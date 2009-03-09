@@ -29,7 +29,7 @@
   </parent>
   <artifactId>php</artifactId>
   <version>0.1-SNAPSHOT</version>
-  <name>php</name>
+  <name>Sonar PHP plugin</name>
 
   <properties>
     <sonar.version>1.6</sonar.version>
