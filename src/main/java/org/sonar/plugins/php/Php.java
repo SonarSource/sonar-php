@@ -20,35 +20,22 @@
 
 package org.sonar.plugins.php;
 
-import org.sonar.plugins.api.Extension;
-import org.sonar.plugins.api.Plugin;
+import org.sonar.commons.resources.Resource;
+import org.sonar.plugins.api.AbstractLanguage;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Php extends AbstractLanguage {
 
-/**
- * Hello world!
- */
-public class Php implements Plugin {
+  public static final String KEY = "php";
 
-  public String getKey() {
-    return "php";
+  public Php() {
+    super(KEY, "PHP");
   }
 
-  public String getName() {
-    return "Php";
+  public Resource getParent(Resource resource) {
+    return null;
   }
 
-  public String getDescription() {
-    return "Php language definition.";
-  }
-
-  public List<Class<? extends Extension>> getExtensions() {
-    List<Class<? extends Extension>> list = new ArrayList<Class<? extends Extension>>();
-    return list;
-  }
-
-  public String toString() {
-    return getKey();
+  public boolean matchExclusionPattern(Resource resource, String wildcardPattern) {
+    return false;
   }
 }
