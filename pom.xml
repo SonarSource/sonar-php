@@ -12,7 +12,7 @@
   <name>Sonar PHP plugin</name>
 
   <properties>
-    <sonar.version>1.7RC1</sonar.version>
+    <sonar.version>1.7RC2</sonar.version>
   </properties>
 
   <dependencies>
