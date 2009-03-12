@@ -29,7 +29,7 @@ import java.util.List;
 public class PhpPlugin implements Plugin {
 
   public String getKey() {
-    return "php";
+    return Php.KEY;
   }
 
   public String getName() {
