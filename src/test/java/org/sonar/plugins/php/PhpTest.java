@@ -33,15 +33,32 @@ import java.util.List;
 public class PhpTest {
 
   @Test
-  public void shouldGetParentReturnsRightValues(){
+  public void shouldCreateFile() {
+    Resource fileUnderADirectory = Php.newFile("src/file.php");
+    assertThat(fileUnderADirectory.getKey(), is("src/file.php"));
+    assertThat(fileUnderADirectory.getName(), is("file.php"));
+
+    Resource fileUnderRoot = Php.newFile("file.php");
+    assertThat(fileUnderRoot.getKey(), is("file.php"));
+    assertThat(fileUnderRoot.getName(), is("file.php"));
+  }
+
+  @Test
+  public void shouldCreateADirectory() {
+    Resource aDirectory = Php.newDirectory("src");
+    assertThat(aDirectory.getKey(), is("src"));
+    assertThat(aDirectory.getName(), is("src"));
+  }
+
+  @Test
+  public void shouldReturnParent() {
     Resource root = Php.newDirectory("root");
     assertThat(new Php().getParent(root), nullValue());
 
-    Resource fileUnderRoot = Php.newDirectory("file.php");
+    Resource fileUnderRoot = Php.newFile("file.php");
     assertThat(new Php().getParent(fileUnderRoot), nullValue());
 
     Resource fileUnderADirectory = Php.newFile("src/file.php");
-//    assertThat(fileUnderADirectory.getKey(), is("file.php"));
     assertThat(new Php().getParent(fileUnderADirectory), new IsPhpDirectory("src"));
 
     Resource fileUnderADirectory2 = Php.newFile("src", "file.php");
@@ -55,14 +72,19 @@ public class PhpTest {
   public void shouldResolveFileFromAbsolutePath() {
     List<String> sources = Arrays.asList("/usr/local/sources/", "/home/project/src/");
 
-    Resource phpFile = Php.newFileFromAbsolutePath("/home/project/src/common/MyFile.php", sources);
-    assertThat(phpFile.getKey(), is("common/MyFile.php"));
-    assertThat(phpFile.getName(), is("MyFile.php"));
-    assertThat(new Php().getParent(phpFile), new IsPhpDirectory("common"));
+    Resource file = Php.newFileFromAbsolutePath("/home/project/src/MyFile.php", sources);
+    assertThat(file.getKey(), is("MyFile.php"));
+    assertThat(file.getName(), is("MyFile.php"));
+    assertThat(new Php().getParent(file), nullValue());
+
+    Resource fileUnderDir = Php.newFileFromAbsolutePath("/home/project/src/common/MyFile.php", sources);
+    assertThat(fileUnderDir.getKey(), is("common/MyFile.php"));
+    assertThat(fileUnderDir.getName(), is("MyFile.php"));
+    assertThat(new Php().getParent(fileUnderDir), new IsPhpDirectory("common"));
   }
-  
+
   @Test
-  public void shouldCheckValidPhpExtensions(){
+  public void shouldCheckValidPhpExtensions() {
     assertTrue(Php.containsValidSuffixes("goodExtension.php"));
     assertTrue(Php.containsValidSuffixes("goodExtension.php5"));
     assertFalse(Php.containsValidSuffixes("wrong.extension"));

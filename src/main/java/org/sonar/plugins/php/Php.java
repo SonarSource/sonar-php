@@ -54,7 +54,11 @@ public class Php extends AbstractLanguage {
 
   public static Resource newDirectory(String key) {
     String resourceKey = StringUtils.trim(key);
-    return Resource.newDirectory(resourceKey, Resource.QUALIFIER_DIRECTORY, KEY);
+    if (!StringUtils.isBlank(key)) {
+      return Resource.newDirectory(resourceKey, Resource.QUALIFIER_DIRECTORY, KEY);
+    } else {
+      return null;
+    }
   }
 
   public static Resource newFile(String key) {
@@ -73,7 +77,7 @@ public class Php extends AbstractLanguage {
       return newFile(fileKey);
     }
     return newFile(dirKey + "/" + fileKey);
-  }  
+  }
 
   public static Resource newFileFromAbsolutePath(String path, List<String> sourceDirs) {
     if (path == null || !(containsValidSuffixes(path))) {
@@ -103,10 +107,10 @@ public class Php extends AbstractLanguage {
     return null;
   }
 
-  protected static boolean containsValidSuffixes(String path){
+  protected static boolean containsValidSuffixes(String path) {
     String pathLowerCase = StringUtils.lowerCase(path);
-    for (String suffix : SUFFIXES){
-      if (pathLowerCase.endsWith(suffix)){
+    for (String suffix : SUFFIXES) {
+      if (pathLowerCase.endsWith(suffix)) {
         return true;
       }
     }
