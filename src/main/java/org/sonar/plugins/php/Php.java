@@ -98,7 +98,6 @@ public class Php extends AbstractLanguage {
 
         if (relativePath.indexOf("/") >= 0) {
           dirName = StringUtils.substringBeforeLast(relativePath, "/");
-          dirName = StringUtils.replace(dirName, "/", ".");
           fileName = StringUtils.substringAfterLast(relativePath, "/");
         }
         return newFile(dirName, fileName);

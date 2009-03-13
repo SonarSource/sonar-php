@@ -34,13 +34,17 @@ public class PhpTest {
 
   @Test
   public void shouldCreateFile() {
+    Resource fileUnderRoot = Php.newFile("file.php");
+    assertThat(fileUnderRoot.getKey(), is("file.php"));
+    assertThat(fileUnderRoot.getName(), is("file.php"));
+
     Resource fileUnderADirectory = Php.newFile("src/file.php");
     assertThat(fileUnderADirectory.getKey(), is("src/file.php"));
     assertThat(fileUnderADirectory.getName(), is("file.php"));
 
-    Resource fileUnderRoot = Php.newFile("file.php");
-    assertThat(fileUnderRoot.getKey(), is("file.php"));
-    assertThat(fileUnderRoot.getName(), is("file.php"));
+    Resource fileUnderTwoDirectory = Php.newFile("src/common/file.php");
+    assertThat(fileUnderTwoDirectory.getKey(), is("src/common/file.php"));
+    assertThat(fileUnderTwoDirectory.getName(), is("file.php"));
   }
 
   @Test
@@ -81,6 +85,16 @@ public class PhpTest {
     assertThat(fileUnderDir.getKey(), is("common/MyFile.php"));
     assertThat(fileUnderDir.getName(), is("MyFile.php"));
     assertThat(new Php().getParent(fileUnderDir), new IsPhpDirectory("common"));
+  }
+
+  @Test
+  public void shouldConvertBackSlashToSlashWhenResolvingFileFromAbsolutePath() {
+    List<String> sources = Arrays.asList("c:\\project\\php\\test");
+
+    Resource fileUnderDir = Php.newFileFromAbsolutePath("c:\\project\\php\\test\\src\\common\\MyFile.php", sources);
+    assertThat(fileUnderDir.getKey(), is("src/common/MyFile.php"));
+    assertThat(fileUnderDir.getName(), is("MyFile.php"));
+    assertThat(new Php().getParent(fileUnderDir), new IsPhpDirectory("src/common"));
   }
 
   @Test
