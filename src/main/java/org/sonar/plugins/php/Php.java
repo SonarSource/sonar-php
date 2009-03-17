@@ -35,7 +35,6 @@ public class Php extends AbstractLanguage {
 
   public Php() {
     super(KEY, "PHP");
-    System.out.println("in PHP Constructor");
   }
 
   public Resource getParent(Resource resource) {
