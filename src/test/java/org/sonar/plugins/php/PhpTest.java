@@ -79,11 +79,13 @@ public class PhpTest {
     Resource file = Php.newFileFromAbsolutePath("/home/project/src/MyFile.php", sources);
     assertThat(file.getKey(), is("MyFile.php"));
     assertThat(file.getName(), is("MyFile.php"));
+    assertTrue(file.isFile());
     assertThat(new Php().getParent(file), nullValue());
 
     Resource fileUnderDir = Php.newFileFromAbsolutePath("/home/project/src/common/MyFile.php", sources);
     assertThat(fileUnderDir.getKey(), is("common/MyFile.php"));
     assertThat(fileUnderDir.getName(), is("MyFile.php"));
+    assertTrue(file.isFile());
     assertThat(new Php().getParent(fileUnderDir), new IsPhpDirectory("common"));
   }
 
