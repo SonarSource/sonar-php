@@ -35,6 +35,7 @@ public class Php extends AbstractLanguage {
 
   public Php() {
     super(KEY, "PHP");
+    System.out.println("in PHP Constructor");
   }
 
   public Resource getParent(Resource resource) {
@@ -49,6 +50,10 @@ public class Php extends AbstractLanguage {
 
   public boolean matchExclusionPattern(Resource resource, String wildcardPattern) {
     return false;
+  }
+  
+  public void start() {
+  	
   }
 
   public static Resource newDirectory(String key) {
