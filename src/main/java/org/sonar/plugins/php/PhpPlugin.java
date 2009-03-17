@@ -43,6 +43,7 @@ public class PhpPlugin implements Plugin {
   public List<Class<? extends Extension>> getExtensions() {
     List<Class<? extends Extension>> list = new ArrayList<Class<? extends Extension>>();
     list.add(Php.class);
+    list.add(PhpMavenCollector.class);
     return list;
   }
 

@@ -29,8 +29,7 @@ import java.util.List;
 public class Php extends AbstractLanguage {
 
   public static final String KEY = "php";
-  public static final Php INSTANCE = new Php();
-  public static final String[] SUFFIXES = {".php", ".php3", ".php4", ".php5", ".phtml"};
+  public static final String[] SUFFIXES = {"php", "php3", "php4", "php5", "phtml"};
 
   public static final String DEFAULT_DIRECTORY_NAME = "/";
 
@@ -106,13 +105,24 @@ public class Php extends AbstractLanguage {
     return null;
   }
 
+  public static Resource newUnitTestFileFromAbsolutePath(String path, List<String> sourceDirs) {
+    Resource unitTestFile = newFileFromAbsolutePath(path, sourceDirs);
+    unitTestFile.setQualifier(Resource.QUALIFIER_UNIT_TEST);
+    return unitTestFile;
+  }
+
   protected static boolean containsValidSuffixes(String path) {
     String pathLowerCase = StringUtils.lowerCase(path);
     for (String suffix : SUFFIXES) {
-      if (pathLowerCase.endsWith(suffix)) {
+      if (pathLowerCase.endsWith("." + suffix)) {
         return true;
       }
     }
     return false;
+  }
+
+
+  public String[] getFileSuffixes() {
+    return SUFFIXES;
   }
 }

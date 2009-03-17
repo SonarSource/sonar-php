@@ -104,4 +104,19 @@ public class PhpTest {
     assertFalse(Php.containsValidSuffixes("wrong.extension"));
   }
 
+  @Test
+  public void shouldResolveUnitTestFileFromAbsolutePath() {
+    List<String> sources = Arrays.asList("/home/project/test/");
+
+    Resource file = Php.newUnitTestFileFromAbsolutePath("/home/project/test/MyFileTest.php", sources);
+    assertThat(file.getKey(), is("MyFileTest.php"));
+    assertThat(file.getName(), is("MyFileTest.php"));
+    assertTrue(file.isUnitTest());
+
+    Resource fileUnderDir = Php.newUnitTestFileFromAbsolutePath("/home/project/test/common/MyFileTest.php", sources);
+    assertThat(fileUnderDir.getKey(), is("common/MyFileTest.php"));
+    assertThat(fileUnderDir.getName(), is("MyFileTest.php"));
+    assertTrue(file.isUnitTest());
+  }
+
 }
