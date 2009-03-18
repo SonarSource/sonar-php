@@ -69,7 +69,7 @@ public class PhpDependResultsParser {
   private void initAttributeByMetrics() {
     attributeByMetrics = new HashMap<Metric, String>();
     attributeByMetrics.put(CoreMetrics.LOC, "loc");
-    attributeByMetrics.put(CoreMetrics.NLOC, "locExecutable");
+    attributeByMetrics.put(CoreMetrics.NCLOC, "locExecutable");
     attributeByMetrics.put(CoreMetrics.COMMENT_LINES, "cloc");
     attributeByMetrics.put(CoreMetrics.CLASSES_COUNT, "classes");
     attributeByMetrics.put(CoreMetrics.FUNCTIONS_COUNT, "nom");
