@@ -61,9 +61,13 @@ public class PhpDependResultsParser {
     initAttributeByMetrics();
   }
 
-  protected PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context, Map<Metric, String> attributeByMetrics) {
-    this(config, context);
+  protected PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context, Map<Metric, String> attributeByMetrics, List<String> sourcesDir) {
+    this.config = config;
+    this.context = context;
     this.attributeByMetrics = attributeByMetrics;
+    this.sourcesDir = sourcesDir;
+    directoryMeasures = new DirectoryMeasures();
+    attributeByMetrics = new HashMap<Metric, String>();    
   }
 
   private void initAttributeByMetrics() {

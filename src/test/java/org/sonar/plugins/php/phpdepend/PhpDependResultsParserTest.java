@@ -29,6 +29,7 @@ import org.sonar.plugins.api.metrics.CoreMetrics;
 import org.sonar.plugins.php.Php;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,10 +49,9 @@ public class PhpDependResultsParserTest {
       File xmlReport = new File(getClass().getResource("/org/sonar/plugins/php/phpdepend/PhpDependResultsParserTest/phpunit-report.xml").toURI());
       context = mock(ProjectContext.class);
       config = mock(PhpDependConfiguration.class);
-      stub(config.getSourceDir()).toReturn(new File("C:\\projets\\PHP\\Money"));
       stub(config.getReportFile(PhpDependConfiguration.PHPUNIT_OPT)).toReturn(xmlReport);
 
-      PhpDependResultsParser parser = new PhpDependResultsParser(config, context, attributeByMetrics);
+      PhpDependResultsParser parser = new PhpDependResultsParser(config, context, attributeByMetrics, Arrays.asList("C:\\projets\\PHP\\Money"));
       parser.parse();
     } catch (Exception e) {
       throw new RuntimeException(e);
