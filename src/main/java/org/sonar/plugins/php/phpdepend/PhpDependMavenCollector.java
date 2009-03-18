@@ -18,26 +18,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 
-package org.sonar.plugins.php;
+package org.sonar.plugins.php.phpdepend;
 
-import org.sonar.commons.resources.Resource;
-import org.sonar.plugins.api.maven.AbstractImportSourceMavenCollector;
+import org.sonar.plugins.api.maven.MavenCollector;
+import org.sonar.plugins.api.maven.MavenPluginHandler;
+import org.sonar.plugins.api.maven.ProjectContext;
+import org.sonar.plugins.api.maven.model.MavenPom;
+import org.sonar.plugins.php.Php;
 
-import java.io.File;
-import java.util.Arrays;
+public class PhpDependMavenCollector implements MavenCollector {
 
-public class PhpMavenCollector extends AbstractImportSourceMavenCollector {
-
-  protected String[] getSuffixes() {
-    return Php.SUFFIXES;
+  public Class<? extends MavenPluginHandler> dependsOnMavenPlugin(MavenPom pom) {
+    return null;
   }
 
-  protected Resource createSourceResource(File file, String sourceDir) {
-    return Php.newFileFromAbsolutePath(file.getAbsolutePath(), Arrays.asList(sourceDir));
+  public boolean shouldCollectOn(MavenPom pom) {
+    return Php.KEY.equals(pom.getLanguageKey());
   }
 
-  protected Resource createTestResource(File file, String testSourceDir) {
-    return Php.newUnitTestFileFromAbsolutePath(file.getAbsolutePath(), Arrays.asList(testSourceDir));
-  }
+  public void collect(MavenPom pom, ProjectContext context) {
+    PhpDependConfiguration config = new PhpDependConfiguration(pom);
+    PhpDependExecutor executor = new PhpDependExecutor(config);
+    executor.execute();
 
+    PhpDependResultsParser parser = new PhpDependResultsParser(config, context);
+    parser.parse();
+  }
 }

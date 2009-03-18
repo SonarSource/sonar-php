@@ -22,6 +22,7 @@ package org.sonar.plugins.php;
 
 import org.sonar.plugins.api.Extension;
 import org.sonar.plugins.api.Plugin;
+import org.sonar.plugins.php.phpdepend.PhpDependMavenCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +38,14 @@ public class PhpPlugin implements Plugin {
   }
 
   public String getDescription() {
-    return "PHP language definition.";
+    return "PHP Plugin.";
   }
 
   public List<Class<? extends Extension>> getExtensions() {
     List<Class<? extends Extension>> list = new ArrayList<Class<? extends Extension>>();
     list.add(Php.class);
-    list.add(PhpMavenCollector.class);
+    list.add(PhpImportSourceMavenCollector.class);
+    list.add(PhpDependMavenCollector.class);
     return list;
   }
 
