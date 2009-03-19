@@ -18,50 +18,50 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 
-package org.sonar.plugins.php.phpdepend;
+package org.sonar.plugins.php.phpcodesniffer;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import org.junit.Test;
 
-public class PhpDependConfigurationTest {
+public class PhpCodeSnifferConfigurationTest {
 
   @Test
   public void shouldGetCommandLineForWindows() {
-    PhpDependConfiguration config = getWindowsConfiguration();
-    assertThat(config.getCommandLine(), is(PhpDependConfiguration.COMMAND_LINE +".bat"));
+    PhpCodeSnifferConfiguration config = getWindowsConfiguration();
+    assertThat(config.getCommandLine(), is(PhpCodeSnifferConfiguration.COMMAND_LINE + ".bat"));
   }
 
   @Test
   public void shouldGetCommandLineForNotWindows() {
-    PhpDependConfiguration config = getNotWindowsConfiguration();
-    assertThat(config.getCommandLine(), is(PhpDependConfiguration.COMMAND_LINE));
+    PhpCodeSnifferConfiguration config = getNotWindowsConfiguration();
+    assertThat(config.getCommandLine(), is(PhpCodeSnifferConfiguration.COMMAND_LINE));
   }
 
   @Test
   public void shouldGetCommandLineWithPath() {
-    String path = "path/to/phpdepend";
-    PhpDependConfiguration config = getConfiguration(false, path);
-    assertThat(config.getCommandLine(), is(path + "/"+ PhpDependConfiguration.COMMAND_LINE));
+    String path = "path/to/phpcodesniffer";
+    PhpCodeSnifferConfiguration config = getConfiguration(false, path);
+    assertThat(config.getCommandLine(), is(path + "/" + PhpCodeSnifferConfiguration.COMMAND_LINE));
   }
 
   @Test
   public void shouldGetCommandLineWithPathEvenIfExistingLastSlash() {
-    String path = "path/to/phpdepend";
-    PhpDependConfiguration config = getConfiguration(false, path + "/");
-    assertThat(config.getCommandLine(), is(path + "/"+ PhpDependConfiguration.COMMAND_LINE));
+    String path = "path/to/phpcodesniffer";
+    PhpCodeSnifferConfiguration config = getConfiguration(false, path + "/");
+    assertThat(config.getCommandLine(), is(path + "/"+ PhpCodeSnifferConfiguration.COMMAND_LINE));
   }
 
-  private PhpDependConfiguration getWindowsConfiguration() {
+  private PhpCodeSnifferConfiguration getWindowsConfiguration() {
     return getConfiguration(true, "");
   }
 
-  private PhpDependConfiguration getNotWindowsConfiguration() {
+  private PhpCodeSnifferConfiguration getNotWindowsConfiguration() {
     return getConfiguration(false, "");
   }
 
-  private PhpDependConfiguration getConfiguration(final boolean isOsWindows, final String path) {
-    PhpDependConfiguration config = new PhpDependConfiguration() {
+  private PhpCodeSnifferConfiguration getConfiguration(final boolean isOsWindows, final String path) {
+    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration() {
 
       protected String getCommandLinePath() {
         return path;
@@ -73,5 +73,4 @@ public class PhpDependConfigurationTest {
     };
     return config;
   }
-
 }

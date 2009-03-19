@@ -49,7 +49,7 @@ public class PhpDependResultsParserTest {
       File xmlReport = new File(getClass().getResource("/org/sonar/plugins/php/phpdepend/PhpDependResultsParserTest/phpunit-report.xml").toURI());
       context = mock(ProjectContext.class);
       config = mock(PhpDependConfiguration.class);
-      stub(config.getReportFile(PhpDependConfiguration.PHPUNIT_OPT)).toReturn(xmlReport);
+      stub(config.getReportFile()).toReturn(xmlReport);
 
       PhpDependResultsParser parser = new PhpDependResultsParser(config, context, attributeByMetrics, Arrays.asList("C:\\projets\\PHP\\Money"));
       parser.parse();
@@ -62,7 +62,7 @@ public class PhpDependResultsParserTest {
   public void shouldThrowAnExceptionWhenReportNotFound() {
     config = mock(PhpDependConfiguration.class);
     stub(config.getSourceDir()).toReturn(new File("C:\\projets\\PHP\\Money"));
-    stub(config.getReportFile(PhpDependConfiguration.PHPUNIT_OPT)).toReturn(new File("path/to/nowhere"));
+    stub(config.getReportFile()).toReturn(new File("path/to/nowhere"));
     PhpDependResultsParser parser = new PhpDependResultsParser(config, null);
     parser.parse();
   }

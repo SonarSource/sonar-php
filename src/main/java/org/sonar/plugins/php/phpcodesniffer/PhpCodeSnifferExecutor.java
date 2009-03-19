@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 
-package org.sonar.plugins.php.phpdepend;
+package org.sonar.plugins.php.phpcodesniffer;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -30,13 +30,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class PhpDependExecutor {
+public class PhpCodeSnifferExecutor {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PhpDependExecutor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpCodeSnifferExecutor.class);
 
-  private PhpDependConfiguration configuration;
+  private PhpCodeSnifferConfiguration configuration;
 
-  public PhpDependExecutor(PhpDependConfiguration configuration) {
+  public PhpCodeSnifferExecutor(PhpCodeSnifferConfiguration configuration) {
     this.configuration = configuration;
   }
 
@@ -44,24 +44,21 @@ public class PhpDependExecutor {
     String commandLine;
 
     try {
-      String[] cmd = {configuration.getCommandLine(), configuration.getReportFileOption(),
-        configuration.getSourceDir().getAbsolutePath()};
+      String[] cmd = {configuration.getCommandLine(), configuration.getReportFormatOption(),
+        configuration.getReportFileOption(), configuration.getSourceDir().getAbsolutePath()};
       commandLine = StringUtils.join(cmd, " ");
       ProcessBuilder builder = new ProcessBuilder(cmd);
       builder.redirectErrorStream(true);
 
-      LOG.info("Execute PHP Depend with command '{}'", commandLine);
+      LOG.info("Execute PHP CodeSniffer with command '{}'", commandLine);
       Process p = builder.start();
       new StreamGobbler(p.getInputStream()).start();
       int returnCde = p.waitFor();
-      if (returnCde != 0) {
-        throw new PhpDependExecutionException("Status=" + returnCde + ", command=" + commandLine);
+      if (returnCde > 1) {
+        throw new PhpCodeSnifferExecutionException("Status=" + returnCde + ", command=" + commandLine);
       }
-    } catch (PhpDependExecutionException e) {
-      throw e;
-
     } catch (Exception e) {
-      throw new PhpDependExecutionException(e);
+      throw new PhpCodeSnifferExecutionException(e);
     }
   }
 

@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 
-package org.sonar.plugins.php.phpdepend;
+package org.sonar.plugins.php.phpcodesniffer;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
@@ -26,23 +26,27 @@ import org.sonar.plugins.api.maven.model.MavenPom;
 
 import java.io.File;
 
-public class PhpDependConfiguration {
+public class PhpCodeSnifferConfiguration {
 
   private MavenPom pom = null;
-  protected static final String KEY_PATH = "phpdepend.path";
+
+  protected static final String KEY_PATH = "phpcodesniffer.path";
   protected static final String DEFAUT_PATH = "";
 
-  protected static final String COMMAND_LINE = "pdepend";
+  protected static final String COMMAND_LINE = "phpcs";
 
-  public static final String PHPUNIT_OPT = "phpunit-xml";
+  public static final String REPORT_FORMAT_OPT = "report";
+  public static final String REPORT_FORMAT_DEFAULT_OPT = "xml";
+
+  public static final String REPORT_FILE_OPT = "report-file";
 
 
-  public PhpDependConfiguration(MavenPom pom) {
+  public PhpCodeSnifferConfiguration(MavenPom pom) {
     this.pom = pom;
   }
 
   // Only for unit tests
-  protected PhpDependConfiguration() {
+  protected PhpCodeSnifferConfiguration() {
   }
 
   public String getCommandLine() {
@@ -61,12 +65,16 @@ public class PhpDependConfiguration {
     }
   }
 
+  public String getReportFormatOption(){
+    return "--"+ REPORT_FORMAT_OPT +"="+ REPORT_FORMAT_DEFAULT_OPT;
+  }
+
   public String getReportFileOption(){
-    return "--"+ PHPUNIT_OPT +"="+ getReportFile().getAbsolutePath();
+    return "--"+ REPORT_FILE_OPT +"="+ getReportFile().getAbsolutePath();
   }
 
   public File getReportFile(){
-    return new File(pom.getBuildDir(), "phpdepend-report.xml");
+    return new File(pom.getBuildDir(), "phpcodesniffer-report.xml");
   }
 
   public File getSourceDir() {

@@ -82,7 +82,7 @@ public class PhpDependResultsParser {
   }
 
   public void parse() {
-    File reportXml = config.getReportFile(PhpDependConfiguration.PHPUNIT_OPT);
+    File reportXml = config.getReportFile();
     if (!reportXml.exists()) {
       throw new PhpDependExecutionException("Result file not found : " + reportXml.getAbsolutePath());
     }
