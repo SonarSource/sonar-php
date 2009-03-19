@@ -23,6 +23,9 @@ package org.sonar.plugins.php.phpcodesniffer;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import org.sonar.plugins.api.maven.model.MavenPom;
 
 public class PhpCodeSnifferConfigurationTest {
 
@@ -50,6 +53,14 @@ public class PhpCodeSnifferConfigurationTest {
     String path = "path/to/phpcodesniffer";
     PhpCodeSnifferConfiguration config = getConfiguration(false, path + "/");
     assertThat(config.getCommandLine(), is(path + "/"+ PhpCodeSnifferConfiguration.COMMAND_LINE));
+  }
+
+  @Test
+  public void shouldReportFileBeInTargetDir(){
+    MavenPom pom = mock(MavenPom.class);
+    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(pom);
+    config.getReportFileOption();
+    verify(pom).getBuildDir();
   }
 
   private PhpCodeSnifferConfiguration getWindowsConfiguration() {

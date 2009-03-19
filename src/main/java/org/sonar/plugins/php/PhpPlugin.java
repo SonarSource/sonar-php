@@ -23,6 +23,7 @@ package org.sonar.plugins.php;
 import org.sonar.plugins.api.Extension;
 import org.sonar.plugins.api.Plugin;
 import org.sonar.plugins.php.phpcodesniffer.PhpCodeSnifferMavenCollector;
+import org.sonar.plugins.php.phpcodesniffer.PhpCodeSnifferRulesRepository;
 import org.sonar.plugins.php.phpdepend.PhpDependMavenCollector;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class PhpPlugin implements Plugin {
     list.add(Php.class);
     list.add(PhpImportSourceMavenCollector.class);
     list.add(PhpDependMavenCollector.class);
+    list.add(PhpCodeSnifferRulesRepository.class);
     list.add(PhpCodeSnifferMavenCollector.class);
     return list;
   }

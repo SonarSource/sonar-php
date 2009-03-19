@@ -23,6 +23,9 @@ package org.sonar.plugins.php.phpdepend;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import org.sonar.plugins.api.maven.model.MavenPom;
 
 public class PhpDependConfigurationTest {
 
@@ -50,6 +53,14 @@ public class PhpDependConfigurationTest {
     String path = "path/to/phpdepend";
     PhpDependConfiguration config = getConfiguration(false, path + "/");
     assertThat(config.getCommandLine(), is(path + "/"+ PhpDependConfiguration.COMMAND_LINE));
+  }
+
+  @Test
+  public void shouldReportFileBeInTargetDir(){
+    MavenPom pom = mock(MavenPom.class);
+    PhpDependConfiguration config = new PhpDependConfiguration(pom);
+    config.getReportFileOption();
+    verify(pom).getBuildDir();
   }
 
   private PhpDependConfiguration getWindowsConfiguration() {

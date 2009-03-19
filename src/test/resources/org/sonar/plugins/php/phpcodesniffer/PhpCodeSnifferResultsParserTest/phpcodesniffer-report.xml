@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpcs version="1.2.0RC1">
+ <file name="C:\projets\_PHP\_Money\src\Common\IMoney.php" errors="24" warnings="1">
+  <error line="37" column="1" source="PEAR.Commenting.FileCommentSniff">@category tag comment indented incorrectly. Expected 2 spaces but found 3.</error>
+  <error line="38" column="1" source="PEAR.Commenting.FileCommentSniff">@package tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="39" column="1" source="PEAR.Commenting.FileCommentSniff">@author tag comment indented incorrectly. Expected 4 spaces but found 5.</error>
+  <error line="40" column="1" source="PEAR.Commenting.FileCommentSniff">@copyright tag comment indented incorrectly. Expected 1 spaces but found 2.</error>
+  <error line="41" column="1" source="PEAR.Commenting.FileCommentSniff">@license tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="42" column="1" source="PEAR.Commenting.FileCommentSniff">@version tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="43" column="1" source="PEAR.Commenting.FileCommentSniff">@link tag comment indented incorrectly. Expected 6 spaces but found 7.</error>
+  <error line="44" column="1" source="PEAR.Commenting.FileCommentSniff">@since tag comment indented incorrectly. Expected 5 spaces but found 6.</error>
+  <warning line="45" column="1" source="PEAR.Commenting.FileCommentSniff">PHP version not specified</warning>
+  <error line="53" column="1" source="PEAR.Commenting.ClassCommentSniff">@category tag comment indented incorrectly. Expected 2 spaces but found 3.</error>
+  <error line="54" column="1" source="PEAR.Commenting.ClassCommentSniff">@package tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="55" column="1" source="PEAR.Commenting.ClassCommentSniff">@author tag comment indented incorrectly. Expected 4 spaces but found 5.</error>
+  <error line="56" column="1" source="PEAR.Commenting.ClassCommentSniff">@copyright tag comment indented incorrectly. Expected 1 spaces but found 2.</error>
+  <error line="57" column="1" source="PEAR.Commenting.ClassCommentSniff">@license tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="58" column="1" source="PEAR.Commenting.ClassCommentSniff">@version tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="59" column="1" source="PEAR.Commenting.ClassCommentSniff">@link tag comment indented incorrectly. Expected 6 spaces but found 7.</error>
+  <error line="60" column="1" source="PEAR.Commenting.ClassCommentSniff">@since tag comment indented incorrectly. Expected 5 spaces but found 6.</error>
+  <error line="64" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="65" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="66" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="67" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="68" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="69" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="70" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="71" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+ </file>
+ <file name="C:\projets\_PHP\_Money\src\Common\IMoney2.php" errors="24" warnings="1">
+  <error line="37" column="1" source="PEAR.Commenting.FileCommentSniff">@category tag comment indented incorrectly. Expected 2 spaces but found 3.</error>
+  <error line="38" column="1" source="PEAR.Commenting.FileCommentSniff">@package tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="39" column="1" source="PEAR.Commenting.FileCommentSniff">@author tag comment indented incorrectly. Expected 4 spaces but found 5.</error>
+  <error line="40" column="1" source="PEAR.Commenting.FileCommentSniff">@copyright tag comment indented incorrectly. Expected 1 spaces but found 2.</error>
+  <error line="41" column="1" source="PEAR.Commenting.FileCommentSniff">@license tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="42" column="1" source="PEAR.Commenting.FileCommentSniff">@version tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="43" column="1" source="PEAR.Commenting.FileCommentSniff">@link tag comment indented incorrectly. Expected 6 spaces but found 7.</error>
+  <error line="44" column="1" source="PEAR.Commenting.FileCommentSniff">@since tag comment indented incorrectly. Expected 5 spaces but found 6.</error>
+  <warning line="45" column="1" source="PEAR.Commenting.FileCommentSniff">PHP version not specified</warning>
+  <error line="53" column="1" source="PEAR.Commenting.ClassCommentSniff">@category tag comment indented incorrectly. Expected 2 spaces but found 3.</error>
+  <error line="54" column="1" source="PEAR.Commenting.ClassCommentSniff">@package tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="55" column="1" source="PEAR.Commenting.ClassCommentSniff">@author tag comment indented incorrectly. Expected 4 spaces but found 5.</error>
+  <error line="56" column="1" source="PEAR.Commenting.ClassCommentSniff">@copyright tag comment indented incorrectly. Expected 1 spaces but found 2.</error>
+  <error line="57" column="1" source="PEAR.Commenting.ClassCommentSniff">@license tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="58" column="1" source="PEAR.Commenting.ClassCommentSniff">@version tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="59" column="1" source="PEAR.Commenting.ClassCommentSniff">@link tag comment indented incorrectly. Expected 6 spaces but found 7.</error>
+  <error line="60" column="1" source="PEAR.Commenting.ClassCommentSniff">@since tag comment indented incorrectly. Expected 5 spaces but found 6.</error>
+  <error line="64" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="65" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="66" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="67" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="68" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="69" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="70" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="71" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+ </file>
+ <file name="C:\projets\_PHP\_Money\src\MoneyBag.php" errors="43" warnings="1">
+  <error line="37" column="1" source="PEAR.Commenting.FileCommentSniff">@category tag comment indented incorrectly. Expected 2 spaces but found 3.</error>
+  <error line="38" column="1" source="PEAR.Commenting.FileCommentSniff">@package tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="39" column="1" source="PEAR.Commenting.FileCommentSniff">@author tag comment indented incorrectly. Expected 4 spaces but found 5.</error>
+  <error line="40" column="1" source="PEAR.Commenting.FileCommentSniff">@copyright tag comment indented incorrectly. Expected 1 spaces but found 2.</error>
+  <error line="41" column="1" source="PEAR.Commenting.FileCommentSniff">@license tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="42" column="1" source="PEAR.Commenting.FileCommentSniff">@version tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="43" column="1" source="PEAR.Commenting.FileCommentSniff">@link tag comment indented incorrectly. Expected 6 spaces but found 7.</error>
+  <error line="44" column="1" source="PEAR.Commenting.FileCommentSniff">@since tag comment indented incorrectly. Expected 5 spaces but found 6.</error>
+  <warning line="45" column="1" source="PEAR.Commenting.FileCommentSniff">PHP version not specified</warning>
+  <error line="53" column="1" source="PEAR.Commenting.ClassCommentSniff">@category tag comment indented incorrectly. Expected 2 spaces but found 3.</error>
+  <error line="54" column="1" source="PEAR.Commenting.ClassCommentSniff">@package tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="55" column="1" source="PEAR.Commenting.ClassCommentSniff">@author tag comment indented incorrectly. Expected 4 spaces but found 5.</error>
+  <error line="56" column="1" source="PEAR.Commenting.ClassCommentSniff">@copyright tag comment indented incorrectly. Expected 1 spaces but found 2.</error>
+  <error line="57" column="1" source="PEAR.Commenting.ClassCommentSniff">@license tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="58" column="1" source="PEAR.Commenting.ClassCommentSniff">@version tag comment indented incorrectly. Expected 3 spaces but found 4.</error>
+  <error line="59" column="1" source="PEAR.Commenting.ClassCommentSniff">@link tag comment indented incorrectly. Expected 6 spaces but found 7.</error>
+  <error line="60" column="1" source="PEAR.Commenting.ClassCommentSniff">@since tag comment indented incorrectly. Expected 5 spaces but found 6.</error>
+  <error line="66" column="19" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="75" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="80" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="85" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="90" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="97" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="102" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="110" column="21" source="Generic.PHP.LowerCaseConstantSniff">TRUE, FALSE and NULL must be lowercase; expected &quot;null&quot; but found &quot;NULL&quot;</error>
+  <error line="134" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="137" column="1" source="PEAR.ControlStructures.MultiLineConditionSniff">Closing parenthesis of a multi-line IF statement must be on a new line</error>
+  <error line="143" column="24" source="Generic.PHP.LowerCaseConstantSniff">TRUE, FALSE and NULL must be lowercase; expected &quot;false&quot; but found &quot;FALSE&quot;</error>
+  <error line="148" column="28" source="Generic.PHP.LowerCaseConstantSniff">TRUE, FALSE and NULL must be lowercase; expected &quot;false&quot; but found &quot;FALSE&quot;</error>
+  <error line="152" column="20" source="Generic.PHP.LowerCaseConstantSniff">TRUE, FALSE and NULL must be lowercase; expected &quot;true&quot; but found &quot;TRUE&quot;</error>
+  <error line="155" column="16" source="Generic.PHP.LowerCaseConstantSniff">TRUE, FALSE and NULL must be lowercase; expected &quot;false&quot; but found &quot;FALSE&quot;</error>
+  <error line="158" column="15" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="166" column="16" source="Generic.PHP.LowerCaseConstantSniff">TRUE, FALSE and NULL must be lowercase; expected &quot;null&quot; but found &quot;NULL&quot;</error>
+  <error line="169" column="15" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="173" column="23" source="Generic.PHP.LowerCaseConstantSniff">TRUE, FALSE and NULL must be lowercase; expected &quot;null&quot; but found &quot;NULL&quot;</error>
+  <error line="174" column="20" source="Generic.PHP.LowerCaseConstantSniff">TRUE, FALSE and NULL must be lowercase; expected &quot;false&quot; but found &quot;FALSE&quot;</error>
+  <error line="180" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="191" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="196" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="209" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="220" column="15" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="229" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="234" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+  <error line="245" column="12" source="PEAR.Commenting.FunctionCommentSniff">Missing function doc comment</error>
+ </file>
+</phpcs>

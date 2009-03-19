@@ -20,28 +20,28 @@
 
 package org.sonar.plugins.php.phpcodesniffer;
 
-import org.sonar.plugins.api.maven.MavenCollector;
-import org.sonar.plugins.api.maven.MavenPluginHandler;
-import org.sonar.plugins.api.maven.ProjectContext;
-import org.sonar.plugins.api.maven.model.MavenPom;
-import org.sonar.plugins.php.Php;
+import org.sonar.commons.Language;
+import org.sonar.commons.rules.Rule;
+import org.sonar.commons.rules.RulesProfile;
+import org.sonar.plugins.api.rules.RulesRepository;
 
-public class PhpCodeSnifferMavenCollector implements MavenCollector {
+import java.util.List;
 
-  public Class<? extends MavenPluginHandler> dependsOnMavenPlugin(MavenPom pom) {
+public class PhpCodeSnifferRulesRepository implements RulesRepository {
+
+  public Language getLanguage() {
     return null;
   }
 
-  public boolean shouldCollectOn(MavenPom pom) {
-    return Php.KEY.equals(pom.getLanguageKey());
+  public List<Rule> getInitialReferential() {
+    return null;
   }
 
-  public void collect(MavenPom pom, ProjectContext context) {
-    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(pom);
-    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(config);
-    executor.execute();
+  public List<Rule> parseReferential(String fileContent) {
+    return null;
+  }
 
-    PhpCodeSnifferResultsParser parser = new PhpCodeSnifferResultsParser(config, context);
-    parser.parse();
+  public List<RulesProfile> getProvidedProfiles() {
+    return null;
   }
 }

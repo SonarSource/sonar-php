@@ -45,7 +45,7 @@ import java.util.Map;
 
 public class PhpDependResultsParser {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PhpDependExecutor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpDependResultsParser.class);
 
   private PhpDependConfiguration config;
   private ProjectContext context;
@@ -67,7 +67,7 @@ public class PhpDependResultsParser {
     this.attributeByMetrics = attributeByMetrics;
     this.sourcesDir = sourcesDir;
     directoryMeasures = new DirectoryMeasures();
-    attributeByMetrics = new HashMap<Metric, String>();    
+    attributeByMetrics = new HashMap<Metric, String>();
   }
 
   private void initAttributeByMetrics() {
