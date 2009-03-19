@@ -1,0 +1,14 @@
+<rules>
+  <rule key="Generic.WhiteSpace.DisallowTabIndentSniff">
+    <name>Disallow Tab Indent</name>
+    <configKey>Generic.WhiteSpace.DisallowTabIndentSniff</configKey>
+    <category name="Usability"/>
+    <description>Spaces must be used to indent lines; tabs are not allowed</description>
+  </rule>
+  <rule key="Zend.Files.ClosingTagSniff">
+    <name>Closing Tag</name>
+    <configKey>Zend.Files.ClosingTagSniff</configKey>
+    <category name="Maintainability"/>
+    <description>A closing tag is not permitted at the end of a PHP file</description>
+  </rule>  
+</rules>

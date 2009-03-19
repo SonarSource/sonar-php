@@ -48,7 +48,7 @@ public class PhpCodeSnifferResultsParserTest {
   }
 
   @Test
-  public void shouldCollectFileMEasure() throws Exception {
+  public void shouldCollectAFileMeasure() throws Exception {
     init();
     final boolean[] hasCollectAFileMeasure = new boolean[]{false};
     PhpCodeSnifferResultsParser parser = new PhpCodeSnifferResultsParser(config){

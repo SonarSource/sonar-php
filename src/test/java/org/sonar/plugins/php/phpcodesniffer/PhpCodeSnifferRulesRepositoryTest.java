@@ -20,38 +20,25 @@
 
 package org.sonar.plugins.php.phpcodesniffer;
 
-import org.apache.commons.io.IOUtils;
-import org.sonar.commons.Language;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 import org.sonar.commons.rules.Rule;
-import org.sonar.commons.rules.RulesProfile;
-import org.sonar.plugins.api.rules.RulesRepository;
-import org.sonar.plugins.api.rules.StandardRulesXmlParser;
-import org.sonar.plugins.php.Php;
 
-import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 
-public class PhpCodeSnifferRulesRepository implements RulesRepository {
+public class PhpCodeSnifferRulesRepositoryTest {
 
-  public Language getLanguage() {
-    return new Php();
-  }
-
-  public List<Rule> getInitialReferential() {
-    InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/phpcodesniffer/rules.xml");
-    try {
-      return new StandardRulesXmlParser().parse(input);
-    } finally {
-      IOUtils.closeQuietly(input);
+  @Test
+  public void rulesAreDefinedWithTheDefaultSonarXmlFormat() {
+    PhpCodeSnifferRulesRepository repository = new PhpCodeSnifferRulesRepository();
+    List<Rule> rules = repository.getInitialReferential();
+    assertTrue(rules.size() > 0);
+    for (Rule rule : rules) {
+      assertNotNull(rule.getKey());
+      assertNotNull(rule.getDescription());
+      assertNotNull(rule.getConfigKey());
+      assertNotNull(rule.getName());
     }
-  }
-
-  public List<Rule> parseReferential(String fileContent) {
-    return new StandardRulesXmlParser().parse(fileContent);
-  }
-
-  public List<RulesProfile> getProvidedProfiles() {
-    return Collections.emptyList();
   }
 }

@@ -24,8 +24,10 @@ import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.commons.resources.Resource;
 import org.sonar.plugins.api.maven.ProjectContext;
 import org.sonar.plugins.api.maven.xml.XmlParserException;
+import org.sonar.plugins.php.Php;
 import org.sonar.plugins.php.phpdepend.PhpDependExecutionException;
 
 import javax.xml.stream.XMLStreamConstants;
@@ -88,7 +90,62 @@ public class PhpCodeSnifferResultsParser {
 
   }
 
-  private void collectFileMeasures(XMLStreamReader2 reader) {
+  private void collectFileMeasures(XMLStreamReader2 reader) throws XMLStreamException {
+    String name = reader.getAttributeValue(null, "name");
+    Resource file = Php.newFileFromAbsolutePath(name, sourcesDir);
+    collectViolations(file, reader);
   }
 
+  private void collectViolations(Resource file, XMLStreamReader2 reader) throws XMLStreamException {
+    boolean isNotAtFileEndTag = reader.next() != XMLStreamConstants.END_DOCUMENT;
+    String elementName;
+    while (isNotAtFileEndTag) {
+      if (reader.isStartElement()) {
+        elementName = reader.getLocalName();
+        if (elementName.equals("error")) {
+          Violation violation = new Violation(file, "error",
+            reader.getAttributeValue(null, "line"),
+            reader.getAttributeValue(null, "column"),
+            reader.getAttributeValue(null, "source"),
+            reader.getText()
+            );
+          violation.createViolation();
+
+          reader.skipElement();
+        } else if (elementName.equals("warning")) {
+          reader.skipElement();
+        }
+      } else if (reader.isEndElement()) {
+        elementName = reader.getLocalName();
+        if (elementName.equals("file")) {
+          isNotAtFileEndTag = false;
+        }
+      }
+      isNotAtFileEndTag &= reader.next() != XMLStreamConstants.END_DOCUMENT;
+    }    
+  }
+
+  class Violation {
+
+    private Resource file;
+    private String level;
+    private String line;
+    private String column;
+    private String key;
+    private String message;
+
+    public Violation(Resource file, String level, String line, String column, String key, String message) {
+      this.file = file;
+      this.level = level;
+      this.line = line;
+      this.column = column;
+      this.key = key;
+      this.message = message;
+    }
+
+    public void createViolation(){
+      
+      
+    }
+  }
 }
