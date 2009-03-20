@@ -10,5 +10,17 @@
     <configKey>Zend.Files.ClosingTagSniff</configKey>
     <category name="Maintainability"/>
     <description>A closing tag is not permitted at the end of a PHP file</description>
+  </rule>
+  <rule key="PEAR.Commenting.FunctionCommentSniff">
+    <name>Function Comment</name>
+    <configKey>PEAR.Commenting.FunctionCommentSniff</configKey>
+    <category name="Maintainability"/>
+    <description>You must use &quot;/**&quot; style comments for a function comment</description>
+  </rule>
+  <rule key="Generic.PHP.LowerCaseConstantSniff">
+    <name>Lower Case Constant</name>
+    <configKey>Generic.PHP.LowerCaseConstantSniff</configKey>
+    <category name="Maintainability"/>
+    <description>TRUE, FALSE and NULL must be lowercase; expected &quot;null&quot; but found &quot;NULL&quot;</description>
   </rule>  
 </rules>

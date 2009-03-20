@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.commons.resources.Resource;
 import org.sonar.plugins.api.maven.ProjectContext;
 import org.sonar.plugins.api.maven.xml.XmlParserException;
+import org.sonar.plugins.api.rules.RulesManager;
 import org.sonar.plugins.php.Php;
 import org.sonar.plugins.php.phpdepend.PhpDependExecutionException;
 
@@ -43,13 +44,19 @@ public class PhpCodeSnifferResultsParser {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCodeSnifferResultsParser.class);
   private PhpCodeSnifferConfiguration configuration;
-  private ProjectContext context;
   private List<String> sourcesDir;
+  private ViolationsManager violationsManager;
 
-  public PhpCodeSnifferResultsParser(PhpCodeSnifferConfiguration configuration, ProjectContext context) {
+  public PhpCodeSnifferResultsParser(PhpCodeSnifferConfiguration configuration, ProjectContext context, RulesManager rulesManager) {
     this.configuration = configuration;
-    this.context = context;
     this.sourcesDir = Arrays.asList(configuration.getSourceDir().getAbsolutePath());
+    this.violationsManager = new ViolationsManager(context, rulesManager, Php.KEY);
+  }
+
+  protected PhpCodeSnifferResultsParser(PhpCodeSnifferConfiguration configuration, ViolationsManager violationsManager, List<String> sourcesDir) {
+    this.configuration = configuration;
+    this.violationsManager = violationsManager;
+    this.sourcesDir = sourcesDir;
   }
 
   protected PhpCodeSnifferResultsParser(PhpCodeSnifferConfiguration configuration) {
@@ -62,7 +69,7 @@ public class PhpCodeSnifferResultsParser {
       throw new PhpDependExecutionException("Result file not found : " + reportXml.getAbsolutePath());
     }
     try {
-      LOG.info("Collecting measures...");
+      LOG.info("Collecting violations...");
       collectMeasures(reportXml);
     } catch (Exception e) {
       throw new XmlParserException(e);
@@ -87,33 +94,24 @@ public class PhpCodeSnifferResultsParser {
       }
     }
     reader.closeCompletely();
-
   }
 
-  private void collectFileMeasures(XMLStreamReader2 reader) throws XMLStreamException {
+  protected void collectFileMeasures(XMLStreamReader2 reader) throws XMLStreamException {
     String name = reader.getAttributeValue(null, "name");
     Resource file = Php.newFileFromAbsolutePath(name, sourcesDir);
     collectViolations(file, reader);
   }
 
-  private void collectViolations(Resource file, XMLStreamReader2 reader) throws XMLStreamException {
+  protected void collectViolations(Resource file, XMLStreamReader2 reader) throws XMLStreamException {
     boolean isNotAtFileEndTag = reader.next() != XMLStreamConstants.END_DOCUMENT;
     String elementName;
     while (isNotAtFileEndTag) {
       if (reader.isStartElement()) {
         elementName = reader.getLocalName();
         if (elementName.equals("error")) {
-          Violation violation = new Violation(file, "error",
-            reader.getAttributeValue(null, "line"),
-            reader.getAttributeValue(null, "column"),
-            reader.getAttributeValue(null, "source"),
-            reader.getText()
-            );
-          violation.createViolation();
-
-          reader.skipElement();
+          createViolation(file, reader, "error");
         } else if (elementName.equals("warning")) {
-          reader.skipElement();
+          createViolation(file, reader, "warning");
         }
       } else if (reader.isEndElement()) {
         elementName = reader.getLocalName();
@@ -122,30 +120,15 @@ public class PhpCodeSnifferResultsParser {
         }
       }
       isNotAtFileEndTag &= reader.next() != XMLStreamConstants.END_DOCUMENT;
-    }    
-  }
-
-  class Violation {
-
-    private Resource file;
-    private String level;
-    private String line;
-    private String column;
-    private String key;
-    private String message;
-
-    public Violation(Resource file, String level, String line, String column, String key, String message) {
-      this.file = file;
-      this.level = level;
-      this.line = line;
-      this.column = column;
-      this.key = key;
-      this.message = message;
-    }
-
-    public void createViolation(){
-      
-      
     }
   }
+
+  protected void createViolation(Resource file, XMLStreamReader2 reader, String level) throws XMLStreamException {
+    violationsManager.createViolation(
+      file, level,
+      reader.getAttributeValue(null, "line"),
+      reader.getAttributeValue(null, "source"),
+      reader.getElementText());
+  }
+
 }

@@ -24,9 +24,16 @@ import org.sonar.plugins.api.maven.MavenCollector;
 import org.sonar.plugins.api.maven.MavenPluginHandler;
 import org.sonar.plugins.api.maven.ProjectContext;
 import org.sonar.plugins.api.maven.model.MavenPom;
+import org.sonar.plugins.api.rules.RulesManager;
 import org.sonar.plugins.php.Php;
 
 public class PhpCodeSnifferMavenCollector implements MavenCollector {
+
+  private RulesManager rulesManager;
+
+  public PhpCodeSnifferMavenCollector(RulesManager rulesManager) {
+    this.rulesManager = rulesManager;
+  }
 
   public Class<? extends MavenPluginHandler> dependsOnMavenPlugin(MavenPom pom) {
     return null;
@@ -41,7 +48,7 @@ public class PhpCodeSnifferMavenCollector implements MavenCollector {
     PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(config);
     executor.execute();
 
-    PhpCodeSnifferResultsParser parser = new PhpCodeSnifferResultsParser(config, context);
+    PhpCodeSnifferResultsParser parser = new PhpCodeSnifferResultsParser(config, context, rulesManager);
     parser.parse();
   }
 }
