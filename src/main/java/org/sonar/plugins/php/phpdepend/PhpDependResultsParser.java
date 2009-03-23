@@ -39,9 +39,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PhpDependResultsParser {
 
@@ -50,35 +48,20 @@ public class PhpDependResultsParser {
   private PhpDependConfiguration config;
   private ProjectContext context;
   private List<String> sourcesDir;
-  private DirectoryMeasures directoryMeasures;
-  private Map<Metric, String> attributeByMetrics;
+  private ResourcesManager resourcesManager;
 
   public PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context) {
     this.config = config;
     this.context = context;
     this.sourcesDir = Arrays.asList(config.getSourceDir().getAbsolutePath());
-    directoryMeasures = new DirectoryMeasures();
-    initAttributeByMetrics();
+    resourcesManager = new ResourcesManager();
   }
 
-  protected PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context, Map<Metric, String> attributeByMetrics, List<String> sourcesDir) {
+  protected PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context, List<String> sourcesDir) {
     this.config = config;
     this.context = context;
-    this.attributeByMetrics = attributeByMetrics;
     this.sourcesDir = sourcesDir;
-    directoryMeasures = new DirectoryMeasures();
-    attributeByMetrics = new HashMap<Metric, String>();
-  }
-
-  private void initAttributeByMetrics() {
-    attributeByMetrics = new HashMap<Metric, String>();
-    attributeByMetrics.put(CoreMetrics.LOC, "loc");
-    attributeByMetrics.put(CoreMetrics.NCLOC, "locExecutable");
-    attributeByMetrics.put(CoreMetrics.COMMENT_LINES, "cloc");
-    attributeByMetrics.put(CoreMetrics.CLASSES_COUNT, "classes");
-    attributeByMetrics.put(CoreMetrics.FUNCTIONS_COUNT, "nom");
-    attributeByMetrics.put(CoreMetrics.FILES_COUNT, "files");
-    attributeByMetrics.put(CoreMetrics.COMPLEXITY, "ccn");
+    resourcesManager = new ResourcesManager();
   }
 
   public void parse() {
@@ -99,131 +82,121 @@ public class PhpDependResultsParser {
     InputStream input = new FileInputStream(reportXml);
     XMLStreamReader2 reader = (XMLStreamReader2) xmlFactory.createXMLStreamReader(input);
 
+    Resource currentResourceFile = null;
     while (reader.next() != XMLStreamConstants.END_DOCUMENT) {
       if (reader.isStartElement()) {
         String elementName = reader.getLocalName();
         if (elementName.equals("metrics")) {
-          collectProjectMeasures(reader);
+          collectMeasuresFromMetricsTag(reader);
         } else if (elementName.equals("file")) {
-          collectFileMeasures(reader);
+          String filePath = reader.getAttributeValue(null, "name");
+          currentResourceFile = Php.newFileFromAbsolutePath(filePath, sourcesDir);
+          collectMeasuresFromFileTag(reader, currentResourceFile);
+        } else if (elementName.equals("class")) {
+          collectMeasuresFromClassTag(reader, currentResourceFile);
+        } else if (elementName.equals("function")) {
+          collectMeasuresFromFunctionTag(reader, currentResourceFile);
         }
       }
     }
     reader.closeCompletely();
 
-    collectDirectoryMeasures();
+    saveMeasures();
   }
 
-  private void collectProjectMeasures(XMLStreamReader2 reader) throws ParseException {
-    for (Map.Entry<Metric, String> attributeByMetric : attributeByMetrics.entrySet()) {
-      Metric metric = attributeByMetric.getKey();
-      String attribute = attributeByMetric.getValue();
-      String value = reader.getAttributeValue(null, attribute);
-      // Classes must not be added to the project measures now because we must also add the interfaces
-      if (value != null && metric != CoreMetrics.CLASSES_COUNT) {
-        addProjectMeasure(metric, value);
-      }
-    }
-    collectProjectClassesMeasure(reader);
+  private void collectMeasuresFromMetricsTag(XMLStreamReader2 reader) throws ParseException, XMLStreamException {
+    Double loc = addBasicMeasureFromAttribute(reader, null, CoreMetrics.LOC, "loc");
+    addBasicMeasureFromAttribute(reader, null, CoreMetrics.NCLOC, "locExecutable");
+    addBasicMeasureFromAttribute(reader, null, CoreMetrics.FUNCTIONS_COUNT, "nom");
+    Double cloc = addBasicMeasureFromAttribute(reader, null, CoreMetrics.COMMENT_LINES, "cloc");
+    addBasicMeasureFromAttribute(reader, null, CoreMetrics.FILES_COUNT, "files");
+    addBasicMeasureFromAttribute(reader, null, CoreMetrics.COMPLEXITY, "ccn");
+
+    collectProjectClassesMeasure(reader, null);
+    addCommentRatioMeasure(null, loc, cloc);
   }
 
-  private void collectProjectClassesMeasure(XMLStreamReader2 reader) throws ParseException {
+  private void collectMeasuresFromFileTag(XMLStreamReader2 reader, Resource file) throws ParseException, XMLStreamException {
+    Double loc = addBasicMeasureFromAttribute(reader, file, CoreMetrics.LOC, "loc");
+    addBasicMeasureFromAttribute(reader, file, CoreMetrics.NCLOC, "locExecutable");
+    Double cloc = addBasicMeasureFromAttribute(reader, file, CoreMetrics.COMMENT_LINES, "cloc");
+    addBasicMeasureFromAttribute(reader, file, CoreMetrics.CLASSES_COUNT, "classes");
+
+    addFileMeasure(file, CoreMetrics.FILES_COUNT, 1.0);
+    addCommentRatioMeasure(file, loc, cloc);
+  }
+
+  private void collectMeasuresFromClassTag(XMLStreamReader2 reader, Resource file) throws ParseException {
+    String value = reader.getAttributeValue(null, "nom");
+    addFileMeasure(file, CoreMetrics.FUNCTIONS_COUNT, value);
+  }
+
+  private void collectMeasuresFromFunctionTag(XMLStreamReader2 reader, Resource file) throws ParseException {
+    addFileMeasure(file, CoreMetrics.FUNCTIONS_COUNT, 1.0);
+  }
+
+  private void collectProjectClassesMeasure(XMLStreamReader2 reader, Resource resource) throws ParseException {
     String classes = reader.getAttributeValue(null, "classes");
     String interfaces = reader.getAttributeValue(null, "interfs");
     Double classesCount = extractValue(classes) + extractValue(interfaces);
     addProjectMeasure(CoreMetrics.CLASSES_COUNT, classesCount);
   }
 
-  private void collectFileMeasures(XMLStreamReader2 reader) throws ParseException, XMLStreamException {
-    String name = reader.getAttributeValue(null, "name");
-    Resource file = Php.newFileFromAbsolutePath(name, sourcesDir);
-
-    for (Map.Entry<Metric, String> attributeByMetric : attributeByMetrics.entrySet()) {
-      Metric metric = attributeByMetric.getKey();
-      String attribute = attributeByMetric.getValue();
-
-      String value = reader.getAttributeValue(null, attribute);
-      if (value != null) {
-        addFileMeasure(file, metric, value);
-      }
-    }
-    collectFunctionsCount(file, reader);
-    collectFilesCountMeasure(file);
+  private void addCommentRatioMeasure(Resource resource, Double loc, Double cloc) throws ParseException {
+    Double commentRatio = cloc / loc * 100;
+    addBasicMeasure(resource, CoreMetrics.COMMENT_RATIO, commentRatio);
   }
 
-  private void collectFunctionsCount(Resource file, XMLStreamReader2 reader) throws XMLStreamException, ParseException {
-    Double functionCount = 0.0;
-    String elementName;
-    boolean isNotAtFileEndTag = reader.next() != XMLStreamConstants.END_DOCUMENT;
-    while (isNotAtFileEndTag) {
-      if (reader.isStartElement()) {
-        elementName = reader.getLocalName();
-        if (elementName.equals("class")) {
-          String value = reader.getAttributeValue(null, "nom");
-          functionCount += extractValue(Integer.parseInt(value));
-          reader.skipElement();
-        } else if (elementName.equals("function")) {
-          functionCount += 1;
-          reader.skipElement();
-        }
-      } else if (reader.isEndElement()) {
-        elementName = reader.getLocalName();
-        if (elementName.equals("file")) {
-          isNotAtFileEndTag = false;
+
+  private void saveMeasures() throws ParseException {
+    for (Resource resource : resourcesManager.getResources()) {
+      for (Metric metric : resourcesManager.getMetrics(resource)) {
+        Double measure = resourcesManager.getMeasure(metric, resource);
+        if (resource != null) {
+          context.addMeasure(resource, metric, measure);
+        } else {
+          context.addMeasure(metric, measure);
         }
       }
-      isNotAtFileEndTag &= reader.next() != XMLStreamConstants.END_DOCUMENT;
     }
-    addFileMeasure(file, CoreMetrics.FUNCTIONS_COUNT, functionCount);
   }
 
-  private void collectDirectoryMeasures() throws ParseException {
-    for (Metric metric : directoryMeasures.getKeys()) {
-      for (Resource resource : directoryMeasures.getResources(metric)) {
-        Double measure = directoryMeasures.getMeasure(metric, resource);
-        context.addMeasure(resource, metric, measure);
-      }
+  private Double addBasicMeasureFromAttribute(XMLStreamReader2 reader, Resource resource, Metric metric, String attribute) throws ParseException {
+    String value = reader.getAttributeValue(null, attribute);
+    if (value != null) {
+      Double doubleValue = extractValue(value);
+      addBasicMeasure(resource, metric, doubleValue);
+      return doubleValue;
+    }
+    return null;
+  }
+
+  private void addBasicMeasure(Resource resource, Metric metric, Double value) throws ParseException {
+    if (resource != null) {
+      addFileMeasure(resource, metric, value);
+    } else {
+      addProjectMeasure(metric, value);
     }
   }
 
   private void addProjectMeasure(Metric metric, String value) throws ParseException {
-    context.addMeasure(metric, extractValue(value));
+    resourcesManager.addProject(extractValue(value), metric);
   }
 
   private void addProjectMeasure(Metric metric, Double value) throws ParseException {
-    context.addMeasure(metric, value);
+    resourcesManager.addProject(value, metric);
   }
 
   private void addFileMeasure(Resource file, Metric metric, Double value) throws ParseException {
-    context.addMeasure(file, metric, value);
-    addFileMeasureToParent(file, metric, value);
+    resourcesManager.addFile(value, metric, file);
   }
 
   private void addFileMeasure(Resource file, Metric metric, String value) throws ParseException {
-    addFileMeasure(file, metric, extractValue(value));
-  }
-
-  private void addFileMeasureToParent(Resource file, Metric metric, Double value) {
-    Resource parent = new Php().getParent(file);
-    if (parent != null) {
-      directoryMeasures.add(value, metric, parent);
-    }
-  }
-
-  private void collectFilesCountMeasure(Resource file) {
-    Resource parent = new Php().getParent(file);
-    if (parent != null) {
-      directoryMeasures.add(1.0, CoreMetrics.FILES_COUNT, parent);
-    }
+    resourcesManager.addFile(extractValue(value), metric, file);
   }
 
   private double extractValue(String value) throws ParseException {
     return MavenCollectorUtils.parseNumber(value);
   }
-
-  private double extractValue(Integer value) throws ParseException {
-    return MavenCollectorUtils.parseNumber(Integer.toString(value));
-  }
-
 
 }
