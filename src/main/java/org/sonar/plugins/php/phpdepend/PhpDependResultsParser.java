@@ -39,7 +39,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PhpDependResultsParser {
 
@@ -50,17 +52,21 @@ public class PhpDependResultsParser {
   private List<String> sourcesDir;
   private ResourcesManager resourcesManager;
 
+  private Set<Metric> metrics;
+
   public PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context) {
     this.config = config;
     this.context = context;
     this.sourcesDir = Arrays.asList(config.getSourceDir().getAbsolutePath());
     resourcesManager = new ResourcesManager();
+    metrics = getMetrics();
   }
 
-  protected PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context, List<String> sourcesDir) {
+  protected PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context, List<String> sourcesDir, Set<Metric> metrics) {
     this.config = config;
     this.context = context;
     this.sourcesDir = sourcesDir;
+    this.metrics = metrics;
     resourcesManager = new ResourcesManager();
   }
 
@@ -77,6 +83,21 @@ public class PhpDependResultsParser {
     }
   }
 
+  private Set<Metric> getMetrics() {
+    Set<Metric> metrics = new HashSet<Metric>();
+    metrics.add(CoreMetrics.LOC);
+    metrics.add(CoreMetrics.NCLOC);
+    metrics.add(CoreMetrics.FUNCTIONS_COUNT);
+    metrics.add(CoreMetrics.COMMENT_LINES);
+    metrics.add(CoreMetrics.FILES_COUNT);
+    metrics.add(CoreMetrics.COMPLEXITY);
+    metrics.add(CoreMetrics.CLASSES_COUNT);
+    metrics.add(CoreMetrics.COMMENT_RATIO);
+    metrics.add(CoreMetrics.COMPLEXITY_AVG_BY_FUNCTION);
+    metrics.add(CoreMetrics.COMPLEXITY_AVG_BY_CLASS);
+    return metrics;
+  }
+
   protected void collectMeasures(File reportXml) throws Exception {
     XMLInputFactory2 xmlFactory = (XMLInputFactory2) XMLInputFactory2.newInstance();
     InputStream input = new FileInputStream(reportXml);
@@ -87,15 +108,15 @@ public class PhpDependResultsParser {
       if (reader.isStartElement()) {
         String elementName = reader.getLocalName();
         if (elementName.equals("metrics")) {
-          collectMeasuresFromMetricsTag(reader);
+          collectProjectMeasures(reader);
         } else if (elementName.equals("file")) {
           String filePath = reader.getAttributeValue(null, "name");
           currentResourceFile = Php.newFileFromAbsolutePath(filePath, sourcesDir);
-          collectMeasuresFromFileTag(reader, currentResourceFile);
+          collectFileMeasures(reader, currentResourceFile);
         } else if (elementName.equals("class")) {
-          collectMeasuresFromClassTag(reader, currentResourceFile);
+          collectClassMeasures(reader, currentResourceFile);
         } else if (elementName.equals("function")) {
-          collectMeasuresFromFunctionTag(reader, currentResourceFile);
+          collectFunctionMeasures(reader, currentResourceFile);
         }
       }
     }
@@ -104,95 +125,122 @@ public class PhpDependResultsParser {
     saveMeasures();
   }
 
-  private void collectMeasuresFromMetricsTag(XMLStreamReader2 reader) throws ParseException, XMLStreamException {
-    Double loc = addBasicMeasureFromAttribute(reader, null, CoreMetrics.LOC, "loc");
-    addBasicMeasureFromAttribute(reader, null, CoreMetrics.NCLOC, "locExecutable");
-    addBasicMeasureFromAttribute(reader, null, CoreMetrics.FUNCTIONS_COUNT, "nom");
-    Double cloc = addBasicMeasureFromAttribute(reader, null, CoreMetrics.COMMENT_LINES, "cloc");
-    addBasicMeasureFromAttribute(reader, null, CoreMetrics.FILES_COUNT, "files");
-    addBasicMeasureFromAttribute(reader, null, CoreMetrics.COMPLEXITY, "ccn");
+  private void collectProjectMeasures(XMLStreamReader2 reader) throws ParseException, XMLStreamException {
+    addMeasureFromAttribute(reader, null, CoreMetrics.LOC, "loc");
+    addMeasureFromAttribute(reader, null, CoreMetrics.NCLOC, "locExecutable");
+    addMeasureFromAttribute(reader, null, CoreMetrics.FUNCTIONS_COUNT, "nom");
+    addMeasureFromAttribute(reader, null, CoreMetrics.COMMENT_LINES, "cloc");
+    addMeasureFromAttribute(reader, null, CoreMetrics.FILES_COUNT, "files");
+    addMeasureFromAttribute(reader, null, CoreMetrics.COMPLEXITY, "ccn");
 
-    collectProjectClassesMeasure(reader, null);
-    addCommentRatioMeasure(null, loc, cloc);
+    addMeasure(null, CoreMetrics.CLASSES_COUNT, getProjectClassesCountMeasure(reader));
+    addMeasure(null, CoreMetrics.COMMENT_RATIO, getCommentRatioMeasure(null));
   }
 
-  private void collectMeasuresFromFileTag(XMLStreamReader2 reader, Resource file) throws ParseException, XMLStreamException {
-    Double loc = addBasicMeasureFromAttribute(reader, file, CoreMetrics.LOC, "loc");
-    addBasicMeasureFromAttribute(reader, file, CoreMetrics.NCLOC, "locExecutable");
-    Double cloc = addBasicMeasureFromAttribute(reader, file, CoreMetrics.COMMENT_LINES, "cloc");
-    addBasicMeasureFromAttribute(reader, file, CoreMetrics.CLASSES_COUNT, "classes");
+  private void collectFileMeasures(XMLStreamReader2 reader, Resource file) throws ParseException, XMLStreamException {
+    addMeasureFromAttribute(reader, file, CoreMetrics.LOC, "loc");
+    addMeasureFromAttribute(reader, file, CoreMetrics.NCLOC, "locExecutable");
+    addMeasureFromAttribute(reader, file, CoreMetrics.COMMENT_LINES, "cloc");
+    addMeasureFromAttribute(reader, file, CoreMetrics.CLASSES_COUNT, "classes");
 
-    addFileMeasure(file, CoreMetrics.FILES_COUNT, 1.0);
-    addCommentRatioMeasure(file, loc, cloc);
+    addMeasure(file, CoreMetrics.FILES_COUNT, 1.0);
+    addMeasure(file, CoreMetrics.COMMENT_RATIO, getCommentRatioMeasure(file));
   }
 
-  private void collectMeasuresFromClassTag(XMLStreamReader2 reader, Resource file) throws ParseException {
-    String value = reader.getAttributeValue(null, "nom");
-    addFileMeasure(file, CoreMetrics.FUNCTIONS_COUNT, value);
+  private void collectClassMeasures(XMLStreamReader2 reader, Resource file) throws ParseException {
+    addMeasureFromAttribute(reader, file, CoreMetrics.FUNCTIONS_COUNT, "nom");
+    addMeasureFromAttribute(reader, file, CoreMetrics.COMPLEXITY, "wmc");
   }
 
-  private void collectMeasuresFromFunctionTag(XMLStreamReader2 reader, Resource file) throws ParseException {
-    addFileMeasure(file, CoreMetrics.FUNCTIONS_COUNT, 1.0);
+  private void collectFunctionMeasures(XMLStreamReader2 reader, Resource file) throws ParseException {
+    addMeasure(file, CoreMetrics.FUNCTIONS_COUNT, 1.0);
+    addMeasureFromAttribute(reader, file, CoreMetrics.COMPLEXITY, "ccn");
   }
-
-  private void collectProjectClassesMeasure(XMLStreamReader2 reader, Resource resource) throws ParseException {
-    String classes = reader.getAttributeValue(null, "classes");
-    String interfaces = reader.getAttributeValue(null, "interfs");
-    Double classesCount = extractValue(classes) + extractValue(interfaces);
-    addProjectMeasure(CoreMetrics.CLASSES_COUNT, classesCount);
-  }
-
-  private void addCommentRatioMeasure(Resource resource, Double loc, Double cloc) throws ParseException {
-    Double commentRatio = cloc / loc * 100;
-    addBasicMeasure(resource, CoreMetrics.COMMENT_RATIO, commentRatio);
-  }
-
 
   private void saveMeasures() throws ParseException {
     for (Resource resource : resourcesManager.getResources()) {
       for (Metric metric : resourcesManager.getMetrics(resource)) {
-        Double measure = resourcesManager.getMeasure(metric, resource);
-        if (resource != null) {
-          context.addMeasure(resource, metric, measure);
-        } else {
-          context.addMeasure(metric, measure);
+        if (metrics.contains(metric)) {
+          Double measure = resourcesManager.getMeasure(metric, resource);
+          recordMeasure(resource, metric, measure);
         }
+      }
+      calculateComplexMeasure(resource);
+    }
+  }
+
+  private void calculateComplexMeasure(Resource resource) throws ParseException {
+    recordComplexMeasure(CoreMetrics.COMPLEXITY_AVG_BY_FUNCTION, resource, getComplexityPerMethodMeasure(resource));
+    recordComplexMeasure(CoreMetrics.COMPLEXITY_AVG_BY_CLASS, resource, getComplexityPerClassMeasure(resource));
+  }
+
+  private void recordMeasure(Resource resource, Metric metric, Double measure) {
+    if (resource != null) {
+      context.addMeasure(resource, metric, measure);
+    } else {
+      context.addMeasure(metric, measure);
+    }
+  }
+
+  private void recordComplexMeasure(Metric metric, Resource resource, Double value) throws ParseException {
+    if (metrics.contains(metric)) {
+      if (value != null){
+        recordMeasure(resource, metric, value);
       }
     }
   }
 
-  private Double addBasicMeasureFromAttribute(XMLStreamReader2 reader, Resource resource, Metric metric, String attribute) throws ParseException {
+  private Double getProjectClassesCountMeasure(XMLStreamReader2 reader) throws ParseException {
+    String classes = reader.getAttributeValue(null, "classes");
+    String interfaces = reader.getAttributeValue(null, "interfs");
+    return extractValue(classes) + extractValue(interfaces);
+  }
+
+  private Double getCommentRatioMeasure(Resource resource) throws ParseException {
+    Double cloc = resourcesManager.getMeasure(CoreMetrics.COMMENT_LINES, resource);
+    Double loc = resourcesManager.getMeasure(CoreMetrics.LOC, resource);
+    if (cloc != null && loc != null && loc != 0) {
+      return cloc / loc * 100;
+    }
+    return null;
+  }
+
+  private Double getComplexityPerMethodMeasure(Resource resource) throws ParseException {
+    Double ccn = resourcesManager.getMeasure(CoreMetrics.COMPLEXITY, resource);
+    Double functions = resourcesManager.getMeasure(CoreMetrics.FUNCTIONS_COUNT, resource);
+    if (ccn != null && functions != null && functions != 0) {
+      return ccn / functions;
+    }
+    return null;
+  }
+
+  private Double getComplexityPerClassMeasure(Resource resource) throws ParseException {
+    Double ccn = resourcesManager.getMeasure(CoreMetrics.COMPLEXITY, resource);
+    Double classes = resourcesManager.getMeasure(CoreMetrics.CLASSES_COUNT, resource);
+    if (ccn != null && classes != null && classes != 0) {
+      return ccn / classes;
+    }
+    return null;
+  }
+
+  private Double addMeasureFromAttribute(XMLStreamReader2 reader, Resource resource, Metric metric, String attribute) throws ParseException {
     String value = reader.getAttributeValue(null, attribute);
     if (value != null) {
       Double doubleValue = extractValue(value);
-      addBasicMeasure(resource, metric, doubleValue);
+      addMeasure(resource, metric, doubleValue);
       return doubleValue;
     }
     return null;
   }
 
-  private void addBasicMeasure(Resource resource, Metric metric, Double value) throws ParseException {
-    if (resource != null) {
-      addFileMeasure(resource, metric, value);
-    } else {
-      addProjectMeasure(metric, value);
+  private void addMeasure(Resource file, Metric metric, Double value) throws ParseException {
+    if (value != null) {
+      if (file != null) {
+        resourcesManager.addFile(value, metric, file);
+      } else {
+        resourcesManager.addProject(value, metric);
+      }
     }
-  }
-
-  private void addProjectMeasure(Metric metric, String value) throws ParseException {
-    resourcesManager.addProject(extractValue(value), metric);
-  }
-
-  private void addProjectMeasure(Metric metric, Double value) throws ParseException {
-    resourcesManager.addProject(value, metric);
-  }
-
-  private void addFileMeasure(Resource file, Metric metric, Double value) throws ParseException {
-    resourcesManager.addFile(value, metric, file);
-  }
-
-  private void addFileMeasure(Resource file, Metric metric, String value) throws ParseException {
-    resourcesManager.addFile(extractValue(value), metric, file);
   }
 
   private double extractValue(String value) throws ParseException {
