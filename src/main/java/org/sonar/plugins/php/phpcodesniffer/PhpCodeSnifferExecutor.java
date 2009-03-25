@@ -45,22 +45,27 @@ public class PhpCodeSnifferExecutor {
 
     try {
       String[] cmd = {configuration.getCommandLine(), configuration.getReportFormatOption(),
-        configuration.getReportFileOption(), configuration.getSourceDir().getAbsolutePath()};
+        configuration.getReportFileOption(), configuration.getStandardOption(),
+        configuration.getSourceDir().getAbsolutePath()
+      };
       commandLine = StringUtils.join(cmd, " ");
       ProcessBuilder builder = new ProcessBuilder(cmd);
       builder.redirectErrorStream(true);
 
-      LOG.info("Execute PHP CodeSniffer with command '{}'", commandLine);
+      LOG.info("Execute PHP CodeSniffer with command '{}' ", commandLine);
       Process p = builder.start();
       new StreamGobbler(p.getInputStream()).start();
       int returnCde = p.waitFor();
-      if (returnCde > 1) {
+
+      LOG.info(" PHP CodeSniffer finished with code '{}' ", returnCde);
+      if (returnCde != 0 && returnCde != 1) {
         throw new PhpCodeSnifferExecutionException("Status=" + returnCde + ", command=" + commandLine);
       }
     } catch (Exception e) {
       throw new PhpCodeSnifferExecutionException(e);
     }
   }
+
 
   class StreamGobbler extends Thread {
     InputStream is;

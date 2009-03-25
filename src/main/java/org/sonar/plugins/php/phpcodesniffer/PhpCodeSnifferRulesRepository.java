@@ -20,15 +20,21 @@
 
 package org.sonar.plugins.php.phpcodesniffer;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.commons.Language;
+import org.sonar.commons.rules.ActiveRule;
 import org.sonar.commons.rules.Rule;
 import org.sonar.commons.rules.RulesProfile;
 import org.sonar.plugins.api.rules.RulesRepository;
 import org.sonar.plugins.api.rules.StandardRulesXmlParser;
 import org.sonar.plugins.php.Php;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,5 +59,45 @@ public class PhpCodeSnifferRulesRepository implements RulesRepository {
 
   public List<RulesProfile> getProvidedProfiles() {
     return Collections.emptyList();
+  }
+
+  public String exportConfiguration(RulesProfile activeProfile) {
+    try {
+      return getConfigurationFromActiveRules(activeProfile.getName(), activeProfile.getActiveRulesByPlugin(Php.KEY));
+    } catch (IOException e) {
+      throw new PhpCodeSnifferExecutionException(e);
+    }
+  }
+
+  protected String getConfigurationFromActiveRules(String profileName, List<ActiveRule> activeRules) throws IOException {
+      String configuration = getTemplateConfiguration();
+      configuration = configuration.replace("$(PROFILE)", profileName);
+      configuration = configuration.replace("$(RULES)", getPhpRules(activeRules));
+      return configuration;
+  }
+
+  protected String getTemplateConfiguration() throws IOException {
+      InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/phpcodesniffer/skeleton-profile.php");
+      return IOUtils.toString(input, "UTF-8");
+  }
+
+  protected String getPhpRules(List<ActiveRule> activeRules) {
+    Collection listOfConfigKey = CollectionUtils.collect(activeRules, new Transformer(){
+      public Object transform(Object o) {
+        ActiveRule activeRule = (ActiveRule) o;
+        return getSniffFromConfigKey(activeRule.getRule().getConfigKey());
+      }
+    });
+    if (!listOfConfigKey.isEmpty()){
+      return "'"+ StringUtils.join(listOfConfigKey, "','") +"'";
+    }
+    return "";
+  }
+
+  protected String getSniffFromConfigKey(String configKey) {
+    String sniff = configKey.replaceAll("\\.", "/");
+    sniff = sniff.replaceFirst("/", "/Sniffs/");
+    sniff += ".php";
+    return sniff;
   }
 }

@@ -52,13 +52,13 @@ public class PhpCodeSnifferConfigurationTest {
   public void shouldGetCommandLineWithPathEvenIfExistingLastSlash() {
     String path = "path/to/phpcodesniffer";
     PhpCodeSnifferConfiguration config = getConfiguration(false, path + "/");
-    assertThat(config.getCommandLine(), is(path + "/"+ PhpCodeSnifferConfiguration.COMMAND_LINE));
+    assertThat(config.getCommandLine(), is(path + "/" + PhpCodeSnifferConfiguration.COMMAND_LINE));
   }
 
   @Test
-  public void shouldReportFileBeInTargetDir(){
+  public void shouldReportFileBeInTargetDir() {
     MavenPom pom = mock(MavenPom.class);
-    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(pom);
+    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(pom, null);
     config.getReportFileOption();
     verify(pom).getBuildDir();
   }

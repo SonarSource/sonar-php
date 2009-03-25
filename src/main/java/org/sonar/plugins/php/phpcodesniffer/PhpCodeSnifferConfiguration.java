@@ -29,25 +29,30 @@ import java.io.File;
 public class PhpCodeSnifferConfiguration {
 
   private MavenPom pom = null;
+  private String profileName;
 
   protected static final String KEY_PATH = "phpcodesniffer.path";
   protected static final String DEFAUT_PATH = "";
 
   protected static final String COMMAND_LINE = "phpcs";
 
-  public static final String REPORT_FORMAT_OPT = "report";
-  public static final String REPORT_FORMAT_DEFAULT_OPT = "xml";
+  private static final String REPORT_FORMAT_OPT = "report";
+  private static final String REPORT_FORMAT_DEFAULT_OPT = "xml";
 
-  public static final String REPORT_FILE_OPT = "report-file";
+  private static final String REPORT_FILE_OPT = "report-file";
+
+  public static final String STANDARD_OPT = "standard";
 
 
-  public PhpCodeSnifferConfiguration(MavenPom pom) {
+  public PhpCodeSnifferConfiguration(MavenPom pom, String profileName) {
     this.pom = pom;
+    this.profileName = profileName;
   }
 
   // Only for unit tests
   protected PhpCodeSnifferConfiguration() {
   }
+
 
   public String getCommandLine() {
     String path = getCommandLinePath();
@@ -87,6 +92,14 @@ public class PhpCodeSnifferConfiguration {
 
   protected String getCommandLinePath(){
     return pom.getConfiguration().getString(KEY_PATH, DEFAUT_PATH);
+  }
+
+  public String getStandardOption(){
+    return "--"+ STANDARD_OPT +"='"+ getProfileDir().getAbsolutePath() +"'";
+  }
+
+  public File getProfileDir(){
+    return new File(pom.getSonarWorkingDirectory(), profileName);
   }
 
 }

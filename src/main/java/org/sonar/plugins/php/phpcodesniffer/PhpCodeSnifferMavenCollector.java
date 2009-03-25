@@ -20,6 +20,8 @@
 
 package org.sonar.plugins.php.phpcodesniffer;
 
+import org.apache.commons.io.FileUtils;
+import org.sonar.commons.rules.RulesProfile;
 import org.sonar.plugins.api.maven.MavenCollector;
 import org.sonar.plugins.api.maven.MavenPluginHandler;
 import org.sonar.plugins.api.maven.ProjectContext;
@@ -27,12 +29,25 @@ import org.sonar.plugins.api.maven.model.MavenPom;
 import org.sonar.plugins.api.rules.RulesManager;
 import org.sonar.plugins.php.Php;
 
+import java.io.File;
+import java.io.IOException;
+
 public class PhpCodeSnifferMavenCollector implements MavenCollector {
 
   private RulesManager rulesManager;
+  private RulesProfile rulesProfile;
+  private PhpCodeSnifferRulesRepository rulesRepository;
 
-  public PhpCodeSnifferMavenCollector(RulesManager rulesManager) {
+  public PhpCodeSnifferMavenCollector(RulesManager rulesManager, RulesProfile rulesProfile,
+                                PhpCodeSnifferRulesRepository rulesRepository) {
     this.rulesManager = rulesManager;
+    this.rulesProfile = rulesProfile;
+    this.rulesRepository = rulesRepository;
+  }
+
+  protected PhpCodeSnifferMavenCollector(RulesProfile rulesProfile, PhpCodeSnifferRulesRepository rulesRepository){
+    this.rulesProfile = rulesProfile;
+    this.rulesRepository = rulesRepository;
   }
 
   public Class<? extends MavenPluginHandler> dependsOnMavenPlugin(MavenPom pom) {
@@ -44,11 +59,26 @@ public class PhpCodeSnifferMavenCollector implements MavenCollector {
   }
 
   public void collect(MavenPom pom, ProjectContext context) {
-    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(pom);
+    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(pom, rulesProfile.getName());
     PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(config);
+    createRulesConfigurationFolderAndFile(config);
     executor.execute();
 
     PhpCodeSnifferResultsParser parser = new PhpCodeSnifferResultsParser(config, context, rulesManager);
     parser.parse();
+  }
+
+  protected void createRulesConfigurationFolderAndFile(PhpCodeSnifferConfiguration config) {
+    try {
+      String rulesConfiguration = rulesRepository.exportConfiguration(rulesProfile);
+      String profileName = rulesProfile.getName();
+      File profileDir = config.getProfileDir();
+      File configurationFile = new File(profileDir, profileName +"CodingStandard.php");
+
+      FileUtils.forceMkdir(profileDir);
+      FileUtils.writeStringToFile(configurationFile, rulesConfiguration, "UTF-8");
+    } catch (IOException e) {
+      throw new PhpCodeSnifferExecutionException(e);
+    }
   }
 }

@@ -20,25 +20,95 @@
 
 package org.sonar.plugins.php.phpcodesniffer;
 
+import org.apache.commons.io.IOUtils;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.number.OrderingComparisons.greaterThan;
+import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import org.sonar.commons.rules.Rule;
+import org.sonar.commons.rules.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PhpCodeSnifferRulesRepositoryTest {
 
   @Test
-  public void rulesAreDefinedWithTheDefaultSonarXmlFormat() {
+  public void shouldRulesInInitialReferentialBeDefinedWithTheDefaultSonarXmlFormat() {
     PhpCodeSnifferRulesRepository repository = new PhpCodeSnifferRulesRepository();
     List<Rule> rules = repository.getInitialReferential();
-    assertTrue(rules.size() > 0);
+    assertThat(rules.size(), greaterThan(0));
     for (Rule rule : rules) {
       assertNotNull(rule.getKey());
       assertNotNull(rule.getDescription());
       assertNotNull(rule.getConfigKey());
       assertNotNull(rule.getName());
+    }
+  }
+
+  @Test
+  public void shouldReturnAnEmptyConfigurationIfNoActiveRules() throws IOException {
+    PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository();
+    String result = rulesRepository.getConfigurationFromActiveRules("TEST", Collections.<ActiveRule>emptyList());
+    assertThatAConfigurationIsEqualTo(result, "test-profile-empty");
+  }
+
+  @Test
+  public void shouldConvertConfigKey() {
+    PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository();
+
+    String configKey = "Zend.Files.ClosingTagSniff";
+    String result = rulesRepository.getSniffFromConfigKey(configKey);
+    assertThat(result, is("Zend/Sniffs/Files/ClosingTagSniff.php"));
+  }
+
+  @Test
+  public void shouldReturnAListOfStringFromAListOfActiveRules() {
+    PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository() {
+      protected String getSniffFromConfigKey(String configKey) {
+        return configKey;
+      }
+    };
+
+    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
+    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "aConfigKey", new RulesCategory("aCat"), "apluginName", ""),
+      RuleFailureLevel.ERROR));
+    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "anOtherConfigKey", new RulesCategory("aCat"), "apluginName", ""),
+      RuleFailureLevel.ERROR));
+    String result = rulesRepository.getPhpRules(activeRules);
+
+    assertThat(result, is("'aConfigKey','anOtherConfigKey'"));
+  }
+  
+  @Test
+  public void shouldGetRulesConfigurationFromSomeActiveRules() throws IOException {
+    PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository();
+
+    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
+    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "Generic.WhiteSpace.DisallowTabIndentSniff", new RulesCategory("aCat"), "apluginName", ""),
+      RuleFailureLevel.ERROR));
+    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "Zend.Files.ClosingTagSniff", new RulesCategory("aCat"), "apluginName", ""),
+      RuleFailureLevel.ERROR));
+    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "PEAR.Commenting.FunctionCommentSniff", new RulesCategory("aCat"), "apluginName", ""),
+      RuleFailureLevel.ERROR));
+
+    String result = rulesRepository.getConfigurationFromActiveRules("TEST", activeRules);
+
+    assertThatAConfigurationIsEqualTo(result, "test-profile-with-some-rules");
+  }
+
+
+  private void assertThatAConfigurationIsEqualTo(String configurationFound, String configurationExpected){
+    try {
+      InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/phpcodesniffer/"+ configurationExpected +".php");
+      String configuration = IOUtils.toString(input, "UTF-8");
+      assertThat(configurationFound, equalToIgnoringWhiteSpace(configuration));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 }

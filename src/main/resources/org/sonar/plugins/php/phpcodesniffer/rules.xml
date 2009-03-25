@@ -1,23 +1,23 @@
 <rules>
-  <rule key="Generic.WhiteSpace.DisallowTabIndentSniff">
+  <rule key="Generic.WhiteSpace.DisallowTabIndent">
     <name>Disallow Tab Indent</name>
     <configKey>Generic.WhiteSpace.DisallowTabIndentSniff</configKey>
     <category name="Usability"/>
     <description>Spaces must be used to indent lines; tabs are not allowed</description>
   </rule>
-  <rule key="Zend.Files.ClosingTagSniff">
+  <rule key="Zend.Files.ClosingTag">
     <name>Closing Tag</name>
     <configKey>Zend.Files.ClosingTagSniff</configKey>
     <category name="Maintainability"/>
     <description>A closing tag is not permitted at the end of a PHP file</description>
   </rule>
-  <rule key="PEAR.Commenting.FunctionCommentSniff">
+  <rule key="PEAR.Commenting.FunctionComment">
     <name>Function Comment</name>
     <configKey>PEAR.Commenting.FunctionCommentSniff</configKey>
     <category name="Maintainability"/>
     <description>You must use &quot;/**&quot; style comments for a function comment</description>
   </rule>
-  <rule key="Generic.PHP.LowerCaseConstantSniff">
+  <rule key="Generic.PHP.LowerCaseConstant">
     <name>Lower Case Constant</name>
     <configKey>Generic.PHP.LowerCaseConstantSniff</configKey>
     <category name="Maintainability"/>
