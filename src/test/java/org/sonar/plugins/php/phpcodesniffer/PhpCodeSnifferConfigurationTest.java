@@ -27,6 +27,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.sonar.plugins.api.maven.model.MavenPom;
 
+import java.io.IOException;
+
 public class PhpCodeSnifferConfigurationTest {
 
   @Test
@@ -56,7 +58,7 @@ public class PhpCodeSnifferConfigurationTest {
   }
 
   @Test
-  public void shouldReportFileBeInTargetDir() {
+  public void shouldReportFileBeInTargetDir() throws IOException {
     MavenPom pom = mock(MavenPom.class);
     PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(pom, null);
     config.getReportFileOption();

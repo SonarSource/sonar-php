@@ -56,11 +56,10 @@ public class PhpCodeSnifferExecutor {
       Process p = builder.start();
       new StreamGobbler(p.getInputStream()).start();
       int returnCde = p.waitFor();
-
-      LOG.info(" PHP CodeSniffer finished with code '{}' ", returnCde);
       if (returnCde != 0 && returnCde != 1) {
         throw new PhpCodeSnifferExecutionException("Status=" + returnCde + ", command=" + commandLine);
       }
+
     } catch (Exception e) {
       throw new PhpCodeSnifferExecutionException(e);
     }
@@ -78,9 +77,7 @@ public class PhpCodeSnifferExecutor {
       InputStreamReader isr = new InputStreamReader(is);
       BufferedReader br = new BufferedReader(isr);
       try {
-
         while (br.readLine() != null) {
-          // nothing
         }
       } catch (IOException ioe) {
         ioe.printStackTrace();

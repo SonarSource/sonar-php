@@ -25,6 +25,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.sonar.plugins.api.maven.model.MavenPom;
 
 import java.io.File;
+import java.io.IOException;
 
 public class PhpCodeSnifferConfiguration {
 
@@ -74,8 +75,8 @@ public class PhpCodeSnifferConfiguration {
     return "--"+ REPORT_FORMAT_OPT +"="+ REPORT_FORMAT_DEFAULT_OPT;
   }
 
-  public String getReportFileOption(){
-    return "--"+ REPORT_FILE_OPT +"="+ getReportFile().getAbsolutePath();
+  public String getReportFileOption() throws IOException {
+    return "--"+ REPORT_FILE_OPT +"="+ getReportFile().getCanonicalPath();
   }
 
   public File getReportFile(){
@@ -94,8 +95,8 @@ public class PhpCodeSnifferConfiguration {
     return pom.getConfiguration().getString(KEY_PATH, DEFAUT_PATH);
   }
 
-  public String getStandardOption(){
-    return "--"+ STANDARD_OPT +"='"+ getProfileDir().getAbsolutePath() +"'";
+  public String getStandardOption() throws IOException {
+    return "--"+ STANDARD_OPT +"="+ getProfileDir().getCanonicalPath();
   }
 
   public File getProfileDir(){
