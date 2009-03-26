@@ -61,9 +61,9 @@ public class PhpCodeSnifferRulesRepository implements RulesRepository {
     return Collections.emptyList();
   }
 
-  public String exportConfiguration(RulesProfile activeProfile) {
+  public String exportConfiguration(RulesProfile activeProfile, String cleanProfileName) {
     try {
-      return getConfigurationFromActiveRules(activeProfile.getName(), activeProfile.getActiveRulesByPlugin(Php.KEY));
+      return getConfigurationFromActiveRules(cleanProfileName, activeProfile.getActiveRulesByPlugin(Php.KEY));
     } catch (IOException e) {
       throw new PhpCodeSnifferExecutionException(e);
     }
@@ -85,7 +85,7 @@ public class PhpCodeSnifferRulesRepository implements RulesRepository {
     Collection listOfConfigKey = CollectionUtils.collect(activeRules, new Transformer(){
       public Object transform(Object o) {
         ActiveRule activeRule = (ActiveRule) o;
-        return getSniffFromConfigKey(activeRule.getRule().getConfigKey());
+        return activeRule.getRule().getConfigKey();
       }
     });
     if (!listOfConfigKey.isEmpty()){
@@ -94,10 +94,4 @@ public class PhpCodeSnifferRulesRepository implements RulesRepository {
     return "";
   }
 
-  protected String getSniffFromConfigKey(String configKey) {
-    String sniff = configKey.replaceAll("\\.", "/");
-    sniff = sniff.replaceFirst("/", "/Sniffs/");
-    sniff += ".php";
-    return sniff;
-  }
 }

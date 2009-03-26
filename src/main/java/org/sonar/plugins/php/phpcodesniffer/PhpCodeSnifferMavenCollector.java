@@ -70,13 +70,12 @@ public class PhpCodeSnifferMavenCollector implements MavenCollector {
 
   protected void createRulesConfigurationFolderAndFile(PhpCodeSnifferConfiguration config) {
     try {
-      String rulesConfiguration = rulesRepository.exportConfiguration(rulesProfile);
-      String profileName = rulesProfile.getName();
-      File profileDir = config.getProfileDir();
-      File configurationFile = new File(profileDir, profileName +"CodingStandard.php");
+      String rulesConfigurationContent = rulesRepository.exportConfiguration(rulesProfile, config.getCleanProfileName());
+      File dirProfile = config.getDirProfile();
+      File fileProfile = config.getFileProfile();
 
-      FileUtils.forceMkdir(profileDir);
-      FileUtils.writeStringToFile(configurationFile, rulesConfiguration, "UTF-8");
+      FileUtils.forceMkdir(dirProfile);
+      FileUtils.writeStringToFile(fileProfile, rulesConfigurationContent, "UTF-8");
     } catch (IOException e) {
       throw new PhpCodeSnifferExecutionException(e);
     }

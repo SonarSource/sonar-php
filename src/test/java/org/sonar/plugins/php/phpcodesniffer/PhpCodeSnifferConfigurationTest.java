@@ -65,6 +65,13 @@ public class PhpCodeSnifferConfigurationTest {
     verify(pom).getBuildDir();
   }
 
+  @Test
+  public void shouldReplaceSpaceByUnderscoreInProperProfileName(){
+    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(null, "profile name with space");
+    String result = config.getCleanProfileName();
+    assertThat(result, is("profile_name_with_space"));
+  }
+
   private PhpCodeSnifferConfiguration getWindowsConfiguration() {
     return getConfiguration(true, "");
   }

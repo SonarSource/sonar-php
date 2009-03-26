@@ -71,15 +71,15 @@ public class PhpCodeSnifferConfiguration {
     }
   }
 
-  public String getReportFormatOption(){
-    return "--"+ REPORT_FORMAT_OPT +"="+ REPORT_FORMAT_DEFAULT_OPT;
+  public String getReportFormatOption() {
+    return "--" + REPORT_FORMAT_OPT + "=" + REPORT_FORMAT_DEFAULT_OPT;
   }
 
   public String getReportFileOption() throws IOException {
-    return "--"+ REPORT_FILE_OPT +"="+ getReportFile().getCanonicalPath();
+    return "--" + REPORT_FILE_OPT + "=" + getReportFile().getCanonicalPath();
   }
 
-  public File getReportFile(){
+  public File getReportFile() {
     return new File(pom.getBuildDir(), "phpcodesniffer-report.xml");
   }
 
@@ -91,16 +91,26 @@ public class PhpCodeSnifferConfiguration {
     return SystemUtils.IS_OS_WINDOWS;
   }
 
-  protected String getCommandLinePath(){
+  protected String getCommandLinePath() {
     return pom.getConfiguration().getString(KEY_PATH, DEFAUT_PATH);
   }
 
   public String getStandardOption() throws IOException {
-    return "--"+ STANDARD_OPT +"="+ getProfileDir().getCanonicalPath();
+    return "--" + STANDARD_OPT + "=" + getDirProfile().getCanonicalPath();
   }
 
-  public File getProfileDir(){
-    return new File(pom.getSonarWorkingDirectory(), profileName);
+  public File getDirProfile() {
+    return new File(pom.getSonarWorkingDirectory(), getCleanProfileName());
+  }
+
+  public String getCleanProfileName() {
+    return StringUtils.replace(profileName, " ", "_");
+  }
+
+  public File getFileProfile() {
+    String profileName = getCleanProfileName();
+    File profileDir = getDirProfile();
+    return new File(profileDir, profileName + "CodingStandard.php");
   }
 
 }

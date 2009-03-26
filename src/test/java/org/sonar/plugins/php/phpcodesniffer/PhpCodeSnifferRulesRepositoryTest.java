@@ -58,15 +58,6 @@ public class PhpCodeSnifferRulesRepositoryTest {
   }
 
   @Test
-  public void shouldConvertConfigKey() {
-    PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository();
-
-    String configKey = "Zend.Files.ClosingTagSniff";
-    String result = rulesRepository.getSniffFromConfigKey(configKey);
-    assertThat(result, is("Zend/Sniffs/Files/ClosingTagSniff.php"));
-  }
-
-  @Test
   public void shouldReturnAListOfStringFromAListOfActiveRules() {
     PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository() {
       protected String getSniffFromConfigKey(String configKey) {
@@ -89,11 +80,11 @@ public class PhpCodeSnifferRulesRepositoryTest {
     PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository();
 
     List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "Generic.WhiteSpace.DisallowTabIndentSniff", new RulesCategory("aCat"), "apluginName", ""),
+    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php", new RulesCategory("aCat"), "apluginName", ""),
       RuleFailureLevel.ERROR));
-    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "Zend.Files.ClosingTagSniff", new RulesCategory("aCat"), "apluginName", ""),
+    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "Zend/Sniffs/Files/ClosingTagSniff.php", new RulesCategory("aCat"), "apluginName", ""),
       RuleFailureLevel.ERROR));
-    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "PEAR.Commenting.FunctionCommentSniff", new RulesCategory("aCat"), "apluginName", ""),
+    activeRules.add(new ActiveRule(new RulesProfile(), new Rule("aRuleName", "aRuleKey", "PEAR/Sniffs/Commenting/FunctionCommentSniff.php", new RulesCategory("aCat"), "apluginName", ""),
       RuleFailureLevel.ERROR));
 
     String result = rulesRepository.getConfigurationFromActiveRules("TEST", activeRules);

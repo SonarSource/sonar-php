@@ -1,25 +1,25 @@
 <rules>
-  <rule key="Generic.WhiteSpace.DisallowTabIndent">
+  <rule key="Generic.WhiteSpace.DisallowTabIndentSniff">
     <name>Disallow Tab Indent</name>
-    <configKey>Generic.WhiteSpace.DisallowTabIndentSniff</configKey>
+    <configKey>Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php</configKey>
     <category name="Usability"/>
     <description>Spaces must be used to indent lines; tabs are not allowed</description>
   </rule>
-  <rule key="Zend.Files.ClosingTag">
+  <rule key="Zend.Files.ClosingTagSniff">
     <name>Closing Tag</name>
-    <configKey>Zend.Files.ClosingTagSniff</configKey>
+    <configKey>Zend/Sniffs/Files/ClosingTagSniff.php</configKey>
     <category name="Maintainability"/>
     <description>A closing tag is not permitted at the end of a PHP file</description>
   </rule>
-  <rule key="PEAR.Commenting.FunctionComment">
+  <rule key="PEAR.Commenting.FunctionCommentSniff">
     <name>Function Comment</name>
-    <configKey>PEAR.Commenting.FunctionCommentSniff</configKey>
+    <configKey>PEAR/Sniffs/Commenting/FunctionCommentSniff.php</configKey>
     <category name="Maintainability"/>
     <description>You must use &quot;/**&quot; style comments for a function comment</description>
   </rule>
-  <rule key="Generic.PHP.LowerCaseConstant">
+  <rule key="Generic.PHP.LowerCaseConstantSniff">
     <name>Lower Case Constant</name>
-    <configKey>Generic.PHP.LowerCaseConstantSniff</configKey>
+    <configKey>Generic/Sniffs/PHP/LowerCaseConstantSniff.php</configKey>
     <category name="Maintainability"/>
     <description>TRUE, FALSE and NULL must be lowercase; expected &quot;null&quot; but found &quot;NULL&quot;</description>
   </rule>  

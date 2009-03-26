@@ -27,6 +27,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.sonar.commons.rules.RulesProfile;
@@ -37,63 +39,52 @@ import java.io.IOException;
 public class PhpCodeSnifferMavenCollectorTest {
 
   private PhpCodeSnifferConfiguration phpCodeSnifferConfiguration;
-  private RulesProfile rulesProfile;
   private PhpCodeSnifferRulesRepository rulesRepository;
+  private RulesProfile rulesProfile;
 
-  private String profileName = "profileName";
 
   @Before
   public void before() {
     phpCodeSnifferConfiguration = mock(PhpCodeSnifferConfiguration.class);
-    rulesProfile = mock(RulesProfile.class);
     rulesRepository = mock(PhpCodeSnifferRulesRepository.class);
+    rulesProfile = mock(RulesProfile.class);
 
-    profileName = "profileName";
-    when(rulesProfile.getName()).thenReturn(profileName);
+    File profileDir = new File("target");
+    when(phpCodeSnifferConfiguration.getDirProfile()).thenReturn(profileDir);
+    File configurationFile = new File(profileDir, "configuration.php");
+    when(phpCodeSnifferConfiguration.getFileProfile()).thenReturn(configurationFile);
   }
 
   @Test
-  public void shouldCreateRulesConfigurationFileAndDirWhenGettingConfiguration() {
-    File profileDir = new File("target", profileName);
-    when(phpCodeSnifferConfiguration.getProfileDir()).thenReturn(profileDir);
+  public void shouldCreateFileProfile() {
+    File profileDir = new File("target");
+    when(phpCodeSnifferConfiguration.getDirProfile()).thenReturn(profileDir);
+    File configurationFile = new File(profileDir, "configuration.php");
+    when(phpCodeSnifferConfiguration.getFileProfile()).thenReturn(configurationFile);
 
-    when(rulesRepository.exportConfiguration(rulesProfile)).thenReturn("");
+    when(rulesRepository.exportConfiguration(eq(rulesProfile), anyString())).thenReturn("");
 
     PhpCodeSnifferMavenCollector collector = new PhpCodeSnifferMavenCollector(rulesProfile, rulesRepository);
     collector.createRulesConfigurationFolderAndFile(phpCodeSnifferConfiguration);
 
-    File configurationFile = new File(profileDir, profileName + "CodingStandard.php");
-
     assertTrue(configurationFile.exists());
-    assertThat(configurationFile.getParent(), endsWith(profileName));
-    assertThat(configurationFile.getParentFile().getParent(), endsWith("target"));
+    assertThat(configurationFile.getParent(), endsWith(profileDir.getName()));
   }
 
   @Test
   public void shouldWriteRulesConfigurationContentToFile() throws IOException {
-    File profileDir = new File("target", profileName);
-    when(phpCodeSnifferConfiguration.getProfileDir()).thenReturn(profileDir);
+    File profileDir = new File("target");
+    when(phpCodeSnifferConfiguration.getDirProfile()).thenReturn(profileDir);
+    File configurationFile = new File(profileDir, "configuration.php");
+    when(phpCodeSnifferConfiguration.getFileProfile()).thenReturn(configurationFile);
 
     String configurationContent = "a configuration content";
-    when(rulesRepository.exportConfiguration(rulesProfile)).thenReturn(configurationContent);
+    when(rulesRepository.exportConfiguration(eq(rulesProfile), anyString())).thenReturn(configurationContent);
 
     PhpCodeSnifferMavenCollector collector = new PhpCodeSnifferMavenCollector(rulesProfile, rulesRepository);
     collector.createRulesConfigurationFolderAndFile(phpCodeSnifferConfiguration);
 
-    File configurationFile = new File(profileDir, profileName + "CodingStandard.php");
-
     assertThat(FileUtils.readFileToString(configurationFile, "UTF-8"), is(configurationContent));
   }
-
-//  @Test(expected = PhpCodeSnifferExecutionException.class)
-//  public void shouldFailIfWorkingDirectoryIsInvalid() {
-//    File profileDir = new File("invalid path !", profileName);
-//    when(phpCodeSnifferConfiguration.getProfileDir()).thenReturn(profileDir);
-//    when(rulesRepository.exportConfiguration(rulesProfile)).thenReturn("");
-//
-//    PhpCodeSnifferMavenCollector collector = new PhpCodeSnifferMavenCollector(rulesProfile, rulesRepository);
-//    collector.createRulesConfigurationFolderAndFile(phpCodeSnifferConfiguration);
-//  }
-
 
 }
