@@ -28,6 +28,7 @@ import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSp
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.sonar.commons.rules.*;
+import org.sonar.plugins.php.Php;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,7 +75,7 @@ public class PhpCodeSnifferRulesRepositoryTest {
 
     assertThat(result, is("'aConfigKey','anOtherConfigKey'"));
   }
-  
+
   @Test
   public void shouldGetRulesConfigurationFromSomeActiveRules() throws IOException {
     PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository();
@@ -92,10 +93,19 @@ public class PhpCodeSnifferRulesRepositoryTest {
     assertThatAConfigurationIsEqualTo(result, "test-profile-with-some-rules");
   }
 
+  @Test
+  public void shouldReturnOneProvidedProfile() {
+    PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository();
+    assertThat(rulesRepository.getProvidedProfiles().size(), is(1));
+    RulesProfile firstRulesProfile = rulesRepository.getProvidedProfiles().get(0);
+    assertThat(firstRulesProfile.getLanguage(), is(Php.KEY));
+    assertThat(firstRulesProfile.getActiveRules().size(), greaterThan(0));
+  }
 
-  private void assertThatAConfigurationIsEqualTo(String configurationFound, String configurationExpected){
+
+  private void assertThatAConfigurationIsEqualTo(String configurationFound, String configurationExpected) {
     try {
-      InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/phpcodesniffer/"+ configurationExpected +".php");
+      InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/phpcodesniffer/" + configurationExpected + ".php");
       String configuration = IOUtils.toString(input, "UTF-8");
       assertThat(configurationFound, equalToIgnoringWhiteSpace(configuration));
     } catch (IOException e) {
