@@ -50,6 +50,7 @@ public class PhpPlugin implements Plugin {
     list.add(PhpDependMavenCollector.class);
     list.add(PhpCodeSnifferRulesRepository.class);
     list.add(PhpCodeSnifferMavenCollector.class);
+//    list.add(CpdMavenCollector.class);
     return list;
   }
 
