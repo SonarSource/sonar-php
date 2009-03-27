@@ -94,12 +94,13 @@ public class PhpCodeSnifferRulesRepositoryTest {
   }
 
   @Test
-  public void shouldReturnOneProvidedProfile() {
+  public void shouldReturnDefaultPhpProvidedProfile() {
     PhpCodeSnifferRulesRepository rulesRepository = new PhpCodeSnifferRulesRepository();
     assertThat(rulesRepository.getProvidedProfiles().size(), is(1));
-    RulesProfile firstRulesProfile = rulesRepository.getProvidedProfiles().get(0);
-    assertThat(firstRulesProfile.getLanguage(), is(Php.KEY));
-    assertThat(firstRulesProfile.getActiveRules().size(), greaterThan(0));
+    RulesProfile profile = rulesRepository.getProvidedProfiles().get(0);
+    assertThat(profile.getLanguage(), is(Php.KEY));
+    assertThat(profile.getName(), is("Default PHP"));
+    assertThat(profile.getActiveRules().size(), greaterThan(0));
   }
 
 

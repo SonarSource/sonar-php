@@ -27,15 +27,14 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.commons.Language;
 import org.sonar.commons.rules.ActiveRule;
 import org.sonar.commons.rules.Rule;
-import org.sonar.commons.rules.RuleFailureLevel;
 import org.sonar.commons.rules.RulesProfile;
 import org.sonar.plugins.api.rules.RulesRepository;
+import org.sonar.plugins.api.rules.StandardProfileXmlParser;
 import org.sonar.plugins.api.rules.StandardRulesXmlParser;
 import org.sonar.plugins.php.Php;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -60,18 +59,19 @@ public class PhpCodeSnifferRulesRepository implements RulesRepository {
   }
 
   public List<RulesProfile> getProvidedProfiles() {
-    return Arrays.asList(loadDefaultProfile());
+    return Arrays.asList(
+      loadProvidedProfile("/org/sonar/plugins/php/phpcodesniffer/profile-default-php.xml"));
   }
 
-  protected RulesProfile loadDefaultProfile() {
-    RulesProfile rulesProfile = new RulesProfile("Default PHP", Php.KEY, true, false);
-    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    activeRules.add(new ActiveRule(rulesProfile, getInitialReferential().get(0), RuleFailureLevel.ERROR));
-    activeRules.add(new ActiveRule(rulesProfile, getInitialReferential().get(1), RuleFailureLevel.ERROR));
-    activeRules.add(new ActiveRule(rulesProfile, getInitialReferential().get(2), RuleFailureLevel.INFO));
-    activeRules.add(new ActiveRule(rulesProfile, getInitialReferential().get(3), RuleFailureLevel.ERROR));
-    rulesProfile.setActiveRules(activeRules);
-    return rulesProfile;
+  protected RulesProfile loadProvidedProfile(String filename) {
+    try {
+      InputStream profile = getClass().getResourceAsStream(filename);
+      StandardProfileXmlParser standardProfileXmlParser = new StandardProfileXmlParser(getInitialReferential());
+      return standardProfileXmlParser.importConfiguration(IOUtils.toString(profile));
+
+    } catch (IOException e) {
+      throw new RuntimeException("Configuration file not found for the file : " + filename, e);
+    }
   }
 
   public String exportConfiguration(RulesProfile activeProfile, String cleanProfileName) {

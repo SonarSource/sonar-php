@@ -23,6 +23,7 @@ package org.sonar.plugins.php.phpdepend;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.sonar.plugins.api.maven.model.MavenPom;
+import org.sonar.plugins.php.Php;
 
 import java.io.File;
 
@@ -35,6 +36,8 @@ public class PhpDependConfiguration {
   protected static final String COMMAND_LINE = "pdepend";
 
   public static final String PHPUNIT_OPT = "phpunit-xml";
+
+  public static final String SUFFIXES_OPT = "suffix";  
 
 
   public PhpDependConfiguration(MavenPom pom) {
@@ -61,8 +64,12 @@ public class PhpDependConfiguration {
     }
   }
 
-  public String getReportFileOption(){
+  public String getReportFilecommandOption(){
     return "--"+ PHPUNIT_OPT +"="+ getReportFile().getAbsolutePath();
+  }
+
+  public String getSuffixesCommandOption() {
+    return "--" + SUFFIXES_OPT + "=" + StringUtils.join(Php.SUFFIXES, ",");
   }
 
   public File getReportFile(){

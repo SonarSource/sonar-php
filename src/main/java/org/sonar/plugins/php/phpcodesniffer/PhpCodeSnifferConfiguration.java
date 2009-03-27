@@ -23,6 +23,7 @@ package org.sonar.plugins.php.phpcodesniffer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.sonar.plugins.api.maven.model.MavenPom;
+import org.sonar.plugins.php.Php;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class PhpCodeSnifferConfiguration {
   private static final String REPORT_FILE_OPT = "report-file";
 
   public static final String STANDARD_OPT = "standard";
+  public static final String SUFFIXES_OPT = "extensions";
 
 
   public PhpCodeSnifferConfiguration(MavenPom pom, String profileName) {
@@ -71,12 +73,16 @@ public class PhpCodeSnifferConfiguration {
     }
   }
 
-  public String getReportFormatOption() {
+  public String getReportFormatCommandOption() {
     return "--" + REPORT_FORMAT_OPT + "=" + REPORT_FORMAT_DEFAULT_OPT;
   }
 
-  public String getReportFileOption() throws IOException {
+  public String getReportFileCommandOption() throws IOException {
     return "--" + REPORT_FILE_OPT + "=" + getReportFile().getCanonicalPath();
+  }
+
+  public String getSuffixesCommandOption() {
+    return "--" + SUFFIXES_OPT + "=" + StringUtils.join(Php.SUFFIXES, ",");
   }
 
   public File getReportFile() {

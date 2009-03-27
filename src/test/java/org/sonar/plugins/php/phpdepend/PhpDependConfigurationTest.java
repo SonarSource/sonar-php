@@ -22,6 +22,8 @@ package org.sonar.plugins.php.phpdepend;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.notNullValue;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -59,8 +61,16 @@ public class PhpDependConfigurationTest {
   public void shouldReportFileBeInTargetDir(){
     MavenPom pom = mock(MavenPom.class);
     PhpDependConfiguration config = new PhpDependConfiguration(pom);
-    config.getReportFileOption();
+    config.getReportFilecommandOption();
     verify(pom).getBuildDir();
+  }
+
+  @Test
+  public void shouldGetValidSuffixeOption(){
+    PhpDependConfiguration config = getWindowsConfiguration();
+    String suffixesOption = config.getSuffixesCommandOption();
+    assertThat(suffixesOption, notNullValue());
+    assertThat(suffixesOption, containsString(","));
   }
 
   private PhpDependConfiguration getWindowsConfiguration() {

@@ -44,7 +44,7 @@ public class PhpDependExecutor {
     String commandLine;
 
     try {
-      String[] cmd = {configuration.getCommandLine(), configuration.getReportFileOption(),
+      String[] cmd = {configuration.getCommandLine(), configuration.getReportFilecommandOption(), configuration.getSuffixesCommandOption(),
         configuration.getSourceDir().getAbsolutePath()};
       commandLine = StringUtils.join(cmd, " ");
       ProcessBuilder builder = new ProcessBuilder(cmd);

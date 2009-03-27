@@ -44,8 +44,8 @@ public class PhpCodeSnifferExecutor {
     String commandLine;
 
     try {
-      String[] cmd = {configuration.getCommandLine(), configuration.getReportFormatOption(),
-        configuration.getReportFileOption(), configuration.getStandardOption(),
+      String[] cmd = {configuration.getCommandLine(), configuration.getReportFormatCommandOption(),
+        configuration.getReportFileCommandOption(), configuration.getStandardOption(), configuration.getSuffixesCommandOption(),
         configuration.getSourceDir().getAbsolutePath()
       };
       commandLine = StringUtils.join(cmd, " ");

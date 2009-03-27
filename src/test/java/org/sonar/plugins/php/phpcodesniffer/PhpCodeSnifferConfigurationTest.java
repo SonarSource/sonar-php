@@ -21,6 +21,8 @@
 package org.sonar.plugins.php.phpcodesniffer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
@@ -61,7 +63,7 @@ public class PhpCodeSnifferConfigurationTest {
   public void shouldReportFileBeInTargetDir() throws IOException {
     MavenPom pom = mock(MavenPom.class);
     PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(pom, null);
-    config.getReportFileOption();
+    config.getReportFileCommandOption();
     verify(pom).getBuildDir();
   }
 
@@ -70,6 +72,14 @@ public class PhpCodeSnifferConfigurationTest {
     PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(null, "profile name with space");
     String result = config.getCleanProfileName();
     assertThat(result, is("profile_name_with_space"));
+  }
+
+  @Test
+  public void shouldGetValidSuffixeOption(){
+    PhpCodeSnifferConfiguration config = new PhpCodeSnifferConfiguration(null, null);
+    String suffixesOption = config.getSuffixesCommandOption();
+    assertThat(suffixesOption, notNullValue());
+    assertThat(suffixesOption, containsString(","));
   }
 
   private PhpCodeSnifferConfiguration getWindowsConfiguration() {
