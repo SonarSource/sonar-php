@@ -118,7 +118,7 @@ public class Php extends AbstractLanguage {
   protected static boolean containsValidSuffixes(String path) {
     String pathLowerCase = StringUtils.lowerCase(path);
     for (String suffix : SUFFIXES) {
-      if (pathLowerCase.endsWith("." + suffix)) {
+      if (pathLowerCase.endsWith("." + StringUtils.lowerCase(suffix))) {
         return true;
       }
     }

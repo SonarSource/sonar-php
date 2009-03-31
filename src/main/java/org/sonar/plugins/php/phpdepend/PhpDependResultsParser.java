@@ -50,7 +50,7 @@ public class PhpDependResultsParser {
   private PhpDependConfiguration config;
   private ProjectContext context;
   private List<String> sourcesDir;
-  private ResourcesManager resourcesManager;
+  private ResourcesBag resourcesBag;
 
   private Set<Metric> metrics;
 
@@ -58,7 +58,7 @@ public class PhpDependResultsParser {
     this.config = config;
     this.context = context;
     this.sourcesDir = Arrays.asList(config.getSourceDir().getAbsolutePath());
-    resourcesManager = new ResourcesManager();
+    resourcesBag = new ResourcesBag();
     metrics = getMetrics();
   }
 
@@ -67,7 +67,7 @@ public class PhpDependResultsParser {
     this.context = context;
     this.sourcesDir = sourcesDir;
     this.metrics = metrics;
-    resourcesManager = new ResourcesManager();
+    resourcesBag = new ResourcesBag();
   }
 
   public void parse() {
@@ -158,10 +158,10 @@ public class PhpDependResultsParser {
   }
 
   private void saveMeasures() throws ParseException {
-    for (Resource resource : resourcesManager.getResources()) {
-      for (Metric metric : resourcesManager.getMetrics(resource)) {
+    for (Resource resource : resourcesBag.getResources()) {
+      for (Metric metric : resourcesBag.getMetrics(resource)) {
         if (metrics.contains(metric)) {
-          Double measure = resourcesManager.getMeasure(metric, resource);
+          Double measure = resourcesBag.getMeasure(metric, resource);
           recordMeasure(resource, metric, measure);
         }
       }
@@ -184,7 +184,7 @@ public class PhpDependResultsParser {
 
   private void recordComplexMeasure(Metric metric, Resource resource, Double value) throws ParseException {
     if (metrics.contains(metric)) {
-      if (value != null){
+      if (value != null) {
         recordMeasure(resource, metric, value);
       }
     }
@@ -197,8 +197,8 @@ public class PhpDependResultsParser {
   }
 
   private Double getCommentRatioMeasure(Resource resource) throws ParseException {
-    Double cloc = resourcesManager.getMeasure(CoreMetrics.COMMENT_LINES, resource);
-    Double loc = resourcesManager.getMeasure(CoreMetrics.LOC, resource);
+    Double cloc = resourcesBag.getMeasure(CoreMetrics.COMMENT_LINES, resource);
+    Double loc = resourcesBag.getMeasure(CoreMetrics.LOC, resource);
     if (cloc != null && loc != null && loc != 0) {
       return cloc / loc * 100;
     }
@@ -206,8 +206,8 @@ public class PhpDependResultsParser {
   }
 
   private Double getComplexityPerMethodMeasure(Resource resource) throws ParseException {
-    Double ccn = resourcesManager.getMeasure(CoreMetrics.COMPLEXITY, resource);
-    Double functions = resourcesManager.getMeasure(CoreMetrics.FUNCTIONS_COUNT, resource);
+    Double ccn = resourcesBag.getMeasure(CoreMetrics.COMPLEXITY, resource);
+    Double functions = resourcesBag.getMeasure(CoreMetrics.FUNCTIONS_COUNT, resource);
     if (ccn != null && functions != null && functions != 0) {
       return ccn / functions;
     }
@@ -215,8 +215,8 @@ public class PhpDependResultsParser {
   }
 
   private Double getComplexityPerClassMeasure(Resource resource) throws ParseException {
-    Double ccn = resourcesManager.getMeasure(CoreMetrics.COMPLEXITY, resource);
-    Double classes = resourcesManager.getMeasure(CoreMetrics.CLASSES_COUNT, resource);
+    Double ccn = resourcesBag.getMeasure(CoreMetrics.COMPLEXITY, resource);
+    Double classes = resourcesBag.getMeasure(CoreMetrics.CLASSES_COUNT, resource);
     if (ccn != null && classes != null && classes != 0) {
       return ccn / classes;
     }
@@ -236,10 +236,22 @@ public class PhpDependResultsParser {
   private void addMeasure(Resource file, Metric metric, Double value) throws ParseException {
     if (value != null) {
       if (file != null) {
-        resourcesManager.addFile(value, metric, file);
+        addAFileMeasureAndItsParentIfExisting(file, metric, value);
       } else {
-        resourcesManager.addProject(value, metric);
+        addAProjectMeasure(metric, value);
       }
+    }
+  }
+
+  private void addAProjectMeasure(Metric metric, Double value) {
+    resourcesBag.add(value, metric, null);
+  }
+
+  private void addAFileMeasureAndItsParentIfExisting(Resource file, Metric metric, Double value) {
+    resourcesBag.add(value, metric, file);
+    Resource parent = new Php().getParent(file);
+    if (parent != null) {
+      resourcesBag.add(value, metric, parent);
     }
   }
 

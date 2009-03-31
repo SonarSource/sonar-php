@@ -22,39 +22,26 @@ package org.sonar.plugins.php.phpdepend;
 
 import org.sonar.commons.Metric;
 import org.sonar.commons.resources.Resource;
-import org.sonar.plugins.php.Php;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ResourcesManager {
+public class ResourcesBag {
 
   private Map<Resource, MeasuresByMetric> resourceMeasures;
 
-  public ResourcesManager() {
+  public ResourcesBag() {
     this.resourceMeasures = new HashMap<Resource, MeasuresByMetric>();
   }
 
-  private void add(Double value, Metric metric, Resource resource) {
+  public void add(Double value, Metric metric, Resource resource) {
     MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
     if (measuresByMetric == null) {
       measuresByMetric = new MeasuresByMetric();
     }
     measuresByMetric.add(value, metric);
     resourceMeasures.put(resource, measuresByMetric);
-  }
-
-  public void addFile(Double value, Metric metric, Resource resource){
-    add(value, metric, resource);
-    Resource parent = new Php().getParent(resource);
-    if (parent != null){
-      add(value, metric, parent);
-    }
-  }
-
-  public void addProject(Double value, Metric metric){
-    add(value, metric, null);
   }
 
   public Set<Resource> getResources() {
