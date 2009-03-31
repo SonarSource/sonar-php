@@ -21,6 +21,11 @@
 package org.sonar.plugins.php.cpd;
 
 import org.junit.Test;
+import static org.mockito.Mockito.*;
+import org.sonar.commons.resources.Resource;
+import org.sonar.plugins.api.maven.ProjectContext;
+import org.sonar.plugins.api.metrics.CoreMetrics;
+import org.sonar.plugins.php.Php;
 
 import java.io.File;
 import java.util.Arrays;
@@ -28,12 +33,65 @@ import java.util.Arrays;
 public class CpdExecutorTest {
 
   @Test
-  public void shoulExecuteCpd() throws Exception {
-    File file = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/sample.php").toURI());
-    File file2 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/sample2.php").toURI());
+  public void shouldGenerateDuplicationMeasuresFromTwoFiles() throws Exception {
+    ProjectContext context = mock(ProjectContext.class);
 
-    CpdExecutor executor = new CpdExecutor(Arrays.asList(file, file2));
+    File file1 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample.php").toURI());
+    File file2 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample2.php").toURI());
+
+    CpdExecutor executor = new CpdExecutor(context, Arrays.asList(file1, file2), Arrays.asList("/org/sonar/plugins/php/cpd/CpdExecutorTest"),
+      50);
     executor.execute();
+
+    Resource phpFile1 = Php.newFile("dir/sample.php");
+    Resource phpFile2 = Php.newFile("dir/sample2.php");
+
+    verify(context).addMeasure(phpFile1, CoreMetrics.DUPLICATED_FILES, 1d);
+    verify(context).addMeasure(phpFile1, CoreMetrics.DUPLICATED_LINES, 10d);
+    verify(context).addMeasure(phpFile1, CoreMetrics.DUPLICATED_BLOCKS, 1d);
+
+    verify(context).addMeasure(phpFile2, CoreMetrics.DUPLICATED_FILES, 1d);
+    verify(context).addMeasure(phpFile2, CoreMetrics.DUPLICATED_LINES, 10d);
+    verify(context).addMeasure(phpFile2, CoreMetrics.DUPLICATED_BLOCKS, 1d);
+
+    verify(context, atLeastOnce()).getResourceKey(phpFile1);
+    verify(context, atLeastOnce()).getResourceKey(phpFile2);
+  }
+
+  @Test
+  public void shouldCollectDirectoryMeasures() throws Exception {
+    ProjectContext context = mock(ProjectContext.class);
+
+    File file1 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample.php").toURI());
+    File file2 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample2.php").toURI());
+
+    CpdExecutor executor = new CpdExecutor(context, Arrays.asList(file1, file2), Arrays.asList("/org/sonar/plugins/php/cpd/CpdExecutorTest"),
+      50);
+    executor.execute();
+
+    Resource phpDir = Php.newFile("dir");
+
+    verify(context).addMeasure(phpDir, CoreMetrics.DUPLICATED_FILES, 2d);
+    verify(context).addMeasure(phpDir, CoreMetrics.DUPLICATED_LINES, 20d);
+    verify(context).addMeasure(phpDir, CoreMetrics.DUPLICATED_BLOCKS, 2d);
+
+  }
+
+  @Test
+  public void shouldCollectProjectMeasure() throws Exception {
+    ProjectContext context = mock(ProjectContext.class);
+
+    File file1 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample.php").toURI());
+    File file2 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample2.php").toURI());
+
+    CpdExecutor executor = new CpdExecutor(context, Arrays.asList(file1, file2), Arrays.asList("/org/sonar/plugins/php/cpd/CpdExecutorTest"),
+      50);
+    executor.execute();
+
+    verify(context).addMeasure(CoreMetrics.DUPLICATED_FILES, 2d);
+    verify(context).addMeasure(CoreMetrics.DUPLICATED_LINES, 20d);
+    verify(context).addMeasure(CoreMetrics.DUPLICATED_BLOCKS, 2d);
+
   }
 
 }

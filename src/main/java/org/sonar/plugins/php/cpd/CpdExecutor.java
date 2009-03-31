@@ -25,12 +25,14 @@ import net.sourceforge.pmd.cpd.CPD;
 import net.sourceforge.pmd.cpd.PHPTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.plugins.api.maven.ProjectContext;
 import org.sonar.plugins.api.maven.model.MavenPom;
 import org.sonar.plugins.php.Php;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CpdExecutor {
@@ -38,18 +40,24 @@ public class CpdExecutor {
   private static final Logger LOG = LoggerFactory.getLogger(CpdExecutor.class);
   private MavenPom pom;
   private CPD cpd;
+  private ProjectContext context;
+  private List<String> sourceDirs;
 
-  public CpdExecutor(MavenPom pom) {
+  public CpdExecutor(MavenPom pom, ProjectContext context) {
+    this.context = context;
+    this.pom = pom;
     try {
-      this.pom = pom;
-      initCpd(5, new ArrayList<File>(pom.getSourceFiles(Php.SUFFIXES)));
+      initCpd(50, new ArrayList<File>(pom.getSourceFiles(Php.SUFFIXES)));
+      sourceDirs = Arrays.asList(pom.getBuildSourceDir().getCanonicalPath());
     } catch (IOException e) {
       throw new CpdExecutionException(e);
     }
   }
 
-  public CpdExecutor(List<File> files) throws IOException {
-    initCpd(5, files);
+  protected CpdExecutor(ProjectContext context, List<File> files, List<String> sourceDirs, int minimumTokens) throws IOException {
+    this.context = context;
+    this.sourceDirs = sourceDirs;
+    initCpd(minimumTokens, files);
   }
 
   private void initCpd(int tokens, List<File> files) throws IOException {
@@ -58,10 +66,15 @@ public class CpdExecutor {
   }
 
   public void execute() {
-    cpd.go();
-    cpd.getMatches();
-    CpdParser gen = new CpdParser();
-    gen.generate(cpd.getMatches());
+    try {
+      LOG.info("Collecting duplications...");
+      cpd.go();
+      cpd.getMatches();
+      CpdAnalyser gen = new CpdAnalyser(context, sourceDirs);
+      gen.generate(cpd.getMatches());
+    } catch (Exception e) {
+      throw new CpdExecutionException(e);
+    }
   }
 
 

@@ -31,6 +31,7 @@ import org.sonar.plugins.api.maven.ProjectContext;
 import org.sonar.plugins.api.maven.xml.XmlParserException;
 import org.sonar.plugins.api.metrics.CoreMetrics;
 import org.sonar.plugins.php.Php;
+import org.sonar.plugins.php.ResourcesBag;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;

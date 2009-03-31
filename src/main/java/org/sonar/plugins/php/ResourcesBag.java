@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 
-package org.sonar.plugins.php.phpdepend;
+package org.sonar.plugins.php;
 
 import org.sonar.commons.Metric;
 import org.sonar.commons.resources.Resource;

@@ -37,7 +37,7 @@ public class CpdMavenCollector implements MavenCollector {
   }
 
   public void collect(MavenPom pom, ProjectContext context) {
-    CpdExecutor executor = new CpdExecutor(pom);
+    CpdExecutor executor = new CpdExecutor(pom, context);
     executor.execute();
   }
 
