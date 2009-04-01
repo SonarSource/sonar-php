@@ -29,6 +29,7 @@ import org.sonar.plugins.php.Php;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class CpdExecutorTest {
 
@@ -59,39 +60,16 @@ public class CpdExecutorTest {
   }
 
   @Test
-  public void shouldCollectDirectoryMeasures() throws Exception {
+  public void shouldDoNothingIfNoData() throws Exception {
     ProjectContext context = mock(ProjectContext.class);
 
-    File file1 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample.php").toURI());
-    File file2 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample2.php").toURI());
-
-    CpdExecutor executor = new CpdExecutor(context, Arrays.asList(file1, file2), Arrays.asList("/org/sonar/plugins/php/cpd/CpdExecutorTest"),
+    CpdExecutor executor = new CpdExecutor(context, Collections.<File>emptyList(), Arrays.asList("/org/sonar/plugins/php/cpd/CpdExecutorTest"),
       50);
     executor.execute();
 
-    Resource phpDir = Php.newFile("dir");
-
-    verify(context).addMeasure(phpDir, CoreMetrics.DUPLICATED_FILES, 2d);
-    verify(context).addMeasure(phpDir, CoreMetrics.DUPLICATED_LINES, 20d);
-    verify(context).addMeasure(phpDir, CoreMetrics.DUPLICATED_BLOCKS, 2d);
-
-  }
-
-  @Test
-  public void shouldCollectProjectMeasure() throws Exception {
-    ProjectContext context = mock(ProjectContext.class);
-
-    File file1 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample.php").toURI());
-    File file2 = new File(getClass().getResource("/org/sonar/plugins/php/cpd/CpdExecutorTest/dir/sample2.php").toURI());
-
-    CpdExecutor executor = new CpdExecutor(context, Arrays.asList(file1, file2), Arrays.asList("/org/sonar/plugins/php/cpd/CpdExecutorTest"),
-      50);
-    executor.execute();
-
-    verify(context).addMeasure(CoreMetrics.DUPLICATED_FILES, 2d);
-    verify(context).addMeasure(CoreMetrics.DUPLICATED_LINES, 20d);
-    verify(context).addMeasure(CoreMetrics.DUPLICATED_BLOCKS, 2d);
-
+    verify(context, never()).addMeasure(any(Resource.class), eq(CoreMetrics.DUPLICATED_FILES), anyDouble());
+    verify(context, never()).addMeasure(any(Resource.class), eq(CoreMetrics.DUPLICATED_LINES), anyDouble());
+    verify(context, never()).addMeasure(any(Resource.class), eq(CoreMetrics.DUPLICATED_BLOCKS), anyDouble());
   }
 
 }

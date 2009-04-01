@@ -22,12 +22,10 @@ package org.sonar.plugins.php.cpd;
 
 import net.sourceforge.pmd.cpd.Match;
 import net.sourceforge.pmd.cpd.TokenEntry;
-import org.sonar.commons.Metric;
 import org.sonar.commons.resources.Resource;
 import org.sonar.plugins.api.maven.ProjectContext;
 import org.sonar.plugins.api.metrics.CoreMetrics;
 import org.sonar.plugins.php.Php;
-import org.sonar.plugins.php.ResourcesBag;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -36,13 +34,11 @@ import java.util.*;
 
 public class CpdAnalyser {
   private ProjectContext context;
-  private ResourcesBag resourcesBag;
   private List<String> sourceDirs;
 
   public CpdAnalyser(ProjectContext context, List<String> sourceDirs) {
     this.sourceDirs = sourceDirs;
     this.context = context;
-    resourcesBag = new ResourcesBag();
   }
 
   public void generate(Iterator<Match> matches) throws IOException, ParseException {
@@ -81,8 +77,6 @@ public class CpdAnalyser {
     for (ClassDuplicationData data : duplicationsData.values()) {
       data.saveUsing(context);
     }
-
-    saveMeasures();
   }
 
 
@@ -95,36 +89,6 @@ public class CpdAnalyser {
         fileContainer.put(file, data);
       }
       data.cumulate(targetFile, (double) targetDuplicationStartLine, (double) duplicationStartLine, (double) duplicatedLines);
-    }
-  }
-
-  private void addFileMeasure(Double value, Metric metric, Resource resource) {
-    resourcesBag.add(value, metric, resource);
-    Resource parent = new Php().getParent(resource);
-    if (parent != null) {
-      resourcesBag.add(value, metric, parent);
-    }
-  }
-
-  private void addProjectMeasure(Double value, Metric metric) {
-    resourcesBag.add(value, metric, null);
-  }
-
-
-  private void saveMeasures() throws ParseException {
-    for (Resource resource : resourcesBag.getResources()) {
-      for (Metric metric : resourcesBag.getMetrics(resource)) {
-        Double measure = resourcesBag.getMeasure(metric, resource);
-        saveMeasure(resource, metric, measure);
-      }
-    }
-  }
-
-  private void saveMeasure(Resource resource, Metric metric, Double measure) {
-    if (resource != null) {
-      context.addMeasure(resource, metric, measure);
-    } else {
-      context.addMeasure(metric, measure);
     }
   }
 
@@ -159,16 +123,6 @@ public class CpdAnalyser {
       context.addMeasure(resource, CoreMetrics.DUPLICATED_LINES, duplicatedLines);
       context.addMeasure(resource, CoreMetrics.DUPLICATED_BLOCKS, duplicatedBlocks);
       context.addMeasure(resource, CoreMetrics.DUPLICATIONS_DATA, getDuplicationXMLData());
-
-      Resource parent = new Php().getParent(resource);
-      if (parent != null) {
-        resourcesBag.add(1d, CoreMetrics.DUPLICATED_FILES, parent);
-        resourcesBag.add(duplicatedLines, CoreMetrics.DUPLICATED_LINES, parent);
-        resourcesBag.add(duplicatedBlocks, CoreMetrics.DUPLICATED_BLOCKS, parent);
-      }
-      resourcesBag.add(1d, CoreMetrics.DUPLICATED_FILES, null);
-      resourcesBag.add(duplicatedLines, CoreMetrics.DUPLICATED_LINES, null);
-      resourcesBag.add(duplicatedBlocks, CoreMetrics.DUPLICATED_BLOCKS, null);
     }
 
     private String getDuplicationXMLData() {
