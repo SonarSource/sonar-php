@@ -21,6 +21,7 @@
 package org.sonar.plugins.php.cpd;
 
 import net.sourceforge.pmd.cpd.PHPTokenizer;
+import net.sourceforge.pmd.cpd.Tokenizer;
 import org.sonar.commons.Language;
 import org.sonar.commons.resources.Resource;
 import org.sonar.plugins.cpd.AbstractCpdMapping;
@@ -30,8 +31,8 @@ import java.util.List;
 
 public class PhpCpdMapping extends AbstractCpdMapping {
 
-  public PhpCpdMapping() {
-    super(new PHPTokenizer(), Php.SUFFIXES);
+  protected Tokenizer getTokenizer(){
+    return new PHPTokenizer();
   }
 
   protected String[] getSuffixes() {
