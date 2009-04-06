@@ -31,11 +31,11 @@ import java.util.List;
 public class PhpCpdMapping extends AbstractCpdMapping {
 
   public PhpCpdMapping() {
-    super(new PHPTokenizer(), Php.SUFFIXES.clone());
+    super(new PHPTokenizer(), Php.SUFFIXES);
   }
 
   protected String[] getSuffixes() {
-    return Php.SUFFIXES.clone();
+    return Php.SUFFIXES;
   }
 
   protected Resource createSourceResource(String absolutePath, List<String> sourceDirs) {

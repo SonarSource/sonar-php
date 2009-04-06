@@ -126,7 +126,4 @@ public class Php extends AbstractLanguage {
   }
 
 
-  public String[] getFileSuffixes() {
-    return SUFFIXES;
-  }
 }
