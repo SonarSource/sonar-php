@@ -20,25 +20,29 @@
 
 package org.sonar.plugins.php.cpd;
 
-import org.sonar.plugins.api.maven.MavenCollector;
-import org.sonar.plugins.api.maven.MavenPluginHandler;
-import org.sonar.plugins.api.maven.ProjectContext;
-import org.sonar.plugins.api.maven.model.MavenPom;
+import net.sourceforge.pmd.cpd.PHPTokenizer;
+import org.sonar.commons.Language;
+import org.sonar.commons.resources.Resource;
+import org.sonar.plugins.cpd.AbstractCpdMapping;
 import org.sonar.plugins.php.Php;
 
-public class CpdMavenCollector implements MavenCollector {
+import java.util.List;
 
-  public Class<? extends MavenPluginHandler> dependsOnMavenPlugin(MavenPom pom) {
-    return null;
+public class PhpCpdMapping extends AbstractCpdMapping {
+
+  public PhpCpdMapping() {
+    super(new PHPTokenizer(), Php.SUFFIXES.clone());
   }
 
-  public boolean shouldCollectOn(MavenPom pom) {
-    return Php.KEY.equals(pom.getLanguageKey());
+  protected String[] getSuffixes() {
+    return Php.SUFFIXES.clone();
   }
 
-  public void collect(MavenPom pom, ProjectContext context) {
-    CpdExecutor executor = new CpdExecutor(pom, context);
-    executor.execute();
+  protected Resource createSourceResource(String absolutePath, List<String> sourceDirs) {
+    return Php.newFileFromAbsolutePath(absolutePath, sourceDirs);
   }
 
+  protected Language getLanguage() {
+    return new Php();
+  }
 }

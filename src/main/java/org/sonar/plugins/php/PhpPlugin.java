@@ -22,11 +22,7 @@ package org.sonar.plugins.php;
 
 import org.sonar.plugins.api.Extension;
 import org.sonar.plugins.api.Plugin;
-import org.sonar.plugins.php.cpd.CpdMavenCollector;
-import org.sonar.plugins.php.cpd.jobs.DuplicatedBlocksJob;
-import org.sonar.plugins.php.cpd.jobs.DuplicatedFilesJob;
-import org.sonar.plugins.php.cpd.jobs.DuplicatedLinesJob;
-import org.sonar.plugins.php.cpd.jobs.DuplicatedLinesRatioJob;
+import org.sonar.plugins.php.cpd.PhpCpdMapping;
 import org.sonar.plugins.php.phpcodesniffer.PhpCodeSnifferMavenCollector;
 import org.sonar.plugins.php.phpcodesniffer.PhpCodeSnifferRulesRepository;
 import org.sonar.plugins.php.phpdepend.PhpDependMavenCollector;
@@ -51,16 +47,15 @@ public class PhpPlugin implements Plugin {
   public List<Class<? extends Extension>> getExtensions() {
     List<Class<? extends Extension>> list = new ArrayList<Class<? extends Extension>>();
     list.add(Php.class);
+
+    // maven collector
     list.add(PhpImportSourceMavenCollector.class);
     list.add(PhpDependMavenCollector.class);
+    list.add(PhpCpdMapping.class);
+
+    // rules repository
     list.add(PhpCodeSnifferRulesRepository.class);
     list.add(PhpCodeSnifferMavenCollector.class);
-    list.add(CpdMavenCollector.class);
-
-    list.add(DuplicatedBlocksJob.class);
-    list.add(DuplicatedFilesJob.class);
-    list.add(DuplicatedLinesJob.class);
-    list.add(DuplicatedLinesRatioJob.class);
     return list;
   }
 

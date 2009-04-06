@@ -52,7 +52,7 @@ public class ResourcesBagTest {
   }
 
   @Test
-  public void shouldDoTheSumWhenAddingTwiceAFileAMetric() {
+  public void shouldDoTheSumWhenAddingTwiceAFile() {
     ResourcesBag resourcesBag = new ResourcesBag();
     Metric metric = aMetricFixture();
     Resource resource = aResourceFixture();
@@ -65,7 +65,7 @@ public class ResourcesBagTest {
   }
 
   @Test
-  public void shouldDoTheSumByMetrics() {
+  public void shouldDoTheSumByMetric() {
     ResourcesBag resourcesBag = new ResourcesBag();
     Metric metric = aMetricFixture();
     Metric anotherMetric = anotherMetricFixture();
