@@ -27,7 +27,7 @@ import org.sonar.commons.resources.Resource;
 import org.sonar.plugins.cpd.AbstractCpdMapping;
 import org.sonar.plugins.php.Php;
 
-import java.util.List;
+import java.util.Arrays;
 
 public class PhpCpdMapping extends AbstractCpdMapping {
 
@@ -39,8 +39,8 @@ public class PhpCpdMapping extends AbstractCpdMapping {
     return Php.SUFFIXES;
   }
 
-  protected Resource createSourceResource(String absolutePath, List<String> sourceDirs) {
-    return Php.newFileFromAbsolutePath(absolutePath, sourceDirs);
+  protected Resource createResource(String absolutePath, String sourceDir) {
+    return Php.newFileFromAbsolutePath(absolutePath, Arrays.asList(sourceDir));
   }
 
   protected Language getLanguage() {
