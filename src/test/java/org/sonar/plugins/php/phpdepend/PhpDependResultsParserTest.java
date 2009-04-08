@@ -76,11 +76,6 @@ public class PhpDependResultsParserTest {
     metric = CoreMetrics.LOC;
     init();
 
-    verify(context).addMeasure(metric, 768.0);
-
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 506.0);
-    verify(context).addMeasure(Php.newDirectory("Sources/Common"), metric, 74.0);
-
     verify(context).addMeasure(Php.newFile("Money.php"), metric, 188.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 251.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 255.0);
@@ -91,11 +86,6 @@ public class PhpDependResultsParserTest {
   public void shouldGenerateNclocMeasures() {
     metric = CoreMetrics.NCLOC;
     init();
-
-    verify(context).addMeasure(metric, 411.0);
-
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 302.0);
-    verify(context).addMeasure(Php.newDirectory("Sources/Common"), metric, 15.0);
 
     verify(context).addMeasure(Php.newFile("Money.php"), metric, 94.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 150.0);
@@ -109,11 +99,6 @@ public class PhpDependResultsParserTest {
     metric = CoreMetrics.FUNCTIONS_COUNT;
     init();
 
-    verify(context).addMeasure(metric, 66.0);
-
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 42.0);
-    verify(context).addMeasure(Php.newDirectory("Sources/Common"), metric, 8.0);
-
     verify(context).addMeasure(Php.newFile("Money.php"), metric, 17.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 18.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 24.0);
@@ -125,41 +110,10 @@ public class PhpDependResultsParserTest {
     metric = CoreMetrics.CLASSES_COUNT;
     init();
 
-    verify(context).addMeasure(metric, 5.0);
-
     verify(context).addMeasure(Php.newFile("Money.php"), metric, 2.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 1.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 1.0);
     verify(context).addMeasure(Php.newFile("Sources/Common/IMoney.php"), metric, 1.0);
-
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 2.0);
-    verify(context).addMeasure(Php.newDirectory("Sources/Common"), metric, 1.0);
-  }
-
-  @Test
-  public void shouldGenerateFilesCountMeasure() {
-    metric = CoreMetrics.FILES_COUNT;
-    init();
-
-    verify(context).addMeasure(metric, 4.0);
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 2.0);
-    verify(context).addMeasure(Php.newDirectory("Sources/Common"), metric, 1.0);
-  }
-
-  @Test
-  public void shouldGenerateCommentsRatioCountMeasure() {
-    metric = CoreMetrics.COMMENT_RATIO;
-    init();
-
-    verify(context).addMeasure(metric, 32.68229166666667);
-
-    verify(context).addMeasure(Php.newFile("Money.php"), metric, 36.17021276595745);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 22.31075697211155);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 27.84313725490196);
-    verify(context).addMeasure(Php.newFile("Sources/Common/IMoney.php"), metric, 75.67567567567568);
-
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 50.15389422701351);
-    verify(context).addMeasure(Php.newDirectory("Sources/Common"), metric, 75.67567567567568);
   }
 
   @Test
@@ -167,46 +121,20 @@ public class PhpDependResultsParserTest {
     metric = CoreMetrics.COMPLEXITY;
     init();
 
-    verify(context).addMeasure(metric, 85.0);
-
     verify(context).addMeasure(Php.newFile("Money.php"), metric, 22.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 39.0);
     verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 24.0);
     verify(context, never()).addMeasure(eq(Php.newFile("Sources/Common/IMoney.php")), eq(metric), anyDouble());
-
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 63.0);
-    verify(context, never()).addMeasure(eq(Php.newDirectory("Sources/Common")), eq(metric), anyDouble());
   }
 
   @Test
-  public void shouldGenerateComplextyPerMethodMeasure() {
-    metric = CoreMetrics.COMPLEXITY_AVG_BY_FUNCTION;
+  public void shouldNotGenerateDirOrProjectMeasures() {
+    metric = CoreMetrics.LOC;
     init();
 
-    verify(context).addMeasure(metric, 1.2878787878787878);
+    verify(context, never()).addMeasure(eq(metric), anyDouble());
 
-    verify(context).addMeasure(Php.newFile("Money.php"), metric, 1.2941176470588236);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 2.1666666666666665);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 1.0);
-    verify(context, never()).addMeasure(eq(Php.newFile("Sources/Common/IMoney.php")), eq(metric), anyDouble());
-
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 1.5);
-    verify(context, never()).addMeasure(eq(Php.newDirectory("Sources/Common")), eq(metric), anyDouble());
-  }
-
-  @Test
-  public void shouldGenerateComplextyPerClassMeasure() {
-    metric = CoreMetrics.COMPLEXITY_AVG_BY_CLASS;
-    init();
-
-    verify(context).addMeasure(metric, 17.0);
-
-    verify(context).addMeasure(Php.newFile("Money.php"), metric, 11.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 39.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 24.0);
-    verify(context, never()).addMeasure(eq(Php.newFile("Sources/Common/IMoney.php")), eq(metric), anyDouble());
-
-    verify(context).addMeasure(Php.newDirectory("Sources"), metric, 31.5);
+    verify(context, never()).addMeasure(eq(Php.newDirectory("Sources")), eq(metric), anyDouble());
     verify(context, never()).addMeasure(eq(Php.newDirectory("Sources/Common")), eq(metric), anyDouble());
   }
 
