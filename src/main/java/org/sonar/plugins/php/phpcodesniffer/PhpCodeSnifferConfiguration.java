@@ -62,15 +62,16 @@ public class PhpCodeSnifferConfiguration {
     // For Windows
     if (isOsWindows()) {
       return path + COMMAND_LINE + ".bat";
-      // For Unix like systems
-    } else {
-      if (StringUtils.isEmpty(path)) {
-        return COMMAND_LINE;
-      } else {
-        path = StringUtils.removeEnd(path, "/");
-        return path + "/" + COMMAND_LINE;
-      }
+
     }
+
+    // For Unix like systems
+    if (StringUtils.isEmpty(path)) {
+      return COMMAND_LINE;
+    }
+
+    path = StringUtils.removeEnd(path, "/");
+    return path + "/" + COMMAND_LINE;
   }
 
   public String getReportFormatCommandOption() {

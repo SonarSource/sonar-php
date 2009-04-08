@@ -17,33 +17,29 @@
  * License along with Sonar; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-
 package org.sonar.plugins.php.cpd;
 
 import net.sourceforge.pmd.cpd.PHPTokenizer;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import org.sonar.commons.Language;
 import org.sonar.commons.resources.Resource;
-import org.sonar.plugins.cpd.AbstractCpdMapping;
+import org.sonar.plugins.cpd.CpdMapping;
 import org.sonar.plugins.php.Php;
 
 import java.util.Arrays;
 
-public class PhpCpdMapping extends AbstractCpdMapping {
+public class PhpCpdMapping implements CpdMapping {
 
-  protected Tokenizer getTokenizer(){
+  public Tokenizer getTokenizer() {
     return new PHPTokenizer();
   }
 
-  protected String[] getSuffixes() {
-    return Php.SUFFIXES;
-  }
-
-  protected Resource createResource(String absolutePath, String sourceDir) {
+  public Resource createResource(String absolutePath, String sourceDir) {
     return Php.newFileFromAbsolutePath(absolutePath, Arrays.asList(sourceDir));
   }
 
-  protected Language getLanguage() {
+  public Language getLanguage() {
     return new Php();
   }
+
 }

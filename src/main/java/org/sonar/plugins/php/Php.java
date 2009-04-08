@@ -50,9 +50,9 @@ public class Php extends AbstractLanguage {
   public boolean matchExclusionPattern(Resource resource, String wildcardPattern) {
     return false;
   }
-  
-  public void start() {
-  	
+
+  public String[] getFileSuffixes() {
+    return SUFFIXES;
   }
 
   public static Resource newDirectory(String key) {
