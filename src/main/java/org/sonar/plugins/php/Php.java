@@ -29,9 +29,8 @@ import java.util.List;
 public class Php extends AbstractLanguage {
 
   public static final String KEY = "php";
+  public static final String DEFAULT_DIRECTORY_NAME = "[ROOT]";
   public static final String[] SUFFIXES = {"php", "php3", "php4", "php5", "phtml"};
-
-  public static final String DEFAULT_DIRECTORY_NAME = "/";
 
   public Php() {
     super(KEY, "PHP");
@@ -57,11 +56,10 @@ public class Php extends AbstractLanguage {
 
   public static Resource newDirectory(String key) {
     String resourceKey = StringUtils.trim(key);
-    if (!StringUtils.isBlank(key)) {
-      return Resource.newDirectory(resourceKey, Resource.QUALIFIER_DIRECTORY, KEY);
-    } else {
-      return null;
+    if (StringUtils.isBlank(key)) {
+      resourceKey = DEFAULT_DIRECTORY_NAME;
     }
+    return Resource.newDirectory(resourceKey, Resource.QUALIFIER_DIRECTORY, KEY);
   }
 
   public static Resource newFile(String key) {

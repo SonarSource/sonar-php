@@ -60,7 +60,7 @@ public class PhpTest {
     assertThat(new Php().getParent(root), nullValue());
 
     Resource fileUnderRoot = Php.newFile("file.php");
-    assertThat(new Php().getParent(fileUnderRoot), nullValue());
+    assertThat(new Php().getParent(fileUnderRoot), new IsPhpDirectory(Php.DEFAULT_DIRECTORY_NAME));
 
     Resource fileUnderADirectory = Php.newFile("src/file.php");
     assertThat(new Php().getParent(fileUnderADirectory), new IsPhpDirectory("src"));
@@ -80,7 +80,7 @@ public class PhpTest {
     assertThat(file.getKey(), is("MyFile.php"));
     assertThat(file.getName(), is("MyFile.php"));
     assertTrue(file.isFile());
-    assertThat(new Php().getParent(file), nullValue());
+    assertThat(new Php().getParent(file), new IsPhpDirectory(Php.DEFAULT_DIRECTORY_NAME));
 
     Resource fileUnderDir = Php.newFileFromAbsolutePath("/home/project/src/common/MyFile.php", sources);
     assertThat(fileUnderDir.getKey(), is("common/MyFile.php"));
