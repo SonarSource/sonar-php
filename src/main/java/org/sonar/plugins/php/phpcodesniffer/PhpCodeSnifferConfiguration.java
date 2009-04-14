@@ -91,7 +91,7 @@ public class PhpCodeSnifferConfiguration {
   }
 
   public File getSourceDir() {
-    return pom.getBuildSourceDir();
+    return pom.getSourceDir();
   }
 
   protected boolean isOsWindows() {

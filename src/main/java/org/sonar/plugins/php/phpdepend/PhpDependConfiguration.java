@@ -77,7 +77,7 @@ public class PhpDependConfiguration {
   }
 
   public File getSourceDir() {
-    return pom.getBuildSourceDir();
+    return pom.getSourceDir();
   }
 
   protected boolean isOsWindows() {
