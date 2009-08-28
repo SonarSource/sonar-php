@@ -24,14 +24,13 @@ import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.commons.Metric;
-import org.sonar.commons.resources.Resource;
-import org.sonar.plugins.api.maven.MavenCollectorUtils;
-import org.sonar.plugins.api.maven.ProjectContext;
-import org.sonar.plugins.api.maven.xml.XmlParserException;
-import org.sonar.plugins.api.metrics.CoreMetrics;
-import org.sonar.plugins.php.Php;
 import org.sonar.plugins.php.ResourcesBag;
+import org.sonar.api.measures.Metric;
+import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.utils.XmlParserException;
+import org.sonar.api.resources.Resource;
+import org.sonar.api.utils.ParsingUtils;
+import org.sonar.api.batch.SensorContext;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -39,7 +38,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,24 +47,22 @@ public class PhpDependResultsParser {
   private static final Logger LOG = LoggerFactory.getLogger(PhpDependResultsParser.class);
 
   private PhpDependConfiguration config;
-  private ProjectContext context;
+  private SensorContext context;
   private List<String> sourcesDir;
   private ResourcesBag resourcesBag;
 
   private Set<Metric> metrics;
 
-  public PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context) {
+  public PhpDependResultsParser(PhpDependConfiguration config, SensorContext context) {
     this.config = config;
     this.context = context;
-    this.sourcesDir = Arrays.asList(config.getSourceDir().getAbsolutePath());
     resourcesBag = new ResourcesBag();
     metrics = getMetrics();
   }
 
-  protected PhpDependResultsParser(PhpDependConfiguration config, ProjectContext context, List<String> sourcesDir, Set<Metric> metrics) {
+  protected PhpDependResultsParser(PhpDependConfiguration config, SensorContext context, Set<Metric> metrics) {
     this.config = config;
     this.context = context;
-    this.sourcesDir = sourcesDir;
     this.metrics = metrics;
     resourcesBag = new ResourcesBag();
   }
@@ -86,13 +82,13 @@ public class PhpDependResultsParser {
 
   private Set<Metric> getMetrics() {
     Set<Metric> metrics = new HashSet<Metric>();
-    metrics.add(CoreMetrics.LOC);
+    metrics.add(CoreMetrics.LINES);
     metrics.add(CoreMetrics.NCLOC);
-    metrics.add(CoreMetrics.FUNCTIONS_COUNT);
+    metrics.add(CoreMetrics.FUNCTIONS);
     metrics.add(CoreMetrics.COMMENT_LINES);
-    metrics.add(CoreMetrics.FILES_COUNT);
+    metrics.add(CoreMetrics.FILES);
     metrics.add(CoreMetrics.COMPLEXITY);
-    metrics.add(CoreMetrics.CLASSES_COUNT);
+    metrics.add(CoreMetrics.CLASSES);
     return metrics;
   }
 
@@ -107,7 +103,7 @@ public class PhpDependResultsParser {
         String elementName = reader.getLocalName();
         if (elementName.equals("file")) {
           String filePath = reader.getAttributeValue(null, "name");
-          currentResourceFile = Php.newFileFromAbsolutePath(filePath, sourcesDir);
+          currentResourceFile = org.sonar.api.resources.File.fromIOFile(new File(filePath), config.getSourceDir());
           collectFileMeasures(reader, currentResourceFile);
         } else if (elementName.equals("class")) {
           collectClassMeasures(reader, currentResourceFile);
@@ -122,21 +118,21 @@ public class PhpDependResultsParser {
   }
 
   private void collectFileMeasures(XMLStreamReader2 reader, Resource file) throws ParseException, XMLStreamException {
-    addMeasureFromAttribute(reader, file, CoreMetrics.LOC, "loc");
+    addMeasureFromAttribute(reader, file, CoreMetrics.LINES, "loc");
     addMeasureFromAttribute(reader, file, CoreMetrics.NCLOC, "locExecutable");
     addMeasureFromAttribute(reader, file, CoreMetrics.COMMENT_LINES, "cloc");
-    addMeasureFromAttribute(reader, file, CoreMetrics.CLASSES_COUNT, "classes");
+    addMeasureFromAttribute(reader, file, CoreMetrics.CLASSES, "classes");
 
-    addMeasure(file, CoreMetrics.FILES_COUNT, 1.0);
+    addMeasure(file, CoreMetrics.FILES, 1.0);
   }
 
   private void collectClassMeasures(XMLStreamReader2 reader, Resource file) throws ParseException {
-    addMeasureFromAttribute(reader, file, CoreMetrics.FUNCTIONS_COUNT, "nom");
+    addMeasureFromAttribute(reader, file, CoreMetrics.FUNCTIONS, "nom");
     addMeasureFromAttribute(reader, file, CoreMetrics.COMPLEXITY, "wmc");
   }
 
   private void collectFunctionMeasures(XMLStreamReader2 reader, Resource file) throws ParseException {
-    addMeasure(file, CoreMetrics.FUNCTIONS_COUNT, 1.0);
+    addMeasure(file, CoreMetrics.FUNCTIONS, 1.0);
     addMeasureFromAttribute(reader, file, CoreMetrics.COMPLEXITY, "ccn");
   }
 
@@ -145,7 +141,7 @@ public class PhpDependResultsParser {
       for (Metric metric : resourcesBag.getMetrics(resource)) {
         if (metrics.contains(metric)) {
           Double measure = resourcesBag.getMeasure(metric, resource);
-          recordMeasure(resource, metric, measure);
+          saveMeasure(resource, metric, measure);
         }
       }
     }
@@ -168,11 +164,11 @@ public class PhpDependResultsParser {
   }
 
   private double extractValue(String value) throws ParseException {
-    return MavenCollectorUtils.parseNumber(value);
+    return ParsingUtils.parseNumber(value);
   }
 
-  private void recordMeasure(Resource resource, Metric metric, Double measure) {
-    context.addMeasure(resource, metric, measure);
+  private void saveMeasure(Resource resource, Metric metric, Double measure) {
+    context.saveMeasure(resource, metric, measure);
   }
 
 }

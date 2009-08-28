@@ -23,8 +23,9 @@ package org.sonar.plugins.php;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import org.junit.Test;
-import org.sonar.commons.Metric;
-import org.sonar.commons.resources.Resource;
+import org.sonar.api.measures.Metric;
+import org.sonar.api.resources.Resource;
+import org.sonar.api.resources.Directory;
 
 public class ResourcesBagTest {
 
@@ -91,6 +92,6 @@ public class ResourcesBagTest {
   }
 
   public Resource aResourceFixture() {
-    return new Resource("aScope", "aKey", "aQualifier", 1, "aName");
+    return new Directory("aKey", Php.INSTANCE);
   }
 }

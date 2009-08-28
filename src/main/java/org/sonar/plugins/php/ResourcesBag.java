@@ -20,11 +20,11 @@
 
 package org.sonar.plugins.php;
 
-import org.sonar.commons.Metric;
-import org.sonar.commons.resources.Resource;
+import org.sonar.api.resources.Resource;
+import org.sonar.api.measures.Metric;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 
 public class ResourcesBag {

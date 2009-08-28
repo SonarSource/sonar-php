@@ -20,98 +20,61 @@
 
 package org.sonar.plugins.php;
 
+import org.sonar.api.resources.AbstractLanguage;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.commons.resources.Resource;
-import org.sonar.plugins.api.AbstractLanguage;
-
-import java.util.List;
 
 public class Php extends AbstractLanguage {
 
+  public static final Php INSTANCE = new Php();
+
   public static final String KEY = "php";
-  public static final String DEFAULT_DIRECTORY_NAME = "[ROOT]";
+
   public static final String[] SUFFIXES = {"php", "php3", "php4", "php5", "phtml"};
 
   public Php() {
     super(KEY, "PHP");
   }
 
-  public Resource getParent(Resource resource) {
-    if (resource.isFile()) {
-      if (resource.getKey().indexOf("/") >= 0) {
-        return newDirectory(StringUtils.substringBeforeLast(resource.getKey(), "/"));
-      }
-      return newDirectory(null);
-    }
-    return null;
-  }
-
-  public boolean matchExclusionPattern(Resource resource, String wildcardPattern) {
-    return false;
-  }
-
   public String[] getFileSuffixes() {
     return SUFFIXES;
   }
 
-  public static Resource newDirectory(String key) {
-    String resourceKey = StringUtils.trim(key);
-    if (StringUtils.isBlank(key)) {
-      resourceKey = DEFAULT_DIRECTORY_NAME;
-    }
-    return Resource.newDirectory(resourceKey, Resource.QUALIFIER_DIRECTORY, KEY);
-  }
 
-  public static Resource newFile(String key) {
-    String resourceKey = StringUtils.trim(key);
-    String name = resourceKey;
-    if (name.contains("/")) {
-      name = StringUtils.substringAfterLast(name, "/");
-    }
-    Resource resource = Resource.newFile(resourceKey, Resource.QUALIFIER_FILE, KEY);
-    resource.setName(name);
-    return resource;
-  }
 
-  public static Resource newFile(String dirKey, String fileKey) {
-    if (StringUtils.isBlank(dirKey)) {
-      return newFile(fileKey);
-    }
-    return newFile(dirKey + "/" + fileKey);
+
+  /*public File newFile(String directory, String fileName) {
+    return (File) new File(directory, fileName).setLanguage(this);
+
   }
 
   public static Resource newFileFromAbsolutePath(String path, List<String> sourceDirs) {
-    if (path == null || !(containsValidSuffixes(path))) {
+    if (path == null) {
       return null;
     }
-    String unixPath = path.trim().replace('\\', '/');
+    String unixPath = path.trim().replace("\\", SEPARATOR);
     for (String rootAbsolutePath : sourceDirs) {
-      String unixRoot = rootAbsolutePath.replace('\\', '/');
-      if (!unixRoot.endsWith("/")) {
-        unixRoot += "/";
+      String unixRoot = rootAbsolutePath.replace("\\", SEPARATOR);
+      if (!unixRoot.endsWith(SEPARATOR)) {
+        unixRoot += SEPARATOR;
       }
       if (unixPath.contains(unixRoot)) {
-        String relativePath = StringUtils.substringAfter(unixPath, unixRoot); // "foo/bar/Myfile.php" or "Myfile.php"
-        relativePath = StringUtils.removeStart(relativePath, "/");
+        String relativePath = StringUtils.substringAfter(unixPath, unixRoot); // "foo/bar/Myfile.sql" or "Myfile.sql"
+        relativePath = StringUtils.removeStart(relativePath, SEPARATOR);
 
         String dirName = null;
         String fileName = relativePath;
 
-        if (relativePath.indexOf("/") >= 0) {
-          dirName = StringUtils.substringBeforeLast(relativePath, "/");
-          fileName = StringUtils.substringAfterLast(relativePath, "/");
+        if (relativePath.indexOf(SEPARATOR) >= 0) {
+          dirName = StringUtils.substringBeforeLast(relativePath, SEPARATOR);
+          fileName = StringUtils.substringAfterLast(relativePath, SEPARATOR);
         }
-        return newFile(dirName, fileName);
+        return new File(dirName, fileName);
       }
     }
     return null;
   }
+           */
 
-  public static Resource newUnitTestFileFromAbsolutePath(String path, List<String> sourceDirs) {
-    Resource unitTestFile = newFileFromAbsolutePath(path, sourceDirs);
-    unitTestFile.setQualifier(Resource.QUALIFIER_UNIT_TEST);
-    return unitTestFile;
-  }
 
   protected static boolean containsValidSuffixes(String path) {
     String pathLowerCase = StringUtils.lowerCase(path);

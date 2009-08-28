@@ -21,9 +21,6 @@
 package org.sonar.plugins.php.phpdepend;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,8 +29,6 @@ import java.io.InputStreamReader;
 
 public class PhpDependExecutor {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PhpDependExecutor.class);
-
   private PhpDependConfiguration configuration;
 
   public PhpDependExecutor(PhpDependConfiguration configuration) {
@@ -41,7 +36,7 @@ public class PhpDependExecutor {
   }
 
   public void execute() {
-    String commandLine;
+   /* String commandLine;
 
     try {
       String[] cmd = {configuration.getCommandLine(), configuration.getReportFilecommandOption(), configuration.getSuffixesCommandOption(),
@@ -62,7 +57,7 @@ public class PhpDependExecutor {
 
     } catch (Exception e) {
       throw new PhpDependExecutionException(e);
-    }
+    }     */
   }
 
   class StreamGobbler extends Thread {

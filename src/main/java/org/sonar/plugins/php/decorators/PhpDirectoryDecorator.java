@@ -18,33 +18,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 
-package org.sonar.plugins.php.matchers;
+package org.sonar.plugins.php.decorators;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
+import org.sonar.api.batch.AbstractDirectoriesDecorator;
 import org.sonar.plugins.php.Php;
-import org.sonar.api.resources.Resource;
-import org.sonar.api.resources.ResourceUtils;
 
-public class IsPhpDirectory extends BaseMatcher<Resource> {
-  private String key = null;
+public class PhpDirectoryDecorator extends AbstractDirectoriesDecorator{
 
-  public IsPhpDirectory(String key) {
-    this.key = key;
-  }
-
-  public IsPhpDirectory() {
-  }
-
-  public boolean matches(Object o) {
-    Resource resource = (Resource)o;
-    boolean result = ResourceUtils.isDirectory(resource) && Php.INSTANCE.equals(resource.getLanguage());
-    if (result && key!=null) {
-      result = key.equals(resource.getKey());
-    }
-    return result;
-  }
-
-  public void describeTo(Description arg0) {
+  public PhpDirectoryDecorator(Php php) {
+    super(php);
   }
 }

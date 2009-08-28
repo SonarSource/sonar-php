@@ -22,14 +22,15 @@ package org.sonar.plugins.php.phpdepend;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
-import org.sonar.plugins.api.maven.model.MavenPom;
 import org.sonar.plugins.php.Php;
+import org.sonar.api.resources.Project;
 
 import java.io.File;
+import java.util.List;
 
 public class PhpDependConfiguration {
 
-  private MavenPom pom = null;
+  private Project project = null;
   protected static final String KEY_PATH = "phpdepend.path";
   protected static final String DEFAUT_PATH = "";
 
@@ -37,11 +38,11 @@ public class PhpDependConfiguration {
 
   public static final String PHPUNIT_OPT = "phpunit-xml";
 
-  public static final String SUFFIXES_OPT = "suffix";  
+  public static final String SUFFIXES_OPT = "suffix";
 
 
-  public PhpDependConfiguration(MavenPom pom) {
-    this.pom = pom;
+  public PhpDependConfiguration(Project pom) {
+    this.project = pom;
   }
 
   // Only for unit tests
@@ -73,11 +74,11 @@ public class PhpDependConfiguration {
   }
 
   public File getReportFile(){
-    return new File(pom.getBuildDir(), "phpdepend-report.xml");
+    return new File(project.getFileSystem().getBuildDir(), "phpdepend-report.xml");
   }
 
-  public File getSourceDir() {
-    return pom.getSourceDir();
+  public List<File> getSourceDir() {
+    return project.getFileSystem().getSourceDirs();
   }
 
   protected boolean isOsWindows() {
@@ -85,7 +86,7 @@ public class PhpDependConfiguration {
   }
 
   protected String getCommandLinePath(){
-    return pom.getConfiguration().getString(KEY_PATH, DEFAUT_PATH);
+    return project.getConfiguration().getString(KEY_PATH, DEFAUT_PATH);
   }
 
 }

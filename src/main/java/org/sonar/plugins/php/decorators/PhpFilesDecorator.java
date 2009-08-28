@@ -18,23 +18,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 
-package org.sonar.plugins.php.phpcodesniffer;
+package org.sonar.plugins.php.decorators;
 
-public class PhpCodeSnifferExecutionException extends RuntimeException {
+import org.sonar.plugins.php.Php;
+import org.sonar.api.batch.AbstractFilesDecorator;
 
-  public PhpCodeSnifferExecutionException() {
-    super();
-  }
-
-  public PhpCodeSnifferExecutionException(String message) {
-    super(message);
-  }
-
-  public PhpCodeSnifferExecutionException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public PhpCodeSnifferExecutionException(Throwable cause) {
-    super(cause);
+public class PhpFilesDecorator extends AbstractFilesDecorator {
+  public PhpFilesDecorator(Php php) {
+    super(php);
   }
 }
+

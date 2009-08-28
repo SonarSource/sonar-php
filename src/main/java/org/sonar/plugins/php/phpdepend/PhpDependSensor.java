@@ -20,23 +20,18 @@
 
 package org.sonar.plugins.php.phpdepend;
 
-import org.sonar.plugins.api.maven.MavenCollector;
-import org.sonar.plugins.api.maven.MavenPluginHandler;
-import org.sonar.plugins.api.maven.ProjectContext;
-import org.sonar.plugins.api.maven.model.MavenPom;
 import org.sonar.plugins.php.Php;
+import org.sonar.api.batch.Sensor;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.Project;
 
-public class PhpDependMavenCollector implements MavenCollector {
+public class PhpDependSensor implements Sensor {
 
-  public Class<? extends MavenPluginHandler> dependsOnMavenPlugin(MavenPom pom) {
-    return null;
+  public boolean shouldExecuteOnProject(Project pom) {
+    return Php.KEY.equals(pom.getLanguage());
   }
 
-  public boolean shouldCollectOn(MavenPom pom) {
-    return Php.KEY.equals(pom.getLanguageKey());
-  }
-
-  public void collect(MavenPom pom, ProjectContext context) {
+  public void analyse(Project pom, SensorContext context) {
     PhpDependConfiguration config = new PhpDependConfiguration(pom);
     PhpDependExecutor executor = new PhpDependExecutor(config);
     executor.execute();

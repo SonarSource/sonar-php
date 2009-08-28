@@ -23,10 +23,9 @@ package org.sonar.plugins.php.phpdepend;
 import org.junit.Test;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
-import org.sonar.commons.Metric;
-import org.sonar.plugins.api.maven.ProjectContext;
-import org.sonar.plugins.api.metrics.CoreMetrics;
-import org.sonar.plugins.php.Php;
+import org.sonar.api.measures.Metric;
+import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.batch.SensorContext;
 
 import java.io.File;
 import java.util.Arrays;
@@ -35,20 +34,20 @@ import java.util.Set;
 
 public class PhpDependResultsParserTest {
 
-  private ProjectContext context;
+  private SensorContext context;
   private PhpDependConfiguration config;
   private Metric metric;
 
   private void init() {
     try {
       File xmlReport = new File(getClass().getResource("/org/sonar/plugins/php/phpdepend/PhpDependResultsParserTest/phpunit-report.xml").toURI());
-      context = mock(ProjectContext.class);
+      context = mock(SensorContext.class);
       config = mock(PhpDependConfiguration.class);
       when(config.getReportFile()).thenReturn(xmlReport);
-
+      when(config.getSourceDir()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Money")));
       Set<Metric> metrics = new HashSet<Metric>();
       metrics.add(metric);
-      PhpDependResultsParser parser = new PhpDependResultsParser(config, context, Arrays.asList("C:\\projets\\PHP\\Money"), metrics);
+      PhpDependResultsParser parser = new PhpDependResultsParser(config, context, metrics);
       parser.parse();
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -58,7 +57,7 @@ public class PhpDependResultsParserTest {
   @Test(expected = PhpDependExecutionException.class)
   public void shouldThrowAnExceptionWhenReportNotFound() {
     config = mock(PhpDependConfiguration.class);
-    when(config.getSourceDir()).thenReturn(new File("C:\\projets\\PHP\\Money"));
+    //when(config.getSourceDir()).thenReturn(new File("C:\\projets\\PHP\\Money"));
     when(config.getReportFile()).thenReturn(new File("path/to/nowhere"));
     PhpDependResultsParser parser = new PhpDependResultsParser(config, null);
     parser.parse();
@@ -68,18 +67,18 @@ public class PhpDependResultsParserTest {
   public void shouldNotThrowAnExceptionIfMetricNotFound() {
     metric = new Metric("not a true metric");
     init();
-    verify(context, never()).addMeasure(eq(metric), anyDouble());
+    verify(context, never()).saveMeasure(eq(metric), anyDouble());
   }
 
   @Test
   public void shouldGenerateLocMeasures() {
-    metric = CoreMetrics.LOC;
+    metric = CoreMetrics.LINES;
     init();
 
-    verify(context).addMeasure(Php.newFile("Money.php"), metric, 188.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 251.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 255.0);
-    verify(context).addMeasure(Php.newFile("Sources/Common/IMoney.php"), metric, 74.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File(("Money.php")), metric, 188.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyBag.php"), metric, 251.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyTest.php"), metric, 255.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/Common/IMoney.php"), metric, 74.0);
   }
 
   @Test
@@ -87,33 +86,33 @@ public class PhpDependResultsParserTest {
     metric = CoreMetrics.NCLOC;
     init();
 
-    verify(context).addMeasure(Php.newFile("Money.php"), metric, 94.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 150.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 152.0);
-    verify(context).addMeasure(Php.newFile("Sources/Common/IMoney.php"), metric, 15.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Money.php"), metric, 94.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyBag.php"), metric, 150.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyTest.php"), metric, 152.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/Common/IMoney.php"), metric, 15.0);
   }
 
 
   @Test
   public void shouldGenerateFunctionsCountMeasure() {
-    metric = CoreMetrics.FUNCTIONS_COUNT;
+    metric = CoreMetrics.FUNCTIONS;
     init();
 
-    verify(context).addMeasure(Php.newFile("Money.php"), metric, 17.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 18.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 24.0);
-    verify(context).addMeasure(Php.newFile("Sources/Common/IMoney.php"), metric, 8.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Money.php"), metric, 17.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyBag.php"), metric, 18.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyTest.php"), metric, 24.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/Common/IMoney.php"), metric, 8.0);
   }
 
   @Test
   public void shouldGenerateClassesCountMeasure() {
-    metric = CoreMetrics.CLASSES_COUNT;
+    metric = CoreMetrics.CLASSES;
     init();
 
-    verify(context).addMeasure(Php.newFile("Money.php"), metric, 2.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 1.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 1.0);
-    verify(context).addMeasure(Php.newFile("Sources/Common/IMoney.php"), metric, 1.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Money.php"), metric, 2.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyBag.php"), metric, 1.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyTest.php"), metric, 1.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/Common/IMoney.php"), metric, 1.0);
   }
 
   @Test
@@ -121,21 +120,21 @@ public class PhpDependResultsParserTest {
     metric = CoreMetrics.COMPLEXITY;
     init();
 
-    verify(context).addMeasure(Php.newFile("Money.php"), metric, 22.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyBag.php"), metric, 39.0);
-    verify(context).addMeasure(Php.newFile("Sources/MoneyTest.php"), metric, 24.0);
-    verify(context, never()).addMeasure(eq(Php.newFile("Sources/Common/IMoney.php")), eq(metric), anyDouble());
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Money.php"), metric, 22.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyBag.php"), metric, 39.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Sources/MoneyTest.php"), metric, 24.0);
+    verify(context, never()).saveMeasure(eq(new org.sonar.api.resources.File("Sources/Common/IMoney.php")), eq(metric), anyDouble());
   }
 
   @Test
   public void shouldNotGenerateDirOrProjectMeasures() {
-    metric = CoreMetrics.LOC;
+    metric = CoreMetrics.LINES;
     init();
 
-    verify(context, never()).addMeasure(eq(metric), anyDouble());
+    verify(context, never()).saveMeasure(eq(metric), anyDouble());
 
-    verify(context, never()).addMeasure(eq(Php.newDirectory("Sources")), eq(metric), anyDouble());
-    verify(context, never()).addMeasure(eq(Php.newDirectory("Sources/Common")), eq(metric), anyDouble());
+    verify(context, never()).saveMeasure(eq(new org.sonar.api.resources.Directory("Sources")), eq(metric), anyDouble());
+    verify(context, never()).saveMeasure(eq(new org.sonar.api.resources.Directory("Sources/Common")), eq(metric), anyDouble());
   }
 
 }
