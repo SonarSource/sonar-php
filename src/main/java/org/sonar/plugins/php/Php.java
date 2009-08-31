@@ -39,43 +39,6 @@ public class Php extends AbstractLanguage {
     return SUFFIXES;
   }
 
-
-
-
-  /*public File newFile(String directory, String fileName) {
-    return (File) new File(directory, fileName).setLanguage(this);
-
-  }
-
-  public static Resource newFileFromAbsolutePath(String path, List<String> sourceDirs) {
-    if (path == null) {
-      return null;
-    }
-    String unixPath = path.trim().replace("\\", SEPARATOR);
-    for (String rootAbsolutePath : sourceDirs) {
-      String unixRoot = rootAbsolutePath.replace("\\", SEPARATOR);
-      if (!unixRoot.endsWith(SEPARATOR)) {
-        unixRoot += SEPARATOR;
-      }
-      if (unixPath.contains(unixRoot)) {
-        String relativePath = StringUtils.substringAfter(unixPath, unixRoot); // "foo/bar/Myfile.sql" or "Myfile.sql"
-        relativePath = StringUtils.removeStart(relativePath, SEPARATOR);
-
-        String dirName = null;
-        String fileName = relativePath;
-
-        if (relativePath.indexOf(SEPARATOR) >= 0) {
-          dirName = StringUtils.substringBeforeLast(relativePath, SEPARATOR);
-          fileName = StringUtils.substringAfterLast(relativePath, SEPARATOR);
-        }
-        return new File(dirName, fileName);
-      }
-    }
-    return null;
-  }
-           */
-
-
   protected static boolean containsValidSuffixes(String path) {
     String pathLowerCase = StringUtils.lowerCase(path);
     for (String suffix : SUFFIXES) {

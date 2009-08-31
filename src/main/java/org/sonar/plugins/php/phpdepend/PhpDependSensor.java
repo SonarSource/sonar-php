@@ -28,7 +28,7 @@ import org.sonar.api.resources.Project;
 public class PhpDependSensor implements Sensor {
 
   public boolean shouldExecuteOnProject(Project pom) {
-    return Php.KEY.equals(pom.getLanguage());
+    return Php.INSTANCE.equals(pom.getLanguage());
   }
 
   public void analyse(Project pom, SensorContext context) {

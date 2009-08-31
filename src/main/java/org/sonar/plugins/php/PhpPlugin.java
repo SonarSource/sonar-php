@@ -24,6 +24,8 @@ import org.sonar.api.Plugin;
 import org.sonar.api.Extension;
 import org.sonar.plugins.php.sensors.PhpSourceImporter;
 import org.sonar.plugins.php.decorators.PhpDirectoryDecorator;
+import org.sonar.plugins.php.decorators.PhpFilesDecorator;
+import org.sonar.plugins.php.phpdepend.PhpDependSensor;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -46,8 +48,9 @@ public class PhpPlugin implements Plugin {
     List<Class<? extends Extension>> list = new ArrayList<Class<? extends Extension>>();
     list.add(Php.class);
     list.add(PhpSourceImporter.class);
-
+    list.add(PhpDependSensor.class);
     list.add(PhpDirectoryDecorator.class);
+    list.add(PhpFilesDecorator.class);
     return list;
   }
 
