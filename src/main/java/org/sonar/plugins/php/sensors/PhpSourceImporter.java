@@ -20,48 +20,14 @@
 
 package org.sonar.plugins.php.sensors;
 
-import org.sonar.api.resources.Resource;
-import org.sonar.api.resources.Language;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.batch.AbstractSourceImporter;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.plugins.php.Php;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public class PhpSourceImporter extends AbstractSourceImporter {
 
-  public PhpSourceImporter(Language language) {
-    super(language);
+  public PhpSourceImporter(Php php) {
+    super(php);
   }
-
-  @Override
-  protected void analyse(ProjectFileSystem fileSystem, SensorContext context) throws IOException {
-    //parseDirs(context, configuration.getPlsqlFiles(), fileSystem.getSourceDirs(), false, fileSystem.getSourceCharset());
-  }
-
-  protected Resource createResource(File file, List<File> sourceDirs, boolean unitTest) {
-    org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(file, sourceDirs);
-    /*if (resource.getKey().contains("sonar") && resource.getKey().contains(FormSensor.GENERATED_SOURCES_DIR)) {
-      // occurs when source dir is ${basedir}. It should not get generated sources from target/sonar/plsql-sources
-      return null;
-    } */
-
-    return resource;
-  }
-
-/*  protected String[] getSuffixes() {
-    return Php.SUFFIXES;
-  }
-
-  protected Resource createSourceResource(File file, String sourceDir) {
-    return Php.newFileFromAbsolutePath(file.getAbsolutePath(), Arrays.asList(sourceDir));
-  }
-
-  protected Resource createTestResource(File file, String testSourceDir) {
-    return Php.newUnitTestFileFromAbsolutePath(file.getAbsolutePath(), Arrays.asList(testSourceDir));
-  }
-  */
 
 }
