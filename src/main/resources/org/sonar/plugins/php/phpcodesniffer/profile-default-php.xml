@@ -1,6 +1,0 @@
-<profile name="Default PHP" language='php'>
-	<rule key="Generic/Sniffs/WhiteSpace/DisallowTabIndentSniff.php" severity="error" />
-	<rule key="Zend/Sniffs/Files/ClosingTagSniff.php" severity="error" />
-	<rule key="PEAR/Sniffs/Commenting/FunctionCommentSniff.php" severity="error" />
-	<rule key="Generic/Sniffs/PHP/LowerCaseConstantSniff.php" severity="warning" />
-</profile>
