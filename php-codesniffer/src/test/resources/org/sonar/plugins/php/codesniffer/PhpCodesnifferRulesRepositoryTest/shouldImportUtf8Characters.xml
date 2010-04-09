@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sonar Checkstyle rules generated configuration -->
+<module name="rulesets">
+  <module name="RC_DYNAMIC_WARNING">
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="é"/>
+  </module>
+</module>

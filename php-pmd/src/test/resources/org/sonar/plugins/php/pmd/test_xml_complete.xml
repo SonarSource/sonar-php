@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- Sonar PMD rules generated configuration -->
+<ruleset name="Sonar PHPMD rules">
+	<rule name="CouplingBetweenObjects">
+		<priority>2</priority>
+		<property name="threshold" value="20" />
+	</rule>
+	<rule name="ExcessiveImports">
+		<priority>3</priority>
+		<property name="max" value="20" />
+	</rule>
+	<rule name="UseNotifyAllInsteadOfNotify">
+		<priority>4</priority>
+	</rule>
+</ruleset>
