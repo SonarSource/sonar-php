@@ -51,7 +51,7 @@ public class PhpPmdConfigurationTest {
 		        PhpPmdConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn(PhpPmdConfiguration.DEFAULT_REPORT_FILE_PATH);
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpPmdConfiguration config = new PhpPmdConfiguration(project);
-		assertEquals(config.getReportFile().getAbsolutePath(), "C:\\projets\\PHP\\Monkey\\target\\logs\\pmd.xml");
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\pmd.xml");
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class PhpPmdConfigurationTest {
 		        PhpPmdConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpPmdConfiguration config = new PhpPmdConfiguration(project);
-		assertEquals(config.getReportFile().getAbsolutePath(), "C:\\projets\\PHP\\Monkey\\target\\reports\\pmd.xml");
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pmd.xml");
 	}
 
 	/**
@@ -101,6 +101,6 @@ public class PhpPmdConfigurationTest {
 		        PhpPmdConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpPmdConfiguration config = new PhpPmdConfiguration(project);
-		assertEquals(config.getReportFile().getAbsolutePath(), "C:\\projets\\PHP\\Monkey\\target\\reports\\pmd-summary.xml");
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pmd-summary.xml");
 	}
 }

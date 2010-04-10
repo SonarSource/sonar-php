@@ -85,8 +85,7 @@ public class PhpDependConfigurationTest {
 				PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH);
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpDependConfiguration config = new PhpDependConfiguration(project);
-		System.out.println(config.getReportFile().getAbsolutePath());
-		assertEquals(config.getReportFile().getAbsolutePath(), "C:\\projets\\PHP\\Monkey\\target\\logs\\pdepend.xml");
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\pdepend.xml");
 	}
 
 	/**
@@ -112,8 +111,8 @@ public class PhpDependConfigurationTest {
 						PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpDependConfiguration config = new PhpDependConfiguration(project);
-		System.out.println(config.getReportFile().getAbsolutePath());
-		assertEquals(config.getReportFile().getAbsolutePath(), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.xml");
+		System.out.println(config.getReportFile().getPath().replace('/', '\\'));
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.xml");
 	}
 
 	@Test
@@ -135,7 +134,7 @@ public class PhpDependConfigurationTest {
 						PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpDependConfiguration config = new PhpDependConfiguration(project);
-		assertEquals(config.getReportFile().getAbsolutePath(), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.summary.xml");
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.summary.xml");
 	}
 
 	/**
