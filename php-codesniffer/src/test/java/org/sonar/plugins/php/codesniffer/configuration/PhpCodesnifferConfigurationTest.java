@@ -53,7 +53,7 @@ public class PhpCodesnifferConfigurationTest {
 		    PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH);
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
-		assertEquals(config.getReportFile().getAbsolutePath(), "C:\\projets\\PHP\\Monkey\\target\\logs\\codesniffer.xml");
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\codesniffer.xml");
 	}
 
 	/**
@@ -79,7 +79,8 @@ public class PhpCodesnifferConfigurationTest {
 		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
-		assertEquals(config.getReportFile().getAbsolutePath(), "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer.xml");
+		assertEquals(assertEquals(config.getReportFile().getPath().replace('/', '\\'), 
+			"C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer.xml");
 	}
 
 	/**
@@ -104,7 +105,7 @@ public class PhpCodesnifferConfigurationTest {
 		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
-		assertEquals(config.getReportFile().getAbsolutePath(),
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'),
 		    "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer-summary.xml");
 	}
 }
