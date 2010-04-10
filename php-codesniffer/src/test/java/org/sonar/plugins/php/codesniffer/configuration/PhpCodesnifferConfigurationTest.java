@@ -79,7 +79,7 @@ public class PhpCodesnifferConfigurationTest {
 		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
-		assertEquals(assertEquals(config.getReportFile().getPath().replace('/', '\\'), 
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), 
 			"C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer.xml");
 	}
 
