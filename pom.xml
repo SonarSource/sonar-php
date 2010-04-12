@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.codehaus.sonar-plugins</groupId>
@@ -8,7 +8,7 @@
 		<relativePath>../parent</relativePath>
 	</parent>
 	<artifactId>sonar-php</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2</version>
 	<packaging>pom</packaging>
 	<name>Sonar PHP</name>
 	<properties>
@@ -21,4 +21,21 @@
       	   <module>php-pmd</module>
            <module>php-unit</module>
         </modules>
+	<inceptionYear>2010</inceptionYear>
+	<organization>
+	  <name>MyCompany</name>
+	  <url>http://mycompany.com</url>
+	</organization>
+	<licenses>
+	  <license>
+	    <name>GNU Lesser General Public License (LGPL), v.3</name>
+	    <url>http://www.gnu.org/licenses/lgpl.txt</url>
+	    <distribution>repo</distribution>
+	  </license>
+	</licenses>
+	  <scm>
+	    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.2</connection>
+	    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.2</developerConnection>
+	    <url>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.2</url>
+	  </scm>
 </project>
