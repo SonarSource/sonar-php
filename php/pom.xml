@@ -10,7 +10,7 @@
 	<artifactId>sonar-php-plugin</artifactId>
 	<groupId>org.codehaus.sonar-plugins</groupId>
 	<version>0.2-SNAPSHOT</version>
-	<packaging>maven-plugin</packaging>
+	<packaging>jar</packaging>
 	<name>Sonar PHP plugin</name>
 	<dependencies>
 		<dependency>

@@ -9,7 +9,7 @@
   </parent>
   <artifactId>sonar-php-depend-plugin</artifactId>
   <version>0.2-SNAPSHOT</version>
-  <packaging>maven-plugin</packaging>
+  <packaging>jar</packaging>
   <name>Sonar PHP Depend plugin</name>
   <dependencies>
     <dependency>
