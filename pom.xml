@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.codehaus.sonar-plugins</groupId>
 		<artifactId>parent</artifactId>
-		<version>5</version>
+		<version>4</version>
 		<relativePath>../parent</relativePath>
 	</parent>
 	<artifactId>sonar-php</artifactId>
