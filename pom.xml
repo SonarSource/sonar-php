@@ -8,7 +8,7 @@
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>sonar-php</artifactId>
-  <version>0.2</version>
+  <version>0.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Sonar PHP</name>
   <properties>
@@ -34,9 +34,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.2</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.2</developerConnection>
-    <url>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.2</url>
+    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php</developerConnection>
+    <url>http://svn.codehaus.org/sonar-plugins</url>
   </scm>
   <profiles>
     <profile>
