@@ -33,88 +33,94 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @XStreamAlias("file")
 public class FileNode {
 
-	/** The lines. */
-	@XStreamImplicit(itemFieldName = "line")
-	private List<LineNode> lines;
+  /** The lines. */
+  @XStreamImplicit(itemFieldName = "line")
+  private List<LineNode> lines;
 
-	/** The ignored nodes. */
-	@XStreamOmitField
-	@XStreamImplicit(itemFieldName = "class")
-	private List<ClassNode> ignoredNodes;
+  /** The ignored nodes. */
+  @XStreamOmitField
+  @XStreamImplicit(itemFieldName = "class")
+  private List<ClassNode> ignoredNodes;
 
-	/** The metrics. */
-	@XStreamAlias("metrics")
-	private MetricsNode metrics;
+  /** The metrics. */
+  @XStreamAlias("metrics")
+  private MetricsNode metrics;
 
-	/**
-	 * Instantiates a new file node.
-	 * 
-	 * @param lines the lines
-	 * @param metrics the metrics
-	 * @param name the name
-	 */
-	public FileNode(List<LineNode> lines, MetricsNode metrics, String name) {
-		super();
-		this.lines = lines;
-		this.metrics = metrics;
-		this.name = name;
-	}
+  /**
+   * Instantiates a new file node.
+   * 
+   * @param lines
+   *          the lines
+   * @param metrics
+   *          the metrics
+   * @param name
+   *          the name
+   */
+  public FileNode(List<LineNode> lines, MetricsNode metrics, String name) {
+    super();
+    this.lines = lines;
+    this.metrics = metrics;
+    this.name = name;
+  }
 
-	/** The name. */
-	@XStreamAsAttribute
-	private String name;
+  /** The name. */
+  @XStreamAsAttribute
+  private String name;
 
-	/**
-	 * Gets the lines.
-	 * 
-	 * @return the lines
-	 */
-	public List<LineNode> getLines() {
-		return lines;
-	}
+  /**
+   * Gets the lines.
+   * 
+   * @return the lines
+   */
+  public List<LineNode> getLines() {
+    return lines;
+  }
 
-	/**
-	 * Sets the lines.
-	 * 
-	 * @param lines the new lines
-	 */
-	public void setLines(List<LineNode> lines) {
-		this.lines = lines;
-	}
+  /**
+   * Sets the lines.
+   * 
+   * @param lines
+   *          the new lines
+   */
+  public void setLines(List<LineNode> lines) {
+    this.lines = lines;
+  }
 
-	/**
-	 * Gets the metrics.
-	 * 
-	 * @return the metrics
-	 */
-	public MetricsNode getMetrics() {
-		return metrics;
-	}
+  /**
+   * Gets the metrics.
+   * 
+   * @return the metrics
+   */
+  public MetricsNode getMetrics() {
+    return metrics;
+  }
 
-	/**
-	 * Sets the metrics.
-	 * 
-	 * @param metrics the new metrics
-	 */
-	public void setMetrics(MetricsNode metrics) {
-		this.metrics = metrics;
-	}
+  /**
+   * Sets the metrics.
+   * 
+   * @param metrics
+   *          the new metrics
+   */
+  public void setMetrics(MetricsNode metrics) {
+    this.metrics = metrics;
+  }
 
-	/**
-	 * Gets the name.
-	 * 
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * Gets the name.
+   * 
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Sets the name.
-	 * 
-	 * @param name the new name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+  /**
+   * Sets the name.
+   * 
+   * @param name
+   *          the new name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 }

@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.codehaus.sonar-plugins</groupId>
     <artifactId>sonar-php</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
     <relativePath>../</relativePath>
   </parent>
   <artifactId>sonar-php-codesniffer-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.2-SNAPSHOT</version>
   <name>Sonar PHP CODESNIFFER plugin</name>
   <dependencies>
     <dependency>
@@ -26,7 +26,7 @@
     <dependency>
       <groupId>org.codehaus.sonar-plugins</groupId>
       <artifactId>sonar-php-plugin</artifactId>
-      <version>0.3-SNAPSHOT</version>
+      <version>0.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
