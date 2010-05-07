@@ -9,7 +9,7 @@
         <properties>
             <property name="reportLevel" value="10"/>
             <property name="showClassesComplexity" value="true"/>
-            <property name="showMethodsComplexity" value="true"/>
+            <property name="showMethodsComplexity" value="false"/>
         </properties>
     </rule>
     <rule name="NPathComplexity">

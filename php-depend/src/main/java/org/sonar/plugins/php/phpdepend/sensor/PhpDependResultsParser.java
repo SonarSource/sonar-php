@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
@@ -35,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
+import org.sonar.api.measures.PersistenceMode;
+import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.resources.PhpFile;
@@ -56,6 +59,8 @@ import com.thoughtworks.xstream.XStreamException;
 public class PhpDependResultsParser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PhpDependResultsParser.class);
+	private final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
+	private final Number[] CLASSES_DISTRIB_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
 	private SensorContext context;
 
@@ -118,7 +123,8 @@ public class PhpDependResultsParser {
 	 * @param value
 	 */
 	private void addMeasureIfNecessary(PhpFile file, Metric metric, double value) {
-		if (resourcesBag.getMeasure(metric, file) == null || resourcesBag.getMeasure(metric, file) == 0) {
+		Double measure = resourcesBag.getMeasure(metric, file);
+		if (measure == null || measure == 0) {
 			resourcesBag.add(value, metric, file);
 		}
 	}
@@ -131,17 +137,20 @@ public class PhpDependResultsParser {
 	 *            the php related file
 	 * @param classNode
 	 *            representing the class in the report file
+	 * @param methodComplexityDistribution 
 	 */
-	private void collectClassMeasures(ClassNode classNode, PhpFile file) {
+	private void collectClassMeasures(ClassNode classNode, PhpFile file, RangeDistributionBuilder methodComplexityDistribution) {
 		addMeasureIfNecessary(file, CoreMetrics.LINES, classNode.getLinesNumber());
 		addMeasureIfNecessary(file, CoreMetrics.COMMENT_LINES, classNode.getCommentLineNumber());
 		addMeasureIfNecessary(file, CoreMetrics.NCLOC, classNode.getCodeLinesNumber());
 		// Adds one class to this file
 		addMeasure(file, CoreMetrics.CLASSES, 1.0);
 		// for all methods in this class.
-		if (classNode.getMethodes() != null && classNode.getMethodes().size() != 0) {
-			for (MethodNode methodNode : classNode.getMethodes()) {
+		List<MethodNode> methodes = classNode.getMethodes();
+		if (methodes != null && methodes.size() != 0) {
+			for (MethodNode methodNode : methodes) {
 				collectMethodMeasures(methodNode, file);
+				methodComplexityDistribution.add(methodNode.getComplexity());
 			}
 		}
 	}
@@ -151,13 +160,16 @@ public class PhpDependResultsParser {
 	 * 
 	 * @param file the php related file
 	 * @param functionNode representing the class in the report file
+	 * @param methodComplexityDistribution 
 	 */
-	private void collectFunctionsMeasures(FunctionNode functionNode, PhpFile file) {
+	private void collectFunctionsMeasures(FunctionNode functionNode, PhpFile file, RangeDistributionBuilder methodComplexityDistribution) {
 		addMeasureIfNecessary(file, CoreMetrics.LINES, functionNode.getLinesNumber());
 		addMeasureIfNecessary(file, CoreMetrics.COMMENT_LINES, functionNode.getCommentLineNumber());
 		addMeasureIfNecessary(file, CoreMetrics.NCLOC, functionNode.getCodeLinesNumber());
 		// Adds one class to this file
 		addMeasure(file, CoreMetrics.FUNCTIONS, 1.0);
+		addMeasure(file, CoreMetrics.COMPLEXITY, functionNode.getComplexity());
+		methodComplexityDistribution.add(functionNode.getComplexity());
 	}
 
 	/**
@@ -176,16 +188,21 @@ public class PhpDependResultsParser {
 		// Adds one file to this php file
 		addMeasure(file, CoreMetrics.FILES, 1.0);
 		// for all class in this file
+		RangeDistributionBuilder classComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, CLASSES_DISTRIB_BOTTOM_LIMITS);
+		RangeDistributionBuilder methodComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
 		if (fileNode.getClasses() != null) {
-			for (ClassNode classNode : fileNode.getClasses()) {
-				collectClassMeasures(classNode, file);
+				for (ClassNode classNode : fileNode.getClasses()) {
+				collectClassMeasures(classNode, file, methodComplexityDistribution);
+				classComplexityDistribution.add(classNode.getComplexity());
 			}// for all class in this file
 		}
 		if (fileNode.getFunctions() != null) {
 			for (FunctionNode funcNode : fileNode.getFunctions()) {
-				collectFunctionsMeasures(funcNode, file);
+				collectFunctionsMeasures(funcNode, file, methodComplexityDistribution);
 			}
 		}
+		context.saveMeasure(new PhpFile(file.getName()), classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+		context.saveMeasure(new PhpFile(file.getName()), methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
 	}
 
 	/**

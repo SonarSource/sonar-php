@@ -44,6 +44,12 @@ public final class FunctionNode {
 	@XStreamAlias("cloc")
 	private double commentLineNumber;
 
+	/** The cyclomatic complexity for the function. */
+	@XStreamAsAttribute
+	@XStreamAlias("ccn")
+	private double complexity;
+
+	
 	/**
 	 * Instantiates a new class node.
 	 * 
@@ -113,4 +119,19 @@ public final class FunctionNode {
 	public void setLinesNumber(final double linesNumber) {
 		this.linesNumber = linesNumber;
 	}
+
+	/**
+	 * @return the complexity
+	 */
+	public double getComplexity() {
+		return complexity;
+	}
+
+	/**
+	 * @param complexity the complexity to set
+	 */
+	public void setComplexity(double complexity) {
+		this.complexity = complexity;
+	}
+	
 }

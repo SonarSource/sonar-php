@@ -58,7 +58,8 @@ public class PhpUnitSensor implements Sensor {
 				PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
 				executor.execute();
 			}
-			new PhpUnitResultParser(project, context).parse(config.getReportFile());
+			PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
+			parser.parse(config.getReportFile());
 			if (config.shouldRunCoverage()) {
 				new PhpUnitCoverageResultParser(project, context).parse(config.getCoverageReportFile());
 			}

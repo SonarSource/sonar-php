@@ -217,6 +217,9 @@ public abstract class PhpPluginAbstractConfiguration {
 		if (getReportFileRelativePathKey() != null) {
 			reportFileRelativePath = project.getConfiguration().getString(getReportFileRelativePathKey(),
 					getDefaultReportFilePath());
+			File reportDirectory = new File(project.getFileSystem().getBuildDir().getAbsolutePath(),reportFileRelativePath);
+			reportDirectory.mkdir();
+			
 		}
 		if (getArgumentLineKey() != null) {
 			argumentLine = project.getConfiguration().getString(getArgumentLineKey(), getDefaultArgumentLine());

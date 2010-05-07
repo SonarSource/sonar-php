@@ -60,7 +60,7 @@ public class PhpUnitConfigurationTest {
 		        PhpUnitConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn(PhpUnitConfiguration.DEFAULT_REPORT_FILE_PATH);
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\punit.xml");
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\phpunit.xml");
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class PhpUnitConfigurationTest {
 		        PhpUnitConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
 		when(project.getConfiguration()).thenReturn(configuration);
 		PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\punit.xml");
+		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\phpunit.xml");
 	}
 
 	/**

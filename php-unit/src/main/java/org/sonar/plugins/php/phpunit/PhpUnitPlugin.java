@@ -36,7 +36,7 @@ import org.sonar.plugins.php.phpunit.sensor.PhpUnitSensor;
  * @author jtama
  */
 @Properties( {
-		@Property(key = PhpUnitConfiguration.MAIN_TEST_CLASS_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_MAIN_TEST_CLASS, name = "Project main test class", description = "The project main test class including the relativ path ie : \"/source/tests/AllTests.php\"", project = true),
+		@Property(key = PhpUnitConfiguration.MAIN_TEST_FILE_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_MAIN_TEST_FILE, name = "Project main test class", description = "The project main test class including the relativ path ie : \"/source/tests/AllTests.php\"", project = true),
 		@Property(key = PhpUnitConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_REPORT_FILE_PATH, name = "PHPUnit log directory", description = "The relative path to the PHPUnit log directory beginning after {PROJECT_BUILD_PATH}.", project = true),
 		@Property(key = PhpUnitConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_REPORT_FILE_NAME, name = "PhpUnit log file name", description = "The php unit log file name.", project = true),
 		@Property(key = PhpUnitConfiguration.COVERAGE_REPORT_FILE_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_COVERAGE_REPORT_FILE, name = "PhpUnit coverage log file name", description = "The php unit coverage log file name.", project = true),
