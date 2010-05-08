@@ -35,7 +35,7 @@ public class ResourcesBag {
   /**
    * The Class MeasuresByMetric.
    */
-  class MeasuresByMetric {
+  static class MeasuresByMetric {
 
     /** The measures by metric. */
     private Map<Metric, Double> measuresByMetric;

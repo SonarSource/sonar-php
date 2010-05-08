@@ -38,7 +38,7 @@ public abstract class PhpPluginAbstractExecutor {
   /**
    * The Class AsyncPipe.
    */
-  class AsyncPipe extends Thread {
+  static class AsyncPipe extends Thread {
 
     /** The input stream. */
     private InputStream istrm;
@@ -72,7 +72,7 @@ public abstract class PhpPluginAbstractExecutor {
           synchronized (ostrm) {
             ostrm.write(buffer, 0, length);
           }
-          istrm.read(buffer);
+          length = istrm.read(buffer);
         }
       } catch (IOException e) {
         LOG.error("Can't execute the Async Pipe", e);

@@ -300,4 +300,111 @@ public class Rule implements Comparable<String> {
     this.properties = properties;
   }
 
+  /**
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((className == null) ? 0 : className.hashCode());
+    result = prime * result + ((description == null) ? 0 : description.hashCode());
+    result = prime * result + ((example == null) ? 0 : example.hashCode());
+    result = prime * result + ((exclude == null) ? 0 : exclude.hashCode());
+    result = prime * result + ((externalInfoUrl == null) ? 0 : externalInfoUrl.hashCode());
+    result = prime * result + ((message == null) ? 0 : message.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((priority == null) ? 0 : priority.hashCode());
+    result = prime * result + ((properties == null) ? 0 : properties.hashCode());
+    result = prime * result + ((since == null) ? 0 : since.hashCode());
+    return result;
+  }
+
+  /**
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Rule other = (Rule) obj;
+    if (className == null) {
+      if (other.className != null) {
+        return false;
+      }
+    } else if ( !className.equals(other.className)) {
+      return false;
+    }
+    if (description == null) {
+      if (other.description != null) {
+        return false;
+      }
+    } else if ( !description.equals(other.description)) {
+      return false;
+    }
+    if (example == null) {
+      if (other.example != null) {
+        return false;
+      }
+    } else if ( !example.equals(other.example)) {
+      return false;
+    }
+    if (exclude == null) {
+      if (other.exclude != null) {
+        return false;
+      }
+    } else if ( !exclude.equals(other.exclude)) {
+      return false;
+    }
+    if (externalInfoUrl == null) {
+      if (other.externalInfoUrl != null) {
+        return false;
+      }
+    } else if ( !externalInfoUrl.equals(other.externalInfoUrl)) {
+      return false;
+    }
+    if (message == null) {
+      if (other.message != null) {
+        return false;
+      }
+    } else if ( !message.equals(other.message)) {
+      return false;
+    }
+    if (name == null) {
+      if (other.name != null) {
+        return false;
+      }
+    } else if ( !name.equals(other.name)) {
+      return false;
+    }
+    if (priority == null) {
+      if (other.priority != null) {
+        return false;
+      }
+    } else if ( !priority.equals(other.priority)) {
+      return false;
+    }
+    if (properties == null) {
+      if (other.properties != null) {
+        return false;
+      }
+    } else if ( !properties.equals(other.properties)) {
+      return false;
+    }
+    if (since == null) {
+      if (other.since != null) {
+        return false;
+      }
+    } else if ( !since.equals(other.since)) {
+      return false;
+    }
+    return true;
+  }
 }

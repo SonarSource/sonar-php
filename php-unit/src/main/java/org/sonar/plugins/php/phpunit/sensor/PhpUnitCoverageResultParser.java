@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -162,8 +163,8 @@ public class PhpUnitCoverageResultParser {
    */
   private void saveMeasures(Map<String, PackageNode> classByPackage) {
     // For each package
-    for (String packageName : classByPackage.keySet()) {
-      PackageNode node = classByPackage.get(packageName);
+    Collection<PackageNode> nodes = classByPackage.values();
+    for (PackageNode node : nodes) {
       PhpPackage phpPackage = node.getPackage();
       double coveragePercent = 0d;
       // Saves the class measures and adds its coverage percent
@@ -172,7 +173,7 @@ public class PhpUnitCoverageResultParser {
       }
       double percentageByPackage = coveragePercent / node.getClassByFileNode().size();
       if (logger.isDebugEnabled()) {
-        logger.debug(MessageFormat.format(MSG_SAVE_MEASURES, CoreMetrics.COVERAGE.getName(), packageName, Double
+        logger.debug(MessageFormat.format(MSG_SAVE_MEASURES, CoreMetrics.COVERAGE.getName(), Double
             .valueOf((convertPercentage(percentageByPackage)))));
       }
       // Saves the measure for the package
@@ -268,7 +269,7 @@ public class PhpUnitCoverageResultParser {
   /**
    * The Class PackageNode.
    */
-  private class PackageNode {
+  private static class PackageNode {
 
     /** The php package. */
     private PhpPackage phpPackage;
