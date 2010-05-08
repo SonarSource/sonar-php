@@ -129,9 +129,12 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
   public static final String ARGUMENT_LINE_KEY = "sonar.phpUnit.argumentLine";
   public static final String DEFAULT_ARGUMENT_LINE = "";
 
-  public static final String PROJECT_CLASS_DESCRIPTION = "The project main test class including the relativ path ie : \"/source/tests/AllTests.php\"";
-  public static final String DEFAULT_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse the analyzis result file. If set to false the plugin will launch tool and parse result.";
-  public static final String DEFAULT_SHOULD_RUN_DESCRIPTION = "If set to true the plugin will launch tool and parse result. If set to false the plugin will only parse the result file.";
+  public static final String PROJECT_CLASS_DESCRIPTION = "The project main test class including the relativ path "
+      + "ie : \"/source/tests/AllTests.php\"";
+  public static final String DEFAULT_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse the analyzis "
+      + "result file. If set to false the plugin will launch tool and parse result.";
+  public static final String DEFAULT_SHOULD_RUN_DESCRIPTION = "If set to true the plugin will launch tool and parse result."
+      + " If set to false the plugin will only parse the result file.";
   public static final String DEFAULT_SHOULD_DEAL_DESCRIPTION = "If set to true the plugin will also take php coverage files into account";
 
   // Only for unit tests

@@ -243,17 +243,17 @@ public class PhpUnitResultParser {
    *          the project
    */
   private void saveTestsDetails(SensorContext context, PhpUnitTestReport fileReport, Project project) {
-    StringBuilder testCaseDetails = new StringBuilder(256);
+    StringBuilder testCaseDetails = new StringBuilder();
     testCaseDetails.append("<tests-details>");
     for (TestCase detail : fileReport.getDetails()) {
       testCaseDetails.append("<testcase status=\"").append(detail.getStatus()).append("\" time=\"").append(detail.getTime()).append(
           "\" name=\"").append(detail.getName().replaceAll(" ", "_")).append("\"");
       boolean isError = TestCase.STATUS_ERROR.equals(detail.getStatus());
       if (isError || TestCase.STATUS_FAILURE.equals(detail.getStatus())) {
-        testCaseDetails.append(">").append(isError ? "<error message=\"" : "<failure message=\"").append(
-            StringEscapeUtils.escapeXml(detail.getErrorMessage())).append("\">").append("<![CDATA[").append(
-            StringEscapeUtils.escapeXml(detail.getStackTrace())).append("]]>").append(isError ? "</error>" : "</failure>").append(
-            "</testcase>");
+        testCaseDetails.append(">").append(isError ? "<error message=\"" : "<failure message=\"");
+        testCaseDetails.append(StringEscapeUtils.escapeXml(detail.getErrorMessage())).append("\"><![CDATA[");
+        testCaseDetails.append(StringEscapeUtils.escapeXml(detail.getStackTrace())).append("]]>");
+        testCaseDetails.append(isError ? "</error>" : "</failure>").append("</testcase>");
       } else {
         testCaseDetails.append("/>");
       }
@@ -261,5 +261,4 @@ public class PhpUnitResultParser {
     testCaseDetails.append("</tests-details>");
     context.saveMeasure(getUnitTestResource(fileReport, project), new Measure(CoreMetrics.TEST_DATA, testCaseDetails.toString()));
   }
-
 }

@@ -103,9 +103,9 @@ public abstract class PhpPluginAbstractConfiguration {
    * Gets operating system dependent launching script name.
    * 
    * <pre>
-   * As an example : 
-   * 	For windows php unit launching script is : punit.bat
-   *  For Unix  php unit launching script is : punit
+   * As an example:
+   * For windows php unit launching script is : punit.bat
+   * For Unix  php unit launching script is : punit
    * </pre>
    * 
    * @return the command line
@@ -138,10 +138,10 @@ public abstract class PhpPluginAbstractConfiguration {
   /**
    * Returns <code>true<code> if property is not null or empty.
    * <pre>
-   *    value.equals(null) return false
-   *    value.equals("") return false
-   *    value.equals("  ") return false
-   *    value.equals(" toto ") return true
+   * value.equals(null) return false
+   * value.equals("") return false
+   * value.equals("  ") return false
+   * value.equals(" toto ") return true
 	 * </pre>
    * 
    * @param key

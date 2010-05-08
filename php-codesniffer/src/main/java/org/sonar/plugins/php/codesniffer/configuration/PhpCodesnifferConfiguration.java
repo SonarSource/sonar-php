@@ -50,6 +50,9 @@ public class PhpCodesnifferConfiguration extends PhpPluginAbstractConfiguration 
   /** The Constant DEFAULT_SHOULD_ANALYSE_ONLY. */
   public static final String DEFAULT_ANALYZE_ONLY = "false";
 
+  /** The Constant DEFAULT_ANALYZE_ONLY_DESCRIPTION. */
+  public static final String ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will the plugin will only parse the result file."
+      + " If set to false launch tool and parse result.";
   /** The Constant DEFAULT_SHOULD_RUN. */
   public static final String DEFAULT_SHOULD_RUN = "true";
 
