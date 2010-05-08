@@ -96,7 +96,6 @@ public class PhpCodesnifferSensor implements Sensor {
       throw new XmlParserException(e);
     } catch (PhpPluginExecutionException e) {
       LOG.error("Error occured while launching Php CodeSniffer", e);
-      e.printStackTrace();
     }
   }
 

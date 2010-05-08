@@ -61,12 +61,24 @@ public class PhpDependResultsParser {
   private final static Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = { 1, 2, 4, 6, 8, 10, 12 };
   private final static Number[] CLASSES_DISTRIB_BOTTOM_LIMITS = { 0, 5, 10, 20, 30, 60, 90 };
 
+  /**
+   * The context.
+   */
   private SensorContext context;
 
+  /**
+   * The metrics.
+   */
   private Set<Metric> metrics;
 
+  /**
+   * The project.
+   */
   private Project project;
 
+  /**
+   * Resources bag to store metrics and their values.
+   */
   private ResourcesBag resourcesBag;
 
   /**
@@ -80,8 +92,8 @@ public class PhpDependResultsParser {
   public PhpDependResultsParser(Project project, SensorContext context) {
     this.project = project;
     this.context = context;
-    resourcesBag = new ResourcesBag();
-    metrics = getMetrics();
+    this.resourcesBag = new ResourcesBag();
+    this.metrics = getMetrics();
   }
 
   /**
@@ -98,7 +110,7 @@ public class PhpDependResultsParser {
     this.project = project;
     this.context = context;
     this.metrics = metrics;
-    resourcesBag = new ResourcesBag();
+    this.resourcesBag = new ResourcesBag();
   }
 
   /**
@@ -255,15 +267,15 @@ public class PhpDependResultsParser {
    * @return the metrics
    */
   private Set<Metric> getMetrics() {
-    Set<Metric> metrics = new HashSet<Metric>();
-    metrics.add(CoreMetrics.LINES);
-    metrics.add(CoreMetrics.NCLOC);
-    metrics.add(CoreMetrics.FUNCTIONS);
-    metrics.add(CoreMetrics.COMMENT_LINES);
-    metrics.add(CoreMetrics.FILES);
-    metrics.add(CoreMetrics.COMPLEXITY);
-    metrics.add(CoreMetrics.CLASSES);
-    return metrics;
+    Set<Metric> metricsSet = new HashSet<Metric>();
+    metricsSet.add(CoreMetrics.LINES);
+    metricsSet.add(CoreMetrics.NCLOC);
+    metricsSet.add(CoreMetrics.FUNCTIONS);
+    metricsSet.add(CoreMetrics.COMMENT_LINES);
+    metricsSet.add(CoreMetrics.FILES);
+    metricsSet.add(CoreMetrics.COMPLEXITY);
+    metricsSet.add(CoreMetrics.CLASSES);
+    return metricsSet;
   }
 
   /**
