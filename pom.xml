@@ -37,7 +37,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php</developerConnection>
-    <url>http://svn.codehaus.org/sonar-plugins</url>
+    <url>http://svn.codehaus.org/sonar-plugins/trunk/php/</url>
   </scm>
   <issueManagement>
     <system>JIRA</system>
