@@ -23,70 +23,72 @@ package org.sonar.plugins.checkstyle.xml;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-
 /**
  * The Class Property.
  */
 @XStreamAlias("property")
 public class Property {
 
-	/** The name. */
-	@XStreamAsAttribute
-	private String name;
+  /** The name. */
+  @XStreamAsAttribute
+  private String name;
 
-	/** The value. */
-	@XStreamAsAttribute
-	private String value;
+  /** The value. */
+  @XStreamAsAttribute
+  private String value;
 
-	/** The default value. */
-	@XStreamAsAttribute
-	@XStreamAlias("default")
-	private String defaultValue;
+  /** The default value. */
+  @XStreamAsAttribute
+  @XStreamAlias("default")
+  private String defaultValue;
 
-	/**
-	 * Instantiates a new property.
-	 * 
-	 * @param name the name
-	 * @param value the value
-	 */
-	public Property(String name, String value) {
-		this.name = name;
-		this.value = value;
-	}
+  /**
+   * Instantiates a new property.
+   * 
+   * @param name
+   *          the name
+   * @param value
+   *          the value
+   */
+  public Property(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
 
-	/**
-	 * Gets the name.
-	 * 
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * Gets the name.
+   * 
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Gets the value.
-	 * 
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
+  /**
+   * Gets the value.
+   * 
+   * @return the value
+   */
+  public String getValue() {
+    return value;
+  }
 
-	/**
-	 * Gets the default value.
-	 * 
-	 * @return the default value
-	 */
-	public String getDefaultValue() {
-		return defaultValue;
-	}
+  /**
+   * Gets the default value.
+   * 
+   * @return the default value
+   */
+  public String getDefaultValue() {
+    return defaultValue;
+  }
 
-	/**
-	 * Sets the default value.
-	 * 
-	 * @param defaultValue the new default value
-	 */
-	public void setDefaultValue(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
+  /**
+   * Sets the default value.
+   * 
+   * @param defaultValue
+   *          the new default value
+   */
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
+  }
 }

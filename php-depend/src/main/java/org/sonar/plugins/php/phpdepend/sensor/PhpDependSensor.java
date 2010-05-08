@@ -31,54 +31,56 @@ import org.sonar.plugins.php.phpdepend.configuration.PhpDependConfiguration;
 import org.sonar.plugins.php.phpdepend.executor.PhpDependExecutor;
 
 /**
- * This class is in charge of knowing wether or not it has to be launched depending on a given project. In case it has to be
- * launched, the sensor, choose between execute phpDepend and analyze its result or only analyze its result
+ * This class is in charge of knowing wether or not it has to be launched depending on a given project. In case it has to be launched, the
+ * sensor, choose between execute phpDepend and analyze its result or only analyze its result
  */
 public class PhpDependSensor implements Sensor {
 
-	private static final Logger LOG = LoggerFactory.getLogger(PhpDependSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpDependSensor.class);
 
-	private PhpDependConfiguration config;
+  private PhpDependConfiguration config;
 
-	/**
-	 * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
-	 */
-	public void analyse(Project project, SensorContext context) {
-		try {
-			if (!getConfig(project).isAnalyseOnly()) {
-				PhpDependExecutor executor = new PhpDependExecutor(config);
-				executor.execute();
-			}
-			PhpDependResultsParser parser = new PhpDependResultsParser(project, context);
-			parser.parse(config.getReportFile());
-		} catch (PhpPluginExecutionException e) {
-			LOG.error("Error occured while launching PhpDepend", e);
-		}
-	}
+  /**
+   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   */
+  public void analyse(Project project, SensorContext context) {
+    try {
+      if ( !getConfig(project).isAnalyseOnly()) {
+        PhpDependExecutor executor = new PhpDependExecutor(config);
+        executor.execute();
+      }
+      PhpDependResultsParser parser = new PhpDependResultsParser(project, context);
+      parser.parse(config.getReportFile());
+    } catch (PhpPluginExecutionException e) {
+      LOG.error("Error occured while launching PhpDepend", e);
+    }
+  }
 
-	/**
-	 * Determines whether or not this sensor will be executed on the given project
-	 * 
-	 * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
-	 * @param project The project to be analyzed
-	 * @return boolean <code>true</code> if project's language is php a,d the project configuration says so, <code>false</code> in any
-	 *         other case.
-	 */
-	public boolean shouldExecuteOnProject(Project project) {
-		return getConfig(project).isShouldRun() && Php.INSTANCE.equals(project.getLanguage());
-	}
+  /**
+   * Determines whether or not this sensor will be executed on the given project
+   * 
+   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
+   * @param project
+   *          The project to be analyzed
+   * @return boolean <code>true</code> if project's language is php a,d the project configuration says so, <code>false</code> in any other
+   *         case.
+   */
+  public boolean shouldExecuteOnProject(Project project) {
+    return getConfig(project).isShouldRun() && Php.INSTANCE.equals(project.getLanguage());
+  }
 
-	/**
-	 * Returns a PhpDependConfiguration plugin configuration. If the instance variable isn't initialize, the method instantiates it
-	 * before returning it.
-	 * 
-	 * @param project the analyzed project
-	 * @return
-	 */
-	private PhpDependConfiguration getConfig(Project project) {
-		if (config == null) {
-			config = new PhpDependConfiguration(project);
-		}
-		return config;
-	}
+  /**
+   * Returns a PhpDependConfiguration plugin configuration. If the instance variable isn't initialize, the method instantiates it before
+   * returning it.
+   * 
+   * @param project
+   *          the analyzed project
+   * @return
+   */
+  private PhpDependConfiguration getConfig(Project project) {
+    if (config == null) {
+      config = new PhpDependConfiguration(project);
+    }
+    return config;
+  }
 }

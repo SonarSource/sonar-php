@@ -29,109 +29,117 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 @XStreamAlias("function")
 public final class FunctionNode {
 
-	/** The code lines number. */
-	@XStreamAsAttribute
-	@XStreamAlias("ncloc")
-	private double codeLinesNumber;
+  /** The code lines number. */
+  @XStreamAsAttribute
+  @XStreamAlias("ncloc")
+  private double codeLinesNumber;
 
-	/** The lines number. */
-	@XStreamAsAttribute
-	@XStreamAlias("loc")
-	private double linesNumber;
+  /** The lines number. */
+  @XStreamAsAttribute
+  @XStreamAlias("loc")
+  private double linesNumber;
 
-	/** The comment line number. */
-	@XStreamAsAttribute
-	@XStreamAlias("cloc")
-	private double commentLineNumber;
+  /** The comment line number. */
+  @XStreamAsAttribute
+  @XStreamAlias("cloc")
+  private double commentLineNumber;
 
-	/** The cyclomatic complexity for the function. */
-	@XStreamAsAttribute
-	@XStreamAlias("ccn")
-	private double complexity;
+  /** The cyclomatic complexity for the function. */
+  @XStreamAsAttribute
+  @XStreamAlias("ccn")
+  private double complexity;
 
-	
-	/**
-	 * Instantiates a new class node.
-	 * 
-	 * @param codeLinesNumber the code lines number
-	 * @param linesNumber the lines number
-	 * @param complexity the complexity
-	 * @param methodNumber the method number
-	 * @param methodes the methodes
-	 */
-	public FunctionNode(final double codeLinesNumber, final double commentLineNumber, final double linesNumber) {
-		super();
-		this.codeLinesNumber = codeLinesNumber;
-		this.commentLineNumber = commentLineNumber;
-		this.linesNumber = linesNumber;
-	}
+  /**
+   * Instantiates a new class node.
+   * 
+   * @param codeLinesNumber
+   *          the code lines number
+   * @param linesNumber
+   *          the lines number
+   * @param complexity
+   *          the complexity
+   * @param methodNumber
+   *          the method number
+   * @param methodes
+   *          the methodes
+   */
+  public FunctionNode(final double codeLinesNumber, final double commentLineNumber, final double linesNumber) {
+    super();
+    this.codeLinesNumber = codeLinesNumber;
+    this.commentLineNumber = commentLineNumber;
+    this.linesNumber = linesNumber;
+  }
 
-	/**
-	 * Gets the code lines number.
-	 * 
-	 * @return the code lines number
-	 */
-	public double getCodeLinesNumber() {
-		return codeLinesNumber;
-	}
+  /**
+   * Gets the code lines number.
+   * 
+   * @return the code lines number
+   */
+  public double getCodeLinesNumber() {
+    return codeLinesNumber;
+  }
 
-	/**
-	 * Gets the comment line number.
-	 * 
-	 * @return the comment line number
-	 */
-	public double getCommentLineNumber() {
-		return commentLineNumber;
-	}
+  /**
+   * Gets the comment line number.
+   * 
+   * @return the comment line number
+   */
+  public double getCommentLineNumber() {
+    return commentLineNumber;
+  }
 
-	/**
-	 * Gets the lines number.
-	 * 
-	 * @return the lines number
-	 */
-	public double getLinesNumber() {
-		return linesNumber;
-	}
+  /**
+   * Gets the lines number.
+   * 
+   * @return the lines number
+   */
+  public double getLinesNumber() {
+    return linesNumber;
+  }
 
-	/**
-	 * Sets the code lines number.
-	 * 
-	 * @param codeLinesNumber the new code lines number
-	 */
-	public void setCodeLinesNumber(final double codeLinesNumber) {
-		this.codeLinesNumber = codeLinesNumber;
-	}
+  /**
+   * Sets the code lines number.
+   * 
+   * @param codeLinesNumber
+   *          the new code lines number
+   */
+  public void setCodeLinesNumber(final double codeLinesNumber) {
+    this.codeLinesNumber = codeLinesNumber;
+  }
 
-	/**
-	 * Sets the comment line number.
-	 * 
-	 * @param commentLineNumber the new comment line number
-	 */
-	public void setCommentLineNumber(final double commentLineNumber) {
-		this.commentLineNumber = commentLineNumber;
-	}
+  /**
+   * Sets the comment line number.
+   * 
+   * @param commentLineNumber
+   *          the new comment line number
+   */
+  public void setCommentLineNumber(final double commentLineNumber) {
+    this.commentLineNumber = commentLineNumber;
+  }
 
-	/**
-	 * Sets the lines number.
-	 * 
-	 * @param linesNumber the new lines number
-	 */
-	public void setLinesNumber(final double linesNumber) {
-		this.linesNumber = linesNumber;
-	}
+  /**
+   * Sets the lines number.
+   * 
+   * @param linesNumber
+   *          the new lines number
+   */
+  public void setLinesNumber(final double linesNumber) {
+    this.linesNumber = linesNumber;
+  }
 
-	/**
-	 * @return the complexity
-	 */
-	public double getComplexity() {
-		return complexity;
-	}
+  /**
+   * @return the complexity
+   */
+  public double getComplexity() {
+    return complexity;
+  }
 
-	/**
-	 * @param complexity the complexity to set
-	 */
-	public void setComplexity(double complexity) {
-		this.complexity = complexity;
-	}
-	
+  /**
+   * @param complexity
+   *          the complexity to set
+   */
+  public void setComplexity(double complexity) {
+    this.complexity = complexity;
+  }
+
 }

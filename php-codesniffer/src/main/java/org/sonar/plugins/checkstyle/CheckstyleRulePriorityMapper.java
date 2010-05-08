@@ -23,45 +23,46 @@ package org.sonar.plugins.checkstyle;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RulePriorityMapper;
 
-
 /**
  * The Class CheckstyleRulePriorityMapper.
  */
 public class CheckstyleRulePriorityMapper implements RulePriorityMapper<String, String> {
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.sonar.api.rules.RulePriorityMapper#from(java.lang.Object)
-	 */
-	public RulePriority from(String priority) {
-		if ("error".equalsIgnoreCase(priority)) {
-			return RulePriority.BLOCKER;
-		}
-		if ("warning".equalsIgnoreCase(priority)) {
-			return RulePriority.MAJOR;
-		}
-		if ("info".equalsIgnoreCase(priority)) {
-			return RulePriority.INFO;
-		}
-		// ignore level returns null
-		return null;
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.sonar.api.rules.RulePriorityMapper#from(java.lang.Object)
+   */
+  public RulePriority from(String priority) {
+    if ("error".equalsIgnoreCase(priority)) {
+      return RulePriority.BLOCKER;
+    }
+    if ("warning".equalsIgnoreCase(priority)) {
+      return RulePriority.MAJOR;
+    }
+    if ("info".equalsIgnoreCase(priority)) {
+      return RulePriority.INFO;
+    }
+    // ignore level returns null
+    return null;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.sonar.api.rules.RulePriorityMapper#to(org.sonar.api.rules.RulePriority )
-	 */
-	public String to(RulePriority priority) {
-		if (RulePriority.BLOCKER.equals(priority) || RulePriority.CRITICAL.equals(priority)) {
-			return "error";
-		}
-		if (RulePriority.MAJOR.equals(priority)) {
-			return "warning";
-		}
-		if (RulePriority.MINOR.equals(priority) || RulePriority.INFO.equals(priority)) {
-			return "info";
-		}
-		throw new IllegalArgumentException("Priority not supported: " + priority);
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.sonar.api.rules.RulePriorityMapper#to(org.sonar.api.rules.RulePriority )
+   */
+  public String to(RulePriority priority) {
+    if (RulePriority.BLOCKER.equals(priority) || RulePriority.CRITICAL.equals(priority)) {
+      return "error";
+    }
+    if (RulePriority.MAJOR.equals(priority)) {
+      return "warning";
+    }
+    if (RulePriority.MINOR.equals(priority) || RulePriority.INFO.equals(priority)) {
+      return "info";
+    }
+    throw new IllegalArgumentException("Priority not supported: " + priority);
+  }
 
 }

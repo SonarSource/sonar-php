@@ -32,48 +32,51 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("metrics")
 public final class MetricsNode {
 
-	/** The packages. */
-	@XStreamImplicit
-	private List<FileNode> files;
+  /** The packages. */
+  @XStreamImplicit
+  private List<FileNode> files;
 
-	/**
-	 * Instantiates a new metrics.
-	 * 
-	 * @param files the files
-	 */
-	public MetricsNode(final List<FileNode> files) {
-		super();
-		this.files = files;
-	}
+  /**
+   * Instantiates a new metrics.
+   * 
+   * @param files
+   *          the files
+   */
+  public MetricsNode(final List<FileNode> files) {
+    super();
+    this.files = files;
+  }
 
-	/**
-	 * Adds the file.
-	 * 
-	 * @param file the file
-	 */
-	public void addFile(final FileNode packageNode) {
-		if (files == null) {
-			files = new ArrayList<FileNode>();
-		}
-		files.add(packageNode);
-	}
+  /**
+   * Adds the file.
+   * 
+   * @param file
+   *          the file
+   */
+  public void addFile(final FileNode packageNode) {
+    if (files == null) {
+      files = new ArrayList<FileNode>();
+    }
+    files.add(packageNode);
+  }
 
-	/**
-	 * Gets the files.
-	 * 
-	 * @return the files
-	 */
-	public List<FileNode> getFiles() {
-		return files;
-	}
+  /**
+   * Gets the files.
+   * 
+   * @return the files
+   */
+  public List<FileNode> getFiles() {
+    return files;
+  }
 
-	/**
-	 * Sets the packages.
-	 * 
-	 * @param packages the new packages
-	 */
-	public void setFiles(final List<FileNode> files) {
-		this.files = files;
-	}
+  /**
+   * Sets the packages.
+   * 
+   * @param packages
+   *          the new packages
+   */
+  public void setFiles(final List<FileNode> files) {
+    this.files = files;
+  }
 
 }

@@ -28,12 +28,13 @@ import org.sonar.plugins.php.core.Php;
  */
 public class PhpFilesDecorator extends AbstractFilesDecorator {
 
-	/**
-	 * Instantiates a new php files decorator.
-	 * 
-	 * @param php the php
-	 */
-	public PhpFilesDecorator(Php php) {
-		super(php);
-	}
+  /**
+   * Instantiates a new php files decorator.
+   * 
+   * @param php
+   *          the php
+   */
+  public PhpFilesDecorator(Php php) {
+    super(php);
+  }
 }

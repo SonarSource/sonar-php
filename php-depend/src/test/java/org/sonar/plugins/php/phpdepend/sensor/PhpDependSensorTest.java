@@ -69,8 +69,9 @@ public class PhpDependSensorTest {
     PhpDependSensor sensor = new PhpDependSensor();
     when(configuration.getString(PhpDependConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, PhpDependConfiguration.DEFAULT_REPORT_FILE_NAME))
         .thenReturn("pdepend.xml");
-    when(configuration.getString(PhpDependConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH))
-        .thenReturn("reports");
+    when(
+        configuration.getString(PhpDependConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+            PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
     when(
         configuration.getBoolean(PhpDependConfiguration.SHOULD_RUN_PROPERTY_KEY, Boolean
             .parseBoolean(PhpDependConfiguration.DEFAULT_SHOULD_RUN))).thenReturn(Boolean.TRUE);
@@ -89,8 +90,9 @@ public class PhpDependSensorTest {
     PhpDependSensor sensor = new PhpDependSensor();
     when(configuration.getString(PhpDependConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, PhpDependConfiguration.DEFAULT_REPORT_FILE_NAME))
         .thenReturn("pdepend.xml");
-    when(configuration.getString(PhpDependConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH))
-        .thenReturn("reports");
+    when(
+        configuration.getString(PhpDependConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+            PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
     when(configuration.getBoolean(PhpDependConfiguration.SHOULD_RUN_PROPERTY_KEY, Boolean.FALSE)).thenReturn(Boolean.FALSE);
     when(project.getConfiguration()).thenReturn(configuration);
     assertEquals(false, sensor.shouldExecuteOnProject(project));

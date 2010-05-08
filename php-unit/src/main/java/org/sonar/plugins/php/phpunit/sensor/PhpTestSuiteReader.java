@@ -100,9 +100,9 @@ public class PhpTestSuiteReader {
           report.setDetails(new ArrayList<TestCase>());
           report.setClassKey(testClassName);
           String file = testCase.getFile();
-          //FIXME bug in phpunit for test cases with @dataProvider. Format is incorrect,
+          // FIXME bug in phpunit for test cases with @dataProvider. Format is incorrect,
           // we get the file name in the parent test suite.
-          if( file == null ){
+          if (file == null) {
             file = parentFileName;
           }
           report.setFile(file);

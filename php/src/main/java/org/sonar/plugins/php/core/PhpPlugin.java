@@ -35,65 +35,66 @@ import org.sonar.plugins.php.cpd.PhpCpdMapping;
  */
 public class PhpPlugin implements Plugin {
 
-	/** The php plugin key. */
-	public static final String KEY = "PHP Language";
+  /** The php plugin key. */
+  public static final String KEY = "PHP Language";
 
-	/**
-	 * Gets the description.
-	 * 
-	 * @return the description
-	 * @see org.sonar.api.Plugin#getDescription()
-	 */
-	public final String getDescription() {
-		return "A plugin to cover the PHP language";
-	}
+  /**
+   * Gets the description.
+   * 
+   * @return the description
+   * @see org.sonar.api.Plugin#getDescription()
+   */
+  public final String getDescription() {
+    return "A plugin to cover the PHP language";
+  }
 
-	/**
-	 * Gets the extensions.
-	 * 
-	 * @return the extensions
-	 * @see org.sonar.api.Plugin#getExtensions()
-	 */
-	public final List<Class<? extends Extension>> getExtensions() {
-		List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
-		// Adds the language
-		extensions.add(Php.class);
-		// Source importer
-		extensions.add(PhpSourceImporter.class);
-		extensions.add(PhpCpdMapping.class);
-		// Php resource decorators
-		extensions.add(PhpDirectoryDecorator.class);
-		extensions.add(PhpFilesDecorator.class);
-		return extensions;
-	}
+  /**
+   * Gets the extensions.
+   * 
+   * @return the extensions
+   * @see org.sonar.api.Plugin#getExtensions()
+   */
+  public final List<Class<? extends Extension>> getExtensions() {
+    List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
+    // Adds the language
+    extensions.add(Php.class);
+    // Source importer
+    extensions.add(PhpSourceImporter.class);
+    extensions.add(PhpCpdMapping.class);
+    // Php resource decorators
+    extensions.add(PhpDirectoryDecorator.class);
+    extensions.add(PhpFilesDecorator.class);
+    return extensions;
+  }
 
-	/**
-	 * Gets the key.
-	 * 
-	 * @return the key
-	 * @see org.sonar.api.Plugin#getKey()
-	 */
-	public final String getKey() {
-		return KEY;
-	}
+  /**
+   * Gets the key.
+   * 
+   * @return the key
+   * @see org.sonar.api.Plugin#getKey()
+   */
+  public final String getKey() {
+    return KEY;
+  }
 
-	/**
-	 * Gets the name.
-	 * 
-	 * @return the name
-	 * @see org.sonar.api.Plugin#getName()
-	 */
-	public final String getName() {
-		return "PHP Language";
-	}
+  /**
+   * Gets the name.
+   * 
+   * @return the name
+   * @see org.sonar.api.Plugin#getName()
+   */
+  public final String getName() {
+    return "PHP Language";
+  }
 
-	/**
-	 * To string.
-	 * 
-	 * @return the string
-	 * @see java.lang.Object#toString()
-	 */
-	public final String toString() {
-		return getKey();
-	}
+  /**
+   * To string.
+   * 
+   * @return the string
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public final String toString() {
+    return getKey();
+  }
 }

@@ -23,60 +23,61 @@ package org.sonar.plugins.php.pmd.xml;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-
 /**
  * The property class represent a PHPmd rule property
  */
 @XStreamAlias("property")
 public class Property {
 
-	/** The property name. */
-	@XStreamAsAttribute
-	private String name;
+  /** The property name. */
+  @XStreamAsAttribute
+  private String name;
 
-	/** The property value. */
-	@XStreamAsAttribute
-	private String value;
+  /** The property value. */
+  @XStreamAsAttribute
+  private String value;
 
-	/** The property description. */
-	@XStreamAsAttribute
-	private String description;
+  /** The property description. */
+  @XStreamAsAttribute
+  private String description;
 
-	/**
-	 * Instantiates a new property.
-	 * 
-	 * @param name the name
-	 * @param value the value
-	 */
-	public Property(String name, String value) {
-		this.name = name;
-		this.value = value;
-	}
+  /**
+   * Instantiates a new property.
+   * 
+   * @param name
+   *          the name
+   * @param value
+   *          the value
+   */
+  public Property(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
 
-	/**
-	 * Gets the name.
-	 * 
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * Gets the name.
+   * 
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Gets the value.
-	 * 
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
+  /**
+   * Gets the value.
+   * 
+   * @return the value
+   */
+  public String getValue() {
+    return value;
+  }
 
-	/**
-	 * Gets the description.
-	 * 
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+  /**
+   * Gets the description.
+   * 
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
 }

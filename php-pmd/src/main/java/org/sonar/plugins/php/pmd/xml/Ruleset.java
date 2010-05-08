@@ -27,100 +27,106 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
-
 /**
  * The Ruleset represent an PHPMD ruleset.
  */
 @XStreamAlias("ruleset")
 public class Ruleset {
 
-	/** The name. */
-	@XStreamAsAttribute
-	private String name;
+  /** The name. */
+  @XStreamAsAttribute
+  private String name;
 
-	/** The description. */
-	@XStreamAlias("description")
-	private String rulesetDescription;
+  /** The description. */
+  @XStreamAlias("description")
+  private String rulesetDescription;
 
-	/** The rules. */
-	@XStreamImplicit(itemFieldName = "rule")
-	private List<Rule> rules;
+  /** The rules. */
+  @XStreamImplicit(itemFieldName = "rule")
+  private List<Rule> rules;
 
-	/**
-	 * Instantiates a new ruleset.
-	 * 
-	 * @param description the description
-	 */
-	public Ruleset(String description) {
-		this.name = description;
-		rules = new ArrayList<Rule>();
-	}
+  /**
+   * Instantiates a new ruleset.
+   * 
+   * @param description
+   *          the description
+   */
+  public Ruleset(String description) {
+    this.name = description;
+    rules = new ArrayList<Rule>();
+  }
 
-	/**
-	 * Instantiates a new ruleset.
-	 * 
-	 * @param name the name
-	 * @param description the description
-	 * @param rules the rules
-	 */
-	public Ruleset(String name, String description, List<Rule> rules) {
-		super();
-		this.name = name;
-		this.rulesetDescription = description;
-		this.rules = rules;
-	}
+  /**
+   * Instantiates a new ruleset.
+   * 
+   * @param name
+   *          the name
+   * @param description
+   *          the description
+   * @param rules
+   *          the rules
+   */
+  public Ruleset(String name, String description, List<Rule> rules) {
+    super();
+    this.name = name;
+    this.rulesetDescription = description;
+    this.rules = rules;
+  }
 
-	/**
-	 * Gets the description.
-	 * 
-	 * @return the description
-	 */
-	public String getDescription() {
-		return rulesetDescription;
-	}
+  /**
+   * Gets the description.
+   * 
+   * @return the description
+   */
+  public String getDescription() {
+    return rulesetDescription;
+  }
 
-	/**
-	 * Gets the name.
-	 * 
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * Gets the name.
+   * 
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Gets the rules.
-	 * 
-	 * @return the rules
-	 */
-	public List<Rule> getRules() {
-		return rules;
-	}
+  /**
+   * Gets the rules.
+   * 
+   * @return the rules
+   */
+  public List<Rule> getRules() {
+    return rules;
+  }
 
-	/**
-	 * Sets the description.
-	 * 
-	 * @param description the new description
-	 */
-	public void setDescription(String description) {
-		this.rulesetDescription = description;
-	}
+  /**
+   * Sets the description.
+   * 
+   * @param description
+   *          the new description
+   */
+  public void setDescription(String description) {
+    this.rulesetDescription = description;
+  }
 
-	/**
-	 * Sets the name.
-	 * 
-	 * @param name the new name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+  /**
+   * Sets the name.
+   * 
+   * @param name
+   *          the new name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * Sets the rules.
-	 * 
-	 * @param rules the new rules
-	 */
-	public void setRules(List<Rule> rules) {
-		this.rules = rules;
-	}
+  /**
+   * Sets the rules.
+   * 
+   * @param rules
+   *          the new rules
+   */
+  public void setRules(List<Rule> rules) {
+    this.rules = rules;
+  }
 }

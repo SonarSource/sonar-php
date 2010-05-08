@@ -31,36 +31,37 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("package")
 public class PackageNode {
 
-	/** The files. */
-	@XStreamImplicit
-	private List<FileNode> files;
+  /** The files. */
+  @XStreamImplicit
+  private List<FileNode> files;
 
-	/**
-	 * Default constructor with a list of classes.
-	 * 
-	 * @param files
-	 */
-	public PackageNode(List<FileNode> files) {
-		super();
-		this.files = files;
-	}
+  /**
+   * Default constructor with a list of classes.
+   * 
+   * @param files
+   */
+  public PackageNode(List<FileNode> files) {
+    super();
+    this.files = files;
+  }
 
-	/**
-	 * Gets the files.
-	 * 
-	 * @return the files
-	 */
-	public List<FileNode> getFiles() {
-		return files;
-	}
+  /**
+   * Gets the files.
+   * 
+   * @return the files
+   */
+  public List<FileNode> getFiles() {
+    return files;
+  }
 
-	/**
-	 * Sets the files.
-	 * 
-	 * @param files the new files
-	 */
-	public void setFiles(List<FileNode> files) {
-		this.files = files;
-	}
+  /**
+   * Sets the files.
+   * 
+   * @param files
+   *          the new files
+   */
+  public void setFiles(List<FileNode> files) {
+    this.files = files;
+  }
 
 }

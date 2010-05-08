@@ -32,111 +32,120 @@ import org.sonar.plugins.php.core.resources.PhpFile;
  */
 public class ResourcesBag {
 
-	/**
-	 * The Class MeasuresByMetric.
-	 */
-	class MeasuresByMetric {
+  /**
+   * The Class MeasuresByMetric.
+   */
+  class MeasuresByMetric {
 
-		/** The measures by metric. */
-		private Map<Metric, Double> measuresByMetric;
+    /** The measures by metric. */
+    private Map<Metric, Double> measuresByMetric;
 
-		/**
-		 * Instantiates a new measures by metric.
-		 */
-		public MeasuresByMetric() {
-			this.measuresByMetric = new HashMap<Metric, Double>();
-		}
+    /**
+     * Instantiates a new measures by metric.
+     */
+    public MeasuresByMetric() {
+      this.measuresByMetric = new HashMap<Metric, Double>();
+    }
 
-		/**
-		 * Adds the.
-		 * 
-		 * @param value the value
-		 * @param metric the metric
-		 */
-		public void add(Double value, Metric metric) {
-			Double val = measuresByMetric.get(metric);
-			if (val == null) {
-				val = 0.0;
-			}
-			val += value;
-			measuresByMetric.put(metric, val);
-		}
+    /**
+     * Adds the.
+     * 
+     * @param value
+     *          the value
+     * @param metric
+     *          the metric
+     */
+    public void add(Double value, Metric metric) {
+      Double val = measuresByMetric.get(metric);
+      if (val == null) {
+        val = 0.0;
+      }
+      val += value;
+      measuresByMetric.put(metric, val);
+    }
 
-		/**
-		 * Gets the measure.
-		 * 
-		 * @param metric the metric
-		 * @return the measure
-		 */
-		public Double getMeasure(Metric metric) {
-			return measuresByMetric.get(metric);
-		}
+    /**
+     * Gets the measure.
+     * 
+     * @param metric
+     *          the metric
+     * @return the measure
+     */
+    public Double getMeasure(Metric metric) {
+      return measuresByMetric.get(metric);
+    }
 
-		/**
-		 * Gets the metrics.
-		 * 
-		 * @return the metrics
-		 */
-		public Set<Metric> getMetrics() {
-			return measuresByMetric.keySet();
-		}
-	}
+    /**
+     * Gets the metrics.
+     * 
+     * @return the metrics
+     */
+    public Set<Metric> getMetrics() {
+      return measuresByMetric.keySet();
+    }
+  }
 
-	/** The resource measures. */
-	private Map<PhpFile, MeasuresByMetric> resourceMeasures;
+  /** The resource measures. */
+  private Map<PhpFile, MeasuresByMetric> resourceMeasures;
 
-	/**
-	 * Instantiates a new resources bag.
-	 */
-	public ResourcesBag() {
-		this.resourceMeasures = new HashMap<PhpFile, MeasuresByMetric>();
-	}
+  /**
+   * Instantiates a new resources bag.
+   */
+  public ResourcesBag() {
+    this.resourceMeasures = new HashMap<PhpFile, MeasuresByMetric>();
+  }
 
-	/**
-	 * Associate the given velue, to the given file and metrics.
-	 * 
-	 * @param value the value
-	 * @param metric the metric
-	 * @param resource the resource
-	 */
-	public void add(Double value, Metric metric, PhpFile resource) {
-		MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
-		if (measuresByMetric == null) {
-			measuresByMetric = new MeasuresByMetric();
-		}
-		measuresByMetric.add(value, metric);
-		resourceMeasures.put(resource, measuresByMetric);
-	}
+  /**
+   * Associate the given velue, to the given file and metrics.
+   * 
+   * @param value
+   *          the value
+   * @param metric
+   *          the metric
+   * @param resource
+   *          the resource
+   */
+  public void add(Double value, Metric metric, PhpFile resource) {
+    MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
+    if (measuresByMetric == null) {
+      measuresByMetric = new MeasuresByMetric();
+    }
+    measuresByMetric.add(value, metric);
+    resourceMeasures.put(resource, measuresByMetric);
+  }
 
-	/**
-	 * Gets the measure.
-	 * 
-	 * @param metric the metric
-	 * @param resource the resource
-	 * @return the measure
-	 */
-	public Double getMeasure(Metric metric, PhpFile resource) {
-		MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
-		return measuresByMetric.getMeasure(metric);
-	}
+  /**
+   * Gets the measure.
+   * 
+   * @param metric
+   *          the metric
+   * @param resource
+   *          the resource
+   * @return the measure
+   */
+  public Double getMeasure(Metric metric, PhpFile resource) {
+    MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
+    return measuresByMetric.getMeasure(metric);
+  }
 
-	/**
-	 * Gets the metrics.
-	 * 
-	 * @param resource the resource
-	 * @return the metrics
-	 */
-	public Set<Metric> getMetrics(PhpFile resource) {
-		MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
-		return measuresByMetric.getMetrics();
-	}
+  /**
+   * Gets the metrics.
+   * 
+   * @param resource
+   *          the resource
+   * @return the metrics
+   */
+  public Set<Metric> getMetrics(PhpFile resource) {
+    MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
+    return measuresByMetric.getMetrics();
+  }
 
-	/**
-	 * Gets the resources.
-	 * 
-	 * @return the resources
-	 */
-	public Set<PhpFile> getResources() {
-		return resourceMeasures.keySet();
-	}
+  /**
+   * Gets the resources.
+   * 
+   * @return the resources
+   */
+  public Set<PhpFile> getResources() {
+    return resourceMeasures.keySet();
+  }
 }

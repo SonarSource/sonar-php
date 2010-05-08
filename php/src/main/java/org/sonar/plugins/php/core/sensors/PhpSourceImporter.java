@@ -37,75 +37,83 @@ import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.resources.PhpFile;
 
 /**
- * The PhpSourceImporter is in charge of analysing and loading valid php files. All source files under source folder and test source
- * folder will be imported. The extension will only execute on php project
+ * The PhpSourceImporter is in charge of analysing and loading valid php files. All source files under source folder and test source folder
+ * will be imported. The extension will only execute on php project
  */
 @Phase(name = Phase.Name.PRE)
 public class PhpSourceImporter extends AbstractSourceImporter {
 
-	/** The logger. */
-	private static final Logger LOG = LoggerFactory.getLogger(PhpSourceImporter.class);
+  /** The logger. */
+  private static final Logger LOG = LoggerFactory.getLogger(PhpSourceImporter.class);
 
-	/**
-	 * Instantiates a new php source importer.
-	 */
-	public PhpSourceImporter() {
-		super(Php.INSTANCE);
-	}
+  /**
+   * Instantiates a new php source importer.
+   */
+  public PhpSourceImporter() {
+    super(Php.INSTANCE);
+  }
 
-	/**
-	 * Analyse the project source dirs.
-	 * 
-	 * @param project the project to be analyzed
-	 * @param context the context the execution context
-	 * @see org.sonar.api.batch.AbstractSourceImporter#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
-	 */
-	@Override
-	public void analyse(Project project, SensorContext context) {
-		try {
-			LOG.info("Importing files from project " + project.getName());
-			doAnalyse(project, context);
-		} catch (IOException e) {
-			throw new SonarException("Parsing source files ended abnormaly", e);
-		}
-	}
+  /**
+   * Analyse the project source dirs.
+   * 
+   * @param project
+   *          the project to be analyzed
+   * @param context
+   *          the context the execution context
+   * @see org.sonar.api.batch.AbstractSourceImporter#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   */
+  @Override
+  public void analyse(Project project, SensorContext context) {
+    try {
+      LOG.info("Importing files from project " + project.getName());
+      doAnalyse(project, context);
+    } catch (IOException e) {
+      throw new SonarException("Parsing source files ended abnormaly", e);
+    }
+  }
 
-	/**
-	 * Creates the resource.
-	 * 
-	 * @param file the file
-	 * @param sourceDirs the source dirs
-	 * @param unitTest the unit test
-	 * @return the php file
-	 * @see org.sonar.api.batch.AbstractSourceImporter#createResource(java.io.File, java.util.List, boolean)
-	 */
-	@Override
-	protected PhpFile createResource(File file, List<File> sourceDirs, boolean unitTest) {
-		return (file != null && !file.getName().contains("$")) ? PhpFile.fromIOFile(file, sourceDirs, unitTest) : null;
-	}
+  /**
+   * Creates the resource.
+   * 
+   * @param file
+   *          the file
+   * @param sourceDirs
+   *          the source dirs
+   * @param unitTest
+   *          the unit test
+   * @return the php file
+   * @see org.sonar.api.batch.AbstractSourceImporter#createResource(java.io.File, java.util.List, boolean)
+   */
+  @Override
+  protected PhpFile createResource(File file, List<File> sourceDirs, boolean unitTest) {
+    return (file != null && !file.getName().contains("$")) ? PhpFile.fromIOFile(file, sourceDirs, unitTest) : null;
+  }
 
-	/**
-	 * Imports php file contains in the source and tests folders.
-	 * 
-	 * @param project the project
-	 * @param context the context
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	protected void doAnalyse(Project project, SensorContext context) throws IOException {
+  /**
+   * Imports php file contains in the source and tests folders.
+   * 
+   * @param project
+   *          the project
+   * @param context
+   *          the context
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   */
+  protected void doAnalyse(Project project, SensorContext context) throws IOException {
 
-		// Importing source files
-		ProjectFileSystem fileSystem = project.getFileSystem();
-		for (File sourceDir : fileSystem.getSourceDirs()) {
-			LOG.info(sourceDir.getName());
-		}
-		parseDirs(context, fileSystem.getSourceFiles(new Language[] { Php.INSTANCE }), fileSystem.getSourceDirs(), false,
-		    fileSystem.getSourceCharset());
-		// Importing tests files
-		for (File sourceDir : fileSystem.getTestDirs()) {
-			LOG.info(sourceDir.getName());
-		}
-		parseDirs(context, fileSystem.getTestFiles(new Language[] { Php.INSTANCE }), fileSystem.getTestDirs(), true,
-		    fileSystem.getSourceCharset());
-	}
+    // Importing source files
+    ProjectFileSystem fileSystem = project.getFileSystem();
+    for (File sourceDir : fileSystem.getSourceDirs()) {
+      LOG.info(sourceDir.getName());
+    }
+    parseDirs(context, fileSystem.getSourceFiles(new Language[] { Php.INSTANCE }), fileSystem.getSourceDirs(), false, fileSystem
+        .getSourceCharset());
+    // Importing tests files
+    for (File sourceDir : fileSystem.getTestDirs()) {
+      LOG.info(sourceDir.getName());
+    }
+    parseDirs(context, fileSystem.getTestFiles(new Language[] { Php.INSTANCE }), fileSystem.getTestDirs(), true, fileSystem
+        .getSourceCharset());
+  }
 
 }

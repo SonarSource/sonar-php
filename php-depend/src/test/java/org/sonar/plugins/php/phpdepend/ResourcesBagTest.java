@@ -32,96 +32,96 @@ import org.sonar.plugins.php.core.resources.PhpFile;
  */
 public class ResourcesBagTest {
 
-	/**
-	 * Should get a previous added value to a resource.
-	 */
-	@Test
-	public void shouldGetAPreviousAddedValueToAResource() {
-		ResourcesBag resourcesBag = new ResourcesBag();
-		Metric metric = aMetricFixture();
-		PhpFile resource = aResourceFixture();
+  /**
+   * Should get a previous added value to a resource.
+   */
+  @Test
+  public void shouldGetAPreviousAddedValueToAResource() {
+    ResourcesBag resourcesBag = new ResourcesBag();
+    Metric metric = aMetricFixture();
+    PhpFile resource = aResourceFixture();
 
-		resourcesBag.add(1d, metric, resource);
+    resourcesBag.add(1d, metric, resource);
 
-		Double result = resourcesBag.getMeasure(metric, resource);
-		assertThat(result, is(1d));
-	}
+    Double result = resourcesBag.getMeasure(metric, resource);
+    assertThat(result, is(1d));
+  }
 
-	/**
-	 * Should get a previous added value to a null resource.
-	 */
-	@Test
-	public void shouldGetAPreviousAddedValueToANullResource() {
-		ResourcesBag resourcesBag = new ResourcesBag();
-		Metric metric = aMetricFixture();
+  /**
+   * Should get a previous added value to a null resource.
+   */
+  @Test
+  public void shouldGetAPreviousAddedValueToANullResource() {
+    ResourcesBag resourcesBag = new ResourcesBag();
+    Metric metric = aMetricFixture();
 
-		resourcesBag.add(1d, metric, null);
+    resourcesBag.add(1d, metric, null);
 
-		Double result = resourcesBag.getMeasure(metric, null);
-		assertThat(result, is(1d));
-	}
+    Double result = resourcesBag.getMeasure(metric, null);
+    assertThat(result, is(1d));
+  }
 
-	/**
-	 * Should do the sum when adding twice a file.
-	 */
-	@Test
-	public void shouldDoTheSumWhenAddingTwiceAFile() {
-		ResourcesBag resourcesBag = new ResourcesBag();
-		Metric metric = aMetricFixture();
-		PhpFile resource = aResourceFixture();
+  /**
+   * Should do the sum when adding twice a file.
+   */
+  @Test
+  public void shouldDoTheSumWhenAddingTwiceAFile() {
+    ResourcesBag resourcesBag = new ResourcesBag();
+    Metric metric = aMetricFixture();
+    PhpFile resource = aResourceFixture();
 
-		resourcesBag.add(1d, metric, resource);
-		resourcesBag.add(3d, metric, resource);
+    resourcesBag.add(1d, metric, resource);
+    resourcesBag.add(3d, metric, resource);
 
-		Double result = resourcesBag.getMeasure(metric, resource);
-		assertThat(result, is(4d));
-	}
+    Double result = resourcesBag.getMeasure(metric, resource);
+    assertThat(result, is(4d));
+  }
 
-	/**
-	 * Should do the sum by metric.
-	 */
-	@Test
-	public void shouldDoTheSumByMetric() {
-		ResourcesBag resourcesBag = new ResourcesBag();
-		Metric metric = aMetricFixture();
-		Metric anotherMetric = anotherMetricFixture();
-		PhpFile resource = aResourceFixture();
+  /**
+   * Should do the sum by metric.
+   */
+  @Test
+  public void shouldDoTheSumByMetric() {
+    ResourcesBag resourcesBag = new ResourcesBag();
+    Metric metric = aMetricFixture();
+    Metric anotherMetric = anotherMetricFixture();
+    PhpFile resource = aResourceFixture();
 
-		resourcesBag.add(1d, metric, resource);
-		resourcesBag.add(2d, metric, resource);
-		resourcesBag.add(5d, anotherMetric, resource);
-		resourcesBag.add(6d, anotherMetric, resource);
+    resourcesBag.add(1d, metric, resource);
+    resourcesBag.add(2d, metric, resource);
+    resourcesBag.add(5d, anotherMetric, resource);
+    resourcesBag.add(6d, anotherMetric, resource);
 
-		Double result = resourcesBag.getMeasure(metric, resource);
-		assertThat(result, is(3d));
-		Double result2 = resourcesBag.getMeasure(anotherMetric, resource);
-		assertThat(result2, is(11d));
-	}
+    Double result = resourcesBag.getMeasure(metric, resource);
+    assertThat(result, is(3d));
+    Double result2 = resourcesBag.getMeasure(anotherMetric, resource);
+    assertThat(result2, is(11d));
+  }
 
-	/**
-	 * A metric fixture.
-	 * 
-	 * @return the metric
-	 */
-	public Metric aMetricFixture() {
-		return new Metric("aKey");
-	}
+  /**
+   * A metric fixture.
+   * 
+   * @return the metric
+   */
+  public Metric aMetricFixture() {
+    return new Metric("aKey");
+  }
 
-	/**
-	 * Another metric fixture.
-	 * 
-	 * @return the metric
-	 */
-	public Metric anotherMetricFixture() {
-		return new Metric("anotherKey");
-	}
+  /**
+   * Another metric fixture.
+   * 
+   * @return the metric
+   */
+  public Metric anotherMetricFixture() {
+    return new Metric("anotherKey");
+  }
 
-	/**
-	 * A resource fixture.
-	 * 
-	 * @return the resource
-	 */
-	public PhpFile aResourceFixture() {
-		return new PhpFile("aKey");
-	}
+  /**
+   * A resource fixture.
+   * 
+   * @return the resource
+   */
+  public PhpFile aResourceFixture() {
+    return new PhpFile("aKey");
+  }
 }

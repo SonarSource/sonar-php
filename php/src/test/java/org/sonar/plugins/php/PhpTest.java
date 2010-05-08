@@ -31,14 +31,14 @@ import org.sonar.plugins.php.core.Php;
  */
 public class PhpTest {
 
-	/**
-	 * Should check valid php extensions.
-	 */
-	@Test
-	public void shouldCheckValidPhpExtensions() {
-		assertTrue(Php.hasValidSuffixes("goodExtension.php"));
-		assertTrue(Php.hasValidSuffixes("goodExtension.php5"));
-		assertTrue(Php.hasValidSuffixes("goodExtension.inc"));
-		assertFalse(Php.hasValidSuffixes("wrong.extension"));
-	}
+  /**
+   * Should check valid php extensions.
+   */
+  @Test
+  public void shouldCheckValidPhpExtensions() {
+    assertTrue(Php.hasValidSuffixes("goodExtension.php"));
+    assertTrue(Php.hasValidSuffixes("goodExtension.php5"));
+    assertTrue(Php.hasValidSuffixes("goodExtension.inc"));
+    assertFalse(Php.hasValidSuffixes("wrong.extension"));
+  }
 }

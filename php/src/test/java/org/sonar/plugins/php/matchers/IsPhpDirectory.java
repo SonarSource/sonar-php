@@ -26,53 +26,55 @@ import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.ResourceUtils;
 import org.sonar.plugins.php.core.Php;
 
-
 /**
  * The Class IsPhpDirectory.
  */
 public class IsPhpDirectory extends BaseMatcher<Resource> {
 
-	/** The key. */
-	private String key = null;
+  /** The key. */
+  private String key = null;
 
-	/**
-	 * Instantiates a new checks if is php directory.
-	 */
-	public IsPhpDirectory() {
-	}
+  /**
+   * Instantiates a new checks if is php directory.
+   */
+  public IsPhpDirectory() {
+  }
 
-	/**
-	 * Instantiates a new checks if is php directory.
-	 * 
-	 * @param key the key
-	 */
-	public IsPhpDirectory(String key) {
-		this.key = key;
-	}
+  /**
+   * Instantiates a new checks if is php directory.
+   * 
+   * @param key
+   *          the key
+   */
+  public IsPhpDirectory(String key) {
+    this.key = key;
+  }
 
-	/*
-	 * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
-	 */
-	/*
-	 * (non-Javadoc)
-	 * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
-	 */
-	public void describeTo(Description arg0) {
-	}
+  /*
+   * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
+   */
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
+   */
+  public void describeTo(Description arg0) {
+  }
 
-	/*
-	 * @see org.hamcrest.Matcher#matches(java.lang.Object)
-	 */
-	/*
-	 * (non-Javadoc)
-	 * @see org.hamcrest.Matcher#matches(java.lang.Object)
-	 */
-	public boolean matches(Object o) {
-		Resource resource = (Resource) o;
-		boolean result = ResourceUtils.isDirectory(resource) && Php.INSTANCE.equals(resource.getLanguage());
-		if (result && key != null) {
-			result = key.equals(resource.getKey());
-		}
-		return result;
-	}
+  /*
+   * @see org.hamcrest.Matcher#matches(java.lang.Object)
+   */
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.hamcrest.Matcher#matches(java.lang.Object)
+   */
+  public boolean matches(Object o) {
+    Resource resource = (Resource) o;
+    boolean result = ResourceUtils.isDirectory(resource) && Php.INSTANCE.equals(resource.getLanguage());
+    if (result && key != null) {
+      result = key.equals(resource.getKey());
+    }
+    return result;
+  }
 }

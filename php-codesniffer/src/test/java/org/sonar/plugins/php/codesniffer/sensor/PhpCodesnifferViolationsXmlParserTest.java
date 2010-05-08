@@ -56,90 +56,106 @@ import org.sonar.plugins.php.core.resources.PhpFile;
  */
 public class PhpCodesnifferViolationsXmlParserTest {
 
-	/**
-	 * Parses the.
-	 * 
-	 * @param context the context
-	 * @param xmlPath the xml path
-	 * 
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	private void parse(SensorContext context, String xmlPath) throws IOException, URISyntaxException, XMLStreamException {
-		DefaultProjectFileSystem fileSystem = mock(DefaultProjectFileSystem.class);
-		when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("/test/src/main/")));
+  /**
+   * Parses the.
+   * 
+   * @param context
+   *          the context
+   * @param xmlPath
+   *          the xml path
+   * 
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  private void parse(SensorContext context, String xmlPath) throws IOException, URISyntaxException, XMLStreamException {
+    DefaultProjectFileSystem fileSystem = mock(DefaultProjectFileSystem.class);
+    when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("/test/src/main/")));
 
-		Project project = mock(Project.class);
-		when(project.getFileSystem()).thenReturn(fileSystem);
+    Project project = mock(Project.class);
+    when(project.getFileSystem()).thenReturn(fileSystem);
 
-		RulesManager manager = mock(RulesManager.class);
-		when(manager.getPluginRule(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
-			public Rule answer(InvocationOnMock invocation) {
-				Object[] args = invocation.getArguments();
-				return new Rule((String) args[1], (String) args[1], null, (String) args[0], "");
-			}
-		});
-		RulesProfile profile = mock(RulesProfile.class);
-		when(profile.getActiveRule(anyString(), anyString())).thenReturn(new ActiveRule(null, null, RulePriority.MINOR));
-		PhpCheckStyleViolationsXmlParser parser = new PhpCheckStyleViolationsXmlParser(project, context, manager);
+    RulesManager manager = mock(RulesManager.class);
+    when(manager.getPluginRule(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
 
-		File xmlFile = new File(getClass().getResource(xmlPath).toURI());
-		parser.parse(xmlFile);
-	}
+      public Rule answer(InvocationOnMock invocation) {
+        Object[] args = invocation.getArguments();
+        return new Rule((String) args[1], (String) args[1], null, (String) args[0], "");
+      }
+    });
+    RulesProfile profile = mock(RulesProfile.class);
+    when(profile.getActiveRule(anyString(), anyString())).thenReturn(new ActiveRule(null, null, RulePriority.MINOR));
+    PhpCheckStyleViolationsXmlParser parser = new PhpCheckStyleViolationsXmlParser(project, context, manager);
 
-	/**
-	 * Should find all class violations.
-	 * 
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	@Test
-	public void shouldFindAllClassViolations() throws IOException, URISyntaxException, XMLStreamException {
-		SensorContext context = mock(SensorContext.class);
-		parse(context, "/org/sonar/plugins/php/codesniffer/PhpCodesnifferViolationsXmlParserTest/codesniffer-full-result.xml");
-		verify(context, times(22)).saveViolation((Violation) anyObject());
-	}
+    File xmlFile = new File(getClass().getResource(xmlPath).toURI());
+    parser.parse(xmlFile);
+  }
 
-	/**
-	 * Should not parse html files.
-	 * 
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	@Test
-	public void shouldNotParseHtmlFiles() throws IOException, URISyntaxException, XMLStreamException {
-		SensorContext context = mock(SensorContext.class);
-		parse(context, "/org/sonar/plugins/php/codesniffer/PhpCodesnifferViolationsXmlParserTest/codesniffer-full-result.xml");
+  /**
+   * Should find all class violations.
+   * 
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  @Test
+  public void shouldFindAllClassViolations() throws IOException, URISyntaxException, XMLStreamException {
+    SensorContext context = mock(SensorContext.class);
+    parse(context, "/org/sonar/plugins/php/codesniffer/PhpCodesnifferViolationsXmlParserTest/codesniffer-full-result.xml");
+    verify(context, times(22)).saveViolation((Violation) anyObject());
+  }
 
-		class IsNotHtmlPackage extends ArgumentMatcher<Violation> {
-			@Override
-			public boolean matches(Object violation) {
-				return !((Violation) violation).getResource().getName().equals("package")
-						&& !((Violation) violation).getResource().getName().equals("package.html");
-			}
-		}
+  /**
+   * Should not parse html files.
+   * 
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  @Test
+  public void shouldNotParseHtmlFiles() throws IOException, URISyntaxException, XMLStreamException {
+    SensorContext context = mock(SensorContext.class);
+    parse(context, "/org/sonar/plugins/php/codesniffer/PhpCodesnifferViolationsXmlParserTest/codesniffer-full-result.xml");
 
-		verify(context, times(22)).saveViolation(argThat(new IsNotHtmlPackage()));
-	}
+    class IsNotHtmlPackage extends ArgumentMatcher<Violation> {
 
-	/**
-	 * Should parse violation.
-	 * 
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	@Test
-	public void shouldParseViolation() throws IOException, URISyntaxException, XMLStreamException {
-		SensorContext context = mock(SensorContext.class);
-		parse(context, "/org/sonar/plugins/php/codesniffer/PhpCodesnifferViolationsXmlParserTest/codesniffer-simple-result.xml");
+      @Override
+      public boolean matches(Object violation) {
+        return !((Violation) violation).getResource().getName().equals("package")
+            && !((Violation) violation).getResource().getName().equals("package.html");
+      }
+    }
 
-		Violation wanted = new Violation(new Rule("PHP CODESNIFFER", "GN/Commenting/ClassCommentSniff/MISSING_CLASS_COMMENT"),
-				new PhpFile("org/sonar/mvn/BaseSonarMojo.php"));
-		wanted.setMessage("Commentaire de classe manquant.");
-		verify(context).saveViolation(argThat(new IsViolation(wanted)));
-	}
+    verify(context, times(22)).saveViolation(argThat(new IsNotHtmlPackage()));
+  }
+
+  /**
+   * Should parse violation.
+   * 
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  @Test
+  public void shouldParseViolation() throws IOException, URISyntaxException, XMLStreamException {
+    SensorContext context = mock(SensorContext.class);
+    parse(context, "/org/sonar/plugins/php/codesniffer/PhpCodesnifferViolationsXmlParserTest/codesniffer-simple-result.xml");
+
+    Violation wanted = new Violation(new Rule("PHP CODESNIFFER", "GN/Commenting/ClassCommentSniff/MISSING_CLASS_COMMENT"), new PhpFile(
+        "org/sonar/mvn/BaseSonarMojo.php"));
+    wanted.setMessage("Commentaire de classe manquant.");
+    verify(context).saveViolation(argThat(new IsViolation(wanted)));
+  }
 }

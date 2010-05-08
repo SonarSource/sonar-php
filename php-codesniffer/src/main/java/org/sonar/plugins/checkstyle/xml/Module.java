@@ -39,204 +39,262 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("module")
 public class Module implements Comparable<String> {
 
-	/** The Constant MODULE_SEPARATOR. */
-	public static final String MODULE_SEPARATOR = "/";
+  /** The Constant MODULE_SEPARATOR. */
+  public static final String MODULE_SEPARATOR = "/";
 
-	/** The name. */
-	@XStreamAsAttribute
-	private String name;
+  /** The name. */
+  @XStreamAsAttribute
+  private String name;
 
-	/** The children. */
-	@XStreamImplicit
-	private List<Module> children;
+  /** The children. */
+  @XStreamImplicit
+  private List<Module> children;
 
-	/** The properties. */
-	@XStreamImplicit(itemFieldName = "property")
-	private List<Property> properties;
+  /** The properties. */
+  @XStreamImplicit(itemFieldName = "property")
+  private List<Property> properties;
 
-	/** The metadata.Not used for sonar plugin*/
-	@XStreamImplicit(itemFieldName = "metadata")
-	private List<Metadata> metadata;
+  /** The metadata.Not used for sonar plugin */
+  @XStreamImplicit(itemFieldName = "metadata")
+  private List<Metadata> metadata;
 
-	/**
-	 * Instantiates a new module.
-	 * 
-	 * @param name the name
-	 * @param parent the parent
-	 * @param properties the properties
-	 */
-	public Module(String name, Module parent, List<Property> properties) {
-		this.name = name;
-		this.properties = properties;
-		this.children = new ArrayList<Module>();
-		if (parent != null) {
-			parent.addChild(this);
-		}
-	}
+  /**
+   * Instantiates a new module.
+   * 
+   * @param name
+   *          the name
+   * @param parent
+   *          the parent
+   * @param properties
+   *          the properties
+   */
+  public Module(String name, Module parent, List<Property> properties) {
+    this.name = name;
+    this.properties = properties;
+    this.children = new ArrayList<Module>();
+    if (parent != null) {
+      parent.addChild(this);
+    }
+  }
 
-	/**
-	 * Instantiates a new module.
-	 * 
-	 * @param name the name
-	 * @param parent the parent
-	 */
-	public Module(String name, Module parent) {
-		this(name, parent, null);
-	}
+  /**
+   * Instantiates a new module.
+   * 
+   * @param name
+   *          the name
+   * @param parent
+   *          the parent
+   */
+  public Module(String name, Module parent) {
+    this(name, parent, null);
+  }
 
-	/**
-	 * Instantiates a new module.
-	 * 
-	 * @param name the name
-	 */
-	public Module(String name) {
-		this(name, null, null);
-	}
+  /**
+   * Instantiates a new module.
+   * 
+   * @param name
+   *          the name
+   */
+  public Module(String name) {
+    this(name, null, null);
+  }
 
-	/**
-	 * Adds the child.
-	 * 
-	 * @param child the child
-	 */
-	public void addChild(Module child) {
-		children.add(child);
-	}
+  /**
+   * Adds the child.
+   * 
+   * @param child
+   *          the child
+   */
+  public void addChild(Module child) {
+    children.add(child);
+  }
 
-	/**
-	 * Gets the name.
-	 * 
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * Gets the name.
+   * 
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Sets the properties.
-	 * 
-	 * @param properties the new properties
-	 */
-	public void setProperties(List<Property> properties) {
-		this.properties = properties;
-	}
+  /**
+   * Sets the properties.
+   * 
+   * @param properties
+   *          the new properties
+   */
+  public void setProperties(List<Property> properties) {
+    this.properties = properties;
+  }
 
-	/**
-	 * Gets the properties.
-	 * 
-	 * @return the properties
-	 */
-	public List<Property> getProperties() {
-		return properties;
-	}
+  /**
+   * Gets the properties.
+   * 
+   * @return the properties
+   */
+  public List<Property> getProperties() {
+    return properties;
+  }
 
-	/**
-	 * Gets the children.
-	 * 
-	 * @return the children
-	 */
-	public List<Module> getChildren() {
-		return children;
-	}
+  /**
+   * Gets the children.
+   * 
+   * @return the children
+   */
+  public List<Module> getChildren() {
+    return children;
+  }
 
-	/**
-	 * Compares the module name to the given String
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(String value) {
-		return value.compareTo(name);
-	}
+  /**
+   * Compares the module name to the given String
+   * 
+   * @see java.lang.Comparable#compareTo(java.lang.Object)
+   */
+  public int compareTo(String value) {
+    return value.compareTo(name);
+  }
 
-	/**
-	 * Gets the child position.
-	 * 
-	 * @param nameToFind the name to find
-	 * 
-	 * @return the child position
-	 */
-	public int getChildPosition(String nameToFind) {
-		int i = 0;
-		for (Module child : children) {
-			if (child.getName().equals(nameToFind)) {
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
+  /**
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Module other = (Module) obj;
+    if (children == null) {
+      if (other.children != null) {
+        return false;
+      }
+    } else if ( !children.equals(other.children)) {
+      return false;
+    }
+    if (metadata == null) {
+      if (other.metadata != null) {
+        return false;
+      }
+    } else if ( !metadata.equals(other.metadata)) {
+      return false;
+    }
+    if (name == null) {
+      if (other.name != null) {
+        return false;
+      }
+    } else if ( !name.equals(other.name)) {
+      return false;
+    }
+    if (properties == null) {
+      if (other.properties != null) {
+        return false;
+      }
+    } else if ( !properties.equals(other.properties)) {
+      return false;
+    }
+    return true;
+  }
 
-	/**
-	 * Gets the or create child.
-	 * 
-	 * @param configKey the config key
-	 * 
-	 * @return the or create child
-	 */
-	public Module getOrCreateChild(String configKey) {
-		Module result = this;
-		String[] modules = StringUtils.split(configKey, MODULE_SEPARATOR);
-		for (int modulePos = 0; modulePos < modules.length; modulePos++) {
-			String moduleName = modules[modulePos];
-			if (result.getChildren().isEmpty()) {
-				Module child = new Module(moduleName);
-				result.addChild(child);
-				result = child;
-			} else {
-				int index = result.getChildPosition(moduleName);
-				// Create new module if it doesn't exists or if it's the last
-				// one (To allow same rule activation)
-				if (index < 0 || modulePos == modules.length - 1) {
-					Module child = new Module(moduleName);
-					result.addChild(child);
-					result = child;
-				} else {
-					result = result.getChildren().get(index);
-				}
-			}
-		}
-		return result;
-	}
+  /**
+   * Gets the child position.
+   * 
+   * @param nameToFind
+   *          the name to find
+   * 
+   * @return the child position
+   */
+  public int getChildPosition(String nameToFind) {
+    int i = 0;
+    for (Module child : children) {
+      if (child.getName().equals(nameToFind)) {
+        return i;
+      }
+      i++;
+    }
+    return -1;
+  }
 
-	/**
-	 * New x stream.
-	 * 
-	 * @return the x stream
-	 */
-	private static XStream newXStream() {
-		XStream xStream = new XStream();
-		xStream.processAnnotations(Module.class);
-		xStream.processAnnotations(Property.class);
-		xStream.processAnnotations(Metadata.class);
-		return xStream;
-	}
+  /**
+   * Gets the or create child.
+   * 
+   * @param configKey
+   *          the config key
+   * 
+   * @return the or create child
+   */
+  public Module getOrCreateChild(String configKey) {
+    Module result = this;
+    String[] modules = StringUtils.split(configKey, MODULE_SEPARATOR);
+    for (int modulePos = 0; modulePos < modules.length; modulePos++) {
+      String moduleName = modules[modulePos];
+      if (result.getChildren().isEmpty()) {
+        Module child = new Module(moduleName);
+        result.addChild(child);
+        result = child;
+      } else {
+        int index = result.getChildPosition(moduleName);
+        // Create new module if it doesn't exists or if it's the last
+        // one (To allow same rule activation)
+        if (index < 0 || modulePos == modules.length - 1) {
+          Module child = new Module(moduleName);
+          result.addChild(child);
+          result = child;
+        } else {
+          result = result.getChildren().get(index);
+        }
+      }
+    }
+    return result;
+  }
 
-	/**
-	 * From xml.
-	 * 
-	 * @param xml the xml
-	 * 
-	 * @return the module
-	 */
-	public static Module fromXml(String xml) {
-		InputStream input = null;
-		try {
-			input = IOUtils.toInputStream(xml, "UTF-8");
-			return (Module) newXStream().fromXML(input);
+  /**
+   * New x stream.
+   * 
+   * @return the x stream
+   */
+  private static XStream newXStream() {
+    XStream xStream = new XStream();
+    xStream.processAnnotations(Module.class);
+    xStream.processAnnotations(Property.class);
+    xStream.processAnnotations(Metadata.class);
+    return xStream;
+  }
 
-		} catch (IOException e) {
-			throw new RuntimeException("can't read configuration file", e);
+  /**
+   * From xml.
+   * 
+   * @param xml
+   *          the xml
+   * 
+   * @return the module
+   */
+  public static Module fromXml(String xml) {
+    InputStream input = null;
+    try {
+      input = IOUtils.toInputStream(xml, "UTF-8");
+      return (Module) newXStream().fromXML(input);
 
-		} finally {
-			IOUtils.closeQuietly(input);
-		}
-	}
+    } catch (IOException e) {
+      throw new RuntimeException("can't read configuration file", e);
 
-	/**
-	 * To xml.
-	 * 
-	 * @return the string
-	 */
-	public String toXml() {
-		return newXStream().toXML(this);
-	}
+    } finally {
+      IOUtils.closeQuietly(input);
+    }
+  }
+
+  /**
+   * To xml.
+   * 
+   * @return the string
+   */
+  public String toXml() {
+    return newXStream().toXML(this);
+  }
 
 }

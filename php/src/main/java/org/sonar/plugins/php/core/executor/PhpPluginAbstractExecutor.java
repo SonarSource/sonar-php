@@ -61,6 +61,7 @@ public abstract class PhpPluginAbstractExecutor {
     /**
      * @see java.lang.Thread#run()
      */
+    @Override
     public void run() {
       try {
         final byte[] buffer = new byte[1024];

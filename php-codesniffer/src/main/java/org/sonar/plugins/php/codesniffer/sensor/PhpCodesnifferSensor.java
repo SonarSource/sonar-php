@@ -42,109 +42,116 @@ import org.sonar.plugins.php.core.executor.PhpPluginExecutionException;
  */
 public class PhpCodesnifferSensor implements Sensor {
 
-	/** The logger. */
-	private static final Logger LOG = LoggerFactory.getLogger(PhpCodesnifferSensor.class);
+  /** The logger. */
+  private static final Logger LOG = LoggerFactory.getLogger(PhpCodesnifferSensor.class);
 
-	/** The rules manager. */
-	private RulesManager rulesManager;
+  /** The rules manager. */
+  private RulesManager rulesManager;
 
-	/** The plugin configuration. */
-	private PhpCodesnifferConfiguration config;
+  /** The plugin configuration. */
+  private PhpCodesnifferConfiguration config;
 
-	/**
-	 * Default constructor used for tests only.
-	 */
-	public PhpCodesnifferSensor() {
-		super();
-	}
+  /**
+   * Default constructor used for tests only.
+   */
+  public PhpCodesnifferSensor() {
+    super();
+  }
 
-	/**
-	 * Instantiates a new php codesniffer sensor.
-	 * 
-	 * @param rulesManager the rules manager
-	 */
-	public PhpCodesnifferSensor(RulesManager rulesManager) {
-		super();
-		this.rulesManager = rulesManager;
-	}
+  /**
+   * Instantiates a new php codesniffer sensor.
+   * 
+   * @param rulesManager
+   *          the rules manager
+   */
+  public PhpCodesnifferSensor(RulesManager rulesManager) {
+    super();
+    this.rulesManager = rulesManager;
+  }
 
-	/**
-	 * Launches the external tool (if configured so) and analyze result file.
-	 * 
-	 * @param project the project
-	 * @param context the context
-	 * 
-	 * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
-	 */
-	public void analyse(Project project, SensorContext context) {
-		try {
-			// If configured so, execute the tool
-			if (!getConfiguration(project).isAnalyseOnly()) {
-				PhpCodesnifferExecutor executor = new PhpCodesnifferExecutor(config);
-				executor.execute();
-			}
-			AbstractViolationsStaxParser parser = getStaxParser(project, context);
-			File report = getConfiguration(project).getReportFile();
-			LOG.info("Analysing project with file:" + report.getAbsolutePath());
-			parser.parse(report);
+  /**
+   * Launches the external tool (if configured so) and analyze result file.
+   * 
+   * @param project
+   *          the project
+   * @param context
+   *          the context
+   * 
+   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   */
+  public void analyse(Project project, SensorContext context) {
+    try {
+      // If configured so, execute the tool
+      if ( !getConfiguration(project).isAnalyseOnly()) {
+        PhpCodesnifferExecutor executor = new PhpCodesnifferExecutor(config);
+        executor.execute();
+      }
+      AbstractViolationsStaxParser parser = getStaxParser(project, context);
+      File report = getConfiguration(project).getReportFile();
+      LOG.info("Analysing project with file:" + report.getAbsolutePath());
+      parser.parse(report);
 
-		} catch (XMLStreamException e) {
-			LOG.error("Error occured while reading report file", e);
-			throw new XmlParserException(e);
-		} catch (PhpPluginExecutionException e) {
-			LOG.error("Error occured while launching Php CodeSniffer", e);
-			e.printStackTrace();
-		}
-	}
+    } catch (XMLStreamException e) {
+      LOG.error("Error occured while reading report file", e);
+      throw new XmlParserException(e);
+    } catch (PhpPluginExecutionException e) {
+      LOG.error("Error occured while launching Php CodeSniffer", e);
+      e.printStackTrace();
+    }
+  }
 
-	/**
-	 * Gets the violation stax result parser.
-	 * 
-	 * @param project the project
-	 * @param context the context
-	 * 
-	 * @return the violation stax result parser.
-	 */
-	private AbstractViolationsStaxParser getStaxParser(Project project, SensorContext context) {
-		return new PhpCheckStyleViolationsXmlParser(project, context, rulesManager);
-	}
+  /**
+   * Gets the violation stax result parser.
+   * 
+   * @param project
+   *          the project
+   * @param context
+   *          the context
+   * 
+   * @return the violation stax result parser.
+   */
+  private AbstractViolationsStaxParser getStaxParser(Project project, SensorContext context) {
+    return new PhpCheckStyleViolationsXmlParser(project, context, rulesManager);
+  }
 
-	/**
-	 * Gets the configuration.
-	 * 
-	 * @param project the project
-	 * 
-	 * @return the configuration
-	 */
-	private PhpCodesnifferConfiguration getConfiguration(Project project) {
-		if (config == null) {
-			config = new PhpCodesnifferConfiguration(project);
-		}
-		return config;
-	}
+  /**
+   * Gets the configuration.
+   * 
+   * @param project
+   *          the project
+   * 
+   * @return the configuration
+   */
+  private PhpCodesnifferConfiguration getConfiguration(Project project) {
+    if (config == null) {
+      config = new PhpCodesnifferConfiguration(project);
+    }
+    return config;
+  }
 
-	/**
-	 * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-	 * 
-	 * @param project the project
-	 * 
-	 * @return true, if should execute on project
-	 * 
-	 * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
-	 */
-	public boolean shouldExecuteOnProject(Project project) {
-		return getConfiguration(project).isShouldRun() && Php.INSTANCE.equals(project.getLanguage());
-	}
+  /**
+   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
+   * 
+   * @param project
+   *          the project
+   * 
+   * @return true, if should execute on project
+   * 
+   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
+   */
+  public boolean shouldExecuteOnProject(Project project) {
+    return getConfiguration(project).isShouldRun() && Php.INSTANCE.equals(project.getLanguage());
+  }
 
-	/**
-	 * To string.
-	 * 
-	 * @return the string
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
+  /**
+   * To string.
+   * 
+   * @return the string
+   * 
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }

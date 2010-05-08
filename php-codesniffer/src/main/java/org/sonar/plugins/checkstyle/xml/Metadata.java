@@ -23,54 +23,55 @@ package org.sonar.plugins.checkstyle.xml;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-
 /**
  * The Class Metadata.
  */
 @XStreamAlias("metadata")
 public class Metadata {
 
-	/** The name. */
-	@XStreamAsAttribute
-	private String name;
+  /** The name. */
+  @XStreamAsAttribute
+  private String name;
 
-	/** The value. */
-	@XStreamAsAttribute
-	private String value;
+  /** The value. */
+  @XStreamAsAttribute
+  private String value;
 
-	/**
-	 * Gets the name.
-	 * 
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * Gets the name.
+   * 
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Sets the name.
-	 * 
-	 * @param name the new name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+  /**
+   * Sets the name.
+   * 
+   * @param name
+   *          the new name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * Gets the value.
-	 * 
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
+  /**
+   * Gets the value.
+   * 
+   * @return the value
+   */
+  public String getValue() {
+    return value;
+  }
 
-	/**
-	 * Sets the value.
-	 * 
-	 * @param value the new value
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+  /**
+   * Sets the value.
+   * 
+   * @param value
+   *          the new value
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 }

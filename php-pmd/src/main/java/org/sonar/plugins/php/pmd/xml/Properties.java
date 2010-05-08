@@ -29,21 +29,20 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("properties")
 public class Properties {
 
-	/** The rules. */
-	@XStreamImplicit(itemFieldName = "property")
-	private List<Property> properties;
-	
-	
-	public Properties() {
-		properties = new ArrayList<Property>(); 
-	}
-	
-	public void add(Property property) {
-		properties.add(property);
-	}
+  /** The rules. */
+  @XStreamImplicit(itemFieldName = "property")
+  private List<Property> properties;
 
-	public List<Property> getProperties() {
-		return properties;
-	}
-	
+  public Properties() {
+    properties = new ArrayList<Property>();
+  }
+
+  public void add(Property property) {
+    properties.add(property);
+  }
+
+  public List<Property> getProperties() {
+    return properties;
+  }
+
 }

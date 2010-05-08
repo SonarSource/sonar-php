@@ -42,110 +42,117 @@ import org.sonar.plugins.php.pmd.executor.PhpPmdExecutor;
  */
 public class PhpPmdSensor implements Sensor {
 
-	/** The logger. */
-	private static final Logger LOG = LoggerFactory.getLogger(PhpPmdSensor.class);
+  /** The logger. */
+  private static final Logger LOG = LoggerFactory.getLogger(PhpPmdSensor.class);
 
-	/** The profile. */
-	private RulesProfile profile;
+  /** The profile. */
+  private RulesProfile profile;
 
-	/** The rules manager. */
-	private RulesManager rulesManager;
+  /** The rules manager. */
+  private RulesManager rulesManager;
 
-	/** The plugin configuration. */
-	private PhpPmdConfiguration config;
+  /** The plugin configuration. */
+  private PhpPmdConfiguration config;
 
-	/**
-	 * Constructor used for tests.
-	 */
-	public PhpPmdSensor() {
-		super();
-	}
+  /**
+   * Constructor used for tests.
+   */
+  public PhpPmdSensor() {
+    super();
+  }
 
-	/**
-	 * Instantiates a new php pmd sensor.
-	 * 
-	 * @param profile the profile
-	 * @param rulesManager the rules manager
-	 */
-	public PhpPmdSensor(RulesProfile profile, RulesManager rulesManager) {
-		super();
-		this.profile = profile;
-		this.rulesManager = rulesManager;
-	}
+  /**
+   * Instantiates a new php pmd sensor.
+   * 
+   * @param profile
+   *          the profile
+   * @param rulesManager
+   *          the rules manager
+   */
+  public PhpPmdSensor(RulesProfile profile, RulesManager rulesManager) {
+    super();
+    this.profile = profile;
+    this.rulesManager = rulesManager;
+  }
 
-	/**
-	 * If configured so runs the PHPMD tool and analyze the results.
-	 * 
-	 * @param project the project
-	 * @param context the context
-	 * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
-	 */
-	public void analyse(Project project, SensorContext context) {
-		try {
-			getConfiguration(project);
-			// If configured so, execute the tool
-			if (!config.isAnalyseOnly()) {
-				PhpPmdExecutor executor = new PhpPmdExecutor(config);
-				executor.execute();
-			}
-			//Gets report file
-			File report = config.getReportFile();
-			if (report == null || !report.exists() || !report.isFile()) {
-				LOG.error("Report file can't be found" + (report != null ? " : " + report.getAbsolutePath() : ""));
-				LOG.error("Plugin will stop.");
-			}
-			//If reports can't be found plugin stop without errors
-			if (report != null) {
-				AbstractViolationsStaxParser parser = getStaxParser(project, context);
-				parser.parse(report);
-			}
-		} catch (XMLStreamException e) {
-			LOG.error("PMD report is invalid data will not be imported", e);
-			throw new SonarException(e);
-		}
-	}
+  /**
+   * If configured so runs the PHPMD tool and analyze the results.
+   * 
+   * @param project
+   *          the project
+   * @param context
+   *          the context
+   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   */
+  public void analyse(Project project, SensorContext context) {
+    try {
+      getConfiguration(project);
+      // If configured so, execute the tool
+      if ( !config.isAnalyseOnly()) {
+        PhpPmdExecutor executor = new PhpPmdExecutor(config);
+        executor.execute();
+      }
+      // Gets report file
+      File report = config.getReportFile();
+      if (report == null || !report.exists() || !report.isFile()) {
+        LOG.error("Report file can't be found" + (report != null ? " : " + report.getAbsolutePath() : ""));
+        LOG.error("Plugin will stop.");
+      }
+      // If reports can't be found plugin stop without errors
+      if (report != null) {
+        AbstractViolationsStaxParser parser = getStaxParser(project, context);
+        parser.parse(report);
+      }
+    } catch (XMLStreamException e) {
+      LOG.error("PMD report is invalid data will not be imported", e);
+      throw new SonarException(e);
+    }
+  }
 
-	/**
-	 * Gets the violation parser.
-	 * 
-	 * @param project the analyzed project
-	 * @param context the execution context
-	 * @return the violation parser.
-	 */
-	private AbstractViolationsStaxParser getStaxParser(Project project, SensorContext context) {
-		return new PhpPmdViolationsXmlParser(project, context, rulesManager, profile);
-	}
+  /**
+   * Gets the violation parser.
+   * 
+   * @param project
+   *          the analyzed project
+   * @param context
+   *          the execution context
+   * @return the violation parser.
+   */
+  private AbstractViolationsStaxParser getStaxParser(Project project, SensorContext context) {
+    return new PhpPmdViolationsXmlParser(project, context, rulesManager, profile);
+  }
 
-	/**
-	 * Should execute on project.
-	 * 
-	 * @param project the project 
-	 * @return true, if should execute on project
-	 * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
-	 */
-	public boolean shouldExecuteOnProject(Project project) {
-		return Php.INSTANCE.equals(project.getLanguage());
-	}
+  /**
+   * Should execute on project.
+   * 
+   * @param project
+   *          the project
+   * @return true, if should execute on project
+   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
+   */
+  public boolean shouldExecuteOnProject(Project project) {
+    return Php.INSTANCE.equals(project.getLanguage());
+  }
 
-	/***
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
+  /***
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
-	/**
-	 * Gets the configuration.
-	 * If config field is null initialize it, other way only returns it.
-	 * 
-	 * @param project the project
-	 * @return the configuration
-	 */
-	private PhpPmdConfiguration getConfiguration(Project project) {
-		if (config == null) {
-			config = new PhpPmdConfiguration(project);
-		}
-		return config;
-	}
+  /**
+   * Gets the configuration. If config field is null initialize it, other way only returns it.
+   * 
+   * @param project
+   *          the project
+   * @return the configuration
+   */
+  private PhpPmdConfiguration getConfiguration(Project project) {
+    if (config == null) {
+      config = new PhpPmdConfiguration(project);
+    }
+    return config;
+  }
 }

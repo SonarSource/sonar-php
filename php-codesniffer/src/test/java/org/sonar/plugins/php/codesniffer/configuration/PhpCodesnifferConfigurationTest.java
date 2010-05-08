@@ -33,89 +33,83 @@ import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 
-
 /**
  * The Class PhpDependConfigurationTest.
  */
 public class PhpCodesnifferConfigurationTest {
 
-	/**
-	 * Should get valid suffixe option.
-	 */
-	@Test
-	public void shouldReturnDefaultReportFileWithDefaultPath() {
-		Project project = mock(Project.class);
-		Configuration configuration = mock(Configuration.class);
-		MavenProject mavenProject = mock(MavenProject.class);
-		ProjectFileSystem fs = mock(ProjectFileSystem.class);
-		when(project.getPom()).thenReturn(mavenProject);
-		when(project.getFileSystem()).thenReturn(fs);
-		when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-		when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-		when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-		when(
-		    configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY,
-		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME)).thenReturn(
-		    PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME);
-		when(
-		    configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn(
-		    PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH);
-		when(project.getConfiguration()).thenReturn(configuration);
-		PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
-		assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\codesniffer.xml");
-	}
+  /**
+   * Should get valid suffixe option.
+   */
+  @Test
+  public void shouldReturnDefaultReportFileWithDefaultPath() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME)).thenReturn(PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME);
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn(PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH);
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
+    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\codesniffer.xml");
+  }
 
-	/**
-	 * Should get valid suffixe option.
-	 */
-	@Test
-	public void shouldReturnDefaultReportFileWithCustomPath() {
-		Project project = mock(Project.class);
-		Configuration configuration = mock(Configuration.class);
-		MavenProject mavenProject = mock(MavenProject.class);
-		ProjectFileSystem fs = mock(ProjectFileSystem.class);
-		when(project.getPom()).thenReturn(mavenProject);
-		when(project.getFileSystem()).thenReturn(fs);
-		when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-		when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-		when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-		when(
-		    configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY,
-		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME)).thenReturn(
-		    PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME);
-		when(
-		    configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
-		when(project.getConfiguration()).thenReturn(configuration);
-		PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
-		assertEquals(config.getReportFile().getPath().replace('/', '\\'), 
-			"C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer.xml");
-	}
+  /**
+   * Should get valid suffixe option.
+   */
+  @Test
+  public void shouldReturnDefaultReportFileWithCustomPath() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME)).thenReturn(PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME);
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
+    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer.xml");
+  }
 
-	/**
-	 * Should return custom report file with custom path.
-	 */
-	@Test
-	public void shouldReturnCustomReportFileWithCustomPath() {
-		Project project = mock(Project.class);
-		Configuration configuration = mock(Configuration.class);
-		MavenProject mavenProject = mock(MavenProject.class);
-		ProjectFileSystem fs = mock(ProjectFileSystem.class);
-		when(project.getPom()).thenReturn(mavenProject);
-		when(project.getFileSystem()).thenReturn(fs);
-		when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-		when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-		when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-		when(
-		    configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY,
-		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME)).thenReturn("codesniffer-summary.xml");
-		when(
-		    configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-		        PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
-		when(project.getConfiguration()).thenReturn(configuration);
-		PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
-		assertEquals(config.getReportFile().getPath().replace('/', '\\'),
-		    "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer-summary.xml");
-	}
+  /**
+   * Should return custom report file with custom path.
+   */
+  @Test
+  public void shouldReturnCustomReportFileWithCustomPath() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME)).thenReturn("codesniffer-summary.xml");
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
+    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer-summary.xml");
+  }
 }

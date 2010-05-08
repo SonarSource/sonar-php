@@ -50,142 +50,158 @@ import org.sonar.api.rules.Violation;
 import org.sonar.api.test.IsViolation;
 import org.sonar.plugins.php.core.resources.PhpFile;
 
-
 /**
  * The Class PhpPmdViolationStaxParserTest.
  */
 public class PhpPmdViolationStaxParserTest {
 
-	/**
-	 * Parses the.
-	 * 
-	 * @param context the context
-	 * @param xmlPath the xml path
-	 * 
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	private void parse(SensorContext context, String xmlPath) throws URISyntaxException, XMLStreamException {
-		DefaultProjectFileSystem fileSystem = mock(DefaultProjectFileSystem.class);
-		when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("/test/src/main/")));
+  /**
+   * Parses the.
+   * 
+   * @param context
+   *          the context
+   * @param xmlPath
+   *          the xml path
+   * 
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  private void parse(SensorContext context, String xmlPath) throws URISyntaxException, XMLStreamException {
+    DefaultProjectFileSystem fileSystem = mock(DefaultProjectFileSystem.class);
+    when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("/test/src/main/")));
 
-		Project project = mock(Project.class);
-		when(project.getFileSystem()).thenReturn(fileSystem);
+    Project project = mock(Project.class);
+    when(project.getFileSystem()).thenReturn(fileSystem);
 
-		RulesManager manager = mock(RulesManager.class);
-		when(manager.getPluginRule(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
-			public Rule answer(InvocationOnMock invocation) {
-				Object[] args = invocation.getArguments();
-				return new Rule((String) args[1], (String) args[1], null, (String) args[0], "");
-			}
-		});
-		RulesProfile profile = mock(RulesProfile.class);
-		when(profile.getActiveRule(anyString(), anyString())).thenReturn(new ActiveRule(null, null, RulePriority.MINOR));
-		PhpPmdViolationsXmlParser parser = new PhpPmdViolationsXmlParser(project, context, manager, profile);
+    RulesManager manager = mock(RulesManager.class);
+    when(manager.getPluginRule(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
 
-		File xmlFile = new File(getClass().getResource(xmlPath).toURI());
-		parser.parse(xmlFile);
-	}
+      public Rule answer(InvocationOnMock invocation) {
+        Object[] args = invocation.getArguments();
+        return new Rule((String) args[1], (String) args[1], null, (String) args[0], "");
+      }
+    });
+    RulesProfile profile = mock(RulesProfile.class);
+    when(profile.getActiveRule(anyString(), anyString())).thenReturn(new ActiveRule(null, null, RulePriority.MINOR));
+    PhpPmdViolationsXmlParser parser = new PhpPmdViolationsXmlParser(project, context, manager, profile);
 
-	/**
-	 * Should save violations on classes.
-	 * 
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	@Test
-	public void shouldSaveViolationsOnClasses() throws URISyntaxException, XMLStreamException {
-		SensorContext context = mock(SensorContext.class);
-		parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result.xml");
+    File xmlFile = new File(getClass().getResource(xmlPath).toURI());
+    parser.parse(xmlFile);
+  }
 
-		verify(context, times(30)).saveViolation(argThat(new IsViolationOnPhpClass()));
-		verify(context, times(4)).saveViolation(
-		    argThat(new IsViolationOnPhpClass(new PhpFile("earth/animal/MonkeyWithComments"))));
+  /**
+   * Should save violations on classes.
+   * 
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  @Test
+  public void shouldSaveViolationsOnClasses() throws URISyntaxException, XMLStreamException {
+    SensorContext context = mock(SensorContext.class);
+    parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result.xml");
 
-		Violation wanted = new Violation(null, new PhpFile("earth/animal/MonkeyWithComments")).setMessage(
-		    "Avoid unused local variables such as 'toto'.").setLineId(22);
-		verify(context, times(1)).saveViolation(argThat(new IsViolation(wanted)));
-	}
+    verify(context, times(30)).saveViolation(argThat(new IsViolationOnPhpClass()));
+    verify(context, times(4)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("earth/animal/MonkeyWithComments"))));
 
-	/**
-	 * Default package should be set onclass without package.
-	 * 
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	@Test
-	public void defaultPackageShouldBeSetOnclassWithoutPackage() throws URISyntaxException, XMLStreamException {
-		SensorContext context = mock(SensorContext.class);
-		parse(context, "/org/sonar/plugins/php/pmd/php-pmd-class-without-package.xml");
-		verify(context, times(3)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("ClassOnDefaultPackage"))));
-	}
+    Violation wanted = new Violation(null, new PhpFile("earth/animal/MonkeyWithComments")).setMessage(
+        "Avoid unused local variables such as 'toto'.").setLineId(22);
+    verify(context, times(1)).saveViolation(argThat(new IsViolation(wanted)));
+  }
 
-	/**
-	 * Unknown xml entity.
-	 * 
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	@Test
-	public void unknownXMLEntity() throws URISyntaxException, XMLStreamException {
-		SensorContext context = mock(SensorContext.class);
-		parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result-with-unknown-entity.xml");
-		verify(context, times(2)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("animal/Monkey"))));
-	}
+  /**
+   * Default package should be set onclass without package.
+   * 
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  @Test
+  public void defaultPackageShouldBeSetOnclassWithoutPackage() throws URISyntaxException, XMLStreamException {
+    SensorContext context = mock(SensorContext.class);
+    parse(context, "/org/sonar/plugins/php/pmd/php-pmd-class-without-package.xml");
+    verify(context, times(3)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("ClassOnDefaultPackage"))));
+  }
 
-	/**
-	 * ISO control chars xml file.
-	 * 
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	@Test
-	public void ISOControlCharsXMLFile() throws URISyntaxException, XMLStreamException {
-		SensorContext context = mock(SensorContext.class);
-		parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result-with-control-char.xml");
-		verify(context, times(1)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("animal/Monkey"))));
-	}
+  /**
+   * Unknown xml entity.
+   * 
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  @Test
+  public void unknownXMLEntity() throws URISyntaxException, XMLStreamException {
+    SensorContext context = mock(SensorContext.class);
+    parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result-with-unknown-entity.xml");
+    verify(context, times(2)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("animal/Monkey"))));
+  }
 
-	/**
-	 * The Class IsViolationOnPhpClass.
-	 */
-	private class IsViolationOnPhpClass extends BaseMatcher<Violation> {
+  /**
+   * ISO control chars xml file.
+   * 
+   * @throws URISyntaxException
+   *           the URI syntax exception
+   * @throws XMLStreamException
+   *           the XML stream exception
+   */
+  @Test
+  public void ISOControlCharsXMLFile() throws URISyntaxException, XMLStreamException {
+    SensorContext context = mock(SensorContext.class);
+    parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result-with-control-char.xml");
+    verify(context, times(1)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("animal/Monkey"))));
+  }
 
-		/** The php class. */
-		private PhpFile phpClass;
+  /**
+   * The Class IsViolationOnPhpClass.
+   */
+  private class IsViolationOnPhpClass extends BaseMatcher<Violation> {
 
-		/**
-		 * Instantiates a new checks if is violation on php class.
-		 * 
-		 * @param javaClass the java class
-		 */
-		private IsViolationOnPhpClass(PhpFile javaClass) {
-			this.phpClass = javaClass;
-		}
+    /** The php class. */
+    private PhpFile phpClass;
 
-		/**
-		 * Instantiates a new checks if is violation on php class.
-		 */
-		private IsViolationOnPhpClass() {
-		}
+    /**
+     * Instantiates a new checks if is violation on php class.
+     * 
+     * @param javaClass
+     *          the java class
+     */
+    private IsViolationOnPhpClass(PhpFile javaClass) {
+      this.phpClass = javaClass;
+    }
 
-		/* (non-Javadoc)
-		 * @see org.hamcrest.Matcher#matches(java.lang.Object)
-		 */
-		public boolean matches(Object o) {
-			Violation v = (Violation) o;
-			boolean ok = (v.getResource() != null) && (v.getResource() instanceof PhpFile);
-			if (ok && phpClass != null) {
-				ok = phpClass.equals(v.getResource());
-			}
-			return ok;
-		}
+    /**
+     * Instantiates a new checks if is violation on php class.
+     */
+    private IsViolationOnPhpClass() {
+    }
 
-		/* (non-Javadoc)
-		 * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
-		 */
-		public void describeTo(Description description) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.hamcrest.Matcher#matches(java.lang.Object)
+     */
+    public boolean matches(Object o) {
+      Violation v = (Violation) o;
+      boolean ok = (v.getResource() != null) && (v.getResource() instanceof PhpFile);
+      if (ok && phpClass != null) {
+        ok = phpClass.equals(v.getResource());
+      }
+      return ok;
+    }
 
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
+     */
+    public void describeTo(Description description) {
+
+    }
+  }
 }

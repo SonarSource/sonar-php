@@ -28,49 +28,50 @@ import org.sonar.api.resources.AbstractLanguage;
  */
 public class Php extends AbstractLanguage {
 
-	/** The php language name */
-	public static final String PHP_LANGUAGE_NAME = "PHP";
+  /** The php language name */
+  public static final String PHP_LANGUAGE_NAME = "PHP";
 
-	/** An php instance. */
-	public static final Php INSTANCE = new Php();
+  /** An php instance. */
+  public static final Php INSTANCE = new Php();
 
-	/** The php language key. */
-	public static final String KEY = "php";
+  /** The php language key. */
+  public static final String KEY = "php";
 
-	/** All the valid php files suffixes. */
-	public static final String[] SUFFIXES = { "php", "php3", "php4", "php5", "phtml", "inc" };
+  /** All the valid php files suffixes. */
+  public static final String[] SUFFIXES = { "php", "php3", "php4", "php5", "phtml", "inc" };
 
-	/**
-	 * Allows to know if the given file name has a valid suffix.
-	 * 
-	 * @param fileName String representing the file name
-	 * @return boolean <code>true</code> if the file name's suffix is known, <code>false</code> any other way
-	 */
-	public static boolean hasValidSuffixes(String fileName) {
-		String pathLowerCase = StringUtils.lowerCase(fileName);
-		for (String suffix : SUFFIXES) {
-			if (pathLowerCase.endsWith("." + StringUtils.lowerCase(suffix))) {
-				return true;
-			}
-		}
-		return false;
-	}
+  /**
+   * Allows to know if the given file name has a valid suffix.
+   * 
+   * @param fileName
+   *          String representing the file name
+   * @return boolean <code>true</code> if the file name's suffix is known, <code>false</code> any other way
+   */
+  public static boolean hasValidSuffixes(String fileName) {
+    String pathLowerCase = StringUtils.lowerCase(fileName);
+    for (String suffix : SUFFIXES) {
+      if (pathLowerCase.endsWith("." + StringUtils.lowerCase(suffix))) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-	/**
-	 * Default constructor.
-	 */
-	public Php() {
-		super(KEY, PHP_LANGUAGE_NAME);
-	}
+  /**
+   * Default constructor.
+   */
+  public Php() {
+    super(KEY, PHP_LANGUAGE_NAME);
+  }
 
-	/**
-	 * Gets the file suffixes.
-	 * 
-	 * @return the file suffixes
-	 * @see org.sonar.api.resources.Language#getFileSuffixes()
-	 */
-	public String[] getFileSuffixes() {
-		return SUFFIXES;
-	}
+  /**
+   * Gets the file suffixes.
+   * 
+   * @return the file suffixes
+   * @see org.sonar.api.resources.Language#getFileSuffixes()
+   */
+  public String[] getFileSuffixes() {
+    return SUFFIXES;
+  }
 
 }

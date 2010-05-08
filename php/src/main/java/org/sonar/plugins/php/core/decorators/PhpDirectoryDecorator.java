@@ -24,17 +24,17 @@ import org.sonar.api.batch.AbstractDirectoriesDecorator;
 import org.sonar.plugins.php.core.Php;
 
 /**
- * The PhpDirectoryDecorator extends AbstractDirectoriesDecorator to allow the use of the php language. It will only run on PHP
- * project.
+ * The PhpDirectoryDecorator extends AbstractDirectoriesDecorator to allow the use of the php language. It will only run on PHP project.
  */
 public class PhpDirectoryDecorator extends AbstractDirectoriesDecorator {
 
-	/**
-	 * Instantiates a new php directory decorator.
-	 * 
-	 * @param php the php
-	 */
-	public PhpDirectoryDecorator(Php php) {
-		super(php);
-	}
+  /**
+   * Instantiates a new php directory decorator.
+   * 
+   * @param php
+   *          the php
+   */
+  public PhpDirectoryDecorator(Php php) {
+    super(php);
+  }
 }

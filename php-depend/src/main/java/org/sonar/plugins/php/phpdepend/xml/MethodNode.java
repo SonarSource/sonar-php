@@ -29,36 +29,38 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 @XStreamAlias("method")
 public final class MethodNode {
 
-	/** The complexity. */
-	@XStreamAsAttribute
-	@XStreamAlias("ccn")
-	private double complexity;
+  /** The complexity. */
+  @XStreamAsAttribute
+  @XStreamAlias("ccn")
+  private double complexity;
 
-	/**
-	 * Instantiates a new method node.
-	 * 
-	 * @param complexity the complexity
-	 */
-	public MethodNode(final double complexity) {
-		super();
-		this.complexity = complexity;
-	}
+  /**
+   * Instantiates a new method node.
+   * 
+   * @param complexity
+   *          the complexity
+   */
+  public MethodNode(final double complexity) {
+    super();
+    this.complexity = complexity;
+  }
 
-	/**
-	 * Gets the complexity.
-	 * 
-	 * @return the complexity
-	 */
-	public double getComplexity() {
-		return complexity;
-	}
+  /**
+   * Gets the complexity.
+   * 
+   * @return the complexity
+   */
+  public double getComplexity() {
+    return complexity;
+  }
 
-	/**
-	 * Sets the complexity.
-	 * 
-	 * @param complexity the new complexity
-	 */
-	public void setComplexity(final double complexity) {
-		this.complexity = complexity;
-	}
+  /**
+   * Sets the complexity.
+   * 
+   * @param complexity
+   *          the new complexity
+   */
+  public void setComplexity(final double complexity) {
+    this.complexity = complexity;
+  }
 }

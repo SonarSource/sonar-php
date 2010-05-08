@@ -36,48 +36,52 @@ import org.sonar.plugins.php.core.resources.PhpFile;
  */
 public class PhpCpdMapping extends AbstractCpdMapping {
 
-	/** The php. */
-	private Php php;
+  /** The php. */
+  private Php php;
 
-	/**
-	 * Instantiates a new php cpd mapping.
-	 * 
-	 * @param php the php
-	 */
-	public PhpCpdMapping(Php php) {
-		this.php = php;
-	}
+  /**
+   * Instantiates a new php cpd mapping.
+   * 
+   * @param php
+   *          the php
+   */
+  public PhpCpdMapping(Php php) {
+    this.php = php;
+  }
 
-	/**
-	 * Creates the resource.
-	 * 
-	 * @param file the file
-	 * @param sourceDirs the source dirs
-	 * @return the php file
-	 * @see org.sonar.api.batch.AbstractCpdMapping#createResource(java.io.File, java.util.List)
-	 */
-	public PhpFile createResource(File file, List<File> sourceDirs) {
-		return PhpFile.fromIOFile(file, sourceDirs, false);
-	}
+  /**
+   * Creates the resource.
+   * 
+   * @param file
+   *          the file
+   * @param sourceDirs
+   *          the source dirs
+   * @return the php file
+   * @see org.sonar.api.batch.AbstractCpdMapping#createResource(java.io.File, java.util.List)
+   */
+  @Override
+  public PhpFile createResource(File file, List<File> sourceDirs) {
+    return PhpFile.fromIOFile(file, sourceDirs, false);
+  }
 
-	/**
-	 * Gets the language.
-	 * 
-	 * @return the language
-	 * @see org.sonar.api.batch.CpdMapping#getLanguage()
-	 */
-	public Language getLanguage() {
-		return php;
-	}
+  /**
+   * Gets the language.
+   * 
+   * @return the language
+   * @see org.sonar.api.batch.CpdMapping#getLanguage()
+   */
+  public Language getLanguage() {
+    return php;
+  }
 
-	/**
-	 * Gets the tokenizer.
-	 * 
-	 * @return the tokenizer
-	 * @see org.sonar.api.batch.CpdMapping#getTokenizer()
-	 */
-	public Tokenizer getTokenizer() {
-		return new PHPTokenizer();
-	}
+  /**
+   * Gets the tokenizer.
+   * 
+   * @return the tokenizer
+   * @see org.sonar.api.batch.CpdMapping#getTokenizer()
+   */
+  public Tokenizer getTokenizer() {
+    return new PHPTokenizer();
+  }
 
 }
