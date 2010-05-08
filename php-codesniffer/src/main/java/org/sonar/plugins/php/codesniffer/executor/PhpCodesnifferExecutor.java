@@ -72,7 +72,7 @@ public class PhpCodesnifferExecutor extends PhpPluginAbstractExecutor {
     if (config.isStringPropertySet(PhpCodesnifferConfiguration.ARGUMENT_LINE_KEY)) {
       result.add(PhpCodesnifferConfiguration.IGNORE_OPTION + config.getArgumentLine());
     }
-    result.add(PhpCodesnifferConfiguration.EXTENSIONS_OPTION + StringUtils.join(Php.SUFFIXES, ","));
+    result.add(PhpCodesnifferConfiguration.EXTENSIONS_OPTION + StringUtils.join(Php.INSTANCE.getFileSuffixes(), ","));
     for (File file : config.getSourceDirectories()) {
       result.add(file.getAbsolutePath());
     }

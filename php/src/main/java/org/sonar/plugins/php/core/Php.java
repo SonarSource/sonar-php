@@ -38,7 +38,7 @@ public class Php extends AbstractLanguage {
   public static final String KEY = "php";
 
   /** All the valid php files suffixes. */
-  public static final String[] SUFFIXES = { "php", "php3", "php4", "php5", "phtml", "inc" };
+  private static final String[] SUFFIXES = { "php", "php3", "php4", "php5", "phtml", "inc" };
 
   /**
    * Allows to know if the given file name has a valid suffix.

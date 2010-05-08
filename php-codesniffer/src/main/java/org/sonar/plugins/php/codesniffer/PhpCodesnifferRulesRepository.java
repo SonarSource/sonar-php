@@ -45,7 +45,7 @@ import org.sonar.plugins.php.core.Php;
 /**
  * The Class PhpCheckstyleRulesRepository.
  */
-public class PhpCodesnifferRulesRepository implements RulesRepository<Php>, ConfigurationExportable, ConfigurationImportable {
+public final class PhpCodesnifferRulesRepository implements RulesRepository<Php>, ConfigurationExportable, ConfigurationImportable {
 
   /** The ruleset file name */
   private static final String RULESET_FILE_NAME = "rules.xml";
@@ -124,7 +124,6 @@ public class PhpCodesnifferRulesRepository implements RulesRepository<Php>, Conf
       return profile;
     } catch (IOException e) {
       throw new SonarException("Configuration file not found for the profile : " + name, e);
-
     } finally {
       IOUtils.closeQuietly(input);
     }

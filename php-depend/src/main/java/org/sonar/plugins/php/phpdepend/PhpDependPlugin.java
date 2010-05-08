@@ -29,7 +29,6 @@ import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.plugins.php.phpdepend.configuration.PhpDependConfiguration;
 import org.sonar.plugins.php.phpdepend.sensor.PhpDependSensor;
-import org.sonar.plugins.php.phpdepend.sensor.PhpDependSensor;
 
 /**
  * The Class PhpDependPlugin.

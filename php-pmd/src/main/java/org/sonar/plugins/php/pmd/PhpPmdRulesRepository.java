@@ -100,9 +100,10 @@ public class PhpPmdRulesRepository implements RulesRepository<Php>, Configuratio
    *          the rules from initial ruleset
    */
   protected void buildActiveRulesFromRuleset(Ruleset ruleset, List<ActiveRule> activeRules, List<org.sonar.api.rules.Rule> rules) {
-    if (ruleset.getRules() != null && !ruleset.getRules().isEmpty()) {
+    List<Rule> allRules = ruleset.getRules();
+    if (allRules != null && !allRules.isEmpty()) {
       // For each rules in the profile
-      for (Rule rule : ruleset.getRules()) {
+      for (Rule rule : allRules) {
         String name = rule.getName();
         for (org.sonar.api.rules.Rule dbRule : rules) {
           // If rule is referenced by initial ruleset

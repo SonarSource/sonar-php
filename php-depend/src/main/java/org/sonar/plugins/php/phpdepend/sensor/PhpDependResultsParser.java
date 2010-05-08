@@ -160,7 +160,7 @@ public class PhpDependResultsParser {
     addMeasure(file, CoreMetrics.CLASSES, 1.0);
     // for all methods in this class.
     List<MethodNode> methodes = classNode.getMethodes();
-    if (methodes != null && methodes.size() != 0) {
+    if (methodes != null && !methodes.isEmpty()) {
       for (MethodNode methodNode : methodes) {
         collectMethodMeasures(methodNode, file);
         methodComplexityDistribution.add(methodNode.getComplexity());
@@ -267,15 +267,15 @@ public class PhpDependResultsParser {
    * @return the metrics
    */
   private Set<Metric> getMetrics() {
-    Set<Metric> metricsSet = new HashSet<Metric>();
-    metricsSet.add(CoreMetrics.LINES);
-    metricsSet.add(CoreMetrics.NCLOC);
-    metricsSet.add(CoreMetrics.FUNCTIONS);
-    metricsSet.add(CoreMetrics.COMMENT_LINES);
-    metricsSet.add(CoreMetrics.FILES);
-    metricsSet.add(CoreMetrics.COMPLEXITY);
-    metricsSet.add(CoreMetrics.CLASSES);
-    return metricsSet;
+    Set<Metric> metricsNode = new HashSet<Metric>();
+    metricsNode.add(CoreMetrics.LINES);
+    metricsNode.add(CoreMetrics.NCLOC);
+    metricsNode.add(CoreMetrics.FUNCTIONS);
+    metricsNode.add(CoreMetrics.COMMENT_LINES);
+    metricsNode.add(CoreMetrics.FILES);
+    metricsNode.add(CoreMetrics.COMPLEXITY);
+    metricsNode.add(CoreMetrics.CLASSES);
+    return metricsNode;
   }
 
   /**

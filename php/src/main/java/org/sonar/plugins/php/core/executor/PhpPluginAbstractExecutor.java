@@ -20,6 +20,7 @@
 
 package org.sonar.plugins.php.core.executor;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
@@ -73,7 +74,7 @@ public abstract class PhpPluginAbstractExecutor {
           }
           istrm.read(buffer);
         }
-      } catch (Exception e) {
+      } catch (IOException e) {
         LOG.error("Can't execute the Async Pipe", e);
       }
     }
@@ -97,9 +98,11 @@ public abstract class PhpPluginAbstractExecutor {
       new AsyncPipe(p.getInputStream(), System.out).start();
       new AsyncPipe(p.getErrorStream(), System.err).start();
       LOG.info(getExecutedTool() + " ended with returned code '{}'.", p.waitFor());
-    } catch (Exception e) {
+    } catch (IOException e) {
       LOG.error("Can't execute the external tool", e);
       throw new PhpPluginExecutionException(e);
+    } catch (InterruptedException e) {
+      LOG.error("Async pipe interrupted: ", e);
     }
   }
 

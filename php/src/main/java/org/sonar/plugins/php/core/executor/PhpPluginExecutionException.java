@@ -26,6 +26,11 @@ package org.sonar.plugins.php.core.executor;
 public class PhpPluginExecutionException extends RuntimeException {
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1017202811537234016L;
+
+  /**
    * Instantiates a new php plugin execution exception.
    */
   public PhpPluginExecutionException() {
