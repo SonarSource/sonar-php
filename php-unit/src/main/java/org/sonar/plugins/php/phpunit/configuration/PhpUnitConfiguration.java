@@ -21,7 +21,6 @@
 package org.sonar.plugins.php.phpunit.configuration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.sonar.api.resources.Project;
@@ -159,7 +158,6 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * Gets the main test class.
    * 
    * @return the main test class
-   * @throws FileNotFoundException
    */
   public String getMainTestClass() {
     String reportFileName = getProject().getConfiguration().getString(MAIN_TEST_FILE_PROPERTY_KEY, DEFAULT_MAIN_TEST_FILE);
@@ -215,8 +213,7 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    */
   @Override
   protected String getDefaultArgumentLine() {
-    // TODO Auto-generated method stub
-    return null;
+    return DEFAULT_ARGUMENT_LINE;
   }
 
   /**

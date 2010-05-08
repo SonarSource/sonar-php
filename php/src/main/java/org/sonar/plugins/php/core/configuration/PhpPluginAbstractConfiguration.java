@@ -142,7 +142,7 @@ public abstract class PhpPluginAbstractConfiguration {
    * value.equals("") return false
    * value.equals("  ") return false
    * value.equals(" toto ") return true
-	 * </pre>
+   * </pre>
    * 
    * @param key
    *          the property's key

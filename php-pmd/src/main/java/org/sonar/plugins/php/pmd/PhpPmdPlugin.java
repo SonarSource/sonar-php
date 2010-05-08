@@ -51,9 +51,10 @@ import org.sonar.plugins.php.pmd.sensor.PhpPmdSensor;
         project = true),
     @Property(key = PhpPmdConfiguration.ANALYZE_ONLY_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_ANALYZE_ONLY, 
         name = "Should the plugin only parse analysis report.", 
-        description = "If set to true the plugin will the plugin will only parse the result file. If set to false launch tool and parse result.", project = true),
+        description = PhpPmdConfiguration.ANALYZE_ONLY_DESCRIPTION, project = true),
     @Property(key = PhpPmdConfiguration.SHOULD_RUN_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_SHOULD_RUN, 
-        name = "Should the plugin run on this project.", description = "If set to false, the plugin will not execute itself for this project.", project = true) })
+        name = "Should the plugin run on this project.", 
+        description = "If set to false, the plugin will not execute itself for this project.", project = true) })
 public class PhpPmdPlugin implements Plugin {
 
   /** The plugin KEY. */
