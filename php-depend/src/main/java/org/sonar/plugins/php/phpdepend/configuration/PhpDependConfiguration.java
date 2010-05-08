@@ -153,7 +153,7 @@ public class PhpDependConfiguration extends PhpPluginAbstractConfiguration {
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
-    return "--" + SUFFIXES_OPT + "=" + StringUtils.join(Php.SUFFIXES, ",");
+    return "--" + SUFFIXES_OPT + "=" + StringUtils.join(Php.INSTANCE.getFileSuffixes(), ",");
   }
 
   @Override
