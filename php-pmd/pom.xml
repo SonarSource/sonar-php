@@ -33,13 +33,12 @@
       <groupId>org.codehaus.sonar-plugins</groupId>
       <artifactId>sonar-php-plugin</artifactId>
       <version>0.2-SNAPSHOT</version>
-      <type>maven-plugin</type>
     </dependency>
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-plugin-api</artifactId>
       <scope>test</scope>
-      <version>1.12</version>
+      <version>${sonar.version}</version>
       <type>test-jar</type>
     </dependency>
     <dependency>

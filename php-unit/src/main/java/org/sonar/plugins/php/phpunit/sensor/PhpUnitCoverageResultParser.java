@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 MyCompany
+ * Copyright (C) 2010 SQLi
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -208,10 +208,10 @@ public class PhpUnitCoverageResultParser {
     for (LineNode line : fileNode.getLines()) {
       saveLineMeasure(line, lineHits);
     }
-    double methodCoveragePercent = new Double(fileNode.getMetrics().getCoveredElements())
-        / new Double(fileNode.getMetrics().getTotalElementsCount());
-    double lineCoveragePercent = new Double(fileNode.getMetrics().getCoveredStatements())
-        / new Double(fileNode.getMetrics().getTotalStatementsCount());
+    double methodCoveragePercent = Double.valueOf(fileNode.getMetrics().getCoveredElements())
+        / Double.valueOf(fileNode.getMetrics().getTotalElementsCount());
+    double lineCoveragePercent = Double.valueOf(fileNode.getMetrics().getCoveredStatements())
+        / Double.valueOf(fileNode.getMetrics().getTotalStatementsCount());
     if (logger.isDebugEnabled()) {
       logger.debug(MessageFormat.format(MSG_SAVE_MEASURES, CoreMetrics.COVERAGE.getName(), phpFile.getName(),
           convertPercentage(methodCoveragePercent)));

@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 MyCompany
+ * Copyright (C) 2010 SQLi
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -128,6 +128,11 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
   /** */
   public static final String ARGUMENT_LINE_KEY = "sonar.phpUnit.argumentLine";
   public static final String DEFAULT_ARGUMENT_LINE = "";
+
+  public static final String PROJECT_CLASS_DESCRIPTION = "The project main test class including the relativ path ie : \"/source/tests/AllTests.php\"";
+  public static final String DEFAULT_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse the analyzis result file. If set to false the plugin will launch tool and parse result.";
+  public static final String DEFAULT_SHOULD_RUN_DESCRIPTION = "If set to true the plugin will launch tool and parse result. If set to false the plugin will only parse the result file.";
+  public static final String DEFAULT_SHOULD_DEAL_DESCRIPTION = "If set to true the plugin will also take php coverage files into account";
 
   // Only for unit tests
   /**
@@ -315,8 +320,9 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return the coverage report file
    */
   public File getCoverageReportFile() {
-    return new File(getProject().getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath()).append(File.separator)
-        .append(getProject().getConfiguration().getString(COVERAGE_REPORT_FILE_PROPERTY_KEY, DEFAULT_COVERAGE_REPORT_FILE)).toString());
+    return new File(getProject().getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath()).append(
+        File.separator).append(getProject().getConfiguration().getString(COVERAGE_REPORT_FILE_PROPERTY_KEY, DEFAULT_COVERAGE_REPORT_FILE))
+        .toString());
   }
 
   /**

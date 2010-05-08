@@ -21,7 +21,6 @@
       <groupId>org.codehaus.sonar-plugins</groupId>
       <artifactId>sonar-php-plugin</artifactId>
       <version>0.2-SNAPSHOT</version>
-      <type>maven-plugin</type>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

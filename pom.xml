@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.codehaus.sonar-plugins</groupId>
@@ -23,8 +24,8 @@
   </modules>
   <inceptionYear>2010</inceptionYear>
   <organization>
-    <name>MyCompany</name>
-    <url>http://mycompany.com</url>
+    <name>SQLi</name>
+    <url>http://www.sqli.com</url>
   </organization>
   <licenses>
     <license>
@@ -38,6 +39,14 @@
     <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php</developerConnection>
     <url>http://svn.codehaus.org/sonar-plugins</url>
   </scm>
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://jira.codehaus.org/browse/SONARPLUGINS/component/13723</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Bamboo</system>
+    <url>http://ci.codehaus.org/browse/SONAR-PHP</url>
+  </ciManagement>
   <profiles>
     <profile>
       <id>eclipse</id>
