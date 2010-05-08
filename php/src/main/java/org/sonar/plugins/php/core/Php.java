@@ -20,6 +20,8 @@
 
 package org.sonar.plugins.php.core;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.AbstractLanguage;
 
@@ -71,7 +73,7 @@ public class Php extends AbstractLanguage {
    * @see org.sonar.api.resources.Language#getFileSuffixes()
    */
   public String[] getFileSuffixes() {
-    return SUFFIXES;
+    return Arrays.copyOf(SUFFIXES, SUFFIXES.length);
   }
 
 }

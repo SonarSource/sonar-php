@@ -194,7 +194,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
    * 
    * @return the rules profile
    */
-  public final RulesProfile buildProfile(String name, String path) {
+  public RulesProfile buildProfile(String name, String path) {
     InputStream input = null;
     try {
       // Gets the input stream
@@ -318,7 +318,6 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
     if (initialRefs != null) {
       return initialRefs;
     }
-    InputStream codeSizeRulesetInput = null;
     try {
       List<org.sonar.api.rules.Rule> rules = new ArrayList<org.sonar.api.rules.Rule>();
       loadRuleset("codesize.xml", rules);
@@ -328,11 +327,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
       String errorMessage = "Can't transform given configuration into inputStream with UTF-8 encoding.";
       LOG.error(errorMessage);
       throw new SonarException(errorMessage, e);
-    } finally {
-      if (codeSizeRulesetInput != null) {
-        IOUtils.closeQuietly(codeSizeRulesetInput);
-      }
-    }
+    } 
   }
 
   public void loadRuleset(String ruleset, List<org.sonar.api.rules.Rule> rules) throws IOException {

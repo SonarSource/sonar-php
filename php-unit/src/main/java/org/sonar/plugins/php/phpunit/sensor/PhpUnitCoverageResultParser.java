@@ -57,7 +57,8 @@ public class PhpUnitCoverageResultParser {
   private static Logger logger = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
 
   private static final String MSG_SAVE_MEASURES = "Saving {0} for {1} with value {2}";
-
+  
+  private static final double PERCENT = 100.0;
   /** The project. */
   private Project project;
 
@@ -189,7 +190,7 @@ public class PhpUnitCoverageResultParser {
    * @return the double
    */
   private double convertPercentage(Number percentage) {
-    return ParsingUtils.scaleValue(percentage.doubleValue() * 100.0);
+    return ParsingUtils.scaleValue(percentage.doubleValue() * PERCENT);
   }
 
   /**

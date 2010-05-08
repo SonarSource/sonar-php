@@ -77,6 +77,10 @@ public class PhpPmdConfiguration extends PhpPluginAbstractConfiguration {
   /** The Constant DEFAULT_LEVEL_ARGUMENT. */
   public static final String DEFAULT_LEVEL_ARGUMENT = "2";
 
+  /** The Constant DEFAULT_LEVEL_ARGUMENT. */
+  public static final String DEFAULT_LEVEL_DESCRIPTION = "The lowest level events won't be included in report file.Values "
+      + "goes from 1(Strong) to 5(Weak) (only integers)";
+
   /** The Constant DEFAULT_IGNORE_ARGUMENT. */
   public static final String DEFAULT_IGNORE_ARGUMENT = " ";
 

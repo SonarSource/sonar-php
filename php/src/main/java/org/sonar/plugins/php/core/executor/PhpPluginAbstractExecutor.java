@@ -40,6 +40,8 @@ public abstract class PhpPluginAbstractExecutor {
    */
   static class AsyncPipe extends Thread {
 
+    private static final int BUFFER_SIZE = 1024;
+
     /** The input stream. */
     private InputStream istrm;
 
@@ -65,7 +67,7 @@ public abstract class PhpPluginAbstractExecutor {
     @Override
     public void run() {
       try {
-        final byte[] buffer = new byte[1024];
+        final byte[] buffer = new byte[BUFFER_SIZE];
         // Reads the process input stream and writes it to the output stream
         int length = istrm.read(buffer);
         while (length != -1) {

@@ -56,6 +56,9 @@ public class PhpDependConfiguration extends PhpPluginAbstractConfiguration {
 
   /** The analyze only default value. */
   public static final String DEFAULT_ANALYZE_ONLY = "false";
+  /** The analyze only default value. */
+  public static final String DEFAULT_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will the plugin will only parse "
+      + "the result file. If set to false launch tool and parse result.";
 
   /** The should run property key. */
   public static final String SHOULD_RUN_PROPERTY_KEY = "sonar.phpDepend.shouldRun";
@@ -110,6 +113,9 @@ public class PhpDependConfiguration extends PhpPluginAbstractConfiguration {
 
   /** The Constant DEFAULT_ARGUMENT_LINE. */
   public static final String DEFAULT_ARGUMENT_LINE = "";
+
+  public static final String DEFAULT_SHOULD_RUN_DESCRIPTION = "If set to true the plugin will launch tool and parse result."
+      + " If set to false the plugin will only parse the result file.";
 
   // Only for unit tests
   /**

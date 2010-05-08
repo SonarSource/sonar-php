@@ -51,6 +51,8 @@ import com.thoughtworks.xstream.XStream;
  */
 public class PhpUnitResultParser {
 
+  private static final double PERCENT = 100d;
+
   /** The logger. */
   private static Logger logger = LoggerFactory.getLogger(PhpUnitResultParser.class);
 
@@ -223,7 +225,7 @@ public class PhpUnitResultParser {
       saveClassMeasure(context, fileReport, CoreMetrics.TEST_EXECUTION_TIME, fileReport.getTime(), project);
       double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
       if (testsCount > 0) {
-        double percentage = passedTests * 100d / testsCount;
+        double percentage = passedTests * PERCENT / testsCount;
         saveClassMeasure(context, fileReport, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage), project);
       }
       saveTestsDetails(context, fileReport, project);

@@ -69,7 +69,7 @@ public final class PhpCodesnifferRulesRepository implements RulesRepository<Php>
    * @see org.sonar.api.rules.RulesRepository#getInitialReferential()
    * @return the list of PHP_CodeSniffer rules declared by the ruleset
    */
-  public final List<Rule> getInitialReferential() {
+  public List<Rule> getInitialReferential() {
     // If ruleset can't be found throws an exception
     InputStream input = getClass().getResourceAsStream(RULESET_FILE_NAME);
     if (input == null) {
@@ -114,7 +114,7 @@ public final class PhpCodesnifferRulesRepository implements RulesRepository<Php>
    *          the path
    * @return the rules profile
    */
-  public final RulesProfile buildProfile(String name, String path) {
+  public RulesProfile buildProfile(String name, String path) {
     InputStream input = null;
     try {
       input = getClass().getResourceAsStream(path);
