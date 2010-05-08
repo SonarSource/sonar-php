@@ -120,7 +120,7 @@ public class PhpPmdConfiguration extends PhpPluginAbstractConfiguration {
    * @return List<File> the source folders
    */
   public List<File> getSourceDir() {
-    return project.getFileSystem().getSourceDirs();
+    return getProject().getFileSystem().getSourceDirs();
   }
 
   /**
@@ -217,7 +217,7 @@ public class PhpPmdConfiguration extends PhpPluginAbstractConfiguration {
    * @return the level
    */
   public String getLevel() {
-    return project.getConfiguration().getString(LEVEL_ARGUMENT_KEY, DEFAULT_LEVEL_ARGUMENT);
+    return getProject().getConfiguration().getString(LEVEL_ARGUMENT_KEY, DEFAULT_LEVEL_ARGUMENT);
   }
 
   /**
@@ -226,7 +226,7 @@ public class PhpPmdConfiguration extends PhpPluginAbstractConfiguration {
    * @return the ignore list
    */
   public String getIgnoreList() {
-    String[] values = project.getConfiguration().getStringArray(IGNORE_ARGUMENT_KEY);
+    String[] values = getProject().getConfiguration().getStringArray(IGNORE_ARGUMENT_KEY);
     if (values != null && values.length > 0) {
       return StringUtils.join(values, ',');
     }
@@ -239,7 +239,7 @@ public class PhpPmdConfiguration extends PhpPluginAbstractConfiguration {
    * @return the rulesets
    */
   public String getRulesets() {
-    String[] values = project.getConfiguration().getStringArray(RULESETS_ARGUMENT_KEY);
+    String[] values = getProject().getConfiguration().getStringArray(RULESETS_ARGUMENT_KEY);
     if (values != null && values.length > 0) {
       return StringUtils.join(values, ',');
     }

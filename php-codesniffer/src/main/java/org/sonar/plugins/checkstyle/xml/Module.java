@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.php.core.executor.PhpPluginExecutionException;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -155,6 +156,22 @@ public class Module implements Comparable<String> {
     return value.compareTo(name);
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((children == null) ? 0 : children.hashCode());
+    result = prime * result + ((metadata == null) ? 0 : metadata.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((properties == null) ? 0 : properties.hashCode());
+    return result;
+  }
+
   /**
    * @see java.lang.Object#equals(java.lang.Object)
    */
@@ -281,7 +298,7 @@ public class Module implements Comparable<String> {
       return (Module) newXStream().fromXML(input);
 
     } catch (IOException e) {
-      throw new RuntimeException("can't read configuration file", e);
+      throw new PhpPluginExecutionException("can't read configuration file", e);
 
     } finally {
       IOUtils.closeQuietly(input);

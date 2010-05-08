@@ -41,7 +41,6 @@ public class FileNode {
   @XStreamOmitField
   @XStreamImplicit(itemFieldName = "class")
   private List<ClassNode> ignoredNodes;
-
   /** The metrics. */
   @XStreamAlias("metrics")
   private MetricsNode metrics;
@@ -112,6 +111,21 @@ public class FileNode {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * @return the ignoredNodes
+   */
+  public final List<ClassNode> getIgnoredNodes() {
+    return ignoredNodes;
+  }
+
+  /**
+   * @param ignoredNodes
+   *          the ignoredNodes to set
+   */
+  public final void setIgnoredNodes(List<ClassNode> ignoredNodes) {
+    this.ignoredNodes = ignoredNodes;
   }
 
   /**

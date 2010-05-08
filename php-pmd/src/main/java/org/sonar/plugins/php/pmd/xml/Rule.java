@@ -40,7 +40,7 @@ public class Rule implements Comparable<String> {
    * 
    * @return the example
    */
-  public String getExample() {
+  public final String getExample() {
     return example;
   }
 
@@ -50,7 +50,7 @@ public class Rule implements Comparable<String> {
    * @param example
    *          the new example
    */
-  public void setExample(String example) {
+  public final void setExample(String example) {
     this.example = example;
   }
 
@@ -69,7 +69,7 @@ public class Rule implements Comparable<String> {
    * @param exclude
    *          the new exclude
    */
-  public void setExclude(String exclude) {
+  public final void setExclude(String exclude) {
     this.exclude = exclude;
   }
 
@@ -88,7 +88,7 @@ public class Rule implements Comparable<String> {
    * @param externalInfoUrl
    *          the new external info url
    */
-  public void setExternalInfoUrl(String externalInfoUrl) {
+  public final void setExternalInfoUrl(String externalInfoUrl) {
     this.externalInfoUrl = externalInfoUrl;
   }
 
@@ -107,7 +107,7 @@ public class Rule implements Comparable<String> {
    * @param message
    *          the new message
    */
-  public void setMessage(String message) {
+  public final void setMessage(String message) {
     this.message = message;
   }
 
@@ -126,7 +126,7 @@ public class Rule implements Comparable<String> {
    * @param since
    *          the new since
    */
-  public void setSince(String since) {
+  public final void setSince(String since) {
     this.since = since;
   }
 
@@ -136,7 +136,7 @@ public class Rule implements Comparable<String> {
    * @param className
    *          the new class name
    */
-  public void setClassName(String className) {
+  public final void setClassName(String className) {
     this.className = className;
   }
 
@@ -266,7 +266,7 @@ public class Rule implements Comparable<String> {
    * @param description
    *          the new description
    */
-  public void setDescription(String description) {
+  public final void setDescription(String description) {
     this.description = description;
   }
 
@@ -276,7 +276,7 @@ public class Rule implements Comparable<String> {
    * @param name
    *          the new name
    */
-  public void setName(String name) {
+  public final void setName(String name) {
     this.name = name;
   }
 
@@ -286,7 +286,7 @@ public class Rule implements Comparable<String> {
    * @param priority
    *          the new priority
    */
-  public void setPriority(String priority) {
+  public final void setPriority(String priority) {
     this.priority = priority;
   }
 
@@ -296,7 +296,7 @@ public class Rule implements Comparable<String> {
    * @param properties
    *          the new properties
    */
-  public void setProperties(Properties properties) {
+  public final void setProperties(Properties properties) {
     this.properties = properties;
   }
 

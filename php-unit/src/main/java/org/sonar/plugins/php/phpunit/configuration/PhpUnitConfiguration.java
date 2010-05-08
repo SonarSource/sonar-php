@@ -154,7 +154,7 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @throws FileNotFoundException
    */
   public String getMainTestClass() {
-    String reportFileName = project.getConfiguration().getString(MAIN_TEST_FILE_PROPERTY_KEY, DEFAULT_MAIN_TEST_FILE);
+    String reportFileName = getProject().getConfiguration().getString(MAIN_TEST_FILE_PROPERTY_KEY, DEFAULT_MAIN_TEST_FILE);
     List<File> directories = getTestDirectories();
     directories.addAll(getSourceDirectories());
 
@@ -169,9 +169,9 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
       }
     }
     // Otherwise return the file in the base directory
-    File file = new File(project.getFileSystem().getBasedir(), reportFileName);
+    File file = new File(getProject().getFileSystem().getBasedir(), reportFileName);
     if ( !file.exists()) {
-      throw new RuntimeException("The specificied main class file cannot be found: " + reportFileName);
+      throw new PhpUnitConfigurationException("The specificied main class file cannot be found: " + reportFileName);
     }
     return file.getAbsolutePath();
   }
@@ -305,7 +305,7 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return true, if successful
    */
   public boolean shouldRunCoverage() {
-    return project.getConfiguration().getBoolean(SHOULD_DEAL_WITH_COVERAGE_PROPERTY_KEY,
+    return getProject().getConfiguration().getBoolean(SHOULD_DEAL_WITH_COVERAGE_PROPERTY_KEY,
         Boolean.parseBoolean(DEFAULT_SHOULD_DEAL_WITH_COVERAGE));
   }
 
@@ -315,8 +315,8 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return the coverage report file
    */
   public File getCoverageReportFile() {
-    return new File(project.getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath()).append(File.separator)
-        .append(project.getConfiguration().getString(COVERAGE_REPORT_FILE_PROPERTY_KEY, DEFAULT_COVERAGE_REPORT_FILE)).toString());
+    return new File(getProject().getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath()).append(File.separator)
+        .append(getProject().getConfiguration().getString(COVERAGE_REPORT_FILE_PROPERTY_KEY, DEFAULT_COVERAGE_REPORT_FILE)).toString());
   }
 
   /**
@@ -325,7 +325,7 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return the user defined filter.
    */
   public String getFilter() {
-    return project.getConfiguration().getString(FILTER_PROPERTY_KEY, DEFAULT_FILTER);
+    return getProject().getConfiguration().getString(FILTER_PROPERTY_KEY, DEFAULT_FILTER);
   }
 
   /**
@@ -334,7 +334,7 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return the user defined filter.
    */
   public String getBootstrap() {
-    return project.getConfiguration().getString(BOOTSTRAP_PROPERTY_KEY, DEFAULT_BOOTSTRAP);
+    return getProject().getConfiguration().getString(BOOTSTRAP_PROPERTY_KEY, DEFAULT_BOOTSTRAP);
   }
 
   /**
@@ -343,7 +343,7 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return the user defined configuration file.
    */
   public String getConfiguration() {
-    return project.getConfiguration().getString(CONFIGURATION_PROPERTY_KEY, DEFAULT_CONFIGURATION);
+    return getProject().getConfiguration().getString(CONFIGURATION_PROPERTY_KEY, DEFAULT_CONFIGURATION);
   }
 
   /**
@@ -352,7 +352,7 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return the user defined loader.
    */
   public String getLoader() {
-    return project.getConfiguration().getString(LOADER_PROPERTY_KEY, DEFAULT_LOADER);
+    return getProject().getConfiguration().getString(LOADER_PROPERTY_KEY, DEFAULT_LOADER);
   }
 
   /**
@@ -361,6 +361,6 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return the user defined group.
    */
   public String getGroup() {
-    return project.getConfiguration().getString(GROUP_PROPERTY_KEY, DEFAULT_GROUP);
+    return getProject().getConfiguration().getString(GROUP_PROPERTY_KEY, DEFAULT_GROUP);
   }
 }

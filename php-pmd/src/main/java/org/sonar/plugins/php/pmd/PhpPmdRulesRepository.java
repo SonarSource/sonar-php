@@ -61,7 +61,10 @@ public class PhpPmdRulesRepository implements RulesRepository<Php>, Configuratio
   /** The rule priority mapper. */
   private PmdRulePriorityMapper mapper = new PmdRulePriorityMapper();
 
-  List<org.sonar.api.rules.Rule> initialRefs;
+  /**
+   * Initial references.
+   */
+  private List<org.sonar.api.rules.Rule> initialRefs;
 
   /**
    * Instantiates a new php pmd rules repository.

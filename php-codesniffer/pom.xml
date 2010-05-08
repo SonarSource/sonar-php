@@ -10,7 +10,7 @@
   <artifactId>sonar-php-codesniffer-plugin</artifactId>
   <packaging>jar</packaging>
   <version>0.2-SNAPSHOT</version>
-  <name>Sonar PHP CODESNIFFER plugin</name>
+  <name>Sonar PHP CodeSniffer plugin</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
@@ -53,6 +53,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>2.2</version>
         <configuration>
           <archive>
             <manifestEntries>

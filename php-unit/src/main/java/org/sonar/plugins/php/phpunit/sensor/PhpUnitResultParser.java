@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.SensorContext;
@@ -91,6 +92,7 @@ public class PhpUnitResultParser {
       xstream.processAnnotations(TestCase.class);
       inputStream = new FileInputStream(report);
       TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
+      Log.debug("Tests suites: " + testSuites);
       return testSuites;
     } catch (IOException e) {
       throw new SonarException("Can't read pUnit report : " + report.getName(), e);

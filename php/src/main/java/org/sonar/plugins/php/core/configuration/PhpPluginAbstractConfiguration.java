@@ -44,7 +44,7 @@ public abstract class PhpPluginAbstractConfiguration {
   private String argumentLine;
 
   /** The configured project. */
-  protected Project project = null;
+  private Project project = null;
 
   /** The report file name. */
   private String reportFileName;
@@ -260,6 +260,21 @@ public abstract class PhpPluginAbstractConfiguration {
    */
   public boolean isShouldRun() {
     return shouldRun;
+  }
+
+  /**
+   * @return the project
+   */
+  protected final Project getProject() {
+    return project;
+  }
+
+  /**
+   * @param project
+   *          the project to set
+   */
+  protected final void setProject(Project project) {
+    this.project = project;
   }
 
   /**

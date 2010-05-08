@@ -96,6 +96,7 @@ class PhpPmdViolationsXmlParser extends AbstractViolationsStaxParser {
   @Override
   protected SMInputCursor cursorForResources(SMInputCursor rootCursor) throws XMLStreamException {
     SMInputCursor descendantElementCursor = rootCursor.descendantElementCursor(FILE_NODE_NAME);
+    LOG.debug("Cursor for resources: " + descendantElementCursor);
     return descendantElementCursor;
   }
 
@@ -115,6 +116,7 @@ class PhpPmdViolationsXmlParser extends AbstractViolationsStaxParser {
   @Override
   protected SMInputCursor cursorForViolations(SMInputCursor resourcesCursor) throws XMLStreamException {
     SMInputCursor descendantElementCursor = resourcesCursor.descendantElementCursor(VIOLATION_NODE_NAME);
+    LOG.debug("Cursor for violations: " + descendantElementCursor);
     return descendantElementCursor;
   }
 

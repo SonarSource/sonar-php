@@ -135,7 +135,7 @@ public class PhpDependConfiguration extends PhpPluginAbstractConfiguration {
    * @return the command line path
    */
   protected String getCommandLinePath() {
-    return project.getConfiguration().getString(KEY_PATH, COMMAND_LINE_DEFAUT_PATH);
+    return getProject().getConfiguration().getString(KEY_PATH, COMMAND_LINE_DEFAUT_PATH);
   }
 
   /**
@@ -212,7 +212,7 @@ public class PhpDependConfiguration extends PhpPluginAbstractConfiguration {
   }
 
   public String getExcludePackeges() {
-    String[] values = project.getConfiguration().getStringArray(EXCLUDE_PACKAGE_KEY);
+    String[] values = getProject().getConfiguration().getStringArray(EXCLUDE_PACKAGE_KEY);
     if (values != null && values.length > 0) {
       return StringUtils.join(values, ',');
     }
@@ -220,7 +220,7 @@ public class PhpDependConfiguration extends PhpPluginAbstractConfiguration {
   }
 
   public String getIgnoreDirs() {
-    String[] values = project.getConfiguration().getStringArray(IGNORE_KEY);
+    String[] values = getProject().getConfiguration().getStringArray(IGNORE_KEY);
     if (values != null && values.length > 0) {
       return StringUtils.join(values, ',');
     }
@@ -228,11 +228,11 @@ public class PhpDependConfiguration extends PhpPluginAbstractConfiguration {
   }
 
   public boolean isBadDocumentation() {
-    return project.getConfiguration().getBoolean(BAD_DOCUMENTATION_KEY, Boolean.valueOf(DEFAULT_BAD_DOCUMENTATION));
+    return getProject().getConfiguration().getBoolean(BAD_DOCUMENTATION_KEY, Boolean.valueOf(DEFAULT_BAD_DOCUMENTATION));
   }
 
   public boolean isWithoutAnnotation() {
-    return project.getConfiguration().getBoolean(WITHOUT_ANNOTATION_KEY, Boolean.valueOf(DEFAULT_WITHOUT_ANNOTATION));
+    return getProject().getConfiguration().getBoolean(WITHOUT_ANNOTATION_KEY, Boolean.valueOf(DEFAULT_WITHOUT_ANNOTATION));
   }
 
 }
