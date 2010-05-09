@@ -65,19 +65,19 @@ public class PmdRulePriorityMapper implements RulePriorityMapper<String, String>
    * @see org.sonar.api.rules.RulePriorityMapper#to(org.sonar.api.rules.RulePriority)
    */
   public String to(RulePriority priority) {
-    if (priority.equals(RulePriority.BLOCKER)) {
+    if (RulePriority.BLOCKER.equals(priority)) {
       return "1";
     }
-    if (priority.equals(RulePriority.CRITICAL)) {
+    if (RulePriority.CRITICAL.equals(priority)) {
       return "2";
     }
-    if (priority.equals(RulePriority.MAJOR)) {
+    if (RulePriority.MAJOR.equals(priority)) {
       return "3";
     }
-    if (priority.equals(RulePriority.MINOR)) {
+    if (RulePriority.MINOR.equals(priority)) {
       return "4";
     }
-    if (priority.equals(RulePriority.INFO)) {
+    if (RulePriority.INFO.equals(priority)) {
       return "5";
     }
     throw new IllegalArgumentException("Level not supported: " + priority);
