@@ -41,7 +41,7 @@ import org.sonar.plugins.php.core.Php;
 public class PhpCodesnifferSensorTest {
 
   /**
-   * Sould not launche on non php project.
+   * Sould not launche on non php project. 
    */
   @Test
   public void shouldNotLauncheOnNonPhpProject() {
