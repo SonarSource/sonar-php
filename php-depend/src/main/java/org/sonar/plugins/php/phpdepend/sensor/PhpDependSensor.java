@@ -83,4 +83,12 @@ public class PhpDependSensor implements Sensor {
     }
     return config;
   }
+
+  /**
+   * The name of the sensor.
+   */
+  @Override
+  public String toString() {
+    return "PHP Depend Sensor";
+  }
 }
