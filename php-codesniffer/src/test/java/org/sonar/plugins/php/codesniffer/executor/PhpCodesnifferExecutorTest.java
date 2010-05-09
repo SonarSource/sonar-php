@@ -20,9 +20,7 @@
 
 package org.sonar.plugins.php.codesniffer.executor;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -42,29 +40,6 @@ public class PhpCodesnifferExecutorTest {
     PhpCodesnifferConfiguration c = mock(PhpCodesnifferConfiguration.class);
     PhpCodesnifferExecutor executor = new PhpCodesnifferExecutor(c);
     executor.getCommandLine();
-    Mockito.verify(c);
-  }
-
-  /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.executor.PhpCodesnifferExecutor#getExecutedTool()}.
-   */
-  @Test
-  public void testGetExecutedTool() {
-    PhpCodesnifferConfiguration c = mock(PhpCodesnifferConfiguration.class);
-    PhpCodesnifferExecutor executor = new PhpCodesnifferExecutor(c);
-    assertEquals("PHPCodeSniffer", executor.getExecutedTool());
-
-  }
-
-  /**
-   * Test method for {@link org.sonar.plugins.php.core.executor.PhpPluginAbstractExecutor#execute()}.
-   */
-  @Test
-  public void testExecute() {
-    PhpCodesnifferConfiguration c = mock(PhpCodesnifferConfiguration.class);
-    when(c.getOsDependentToolScriptName()).thenReturn("sqlics");
-    PhpCodesnifferExecutor executor = new PhpCodesnifferExecutor(c);
-    executor.execute();
     Mockito.verify(c);
   }
 
