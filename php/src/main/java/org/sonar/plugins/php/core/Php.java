@@ -20,8 +20,6 @@
 
 package org.sonar.plugins.php.core;
 
-import java.util.Arrays;
-
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.AbstractLanguage;
 
