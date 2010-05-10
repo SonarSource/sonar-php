@@ -73,7 +73,7 @@ public class Php extends AbstractLanguage {
    * @see org.sonar.api.resources.Language#getFileSuffixes()
    */
   public String[] getFileSuffixes() {
-    return Arrays.copyOf(SUFFIXES, SUFFIXES.length);
+    return SUFFIXES;
   }
 
 }
