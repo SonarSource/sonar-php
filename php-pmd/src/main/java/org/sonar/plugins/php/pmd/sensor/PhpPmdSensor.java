@@ -131,7 +131,7 @@ public class PhpPmdSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return Php.INSTANCE.equals(project.getLanguage());
+    return getConfiguration(project).isShouldRun() && Php.INSTANCE.equals(project.getLanguage());
   }
 
   /***

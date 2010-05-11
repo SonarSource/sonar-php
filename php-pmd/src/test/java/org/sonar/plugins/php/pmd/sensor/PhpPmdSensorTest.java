@@ -34,6 +34,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
@@ -51,8 +52,7 @@ public class PhpPmdSensorTest {
    */
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
-    Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(Java.INSTANCE);
+    Project project = getMockProject(Java.INSTANCE);
     PhpPmdSensor sensor = new PhpPmdSensor();
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
@@ -62,10 +62,9 @@ public class PhpPmdSensorTest {
    */
   @Test
   public void shouldLaunchOnPhpProject() {
-    Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
+    Project project = getMockProject(Php.INSTANCE);
     PhpPmdSensor sensor = new PhpPmdSensor();
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
+    assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
   /**
@@ -93,6 +92,27 @@ public class PhpPmdSensorTest {
     SensorContext context = mock(SensorContext.class);
     sensor.analyse(project, context);
     verify(context, never()).saveViolation(any(Violation.class));
+  }
+
+  /**
+   * @return a mock project used by all tests cases in this class.
+   */
+  private Project getMockProject(AbstractLanguage language) {
+    Project project = mock(Project.class);
+    when(project.getLanguage()).thenReturn(language);
+    Configuration configuration = mock(Configuration.class);
+
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
+    when(configuration.getString(PhpPmdConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, PhpPmdConfiguration.DEFAULT_REPORT_FILE_NAME))
+        .thenReturn("tot.xml");
+    when(configuration.getString(PhpPmdConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PhpPmdConfiguration.DEFAULT_REPORT_FILE_PATH))
+        .thenReturn(PhpPmdConfiguration.DEFAULT_REPORT_FILE_PATH);
+    when(project.getConfiguration()).thenReturn(configuration);
+    return project;
   }
 
 }
