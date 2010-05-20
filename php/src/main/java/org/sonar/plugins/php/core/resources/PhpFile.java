@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.resources.DefaultProjectFileSystem;
@@ -282,6 +284,20 @@ public class PhpFile extends Resource<PhpPackage> {
     String patternWithoutFileSuffix = StringUtils.substringBeforeLast(antPattern, ".");
     WildcardPattern matcher = WildcardPattern.create(patternWithoutFileSuffix, ".");
     return matcher.match(getKey());
+  }
+
+  /**
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    builder.append("filename", filename);
+    builder.append("longName", longName);
+    builder.append("packageKey", packageKey);
+    builder.append("parent", parent);
+    builder.append("unitTest", unitTest);
+    return builder.toString();
   }
 
 }
