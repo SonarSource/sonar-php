@@ -32,7 +32,7 @@ import org.sonar.plugins.php.core.Php;
 public class PhpPackage extends Resource {
 
   /** The Constant DEFAULT_PACKAGE_NAME. */
-  public static final String DEFAULT_PACKAGE_NAME = "";
+  public static final String DEFAULT_PACKAGE_NAME = "(default)";
 
   /**
    * Instantiates a new php package.
