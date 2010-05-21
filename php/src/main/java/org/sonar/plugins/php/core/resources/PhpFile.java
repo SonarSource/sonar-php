@@ -90,13 +90,13 @@ public class PhpFile extends Resource<PhpPackage> {
    * 
    * @param file
    *          the file to load
-   * @param unitTest
+   * @param isUnitTest
    *          if <code>true</code> the given resource will be marked as a unit test, otherwise it will be marked has a class
    * @param dirs
    *          the dirs
    * @return the php file
    */
-  public static PhpFile fromIOFile(File file, List<File> dirs, boolean unitTest) {
+  public static PhpFile fromIOFile(File file, List<File> dirs, boolean isUnitTest) {
     // If the file has a valid suffix
     if (file == null || !Php.hasValidSuffixes(file.getName())) {
       return null;
@@ -104,16 +104,16 @@ public class PhpFile extends Resource<PhpPackage> {
     String relativePath = DefaultProjectFileSystem.getRelativePath(file, dirs);
     // and can be found in the given directories
     if (relativePath != null) {
-      String pacname = null;
-      String classname = relativePath;
+      String packageName = null;
+      String className = relativePath;
 
       if (relativePath.indexOf('/') >= 0) {
-        pacname = StringUtils.substringBeforeLast(relativePath, "/");
-        pacname = StringUtils.replace(pacname, "/", ".");
-        classname = StringUtils.substringAfterLast(relativePath, "/");
+        packageName = StringUtils.substringBeforeLast(relativePath, "/");
+        packageName = StringUtils.replace(packageName, "/", ".");
+        className = StringUtils.substringAfterLast(relativePath, "/");
       }
-      classname = StringUtils.substringBeforeLast(classname, ".");
-      return new PhpFile(pacname, classname, unitTest);
+      className = StringUtils.substringBeforeLast(className, ".");
+      return new PhpFile(packageName, className, isUnitTest);
     }
     return null;
   }
@@ -178,13 +178,13 @@ public class PhpFile extends Resource<PhpPackage> {
    * 
    * @param className
    *          String representing the class name
-   * @param unitTest
+   * @param isUnitTest
    *          String representing the unit test
    * @param aPackageName
    *          the a package name
    */
-  public PhpFile(String packageKey, String className, boolean unitTest) {
-    LOG.debug("aPackageName=[" + packageKey + "], className=[" + className + "], unitTest=[" + unitTest + "]");
+  public PhpFile(String packageKey, String className, boolean isUnitTest) {
+    LOG.debug("aPackageName=[" + packageKey + "], className=[" + className + "], unitTest=[" + isUnitTest + "]");
     if (className == null) {
       throw new IllegalArgumentException("Php filename can not be null");
     }
@@ -203,7 +203,7 @@ public class PhpFile extends Resource<PhpPackage> {
       this.longName = key;
     }
     setKey(key);
-    this.unitTest = unitTest;
+    this.unitTest = isUnitTest;
   }
 
   /**
