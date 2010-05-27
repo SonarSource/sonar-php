@@ -20,6 +20,9 @@
 
 package org.sonar.plugins.php.pmd.xml;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -307,13 +310,7 @@ public class Rule implements Comparable<String> {
    */
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((className == null) ? 0 : className.hashCode());
-    result = prime * result + ((message == null) ? 0 : message.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((priority == null) ? 0 : priority.hashCode());
-    return result;
+    return new HashCodeBuilder(1, 31).append(className).append(message).append(name).append(priority).toHashCode();
   }
 
   /*
@@ -333,35 +330,8 @@ public class Rule implements Comparable<String> {
       return false;
     }
     Rule other = (Rule) obj;
-    if (className == null) {
-      if (other.className != null) {
-        return false;
-      }
-    } else if ( !className.equals(other.className)) {
-      return false;
-    }
-    if (message == null) {
-      if (other.message != null) {
-        return false;
-      }
-    } else if ( !message.equals(other.message)) {
-      return false;
-    }
-    if (name == null) {
-      if (other.name != null) {
-        return false;
-      }
-    } else if ( !name.equals(other.name)) {
-      return false;
-    }
-    if (priority == null) {
-      if (other.priority != null) {
-        return false;
-      }
-    } else if ( !priority.equals(other.priority)) {
-      return false;
-    }
-    return true;
+    return new EqualsBuilder().append(className, other.className).append(message, other.message).append(name, other.name).append(priority,
+        other.priority).isEquals();
   }
 
 }
