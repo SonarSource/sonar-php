@@ -151,7 +151,7 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    */
   public PhpUnitConfiguration(Project aProject) {
     super();
-    init(aProject);
+    super.init(aProject);
   }
 
   /**
