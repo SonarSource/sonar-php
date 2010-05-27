@@ -117,7 +117,7 @@ public class PhpCodesnifferConfiguration extends PhpPluginAbstractConfiguration 
    */
   public PhpCodesnifferConfiguration(Project pom) {
     super();
-    init(pom);
+    super.init(pom);
   }
 
   /**
