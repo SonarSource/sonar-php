@@ -91,7 +91,6 @@ public class PhpUnitResultParser {
     InputStream inputStream = null;
     try {
       XStream xstream = new XStream();
-      // xstream.aliasSystemAttribute("classType", "class");
       xstream.aliasSystemAttribute("className", "class");
       xstream.processAnnotations(TestSuites.class);
       xstream.processAnnotations(TestSuite.class);
@@ -129,9 +128,7 @@ public class PhpUnitResultParser {
    *          the execution context
    */
   private void insertZeroWhenNoReports(Project project, SensorContext context) {
-    // if ( !"php".equalsIgnoreCase(project.getPom().getPackaging())) {
     context.saveMeasure(CoreMetrics.TESTS, 0.0);
-    // }
   }
 
   /**

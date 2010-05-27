@@ -33,8 +33,6 @@ import org.sonar.plugins.php.phpunit.xml.TestSuite;
  */
 public class PhpTestSuiteReader {
 
-  // private static final int SCALE_PRECISION = 10;
-  // private static final int MILLISECONDS = 1000;
   /**
    * FIXME: Due to a inconsistent XML format in phpUnit, we have to parse enclosing testsuite name for generated testcases when a testcase
    * holds the annotation dataProvider.
@@ -61,10 +59,6 @@ public class PhpTestSuiteReader {
       report.setErrors(report.getErrors() + 1);
     }
     report.setTests(report.getTests() + 1);
-    // if ( !Double.isNaN(testCase.getTime())) {
-    // Double scaled = ParsingUtils.scaleValue(testCase.getTime(), SCALE_PRECISION);
-    // report.setTime(report.getTime() + scaled.intValue());
-    // }
     report.getDetails().add(testCase);
   }
 
