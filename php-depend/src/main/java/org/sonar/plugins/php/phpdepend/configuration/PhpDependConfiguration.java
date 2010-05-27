@@ -132,16 +132,7 @@ public class PhpDependConfiguration extends PhpPluginAbstractConfiguration {
    */
   public PhpDependConfiguration(Project project) {
     super();
-    init(project);
-  }
-
-  /**
-   * Gets the command line path.
-   * 
-   * @return the command line path
-   */
-  protected String getCommandLinePath() {
-    return getProject().getConfiguration().getString(KEY_PATH, COMMAND_LINE_DEFAUT_PATH);
+    super.init(project);
   }
 
   /**
