@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.AbstractSourceImporter;
@@ -114,6 +116,17 @@ public class PhpSourceImporter extends AbstractSourceImporter {
     }
     parseDirs(context, fileSystem.getTestFiles(new Language[] { Php.INSTANCE }), fileSystem.getTestDirs(), true, fileSystem
         .getSourceCharset());
+  }
+
+  /**
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    builder.append("getLanguage()", getLanguage());
+    builder.append("getClass()", getClass());
+    return builder.toString();
   }
 
 }
