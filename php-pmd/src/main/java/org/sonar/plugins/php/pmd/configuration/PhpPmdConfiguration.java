@@ -118,7 +118,7 @@ public class PhpPmdConfiguration extends PhpPluginAbstractConfiguration {
    *          the project
    */
   public PhpPmdConfiguration(Project project) {
-    init(project);
+    super.init(project);
   }
 
   /**
