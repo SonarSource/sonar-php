@@ -53,6 +53,10 @@ public class PhpUnitResultParser {
 
   private static final double PERCENT = 100d;
 
+  private static final double MILLISECONDS = 1000d;
+
+  private static final int PRECISION = 1;
+
   /** The logger. */
   private static Logger logger = LoggerFactory.getLogger(PhpUnitResultParser.class);
 
@@ -125,9 +129,9 @@ public class PhpUnitResultParser {
    *          the execution context
    */
   private void insertZeroWhenNoReports(Project project, SensorContext context) {
-    if ( !"pom".equalsIgnoreCase(project.getPom().getPackaging())) {
-      context.saveMeasure(CoreMetrics.TESTS, 0.0);
-    }
+    // if ( !"php".equalsIgnoreCase(project.getPom().getPackaging())) {
+    context.saveMeasure(CoreMetrics.TESTS, 0.0);
+    // }
   }
 
   /**
@@ -140,7 +144,7 @@ public class PhpUnitResultParser {
     if (reportFile == null) {
       insertZeroWhenNoReports(project, context);
     } else {
-      logger.info("Parsing file : {0}", reportFile.getName());
+      logger.info("Parsing file : ", reportFile.getName());
       parseFile(context, reportFile, project);
     }
   }
@@ -219,10 +223,11 @@ public class PhpUnitResultParser {
       if (fileReport.getSkipped() > 0) {
         saveClassMeasure(context, fileReport, CoreMetrics.SKIPPED_TESTS, fileReport.getSkipped(), project);
       }
+      double duration = Math.round(fileReport.getTime() * MILLISECONDS);
+      saveClassMeasure(context, fileReport, CoreMetrics.TEST_EXECUTION_TIME, duration, project);
       saveClassMeasure(context, fileReport, CoreMetrics.TESTS, testsCount, project);
       saveClassMeasure(context, fileReport, CoreMetrics.TEST_ERRORS, fileReport.getErrors(), project);
       saveClassMeasure(context, fileReport, CoreMetrics.TEST_FAILURES, fileReport.getFailures(), project);
-      saveClassMeasure(context, fileReport, CoreMetrics.TEST_EXECUTION_TIME, fileReport.getTime(), project);
       double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
       if (testsCount > 0) {
         double percentage = passedTests * PERCENT / testsCount;
@@ -243,22 +248,23 @@ public class PhpUnitResultParser {
    *          the project
    */
   private void saveTestsDetails(SensorContext context, PhpUnitTestReport fileReport, Project project) {
-    StringBuilder testCaseDetails = new StringBuilder();
-    testCaseDetails.append("<tests-details>");
+    StringBuilder details = new StringBuilder();
+    details.append("<tests-details>");
     for (TestCase detail : fileReport.getDetails()) {
-      testCaseDetails.append("<testcase status=\"").append(detail.getStatus()).append("\" time=\"").append(detail.getTime()).append(
-          "\" name=\"").append(detail.getName().replaceAll(" ", "_")).append("\"");
+      double time = ParsingUtils.scaleValue(detail.getTime() * MILLISECONDS, PRECISION);
+      details.append("<testcase status=\"").append(detail.getStatus()).append("\" time=\"");
+      details.append(time).append("\" name=\"").append(detail.getName().replaceAll(" ", "_")).append("\"");
       boolean isError = TestCase.STATUS_ERROR.equals(detail.getStatus());
       if (isError || TestCase.STATUS_FAILURE.equals(detail.getStatus())) {
-        testCaseDetails.append(">").append(isError ? "<error message=\"" : "<failure message=\"");
-        testCaseDetails.append(StringEscapeUtils.escapeXml(detail.getErrorMessage())).append("\"><![CDATA[");
-        testCaseDetails.append(StringEscapeUtils.escapeXml(detail.getStackTrace())).append("]]>");
-        testCaseDetails.append(isError ? "</error>" : "</failure>").append("</testcase>");
+        details.append(">").append(isError ? "<error message=\"" : "<failure message=\"");
+        details.append(StringEscapeUtils.escapeXml(detail.getErrorMessage())).append("\"><![CDATA[");
+        details.append(StringEscapeUtils.escapeXml(detail.getStackTrace())).append("]]>");
+        details.append(isError ? "</error>" : "</failure>").append("</testcase>");
       } else {
-        testCaseDetails.append("/>");
+        details.append("/>");
       }
     }
-    testCaseDetails.append("</tests-details>");
-    context.saveMeasure(getUnitTestResource(fileReport, project), new Measure(CoreMetrics.TEST_DATA, testCaseDetails.toString()));
+    details.append("</tests-details>");
+    context.saveMeasure(getUnitTestResource(fileReport, project), new Measure(CoreMetrics.TEST_DATA, details.toString()));
   }
 }

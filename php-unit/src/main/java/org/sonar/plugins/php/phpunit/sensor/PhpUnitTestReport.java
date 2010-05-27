@@ -22,6 +22,7 @@ package org.sonar.plugins.php.phpunit.sensor;
 
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
 /**
@@ -51,7 +52,7 @@ public class PhpUnitTestReport {
   private int tests = 0;
 
   /** The time. */
-  private int time = 0;
+  private double time = 0;
 
   /**
    * Gets the class key.
@@ -121,7 +122,7 @@ public class PhpUnitTestReport {
    * 
    * @return the time
    */
-  public int getTime() {
+  public double getTime() {
     return time;
   }
 
@@ -210,8 +211,25 @@ public class PhpUnitTestReport {
    * @param time
    *          the new time
    */
-  public void setTime(int time) {
+  public void setTime(double time) {
     this.time = time;
+  }
+
+  /**
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    ToStringBuilder builder = new ToStringBuilder(this);
+    builder.append("classKey", classKey);
+    builder.append("details", details);
+    builder.append("errors", errors);
+    builder.append("failures", failures);
+    builder.append("file", file);
+    builder.append("skipped", skipped);
+    builder.append("tests", tests);
+    builder.append("time", time);
+    return builder.toString();
   }
 
 }

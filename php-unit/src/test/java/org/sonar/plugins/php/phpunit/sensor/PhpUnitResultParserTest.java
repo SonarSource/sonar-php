@@ -70,9 +70,9 @@ public class PhpUnitResultParserTest {
       when(project.getFileSystem()).thenReturn(fs);
       when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
       when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-      when(mavenProject.getPackaging()).thenReturn("maven-plugin");
-      when(config.getReportFile()).thenReturn(
-          new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml").getFile()));
+      when(mavenProject.getPackaging()).thenReturn("php");
+      File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml").getFile());
+      when(config.getReportFile()).thenReturn(reportFile);
       PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
       parser.parse(config.getReportFile());
     } catch (Exception e) {
@@ -170,7 +170,13 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateTestExecutionTimeMeasures() {
     metric = CoreMetrics.TEST_EXECUTION_TIME;
     init();
-    verify(context).saveMeasure(new PhpFile("Monkey", true), metric, 447.0);
+    PhpFile monkey = new PhpFile("Monkey", true);
+    verify(context).saveMeasure(monkey, metric, 447.0);
+    verify(context).saveMeasure(monkey, CoreMetrics.TESTS, 3.0);
+    verify(context).saveMeasure(monkey, CoreMetrics.TEST_ERRORS, 1.0);
+    verify(context).saveMeasure(monkey, CoreMetrics.TEST_FAILURES, 2.0);
+    verify(context).saveMeasure(monkey, CoreMetrics.TEST_FAILURES, 2.0);
+    verify(context).saveMeasure(monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
     verify(context).saveMeasure(new PhpFile("Banana", true), metric, 570.0);
   }
 
