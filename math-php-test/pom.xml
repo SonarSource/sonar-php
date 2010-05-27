@@ -1,0 +1,23 @@
+<!-- this maven file is used by sonar only. Project is built with ant (see build.xml). -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sqli</groupId>
+  <artifactId>mathematics</artifactId>
+  <name>PHP Mathematics</name>
+  <version>1.0</version>  
+  <packaging>pom</packaging>
+  
+  <build>
+   <sourceDirectory>${basedir}/source</sourceDirectory>
+   <testSourceDirectory>${basedir}/source/tests</testSourceDirectory>
+ </build>
+
+  <properties>
+    <sonar.phpUnit.coverage.shouldRun>true</sonar.phpUnit.coverage.shouldRun>
+	  <sonar.phpUnit.mainTestClass>/source/tests/AllTests2.php</sonar.phpUnit.mainTestClass>
+	  <sonar.language>php</sonar.language>
+	  <sonar.dynamicAnalysis>true</sonar.dynamicAnalysis>
+  </properties>
+
+</project>
