@@ -112,4 +112,78 @@ public class PhpCodesnifferConfigurationTest {
     PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer-summary.xml");
   }
+
+  /**
+   * Should return custom report file with custom path.
+   */
+  @Test
+  public void shouldReturnIgnoreList() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME)).thenReturn("codesniffer-summary.xml");
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
+    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer-summary.xml");
+
+    when(project.getConfiguration().getStringArray(PhpCodesnifferConfiguration.IGNORE_ARGUMENT_KEY)).thenReturn(new String[] { "a", "b" });
+    assertEquals("a,b", config.getIgnoreList());
+
+    when(project.getConfiguration().getStringArray(PhpCodesnifferConfiguration.IGNORE_ARGUMENT_KEY)).thenReturn(new String[] { "a" });
+    assertEquals("a", config.getIgnoreList());
+
+    when(project.getConfiguration().getStringArray(PhpCodesnifferConfiguration.IGNORE_ARGUMENT_KEY)).thenReturn(new String[] { "" });
+    assertEquals("", config.getIgnoreList());
+
+    when(project.getConfiguration().getStringArray(PhpCodesnifferConfiguration.IGNORE_ARGUMENT_KEY)).thenReturn(new String[] {});
+    assertEquals(null, config.getIgnoreList());
+  }
+
+  /**
+   * Should return custom report file with custom path.
+   */
+  @Test
+  public void shouldReturnLevelAndCommandLine() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME)).thenReturn("codesniffer-summary.xml");
+    when(
+        configuration.getString(PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpCodesnifferConfiguration config = new PhpCodesnifferConfiguration(project);
+    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer-summary.xml");
+
+    when(
+        project.getConfiguration().getString(PhpCodesnifferConfiguration.LEVEL_ARGUMENT_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_LEVEL_ARGUMENT)).thenReturn("warning");
+    assertEquals("warning", config.getLevel());
+    when(
+        project.getConfiguration().getString(PhpCodesnifferConfiguration.LEVEL_ARGUMENT_KEY,
+            PhpCodesnifferConfiguration.DEFAULT_LEVEL_ARGUMENT)).thenReturn(null);
+    assertEquals(null, config.getLevel());
+
+    assertEquals("sqlics", config.getCommandLine());
+
+  }
 }
