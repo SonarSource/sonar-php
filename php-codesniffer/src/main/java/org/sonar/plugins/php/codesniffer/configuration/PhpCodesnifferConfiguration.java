@@ -101,14 +101,6 @@ public class PhpCodesnifferConfiguration extends PhpPluginAbstractConfiguration 
   /** The Constant COMMAND_LINE. */
   private static final String COMMAND_LINE = "sqlics";
 
-  // Only for unit tests
-  /**
-   * Instantiates a new php checkstyle configuration.
-   */
-  protected PhpCodesnifferConfiguration() {
-    super();
-  }
-
   /**
    * Instantiates a new php checkstyle configuration.
    * 

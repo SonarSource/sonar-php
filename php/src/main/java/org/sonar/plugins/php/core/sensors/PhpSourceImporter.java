@@ -102,20 +102,27 @@ public class PhpSourceImporter extends AbstractSourceImporter {
    *           Signals that an I/O exception has occurred.
    */
   protected void doAnalyse(Project project, SensorContext context) throws IOException {
-
     // Importing source files
     ProjectFileSystem fileSystem = project.getFileSystem();
-    for (File sourceDir : fileSystem.getSourceDirs()) {
-      LOG.info(sourceDir.getName());
-    }
-    parseDirs(context, fileSystem.getSourceFiles(new Language[] { Php.INSTANCE }), fileSystem.getSourceDirs(), false, fileSystem
-        .getSourceCharset());
+    List<File> sourceDirs = fileSystem.getSourceDirs();
+    Language[] language = new Language[] { Php.INSTANCE };
+    List<File> sourceFiles = fileSystem.getSourceFiles(language);
+    parseDirs(context, sourceFiles, sourceDirs, false, fileSystem.getSourceCharset());
+
     // Importing tests files
-    for (File sourceDir : fileSystem.getTestDirs()) {
-      LOG.info(sourceDir.getName());
+    List<File> testDirs = fileSystem.getTestDirs();
+    List<File> testFiles = fileSystem.getTestFiles(language);
+    parseDirs(context, testFiles, testDirs, true, fileSystem.getSourceCharset());
+
+    // Display source dirs and tests directories if info level is enabled.
+    if (LOG.isInfoEnabled()) {
+      for (File directory : sourceDirs) {
+        LOG.info(directory.getName());
+      }
+      for (File directory : testDirs) {
+        LOG.info(directory.getName());
+      }
     }
-    parseDirs(context, fileSystem.getTestFiles(new Language[] { Php.INSTANCE }), fileSystem.getTestDirs(), true, fileSystem
-        .getSourceCharset());
   }
 
   /**

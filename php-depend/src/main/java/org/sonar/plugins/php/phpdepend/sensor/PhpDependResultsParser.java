@@ -218,9 +218,9 @@ public class PhpDependResultsParser {
         collectFunctionsMeasures(funcNode, file, methodComplexityDistribution);
       }
     }
-    String fileName = fileNode.getFileName();
-    context.saveMeasure(new PhpFile(fileName), classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
-    context.saveMeasure(new PhpFile(fileName), methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+    //String fileName = fileNode.getFileName();
+    context.saveMeasure(file, classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+    context.saveMeasure(file, methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
   }
 
   /**
