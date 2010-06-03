@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.codehaus.sonar-plugins</groupId>
     <artifactId>sonar-php</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <relativePath>../</relativePath>
   </parent>
   <artifactId>sonar-php-depend-plugin</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <packaging>jar</packaging>
   <name>Sonar PHP Depend plugin</name>
   <dependencies>
@@ -20,7 +20,7 @@
     <dependency>
       <groupId>org.codehaus.sonar-plugins</groupId>
       <artifactId>sonar-php-plugin</artifactId>
-      <version>0.2-SNAPSHOT</version>
+      <version>0.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
