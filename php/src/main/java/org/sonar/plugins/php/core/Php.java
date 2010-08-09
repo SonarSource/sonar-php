@@ -20,6 +20,7 @@
 
 package org.sonar.plugins.php.core;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.AbstractLanguage;
 
@@ -28,17 +29,24 @@ import org.sonar.api.resources.AbstractLanguage;
  */
 public class Php extends AbstractLanguage {
 
+  private Configuration configuration;
+	
   /** The php language name */
   public static final String PHP_LANGUAGE_NAME = "PHP";
 
   /** An php instance. */
-  public static final Php INSTANCE = new Php();
+  public static Php INSTANCE;
 
   /** The php language key. */
   public static final String KEY = "php";
+  
+  public Php(Configuration configuration) {
+	    super(KEY, PHP_LANGUAGE_NAME);
+	    this.configuration = configuration;
 
-  /** All the valid php files suffixes. */
-  private static final String[] SUFFIXES = { "php", "php3", "php4", "php5", "phtml", "inc" };
+	    // See SONAR-1461
+	    INSTANCE = this;
+  }
 
   /**
    * Allows to know if the given file name has a valid suffix.
@@ -49,7 +57,7 @@ public class Php extends AbstractLanguage {
    */
   public static boolean hasValidSuffixes(String fileName) {
     String pathLowerCase = StringUtils.lowerCase(fileName);
-    for (String suffix : SUFFIXES) {
+    for (String suffix : INSTANCE.getFileSuffixes()) {
       if (pathLowerCase.endsWith("." + StringUtils.lowerCase(suffix))) {
         return true;
       }
@@ -60,9 +68,9 @@ public class Php extends AbstractLanguage {
   /**
    * Default constructor.
    */
-  public Php() {
-    super(KEY, PHP_LANGUAGE_NAME);
-  }
+//  public Php() {
+//    super(KEY, PHP_LANGUAGE_NAME);
+//  }
 
   /**
    * Gets the file suffixes.
@@ -71,7 +79,11 @@ public class Php extends AbstractLanguage {
    * @see org.sonar.api.resources.Language#getFileSuffixes()
    */
   public String[] getFileSuffixes() {
-    return SUFFIXES.clone();
+     String[] suffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
+     if (suffixes == null || suffixes.length == 0) {
+       suffixes = StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES, ",");
+     }
+     return suffixes;
   }
 
 }

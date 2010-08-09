@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.sonar.api.Extension;
 import org.sonar.api.Plugin;
+import org.sonar.api.Properties;
+import org.sonar.api.Property;
 import org.sonar.plugins.php.core.decorators.PhpDirectoryDecorator;
 import org.sonar.plugins.php.core.decorators.PhpFilesDecorator;
 import org.sonar.plugins.php.core.sensors.PhpSourceImporter;
@@ -33,7 +35,18 @@ import org.sonar.plugins.php.cpd.PhpCpdMapping;
 /**
  * This class is the sonar entry point of this plugin. It declares all the extension that can be launched with this plugin
  */
+@Properties({
+	  @Property(key = PhpPlugin.FILE_SUFFIXES_KEY, defaultValue = PhpPlugin.DEFAULT_SUFFIXES, name = "File suffixes",
+	      description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.",
+	  global=true,
+	  project = true)
+	})
 public class PhpPlugin implements Plugin {
+
+  /** All the valid php files suffixes. */
+  public static final String DEFAULT_SUFFIXES = "php,php3,php4,php5,phtml,inc";
+
+  public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
 
   /** The php plugin key. */
   public static final String KEY = "PHP Language";
