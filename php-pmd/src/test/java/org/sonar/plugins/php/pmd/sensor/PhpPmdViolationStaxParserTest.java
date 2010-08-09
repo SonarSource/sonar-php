@@ -33,6 +33,7 @@ import java.util.Arrays;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.configuration.Configuration;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Test;
@@ -48,6 +49,8 @@ import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RulesManager;
 import org.sonar.api.rules.Violation;
 import org.sonar.api.test.IsViolation;
+import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.core.resources.PhpFile;
 
 /**
@@ -102,12 +105,15 @@ public class PhpPmdViolationStaxParserTest {
   @Test
   public void shouldSaveViolationsOnClasses() throws URISyntaxException, XMLStreamException {
     SensorContext context = mock(SensorContext.class);
+	Configuration configuration = mock(Configuration.class);
+	Php php = new Php(configuration);
+	when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
     parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result.xml");
 
     verify(context, times(30)).saveViolation(argThat(new IsViolationOnPhpClass()));
-    verify(context, times(4)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("earth/animal/MonkeyWithComments"))));
+    verify(context, times(4)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("earth/animal/MonkeyWithComments.php"))));
 
-    Violation wanted = new Violation(null, new PhpFile("earth/animal/MonkeyWithComments")).setMessage(
+    Violation wanted = new Violation(null, new PhpFile("earth/animal/MonkeyWithComments.php")).setMessage(
         "Avoid unused local variables such as 'toto'.").setLineId(22);
     verify(context, times(1)).saveViolation(argThat(new IsViolation(wanted)));
   }
@@ -124,7 +130,7 @@ public class PhpPmdViolationStaxParserTest {
   public void defaultPackageShouldBeSetOnclassWithoutPackage() throws URISyntaxException, XMLStreamException {
     SensorContext context = mock(SensorContext.class);
     parse(context, "/org/sonar/plugins/php/pmd/php-pmd-class-without-package.xml");
-    verify(context, times(3)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("ClassOnDefaultPackage"))));
+    verify(context, times(3)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("ClassOnDefaultPackage.php"))));
   }
 
   /**
@@ -139,7 +145,7 @@ public class PhpPmdViolationStaxParserTest {
   public void unknownXMLEntity() throws URISyntaxException, XMLStreamException {
     SensorContext context = mock(SensorContext.class);
     parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result-with-unknown-entity.xml");
-    verify(context, times(2)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("animal/Monkey"))));
+    verify(context, times(2)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("animal/Monkey.php"))));
   }
 
   /**
@@ -154,7 +160,7 @@ public class PhpPmdViolationStaxParserTest {
   public void ISOControlCharsXMLFile() throws URISyntaxException, XMLStreamException {
     SensorContext context = mock(SensorContext.class);
     parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result-with-control-char.xml");
-    verify(context, times(1)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("animal/Monkey"))));
+    verify(context, times(1)).saveViolation(argThat(new IsViolationOnPhpClass(new PhpFile("animal/Monkey.php"))));
   }
 
   /**
