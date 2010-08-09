@@ -35,6 +35,7 @@ import java.util.Arrays;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.invocation.InvocationOnMock;
@@ -49,6 +50,8 @@ import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RulesManager;
 import org.sonar.api.rules.Violation;
 import org.sonar.api.test.IsViolation;
+import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.core.resources.PhpFile;
 
 /**
@@ -86,6 +89,11 @@ public class PhpCodesnifferViolationsXmlParserTest {
         return new Rule((String) args[1], (String) args[1], null, (String) args[0], "");
       }
     });
+
+    Configuration configuration = mock(Configuration.class);
+	Php php = new Php(configuration);
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+
     RulesProfile profile = mock(RulesProfile.class);
     when(profile.getActiveRule(anyString(), anyString())).thenReturn(new ActiveRule(null, null, RulePriority.MINOR));
     PhpCheckStyleViolationsXmlParser parser = new PhpCheckStyleViolationsXmlParser(project, context, manager);
@@ -154,7 +162,7 @@ public class PhpCodesnifferViolationsXmlParserTest {
     parse(context, "/org/sonar/plugins/php/codesniffer/PhpCodesnifferViolationsXmlParserTest/codesniffer-simple-result.xml");
 
     Violation wanted = new Violation(new Rule("PHP CODESNIFFER", "GN/Commenting/ClassCommentSniff/MISSING_CLASS_COMMENT"), new PhpFile(
-        "org/sonar/mvn/BaseSonarMojo.php"));
+        "org/sonar/mvn/BaseSonarMojo.php5"));
     wanted.setMessage("Commentaire de classe manquant.");
     verify(context).saveViolation(argThat(new IsViolation(wanted)));
   }
