@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -39,6 +40,8 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.core.resources.PhpFile;
 
 /**
@@ -54,12 +57,16 @@ public class PhpDependResultsParserTest {
 
   private Project project;
 
+  private static final String PDEPEND_RESULT = "/org/sonar/plugins/php/phpdepend/sensor/PhpDependResultsParserTest/pdepend.xml";
+  private static final String PDEPEND_RESULT_SAMEFILE_DIFFERBYFSUFFIX = "/org/sonar/plugins/php/phpdepend/sensor/PhpDependResultsParserTest/pdepend.samefiledifferbysuffix.xml";
+  
+  
   /**
    * Inits the result parser.
    */
-  private void init() {
+  private void init(String pdependResultFile) {
     try {
-      File xmlReport = new File(getClass().getResource("/org/sonar/plugins/php/phpdepend/sensor/PhpDependResultsParserTest/pdepend.xml")
+      File xmlReport = new File(getClass().getResource(pdependResultFile)
           .toURI());
       context = mock(SensorContext.class);
       project = mock(Project.class);
@@ -70,6 +77,11 @@ public class PhpDependResultsParserTest {
       Set<Metric> metrics = new HashSet<Metric>();
       metrics.add(metric);
       PhpDependResultsParser parser = new PhpDependResultsParser(project, context, metrics);
+      
+  	  Configuration configuration = mock(Configuration.class);
+	  Php php = new Php(configuration);
+      when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+      
       parser.parse(xmlReport);
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -103,7 +115,7 @@ public class PhpDependResultsParserTest {
   @Test
   public void shouldNotThrowAnExceptionIfMetricNotFound() {
     metric = new Metric("not a true metric");
-    init();
+    init(PDEPEND_RESULT);
     verify(context, never()).saveMeasure(eq(metric), anyDouble());
   }
 
@@ -113,11 +125,11 @@ public class PhpDependResultsParserTest {
   @Test
   public void shouldGenerateLocMeasures() {
     metric = CoreMetrics.LINES;
-    init();
-    verify(context).saveMeasure(new PhpFile("Money"), metric, 188.0);
-    verify(context).saveMeasure(new PhpFile("MoneyBag"), metric, 251.0);
-    verify(context).saveMeasure(new PhpFile("MoneyTest"), metric, 255.0);
-    verify(context).saveMeasure(new PhpFile("Common/IMoney"), metric, 74.0);
+    init(PDEPEND_RESULT);
+    verify(context).saveMeasure(new PhpFile("MoneyTest.php", true), metric, 255.0);
+    verify(context).saveMeasure(new PhpFile("Money.php"), metric, 188.0);
+    verify(context).saveMeasure(new PhpFile("MoneyBag.php"), metric, 251.0);
+    verify(context).saveMeasure(new PhpFile("Common/IMoney.php"), metric, 74.0);
   }
 
   /**
@@ -126,11 +138,11 @@ public class PhpDependResultsParserTest {
   @Test
   public void shouldGenerateNclocMeasures() {
     metric = CoreMetrics.NCLOC;
-    init();
-    verify(context).saveMeasure(new PhpFile("Money"), metric, 94.0);
-    verify(context).saveMeasure(new PhpFile("MoneyBag"), metric, 150.0);
-    verify(context).saveMeasure(new PhpFile("MoneyTest"), metric, 152.0);
-    verify(context).saveMeasure(new PhpFile("Common/IMoney"), metric, 15.0);
+    init(PDEPEND_RESULT);
+    verify(context).saveMeasure(new PhpFile("Money.php"), metric, 94.0);
+    verify(context).saveMeasure(new PhpFile("MoneyBag.php"), metric, 150.0);
+    verify(context).saveMeasure(new PhpFile("MoneyTest.php"), metric, 152.0);
+    verify(context).saveMeasure(new PhpFile("Common/IMoney.php"), metric, 15.0);
   }
 
   /**
@@ -139,11 +151,11 @@ public class PhpDependResultsParserTest {
   @Test
   public void shouldGenerateFunctionsCountMeasure() {
     metric = CoreMetrics.FUNCTIONS;
-    init();
-    verify(context).saveMeasure(new PhpFile("Money"), metric, 16.0);
-    verify(context).saveMeasure(new PhpFile("MoneyBag"), metric, 18.0);
-    verify(context).saveMeasure(new PhpFile("MoneyTest"), metric, 24.0);
-    verify(context).saveMeasure(new PhpFile("Common/IMoney"), metric, 8.0);
+    init(PDEPEND_RESULT);
+    verify(context).saveMeasure(new PhpFile("Money.php"), metric, 16.0);
+    verify(context).saveMeasure(new PhpFile("MoneyBag.php"), metric, 18.0);
+    verify(context).saveMeasure(new PhpFile("MoneyTest.php"), metric, 24.0);
+    verify(context).saveMeasure(new PhpFile("Common/IMoney.php"), metric, 8.0);
   }
 
   /**
@@ -152,11 +164,11 @@ public class PhpDependResultsParserTest {
   @Test
   public void shouldGenerateClassesCountMeasure() {
     metric = CoreMetrics.CLASSES;
-    init();
-    verify(context).saveMeasure(new PhpFile("Money"), metric, 2.0);
-    verify(context).saveMeasure(new PhpFile("MoneyBag"), metric, 1.0);
-    verify(context).saveMeasure(new PhpFile("MoneyTest"), metric, 1.0);
-    verify(context).saveMeasure(new PhpFile("Common/IMoney"), metric, 1.0);
+    init(PDEPEND_RESULT);
+    verify(context).saveMeasure(new PhpFile("Money.php"), metric, 2.0);
+    verify(context).saveMeasure(new PhpFile("MoneyBag.php"), metric, 1.0);
+    verify(context).saveMeasure(new PhpFile("MoneyTest.php"), metric, 1.0);
+    verify(context).saveMeasure(new PhpFile("Common/IMoney.php"), metric, 1.0);
   }
 
   /**
@@ -165,11 +177,11 @@ public class PhpDependResultsParserTest {
   @Test
   public void shouldGenerateComplextyMeasure() {
     metric = CoreMetrics.COMPLEXITY;
-    init();
-    verify(context).saveMeasure(new PhpFile("Money"), metric, 21.0);
-    verify(context).saveMeasure(new PhpFile("MoneyBag"), metric, 39.0);
-    verify(context).saveMeasure(new PhpFile("MoneyTest"), metric, 24.0);
-    verify(context).saveMeasure(new PhpFile("Common/IMoney"), metric, 0.0);
+    init(PDEPEND_RESULT);
+    verify(context).saveMeasure(new PhpFile("Money.php"), metric, 21.0);
+    verify(context).saveMeasure(new PhpFile("MoneyBag.php"), metric, 39.0);
+    verify(context).saveMeasure(new PhpFile("MoneyTest.php"), metric, 24.0);
+    verify(context).saveMeasure(new PhpFile("Common/IMoney.php"), metric, 0.0);
   }
 
   /**
@@ -178,12 +190,22 @@ public class PhpDependResultsParserTest {
   @Test
   public void shouldNotGenerateDirOrProjectMeasures() {
     metric = CoreMetrics.LINES;
-    init();
+    init(PDEPEND_RESULT);
 
     verify(context, never()).saveMeasure(eq(metric), anyDouble());
 
     verify(context, never()).saveMeasure(eq(new org.sonar.api.resources.Directory("Sources/main")), eq(metric), anyDouble());
     verify(context, never()).saveMeasure(eq(new org.sonar.api.resources.Directory("Sources/main/Common")), eq(metric), anyDouble());
+  }
+
+  @Test
+  public void shouldGenerateValidMeasuresOnSameFileWithDifferentSuffix() {
+    metric = CoreMetrics.COMPLEXITY;
+    init(PDEPEND_RESULT_SAMEFILE_DIFFERBYFSUFFIX);
+    verify(context).saveMeasure(new PhpFile("MoneyTest.php", true), metric, 24.0);
+    verify(context).saveMeasure(new PhpFile("Money.php"), metric, 21.0);
+    verify(context).saveMeasure(new PhpFile("Money.inc"), metric, 39.0);
+
   }
 
 }
