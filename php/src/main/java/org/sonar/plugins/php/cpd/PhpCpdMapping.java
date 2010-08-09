@@ -23,7 +23,6 @@ package org.sonar.plugins.php.cpd;
 import java.io.File;
 import java.util.List;
 
-import net.sourceforge.pmd.cpd.PHPTokenizer;
 import net.sourceforge.pmd.cpd.Tokenizer;
 
 import org.sonar.api.batch.AbstractCpdMapping;
@@ -81,7 +80,7 @@ public class PhpCpdMapping extends AbstractCpdMapping {
    * @see org.sonar.api.batch.CpdMapping#getTokenizer()
    */
   public Tokenizer getTokenizer() {
-    return new PHPTokenizer();
+    return new org.sonar.plugins.php.cpd.PHPTokenizer();
   }
 
 }
