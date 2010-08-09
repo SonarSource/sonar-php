@@ -112,8 +112,9 @@ public class PhpFile extends Resource<PhpPackage> {
         packageName = StringUtils.replace(packageName, "/", ".");
         className = StringUtils.substringAfterLast(relativePath, "/");
       }
+      String extension = "." + StringUtils.substringAfterLast(className, ".");
       className = StringUtils.substringBeforeLast(className, ".");
-      return new PhpFile(packageName, className, isUnitTest);
+      return new PhpFile(packageName, className, extension, isUnitTest);
     }
     return null;
   }
@@ -147,6 +148,10 @@ public class PhpFile extends Resource<PhpPackage> {
       throw new IllegalArgumentException("Php inner classes are not supported yet : " + key);
     }
     this.unitTest = unitTest;
+    String extension = FilenameUtils.getExtension(StringUtils.trim(key));
+    if (extension != null) {
+    	extension = "." + extension;
+    }
     String realKey = FilenameUtils.removeExtension(StringUtils.trim(key)).replaceAll(SEPARATOR, ".");
     if (realKey.contains(".")) {
       this.filename = StringUtils.substringAfterLast(realKey, ".");
@@ -158,7 +163,7 @@ public class PhpFile extends Resource<PhpPackage> {
       this.packageKey = PhpPackage.DEFAULT_PACKAGE_NAME;
       realKey = new StringBuilder().append(realKey).toString();
     }
-    setKey(realKey);
+    setKey(realKey + extension);
   }
 
   /**
@@ -170,7 +175,7 @@ public class PhpFile extends Resource<PhpPackage> {
    *          the class name
    */
   public PhpFile(String packageName, String className) {
-    this(packageName, className, false);
+    this(packageName, className, "", false);
   }
 
   /**
@@ -183,7 +188,7 @@ public class PhpFile extends Resource<PhpPackage> {
    * @param aPackageName
    *          the a package name
    */
-  public PhpFile(String packageKey, String className, boolean isUnitTest) {
+  public PhpFile(String packageKey, String className, String extension, boolean isUnitTest) {
     LOG.debug("aPackageName=[" + packageKey + "], className=[" + className + "], unitTest=[" + isUnitTest + "]");
     if (className == null) {
       throw new IllegalArgumentException("Php filename can not be null");
@@ -196,11 +201,11 @@ public class PhpFile extends Resource<PhpPackage> {
     if (StringUtils.isBlank(packageKey)) {
       this.packageKey = PhpPackage.DEFAULT_PACKAGE_NAME;
       this.longName = this.filename;
-      key = new StringBuilder().append(this.filename).toString();
+      key = new StringBuilder().append(this.filename).append(extension).toString();
     } else {
       this.packageKey = packageKey.trim();
-      key = new StringBuilder().append(this.packageKey).append(".").append(this.filename).toString();
-      this.longName = key;
+      this.longName = new StringBuilder().append(this.packageKey).append(".").append(this.filename).toString();
+      key = new StringBuilder().append(this.packageKey).append(".").append(this.filename).append(extension).toString();
     }
     setKey(key);
     this.unitTest = isUnitTest;

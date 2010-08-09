@@ -23,8 +23,13 @@ package org.sonar.plugins.php;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.commons.configuration.Configuration;
+import org.codehaus.plexus.util.StringUtils;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 
 /**
  * The Class PhpTest.
@@ -35,10 +40,29 @@ public class PhpTest {
    * Should check valid php extensions.
    */
   @Test
-  public void shouldCheckValidPhpExtensions() {
-    assertTrue(Php.hasValidSuffixes("goodExtension.php"));
+  public void shouldCheckDefaultValidPhpExtensions() {
+	Configuration configuration = mock(Configuration.class);
+	Php php = new Php(configuration);
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+
+	assertTrue(Php.hasValidSuffixes("goodExtension.php"));
     assertTrue(Php.hasValidSuffixes("goodExtension.php5"));
     assertTrue(Php.hasValidSuffixes("goodExtension.inc"));
+
     assertFalse(Php.hasValidSuffixes("wrong.extension"));
+	assertFalse(Php.hasValidSuffixes("goodExtension.java"));
+    assertFalse(Php.hasValidSuffixes("goodExtension.cs"));
+    assertFalse(Php.hasValidSuffixes("goodExtension.php7"));
   }
+  
+  @Test
+  public void shouldCheckCustomValidPhpExtensions() {
+	Configuration configuration = mock(Configuration.class);
+	Php php = new Php(configuration);
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES + ",php6,php7", ","));
+
+    assertTrue(Php.hasValidSuffixes("goodExtension.php6"));
+    assertTrue(Php.hasValidSuffixes("goodExtension.php7"));
+  }
+
 }

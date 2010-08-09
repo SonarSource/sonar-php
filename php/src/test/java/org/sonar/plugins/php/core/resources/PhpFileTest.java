@@ -27,11 +27,13 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.Arrays;
 
+import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 
 /**
  * The Class PhpFileTest.
@@ -71,11 +73,11 @@ public class PhpFileTest {
   public void fromAbsolutePathShouldInitializePackageAndClassName() {
     init();
     PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
-    assertEquals("animal.Monkey", phpFile.getKey());
+    assertEquals("animal.Monkey.php", phpFile.getKey());
     phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\insult\\Monkey.php", project);
-    assertEquals("insult.Monkey", phpFile.getKey());
+    assertEquals("insult.Monkey.php", phpFile.getKey());
     phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\Monkey.php", project);
-    assertEquals("Monkey", phpFile.getKey());
+    assertEquals("Monkey.php", phpFile.getKey());
   }
 
   /**
@@ -86,7 +88,7 @@ public class PhpFileTest {
     init();
     PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
     assertEquals(Php.INSTANCE, phpFile.getLanguage());
-    assertEquals("animal.Monkey", phpFile.getKey());
+    assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
     assertEquals(Resource.QUALIFIER_FILE, phpFile.getScope());
     assertEquals(Resource.QUALIFIER_CLASS, phpFile.getQualifier());
@@ -100,7 +102,7 @@ public class PhpFileTest {
     init();
     PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
     assertEquals(Php.INSTANCE, phpFile.getLanguage());
-    assertEquals("animal.Monkey", phpFile.getKey());
+    assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
     assertEquals(Resource.QUALIFIER_FILE, phpFile.getScope());
     assertEquals(Resource.QUALIFIER_UNIT_TEST_CLASS, phpFile.getQualifier());
@@ -129,6 +131,12 @@ public class PhpFileTest {
   private void init() {
     project = mock(Project.class);
     ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
+
+    Configuration configuration = mock(Configuration.class);
+	Php php = new Php(configuration);
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+
+    
     when(project.getFileSystem()).thenReturn(fileSystem);
     when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src\\main")));
     when(fileSystem.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src\\test")));
