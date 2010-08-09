@@ -27,6 +27,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.Arrays;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
@@ -34,6 +35,8 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.core.resources.PhpFile;
 import org.sonar.plugins.php.phpunit.configuration.PhpUnitConfiguration;
 
@@ -73,6 +76,11 @@ public class PhpUnitResultParserTest {
       when(mavenProject.getPackaging()).thenReturn("php");
       File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml").getFile());
       when(config.getReportFile()).thenReturn(reportFile);
+
+      Configuration configuration = mock(Configuration.class);
+	  Php php = new Php(configuration);
+	  when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+
       PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
       parser.parse(config.getReportFile());
     } catch (Exception e) {
@@ -137,8 +145,8 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateTestsMeasures() {
     metric = CoreMetrics.TESTS;
     init();
-    verify(context).saveMeasure(new PhpFile("Monkey", true), metric, 3.0);
-    verify(context).saveMeasure(new PhpFile("Banana", true), metric, 1.0);
+    verify(context).saveMeasure(new PhpFile("Monkey.php", true), metric, 3.0);
+    verify(context).saveMeasure(new PhpFile("Banana.php", true), metric, 1.0);
   }
 
   /**
@@ -148,8 +156,8 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateFailedMeasures() {
     metric = CoreMetrics.TEST_FAILURES;
     init();
-    verify(context).saveMeasure(new PhpFile("Monkey", true), metric, 2.0);
-    verify(context).saveMeasure(new PhpFile("Banana", true), metric, 0.0);
+    verify(context).saveMeasure(new PhpFile("Monkey.php", true), metric, 2.0);
+    verify(context).saveMeasure(new PhpFile("Banana.php", true), metric, 0.0);
   }
 
   /**
@@ -159,8 +167,8 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateErrorMeasures() {
     metric = CoreMetrics.TEST_ERRORS;
     init();
-    verify(context).saveMeasure(new PhpFile("Monkey", true), metric, 1.0);
-    verify(context).saveMeasure(new PhpFile("Banana", true), metric, 1.0);
+    verify(context).saveMeasure(new PhpFile("Monkey.php", true), metric, 1.0);
+    verify(context).saveMeasure(new PhpFile("Banana.php", true), metric, 1.0);
   }
 
   /**
@@ -170,14 +178,14 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateTestExecutionTimeMeasures() {
     metric = CoreMetrics.TEST_EXECUTION_TIME;
     init();
-    PhpFile monkey = new PhpFile("Monkey", true);
+    PhpFile monkey = new PhpFile("Monkey.php", true);
     verify(context).saveMeasure(monkey, metric, 447.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TESTS, 3.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_ERRORS, 1.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_FAILURES, 2.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_FAILURES, 2.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
-    verify(context).saveMeasure(new PhpFile("Banana", true), metric, 570.0);
+    verify(context).saveMeasure(new PhpFile("Banana.php", true), metric, 570.0);
   }
 
 }

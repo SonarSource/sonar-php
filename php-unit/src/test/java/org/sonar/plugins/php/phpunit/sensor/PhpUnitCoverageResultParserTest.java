@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.Arrays;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
@@ -38,6 +39,8 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.core.resources.PhpFile;
 import org.sonar.plugins.php.core.resources.PhpPackage;
 import org.sonar.plugins.php.phpunit.configuration.PhpUnitConfiguration;
@@ -73,6 +76,10 @@ public class PhpUnitCoverageResultParserTest {
       when(mavenProject.getPackaging()).thenReturn("maven-plugin");
       when(config.getReportFile()).thenReturn(
           new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml").getFile()));
+   	  Configuration configuration = mock(Configuration.class);
+	  Php php = new Php(configuration);
+	  when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+
       PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
       parser.parse(config.getReportFile());
     } catch (Exception e) {
@@ -120,10 +127,10 @@ public class PhpUnitCoverageResultParserTest {
   public void shouldGenerateCoverageMeasures() {
     metric = CoreMetrics.COVERAGE;
     init();
-    PhpFile phpFile = new PhpFile("Banana", true);
+    PhpFile phpFile = new PhpFile("Banana.php", true);
     verify(context).saveMeasure(phpFile, metric, 0.0);
 
-    phpFile = new PhpFile("Monkey");
+    phpFile = new PhpFile("Monkey.php");
     verify(context).saveMeasure(phpFile, metric, 50.0);
 
     PhpPackage phpPackage = new PhpPackage("");
@@ -137,7 +144,7 @@ public class PhpUnitCoverageResultParserTest {
   public void shouldNotGenerateCoverageMeasures() {
     metric = CoreMetrics.COVERAGE;
     init();
-    verify(context, never()).saveMeasure(new PhpFile("IndexControllerTest", true), metric, 1.0);
+    verify(context, never()).saveMeasure(new PhpFile("IndexControllerTest.php", true), metric, 1.0);
   }
 
   /**
@@ -147,8 +154,8 @@ public class PhpUnitCoverageResultParserTest {
   public void shouldGenerateLineHitsMeasures() {
     metric = CoreMetrics.COVERAGE_LINE_HITS_DATA;
     init();
-    verify(context, atLeastOnce()).saveMeasure(new PhpFile("Monkey", true), new Measure(metric, "34=1;35=1;38=1;40=0;45=1;46=1"));
-    verify(context, atLeastOnce()).saveMeasure(new PhpFile("Banana"), new Measure(metric, "34=0;35=0;38=0;40=0;45=1;46=1"));
+    verify(context, atLeastOnce()).saveMeasure(new PhpFile("Monkey.php", true), new Measure(metric, "34=1;35=1;38=1;40=0;45=1;46=1"));
+    verify(context, atLeastOnce()).saveMeasure(new PhpFile("Banana.php"), new Measure(metric, "34=0;35=0;38=0;40=0;45=1;46=1"));
   }
 
   /**
