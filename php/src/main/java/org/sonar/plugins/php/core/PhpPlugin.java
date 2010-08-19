@@ -35,12 +35,7 @@ import org.sonar.plugins.php.cpd.PhpCpdMapping;
 /**
  * This class is the sonar entry point of this plugin. It declares all the extension that can be launched with this plugin
  */
-@Properties({
-	  @Property(key = PhpPlugin.FILE_SUFFIXES_KEY, defaultValue = PhpPlugin.DEFAULT_SUFFIXES, name = "File suffixes",
-	      description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.",
-	  global=true,
-	  project = true)
-	})
+@Properties( { @Property(key = PhpPlugin.FILE_SUFFIXES_KEY, defaultValue = PhpPlugin.DEFAULT_SUFFIXES, name = "File suffixes", description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.", global = true, project = true) })
 public class PhpPlugin implements Plugin {
 
   /** All the valid php files suffixes. */
@@ -77,6 +72,8 @@ public class PhpPlugin implements Plugin {
     // Php resource decorators
     extensions.add(PhpDirectoryDecorator.class);
     extensions.add(PhpFilesDecorator.class);
+    // Php Source Code Colorizer
+    extensions.add(PhpSourceCodeColorizer.class);
     return extensions;
   }
 
