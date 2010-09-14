@@ -16,10 +16,10 @@
   </properties>
   <modules>
     <module>php</module>
-    <module>php-codesniffer</module>
+    <!-- <module>php-codesniffer</module>
     <module>php-depend</module>
     <module>php-pmd</module>
-    <module>php-unit</module>
+    <module>php-unit</module> -->
   </modules>
   <inceptionYear>2010</inceptionYear>
   <organization>
