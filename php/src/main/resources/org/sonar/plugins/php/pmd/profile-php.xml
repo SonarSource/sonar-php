@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<ruleset name="Default php profile">
+    <description>
+		Default php profile.
+    </description>
+    <rule name="CyclomaticComplexity">
+        <priority>3</priority>
+        <properties>
+            <property name="reportLevel" value="10"/>
+            <property name="showClassesComplexity" value="true"/>
+            <property name="showMethodsComplexity" value="false"/>
+        </properties>
+    </rule>
+    <rule name="NPathComplexity">
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" value="200"/>
+        </properties>
+    </rule>
+    <rule name="ExcessiveMethodLength">
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" value="100"/>
+        </properties>
+    </rule>
+    <rule name="ExcessiveClassLength">
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="The class size reporting threshold"  value="1000"/>
+        </properties>
+    </rule>
+    <rule name="ExcessiveParameterList">
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="The parameter count reporting threshold" value="10"/>
+        </properties>
+    </rule>
+    <rule name="ExcessivePublicCount">
+        <priority>3</priority>
+        <properties>
+            <property name="minimum"  description="The public item reporting threshold" value="45"/>
+        </properties>
+    </rule>
+    <rule name="TooManyFields">
+        <priority>3</priority>
+        <properties>
+            <property name="maxfields"  description="The field count reporting threshold " value="15"/>
+        </properties>
+    </rule>
+    <rule name="TooManyMethods">
+        <priority>3</priority>
+        <properties>
+            <property name="maxmethods" value="10"/>
+        </properties>
+    </rule>
+    <rule name="UnusedPrivateField">
+		<priority>3</priority>
+	</rule>
+	<rule name="UnusedLocalVariable">
+		<priority>3</priority>
+	</rule>
+	<rule name="UnusedPrivateMethod">
+		<priority>3</priority>
+	</rule>
+	<rule name="UnusedFormalParameter">
+		<priority>3</priority>
+	</rule>    
+</ruleset>

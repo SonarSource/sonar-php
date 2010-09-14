@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite name="Monkey" file="C:\projets\PHP\Monkey\Sources\test\Monkey.php" tests="3" assertions="0" failures="0" errors="0" time="0.447311">
+		<testcase name="testSleepAction" class="Monkey" file="C:\projets\PHP\Monkey\Sources\test\Monkey.php" line="51" assertions="0" time="0.047311">
+			<failure>yo</failure>
+		</testcase>
+		<testcase name="testEatAction" class="Monkey" file="C:\projets\PHP\Monkey\Sources\test\Monkey.php" line="51" assertions="0" time="0.0">
+			<failure>yo</failure>
+		</testcase>
+		<testcase name="testClimbAction" class="Monkey" file="C:\projets\PHP\Monkey\Sources\test\Monkey.php" line="51" assertions="0" time="0.0">
+			<error>yo</error>
+		</testcase>
+		<testsuite name="PhpUnderControl_Example_MathTest::testDataProviderOneWillFail" tests="4" assertions="4" failures="1" errors="0" time="4.010048">
+			<testcase name="testDataProviderOneWillFail with data set #0" assertions="1" time="1.001897" />
+			<testcase name="testDataProviderOneWillFail with data set #1" assertions="1" time="1.002386" />
+			<testcase name="testDataProviderOneWillFail with data set #2" assertions="1" time="1.003090">
+				<failure type="PHPUnit_Framework_ExpectationFailedException">PhpUnderControl_Example_MathTest::testDataProviderOneWillFail
+					with data set #2 (7, 1) Failed asserting that &lt;integer:6&gt; matches
+					expected &lt;integer:1&gt;.
+					D:\projets\math-php-test\source\tests\AllTests2.php:105
+				</failure>
+			</testcase>
+			<testcase name="testDataProviderOneWillFail with data set #3" assertions="1" time="1.002675" />
+		</testsuite>
+	</testsuite>
+	<testsuite name="Banana" file="C:\projets\PHP\Monkey\Sources\test\Banana.php" tests="1" assertions="0" failures="0" errors="0" time="0.57">
+		<testcase name="testFallFromTreeAction" class="Banana" file="C:\projets\PHP\Monkey\Sources\test\Banana.php" line="51" assertions="0" time="0.57">
+			<error>yo</error>
+		</testcase>
+	</testsuite>
+</testsuites>

@@ -1,0 +1,14 @@
+<module name="Checker">
+	<module name="CyclomaticComplexity">
+			<property name="severity" value="error" />
+			<property name="minimum" value="20" />
+	</module>
+	<module name="TreeWalker">
+		<module name="ExcessiveClassLength">
+				<property name="minimum" value="15" />
+		</module>
+		<module name="NPathComplexity">
+				<property name="severity" value="warning" />
+		</module>
+	</module>
+</module>

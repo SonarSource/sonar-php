@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.2" timestamp="2009-06-01T10:32:31.607">
+  <file name="/test/src/main/animal/Monkey.php">
+    <violation beginline="216" endline="216" begincolumn="2" endcolumn="149" rule="AvoidDuplicateLiterals" ruleset="String and StringBuffer Rules" package="com.upromise.portal.augment.impl" class="PageGroupOperationImpl$AddModuleImpl" method="createRawValidator" externalInfoUrl="http://pmd.sourceforge.net/rules/strings.html#AvoidDuplicateLiterals" priority="3">The String literal &quot;&#172;&#237;</violation>
+  </file>
+</pmd>

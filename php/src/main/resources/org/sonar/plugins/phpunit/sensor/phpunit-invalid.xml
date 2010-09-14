@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Toto>
+    <testsuite name="IndexControllerTest" file="C:/dev/RejectV2/source/tests/application/default/controllers/IndexControllerTest.php" tests="1" assertions="0" failures="0" errors="0" time="0.447311">
+      <testcase name="testIndexAction" className="IndexControllerTest" file="C:/dev/RejectV2/source/tests/application/default/controllers/IndexControllerTest.php" status="ok" line="51" assertions="0" time="0.447311"/> 
+    </testsuite>
+</Toto>
