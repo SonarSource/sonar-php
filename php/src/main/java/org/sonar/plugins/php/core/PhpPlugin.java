@@ -182,6 +182,8 @@ public class PhpPlugin implements Plugin {
     //Phpmd
     extensions.add(PhpPmdSensor.class);
     
+     // Php Source Code Colorizer
+    extensions.add(PhpSourceCodeColorizer.class);
     
     return extensions;
   }
