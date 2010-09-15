@@ -47,18 +47,18 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
   /**
    * An array containing all PHP keywords.
    */
-  private static final String[] PHP_KEYWORDS_ARRAY = new String[] { "and", "or", "xor", "__FILE__", "exception", "__LINE__", "array", "as",
-      "break", "case", "class", "const", "continue", "declare", "default", "die", "do", "echo", "else", "elseif", "empty", "enddeclare",
-      "endfor", "endforeach", "endif", "endswitch", "endwhile", "eval", "exit", "extends", "for", "foreach", "function", "global", "if",
-      "include", "include_once", "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "unset", "use",
-      "var", "while", "__FUNCTION__", "__CLASS__", "__METHOD__", "final", "php_user_filter", "interface", "implements", "instanceof",
-      "public", "private", "protected", "abstract", "clone", "try", "catch", "throw", "cfunction", "old_function", "this", "final",
-      "__NAMESPACE__", "namespace", "goto", "__DIR__" };
+  private static final String[] PHP_KEYWORDS_ARRAY = new String[] { "and", "or", "xor", "exception", "array", "as", "break", "case",
+      "class", "const", "continue", "declare", "default", "die", "do", "echo", "else", "elseif", "empty", "enddeclare", "endfor",
+      "endforeach", "endif", "endswitch", "endwhile", "eval", "exit", "extends", "for", "foreach", "function", "global", "if", "include",
+      "include_once", "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "unset", "use", "var",
+      "while", "final", "php_user_filter", "interface", "implements", "instanceof", "public", "private", "protected", "abstract", "clone",
+      "try", "catch", "throw", "cfunction", "old_function", "this", "final", "namespace", "goto" };
 
   /**
    * An array containing reserved variables.
    */
-  private static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[] { "$this" };
+  private static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[] { "__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
+      "__DIR__", "__FILE__", "__LINE__", "$this" };
 
   static {
     Collections.addAll(PHP_KEYWORDS, PHP_KEYWORDS_ARRAY);
