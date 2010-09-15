@@ -59,15 +59,13 @@ public class PhpDependResultsParserTest {
 
   private static final String PDEPEND_RESULT = "/org/sonar/plugins/php/phpdepend/sensor/PhpDependResultsParserTest/pdepend.xml";
   private static final String PDEPEND_RESULT_SAMEFILE_DIFFERBYFSUFFIX = "/org/sonar/plugins/php/phpdepend/sensor/PhpDependResultsParserTest/pdepend.samefiledifferbysuffix.xml";
-  
-  
+
   /**
    * Inits the result parser.
    */
   private void init(String pdependResultFile) {
     try {
-      File xmlReport = new File(getClass().getResource(pdependResultFile)
-          .toURI());
+      File xmlReport = new File(getClass().getResource(pdependResultFile).toURI());
       context = mock(SensorContext.class);
       project = mock(Project.class);
       ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
@@ -77,11 +75,11 @@ public class PhpDependResultsParserTest {
       Set<Metric> metrics = new HashSet<Metric>();
       metrics.add(metric);
       PhpDependResultsParser parser = new PhpDependResultsParser(project, context, metrics);
-      
-  	  Configuration configuration = mock(Configuration.class);
-	  Php php = new Php(configuration);
+
+      Configuration configuration = mock(Configuration.class);
+      new Php(configuration);
       when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
-      
+
       parser.parse(xmlReport);
     } catch (Exception e) {
       throw new RuntimeException(e);

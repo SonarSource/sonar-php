@@ -105,9 +105,9 @@ public class PhpPmdViolationStaxParserTest {
   @Test
   public void shouldSaveViolationsOnClasses() throws URISyntaxException, XMLStreamException {
     SensorContext context = mock(SensorContext.class);
-	Configuration configuration = mock(Configuration.class);
-	Php php = new Php(configuration);
-	when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+    Configuration configuration = mock(Configuration.class);
+    new Php(configuration);
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
     parse(context, "/org/sonar/plugins/php/pmd/php-pmd-result.xml");
 
     verify(context, times(30)).saveViolation(argThat(new IsViolationOnPhpClass()));

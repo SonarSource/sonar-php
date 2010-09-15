@@ -35,6 +35,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.RulesManager;
 import org.sonar.plugins.php.core.resources.PhpFile;
+import org.sonar.plugins.php.core.resources.PhpPackage;
 import org.sonar.plugins.php.pmd.PhpPmdPlugin;
 
 /**
@@ -76,7 +77,7 @@ class PhpPmdViolationsXmlParser extends AbstractViolationsStaxParser {
    *          the profile
    */
   public PhpPmdViolationsXmlParser(Project project, SensorContext context, RulesManager rulesManager, RulesProfile profile) {
-    super(context, rulesManager, profile);
+    super(context, rulesManager);
     this.project = project;
   }
 
@@ -204,7 +205,7 @@ class PhpPmdViolationsXmlParser extends AbstractViolationsStaxParser {
    * @see org.sonar.api.batch.AbstractViolationsStaxParser#toResource(org.codehaus.staxmate.in.SMInputCursor)
    */
   @Override
-  protected Resource toResource(SMInputCursor resourcesCursor) throws XMLStreamException {
+  protected Resource<PhpPackage> toResource(SMInputCursor resourcesCursor) throws XMLStreamException {
     String fileName = resourcesCursor.getAttrValue(FILE_NAME_ATTRIBUTE_NAME);
     if (LOG.isDebugEnabled()) {
       LOG.debug("Loading " + fileName + " to be associated with rule violation");

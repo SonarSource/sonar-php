@@ -133,10 +133,8 @@ public class PhpFileTest {
     ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
 
     Configuration configuration = mock(Configuration.class);
-	Php php = new Php(configuration);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
-    
     when(project.getFileSystem()).thenReturn(fileSystem);
     when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src\\main")));
     when(fileSystem.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src\\test")));

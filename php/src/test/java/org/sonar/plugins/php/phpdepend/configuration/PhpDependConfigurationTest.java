@@ -67,9 +67,9 @@ public class PhpDependConfigurationTest {
   @Test
   public void shouldGetValidSuffixeOption() {
     Configuration configuration = mock(Configuration.class);
-	Php php = new Php(configuration);
+    Php php = new Php(configuration);
 
-	PhpDependConfiguration config = getWindowsConfiguration();
+    PhpDependConfiguration config = getWindowsConfiguration();
     String suffixesOption = config.getSuffixesCommandOption();
     assertThat(suffixesOption, notNullValue());
     assertThat(suffixesOption, containsString(","));
@@ -180,6 +180,7 @@ public class PhpDependConfigurationTest {
         return path;
       }
 
+      @Override
       protected boolean isOsWindows() {
         return isOsWindows;
       }

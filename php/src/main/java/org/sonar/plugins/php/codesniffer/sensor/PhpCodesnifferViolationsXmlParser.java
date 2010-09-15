@@ -127,6 +127,7 @@ class PhpCheckStyleViolationsXmlParser extends AbstractViolationsStaxParser {
    * 
    * @see org.sonar.api.batch.AbstractViolationsStaxParser#toResource(org.codehaus.staxmate.in.SMInputCursor)
    */
+  @SuppressWarnings("rawtypes")
   @Override
   protected Resource toResource(SMInputCursor resourcesCursor) throws XMLStreamException {
     String fileName = resourcesCursor.getAttrValue(FILE_NAME_ATTRIBUTE_NAME);

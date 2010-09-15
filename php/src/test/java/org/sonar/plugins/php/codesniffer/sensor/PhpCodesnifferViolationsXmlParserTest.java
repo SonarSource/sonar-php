@@ -91,7 +91,7 @@ public class PhpCodesnifferViolationsXmlParserTest {
     });
 
     Configuration configuration = mock(Configuration.class);
-	Php php = new Php(configuration);
+    Php php = new Php(configuration);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
     RulesProfile profile = mock(RulesProfile.class);

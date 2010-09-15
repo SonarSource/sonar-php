@@ -98,8 +98,8 @@ public class PhpUnitSensorTest {
     when(configuration.getString(PhpUnitConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, PhpUnitConfiguration.DEFAULT_REPORT_FILE_NAME))
         .thenReturn("punit-invalid.summary.xml");
     when(
-        configuration.getBoolean(PhpUnitConfiguration.ANALYZE_ONLY_PROPERTY_KEY, Boolean
-            .getBoolean(PhpUnitConfiguration.DEFAULT_ANALYZE_ONLY))).thenReturn(true);
+        configuration.getBoolean(PhpUnitConfiguration.ANALYZE_ONLY_PROPERTY_KEY,
+            Boolean.getBoolean(PhpUnitConfiguration.DEFAULT_ANALYZE_ONLY))).thenReturn(true);
     sensor.analyse(project, null);
   }
 

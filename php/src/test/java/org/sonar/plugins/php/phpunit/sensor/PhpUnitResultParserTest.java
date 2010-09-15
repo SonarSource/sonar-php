@@ -35,7 +35,6 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.core.resources.PhpFile;
 import org.sonar.plugins.php.phpunit.configuration.PhpUnitConfiguration;
@@ -78,8 +77,7 @@ public class PhpUnitResultParserTest {
       when(config.getReportFile()).thenReturn(reportFile);
 
       Configuration configuration = mock(Configuration.class);
-	  Php php = new Php(configuration);
-	  when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+      when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
       PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
       parser.parse(config.getReportFile());

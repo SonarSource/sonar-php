@@ -26,7 +26,6 @@ import static org.mockito.Mockito.when;
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.plugins.php.codesniffer.configuration.PhpCodesnifferConfiguration;
-import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpPlugin;
 
 /**
@@ -40,11 +39,10 @@ public class PhpCodesnifferExecutorTest {
    */
   @Test
   public void testGetCommandLine() {
-	Configuration configuration = mock(Configuration.class);
-	Php php = new Php(configuration);
-	when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+    Configuration configuration = mock(Configuration.class);
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
-	PhpCodesnifferConfiguration c = mock(PhpCodesnifferConfiguration.class);
+    PhpCodesnifferConfiguration c = mock(PhpCodesnifferConfiguration.class);
     PhpCodesnifferExecutor executor = new PhpCodesnifferExecutor(c);
     executor.getCommandLine();
     // Mockito.verify(c);

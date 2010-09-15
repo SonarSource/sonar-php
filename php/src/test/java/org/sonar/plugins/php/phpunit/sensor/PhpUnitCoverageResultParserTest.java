@@ -39,7 +39,6 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.core.resources.PhpFile;
 import org.sonar.plugins.php.core.resources.PhpPackage;
@@ -76,9 +75,8 @@ public class PhpUnitCoverageResultParserTest {
       when(mavenProject.getPackaging()).thenReturn("maven-plugin");
       when(config.getReportFile()).thenReturn(
           new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml").getFile()));
-   	  Configuration configuration = mock(Configuration.class);
-	  Php php = new Php(configuration);
-	  when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+      Configuration configuration = mock(Configuration.class);
+      when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
       PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
       parser.parse(config.getReportFile());

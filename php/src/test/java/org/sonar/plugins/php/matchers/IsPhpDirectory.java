@@ -25,11 +25,12 @@ import org.hamcrest.Description;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.ResourceUtils;
 import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.resources.PhpPackage;
 
 /**
  * The Class IsPhpDirectory.
  */
-public class IsPhpDirectory extends BaseMatcher<Resource> {
+public class IsPhpDirectory extends BaseMatcher<Resource<PhpPackage>> {
 
   /** The key. */
   private String key = null;
@@ -61,9 +62,6 @@ public class IsPhpDirectory extends BaseMatcher<Resource> {
   public void describeTo(Description arg0) {
   }
 
-  /*
-   * @see org.hamcrest.Matcher#matches(java.lang.Object)
-   */
   /*
    * (non-Javadoc)
    * 
