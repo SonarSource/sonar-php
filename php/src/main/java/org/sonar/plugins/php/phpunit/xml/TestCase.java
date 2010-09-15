@@ -306,4 +306,20 @@ public final class TestCase {
   public void setTime(final double time) {
     this.time = time;
   }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("TestCase [assertions=").append(assertions).append(", className=").append(className).append(", errorMessage=")
+        .append(errorMessage).append(", file=").append(file).append(", line=").append(line).append(", name=").append(name)
+        .append(", status=").append(status).append(", time=").append(time).append(", error=").append(error).append(", failure=")
+        .append(failure).append("]");
+    return builder.toString();
+  }
+
 }

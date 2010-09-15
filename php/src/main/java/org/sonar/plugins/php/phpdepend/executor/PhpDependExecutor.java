@@ -20,10 +20,10 @@
 
 package org.sonar.plugins.php.phpdepend.executor;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.php.core.executor.PhpPluginAbstractExecutor;
 import org.sonar.plugins.php.phpdepend.configuration.PhpDependConfiguration;
 
@@ -32,6 +32,10 @@ import org.sonar.plugins.php.phpdepend.configuration.PhpDependConfiguration;
  */
 public class PhpDependExecutor extends PhpPluginAbstractExecutor {
 
+  /**
+   * 
+   */
+  private static final String DIRECTORY_SEPARATOR = ",";
   /** The configuration. */
   private PhpDependConfiguration config;
 
@@ -66,9 +70,8 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
     if (config.isStringPropertySet(PhpDependConfiguration.ARGUMENT_LINE_KEY)) {
       result.add(config.getArgumentLine());
     }
-    for (File file : config.getSourceDirectories()) {
-      result.add(file.getAbsolutePath());
-    }
+    // SONARPLUGINS-547 PhpDependExecutor: wrong dirs params
+    result.add(StringUtils.join(config.getSourceDirectories(), PhpDependExecutor.DIRECTORY_SEPARATOR));
     return result;
   }
 
