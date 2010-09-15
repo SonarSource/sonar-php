@@ -29,42 +29,64 @@ import org.sonar.api.web.CodeColorizerFormat;
 import org.sonar.colorizer.CDocTokenizer;
 import org.sonar.colorizer.CppDocTokenizer;
 import org.sonar.colorizer.KeywordsTokenizer;
+import org.sonar.colorizer.StringTokenizer;
 import org.sonar.colorizer.Tokenizer;
 
+/**
+ * @author freddy.mallet
+ * 
+ */
 public class PhpSourceCodeColorizer extends CodeColorizerFormat {
 
+  /**
+   * 
+   */
   private static final Set<String> PHP_KEYWORDS = new HashSet<String>();
+  private static final Set<String> PHP_RESERVED_VARIABLES = new HashSet<String>();
 
-  private static final String[] PHP_KEYWORDS_ARRAY = new String[] {
-      "and", "or", "xor", "__FILE__", "exception", "__LINE__", "array", "as", "break", "case",
-      "class", "const", "continue", "declare", "default",
-      "die", "do", "echo", "else", "elseif",
-      "empty", "enddeclare", "endfor", "endforeach", "endif",
-      "endswitch", "endwhile", "eval", "exit", "extends",
-      "for", "foreach", "function", "global", "if",
-      "include", "include_once", "isset", "list", "new",
-      "print", "require", "require_once", "return", "static",
-      "switch", "unset", "use", "var", "while",
-      "__FUNCTION__", "__CLASS__", "__METHOD__", "final", "php_user_filter",
-      "interface", "implements", "instanceof", "public", "private",
-      "protected", "abstract", "clone", "try", "catch",
-      "throw", "cfunction", "old_function", "this", "final",
-      "__NAMESPACE__", "namespace", "goto", "__DIR__"
-  };
+  /**
+   * An array containing all PHP keywords.
+   */
+  private static final String[] PHP_KEYWORDS_ARRAY = new String[] { "and", "or", "xor", "__FILE__", "exception", "__LINE__", "array", "as",
+      "break", "case", "class", "const", "continue", "declare", "default", "die", "do", "echo", "else", "elseif", "empty", "enddeclare",
+      "endfor", "endforeach", "endif", "endswitch", "endwhile", "eval", "exit", "extends", "for", "foreach", "function", "global", "if",
+      "include", "include_once", "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "unset", "use",
+      "var", "while", "__FUNCTION__", "__CLASS__", "__METHOD__", "final", "php_user_filter", "interface", "implements", "instanceof",
+      "public", "private", "protected", "abstract", "clone", "try", "catch", "throw", "cfunction", "old_function", "this", "final",
+      "__NAMESPACE__", "namespace", "goto", "__DIR__" };
+
+  /**
+   * An array containing reserved variables.
+   */
+  private static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[] { "$this" };
 
   static {
     Collections.addAll(PHP_KEYWORDS, PHP_KEYWORDS_ARRAY);
+    Collections.addAll(PHP_RESERVED_VARIABLES, PHP_RESERVED_VARIABLES_ARRAY);
   }
 
+  /**
+   * Simple constructor
+   */
   public PhpSourceCodeColorizer() {
     super(Php.KEY);
   }
 
+  /**
+   * We use here the C/C++ tokenizers, the custom PHP Tokenizer and the standard String tokenir (handles simple quotes and double quotes
+   * delimited strings).
+   * 
+   * @see org.sonar.api.web.CodeColorizerFormat#getTokenizers()
+   */
   @Override
   public List<Tokenizer> getTokenizers() {
-    return Collections.unmodifiableList(Arrays.asList(new CDocTokenizer("<span class=\"cd\">", "</span>"), new CppDocTokenizer(
-        "<span class=\"cppd\">",
-        "</span>"),
-        new KeywordsTokenizer("<span class=\"k\">", "</span>", PHP_KEYWORDS)));
+    String tagAfter = "</span>";
+    KeywordsTokenizer phpKeyWordsTokenizer = new KeywordsTokenizer("<span class=\"k\">", tagAfter, PHP_KEYWORDS);
+    KeywordsTokenizer phpVariablesTokenizer = new KeywordsTokenizer("<span class=\"c\">", tagAfter, PHP_RESERVED_VARIABLES);
+    CppDocTokenizer cppDocTokenizer = new CppDocTokenizer("<span class=\"cppd\">", tagAfter);
+    CDocTokenizer cDocTokenizer = new CDocTokenizer("<span class=\"cd\">", tagAfter);
+    StringTokenizer stringTokenizer = new StringTokenizer("<span class=\"s\">", tagAfter);
+    return Collections.unmodifiableList(Arrays.asList(cDocTokenizer, cppDocTokenizer, phpKeyWordsTokenizer, stringTokenizer,
+        phpVariablesTokenizer));
   }
 }
