@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<checkstyle version="4.1">
-  <file name="/test/src/main/org/sonar/mvn/BaseSonarMojo.php5">
-    <error line="6" severity="warning" message="Commentaire de classe manquant."
-           source="GN/Commenting/ClassCommentSniff/MISSING_CLASS_COMMENT"/>
-  </file>
-</checkstyle>
