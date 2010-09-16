@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.codehaus.sonar-plugins</groupId>
@@ -16,10 +17,7 @@
   </properties>
   <modules>
     <module>php</module>
-    <!-- <module>php-codesniffer</module>
-    <module>php-depend</module>
-    <module>php-pmd</module>
-    <module>php-unit</module> -->
+    <!-- <module>php-codesniffer</module> <module>php-depend</module> <module>php-pmd</module> <module>php-unit</module> -->
   </modules>
   <inceptionYear>2010</inceptionYear>
   <organization>
@@ -48,7 +46,7 @@
   </ciManagement>
   <build>
     <extensions>
-      <!--  Bug with maven 2.2.1 and Ubuntu. -->
+      <!-- Bug with maven 2.2.1 and Ubuntu. -->
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
