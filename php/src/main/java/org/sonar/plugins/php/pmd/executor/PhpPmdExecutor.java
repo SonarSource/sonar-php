@@ -20,7 +20,6 @@
 
 package org.sonar.plugins.php.pmd.executor;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +33,7 @@ import org.sonar.plugins.php.pmd.configuration.PhpPmdConfiguration;
  */
 public class PhpPmdExecutor extends PhpPluginAbstractExecutor {
 
+  private static final String PHPMD_PATH_SEPARATOR = ",";
   /** The config. */
   private PhpPmdConfiguration config;
 
@@ -60,7 +60,7 @@ public class PhpPmdExecutor extends PhpPluginAbstractExecutor {
     result.add(config.getOsDependentToolScriptName());
     
     // SONARPLUGINS-546 PhpPmdExecutor: wrong dirs params
-    result.add(StringUtils.join(config.getSourceDirectories(), ","));
+    result.add(StringUtils.join(config.getSourceDirectories(), PHPMD_PATH_SEPARATOR));
     
     result.add(PhpPmdConfiguration.REPORT_FORMAT);
     result.add(config.getRulesets());

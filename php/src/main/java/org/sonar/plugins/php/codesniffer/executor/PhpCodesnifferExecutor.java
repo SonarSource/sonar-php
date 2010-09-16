@@ -34,6 +34,7 @@ import org.sonar.plugins.php.core.executor.PhpPluginAbstractExecutor;
  */
 public class PhpCodesnifferExecutor extends PhpPluginAbstractExecutor {
 
+  private static final String CODESNIFFER_PATH_SEPARATOR = " ";
   /** The PhpCodesnifferConfiguration. */
   private PhpCodesnifferConfiguration config;
 
@@ -73,8 +74,9 @@ public class PhpCodesnifferExecutor extends PhpPluginAbstractExecutor {
       result.add(PhpCodesnifferConfiguration.IGNORE_OPTION + config.getArgumentLine());
     }
     result.add(PhpCodesnifferConfiguration.EXTENSIONS_OPTION + StringUtils.join(Php.INSTANCE.getFileSuffixes(), ","));
-    for (File file : config.getSourceDirectories()) {
-      result.add(file.getAbsolutePath());
+    // Do not use the StringUtils.join() method here, because all the path will be treated as a single one
+    for (File f : config.getSourceDirectories()) {
+      result.add(f.getAbsolutePath() + CODESNIFFER_PATH_SEPARATOR);
     }
     return result;
   }

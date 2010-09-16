@@ -35,7 +35,7 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
   /**
    * 
    */
-  private static final String DIRECTORY_SEPARATOR = ",";
+  private static final String PHPDEPEND_DIRECTORY_SEPARATOR = ",";
   /** The configuration. */
   private PhpDependConfiguration config;
 
@@ -71,7 +71,7 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
       result.add(config.getArgumentLine());
     }
     // SONARPLUGINS-547 PhpDependExecutor: wrong dirs params
-    result.add(StringUtils.join(config.getSourceDirectories(), PhpDependExecutor.DIRECTORY_SEPARATOR));
+    result.add(StringUtils.join(config.getSourceDirectories(), PHPDEPEND_DIRECTORY_SEPARATOR));
     return result;
   }
 

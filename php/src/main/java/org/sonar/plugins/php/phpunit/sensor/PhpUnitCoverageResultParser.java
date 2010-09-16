@@ -57,7 +57,7 @@ public class PhpUnitCoverageResultParser {
   private static Logger logger = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
 
   private static final String MSG_SAVE_MEASURES = "Saving {0} for {1} with value {2}";
-  
+
   private static final double PERCENT = 100.0;
   /** The project. */
   private Project project;
@@ -118,6 +118,10 @@ public class PhpUnitCoverageResultParser {
   private void parseFile(SensorContext context, File coverageReportFile, Project project) {
     CoverageNode coverage = getCoverage(coverageReportFile);
     double percentage = 0d;
+    // Use to record the number of covered statements (lines)
+    Integer statements = 0;
+    Integer coveredStatements = 0;
+
     if (coverage.getProjects() != null && coverage.getProjects().size() > 0) {
       ProjectNode projectNode = coverage.getProjects().get(0);
       for (FileNode file : projectNode.getFiles()) {
@@ -125,6 +129,8 @@ public class PhpUnitCoverageResultParser {
       }
       percentage = Double.valueOf(projectNode.getMetrics().getCoveredElements())
           / Double.valueOf(projectNode.getMetrics().getTotalElementsCount());
+      statements += projectNode.getMetrics().getTotalStatementsCount();
+      coveredStatements += projectNode.getMetrics().getCoveredStatements();
       saveMeasures(classByPackage);
     }
     if (logger.isDebugEnabled()) {
@@ -132,6 +138,9 @@ public class PhpUnitCoverageResultParser {
           Double.valueOf((convertPercentage(percentage)))));
     }
     context.saveMeasure(CoreMetrics.COVERAGE, convertPercentage(percentage));
+    // Record the number of uncovered statements (lines)
+    context.saveMeasure(CoreMetrics.LINES_TO_COVER, Double.valueOf(statements));
+    context.saveMeasure(CoreMetrics.UNCOVERED_LINES, Double.valueOf(statements - coveredStatements));
   }
 
   /**
@@ -174,8 +183,8 @@ public class PhpUnitCoverageResultParser {
       }
       double percentageByPackage = coveragePercent / node.getClassByFileNode().size();
       if (logger.isDebugEnabled()) {
-        logger.debug(MessageFormat.format(MSG_SAVE_MEASURES, CoreMetrics.COVERAGE.getName(), Double
-            .valueOf((convertPercentage(percentageByPackage)))));
+        logger.debug(MessageFormat.format(MSG_SAVE_MEASURES, CoreMetrics.COVERAGE.getName(),
+            Double.valueOf((convertPercentage(percentageByPackage)))));
       }
       // Saves the measure for the package
       context.saveMeasure(phpPackage, CoreMetrics.COVERAGE, convertPercentage(percentageByPackage));
@@ -218,12 +227,17 @@ public class PhpUnitCoverageResultParser {
           convertPercentage(methodCoveragePercent)));
       logger.debug(MessageFormat.format(MSG_SAVE_MEASURES, CoreMetrics.LINE_COVERAGE.getName(), phpFile.getName(),
           convertPercentage(lineCoveragePercent)));
-      logger.debug(MessageFormat.format(MSG_SAVE_MEASURES, CoreMetrics.COVERAGE_LINE_HITS_DATA.getName(), phpFile.getName(), lineHits
-          .buildData()));
+      logger.debug(MessageFormat.format(MSG_SAVE_MEASURES, CoreMetrics.COVERAGE_LINE_HITS_DATA.getName(), phpFile.getName(),
+          lineHits.buildData()));
     }
     context.saveMeasure(phpFile, CoreMetrics.COVERAGE, convertPercentage(methodCoveragePercent));
     context.saveMeasure(phpFile, CoreMetrics.LINE_COVERAGE, convertPercentage(lineCoveragePercent));
     context.saveMeasure(phpFile, lineHits.build());
+
+    // Save uncovered statements (lines)
+    context.saveMeasure(phpFile, CoreMetrics.LINES_TO_COVER, Double.valueOf(fileNode.getMetrics().getTotalStatementsCount()));
+    context.saveMeasure(phpFile, CoreMetrics.UNCOVERED_LINES,
+        Double.valueOf(fileNode.getMetrics().getTotalStatementsCount() - fileNode.getMetrics().getCoveredStatements()));
     return methodCoveragePercent;
   }
 
