@@ -21,10 +21,8 @@
 package org.sonar.plugins.php.cpd;
 
 import java.io.IOException;
-import java.util.List;
 
 import net.sourceforge.pmd.cpd.SourceCode;
-import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
 
@@ -38,26 +36,26 @@ public class PHPTokenizer implements Tokenizer {
    * @see net.sourceforge.pmd.cpd.Tokenizer#tokenize(net.sourceforge.pmd.cpd.SourceCode, net.sourceforge.pmd.cpd.Tokens)
    */
   public void tokenize(SourceCode tokens, Tokens tokenEntries) throws IOException {
-    List<String> code = tokens.getCode();
-    boolean commentLine = false;
-    for (int i = 0; i < code.size(); i++) {
-      String currentLine = (String) code.get(i);
-      for (int j = 0; j < currentLine.length(); j++) {
-        char tok = currentLine.charAt(j);
-        if (j == currentLine.indexOf("//", j)) {
-          break;
-        } else if (j == currentLine.indexOf("/*", j)) {
-          j++;
-          commentLine = true;
-        } else if (commentLine && j == currentLine.indexOf("*/", j)) {
-          j++;
-          commentLine = false;
-        } else if ( !commentLine && !Character.isWhitespace(tok) && tok != '{' && tok != '}' && tok != ';') {
-          tokenEntries.add(new TokenEntry(String.valueOf(tok), tokens.getFileName(), i + 1));
-        }
-      }
-    }
-    tokenEntries.add(TokenEntry.getEOF());
+//    List<String> code = tokens.getCode();
+//    boolean commentLine = false;
+//    for (int i = 0; i < code.size(); i++) {
+//      String currentLine = (String) code.get(i);
+//      for (int j = 0; j < currentLine.length(); j++) {
+//        char tok = currentLine.charAt(j);
+//        if (j == currentLine.indexOf("//", j)) {
+//          break;
+//        } else if (j == currentLine.indexOf("/*", j)) {
+//          j++;
+//          commentLine = true;
+//        } else if (commentLine && j == currentLine.indexOf("*/", j)) {
+//          j++;
+//          commentLine = false;
+//        } else if ( !commentLine && !Character.isWhitespace(tok) && tok != '{' && tok != '}' && tok != ';') {
+//          tokenEntries.add(new TokenEntry(String.valueOf(tok), tokens.getFileName(), i + 1));
+//        }
+//      }
+//    }
+//    tokenEntries.add(TokenEntry.getEOF());
   }
 
 }

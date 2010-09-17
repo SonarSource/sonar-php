@@ -131,8 +131,11 @@ public abstract class PhpPluginAbstractConfiguration {
    * @return the report file
    */
   public File getReportFile() {
-    return new File(project.getFileSystem().getBuildDir(), new StringBuilder().append(reportFileRelativePath).append(File.separator)
-        .append(reportFileName).toString());
+    StringBuilder fileName = new StringBuilder(reportFileRelativePath).append(File.separator);
+    fileName.append(reportFileName);
+    File reportFile = new File(project.getFileSystem().getBuildDir(), fileName.toString());
+    return reportFile;
+
   }
 
   /**

@@ -20,7 +20,9 @@
 
 package org.sonar.plugins.php.codesniffer.configuration;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.Arrays;
+import java.util.List;
+
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.configuration.PhpPluginAbstractConfiguration;
 
@@ -85,9 +87,6 @@ public class PhpCodesnifferConfiguration extends PhpPluginAbstractConfiguration 
 
   /** The Constant DEFAULT_IGNORE_ARGUMENT. */
   public static final String DEFAULT_IGNORE_ARGUMENT = " ";
-
-  /** The Constant IGNORE_ARGUMENT_KEY. */
-  public static final String IGNORE_ARGUMENT_KEY = "sonar.phpCodesniffer.ignoreArgument";
 
   /** The Constant REPORT_OPTION. */
   public static final String REPORT_OPTION = "--report=checkstyle";
@@ -256,11 +255,7 @@ public class PhpCodesnifferConfiguration extends PhpPluginAbstractConfiguration 
    * 
    * @return the ignore list
    */
-  public String getIgnoreList() {
-    String[] values = getProject().getConfiguration().getStringArray(IGNORE_ARGUMENT_KEY);
-    if (values != null && values.length > 0) {
-      return StringUtils.join(values, ',');
-    }
-    return null;
+  public List<String> getExclusionPatterns() {
+    return Arrays.asList(getProject().getExclusionPatterns());
   }
 }

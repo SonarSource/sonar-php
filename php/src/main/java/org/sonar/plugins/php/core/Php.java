@@ -30,7 +30,7 @@ import org.sonar.api.resources.AbstractLanguage;
 public class Php extends AbstractLanguage {
 
   private Configuration configuration;
-	
+
   /** The php language name */
   public static final String PHP_LANGUAGE_NAME = "PHP";
 
@@ -39,13 +39,13 @@ public class Php extends AbstractLanguage {
 
   /** The php language key. */
   public static final String KEY = "php";
-  
-  public Php(Configuration configuration) {
-	    super(KEY, PHP_LANGUAGE_NAME);
-	    this.configuration = configuration;
 
-	    // See SONAR-1461
-	    INSTANCE = this;
+  public Php(Configuration configuration) {
+    super(KEY, PHP_LANGUAGE_NAME);
+    this.configuration = configuration;
+
+    // See SONAR-1461
+    INSTANCE = this;
   }
 
   /**
@@ -68,9 +68,9 @@ public class Php extends AbstractLanguage {
   /**
    * Default constructor.
    */
-//  public Php() {
-//    super(KEY, PHP_LANGUAGE_NAME);
-//  }
+  // public Php() {
+  // super(KEY, PHP_LANGUAGE_NAME);
+  // }
 
   /**
    * Gets the file suffixes.
@@ -78,12 +78,13 @@ public class Php extends AbstractLanguage {
    * @return the file suffixes
    * @see org.sonar.api.resources.Language#getFileSuffixes()
    */
+
   public String[] getFileSuffixes() {
-     String[] suffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
-     if (suffixes == null || suffixes.length == 0) {
-       suffixes = StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES, ",");
-     }
-     return suffixes;
+    String[] suffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
+    if (suffixes == null || suffixes.length == 0) {
+      suffixes = StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES, ",");
+    }
+    return suffixes;
   }
 
 }

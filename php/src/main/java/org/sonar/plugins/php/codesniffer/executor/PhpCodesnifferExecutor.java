@@ -35,6 +35,7 @@ import org.sonar.plugins.php.core.executor.PhpPluginAbstractExecutor;
 public class PhpCodesnifferExecutor extends PhpPluginAbstractExecutor {
 
   private static final String CODESNIFFER_PATH_SEPARATOR = " ";
+  private static final String EXCLUSION_PATTERN_SEPARATOR = ",";
   /** The PhpCodesnifferConfiguration. */
   private PhpCodesnifferConfiguration config;
 
@@ -67,8 +68,11 @@ public class PhpCodesnifferExecutor extends PhpPluginAbstractExecutor {
     } else {
       result.add(PhpCodesnifferConfiguration.STANDARD_OPTION + PhpCodesnifferConfiguration.DEFAULT_STANDARD_ARGUMENT);
     }
-    if (config.isStringPropertySet(PhpCodesnifferConfiguration.IGNORE_ARGUMENT_KEY)) {
-      result.add(PhpCodesnifferConfiguration.IGNORE_OPTION + config.getIgnoreList());
+    List<String> exclusionPatterns = config.getExclusionPatterns();
+    if (exclusionPatterns != null && !exclusionPatterns.isEmpty()) {
+      String ignorePatterns = StringUtils.join(exclusionPatterns, EXCLUSION_PATTERN_SEPARATOR);
+      StringBuilder sb = new StringBuilder(PhpCodesnifferConfiguration.IGNORE_OPTION).append(ignorePatterns);
+      result.add(sb.toString());
     }
     if (config.isStringPropertySet(PhpCodesnifferConfiguration.ARGUMENT_LINE_KEY)) {
       result.add(PhpCodesnifferConfiguration.IGNORE_OPTION + config.getArgumentLine());

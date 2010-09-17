@@ -93,7 +93,7 @@ public abstract class PhpPluginAbstractExecutor {
       // Gets the tool command line
       List<String> commandLine = getCommandLine();
       ProcessBuilder builder = new ProcessBuilder(commandLine);
-      LOG.info("Execute" + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
+      LOG.info("Execute " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
       // Starts the process
       Process p = builder.start();
       // And handles it's normal and error stream in separated threads.
