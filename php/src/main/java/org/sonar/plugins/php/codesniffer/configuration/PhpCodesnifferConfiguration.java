@@ -85,6 +85,9 @@ public class PhpCodesnifferConfiguration extends PhpPluginAbstractConfiguration 
   /** The Constant DEFAULT_ARGUMENT_LINE. */
   public static final String DEFAULT_ARGUMENT_LINE = " ";
 
+  /** The Constant IGNORE_ARGUMENT_KEY. */
+  public static final String IGNORE_ARGUMENT_KEY = "sonar.phpCodesniffer.ignoreArgument";
+
   /** The Constant DEFAULT_IGNORE_ARGUMENT. */
   public static final String DEFAULT_IGNORE_ARGUMENT = " ";
 

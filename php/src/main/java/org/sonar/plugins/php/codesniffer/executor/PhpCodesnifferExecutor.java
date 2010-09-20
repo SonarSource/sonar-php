@@ -34,7 +34,6 @@ import org.sonar.plugins.php.core.executor.PhpPluginAbstractExecutor;
  */
 public class PhpCodesnifferExecutor extends PhpPluginAbstractExecutor {
 
-  private static final String CODESNIFFER_PATH_SEPARATOR = " ";
   private static final String EXCLUSION_PATTERN_SEPARATOR = ",";
   /** The PhpCodesnifferConfiguration. */
   private PhpCodesnifferConfiguration config;
@@ -68,19 +67,22 @@ public class PhpCodesnifferExecutor extends PhpPluginAbstractExecutor {
     } else {
       result.add(PhpCodesnifferConfiguration.STANDARD_OPTION + PhpCodesnifferConfiguration.DEFAULT_STANDARD_ARGUMENT);
     }
+
     List<String> exclusionPatterns = config.getExclusionPatterns();
-    if (exclusionPatterns != null && !exclusionPatterns.isEmpty()) {
+    boolean exclusionPatternsNotEmpty = exclusionPatterns != null && !exclusionPatterns.isEmpty();
+    if (config.isStringPropertySet(PhpCodesnifferConfiguration.IGNORE_ARGUMENT_KEY) && exclusionPatternsNotEmpty) {
       String ignorePatterns = StringUtils.join(exclusionPatterns, EXCLUSION_PATTERN_SEPARATOR);
       StringBuilder sb = new StringBuilder(PhpCodesnifferConfiguration.IGNORE_OPTION).append(ignorePatterns);
       result.add(sb.toString());
     }
+
     if (config.isStringPropertySet(PhpCodesnifferConfiguration.ARGUMENT_LINE_KEY)) {
       result.add(PhpCodesnifferConfiguration.IGNORE_OPTION + config.getArgumentLine());
     }
     result.add(PhpCodesnifferConfiguration.EXTENSIONS_OPTION + StringUtils.join(Php.INSTANCE.getFileSuffixes(), ","));
     // Do not use the StringUtils.join() method here, because all the path will be treated as a single one
     for (File f : config.getSourceDirectories()) {
-      result.add(f.getAbsolutePath() + CODESNIFFER_PATH_SEPARATOR);
+      result.add(f.getAbsolutePath());
     }
     return result;
   }
