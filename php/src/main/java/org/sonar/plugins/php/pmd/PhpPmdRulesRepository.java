@@ -168,6 +168,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
     InputStream inputStream = null;
     try {
       XStream xstream = new XStream();
+      xstream.setClassLoader(getClass().getClassLoader());
       xstream.aliasSystemAttribute("classType", "class");
       xstream.processAnnotations(Ruleset.class);
       xstream.processAnnotations(Rule.class);
@@ -222,6 +223,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
    */
   protected String buildXmlFromRuleset(Ruleset tree) {
     XStream xstream = new XStream();
+    xstream.setClassLoader(getClass().getClassLoader());
     xstream.processAnnotations(Ruleset.class);
     xstream.processAnnotations(Rule.class);
     xstream.processAnnotations(Property.class);
@@ -327,7 +329,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
       String errorMessage = "Can't transform given configuration into inputStream with UTF-8 encoding.";
       LOG.error(errorMessage);
       throw new SonarException(errorMessage, e);
-    } 
+    }
   }
 
   public void loadRuleset(String ruleset, List<org.sonar.api.rules.Rule> rules) throws IOException {

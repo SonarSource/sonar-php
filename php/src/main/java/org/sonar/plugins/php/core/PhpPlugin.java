@@ -39,6 +39,7 @@ import org.sonar.plugins.php.phpdepend.configuration.PhpDependConfiguration;
 import org.sonar.plugins.php.phpdepend.sensor.PhpDependSensor;
 import org.sonar.plugins.php.phpunit.configuration.PhpUnitConfiguration;
 import org.sonar.plugins.php.phpunit.sensor.PhpUnitSensor;
+import org.sonar.plugins.php.pmd.PhpPmdRulesRepository;
 import org.sonar.plugins.php.pmd.configuration.PhpPmdConfiguration;
 import org.sonar.plugins.php.pmd.sensor.PhpPmdSensor;
 
@@ -118,6 +119,11 @@ public class PhpPlugin implements Plugin {
     List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
     // Adds the language
     extensions.add(Php.class);
+
+    // Adds rules repositories
+    extensions.add(PhpPmdRulesRepository.class);
+    extensions.add(PhpCodesnifferRulesRepository.class);
+
     // Source importer
     extensions.add(PhpSourceImporter.class);
 
@@ -132,7 +138,6 @@ public class PhpPlugin implements Plugin {
 
     // Code sniffer
     extensions.add(PhpCodesnifferSensor.class);
-    extensions.add(PhpCodesnifferRulesRepository.class);
 
     // PhpDepend
     extensions.add(PhpDependSensor.class);

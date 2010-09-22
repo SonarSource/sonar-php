@@ -13,5 +13,5 @@ rem copy php-pmd\target\sonar-php-pmd-plugin-%SONAR_PHP_PLUGIN_VERSION%.jar %SON
 rem copy php-unit\target\sonar-php-unit-plugin-%SONAR_PHP_PLUGIN_VERSION%.jar %SONAR_PLUGINS_HOME%
 
 set SONAR_PLUGINS_HOME=d:\java\sonar-2.2\extensions\plugins
-copy php\target\sonar-php-plugin-%SONAR_PHP_PLUGIN_VERSION%.jar %SONAR_PLUGINS_HOME%
+copy target\sonar-php-plugin-%SONAR_PHP_PLUGIN_VERSION%.jar %SONAR_PLUGINS_HOME%
 

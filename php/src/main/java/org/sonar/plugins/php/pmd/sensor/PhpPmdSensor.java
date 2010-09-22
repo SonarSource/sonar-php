@@ -27,6 +27,7 @@ import javax.xml.stream.XMLStreamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.AbstractViolationsStaxParser;
+import org.sonar.api.batch.GeneratesViolations;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
@@ -40,7 +41,7 @@ import org.sonar.plugins.php.pmd.executor.PhpPmdExecutor;
 /**
  * The plugin entry point.
  */
-public class PhpPmdSensor implements Sensor {
+public class PhpPmdSensor implements Sensor, GeneratesViolations {
 
   /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(PhpPmdSensor.class);
