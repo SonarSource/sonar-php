@@ -31,7 +31,7 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * The Ruleset represent an PHPMD ruleset.
  */
 @XStreamAlias("ruleset")
-public class Ruleset {
+public class RulesetNode {
 
   /** The name. */
   @XStreamAsAttribute
@@ -43,7 +43,7 @@ public class Ruleset {
 
   /** The rules. */
   @XStreamImplicit(itemFieldName = "rule")
-  private List<Rule> rules;
+  private List<RuleNode> rules;
 
   /**
    * Instantiates a new ruleset.
@@ -51,9 +51,9 @@ public class Ruleset {
    * @param description
    *          the description
    */
-  public Ruleset(String description) {
+  public RulesetNode(String description) {
     this.name = description;
-    rules = new ArrayList<Rule>();
+    rules = new ArrayList<RuleNode>();
   }
 
   /**
@@ -66,7 +66,7 @@ public class Ruleset {
    * @param rules
    *          the rules
    */
-  public Ruleset(String name, String description, List<Rule> rules) {
+  public RulesetNode(String name, String description, List<RuleNode> rules) {
     super();
     this.name = name;
     this.rulesetDescription = description;
@@ -96,7 +96,7 @@ public class Ruleset {
    * 
    * @return the rules
    */
-  public List<Rule> getRules() {
+  public List<RuleNode> getRules() {
     return rules;
   }
 
@@ -126,7 +126,7 @@ public class Ruleset {
    * @param rules
    *          the new rules
    */
-  public void setRules(List<Rule> rules) {
+  public void setRules(List<RuleNode> rules) {
     this.rules = rules;
   }
 }

@@ -54,11 +54,15 @@ public class PhpPmdSensor implements Sensor, GeneratesViolations {
 
   /** The plugin configuration. */
   private PhpPmdConfiguration config;
+  /**
+   * The associated language.
+   */
+  private Php php;
 
   /**
    * Constructor used for tests.
    */
-  public PhpPmdSensor() {
+  PhpPmdSensor() {
     super();
   }
 
@@ -70,10 +74,11 @@ public class PhpPmdSensor implements Sensor, GeneratesViolations {
    * @param rulesManager
    *          the rules manager
    */
-  public PhpPmdSensor(RulesProfile profile, RulesManager rulesManager) {
+  public PhpPmdSensor(RulesProfile profile, RulesManager rulesManager, Php php) {
     super();
-    this.profile = profile;
     this.rulesManager = rulesManager;
+    this.php = php;
+    this.profile = profile;
   }
 
   /**
@@ -132,7 +137,7 @@ public class PhpPmdSensor implements Sensor, GeneratesViolations {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return getConfiguration(project).isShouldRun() && Php.INSTANCE.equals(project.getLanguage());
+    return getConfiguration(project).isShouldRun() && project.getLanguage().equals(php);
   }
 
   /***

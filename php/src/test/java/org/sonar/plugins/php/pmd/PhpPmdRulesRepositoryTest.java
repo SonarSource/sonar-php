@@ -48,9 +48,9 @@ import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpPlugin;
-import org.sonar.plugins.php.pmd.xml.Property;
-import org.sonar.plugins.php.pmd.xml.Rule;
-import org.sonar.plugins.php.pmd.xml.Ruleset;
+import org.sonar.plugins.php.pmd.xml.PropertyNode;
+import org.sonar.plugins.php.pmd.xml.RuleNode;
+import org.sonar.plugins.php.pmd.xml.RulesetNode;
 import org.xml.sax.SAXException;
 
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -112,17 +112,17 @@ public class PhpPmdRulesRepositoryTest {
     ActiveRule activeRule = new ActiveRule(null, dbRule, RulePriority.MAJOR);
     activeRule.setActiveRuleParams(Arrays.asList(new ActiveRuleParam(activeRule, ruleParam, "Connection,Statement,ResultSet")));
 
-    Ruleset ruleset = repository.buildRuleset(Arrays.asList(activeRule));
+    RulesetNode ruleset = repository.buildRuleset(Arrays.asList(activeRule));
 
     assertThat(ruleset.getRules().size(), is(1));
 
-    Rule rule = ruleset.getRules().get(0);
+    RuleNode rule = ruleset.getRules().get(0);
     assertThat(rule.getName(), is("rulesets/design.xml/CloseResource"));
     assertThat(rule.getProperties().getProperties().size(), is(1));
 
     assertThat(rule.getPriority(), is("3"));
 
-    Property property = rule.getProperties().getProperties().get(0);
+    PropertyNode property = rule.getProperties().getProperties().get(0);
     assertThat(property.getName(), is("types"));
     assertThat(property.getValue(), is("Connection,Statement,ResultSet"));
   }
@@ -142,7 +142,7 @@ public class PhpPmdRulesRepositoryTest {
     rule2.setKey("rulesets/braces.xml/IfElseStmtsMustUseBraces");
     ActiveRule activeRule2 = new ActiveRule(null, rule2, RulePriority.MAJOR);
 
-    Ruleset ruleset = repository.buildRuleset(Arrays.asList(activeRule1, activeRule2));
+    RulesetNode ruleset = repository.buildRuleset(Arrays.asList(activeRule1, activeRule2));
 
     assertThat(ruleset.getRules().size(), is(2));
     assertThat(ruleset.getRules().get(0).getName(), is("rulesets/design.xml/CloseResource"));
@@ -158,29 +158,29 @@ public class PhpPmdRulesRepositoryTest {
   @Test
   public void shouldBuildRulesetFromXml() throws IOException {
     InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/pmd/test_module_tree.xml");
-    Ruleset ruleset = repository.buildRulesetFromXml(IOUtils.toString(input));
+    RulesetNode ruleset = repository.buildRulesetFromXml(IOUtils.toString(input));
 
     assertThat(ruleset.getRules().size(), is(3));
 
-    Rule rule1 = ruleset.getRules().get(0);
+    RuleNode rule1 = ruleset.getRules().get(0);
     assertThat(rule1.getName(), is("CyclomaticComplexity"));
     assertThat(rule1.getPriority(), is("2"));
     assertThat(rule1.getProperties().getProperties().size(), is(1));
 
-    Property module1Property = rule1.getProperties().getProperties().get(0);
+    PropertyNode module1Property = rule1.getProperties().getProperties().get(0);
     assertThat(module1Property.getName(), is("threshold"));
     assertThat(module1Property.getValue(), is("20"));
 
-    Rule rule2 = ruleset.getRules().get(1);
+    RuleNode rule2 = ruleset.getRules().get(1);
     assertThat(rule2.getName(), is("ExcessiveClassLength"));
     assertThat(rule2.getPriority(), is("3"));
     assertThat(rule2.getProperties().getProperties().size(), is(1));
 
-    Property module2Property = rule2.getProperties().getProperties().get(0);
+    PropertyNode module2Property = rule2.getProperties().getProperties().get(0);
     assertThat(module2Property.getName(), is("minimum"));
     assertThat(module2Property.getValue(), is("20"));
 
-    Rule rule3 = ruleset.getRules().get(2);
+    RuleNode rule3 = ruleset.getRules().get(2);
     assertThat(rule3.getName(), is("UnusedFormalParameter"));
     assertThat(rule3.getPriority(), is("4"));
     assertNull(rule3.getProperties().getProperties());
@@ -195,9 +195,9 @@ public class PhpPmdRulesRepositoryTest {
   @Test
   public void shouldBuildRulesetFromXmlInUtf8() throws IOException {
     InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/pmd/test_xml_utf8.xml");
-    Ruleset ruleset = repository.buildRulesetFromXml(IOUtils.toString(input, CharEncoding.UTF_8));
+    RulesetNode ruleset = repository.buildRulesetFromXml(IOUtils.toString(input, CharEncoding.UTF_8));
 
-    Rule rule1 = ruleset.getRules().get(0);
+    RuleNode rule1 = ruleset.getRules().get(0);
     assertThat(rule1.getName(), is("CyclomaticComplexity"));
     assertThat(rule1.getProperties().getProperties().get(0).getValue(), is("\u00E9"));
   }
@@ -212,7 +212,7 @@ public class PhpPmdRulesRepositoryTest {
    */
   @Test
   public void shouldBuilXmlFromRuleset() throws IOException, SAXException {
-    Ruleset ruleset = buildRulesetFixture();
+    RulesetNode ruleset = buildRulesetFixture();
     String xml = repository.buildXmlFromRuleset(ruleset);
     assertXmlAreSimilar(xml, "test_module_tree.xml");
   }
@@ -291,7 +291,7 @@ public class PhpPmdRulesRepositoryTest {
     List<ActiveRule> activeRulesExpected = buildActiveRulesFixture(inputRules);
 
     List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    Ruleset ruleset = buildRulesetFixture();
+    RulesetNode ruleset = buildRulesetFixture();
     repository.buildActiveRulesFromRuleset(ruleset, activeRules, inputRules);
 
     assertThat(activeRulesExpected.size(), is(activeRules.size()));
@@ -354,7 +354,7 @@ public class PhpPmdRulesRepositoryTest {
     rule2.setPluginName("not-a-pmd-plugin");
     ActiveRule activeRule2 = new ActiveRule(null, rule1, RulePriority.CRITICAL);
 
-    Ruleset tree = repository.buildRuleset(Arrays.asList(activeRule1, activeRule2));
+    RulesetNode tree = repository.buildRuleset(Arrays.asList(activeRule1, activeRule2));
     assertThat(tree.getRules().size(), is(0));
   }
 
@@ -363,7 +363,7 @@ public class PhpPmdRulesRepositoryTest {
    */
   @Test
   public void shouldBuildOnlyOneModuleWhenNoActiveRules() {
-    Ruleset tree = repository.buildRuleset(Collections.<ActiveRule> emptyList());
+    RulesetNode tree = repository.buildRuleset(Collections.<ActiveRule> emptyList());
     assertThat(tree.getRules().size(), is(0));
   }
 
@@ -381,13 +381,13 @@ public class PhpPmdRulesRepositoryTest {
     dbRule2.setKey("rulesets/coupling.xml/CouplingBetweenObjects");
     ActiveRule activeRule2 = new ActiveRule(null, dbRule2, RulePriority.CRITICAL);
 
-    Ruleset tree = repository.buildRuleset(Arrays.asList(activeRule1, activeRule2));
+    RulesetNode tree = repository.buildRuleset(Arrays.asList(activeRule1, activeRule2));
     assertThat(tree.getRules().size(), is(2));
 
-    Rule rule1 = tree.getRules().get(0);
+    RuleNode rule1 = tree.getRules().get(0);
     assertThat(rule1.getName(), is("rulesets/coupling.xml/CouplingBetweenObjects"));
 
-    Rule rule2 = tree.getRules().get(1);
+    RuleNode rule2 = tree.getRules().get(1);
     assertThat(rule2.getName(), is("rulesets/coupling.xml/CouplingBetweenObjects"));
   }
 
@@ -421,18 +421,18 @@ public class PhpPmdRulesRepositoryTest {
    * 
    * @return the ruleset
    */
-  private Ruleset buildRulesetFixture() {
-    Ruleset ruleset = new Ruleset("Sonar PHP PMD rules");
+  private RulesetNode buildRulesetFixture() {
+    RulesetNode ruleset = new RulesetNode("Sonar PHP PMD rules");
 
-    Rule rule1 = new Rule("CyclomaticComplexity", "2");
-    rule1.getProperties().add(new Property("threshold", "20"));
+    RuleNode rule1 = new RuleNode("CyclomaticComplexity", "2");
+    rule1.getProperties().add(new PropertyNode("threshold", "20"));
     ruleset.getRules().add(rule1);
 
-    Rule rule2 = new Rule("ExcessiveClassLength", "3");
-    rule2.getProperties().add(new Property("minimum", "20"));
+    RuleNode rule2 = new RuleNode("ExcessiveClassLength", "3");
+    rule2.getProperties().add(new PropertyNode("minimum", "20"));
     ruleset.getRules().add(rule2);
 
-    Rule rule3 = new Rule("UnusedFormalParameter", "4");
+    RuleNode rule3 = new RuleNode("UnusedFormalParameter", "4");
     ruleset.getRules().add(rule3);
 
     return ruleset;

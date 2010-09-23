@@ -27,7 +27,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * The property class represent a PHPmd rule property
  */
 @XStreamAlias("property")
-public class Property {
+public class PropertyNode {
 
   /** The property name. */
   @XStreamAsAttribute
@@ -49,7 +49,7 @@ public class Property {
    * @param value
    *          the value
    */
-  public Property(String name, String value) {
+  public PropertyNode(String name, String value) {
     this.name = name;
     this.value = value;
   }

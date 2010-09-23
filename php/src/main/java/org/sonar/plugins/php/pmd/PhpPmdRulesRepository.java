@@ -32,21 +32,19 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
-import org.sonar.api.rules.ConfigurationExportable;
-import org.sonar.api.rules.ConfigurationImportable;
 import org.sonar.api.rules.Iso9126RulesCategories;
+import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RulesCategory;
-import org.sonar.api.rules.RulesRepository;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.pmd.sensor.PhpPmdSensor;
-import org.sonar.plugins.php.pmd.xml.Properties;
-import org.sonar.plugins.php.pmd.xml.Property;
-import org.sonar.plugins.php.pmd.xml.Rule;
-import org.sonar.plugins.php.pmd.xml.Ruleset;
+import org.sonar.plugins.php.pmd.xml.PropertiesNode;
+import org.sonar.plugins.php.pmd.xml.PropertyNode;
+import org.sonar.plugins.php.pmd.xml.RuleNode;
+import org.sonar.plugins.php.pmd.xml.RulesetNode;
 import org.sonar.plugins.pmd.PmdRulePriorityMapper;
 
 import com.thoughtworks.xstream.XStream;
@@ -107,11 +105,11 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    * @param rules
    *          the rules from initial ruleset
    */
-  protected void buildActiveRulesFromRuleset(Ruleset ruleset, List<ActiveRule> activeRules, List<org.sonar.api.rules.Rule> rules) {
-    List<Rule> allRules = ruleset.getRules();
+  protected void buildActiveRulesFromRuleset(RulesetNode ruleset, List<ActiveRule> activeRules, List<org.sonar.api.rules.Rule> rules) {
+    List<RuleNode> allRules = ruleset.getRules();
     if (allRules != null && !allRules.isEmpty()) {
       // For each rules in the profile
-      for (Rule rule : allRules) {
+      for (RuleNode rule : allRules) {
         String name = rule.getName();
         for (org.sonar.api.rules.Rule dbRule : rules) {
           // If rule is referenced by initial ruleset
@@ -136,18 +134,18 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    * 
    * @return the ruleset
    */
-  protected Ruleset buildRuleset(List<ActiveRule> activeRules) {
-    Ruleset ruleset = new Ruleset(PHPMD_RULESET_NAME);
+  protected RulesetNode buildRuleset(List<ActiveRule> activeRules) {
+    RulesetNode ruleset = new RulesetNode(PHPMD_RULESET_NAME);
     for (ActiveRule activeRule : activeRules) {
       if (activeRule.getRule().getPluginName().equals(PhpPlugin.PHPMD_PLUGIN_KEY)) {
         String configKey = activeRule.getRuleKey();
-        Rule rule = new Rule(configKey, mapper.to(activeRule.getPriority()));
+        RuleNode rule = new RuleNode(configKey, mapper.to(activeRule.getPriority()));
         rule.setClassName(activeRule.getConfigKey());
-        Properties properties = null;
+        PropertiesNode properties = null;
         if (activeRule.getActiveRuleParams() != null && !activeRule.getActiveRuleParams().isEmpty()) {
-          properties = new Properties();
+          properties = new PropertiesNode();
           for (ActiveRuleParam activeRuleParam : activeRule.getActiveRuleParams()) {
-            properties.add(new Property(activeRuleParam.getRuleParam().getKey(), activeRuleParam.getValue()));
+            properties.add(new PropertyNode(activeRuleParam.getRuleParam().getKey(), activeRuleParam.getValue()));
           }
         }
         rule.setProperties(properties);
@@ -165,7 +163,7 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    * 
    * @return the ruleset
    */
-  protected Ruleset buildRulesetFromXml(String configuration) {
+  protected RulesetNode buildRulesetFromXml(String configuration) {
     if (LOG.isInfoEnabled() && !LOG.isDebugEnabled()) {
       LOG.info("Loading configuration.");
     }
@@ -178,11 +176,11 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
       XStream xstream = new XStream();
       xstream.setClassLoader(getClass().getClassLoader());
       xstream.aliasSystemAttribute("classType", "class");
-      xstream.processAnnotations(Ruleset.class);
-      xstream.processAnnotations(Rule.class);
-      xstream.processAnnotations(Property.class);
+      xstream.processAnnotations(RulesetNode.class);
+      xstream.processAnnotations(RuleNode.class);
+      xstream.processAnnotations(PropertyNode.class);
       inputStream = IOUtils.toInputStream(configuration, CharEncoding.UTF_8);
-      return (Ruleset) xstream.fromXML(inputStream);
+      return (RulesetNode) xstream.fromXML(inputStream);
 
     } catch (IOException e) {
       String errorMessage = "Can't transform given configuration into inputStream with UTF-8 encoding.";
@@ -229,12 +227,12 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    * 
    * @return the string
    */
-  protected String buildXmlFromRuleset(Ruleset tree) {
+  protected String buildXmlFromRuleset(RulesetNode tree) {
     XStream xstream = new XStream();
     xstream.setClassLoader(getClass().getClassLoader());
-    xstream.processAnnotations(Ruleset.class);
-    xstream.processAnnotations(Rule.class);
-    xstream.processAnnotations(Property.class);
+    xstream.processAnnotations(RulesetNode.class);
+    xstream.processAnnotations(RuleNode.class);
+    xstream.processAnnotations(PropertyNode.class);
     return xstream.toXML(tree);
   }
 
@@ -248,8 +246,8 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    * @param buildModuleTreeFromXml
    *          the build module tree from xml
    */
-  private void copyToSonarRules(List<org.sonar.api.rules.Rule> rules, Ruleset buildModuleTreeFromXml) {
-    for (Rule phpmdRule : buildModuleTreeFromXml.getRules()) {
+  private void copyToSonarRules(List<org.sonar.api.rules.Rule> rules, RulesetNode buildModuleTreeFromXml) {
+    for (RuleNode phpmdRule : buildModuleTreeFromXml.getRules()) {
       org.sonar.api.rules.Rule rule = new org.sonar.api.rules.Rule();
       rule.setConfigKey(phpmdRule.getClassName());
       rule.setName(phpmdRule.getName());
@@ -259,7 +257,7 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
       rule.setPriority(mapper.from(phpmdRule.getPriority()));
       if (phpmdRule.getProperties() != null) {
         List<RuleParam> params = new ArrayList<RuleParam>();
-        for (Property property : phpmdRule.getProperties().getProperties()) {
+        for (PropertyNode property : phpmdRule.getProperties().getProperties()) {
           RuleParam param = new RuleParam(rule, property.getName(), property.getDescription(), "i");
           params.add(param);
         }
@@ -284,7 +282,7 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
     if (LOG.isInfoEnabled()) {
       LOG.info("Exporting " + activeProfile.getName() + ".");
     }
-    Ruleset tree = buildRuleset(activeProfile.getActiveRulesByPlugin(PhpPlugin.PHPMD_PLUGIN_KEY));
+    RulesetNode tree = buildRuleset(activeProfile.getActiveRulesByPlugin(PhpPlugin.PHPMD_PLUGIN_KEY));
     String xmlModules = buildXmlFromRuleset(tree);
     return addHeaderToXml(xmlModules);
   }
@@ -301,10 +299,10 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    * 
    * @return the active rule params
    */
-  private List<ActiveRuleParam> getActiveRuleParams(Rule rule, org.sonar.api.rules.Rule dbRule, ActiveRule activeRule) {
+  private List<ActiveRuleParam> getActiveRuleParams(RuleNode rule, org.sonar.api.rules.Rule dbRule, ActiveRule activeRule) {
     List<ActiveRuleParam> activeRuleParams = new ArrayList<ActiveRuleParam>();
     if (rule.getProperties() != null && rule.getProperties().getProperties() != null) {
-      for (Property property : rule.getProperties().getProperties()) {
+      for (PropertyNode property : rule.getProperties().getProperties()) {
         if (dbRule.getParams() != null) {
           for (RuleParam ruleParam : dbRule.getParams()) {
             if (ruleParam.getKey().equals(property.getName())) {
@@ -324,12 +322,12 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    * 
    * @see org.sonar.api.rules.RulesRepository#getInitialReferential()
    */
-  public List<org.sonar.api.rules.Rule> getInitialReferential() {
+  public List<Rule> getInitialReferential() {
     if (initialRefs != null) {
       return initialRefs;
     }
     try {
-      List<org.sonar.api.rules.Rule> rules = new ArrayList<org.sonar.api.rules.Rule>();
+      List<Rule> rules = new ArrayList<Rule>();
       loadRuleset("codesize.xml", rules);
       loadRuleset("unusedcode.xml", rules);
       return rules;
@@ -340,13 +338,13 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
     }
   }
 
-  public void loadRuleset(String ruleset, List<org.sonar.api.rules.Rule> rules) throws IOException {
+  public void loadRuleset(String ruleset, List<Rule> rules) throws IOException {
     InputStream is = getClass().getResourceAsStream(ruleset);
     try {
       if (is == null) {
         throw new SonarException("Resource not found : " + ruleset);
       }
-      Ruleset buildModuleTreeFromXml = buildRulesetFromXml(IOUtils.toString(is, CharEncoding.UTF_8));
+      RulesetNode buildModuleTreeFromXml = buildRulesetFromXml(IOUtils.toString(is, CharEncoding.UTF_8));
       copyToSonarRules(rules, buildModuleTreeFromXml);
     } finally {
       IOUtils.closeQuietly(is);
@@ -391,7 +389,7 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    */
   public List<ActiveRule> importConfiguration(String configuration, List<org.sonar.api.rules.Rule> rules) {
     List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    Ruleset moduleTree = buildRulesetFromXml(configuration);
+    RulesetNode moduleTree = buildRulesetFromXml(configuration);
     buildActiveRulesFromRuleset(moduleTree, activeRules, rules);
     return activeRules;
   }
@@ -406,9 +404,9 @@ public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, Con
    * 
    * @see org.sonar.api.rules.RulesRepository#parseReferential(java.lang.String)
    */
-  public List<org.sonar.api.rules.Rule> parseReferential(String fileContent) {
-    List<org.sonar.api.rules.Rule> rules = new ArrayList<org.sonar.api.rules.Rule>();
-    Ruleset buildModuleTreeFromXml = buildRulesetFromXml(fileContent);
+  public List<Rule> parseReferential(String fileContent) {
+    List<Rule> rules = new ArrayList<Rule>();
+    RulesetNode buildModuleTreeFromXml = buildRulesetFromXml(fileContent);
     copyToSonarRules(rules, buildModuleTreeFromXml);
     return rules;
   }

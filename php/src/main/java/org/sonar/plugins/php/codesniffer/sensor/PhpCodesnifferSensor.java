@@ -57,12 +57,15 @@ public class PhpCodesnifferSensor implements Sensor, GeneratesViolations {
    */
   private RulesProfile profile;
 
+  /**
+   * The associated language.
+   */
   private Php php;
 
   /**
    * Default constructor used for tests only.
    */
-  public PhpCodesnifferSensor() {
+  PhpCodesnifferSensor() {
     super();
   }
 
@@ -149,7 +152,7 @@ public class PhpCodesnifferSensor implements Sensor, GeneratesViolations {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return getConfiguration(project).isShouldRun() && Php.INSTANCE.equals(project.getLanguage());
+    return getConfiguration(project).isShouldRun() && project.getLanguage().equals(php);
   }
 
   /**

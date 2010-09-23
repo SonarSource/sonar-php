@@ -31,7 +31,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  * The Rule class represent a PHPMD rule.
  */
 @XStreamAlias("rule")
-public class Rule implements Comparable<String> {
+public class RuleNode implements Comparable<String> {
 
   /** The class name. */
   @XStreamAsAttribute
@@ -177,7 +177,7 @@ public class Rule implements Comparable<String> {
 
   /** The properties. */
   @XStreamAlias("properties")
-  private Properties properties;
+  private PropertiesNode properties;
 
   /**
    * Instantiates a new rule.
@@ -185,7 +185,7 @@ public class Rule implements Comparable<String> {
    * @param name
    *          the rule name
    */
-  public Rule(String name) {
+  public RuleNode(String name) {
     this(name, null);
   }
 
@@ -197,9 +197,9 @@ public class Rule implements Comparable<String> {
    * @param name
    *          the name
    */
-  public Rule(String name, String priority) {
+  public RuleNode(String name, String priority) {
     super();
-    properties = new Properties();
+    properties = new PropertiesNode();
     this.name = name;
     this.priority = priority;
   }
@@ -259,7 +259,7 @@ public class Rule implements Comparable<String> {
    * 
    * @return the properties
    */
-  public Properties getProperties() {
+  public PropertiesNode getProperties() {
     return properties;
   }
 
@@ -299,7 +299,7 @@ public class Rule implements Comparable<String> {
    * @param properties
    *          the new properties
    */
-  public final void setProperties(Properties properties) {
+  public final void setProperties(PropertiesNode properties) {
     this.properties = properties;
   }
 
@@ -329,7 +329,7 @@ public class Rule implements Comparable<String> {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    Rule other = (Rule) obj;
+    RuleNode other = (RuleNode) obj;
     return new EqualsBuilder().append(className, other.className).append(message, other.message).append(name, other.name)
         .append(priority, other.priority).isEquals();
   }

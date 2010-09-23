@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.resources.Project;
 
 /**
@@ -32,6 +34,8 @@ import org.sonar.api.resources.Project;
  */
 public abstract class PhpPluginAbstractConfiguration {
 
+  /** The logger. */
+  private static final Logger LOG = LoggerFactory.getLogger(PhpPluginAbstractConfiguration.class);
   /**
    * Suffix used by windows for script files
    */
@@ -134,6 +138,7 @@ public abstract class PhpPluginAbstractConfiguration {
     StringBuilder fileName = new StringBuilder(reportFileRelativePath).append(File.separator);
     fileName.append(reportFileName);
     File reportFile = new File(project.getFileSystem().getBuildDir(), fileName.toString());
+    LOG.debug("Report file: " + reportFile);
     return reportFile;
 
   }

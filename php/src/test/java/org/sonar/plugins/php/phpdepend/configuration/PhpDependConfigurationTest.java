@@ -68,7 +68,6 @@ public class PhpDependConfigurationTest {
   public void shouldGetValidSuffixeOption() {
     Configuration configuration = mock(Configuration.class);
     Php php = new Php(configuration);
-
     PhpDependConfiguration config = getWindowsConfiguration();
     String suffixesOption = config.getSuffixesCommandOption();
     assertThat(suffixesOption, notNullValue());

@@ -51,6 +51,7 @@ import com.thoughtworks.xstream.XStream;
  * @author akram
  * 
  */
+@SuppressWarnings("rawtypes")
 public class PhpCpdResultParser {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCpdResultParser.class);
@@ -103,7 +104,6 @@ public class PhpCpdResultParser {
    */
   private void parseFile(SensorContext context, File file, Project project) {
     List<DuplicationNode> duplications = getDuplications(file);
-    @SuppressWarnings("rawtypes")
     Map<Resource, ClassDuplicationData> duplicationsData = new HashMap<Resource, ClassDuplicationData>();
     for (DuplicationNode duplication : duplications) {
       List<FileNode> files = duplication.getFiles();
@@ -126,7 +126,6 @@ public class PhpCpdResultParser {
    * @param duplication
    * @param project
    */
-  @SuppressWarnings("rawtypes")
   private void processClassMeasure(SensorContext context, Map<Resource, ClassDuplicationData> duplicationsData, FileNode original,
       FileNode copied, DuplicationNode duplication, Project project) {
     Resource file = PhpFile.fromAbsolutePath(copied.getPath(), project.getFileSystem().getSourceDirs(), false);
@@ -174,7 +173,7 @@ public class PhpCpdResultParser {
    * @author akram
    * 
    */
-  private static class ClassDuplicationData {
+  private static final class ClassDuplicationData {
 
     private static final String SONAR_DUPLICATION_CLOSING_TAG = "\"/>";
     private static final String SONAR_TARGET_RESOURCE_ATTRIBUTE = "\" target-resource=\"";
@@ -183,10 +182,10 @@ public class PhpCpdResultParser {
     private static final String SONAR_DUPLICATION_START_ATTRIBUTE = "\" start=\"";
     private static final String SONAR_DUPLICATIONS_END_TAG = "</duplications>";
     private static final String SONAR_DUPLICATION_START_TAG = "<duplications>";
-    protected double duplicatedLines;
-    protected double duplicatedBlocks;
-    @SuppressWarnings("rawtypes")
-    protected Resource resource;
+    private double duplicatedLines;
+    private double duplicatedBlocks;
+
+    private Resource resource;
     private SensorContext context;
     private List<StringBuilder> duplicationXMLEntries = new ArrayList<StringBuilder>();
 
@@ -196,7 +195,7 @@ public class PhpCpdResultParser {
      * @param resource
      * @param context
      */
-    private ClassDuplicationData(@SuppressWarnings("rawtypes") Resource resource, SensorContext context) {
+    private ClassDuplicationData(Resource resource, SensorContext context) {
       this.context = context;
       this.resource = resource;
     }
@@ -204,14 +203,14 @@ public class PhpCpdResultParser {
     /**
      * Build XML for sonar dashboard to display duplicated code.
      * 
-     * @param targetResource
+     * @param target
      * @param targetDuplicationStartLine
      * @param duplicationStartLine
      * @param duplicatedLines
      */
-    @SuppressWarnings("rawtypes")
-    protected void cumulate(Resource targetResource, Double targetDuplicationStartLine, Double duplicationStartLine, Double duplicatedLines) {
-      Resource resolvedResource = context.getResource(targetResource);
+
+    protected void cumulate(Resource target, Double targetDuplicationStartLine, Double duplicationStartLine, Double duplicatedLines) {
+      Resource resolvedResource = context.getResource(target);
       if (resolvedResource != null) {
         StringBuilder xml = new StringBuilder(SONAR_DUPLICATION_DUPLICATION_LINES_TAG);
         xml.append(duplicatedLines.intValue()).append(SONAR_DUPLICATION_START_ATTRIBUTE).append(duplicationStartLine.intValue());
