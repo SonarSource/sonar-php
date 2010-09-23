@@ -150,7 +150,7 @@ public class PhpFile extends Resource<PhpPackage> {
     this.unitTest = unitTest;
     String extension = FilenameUtils.getExtension(StringUtils.trim(key));
     if (extension != null) {
-    	extension = "." + extension;
+      extension = "." + extension;
     }
     String realKey = FilenameUtils.removeExtension(StringUtils.trim(key)).replaceAll(SEPARATOR, ".");
     if (realKey.contains(".")) {

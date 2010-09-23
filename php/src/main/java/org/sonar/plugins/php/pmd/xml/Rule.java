@@ -330,8 +330,8 @@ public class Rule implements Comparable<String> {
       return false;
     }
     Rule other = (Rule) obj;
-    return new EqualsBuilder().append(className, other.className).append(message, other.message).append(name, other.name).append(priority,
-        other.priority).isEquals();
+    return new EqualsBuilder().append(className, other.className).append(message, other.message).append(name, other.name)
+        .append(priority, other.priority).isEquals();
   }
 
 }

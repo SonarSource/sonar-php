@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -235,7 +236,7 @@ public class Module implements Comparable<String> {
   public Module fromXml(String xml) {
     InputStream input = null;
     try {
-      input = IOUtils.toInputStream(xml, "UTF-8");
+      input = IOUtils.toInputStream(xml, CharEncoding.UTF_8);
       return (Module) newXStream().fromXML(input);
 
     } catch (IOException e) {
@@ -281,8 +282,8 @@ public class Module implements Comparable<String> {
       return false;
     }
     Module other = (Module) obj;
-    return new EqualsBuilder().append(children, other.children).append(metadata, other.metadata).append(name, other.name).append(
-        properties, other.properties).isEquals();
+    return new EqualsBuilder().append(children, other.children).append(metadata, other.metadata).append(name, other.name)
+        .append(properties, other.properties).isEquals();
   }
 
   /**

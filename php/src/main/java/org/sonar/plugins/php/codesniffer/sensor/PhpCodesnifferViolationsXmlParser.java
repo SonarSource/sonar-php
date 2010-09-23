@@ -29,10 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.AbstractViolationsStaxParser;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.RulesManager;
-import org.sonar.plugins.php.codesniffer.PhpCodesnifferPlugin;
 import org.sonar.plugins.php.core.resources.PhpFile;
 
 /**
@@ -52,6 +52,9 @@ class PhpCheckStyleViolationsXmlParser extends AbstractViolationsStaxParser {
 
   private static final String MESSAGE_ATTRIBUTE_NAME = "message";
 
+  /** The plugin KEY. */
+  public static final String KEY = "PHP_CodeSniffer";
+
   private static final Logger LOG = LoggerFactory.getLogger(PhpCheckStyleViolationsXmlParser.class);
 
   /** The project. */
@@ -61,17 +64,20 @@ class PhpCheckStyleViolationsXmlParser extends AbstractViolationsStaxParser {
    * Instantiates a new checkstyle violations xml parser.
    * 
    * @param project
-   *          the project
    * @param context
-   *          the context
    * @param rulesManager
-   *          the rules manager
-   * @param profile
-   *          the profile
    */
-  public PhpCheckStyleViolationsXmlParser(Project project, SensorContext context, RulesManager rulesManager) {
-    super(context, rulesManager);
+  public PhpCheckStyleViolationsXmlParser(Project project, SensorContext context, RulesManager rulesManager, RulesProfile profile) {
+    super(context, rulesManager, profile);
     this.project = project;
+  }
+
+  /**
+   * @see org.sonar.api.batch.AbstractViolationsStaxParser#keyForPlugin()
+   */
+  @Override
+  protected String keyForPlugin() {
+    return KEY;
   }
 
   /**
@@ -88,14 +94,6 @@ class PhpCheckStyleViolationsXmlParser extends AbstractViolationsStaxParser {
   @Override
   protected SMInputCursor cursorForViolations(SMInputCursor resourcesCursor) throws XMLStreamException {
     return resourcesCursor.descendantElementCursor(VIOLATION_NODE_NAME);
-  }
-
-  /**
-   * @see org.sonar.api.batch.AbstractViolationsStaxParser#keyForPlugin()
-   */
-  @Override
-  protected String keyForPlugin() {
-    return PhpCodesnifferPlugin.KEY;
   }
 
   /**

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.RulesProfile;
@@ -33,12 +34,14 @@ import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
 import org.sonar.api.rules.ConfigurationExportable;
 import org.sonar.api.rules.ConfigurationImportable;
+import org.sonar.api.rules.Iso9126RulesCategories;
 import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RulesCategory;
 import org.sonar.api.rules.RulesRepository;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.pmd.sensor.PhpPmdSensor;
 import org.sonar.plugins.php.pmd.xml.Properties;
 import org.sonar.plugins.php.pmd.xml.Property;
@@ -51,7 +54,7 @@ import com.thoughtworks.xstream.XStream;
 /**
  * The Class PhpPmdRulesRepository handles ruleset and profile import and export
  */
-public final class PhpPmdRulesRepository implements RulesRepository<Php>, ConfigurationExportable, ConfigurationImportable {
+public final class PhpPmdRulesRepository /* implements RulesRepository<Php>, ConfigurationExportable, ConfigurationImportable */{
 
   private static final String PHPMD_RULESET_NAME = "Sonar PHPMD rules";
 
@@ -61,6 +64,10 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
   /** The rule priority mapper. */
   private PmdRulePriorityMapper mapper = new PmdRulePriorityMapper();
 
+  /**
+   * Php Language instance.
+   */
+  private Php php;
   /**
    * Initial references.
    */
@@ -72,8 +79,9 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
    * @param language
    *          the language
    */
-  public PhpPmdRulesRepository() {
+  public PhpPmdRulesRepository(Php php) {
     super();
+    this.php = php;
   }
 
   /**
@@ -131,7 +139,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
   protected Ruleset buildRuleset(List<ActiveRule> activeRules) {
     Ruleset ruleset = new Ruleset(PHPMD_RULESET_NAME);
     for (ActiveRule activeRule : activeRules) {
-      if (activeRule.getRule().getPluginName().equals(PhpPmdPlugin.KEY)) {
+      if (activeRule.getRule().getPluginName().equals(PhpPlugin.PHPMD_PLUGIN_KEY)) {
         String configKey = activeRule.getRuleKey();
         Rule rule = new Rule(configKey, mapper.to(activeRule.getPriority()));
         rule.setClassName(activeRule.getConfigKey());
@@ -173,7 +181,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
       xstream.processAnnotations(Ruleset.class);
       xstream.processAnnotations(Rule.class);
       xstream.processAnnotations(Property.class);
-      inputStream = IOUtils.toInputStream(configuration, "UTF-8");
+      inputStream = IOUtils.toInputStream(configuration, CharEncoding.UTF_8);
       return (Ruleset) xstream.fromXML(inputStream);
 
     } catch (IOException e) {
@@ -202,7 +210,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
       input = getClass().getResourceAsStream(path);
       RulesProfile profile = new RulesProfile(name, Php.KEY);
       List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-      buildActiveRulesFromRuleset(buildRulesetFromXml(IOUtils.toString(input, "UTF-8")), activeRules, getInitialReferential());
+      buildActiveRulesFromRuleset(buildRulesetFromXml(IOUtils.toString(input, CharEncoding.UTF_8)), activeRules, getInitialReferential());
       profile.setActiveRules(activeRules);
       return profile;
     } catch (IOException e) {
@@ -247,7 +255,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
       rule.setName(phpmdRule.getName());
       rule.setDescription(phpmdRule.getDescription());
       rule.setKey(phpmdRule.getName());
-      rule.setPluginName(PhpPmdPlugin.KEY);
+      rule.setPluginName(PhpPlugin.PHPMD_PLUGIN_KEY);
       rule.setPriority(mapper.from(phpmdRule.getPriority()));
       if (phpmdRule.getProperties() != null) {
         List<RuleParam> params = new ArrayList<RuleParam>();
@@ -257,7 +265,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
         }
         rule.setParams(params);
       }
-      rule.setRulesCategory(new RulesCategory("Maintainability"));
+      rule.setRulesCategory(new RulesCategory(Iso9126RulesCategories.MAINTAINABILITY.getName()));
       rules.add(rule);
     }
   }
@@ -276,7 +284,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
     if (LOG.isInfoEnabled()) {
       LOG.info("Exporting " + activeProfile.getName() + ".");
     }
-    Ruleset tree = buildRuleset(activeProfile.getActiveRulesByPlugin(PhpPmdPlugin.KEY));
+    Ruleset tree = buildRuleset(activeProfile.getActiveRulesByPlugin(PhpPlugin.PHPMD_PLUGIN_KEY));
     String xmlModules = buildXmlFromRuleset(tree);
     return addHeaderToXml(xmlModules);
   }
@@ -338,7 +346,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
       if (is == null) {
         throw new SonarException("Resource not found : " + ruleset);
       }
-      Ruleset buildModuleTreeFromXml = buildRulesetFromXml(IOUtils.toString(is, "UTF-8"));
+      Ruleset buildModuleTreeFromXml = buildRulesetFromXml(IOUtils.toString(is, CharEncoding.UTF_8));
       copyToSonarRules(rules, buildModuleTreeFromXml);
     } finally {
       IOUtils.closeQuietly(is);
@@ -353,7 +361,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
    * @see org.sonar.api.rules.RulesRepository#getLanguage()
    */
   public Php getLanguage() {
-    return Php.INSTANCE;
+    return php;
   }
 
   /**
@@ -365,7 +373,7 @@ public final class PhpPmdRulesRepository implements RulesRepository<Php>, Config
    */
   public List<RulesProfile> getProvidedProfiles() {
     List<RulesProfile> profiles = new ArrayList<RulesProfile>();
-    profiles.add(buildProfile("Default Php Profile", "profile-php.xml"));
+    profiles.add(buildProfile("Php Profile with PMD", "php-profile-with-pmd.xml"));
     return profiles;
   }
 

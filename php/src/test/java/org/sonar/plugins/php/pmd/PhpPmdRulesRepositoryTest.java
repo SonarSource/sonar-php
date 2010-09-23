@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
@@ -45,6 +46,8 @@ import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
 import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
+import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.pmd.xml.Property;
 import org.sonar.plugins.php.pmd.xml.Rule;
 import org.sonar.plugins.php.pmd.xml.Ruleset;
@@ -67,7 +70,7 @@ public class PhpPmdRulesRepositoryTest {
    */
   @Before
   public void setup() {
-    repository = new PhpPmdRulesRepository();
+    repository = new PhpPmdRulesRepository(new Php());
   }
 
   /**
@@ -104,7 +107,7 @@ public class PhpPmdRulesRepositoryTest {
   public void shouldBuildModuleWithProperties() {
     org.sonar.api.rules.Rule dbRule = new org.sonar.api.rules.Rule();
     dbRule.setKey("rulesets/design.xml/CloseResource");
-    dbRule.setPluginName(PhpPmdPlugin.KEY);
+    dbRule.setPluginName(PhpPlugin.PHPMD_PLUGIN_KEY);
     RuleParam ruleParam = new RuleParam(dbRule, "types", null, null);
     ActiveRule activeRule = new ActiveRule(null, dbRule, RulePriority.MAJOR);
     activeRule.setActiveRuleParams(Arrays.asList(new ActiveRuleParam(activeRule, ruleParam, "Connection,Statement,ResultSet")));
@@ -131,11 +134,11 @@ public class PhpPmdRulesRepositoryTest {
   public void shouldBuildManyModules() {
 
     org.sonar.api.rules.Rule rule1 = new org.sonar.api.rules.Rule();
-    rule1.setPluginName(PhpPmdPlugin.KEY);
+    rule1.setPluginName(PhpPlugin.PHPMD_PLUGIN_KEY);
     rule1.setKey("rulesets/design.xml/CloseResource");
     ActiveRule activeRule1 = new ActiveRule(null, rule1, RulePriority.MAJOR);
     org.sonar.api.rules.Rule rule2 = new org.sonar.api.rules.Rule();
-    rule2.setPluginName(PhpPmdPlugin.KEY);
+    rule2.setPluginName(PhpPlugin.PHPMD_PLUGIN_KEY);
     rule2.setKey("rulesets/braces.xml/IfElseStmtsMustUseBraces");
     ActiveRule activeRule2 = new ActiveRule(null, rule2, RulePriority.MAJOR);
 
@@ -192,7 +195,7 @@ public class PhpPmdRulesRepositoryTest {
   @Test
   public void shouldBuildRulesetFromXmlInUtf8() throws IOException {
     InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/pmd/test_xml_utf8.xml");
-    Ruleset ruleset = repository.buildRulesetFromXml(IOUtils.toString(input, "UTF-8"));
+    Ruleset ruleset = repository.buildRulesetFromXml(IOUtils.toString(input, CharEncoding.UTF_8));
 
     Rule rule1 = ruleset.getRules().get(0);
     assertThat(rule1.getName(), is("CyclomaticComplexity"));
@@ -304,7 +307,7 @@ public class PhpPmdRulesRepositoryTest {
     assertThat(profiles.size(), is(1));
 
     RulesProfile profile1 = profiles.get(0);
-    assertThat(profile1.getName(), is("Default Php Profile"));
+    assertThat(profile1.getName(), is("Php Profile with PMD"));
     assertTrue(profile1.getActiveRules().size() + "", profile1.getActiveRules().size() > 10);
   }
 
@@ -370,11 +373,11 @@ public class PhpPmdRulesRepositoryTest {
   @Test
   public void shouldBuildTwoModulesEvenIfSameTwoRulesActivated() {
     org.sonar.api.rules.Rule dbRule1 = new org.sonar.api.rules.Rule();
-    dbRule1.setPluginName(PhpPmdPlugin.KEY);
+    dbRule1.setPluginName(PhpPlugin.PHPMD_PLUGIN_KEY);
     dbRule1.setKey("rulesets/coupling.xml/CouplingBetweenObjects");
     ActiveRule activeRule1 = new ActiveRule(null, dbRule1, RulePriority.CRITICAL);
     org.sonar.api.rules.Rule dbRule2 = new org.sonar.api.rules.Rule();
-    dbRule2.setPluginName(PhpPmdPlugin.KEY);
+    dbRule2.setPluginName(PhpPlugin.PHPMD_PLUGIN_KEY);
     dbRule2.setKey("rulesets/coupling.xml/CouplingBetweenObjects");
     ActiveRule activeRule2 = new ActiveRule(null, dbRule2, RulePriority.CRITICAL);
 
@@ -442,19 +445,19 @@ public class PhpPmdRulesRepositoryTest {
    */
   private List<org.sonar.api.rules.Rule> buildRulesFixture() {
     final org.sonar.api.rules.Rule rule1 = new org.sonar.api.rules.Rule("CyclomaticComplexity", "CyclomaticComplexity",
-        "CyclomaticComplexity", null, PhpPmdPlugin.KEY, null);
+        "CyclomaticComplexity", null, PhpPlugin.PHPMD_PLUGIN_KEY, null);
     RuleParam ruleParam1 = new RuleParam(rule1, "threshold", null, "i");
     rule1.setParams(Arrays.asList(ruleParam1));
     rule1.setPriority(RulePriority.CRITICAL);
 
     final org.sonar.api.rules.Rule rule2 = new org.sonar.api.rules.Rule("ExcessiveClassLength", "ExcessiveClassLength",
-        "ExcessiveClassLength", null, PhpPmdPlugin.KEY, null);
+        "ExcessiveClassLength", null, PhpPlugin.PHPMD_PLUGIN_KEY, null);
     RuleParam ruleParam2 = new RuleParam(rule2, "minimum", null, "i");
     rule2.setParams(Arrays.asList(ruleParam2));
     rule2.setPriority(RulePriority.MAJOR);
 
     final org.sonar.api.rules.Rule rule3 = new org.sonar.api.rules.Rule("UnusedFormalParameter", "UnusedFormalParameter",
-        "UnusedFormalParameter", null, PhpPmdPlugin.KEY, null);
+        "UnusedFormalParameter", null, PhpPlugin.PHPMD_PLUGIN_KEY, null);
     rule3.setPriority(RulePriority.MINOR);
 
     return Arrays.asList(rule1, rule2, rule3);

@@ -320,9 +320,9 @@ public class PhpUnitConfiguration extends PhpPluginAbstractConfiguration {
    * @return the coverage report file
    */
   public File getCoverageReportFile() {
-    return new File(getProject().getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath()).append(
-        File.separator).append(getProject().getConfiguration().getString(COVERAGE_REPORT_FILE_PROPERTY_KEY, DEFAULT_COVERAGE_REPORT_FILE))
-        .toString());
+    return new File(getProject().getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath())
+        .append(File.separator)
+        .append(getProject().getConfiguration().getString(COVERAGE_REPORT_FILE_PROPERTY_KEY, DEFAULT_COVERAGE_REPORT_FILE)).toString());
   }
 
   /**

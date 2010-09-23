@@ -33,6 +33,7 @@
     <developer>
       <id>akram</id>
       <name>Akram Ben Aissi</name>
+      <email>akbenaissi@sqli.com</email>
     </developer>
   </developers>
 
@@ -42,6 +43,7 @@
     <url>http://svn.codehaus.org/sonar-plugins/trunk/php/</url>
   </scm>
 
+  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
   <issueManagement>
     <system>JIRA</system>
     <url>http://jira.codehaus.org/browse/SONARPLUGINS/component/13723</url>
@@ -54,7 +56,7 @@
   <properties>
     <sonar.version>2.2</sonar.version>
     <sonar.pluginClass>org.sonar.plugins.php.core.PhpPlugin</sonar.pluginClass>
-    <sonar.runtimeVersion>${sonar.version}</sonar.runtimeVersion>
+    <sonar.runtimeVersion>2.3-SNAPSHOT</sonar.runtimeVersion>
   </properties>
 
   <dependencies>

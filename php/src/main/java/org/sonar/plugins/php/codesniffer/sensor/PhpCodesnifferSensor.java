@@ -30,6 +30,7 @@ import org.sonar.api.batch.AbstractViolationsStaxParser;
 import org.sonar.api.batch.GeneratesViolations;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.RulesManager;
 import org.sonar.api.utils.XmlParserException;
@@ -51,6 +52,12 @@ public class PhpCodesnifferSensor implements Sensor, GeneratesViolations {
 
   /** The plugin configuration. */
   private PhpCodesnifferConfiguration config;
+  /**
+   * 
+   */
+  private RulesProfile profile;
+
+  private Php php;
 
   /**
    * Default constructor used for tests only.
@@ -65,9 +72,11 @@ public class PhpCodesnifferSensor implements Sensor, GeneratesViolations {
    * @param rulesManager
    *          the rules manager
    */
-  public PhpCodesnifferSensor(RulesManager rulesManager) {
+  public PhpCodesnifferSensor(RulesProfile profile, RulesManager rulesManager, Php php) {
     super();
     this.rulesManager = rulesManager;
+    this.php = php;
+    this.profile = profile;
   }
 
   /**
@@ -111,7 +120,7 @@ public class PhpCodesnifferSensor implements Sensor, GeneratesViolations {
    * @return the violation stax result parser.
    */
   private AbstractViolationsStaxParser getStaxParser(Project project, SensorContext context) {
-    return new PhpCheckStyleViolationsXmlParser(project, context, rulesManager);
+    return new PhpCheckStyleViolationsXmlParser(project, context, rulesManager, profile);
   }
 
   /**

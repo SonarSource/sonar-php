@@ -58,16 +58,16 @@ public class PhpPmdExecutor extends PhpPluginAbstractExecutor {
   protected List<String> getCommandLine() {
     List<String> result = new ArrayList<String>();
     result.add(config.getOsDependentToolScriptName());
-    
+
     // SONARPLUGINS-546 PhpPmdExecutor: wrong dirs params
     result.add(StringUtils.join(config.getSourceDirectories(), PHPMD_PATH_SEPARATOR));
-    
+
     result.add(PhpPmdConfiguration.REPORT_FORMAT);
     result.add(config.getRulesets());
     result.add(PhpPmdConfiguration.REPORT_FILE_OPTION);
     result.add(config.getReportFile().getAbsolutePath());
-    //result.add(PhpPmdConfiguration.LEVEL_OPTION);
-    //result.add(config.getLevel());
+    // result.add(PhpPmdConfiguration.LEVEL_OPTION);
+    // result.add(config.getLevel());
     if (config.isStringPropertySet(PhpPmdConfiguration.IGNORE_ARGUMENT_KEY)) {
       result.add(PhpPmdConfiguration.IGNORE_OPTION);
       result.add(config.getIgnoreList());

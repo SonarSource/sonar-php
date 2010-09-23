@@ -96,7 +96,7 @@ public class PhpCodesnifferViolationsXmlParserTest {
 
     RulesProfile profile = mock(RulesProfile.class);
     when(profile.getActiveRule(anyString(), anyString())).thenReturn(new ActiveRule(null, null, RulePriority.MINOR));
-    PhpCheckStyleViolationsXmlParser parser = new PhpCheckStyleViolationsXmlParser(project, context, manager);
+    PhpCheckStyleViolationsXmlParser parser = new PhpCheckStyleViolationsXmlParser(project, context, manager, profile);
 
     File xmlFile = new File(getClass().getResource(xmlPath).toURI());
     parser.parse(xmlFile);
@@ -161,8 +161,9 @@ public class PhpCodesnifferViolationsXmlParserTest {
     SensorContext context = mock(SensorContext.class);
     parse(context, "/org/sonar/plugins/php/codesniffer/PhpCodesnifferViolationsXmlParserTest/codesniffer-simple-result.xml");
 
-    Violation wanted = new Violation(new Rule("PHP CODESNIFFER", "GN/Commenting/ClassCommentSniff/MISSING_CLASS_COMMENT"), new PhpFile(
-        "org/sonar/mvn/BaseSonarMojo.php5"));
+    Violation wanted = new Violation(
+        new Rule(PhpCheckStyleViolationsXmlParser.KEY, "GN/Commenting/ClassCommentSniff/MISSING_CLASS_COMMENT"), new PhpFile(
+            "org/sonar/mvn/BaseSonarMojo.php5"));
     wanted.setMessage("Commentaire de classe manquant.");
     verify(context).saveViolation(argThat(new IsViolation(wanted)));
   }

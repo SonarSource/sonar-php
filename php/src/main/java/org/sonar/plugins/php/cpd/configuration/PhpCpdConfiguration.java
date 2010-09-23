@@ -19,7 +19,7 @@
  */
 
 /***
- 
+
  */
 package org.sonar.plugins.php.cpd.configuration;
 

@@ -43,7 +43,6 @@ public class Php extends AbstractLanguage {
   public Php(Configuration configuration) {
     super(KEY, PHP_LANGUAGE_NAME);
     this.configuration = configuration;
-
     // See SONAR-1461
     INSTANCE = this;
   }
@@ -68,9 +67,13 @@ public class Php extends AbstractLanguage {
   /**
    * Default constructor.
    */
-  // public Php() {
-  // super(KEY, PHP_LANGUAGE_NAME);
-  // }
+  public Php() {
+    super(KEY, PHP_LANGUAGE_NAME);
+    // See SONAR-1461
+    if (INSTANCE == null) {
+      INSTANCE = this;
+    }
+  }
 
   /**
    * Gets the file suffixes.

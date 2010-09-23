@@ -36,7 +36,6 @@ import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.RulesManager;
 import org.sonar.plugins.php.core.resources.PhpFile;
 import org.sonar.plugins.php.core.resources.PhpPackage;
-import org.sonar.plugins.php.pmd.PhpPmdPlugin;
 
 /**
  * The PmdViolationsXmlParser reads the pmd result files and creates violations depending on the repository.
@@ -63,6 +62,8 @@ class PhpPmdViolationsXmlParser extends AbstractViolationsStaxParser {
 
   /** The analyzed project. */
   private Project project;
+  /** The plugin KEY. */
+  public static final String KEY = "Phpmd";
 
   /**
    * Instantiates a new pmd violations xml parser.
@@ -77,7 +78,7 @@ class PhpPmdViolationsXmlParser extends AbstractViolationsStaxParser {
    *          the profile
    */
   public PhpPmdViolationsXmlParser(Project project, SensorContext context, RulesManager rulesManager, RulesProfile profile) {
-    super(context, rulesManager);
+    super(context, rulesManager, profile);
     this.project = project;
   }
 
@@ -130,7 +131,7 @@ class PhpPmdViolationsXmlParser extends AbstractViolationsStaxParser {
    */
   @Override
   protected String keyForPlugin() {
-    return PhpPmdPlugin.KEY;
+    return KEY;
   }
 
   /**

@@ -38,6 +38,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
@@ -50,6 +51,8 @@ import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.plugins.checkstyle.xml.Module;
 import org.sonar.plugins.checkstyle.xml.Property;
+import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.xml.sax.SAXException;
 
 /**
@@ -130,9 +133,9 @@ public class PhpCodesnifferRulesRepositoryTest {
     bf.setFeature("http://apache.org/xml/features/allow-java-encodings", true);
 
     InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/codesniffer/" + xmlFileToFind);
-    String xmlToFind = IOUtils.toString(input, "UTF-8");
-    Diff diff = XMLUnit.compareXML(XMLUnit.buildDocument(bf.newDocumentBuilder(), new StringReader(xml)), XMLUnit.buildDocument(bf
-        .newDocumentBuilder(), new StringReader(xmlToFind)));
+    String xmlToFind = IOUtils.toString(input, CharEncoding.UTF_8);
+    Diff diff = XMLUnit.compareXML(XMLUnit.buildDocument(bf.newDocumentBuilder(), new StringReader(xml)),
+        XMLUnit.buildDocument(bf.newDocumentBuilder(), new StringReader(xmlToFind)));
     assertTrue(diff.toString(), diff.similar());
   }
 
@@ -180,17 +183,17 @@ public class PhpCodesnifferRulesRepositoryTest {
    */
   private List<Rule> buildRulesFixture() {
     final Rule rule1 = new Rule("Translation", "com.puppycrawl.tools.checkstyle.checks.TranslationCheck", "Checker/Translation", null,
-        PhpCodesnifferPlugin.KEY, null);
+        PhpPlugin.CODESNIFFER_PLUGIN_KEY, null);
     RuleParam ruleParam1 = new RuleParam(rule1, "fileExtensions", null, "s{}");
     rule1.setParams(Arrays.asList(ruleParam1));
 
     final Rule rule2 = new Rule("AnonInnerLength", "com.puppycrawl.tools.checkstyle.checks.sizes.AnonInnerLengthCheck",
-        "Checker/TreeWalker/AnonInnerLength", null, PhpCodesnifferPlugin.KEY, null);
+        "Checker/TreeWalker/AnonInnerLength", null, PhpPlugin.CODESNIFFER_PLUGIN_KEY, null);
     RuleParam ruleParam2 = new RuleParam(rule2, "max", null, "i");
     rule2.setParams(Arrays.asList(ruleParam2));
 
     final Rule rule3 = new Rule("Type Name", "com.puppycrawl.tools.checkstyle.checks.naming.TypeNameCheck", "Checker/TreeWalker/TypeName",
-        null, PhpCodesnifferPlugin.KEY, null);
+        null, PhpPlugin.CODESNIFFER_PLUGIN_KEY, null);
     rule3.setPriority(RulePriority.MINOR);
     RuleParam ruleParam3 = new RuleParam(rule3, "format", null, "r");
     rule3.setParams(Arrays.asList(ruleParam3));
@@ -205,7 +208,7 @@ public class PhpCodesnifferRulesRepositoryTest {
   public void doExportProfileToCodesnifferFormat() {
     Rule rule = new Rule();
     rule.setConfigKey("Checker/TreeWalker/Rule");
-    rule.setPluginName(PhpCodesnifferPlugin.KEY);
+    rule.setPluginName(PhpPlugin.CODESNIFFER_PLUGIN_KEY);
     RuleParam ruleParam = new RuleParam(rule, "a_name", null, null);
     ActiveRule activeRule = new ActiveRule(null, rule, RulePriority.CRITICAL);
     activeRule.setActiveRuleParams(Arrays.asList(new ActiveRuleParam(activeRule, ruleParam, "a_value")));
@@ -239,7 +242,7 @@ public class PhpCodesnifferRulesRepositoryTest {
   public void doNotExportParameterWhenNoValue() {
     Rule rule = new Rule();
     rule.setConfigKey("Checker/TreeWalker/Rule");
-    rule.setPluginName(PhpCodesnifferPlugin.KEY);
+    rule.setPluginName(PhpPlugin.CODESNIFFER_PLUGIN_KEY);
     RuleParam ruleParam = new RuleParam(rule, "a_name", null, null);
     ActiveRule activeRule = new ActiveRule(null, rule, RulePriority.CRITICAL);
     activeRule.setActiveRuleParams(Arrays.asList(new ActiveRuleParam(activeRule, ruleParam, "")));
@@ -359,7 +362,8 @@ public class PhpCodesnifferRulesRepositoryTest {
    */
   @Before
   public void setup() {
-    repository = new PhpCodesnifferRulesRepository();
+
+    repository = new PhpCodesnifferRulesRepository(new Php());
   }
 
   /**
@@ -385,11 +389,11 @@ public class PhpCodesnifferRulesRepositoryTest {
   @Test
   public void shouldBuildManyModules() {
     Rule rule1 = new Rule();
-    rule1.setPluginName(PhpCodesnifferPlugin.KEY);
+    rule1.setPluginName(PhpPlugin.CODESNIFFER_PLUGIN_KEY);
     rule1.setConfigKey("Checker/TreeWalker/Rule");
     ActiveRule activeRule1 = new ActiveRule(null, rule1, RulePriority.CRITICAL);
     Rule rule2 = new Rule();
-    rule2.setPluginName(PhpCodesnifferPlugin.KEY);
+    rule2.setPluginName(PhpPlugin.CODESNIFFER_PLUGIN_KEY);
     rule2.setConfigKey("Checker/TreeWalker/AnonInnerLength");
     ActiveRule activeRule2 = new ActiveRule(null, rule2, RulePriority.CRITICAL);
 
@@ -415,7 +419,7 @@ public class PhpCodesnifferRulesRepositoryTest {
   @Test
   public void shouldBuildModuleWithConfigKeyWithOnlyTwoLevelConfig() {
     Rule rule1 = new Rule();
-    rule1.setPluginName(PhpCodesnifferPlugin.KEY);
+    rule1.setPluginName(PhpPlugin.CODESNIFFER_PLUGIN_KEY);
     rule1.setConfigKey("Checker/Rule");
     ActiveRule activeRule1 = new ActiveRule(null, rule1, RulePriority.CRITICAL);
 
@@ -461,11 +465,11 @@ public class PhpCodesnifferRulesRepositoryTest {
   @Test
   public void shouldBuildTwoModulesEvenIfSameTwoRulesActivated() {
     Rule rule1 = new Rule();
-    rule1.setPluginName(PhpCodesnifferPlugin.KEY);
+    rule1.setPluginName(PhpPlugin.CODESNIFFER_PLUGIN_KEY);
     rule1.setConfigKey("Checker/TreeWalker/Rule");
     ActiveRule activeRule1 = new ActiveRule(null, rule1, RulePriority.CRITICAL);
     Rule rule2 = new Rule();
-    rule2.setPluginName(PhpCodesnifferPlugin.KEY);
+    rule2.setPluginName(PhpPlugin.CODESNIFFER_PLUGIN_KEY);
     rule2.setConfigKey("Checker/TreeWalker/Rule");
     ActiveRule activeRule2 = new ActiveRule(null, rule2, RulePriority.CRITICAL);
 
@@ -577,7 +581,7 @@ public class PhpCodesnifferRulesRepositoryTest {
   @Test
   public void shouldExportUtf8Characters() throws Exception {
     Rule rule = new Rule("Translation", "com.puppycrawl.tools.checkstyle.checks.TranslationCheck", "Checker/Translation", null,
-        PhpCodesnifferPlugin.KEY, null);
+        PhpPlugin.CODESNIFFER_PLUGIN_KEY, null);
     RuleParam ruleParam1 = new RuleParam(rule, "fileExtensions", null, null);
     rule.setParams(Arrays.asList(ruleParam1));
     List<Rule> rules = Arrays.asList(rule);
@@ -601,7 +605,7 @@ public class PhpCodesnifferRulesRepositoryTest {
   @Test
   public void shouldImportProfileWithAParamValueEqualToId() throws IOException {
     final List<Rule> rules = new ArrayList<Rule>();
-    Rule rule = new Rule("Test", "checks.Test", "Checker/Test", null, PhpCodesnifferPlugin.KEY, null);
+    Rule rule = new Rule("Test", "checks.Test", "Checker/Test", null, PhpPlugin.CODESNIFFER_PLUGIN_KEY, null);
     RuleParam ruleParam1 = new RuleParam(rule, "id", null, "s");
     rule.setParams(Arrays.asList(ruleParam1));
     rules.add(rule);

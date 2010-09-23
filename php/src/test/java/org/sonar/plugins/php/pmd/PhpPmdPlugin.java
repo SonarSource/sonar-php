@@ -25,15 +25,13 @@ import java.util.List;
 
 import org.sonar.api.Extension;
 import org.sonar.api.Plugin;
+import org.sonar.plugins.php.core.PhpPlugin;
 import org.sonar.plugins.php.pmd.sensor.PhpPmdSensor;
 
 /**
  * The Class PhpPmdPlugin class declares all extensions to be run for a project to be analyzed by the PHPMD tool.
  */
 public class PhpPmdPlugin implements Plugin {
-
-  /** The plugin KEY. */
-  public static final String KEY = "PHP PMD";
 
   /**
    * Gets the description.
@@ -54,7 +52,7 @@ public class PhpPmdPlugin implements Plugin {
   public List<Class<? extends Extension>> getExtensions() {
     List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
     extensions.add(PhpPmdSensor.class);
-    extensions.add(PhpPmdRulesRepository.class);
+    // extensions.add(PhpPmdRulesRepository.class);
     return extensions;
   }
 
@@ -65,7 +63,7 @@ public class PhpPmdPlugin implements Plugin {
    * @see org.sonar.api.Plugin#getKey()
    */
   public String getKey() {
-    return KEY;
+    return PhpPlugin.PHPMD_PLUGIN_KEY;
   }
 
   /**

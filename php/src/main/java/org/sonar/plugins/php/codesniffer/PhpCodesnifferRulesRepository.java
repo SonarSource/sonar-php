@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
@@ -41,6 +42,7 @@ import org.sonar.plugins.checkstyle.CheckstyleRulePriorityMapper;
 import org.sonar.plugins.checkstyle.xml.Module;
 import org.sonar.plugins.checkstyle.xml.Property;
 import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.core.PhpPlugin;
 
 /**
  * The Class PhpCheckstyleRulesRepository.
@@ -54,13 +56,29 @@ public final class PhpCodesnifferRulesRepository implements RulesRepository<Php>
   private CheckstyleRulePriorityMapper priorityMapper = new CheckstyleRulePriorityMapper();
 
   /**
+   * Php Language instance.
+   */
+  private Php php;
+
+  /**
+   * Instantiates a new php CodeSniffer rules repository.
+   * 
+   * @param language
+   *          the language
+   */
+  public PhpCodesnifferRulesRepository(Php php) {
+    super();
+    this.php = php;
+  }
+
+  /**
    * Returns an instance of PHP language.
    * 
    * @see org.sonar.api.rules.RulesRepository#getLanguage()
    * @return a PHP instance
    */
   public Php getLanguage() {
-    return Php.INSTANCE;
+    return php;
   }
 
   /**
@@ -101,7 +119,7 @@ public final class PhpCodesnifferRulesRepository implements RulesRepository<Php>
    */
   public List<RulesProfile> getProvidedProfiles() {
     List<RulesProfile> profiles = new ArrayList<RulesProfile>();
-    profiles.add(buildProfile("Default Php Profile", "profile-php.xml"));
+    profiles.add(buildProfile("Php Profile with PHP CodeSniffer", "php-profile-with-cs.xml"));
     return profiles;
   }
 
@@ -119,7 +137,7 @@ public final class PhpCodesnifferRulesRepository implements RulesRepository<Php>
     try {
       input = getClass().getResourceAsStream(path);
       RulesProfile profile = new RulesProfile(name, Php.KEY);
-      List<ActiveRule> activeRules = importConfiguration(IOUtils.toString(input, "UTF-8"), getInitialReferential());
+      List<ActiveRule> activeRules = importConfiguration(IOUtils.toString(input, CharEncoding.UTF_8), getInitialReferential());
       profile.setActiveRules(activeRules);
       return profile;
     } catch (IOException e) {
@@ -138,7 +156,7 @@ public final class PhpCodesnifferRulesRepository implements RulesRepository<Php>
    * @see org.sonar.api.rules.ConfigurationExportable#exportConfiguration(org.sonar.api.profiles.RulesProfile)
    */
   public String exportConfiguration(RulesProfile activeProfile) {
-    Module module = toXStream(activeProfile.getActiveRulesByPlugin(PhpCodesnifferPlugin.KEY));
+    Module module = toXStream(activeProfile.getActiveRulesByPlugin(PhpPlugin.CODESNIFFER_PLUGIN_KEY));
     module.getOrCreateChild("TreeWalker" + Module.MODULE_SEPARATOR + "FileContentsHolder");
     module.getOrCreateChild("SuppressionCommentFilter");
     return addXmlHeader(module.toXml());
@@ -174,7 +192,7 @@ public final class PhpCodesnifferRulesRepository implements RulesRepository<Php>
     Module root = new Module("");
 
     for (ActiveRule activeRule : activeRules) {
-      if (activeRule.getRule().getPluginName().equals(PhpCodesnifferPlugin.KEY)) {
+      if (activeRule.getRule().getPluginName().equals(PhpPlugin.CODESNIFFER_PLUGIN_KEY)) {
         String configKey = activeRule.getRule().getConfigKey();
         Module module = root.getOrCreateChild(configKey);
         List<Property> properties = new ArrayList<Property>();
