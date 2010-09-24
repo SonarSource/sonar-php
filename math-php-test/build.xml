@@ -32,8 +32,8 @@
   --title '${ant.project.name}'
   --undocumentedelements on
   --parseprivate on
-  --target ${basedir}/build/api 
-  --directory ${basedir}/source  />
+  --target ${basedir}/build/api
+  --directory ${basedir}/source" />
    </exec>
   </target>
 
@@ -46,12 +46,10 @@
 
   <target name="phpunit-tu">
     <exec executable="phpunit" dir="${basedir}/source" failonerror="on">
-      <arg line=" 
-      --log-junit ${basedir}/build/logs/phpunit.xml 
-      --log-pmd ${basedir}/build/logs/phpunit.pmd.xml  
-      --log-metrics ${basedir}/build/logs/phpunit.metrics.xml 
-      --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
-      --coverage-html ${basedir}/build/coverage ci-example ${basedir}/source/tests/MathTest.php" />
+      <arg line="
+      --log-junit ${basedir}/build/logs/phpunit.xml
+      --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml
+      --coverage-html ${basedir}/build/coverage ci-example ${basedir}/source/tests/AllTests.php" />
     </exec>
   </target>
 
@@ -67,4 +65,3 @@
   </target>
 
 </project>
-
