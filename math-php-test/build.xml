@@ -44,8 +44,8 @@
   </target>
 
   <target name="phpunit-tu">
-    <exec executable="phpunit" dir="${basedir}/source" failonerror="on">
-      <arg line="--log-junit ${basedir}/build/logs/phpunit.xml --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml
+    <exec executable="phpunit" dir="${basedir}/source" failonerror="off">
+      <arg line="--log-junit ${basedir}/build/logs/phpunit.xml 
                  --coverage-html ${basedir}/build/coverage ci-example ${basedir}/source/tests/AllTests.php" />
     </exec>
   </target>
