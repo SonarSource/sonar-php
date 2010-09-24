@@ -3,7 +3,7 @@
 
   <property name="php.pear.path" value="/usr/share/php" />
 
-  <target name="build" depends="delete-old-builds, php-lint, php-documentor, phpunit-tu"/>
+  <target name="build" depends="php-lint, php-documentor, phpunit-tu"/>
 
   <target name="checkout">
      <exec executable="svn" dir="${basedir}/source" failonerror="on">
