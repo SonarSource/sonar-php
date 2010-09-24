@@ -29,11 +29,11 @@
 
   <target name="php-documentor">
     <exec executable="phpdoc" dir="${basedir}/source" logerror="on">
-      <arg line="--title '${ant.project.name}' 
+      <arg line="--title '${ant.project.name}'
                  --undocumentedelements on
                  --parseprivate on
                  --target ${basedir}/build/api
-                 --directory ${basedir}/source" />
+                 --directory '${basedir}/source'" />
    </exec>
   </target>
 
@@ -46,8 +46,8 @@
 
   <target name="phpunit-tu">
     <exec executable="phpunit" dir="${basedir}/source" failonerror="off">
-      <arg line="--log-junit ${basedir}/build/logs/phpunit.xml 
-                 --coverage-html ${basedir}/build/coverage ci-example ${basedir}/source/tests/AllTests.php" />
+      <arg line="--log-junit '${basedir}/build/logs/phpunit.xml'
+                 --coverage-html '${basedir}/build/coverage' ci-example ${basedir}/source/tests/AllTests.php" />
     </exec>
   </target>
 
