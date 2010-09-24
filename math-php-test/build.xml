@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ci-example"  default="build" basedir=".">
+
+  <property name="php.pear.path" value="/usr/share/php" />
+
+  <target name="build" depends="delete-old-builds, checkout, php-lint, php-codesniffer, php-documentor, pdepend, phpunit-tu"/>
+
+  <target name="checkout">
+     <exec executable="svn" dir="${basedir}/source" failonerror="on">
+       <arg line="up"/>
+     </exec>
+   </target>
+
+  <target name="delete-old-builds">
+    <exec executable="phpuc" dir="${basedir}/../" failonerror="off">
+      <arg line="clean --project-name ${ant.project.name} --keep-builds 10 /var/cruisecontrol" />
+    </exec>
+  </target>
+
+  <target name="php-lint">
+     <apply executable="php" failonerror="true">
+       <arg value="-l" />
+       <fileset dir="${basedir}/source/">
+         <include name="**/*.php" />
+       </fileset>
+     </apply>
+   </target>
+
+  <target name="php-documentor">
+    <exec executable="phpdoc" dir="${basedir}/source" logerror="on">
+      <arg line="
+  --title '${ant.project.name}'
+  --undocumentedelements on
+  --parseprivate on
+  --target ${basedir}/build/api 
+  --directory ${basedir}/source 
+  --templatebase  '${php.pear.path}/data/phpUnderControl/data/phpdoc' 
+  --output HTML:Phpuc:phpuc" />
+   </exec>
+  </target>
+
+  <target name="php-codesniffer">
+    <exec executable="sqlics" dir="${basedir}/source"
+      error="/tmp/checkstyle.error.log">
+      <arg line=" --standard=GN --report=checkstyle --report-file=${basedir}/build/logs/checkstyle.xml  ${basedir}/source"/>
+    </exec>
+  </target>
+
+  <target name="phpunit-tu">
+    <exec executable="phpunit" dir="${basedir}/source" failonerror="on">
+      <arg line=" 
+      --log-junit ${basedir}/build/logs/phpunit.xml 
+      --log-pmd ${basedir}/build/logs/phpunit.pmd.xml  
+      --log-metrics ${basedir}/build/logs/phpunit.metrics.xml 
+      --coverage-clover ${basedir}/build/logs/phpunit.coverage.xml 
+      --coverage-html ${basedir}/build/coverage ci-example ${basedir}/source/tests/MathTest.php" />
+    </exec>
+  </target>
+
+  <target name="pdepend">
+    <exec executable="pdepend" dir="${basedir}/source">
+      <arg line="
+      --jdepend-chart=${basedir}/build/graph/08-pdepend.jdepend.chart.svg
+      --jdepend-xml=${basedir}/build/logs/pdepend.jdepend.xml
+      --overview-pyramid=${basedir}/build/graph/09-pdepend.pyramid.svg
+      --summary-xml=${basedir}/build/logs/pdepend.summary.xml
+      ${basedir}/source/" />
+    </exec>
+  </target>
+
+</project>
+
