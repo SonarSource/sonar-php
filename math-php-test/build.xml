@@ -33,9 +33,7 @@
   --undocumentedelements on
   --parseprivate on
   --target ${basedir}/build/api 
-  --directory ${basedir}/source 
-  --templatebase  '${php.pear.path}/data/phpUnderControl/data/phpdoc' 
-  --output HTML:Phpuc:phpuc" />
+  --directory ${basedir}/source  />
    </exec>
   </target>
 
