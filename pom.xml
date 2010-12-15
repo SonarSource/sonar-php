@@ -14,6 +14,7 @@
 		<module>phpmd-rulesets</module>
 		<module>phpcodesniffer-rulesets</module>
 		<module>sonar-php-plugin</module>
+		
 		<!-- <module>php-codesniffer</module> <module>php-depend</module> <module>php-pmd</module> 
 			<module>php-unit</module> -->
 	</modules>
