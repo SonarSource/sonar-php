@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="checkstyle-ruleset-to-sonar-rules.xslt"?>
+<checkstyle version="1.3.0RC1">
+ <file name="D:\hashcode\math-php-test\source\src\Mail.php">
+  <error line="15" column="1" severity="error" message="@category tag comment indented incorrectly; expected 2 spaces but found 3" source="PEAR.Commenting.FileComment.TagIndent"/>
+  <error line="16" column="1" severity="error" message="@package tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.FileComment.TagIndent"/>
+  <error line="17" column="1" severity="warning" message="Line exceeds 85 characters; contains 87 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="17" column="1" severity="error" message="@copyright tag must contain a year and the name of the copyright holder" source="PEAR.Commenting.FileComment.EmptyCopyright"/>
+  <error line="17" column="1" severity="error" message="@copyright tag comment indented incorrectly; expected 1 spaces but found 2" source="PEAR.Commenting.FileComment.TagIndent"/>
+  <error line="18" column="1" severity="error" message="@license tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.FileComment.TagIndent"/>
+  <error line="19" column="1" severity="warning" message="Invalid version &quot;$Id: Mail.php 20783 2010-01-31 08:06:30Z yoshida@zend.co.jp $&quot; in file comment; consider &quot;CVS: &lt;cvs_id&gt;&quot; or &quot;SVN: &lt;svn_id&gt;&quot; instead" source="PEAR.Commenting.FileComment.InvalidVersion"/>
+  <error line="19" column="1" severity="error" message="@version tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.FileComment.TagIndent"/>
+  <error line="20" column="1" severity="warning" message="PHP version not specified" source="PEAR.Commenting.FileComment.MissingVersion"/>
+  <error line="20" column="1" severity="error" message="Missing @author tag in file comment" source="PEAR.Commenting.FileComment.MissingTag"/>
+  <error line="20" column="1" severity="error" message="Missing @link tag in file comment" source="PEAR.Commenting.FileComment.MissingTag"/>
+  <error line="47" column="1" severity="error" message="@category tag comment indented incorrectly; expected 2 spaces but found 3" source="PEAR.Commenting.ClassComment.TagIndent"/>
+  <error line="48" column="1" severity="error" message="@package tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.ClassComment.TagIndent"/>
+  <error line="49" column="1" severity="warning" message="Line exceeds 85 characters; contains 87 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="49" column="1" severity="error" message="@copyright tag must contain a year and the name of the copyright holder" source="PEAR.Commenting.ClassComment.EmptyCopyright"/>
+  <error line="49" column="1" severity="error" message="@copyright tag comment indented incorrectly; expected 1 spaces but found 2" source="PEAR.Commenting.ClassComment.TagIndent"/>
+  <error line="50" column="1" severity="error" message="@license tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.ClassComment.TagIndent"/>
+  <error line="51" column="1" severity="error" message="Missing @author tag in class comment" source="PEAR.Commenting.ClassComment.MissingTag"/>
+  <error line="51" column="1" severity="error" message="Missing @link tag in class comment" source="PEAR.Commenting.ClassComment.MissingTag"/>
+  <error line="62" column="22" severity="error" message="Protected member variable &quot;_defaultTransport&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="68" column="22" severity="error" message="Protected member variable &quot;_defaultFrom&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="74" column="22" severity="error" message="Protected member variable &quot;_defaultReplyTo&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="80" column="15" severity="error" message="Protected member variable &quot;_charset&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="86" column="15" severity="error" message="Protected member variable &quot;_headers&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="92" column="15" severity="error" message="Protected member variable &quot;_headerEncoding&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="98" column="15" severity="error" message="Protected member variable &quot;_from&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="104" column="15" severity="error" message="Protected member variable &quot;_to&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="110" column="15" severity="error" message="Protected member variable &quot;_recipients&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="116" column="15" severity="error" message="Protected member variable &quot;_replyTo&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="122" column="15" severity="error" message="Protected member variable &quot;_returnPath&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="128" column="15" severity="error" message="Protected member variable &quot;_subject&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="134" column="15" severity="error" message="Protected member variable &quot;_date&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="140" column="15" severity="error" message="Protected member variable &quot;_messageId&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="146" column="15" severity="error" message="Protected member variable &quot;_bodyText&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="152" column="15" severity="error" message="Protected member variable &quot;_bodyHtml&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="158" column="15" severity="error" message="Protected member variable &quot;_mimeBoundary&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="164" column="15" severity="error" message="Protected member variable &quot;_type&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore"/>
+  <error line="181" column="1" severity="error" message="Parameters must appear immediately after the comment" source="PEAR.Commenting.FunctionComment.SpacingBeforeParams"/>
+  <error line="181" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="181" column="1" severity="error" message="Missing comment for param &quot;$transport&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="182" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="183" column="88" severity="warning" message="Line exceeds 85 characters; contains 87 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="194" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="202" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="211" column="1" severity="error" message="Missing comment for param &quot;$charset&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="233" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="233" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="248" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="271" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="271" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="271" column="1" severity="error" message="Missing comment for param &quot;$boundary&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="318" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="318" column="1" severity="error" message="Parameters must appear immediately after the comment" source="PEAR.Commenting.FunctionComment.SpacingBeforeParams"/>
+  <error line="318" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="318" column="1" severity="error" message="Missing comment for param &quot;$encoding&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="329" column="1" severity="warning" message="Line exceeds 85 characters; contains 97 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="329" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="329" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="342" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="353" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="353" column="1" severity="error" message="Missing comment for param &quot;$txt&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="354" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="354" column="1" severity="error" message="The comments for parameters $txt (1) and $charset (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="354" column="1" severity="error" message="Missing comment for param &quot;$charset&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="355" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="355" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="355" column="1" severity="error" message="The comments for parameters $charset (2) and $encoding (3) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="355" column="1" severity="error" message="Missing comment for param &quot;$encoding&quot; at position 3" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="358" column="104" severity="warning" message="Line exceeds 85 characters; contains 103 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="378" column="1" severity="warning" message="Line exceeds 85 characters; contains 124 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="378" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="378" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="378" column="1" severity="error" message="Doc comment for var textOnly does not match actual variable name $textOnly at position 1" source="PEAR.Commenting.FunctionComment.ParamNameNoMatch"/>
+  <error line="394" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="394" column="1" severity="error" message="Missing comment for param &quot;$html&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="395" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="395" column="1" severity="error" message="The comments for parameters $html (1) and $charset (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="395" column="1" severity="error" message="Missing comment for param &quot;$charset&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="396" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="396" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="396" column="1" severity="error" message="The comments for parameters $charset (2) and $encoding (3) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="396" column="1" severity="error" message="Missing comment for param &quot;$encoding&quot; at position 3" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="399" column="105" severity="warning" message="Line exceeds 85 characters; contains 104 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="419" column="1" severity="warning" message="Line exceeds 85 characters; contains 118 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="419" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="419" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="435" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="435" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="435" column="1" severity="error" message="Missing comment for param &quot;$attachment&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="452" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="452" column="1" severity="error" message="Missing comment for param &quot;$body&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="452" column="1" severity="error" message="Expected 1 space after the longest type" source="PEAR.Commenting.FunctionComment.SpacingAfterLongType"/>
+  <error line="453" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="453" column="1" severity="error" message="The comments for parameters $body (1) and $mimeType (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="453" column="1" severity="error" message="Missing comment for param &quot;$mimeType&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="454" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="454" column="1" severity="error" message="The comments for parameters $mimeType (2) and $disposition (3) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="454" column="1" severity="error" message="Missing comment for param &quot;$disposition&quot; at position 3" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="455" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="455" column="1" severity="error" message="The comments for parameters $disposition (3) and $encoding (4) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="455" column="1" severity="error" message="Missing comment for param &quot;$encoding&quot; at position 4" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="456" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="456" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="456" column="1" severity="error" message="The comments for parameters $encoding (4) and $filename (5) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="461" column="1" severity="error" message="Multi-line function declaration not indented correctly; expected 8 spaces but found 37" source="PEAR.Functions.FunctionDeclaration.Indent"/>
+  <error line="462" column="1" severity="error" message="Multi-line function declaration not indented correctly; expected 8 spaces but found 37" source="PEAR.Functions.FunctionDeclaration.Indent"/>
+  <error line="462" column="87" severity="warning" message="Line exceeds 85 characters; contains 86 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="463" column="1" severity="error" message="Multi-line function declaration not indented correctly; expected 8 spaces but found 37" source="PEAR.Functions.FunctionDeclaration.Indent"/>
+  <error line="464" column="1" severity="error" message="Multi-line function declaration not indented correctly; expected 4 spaces but found 37" source="PEAR.Functions.FunctionDeclaration.Indent"/>
+  <error line="464" column="58" severity="error" message="There must be a single space between the closing parenthesis and the opening brace of a multi-line function declaration; found newline" source="PEAR.Functions.FunctionDeclaration.NewlineBeforeOpenBrace"/>
+  <error line="494" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="494" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="494" column="1" severity="error" message="Missing comment for param &quot;$value&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="497" column="15" severity="error" message="Protected method name &quot;Zend_Mail::_encodeHeader&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+  <error line="501" column="137" severity="warning" message="Line exceeds 85 characters; contains 136 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="503" column="128" severity="warning" message="Line exceeds 85 characters; contains 127 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="516" column="1" severity="error" message="Missing comment for param &quot;$headerName&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="517" column="1" severity="error" message="The comments for parameters $headerName (1) and $value (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="517" column="1" severity="error" message="Missing comment for param &quot;$value&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="518" column="1" severity="error" message="The variable names for parameters $value (2) and $append (3) do not align" source="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned"/>
+  <error line="518" column="1" severity="error" message="The comments for parameters $value (2) and $append (3) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="518" column="1" severity="error" message="Missing comment for param &quot;$append&quot; at position 3" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="519" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="520" column="15" severity="error" message="Protected method name &quot;Zend_Mail::_storeHeader&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+  <error line="537" column="1" severity="error" message="Missing comment for param &quot;$headerName&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="538" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="539" column="15" severity="error" message="Protected method name &quot;Zend_Mail::_clearHeader&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+  <error line="541" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...){\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="541" column="49" severity="error" message="There must be a single space between the closing parenthesis and the opening brace of a multi-line IF statement; found 0 spaces" source="PEAR.ControlStructures.MultiLineCondition.SpaceBeforeOpenBrace"/>
+  <error line="549" column="1" severity="error" message="Missing comment for param &quot;$headerName&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="550" column="1" severity="error" message="The comments for parameters $headerName (1) and $email (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="550" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="551" column="1" severity="error" message="The comments for parameters $email (2) and $name (3) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="551" column="1" severity="error" message="Missing comment for param &quot;$name&quot; at position 3" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="552" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="553" column="15" severity="error" message="Protected method name &quot;Zend_Mail::_addRecipientAndHeader&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+  <error line="563" column="1" severity="warning" message="Line exceeds 85 characters; contains 87 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="565" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="565" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="566" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="566" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="566" column="1" severity="error" message="The variable names for parameters $email (1) and $name (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned"/>
+  <error line="566" column="1" severity="error" message="The comments for parameters $email (1) and $name (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="566" column="1" severity="error" message="Missing comment for param &quot;$name&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="584" column="1" severity="warning" message="Line exceeds 85 characters; contains 87 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="586" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="586" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="587" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="587" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="587" column="1" severity="error" message="The variable names for parameters $email (1) and $name (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned"/>
+  <error line="587" column="1" severity="error" message="The comments for parameters $email (1) and $name (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="587" column="1" severity="error" message="Missing comment for param &quot;$name&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="606" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="606" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="606" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="652" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="652" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="653" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="653" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="653" column="1" severity="error" message="The comments for parameters $email (1) and $name (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="653" column="1" severity="error" message="Missing comment for param &quot;$name&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="663" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="678" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="679" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="679" column="1" severity="error" message="The comments for parameters $email (1) and $name (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="679" column="1" severity="error" message="Missing comment for param &quot;$name&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="689" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="750" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="750" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="751" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="751" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="751" column="1" severity="error" message="The variable names for parameters $email (1) and Optional (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned"/>
+  <error line="751" column="1" severity="error" message="The comments for parameters $email (1) and Optional (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="751" column="1" severity="error" message="Doc comment for var Optional does not match actual variable name $name at position 2" source="PEAR.Commenting.FunctionComment.ParamNameNoMatch"/>
+  <error line="751" column="1" severity="error" message="Expected 1 space after the longest type" source="PEAR.Commenting.FunctionComment.SpacingAfterLongType"/>
+  <error line="751" column="1" severity="error" message="Expected 1 space after the longest variable name" source="PEAR.Commenting.FunctionComment.SpacingAfterLongName"/>
+  <error line="784" column="44" severity="error" message="Opening brace should be on a new line" source="PEAR.Functions.FunctionDeclaration.BraceOnSameLine"/>
+  <error line="786" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if(...) {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="787" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="800" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="800" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="801" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="801" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="801" column="1" severity="error" message="The variable names for parameters $email (1) and Optional (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned"/>
+  <error line="801" column="1" severity="error" message="The comments for parameters $email (1) and Optional (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="801" column="1" severity="error" message="Doc comment for var Optional does not match actual variable name $name at position 2" source="PEAR.Commenting.FunctionComment.ParamNameNoMatch"/>
+  <error line="801" column="1" severity="error" message="Expected 1 space after the longest type" source="PEAR.Commenting.FunctionComment.SpacingAfterLongType"/>
+  <error line="801" column="1" severity="error" message="Expected 1 space after the longest variable name" source="PEAR.Commenting.FunctionComment.SpacingAfterLongName"/>
+  <error line="834" column="45" severity="error" message="Opening brace should be on a new line" source="PEAR.Functions.FunctionDeclaration.BraceOnSameLine"/>
+  <error line="836" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if(...) {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="837" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="850" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="850" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="850" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="864" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="902" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="902" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="902" column="1" severity="error" message="Missing comment for param &quot;$subject&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="916" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="948" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="948" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="948" column="1" severity="error" message="Missing comment for param &quot;$date&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="965" column="21" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="966" column="101" severity="warning" message="Line exceeds 85 characters; contains 100 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="976" column="17" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="977" column="114" severity="warning" message="Line exceeds 85 characters; contains 113 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="986" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="1018" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="1018" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="1018" column="1" severity="error" message="Expected 1 space after the longest type" source="PEAR.Commenting.FunctionComment.SpacingAfterLongType"/>
+  <error line="1042" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="1078" column="39" severity="error" message="Opening brace should be on a new line" source="PEAR.Functions.FunctionDeclaration.BraceOnSameLine"/>
+  <error line="1110" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="1110" column="1" severity="error" message="Missing comment for param &quot;$name&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1111" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="1111" column="1" severity="error" message="The comments for parameters $name (1) and $value (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="1111" column="1" severity="error" message="Missing comment for param &quot;$value&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1112" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="1112" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="1112" column="1" severity="error" message="The comments for parameters $value (2) and $append (3) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="1112" column="1" severity="error" message="Missing comment for param &quot;$append&quot; at position 3" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1126" column="13" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="1127" column="90" severity="warning" message="Line exceeds 85 characters; contains 89 characters" source="Generic.Files.LineLength.TooLong"/>
+  <error line="1152" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="1152" column="1" severity="error" message="Expected 1 space before variable type" source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType"/>
+  <error line="1152" column="1" severity="error" message="Missing comment for param &quot;$transport&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1159" column="17" severity="error" message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce"/>
+  <error line="1170" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if(...) {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="1174" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if(...) {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="1186" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="1186" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1189" column="15" severity="error" message="Protected method name &quot;Zend_Mail::_filterEmail&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+  <error line="1206" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="1206" column="1" severity="error" message="Missing comment for param &quot;$name&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1209" column="15" severity="error" message="Protected method name &quot;Zend_Mail::_filterName&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+  <error line="1225" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="1225" column="1" severity="error" message="Missing comment for param &quot;$data&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1228" column="15" severity="error" message="Protected method name &quot;Zend_Mail::_filterOther&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+  <error line="1241" column="1" severity="error" message="Missing comment for param &quot;$email&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1242" column="1" severity="error" message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
+  <error line="1242" column="1" severity="error" message="The comments for parameters $email (1) and $name (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
+  <error line="1242" column="1" severity="error" message="Missing comment for param &quot;$name&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <error line="1245" column="15" severity="error" message="Protected method name &quot;Zend_Mail::_formatAddress&quot; must not be prefixed with an underscore" source="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore"/>
+  <error line="1252" column="1" severity="error" message="Closing parenthesis of a multi-line IF statement must be on a new line" source="PEAR.ControlStructures.MultiLineCondition.CloseBracketNewLine"/>
+  <error line="1252" column="1" severity="error" message="Multi-line IF statement not indented correctly; expected 16 spaces but found 20" source="PEAR.ControlStructures.MultiLineCondition.Alignment"/>
+  <error line="1252" column="90" severity="warning" message="Line exceeds 85 characters; contains 89 characters" source="Generic.Files.LineLength.TooLong"/>
+ </file>
+ <file name="D:\hashcode\math-php-test\source\src\Math.php">
+  <error line="2" column="1" severity="error" message="Missing file doc comment" source="PEAR.Commenting.FileComment.Missing"/>
+  <error line="44" column="1" severity="error" message="Missing function doc comment" source="PEAR.Commenting.FunctionComment.Missing"/>
+  <error line="45" column="5" severity="error" message="Opening brace indented incorrectly; expected 0 spaces, found 4" source="PEAR.Functions.FunctionDeclaration.BraceIndent"/>
+  <error line="47" column="5" severity="error" message="Closing brace indented incorrectly; expected 0 spaces, found 4" source="PEAR.WhiteSpace.ScopeClosingBrace.Indent"/>
+  <error line="58" column="1" severity="error" message="Missing @category tag in class comment" source="PEAR.Commenting.ClassComment.MissingTag"/>
+  <error line="87" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="87" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="89" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="93" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="96" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="108" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="110" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="110" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="115" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="121" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="124" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="136" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="138" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="138" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="143" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="151" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="151" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="153" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="157" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="160" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="172" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="174" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="174" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="175" column="30" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="175" column="38" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="179" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="185" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="188" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="200" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="202" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="202" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="207" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+ </file>
+ <file name="D:\hashcode\math-php-test\source\src\Math2.php">
+  <error line="43" column="1" severity="warning" message="PHP version not specified" source="PEAR.Commenting.FileComment.MissingVersion"/>
+  <error line="43" column="1" severity="error" message="Missing @category tag in file comment" source="PEAR.Commenting.FileComment.MissingTag"/>
+  <error line="54" column="1" severity="error" message="Missing @category tag in class comment" source="PEAR.Commenting.ClassComment.MissingTag"/>
+  <error line="83" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="83" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="85" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="89" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="92" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="104" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="106" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="106" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="111" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="117" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="120" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="132" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="134" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="134" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="139" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="147" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="147" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="149" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="153" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="156" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="168" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="170" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="170" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="171" column="30" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="171" column="38" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="175" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="181" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="184" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="196" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="198" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="198" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="203" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+ </file>
+ <file name="D:\hashcode\math-php-test\source\src\Math3.php">
+  <error line="43" column="1" severity="warning" message="PHP version not specified" source="PEAR.Commenting.FileComment.MissingVersion"/>
+  <error line="43" column="1" severity="error" message="Missing @category tag in file comment" source="PEAR.Commenting.FileComment.MissingTag"/>
+  <error line="54" column="1" severity="error" message="Missing @category tag in class comment" source="PEAR.Commenting.ClassComment.MissingTag"/>
+  <error line="83" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="83" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="85" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="89" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="92" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="104" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="106" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="106" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="111" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="117" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="120" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="132" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="134" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="134" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="139" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="147" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="147" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="149" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="153" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="156" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="168" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="170" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="170" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="171" column="30" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="171" column="38" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="175" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="181" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="184" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="196" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="198" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="198" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="203" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+ </file>
+ <file name="D:\hashcode\math-php-test\source\src\Math4.php">
+  <error line="43" column="1" severity="warning" message="PHP version not specified" source="PEAR.Commenting.FileComment.MissingVersion"/>
+  <error line="43" column="1" severity="error" message="Missing @category tag in file comment" source="PEAR.Commenting.FileComment.MissingTag"/>
+  <error line="54" column="1" severity="error" message="Missing @category tag in class comment" source="PEAR.Commenting.ClassComment.MissingTag"/>
+  <error line="83" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="83" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="85" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="89" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="92" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="104" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="106" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="106" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="111" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="117" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="120" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="132" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="134" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="134" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="139" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="147" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="147" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="149" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="153" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="156" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="168" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="170" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="170" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="171" column="30" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="171" column="38" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="175" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="181" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="184" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="196" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="198" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="198" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="203" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+ </file>
+ <file name="D:\hashcode\math-php-test\source\src\Math5.php">
+  <error line="43" column="1" severity="warning" message="PHP version not specified" source="PEAR.Commenting.FileComment.MissingVersion"/>
+  <error line="43" column="1" severity="error" message="Missing @category tag in file comment" source="PEAR.Commenting.FileComment.MissingTag"/>
+  <error line="54" column="1" severity="error" message="Missing @category tag in class comment" source="PEAR.Commenting.ClassComment.MissingTag"/>
+  <error line="83" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="83" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="85" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="89" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="92" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="104" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="106" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="106" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="111" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="117" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="120" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="132" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="134" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="134" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="139" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="147" column="5" severity="error" message="Doc comment for &quot;$v1&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="147" column="5" severity="error" message="Doc comment for &quot;$v2&quot; missing" source="PEAR.Commenting.FunctionComment.MissingParamTag"/>
+  <error line="149" column="1" severity="error" message="Missing @return tag in function comment" source="PEAR.Commenting.FunctionComment.MissingReturn"/>
+  <error line="153" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="156" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="168" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="170" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="170" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="171" column="30" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="171" column="38" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="175" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="181" column="9" severity="error" message="Expected &quot;if (...) {\n&quot;; found &quot;if (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="184" column="13" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n            {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="196" column="9" severity="error" message="Expected &quot;for (...) {\n&quot;; found &quot;for (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+  <error line="198" column="13" severity="error" message="Space after opening parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"/>
+  <error line="198" column="25" severity="error" message="Space before closing parenthesis of function call prohibited" source="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+  <error line="203" column="9" severity="error" message="Expected &quot;foreach (...) {\n&quot;; found &quot;foreach (...)\n        {\n&quot;" source="PEAR.ControlStructures.ControlSignature"/>
+ </file>
+</checkstyle>

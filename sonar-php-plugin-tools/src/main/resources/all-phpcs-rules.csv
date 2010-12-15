@@ -1,0 +1,329 @@
+key,priority,category,name,configKey,descriptionGeneric.Classes.DuplicateClassName.Found,MAJOR,Maintainability,DuplicateClassNameFound,rulesets/DuplicateClassName,Duplicate %s name "%s" found; first defined in %s on line %s
+Generic.CodeAnalysis.EmptyStatement.NotAllowed,MAJOR,Maintainability,EmptyStatementNotAllowed,rulesets/EmptyStatement,Empty %s statement detected
+Generic.CodeAnalysis.ForLoopShouldBeWhileLoop.,MAJOR,Maintainability,ForLoopShouldBeWhileLoop,rulesets/ForLoopShouldBeWhileLoop,This FOR loop can be simplified to a WHILE loop
+Generic.CodeAnalysis.ForLoopWithTestFunctionCall.,MAJOR,Maintainability,ForLoopWithTestFunctionCall,rulesets/ForLoopWithTestFunctionCall,Avoid function calls in a FOR loop test part
+Generic.CodeAnalysis.JumbledIncrementer.Found,MAJOR,Maintainability,JumbledIncrementerFound,rulesets/JumbledIncrementer,Loop incrementor (%s) jumbling with inner loop
+Generic.CodeAnalysis.UnconditionalIfStatement.,MAJOR,Maintainability,UnconditionalIfStatement,rulesets/UnconditionalIfStatement,Avoid IF statements that are always true or false
+Generic.CodeAnalysis.UnnecessaryFinalModifier.,MAJOR,Maintainability,UnnecessaryFinalModifier,rulesets/UnnecessaryFinalModifier,Unnecessary FINAL modifier in FINAL class
+Generic.CodeAnalysis.UnusedFunctionParameter.Found,MAJOR,Maintainability,UnusedFunctionParameterFound,rulesets/UnusedFunctionParameter,The method parameter %s is never used
+Generic.Commenting.Todo.typ,MAJOR,Maintainability,Todotyp,rulesets/Todo,Comment refers to a TODO task
+Generic.Files.LineEndings.InvalidEOLChar,MAJOR,Maintainability,LineEndingsInvalidEOLChar,rulesets/LineEndings,End of line character is invalid; expected "%s" but found "%s"
+Generic.Files.LineLength.MaxExceeded,MAJOR,Maintainability,LineLengthMaxExceeded,rulesets/LineLength,Line exceeds maximum limit of %s characters; contains %s characters
+Generic.Formatting.DisallowMultipleStatements.,MAJOR,Maintainability,DisallowMultipleStatements,rulesets/DisallowMultipleStatements,Each PHP statement must be on a line by itself
+Generic.Formatting.MultipleStatementAlignment.typ,MAJOR,Maintainability,MultipleStatementAlignmenttyp,rulesets/MultipleStatementAlignment,Equals sign not aligned correctly; expected %s but found %s
+Generic.Formatting.NoSpaceAfterCast.,MAJOR,Maintainability,NoSpaceAfterCast,rulesets/NoSpaceAfterCast,A cast statement must not be followed by a space
+Generic.Formatting.SpaceAfterCast.,MAJOR,Maintainability,SpaceAfterCast,rulesets/SpaceAfterCast,A cast statement must be followed by a single space
+Generic.Functions.CallTimePassByReference.,MAJOR,Maintainability,CallTimePassByReference,rulesets/CallTimePassByReference,Call-time pass-by-reference calls are prohibited
+Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma,MAJOR,Maintainability,FunctionCallArgumentSpacingTooMuchSpaceAfterComma,rulesets/FunctionCallArgumentSpacing,Space found before comma in function call
+Generic.Functions.FunctionCallArgumentSpacing.,MAJOR,Maintainability,FunctionCallArgumentSpacing,rulesets/FunctionCallArgumentSpacing,Expected 1 space before = sign of default value
+Generic.Functions.OpeningFunctionBraceBsdAllman.BraceSpacing,MAJOR,Maintainability,OpeningFunctionBraceBsdAllmanBraceSpacing,rulesets/OpeningFunctionBraceBsdAllman,Opening brace should be on a new line
+Generic.Functions.OpeningFunctionBraceBsdAllman.BraceIndent,MAJOR,Maintainability,OpeningFunctionBraceBsdAllmanBraceIndent,rulesets/OpeningFunctionBraceBsdAllman,Opening brace indented incorrectly; expected %s spaces, found %s
+Generic.Functions.OpeningFunctionBraceKernighanRitchie.SpaceBeforeBrace,MAJOR,Maintainability,OpeningFunctionBraceKernighanRitchieSpaceBeforeBrace,rulesets/OpeningFunctionBraceKernighanRitchie,Opening brace should be on the same line as the declaration
+Generic.Functions.OpeningFunctionBraceKernighanRitchie.SpaceBeforeBrace,MAJOR,Maintainability,OpeningFunctionBraceKernighanRitchieSpaceBeforeBrace,rulesets/OpeningFunctionBraceKernighanRitchie,Expected a single space character between closing parenthesis and opening brace; found %s
+Generic.Metrics.CyclomaticComplexity.MaxExceeded,MAJOR,Maintainability,CyclomaticComplexityMaxExceeded,rulesets/CyclomaticComplexity,Function\'s cyclomatic complexity (%s) exceeds allowed maximum of %s
+Generic.Metrics.NestingLevel.MaxExceeded,MAJOR,Maintainability,NestingLevelMaxExceeded,rulesets/NestingLevel,Function\'s nesting level (%s) exceeds allowed maximum of %s
+Generic.NamingConventions.ConstructorName.,MAJOR,Maintainability,ConstructorName,rulesets/ConstructorName,Class PHP_CodeSniffer_Standards_AbstractScopeSniff not found
+Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase,MAJOR,Maintainability,UpperCaseConstantNameClassConstantNotUpperCase,rulesets/UpperCaseConstantName,Class constants must be uppercase; expected %s but found %s
+Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase,MAJOR,Maintainability,UpperCaseConstantNameConstantNotUpperCase,rulesets/UpperCaseConstantName,Constants must be uppercase; expected %s but found %s
+Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase,MAJOR,Maintainability,UpperCaseConstantNameConstantNotUpperCase,rulesets/UpperCaseConstantName,Constants must be uppercase; expected %s but found %s
+Generic.PHP.DisallowShortOpenTag.Found,MAJOR,Maintainability,DisallowShortOpenTagFound,rulesets/DisallowShortOpenTag,Short PHP opening tag used; expected "<?php" but found "%s"
+Generic.PHP.DisallowShortOpenTag.EchoFound,MAJOR,Maintainability,DisallowShortOpenTagEchoFound,rulesets/DisallowShortOpenTag,Short PHP opening tag used with echo; expected "<?php echo %s ..." but found "%s %s ..."
+Generic.PHP.ForbiddenFunctions.typ,MAJOR,Maintainability,ForbiddenFunctionstyp,rulesets/ForbiddenFunctions,The use of function %s() is 
+Generic.PHP.LowerCaseConstant.Found,MAJOR,Maintainability,LowerCaseConstantFound,rulesets/LowerCaseConstant,TRUE, FALSE and NULL must be lowercase; expected "%s" but found "%s"
+Generic.PHP.NoSilencedErrors.,MAJOR,Maintainability,NoSilencedErrors,rulesets/NoSilencedErrors,Silencing errors is forbidden
+Generic.PHP.UpperCaseConstant.Found,MAJOR,Maintainability,UpperCaseConstantFound,rulesets/UpperCaseConstant,TRUE, FALSE and NULL must be uppercase; expected "%s" but found "%s"
+Generic.Strings.UnnecessaryStringConcat.,MAJOR,Maintainability,UnnecessaryStringConcat,rulesets/UnnecessaryStringConcat,String concat is not required here; use a single string instead
+Generic.VersionControl.SubversionProperties.Unexpected,MAJOR,Maintainability,SubversionPropertiesUnexpected,rulesets/SubversionProperties,Unexpected Subversion property "%s" = "%s"
+Generic.VersionControl.SubversionProperties.Missing,MAJOR,Maintainability,SubversionPropertiesMissing,rulesets/SubversionProperties,Missing Subversion property "%s" = "%s"
+Generic.VersionControl.SubversionProperties.NoMatch,MAJOR,Maintainability,SubversionPropertiesNoMatch,rulesets/SubversionProperties,Subversion property "%s" = "%s" does not match "%s"
+Generic.VersionControl.SubversionProperties.,MAJOR,Maintainability,SubversionProperties,rulesets/SubversionProperties,Error opening file; could not get Subversion properties
+Generic.WhiteSpace.DisallowTabIndent.,MAJOR,Maintainability,DisallowTabIndent,rulesets/DisallowTabIndent,Spaces must be used to indent lines; tabs are not allowed
+Generic.WhiteSpace.ScopeIndent.Incorrect,MAJOR,Maintainability,ScopeIndentIncorrect,rulesets/ScopeIndent,Line indented incorrectly; expected %s spaces, found %s
+Generic.WhiteSpace.ScopeIndent.typ,MAJOR,Maintainability,ScopeIndenttyp,rulesets/ScopeIndent,Line indented incorrectly; expected 
+MySource.Channels.ChannelException.WrongExceptionType,MAJOR,Maintainability,ChannelExceptionWrongExceptionType,rulesets/ChannelException,Channel actions can only throw ChannelException; found "%s"
+MySource.Channels.DisallowSelfActions.Found,MAJOR,Maintainability,DisallowSelfActionsFound,rulesets/DisallowSelfActions,Static calls to public methods in Action classes must not use the self keyword; use %s::%s() instead
+MySource.Channels.IncludeSystem.NotIncludedCall,MAJOR,Maintainability,IncludeSystemNotIncludedCall,rulesets/IncludeSystem,Class PHP_CodeSniffer_Standards_AbstractScopeSniff not found
+MySource.Channels.IncludeSystem.NotIncludedExtends,MAJOR,Maintainability,IncludeSystemNotIncludedExtends,rulesets/IncludeSystem,Class extends non-included class or system "%s"; include system with Channels::includeSystem() or include class with require_once
+MySource.Channels.IncludeSystem.NotIncludedCall,MAJOR,Maintainability,IncludeSystemNotIncludedCall,rulesets/IncludeSystem,Static method called on non-included class or system "%s"; include system with Channels::includeSystem() or include class with require_once
+MySource.Channels.UnusedSystem.Found,MAJOR,Maintainability,UnusedSystemFound,rulesets/UnusedSystem,Included system "%s" is never used
+MySource.Commenting.FunctionComment.ApiTagSpacing,MAJOR,Maintainability,FunctionCommentApiTagSpacing,rulesets/FunctionComment,Class Squiz_Sniffs_Commenting_FunctionCommentSniff not found
+MySource.Commenting.FunctionComment.TagNotAllowed,MAJOR,Maintainability,FunctionCommentTagNotAllowed,rulesets/FunctionComment,@%s tag is not allowed in function comment
+MySource.Commenting.FunctionComment.ApiTagIndent,MAJOR,Maintainability,FunctionCommentApiTagIndent,rulesets/FunctionComment,The @api tags must be the last tags in a function comment
+MySource.CSS.BrowserSpecificStyles.,MAJOR,Maintainability,BrowserSpecificStyles,rulesets/BrowserSpecificStyles,Browser-specific styles are not allowed
+MySource.Debug.DebugCode.Found,MAJOR,Maintainability,DebugCodeFound,rulesets/DebugCode,Call to debug function Debug::%s() must be removed
+MySource.Debug.FirebugConsole.,MAJOR,Maintainability,FirebugConsole,rulesets/FirebugConsole,Variables, functions and labels must not be named "console"; name may conflict with Firebug internal variable
+MySource.Objects.AssignThis.,MAJOR,Maintainability,AssignThis,rulesets/AssignThis,Keyword "this" can only be assigned to a variable called "self"
+MySource.Objects.CreateWidgetTypeCallback.,MAJOR,Maintainability,CreateWidgetTypeCallback,rulesets/CreateWidgetTypeCallback,The first argument of the create() method of a widget type must be called "callback"
+MySource.Objects.DisallowNewWidget.Found,MAJOR,Maintainability,DisallowNewWidgetFound,rulesets/DisallowNewWidget,Manual creation of widget objects is banned; use Widget::getWidget(\'%s\'); instead
+MySource.PHP.EvalObjectFactory.,MAJOR,Maintainability,EvalObjectFactory,rulesets/EvalObjectFactory,Do not use eval() to create objects dynamically; use reflection instead
+MySource.PHP.GetRequestData.typ,MAJOR,Maintainability,GetRequestDatatyp,rulesets/GetRequestData,The %s super global must not be accessed directly; use Security::getRequestData(
+MySource.PHP.ReturnFunctionValue.,MAJOR,Maintainability,ReturnFunctionValue,rulesets/ReturnFunctionValue,The result of a function call should be assigned to a variable before being returned
+MySource.Strings.JoinStrings.,MAJOR,Maintainability,JoinStrings,rulesets/JoinStrings,Joining strings using inline arrays is not allowed; use the + operator instead
+PEAR.Classes.ClassDeclaration.MissingBrace,MAJOR,Maintainability,ClassDeclarationMissingBrace,rulesets/ClassDeclaration,Possible parse error: %s missing opening or closing brace
+PEAR.Classes.ClassDeclaration.OpenBraceNewLine,MAJOR,Maintainability,ClassDeclarationOpenBraceNewLine,rulesets/ClassDeclaration,Opening brace of a %s must be on the line after the definition
+PEAR.Classes.ClassDeclaration.OpenBraceWrongLine,MAJOR,Maintainability,ClassDeclarationOpenBraceWrongLine,rulesets/ClassDeclaration,Opening brace of a %s must be on the line following the %s declaration; found %s line(s)
+PEAR.Classes.ClassDeclaration.OpenBraceNotAlone,MAJOR,Maintainability,ClassDeclarationOpenBraceNotAlone,rulesets/ClassDeclaration,Opening %s brace must be on a line by itself
+PEAR.Classes.ClassDeclaration.SpaceBeforeBrace,MAJOR,Maintainability,ClassDeclarationSpaceBeforeBrace,rulesets/ClassDeclaration,Expected 0 spaces before opening brace; %s found
+PEAR.Commenting.ClassComment.WrongStyle,MAJOR,Maintainability,ClassCommentWrongStyle,rulesets/ClassComment,Class PHP_CodeSniffer_CommentParser_ClassCommentParser not found
+PEAR.Commenting.ClassComment.Missing,MAJOR,Maintainability,ClassCommentMissing,rulesets/ClassComment,Missing %s doc comment
+PEAR.Commenting.ClassComment.Empty,MAJOR,Maintainability,ClassCommentEmpty,rulesets/ClassComment,Doc comment is empty for %s
+PEAR.Commenting.ClassComment.SpacingBeforeShort,MAJOR,Maintainability,ClassCommentSpacingBeforeShort,rulesets/ClassComment,Extra newline(s) found before %s comment short description
+PEAR.Commenting.ClassComment.SpacingAfterShort,MAJOR,Maintainability,ClassCommentSpacingAfterShort,rulesets/ClassComment,There must be exactly one blank line between descriptions in %s comments
+PEAR.Commenting.ClassComment.SpacingBeforeTags,MAJOR,Maintainability,ClassCommentSpacingBeforeTags,rulesets/ClassComment,There must be exactly one blank line before the tags in %s comments
+PEAR.Commenting.ClassComment.InvalidVersion,MAJOR,Maintainability,ClassCommentInvalidVersion,rulesets/ClassComment,Content missing for @version tag in doc comment
+PEAR.Commenting.FileComment.MissingTag,MAJOR,Maintainability,FileCommentMissingTag,rulesets/FileComment,You must use "/**" style comments for a file comment
+PEAR.Commenting.FileComment.DuplicateTag,MAJOR,Maintainability,FileCommentDuplicateTag,rulesets/FileComment,Only 1 @%s tag is allowed in a %s comment
+PEAR.Commenting.FileComment.TagsNotGrouped,MAJOR,Maintainability,FileCommentTagsNotGrouped,rulesets/FileComment,@%s tags must be grouped together
+PEAR.Commenting.FileComment.WrongTagOrder,MAJOR,Maintainability,FileCommentWrongTagOrder,rulesets/FileComment,The @%s tag is in the wrong order; the tag %s
+PEAR.Commenting.FileComment.TagIndent,MAJOR,Maintainability,FileCommentTagIndent,rulesets/FileComment,@%s tag comment indented incorrectly; expected %s spaces but found %s
+PEAR.Commenting.FileComment.InvalidCategory,MAJOR,Maintainability,FileCommentInvalidCategory,rulesets/FileComment,Category name "%s" is not valid; consider "%s" instead
+PEAR.Commenting.FileComment.InvalidPackage,MAJOR,Maintainability,FileCommentInvalidPackage,rulesets/FileComment,@category tag must contain a name
+PEAR.Commenting.FileComment.InvalidSubpackage,MAJOR,Maintainability,FileCommentInvalidSubpackage,rulesets/FileComment,@package tag must contain a name
+PEAR.Commenting.FileComment.EmptyAuthors,MAJOR,Maintainability,FileCommentEmptyAuthors,rulesets/FileComment,@subpackage tag must contain a name
+PEAR.Commenting.FileComment.InvalidVersion,MAJOR,Maintainability,FileCommentInvalidVersion,rulesets/FileComment,A hyphen must be used between the earliest and latest year
+PEAR.Commenting.FunctionComment.ParameterNamesNotAligned,MAJOR,Maintainability,FunctionCommentParameterNamesNotAligned,rulesets/FunctionComment,You must use "/**" style comments for a function comment
+PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned,MAJOR,Maintainability,FunctionCommentParameterCommentsNotAligned,rulesets/FunctionComment,The comments for parameters %s (%s) and %s (%s) do not align
+PEAR.Commenting.FunctionComment.cod,MAJOR,Maintainability,FunctionCommentcod,rulesets/FunctionComment,Doc comment for var %s does not match 
+PEAR.Commenting.FunctionComment.MissingParamComment,MAJOR,Maintainability,FunctionCommentMissingParamComment,rulesets/FunctionComment,Superfluous doc comment at position '.$po
+PEAR.Commenting.FunctionComment.MissingParamTag,MAJOR,Maintainability,FunctionCommentMissingParamTag,rulesets/FunctionComment,Expected 1 space after the longest type
+PEAR.Commenting.InlineComment.,MAJOR,Maintainability,InlineComment,rulesets/InlineComment,Perl-style comments are not allowed. Use "// Comment."
+PEAR.ControlStructures.MultiLineCondition.,MAJOR,Maintainability,MultiLineCondition,rulesets/MultiLineCondition,Closing parenthesis of a multi-line IF statement must be on a new line
+PEAR.Files.IncludingFile.BracketsNotRequired,MAJOR,Maintainability,IncludingFileBracketsNotRequired,rulesets/IncludingFile,"%s" is a statement not a function; no parentheses are required
+PEAR.Files.IncludingFile.,MAJOR,Maintainability,IncludingFile,rulesets/IncludingFile,File is being conditionally included; 
+PEAR.Formatting.MultiLineAssignment.Indent,MAJOR,Maintainability,MultiLineAssignmentIndent,rulesets/MultiLineAssignment,Multi-line assignments must have the equal sign on the second line
+PEAR.Functions.FunctionCallSignature.Indent,MAJOR,Maintainability,FunctionCallSignatureIndent,rulesets/FunctionCallSignature,Space before opening parenthesis of function call prohibited
+PEAR.Functions.FunctionCallSignature.,MAJOR,Maintainability,FunctionCallSignature,rulesets/FunctionCallSignature,Opening parenthesis of a multi-line function call must be the last content on the line
+PEAR.Functions.FunctionDeclaration.Indent,MAJOR,Maintainability,FunctionDeclarationIndent,rulesets/FunctionDeclaration,Multi-line function declaration not indented correctly; expected %s spaces but found %s
+PEAR.Functions.FunctionDeclaration.cod,MAJOR,Maintainability,FunctionDeclarationcod,rulesets/FunctionDeclaration,There must be a single space between the closing parenthesis and the opening brace of a multi-line function declaration; found 
+PEAR.Functions.FunctionDeclaration.,MAJOR,Maintainability,FunctionDeclaration,rulesets/FunctionDeclaration,There must be a single space between the closing parenthesis and the opening brace of a multi-line function declaration
+PEAR.Functions.ValidDefaultValue.,MAJOR,Maintainability,ValidDefaultValue,rulesets/ValidDefaultValue,Arguments with default values must be at the end of the argument list
+PEAR.NamingConventions.ValidClassName.StartWithCaptial,MAJOR,Maintainability,ValidClassNameStartWithCaptial,rulesets/ValidClassName,%s name must begin with a capital letter
+PEAR.NamingConventions.ValidClassName.Invalid,MAJOR,Maintainability,ValidClassNameInvalid,rulesets/ValidClassName,%s name is not valid
+PEAR.NamingConventions.ValidClassName.Invalid,MAJOR,Maintainability,ValidClassNameInvalid,rulesets/ValidClassName,%s name is not valid; consider %s instead
+PEAR.NamingConventions.ValidFunctionName.MethodDoubleUnderscore,MAJOR,Maintainability,ValidFunctionNameMethodDoubleUnderscore,rulesets/ValidFunctionName,Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore
+PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore,MAJOR,Maintainability,ValidFunctionNamePrivateNoUnderscore,rulesets/ValidFunctionName,Private method name "%s" must be prefixed with an underscore
+PEAR.NamingConventions.ValidFunctionName.PublicUnderscore,MAJOR,Maintainability,ValidFunctionNamePublicUnderscore,rulesets/ValidFunctionName,%s method name "%s" must not be prefixed with an underscore
+PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps,MAJOR,Maintainability,ValidFunctionNameScopeNotCamelCaps,rulesets/ValidFunctionName,%s method name "%s" is not in camel caps format
+PEAR.NamingConventions.ValidFunctionName.NotCamelCaps,MAJOR,Maintainability,ValidFunctionNameNotCamelCaps,rulesets/ValidFunctionName,Method name "%s" is not in camel caps format
+PEAR.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,MAJOR,Maintainability,ValidFunctionNameFunctionDoubleUnderscore,rulesets/ValidFunctionName,Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore
+PEAR.NamingConventions.ValidFunctionName.FunctionUnderscore,MAJOR,Maintainability,ValidFunctionNameFunctionUnderscore,rulesets/ValidFunctionName,Function name "%s" is invalid; only private methods should be prefixed with an underscore
+PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial,MAJOR,Maintainability,ValidFunctionNameFunctionNoCaptial,rulesets/ValidFunctionName,Function name "%s" is prefixed with a package name but does not begin with a capital letter
+PEAR.NamingConventions.ValidFunctionName.FunctionInvalid,MAJOR,Maintainability,ValidFunctionNameFunctionInvalid,rulesets/ValidFunctionName,Function name "%s" is not valid; name appears incomplete
+PEAR.NamingConventions.ValidFunctionName.FunctionNameInvalid,MAJOR,Maintainability,ValidFunctionNameFunctionNameInvalid,rulesets/ValidFunctionName,Function name "%s" is invalid; consider "%s" instead
+PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore,MAJOR,Maintainability,ValidVariableNamePrivateNoUnderscore,rulesets/ValidVariableName,Class PHP_CodeSniffer_Standards_AbstractVariableSniff not found
+PEAR.NamingConventions.ValidVariableName.PublicUnderscore,MAJOR,Maintainability,ValidVariableNamePublicUnderscore,rulesets/ValidVariableName,%s member variable "%s" must not be prefixed with an underscore
+PEAR.WhiteSpace.ObjectOperatorIndent.Incorrect,MAJOR,Maintainability,ObjectOperatorIndentIncorrect,rulesets/ObjectOperatorIndent,Object operator not indented correctly; expected %s spaces but found %s
+PEAR.WhiteSpace.ObjectOperatorIndent.,MAJOR,Maintainability,ObjectOperatorIndent,rulesets/ObjectOperatorIndent,Object operator must be at the start of the line, not the end
+PEAR.WhiteSpace.ScopeClosingBrace.BreakIdent,MAJOR,Maintainability,ScopeClosingBraceBreakIdent,rulesets/ScopeClosingBrace,Closing brace must be on a line by itself
+PEAR.WhiteSpace.ScopeClosingBrace.Indent,MAJOR,Maintainability,ScopeClosingBraceIndent,rulesets/ScopeClosingBrace,Closing brace indented incorrectly; expected %s spaces, found %s
+PEAR.WhiteSpace.ScopeIndent.,MAJOR,Maintainability,ScopeIndent,rulesets/ScopeIndent,Class Generic_Sniffs_WhiteSpace_ScopeIndentSniff not found
+Squiz.Arrays.ArrayBracketSpacing.SpaceBeforeBracket,MAJOR,Maintainability,ArrayBracketSpacingSpaceBeforeBracket,rulesets/ArrayBracketSpacing,Space found before square bracket; expected "%s" but found "%s"
+Squiz.Arrays.ArrayBracketSpacing.SpaceAfterBracket,MAJOR,Maintainability,ArrayBracketSpacingSpaceAfterBracket,rulesets/ArrayBracketSpacing,Space found after square bracket; expected "%s" but found "%s"
+Squiz.Arrays.ArrayDeclaration.NotLowerCase,MAJOR,Maintainability,ArrayDeclarationNotLowerCase,rulesets/ArrayDeclaration,Array keyword should be lower case; expected "array" but found "%s"
+Squiz.Arrays.ArrayDeclaration.NoSpaceBeforeDoubleArrow,MAJOR,Maintainability,ArrayDeclarationNoSpaceBeforeDoubleArrow,rulesets/ArrayDeclaration,There must be no space between the Array keyword and the opening parenthesis
+Squiz.Arrays.ArrayDeclaration.SpaceBeforeDoubleArrow,MAJOR,Maintainability,ArrayDeclarationSpaceBeforeDoubleArrow,rulesets/ArrayDeclaration,Expected 1 space between "%s" and double arrow; %s found
+Squiz.Arrays.ArrayDeclaration.NoSpaceAfterDoubleArrow,MAJOR,Maintainability,ArrayDeclarationNoSpaceAfterDoubleArrow,rulesets/ArrayDeclaration,Expected 1 space between double arrow and "%s"; 0 found
+Squiz.Arrays.ArrayDeclaration.SpaceAfterDoubleArrow,MAJOR,Maintainability,ArrayDeclarationSpaceAfterDoubleArrow,rulesets/ArrayDeclaration,Expected 1 space between double arrow and "%s"; %s found
+Squiz.Arrays.ArrayDeclaration.NoSpaceAfterComma,MAJOR,Maintainability,ArrayDeclarationNoSpaceAfterComma,rulesets/ArrayDeclaration,Array with multiple values cannot be declared on a single line
+Squiz.Arrays.ArrayDeclaration.SpaceAfterComma,MAJOR,Maintainability,ArrayDeclarationSpaceAfterComma,rulesets/ArrayDeclaration,Expected 1 space between comma and "%s"; %s found
+Squiz.Arrays.ArrayDeclaration.SpaceBeforeComma,MAJOR,Maintainability,ArrayDeclarationSpaceBeforeComma,rulesets/ArrayDeclaration,Expected 0 spaces between "%s" and comma; %s found
+Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned,MAJOR,Maintainability,ArrayDeclarationCloseBraceNotAligned,rulesets/ArrayDeclaration,Closing parenthesis of array declaration must be on a new line
+Squiz.Arrays.ArrayDeclaration.SpaceBeforeComma,MAJOR,Maintainability,ArrayDeclarationSpaceBeforeComma,rulesets/ArrayDeclaration,No key specified for array entry; first entry specifies key
+Squiz.Arrays.ArrayDeclaration.ValueNotAligned,MAJOR,Maintainability,ArrayDeclarationValueNotAligned,rulesets/ArrayDeclaration,Key specified for array entry; first entry has no key
+Squiz.Arrays.ArrayDeclaration.KeyNotAligned,MAJOR,Maintainability,ArrayDeclarationKeyNotAligned,rulesets/ArrayDeclaration,The first value in a multi-value array must be on a new line
+Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned,MAJOR,Maintainability,ArrayDeclarationDoubleArrowNotAligned,rulesets/ArrayDeclaration,Array double arrow not aligned correctly; expected %s space(s) but found %s
+Squiz.Arrays.ArrayDeclaration.ValueNotAligned,MAJOR,Maintainability,ArrayDeclarationValueNotAligned,rulesets/ArrayDeclaration,Array value not aligned correctly; expected %s space(s) but found %s
+Squiz.Arrays.ArrayDeclaration.SpaceBeforeComma,MAJOR,Maintainability,ArrayDeclarationSpaceBeforeComma,rulesets/ArrayDeclaration,Each line in an array declaration must end in a comma
+Squiz.Classes.ClassDeclaration.SpaceBeforeKeyword,MAJOR,Maintainability,ClassDeclarationSpaceBeforeKeyword,rulesets/ClassDeclaration,Class PEAR_Sniffs_Classes_ClassDeclarationSniff not found
+Squiz.Classes.ClassDeclaration.SpacesBeforeKeyword,MAJOR,Maintainability,ClassDeclarationSpacesBeforeKeyword,rulesets/ClassDeclaration,Expected 1 space between %s and %s keywords; %s found
+Squiz.Classes.ClassDeclaration.MissingBrace,MAJOR,Maintainability,ClassDeclarationMissingBrace,rulesets/ClassDeclaration,Possible parse error: %s missing opening or closing brace
+Squiz.Classes.ClassDeclaration.SpaceBeforeCloseBrace,MAJOR,Maintainability,ClassDeclarationSpaceBeforeCloseBrace,rulesets/ClassDeclaration,Expected 0 spaces before closing brace; newline found
+Squiz.Classes.ClassDeclaration.EndFileAfterCloseBrace,MAJOR,Maintainability,ClassDeclarationEndFileAfterCloseBrace,rulesets/ClassDeclaration,Closing brace of a %s must be followed by a blank line and then a closing PHP tag
+Squiz.Classes.ClassDeclaration.NoNewlineAfterCloseBrace,MAJOR,Maintainability,ClassDeclarationNoNewlineAfterCloseBrace,rulesets/ClassDeclaration,Closing brace of a %s must be followed by a single blank line
+Squiz.Classes.ClassDeclaration.NewlinesAfterCloseBrace,MAJOR,Maintainability,ClassDeclarationNewlinesAfterCloseBrace,rulesets/ClassDeclaration,Closing brace of a %s must be followed by a single blank line; found %s
+Squiz.Classes.ClassDeclaration.CloseBraceSameLine,MAJOR,Maintainability,ClassDeclarationCloseBraceSameLine,rulesets/ClassDeclaration,Closing %s brace must be on a line by itself
+Squiz.Classes.ClassDeclaration.SpaceAfterKeyword,MAJOR,Maintainability,ClassDeclarationSpaceAfterKeyword,rulesets/ClassDeclaration,Expected 1 space between %s keyword and %s name; %s found
+Squiz.Classes.ClassDeclaration.SpaceAfterName,MAJOR,Maintainability,ClassDeclarationSpaceAfterName,rulesets/ClassDeclaration,Expected 1 space after %s name; %s found
+Squiz.Classes.ClassDeclaration.NoSpaceBeforeName,MAJOR,Maintainability,ClassDeclarationNoSpaceBeforeName,rulesets/ClassDeclaration,Expected 1 space before "%s"; 0 found
+Squiz.Classes.ClassDeclaration.SpaceBeforeName,MAJOR,Maintainability,ClassDeclarationSpaceBeforeName,rulesets/ClassDeclaration,Expected 1 space before "%s"; %s found
+Squiz.Classes.ClassDeclaration.SpaceBeforeComma,MAJOR,Maintainability,ClassDeclarationSpaceBeforeComma,rulesets/ClassDeclaration,Expected 0 spaces between "%s" and comma; $%s found
+Squiz.Classes.ClassFileName.NoMatch,MAJOR,Maintainability,ClassFileNameNoMatch,rulesets/ClassFileName,%s name doesn\'t match filename; expected "%s %s"
+Squiz.Classes.DuplicateProperty.Found,MAJOR,Maintainability,DuplicatePropertyFound,rulesets/DuplicateProperty,Duplicate property definition found for "%s"; previously defined on line %s
+Squiz.Classes.LowercaseClassKeywords.FoundUppercase,MAJOR,Maintainability,LowercaseClassKeywordsFoundUppercase,rulesets/LowercaseClassKeywords,%s keyword must be lowercase; expected "%s" but found "%s"
+Squiz.Classes.SelfMemberReference.IncorrectCase,MAJOR,Maintainability,SelfMemberReferenceIncorrectCase,rulesets/SelfMemberReference,Class PHP_CodeSniffer_Standards_AbstractScopeSniff not found
+Squiz.Classes.SelfMemberReference.SpaceBefore,MAJOR,Maintainability,SelfMemberReferenceSpaceBefore,rulesets/SelfMemberReference,Must use "self::" for local static member reference
+Squiz.Classes.SelfMemberReference.SpaceAfter,MAJOR,Maintainability,SelfMemberReferenceSpaceAfter,rulesets/SelfMemberReference,Expected 0 spaces after double colon; %s found
+Squiz.Classes.ValidClassName.MissingBrace,MAJOR,Maintainability,ValidClassNameMissingBrace,rulesets/ValidClassName,Possible parse error: %s missing opening or closing brace
+Squiz.Classes.ValidClassName.NotCamelCaps,MAJOR,Maintainability,ValidClassNameNotCamelCaps,rulesets/ValidClassName,%s name "%s" is not in camel caps format
+Squiz.Commenting.BlockComment.FirstLineIndent,MAJOR,Maintainability,BlockCommentFirstLineIndent,rulesets/BlockComment,Single line block comment not allowed; use inline ("// text") comment instead
+Squiz.Commenting.BlockComment.LineIndent,MAJOR,Maintainability,BlockCommentLineIndent,rulesets/BlockComment,Block comments must start with a capital letter
+Squiz.Commenting.BlockComment.LastLineIndent,MAJOR,Maintainability,BlockCommentLastLineIndent,rulesets/BlockComment,Comment closer must be on a new line
+Squiz.Commenting.BlockComment.,MAJOR,Maintainability,BlockComment,rulesets/BlockComment,Empty line not required before block comment
+Squiz.Commenting.ClassComment.TagNotAllowed,MAJOR,Maintainability,ClassCommentTagNotAllowed,rulesets/ClassComment,There must be exactly one blank line before the class comment
+Squiz.Commenting.ClassComment.,MAJOR,Maintainability,ClassComment,rulesets/ClassComment,Additional blank lines found at end of class comment
+Squiz.Commenting.ClosingDeclarationComment.MissingBrace,MAJOR,Maintainability,ClosingDeclarationCommentMissingBrace,rulesets/ClosingDeclarationComment,Possible parse error: non-abstract method defined as abstract
+Squiz.Commenting.ClosingDeclarationComment.,MAJOR,Maintainability,ClosingDeclarationComment,rulesets/ClosingDeclarationComment,Expected '.$commen
+Squiz.Commenting.DocCommentAlignment.SpaceBeforeTag,MAJOR,Maintainability,DocCommentAlignmentSpaceBeforeTag,rulesets/DocCommentAlignment,Expected 1 space between asterisk and tag; 0 found
+Squiz.Commenting.DocCommentAlignment.SpaceBeforeAsterisk,MAJOR,Maintainability,DocCommentAlignmentSpaceBeforeAsterisk,rulesets/DocCommentAlignment,Expected %s space(s) before asterisk; %s found
+Squiz.Commenting.EmptyCatchComment.,MAJOR,Maintainability,EmptyCatchComment,rulesets/EmptyCatchComment,Empty CATCH statement must have a comment to explain why the exception is not handled
+Squiz.Commenting.FileComment.TagNotAllowed,MAJOR,Maintainability,FileCommentTagNotAllowed,rulesets/FileComment,Extra newline found after the open tag
+Squiz.Commenting.FileComment.MissingTag,MAJOR,Maintainability,FileCommentMissingTag,rulesets/FileComment,Additional blank lines found at end of file comment
+Squiz.Commenting.FileComment.DuplicateTag,MAJOR,Maintainability,FileCommentDuplicateTag,rulesets/FileComment,Only 1 @%s tag is allowed in file comment
+Squiz.Commenting.FileComment.TagOrder,MAJOR,Maintainability,FileCommentTagOrder,rulesets/FileComment,The @%s tag is in the wrong order; the tag %s
+Squiz.Commenting.FileComment.TagIndent,MAJOR,Maintainability,FileCommentTagIndent,rulesets/FileComment,@%s tag comment indented incorrectly; expected %s spaces but found %s
+Squiz.Commenting.FileComment.IncorrectPackage,MAJOR,Maintainability,FileCommentIncorrectPackage,rulesets/FileComment,Content missing for @package tag in file comment
+Squiz.Commenting.FileComment.IncorrectSubpackage,MAJOR,Maintainability,FileCommentIncorrectSubpackage,rulesets/FileComment,Content missing for @subpackage tag in file comment
+Squiz.Commenting.FileComment.,MAJOR,Maintainability,FileComment,rulesets/FileComment,Content missing for @author tag in file comment
+Squiz.Commenting.FunctionComment.SeeIndent,MAJOR,Maintainability,FunctionCommentSeeIndent,rulesets/FunctionComment,Class PHP_CodeSniffer_CommentParser_FunctionCommentParser not found
+Squiz.Commenting.FunctionComment.InvalidReturn,MAJOR,Maintainability,FunctionCommentInvalidReturn,rulesets/FunctionComment,Only 1 @return tag is allowed in function comment
+Squiz.Commenting.FunctionComment.ReturnIndent,MAJOR,Maintainability,FunctionCommentReturnIndent,rulesets/FunctionComment,Function return type is void, but function contains return statement
+Squiz.Commenting.FunctionComment.ParameterNamesNotAligned,MAJOR,Maintainability,FunctionCommentParameterNamesNotAligned,rulesets/FunctionComment,Missing @return tag in function comment
+Squiz.Commenting.FunctionComment.ParameterCommentsNotAligned,MAJOR,Maintainability,FunctionCommentParameterCommentsNotAligned,rulesets/FunctionComment,The comments for parameters %s (%s) and %s (%s) do not align
+Squiz.Commenting.FunctionComment.IncorrectParamVarName,MAJOR,Maintainability,FunctionCommentIncorrectParamVarName,rulesets/FunctionComment,Expected "%s"; found "%s" for %s at position %s
+Squiz.Commenting.FunctionComment.TypeHintMissing,MAJOR,Maintainability,FunctionCommentTypeHintMissing,rulesets/FunctionComment,Type hint "%s" missing for %s at position %s
+Squiz.Commenting.FunctionComment.IncorrectTypeHint,MAJOR,Maintainability,FunctionCommentIncorrectTypeHint,rulesets/FunctionComment,Expected type hint "%s"; found "%s" for %s at position %s
+Squiz.Commenting.FunctionComment.InvalidTypeHint,MAJOR,Maintainability,FunctionCommentInvalidTypeHint,rulesets/FunctionComment,Unknown type hint "%s" found for %s at position %s
+Squiz.Commenting.FunctionComment.cod,MAJOR,Maintainability,FunctionCommentcod,rulesets/FunctionComment,Doc comment for var %s does not match 
+Squiz.Commenting.FunctionComment.MissingParamComment,MAJOR,Maintainability,FunctionCommentMissingParamComment,rulesets/FunctionComment,Superfluous doc comment at position '.$po
+Squiz.Commenting.FunctionComment.MissingParamTag,MAJOR,Maintainability,FunctionCommentMissingParamTag,rulesets/FunctionComment,Param comment must start with a capital letter
+Squiz.Commenting.FunctionComment.TagNotAllowed,MAJOR,Maintainability,FunctionCommentTagNotAllowed,rulesets/FunctionComment,@%s tag is not allowed in function comment
+Squiz.Commenting.FunctionCommentThrowTag.WrongNumber,MAJOR,Maintainability,FunctionCommentThrowTagWrongNumber,rulesets/FunctionCommentThrowTag,Class PHP_CodeSniffer_Standards_AbstractScopeSniff not found
+Squiz.Commenting.FunctionCommentThrowTag.WrongType,MAJOR,Maintainability,FunctionCommentThrowTagWrongType,rulesets/FunctionCommentThrowTag,Expected "%s" but found "%s" for @throws tag exception
+Squiz.Commenting.InlineComment.NoSpaceBefore,MAJOR,Maintainability,InlineCommentNoSpaceBefore,rulesets/InlineComment,Inline doc block comments are not allowed; use "/* Comment */" or "// Comment" instead
+Squiz.Commenting.InlineComment.SpacingBefore,MAJOR,Maintainability,InlineCommentSpacingBefore,rulesets/InlineComment,%s spaces found before inline comment; expected "// %s" but found "%s"
+Squiz.Commenting.InlineComment.InvalidEndChar,MAJOR,Maintainability,InlineCommentInvalidEndChar,rulesets/InlineComment,Blank comments are not allowed
+Squiz.Commenting.InlineComment.,MAJOR,Maintainability,InlineComment,rulesets/InlineComment,There must be no blank line following an inline comment
+Squiz.Commenting.LongConditionClosingComment.Missing,MAJOR,Maintainability,LongConditionClosingCommentMissing,rulesets/LongConditionClosingComment,End comment for long condition not found; expected "%s"
+Squiz.Commenting.LongConditionClosingComment.SpacingBefore,MAJOR,Maintainability,LongConditionClosingCommentSpacingBefore,rulesets/LongConditionClosingComment,Space found before closing comment; expected "%s"
+Squiz.Commenting.LongConditionClosingComment.Invalid,MAJOR,Maintainability,LongConditionClosingCommentInvalid,rulesets/LongConditionClosingComment,Incorrect closing comment; expected "%s" but found "%s"
+Squiz.Commenting.PostStatementComment.,MAJOR,Maintainability,PostStatementComment,rulesets/PostStatementComment,Comments may not appear after statements.
+Squiz.Commenting.VariableComment.TagNotAllowed,MAJOR,Maintainability,VariableCommentTagNotAllowed,rulesets/VariableComment,Variable doc comment is empty
+Squiz.Commenting.VariableComment.IncorrectVarType,MAJOR,Maintainability,VariableCommentIncorrectVarType,rulesets/VariableComment,Additional blank lines found at end of variable comment
+Squiz.Commenting.VariableComment.VarIndent,MAJOR,Maintainability,VariableCommentVarIndent,rulesets/VariableComment,@var tag indented incorrectly; expected 1 space but found %s
+Squiz.Commenting.VariableComment.SeesIndent,MAJOR,Maintainability,VariableCommentSeesIndent,rulesets/VariableComment,Missing @var tag in variable comment
+Squiz.ControlStructures.ElseIfDeclaration.,MAJOR,Maintainability,ElseIfDeclaration,rulesets/ElseIfDeclaration,Usage of ELSEIF not allowed; use ELSE IF instead
+Squiz.ControlStructures.ForEachLoopDeclaration.AsNotLower,MAJOR,Maintainability,ForEachLoopDeclarationAsNotLower,rulesets/ForEachLoopDeclaration,Space found after opening bracket of FOREACH loop
+Squiz.ControlStructures.ForEachLoopDeclaration.SpacingBeforeArrow,MAJOR,Maintainability,ForEachLoopDeclarationSpacingBeforeArrow,rulesets/ForEachLoopDeclaration,Expected 1 space before "=>"; 0 found
+Squiz.ControlStructures.ForEachLoopDeclaration.SpacingAfterArrow,MAJOR,Maintainability,ForEachLoopDeclarationSpacingAfterArrow,rulesets/ForEachLoopDeclaration,Expected 1 space after "=>"; 0 found
+Squiz.ControlStructures.ForEachLoopDeclaration.SpacingBeforeAs,MAJOR,Maintainability,ForEachLoopDeclarationSpacingBeforeAs,rulesets/ForEachLoopDeclaration,Expected 1 space before "as"; 0 found
+Squiz.ControlStructures.ForEachLoopDeclaration.SpacingAfterAs,MAJOR,Maintainability,ForEachLoopDeclarationSpacingAfterAs,rulesets/ForEachLoopDeclaration,Expected 1 space after "as"; 0 found
+Squiz.ControlStructures.ForLoopDeclaration.SpacingAfterFirst,MAJOR,Maintainability,ForLoopDeclarationSpacingAfterFirst,rulesets/ForLoopDeclaration,Possible parse error: no opening parenthesis for FOR keyword
+Squiz.ControlStructures.ForLoopDeclaration.SpacingAfterSecond,MAJOR,Maintainability,ForLoopDeclarationSpacingAfterSecond,rulesets/ForLoopDeclaration,Space found before second semicolon of FOR loop
+Squiz.ControlStructures.InlineIfDeclaration.SpacingBeforeThen,MAJOR,Maintainability,InlineIfDeclarationSpacingBeforeThen,rulesets/InlineIfDeclaration,Inline shorthand IF statement must be declared on a single line
+Squiz.ControlStructures.InlineIfDeclaration.SpacingAfterThen,MAJOR,Maintainability,InlineIfDeclarationSpacingAfterThen,rulesets/InlineIfDeclaration,Inline shorthand IF statement requires 1 space after THEN; %s found
+Squiz.ControlStructures.InlineIfDeclaration.SpacingBeforeElse,MAJOR,Maintainability,InlineIfDeclarationSpacingBeforeElse,rulesets/InlineIfDeclaration,Inline shorthand IF statement requires 1 space before ELSE; %s found
+Squiz.ControlStructures.InlineIfDeclaration.SpacingAfterElse,MAJOR,Maintainability,InlineIfDeclarationSpacingAfterElse,rulesets/InlineIfDeclaration,Inline shorthand IF statement requires 1 space after ELSE; %s found
+Squiz.ControlStructures.LowercaseDeclaration.FoundUppercase,MAJOR,Maintainability,LowercaseDeclarationFoundUppercase,rulesets/LowercaseDeclaration,%s keyword must be lowercase; expected "%s" but found "%s"
+Squiz.ControlStructures.SwitchDeclaration.DefaultNotLower,MAJOR,Maintainability,SwitchDeclarationDefaultNotLower,rulesets/SwitchDeclaration,CASE keyword must be lowercase; expected \"$expected\" but found \"$content\"
+Squiz.ControlStructures.SwitchDeclaration.,MAJOR,Maintainability,SwitchDeclaration,rulesets/SwitchDeclaration,There must be no space before the colon in a DEFAULT statement
+Squiz.CSS.ClassDefinitionClosingBraceSpace.SpacingAfterClose,MAJOR,Maintainability,ClassDefinitionClosingBraceSpaceSpacingAfterClose,rulesets/ClassDefinitionClosingBraceSpace,Expected one blank line after closing brace of class definition; %s found
+Squiz.CSS.ClassDefinitionClosingBraceSpace.SpacingBeforeClose,MAJOR,Maintainability,ClassDefinitionClosingBraceSpaceSpacingBeforeClose,rulesets/ClassDefinitionClosingBraceSpace,Expected 0 blank lines before closing brace of class definition; %s found
+Squiz.CSS.ClassDefinitionNameSpacing.,MAJOR,Maintainability,ClassDefinitionNameSpacing,rulesets/ClassDefinitionNameSpacing,Blank lines are not allowed between class names
+Squiz.CSS.ClassDefinitionOpeningBraceSpace.Before,MAJOR,Maintainability,ClassDefinitionOpeningBraceSpaceBefore,rulesets/ClassDefinitionOpeningBraceSpace,Expected 1 space before opening brace of class definition; 0 found
+Squiz.CSS.ClassDefinitionOpeningBraceSpace.After,MAJOR,Maintainability,ClassDefinitionOpeningBraceSpaceAfter,rulesets/ClassDefinitionOpeningBraceSpace,Expected 0 blank lines after opening brace of class definition; %s found
+Squiz.CSS.ColonSpacing.After,MAJOR,Maintainability,ColonSpacingAfter,rulesets/ColonSpacing,There must be no space before a colon in a style definition
+Squiz.CSS.ColonSpacing.,MAJOR,Maintainability,ColonSpacing,rulesets/ColonSpacing,Expected 1 space after colon in style definition; newline found
+Squiz.CSS.ColourDefinition.NotUpper,MAJOR,Maintainability,ColourDefinitionNotUpper,rulesets/ColourDefinition,CSS colours must be defined in uppercase; expected %s but found %s
+Squiz.CSS.ColourDefinition.Shorthand,MAJOR,Maintainability,ColourDefinitionShorthand,rulesets/ColourDefinition,CSS colours must use shorthand if available; expected %s but found %s
+Squiz.CSS.DisallowMultipleStyleDefinitions.,MAJOR,Maintainability,DisallowMultipleStyleDefinitions,rulesets/DisallowMultipleStyleDefinitions,Each style definition must be on a line by itself
+Squiz.CSS.DuplicateClassDefinition.Found,MAJOR,Maintainability,DuplicateClassDefinitionFound,rulesets/DuplicateClassDefinition,Duplicate class definition found; first defined on line %s
+Squiz.CSS.DuplicateStyleDefinition.Found,MAJOR,Maintainability,DuplicateStyleDefinitionFound,rulesets/DuplicateStyleDefinition,Duplicate style definition found; first defined on line %s
+Squiz.CSS.EmptyClassDefinition.,MAJOR,Maintainability,EmptyClassDefinition,rulesets/EmptyClassDefinition,Class definition is empty
+Squiz.CSS.EmptyStyleDefinition.,MAJOR,Maintainability,EmptyStyleDefinition,rulesets/EmptyStyleDefinition,Style definition is empty
+Squiz.CSS.Indentation.Incorrect,MAJOR,Maintainability,IndentationIncorrect,rulesets/Indentation,Blank lines are not allowed in class definitions
+Squiz.CSS.LowercaseStyleDefinition.FoundUpper,MAJOR,Maintainability,LowercaseStyleDefinitionFoundUpper,rulesets/LowercaseStyleDefinition,Style definitions must be lowercase; expected %s but found %s
+Squiz.CSS.MissingColon.,MAJOR,Maintainability,MissingColon,rulesets/MissingColon,No style definition found on line; check for missing colon
+Squiz.CSS.Opacity.PointNotRequired,MAJOR,Maintainability,OpacityPointNotRequired,rulesets/Opacity,Opacity values must be between 0 and 1
+Squiz.CSS.Opacity.StartWithPoint,MAJOR,Maintainability,OpacityStartWithPoint,rulesets/Opacity,Opacity values must not start with a decimal point; use 0%s instead
+Squiz.CSS.Opacity.,MAJOR,Maintainability,Opacity,rulesets/Opacity,Opacity values must be between 0 and 1
+Squiz.CSS.SemicolonSpacing.SpaceFound,MAJOR,Maintainability,SemicolonSpacingSpaceFound,rulesets/SemicolonSpacing,Style definitions must end with a semicolon
+Squiz.Files.FileExtension.ClassFound,MAJOR,Maintainability,FileExtensionClassFound,rulesets/FileExtension,%s found in ".php" file; use ".inc" extension instead
+Squiz.Files.FileExtension.,MAJOR,Maintainability,FileExtension,rulesets/FileExtension,No interface or class found in ".inc" file; use ".php" extension instead
+Squiz.Formatting.OperatorBracket.,MAJOR,Maintainability,OperatorBracket,rulesets/OperatorBracket,No space allowed between minus sign and number
+Squiz.Formatting.OutputBufferingIndent.Incorrect,MAJOR,Maintainability,OutputBufferingIndentIncorrect,rulesets/OutputBufferingIndent,Output buffering must be closed using ob_end_clean or ob_end_flush
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceBeforeEquals,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpaceBeforeEquals,rulesets/FunctionDeclarationArgumentSpacing,Expected 0 spaces between argument "%s" and equals sign; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceAfterDefault,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpaceAfterDefault,rulesets/FunctionDeclarationArgumentSpacing,Expected 0 spaces between default value and equals sign for argument "%s"; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceBeforeComma,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpaceBeforeComma,rulesets/FunctionDeclarationArgumentSpacing,Expected 0 spaces between argument "%s" and comma; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpacingAfterHint,rulesets/FunctionDeclarationArgumentSpacing,Expected 1 space between type hint and argument "%s"; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.NoSapceBeforeHint,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingNoSapceBeforeHint,rulesets/FunctionDeclarationArgumentSpacing,Expected 1 space between comma and type hint "%s"; 0 found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeHint,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpacingBeforeHint,rulesets/FunctionDeclarationArgumentSpacing,Expected 1 space between comma and type hint "%s"; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeArg,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpacingBeforeArg,rulesets/FunctionDeclarationArgumentSpacing,Expected 1 space between comma and argument "%s"; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.NoSpaceBeforeArg,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingNoSpaceBeforeArg,rulesets/FunctionDeclarationArgumentSpacing,Expected 1 space between comma and argument "%s"; 0 found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpacingAfterHint,rulesets/FunctionDeclarationArgumentSpacing,Expected 1 space between type hint and argument "%s"; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpenHint,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpacingAfterOpenHint,rulesets/FunctionDeclarationArgumentSpacing,Expected 0 spaces between opening bracket and type hint "%s"; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpacingAfterOpen,rulesets/FunctionDeclarationArgumentSpacing,Expected 0 spaces between opening bracket and argument "%s"; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBetween,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpacingBetween,rulesets/FunctionDeclarationArgumentSpacing,Expected 0 spaces between brackets of function declaration; %s found
+Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose,MAJOR,Maintainability,FunctionDeclarationArgumentSpacingSpacingBeforeClose,rulesets/FunctionDeclarationArgumentSpacing,Expected 0 spaces between argument "%s" and closing bracket; %s found
+Squiz.Functions.FunctionDuplicateArgument.Found,MAJOR,Maintainability,FunctionDuplicateArgumentFound,rulesets/FunctionDuplicateArgument,Variable "%s" appears more than once in function declaration
+Squiz.Functions.GlobalFunction.Found,MAJOR,Maintainability,GlobalFunctionFound,rulesets/GlobalFunction,Consider putting global function "%s" in a static class
+Squiz.Functions.LowercaseFunctionKeywords.FoundUppercase,MAJOR,Maintainability,LowercaseFunctionKeywordsFoundUppercase,rulesets/LowercaseFunctionKeywords,%s keyword must be lowercase; expected "%s" but found "%s"
+Squiz.Functions.MultiLineFunctionDeclaration.,MAJOR,Maintainability,MultiLineFunctionDeclaration,rulesets/MultiLineFunctionDeclaration,Class PEAR_Sniffs_Functions_FunctionDeclarationSniff not found
+Squiz.NamingConventions.ConstantCase.,MAJOR,Maintainability,ConstantCase,rulesets/ConstantCase,Class Generic_Sniffs_PHP_LowerCaseConstantSniff not found
+Squiz.NamingConventions.ValidFunctionName.DoubleUnderscore,MAJOR,Maintainability,ValidFunctionNameDoubleUnderscore,rulesets/ValidFunctionName,Function name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore
+Squiz.NamingConventions.ValidFunctionName.NotCamelCaps,MAJOR,Maintainability,ValidFunctionNameNotCamelCaps,rulesets/ValidFunctionName,Function name "%s" is not in camel caps format
+Squiz.NamingConventions.ValidVariableName.NotCamelCaps,MAJOR,Maintainability,ValidVariableNameNotCamelCaps,rulesets/ValidVariableName,Variable "%s" is not in valid camel caps format
+Squiz.NamingConventions.ValidVariableName.NotCamelCaps,MAJOR,Maintainability,ValidVariableNameNotCamelCaps,rulesets/ValidVariableName,Variable "%s" is not in valid camel caps format
+Squiz.NamingConventions.ValidVariableName.PublicHasUnderscore,MAJOR,Maintainability,ValidVariableNamePublicHasUnderscore,rulesets/ValidVariableName,%s member variable "%s" must not contain a leading underscore
+Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore,MAJOR,Maintainability,ValidVariableNamePrivateNoUnderscore,rulesets/ValidVariableName,Private member variable "%s" must contain a leading underscore
+Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps,MAJOR,Maintainability,ValidVariableNameMemberNotCamelCaps,rulesets/ValidVariableName,Variable "%s" is not in valid camel caps format
+Squiz.NamingConventions.ValidVariableName.StringNotCamelCaps,MAJOR,Maintainability,ValidVariableNameStringNotCamelCaps,rulesets/ValidVariableName,Variable "%s" is not in valid camel caps format
+Squiz.Objects.DisallowObjectStringIndex.,MAJOR,Maintainability,DisallowObjectStringIndex,rulesets/DisallowObjectStringIndex,Object indexes must be written in dot notation
+Squiz.Objects.ObjectInstantiation.,MAJOR,Maintainability,ObjectInstantiation,rulesets/ObjectInstantiation,New objects must be assigned to a variable
+Squiz.Objects.ObjectMemberComma.,MAJOR,Maintainability,ObjectMemberComma,rulesets/ObjectMemberComma,Last member of object must not be followed by a comma
+Squiz.Operators.ComparisonOperatorUsage.NotAllowed,MAJOR,Maintainability,ComparisonOperatorUsageNotAllowed,rulesets/ComparisonOperatorUsage,Operator %s prohibited; use %s instead
+Squiz.Operators.ComparisonOperatorUsage.,MAJOR,Maintainability,ComparisonOperatorUsage,rulesets/ComparisonOperatorUsage,Implicit true comparisons prohibited; use === TRUE instead
+Squiz.Operators.IncrementDecrementUsage.,MAJOR,Maintainability,IncrementDecrementUsage,rulesets/IncrementDecrementUsage,Increment and decrement operators cannot be used in an arithmetic operation
+Squiz.Operators.ValidLogicalOperators.NotAllowed,MAJOR,Maintainability,ValidLogicalOperatorsNotAllowed,rulesets/ValidLogicalOperators,Logical operator "%s" is prohibited; use "%s" instead
+Squiz.PHP.CommentedOutCode.Found,MAJOR,Maintainability,CommentedOutCodeFound,rulesets/CommentedOutCode,This comment is %s%% valid code; is this commented out code?
+Squiz.PHP.DisallowComparisonAssignment.,MAJOR,Maintainability,DisallowComparisonAssignment,rulesets/DisallowComparisonAssignment,The value of a comparison must not be assigned to a variable
+Squiz.PHP.DisallowMultipleAssignments.,MAJOR,Maintainability,DisallowMultipleAssignments,rulesets/DisallowMultipleAssignments,Assignments must be the first block of code on a line
+Squiz.PHP.DisallowSizeFunctionsInLoops.Found,MAJOR,Maintainability,DisallowSizeFunctionsInLoopsFound,rulesets/DisallowSizeFunctionsInLoops,The use of %s inside a loop condition is not allowed; assign the return value to a variable and use the variable in the loop condition instead
+Squiz.PHP.EmbeddedPhp.Indent,MAJOR,Maintainability,EmbeddedPhpIndent,rulesets/EmbeddedPhp,Empty embedded PHP tag found
+Squiz.PHP.EmbeddedPhp.SpacingAfterOpen,MAJOR,Maintainability,EmbeddedPhpSpacingAfterOpen,rulesets/EmbeddedPhp,Blank line found at end of embedded PHP content
+Squiz.PHP.EmbeddedPhp.MultipleStatements,MAJOR,Maintainability,EmbeddedPhpMultipleStatements,rulesets/EmbeddedPhp,No description available
+Squiz.PHP.EmbeddedPhp.SpacingBeforeClose,MAJOR,Maintainability,EmbeddedPhpSpacingBeforeClose,rulesets/EmbeddedPhp,Expected 1 space before closing PHP tag; 0 found
+Squiz.PHP.Eval.,MAJOR,Maintainability,Eval,rulesets/Eval,Use of eval() is discouraged
+Squiz.PHP.GlobalKeyword.NotAllowed,MAJOR,Maintainability,GlobalKeywordNotAllowed,rulesets/GlobalKeyword,Use of the "global" keyword is forbidden; use "$GLOBALS[\'%s\']" instead
+Squiz.PHP.Heredoc.,MAJOR,Maintainability,Heredoc,rulesets/Heredoc,Use of heredoc syntax ("<<<") is not allowed; use standard strings or inline HTML instead
+Squiz.PHP.InnerFunctions.,MAJOR,Maintainability,InnerFunctions,rulesets/InnerFunctions,The use of inner functions is forbidden
+Squiz.PHP.LowercasePHPFunctions.KeywordUppercase,MAJOR,Maintainability,LowercasePHPFunctionsKeywordUppercase,rulesets/LowercasePHPFunctions,%s keyword must be lowercase; expected "%s" but found "%s"
+Squiz.PHP.LowercasePHPFunctions.CallUppercase,MAJOR,Maintainability,LowercasePHPFunctionsCallUppercase,rulesets/LowercasePHPFunctions,Calls to inbuilt PHP functions must be lowercase; expected "%s" but found "%s"
+Squiz.Scope.MemberVarScope.Missing,MAJOR,Maintainability,MemberVarScopeMissing,rulesets/MemberVarScope,Scope modifier not specified for member variable "%s"
+Squiz.Scope.MethodScope.Missing,MAJOR,Maintainability,MethodScopeMissing,rulesets/MethodScope,No scope modifier specified for function "%s"
+Squiz.Scope.StaticThisUsage.,MAJOR,Maintainability,StaticThisUsage,rulesets/StaticThisUsage,Usage of "$this" in static methods will cause runtime errors
+Squiz.Strings.DoubleQuoteUsage.ContainsVar,MAJOR,Maintainability,DoubleQuoteUsageContainsVar,rulesets/DoubleQuoteUsage,Variable "%s" not allowed in double quoted string; use concatenation instead
+Squiz.Strings.DoubleQuoteUsage.NotRequired,MAJOR,Maintainability,DoubleQuoteUsageNotRequired,rulesets/DoubleQuoteUsage,String %s does not require double quotes; use single quotes instead
+Squiz.Strings.EchoedStrings.,MAJOR,Maintainability,EchoedStrings,rulesets/EchoedStrings,Echoed strings should not be bracketed
+Squiz.WhiteSpace.CastSpacing.ContainsWhiteSpace,MAJOR,Maintainability,CastSpacingContainsWhiteSpace,rulesets/CastSpacing,Cast statements must not contain whitespace; expected "%s" but found "%s"
+Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpenBrace,MAJOR,Maintainability,ControlStructureSpacingSpacingAfterOpenBrace,rulesets/ControlStructureSpacing,Expected 0 spaces after opening bracket; %s found
+Squiz.WhiteSpace.ControlStructureSpacing.SpaceBeforeCloseBrace,MAJOR,Maintainability,ControlStructureSpacingSpaceBeforeCloseBrace,rulesets/ControlStructureSpacing,Expected 0 spaces before closing bracket; %s found
+Squiz.WhiteSpace.ControlStructureSpacing.,MAJOR,Maintainability,ControlStructureSpacing,rulesets/ControlStructureSpacing,Blank line found at start of control structure
+Squiz.WhiteSpace.FunctionClosingBraceSpace.SpacingBeforeNestedClose,MAJOR,Maintainability,FunctionClosingBraceSpaceSpacingBeforeNestedClose,rulesets/FunctionClosingBraceSpace,The opening and closing braces of empty functions must be directly next to each other; e.g., function () {}
+Squiz.WhiteSpace.FunctionClosingBraceSpace.SpacingBeforeClose,MAJOR,Maintainability,FunctionClosingBraceSpaceSpacingBeforeClose,rulesets/FunctionClosingBraceSpace,Expected 1 blank line before closing function brace; %s found
+Squiz.WhiteSpace.FunctionOpeningBraceSpace.SpacingAfter,MAJOR,Maintainability,FunctionOpeningBraceSpaceSpacingAfter,rulesets/FunctionOpeningBraceSpace,Expected 0 blank lines after opening function brace; %s found
+Squiz.WhiteSpace.FunctionOpeningBraceSpace.SpacingAfterNested,MAJOR,Maintainability,FunctionOpeningBraceSpaceSpacingAfterNested,rulesets/FunctionOpeningBraceSpace,Expected 0 blank lines before opening brace of nested function; %s found
+Squiz.WhiteSpace.FunctionOpeningBraceSpace.SpacingBefore,MAJOR,Maintainability,FunctionOpeningBraceSpaceSpacingBefore,rulesets/FunctionOpeningBraceSpace,Opening brace should be on a new line
+Squiz.WhiteSpace.FunctionSpacing.After,MAJOR,Maintainability,FunctionSpacingAfter,rulesets/FunctionSpacing,Expected 2 blank lines after function; %s found
+Squiz.WhiteSpace.FunctionSpacing.Before,MAJOR,Maintainability,FunctionSpacingBefore,rulesets/FunctionSpacing,Expected 2 blank lines before function; %s found
+Squiz.WhiteSpace.LanguageConstructSpacing.IncorrectSingle,MAJOR,Maintainability,LanguageConstructSpacingIncorrectSingle,rulesets/LanguageConstructSpacing,Language constructs must be followed by a single space; expected 1 space but found %s
+Squiz.WhiteSpace.LanguageConstructSpacing.Incorrect,MAJOR,Maintainability,LanguageConstructSpacingIncorrect,rulesets/LanguageConstructSpacing,Language constructs must be followed by a single space; expected "%s" but found "%s"
+Squiz.WhiteSpace.LogicalOperatorSpacing.TooMuchSpaceBefore,MAJOR,Maintainability,LogicalOperatorSpacingTooMuchSpaceBefore,rulesets/LogicalOperatorSpacing,Expected 1 space before logical operator; 0 found
+Squiz.WhiteSpace.LogicalOperatorSpacing.TooMuchSpaceAfter,MAJOR,Maintainability,LogicalOperatorSpacingTooMuchSpaceAfter,rulesets/LogicalOperatorSpacing,Expected 1 space after logical operator; 0 found
+Squiz.WhiteSpace.MemberVarSpacing.After,MAJOR,Maintainability,MemberVarSpacingAfter,rulesets/MemberVarSpacing,Expected 1 blank line before member var; %s found
+Squiz.WhiteSpace.ObjectOperatorSpacing.,MAJOR,Maintainability,ObjectOperatorSpacing,rulesets/ObjectOperatorSpacing,Space found before object operator
+Squiz.WhiteSpace.OperatorSpacing.SpacingBeforeAmp,MAJOR,Maintainability,OperatorSpacingSpacingBeforeAmp,rulesets/OperatorSpacing,Expected 1 space before "&" operator; 0 found
+Squiz.WhiteSpace.OperatorSpacing.SpacingAfterAmp,MAJOR,Maintainability,OperatorSpacingSpacingAfterAmp,rulesets/OperatorSpacing,Expected 1 space after "&" operator; 0 found
+Squiz.WhiteSpace.OperatorSpacing.SpacingBefore,MAJOR,Maintainability,OperatorSpacingSpacingBefore,rulesets/OperatorSpacing,Expected 1 space before \"$operator\"; 0 found
+Squiz.WhiteSpace.OperatorSpacing.SpacingAfter,MAJOR,Maintainability,OperatorSpacingSpacingAfter,rulesets/OperatorSpacing,Expected 1 space after \"$operator\"; 0 found
+Squiz.WhiteSpace.PropertyLabelSpacing.,MAJOR,Maintainability,PropertyLabelSpacing,rulesets/PropertyLabelSpacing,There must be no space before the colon in a property/label declaration
+Squiz.WhiteSpace.ScopeClosingBrace.Indent,MAJOR,Maintainability,ScopeClosingBraceIndent,rulesets/ScopeClosingBrace,Closing brace must be on a line by itself
+Squiz.WhiteSpace.ScopeKeywordSpacing.Incorrect,MAJOR,Maintainability,ScopeKeywordSpacingIncorrect,rulesets/ScopeKeywordSpacing,Scope keyword "%s" must be followed by a single space
+Squiz.WhiteSpace.SemicolonSpacing.Incorrect,MAJOR,Maintainability,SemicolonSpacingIncorrect,rulesets/SemicolonSpacing,Space found before semicolon; expected "%s" but found "%s"
+Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines,MAJOR,Maintainability,SuperfluousWhitespaceEmptyLines,rulesets/SuperfluousWhitespace,Functions must not contain multiple empty lines in a row; found %s empty lines
+Zend.Files.ClosingTag.,MAJOR,Maintainability,ClosingTag,rulesets/ClosingTag,A closing tag is not permitted at the end of a PHP file
+Zend.NamingConventions.ValidVariableName.NotCamelCaps,MAJOR,Maintainability,ValidVariableNameNotCamelCaps,rulesets/ValidVariableName,Variable "%s" is not in valid camel caps format
+Zend.NamingConventions.ValidVariableName.NotCamelCaps,MAJOR,Maintainability,ValidVariableNameNotCamelCaps,rulesets/ValidVariableName,Variable "%s" is not in valid camel caps format
+Zend.NamingConventions.ValidVariableName.PublicHasUnderscore,MAJOR,Maintainability,ValidVariableNamePublicHasUnderscore,rulesets/ValidVariableName,Public member variable "%s" must not contain a leading underscore
+Zend.NamingConventions.ValidVariableName.PrivateNoUnderscore,MAJOR,Maintainability,ValidVariableNamePrivateNoUnderscore,rulesets/ValidVariableName,%s member variable "%s" must contain a leading underscore
+Zend.NamingConventions.ValidVariableName.MemberVarNotCamelCaps,MAJOR,Maintainability,ValidVariableNameMemberVarNotCamelCaps,rulesets/ValidVariableName,Variable "%s" is not in valid camel caps format
+Zend.NamingConventions.ValidVariableName.StringVarNotCamelCaps,MAJOR,Maintainability,ValidVariableNameStringVarNotCamelCaps,rulesets/ValidVariableName,Variable "%s" is not in valid camel caps format
