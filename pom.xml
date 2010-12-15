@@ -6,7 +6,7 @@
 	<artifactId>sonar-php</artifactId>
 	<version>0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>Sonar PHP</name>
+	<name>Sonar PHP Project</name>
 	<properties>
 		<sonar.version>2.2</sonar.version>
 	</properties>

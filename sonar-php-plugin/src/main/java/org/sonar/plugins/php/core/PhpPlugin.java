@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -20,6 +20,58 @@
 
 package org.sonar.plugins.php.core;
 
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_DESCRIPTION;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_MESSAGE;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_ANALYZE_ONLY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_STANDARD_ARGUMENT;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_DESCRIPTION;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_MESSAGE;
+import static org.sonar.plugins.php.core.PhpPlugin.DEFAULT_SUFFIXES;
+import static org.sonar.plugins.php.core.PhpPlugin.FILE_SUFFIXES_KEY;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PDEPEND_EXECUTE_DESCRIPTION;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PDEPEND_EXECUTE_MESSAGE;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPCPD_EXECUTE_DESCRIPTION;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPCPD_EXECUTE_MESSAGE;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPCPD_MIN_LINES_DESCRIPTION;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPCPD_MIN_LINES_MESSAGE;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPCPD_MIN_TOKENS_MESSAGE;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPCS_EXECUTE_DESCRIPTION;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPCS_EXECUTE_MESSAGE;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPUNIT_COVERAGE_EXECUTE_MESSAGE;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPUNIT_EXECUTE_MESSAGE;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHP_FILE_SUFFIXES_DESCRIPTION;
+import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHP_FILE_SUFFIXES_MESSAGE;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_DESCRIPTION;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_MESSAGE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_ANALYZE_ONLY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_SHOULD_RUN_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_DESCRIPTION;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_ANALYZE_ONLY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_MAIN_TEST_FILE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_DESCRIPTION;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_MESSAGE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_PROPERTY_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_DESCRIPTION;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_MESSAGE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,128 +79,83 @@ import org.sonar.api.Extension;
 import org.sonar.api.Plugin;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
-import org.sonar.plugins.php.codesniffer.PhpCodesnifferRulesRepository;
-import org.sonar.plugins.php.codesniffer.configuration.PhpCodesnifferConfiguration;
-import org.sonar.plugins.php.codesniffer.sensor.PhpCodesnifferSensor;
-import org.sonar.plugins.php.core.decorators.PhpDirectoryDecorator;
-import org.sonar.plugins.php.core.decorators.PhpFilesDecorator;
-import org.sonar.plugins.php.core.sensors.PhpSourceImporter;
-import org.sonar.plugins.php.cpd.PhpCpdMapping;
-import org.sonar.plugins.php.cpd.sensor.PhpCpdSensor;
-import org.sonar.plugins.php.phpdepend.configuration.PhpDependConfiguration;
-import org.sonar.plugins.php.phpdepend.sensor.PhpDependSensor;
-import org.sonar.plugins.php.phpunit.configuration.PhpUnitConfiguration;
-import org.sonar.plugins.php.phpunit.sensor.PhpUnitSensor;
-import org.sonar.plugins.php.pmd.configuration.PhpPmdConfiguration;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferPriorityMapper;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfile;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileExporter;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileImporter;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferViolationsXmlParser;
+import org.sonar.plugins.php.codesniffer.PhpCodesnifferSensor;
+import org.sonar.plugins.php.cpd.PhpCpdConfiguration;
+import org.sonar.plugins.php.cpd.PhpCpdExecutor;
+import org.sonar.plugins.php.cpd.PhpCpdResultParser;
+import org.sonar.plugins.php.cpd.PhpCpdSensor;
+import org.sonar.plugins.php.phpdepend.PhpDependConfiguration;
+import org.sonar.plugins.php.phpdepend.PhpDependExecutor;
+import org.sonar.plugins.php.phpdepend.PhpDependResultsParser;
+import org.sonar.plugins.php.phpdepend.PhpDependSensor;
+import org.sonar.plugins.php.phpunit.PhpUnitConfiguration;
+import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitExecutor;
+import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitSensor;
+import org.sonar.plugins.php.pmd.PhpmdConfiguration;
+import org.sonar.plugins.php.pmd.PhpmdProfile;
+import org.sonar.plugins.php.pmd.PhpmdProfileExporter;
+import org.sonar.plugins.php.pmd.PhpmdProfileImporter;
+import org.sonar.plugins.php.pmd.PhpmdRuleRepository;
+import org.sonar.plugins.php.pmd.PhpmdSensor;
+import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
 
 /**
  * This class is the sonar entry point of this plugin. It declares all the extension that can be launched with this plugin
  */
 @Properties({
-    @Property(key = PhpPlugin.FILE_SUFFIXES_KEY, defaultValue = PhpPlugin.DEFAULT_SUFFIXES, name = "File suffixes", project = true,
-        description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.", global = true),
-    @Property(key = PhpCodesnifferConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, name = "PhpCodesniffer log directory",
-        description = "The relative path to the PhpCodeSniffer log directory.",
-        defaultValue = PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_PATH, project = true),
-    @Property(key = PhpCodesnifferConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, name = "PhpCodesniffer log file name", project = true,
-        defaultValue = PhpCodesnifferConfiguration.DEFAULT_REPORT_FILE_NAME, description = "The PhpCodeSniffer log file name."),
-    @Property(key = PhpCodesnifferConfiguration.LEVEL_ARGUMENT_KEY, defaultValue = PhpCodesnifferConfiguration.DEFAULT_LEVEL_ARGUMENT,
-        name = "The code sniffer level argument line", description = "The lowest level events won't be included in report file",
-        project = true),
-    @Property(key = PhpCodesnifferConfiguration.STANDARD_ARGUMENT_KEY, description = "The standar to be used by PhpCodeSniffer",
-        project = true, defaultValue = PhpCodesnifferConfiguration.DEFAULT_STANDARD_ARGUMENT,
-        name = "The code sniffer standard argument line"),
-    @Property(key = PhpCodesnifferConfiguration.ARGUMENT_LINE_KEY, defaultValue = PhpCodesnifferConfiguration.DEFAULT_ARGUMENT_LINE,
-        name = "The other code sniffer argument line", description = "PhpCodeSniffer will be launched with this arguments", project = true),
-    @Property(key = PhpCodesnifferConfiguration.ANALYZE_ONLY_KEY, defaultValue = PhpCodesnifferConfiguration.DEFAULT_ANALYZE_ONLY,
-        name = "Should the plugin only parse analysis report.", description = PhpCodesnifferConfiguration.ANALYZE_ONLY_DESCRIPTION,
-        project = true),
-    @Property(key = PhpCodesnifferConfiguration.SHOULD_RUN_KEY, defaultValue = PhpCodesnifferConfiguration.DEFAULT_SHOULD_RUN,
-        name = "Should the plugin run on this project.",
-        description = "If set to false, the plugin will not execute itself for this project.", project = true),
+  // Global Php Configuration
+  @Property(key = FILE_SUFFIXES_KEY, defaultValue = DEFAULT_SUFFIXES, name = PHP_FILE_SUFFIXES_MESSAGE, project = true, global = true,
+      description = PHP_FILE_SUFFIXES_DESCRIPTION),
 
-    @Property(key = PhpUnitConfiguration.MAIN_TEST_FILE_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_MAIN_TEST_FILE,
-        name = "Project main test class", description = PhpUnitConfiguration.PROJECT_CLASS_DESCRIPTION, project = true),
-    @Property(key = PhpUnitConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-        defaultValue = PhpUnitConfiguration.DEFAULT_REPORT_FILE_PATH, name = "PHPUnit log directory",
-        description = "The relative path to the PHPUnit log directory beginning after {PROJECT_BUILD_PATH}.", project = true),
-    @Property(key = PhpUnitConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_REPORT_FILE_NAME,
-        name = "PhpUnit log file name", description = "The php unit log file name.", project = true),
-    @Property(key = PhpUnitConfiguration.COVERAGE_REPORT_FILE_PROPERTY_KEY,
-        defaultValue = PhpUnitConfiguration.DEFAULT_COVERAGE_REPORT_FILE, name = "PhpUnit coverage log file name",
-        description = "The php unit coverage log file name.", project = true),
-    @Property(key = PhpUnitConfiguration.FILTER_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_FILTER,
-        name = "The phpunit filter arguments line", description = "Given arguments will be used as filters arguments for PHPUnit",
-        project = true),
-    @Property(key = PhpUnitConfiguration.BOOTSTRAP_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_BOOTSTRAP,
-        name = "The phpunit bootstrap arguments line", description = "Given arguments will be used to set bootstrap for PHPUnit",
-        project = true),
-    @Property(key = PhpUnitConfiguration.CONFIGURATION_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_CONFIGURATION,
-        name = "The phpunit configuration arguments line",
-        description = "Given arguments will be used as configuration arguments for PHPUnit", project = true),
-    @Property(key = PhpUnitConfiguration.LOADER_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_LOADER,
-        name = "The phpunit loader arguments line", description = "Given arguments will be used as other loader for PHPUnit",
-        project = true),
-    @Property(key = PhpUnitConfiguration.ARGUMENT_LINE_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_ARGUMENT_LINE,
-        name = "The phpunit other arguments line", description = "Given arguments will be used as other arguments for PHPUnit",
-        project = true),
-    @Property(key = PhpUnitConfiguration.SHOULD_RUN_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_SHOULD_RUN,
-        name = "Should run the plugin", description = PhpUnitConfiguration.DEFAULT_SHOULD_RUN_DESCRIPTION, project = true),
-    @Property(key = PhpUnitConfiguration.ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PhpUnitConfiguration.DEFAULT_ANALYZE_ONLY,
-        name = "Should the plugin only get analyzis results", description = PhpUnitConfiguration.DEFAULT_ANALYZE_ONLY_DESCRIPTION,
-        project = true),
-    @Property(key = PhpUnitConfiguration.SHOULD_DEAL_WITH_COVERAGE_PROPERTY_KEY,
-        defaultValue = PhpUnitConfiguration.DEFAULT_SHOULD_DEAL_WITH_COVERAGE,
-        name = "Should the plugin deal with php unit coverage issues.", description = PhpUnitConfiguration.DEFAULT_SHOULD_DEAL_DESCRIPTION,
-        project = true),
+  // Phpmd configuration: Disabling Phpmd is not a good idea cause almost all metrics rely on it.
+  @Property(key = PHPMD_SHOULD_RUN_KEY, defaultValue = PHPMD_DEFAULT_SHOULD_RUN, name = PHPMD_SHOULD_RUN_MESSAGE, project = true,
+      global = true, description = PHPMD_SHOULD_RUN_DESCRIPTION),
+  @Property(key = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, defaultValue = PhpmdConfiguration.PHPMD_DEFAULT_ANALYZE_ONLY,
+      name = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_MESSAGE, project = true, global = true,
+      description = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_DESCRIPTION),
 
-    @Property(key = PhpDependConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-        defaultValue = PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH, name = "PhpDepend log directory",
-        description = "The relative path after project build path to the PhpDepend log directory.", project = true),
-    @Property(key = PhpDependConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, defaultValue = PhpDependConfiguration.DEFAULT_REPORT_FILE_NAME,
-        name = "PhpDepend log file name", description = "The php depend log file name.", project = true),
-    @Property(key = PhpDependConfiguration.IGNORE_KEY, defaultValue = PhpDependConfiguration.DEFAULT_IGNORE,
-        name = "Directories that will be ignored in the analysis process.",
-        description = "A list of comma separated folder name that will be excluded from analysis", project = true),
-    @Property(key = PhpDependConfiguration.EXCLUDE_PACKAGE_KEY, defaultValue = PhpDependConfiguration.DEFAULT_EXCLUDE_PACKAGES,
-        name = "Packages that will be excluded from the analysis process.",
-        description = "A list of comma separated packages that will be excluded from analysis", project = true),
-    @Property(key = PhpDependConfiguration.BAD_DOCUMENTATION_KEY, defaultValue = PhpDependConfiguration.DEFAULT_BAD_DOCUMENTATION,
-        name = "The project documentation is clean.", description = "If set to true, documentation analysis will be skipped",
-        project = true),
-    @Property(key = PhpDependConfiguration.WITHOUT_ANNOTATION_KEY, defaultValue = PhpDependConfiguration.DEFAULT_WITHOUT_ANNOTATION,
-        name = "Packages that will be excluded from the analysis process.",
-        description = "A list of comma separated packages that will be excluded from analysis", project = true),
-    @Property(key = PhpDependConfiguration.ARGUMENT_LINE_KEY, defaultValue = PhpDependConfiguration.DEFAULT_ARGUMENT_LINE,
-        name = "The php depend argument line", description = "PhpCodeSniffer will be launched with this arguments", project = true),
-    @Property(key = PhpDependConfiguration.ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PhpDependConfiguration.DEFAULT_ANALYZE_ONLY,
-        name = "Should the plugin only parse analyzis report.", description = PhpDependConfiguration.DEFAULT_ANALYZE_ONLY_DESCRIPTION,
-        project = true),
-    @Property(key = PhpDependConfiguration.SHOULD_RUN_PROPERTY_KEY, defaultValue = PhpDependConfiguration.DEFAULT_SHOULD_RUN,
-        name = "Should run the plugin", description = PhpDependConfiguration.DEFAULT_SHOULD_RUN_DESCRIPTION, project = true),
+  // PhpCodeSniffer configuration
+  @Property(key = PHPCS_SHOULD_RUN_KEY, defaultValue = PHPCS_DEFAULT_SHOULD_RUN, name = PHPCS_EXECUTE_MESSAGE, project = true,
+      global = true, description = PHPCS_EXECUTE_DESCRIPTION),
+  @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = PHPCS_DEFAULT_ANALYZE_ONLY, name = PHPCS_ANALYZE_ONLY_MESSAGE, project = true,
+      global = true, description = PHPCS_ANALYZE_ONLY_DESCRIPTION),
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = PHPCS_DEFAULT_STANDARD_ARGUMENT,
+      name = PHPCS_STANDARD_MESSAGE, project = true, global = true, description = PHPCS_STANDARD_DESCRIPTION),
 
-    @Property(key = PhpPmdConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-        defaultValue = PhpPmdConfiguration.DEFAULT_REPORT_FILE_PATH, name = "PhpDepend log directory",
-        description = "The relative path to the PHPMD log directory.", project = true),
-    @Property(key = PhpPmdConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_REPORT_FILE_NAME,
-        name = "PhpDepend log file name", description = "The PHPMD log file name.", project = true),
-    @Property(key = PhpPmdConfiguration.RULESETS_ARGUMENT_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_RULESET_ARGUMENT,
-        name = "The phpmd ruleset argument line", description = "PHPMD will use given ruleset", project = true),
-    @Property(key = PhpPmdConfiguration.LEVEL_ARGUMENT_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_LEVEL_ARGUMENT,
-        name = "The phpmd level argument line", description = PhpPmdConfiguration.DEFAULT_LEVEL_DESCRIPTION, project = true),
-    @Property(key = PhpPmdConfiguration.IGNORE_ARGUMENT_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_IGNORE_ARGUMENT,
-        name = "The phpmd ignore argument line", description = "PHPMD will ignore the given folders (comma separated folder names)",
-        project = true),
-    @Property(key = PhpPmdConfiguration.ARGUMENT_LINE_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_ARGUMENT_LINE,
-        name = "The phpmd other arguments line", description = "Given arguments will be used as other arguments for PHPMD", project = true),
-    @Property(key = PhpPmdConfiguration.ANALYZE_ONLY_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_ANALYZE_ONLY,
-        name = "Should the plugin only parse analysis report.", description = PhpPmdConfiguration.ANALYZE_ONLY_DESCRIPTION, project = true),
-    @Property(key = PhpPmdConfiguration.SHOULD_RUN_KEY, defaultValue = PhpPmdConfiguration.DEFAULT_SHOULD_RUN,
-        name = "Should the plugin run on this project.",
-        description = "If set to false, the plugin will not execute itself for this project.", project = true)
+  // PhPdepend configuration
+  @Property(key = PDEPEND_SHOULD_RUN_PROPERTY_KEY, defaultValue = PDEPEND_DEFAULT_SHOULD_RUN, name = PDEPEND_EXECUTE_MESSAGE,
+      project = true, global = true, description = PDEPEND_EXECUTE_DESCRIPTION),
+  @Property(key = PDEPEND_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PDEPEND_DEFAULT_ANALYZE_ONLY, name = PDEPEND_ANALYZE_ONLY_MESSAGE,
+      project = true, global = true, description = PDEPEND_ANALYZE_ONLY_DESCRIPTION),
 
-})
-public class PhpPlugin implements Plugin {
+  // Phpunit Configuration
+  @Property(key = PHPUNIT_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_SHOULD_RUN, name = PHPUNIT_EXECUTE_MESSAGE,
+      project = true, global = true, description = PHPUNIT_EXECUTE_MESSAGE),
+  @Property(key = PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE,
+      name = PHPUNIT_COVERAGE_EXECUTE_MESSAGE, project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
+  @Property(key = PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_ANALYZE_ONLY, name = PHPUNIT_ANALYZE_ONLY_DESCRIPTION,
+      project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
+  @Property(key = PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_MAIN_TEST_FILE,
+      name = PHPUNIT_MAIN_TEST_FILE_MESSAGE, project = true, global = true, description = PHPUNIT_MAIN_TEST_FILE_DESCRIPTION),
+
+  // PhpCpd configuration
+  @Property(key = PHPCPD_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPCPD_DEFAULT_SHOULD_RUN, name = PHPCPD_EXECUTE_MESSAGE, project = true,
+      global = true, description = PHPCPD_EXECUTE_DESCRIPTION),
+  @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES,
+      name = PHPCPD_MIN_LINES_MESSAGE, project = true, global = true, description = PHPCPD_MIN_LINES_DESCRIPTION),
+  @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS,
+      name = PHPCPD_MIN_TOKENS_MESSAGE, project = true, global = true, description = PHPCPD_MIN_TOKENS_MESSAGE) })
+public class PhpPlugin implements Plugin, PhpPluginConfiguration {
 
   /** All the valid php files suffixes. */
   public static final String DEFAULT_SUFFIXES = "php,php3,php4,php5,phtml,inc";
@@ -163,6 +170,8 @@ public class PhpPlugin implements Plugin {
   /** The CodeSniffer plugin KEY. */
   public static final String CODESNIFFER_PLUGIN_KEY = "PHP_CodeSniffer";
 
+  public static final String PLUGIN_NAME = "PHP";
+
   /**
    * Gets the description.
    * 
@@ -170,7 +179,7 @@ public class PhpPlugin implements Plugin {
    * @see org.sonar.api.Plugin#getDescription()
    */
   public final String getDescription() {
-    return "A plugin to cover the PHP language";
+    return "Sonar PHP Plugin is set of tool that brings PHP support to sonar. It rely on Sonar core, PDepend, Phpmd, PHP_CodeSniffer, Phpunit and Phpcpd tools.";
   }
 
   /**
@@ -179,39 +188,55 @@ public class PhpPlugin implements Plugin {
    * @return the extensions
    * @see org.sonar.api.Plugin#getExtensions()
    */
-  public final List<Class<? extends Extension>> getExtensions() {
-    List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
-    // Adds the language
+  public List<Class<? extends Extension>> getExtensions() {
+    List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>(); // Adds the language
+
     extensions.add(Php.class);
 
     // Source importer
     extensions.add(PhpSourceImporter.class);
-
-    extensions.add(PhpCpdMapping.class);
-
-    // Php resource decorators
-    extensions.add(PhpDirectoryDecorator.class);
-    extensions.add(PhpFilesDecorator.class);
-
-    // PhpUnit
-    extensions.add(PhpUnitSensor.class);
-
-    // Code sniffer
-    extensions.add(PhpCodesnifferRulesRepository.class);
-    extensions.add(PhpCodesnifferSensor.class);
-
-    // PhpDepend
-    extensions.add(PhpDependSensor.class);
-
-    // Phpmd
-    // FIXME Commented for the moment, because of duplicate rules repositories
-    // extensions.add(PhpPmdSensor.class);
-    // extensions.add(PhpPmdRulesRepository.class);
-
     // Php Source Code Colorizer
     extensions.add(PhpSourceCodeColorizer.class);
 
+    // Code sniffer
+    extensions.add(NoSonarAndCommentedOutLocSensor.class);
+    extensions.add(PhpCodeSnifferRuleRepository.class);
+    extensions.add(PhpCodeSnifferExecutor.class);
+    extensions.add(PhpCodeSnifferViolationsXmlParser.class);
+    extensions.add(PhpCodesnifferSensor.class);
+    extensions.add(PhpCodeSnifferProfile.class);
+    extensions.add(PhpCodeSnifferConfiguration.class);
+    extensions.add(PhpCodeSnifferPriorityMapper.class);
+    extensions.add(PhpCodeSnifferProfileExporter.class);
+    extensions.add(PhpCodeSnifferProfileImporter.class);
+
+    // PhpDepend
+    extensions.add(PhpDependExecutor.class);
+    extensions.add(PhpDependResultsParser.class);
+    extensions.add(PhpDependConfiguration.class);
+    extensions.add(PhpDependSensor.class);
+
+    // Phpmd
+    extensions.add(PhpmdSensor.class);
+    extensions.add(PhpmdRuleRepository.class);
+    extensions.add(PhpmdProfile.class);
+    extensions.add(PmdRulePriorityMapper.class);
+    extensions.add(PhpmdProfileImporter.class);
+    extensions.add(PhpmdProfileExporter.class);
+
+    // PhpUnit
+    extensions.add(PhpUnitConfiguration.class);
+    extensions.add(PhpUnitSensor.class);
+    extensions.add(PhpUnitExecutor.class);
+    extensions.add(PhpUnitResultParser.class);
+    extensions.add(PhpUnitCoverageResultParser.class);
+
+    // Phpcpd
+    extensions.add(PhpCpdConfiguration.class);
+    extensions.add(PhpCpdExecutor.class);
+    extensions.add(PhpCpdResultParser.class);
     extensions.add(PhpCpdSensor.class);
+
     return extensions;
   }
 
@@ -232,7 +257,7 @@ public class PhpPlugin implements Plugin {
    * @see org.sonar.api.Plugin#getName()
    */
   public final String getName() {
-    return "Sonar PHP Plugin";
+    return PLUGIN_NAME;
   }
 
   /**

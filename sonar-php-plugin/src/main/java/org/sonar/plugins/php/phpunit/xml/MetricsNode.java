@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -26,37 +26,37 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 /**
  * The Class MetricsNode.
  */
-public class MetricsNode {
+public final class MetricsNode {
 
   /** The The number of covered elements. */
   @XStreamAsAttribute
   @XStreamAlias("coveredelements")
-  private int coveredElements;
+  private double coveredElements;
 
   /** The number of covered methods. */
   @XStreamAsAttribute
   @XStreamAlias("coveredmethods")
-  private int coveredMethods;
+  private double coveredMethods;
 
   /** The The number of covered statements. */
   @XStreamAsAttribute
   @XStreamAlias("coveredstatements")
-  private int coveredStatements;
+  private double coveredStatements;
 
   /** The total elements count. */
   @XStreamAsAttribute
   @XStreamAlias("elements")
-  private int totalElementsCount;
+  private double totalElementsCount;
 
   /** The total methods count. */
   @XStreamAsAttribute
   @XStreamAlias("methods")
-  private int totalMethodsCount;
+  private double totalMethodsCount;
 
   /** The total statements count. */
   @XStreamAsAttribute
   @XStreamAlias("statements")
-  private int totalStatementsCount;
+  private double totalStatementsCount;
 
   /**
    * Instantiates a new metrics node.
@@ -70,8 +70,8 @@ public class MetricsNode {
    * @param coveredstatements
    *          the coveredstatements
    */
-  public MetricsNode(int totalMethodsCount, int coveredmethods, int totalStatementsCount, int coveredstatements, int totalElementsCount,
-      int coveredElements) {
+  public MetricsNode(double totalMethodsCount, double coveredmethods, double totalStatementsCount, double coveredstatements,
+      double totalElementsCount, double coveredElements) {
     super();
     this.totalMethodsCount = totalMethodsCount;
     this.coveredMethods = coveredmethods;
@@ -81,7 +81,7 @@ public class MetricsNode {
     this.coveredElements = coveredElements;
   }
 
-  public int getCoveredElements() {
+  public double getCoveredElements() {
     return coveredElements;
   }
 
@@ -90,7 +90,7 @@ public class MetricsNode {
    * 
    * @return the coveredmethods
    */
-  public int getCoveredMethods() {
+  public double getCoveredMethods() {
     return coveredMethods;
   }
 
@@ -99,11 +99,11 @@ public class MetricsNode {
    * 
    * @return the coveredstatements
    */
-  public int getCoveredStatements() {
+  public double getCoveredStatements() {
     return coveredStatements;
   }
 
-  public int getTotalElementsCount() {
+  public double getTotalElementsCount() {
     return totalElementsCount;
   }
 
@@ -112,7 +112,7 @@ public class MetricsNode {
    * 
    * @return the total methods count
    */
-  public int getTotalMethodsCount() {
+  public double getTotalMethodsCount() {
     return totalMethodsCount;
   }
 
@@ -121,11 +121,11 @@ public class MetricsNode {
    * 
    * @return the total statements count
    */
-  public int getTotalStatementsCount() {
+  public double getTotalStatementsCount() {
     return totalStatementsCount;
   }
 
-  public void setCoveredElements(int coveredElements) {
+  public void setCoveredElements(double coveredElements) {
     this.coveredElements = coveredElements;
   }
 
@@ -135,7 +135,7 @@ public class MetricsNode {
    * @param coveredmethods
    *          the new coveredmethods
    */
-  public void setCoveredMethods(int coveredmethods) {
+  public void setCoveredMethods(double coveredmethods) {
     this.coveredMethods = coveredmethods;
   }
 
@@ -145,11 +145,11 @@ public class MetricsNode {
    * @param coveredstatements
    *          the new coveredstatements
    */
-  public void setCoveredStatements(int coveredstatements) {
+  public void setCoveredStatements(double coveredstatements) {
     this.coveredStatements = coveredstatements;
   }
 
-  public void setTotalElementsCount(int totalElementsCount) {
+  public void setTotalElementsCount(double totalElementsCount) {
     this.totalElementsCount = totalElementsCount;
   }
 
@@ -159,7 +159,7 @@ public class MetricsNode {
    * @param totalMethodsCount
    *          the new total methods count
    */
-  public void setTotalMethodsCount(int totalMethodsCount) {
+  public void setTotalMethodsCount(double totalMethodsCount) {
     this.totalMethodsCount = totalMethodsCount;
   }
 
@@ -169,7 +169,7 @@ public class MetricsNode {
    * @param totalStatementsCount
    *          the new total statements count
    */
-  public void setTotalStatementsCount(int totalStatementsCount) {
+  public void setTotalStatementsCount(double totalStatementsCount) {
     this.totalStatementsCount = totalStatementsCount;
   }
 }

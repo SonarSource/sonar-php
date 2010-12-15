@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -27,37 +27,35 @@ import org.sonar.api.Extension;
 import org.sonar.api.Plugin;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
-import org.sonar.plugins.php.phpdepend.configuration.PhpDependConfiguration;
-import org.sonar.plugins.php.phpdepend.sensor.PhpDependSensor;
 
 /**
  * The Class PhpDependPlugin.
  */
 @Properties({
-    @Property(key = PhpDependConfiguration.REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+    @Property(key = PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
         defaultValue = PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH, name = "PhpDepend log directory",
         description = "The relative path after project build path to the PhpDepend log directory.", project = true),
-    @Property(key = PhpDependConfiguration.REPORT_FILE_NAME_PROPERTY_KEY, defaultValue = PhpDependConfiguration.DEFAULT_REPORT_FILE_NAME,
+    @Property(key = PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, defaultValue = PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME,
         name = "PhpDepend log file name", description = "The php depend log file name.", project = true),
-    @Property(key = PhpDependConfiguration.IGNORE_KEY, defaultValue = PhpDependConfiguration.DEFAULT_IGNORE,
+    @Property(key = PhpDependConfiguration.PDEPEND_IGNORE_KEY, defaultValue = PhpDependConfiguration.PDEPEND_DEFAULT_IGNORE,
         name = "Directories that will be ignored in the analysis process.",
         description = "A list of comma separated folder name that will be excluded from analysis", project = true),
-    @Property(key = PhpDependConfiguration.EXCLUDE_PACKAGE_KEY, defaultValue = PhpDependConfiguration.DEFAULT_EXCLUDE_PACKAGES,
+    @Property(key = PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY, defaultValue = PhpDependConfiguration.PDEPEND_DEFAULT_EXCLUDE_PACKAGES,
         name = "Packages that will be excluded from the analysis process.",
         description = "A list of comma separated packages that will be excluded from analysis", project = true),
-    @Property(key = PhpDependConfiguration.BAD_DOCUMENTATION_KEY, defaultValue = PhpDependConfiguration.DEFAULT_BAD_DOCUMENTATION,
+    @Property(key = PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_KEY, defaultValue = PhpDependConfiguration.PDEPEND_DEFAULT_BAD_DOCUMENTATION,
         name = "The project documentation is clean.", description = "If set to true, documentation analysis will be skipped",
         project = true),
-    @Property(key = PhpDependConfiguration.WITHOUT_ANNOTATION_KEY, defaultValue = PhpDependConfiguration.DEFAULT_WITHOUT_ANNOTATION,
+    @Property(key = PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY, defaultValue = PhpDependConfiguration.PDEPEND_DEFAULT_WITHOUT_ANNOTATION,
         name = "Packages that will be excluded from the analysis process.",
         description = "A list of comma separated packages that will be excluded from analysis", project = true),
-    @Property(key = PhpDependConfiguration.ARGUMENT_LINE_KEY, defaultValue = PhpDependConfiguration.DEFAULT_ARGUMENT_LINE,
+    @Property(key = PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY, defaultValue = PhpDependConfiguration.PDEPEND_DEFAULT_ARGUMENT_LINE,
         name = "The php depend argument line", description = "PhpCodeSniffer will be launched with this arguments", project = true),
-    @Property(key = PhpDependConfiguration.ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PhpDependConfiguration.DEFAULT_ANALYZE_ONLY,
-        name = "Should the plugin only parse analyzis report.", description = PhpDependConfiguration.DEFAULT_ANALYZE_ONLY_DESCRIPTION,
+    @Property(key = PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PhpDependConfiguration.PDEPEND_DEFAULT_ANALYZE_ONLY,
+        name = "Should the plugin only parse analyzis report.", description = PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_DESCRIPTION,
         project = true),
-    @Property(key = PhpDependConfiguration.SHOULD_RUN_PROPERTY_KEY, defaultValue = PhpDependConfiguration.DEFAULT_SHOULD_RUN,
-        name = "Should run the plugin", description = PhpDependConfiguration.DEFAULT_SHOULD_RUN_DESCRIPTION, project = true) })
+    @Property(key = PhpDependConfiguration.PDEPEND_SHOULD_RUN_PROPERTY_KEY, defaultValue = PhpDependConfiguration.PDEPEND_DEFAULT_SHOULD_RUN,
+        name = "Should run the plugin", description = PhpDependConfiguration.PDEPEND_SHOULD_RUN_DESCRIPTION, project = true) })
 public class PhpDependPlugin implements Plugin {
 
   /** The Plugin KEY. */

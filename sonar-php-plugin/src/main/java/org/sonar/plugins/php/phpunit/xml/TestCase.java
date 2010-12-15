@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -90,7 +90,7 @@ public final class TestCase {
    * 
    * @param assertions
    *          the assertions
-   * @param className
+   * @param fileName
    *          the class name
    * @param errorMessage
    *          the error message
@@ -232,7 +232,7 @@ public final class TestCase {
   /**
    * Sets the class name.
    * 
-   * @param className
+   * @param fileName
    *          the new class name
    */
   public void setClassName(final String className) {
@@ -315,7 +315,7 @@ public final class TestCase {
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    builder.append("TestCase [assertions=").append(assertions).append(", className=").append(className).append(", errorMessage=")
+    builder.append("TestCase [assertions=").append(assertions).append(", fileName=").append(className).append(", errorMessage=")
         .append(errorMessage).append(", file=").append(file).append(", line=").append(line).append(", name=").append(name)
         .append(", status=").append(status).append(", time=").append(time).append(", error=").append(error).append(", failure=")
         .append(failure).append("]");

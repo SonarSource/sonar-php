@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.sonar.plugins.checkstyle.xml.Module;
+import org.sonar.plugins.php.checkstyle.xml.Module;
 
 /**
  * The Class ModuleTest.
@@ -43,7 +43,7 @@ public class ModuleTest {
    */
   @Test
   public void shouldBuildXStreamFromXml() throws IOException {
-    InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/codesniffer/xml/ModuleTest/shouldBuildXStreamFromXml.xml");
+    InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/php/codesniffer/xml/shouldBuildXStreamFromXml.xml");
     Module module = new Module("");
     module = module.fromXml(IOUtils.toString(input));
 

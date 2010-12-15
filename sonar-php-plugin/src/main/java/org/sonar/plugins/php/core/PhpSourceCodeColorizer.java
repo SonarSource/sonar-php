@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -17,7 +17,11 @@
  * License along with Sonar; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
+
 package org.sonar.plugins.php.core;
+
+import static org.sonar.plugins.php.core.Php.PHP_KEYWORDS_ARRAY;
+import static org.sonar.plugins.php.core.Php.PHP_RESERVED_VARIABLES_ARRAY;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,22 +47,6 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
    */
   private static final Set<String> PHP_KEYWORDS = new HashSet<String>();
   private static final Set<String> PHP_RESERVED_VARIABLES = new HashSet<String>();
-
-  /**
-   * An array containing all PHP keywords.
-   */
-  private static final String[] PHP_KEYWORDS_ARRAY = new String[] { "and", "or", "xor", "exception", "array", "as", "break", "case",
-    "class", "const", "continue", "declare", "default", "die", "do", "echo", "else", "elseif", "empty", "enddeclare", "endfor",
-    "endforeach", "endif", "endswitch", "endwhile", "eval", "exit", "extends", "for", "foreach", "function", "global", "if", "include",
-    "include_once", "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "unset", "use", "var",
-    "while", "final", "php_user_filter", "interface", "implements", "instanceof", "public", "private", "protected", "abstract", "clone",
-    "try", "catch", "throw", "cfunction", "old_function", "this", "final", "namespace", "goto" };
-
-  /**
-   * An array containing reserved variables.
-   */
-  private static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[] { "__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
-    "__DIR__", "__FILE__", "__LINE__", "$this" };
 
   static {
     Collections.addAll(PHP_KEYWORDS, PHP_KEYWORDS_ARRAY);

@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.sonar.api.Extension;
 import org.sonar.api.Plugin;
-import org.sonar.plugins.php.phpunit.sensor.PhpUnitSensor;
 
 /**
  * The PhpUnitPlugin handles files and metrics provided by punit tool.

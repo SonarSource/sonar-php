@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -136,7 +136,7 @@ public class RuleNode implements Comparable<String> {
   /**
    * Sets the class name.
    * 
-   * @param className
+   * @param fileName
    *          the new class name
    */
   public final void setClassName(String className) {

@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ import static org.hamcrest.core.Is.is;
 
 import org.junit.Test;
 import org.sonar.api.measures.Metric;
-import org.sonar.plugins.php.core.resources.PhpFile;
+import org.sonar.plugins.php.core.PhpFile;
 
 /**
  * The Class ResourcesBagTest.

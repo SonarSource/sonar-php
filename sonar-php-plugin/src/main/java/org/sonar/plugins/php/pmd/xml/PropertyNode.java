@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -79,5 +79,13 @@ public class PropertyNode {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * @param description
+   *          the description to set
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 }

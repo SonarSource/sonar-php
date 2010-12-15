@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ public class PhpTest {
   @Test
   public void shouldCheckDefaultValidPhpExtensions() {
     Configuration configuration = mock(Configuration.class);
-    new Php(configuration);
+    // new Php();
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
     assertTrue(Php.hasValidSuffixes("goodExtension.php"));
@@ -58,10 +58,10 @@ public class PhpTest {
   @Test
   public void shouldCheckCustomValidPhpExtensions() {
     Configuration configuration = mock(Configuration.class);
-    new Php(configuration);
+    // new Php();
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(
         StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES + ",php6,php7", ","));
-
+    Php.INSTANCE.setConfiguration(configuration);
     assertTrue(Php.hasValidSuffixes("goodExtension.php6"));
     assertTrue(Php.hasValidSuffixes("goodExtension.php7"));
   }

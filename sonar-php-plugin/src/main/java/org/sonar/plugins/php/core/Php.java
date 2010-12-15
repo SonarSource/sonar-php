@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -27,24 +27,41 @@ import org.sonar.api.resources.AbstractLanguage;
 /**
  * This class defines the PHP language.
  */
-public class Php extends AbstractLanguage {
+public final class Php extends AbstractLanguage {
 
   private Configuration configuration;
 
   /** The php language name */
   public static final String PHP_LANGUAGE_NAME = "PHP";
 
+  /**
+   * An array containing all PHP keywords.
+   */
+  static final String[] PHP_KEYWORDS_ARRAY = new String[] { "and", "or", "xor", "exception", "array", "as", "break", "case", "class",
+    "const", "continue", "declare", "default", "die", "do", "echo", "else", "elseif", "empty", "enddeclare", "endfor", "endforeach",
+    "endif", "endswitch", "endwhile", "eval", "exit", "extends", "for", "foreach", "function", "global", "if", "include", "include_once",
+    "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "unset", "use", "var", "while", "final",
+    "php_user_filter", "interface", "implements", "instanceof", "public", "private", "protected", "abstract", "clone", "try", "catch",
+    "throw", "cfunction", "old_function", "this", "final", "namespace", "goto" };
+
+  /**
+   * An array containing reserved variables.
+   */
+  static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[] { "__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
+    "__DIR__", "__FILE__", "__LINE__", "$this" };
+
   /** An php instance. */
-  public static Php INSTANCE;
+  public final static Php INSTANCE = new Php();
 
   /** The php language key. */
   public static final String KEY = "php";
 
-  public Php(Configuration configuration) {
+  /**
+   * Construct the PHP language instance based on its key.
+   */
+
+  public Php() {
     super(KEY, PHP_LANGUAGE_NAME);
-    this.configuration = configuration;
-    // See SONAR-1461
-    INSTANCE = this;
   }
 
   /**
@@ -65,17 +82,6 @@ public class Php extends AbstractLanguage {
   }
 
   /**
-   * Default constructor.
-   */
-  public Php() {
-    super(KEY, PHP_LANGUAGE_NAME);
-    // See SONAR-1461
-    if (INSTANCE == null) {
-      INSTANCE = this;
-    }
-  }
-
-  /**
    * Gets the file suffixes.
    * 
    * @return the file suffixes
@@ -83,11 +89,19 @@ public class Php extends AbstractLanguage {
    */
 
   public String[] getFileSuffixes() {
-    String[] suffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
-    if (suffixes == null || suffixes.length == 0) {
-      suffixes = StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES, ",");
+    String[] suffixes = StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES, ",");
+    if (configuration != null) {
+      suffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
     }
     return suffixes;
+  }
+
+  /**
+   * @param configuration
+   *          the configuration to set
+   */
+  public void setConfiguration(Configuration configuration) {
+    this.configuration = configuration;
   }
 
 }

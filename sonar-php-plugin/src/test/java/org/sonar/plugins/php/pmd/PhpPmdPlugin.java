@@ -1,6 +1,6 @@
 /*
  * Sonar, open source software quality management tool.
- * Copyright (C) 2010 SQLi
+ * Copyright (C) 2010 EchoSource
  * mailto:contact AT sonarsource DOT com
  *
  * Sonar is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ import java.util.List;
 import org.sonar.api.Extension;
 import org.sonar.api.Plugin;
 import org.sonar.plugins.php.core.PhpPlugin;
-import org.sonar.plugins.php.pmd.sensor.PhpPmdSensor;
 
 /**
  * The Class PhpPmdPlugin class declares all extensions to be run for a project to be analyzed by the PHPMD tool.
@@ -51,7 +50,7 @@ public class PhpPmdPlugin implements Plugin {
    */
   public List<Class<? extends Extension>> getExtensions() {
     List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
-    extensions.add(PhpPmdSensor.class);
+    extensions.add(PhpmdSensor.class);
     // extensions.add(PhpPmdRulesRepository.class);
     return extensions;
   }

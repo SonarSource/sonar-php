@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="PHP_CodeSniffer rules">
+  <rule ref="Generic.CodeAnalysis.EmptyStatement.NotAllowed">
+    <priority>warning</priority>
+    <severity>warning</severity>
+  </rule>
+  <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop.CanSimplify">
+    <priority>error</priority>
+    <severity>error</severity>
+  </rule>
+  <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall.NotAllowed">
+    <priority>info</priority>
+    <severity>info</severity>
+  </rule>
+</ruleset>

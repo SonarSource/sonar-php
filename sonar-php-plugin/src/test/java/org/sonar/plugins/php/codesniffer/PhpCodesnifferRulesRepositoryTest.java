@@ -49,9 +49,8 @@ import org.sonar.api.rules.ActiveRuleParam;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
-import org.sonar.plugins.checkstyle.xml.Module;
-import org.sonar.plugins.checkstyle.xml.Property;
-import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.checkstyle.xml.Module;
+import org.sonar.plugins.php.checkstyle.xml.Property;
 import org.sonar.plugins.php.core.PhpPlugin;
 import org.xml.sax.SAXException;
 
@@ -362,8 +361,7 @@ public class PhpCodesnifferRulesRepositoryTest {
    */
   @Before
   public void setup() {
-
-    repository = new PhpCodesnifferRulesRepository(new Php());
+    repository = new PhpCodesnifferRulesRepository("", "");
   }
 
   /**

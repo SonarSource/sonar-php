@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="1.3.0RC1">
+  <file name="D:\hashcode\math-php-test\source\src\Mail.php">
+    <error line="15" column="1" severity="error"
+      message="@category tag comment indented incorrectly; expected 2 spaces but found 3" source="PEAR.Commenting.FileComment.TagIndent" />
+    <error line="16" column="1" severity="error"
+      message="@package tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.FileComment.TagIndent" />
+    <error line="17" column="1" severity="warning" message="Line exceeds 85 characters; contains 113 characters"
+      source="Generic.Files.LineLength.TooLong" />
+    <error line="17" column="1" severity="error"
+      message="@copyright tag must contain a year and the name of the copyright holder" source="PEAR.Commenting.FileComment.EmptyCopyright" />
+    <error line="17" column="1" severity="error"
+      message="@copyright tag comment indented incorrectly; expected 1 spaces but found 2" source="PEAR.Commenting.FileComment.TagIndent" />
+    <error line="18" column="1" severity="error"
+      message="@license tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.FileComment.TagIndent" />
+    <error line="19" column="1" severity="warning"
+      message="Invalid version &quot;$Id: Mail.php 20783 2010-01-31 08:06:30Z yoshida@zend.co.jp $&quot; in file comment; consider &quot;CVS: &lt;cvs_id&gt;&quot; or &quot;SVN: &lt;svn_id&gt;&quot; instead"
+      source="PEAR.Commenting.FileComment.InvalidVersion" />
+    <error line="19" column="1" severity="error"
+      message="@version tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.FileComment.TagIndent" />
+    <error line="20" column="1" severity="warning" message="PHP version not specified"
+      source="PEAR.Commenting.FileComment.MissingVersion" />
+    <error line="20" column="1" severity="error" message="Missing @author tag in file comment"
+      source="PEAR.Commenting.FileComment.MissingTag" />
+    <error line="20" column="1" severity="error" message="Missing @link tag in file comment"
+      source="PEAR.Commenting.FileComment.MissingTag" />
+    <error line="43" column="1" severity="error" message="Missing class doc comment"
+      source="PEAR.Commenting.ClassComment.Missing" />
+    <error line="53" column="22" severity="error"
+      message="Protected member variable &quot;_defaultTransport&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="60" column="1" severity="error"
+      message="@category tag comment indented incorrectly; expected 2 spaces but found 3" source="PEAR.Commenting.ClassComment.TagIndent" />
+    <error line="61" column="1" severity="error"
+      message="@package tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.ClassComment.TagIndent" />
+    <error line="62" column="1" severity="warning" message="Line exceeds 85 characters; contains 87 characters"
+      source="Generic.Files.LineLength.TooLong" />
+    <error line="62" column="1" severity="error"
+      message="@copyright tag must contain a year and the name of the copyright holder" source="PEAR.Commenting.ClassComment.EmptyCopyright" />
+    <error line="62" column="1" severity="error"
+      message="@copyright tag comment indented incorrectly; expected 1 spaces but found 2" source="PEAR.Commenting.ClassComment.TagIndent" />
+    <error line="63" column="1" severity="error"
+      message="@license tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.ClassComment.TagIndent" />
+    <error line="64" column="1" severity="error" message="Missing @author tag in class comment"
+      source="PEAR.Commenting.ClassComment.MissingTag" />
+    <error line="64" column="1" severity="error" message="Missing @link tag in class comment"
+      source="PEAR.Commenting.ClassComment.MissingTag" />
+    <error line="75" column="22" severity="error"
+      message="Protected member variable &quot;_defaultTransport&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="81" column="22" severity="error"
+      message="Protected member variable &quot;_defaultFrom&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="87" column="22" severity="error"
+      message="Protected member variable &quot;_defaultReplyTo&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="93" column="15" severity="error"
+      message="Protected member variable &quot;_charset&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="99" column="15" severity="error"
+      message="Protected member variable &quot;_headers&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="105" column="15" severity="error"
+      message="Protected member variable &quot;_headerEncoding&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="111" column="15" severity="error"
+      message="Protected member variable &quot;_from&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="117" column="15" severity="error"
+      message="Protected member variable &quot;_to&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="123" column="15" severity="error"
+      message="Protected member variable &quot;_recipients&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="129" column="15" severity="error"
+      message="Protected member variable &quot;_replyTo&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="135" column="15" severity="error"
+      message="Protected member variable &quot;_returnPath&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="141" column="15" severity="error"
+      message="Protected member variable &quot;_subject&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="147" column="15" severity="error"
+      message="Protected member variable &quot;_date&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="153" column="15" severity="error"
+      message="Protected member variable &quot;_messageId&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="159" column="15" severity="error"
+      message="Protected member variable &quot;_bodyText&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="165" column="15" severity="error"
+      message="Protected member variable &quot;_bodyHtml&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="171" column="15" severity="error"
+      message="Protected member variable &quot;_mimeBoundary&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="177" column="15" severity="error"
+      message="Protected member variable &quot;_type&quot; must not be prefixed with an underscore"
+      source="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+    <error line="194" column="1" severity="error"
+      message="Parameters must appear immediately after the comment" source="PEAR.Commenting.FunctionComment.SpacingBeforeParams" />
+    <error line="194" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="194" column="1" severity="error"
+      message="Missing comment for param &quot;$transport&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment" />
+    <error line="195" column="1" severity="error" message="Missing @return tag in function comment"
+      source="PEAR.Commenting.FunctionComment.MissingReturn" />
+    <error line="196" column="88" severity="warning"
+      message="Line exceeds 85 characters; contains 87 characters" source="Generic.Files.LineLength.TooLong" />
+    <error line="207" column="1" severity="error" message="Missing @return tag in function comment"
+      source="PEAR.Commenting.FunctionComment.MissingReturn" />
+    <error line="215" column="1" severity="error" message="Missing @return tag in function comment"
+      source="PEAR.Commenting.FunctionComment.MissingReturn" />
+    <error line="224" column="1" severity="error"
+      message="Missing comment for param &quot;$charset&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment" />
+    <error line="246" column="1" severity="error"
+      message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
+    <error line="246" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="261" column="13" severity="error"
+      message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce" />
+    <error line="284" column="1" severity="error"
+      message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
+    <error line="284" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="284" column="1" severity="error"
+      message="Missing comment for param &quot;$boundary&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment" />
+    <error line="331" column="1" severity="error"
+      message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
+    <error line="331" column="1" severity="error"
+      message="Parameters must appear immediately after the comment" source="PEAR.Commenting.FunctionComment.SpacingBeforeParams" />
+    <error line="331" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="331" column="1" severity="error"
+      message="Missing comment for param &quot;$encoding&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment" />
+    <error line="342" column="1" severity="warning" message="Line exceeds 85 characters; contains 97 characters"
+      source="Generic.Files.LineLength.TooLong" />
+    <error line="342" column="1" severity="error"
+      message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
+    <error line="342" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="355" column="13" severity="error"
+      message="File is being conditionally included; use &quot;include_once&quot; instead" source="PEAR.Files.IncludingFile.UseIncludeOnce" />
+    <error line="366" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="366" column="1" severity="error"
+      message="Missing comment for param &quot;$txt&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment" />
+    <error line="367" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="367" column="1" severity="error"
+      message="The comments for parameters $txt (1) and $charset (2) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned" />
+    <error line="367" column="1" severity="error"
+      message="Missing comment for param &quot;$charset&quot; at position 2" source="PEAR.Commenting.FunctionComment.MissingParamComment" />
+    <error line="368" column="1" severity="error"
+      message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
+    <error line="368" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="368" column="1" severity="error"
+      message="The comments for parameters $charset (2) and $encoding (3) do not align" source="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned" />
+    <error line="368" column="1" severity="error"
+      message="Missing comment for param &quot;$encoding&quot; at position 3" source="PEAR.Commenting.FunctionComment.MissingParamComment" />
+    <error line="371" column="104" severity="warning"
+      message="Line exceeds 85 characters; contains 103 characters" source="Generic.Files.LineLength.TooLong" />
+    <error line="391" column="1" severity="warning"
+      message="Line exceeds 85 characters; contains 124 characters" source="Generic.Files.LineLength.TooLong" />
+    <error line="391" column="1" severity="error"
+      message="Last parameter comment requires a blank newline after it" source="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
+    <error line="391" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="391" column="1" severity="error"
+      message="Doc comment for var textOnly does not match actual variable name $textOnly at position 1"
+      source="PEAR.Commenting.FunctionComment.ParamNameNoMatch" />
+    <error line="407" column="1" severity="error" message="Expected 1 space before variable type"
+      source="PEAR.Commenting.FunctionComment.SpacingBeforeParamType" />
+    <error line="407" column="1" severity="error"
+      message="Missing comment for param &quot;$html&quot; at position 1" source="PEAR.Commenting.FunctionComment.MissingParamComment" />
+  </file>
+</checkstyle>
