@@ -40,61 +40,63 @@ import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
  */
 public class PhpCpdExecutor extends PhpPluginAbstractExecutor {
 
-  /**
+	/**
    * 
    */
 
-  /** The configuration. */
-  private PhpCpdConfiguration configuration;
+	/** The configuration. */
+	private PhpCpdConfiguration configuration;
 
-  /**
-   * Instantiates a new php depend executor.
-   * 
-   * @param configuration
-   *          the configuration
-   */
-  public PhpCpdExecutor(PhpCpdConfiguration configuration) {
-    this.configuration = configuration;
-  }
+	/**
+	 * Instantiates a new php depend executor.
+	 * 
+	 * @param configuration
+	 *            the configuration
+	 */
+	public PhpCpdExecutor(PhpCpdConfiguration configuration) {
+		this.configuration = configuration;
+	}
 
-  /**
-   * Return the command line depending configuration and arguments.
-   * 
-   * @see org.sonar.plugins.php.core.PhpPluginAbstractExecutor#getCommandLine()
-   */
-  @Override
-  protected List<String> getCommandLine() {
-    List<String> result = new ArrayList<String>();
-    result.add(configuration.getOsDependentToolScriptName());
+	/**
+	 * Return the command line depending configuration and arguments.
+	 * 
+	 * @see org.sonar.plugins.php.core.PhpPluginAbstractExecutor#getCommandLine()
+	 */
+	@Override
+	protected List<String> getCommandLine() {
+		List<String> result = new ArrayList<String>();
+		result.add(configuration.getOsDependentToolScriptName());
 
-    result.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_MODIFIER);
-    result.add(configuration.getMinimunNumberOfIdenticalLines().toString());
+		result.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_MODIFIER);
+		result.add(configuration.getMinimunNumberOfIdenticalLines().toString());
 
-    result.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_MODIFIER);
-    result.add(configuration.getMinimunNumberOfIdenticalTokens().toString());
+		result.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_MODIFIER);
+		result.add(configuration.getMinimunNumberOfIdenticalTokens().toString());
 
-    result.add(PHPCPD_REPORT_FILE_OPTION);
-    result.add(configuration.getReportFile().getAbsolutePath());
+		result.add(PHPCPD_REPORT_FILE_OPTION);
+		result.add(configuration.getReportFile().getPath());
 
-    String suffixes = configuration.getSuffixesCommandOption();
-    if (StringUtils.isNotBlank(suffixes)) {
-      result.add(PhpCpdConfiguration.PHPCPD_SUFFIXES);
-      result.add(suffixes);
-    }
+		String suffixes = configuration.getSuffixesCommandOption();
+		if (StringUtils.isNotBlank(suffixes)) {
+			result.add(PhpCpdConfiguration.PHPCPD_SUFFIXES);
+			result.add(suffixes);
+		}
 
-    if (configuration.isStringPropertySet(PHPCPD_EXCLUDE_PACKAGE_KEY)) {
-      result.add(PHPCPD_EXCLUDE_OPTION + configuration.getExcludePackages());
-    }
-    List<File> sourceDirectories = configuration.getSourceDirectories();
-    if (sourceDirectories != null && !sourceDirectories.isEmpty()) {
-      result.add(StringUtils.join(sourceDirectories, PHPCPD_DIRECTORY_SEPARATOR));
-    }
-    return result;
-  }
+		if (configuration.isStringPropertySet(PHPCPD_EXCLUDE_PACKAGE_KEY)) {
+			result.add(PHPCPD_EXCLUDE_OPTION
+					+ configuration.getExcludePackages());
+		}
+		List<File> sourceDirectories = configuration.getSourceDirectories();
+		if (sourceDirectories != null && !sourceDirectories.isEmpty()) {
+			result.add(StringUtils.join(sourceDirectories,
+					PHPCPD_DIRECTORY_SEPARATOR));
+		}
+		return result;
+	}
 
-  @Override
-  protected String getExecutedTool() {
-    return PHPCPD_COMMAND_LINE;
-  }
+	@Override
+	protected String getExecutedTool() {
+		return PHPCPD_COMMAND_LINE;
+	}
 
 }
