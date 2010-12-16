@@ -97,23 +97,6 @@ public class PhpDependResultsParser implements BatchExtension {
   }
 
   /**
-   * Instantiates a new php depend results parser.
-   * 
-   * @param config
-   *          the config
-   * @param context
-   *          the context
-   * @param metrics
-   *          the metrics
-   */
-  protected PhpDependResultsParser(Project project, SensorContext context, Set<Metric> metrics) {
-    this.project = project;
-    this.context = context;
-    this.metrics = metrics;
-    this.resourcesBag = new ResourcesBag();
-  }
-
-  /**
    * If the given value is not null, the metric, resource and value will be associated
    * 
    * @param file

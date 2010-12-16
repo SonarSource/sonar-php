@@ -59,7 +59,8 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   public static final String PHPCS_DEFAULT_STANDARD_ARGUMENT = "Pear";
   public static final String PHPCS_STANDARD_MODIFIER = "--standard=";
   public static final String PHPCS_STANDARD_MESSAGE = "Ruleset (or standard) to run PHP_CodeSniffer with";
-  public static final String PHPCS_STANDARD_DESCRIPTION = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. If no one is specified all standards will be launched";
+  public static final String PHPCS_STANDARD_DESCRIPTION = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. "
+      + "If no one is specified all standards will be launched";
 
   public static final String PHPCS_REPORT_FILE_MODIFIER = "--report-file=";
   public static final String PHPCS_ARGUMENT_LINE_KEY = "sonar.phpCodesniffer.argumentLine";

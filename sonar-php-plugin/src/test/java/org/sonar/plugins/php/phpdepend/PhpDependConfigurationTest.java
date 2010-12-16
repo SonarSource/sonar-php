@@ -36,7 +36,6 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.core.Php;
 
 /**
  * The Class PhpDependConfigurationTest.
@@ -87,7 +86,7 @@ public class PhpDependConfigurationTest {
     when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
     when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn(DEFAULT_REPORT_FILE_PATH);
     when(project.getConfiguration()).thenReturn(configuration);
-    //new Php();
+    // new Php();
     PhpDependConfiguration config = getNotWindowsConfiguration(project);
 
     assertThat(config.getOsDependentToolScriptName(), is(PhpDependConfiguration.PDEPEND_COMMAND_LINE));
@@ -98,7 +97,7 @@ public class PhpDependConfigurationTest {
    */
   @Test
   public void shouldGetValidSuffixeOption() {
-    //new Php();
+    // new Php();
     Project project = mock(Project.class);
     Configuration configuration = mock(Configuration.class);
     MavenProject mavenProject = mock(MavenProject.class);

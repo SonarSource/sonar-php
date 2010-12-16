@@ -251,7 +251,7 @@ public final class Module implements Comparable<String> {
    * @param metadata
    *          the metadata to set
    */
-  protected void setMetadata(List<Metadata> metadata) {
+  public void setMetadata(List<Metadata> metadata) {
     this.metadata = metadata;
   }
 
