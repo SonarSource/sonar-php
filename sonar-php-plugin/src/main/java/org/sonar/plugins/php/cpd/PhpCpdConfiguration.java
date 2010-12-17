@@ -131,7 +131,6 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
    */
   @Override
   protected boolean shouldAnalyzeOnlyDefault() {
-    // TODO Auto-generated method stub
     return false;
   }
 

@@ -91,7 +91,6 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     } catch (FileNotFoundException e) {
       throw new SonarException("Unable to open file '" + file.getAbsolutePath() + "'", e);
     } catch (RuntimeException rEx) {
-      // TODO HACK for SONARPLUGINS-662
       log.error("error while parsing file '" + file.getAbsolutePath() + "'", rEx);
     }
     return result;

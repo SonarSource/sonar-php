@@ -68,10 +68,10 @@ public class PhpCpdExecutor extends PhpPluginAbstractExecutor {
 		result.add(configuration.getOsDependentToolScriptName());
 
 		result.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_MODIFIER);
-		result.add(configuration.getMinimunNumberOfIdenticalLines().toString());
+		result.add(configuration.getMinimunNumberOfIdenticalLines());
 
 		result.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_MODIFIER);
-		result.add(configuration.getMinimunNumberOfIdenticalTokens().toString());
+		result.add(configuration.getMinimunNumberOfIdenticalTokens());
 
 		result.add(PHPCPD_REPORT_FILE_OPTION);
 		result.add(configuration.getReportFile().getPath());

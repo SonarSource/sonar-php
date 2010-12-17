@@ -155,7 +155,7 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
       name = PHPCPD_MIN_LINES_MESSAGE, project = true, global = true, description = PHPCPD_MIN_LINES_DESCRIPTION),
   @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS,
       name = PHPCPD_MIN_TOKENS_MESSAGE, project = true, global = true, description = PHPCPD_MIN_TOKENS_MESSAGE) })
-public class PhpPlugin implements Plugin, PhpPluginConfiguration {
+public class PhpPlugin implements Plugin {
 
   /** All the valid php files suffixes. */
   public static final String DEFAULT_SUFFIXES = "php,php3,php4,php5,phtml,inc";
