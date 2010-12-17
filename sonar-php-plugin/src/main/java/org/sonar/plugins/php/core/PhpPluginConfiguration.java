@@ -53,4 +53,10 @@ public class PhpPluginConfiguration {
   public static final String PHPCPD_MIN_TOKENS_MESSAGE = "Minimum number of identical tokens";
   public static final String PHPCPD_MIN_TOKENS_DESCRIPTION = "The minimum number of identical tokens to consider to detect a copy/paster";
 
+  /**
+   * hidden constructor
+   */
+  private PhpPluginConfiguration() {
+  }
+
 }
