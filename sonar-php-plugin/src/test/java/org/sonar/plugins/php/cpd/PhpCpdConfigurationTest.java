@@ -23,8 +23,12 @@ package org.sonar.plugins.php.cpd;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_REPORT_FILE_NAME;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_REPORT_FILE_PATH;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
 
@@ -41,6 +45,34 @@ import org.sonar.api.resources.ProjectFileSystem;
  * The Class PhpCpdConfigurationTest.
  */
 public class PhpCpdConfigurationTest {
+
+  /**
+   * Should get valid suffixe option.
+   */
+  @Test
+  public void testGetMinimunNumbeOfIdenticalLines() {
+    Project project = mock(Project.class);
+    Configuration configuration = getMockConfiguration(project);
+    when(configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES))
+        .thenReturn(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES);
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpCpdConfiguration config = new PhpCpdConfiguration(project);
+    assertEquals(config.getMinimunNumberOfIdenticalLines(), PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES);
+  }
+
+  /**
+   * Should get valid suffixe option.
+   */
+  @Test
+  public void testGetMinimunNumbeOfIdenticalTokens() {
+    Project project = mock(Project.class);
+    Configuration configuration = getMockConfiguration(project);
+    when(configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS))
+        .thenReturn(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS);
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpCpdConfiguration config = new PhpCpdConfiguration(project);
+    assertEquals(config.getMinimunNumberOfIdenticalTokens(), PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS);
+  }
 
   /**
    * Should get valid suffixe option.
@@ -101,6 +133,9 @@ public class PhpCpdConfigurationTest {
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
     when(configuration.getString(PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY, PHPCPD_DEFAULT_REPORT_FILE_NAME)).thenReturn(
         PHPCPD_DEFAULT_REPORT_FILE_NAME);
+    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPCPD_DEFAULT_REPORT_FILE_PATH)).thenReturn(
+        PHPCPD_DEFAULT_REPORT_FILE_PATH);
+
     return configuration;
   }
 }
