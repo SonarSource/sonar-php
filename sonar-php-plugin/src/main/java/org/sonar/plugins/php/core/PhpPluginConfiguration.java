@@ -27,7 +27,7 @@ package org.sonar.plugins.php.core;
  * @author Akram Ben Aissi
  * 
  */
-public class PhpPluginConfiguration {
+public final class PhpPluginConfiguration {
 
   public static final String PHP_FILE_SUFFIXES_MESSAGE = "File suffixes";
   public static final String PHP_FILE_SUFFIXES_DESCRIPTION = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.";
