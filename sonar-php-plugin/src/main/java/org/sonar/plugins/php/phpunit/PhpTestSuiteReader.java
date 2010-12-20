@@ -34,9 +34,7 @@ import org.sonar.plugins.php.phpunit.xml.TestSuite;
 public class PhpTestSuiteReader {
 
   /**
-   * FIXME: Due to a inconsistent XML format in phpUnit, we have to parse enclosing testsuite name for generated testcases when a testcase
-   * holds the annotation dataProvider.
-   */
+  */
   private static final String TESTSUITE_CLASS_NAME_SEPARATOR = "::";
   /** The reports per class. */
   private Map<String, PhpUnitTestReport> reportsPerClass = new HashMap<String, PhpUnitTestReport>();
@@ -65,6 +63,9 @@ public class PhpTestSuiteReader {
   /**
    * Reads the given test suite.
    * 
+   * FIXME: Due to a inconsistent XML format in phpUnit, we have to parse enclosing testsuite name for generated testcases when a testcase
+   * holds the annotation dataProvider.
+   * 
    * @param testSuite
    *          the test suite
    * @return List<PhpUnitTestReport> A list containing on report per php class
@@ -82,8 +83,7 @@ public class PhpTestSuiteReader {
     if (testCases != null) {
       for (TestCase testCase : testCases) {
         String testClassName = testCase.getClassName();
-        // FIXME bug in phpunit for test cases with @dataProvider. Format is incorrect,
-        // we get the fileName in the enclosing testSuite in the name attribute before string "::"
+        // For test cases with @dataProvider. we get the fileName in the enclosing testSuite in the name attribute before string "::"
         if (testClassName == null) {
           String name = testSuite.getName();
           int testSuiteClassIndex = name.indexOf(TESTSUITE_CLASS_NAME_SEPARATOR);
@@ -98,8 +98,7 @@ public class PhpTestSuiteReader {
           report.setDetails(new ArrayList<TestCase>());
           report.setClassKey(testClassName);
           String file = testCase.getFile();
-          // FIXME bug in phpunit for test cases with @dataProvider. Format is incorrect,
-          // we get the file name in the parent test suite.
+          // test cases with @dataProvider, we get the file name in the parent test suite.
           if (file == null) {
             file = parentFileName;
           }
