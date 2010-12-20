@@ -39,7 +39,6 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpFile;
 import org.sonar.plugins.php.core.PhpPackage;
 import org.sonar.plugins.php.core.PhpPlugin;

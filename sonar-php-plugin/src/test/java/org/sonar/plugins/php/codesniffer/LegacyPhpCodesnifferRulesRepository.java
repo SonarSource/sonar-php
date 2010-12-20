@@ -35,7 +35,6 @@ import org.sonar.api.rules.RuleParam;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleRepository;
 import org.sonar.api.rules.StandardRulesXmlParser;
-import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.checkstyle.xml.Module;
 import org.sonar.plugins.php.checkstyle.xml.Property;
