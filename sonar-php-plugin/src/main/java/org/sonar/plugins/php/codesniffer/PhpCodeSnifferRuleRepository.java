@@ -34,7 +34,7 @@ import org.sonar.plugins.php.core.PhpRuleRepository;
 public final class PhpCodeSnifferRuleRepository extends PhpRuleRepository {
 
   public static final String PHPCS_REPOSITORY_KEY = "php_codesniffer_rules";
-  public static final String PHPCS_REPOSITORY_NAME = "Php_CodeSniffer Rules";
+  public static final String PHPCS_REPOSITORY_NAME = "PHP_CodeSniffer rules";
   // for user extensions
   private ServerFileSystem fileSystem;
   private XMLRuleParser parser;

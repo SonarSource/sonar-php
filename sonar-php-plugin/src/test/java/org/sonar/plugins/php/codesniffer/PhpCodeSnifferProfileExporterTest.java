@@ -66,17 +66,17 @@ public class PhpCodeSnifferProfileExporterTest {
     assertEquals(exptected, StringUtils.remove(xmlOutput.toString(), '\r'));
   }
 
-  private static class MockPhpCodeSnifferRuleFinder implements RuleFinder {
+  public static class MockPhpCodeSnifferRuleFinder implements RuleFinder {
 
     private List<Rule> rules;
-    private static Map<String, Rule> rulesByKey;
+    private static Map<String, Rule> rulesByKey = new HashMap<String, Rule>();
 
     public MockPhpCodeSnifferRuleFinder(List<Rule> rules) {
       this.rules = rules;
     }
 
     public Rule findByKey(String repositoryKey, String key) {
-      throw new UnsupportedOperationException();
+      return rulesByKey.get(key);
     }
 
     public Collection<Rule> findAll(RuleQuery query) {
@@ -98,9 +98,9 @@ public class PhpCodeSnifferProfileExporterTest {
     private Map<String, Rule> getRulesMap() {
       if (rulesByKey == null) {
         rulesByKey = new HashMap<String, Rule>();
-        for (Rule rule : rules) {
-          rulesByKey.put(rule.getKey(), rule);
-        }
+      }
+      for (Rule rule : rules) {
+        rulesByKey.put(rule.getKey(), rule);
       }
       return rulesByKey;
     }
