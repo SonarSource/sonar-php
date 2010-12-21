@@ -49,8 +49,8 @@ public class PmdRuleset {
     return name;
   }
 
-  public String getDescription() { // NOSONAR unwritten field
-    return description;
+  public String getDescription() {
+    return description;// NOSONAR unwritten field
   }
 
   public void addRule(PmdRule rule) {
