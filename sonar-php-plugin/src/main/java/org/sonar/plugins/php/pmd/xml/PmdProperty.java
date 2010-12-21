@@ -25,7 +25,7 @@ public class PmdProperty {
   private String name;
 
   private String value;
-  
+
   private String cdataValue;
 
   public PmdProperty(String name, String value) {
@@ -40,19 +40,15 @@ public class PmdProperty {
   public String getValue() {
     return value;
   }
-  
+
   public String getCdataValue() {
     return cdataValue;
   }
-  
-  public boolean isCdataValue(){
+
+  public boolean isCdataValue() {
     return cdataValue != null;
   }
 
-  public void setValue(String value) {
-    this.value = value;
-  }
-  
   public void setCdataValue(String cdataValue) {
     this.cdataValue = cdataValue;
   }

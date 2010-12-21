@@ -49,7 +49,7 @@ public class PmdRuleset {
     return name;
   }
 
-  public String getDescription() {
+  public String getDescription() { // NOSONAR unwritten field
     return description;
   }
 
