@@ -60,6 +60,16 @@ public class PhpDependConfigurationTest {
   }
 
   @Test
+  public void testGetIgnoreDirsWithEmpty() {
+    Project project = getMockProject();
+    PhpDependConfiguration config = getWindowsConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] {};
+    when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(excludeDirs);
+    assertEquals(null, config.getIgnoreDirs());
+  }
+
+  @Test
   public void testGetExcludePackageWithNull() {
     Project project = getMockProject();
     PhpDependConfiguration config = getWindowsConfiguration(project);
@@ -76,6 +86,16 @@ public class PhpDependConfigurationTest {
     String[] excludeDirs = new String[] { "a", "b" };
     when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(excludeDirs);
     assertEquals("a,b", config.getExcludePackages());
+  }
+
+  @Test
+  public void testGetExcludePackageWithEmpty() {
+    Project project = getMockProject();
+    PhpDependConfiguration config = getWindowsConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] {};
+    when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(excludeDirs);
+    assertEquals(null, config.getExcludePackages());
   }
 
   @Test

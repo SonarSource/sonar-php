@@ -23,6 +23,13 @@ package org.sonar.plugins.php.pmd;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_RULESET_ARGUMENT;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_ARGUMENT_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_RULESETS_ARGUMENT_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -38,6 +45,64 @@ import org.sonar.api.resources.ProjectFileSystem;
  */
 public class PhpPmdConfigurationTest {
 
+  @Test
+  public void testGetRulesetsWithNotNull() {
+    Project project = getMockProject();
+    PhpmdConfiguration config = new PhpmdConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] { "a", "b" };
+    when(c.getStringArray(PHPMD_RULESETS_ARGUMENT_KEY)).thenReturn(excludeDirs);
+    assertEquals("a,b", config.getRulesets());
+  }
+
+  @Test
+  public void testGetRulesetsWithEmpty() {
+    Project project = getMockProject();
+    PhpmdConfiguration config = new PhpmdConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] {};
+    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(excludeDirs);
+    assertEquals(PHPMD_DEFAULT_RULESET_ARGUMENT, config.getRulesets());
+  }
+
+  @Test
+  public void testGetRulesetsWithNull() {
+    Project project = getMockProject();
+    PhpmdConfiguration config = new PhpmdConfiguration(project);
+    Configuration c = project.getConfiguration();
+    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(null);
+    assertEquals(PHPMD_DEFAULT_RULESET_ARGUMENT, config.getRulesets());
+  }
+
+  @Test
+  public void testGetIgnoreListWithNotNull() {
+    Project project = getMockProject();
+    PhpmdConfiguration config = new PhpmdConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] { "a", "b" };
+    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(excludeDirs);
+    assertEquals("a,b", config.getIgnoreList());
+  }
+
+  @Test
+  public void testGetIgnoreListWithEmpty() {
+    Project project = getMockProject();
+    PhpmdConfiguration config = new PhpmdConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] {};
+    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(excludeDirs);
+    assertEquals(null, config.getIgnoreList());
+  }
+
+  @Test
+  public void testGetIgnoreListWithNull() {
+    Project project = getMockProject();
+    PhpmdConfiguration config = new PhpmdConfiguration(project);
+    Configuration c = project.getConfiguration();
+    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(null);
+    assertEquals(null, config.getIgnoreList());
+  }
+
   /**
    * Should get valid suffixe option.
    */
@@ -52,11 +117,10 @@ public class PhpPmdConfigurationTest {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME))
-        .thenReturn(PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME);
-    when(
-        configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn(PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH);
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn(
+        PHPMD_DEFAULT_REPORT_FILE_NAME);
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn(
+        PHPMD_DEFAULT_REPORT_FILE_PATH);
     when(project.getConfiguration()).thenReturn(configuration);
     PhpmdConfiguration config = new PhpmdConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\pmd.xml");
@@ -76,11 +140,9 @@ public class PhpPmdConfigurationTest {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME))
-        .thenReturn(PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME);
-    when(
-        configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn(
+        PHPMD_DEFAULT_REPORT_FILE_NAME);
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
     PhpmdConfiguration config = new PhpmdConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pmd.xml");
@@ -91,6 +153,12 @@ public class PhpPmdConfigurationTest {
    */
   @Test
   public void shouldReturnCustomReportFileWithCustomPath() {
+    Project project = getMockProject();
+    PhpmdConfiguration config = new PhpmdConfiguration(project);
+    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pmd-summary.xml");
+  }
+
+  private Project getMockProject() {
     Project project = mock(Project.class);
     Configuration configuration = mock(Configuration.class);
     MavenProject mavenProject = mock(MavenProject.class);
@@ -100,13 +168,9 @@ public class PhpPmdConfigurationTest {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME))
-        .thenReturn("pmd-summary.xml");
-    when(
-        configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("pmd-summary.xml");
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
-    PhpmdConfiguration config = new PhpmdConfiguration(project);
-    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pmd-summary.xml");
+    return project;
   }
 }
