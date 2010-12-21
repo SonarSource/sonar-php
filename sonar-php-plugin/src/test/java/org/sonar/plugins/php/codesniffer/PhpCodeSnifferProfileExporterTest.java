@@ -27,12 +27,14 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
@@ -40,6 +42,7 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.api.utils.SonarException;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.test.TestUtils;
 import org.xml.sax.SAXException;
@@ -48,6 +51,38 @@ public class PhpCodeSnifferProfileExporterTest {
 
   private PhpCodeSnifferPriorityMapper mapper = new PhpCodeSnifferPriorityMapper();
   private PhpCodeSnifferProfileExporter exporter = new PhpCodeSnifferProfileExporter(mapper);
+
+  @Test(expected = SonarException.class)
+  public void testExportProfileFail() throws IOException, SAXException {
+    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    List<Rule> rules = repository.createRules();
+
+    RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
+    PhpCodeSnifferProfileImporter importer = new PhpCodeSnifferProfileImporter(ruleFinder, mapper);
+    Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/simple-ruleset.xml"));
+    RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
+
+    exporter.exportProfile(rulesProfile, xmlOutput);
+  }
+
+  @Test
+  @Ignore("We must set a rules.xml with params to be able to test this")
+  public void testExportComplexProfile() throws IOException, SAXException {
+    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    List<Rule> rules = repository.createRules();
+
+    RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
+    PhpCodeSnifferProfileImporter importer = new PhpCodeSnifferProfileImporter(ruleFinder, mapper);
+    Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/complex-ruleset.xml"));
+    RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
+
+    StringWriter xmlOutput = new StringWriter();
+    exporter.exportProfile(rulesProfile, xmlOutput);
+    String exptected = StringUtils.remove(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/complex-export.xml"), '\r');
+    assertEquals(exptected, StringUtils.remove(xmlOutput.toString(), '\r'));
+  }
 
   @Test
   public void testExportProfile() throws IOException, SAXException {
@@ -105,4 +140,30 @@ public class PhpCodeSnifferProfileExporterTest {
       return rulesByKey;
     }
   }
+
+  static Writer xmlOutput = new Writer() {
+
+    public Writer append(CharSequence s) throws IOException {
+      throw new IOException("");
+    }
+
+    @Override
+    public void close() throws IOException {
+      // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void flush() throws IOException {
+      // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void write(char[] cbuf, int off, int len) throws IOException {
+      // TODO Auto-generated method stub
+
+    };
+  };
+
 }
