@@ -27,6 +27,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -47,23 +49,50 @@ public class PhpDependConfigurationTest {
   private static final String DEFAULT_REPORT_FILE_NAME = PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME;
   private static final String REPORT_FILE_NAME_PROPERTY_KEY = PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
 
+  @Test
+  public void testGetIgnoreDirsWithNotNull() {
+    Project project = getMockProject();
+    PhpDependConfiguration config = getWindowsConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] { "a", "b" };
+    when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(excludeDirs);
+    assertEquals("a,b", config.getIgnoreDirs());
+  }
+
+  @Test
+  public void testGetExcludePackageWithNull() {
+    Project project = getMockProject();
+    PhpDependConfiguration config = getWindowsConfiguration(project);
+    Configuration c = project.getConfiguration();
+    when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(null);
+    assertEquals(null, config.getExcludePackages());
+  }
+
+  @Test
+  public void testGetExcludePackageWithNotNull() {
+    Project project = getMockProject();
+    PhpDependConfiguration config = getWindowsConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] { "a", "b" };
+    when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(excludeDirs);
+    assertEquals("a,b", config.getExcludePackages());
+  }
+
+  @Test
+  public void testGetIgnoreDirsWithNull() {
+    Project project = getMockProject();
+    PhpDependConfiguration config = getWindowsConfiguration(project);
+    Configuration c = project.getConfiguration();
+    when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(null);
+    assertEquals(null, config.getIgnoreDirs());
+  }
+
   /**
    * Should get command line for windows.
    */
   @Test
   public void shouldGetCommandLineForWindows() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn(DEFAULT_REPORT_FILE_PATH);
-    when(project.getConfiguration()).thenReturn(configuration);
+    Project project = getMockProject();
     PhpDependConfiguration config = getWindowsConfiguration(project);
 
     assertThat(config.getOsDependentToolScriptName(), is(PhpDependConfiguration.PDEPEND_COMMAND_LINE + ".bat"));
@@ -74,21 +103,9 @@ public class PhpDependConfigurationTest {
    */
   @Test
   public void shouldGetCommandLineForNotWindows() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn(DEFAULT_REPORT_FILE_PATH);
-    when(project.getConfiguration()).thenReturn(configuration);
+    Project project = getMockProject();
     // new Php();
     PhpDependConfiguration config = getNotWindowsConfiguration(project);
-
     assertThat(config.getOsDependentToolScriptName(), is(PhpDependConfiguration.PDEPEND_COMMAND_LINE));
   }
 
@@ -97,19 +114,7 @@ public class PhpDependConfigurationTest {
    */
   @Test
   public void shouldGetValidSuffixeOption() {
-    // new Php();
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn(DEFAULT_REPORT_FILE_PATH);
-    when(project.getConfiguration()).thenReturn(configuration);
+    Project project = getMockProject();
     PhpDependConfiguration config = new PhpDependConfiguration(project);
 
     String suffixesOption = config.getSuffixesCommandOption();
@@ -122,6 +127,12 @@ public class PhpDependConfigurationTest {
    */
   @Test
   public void shouldReturnDefaultReportFileWithDefaultPath() {
+    Project project = getMockProject();
+    PhpDependConfiguration config = new PhpDependConfiguration(project);
+    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\pdepend.xml");
+  }
+
+  private Project getMockProject() {
     Project project = mock(Project.class);
     Configuration configuration = mock(Configuration.class);
     MavenProject mavenProject = mock(MavenProject.class);
@@ -134,8 +145,7 @@ public class PhpDependConfigurationTest {
     when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
     when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn(DEFAULT_REPORT_FILE_PATH);
     when(project.getConfiguration()).thenReturn(configuration);
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\pdepend.xml");
+    return project;
   }
 
   /**

@@ -55,7 +55,7 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
     result.add(configuration.getReportFileCommandOption());
     result.add(configuration.getSuffixesCommandOption());
     if (configuration.isStringPropertySet(PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY)) {
-      result.add(PhpDependConfiguration.PDEPEND_EXCLUDE_OPTION + configuration.getExcludePackeges());
+      result.add(PhpDependConfiguration.PDEPEND_EXCLUDE_OPTION + configuration.getExcludePackages());
     }
     if (configuration.isStringPropertySet(PhpDependConfiguration.PDEPEND_IGNORE_KEY)) {
       result.add(PhpDependConfiguration.PDEPEND_IGNORE_OPTION + configuration.getIgnoreDirs());

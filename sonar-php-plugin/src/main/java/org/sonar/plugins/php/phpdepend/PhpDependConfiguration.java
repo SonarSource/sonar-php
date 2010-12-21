@@ -150,7 +150,7 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
     return PDEPEND_COMMAND_LINE;
   }
 
-  public String getExcludePackeges() {
+  public String getExcludePackages() {
     String[] values = getProject().getConfiguration().getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY);
     if (values != null && values.length > 0) {
       return StringUtils.join(values, ',');
