@@ -37,6 +37,9 @@ import org.sonar.api.resources.Project;
  */
 public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
+  protected final static String SONAR_DYNAMIC_ANALYSIS = "sonar.dynamicAnalysis";
+  protected final static Boolean DEFAULT_SONAR_DYNAMIC_ANALYSIS = true;
+
   protected Project project;
 
   protected AbstractPhpPluginConfiguration(Project project) {
@@ -70,7 +73,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   private static final String WINDOWS_BAT_SUFFIX = ".bat";
 
   /** Indicates whether the plugin should only analyze results or launch tool. */
-  private boolean analyzeOnly;
+  protected boolean analyzeOnly;
 
   /** The tool argument line. */
   private String argumentLine;

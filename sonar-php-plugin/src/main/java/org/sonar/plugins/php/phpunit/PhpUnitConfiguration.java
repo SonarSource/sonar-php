@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.configuration.Configuration;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
 import org.sonar.plugins.php.core.Php;
@@ -75,7 +76,8 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
   public static final String PHPUNIT_MAIN_TEST_FILE_DESCRIPTION = "The project main test file including the relative path "
       + "ie : \"/source/tests/AllTests.php\". If not present, phpunit will look for phpunit.xml file in test directory.";
   public static final String PHPUNIT_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse the analyzis "
-      + "result file. If set to false the plugin will launch tool and parse result.";
+      + "result file. If set to false the plugin will launch tool and parse result. If the option sonar.dynamicAnalisys is set to true,"
+      + " this plugin will also parse analyzis file only.";
   public static final String PHPUNIT_SHOULD_RUN_DESCRIPTION = "If set to true the plugin will launch tool and parse result."
       + " If set to false the plugin will only parse the result file.";
   public static final String PHPUNIT_SHOULD_RUN_COVERAGE_DESCRIPTION = "If set to true the plugin will compute coverage on php files";
@@ -88,6 +90,12 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
    */
   public PhpUnitConfiguration(Project project) {
     super(project);
+    if (getShouldAnalyzeOnlyKey() != null) {
+      // Enable dynamic anaylisis if analyze only is set or dynamic analysis is set to false
+      Configuration configuration = project.getConfiguration();
+      analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), shouldAnalyzeOnlyDefault())
+          || !configuration.getBoolean(SONAR_DYNAMIC_ANALYSIS, DEFAULT_SONAR_DYNAMIC_ANALYSIS);
+    }
   }
 
   /**
