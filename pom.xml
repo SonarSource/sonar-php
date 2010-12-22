@@ -2,11 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	 <groupId>org.codehaus.sonar-plugins</groupId>
+
+	<groupId>org.codehaus.sonar-plugins</groupId>
 	<artifactId>sonar-php</artifactId>
 	<version>0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Sonar PHP Project</name>
+
+	<parent>
+		<groupId>org.codehaus.sonar-plugins</groupId>
+		<artifactId>parent</artifactId>
+		<version>6</version>
+		<relativePath>../parent</relativePath>
+	</parent>
+
 	<properties>
 		<sonar.version>2.2</sonar.version>
 	</properties>
@@ -14,14 +23,10 @@
 		<module>phpmd-rulesets</module>
 		<module>phpcodesniffer-rulesets</module>
 		<module>sonar-php-plugin</module>
-		
-		<!-- <module>php-codesniffer</module> <module>php-depend</module> <module>php-pmd</module> 
-			<module>php-unit</module> -->
 	</modules>
 	<inceptionYear>2010</inceptionYear>
 	<organization>
-		<name>SQLi</name>
-		<url>http://www.sqli.com</url>
+		<name>Akram Ben Aissi</name>
 	</organization>
 	<licenses>
 		<license>
@@ -30,10 +35,18 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<developers>
+		<developer>
+			<id>akram</id>
+			<name>Akram Ben Aissi</name>
+			<email>akram.benaissi@free.fr</email>
+		</developer>
+	</developers>
+
 	<scm>
 		<connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php</connection>
 		<developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php</developerConnection>
-		<url>http://svn.codehaus.org/sonar-plugins/trunk/php/</url>
+		<url>http://svn.sonar-plugins.codehaus.org</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
