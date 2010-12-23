@@ -1,86 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.codehaus.sonar-plugins</groupId>
-	<artifactId>sonar-php</artifactId>
-	<version>0.3-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>Sonar PHP Project</name>
+  <parent>
+    <groupId>org.codehaus.sonar-plugins</groupId>
+    <artifactId>parent</artifactId>
+    <version>6</version>
+  </parent>
 
-	<parent>
-		<groupId>org.codehaus.sonar-plugins</groupId>
-		<artifactId>parent</artifactId>
-		<version>6</version>
-		<relativePath>../parent</relativePath>
-	</parent>
+  <groupId>org.codehaus.sonar-plugins</groupId>
+  <artifactId>sonar-php</artifactId>
+  <version>0.3-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Sonar PHP Project</name>
 
-	<properties>
-		<sonar.version>2.2</sonar.version>
-	</properties>
-	<modules>
-		<module>phpmd-rulesets</module>
-		<module>phpcodesniffer-rulesets</module>
-		<module>sonar-php-plugin</module>
-	</modules>
-	<inceptionYear>2010</inceptionYear>
-	<organization>
-		<name>Akram Ben Aissi</name>
-	</organization>
-	<licenses>
-		<license>
-			<name>GNU Lesser General Public License (LGPL), v.3</name>
-			<url>http://www.gnu.org/licenses/lgpl.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-	<developers>
-		<developer>
-			<id>akram</id>
-			<name>Akram Ben Aissi</name>
-			<email>akram.benaissi@free.fr</email>
-		</developer>
-	</developers>
+  <modules>
+    <module>phpmd-rulesets</module>
+    <module>phpcodesniffer-rulesets</module>
+    <module>sonar-php-plugin</module>
+  </modules>
+  <inceptionYear>2010</inceptionYear>
+  <organization>
+    <name>Akram Ben Aissi</name>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License (LGPL), v.3</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>akram</id>
+      <name>Akram Ben Aissi</name>
+      <email>akram.benaissi@free.fr</email>
+    </developer>
+  </developers>
 
-	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php</developerConnection>
-		<url>http://svn.sonar-plugins.codehaus.org</url>
-	</scm>
-	<issueManagement>
-		<system>JIRA</system>
-		<url>http://jira.codehaus.org/browse/SONARPLUGINS/component/13723</url>
-	</issueManagement>
-	<ciManagement>
-		<system>Bamboo</system>
-		<url>http://ci.codehaus.org/browse/SONAR-PHP</url>
-	</ciManagement>
-	<build>
-		<extensions>
-			<!-- Bug with maven 2.2.1 and Ubuntu. -->
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-webdav-jackrabbit</artifactId>
-				<version>1.0-beta-6</version>
-			</extension>
-		</extensions>
-	</build>
-	<profiles>
-		<profile>
-			<id>eclipse</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-eclipse-plugin</artifactId>
-						<version>2.8</version>
-						<configuration>
-							<downloadJavadocs>false</downloadJavadocs>
-							<downloadSources>true</downloadSources>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php</developerConnection>
+    <url>http://svn.sonar-plugins.codehaus.org</url>
+  </scm>
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://jira.codehaus.org/browse/SONARPLUGINS/component/13723</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Bamboo</system>
+    <url>http://ci.codehaus.org/browse/SONAR-PHP</url>
+  </ciManagement>
+  <build>
+    <extensions>
+      <!-- Bug with maven 2.2.1 and Ubuntu. -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>1.0-beta-6</version>
+      </extension>
+    </extensions>
+  </build>
+  <profiles>
+    <profile>
+      <id>eclipse</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-eclipse-plugin</artifactId>
+            <version>2.8</version>
+            <configuration>
+              <downloadJavadocs>false</downloadJavadocs>
+              <downloadSources>true</downloadSources>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
