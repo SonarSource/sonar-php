@@ -15,6 +15,7 @@
   <packaging>pom</packaging>
   <name>Sonar PHP Project</name>
 
+
   <modules>
     <module>phpmd-rulesets</module>
     <module>phpcodesniffer-rulesets</module>
@@ -23,10 +24,11 @@
   <inceptionYear>2010</inceptionYear>
   <organization>
     <name>Akram Ben Aissi</name>
+    <url>http://www.akram.benaissi.com</url>
   </organization>
   <licenses>
     <license>
-      <name>GNU Lesser General Public License (LGPL), v.3</name>
+      <name>GNU LGPL v3</name>
       <url>http://www.gnu.org/licenses/lgpl.txt</url>
       <distribution>repo</distribution>
     </license>

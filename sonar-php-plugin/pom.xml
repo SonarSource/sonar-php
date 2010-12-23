@@ -14,6 +14,7 @@
   <version>0.3-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
   <name>Sonar PHP Plugin</name>
+  <description>Enables analysis of PHP projects into Sonar.</description>
 
   <inceptionYear>2010</inceptionYear>
   <organization>
