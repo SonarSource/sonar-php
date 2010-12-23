@@ -213,7 +213,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getShouldAnalyzeOnlyKey()
    */
   @Override
-  protected String getShouldAnalyzeOnlyKey() {
+  protected final String getShouldAnalyzeOnlyKey() {
     return PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY;
   }
 
@@ -235,7 +235,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#shouldAnalyzeOnlyDefault()
    */
   @Override
-  protected boolean shouldAnalyzeOnlyDefault() {
+  protected final boolean shouldAnalyzeOnlyDefault() {
     return Boolean.parseBoolean(PHPUNIT_DEFAULT_ANALYZE_ONLY);
   }
 

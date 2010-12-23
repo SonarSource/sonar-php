@@ -179,7 +179,8 @@ public class PhpPlugin implements Plugin {
    * @see org.sonar.api.Plugin#getDescription()
    */
   public final String getDescription() {
-    return "Sonar PHP Plugin is set of tool that brings PHP support to sonar. It rely on Sonar core, PDepend, Phpmd, PHP_CodeSniffer, Phpunit and Phpcpd tools.";
+    return "Sonar PHP Plugin is set of tool that brings PHP support to sonar. It rely on Sonar core, "
+        + "PDepend, Phpmd, PHP_CodeSniffer, Phpunit and Phpcpd tools.";
   }
 
   /**

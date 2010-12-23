@@ -30,16 +30,20 @@ package org.sonar.plugins.php.core;
 public final class PhpPluginConfiguration {
 
   public static final String PHP_FILE_SUFFIXES_MESSAGE = "File suffixes";
-  public static final String PHP_FILE_SUFFIXES_DESCRIPTION = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.";
+  public static final String PHP_FILE_SUFFIXES_DESCRIPTION = "Comma-separated list of suffixes for files to analyze."
+      + " To not filter, leave the list empty.";
 
   public static final String PHPCS_EXECUTE_MESSAGE = "Execute PHP_CodeSniffer";
-  public static final String PHPCS_EXECUTE_DESCRIPTION = "If true PhpCodeSniffer engine will be run and its violations will be present in Sonar dashboard.";
+  public static final String PHPCS_EXECUTE_DESCRIPTION = "If true PhpCodeSniffer engine will be run and its violations will be "
+      + "present in Sonar dashboard.";
 
   public static final String PDEPEND_EXECUTE_MESSAGE = "Execute Pdepend";
-  public static final String PDEPEND_EXECUTE_DESCRIPTION = "If true PDepend engine will be run and its violations will be present in Sonar dashboard.";
+  public static final String PDEPEND_EXECUTE_DESCRIPTION = "If true PDepend engine will be run and its violations will be "
+      + "present in Sonar dashboard.";
 
   public static final String PHPUNIT_EXECUTE_MESSAGE = "Execute PHPUnit";
-  public static final String PHPUNIT_EXECUTE_DESCRIPTION = "If true PHPUnit tests will be run and unit tests counts will be present in Sonar dashboard.";
+  public static final String PHPUNIT_EXECUTE_DESCRIPTION = "If true PHPUnit tests will be run and unit tests counts will be "
+      + "present in Sonar dashboard.";
 
   public static final String PHPUNIT_COVERAGE_EXECUTE_MESSAGE = "Execute PHPUnit coverage";
   public static final String PHPUNIT_COVERAGE_EXECUTE_DESCRIPTION = "If true code coverage measures will be computed.";
