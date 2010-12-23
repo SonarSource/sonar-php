@@ -14,6 +14,7 @@
   <version>0.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Sonar PHP Project</name>
+  <description>Enables analysis of PHP projects into Sonar.</description>
 
 
   <modules>
