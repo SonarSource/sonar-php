@@ -71,7 +71,7 @@
   <!-- some properties that you may want to change -->
   <properties>
     <sonar.language>php</sonar.language>
-    <sonar.dynamicAnalysis>true</sonar.dynamicAnalysis>
+    <!--<sonar.dynamicAnalysis>true</sonar.dynamicAnalysis>-->
     <sonar.phpPmd.shouldRun>true</sonar.phpPmd.shouldRun>
     <sonar.phpCodesniffer.shouldRun>true</sonar.phpCodesniffer.shouldRun>
     <sonar.phpDepend.shouldRun>true</sonar.phpDepend.shouldRun>
