@@ -94,22 +94,18 @@ class PhpUnderControl_Example_MathTest extends PHPUnit_Framework_TestCase
     
     /**
      * Test case with data provider.
-     *
-     * @dataProvider dataProviderOne
      */
-    public function testDataProviderOneWillFail( $x, $y )
+    public function testDataProviderOneWillFail( )
     {
-        $this->assertEquals( 1, $this->math->sub( $x, $y ) );
+        $this->assertEquals( 1, $this->math->sub( 2,1 ) );
     }
     
     /**
      * Test case with data provider.
-     *
-     * @dataProvider dataProviderTwo
      */
-    public function testDataProviderAllWillFail( $x, $y )
+    public function testDataProviderAllWillFail( )
     {
-        $this->assertEquals( 1, $this->math->sub( $x, $y ) );
+        $this->assertEquals( 1, $this->math->sub(1,2 ) );
     }
     
     /**
@@ -134,35 +130,5 @@ class PhpUnderControl_Example_MathTest extends PHPUnit_Framework_TestCase
     public function testMarkIncomplete()
     {
         $this->markTestIncomplete('Incomplete because...');
-    }
-    
-    /**
-     * Example data provider.
-     *
-     * @return array(array)
-     */
-    public static function dataProviderOne()
-    {
-        return array(
-            array( 2, 1 ),
-            array( 3, 2 ),
-            array( 7, 1 ),
-            array( 9, 8 ),
-        );
-    }
-    
-    /**
-     * Example data provider.
-     *
-     * @return array(array)
-     */
-    public static function dataProviderTwo()
-    {
-        return array(
-            array( 17, 42 ),
-            array( 13, 23 ),
-            array( 42, 17 ),
-            array( 23, 13 ),
-        );
     }
 }
