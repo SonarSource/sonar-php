@@ -78,7 +78,7 @@
     <sonar.phpUnit.coverage.shouldRun>true</sonar.phpUnit.coverage.shouldRun>
     <sonar.phpUnit.shouldRun>true</sonar.phpUnit.shouldRun>
     <sonar.phpcpd.shouldRun>true</sonar.phpcpd.shouldRun>
-    <sonar.phpUnit.mainTestClass>/source/test/AllTests.php</sonar.phpUnit.mainTestClass>
+    <sonar.phpUnit.mainTestClass>AllTests.php</sonar.phpUnit.mainTestClass>
     <!-- to enable mutliple source directories. The phase must patch with 
       the build-helper-maven-plugin exectution phase -->
     <sonar.phase>generate-sources</sonar.phase>
