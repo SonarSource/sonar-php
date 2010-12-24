@@ -27,7 +27,7 @@
             <configuration>
               <sources>
                 <source>source/src</source>
-                <!--<source>source/tests</source> -->
+                <source>source/tests</source>
               </sources>
             </configuration>
           </execution>
