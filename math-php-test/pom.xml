@@ -11,7 +11,7 @@
     <!-- You cannot omit this one, because maven will implicitely add src/main/java 
       to it -->
     <sourceDirectory>${basedir}/source/src</sourceDirectory>
-    <!--testSourceDirectory>${basedir}/source/tests</testSourceDirectory -->
+    <testSourceDirectory>${basedir}/source/tests</testSourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
