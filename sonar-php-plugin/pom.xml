@@ -42,7 +42,6 @@
     <sonar.version>2.3</sonar.version>
     <sonar.pluginClass>org.sonar.plugins.php.core.PhpPlugin</sonar.pluginClass>
     <sonar.runtimeVersion>2.3</sonar.runtimeVersion>
-    <sonar.pluginKey>php</sonar.pluginKey>
     <sonar.pluginName>PHP</sonar.pluginName>
   </properties>
 
