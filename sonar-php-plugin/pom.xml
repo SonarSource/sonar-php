@@ -15,6 +15,7 @@
   <packaging>sonar-plugin</packaging>
   <name>Sonar PHP Plugin</name>
   <description>Enables analysis of PHP projects into Sonar.</description>
+  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
 
   <inceptionYear>2010</inceptionYear>
   <organization>
@@ -22,7 +23,7 @@
   </organization>
   <licenses>
     <license>
-      <name>GNU Lesser General Public License (LGPL), v.3</name>
+      <name>GNU LGPL 3</name>
       <url>http://www.gnu.org/licenses/lgpl.txt</url>
       <distribution>repo</distribution>
     </license>
@@ -41,6 +42,8 @@
     <sonar.version>2.3</sonar.version>
     <sonar.pluginClass>org.sonar.plugins.php.core.PhpPlugin</sonar.pluginClass>
     <sonar.runtimeVersion>2.3</sonar.runtimeVersion>
+    <sonar.pluginKey>php</sonar.pluginKey>
+    <sonar.pluginName>PHP</sonar.pluginName>
   </properties>
 
   <dependencies>
