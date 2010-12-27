@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.codehaus.sonar-plugins</groupId>
     <artifactId>sonar-php</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>sonar-php-plugin</artifactId>
   <groupId>org.codehaus.sonar-plugins</groupId>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.3-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
   <name>Sonar PHP Plugin</name>
   <description>Enables analysis of PHP projects into Sonar.</description>

@@ -11,7 +11,7 @@
 
   <groupId>org.codehaus.sonar-plugins</groupId>
   <artifactId>sonar-php</artifactId>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Sonar PHP Project</name>
   <description>Enables analysis of PHP projects into Sonar.</description>
