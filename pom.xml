@@ -19,8 +19,6 @@
 
 
   <modules>
-    <module>phpmd-rulesets</module>
-    <module>phpcodesniffer-rulesets</module>
     <module>sonar-php-plugin</module>
   </modules>
   <inceptionYear>2010</inceptionYear>
@@ -56,4 +54,17 @@
     <system>Bamboo</system>
     <url>http://ci.codehaus.org/browse/SONAR-PHP</url>
   </ciManagement>
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <modules>
+        <module>phpmd-rulesets</module>
+        <module>phpcodesniffer-rulesets</module>
+        <module>sonar-php-plugin</module>
+      </modules>
+    </profile>
+  </profiles>
+
+
 </project>
+
