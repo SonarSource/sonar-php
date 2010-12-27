@@ -57,11 +57,12 @@
     <url>http://ci.codehaus.org/browse/SONAR-PHP</url>
   </ciManagement>
   <profiles>
-    <id>release</id>
-    <modules>
-      <module>sonar-php-plugin</module>
-    </modules>
-  </profile>
+    <profile>
+      <id>release</id>
+      <modules>
+        <module>sonar-php-plugin</module>
+      </modules>
+    </profile>
   </profiles>
 
 
