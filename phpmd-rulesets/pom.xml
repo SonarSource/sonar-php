@@ -5,14 +5,14 @@
   <parent>
     <groupId>org.codehaus.sonar-plugins</groupId>
     <artifactId>sonar-php</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
   </parent>
 
   
   <groupId>phpmd</groupId>
   <artifactId>phpmd-rulesets</artifactId>
   <name>PHPMD Rulesets</name>
-  <version>0.2.5</version>
+  <version>0.3</version>
   <packaging>jar</packaging>
   
   
