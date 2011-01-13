@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.sqli</groupId>
+  <groupId>fr.hashcode</groupId>
   <artifactId>mathematics</artifactId>
   <name>PHP Mathematics</name>
   <version>1.0</version>
   <!-- For the moment, specify pom as packaging for php projects -->
-  <packaging>php</packaging>
+  <packaging>pom</packaging>
   <build>
     <!-- You cannot omit this one, because maven will implicitely add src/main/java 
       to it -->
     <sourceDirectory>${basedir}/source/src</sourceDirectory>
-    <testSourceDirectory>${basedir}/source/tests</testSourceDirectory>
+    <!--testSourceDirectory>${basedir}/source/tests</testSourceDirectory -->
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -27,7 +27,7 @@
             <configuration>
               <sources>
                 <source>source/src</source>
-                 <!--<source>source/tests</source>-->
+                <!--<source>source/tests</source> -->
               </sources>
             </configuration>
           </execution>
@@ -71,17 +71,20 @@
   <!-- some properties that you may want to change -->
   <properties>
     <sonar.language>php</sonar.language>
-    <!--<sonar.dynamicAnalysis>true</sonar.dynamicAnalysis>-->
+    <sonar.dynamicAnalysis>true</sonar.dynamicAnalysis>
     <sonar.phpPmd.shouldRun>true</sonar.phpPmd.shouldRun>
     <sonar.phpCodesniffer.shouldRun>true</sonar.phpCodesniffer.shouldRun>
     <sonar.phpDepend.shouldRun>true</sonar.phpDepend.shouldRun>
     <sonar.phpUnit.coverage.shouldRun>true</sonar.phpUnit.coverage.shouldRun>
     <sonar.phpUnit.shouldRun>true</sonar.phpUnit.shouldRun>
+    <sonar.phpUnit.mainTestClass>/source/tests/AllTests2.php</sonar.phpUnit.mainTestClass>
     <sonar.phpcpd.shouldRun>true</sonar.phpcpd.shouldRun>
-    <sonar.phpUnit.mainTestClass>AllTests.php</sonar.phpUnit.mainTestClass>
+    <sonar.phpcpd.excludes>source/tests</sonar.phpcpd.excludes>
+
     <!-- to enable mutliple source directories. The phase must patch with 
       the build-helper-maven-plugin exectution phase -->
     <sonar.phase>generate-sources</sonar.phase>
+    
   </properties>
 
 
