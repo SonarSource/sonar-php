@@ -83,7 +83,8 @@ public class PhpCpdExecutor extends PhpPluginAbstractExecutor {
     }
 
     if (configuration.isStringPropertySet(PHPCPD_EXCLUDE_PACKAGE_KEY)) {
-      result.add(PHPCPD_EXCLUDE_OPTION + configuration.getExcludePackages());
+      result.add(PHPCPD_EXCLUDE_OPTION);
+      result.add(configuration.getExcludePackages());
     }
     List<File> sourceDirectories = configuration.getSourceDirectories();
     if (sourceDirectories != null && !sourceDirectories.isEmpty()) {

@@ -44,6 +44,10 @@ import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
  */
 public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
 
+  private static final String PHPUNIT_COVERAGE_CLOVER_OPTION = "--coverage-clover=";
+
+  private static final String PHPUNIT_LOG_JUNIT_OPTION = "--log-junit=";
+
   /** The configuration. */
   private final PhpUnitConfiguration configuration;
 
@@ -84,9 +88,9 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
     } else if (configuration.isStringPropertySet(PHPUNIT_ARGUMENT_LINE_KEY)) {
       result.add(configuration.getArgumentLine());
     }
-    result.add("--log-junit=" + configuration.getReportFile());
+    result.add(PHPUNIT_LOG_JUNIT_OPTION + configuration.getReportFile());
     if (configuration.shouldRunCoverage()) {
-      result.add("--coverage-clover=" + configuration.getCoverageReportFile());
+      result.add(PHPUNIT_COVERAGE_CLOVER_OPTION + configuration.getCoverageReportFile());
     }
     if (configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY)) {
       result.add(project.getName());

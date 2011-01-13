@@ -16,6 +16,10 @@
   <description>Enables analysis of PHP projects into Sonar.</description>
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
 
+  <ciManagement>
+  	<system>bamboo</system>
+  	<url>http://bamboo.ci.codehaus.org/browse/SONAR-PHP</url>
+  </ciManagement>
   <inceptionYear>2010</inceptionYear>
   <organization>
     <name>Akram Ben Aissi</name>
