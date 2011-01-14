@@ -77,7 +77,7 @@ public class PhpCpdExecutorTest {
     expected.add(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS.toString());
     expected.add("--log-pmd");
 
-    expected.add(new File(reportFile).getAbsolutePath());
+    expected.add(reportFile);
 
     expected.add(PHPCPD_EXCLUDE_OPTION);
     expected.add(excludedPackages);
