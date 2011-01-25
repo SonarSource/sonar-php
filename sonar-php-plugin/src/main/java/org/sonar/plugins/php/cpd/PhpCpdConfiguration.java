@@ -91,7 +91,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
-    return StringUtils.join(Php.INSTANCE.getFileSuffixes(), PHPCPD_SUFFIXE_SEPARATOR);
+    return StringUtils.join(Php.PHP.getFileSuffixes(), PHPCPD_SUFFIXE_SEPARATOR);
   }
 
   /**
@@ -192,10 +192,6 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
       return StringUtils.join(values, PHPCPD_DIRECTORY_SEPARATOR);
     }
     return null;
-  }
-
-  public boolean shouldExecuteOnProject(Project project) {
-    return isShouldRun() && Php.INSTANCE.equals(project.getLanguage());
   }
 
 }

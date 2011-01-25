@@ -20,16 +20,25 @@
 
 package org.sonar.plugins.php.codesniffer;
 
+import static java.lang.Boolean.parseBoolean;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
+import static org.sonar.plugins.php.core.Php.PHP;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
@@ -47,6 +56,8 @@ public class PhpCodesnifferSensor implements Sensor {
   private PhpCodeSnifferExecutor executor;
 
   private PhpCodeSnifferViolationsXmlParser parser;
+  /**   */
+  private RulesProfile profile;
 
   /**
    * Instantiates a new php codesniffer sensor.
@@ -54,10 +65,11 @@ public class PhpCodesnifferSensor implements Sensor {
    * @param rulesManager
    *          the rules manager
    */
-  public PhpCodesnifferSensor(PhpCodeSnifferExecutor executor, PhpCodeSnifferViolationsXmlParser parser) {
+  public PhpCodesnifferSensor(PhpCodeSnifferExecutor executor, PhpCodeSnifferViolationsXmlParser parser, RulesProfile profile) {
     super();
     this.executor = executor;
     this.parser = parser;
+    this.profile = profile;
   }
 
   /**
@@ -116,7 +128,11 @@ public class PhpCodesnifferSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return executor.getConfiguration().shouldExecuteOnProject(project);
+    Configuration configuration = project.getConfiguration();
+    Language language = project.getLanguage();
+    return (project.getPom() != null) && PHP.equals(language)
+        && configuration.getBoolean(PHPCS_SHOULD_RUN_KEY, parseBoolean(PHPCS_DEFAULT_SHOULD_RUN))
+        && (project.getReuseExistingRulesConfig() || !profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty());
   }
 
   /**

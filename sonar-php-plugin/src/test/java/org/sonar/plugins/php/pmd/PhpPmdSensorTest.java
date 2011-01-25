@@ -72,7 +72,7 @@ public class PhpPmdSensorTest {
   private PhpmdSensor getSensor(Project project) {
     RulesProfile profile = mock(RulesProfile.class);
     RuleFinder finder = mock(RuleFinder.class);
-    PhpmdSensor sensor = new PhpmdSensor(profile, finder, Php.INSTANCE);
+    PhpmdSensor sensor = new PhpmdSensor(profile, finder, Php.PHP);
     return sensor;
   }
 
@@ -81,7 +81,7 @@ public class PhpPmdSensorTest {
    */
   @Test
   public void shouldLaunchOnPhpProject() {
-    Project project = getMockProject(Php.INSTANCE);
+    Project project = getMockProject(Php.PHP);
     PhpmdSensor sensor = getSensor(project);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
@@ -107,7 +107,7 @@ public class PhpPmdSensorTest {
             PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn(PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH);
     when(configuration.getBoolean(PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, false)).thenReturn(true);
     when(project.getConfiguration()).thenReturn(configuration);
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
+    when(project.getLanguage()).thenReturn(Php.PHP);
     PhpmdSensor sensor = getSensor(project);
     SensorContext context = mock(SensorContext.class);
     sensor.analyse(project, context);

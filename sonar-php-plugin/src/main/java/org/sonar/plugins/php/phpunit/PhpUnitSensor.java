@@ -20,10 +20,19 @@
 
 package org.sonar.plugins.php.phpunit;
 
+import static java.lang.Boolean.parseBoolean;
+import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_PROPERTY_KEY;
+
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
@@ -92,7 +101,13 @@ public class PhpUnitSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return executor.getConfiguration().shouldExecuteOnProject();
+
+    Configuration configuration = project.getConfiguration();
+    Language language = project.getLanguage();
+    return (project.getPom() != null)
+        && PHP.equals(language)
+        && (configuration.getBoolean(PHPUNIT_SHOULD_RUN_PROPERTY_KEY, parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN)) || configuration
+            .getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE)));
   }
 
   /**

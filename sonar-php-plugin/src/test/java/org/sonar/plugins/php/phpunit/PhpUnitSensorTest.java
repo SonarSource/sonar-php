@@ -77,8 +77,8 @@ public class PhpUnitSensorTest {
     when(executor.getConfiguration()).thenReturn(configuration);
 
     assertEquals(false, sensor.shouldExecuteOnProject(project));
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
-    when(configuration.isShouldRun()).thenReturn(false);
+    when(project.getLanguage()).thenReturn(Php.PHP);
+    //when(configuration.isShouldRun()).thenReturn(false);
 
     when(executor.getConfiguration()).thenReturn(configuration);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
@@ -90,7 +90,7 @@ public class PhpUnitSensorTest {
   @Test
   public void shouldNotLaunchWhenConfiguredSoOnPhpProject() {
     init();
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
+    when(project.getLanguage()).thenReturn(Php.PHP);
     when(config.getBoolean(SHOULD_RUN_PROPERTY_KEY, Boolean.getBoolean(PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN))).thenReturn(false);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);

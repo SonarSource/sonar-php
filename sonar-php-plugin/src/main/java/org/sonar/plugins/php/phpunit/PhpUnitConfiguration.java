@@ -27,7 +27,6 @@ import java.util.List;
 import org.apache.commons.configuration.Configuration;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
-import org.sonar.plugins.php.core.Php;
 
 /**
  * This class handles the php unit configuration.
@@ -256,8 +255,8 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
    * @return true, if successful
    */
   public boolean shouldRunCoverage() {
-    return getProject().getConfiguration().getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY,
-        Boolean.parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE));
+    Configuration configuration = getProject().getConfiguration();
+    return configuration.getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, Boolean.parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE));
   }
 
   /**
@@ -266,10 +265,10 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
    * @return the coverage report file
    */
   public File getCoverageReportFile() {
+    Configuration configuration = getProject().getConfiguration();
     return new File(getProject().getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath())
         .append(File.separator)
-        .append(getProject().getConfiguration().getString(PHPUNIT_COVERAGE_REPORT_FILE_PROPERTY_KEY, PHPUNIT_DEFAULT_COVERAGE_REPORT_FILE))
-        .toString());
+        .append(configuration.getString(PHPUNIT_COVERAGE_REPORT_FILE_PROPERTY_KEY, PHPUNIT_DEFAULT_COVERAGE_REPORT_FILE)).toString());
   }
 
   /**
@@ -315,10 +314,6 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
    */
   public String getGroup() {
     return getProject().getConfiguration().getString(PHPUNIT_GROUP_PROPERTY_KEY, PHPUNIT_DEFAULT_GROUP);
-  }
-
-  public final boolean shouldExecuteOnProject() {
-    return isShouldRun() && Php.INSTANCE.equals(getProject().getLanguage());
   }
 
 }

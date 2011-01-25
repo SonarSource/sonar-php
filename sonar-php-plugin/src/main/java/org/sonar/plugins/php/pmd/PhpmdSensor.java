@@ -20,20 +20,27 @@
 
 package org.sonar.plugins.php.pmd;
 
+import static java.lang.Boolean.parseBoolean;
+import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository;
 import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpFile;
 
@@ -53,13 +60,9 @@ public class PhpmdSensor implements Sensor {
 
   /** The plugin configuration. */
   private PhpmdConfiguration config;
-  /**
-   * The associated language.
-   */
-  private Php php;
 
   /**
-   * Instantiates a new php pmd sensor.
+   * /** Instantiates a new php pmd sensor.
    * 
    * @param rulesManager
    *          the rules manager
@@ -67,7 +70,6 @@ public class PhpmdSensor implements Sensor {
   public PhpmdSensor(RulesProfile profile, RuleFinder ruleFinder, Php php) {
     super();
     this.ruleFinder = ruleFinder;
-    this.php = php;
     this.profile = profile;
   }
 
@@ -117,12 +119,11 @@ public class PhpmdSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    boolean sensorShouldRun = getConfiguration(project).isShouldRun();
-    boolean projectIsPhp = project.getLanguage().equals(php);
-    boolean profileContainsActiveRules = !profile.getActiveRulesByRepository(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY).isEmpty();
-    boolean reuseRules = project.getReuseExistingRulesConfig();
-    boolean pomNotNull = project.getPom() != null;
-    return sensorShouldRun && projectIsPhp && (profileContainsActiveRules || reuseRules) && pomNotNull;
+    Configuration configuration = project.getConfiguration();
+    Language language = project.getLanguage();
+    return (project.getPom() != null) && PHP.equals(language)
+        && configuration.getBoolean(PHPMD_SHOULD_RUN_KEY, parseBoolean(PHPMD_DEFAULT_SHOULD_RUN))
+        && (project.getReuseExistingRulesConfig() || !profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY).isEmpty());
   }
 
   /***

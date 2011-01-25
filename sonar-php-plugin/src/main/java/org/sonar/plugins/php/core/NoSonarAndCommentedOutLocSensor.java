@@ -100,7 +100,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return Php.INSTANCE.equals(project.getLanguage());
+    return Php.PHP.equals(project.getLanguage());
   }
 
   private static class PhpLanguageFootprint implements LanguageFootprint {

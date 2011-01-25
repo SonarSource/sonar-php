@@ -35,7 +35,6 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
-import org.sonar.plugins.php.core.Php;
 
 /**
  * The Class PhpCheckstyleConfiguration.
@@ -122,25 +121,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
     } finally {
       IOUtils.closeQuietly(writer);
     }
-  }
-
-  /**
-   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   * 
-   * @param project
-   *          the project
-   * 
-   * @return true, if should execute on project
-   * 
-   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
-   */
-  public boolean shouldExecuteOnProject(Project project) {
-    boolean sensorShouldRun = isShouldRun();
-    boolean projectIsPhp = project.getLanguage().equals(Php.INSTANCE);
-    boolean profileContainsActiveRules = !profile.getActiveRulesByRepository(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY).isEmpty();
-    boolean reuseRules = project.getReuseExistingRulesConfig();
-    boolean pomNotNull = project.getPom() != null;
-    return sensorShouldRun && projectIsPhp && (profileContainsActiveRules || reuseRules) && pomNotNull;
   }
 
   /**

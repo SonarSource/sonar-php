@@ -23,12 +23,19 @@
  */
 package org.sonar.plugins.php.cpd;
 
+import static java.lang.Boolean.parseBoolean;
+import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
+
 import java.io.File;
 
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 
 /**
@@ -40,6 +47,8 @@ import org.sonar.api.resources.Project;
 public class PhpCpdSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCpdSensor.class);
+  private static final String SONAR_PHP_CPD_SKIP_KEY = "sonar.php.cpd.skip";
+  private static final Boolean SONAR_DEFAULT_PHP_CPD_SKIP = false;
   /** The configuration. */
   private PhpCpdConfiguration configuration;
 
@@ -60,10 +69,22 @@ public class PhpCpdSensor implements Sensor {
   }
 
   /**
-   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
+   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
+   * 
+   * @param project
+   *          the project
+   * 
+   * @return true, if should execute on project
+   * 
+   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return configuration.shouldExecuteOnProject(project);
+    Configuration c = project.getConfiguration();
+    Language language = project.getLanguage();
+    Boolean phpcpdDefaultShouldRun = parseBoolean(PHPCPD_DEFAULT_SHOULD_RUN);
+    return ((project.getPom() != null) && PHP.equals(language))
+        && ( !c.getBoolean(SONAR_PHP_CPD_SKIP_KEY, SONAR_DEFAULT_PHP_CPD_SKIP) || c.getBoolean(PHPCPD_SHOULD_RUN_PROPERTY_KEY,
+            phpcpdDefaultShouldRun));
   }
 
   /**

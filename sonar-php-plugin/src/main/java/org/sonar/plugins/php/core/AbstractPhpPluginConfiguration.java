@@ -60,9 +60,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
     if (getShouldAnalyzeOnlyKey() != null) {
       analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), shouldAnalyzeOnlyDefault());
     }
-    if (getShouldRunKey() != null) {
-      shouldRun = configuration.getBoolean(getShouldRunKey(), shouldRunDefault());
-    }
+
   }
 
   /** The logger. */
@@ -83,9 +81,6 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /** The report file relative path. */
   private String reportFileRelativePath;
-
-  /** Indicates whether the plugin should run on this getProject(). */
-  private boolean shouldRun;
 
   /**
    * Gets the argument line.
@@ -259,15 +254,6 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
    */
   public boolean isOsWindows() {
     return SystemUtils.IS_OS_WINDOWS;
-  }
-
-  /**
-   * Checks if is should run.
-   * 
-   * @return true, if is should run
-   */
-  public boolean isShouldRun() {
-    return shouldRun;
   }
 
   /**

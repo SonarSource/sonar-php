@@ -20,12 +20,19 @@
 
 package org.sonar.plugins.php.phpdepend;
 
+import static java.lang.Boolean.parseBoolean;
+import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_SHOULD_RUN;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_SHOULD_RUN_PROPERTY_KEY;
+
 import java.io.File;
 
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
@@ -67,16 +74,20 @@ public class PhpDependSensor implements Sensor {
   }
 
   /**
-   * Determines whether or not this sensor will be executed on the given project
+   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
+   * 
+   * @param project
+   *          the project
+   * 
+   * @return true, if should execute on project
    * 
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
-   * @param project
-   *          The project to be analyzed
-   * @return boolean <code>true</code> if project's language is php a,d the project configuration says so, <code>false</code> in any other
-   *         case.
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return executor.getConfiguration().shouldExecuteOnProject();
+    Configuration configuration = project.getConfiguration();
+    Language language = project.getLanguage();
+    return (project.getPom() != null) && PHP.equals(language)
+        && configuration.getBoolean(PDEPEND_SHOULD_RUN_PROPERTY_KEY, parseBoolean(PDEPEND_DEFAULT_SHOULD_RUN));
   }
 
   /**

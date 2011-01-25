@@ -83,7 +83,7 @@ public class PhpCodeSnifferExecutor extends PhpPluginAbstractExecutor {
     if (configuration.isStringPropertySet(PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY)) {
       result.add(PhpCodeSnifferConfiguration.PHPCS_IGNORE_MODIFIER + configuration.getArgumentLine());
     }
-    result.add(PhpCodeSnifferConfiguration.PHPCS_EXTENSIONS_MODIFIER + StringUtils.join(Php.INSTANCE.getFileSuffixes(), ","));
+    result.add(PhpCodeSnifferConfiguration.PHPCS_EXTENSIONS_MODIFIER + StringUtils.join(Php.PHP.getFileSuffixes(), ","));
     // Do not use the StringUtils.join() method here, because all the path will be treated as a single one
     for (File file : configuration.getSourceDirectories()) {
       result.add(file.getAbsolutePath());

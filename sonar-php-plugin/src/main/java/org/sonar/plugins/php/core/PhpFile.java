@@ -239,7 +239,7 @@ public class PhpFile extends Resource<PhpPackage> {
    */
   @Override
   public Language getLanguage() {
-    return Php.INSTANCE;
+    return Php.PHP;
   }
 
   /**

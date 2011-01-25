@@ -61,7 +61,7 @@ public class PhpTest {
     // new Php();
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(
         StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES + ",php6,php7", ","));
-    Php.INSTANCE.setConfiguration(configuration);
+    Php.PHP.setConfiguration(configuration);
     assertTrue(Php.hasValidSuffixes("goodExtension.php6"));
     assertTrue(Php.hasValidSuffixes("goodExtension.php7"));
   }

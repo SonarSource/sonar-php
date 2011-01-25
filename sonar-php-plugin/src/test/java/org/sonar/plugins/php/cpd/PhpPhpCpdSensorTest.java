@@ -22,11 +22,13 @@ package org.sonar.plugins.php.cpd;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
@@ -36,14 +38,35 @@ import org.sonar.plugins.php.core.PhpPluginExecutionException;
 public class PhpPhpCpdSensorTest {
 
   @Test
-  public void generalSkip() {
-    PropertiesConfiguration conf = new PropertiesConfiguration();
+  public void testShouldExecuteOnProject() {
+    testShouldRun(true);
+
+  }
+
+  @Test
+  public void testShouldNotExecuteOnProject() {
+    testShouldRun(false);
+  }
+
+  private void testShouldRun(boolean shouldRun) {
+    Project project = createProject();
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
     conf.setProperty("sonar.php.cpd.skip", "true");
+    conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, shouldRun);
+
+    PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
+    PhpCpdSensor sensor = getSensor(project, executor);
+    assertEquals(shouldRun, sensor.shouldExecuteOnProject(project));
+  }
+
+  @Test
+  public void generalSkip() {
 
     PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
-    when(configuration.isShouldRun()).thenReturn(false);
-
-    Project project = createProject().setConfiguration(conf);
+    Project project = createProject();
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty("sonar.php.cpd.skip", "true");
+    conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, "false");
 
     PhpCpdSensor sensor = new PhpCpdSensor(configuration, null, null);
     assertFalse(sensor.shouldExecuteOnProject(project));
@@ -51,8 +74,9 @@ public class PhpPhpCpdSensorTest {
 
   @Test
   public void testAnalyze() {
-    PropertiesConfiguration conf = new PropertiesConfiguration();
-    Project project = createProject().setConfiguration(conf);
+
+    Project project = createProject();
+    project.setPom(new MavenProject());
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
 
     PhpCpdSensor sensor = getSensor(project, executor);
@@ -83,17 +107,22 @@ public class PhpPhpCpdSensorTest {
    */
   private PhpCpdSensor getSensor(Project project, PhpCpdExecutor executor) {
     PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
-    when(configuration.isShouldRun()).thenReturn(true);
-    when(configuration.shouldExecuteOnProject(project)).thenReturn(true);
+    // when(configuration.isShouldRun()).thenReturn(true);
 
     PhpCpdResultParser parser = mock(PhpCpdResultParser.class);
 
     PhpCpdSensor sensor = new PhpCpdSensor(configuration, executor, parser);
+    // when(configuration.shouldExecuteOnProject(project)).thenReturn(true);
     return sensor;
   }
 
   private Project createProject() {
-    return new Project("php_project").setLanguageKey(Php.KEY);
+    PropertiesConfiguration conf = new PropertiesConfiguration();
+    Project project = new Project("php_project");
+    project.setConfiguration(conf);
+    project.setPom(new MavenProject());
+    project.setLanguage(Php.PHP);
+    return project;
   }
 
 }

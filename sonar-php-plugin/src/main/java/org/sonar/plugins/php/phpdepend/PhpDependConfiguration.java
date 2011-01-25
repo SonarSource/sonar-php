@@ -92,7 +92,7 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
-    return "--" + PDEPEND_SUFFIXES_OPT + "=" + StringUtils.join(Php.INSTANCE.getFileSuffixes(), ",");
+    return "--" + PDEPEND_SUFFIXES_OPT + "=" + StringUtils.join(Php.PHP.getFileSuffixes(), ",");
   }
 
   @Override
@@ -172,10 +172,6 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
 
   public boolean isWithoutAnnotation() {
     return getProject().getConfiguration().getBoolean(PDEPEND_WITHOUT_ANNOTATION_KEY, Boolean.valueOf(PDEPEND_DEFAULT_WITHOUT_ANNOTATION));
-  }
-
-  public final boolean shouldExecuteOnProject() {
-    return isShouldRun() && Php.INSTANCE.equals(getProject().getLanguage());
   }
 
 }

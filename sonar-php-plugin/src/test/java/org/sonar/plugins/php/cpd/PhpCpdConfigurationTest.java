@@ -34,7 +34,6 @@ import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBE
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -44,36 +43,11 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.core.Php;
 
 /**
  * The Class PhpCpdConfigurationTest.
  */
 public class PhpCpdConfigurationTest {
-
-  @Test
-  public void testShouldExecuteOnProject() {
-    testShouldRun(true);
-
-  }
-
-  @Test
-  public void testShouldNotExecuteOnProject() {
-    testShouldRun(false);
-  }
-
-  private void testShouldRun(boolean shouldRun) {
-    Project project = mock(Project.class);
-    Configuration configuration = getMockConfiguration(project);
-    when(configuration.getBoolean(PHPCPD_SHOULD_RUN_PROPERTY_KEY, shouldRun)).thenReturn(true);
-
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
-    PhpCpdConfiguration config = new PhpCpdConfiguration(project);
-
-    when(configuration.getBoolean(config.getShouldRunKey())).thenReturn(shouldRun);
-    assertEquals(shouldRun, config.shouldExecuteOnProject(project));
-  }
 
   /**
    * Should get valid suffixe option.

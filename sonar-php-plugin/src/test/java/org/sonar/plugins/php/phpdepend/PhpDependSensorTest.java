@@ -23,10 +23,12 @@ package org.sonar.plugins.php.phpdepend;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
 
 import java.io.File;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
@@ -56,23 +58,24 @@ public class PhpDependSensorTest {
     when(config.getProject()).thenReturn(project);
     when(executor.getConfiguration()).thenReturn(config);
 
-    when(configuration.getString(PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
+    when(configuration.getString(PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(
+        "pdepend.xml");
     when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
 
-    when(config.isShouldRun()).thenReturn(true);
-    //new Php();
+    // when(config.isShouldRun()).thenReturn(true);
+    // new Php();
 
     assertEquals(false, sensor.shouldExecuteOnProject(project));
 
-    when(config.isShouldRun()).thenReturn(false);
+    // when(config.isShouldRun()).thenReturn(false);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
   public void shouldLaunchOnPhpProjectIfConfiguredSo() {
     Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
+    when(project.getLanguage()).thenReturn(Php.PHP);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getBuildDir()).thenReturn(new File(DEFAULT_REPORT_FILE_NAME));
@@ -83,23 +86,23 @@ public class PhpDependSensorTest {
     PhpDependSensor sensor = new PhpDependSensor(executor, parser);
     PhpDependConfiguration config = mock(PhpDependConfiguration.class);
     when(executor.getConfiguration()).thenReturn(config);
-    //new Php();
     when(config.getProject()).thenReturn(project);
 
-    String reportFileNamePropertyKey = PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
+    String reportFileNamePropertyKey = PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
     when(configuration.getString(reportFileNamePropertyKey, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
     when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
-    when(config.shouldExecuteOnProject()).thenReturn(true);
+    // when(config.shouldExecuteOnProject()).thenReturn(true);
     when(configuration.getBoolean(SHOULD_RUN_PROPERTY_KEY, Boolean.parseBoolean(DEFAULT_SHOULD_RUN))).thenReturn(Boolean.TRUE);
     when(project.getConfiguration()).thenReturn(configuration);
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
+    when(project.getLanguage()).thenReturn(Php.PHP);
+    when(project.getPom()).thenReturn(new MavenProject());
     assertEquals(true, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
   public void shouldNotLaunchOnPhpProjectIfConfiguredSo() {
     Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
+    when(project.getLanguage()).thenReturn(Php.PHP);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getBuildDir()).thenReturn(new File(DEFAULT_REPORT_FILE_PATH));
@@ -111,7 +114,7 @@ public class PhpDependSensorTest {
     PhpDependConfiguration config = mock(PhpDependConfiguration.class);
     when(executor.getConfiguration()).thenReturn(config);
 
-    when(configuration.getString(PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
+    when(configuration.getString(PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
     when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
     when(configuration.getBoolean(SHOULD_RUN_PROPERTY_KEY, Boolean.FALSE)).thenReturn(Boolean.FALSE);
     when(project.getConfiguration()).thenReturn(configuration);

@@ -85,7 +85,7 @@ public class PhpFileTest {
   public void fromAbsolutePathShouldRecognizeAndInitializeSourceFile() {
     init();
     PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
-    assertEquals(Php.INSTANCE, phpFile.getLanguage());
+    assertEquals(Php.PHP, phpFile.getLanguage());
     assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
     assertEquals(Resource.QUALIFIER_FILE, phpFile.getScope());
@@ -99,7 +99,7 @@ public class PhpFileTest {
   public void fromAbsolutePathShouldRecognizeAndInitializeTestFile() {
     init();
     PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
-    assertEquals(Php.INSTANCE, phpFile.getLanguage());
+    assertEquals(Php.PHP, phpFile.getLanguage());
     assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
     assertEquals(Resource.QUALIFIER_FILE, phpFile.getScope());

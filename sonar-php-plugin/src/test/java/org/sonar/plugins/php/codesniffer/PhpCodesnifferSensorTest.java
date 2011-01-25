@@ -68,7 +68,7 @@ public class PhpCodesnifferSensorTest {
         PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_PATH);
     when(config.getBoolean(PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY, false)).thenReturn(true);
     when(project.getConfiguration()).thenReturn(config);
-    when(project.getLanguage()).thenReturn(Php.INSTANCE);
+    when(project.getLanguage()).thenReturn(Php.PHP);
 
     PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
     PhpCodeSnifferConfiguration configuration = mock(PhpCodeSnifferConfiguration.class);
@@ -76,7 +76,7 @@ public class PhpCodesnifferSensorTest {
     when(executor.getConfiguration()).thenReturn(configuration);
     when(configuration.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
 
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(executor, parser);
+    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(executor, parser, null);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 }

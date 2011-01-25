@@ -68,7 +68,7 @@ public class IsPhpDirectory extends BaseMatcher<Resource<PhpPackage>> {
   public boolean matches(Object o) {
     @SuppressWarnings("rawtypes")
     Resource resource = (Resource) o;
-    boolean result = ResourceUtils.isDirectory(resource) && Php.INSTANCE.equals(resource.getLanguage());
+    boolean result = ResourceUtils.isDirectory(resource) && Php.PHP.equals(resource.getLanguage());
     if (result && key != null) {
       result = key.equals(resource.getKey());
     }

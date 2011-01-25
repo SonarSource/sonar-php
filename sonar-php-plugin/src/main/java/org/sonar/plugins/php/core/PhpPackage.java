@@ -90,7 +90,7 @@ public final class PhpPackage extends Resource {
 
   @Override
   public Language getLanguage() {
-    return Php.INSTANCE;
+    return Php.PHP;
   }
 
   @Override

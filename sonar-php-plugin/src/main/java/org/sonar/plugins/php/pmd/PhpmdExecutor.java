@@ -72,7 +72,7 @@ public class PhpmdExecutor extends PhpPluginAbstractExecutor {
       result.add(config.getIgnoreList());
     }
     result.add(PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION);
-    result.add(StringUtils.join(Php.INSTANCE.getFileSuffixes(), ","));
+    result.add(StringUtils.join(Php.PHP.getFileSuffixes(), ","));
     if (config.isStringPropertySet(PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY)) {
       result.add(config.getArgumentLine());
     }

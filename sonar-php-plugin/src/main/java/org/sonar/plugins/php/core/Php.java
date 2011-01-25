@@ -51,7 +51,7 @@ public final class Php extends AbstractLanguage {
     "__DIR__", "__FILE__", "__LINE__", "$this" };
 
   /** An php instance. */
-  public final static Php INSTANCE = new Php();
+  public final static Php PHP = new Php();
 
   /** The php language key. */
   public static final String KEY = "php";
@@ -73,7 +73,7 @@ public final class Php extends AbstractLanguage {
    */
   public static boolean hasValidSuffixes(String fileName) {
     String pathLowerCase = StringUtils.lowerCase(fileName);
-    for (String suffix : INSTANCE.getFileSuffixes()) {
+    for (String suffix : PHP.getFileSuffixes()) {
       if (pathLowerCase.endsWith("." + StringUtils.lowerCase(suffix))) {
         return true;
       }

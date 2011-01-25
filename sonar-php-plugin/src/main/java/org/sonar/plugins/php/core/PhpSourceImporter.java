@@ -50,7 +50,7 @@ public class PhpSourceImporter extends AbstractSourceImporter {
    * Instantiates a new php source importer.
    */
   public PhpSourceImporter() {
-    super(Php.INSTANCE);
+    super(Php.PHP);
   }
 
   /**
@@ -103,7 +103,7 @@ public class PhpSourceImporter extends AbstractSourceImporter {
     // Importing source files
     ProjectFileSystem fileSystem = project.getFileSystem();
     List<File> sourceDirs = fileSystem.getSourceDirs();
-    Language[] language = new Language[] { Php.INSTANCE };
+    Language[] language = new Language[] { Php.PHP };
     List<File> sourceFiles = fileSystem.getSourceFiles(language);
     parseDirs(context, sourceFiles, sourceDirs, false, fileSystem.getSourceCharset());
 
