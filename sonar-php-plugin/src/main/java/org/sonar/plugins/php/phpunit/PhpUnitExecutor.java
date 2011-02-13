@@ -20,6 +20,7 @@
 
 package org.sonar.plugins.php.phpunit;
 
+import static org.sonar.plugins.php.core.Php.PHP;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_OPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_PROPERTY_KEY;
@@ -66,6 +67,7 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
     super();
     this.configuration = config;
     this.project = project;
+    PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
 
   /**

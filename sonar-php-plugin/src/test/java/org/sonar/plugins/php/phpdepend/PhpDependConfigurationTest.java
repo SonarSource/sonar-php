@@ -20,10 +20,9 @@
 
 package org.sonar.plugins.php.phpdepend;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -138,8 +137,8 @@ public class PhpDependConfigurationTest {
     PhpDependConfiguration config = new PhpDependConfiguration(project);
 
     String suffixesOption = config.getSuffixesCommandOption();
-    assertThat(suffixesOption, notNullValue());
-    assertThat(suffixesOption, containsString(","));
+    assertThat(suffixesOption).isNotNull();
+    assertThat(suffixesOption).contains(",");
   }
 
   /**

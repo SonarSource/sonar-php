@@ -20,6 +20,8 @@
 
 package org.sonar.plugins.php.pmd;
 
+import static org.sonar.plugins.php.core.Php.PHP;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class PhpmdExecutor extends PhpPluginAbstractExecutor {
    */
   public PhpmdExecutor(PhpmdConfiguration configuration) {
     this.config = configuration;
+    PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
 
   /**

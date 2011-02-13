@@ -20,13 +20,16 @@
 
 package org.sonar.plugins.php.codesniffer;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
+import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.PhpPlugin;
 
 /**
@@ -39,14 +42,34 @@ public class PhpCodesnifferExecutorTest {
    * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
    */
   @Test
-  public void testGetCommandLine() {
-
+  public void testGetCommandLine1() {
     Configuration configuration = mock(Configuration.class);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
+    Project p = mock(Project.class);
+    when(p.getConfiguration()).thenReturn(configuration);
+    when(c.getProject()).thenReturn(p);
     when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
     PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c);
     executor.getCommandLine();
   }
 
+  /**
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   */
+  @Test
+  public void testGetCommandLine2() {
+    Configuration configuration = mock(Configuration.class);
+    String[] suffixes = new String[] { "php", "php2" };
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(suffixes);
+    PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
+    Project p = mock(Project.class);
+    when(p.getConfiguration()).thenReturn(configuration);
+    when(c.getProject()).thenReturn(p);
+    when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
+    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c);
+    List<String> commandLine = executor.getCommandLine();
+    String expected = "--extensions=php,php2";
+    assertThat(commandLine).contains(expected);
+  }
 }

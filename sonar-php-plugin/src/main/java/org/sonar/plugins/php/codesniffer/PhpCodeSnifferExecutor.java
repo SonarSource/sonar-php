@@ -20,6 +20,8 @@
 
 package org.sonar.plugins.php.codesniffer;
 
+import static org.sonar.plugins.php.core.Php.PHP;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ public class PhpCodeSnifferExecutor extends PhpPluginAbstractExecutor {
    */
   public PhpCodeSnifferExecutor(PhpCodeSnifferConfiguration configuration) {
     this.configuration = configuration;
+    PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
 
   /**

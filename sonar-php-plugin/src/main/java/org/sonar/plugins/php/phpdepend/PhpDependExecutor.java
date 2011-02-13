@@ -20,6 +20,8 @@
 
 package org.sonar.plugins.php.phpdepend;
 
+import static org.sonar.plugins.php.core.Php.PHP;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,7 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
    */
   public PhpDependExecutor(PhpDependConfiguration configuration) {
     this.configuration = configuration;
+    PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
 
   @Override
@@ -85,7 +88,5 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
   public PhpDependConfiguration getConfiguration() {
     return configuration;
   }
-  
-  
-  
+
 }

@@ -91,7 +91,10 @@ public final class Php extends AbstractLanguage {
   public String[] getFileSuffixes() {
     String[] suffixes = StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES, ",");
     if (configuration != null) {
-      suffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
+      String[] configuredSuffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
+      if (configuredSuffixes != null) {
+        suffixes = configuredSuffixes;
+      }
     }
     return suffixes;
   }

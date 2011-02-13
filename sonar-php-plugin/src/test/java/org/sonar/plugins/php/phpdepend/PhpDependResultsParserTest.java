@@ -41,6 +41,7 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpFile;
 import org.sonar.plugins.php.core.PhpPlugin;
 
@@ -68,6 +69,7 @@ public class PhpDependResultsParserTest {
       File xmlReport = new File(getClass().getResource(pdependResultFile).toURI());
       context = mock(SensorContext.class);
       project = mock(Project.class);
+
       ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
       when(project.getFileSystem()).thenReturn(fileSystem);
       when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Money\\Sources\\main")));
@@ -79,7 +81,7 @@ public class PhpDependResultsParserTest {
       Configuration configuration = mock(Configuration.class);
       // new Php();
       when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
-
+      Php.PHP.setConfiguration(configuration);
       parser.parse(xmlReport);
     } catch (Exception e) {
       throw new RuntimeException(e);

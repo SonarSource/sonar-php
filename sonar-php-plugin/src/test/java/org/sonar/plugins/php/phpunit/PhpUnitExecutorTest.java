@@ -27,6 +27,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.List;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
@@ -40,6 +41,12 @@ public class PhpUnitExecutorTest {
     MavenProject mProject = mock(MavenProject.class);
     when(project.getPom()).thenReturn(mProject);
     when(mProject.getBasedir()).thenReturn(new File("toto"));
+
+    Configuration configuration = mock(Configuration.class);
+    Project p = mock(Project.class);
+    when(p.getConfiguration()).thenReturn(configuration);
+    when(config.getProject()).thenReturn(p);
+
     PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
     when(config.shouldRunCoverage()).thenReturn(false);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));

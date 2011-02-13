@@ -36,6 +36,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
+import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.PhpPlugin;
 
 /**
@@ -64,6 +65,10 @@ public class PhpCpdExecutorTest {
     when(c.isOsWindows()).thenReturn(false);
     String phpcpdScriptName = "phpcpd";
     when(c.getOsDependentToolScriptName()).thenReturn(phpcpdScriptName);
+
+    Project p = mock(Project.class);
+    when(p.getConfiguration()).thenReturn(configuration);
+    when(c.getProject()).thenReturn(p);
 
     PhpCpdExecutor executor = new PhpCpdExecutor(c);
     List<String> commandLine = executor.getCommandLine();

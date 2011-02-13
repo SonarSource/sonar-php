@@ -62,9 +62,15 @@ public class PhpUnitResultParserTest {
    */
   private void init() {
     try {
+
+      Configuration configuration = mock(Configuration.class);
       config = mock(PhpUnitConfiguration.class);
       project = mock(Project.class);
       context = mock(SensorContext.class);
+
+      when(project.getConfiguration()).thenReturn(configuration);
+      when(config.getProject()).thenReturn(project);
+
       MavenProject mavenProject = mock(MavenProject.class);
       ProjectFileSystem fs = mock(ProjectFileSystem.class);
       when(project.getPom()).thenReturn(mavenProject);
@@ -75,7 +81,6 @@ public class PhpUnitResultParserTest {
       File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml").getFile());
       when(config.getReportFile()).thenReturn(reportFile);
 
-      Configuration configuration = mock(Configuration.class);
       when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
       PhpUnitResultParser parser = new PhpUnitResultParser(project, context);

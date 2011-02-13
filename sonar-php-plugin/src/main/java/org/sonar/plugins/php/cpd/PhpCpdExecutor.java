@@ -20,6 +20,7 @@
 
 package org.sonar.plugins.php.cpd;
 
+import static org.sonar.plugins.php.core.Php.PHP;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_COMMAND_LINE;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DIRECTORY_SEPARATOR;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_EXCLUDE_OPTION;
@@ -51,6 +52,7 @@ public class PhpCpdExecutor extends PhpPluginAbstractExecutor {
    */
   public PhpCpdExecutor(PhpCpdConfiguration configuration) {
     this.configuration = configuration;
+    PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
 
   /**

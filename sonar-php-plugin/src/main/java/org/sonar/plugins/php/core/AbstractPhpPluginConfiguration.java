@@ -150,7 +150,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   public void createWorkingDirectory() {
     File target = getProject().getFileSystem().getSonarWorkingDirectory();
     File logs = new File(target, getReportFileRelativePath());
-    logs.mkdir();
+    logs.mkdirs();
   }
 
   /**

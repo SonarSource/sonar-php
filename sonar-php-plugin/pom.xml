@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -17,8 +18,8 @@
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
 
   <ciManagement>
-  	<system>bamboo</system>
-  	<url>http://bamboo.ci.codehaus.org/browse/SONAR-PHP</url>
+    <system>bamboo</system>
+    <url>http://bamboo.ci.codehaus.org/browse/SONAR-PHP</url>
   </ciManagement>
   <inceptionYear>2010</inceptionYear>
   <organization>
@@ -101,6 +102,12 @@
       <version>${sonar.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-assert</artifactId>
+      <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
@@ -141,27 +148,27 @@
                 <phase>package</phase>
                 <configuration>
                   <tasks>
-                    <property refid="maven.compile.classpath" name="mvn.classpath" />
+                    <property refid="maven.compile.classpath" name="mvn.classpath"/>
                     <!-- <echo message="Using Maven Classpath: ${mvn.classpath}" /> -->
-                    <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" />
+                    <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask"/>
                     <yguard>
                       <!-- Input file and output file is the same. -->
-                      <inoutpair in="${project.build.directory}/${project.build.finalName}.jar" out="${project.build.directory}/${project.build.finalName}.jar" />
+                      <inoutpair in="${project.build.directory}/${project.build.finalName}.jar" out="${project.build.directory}/${project.build.finalName}.jar"/>
                       <!-- Obfuscate classes plus string references. -->
                       <rename logfile="${project.build.directory}/yguard.log.xml" replaceClassNameStrings="true">
                         <!-- Keep the only class to be used for easy running and its public method main(). -->
                         <keep>
                           <class classes="public" methods="public">
                             <patternset>
-                              <include name="**.*Profile" />
-                              <include name="**.PhpPlugin" />
+                              <include name="**.*Profile"/>
+                              <include name="**.PhpPlugin"/>
                             </patternset>
                           </class>
                         </keep>
                       </rename>
                       <!-- There are some external libraries used - Maven knows details. -->
                       <externalclasses>
-                        <pathelement path="${mvn.classpath}" />
+                        <pathelement path="${mvn.classpath}"/>
                       </externalclasses>
                     </yguard>
                   </tasks>
