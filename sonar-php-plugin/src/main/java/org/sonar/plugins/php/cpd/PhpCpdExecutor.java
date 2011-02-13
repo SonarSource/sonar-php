@@ -40,10 +40,6 @@ import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
  */
 public class PhpCpdExecutor extends PhpPluginAbstractExecutor {
 
-  /**
-   * 
-   */
-
   /** The configuration. */
   private PhpCpdConfiguration configuration;
 

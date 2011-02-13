@@ -75,6 +75,8 @@ public class PhpUnitSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     try {
       PhpUnitConfiguration configuration = executor.getConfiguration();
+      configuration.createWorkingDirectory();
+
       if ( !configuration.isAnalyseOnly()) {
         executor.execute();
       }

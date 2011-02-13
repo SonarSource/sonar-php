@@ -85,8 +85,10 @@ public class PhpmdSensor implements Sensor {
    */
   public void analyse(Project project, SensorContext context) {
     // If configured so, execute the tool
-    if ( !getConfiguration(project).isAnalyseOnly()) {
+    PhpmdConfiguration configuration = getConfiguration(project);
+    if ( !configuration.isAnalyseOnly()) {
       PhpmdExecutor executor = new PhpmdExecutor(config);
+      configuration.createWorkingDirectory();
       executor.execute();
     }
     File report = config.getReportFile();

@@ -84,6 +84,7 @@ public class PhpCodesnifferSensor implements Sensor {
    */
   public void analyse(Project project, SensorContext context) {
     PhpCodeSnifferConfiguration configuration = executor.getConfiguration();
+    configuration.createWorkingDirectory();
 
     if ( !configuration.isAnalyseOnly()) {
       executor.execute();

@@ -20,9 +20,13 @@
 
 package org.sonar.plugins.php.core;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,15 +44,16 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
   /**
    * The Class AsyncPipe.
    */
-  static class AsyncPipe extends Thread {
+  private static class AsyncPipe extends Thread {
 
-    private static final int BUFFER_SIZE = 1024;
+    /** The logger. */
+    private static final Logger LOG = LoggerFactory.getLogger(AsyncPipe.class);
 
     /** The input stream. */
-    private InputStream istrm;
+    private BufferedReader reader;
 
     /** The output stream. */
-    private OutputStream ostrm;
+    private BufferedWriter writer;
 
     /**
      * Instantiates a new async pipe.
@@ -58,9 +63,9 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
      * @param output
      *          an OutputStream
      */
-    public AsyncPipe(InputStream input, OutputStream output) {
-      istrm = input;
-      ostrm = output;
+    public AsyncPipe(InputStream input, ByteArrayOutputStream output) {
+      this.reader = new BufferedReader(new InputStreamReader(input));
+      this.writer = new BufferedWriter(new OutputStreamWriter(output));
     }
 
     /**
@@ -69,14 +74,14 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
     @Override
     public void run() {
       try {
-        final byte[] buffer = new byte[BUFFER_SIZE];
         // Reads the process input stream and writes it to the output stream
-        int length = istrm.read(buffer);
-        while (length != -1) {
-          synchronized (ostrm) {
-            ostrm.write(buffer, 0, length);
+        String line = reader.readLine();
+        while (line != null) {
+          synchronized (writer) {
+            writer.write(line);
+            LOG.debug(line);
           }
-          length = istrm.read(buffer);
+          line = reader.readLine();
         }
       } catch (IOException e) {
         LOG.error("Can't execute the Async Pipe", e);
@@ -86,6 +91,7 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
 
   /** The logger */
   private static final Logger LOG = LoggerFactory.getLogger(PhpPluginAbstractExecutor.class);
+  private static final int DEFAUT_BUFFER_INITIAL_SIZE = 1024;
 
   /**
    * Executes the external tool.
@@ -99,8 +105,15 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
       // Starts the process
       Process p = builder.start();
       // And handles it's normal and error stream in separated threads.
-      new AsyncPipe(p.getInputStream(), System.out).start();
-      new AsyncPipe(p.getErrorStream(), System.err).start();
+
+      ByteArrayOutputStream output = new ByteArrayOutputStream(DEFAUT_BUFFER_INITIAL_SIZE);
+      AsyncPipe outputStreamThread = new AsyncPipe(p.getInputStream(), output);
+      outputStreamThread.start();
+
+      ByteArrayOutputStream error = new ByteArrayOutputStream(DEFAUT_BUFFER_INITIAL_SIZE);
+      AsyncPipe errorStreamThread = new AsyncPipe(p.getErrorStream(), error);
+      errorStreamThread.start();
+
       LOG.info(getExecutedTool() + " ended with returned code '{}'.", p.waitFor());
     } catch (IOException e) {
       LOG.error("Can't execute the external tool", e);

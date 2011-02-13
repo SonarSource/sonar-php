@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.apache.commons.configuration.Configuration;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
@@ -103,6 +104,17 @@ public class PhpFileTest {
     assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
     assertEquals(Resource.QUALIFIER_FILE, phpFile.getScope());
+    assertEquals(Resource.QUALIFIER_UNIT_TEST_CLASS, phpFile.getQualifier());
+  }
+
+  @Test
+  @Ignore("Not implemented yet: Need more time to implement a better fix")
+  public void fromAbsolutePathShouldRecognizeAndInitializeTestFileContainedBelowSourceDirs() {
+    init();
+    ProjectFileSystem fileSystem = project.getFileSystem();
+    when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src")));
+
+    PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
     assertEquals(Resource.QUALIFIER_UNIT_TEST_CLASS, phpFile.getQualifier());
   }
 
