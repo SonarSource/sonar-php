@@ -65,6 +65,25 @@ public final class Php extends AbstractLanguage {
   }
 
   /**
+   * @param configuration
+   *          the configuration to set
+   */
+  public void setConfiguration(Configuration configuration) {
+    this.configuration = configuration;
+  }
+
+  public String[] getFileSuffixes() {
+    String[] suffixes = StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES, ",");
+    if (configuration != null) {
+      String[] configuredSuffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
+      if (configuredSuffixes != null && configuredSuffixes.length > 0) {
+        suffixes = configuredSuffixes;
+      }
+    }
+    return suffixes;
+  }
+
+  /**
    * Allows to know if the given file name has a valid suffix.
    * 
    * @param fileName
@@ -79,32 +98,6 @@ public final class Php extends AbstractLanguage {
       }
     }
     return false;
-  }
-
-  /**
-   * Gets the file suffixes.
-   * 
-   * @return the file suffixes
-   * @see org.sonar.api.resources.Language#getFileSuffixes()
-   */
-
-  public String[] getFileSuffixes() {
-    String[] suffixes = StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES, ",");
-    if (configuration != null) {
-      String[] configuredSuffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
-      if (configuredSuffixes != null) {
-        suffixes = configuredSuffixes;
-      }
-    }
-    return suffixes;
-  }
-
-  /**
-   * @param configuration
-   *          the configuration to set
-   */
-  public void setConfiguration(Configuration configuration) {
-    this.configuration = configuration;
   }
 
 }

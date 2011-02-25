@@ -64,7 +64,6 @@ public class PhpDependSensor implements Sensor {
     try {
       PhpDependConfiguration configuration = executor.getConfiguration();
       configuration.createWorkingDirectory();
-
       if ( !configuration.isAnalyseOnly()) {
         executor.execute();
       }
