@@ -199,18 +199,6 @@ public class PhpPlugin implements Plugin {
     // Php Source Code Colorizer
     extensions.add(PhpSourceCodeColorizer.class);
 
-    // Code sniffer
-    extensions.add(NoSonarAndCommentedOutLocSensor.class);
-    extensions.add(PhpCodeSnifferRuleRepository.class);
-    extensions.add(PhpCodeSnifferExecutor.class);
-    extensions.add(PhpCodeSnifferViolationsXmlParser.class);
-    extensions.add(PhpCodesnifferSensor.class);
-    extensions.add(PhpCodeSnifferProfile.class);
-    extensions.add(PhpCodeSnifferConfiguration.class);
-    extensions.add(PhpCodeSnifferPriorityMapper.class);
-    extensions.add(PhpCodeSnifferProfileExporter.class);
-    extensions.add(PhpCodeSnifferProfileImporter.class);
-
     // PhpDepend
     extensions.add(PhpDependExecutor.class);
     extensions.add(PhpDependResultsParser.class);
@@ -237,6 +225,18 @@ public class PhpPlugin implements Plugin {
     extensions.add(PhpCpdExecutor.class);
     extensions.add(PhpCpdResultParser.class);
     extensions.add(PhpCpdSensor.class);
+
+    // Code sniffer
+    extensions.add(NoSonarAndCommentedOutLocSensor.class);
+    extensions.add(PhpCodeSnifferRuleRepository.class);
+    extensions.add(PhpCodeSnifferExecutor.class);
+    extensions.add(PhpCodeSnifferViolationsXmlParser.class);
+    extensions.add(PhpCodesnifferSensor.class);
+    extensions.add(PhpCodeSnifferProfile.class);
+    extensions.add(PhpCodeSnifferConfiguration.class);
+    extensions.add(PhpCodeSnifferPriorityMapper.class);
+    extensions.add(PhpCodeSnifferProfileExporter.class);
+    extensions.add(PhpCodeSnifferProfileImporter.class);
 
     return extensions;
   }
