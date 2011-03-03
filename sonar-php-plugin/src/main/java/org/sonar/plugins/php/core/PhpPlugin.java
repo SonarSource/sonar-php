@@ -50,6 +50,10 @@ import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_SHOUL
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_ANALYZE_ONLY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_MESSAGE;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_MESSAGE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_PROPERTY_KEY;
@@ -151,6 +155,8 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
   // PhpCpd configuration
   @Property(key = PHPCPD_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPCPD_DEFAULT_SHOULD_RUN, name = PHPCPD_EXECUTE_MESSAGE, project = true,
       global = true, description = PHPCPD_EXECUTE_DESCRIPTION),
+  @Property(key = PHPCPD_ANALYZE_ONLY_KEY, defaultValue = PHPCPD_DEFAULT_ANALYZE_ONLY, name = PHPCPD_ANALYZE_ONLY_MESSAGE, project = true,
+      global = true, description = PHPCPD_ANALYZE_ONLY_DESCRIPTION),
   @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES,
       name = PHPCPD_MIN_LINES_MESSAGE, project = true, global = true, description = PHPCPD_MIN_LINES_DESCRIPTION),
   @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS,
@@ -174,7 +180,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the description.
-   * 
+   *
    * @return the description
    * @see org.sonar.api.Plugin#getDescription()
    */
@@ -185,7 +191,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the extensions.
-   * 
+   *
    * @return the extensions
    * @see org.sonar.api.Plugin#getExtensions()
    */
@@ -243,7 +249,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the key.
-   * 
+   *
    * @return the key
    * @see org.sonar.api.Plugin#getKey()
    */
@@ -253,7 +259,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    * @see org.sonar.api.Plugin#getName()
    */
@@ -263,7 +269,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * To string.
-   * 
+   *
    * @return the string
    * @see java.lang.Object#toString()
    */

@@ -19,7 +19,7 @@
  */
 
 /**
- * 
+ *
  */
 package org.sonar.plugins.php.cpd;
 
@@ -37,12 +37,13 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 /**
  * PhpCpd sensor that rely on "phpcpd" tool to perform copy paste detection.
- * 
+ *
  * @author akram
- * 
+ *
  */
 public class PhpCpdSensor implements Sensor {
 
@@ -70,12 +71,12 @@ public class PhpCpdSensor implements Sensor {
 
   /**
    * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   * 
+   *
    * @param project
    *          the project
-   * 
+   *
    * @return true, if should execute on project
-   * 
+   *
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
@@ -91,9 +92,18 @@ public class PhpCpdSensor implements Sensor {
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
   public void analyse(Project project, SensorContext context) {
-    executor.execute();
-    File reportFile = configuration.getReportFile();
-    LOG.debug("Starting analysis of copy/paste with report file" + reportFile);
-    parser.parse(reportFile);
+
+    try {
+
+      if ( !configuration.isAnalyseOnly()) {
+        executor.execute();
+      }
+
+      File reportFile = configuration.getReportFile();
+      LOG.debug("Starting analysis of copy/paste with report file" + reportFile);
+      parser.parse(reportFile);
+    } catch (PhpPluginExecutionException e) {
+      LOG.error("Error occured while launching phpcpd", e);
+    }
   }
 }

@@ -65,11 +65,15 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   public static final String PHPCPD_SHOULD_RUN_PROPERTY_KEY = "sonar.phpcpd.shouldRun";
   public static final String PHPCPD_DEFAULT_SHOULD_RUN = "true";
 
-  public static final String PHPCPD_ANALYZE_ONLY_KEY = "sonar.phpcpd.analyseOnly";
+  public static final String PHPCPD_ANALYZE_ONLY_KEY = "sonar.phpcpd.analyzeOnly";
+  public static final String PHPCPD_DEFAULT_ANALYZE_ONLY = "false";
+  public static final String PHPCPD_ANALYZE_ONLY_MESSAGE = "Only analyze existing phpcpd files";
+  public static final String PHPCPD_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse "
+      + "the result file. If set to false launch tool and parse result.";
 
   /**
    * Instantiates a new php cpd configuration.
-   * 
+   *
    * @param project
    *          the project
    */
@@ -87,7 +91,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the suffixes command option.
-   * 
+   *
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
@@ -131,7 +135,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
    */
   @Override
   protected boolean shouldAnalyzeOnlyDefault() {
-    return false;
+    return Boolean.parseBoolean(PHPCPD_DEFAULT_ANALYZE_ONLY);
   }
 
   /**

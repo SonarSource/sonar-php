@@ -136,6 +136,10 @@ public class PhpCpdConfigurationTest {
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\" + customReportFileName);
   }
 
+  public void shouldAnalyzeOnlyDefaultReturnsBooleanFalse() {
+
+  }
+
   /**
    * @param project
    * @return

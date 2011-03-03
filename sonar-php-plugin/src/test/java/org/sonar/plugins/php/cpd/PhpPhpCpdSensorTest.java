@@ -23,8 +23,7 @@ package org.sonar.plugins.php.cpd;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -87,8 +86,52 @@ public class PhpPhpCpdSensorTest {
 
   }
 
-  @Test(expected = PhpPluginExecutionException.class)
-  public void testAnalyzeStopWhenExecuteFail() {
+  @Test
+  public void AnalyzeExecutesTheToolWhenNotInAnalyzeOnlyMode() {
+
+    Project project = createProject();
+
+    PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
+    when(configuration.isAnalyseOnly()).thenReturn(false);
+
+    PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
+
+    PhpCpdSensor sensor = new PhpCpdSensor(
+      configuration,
+      executor,
+      mock(PhpCpdResultParser.class)
+    );
+
+    SensorContext context = mock(SensorContext.class);
+    sensor.analyse(project, context);
+
+    verify(executor).execute();
+  }
+
+  @Test
+  public void AnalyzeDoesntExecuteTheToolWhenInAnalyzeOnlyMode() {
+
+    Project project = createProject();
+
+    PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
+    when(configuration.isAnalyseOnly()).thenReturn(true);
+
+    PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
+
+    PhpCpdSensor sensor = new PhpCpdSensor(
+      configuration,
+      executor,
+      mock(PhpCpdResultParser.class)
+    );
+
+    SensorContext context = mock(SensorContext.class);
+    sensor.analyse(project, context);
+
+    verify(executor, never()).execute();
+  }
+
+  @Test
+  public void testAnalyzeExitsGracefullyOnError() {
     PropertiesConfiguration conf = new PropertiesConfiguration();
     Project project = createProject().setConfiguration(conf);
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
@@ -97,8 +140,8 @@ public class PhpPhpCpdSensorTest {
     assertTrue(sensor.shouldExecuteOnProject(project));
     SensorContext context = mock(SensorContext.class);
     doThrow(new PhpPluginExecutionException()).when(executor).execute();
-    sensor.analyse(project, context);
 
+    sensor.analyse(project, context);
   }
 
   /**
@@ -107,12 +150,11 @@ public class PhpPhpCpdSensorTest {
    */
   private PhpCpdSensor getSensor(Project project, PhpCpdExecutor executor) {
     PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
-    // when(configuration.isShouldRun()).thenReturn(true);
 
     PhpCpdResultParser parser = mock(PhpCpdResultParser.class);
 
     PhpCpdSensor sensor = new PhpCpdSensor(configuration, executor, parser);
-    // when(configuration.shouldExecuteOnProject(project)).thenReturn(true);
+
     return sensor;
   }
 
