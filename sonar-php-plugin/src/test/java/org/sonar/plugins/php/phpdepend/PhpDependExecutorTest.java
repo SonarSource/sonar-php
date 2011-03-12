@@ -142,11 +142,10 @@ public class PhpDependExecutorTest {
     assertThat(commandLine).isEqualTo(expected);
   }
 
-  private String getFile(String path) {
-    File f = new File("working");
-    String parent = File.pathSeparator.equals("/") ? f.getAbsoluteFile().getParent() : null;
-    return new File(parent, path).toString();
-  }
+	private String getFile(String path) {
+		File f = new File("working");
+		return new File(f.getAbsoluteFile().getParent(), path).toString();
+	}
 
   private Project getMockProject() {
     Project project = mock(Project.class);
