@@ -115,11 +115,12 @@ public class PhpFile extends Resource<PhpPackage> {
       File file = new File(path);
       ProjectFileSystem fileSystem = project.getFileSystem();
       List<File> sourceFiles = fileSystem.getSourceFiles(PHP);
+      List<File> testFiles = fileSystem.getTestFiles(PHP);
       if (sourceFiles.contains(file)) {
         phpFile = fromIOFile(file, fileSystem.getSourceDirs(), false);
-        if (phpFile == null) {
-          phpFile = fromIOFile(file, fileSystem.getTestDirs(), true);
-        }
+      }
+      if (phpFile == null && testFiles.contains(file)) {
+        phpFile = fromIOFile(file, fileSystem.getTestDirs(), true);
       }
     }
     return phpFile;

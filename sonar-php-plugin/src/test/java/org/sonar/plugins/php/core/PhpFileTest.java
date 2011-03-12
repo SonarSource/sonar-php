@@ -20,6 +20,7 @@
 
 package org.sonar.plugins.php.core;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,7 +29,6 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.apache.commons.configuration.Configuration;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
@@ -48,7 +48,7 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathInWrongPathShouldReturnNull() {
     init();
-    assertEquals(null, PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\lib\\animal\\Monkey.php", project));
+    assertEquals(null, PhpFile.getInstance(project).fromAbsolutePath("C:/projets/PHP/Monkey/src/lib/animal/Monkey.php", project));
   }
 
   /**
@@ -57,11 +57,11 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathShouldInitializePackageAndClassName() {
     init();
-    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:/projets/PHP/Monkey/src/main/animal/Monkey.php", project);
     assertEquals("animal.Monkey.php", phpFile.getKey());
-    phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\insult\\Monkey.php", project);
+    phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:/projets/PHP/Monkey/src/main/insult/Monkey.php", project);
     assertEquals("insult.Monkey.php", phpFile.getKey());
-    phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\Monkey.php", project);
+    phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:/projets/PHP/Monkey/src/main/Monkey.php", project);
     assertEquals("Monkey.php", phpFile.getKey());
   }
 
@@ -71,7 +71,7 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathShouldRecognizeAndInitializeSourceFile() {
     init();
-    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:/projets/PHP/Monkey/src/main/animal/Monkey.php", project);
     assertEquals(Php.PHP, phpFile.getLanguage());
     assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
@@ -85,7 +85,7 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathShouldRecognizeAndInitializeTestFile() {
     init();
-    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:/projets/PHP/Monkey/src/test/animal/Monkey.php", project);
     assertEquals(Php.PHP, phpFile.getLanguage());
     assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
@@ -94,14 +94,14 @@ public class PhpFileTest {
   }
 
   @Test
-  @Ignore("Not implemented yet: Need more time to implement a better fix")
   public void fromAbsolutePathShouldRecognizeAndInitializeTestFileContainedBelowSourceDirs() {
     init();
     ProjectFileSystem fileSystem = project.getFileSystem();
-    when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src")));
+    when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/src")));
 
-    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
-    assertEquals(Resource.QUALIFIER_UNIT_TEST_CLASS, phpFile.getQualifier());
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:/projets/PHP/Monkey/src/test/animal/Monkey.php", project);
+    assertThat(phpFile).isNotNull();
+    assertThat(phpFile.getQualifier()).isEqualTo(Resource.QUALIFIER_UNIT_TEST_CLASS);
   }
 
   /**
@@ -118,7 +118,7 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathWithWrongExtensionShouldReturnNull() {
     init();
-    assertEquals(null, PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.java", project));
+    assertEquals(null, PhpFile.getInstance(project).fromAbsolutePath("C:/projets/PHP/Monkey/src/main/animal/Monkey.java", project));
   }
 
   /**
@@ -132,12 +132,14 @@ public class PhpFileTest {
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
     when(project.getFileSystem()).thenReturn(fileSystem);
-    when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src\\main")));
-    when(fileSystem.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src\\test")));
-    File f1 = new File("C:\\projets\\PHP\\Monkey\\src\\main\\insult\\Monkey.php");
-    File f2 = new File("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php");
-    File f3 = new File("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php");
-    File f4 = new File("C:\\projets\\PHP\\Monkey\\src\\main\\Monkey.php");
-    when(fileSystem.getSourceFiles(Php.PHP)).thenReturn(Arrays.asList(f1, f2, f3, f4));
+    when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/src/main")));
+    when(fileSystem.getTestDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/src/test")));
+    File f1 = new File("C:/projets/PHP/Monkey/src/main/insult/Monkey.php");
+    File f2 = new File("C:/projets/PHP/Monkey/src/main/animal/Monkey.php");
+    File f3 = new File("C:/projets/PHP/Monkey/src/main/Monkey.php");
+    File f4 = new File("C:/projets/PHP/Monkey/src/test/animal/Monkey.php");
+    File f5 = new File("C:/projets/PHP/Monkey/src/test/animal/Monkey.php");
+    when(fileSystem.getSourceFiles(Php.PHP)).thenReturn(Arrays.asList(f1, f2, f3));
+    when(fileSystem.getTestFiles(Php.PHP)).thenReturn(Arrays.asList(f4, f5));
   }
 }

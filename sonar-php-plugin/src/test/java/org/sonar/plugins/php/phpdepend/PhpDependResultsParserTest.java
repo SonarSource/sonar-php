@@ -82,6 +82,7 @@ public class PhpDependResultsParserTest {
       File f5 = new File("C:/projets/PHP/Money/Sources/main/Money.inc");
 
       when(fileSystem.getSourceFiles(PHP)).thenReturn(Arrays.asList(f1, f2, f3, f4, f5));
+      when(fileSystem.getTestFiles(PHP)).thenReturn(Arrays.asList(f1));
 
       Set<Metric> metrics = new HashSet<Metric>();
       metrics.add(metric);
