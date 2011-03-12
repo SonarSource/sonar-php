@@ -142,10 +142,13 @@ public class PhpDependExecutorTest {
     assertThat(commandLine).isEqualTo(expected);
   }
 
-	private String getFile(String path) {
-		File f = new File("working");
-		return new File(f.getAbsoluteFile().getParent(), path).toString();
-	}
+  private String getFile(String path) {
+    File f = new File("working");
+    if (System.getProperty("os.name").toLowerCase().contains("win")) {
+      return new File(path).toString();
+    }
+    return new File(f.getAbsoluteFile().getParent(), path).toString();
+  }
 
   private Project getMockProject() {
     Project project = mock(Project.class);
