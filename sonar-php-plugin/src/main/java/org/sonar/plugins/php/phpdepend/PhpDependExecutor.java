@@ -20,11 +20,20 @@
 
 package org.sonar.plugins.php.phpdepend;
 
+import static org.sonar.api.CoreProperties.PROJECT_EXCLUSIONS_PROPERTY;
 import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_OPTION;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_OPTION;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_OPTION;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_OPTION;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
 
@@ -57,19 +66,28 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
     result.add(configuration.getOsDependentToolScriptName());
     result.add(configuration.getReportFileCommandOption());
     result.add(configuration.getSuffixesCommandOption());
-    if (configuration.isStringPropertySet(PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY)) {
-      result.add(PhpDependConfiguration.PDEPEND_EXCLUDE_OPTION + configuration.getExcludePackages());
+    if (configuration.isStringPropertySet(PDEPEND_EXCLUDE_PACKAGE_KEY)) {
+      result.add(PDEPEND_EXCLUDE_OPTION + configuration.getExcludePackages());
     }
-    if (configuration.isStringPropertySet(PhpDependConfiguration.PDEPEND_IGNORE_KEY)) {
-      result.add(PhpDependConfiguration.PDEPEND_IGNORE_OPTION + configuration.getIgnoreDirs());
+    boolean sonarExclusionsIsSet = configuration.isStringPropertySet(PROJECT_EXCLUSIONS_PROPERTY);
+    boolean ignoreKeyIsSet = configuration.isStringPropertySet(PDEPEND_IGNORE_KEY);
+    if (ignoreKeyIsSet || sonarExclusionsIsSet) {
+      String ignore = configuration.getIgnoreDirs();
+      Configuration projectConfiguration = configuration.getProject().getConfiguration();
+      String[] sonarExclusions = projectConfiguration.getStringArray(PROJECT_EXCLUSIONS_PROPERTY);
+      if (sonarExclusionsIsSet && sonarExclusions != null) {
+        ignore += StringUtils.isBlank(ignore) ? "" : ",";
+        ignore += StringUtils.join(sonarExclusions, ",");
+      }
+      result.add(PDEPEND_IGNORE_OPTION + ignore);
     }
     if (configuration.isBadDocumentation()) {
-      result.add(PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_OPTION);
+      result.add(PDEPEND_BAD_DOCUMENTATION_OPTION);
     }
     if (configuration.isWithoutAnnotation()) {
-      result.add(PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_OPTION);
+      result.add(PDEPEND_WITHOUT_ANNOTATION_OPTION);
     }
-    if (configuration.isStringPropertySet(PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY)) {
+    if (configuration.isStringPropertySet(PDEPEND_ARGUMENT_LINE_KEY)) {
       result.add(configuration.getArgumentLine());
     }
     // SONARPLUGINS-547 PhpDependExecutor: wrong dirs params

@@ -130,8 +130,9 @@ public class PhpCpdResultParser implements BatchExtension {
    */
   private void processClassMeasure(SensorContext context, Map<Resource, ClassDuplicationData> duplicationsData, FileNode original,
       FileNode copied, DuplicationNode duplication, Project project) {
-    Resource file = PhpFile.fromAbsolutePath(copied.getPath(), project.getFileSystem().getSourceDirs(), false);
-    Resource targetPhpClass = PhpFile.fromAbsolutePath(original.getPath(), project.getFileSystem().getSourceDirs(), false);
+    PhpFile instance = PhpFile.getInstance(project);
+    Resource file = instance.fromAbsolutePath(copied.getPath(), project.getFileSystem().getSourceDirs(), false);
+    Resource targetPhpClass = instance.fromAbsolutePath(original.getPath(), project.getFileSystem().getSourceDirs(), false);
     if (file != null) {
       ClassDuplicationData data = duplicationsData.get(file);
       if (data == null) {

@@ -45,12 +45,14 @@ public class PhpSourceImporter extends AbstractSourceImporter {
 
   /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(PhpSourceImporter.class);
+  private Project project;
 
   /**
    * Instantiates a new php source importer.
    */
-  public PhpSourceImporter() {
+  public PhpSourceImporter(Project project) {
     super(Php.PHP);
+    this.project = project;
   }
 
   /**
@@ -86,7 +88,7 @@ public class PhpSourceImporter extends AbstractSourceImporter {
    */
   @Override
   protected PhpFile createResource(File file, List<File> sourceDirs, boolean unitTest) {
-    return (file != null && !file.getName().contains("$")) ? PhpFile.fromIOFile(file, sourceDirs, unitTest) : null;
+    return (file != null && !file.getName().contains("$")) ? PhpFile.getInstance(project).fromIOFile(file, sourceDirs, unitTest) : null;
   }
 
   /**

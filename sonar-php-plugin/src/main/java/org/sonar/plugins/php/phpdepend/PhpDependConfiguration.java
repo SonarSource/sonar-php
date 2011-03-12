@@ -163,7 +163,7 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
     if (values != null && values.length > 0) {
       return StringUtils.join(values, ',');
     }
-    return null;
+    return StringUtils.EMPTY;
   }
 
   public boolean isBadDocumentation() {

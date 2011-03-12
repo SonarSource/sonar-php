@@ -33,7 +33,7 @@ import org.sonar.plugins.php.checkstyle.xml.Module;
 /**
  * The Class ModuleTest.
  */
-public class ModuleTest {
+public class CodesnifferModuleTest {
 
   /**
    * Should build x stream from xml.

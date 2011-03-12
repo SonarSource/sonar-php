@@ -20,8 +20,12 @@
 
 package org.sonar.plugins.php.core;
 
+import static org.sonar.plugins.php.core.Php.PHP;
+
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -32,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.resources.DefaultProjectFileSystem;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.WildcardPattern;
 
@@ -45,11 +50,40 @@ public class PhpFile extends Resource<PhpPackage> {
   /** The Constant SEPARATOR. */
   private static final String SEPARATOR = "/";
 
+  private static Map<Project, PhpFile> instances = new HashMap<Project, PhpFile>();
+
   private boolean unitTest;
   private String filename;
   private String packageKey;
   private String longName;
   private PhpPackage parent = null;
+
+  private Project project;
+
+  public PhpFile(Project project) {
+    this.project = project;
+  }
+
+  /**
+   * The default Constructor.
+   * 
+   * @param key
+   *          String representing the resource key.
+   * @throws IllegalArgumentException
+   *           If the given key is null or empty.
+   */
+  public PhpFile(String key) {
+    this(key, false);
+  }
+
+  public static PhpFile getInstance(Project project) {
+    PhpFile instance = instances.get(project);
+    if (instance == null) {
+      instance = new PhpFile(project);
+      instances.put(project, instance);
+    }
+    return instance;
+  }
 
   /**
    * From absolute path.
@@ -62,7 +96,7 @@ public class PhpFile extends Resource<PhpPackage> {
    *          the unit test
    * @return the php file
    */
-  public static PhpFile fromAbsolutePath(String path, List<File> sourceDirs, boolean unitTest) {
+  public PhpFile fromAbsolutePath(String path, List<File> sourceDirs, boolean unitTest) {
     return path == null ? null : fromIOFile(new File(path), sourceDirs, unitTest);
   }
 
@@ -75,10 +109,18 @@ public class PhpFile extends Resource<PhpPackage> {
    *          the current project
    * @return the php file
    */
-  public static PhpFile fromAbsolutePath(String path, Project project) {
-    PhpFile phpFile = path == null ? null : fromIOFile(new File(path), project.getFileSystem().getSourceDirs(), false);
-    if (phpFile == null) {
-      phpFile = path == null ? null : fromIOFile(new File(path), project.getFileSystem().getTestDirs(), true);
+  public PhpFile fromAbsolutePath(String path, Project project) {
+    PhpFile phpFile = null;
+    if (path != null) {
+      File file = new File(path);
+      ProjectFileSystem fileSystem = project.getFileSystem();
+      List<File> sourceFiles = fileSystem.getSourceFiles(PHP);
+      if (sourceFiles.contains(file)) {
+        phpFile = fromIOFile(file, fileSystem.getSourceDirs(), false);
+        if (phpFile == null) {
+          phpFile = fromIOFile(file, fileSystem.getTestDirs(), true);
+        }
+      }
     }
     return phpFile;
   }
@@ -90,16 +132,17 @@ public class PhpFile extends Resource<PhpPackage> {
    * @param file
    *          the file to load
    * @param isUnitTest
-   *          if <code>true</code> the given resource will be marked as a unit test, otherwise it will be marked has a class
+   *          if <code>true</code> the given resource will be marked as a unit test, otherwise it will be marked as a class
    * @param dirs
    *          the dirs
    * @return the php file
    */
-  public static PhpFile fromIOFile(File file, List<File> dirs, boolean isUnitTest) {
+  public PhpFile fromIOFile(File file, List<File> dirs, boolean isUnitTest) {
     // If the file has a valid suffix
     if (file == null || !Php.hasValidSuffixes(file.getName())) {
       return null;
     }
+
     String relativePath = DefaultProjectFileSystem.getRelativePath(file, dirs);
     // and can be found in the given directories
     if (relativePath != null) {
@@ -116,18 +159,6 @@ public class PhpFile extends Resource<PhpPackage> {
       return new PhpFile(packageName, className, extension, isUnitTest);
     }
     return null;
-  }
-
-  /**
-   * The default Constructor.
-   * 
-   * @param key
-   *          String representing the resource key.
-   * @throws IllegalArgumentException
-   *           If the given key is null or empty.
-   */
-  public PhpFile(String key) {
-    this(key, false);
   }
 
   /**
@@ -239,7 +270,7 @@ public class PhpFile extends Resource<PhpPackage> {
    */
   @Override
   public Language getLanguage() {
-    return Php.PHP;
+    return PHP;
   }
 
   /**

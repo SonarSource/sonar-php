@@ -65,7 +65,7 @@ public class PhpDependConfigurationTest {
     Configuration c = project.getConfiguration();
     String[] excludeDirs = new String[] {};
     when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(excludeDirs);
-    assertEquals(null, config.getIgnoreDirs());
+    assertThat(config.getIgnoreDirs()).isEqualTo("");
   }
 
   @Test
@@ -103,7 +103,7 @@ public class PhpDependConfigurationTest {
     PhpDependConfiguration config = getWindowsConfiguration(project);
     Configuration c = project.getConfiguration();
     when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(null);
-    assertEquals(null, config.getIgnoreDirs());
+    assertThat(config.getIgnoreDirs()).isEqualTo("");
   }
 
   /**

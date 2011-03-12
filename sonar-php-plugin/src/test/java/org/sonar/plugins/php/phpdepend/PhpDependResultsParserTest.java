@@ -26,6 +26,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.core.Php.PHP;
 
 import java.io.File;
 import java.util.Arrays;
@@ -33,7 +34,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.configuration.Configuration;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -74,6 +74,15 @@ public class PhpDependResultsParserTest {
       when(project.getFileSystem()).thenReturn(fileSystem);
       when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Money\\Sources\\main")));
       when(fileSystem.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Money\\Sources\\test")));
+
+      File f1 = new File("C:\\projets\\PHP\\Money\\Sources\\test\\MoneyTest.php");
+      File f2 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\Money.php");
+      File f3 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\MoneyBag.php");
+      File f4 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\Common\\IMoney.php");
+      File f5 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\Money.inc");
+
+      when(fileSystem.getSourceFiles(PHP)).thenReturn(Arrays.asList(f1, f2, f3, f4, f5));
+
       Set<Metric> metrics = new HashSet<Metric>();
       metrics.add(metric);
       PhpDependResultsParser parser = new PhpDependResultsParser(project, context);
@@ -86,6 +95,17 @@ public class PhpDependResultsParserTest {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Should generate functions count measure.
+   */
+  @Test
+  public void shouldNotGenerateMeasureForFileNotInSourceDirectory() {
+    metric = CoreMetrics.LINES;
+    init(PDEPEND_RESULT);
+    PhpFile file = new PhpFile("d:\\projets\\PHP\\Money\\Sources\\main\\Common\\IMoney.php");
+    verify(context, never()).saveMeasure(eq(file), eq(metric), anyDouble());
   }
 
   /**
@@ -102,11 +122,14 @@ public class PhpDependResultsParserTest {
    * Should throw an exception when file isn't valid
    */
   @Test(expected = SonarException.class)
-  @Ignore("Determine if exception should be thrown or not")
   public void shouldThrowAnExceptionWhenReportIsInvalid() {
-    project = mock(Project.class);
-    PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
-    parser.parse(new File(getClass().getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-invalid.xml").getFile()));
+    try {
+      project = mock(Project.class);
+      PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
+      parser.parse(new File(getClass().getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-invalid.xml").getFile()));
+    } catch (SonarException e) {
+      throw new SonarException();
+    }
   }
 
   /**
@@ -191,9 +214,7 @@ public class PhpDependResultsParserTest {
   public void shouldNotGenerateDirOrProjectMeasures() {
     metric = CoreMetrics.LINES;
     init(PDEPEND_RESULT);
-
     verify(context, never()).saveMeasure(eq(metric), anyDouble());
-
     verify(context, never()).saveMeasure(eq(new org.sonar.api.resources.Directory("Sources/main")), eq(metric), anyDouble());
     verify(context, never()).saveMeasure(eq(new org.sonar.api.resources.Directory("Sources/main/Common")), eq(metric), anyDouble());
   }
@@ -205,7 +226,6 @@ public class PhpDependResultsParserTest {
     verify(context).saveMeasure(new PhpFile("MoneyTest.php", true), metric, 24.0);
     verify(context).saveMeasure(new PhpFile("Money.php"), metric, 21.0);
     verify(context).saveMeasure(new PhpFile("Money.inc"), metric, 39.0);
-
   }
 
 }

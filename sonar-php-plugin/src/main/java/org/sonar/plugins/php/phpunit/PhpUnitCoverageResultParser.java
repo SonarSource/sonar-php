@@ -141,7 +141,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    *          the file
    */
   private void cumulateResults(FileNode file) {
-    PhpFile phpFile = PhpFile.fromAbsolutePath(file.getName(), project);
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath(file.getName(), project);
     if (phpFile == null) {
       logger.info(file.getName() + " can't be found amoung the project source directories");
       return;

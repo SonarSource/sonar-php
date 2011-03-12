@@ -83,5 +83,5 @@
       <method name="negate" cloc="0" loc="1" locExecutable="0" ncloc="1" />
       <method name="subtract" cloc="0" loc="1" locExecutable="0" ncloc="1" />
     </class>
-  </file>
+  </file>  
 </metrics>

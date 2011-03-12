@@ -119,7 +119,7 @@ public class PhpUnitResultParser implements BatchExtension {
    * @return PhpFile pointed by the report
    */
   private PhpFile getUnitTestResource(PhpUnitTestReport report, Project project) {
-    return PhpFile.fromAbsolutePath(report.getFile(), project.getFileSystem().getTestDirs(), true);
+    return PhpFile.getInstance(project).fromAbsolutePath(report.getFile(), project.getFileSystem().getTestDirs(), true);
   }
 
   /**

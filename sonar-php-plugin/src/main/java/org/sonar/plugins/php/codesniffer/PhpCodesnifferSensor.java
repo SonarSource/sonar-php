@@ -102,7 +102,7 @@ public class PhpCodesnifferSensor implements Sensor {
       String ruleKey = violation.getRuleKey();
       Rule rule = ruleFinder.findByKey(repositoryKey, ruleKey);
       if (rule != null) {
-        PhpFile resource = (PhpFile) context.getResource(PhpFile.fromAbsolutePath(violation.getFileName(), project));
+        PhpFile resource = (PhpFile) context.getResource(PhpFile.getInstance(project).fromAbsolutePath(violation.getFileName(), project));
         if (context.getResource(resource) != null) {
           Violation v = Violation.create(rule, resource).setLineId(violation.getLine()).setMessage(violation.getLongMessage());
           contextViolations.add(v);

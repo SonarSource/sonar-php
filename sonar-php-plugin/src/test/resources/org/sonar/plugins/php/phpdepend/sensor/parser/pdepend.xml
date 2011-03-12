@@ -84,4 +84,16 @@
       <method name="subtract" cloc="0" loc="1" locExecutable="0" ncloc="1" />
     </class>
   </file>
+   <file name="d:\projets\PHP\Money\Sources\main\Common\OutOfProject.php" classes="1" cloc="56" functions="0" loc="74" locExecutable="15" ncloc="18">
+    <class name="IMoney" cloc="0" cr="0.405" loc="11" locExecutable="10" ncloc="11" nom="8" rcr="0.15">
+      <method name="add" cloc="0" loc="1" locExecutable="0" ncloc="1" />
+      <method name="addMoney" cloc="0" loc="1" locExecutable="0" ncloc="1" />
+      <method name="addMoneyBag" cloc="0" loc="1" locExecutable="0" ncloc="1" />
+      <method name="appendTo" cloc="0" loc="1" locExecutable="0" ncloc="1" />
+      <method name="isZero" cloc="0" loc="1" locExecutable="0" ncloc="1" />
+      <method name="multiply" cloc="0" loc="1" locExecutable="0" ncloc="1" />
+      <method name="negate" cloc="0" loc="1" locExecutable="0" ncloc="1" />
+      <method name="subtract" cloc="0" loc="1" locExecutable="0" ncloc="1" />
+    </class>
+  </file>  
 </metrics>

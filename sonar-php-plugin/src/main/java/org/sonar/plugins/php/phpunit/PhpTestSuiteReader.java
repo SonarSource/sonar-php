@@ -63,8 +63,8 @@ public class PhpTestSuiteReader {
   /**
    * Reads the given test suite.
    * 
-   * FIXME: Due to a inconsistent XML format in phpUnit, we have to parse enclosing testsuite name for generated testcases when a testcase
-   * holds the annotation dataProvider.
+   * Due to a inconsistent XML format in phpUnit, we have to parse enclosing testsuite name for generated testcases when a testcase holds
+   * the annotation dataProvider.
    * 
    * @param testSuite
    *          the test suite

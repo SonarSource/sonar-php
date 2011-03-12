@@ -20,6 +20,14 @@
 
 package org.sonar.plugins.php.phpdepend;
 
+import static org.sonar.api.measures.CoreMetrics.CLASSES;
+import static org.sonar.api.measures.CoreMetrics.COMMENT_LINES;
+import static org.sonar.api.measures.CoreMetrics.COMPLEXITY;
+import static org.sonar.api.measures.CoreMetrics.FILES;
+import static org.sonar.api.measures.CoreMetrics.FUNCTIONS;
+import static org.sonar.api.measures.CoreMetrics.LINES;
+import static org.sonar.api.measures.CoreMetrics.NCLOC;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -86,7 +94,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Instantiates a new php depend results parser.
-   *
+   * 
    * @param config
    *          the config
    * @param context
@@ -101,7 +109,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Returns true if unit tests are counted when measuring complexity and LOC.
-   *
+   * 
    * @return true if unit tests are counted when measuring complexity and LOC.
    */
   public boolean isMeasureUnitTests() {
@@ -110,8 +118,9 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Sets whether unit tests are counted when measuring complexity and LOC.
-   *
-   * @param measureUnitTests true if unit tests are counted when measuring complexity and LOC.
+   * 
+   * @param measureUnitTests
+   *          true if unit tests are counted when measuring complexity and LOC.
    */
   public void setMeasureUnitTests(boolean measureUnitTests) {
     this.measureUnitTests = measureUnitTests;
@@ -119,7 +128,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * If the given value is not null, the metric, resource and value will be associated
-   *
+   * 
    * @param file
    *          the file
    * @param metric
@@ -135,7 +144,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Adds the measure if the given metrics isn't already present on this resource.
-   *
+   * 
    * @param file
    * @param metric
    * @param value
@@ -149,7 +158,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Collects the given class measures and launches {@see #collectFunctionMeasures(MethodNode, PhpFile)} for all its descendant.
-   *
+   * 
    * @param file
    *          the php related file
    * @param classNode
@@ -157,11 +166,11 @@ public class PhpDependResultsParser implements BatchExtension {
    * @param methodComplexityDistribution
    */
   private void collectClassMeasures(ClassNode classNode, PhpFile file, RangeDistributionBuilder methodComplexityDistribution) {
-    addMeasureIfNecessary(file, CoreMetrics.LINES, classNode.getLinesNumber());
-    addMeasureIfNecessary(file, CoreMetrics.COMMENT_LINES, classNode.getCommentLineNumber());
-    addMeasureIfNecessary(file, CoreMetrics.NCLOC, classNode.getCodeLinesNumber());
+    addMeasureIfNecessary(file, LINES, classNode.getLinesNumber());
+    addMeasureIfNecessary(file, COMMENT_LINES, classNode.getCommentLineNumber());
+    addMeasureIfNecessary(file, NCLOC, classNode.getCodeLinesNumber());
     // Adds one class to this file
-    addMeasure(file, CoreMetrics.CLASSES, 1.0);
+    addMeasure(file, CLASSES, 1.0);
     // for all methods in this class.
     List<MethodNode> methodes = classNode.getMethodes();
     if (methodes != null && !methodes.isEmpty()) {
@@ -174,7 +183,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Collects the given function measures.
-   *
+   * 
    * @param file
    *          the php related file
    * @param functionNode
@@ -182,26 +191,26 @@ public class PhpDependResultsParser implements BatchExtension {
    * @param methodComplexityDistribution
    */
   private void collectFunctionsMeasures(FunctionNode functionNode, PhpFile file, RangeDistributionBuilder methodComplexityDistribution) {
-    addMeasureIfNecessary(file, CoreMetrics.LINES, functionNode.getLinesNumber());
-    addMeasureIfNecessary(file, CoreMetrics.COMMENT_LINES, functionNode.getCommentLineNumber());
-    addMeasureIfNecessary(file, CoreMetrics.NCLOC, functionNode.getCodeLinesNumber());
+    addMeasureIfNecessary(file, LINES, functionNode.getLinesNumber());
+    addMeasureIfNecessary(file, COMMENT_LINES, functionNode.getCommentLineNumber());
+    addMeasureIfNecessary(file, NCLOC, functionNode.getCodeLinesNumber());
     // Adds one class to this file
-    addMeasure(file, CoreMetrics.FUNCTIONS, 1.0);
-    addMeasure(file, CoreMetrics.COMPLEXITY, functionNode.getComplexity());
+    addMeasure(file, FUNCTIONS, 1.0);
+    addMeasure(file, COMPLEXITY, functionNode.getComplexity());
     methodComplexityDistribution.add(functionNode.getComplexity());
   }
 
   /**
    * Collect the fiven php file measures and launches {@see #collectClassMeasures(ClassNode, PhpFile)} for all its descendant. Indeed even
    * if it's not a good practice it isn't illegal to have more than one public class in one php file.
-   *
+   * 
    * @param file
    *          the php file
    * @param fileNode
    *          the node representing the file in the report file.
    */
   private void collectFileMeasures(FileNode fileNode, PhpFile file) {
-    addMeasure(file, CoreMetrics.LINES, fileNode.getLinesNumber());
+    addMeasure(file, LINES, fileNode.getLinesNumber());
     addMeasure(file, CoreMetrics.NCLOC, fileNode.getCodeLinesNumber());
     addMeasure(file, CoreMetrics.COMMENT_LINES, fileNode.getCommentLineNumber());
     // Adds one file to this php file
@@ -229,7 +238,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Collect function measures.
-   *
+   * 
    * @param file
    *          the file
    * @param methodNode
@@ -243,7 +252,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Collect measures.
-   *
+   * 
    * @param reportXml
    *          the report xml
    * @throws FileNotFoundException
@@ -253,17 +262,16 @@ public class PhpDependResultsParser implements BatchExtension {
    */
   protected void collectMeasures(File reportXml) throws FileNotFoundException, ParseException {
     MetricsNode metricsNode = getMetrics(reportXml);
-    PhpFile currentResourceFile = null;
-    for (FileNode fileNode : metricsNode.getFiles()) {
+    List<FileNode> files = metricsNode.getFiles();
+    for (FileNode fileNode : files) {
       String fileName = fileNode.getFileName();
-      currentResourceFile = PhpFile.fromAbsolutePath(fileName, project);
-      if (currentResourceFile == null) {
-        LOG.warn("The following file doesn't belong to current project sources or tests : " + fileName);
-      } else {
-        if (!measureUnitTests && ResourceUtils.isUnitTestClass(currentResourceFile)) {
-          continue;
+      PhpFile currentResourceFile = PhpFile.getInstance(project).fromAbsolutePath(fileName, project);
+      if (currentResourceFile != null) {
+        if (measureUnitTests || !ResourceUtils.isUnitTestClass(currentResourceFile)) {
+          collectFileMeasures(fileNode, currentResourceFile);
         }
-        collectFileMeasures(fileNode, currentResourceFile);
+      } else {
+        LOG.warn("The following file doesn't belong to current project sources or tests : " + fileName);
       }
     }
     saveMeasures();
@@ -271,24 +279,24 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Gets the metrics.
-   *
+   * 
    * @return the metrics
    */
   private Set<Metric> getMetrics() {
     Set<Metric> metricsNode = new HashSet<Metric>();
-    metricsNode.add(CoreMetrics.LINES);
-    metricsNode.add(CoreMetrics.NCLOC);
-    metricsNode.add(CoreMetrics.FUNCTIONS);
-    metricsNode.add(CoreMetrics.COMMENT_LINES);
-    metricsNode.add(CoreMetrics.FILES);
-    metricsNode.add(CoreMetrics.COMPLEXITY);
-    metricsNode.add(CoreMetrics.CLASSES);
+    metricsNode.add(LINES);
+    metricsNode.add(NCLOC);
+    metricsNode.add(FUNCTIONS);
+    metricsNode.add(COMMENT_LINES);
+    metricsNode.add(FILES);
+    metricsNode.add(COMPLEXITY);
+    metricsNode.add(CLASSES);
     return metricsNode;
   }
 
   /**
    * Gets the metrics.
-   *
+   * 
    * @param report
    *          the report
    * @return the metrics
@@ -310,7 +318,7 @@ public class PhpDependResultsParser implements BatchExtension {
     } catch (XStreamException e) {
       throw new SonarException("PDepend report isn't valid: " + report.getName(), e);
     } catch (IOException e) {
-      throw new SonarException("Can't read pUnit report : " + report.getName(), e);
+      throw new SonarException("Can't read report : " + report.getName(), e);
     } finally {
       IOUtils.closeQuietly(inputStream);
     }
@@ -337,7 +345,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Saves on measure in the context. One value is associated with a metric and a resource.
-   *
+   * 
    * @param resource
    *          Can be a PhpFile or a PhpPackage
    * @param metric
@@ -354,7 +362,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Saves all the measure contained in the resourceBag used for this analysis.
-   *
+   * 
    * @throws ParseException
    */
   private void saveMeasures() {

@@ -98,13 +98,13 @@ public class PhpSourceImporterTest {
     createFiles(sources, false);
     createFiles(tests, true);
 
-    new PhpSourceImporter().analyse(project, context);
+    new PhpSourceImporter(project).analyse(project, context);
     for (String name : sourceNames) {
-      PhpFile pf = PhpFile.fromIOFile(new File(sources, name), Arrays.asList(sources), false);
+      PhpFile pf = PhpFile.getInstance(project).fromIOFile(new File(sources, name), Arrays.asList(sources), false);
       verify(context).saveSource(pf, phpCode);
     }
     for (String name : testNames) {
-      PhpFile pf = PhpFile.fromIOFile(new File(tests, name), Arrays.asList(tests), true);
+      PhpFile pf = PhpFile.getInstance(project).fromIOFile(new File(tests, name), Arrays.asList(tests), true);
       verify(context).saveSource(pf, phpCode);
     }
     verifyNoMoreInteractions(context);

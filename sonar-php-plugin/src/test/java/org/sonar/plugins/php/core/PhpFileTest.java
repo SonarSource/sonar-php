@@ -43,26 +43,12 @@ public class PhpFileTest {
   private Project project;
 
   /**
-   * Constructor with null key should only set qualifier and scope.
-   */
-  @Test(expected = IllegalArgumentException.class)
-  public void constructorWithNullKeyShouldOnlySetQualifierAndScope() {
-    new PhpFile(null);
-    // PhpFile phpFile = new PhpFile(null);
-    // assertEquals(null, phpFile.getLanguage());
-    // assertEquals(null, phpFile.getKey());
-    // assertEquals(null, phpFile.getName());
-    // assertEquals(Resource.QUALIFIER_FILE, phpFile.getScope());
-    // assertEquals(Resource.QUALIFIER_CLASS, phpFile.getQualifier());
-  }
-
-  /**
    * From absolute path in wrong path should return null.
    */
   @Test
   public void fromAbsolutePathInWrongPathShouldReturnNull() {
     init();
-    assertEquals(null, PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\lib\\animal\\Monkey.php", project));
+    assertEquals(null, PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\lib\\animal\\Monkey.php", project));
   }
 
   /**
@@ -71,11 +57,11 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathShouldInitializePackageAndClassName() {
     init();
-    PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
     assertEquals("animal.Monkey.php", phpFile.getKey());
-    phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\insult\\Monkey.php", project);
+    phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\insult\\Monkey.php", project);
     assertEquals("insult.Monkey.php", phpFile.getKey());
-    phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\Monkey.php", project);
+    phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\Monkey.php", project);
     assertEquals("Monkey.php", phpFile.getKey());
   }
 
@@ -85,7 +71,7 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathShouldRecognizeAndInitializeSourceFile() {
     init();
-    PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php", project);
     assertEquals(Php.PHP, phpFile.getLanguage());
     assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
@@ -99,7 +85,7 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathShouldRecognizeAndInitializeTestFile() {
     init();
-    PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
     assertEquals(Php.PHP, phpFile.getLanguage());
     assertEquals("animal.Monkey.php", phpFile.getKey());
     assertEquals("Monkey", phpFile.getName());
@@ -114,7 +100,7 @@ public class PhpFileTest {
     ProjectFileSystem fileSystem = project.getFileSystem();
     when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src")));
 
-    PhpFile phpFile = PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
+    PhpFile phpFile = PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php", project);
     assertEquals(Resource.QUALIFIER_UNIT_TEST_CLASS, phpFile.getQualifier());
   }
 
@@ -123,7 +109,7 @@ public class PhpFileTest {
    */
   @Test
   public void fromAbsolutePathWithNullKeyShouldReturnNull() {
-    assertEquals(null, PhpFile.fromAbsolutePath(null, null));
+    assertEquals(null, PhpFile.getInstance(project).fromAbsolutePath(null, null));
   }
 
   /**
@@ -132,7 +118,7 @@ public class PhpFileTest {
   @Test
   public void fromAbsolutePathWithWrongExtensionShouldReturnNull() {
     init();
-    assertEquals(null, PhpFile.fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.java", project));
+    assertEquals(null, PhpFile.getInstance(project).fromAbsolutePath("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.java", project));
   }
 
   /**
@@ -148,6 +134,10 @@ public class PhpFileTest {
     when(project.getFileSystem()).thenReturn(fileSystem);
     when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src\\main")));
     when(fileSystem.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\src\\test")));
+    File f1 = new File("C:\\projets\\PHP\\Monkey\\src\\main\\insult\\Monkey.php");
+    File f2 = new File("C:\\projets\\PHP\\Monkey\\src\\test\\animal\\Monkey.php");
+    File f3 = new File("C:\\projets\\PHP\\Monkey\\src\\main\\animal\\Monkey.php");
+    File f4 = new File("C:\\projets\\PHP\\Monkey\\src\\main\\Monkey.php");
+    when(fileSystem.getSourceFiles(Php.PHP)).thenReturn(Arrays.asList(f1, f2, f3, f4));
   }
-
 }

@@ -72,7 +72,7 @@ public class PhpPmdSensorTest {
   private PhpmdSensor getSensor(Project project) {
     RulesProfile profile = mock(RulesProfile.class);
     RuleFinder finder = mock(RuleFinder.class);
-    PhpmdSensor sensor = new PhpmdSensor(profile, finder, Php.PHP);
+    PhpmdSensor sensor = new PhpmdSensor(profile, finder);
     return sensor;
   }
 

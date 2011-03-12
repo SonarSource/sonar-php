@@ -71,7 +71,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     List<File> sourceFiles = project.getFileSystem().getSourceFiles();
     List<File> directories = project.getFileSystem().getSourceDirs();
     for (File file : sourceFiles) {
-      PhpFile phpFile = PhpFile.fromIOFile(file, directories, false);
+      PhpFile phpFile = PhpFile.getInstance(project).fromIOFile(file, directories, false);
       if (phpFile == null) {
         continue;
       }
