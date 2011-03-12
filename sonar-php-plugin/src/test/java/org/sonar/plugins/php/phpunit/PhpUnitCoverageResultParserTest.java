@@ -71,14 +71,14 @@ public class PhpUnitCoverageResultParserTest {
 
       when(project.getPom()).thenReturn(mavenProject);
       when(project.getFileSystem()).thenReturn(fs);
-      when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-      when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\test")));
+      when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/main")));
+      when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/test")));
 
-      File f1 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\Monkey2.php");
-      File f2 = new File("C:\\projets\\PHP\\Monkey\\sources\\main\\Monkey.php");
-      File f3 = new File("C:\\projets\\PHP\\Monkey\\sources\\main\\Banana1.php");
-      File f4 = new File("C:\\projets\\PHP\\Monkey\\sources\\test\\Banana.php");
-      File f5 = new File("C:\\projets\\PHP\\Monkey\\sources\\main\\Money.inc");
+      File f1 = new File("C:/projets/PHP/Money/Sources/main/Monkey2.php");
+      File f2 = new File("C:/projets/PHP/Monkey/sources/main/Monkey.php");
+      File f3 = new File("C:/projets/PHP/Monkey/sources/main/Banana1.php");
+      File f4 = new File("C:/projets/PHP/Monkey/sources/test/Banana.php");
+      File f5 = new File("C:/projets/PHP/Monkey/sources/main/Money.inc");
       when(fs.getSourceFiles(PHP)).thenReturn(Arrays.asList(f1, f2, f3, f4, f5));
 
       when(mavenProject.getPackaging()).thenReturn("maven-plugin");

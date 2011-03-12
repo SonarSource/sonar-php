@@ -72,14 +72,14 @@ public class PhpDependResultsParserTest {
 
       ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
       when(project.getFileSystem()).thenReturn(fileSystem);
-      when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Money\\Sources\\main")));
-      when(fileSystem.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Money\\Sources\\test")));
+      when(fileSystem.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Money/Sources/main")));
+      when(fileSystem.getTestDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Money/Sources/test")));
 
-      File f1 = new File("C:\\projets\\PHP\\Money\\Sources\\test\\MoneyTest.php");
-      File f2 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\Money.php");
-      File f3 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\MoneyBag.php");
-      File f4 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\Common\\IMoney.php");
-      File f5 = new File("C:\\projets\\PHP\\Money\\Sources\\main\\Money.inc");
+      File f1 = new File("C:/projets/PHP/Money/Sources/test/MoneyTest.php");
+      File f2 = new File("C:/projets/PHP/Money/Sources/main/Money.php");
+      File f3 = new File("C:/projets/PHP/Money/Sources/main/MoneyBag.php");
+      File f4 = new File("C:/projets/PHP/Money/Sources/main/Common/IMoney.php");
+      File f5 = new File("C:/projets/PHP/Money/Sources/main/Money.inc");
 
       when(fileSystem.getSourceFiles(PHP)).thenReturn(Arrays.asList(f1, f2, f3, f4, f5));
 
@@ -104,7 +104,7 @@ public class PhpDependResultsParserTest {
   public void shouldNotGenerateMeasureForFileNotInSourceDirectory() {
     metric = CoreMetrics.LINES;
     init(PDEPEND_RESULT);
-    PhpFile file = new PhpFile("d:\\projets\\PHP\\Money\\Sources\\main\\Common\\IMoney.php");
+    PhpFile file = new PhpFile("d:/projets/PHP/Money/Sources/main/Common/IMoney.php");
     verify(context, never()).saveMeasure(eq(file), eq(metric), anyDouble());
   }
 

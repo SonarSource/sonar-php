@@ -58,7 +58,7 @@ public class PhpFile extends Resource<PhpPackage> {
   private String longName;
   private PhpPackage parent = null;
 
-  private Project project;
+  protected Project project;
 
   public PhpFile(Project project) {
     this.project = project;
