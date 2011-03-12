@@ -180,7 +180,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the description.
-   *
+   * 
    * @return the description
    * @see org.sonar.api.Plugin#getDescription()
    */
@@ -191,7 +191,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the extensions.
-   *
+   * 
    * @return the extensions
    * @see org.sonar.api.Plugin#getExtensions()
    */
@@ -249,7 +249,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the key.
-   *
+   * 
    * @return the key
    * @see org.sonar.api.Plugin#getKey()
    */
@@ -259,7 +259,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the name.
-   *
+   * 
    * @return the name
    * @see org.sonar.api.Plugin#getName()
    */
@@ -269,7 +269,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * To string.
-   *
+   * 
    * @return the string
    * @see java.lang.Object#toString()
    */

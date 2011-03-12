@@ -34,23 +34,24 @@ import org.sonar.plugins.php.core.PhpPlugin;
  * configuration properties.
  */
 @Properties({
-    @Property(key = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-        defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_PATH, name = "PhpCodesniffer log directory",
-        description = "The relative path to the PhpCodeSniffer log directory.", project = true),
-    @Property(key = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_PROPERTY_KEY,
-        defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_NAME, name = "PhpCodesniffer log file name",
-        description = "The PhpCodeSniffer log file name.", project = true),
-    @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY,
-        defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_STANDARD_ARGUMENT, name = "The code sniffer standard argument line",
-        description = "The standard to be used by PhpCodeSniffer", project = true),
-    @Property(key = PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY, defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_ARGUMENT_LINE,
-        name = "The other code sniffer argument line", description = "PhpCodeSniffer will be launched with this arguments", project = true),
-    @Property(key = PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY, defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_ANALYZE_ONLY,
-        name = "Should the plugin only parse analysis report.", description = PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_DESCRIPTION,
-        project = true),
-    @Property(key = PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY, defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SHOULD_RUN,
-        name = "Should the plugin run on this project.",
-        description = "If set to false, the plugin will not execute itself for this project.", project = true) })
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
+      defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_PATH, name = "PhpCodesniffer log directory",
+      description = "The relative path to the PhpCodeSniffer log directory.", project = true),
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_PROPERTY_KEY,
+      defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_NAME, name = "PhpCodesniffer log file name",
+      description = "The PhpCodeSniffer log file name.", project = true),
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY,
+      defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_STANDARD_ARGUMENT, name = "The code sniffer standard argument line",
+      description = "The standard to be used by PhpCodeSniffer", project = true),
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY,
+      defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_ARGUMENT_LINE, name = "The other code sniffer argument line",
+      description = "PhpCodeSniffer will be launched with this arguments", project = true),
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY,
+      defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_ANALYZE_ONLY, name = "Should the plugin only parse analysis report.",
+      description = PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_DESCRIPTION, project = true),
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY, defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SHOULD_RUN,
+      name = "Should the plugin run on this project.",
+      description = "If set to false, the plugin will not execute itself for this project.", project = true) })
 public class PhpCodesnifferPlugin implements Plugin {
 
   /**

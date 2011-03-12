@@ -100,11 +100,7 @@ public class PhpPhpCpdSensorTest {
 
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
 
-    PhpCpdSensor sensor = new PhpCpdSensor(
-      configuration,
-      executor,
-      mock(PhpCpdResultParser.class)
-    );
+    PhpCpdSensor sensor = new PhpCpdSensor(configuration, executor, mock(PhpCpdResultParser.class));
 
     SensorContext context = mock(SensorContext.class);
     sensor.analyse(project, context);
@@ -122,11 +118,7 @@ public class PhpPhpCpdSensorTest {
 
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
 
-    PhpCpdSensor sensor = new PhpCpdSensor(
-      configuration,
-      executor,
-      mock(PhpCpdResultParser.class)
-    );
+    PhpCpdSensor sensor = new PhpCpdSensor(configuration, executor, mock(PhpCpdResultParser.class));
 
     SensorContext context = mock(SensorContext.class);
     sensor.analyse(project, context);

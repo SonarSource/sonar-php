@@ -41,9 +41,9 @@ import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 /**
  * PhpCpd sensor that rely on "phpcpd" tool to perform copy paste detection.
- *
+ * 
  * @author akram
- *
+ * 
  */
 public class PhpCpdSensor implements Sensor {
 
@@ -71,12 +71,12 @@ public class PhpCpdSensor implements Sensor {
 
   /**
    * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   *
+   * 
    * @param project
    *          the project
-   *
+   * 
    * @return true, if should execute on project
-   *
+   * 
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {

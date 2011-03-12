@@ -78,7 +78,7 @@ public class PhpUnitSensorTest {
 
     assertEquals(false, sensor.shouldExecuteOnProject(project));
     when(project.getLanguage()).thenReturn(Php.PHP);
-    //when(configuration.isShouldRun()).thenReturn(false);
+    // when(configuration.isShouldRun()).thenReturn(false);
 
     when(executor.getConfiguration()).thenReturn(configuration);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
@@ -110,7 +110,8 @@ public class PhpUnitSensorTest {
     config = mock(Configuration.class);
 
     when(config.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("punit.summary.xml");
-    when(config.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PhpUnitConfiguration.PHPUNIT_DEFAULT_REPORT_FILE_PATH)).thenReturn("/log");
+    when(config.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PhpUnitConfiguration.PHPUNIT_DEFAULT_REPORT_FILE_PATH))
+        .thenReturn("/log");
     String file = "phpunit.coverage.xml";
     when(config.getString(COVERAGE_REPORT_FILE_PROPERTY_KEY, PhpUnitConfiguration.PHPUNIT_DEFAULT_COVERAGE_REPORT_FILE)).thenReturn(file);
     when(config.getBoolean(SHOULD_RUN_PROPERTY_KEY, Boolean.getBoolean(PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN))).thenReturn(true);

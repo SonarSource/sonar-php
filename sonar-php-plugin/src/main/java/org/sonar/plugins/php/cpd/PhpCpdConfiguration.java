@@ -73,7 +73,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Instantiates a new php cpd configuration.
-   *
+   * 
    * @param project
    *          the project
    */
@@ -91,7 +91,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the suffixes command option.
-   *
+   * 
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
