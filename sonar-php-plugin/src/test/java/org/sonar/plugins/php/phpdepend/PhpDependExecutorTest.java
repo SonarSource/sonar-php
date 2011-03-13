@@ -24,11 +24,9 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.api.CoreProperties.PROJECT_EXCLUSIONS_PROPERTY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME;
+import static org.sonar.plugins.php.MockUtils.getFile;
+import static org.sonar.plugins.php.MockUtils.getMockProject;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -36,10 +34,8 @@ import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
-import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.core.PhpPlugin;
 
 public class PhpDependExecutorTest {
@@ -140,30 +136,6 @@ public class PhpDependExecutorTest {
     List<String> expected = Arrays.asList(s1, s2, s3, s4, s5);
 
     assertThat(commandLine).isEqualTo(expected);
-  }
-
-  private String getFile(String path) {
-    File f = new File("working");
-    if (System.getProperty("os.name").toLowerCase().contains("win")) {
-      return new File(path).toString();
-    }
-    return new File(f.getAbsoluteFile().getParent(), path).toString();
-  }
-
-  private Project getMockProject() {
-    Project project = mock(Project.class);
-    Configuration c = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/Sources/test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:/projets/PHP/Monkey/target"));
-    when(c.getString(PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, PDEPEND_DEFAULT_REPORT_FILE_NAME)).thenReturn(PDEPEND_DEFAULT_REPORT_FILE_NAME);
-    when(c.getString(PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn(DEFAULT_REPORT_FILE_PATH);
-    when(project.getConfiguration()).thenReturn(c);
-    return project;
   }
 
   /**

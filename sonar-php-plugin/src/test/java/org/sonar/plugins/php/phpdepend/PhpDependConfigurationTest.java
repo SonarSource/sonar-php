@@ -52,6 +52,17 @@ public class PhpDependConfigurationTest {
   private static final String REPORT_FILE_NAME_PROPERTY_KEY = PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
 
   @Test
+  public void testGetReportFileNameKeyIsNull() {
+    Project project = getMockProject();
+    PhpDependConfiguration config = getWindowsConfiguration(project);
+    Configuration c = project.getConfiguration();
+    String[] excludeDirs = new String[] { "a", "b" };
+    when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(excludeDirs);
+    when(c.getStringArray(PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY)).thenReturn(null);
+    assertEquals("a,b", config.getIgnoreDirs());
+  }
+
+  @Test
   public void testGetIgnoreDirsWithNotNull() {
     Project project = getMockProject();
     PhpDependConfiguration config = getWindowsConfiguration(project);

@@ -20,11 +20,15 @@
 
 package org.sonar.plugins.php.pmd;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_CLASS;
+import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_EXPRESSION_PARAM;
+import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_MESSAGE_PARAM;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -52,6 +56,30 @@ public class PhpmdProfileExporterTest {
   private PhpmdProfileExporter exporter = new PhpmdProfileExporter(new PmdRulePriorityMapper());
 
   @Test
+  public void testExportProfileWithParam() throws IOException, SAXException {
+    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
+    PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser());
+    List<Rule> rules = repository.createRules();
+
+    RuleFinder ruleFinder = new PhpmdRuleFinder(rules);
+    PhpmdProfileImporter importer = new PhpmdProfileImporter(ruleFinder);
+    String path = "/org/sonar/plugins/php/pmd/simple-ruleset-with-param.xml";
+    Reader reader = new StringReader(TestUtils.getResourceContent(path));
+    ValidationMessages messages = ValidationMessages.create();
+    RulesProfile rulesProfile = importer.importProfile(reader, messages);
+    assertThat(messages).isNotNull();
+    assertThat(messages.hasErrors()).isFalse();
+    assertThat(messages.hasWarnings()).isFalse();
+    assertThat(messages.hasWarnings()).isFalse();
+
+    StringWriter xmlOutput = new StringWriter();
+    exporter.exportProfile(rulesProfile, xmlOutput);
+    String exptected = TestUtils.getResourceContent("/org/sonar/plugins/php/pmd/simple-export-with-param.xml");
+    assertEquals(StringUtils.remove(exptected, '\r'), StringUtils.remove(xmlOutput.toString(), '\r'));
+
+  }
+
+  @Test
   public void testExportProfile() throws IOException, SAXException {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
     PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser());
@@ -60,12 +88,18 @@ public class PhpmdProfileExporterTest {
     RuleFinder ruleFinder = new PhpmdRuleFinder(rules);
     PhpmdProfileImporter importer = new PhpmdProfileImporter(ruleFinder);
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/pmd/simple-ruleset.xml"));
-    RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
+    ValidationMessages messages = ValidationMessages.create();
+    RulesProfile rulesProfile = importer.importProfile(reader, messages);
+    assertThat(messages).isNotNull();
+    assertThat(messages.hasErrors()).isFalse();
+    assertThat(messages.hasWarnings()).isTrue();
+    assertThat(messages.hasInfos()).isFalse();
 
     StringWriter xmlOutput = new StringWriter();
     exporter.exportProfile(rulesProfile, xmlOutput);
     String exptected = TestUtils.getResourceContent("/org/sonar/plugins/php/pmd/simple-export.xml");
     assertEquals(StringUtils.remove(exptected, '\r'), StringUtils.remove(xmlOutput.toString(), '\r'));
+
   }
 
   @Test
@@ -73,9 +107,9 @@ public class PhpmdProfileExporterTest {
     String message = "This is bad";
     String xpathExpression = "xpathExpression";
 
-    PmdRule rule = new PmdRule(PhpmdProfileImporter.XPATH_CLASS);
-    rule.addProperty(new PmdProperty(PhpmdProfileImporter.XPATH_EXPRESSION_PARAM, xpathExpression));
-    rule.addProperty(new PmdProperty(PhpmdProfileImporter.XPATH_MESSAGE_PARAM, message));
+    PmdRule rule = new PmdRule(XPATH_CLASS);
+    rule.addProperty(new PmdProperty(XPATH_EXPRESSION_PARAM, xpathExpression));
+    rule.addProperty(new PmdProperty(XPATH_MESSAGE_PARAM, message));
     rule.setName("MyOwnRule");
 
     exporter.processXPathRule("xpathKey", rule);

@@ -1,129 +1,131 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <rules>
-	<rule key="Code Size Rules/CyclomaticComplexity" priority="CRITICAL">
-		<name><![CDATA[Class cyclomatic complexity exceed maximum]]></name>
-		<configKey>rulesets/codesize.xml/CyclomaticComplexity</configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Class cyclomatic complexity exceed maximum]]></description>
-	</rule>
+  <rule key="Code Size Rules/CyclomaticComplexity" priority="CRITICAL">
+    <name><![CDATA[Class cyclomatic complexity exceed maximum]]></name>
+    <configKey>rulesets/codesize.xml/CyclomaticComplexity</configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Class cyclomatic complexity exceed maximum]]></description>
+    <param key="maximum" type="i">
+      <description><![CDATA[The maximum cyclomatic complexity threshold. Default is 10.]]></description>
+    </param>
+  </rule>
 
-	<rule key="Code Size Rules/NPathComplexity" priority="CRITICAL">
-		<name><![CDATA[Class NPath Complexity exceeds maximum]]></name>
-		<configKey><![CDATA[rulesets/codesize.xml/NPathComplexity]]></configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Class NPath Complexity exceeds maximum]]></description>
-	</rule>
+  <rule key="Code Size Rules/NPathComplexity" priority="CRITICAL">
+    <name><![CDATA[Class NPath Complexity exceeds maximum]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/NPathComplexity]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Class NPath Complexity exceeds maximum]]></description>
+  </rule>
 
-	<rule key="Code Size Rules/ExcessiveMethodLength" priority="BLOCKER">
-		<name><![CDATA[Method length exceeds maximum]]></name>
-		<configKey><![CDATA[rulesets/codesize.xml/ExcessiveMethodLength]]></configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Method length exceeds maximum]]></description>
-	</rule>
+  <rule key="Code Size Rules/ExcessiveMethodLength" priority="BLOCKER">
+    <name><![CDATA[Method length exceeds maximum]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/ExcessiveMethodLength]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Method length exceeds maximum]]></description>
+  </rule>
 
-	<rule key="Code Size Rules/ExcessiveClassLength" priority="MAJOR">
-		<name><![CDATA[Class length exceeds maximum]]></name>
-		<configKey><![CDATA[rulesets/codesize.xml/ExcessiveClassLength]]></configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Class length exceeds maximum]]></description>
-	</rule>
+  <rule key="Code Size Rules/ExcessiveClassLength" priority="MAJOR">
+    <name><![CDATA[Class length exceeds maximum]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/ExcessiveClassLength]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Class length exceeds maximum]]></description>
+  </rule>
 
-	<rule key="Code Size Rules/UnusedPrivateField" priority="BLOCKER">
-		<name><![CDATA[Unused private field]]></name>
-		<configKey><![CDATA[rulesets/codesize.xml/UnusedPrivateField]]></configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Unused private field]]></description>
-	</rule>
+  <rule key="Code Size Rules/UnusedPrivateField" priority="BLOCKER">
+    <name><![CDATA[Unused private field]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/UnusedPrivateField]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Unused private field]]></description>
+  </rule>
 
-	<rule key="Code Size Rules/ExcessiveParameterList" priority="BLOCKER">
-		<name><![CDATA[Method has too many parameters]]></name>
-		<configKey><![CDATA[rulesets/codesize.xml/ExcessiveParameterList]]></configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Method has too many parameters]]></description>
-	</rule>
+  <rule key="Code Size Rules/ExcessiveParameterList" priority="BLOCKER">
+    <name><![CDATA[Method has too many parameters]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/ExcessiveParameterList]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Method has too many parameters]]></description>
+  </rule>
 
-	<rule key="Code Size Rules/ExcessivePublicCount" priority="MAJOR">
-		<name><![CDATA[Number of public methods and attributes in class exceeds maximum]]></name>
-		<configKey><![CDATA[rulesets/codesize.xml/ExcessivePublicCount]]></configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Number of public methods and attributes in class exceeds maximum]]></description>
-	</rule>
+  <rule key="Code Size Rules/ExcessivePublicCount" priority="MAJOR">
+    <name><![CDATA[Number of public methods and attributes in class exceeds maximum]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/ExcessivePublicCount]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Number of public methods and attributes in class exceeds maximum]]></description>
+  </rule>
 
-	<rule key="Code Size Rules/TooManyFields" priority="MAJOR">
-		<name><![CDATA[Number of class fields exceeds maximum]]></name>
-		<configKey><![CDATA[rulesets/codesize.xml/TooManyFields]]></configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Number of class fields exceeds maximum]]></description>
-	</rule>
+  <rule key="Code Size Rules/TooManyFields" priority="MAJOR">
+    <name><![CDATA[Number of class fields exceeds maximum]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/TooManyFields]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Number of class fields exceeds maximum]]></description>
+  </rule>
 
-	<rule key="Code Size Rules/TooManyMethods" priority="MAJOR">
-		<name><![CDATA[Number of methods in class exceeds maximum]]></name>
-		<configKey><![CDATA[rulesets/codesize.xml/TooManyMethods]]></configKey>
-		<category name="Maintainability" />
-		<description><![CDATA[Number of methods in class exceeds maximum]]></description>
-	</rule>
+  <rule key="Code Size Rules/TooManyMethods" priority="MAJOR">
+    <name><![CDATA[Number of methods in class exceeds maximum]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/TooManyMethods]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[Number of methods in class exceeds maximum]]></description>
+  </rule>
 
-	<rule key="Naming Rules/ShortVariable" priority="MINOR">
-		<name><![CDATA[Variable name is shorter than minimum]]></name>
-		<configKey><![CDATA[rulesets/naming.xml/ShortVariable]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Variable name is shorter than minimum]]></description>
-	</rule>
+  <rule key="Naming Rules/ShortVariable" priority="MINOR">
+    <name><![CDATA[Variable name is shorter than minimum]]></name>
+    <configKey><![CDATA[rulesets/naming.xml/ShortVariable]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Variable name is shorter than minimum]]></description>
+  </rule>
 
-	<rule key="Naming Rules/LongVariable" priority="INFO">
-		<name><![CDATA[Variable name lenght exceeds maximum]]></name>
-		<configKey><![CDATA[rulesets/naming.xml/LongVariable]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Variable name lenght exceeds maximum]]></description>
-	</rule>
-	<rule key="Naming Rules/ShortMethodName" priority="INFO">
-		<name><![CDATA[Method name is shorter than minimum]]></name>
-		<configKey><![CDATA[rulesets/naming.xml/ShortMethodName]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Method name is shorter than minimum]]></description>
-	</rule>
-	<rule key="Naming Rules/ConstructorWithNameAsEnclosingClass"
-		priority="INFO">
-		<name><![CDATA[Constructor name contains class]]></name>
-		<configKey><![CDATA[rulesets/naming.xml/ConstructorWithNameAsEnclosingClass]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Constructor name contains class]]></description>
-	</rule>
-	<rule key="Naming Rules/ConstantNamingConventions" priority="MINOR">
-		<name><![CDATA[Constant name does not match pattern]]></name>
-		<configKey><![CDATA[rulesets/naming.xml/ConstantNamingConventions]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Constant name does not match pattern]]></description>
-	</rule>
-	<rule key="Naming Rules/BooleanGetMethodName" priority="INFO">
-		<name><![CDATA[Name of method returning boolean starting with get]]></name>
-		<configKey><![CDATA[rulesets/naming.xml/BooleanGetMethodName]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Name of method returning boolean starting with get]]></description>
-	</rule>
+  <rule key="Naming Rules/LongVariable" priority="INFO">
+    <name><![CDATA[Variable name lenght exceeds maximum]]></name>
+    <configKey><![CDATA[rulesets/naming.xml/LongVariable]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Variable name lenght exceeds maximum]]></description>
+  </rule>
+  <rule key="Naming Rules/ShortMethodName" priority="INFO">
+    <name><![CDATA[Method name is shorter than minimum]]></name>
+    <configKey><![CDATA[rulesets/naming.xml/ShortMethodName]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Method name is shorter than minimum]]></description>
+  </rule>
+  <rule key="Naming Rules/ConstructorWithNameAsEnclosingClass" priority="INFO">
+    <name><![CDATA[Constructor name contains class]]></name>
+    <configKey><![CDATA[rulesets/naming.xml/ConstructorWithNameAsEnclosingClass]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Constructor name contains class]]></description>
+  </rule>
+  <rule key="Naming Rules/ConstantNamingConventions" priority="MINOR">
+    <name><![CDATA[Constant name does not match pattern]]></name>
+    <configKey><![CDATA[rulesets/naming.xml/ConstantNamingConventions]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Constant name does not match pattern]]></description>
+  </rule>
+  <rule key="Naming Rules/BooleanGetMethodName" priority="INFO">
+    <name><![CDATA[Name of method returning boolean starting with get]]></name>
+    <configKey><![CDATA[rulesets/naming.xml/BooleanGetMethodName]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Name of method returning boolean starting with get]]></description>
+  </rule>
 
-	<rule key="Unused Code Rules/UnusedPrivateField" priority="MAJOR">
-		<name><![CDATA[Unused private field]]></name>
-		<configKey><![CDATA[rulesets/unusedcode.xml/UnusedPrivateField]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Unused private field]]></description>
-	</rule>
-	<rule key="Unused Code Rules/UnusedLocalVariable" priority="MAJOR">
-		<name><![CDATA[Unused local variable]]></name>
-		<configKey><![CDATA[rulesets/unusedcode.xml/UnusedLocalVariable]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Unused local variable]]></description>
-	</rule>
-	<rule key="Unused Code Rules/UnusedPrivateMethod" priority="MAJOR">
-		<name><![CDATA[Unused private method]]></name>
-		<configKey><![CDATA[rulesets/unusedcode.xml/UnusedPrivateMethod]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Unused private method]]></description>
-	</rule>
-	<rule key="Unused Code Rules/UnusedFormalParameter" priority="MAJOR">
-		<name><![CDATA[Unused formal parameter]]></name>
-		<configKey><![CDATA[rulesets/unusedcode.xml/UnusedFormalParameter]]></configKey>
-		<category name="Usability" />
-		<description><![CDATA[Unused formal parameter]]></description>
-	</rule>
+  <rule key="Unused Code Rules/UnusedPrivateField" priority="MAJOR">
+    <name><![CDATA[Unused private field]]></name>
+    <configKey><![CDATA[rulesets/unusedcode.xml/UnusedPrivateField]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Unused private field]]></description>
+  </rule>
+  <rule key="Unused Code Rules/UnusedLocalVariable" priority="MAJOR">
+    <name><![CDATA[Unused local variable]]></name>
+    <configKey><![CDATA[rulesets/unusedcode.xml/UnusedLocalVariable]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Unused local variable]]></description>
+  </rule>
+  <rule key="Unused Code Rules/UnusedPrivateMethod" priority="MAJOR">
+    <name><![CDATA[Unused private method]]></name>
+    <configKey><![CDATA[rulesets/unusedcode.xml/UnusedPrivateMethod]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Unused private method]]></description>
+  </rule>
+  <rule key="Unused Code Rules/UnusedFormalParameter" priority="MAJOR">
+    <name><![CDATA[Unused formal parameter]]></name>
+    <configKey><![CDATA[rulesets/unusedcode.xml/UnusedFormalParameter]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Unused formal parameter]]></description>
+  </rule>
 </rules>

@@ -27,24 +27,21 @@ import static org.mockito.Mockito.when;
 import static org.sonar.api.measures.CoreMetrics.DUPLICATED_BLOCKS;
 import static org.sonar.api.measures.CoreMetrics.DUPLICATED_FILES;
 import static org.sonar.api.measures.CoreMetrics.DUPLICATED_LINES;
+import static org.sonar.plugins.php.MockUtils.getMockProject;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
-import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.PhpFile;
@@ -83,7 +80,8 @@ public class PhpCpdResultParserTest {
   @Test
   public void shouldParse() throws URISyntaxException, XMLStreamException {
     SensorContext context = mock(SensorContext.class);
-    PhpCpdResultParser parser = new PhpCpdResultParser(getMockProject(), context);
+    Project project = getMockProject("C:/php/math-php-test/source/src/");
+    PhpCpdResultParser parser = new PhpCpdResultParser(project, context);
     String reportFile = "/org/sonar/plugins/php/cpd/php-cpd.xml";
     File xmlFile = FileUtils.toFile(getClass().getResource(reportFile));
     parser.parse(xmlFile);
@@ -94,19 +92,4 @@ public class PhpCpdResultParserTest {
     verify(context).saveMeasure(mathPhp, DUPLICATED_BLOCKS, 0.0);
 
   }
-
-  private Project getMockProject() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\php\\math-php-test\\source\\src\\")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(project.getConfiguration()).thenReturn(configuration);
-    return project;
-  }
-
 }
