@@ -310,7 +310,7 @@ public class RuleNode implements Comparable<String> {
    */
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(1, 31).append(className).append(message).append(name).append(priority).toHashCode();
+    return new HashCodeBuilder().append(className).append(message).append(name).append(priority).toHashCode();
   }
 
   /*

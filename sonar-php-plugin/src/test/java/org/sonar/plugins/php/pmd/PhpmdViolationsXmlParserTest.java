@@ -20,10 +20,14 @@
 
 package org.sonar.plugins.php.pmd;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
 
 import org.junit.Test;
 import org.sonar.api.utils.SonarException;
@@ -35,12 +39,26 @@ public class PhpmdViolationsXmlParserTest {
 
   /**
    * Should get valid suffixe option.
+   * 
+   * @throws MalformedURLException
    */
   @Test(expected = SonarException.class)
-  public void shouldThrowExceptionWhenReportFileDoesNotExist() {
+  public void shouldThrowExceptionWhenReportFileDoesNotExist() throws MalformedURLException {
     File reportFile = mock(File.class);
     when(reportFile.exists()).thenReturn(Boolean.FALSE);
-    new PhpmdViolationsXmlParser(reportFile);
+    new PhpmdViolationsXmlParser(reportFile.toURL());
+  }
+
+  /**
+   * Should get valid suffixe option.
+   */
+  @Test
+  public void parserTest() {
+    URL reportFile = getClass().getResource("/org/sonar/plugins/php/pmd/php-pmd-result.xml");
+    PhpmdViolationsXmlParser parser = new PhpmdViolationsXmlParser(reportFile);
+    List<PhpmdViolation> violations = parser.getViolations();
+    assertThat(violations).isNotEmpty();
+    assertThat(violations).hasSize(30);
   }
 
 }

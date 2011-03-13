@@ -20,6 +20,11 @@
 
 package org.sonar.plugins.php.cpd;
 
+import static org.sonar.api.measures.CoreMetrics.DUPLICATED_BLOCKS;
+import static org.sonar.api.measures.CoreMetrics.DUPLICATED_FILES;
+import static org.sonar.api.measures.CoreMetrics.DUPLICATED_LINES;
+import static org.sonar.api.measures.CoreMetrics.DUPLICATIONS_DATA;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
@@ -235,10 +239,10 @@ public class PhpCpdResultParser implements BatchExtension {
      * @param context
      */
     protected void saveUsing(SensorContext context) {
-      context.saveMeasure(resource, CoreMetrics.DUPLICATED_FILES, 1d);
-      context.saveMeasure(resource, CoreMetrics.DUPLICATED_LINES, duplicatedLines);
-      context.saveMeasure(resource, CoreMetrics.DUPLICATED_BLOCKS, duplicatedBlocks);
-      context.saveMeasure(resource, new Measure(CoreMetrics.DUPLICATIONS_DATA, getDuplicationXMLData()));
+      context.saveMeasure(resource, DUPLICATED_FILES, 1d);
+      context.saveMeasure(resource, DUPLICATED_LINES, duplicatedLines);
+      context.saveMeasure(resource, DUPLICATED_BLOCKS, duplicatedBlocks);
+      context.saveMeasure(resource, new Measure(DUPLICATIONS_DATA, getDuplicationXMLData()));
     }
 
     private String getDuplicationXMLData() {

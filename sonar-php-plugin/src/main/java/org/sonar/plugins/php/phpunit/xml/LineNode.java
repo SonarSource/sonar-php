@@ -30,10 +30,10 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 public class LineNode {
 
   /** The Constant METHODE_TYPE. */
-  public final static String METHODE_TYPE = "method";
+  public static final String METHODE_TYPE = "method";
 
   /** The Constant STATEMENT_TYPE. */
-  public final static String STATEMENT_TYPE = "stmt";
+  public static final String STATEMENT_TYPE = "stmt";
 
   /** The count. */
   @XStreamAsAttribute

@@ -27,6 +27,7 @@ import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,21 +93,27 @@ public class PhpmdSensor implements Sensor {
     }
     File report = config.getReportFile();
     LOG.info("Phpmd  report file: " + report.getAbsolutePath());
-    PhpmdViolationsXmlParser reportParser = new PhpmdViolationsXmlParser(report);
-    List<PhpmdViolation> violations = reportParser.getViolations();
-    List<Violation> contextViolations = new ArrayList<Violation>();
-    for (PhpmdViolation violation : violations) {
-      Rule rule = ruleFinder.findByKey(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY, violation.getRuleKey());
-      if (rule != null) {
-        PhpFile resource = (PhpFile) context.getResource(PhpFile.getInstance(project).fromAbsolutePath(violation.getFileName(), project));
-        if (context.getResource(resource) != null) {
-          Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
-          contextViolations.add(v);
-          LOG.debug("Violation found: " + v);
+    PhpmdViolationsXmlParser reportParser;
+    try {
+      reportParser = new PhpmdViolationsXmlParser(report.toURL());
+
+      List<PhpmdViolation> violations = reportParser.getViolations();
+      List<Violation> contextViolations = new ArrayList<Violation>();
+      for (PhpmdViolation violation : violations) {
+        Rule rule = ruleFinder.findByKey(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY, violation.getRuleKey());
+        if (rule != null) {
+          PhpFile resource = (PhpFile) context.getResource(PhpFile.getInstance(project).fromAbsolutePath(violation.getFileName(), project));
+          if (context.getResource(resource) != null) {
+            Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
+            contextViolations.add(v);
+            LOG.debug("Violation found: " + v);
+          }
         }
       }
+      context.saveViolations(contextViolations);
+    } catch (MalformedURLException e) {
+      LOG.error("Phpmd report file cannot be concerted to url " + report);
     }
-    context.saveViolations(contextViolations);
   }
 
   /**
@@ -122,9 +129,10 @@ public class PhpmdSensor implements Sensor {
   public boolean shouldExecuteOnProject(Project project) {
     Configuration configuration = project.getConfiguration();
     Language language = project.getLanguage();
-    return (project.getPom() != null) && PHP.equals(language)
-        && configuration.getBoolean(PHPMD_SHOULD_RUN_KEY, parseBoolean(PHPMD_DEFAULT_SHOULD_RUN))
-        && (project.getReuseExistingRulesConfig() || !profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY).isEmpty());
+    boolean result = (project.getPom() != null) && PHP.equals(language);
+    result = result && configuration.getBoolean(PHPMD_SHOULD_RUN_KEY, parseBoolean(PHPMD_DEFAULT_SHOULD_RUN));
+    result = result && (project.getReuseExistingRulesConfig() || !profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY).isEmpty());
+    return result;
   }
 
   /***

@@ -20,7 +20,7 @@
 
 package org.sonar.plugins.php.pmd;
 
-import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,6 @@ import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.utils.SonarException;
 import org.sonar.api.utils.XmlParserException;
 
 /**
@@ -54,21 +53,16 @@ public class PhpmdViolationsXmlParser {
 
   private static final String RULE_KEY_RULESET_SEPARATOR = "/";
 
-  private final File reportFile;
-  private final String reportPath;
+  private final URL url;
 
   /**
    * Instantiates a new pmd violations xml parser.
    * 
-   * @param reportFile
+   * @param url
    */
-  public PhpmdViolationsXmlParser(File reportFile) {
-    this.reportFile = reportFile;
-    LOG.debug("Report file for Phpms is " + reportFile);
-    reportPath = reportFile.getAbsolutePath();
-    if ( !reportFile.exists()) {
-      throw new SonarException("The XML report can't be found at '" + reportPath + "'");
-    }
+  public PhpmdViolationsXmlParser(URL url) {
+    this.url = url;
+    LOG.debug("Report file for Phpms is " + url);
   }
 
   /**
@@ -80,7 +74,7 @@ public class PhpmdViolationsXmlParser {
     try {
       SMInputFactory inputFactory = new SMInputFactory(XMLInputFactory.newInstance());
       // <pmd>
-      SMInputCursor rootNodeCursor = inputFactory.rootElementCursor(reportFile).advance();
+      SMInputCursor rootNodeCursor = inputFactory.rootElementCursor(url).advance();
       // <file>
       SMInputCursor fileNodeCursor = rootNodeCursor.childElementCursor(FILE_NODE_NAME).advance();
       while (fileNodeCursor.asEvent() != null) {
@@ -107,7 +101,7 @@ public class PhpmdViolationsXmlParser {
       }
       rootNodeCursor.getStreamReader().closeCompletely();
     } catch (XMLStreamException e) {
-      throw new XmlParserException("Unable to parse the  XML Report '" + reportPath + "'", e);
+      throw new XmlParserException("Unable to parse the  XML Report", e);
     }
     return violations;
   }

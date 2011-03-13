@@ -67,8 +67,8 @@ import com.thoughtworks.xstream.XStreamException;
 public class PhpDependResultsParser implements BatchExtension {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpDependResultsParser.class);
-  private final static Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = { 1, 2, 4, 6, 8, 10, 12 };
-  private final static Number[] CLASSES_DISTRIB_BOTTOM_LIMITS = { 0, 5, 10, 20, 30, 60, 90 };
+  private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = { 1, 2, 4, 6, 8, 10, 12 };
+  private static final Number[] CLASSES_DISTRIB_BOTTOM_LIMITS = { 0, 5, 10, 20, 30, 60, 90 };
 
   /**
    * The context.

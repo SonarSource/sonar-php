@@ -48,7 +48,7 @@ import org.sonar.plugins.php.pmd.xml.PmdRuleset;
  */
 public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
 
-  private final static Logger LOG = LoggerFactory.getLogger(PhpCodeSnifferProfileImporter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpCodeSnifferProfileImporter.class);
   /**
    * 
    */

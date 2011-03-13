@@ -35,7 +35,7 @@ public final class PmdRule implements Comparable<String> {
 
   private List<PmdProperty> properties = new ArrayList<PmdProperty>();
 
-  private String clazz;// NOSONAR unused private field
+  private String clazz;
 
   public PmdRule(String ref) {
     this(ref, null);

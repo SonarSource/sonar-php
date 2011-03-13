@@ -35,7 +35,7 @@ public class PmdRulePriorityMapper implements ServerExtension, BatchExtension {
   private Map<String, RulePriority> from = new HashMap<String, RulePriority>();
   private Map<RulePriority, String> to = new HashMap<RulePriority, String>();
 
-  private final RulePriority DEFAULT_RULE_PRIORITY = RulePriority.MAJOR;
+  private static final RulePriority DEFAULT_RULE_PRIORITY = RulePriority.MAJOR;
 
   /**
    * 

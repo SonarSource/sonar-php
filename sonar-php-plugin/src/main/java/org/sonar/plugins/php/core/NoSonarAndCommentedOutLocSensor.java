@@ -50,7 +50,9 @@ import org.sonar.squid.text.Source;
 // The NoSonarFilter must be fed before launching the violation engines
 public class NoSonarAndCommentedOutLocSensor implements Sensor {
 
-  private final static Logger log = LoggerFactory.getLogger(NoSonarAndCommentedOutLocSensor.class);
+  private static final double CODE_RECOGNIZER_SENSITIVITY = 0.9;
+
+  private static final Logger LOG = LoggerFactory.getLogger(NoSonarAndCommentedOutLocSensor.class);
 
   /**
    * 
@@ -86,12 +88,11 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
   protected static Source analyseSourceCode(File file) {
     Source result = null;
     try {
-
-      result = new Source(new FileReader(file), new CodeRecognizer(0.9, new PhpLanguageFootprint()));
+      result = new Source(new FileReader(file), new CodeRecognizer(CODE_RECOGNIZER_SENSITIVITY, new PhpLanguageFootprint()));
     } catch (FileNotFoundException e) {
       throw new SonarException("Unable to open file '" + file.getAbsolutePath() + "'", e);
     } catch (RuntimeException rEx) {
-      log.error("error while parsing file '" + file.getAbsolutePath() + "'", rEx);
+      LOG.error("error while parsing file '" + file.getAbsolutePath() + "'", rEx);
     }
     return result;
   }
@@ -105,14 +106,19 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
 
   private static class PhpLanguageFootprint implements LanguageFootprint {
 
+    private static final double CAMEL_CASE_PROBABILITY = 0.5;
+    private static final double CONDITIONAL_PROBABILITY = 0.95;
+    private static final double PHP_KEYWORDS_PROBABILITY = 0.3;
+    private static final double BOOLEAN_OPERATOR_PROBABILITY = 0.7;
+    private static final double END_WITH_DETECTOR_PROBABILITY = 0.95;
     private final Set<Detector> detectors = new HashSet<Detector>();
 
     public PhpLanguageFootprint() {
-      detectors.add(new EndWithDetector(0.95, '}', ';', '{'));
-      detectors.add(new KeywordsDetector(0.7, "||", "&&"));
-      detectors.add(new KeywordsDetector(0.3, Php.PHP_KEYWORDS_ARRAY));
-      detectors.add(new ContainsDetector(0.95, "++", "for(", "if(", "while(", "catch(", "switch(", "try{", "else{"));
-      detectors.add(new CamelCaseDetector(0.5));
+      detectors.add(new EndWithDetector(END_WITH_DETECTOR_PROBABILITY, '}', ';', '{'));
+      detectors.add(new KeywordsDetector(BOOLEAN_OPERATOR_PROBABILITY, "||", "&&"));
+      detectors.add(new KeywordsDetector(PHP_KEYWORDS_PROBABILITY, Php.PHP_KEYWORDS_ARRAY));
+      detectors.add(new ContainsDetector(CONDITIONAL_PROBABILITY, "++", "for(", "if(", "while(", "catch(", "switch(", "try{", "else{"));
+      detectors.add(new CamelCaseDetector(CAMEL_CASE_PROBABILITY));
     }
 
     /**

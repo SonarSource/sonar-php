@@ -50,7 +50,7 @@ public class PmdRuleset {
   }
 
   public String getDescription() {
-    return description;// NOSONAR unwritten field
+    return description;
   }
 
   public void addRule(PmdRule rule) {

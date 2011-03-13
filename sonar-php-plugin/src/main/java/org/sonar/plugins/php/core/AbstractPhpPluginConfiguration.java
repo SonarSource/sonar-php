@@ -37,8 +37,8 @@ import org.sonar.api.resources.Project;
  */
 public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
-  protected final static String SONAR_DYNAMIC_ANALYSIS = "sonar.dynamicAnalysis";
-  protected final static Boolean DEFAULT_SONAR_DYNAMIC_ANALYSIS = true;
+  protected static final String SONAR_DYNAMIC_ANALYSIS = "sonar.dynamicAnalysis";
+  protected static final Boolean DEFAULT_SONAR_DYNAMIC_ANALYSIS = true;
 
   protected Project project;
 

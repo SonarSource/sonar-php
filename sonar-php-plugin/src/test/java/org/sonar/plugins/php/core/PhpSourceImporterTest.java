@@ -100,12 +100,12 @@ public class PhpSourceImporterTest {
 
     new PhpSourceImporter(project).analyse(project, context);
     for (String name : sourceNames) {
-      PhpFile pf = PhpFile.getInstance(project).fromIOFile(new File(sources, name), Arrays.asList(sources), false);
-      verify(context).saveSource(pf, phpCode);
+      PhpFile file = PhpFile.getInstance(project).fromIOFile(new File(sources, name), Arrays.asList(sources), false);
+      verify(context).saveSource(file, phpCode);
     }
     for (String name : testNames) {
-      PhpFile pf = PhpFile.getInstance(project).fromIOFile(new File(tests, name), Arrays.asList(tests), true);
-      verify(context).saveSource(pf, phpCode);
+      PhpFile file = PhpFile.getInstance(project).fromIOFile(new File(tests, name), Arrays.asList(tests), true);
+      verify(context).saveSource(file, phpCode);
     }
     verifyNoMoreInteractions(context);
   }

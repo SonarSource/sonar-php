@@ -51,7 +51,7 @@ public final class Php extends AbstractLanguage {
     "__DIR__", "__FILE__", "__LINE__", "$this" };
 
   /** An php instance. */
-  public final static Php PHP = new Php();
+  public static final Php PHP = new Php();
 
   /** The php language key. */
   public static final String KEY = "php";

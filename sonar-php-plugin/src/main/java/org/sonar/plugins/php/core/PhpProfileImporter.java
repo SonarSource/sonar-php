@@ -51,7 +51,7 @@ public abstract class PhpProfileImporter extends ProfileImporter {
     setSupportedLanguages(Php.KEY);
   }
 
-  private final static Logger LOG = LoggerFactory.getLogger(PhpmdProfileImporter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpmdProfileImporter.class);
 
   /**
    * @param messages
