@@ -46,11 +46,12 @@ public class PhpmdViolationsXmlParserTest {
   public void shouldThrowExceptionWhenReportFileDoesNotExist() throws MalformedURLException {
     File reportFile = mock(File.class);
     when(reportFile.exists()).thenReturn(Boolean.FALSE);
-    new PhpmdViolationsXmlParser(reportFile.toURL());
+    PhpmdViolationsXmlParser parser = new PhpmdViolationsXmlParser(reportFile.toURL());
+    parser.getViolations();
   }
 
   /**
-   * Should get valid suffixe option.
+   * Should get violations from the file.
    */
   @Test
   public void parserTest() {

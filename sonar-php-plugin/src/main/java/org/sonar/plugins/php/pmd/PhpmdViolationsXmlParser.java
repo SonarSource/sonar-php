@@ -31,6 +31,7 @@ import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.utils.SonarException;
 import org.sonar.api.utils.XmlParserException;
 
 /**
@@ -63,6 +64,9 @@ public class PhpmdViolationsXmlParser {
   public PhpmdViolationsXmlParser(URL url) {
     this.url = url;
     LOG.debug("Report file for Phpms is " + url);
+    if (url == null) {
+      throw new SonarException("URL associated to phpmd report file is null, check that report is existant");
+    }
   }
 
   /**
