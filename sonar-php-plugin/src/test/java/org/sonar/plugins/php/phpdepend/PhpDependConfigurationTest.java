@@ -26,8 +26,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -43,10 +47,9 @@ import org.sonar.api.resources.ProjectFileSystem;
  */
 public class PhpDependConfigurationTest {
 
-  private static final String REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
-  private static final String DEFAULT_REPORT_FILE_PATH = PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH;
-  private static final String DEFAULT_REPORT_FILE_NAME = PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME;
-  private static final String REPORT_FILE_NAME_PROPERTY_KEY = PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
+  private static final String REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+  private static final String DEFAULT_REPORT_FILE_NAME = PDEPEND_DEFAULT_REPORT_FILE_NAME;
+  private static final String REPORT_FILE_NAME_PROPERTY_KEY = PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
 
   @Test
   public void testGetIgnoreDirsWithNotNull() {

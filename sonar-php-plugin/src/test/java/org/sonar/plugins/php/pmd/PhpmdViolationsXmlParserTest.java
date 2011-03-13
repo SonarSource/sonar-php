@@ -45,7 +45,7 @@ public class PhpmdViolationsXmlParserTest {
   @Test(expected = SonarException.class)
   public void shouldThrowExceptionWhenReportFileDoesNotExist() throws MalformedURLException {
     File reportFile = mock(File.class);
-    when(reportFile.exists()).thenReturn(Boolean.FALSE);
+   // when(reportFile.exists()).thenReturn(Boolean.FALSE);
     PhpmdViolationsXmlParser parser = new PhpmdViolationsXmlParser(reportFile.toURL());
     parser.getViolations();
   }
