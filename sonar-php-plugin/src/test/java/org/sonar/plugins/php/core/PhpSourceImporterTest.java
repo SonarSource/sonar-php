@@ -98,7 +98,10 @@ public class PhpSourceImporterTest {
     createFiles(sources, false);
     createFiles(tests, true);
 
-    new PhpSourceImporter(project).analyse(project, context);
+    PhpSourceImporter importer = new PhpSourceImporter(project);
+    importer.analyse(project, context);
+    importer.toString();
+
     for (String name : sourceNames) {
       PhpFile file = PhpFile.getInstance(project).fromIOFile(new File(sources, name), Arrays.asList(sources), false);
       verify(context).saveSource(file, phpCode);

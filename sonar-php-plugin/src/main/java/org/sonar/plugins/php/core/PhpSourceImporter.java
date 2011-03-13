@@ -115,13 +115,11 @@ public class PhpSourceImporter extends AbstractSourceImporter {
     parseDirs(context, testFiles, testDirs, true, fileSystem.getSourceCharset());
 
     // Display source dirs and tests directories if info level is enabled.
-    if (LOG.isInfoEnabled()) {
-      for (File directory : sourceDirs) {
-        LOG.info(directory.getName());
-      }
-      for (File directory : testDirs) {
-        LOG.info(directory.getName());
-      }
+    for (File directory : sourceDirs) {
+      LOG.info(directory.getName());
+    }
+    for (File directory : testDirs) {
+      LOG.info(directory.getName());
     }
   }
 
