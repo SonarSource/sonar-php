@@ -44,16 +44,16 @@ import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPUNIT_COVERAGE
 import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPUNIT_EXECUTE_MESSAGE;
 import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHP_FILE_SUFFIXES_DESCRIPTION;
 import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHP_FILE_SUFFIXES_MESSAGE;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_DESCRIPTION;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_MESSAGE;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_ANALYZE_ONLY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_ANALYZE_ONLY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_MESSAGE;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_MESSAGE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_PROPERTY_KEY;
@@ -106,6 +106,7 @@ import org.sonar.plugins.php.phpunit.PhpUnitExecutor;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitSensor;
 import org.sonar.plugins.php.pmd.PhpmdConfiguration;
+import org.sonar.plugins.php.pmd.PhpmdExecutor;
 import org.sonar.plugins.php.pmd.PhpmdProfile;
 import org.sonar.plugins.php.pmd.PhpmdProfileExporter;
 import org.sonar.plugins.php.pmd.PhpmdProfileImporter;
@@ -214,10 +215,24 @@ public class PhpPlugin implements Plugin {
     // Phpmd
     extensions.add(PhpmdSensor.class);
     extensions.add(PhpmdRuleRepository.class);
+    extensions.add(PhpmdConfiguration.class);
+    extensions.add(PhpmdExecutor.class);
     extensions.add(PhpmdProfile.class);
     extensions.add(PmdRulePriorityMapper.class);
     extensions.add(PhpmdProfileImporter.class);
     extensions.add(PhpmdProfileExporter.class);
+
+    // Code sniffer
+    extensions.add(NoSonarAndCommentedOutLocSensor.class);
+    extensions.add(PhpCodeSnifferRuleRepository.class);
+    extensions.add(PhpCodeSnifferExecutor.class);
+    extensions.add(PhpCodeSnifferViolationsXmlParser.class);
+    extensions.add(PhpCodesnifferSensor.class);
+    extensions.add(PhpCodeSnifferProfile.class);
+    extensions.add(PhpCodeSnifferConfiguration.class);
+    extensions.add(PhpCodeSnifferPriorityMapper.class);
+    extensions.add(PhpCodeSnifferProfileExporter.class);
+    extensions.add(PhpCodeSnifferProfileImporter.class);
 
     // PhpUnit
     extensions.add(PhpUnitConfiguration.class);
@@ -231,18 +246,6 @@ public class PhpPlugin implements Plugin {
     extensions.add(PhpCpdExecutor.class);
     extensions.add(PhpCpdResultParser.class);
     extensions.add(PhpCpdSensor.class);
-
-    // Code sniffer
-    extensions.add(NoSonarAndCommentedOutLocSensor.class);
-    extensions.add(PhpCodeSnifferRuleRepository.class);
-    extensions.add(PhpCodeSnifferExecutor.class);
-    extensions.add(PhpCodeSnifferViolationsXmlParser.class);
-    extensions.add(PhpCodesnifferSensor.class);
-    extensions.add(PhpCodeSnifferProfile.class);
-    extensions.add(PhpCodeSnifferConfiguration.class);
-    extensions.add(PhpCodeSnifferPriorityMapper.class);
-    extensions.add(PhpCodeSnifferProfileExporter.class);
-    extensions.add(PhpCodeSnifferProfileImporter.class);
 
     return extensions;
   }

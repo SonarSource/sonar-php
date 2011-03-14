@@ -23,6 +23,9 @@ package org.sonar.plugins.php.pmd.xml;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 public final class PmdRule implements Comparable<String> {
 
   private String ref;
@@ -79,15 +82,7 @@ public final class PmdRule implements Comparable<String> {
    */
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((clazz == null) ? 0 : clazz.hashCode());
-    result = prime * result + ((message == null) ? 0 : message.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((priority == null) ? 0 : priority.hashCode());
-    result = prime * result + ((properties == null) ? 0 : properties.hashCode());
-    result = prime * result + ((ref == null) ? 0 : ref.hashCode());
-    return result;
+    return HashCodeBuilder.reflectionHashCode(this);
   }
 
   /**
@@ -95,17 +90,8 @@ public final class PmdRule implements Comparable<String> {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    PmdRule other = (PmdRule) obj;
-    return other.ref.equals(this.ref);
+    String[] excludeFields = { "priority", "message", "name", "properties", "clazz" };
+    return EqualsBuilder.reflectionEquals(this, obj, excludeFields);
   }
 
   public String getPriority() {

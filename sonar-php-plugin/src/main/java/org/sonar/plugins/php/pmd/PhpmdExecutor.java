@@ -21,12 +21,18 @@
 package org.sonar.plugins.php.pmd;
 
 import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_OPTION;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_OPTION;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FORMAT;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.sonar.plugins.php.core.Php;
+import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
 
 /**
@@ -36,7 +42,9 @@ public class PhpmdExecutor extends PhpPluginAbstractExecutor {
 
   private static final String PHPMD_PATH_SEPARATOR = ",";
   /** The config. */
-  private PhpmdConfiguration config;
+  private PhpmdConfiguration configuration;
+  private PhpmdProfileExporter exporter;
+  private RulesProfile profile;
 
   /**
    * Instantiates a new php checkstyle executor.
@@ -44,9 +52,11 @@ public class PhpmdExecutor extends PhpPluginAbstractExecutor {
    * @param configuration
    *          the configuration
    */
-  public PhpmdExecutor(PhpmdConfiguration configuration) {
-    this.config = configuration;
+  public PhpmdExecutor(PhpmdConfiguration configuration, PhpmdProfileExporter exporter, RulesProfile profile) {
+    this.configuration = configuration;
     PHP.setConfiguration(configuration.getProject().getConfiguration());
+    this.exporter = exporter;
+    this.profile = profile;
   }
 
   /**
@@ -59,25 +69,31 @@ public class PhpmdExecutor extends PhpPluginAbstractExecutor {
   @Override
   protected List<String> getCommandLine() {
     List<String> result = new ArrayList<String>();
-    result.add(config.getOsDependentToolScriptName());
+    result.add(configuration.getOsDependentToolScriptName());
 
     // SONARPLUGINS-546 PhpmdExecutor: wrong dirs params
-    result.add(StringUtils.join(config.getSourceDirectories(), PHPMD_PATH_SEPARATOR));
+    result.add(StringUtils.join(configuration.getSourceDirectories(), PHPMD_PATH_SEPARATOR));
 
-    result.add(PhpmdConfiguration.PHPMD_REPORT_FORMAT);
-    result.add(config.getRulesets());
-    result.add(PhpmdConfiguration.PHPMD_REPORT_FILE_OPTION);
-    result.add(config.getReportFile().getAbsolutePath());
+    result.add(PHPMD_REPORT_FORMAT);
+    File ruleset = getRuleset(configuration, profile, exporter);
+    if (ruleset != null) {
+      result.add(ruleset.getAbsolutePath());
+    } else {
+      result.add(configuration.getRulesets());
+    }
+
+    result.add(PHPMD_REPORT_FILE_OPTION);
+    result.add(configuration.getReportFile().getAbsolutePath());
     // result.add(PhpmdConfiguration.PHPMD_LEVEL_OPTION);
     // result.add(config.getLevel());
-    if (config.isStringPropertySet(PhpmdConfiguration.PHPMD_IGNORE_ARGUMENT_KEY)) {
-      result.add(PhpmdConfiguration.PHPMD_IGNORE_OPTION);
-      result.add(config.getIgnoreList());
+    if (configuration.isStringPropertySet(PhpmdConfiguration.PHPMD_IGNORE_ARGUMENT_KEY)) {
+      result.add(PHPMD_IGNORE_OPTION);
+      result.add(configuration.getIgnoreList());
     }
-    result.add(PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION);
-    result.add(StringUtils.join(Php.PHP.getFileSuffixes(), ","));
-    if (config.isStringPropertySet(PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY)) {
-      result.add(config.getArgumentLine());
+    result.add(PHPMD_EXTENSIONS_OPTION);
+    result.add(StringUtils.join(PHP.getFileSuffixes(), ","));
+    if (configuration.isStringPropertySet(PHPMD_ARGUMENT_LINE_KEY)) {
+      result.add(configuration.getArgumentLine());
     }
     return result;
   }

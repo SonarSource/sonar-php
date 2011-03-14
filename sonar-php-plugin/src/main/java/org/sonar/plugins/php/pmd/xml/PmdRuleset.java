@@ -57,4 +57,8 @@ public class PmdRuleset {
     rules.add(rule);
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
 }

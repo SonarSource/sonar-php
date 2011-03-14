@@ -74,6 +74,7 @@ public class PhpCodeSnifferProfileExporter extends ProfileExporter {
       PmdRuleset ruleset = createRuleset(activeRulesByRepository, profile.getName());
       String xmlModules = exportRulesetToXml(ruleset);
       writer.append(xmlModules);
+      writer.flush();
     } catch (IOException e) {
       throw new SonarException("Fail to export the profile " + profile, e);
     }

@@ -83,6 +83,7 @@ public class PhpCodesnifferSensor implements Sensor {
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
   public void analyse(Project project, SensorContext context) {
+   
     PhpCodeSnifferConfiguration configuration = executor.getConfiguration();
     configuration.createWorkingDirectory();
 

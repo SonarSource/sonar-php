@@ -73,6 +73,7 @@ public class PhpmdProfileExporter extends ProfileExporter {
       PmdRuleset tree = createPmdRuleset(profile.getActiveRulesByRepository(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY), profile.getName());
       String xmlModules = exportPmdRulesetToXml(tree);
       writer.append(xmlModules);
+      writer.flush();
     } catch (IOException e) {
       throw new SonarException("Fail to export the profile " + profile, e);
     }

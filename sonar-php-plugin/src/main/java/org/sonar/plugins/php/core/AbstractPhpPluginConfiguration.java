@@ -147,12 +147,13 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
     }
   }
 
-  public void createWorkingDirectory() {
+  public File createWorkingDirectory() {
     File target = getProject().getFileSystem().getBuildDir();
     File logs = new File(target, getReportFileRelativePath());
     synchronized (this) {
       logs.mkdirs();
     }
+    return logs;
   }
 
   /**

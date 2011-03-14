@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
+import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.PhpPlugin;
 
@@ -50,7 +51,11 @@ public class PhpCodesnifferExecutorTest {
     when(p.getConfiguration()).thenReturn(configuration);
     when(c.getProject()).thenReturn(p);
     when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
-    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c);
+
+    RulesProfile profile = mock(RulesProfile.class);
+    PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);
+
+    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c, e, profile);
     executor.getCommandLine();
   }
 
@@ -67,7 +72,11 @@ public class PhpCodesnifferExecutorTest {
     when(p.getConfiguration()).thenReturn(configuration);
     when(c.getProject()).thenReturn(p);
     when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
-    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c);
+
+    RulesProfile profile = mock(RulesProfile.class);
+    PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);
+    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c, e, profile);
+
     List<String> commandLine = executor.getCommandLine();
     String expected = "--extensions=php,php2";
     assertThat(commandLine).contains(expected);

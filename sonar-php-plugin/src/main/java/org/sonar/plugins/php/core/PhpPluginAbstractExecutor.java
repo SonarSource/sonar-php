@@ -23,16 +23,21 @@ package org.sonar.plugins.php.core;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
+import org.sonar.api.profiles.ProfileExporter;
+import org.sonar.api.profiles.RulesProfile;
 
 /**
  * Abstract php plugin executor. This class handles common executor needs such as running the process, reading its common and error output
@@ -48,7 +53,6 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
 
     /** The logger. */
     private static final Logger LOG = LoggerFactory.getLogger(AsyncPipe.class);
-
     /** The input stream. */
     private BufferedReader reader;
 
@@ -92,6 +96,8 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
   /** The logger */
   private static final Logger LOG = LoggerFactory.getLogger(PhpPluginAbstractExecutor.class);
   private static final int DEFAUT_BUFFER_INITIAL_SIZE = 1024;
+  private static final String RULESET_PREFIX = "ruleset";
+  private static final String XML_SUFFIX = ".xml";
 
   /**
    * Executes the external tool.
@@ -122,6 +128,20 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
       LOG.error("Async pipe interrupted: ", e);
       throw new PhpPluginExecutionException(e);
     }
+  }
+
+  protected File getRuleset(AbstractPhpPluginConfiguration configuration, RulesProfile profile, ProfileExporter exporter) {
+    File workingDir = configuration.createWorkingDirectory();
+    File ruleset = null;
+    try {
+      ruleset = File.createTempFile(RULESET_PREFIX, XML_SUFFIX, workingDir);
+      Writer writer = new FileWriter(ruleset);
+      exporter.exportProfile(profile, writer);
+    } catch (IOException e) {
+      String msg = "Error while creating  temporary ruleset from profile: " + profile + " to file : " + ruleset + " in dir " + workingDir;
+      LOG.error(msg);
+    }
+    return ruleset.length() > 0 ? ruleset : null;
   }
 
   /**

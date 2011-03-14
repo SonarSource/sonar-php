@@ -61,16 +61,20 @@ public class PhpmdSensor implements Sensor {
   /** The plugin configuration. */
   private PhpmdConfiguration config;
 
+  /** The plugin configuration. */
+  private PhpmdExecutor executor;
+
   /**
    * /** Instantiates a new php pmd sensor.
    * 
    * @param rulesManager
    *          the rules manager
    */
-  public PhpmdSensor(RulesProfile profile, RuleFinder ruleFinder) {
+  public PhpmdSensor(RulesProfile profile, RuleFinder ruleFinder, PhpmdExecutor executor) {
     super();
     this.ruleFinder = ruleFinder;
     this.profile = profile;
+    this.executor = executor;
   }
 
   /**
@@ -87,7 +91,7 @@ public class PhpmdSensor implements Sensor {
     // If configured so, execute the tool
     PhpmdConfiguration configuration = getConfiguration(project);
     if ( !configuration.isAnalyseOnly()) {
-      PhpmdExecutor executor = new PhpmdExecutor(config);
+      // PhpmdExecutor executor = new PhpmdExecutor(config);
       configuration.createWorkingDirectory();
       executor.execute();
     }
