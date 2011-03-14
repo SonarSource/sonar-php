@@ -104,12 +104,12 @@
     <description><![CDATA[Name of method returning boolean starting with get]]></description>
   </rule>
 
-  <!-- <rule key="Unused Code Rules/UnusedPrivateField" priority="MAJOR"> -->
-  <!-- <name><![CDATA[Unused private field]]></name> -->
-  <!-- <configKey><![CDATA[rulesets/unusedcode.xml/UnusedPrivateField]]></configKey> -->
-  <!-- <category name="Usability"/> -->
-  <!-- <description><![CDATA[Unused private field]]></description> -->
-  <!-- </rule> -->
+  <rule key="Unused Code Rules/UnusedPrivateField" priority="MAJOR">
+    <name><![CDATA[Unused private field]]></name>
+    <configKey><![CDATA[rulesets/unusedcode.xml/UnusedPrivateField]]></configKey>
+    <category name="Usability"/>
+    <description><![CDATA[Unused private field]]></description>
+  </rule>
   <rule key="Unused Code Rules/UnusedLocalVariable" priority="MAJOR">
     <name><![CDATA[Unused local variable]]></name>
     <configKey><![CDATA[rulesets/unusedcode.xml/UnusedLocalVariable]]></configKey>

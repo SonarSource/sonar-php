@@ -99,7 +99,7 @@ public class PhpmdSensor implements Sensor {
     LOG.info("Phpmd  report file: " + report.getAbsolutePath());
     PhpmdViolationsXmlParser reportParser;
     try {
-      reportParser = new PhpmdViolationsXmlParser(report.toURL());
+      reportParser = new PhpmdViolationsXmlParser(report.toURI().toURL());
 
       List<PhpmdViolation> violations = reportParser.getViolations();
       List<Violation> contextViolations = new ArrayList<Violation>();
