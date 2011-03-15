@@ -20,6 +20,8 @@
 
 package org.sonar.plugins.php.codesniffer;
 
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
+
 import java.io.IOException;
 import java.io.Reader;
 
@@ -92,7 +94,7 @@ public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
         continue;
       }
       // Attention: rule is retrieved using the key field which different of what is done on PmdImporter that uses configKey.
-      Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY).withKey(key));
+      Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(PHPCS_REPOSITORY_KEY).withKey(key));
       if (rule != null) {
         ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
         if (pmdRule.getProperties() != null) {

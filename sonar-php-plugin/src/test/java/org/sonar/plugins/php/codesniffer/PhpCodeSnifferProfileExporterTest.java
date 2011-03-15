@@ -20,7 +20,7 @@
 
 package org.sonar.plugins.php.codesniffer;
 
-import static org.junit.Assert.assertEquals;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
@@ -67,7 +66,6 @@ public class PhpCodeSnifferProfileExporterTest {
   }
 
   @Test
-  @Ignore("We must set a rules.xml with params to be able to test this")
   public void testExportComplexProfile() throws IOException, SAXException {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
     PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
@@ -80,8 +78,9 @@ public class PhpCodeSnifferProfileExporterTest {
 
     StringWriter xmlOutput = new StringWriter();
     exporter.exportProfile(rulesProfile, xmlOutput);
-    String exptected = StringUtils.remove(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/complex-export.xml"), '\r');
-    assertEquals(exptected, StringUtils.remove(xmlOutput.toString(), '\r'));
+    String expected = StringUtils.remove(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/complex-export.xml"), '\r');
+    String filteredOuput = StringUtils.remove(xmlOutput.toString(), '\r');
+    assertThat(filteredOuput).isEqualTo(expected);
   }
 
   @Test
@@ -97,8 +96,9 @@ public class PhpCodeSnifferProfileExporterTest {
 
     StringWriter xmlOutput = new StringWriter();
     exporter.exportProfile(rulesProfile, xmlOutput);
-    String exptected = StringUtils.remove(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/simple-export.xml"), '\r');
-    assertEquals(exptected, StringUtils.remove(xmlOutput.toString(), '\r'));
+    String expected = StringUtils.remove(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/simple-export.xml"), '\r');
+    String filteredOuput = StringUtils.remove(xmlOutput.toString(), '\r');
+    assertThat(filteredOuput).isEqualTo(expected);
   }
 
   public static class MockPhpCodeSnifferRuleFinder implements RuleFinder {
