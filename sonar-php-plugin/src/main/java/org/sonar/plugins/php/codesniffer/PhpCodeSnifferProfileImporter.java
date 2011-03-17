@@ -20,6 +20,7 @@
 
 package org.sonar.plugins.php.codesniffer;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 
 import java.io.IOException;
@@ -88,34 +89,48 @@ public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
   protected RulesProfile createRuleProfile(PmdRuleset pmdRuleset, ValidationMessages messages) {
     RulesProfile profile = RulesProfile.create(pmdRuleset.getName(), Php.KEY);
     for (PmdRule pmdRule : pmdRuleset.getPmdRules()) {
+      boolean isRuleValid = true;
       String key = pmdRule.getRef();
       if (key == null) {
         messages.addWarningText("A rule without 'ref' attribute can't be imported. see '" + pmdRule.getClazz() + "'");
-        continue;
+        isRuleValid = false;
       }
       // Attention: rule is retrieved using the key field which different of what is done on PmdImporter that uses configKey.
       Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(PHPCS_REPOSITORY_KEY).withKey(key));
-      if (rule != null) {
-        ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
-        if (pmdRule.getProperties() != null) {
-          for (PmdProperty prop : pmdRule.getProperties()) {
-            String name = prop.getName();
-            if (rule.getParam(name) == null) {
-              StringBuilder message = new StringBuilder("The property '").append(name);
-              message.append("' is not supported in the PhpCodeSniffer rule: ").append(key);
-              messages.addWarningText(message.toString());
-              continue;
-            }
-            activeRule.setParameter(name, prop.getValue());
-          }
-        }
-      } else {
+      if (rule == null) {
         StringBuilder message = new StringBuilder("Unable to import unknown PMD rule '");
         message.append(key).append("' consider adding an extension in sonar extenions directory");
         messages.addWarningText(message.toString());
+        isRuleValid = false;
+      }
+      ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
+      if (isRuleValid && pmdRule.getProperties() != null) {
+        createRule(messages, pmdRule, key, rule, activeRule);
       }
     }
     return profile;
+  }
+
+  /**
+   * @param messages
+   * @param pmdRule
+   * @param key
+   * @param rule
+   * @param activeRule
+   */
+  private void createRule(ValidationMessages messages, PmdRule pmdRule, String key, Rule rule, ActiveRule activeRule) {
+    for (PmdProperty prop : pmdRule.getProperties()) {
+      String name = prop.getName();
+      if (rule.getParam(name) != null) {
+        String value = prop.getValue();
+        String ruleValue = prop.isCdataValue() && isBlank(value) ? prop.getCdataValue() : value;
+        activeRule.setParameter(name, ruleValue);
+      } else {
+        StringBuilder message = new StringBuilder("The property '").append(name);
+        message.append("' is not supported in the PhpCodeSniffer rule: ").append(key);
+        messages.addWarningText(message.toString());
+      }
+    }
   }
 
   /**

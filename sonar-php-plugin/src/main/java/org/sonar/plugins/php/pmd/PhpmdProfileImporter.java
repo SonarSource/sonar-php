@@ -20,6 +20,9 @@
 
 package org.sonar.plugins.php.pmd;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
+
 import java.io.IOException;
 import java.io.Reader;
 
@@ -82,38 +85,50 @@ public class PhpmdProfileImporter extends PhpProfileImporter {
         StringBuilder message = new StringBuilder("PMD XPath rule '").append(pmdRule.getName());
         message.append("' can't be imported automatically. The rule must be created manually through the Sonar web interface.");
         messages.addWarningText(message.toString());
-        continue;
       }
       String configKey = pmdRule.getRef();
       if (configKey == null) {
         StringBuilder message = new StringBuilder("Rule '").append(pmdRule.getClazz());
         message.append("' does not have a 'ref' attribute and can't be imported");
         messages.addWarningText(message.toString());
-        continue;
-      }
-      Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY).withConfigKey(configKey));
-      if (rule != null) {
-        PmdRulePriorityMapper mapper = new PmdRulePriorityMapper();
-        ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
-        if (pmdRule.getProperties() != null) {
-          for (PmdProperty prop : pmdRule.getProperties()) {
-            String name = prop.getName();
-            if (rule.getParam(name) == null) {
-              StringBuilder message = new StringBuilder("The property '").append(name);
-              message.append("' is not supported in the pmd rule: ").append(configKey);
-              messages.addWarningText(message.toString());
-              continue;
-            }
-            activeRule.setParameter(name, prop.getValue());
-          }
-        }
       } else {
-        StringBuilder message = new StringBuilder("Unable to import unknown PMD rule '");
-        message.append(configKey).append("' consider adding an extension in sonar extenions directory");
-        messages.addWarningText(message.toString());
+        Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(PHPMD_REPOSITORY_KEY).withConfigKey(configKey));
+        if (rule == null) {
+          StringBuilder message = new StringBuilder("Unable to import unknown PMD rule '");
+          message.append(configKey).append("' consider adding an extension in sonar extenions directory");
+          messages.addWarningText(message.toString());
+        } else {
+          createRule(messages, profile, pmdRule, configKey, rule);
+        }
       }
     }
     return profile;
+  }
+
+  /**
+   * @param messages
+   * @param profile
+   * @param pmdRule
+   * @param configKey
+   * @param rule
+   */
+  private void createRule(ValidationMessages messages, RulesProfile profile, PmdRule pmdRule, String configKey, Rule rule) {
+    PmdRulePriorityMapper mapper = new PmdRulePriorityMapper();
+    ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
+    if (pmdRule.getProperties() != null) {
+      for (PmdProperty prop : pmdRule.getProperties()) {
+        String name = prop.getName();
+        if (rule.getParam(name) != null) {
+          String value = prop.getValue();
+          String ruleValue = prop.isCdataValue() && isBlank(value) ? prop.getCdataValue() : value;
+          activeRule.setParameter(name, ruleValue);
+        } else {
+          StringBuilder message = new StringBuilder("The property '").append(name);
+          message.append("' is not supported in the pmd rule: ").append(configKey);
+          messages.addWarningText(message.toString());
+        }
+      }
+    }
   }
 
   /**

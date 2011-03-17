@@ -65,7 +65,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   public static final String PHPCS_ARGUMENT_LINE_KEY = "sonar.phpCodesniffer.argumentLine";
   public static final String PHPCS_DEFAULT_ARGUMENT_LINE = " ";
   public static final String PHPCS_IGNORE_ARGUMENT_KEY = "sonar.phpCodesniffer.ignoreArgument";
-  public static final String PHPCS_DEFAULT_IGNORE_ARGUMENT = " ";
   public static final String PHPCS_REPORT_MODIFIER = "--report=checkstyle";
   public static final String PHPCS_EXTENSIONS_MODIFIER = "--extensions=";
   public static final String PHPCS_IGNORE_MODIFIER = "--ignore=";

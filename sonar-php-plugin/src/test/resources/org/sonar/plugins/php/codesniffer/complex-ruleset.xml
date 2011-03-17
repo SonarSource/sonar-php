@@ -9,7 +9,7 @@
     <parameters>
       <parameter>
         <key>eolChar</key>
-        <value>aa</value>
+        <value><![CDATA[aaa]]></value>
       </parameter>
     </parameters>
   </rule>

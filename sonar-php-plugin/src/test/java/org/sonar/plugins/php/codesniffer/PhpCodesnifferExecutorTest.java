@@ -23,6 +23,9 @@ package org.sonar.plugins.php.codesniffer;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
+import static org.sonar.plugins.php.core.PhpPlugin.FILE_SUFFIXES_KEY;
 
 import java.io.File;
 import java.util.List;
@@ -66,7 +69,7 @@ public class PhpCodesnifferExecutorTest {
   public void testGetCommandLine2() {
     Configuration configuration = mock(Configuration.class);
     String[] suffixes = new String[] { "php", "php2" };
-    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(suffixes);
+    when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(suffixes);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
     Project p = mock(Project.class);
     when(p.getConfiguration()).thenReturn(configuration);
@@ -80,5 +83,38 @@ public class PhpCodesnifferExecutorTest {
     List<String> commandLine = executor.getCommandLine();
     String expected = "--extensions=php,php2";
     assertThat(commandLine).contains(expected);
+  }
+
+  /**
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   */
+  @Test
+  public void testGetCommandLine3() {
+    Configuration configuration = mock(Configuration.class);
+    String[] suffixes = new String[] { "php", "php2" };
+    when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(suffixes);
+    PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
+    Project p = mock(Project.class);
+    when(p.getConfiguration()).thenReturn(configuration);
+    when(c.getProject()).thenReturn(p);
+    when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
+
+    String modifierKey = PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
+    when(configuration.getString(modifierKey, PHPCS_SEVERITY_OR_LEVEL_MODIFIER)).thenReturn(PHPCS_SEVERITY_OR_LEVEL_MODIFIER);
+    when(c.isStringPropertySet(PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY)).thenReturn(true);
+    String severityModifier = "--level=";
+    String level = "--level=";
+    when(c.getSeverityModifier()).thenReturn(severityModifier);
+    when(c.getLevel()).thenReturn(level);
+
+    RulesProfile profile = mock(RulesProfile.class);
+    PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);
+    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c, e, profile);
+
+    List<String> commandLine = executor.getCommandLine();
+    String expected = "--extensions=php,php2";
+    assertThat(commandLine).contains(expected);
+    assertThat(commandLine).contains(severityModifier + level);
+
   }
 }
