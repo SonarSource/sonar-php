@@ -22,7 +22,6 @@ package org.sonar.plugins.php.pmd;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.net.MalformedURLException;
