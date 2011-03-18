@@ -101,8 +101,10 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
     if (configuration.isStringPropertySet(PHPUNIT_BOOTSTRAP_PROPERTY_KEY)) {
       result.add(PHPUNIT_BOOTSTRAP_OPTION + configuration.getBootstrap());
     }
+    boolean useMaintTestClass = true;
     if (configuration.isStringPropertySet(PHPUNIT_CONFIGURATION_PROPERTY_KEY)) {
       result.add(PHPUNIT_CONFIGURATION_OPTION + configuration.getConfiguration());
+      useMaintTestClass = false;
     }
     if (configuration.isStringPropertySet(PHPUNIT_LOADER_PROPERTY_KEY)) {
       result.add(PHPUNIT_LOADER_OPTION + configuration.getLoader());
@@ -120,14 +122,15 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
     if (configuration.shouldRunCoverage()) {
       result.add(PHPUNIT_COVERAGE_CLOVER_OPTION + configuration.getCoverageReportFile());
     }
-    // source directory is appended phpunit.
-    if ( !c.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY) || c.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)) {
-      result.add(getTestDirectoryOrFiles());
-    }
-    if (configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY)) {
+    if (useMaintTestClass && configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY)) {
       result.add(project.getName());
       result.add(configuration.getMainTestClass());
     }
+    // source directory is appended phpunit.
+    if ( !useMaintTestClass || !c.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY) || c.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)) {
+      result.add(getTestDirectoryOrFiles());
+    }
+
     return result;
   }
 

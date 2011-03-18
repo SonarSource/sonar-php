@@ -20,8 +20,11 @@
 
 package org.sonar.plugins.php.core;
 
+import static org.sonar.plugins.php.core.Php.PHP;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -31,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.AbstractSourceImporter;
 import org.sonar.api.batch.Phase;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
@@ -88,7 +90,11 @@ public class PhpSourceImporter extends AbstractSourceImporter {
    */
   @Override
   protected PhpFile createResource(File file, List<File> sourceDirs, boolean unitTest) {
-    return (file != null && !file.getName().contains("$")) ? PhpFile.getInstance(project).fromIOFile(file, sourceDirs, unitTest) : null;
+    PhpFile phpFile = null;
+    if (file != null && !file.getName().contains("$")) {
+      phpFile = PhpFile.getInstance(project).fromIOFile(file, sourceDirs, unitTest);
+    }
+    return phpFile;
   }
 
   /**
@@ -104,20 +110,20 @@ public class PhpSourceImporter extends AbstractSourceImporter {
   protected void doAnalyse(Project project, SensorContext context) throws IOException {
     // Importing source files
     ProjectFileSystem fileSystem = project.getFileSystem();
+    Charset sourceCharset = fileSystem.getSourceCharset();
+
     List<File> sourceDirs = fileSystem.getSourceDirs();
-    Language[] language = new Language[] { Php.PHP };
-    List<File> sourceFiles = fileSystem.getSourceFiles(language);
-    parseDirs(context, sourceFiles, sourceDirs, false, fileSystem.getSourceCharset());
-
-    // Importing tests files
-    List<File> testDirs = fileSystem.getTestDirs();
-    List<File> testFiles = fileSystem.getTestFiles(language);
-    parseDirs(context, testFiles, testDirs, true, fileSystem.getSourceCharset());
-
-    // Display source dirs and tests directories if info level is enabled.
+    List<File> sourceFiles = fileSystem.getSourceFiles(PHP);
+    parseDirs(context, sourceFiles, sourceDirs, false, sourceCharset);
     for (File directory : sourceDirs) {
       LOG.info(directory.getName());
     }
+
+    // Importing tests files
+    List<File> testDirs = fileSystem.getTestDirs();
+    List<File> testFiles = fileSystem.getTestFiles(PHP);
+    parseDirs(context, testFiles, testDirs, true, sourceCharset);
+    // Display source dirs and tests directories if info level is enabled.
     for (File directory : testDirs) {
       LOG.info(directory.getName());
     }
