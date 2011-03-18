@@ -61,6 +61,13 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
   public static final String PHPUNIT_DEFAULT_BOOTSTRAP = " ";
   public static final String PHPUNIT_CONFIGURATION_OPTION = "--configuration=";
   public static final String PHPUNIT_CONFIGURATION_PROPERTY_KEY = "sonar.phpUnit.configuration";
+
+  public static final String PHPUNIT_IGNORE_CONFIGURATION_OPTION = "--no-configuration";
+  public static final String PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY = "sonar.phpUnit.ignore.configuration";
+
+  public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY = "sonar.phpUnit.analyze.test.directory";
+  public static final Boolean PHPUNIT_DEFAULT_ANALYZE_TEST_DIRECTORY = true;
+
   public static final String PHPUNIT_DEFAULT_CONFIGURATION = " ";
   public static final String PHPUNIT_LOADER_OPTION = "--loader=";
   public static final String PHPUNIT_LOADER_PROPERTY_KEY = "sonar.phpUnit.loader";
