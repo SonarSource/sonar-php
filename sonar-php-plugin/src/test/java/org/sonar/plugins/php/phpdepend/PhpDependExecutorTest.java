@@ -160,6 +160,7 @@ public class PhpDependExecutorTest {
   private PhpDependConfiguration getConfiguration(Project project, final boolean isOsWindows, final String path) {
     PhpDependConfiguration config = new PhpDependConfiguration(project) {
 
+      @SuppressWarnings("unused")
       public String getCommandLinePath() {
         return path;
       }
