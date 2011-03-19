@@ -94,18 +94,30 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
     List<String> result = new ArrayList<String>();
     result.add(configuration.getOsDependentToolScriptName());
     Configuration c = configuration.getProject().getConfiguration();
+    addBasicOptions(result);
 
-    if (configuration.isStringPropertySet(PHPUNIT_FILTER_PROPERTY_KEY)) {
-      result.add(PHPUNIT_FILTER_OPTION + configuration.getFilter());
-    }
-    if (configuration.isStringPropertySet(PHPUNIT_BOOTSTRAP_PROPERTY_KEY)) {
-      result.add(PHPUNIT_BOOTSTRAP_OPTION + configuration.getBootstrap());
-    }
     boolean useMaintTestClass = true;
     if (configuration.isStringPropertySet(PHPUNIT_CONFIGURATION_PROPERTY_KEY)) {
       result.add(PHPUNIT_CONFIGURATION_OPTION + configuration.getConfiguration());
       useMaintTestClass = false;
     }
+    addExtendedOptions(result, c);
+    if (useMaintTestClass && configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY)) {
+      result.add(project.getName());
+      result.add(configuration.getMainTestClass());
+    }
+    // source directory is appended phpunit.
+    if ( !useMaintTestClass || !c.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY) || c.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)) {
+      result.add(getTestDirectoryOrFiles());
+    }
+    return result;
+  }
+
+  /**
+   * @param result
+   * @param c
+   */
+  private void addExtendedOptions(List<String> result, Configuration c) {
     if (configuration.isStringPropertySet(PHPUNIT_LOADER_PROPERTY_KEY)) {
       result.add(PHPUNIT_LOADER_OPTION + configuration.getLoader());
     }
@@ -122,16 +134,18 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
     if (configuration.shouldRunCoverage()) {
       result.add(PHPUNIT_COVERAGE_CLOVER_OPTION + configuration.getCoverageReportFile());
     }
-    if (useMaintTestClass && configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY)) {
-      result.add(project.getName());
-      result.add(configuration.getMainTestClass());
-    }
-    // source directory is appended phpunit.
-    if ( !useMaintTestClass || !c.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY) || c.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)) {
-      result.add(getTestDirectoryOrFiles());
-    }
+  }
 
-    return result;
+  /**
+   * @param result
+   */
+  private void addBasicOptions(List<String> result) {
+    if (configuration.isStringPropertySet(PHPUNIT_FILTER_PROPERTY_KEY)) {
+      result.add(PHPUNIT_FILTER_OPTION + configuration.getFilter());
+    }
+    if (configuration.isStringPropertySet(PHPUNIT_BOOTSTRAP_PROPERTY_KEY)) {
+      result.add(PHPUNIT_BOOTSTRAP_OPTION + configuration.getBootstrap());
+    }
   }
 
   /**
