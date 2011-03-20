@@ -69,6 +69,7 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
     if (configuration.isStringPropertySet(PDEPEND_EXCLUDE_PACKAGE_KEY)) {
       result.add(PDEPEND_EXCLUDE_OPTION + configuration.getExcludePackages());
     }
+
     boolean sonarExclusionsIsSet = configuration.isStringPropertySet(PROJECT_EXCLUSIONS_PROPERTY);
     boolean ignoreKeyIsSet = configuration.isStringPropertySet(PDEPEND_IGNORE_KEY);
     if (ignoreKeyIsSet || sonarExclusionsIsSet) {

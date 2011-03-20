@@ -85,7 +85,7 @@ public class PhpCodeSnifferExecutor extends PhpPluginAbstractExecutor {
       result.add(severityOption + configuration.getLevel());
     }
     // default standard is no standard (but maybe Pear is taken)
-    // TODO use a generated ruleset from the current profile and pass it to standard.
+    // use a generated ruleset from the current profile and pass it to standard.
     if (configuration.isStringPropertySet(PHPCS_STANDARD_ARGUMENT_KEY)) {
       result.add(PHPCS_STANDARD_MODIFIER + configuration.getStandard());
     } else {

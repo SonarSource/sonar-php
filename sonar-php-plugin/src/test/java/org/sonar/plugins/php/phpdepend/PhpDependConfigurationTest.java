@@ -27,6 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_COMMAND_LINE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
@@ -128,7 +129,7 @@ public class PhpDependConfigurationTest {
     Project project = getMockProject();
     PhpDependConfiguration config = getWindowsConfiguration(project);
 
-    assertThat(config.getOsDependentToolScriptName(), is(PhpDependConfiguration.PDEPEND_COMMAND_LINE + ".bat"));
+    assertThat(config.getOsDependentToolScriptName(), is(PDEPEND_COMMAND_LINE + ".bat"));
   }
 
   /**
@@ -139,7 +140,7 @@ public class PhpDependConfigurationTest {
     Project project = getMockProject();
     // new Php();
     PhpDependConfiguration config = getNotWindowsConfiguration(project);
-    assertThat(config.getOsDependentToolScriptName(), is(PhpDependConfiguration.PDEPEND_COMMAND_LINE));
+    assertThat(config.getOsDependentToolScriptName(), is(PDEPEND_COMMAND_LINE));
   }
 
   /**

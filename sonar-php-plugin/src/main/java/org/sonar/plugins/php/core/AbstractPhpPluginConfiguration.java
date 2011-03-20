@@ -31,56 +31,50 @@ import org.sonar.api.BatchExtension;
 import org.sonar.api.resources.Project;
 
 /**
- * //TODO Refactor this class to make it more abstract Abstract php plugin configuration.
  * 
  * Each php plugin should redefine properties names, it handles common properties initialization.
  */
 public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
+  /** The logger. */
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpPluginConfiguration.class);
+  /** Suffix used by windows for script files */
+  private static final String WINDOWS_BAT_SUFFIX = ".bat";
   protected static final String SONAR_DYNAMIC_ANALYSIS = "sonar.dynamicAnalysis";
   protected static final Boolean DEFAULT_SONAR_DYNAMIC_ANALYSIS = true;
 
   protected Project project;
+  /** Indicates whether the plugin should only analyze results or launch tool. */
+  protected boolean analyzeOnly;
+  /** The tool argument line. */
+  private String argumentLine;
+  /** The report file name. */
+  private String reportFileName;
+  /** The report file relative path. */
+  private String reportFileRelativePath;
 
+  /**
+   * @param project
+   */
   protected AbstractPhpPluginConfiguration(Project project) {
     this.project = project;
     Configuration configuration = getProject().getConfiguration();
     if (getReportFileNameKey() != null) {
-      reportFileName = configuration.getString(getReportFileNameKey(), getDefaultReportFileName());
+      this.reportFileName = configuration.getString(getReportFileNameKey(), getDefaultReportFileName());
     }
     if (getReportFileRelativePathKey() != null) {
-      reportFileRelativePath = configuration.getString(getReportFileRelativePathKey(), getDefaultReportFilePath());
-      File reportDirectory = new File(getProject().getFileSystem().getBuildDir().getAbsolutePath(), reportFileRelativePath);
+      this.reportFileRelativePath = configuration.getString(getReportFileRelativePathKey(), getDefaultReportFilePath());
+      String absolutePath = getProject().getFileSystem().getBuildDir().getAbsolutePath();
+      File reportDirectory = new File(absolutePath, reportFileRelativePath);
       reportDirectory.mkdir();
-
     }
     if (getArgumentLineKey() != null) {
-      argumentLine = configuration.getString(getArgumentLineKey(), getDefaultArgumentLine());
+      this.argumentLine = configuration.getString(getArgumentLineKey(), getDefaultArgumentLine());
     }
     if (getShouldAnalyzeOnlyKey() != null) {
-      analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), shouldAnalyzeOnlyDefault());
+      this.analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), shouldAnalyzeOnlyDefault());
     }
-
   }
-
-  /** The logger. */
-  private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpPluginConfiguration.class);
-  /**
-   * Suffix used by windows for script files
-   */
-  private static final String WINDOWS_BAT_SUFFIX = ".bat";
-
-  /** Indicates whether the plugin should only analyze results or launch tool. */
-  protected boolean analyzeOnly;
-
-  /** The tool argument line. */
-  private String argumentLine;
-
-  /** The report file name. */
-  private String reportFileName;
-
-  /** The report file relative path. */
-  private String reportFileRelativePath;
 
   /**
    * Gets the argument line.
@@ -90,41 +84,6 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   public String getArgumentLine() {
     return argumentLine;
   }
-
-  /**
-   * Gets the argument line key.
-   * 
-   * @return the argument line key
-   */
-  protected abstract String getArgumentLineKey();
-
-  /**
-   * Gets the command line.
-   * 
-   * @return the command line
-   */
-  protected abstract String getCommandLine();
-
-  /**
-   * Gets the default argument line.
-   * 
-   * @return the default argument line
-   */
-  protected abstract String getDefaultArgumentLine();
-
-  /**
-   * Gets the default report file name.
-   * 
-   * @return the default report file name
-   */
-  protected abstract String getDefaultReportFileName();
-
-  /**
-   * Gets the default report file path.
-   * 
-   * @return the default report file path
-   */
-  protected abstract String getDefaultReportFilePath();
 
   /**
    * Gets operating system dependent launching script name.
@@ -147,6 +106,9 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
     }
   }
 
+  /**
+   * @return the created working directory.
+   */
   public File createWorkingDirectory() {
     File target = getProject().getFileSystem().getBuildDir();
     File logs = new File(target, getReportFileRelativePath());
@@ -174,60 +136,6 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
     return reportFile;
 
   }
-
-  /**
-   * Returns <code>true<code> if property is not null or empty.
-   * <pre>
-   * value.equals(null) return false
-   * value.equals("") return false
-   * value.equals("  ") return false
-   * value.equals(" toto ") return true
-   * </pre>
-   * 
-   * @param key
-   *          the property's key
-   * @return <code>true<code> if property is not null or empty; <code>false</code> any other way.
-   */
-  public boolean isStringPropertySet(String key) {
-    return project.getConfiguration().containsKey(key);
-  }
-
-  /**
-   * Gets the report file name key.
-   * 
-   * @return the report file name key
-   */
-  protected abstract String getReportFileNameKey();
-
-  /**
-   * Gets the report file relative path.
-   * 
-   * @return the report file relative path
-   */
-  public String getReportFileRelativePath() {
-    return reportFileRelativePath;
-  }
-
-  /**
-   * Gets the report file relative path key.
-   * 
-   * @return the report file relative path key
-   */
-  protected abstract String getReportFileRelativePathKey();
-
-  /**
-   * Gets the should analyze only key.
-   * 
-   * @return the should analyze only key
-   */
-  protected abstract String getShouldAnalyzeOnlyKey();
-
-  /**
-   * Gets the should run key.
-   * 
-   * @return the should run key
-   */
-  protected abstract String getShouldRunKey();
 
   /**
    * Gets the source directories.
@@ -271,6 +179,95 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   public Project getProject() {
     return project;
   }
+
+  /**
+   * Returns <code>true<code> if property is not null or empty.
+   * <pre>
+   * value.equals(null) return false
+   * value.equals("") return false
+   * value.equals("  ") return false
+   * value.equals(" toto ") return true
+   * </pre>
+   * 
+   * @param key
+   *          the property's key
+   * @return <code>true<code> if property is not null or empty; <code>false</code> any other way.
+   */
+  public boolean isStringPropertySet(String key) {
+    return project.getConfiguration().containsKey(key);
+  }
+
+  /**
+   * Gets the argument line key.
+   * 
+   * @return the argument line key
+   */
+  protected abstract String getArgumentLineKey();
+
+  /**
+   * Gets the command line.
+   * 
+   * @return the command line
+   */
+  protected abstract String getCommandLine();
+
+  /**
+   * Gets the default argument line.
+   * 
+   * @return the default argument line
+   */
+  protected abstract String getDefaultArgumentLine();
+
+  /**
+   * Gets the default report file name.
+   * 
+   * @return the default report file name
+   */
+  protected abstract String getDefaultReportFileName();
+
+  /**
+   * Gets the default report file path.
+   * 
+   * @return the default report file path
+   */
+  protected abstract String getDefaultReportFilePath();
+
+  /**
+   * Gets the report file name key.
+   * 
+   * @return the report file name key
+   */
+  protected abstract String getReportFileNameKey();
+
+  /**
+   * Gets the report file relative path.
+   * 
+   * @return the report file relative path
+   */
+  public String getReportFileRelativePath() {
+    return reportFileRelativePath;
+  }
+
+  /**
+   * Gets the report file relative path key.
+   * 
+   * @return the report file relative path key
+   */
+  protected abstract String getReportFileRelativePathKey();
+
+  /**
+   * Gets the should analyze only key.
+   * 
+   * @return the should analyze only key
+   */
+  protected abstract String getShouldAnalyzeOnlyKey();
+
+  /**
+   * Gets the should run key.
+   * 
+   * @return the should run key
+   */
+  protected abstract String getShouldRunKey();
 
   /**
    * Should analyze only default.

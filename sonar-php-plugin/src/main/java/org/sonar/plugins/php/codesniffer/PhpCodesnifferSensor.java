@@ -83,7 +83,7 @@ public class PhpCodesnifferSensor implements Sensor {
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
   public void analyse(Project project, SensorContext context) {
-   
+
     PhpCodeSnifferConfiguration configuration = executor.getConfiguration();
     configuration.createWorkingDirectory();
 
@@ -94,14 +94,13 @@ public class PhpCodesnifferSensor implements Sensor {
     LOG.info("PhpCodeSniffer  report file: " + report.getAbsolutePath());
     List<PhpCodeSnifferViolation> violations = parser.getViolations(report);
 
-    // TODO Check that we can't get a rule form other repositories
-    String repositoryKey = PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
     List<Violation> contextViolations = new ArrayList<Violation>();
     Set<String> unfoundViolations = new HashSet<String>();
     for (PhpCodeSnifferViolation violation : violations) {
       RuleFinder ruleFinder = configuration.getRuleFinder();
       String ruleKey = violation.getRuleKey();
-      Rule rule = ruleFinder.findByKey(repositoryKey, ruleKey);
+      // get the rule from the repository
+      Rule rule = ruleFinder.findByKey(PHPCS_REPOSITORY_KEY, ruleKey);
       if (rule != null) {
         PhpFile resource = (PhpFile) context.getResource(PhpFile.getInstance(project).fromAbsolutePath(violation.getFileName(), project));
         if (context.getResource(resource) != null) {
@@ -114,7 +113,7 @@ public class PhpCodesnifferSensor implements Sensor {
       }
     }
     for (String key : unfoundViolations) {
-      LOG.info("No violation found in repository " + repositoryKey + " for violation " + key);
+      LOG.info("No violation found in repository " + PHPCS_REPOSITORY_KEY + " for violation " + key);
     }
     context.saveViolations(contextViolations);
   }

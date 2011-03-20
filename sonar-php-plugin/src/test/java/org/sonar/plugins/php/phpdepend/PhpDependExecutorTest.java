@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 import static org.sonar.api.CoreProperties.PROJECT_EXCLUSIONS_PROPERTY;
 import static org.sonar.plugins.php.MockUtils.getFile;
 import static org.sonar.plugins.php.MockUtils.getMockProject;
+import static org.sonar.plugins.php.core.PhpPlugin.FILE_SUFFIXES_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
 
 import java.io.File;
@@ -36,7 +37,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.core.PhpPlugin;
 
 public class PhpDependExecutorTest {
 
@@ -46,7 +46,7 @@ public class PhpDependExecutorTest {
   @Test
   public void testGetCommandLine1() {
     Configuration configuration = mock(Configuration.class);
-    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+    when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(null);
     Project project = getMockProject();
     PhpDependConfiguration c = getWindowsConfiguration(project);
     PhpDependExecutor executor = new PhpDependExecutor(c);
