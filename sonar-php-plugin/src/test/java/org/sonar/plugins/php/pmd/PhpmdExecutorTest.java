@@ -33,6 +33,7 @@ import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_ARGUMENT
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class PhpmdExecutorTest {
 
     List<String> commandLine = executor.getCommandLine();
 
-    String f1 = "C:/projets/PHP/Monkey/sources/main";
+    String f1 = new File("C:/projets/PHP/Monkey/sources/main").toString();
     String f2 = getFile("C:/projets/PHP/Monkey/target/pmd.xml");
     String[] expected = new String[] { "phpmd.bat", f1, "xml", "codesize,unusedcode,naming", "--reportfile", f2, "--extensions",
       StringUtils.join(extensions, ",") };
@@ -91,7 +92,7 @@ public class PhpmdExecutorTest {
     PhpmdExecutor executor = new PhpmdExecutor(c, e, null);
     List<String> commandLine = executor.getCommandLine();
 
-    String f1 = "C:/projets/PHP/Monkey/sources/main";
+    String f1 = new File("C:/projets/PHP/Monkey/sources/main").toString();
     String f2 = getFile("C:/projets/PHP/Monkey/target/pmd.xml");
     String[] expected = new String[] { "phpmd.bat", f1, "xml", "codesize,unusedcode,naming", "--reportfile", f2, "--extensions",
       StringUtils.join(extensions, ",") };
@@ -120,7 +121,7 @@ public class PhpmdExecutorTest {
     PhpmdExecutor executor = new PhpmdExecutor(c, e, null);
     List<String> commandLine = executor.getCommandLine();
     String s1 = "phpmd.bat";
-    String s2 = "C:/projets/PHP/Monkey/sources/main";
+    String s2 = new File("C:/projets/PHP/Monkey/sources/main").toString();
     String s3 = "xml";
     String s4 = "codesize,unusedcode,naming";
     String s5 = "--reportfile";
@@ -158,7 +159,7 @@ public class PhpmdExecutorTest {
     PhpmdExecutor executor = new PhpmdExecutor(c, e, null);
     List<String> commandLine = executor.getCommandLine();
     String s1 = "phpmd.bat";
-    String s2 = "C:/projets/PHP/Monkey/sources/main";
+    String s2 = new File("C:/projets/PHP/Monkey/sources/main").toString();
     String s3 = "xml";
     String s4 = "codesize,unusedcode,naming";
     String s5 = "--reportfile";
