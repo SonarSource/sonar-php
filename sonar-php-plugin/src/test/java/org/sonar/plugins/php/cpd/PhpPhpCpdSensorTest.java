@@ -41,21 +41,67 @@ import org.sonar.plugins.php.core.PhpPluginExecutionException;
 public class PhpPhpCpdSensorTest {
 
   @Test
-  public void testShouldExecuteOnProject() {
-    testShouldRun(true);
+  public void testShouldExecuteOnProjectWhenCpdSkipPropertyFalse() {
+    Project project = createProject();
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty("sonar.cpd.skip", "false");
 
+    testShouldRun(project, true);
   }
 
   @Test
-  public void testShouldNotExecuteOnProject() {
-    testShouldRun(false);
+  public void testShouldNotExecuteOnProjectWhenCpdSkipPropertyTrue() {
+    Project project = createProject();
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty("sonar.cpd.skip", "true");
+
+    testShouldRun(project, false);
   }
 
-  private void testShouldRun(boolean shouldRun) {
+  @Test
+  public void testShouldExecuteOnProjectWhenCpdSkipPropertyNotSetButDeprecatedCpdSkipPropertyFalse() {
+    Project project = createProject();
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty("sonar.php.cpd.skip", "false");
+
+    testShouldRun(project, true);
+  }
+
+  @Test
+  public void testShouldNotExecuteOnProjectWhenCpdSkipPropertyNotSetButDeprecatedCpdSkipPropertyTrue() {
     Project project = createProject();
     PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
     conf.setProperty("sonar.php.cpd.skip", "true");
-    conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, shouldRun);
+
+    testShouldRun(project, false);
+  }
+
+  @Test
+  public void testShouldExecuteOnProjectWhenBothCpdSkipPropertyNotSetButShouldRunPropertyTrue() {
+    Project project = createProject();
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, "true");
+
+    testShouldRun(project, true);
+  }
+
+  @Test
+  public void testShouldNotExecuteOnProjectWhenBothCpdSkipPropertyNotSetButShouldRunPropertyFalse() {
+    Project project = createProject();
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, "false");
+
+    testShouldRun(project, false);
+  }
+
+  @Test
+  public void testShouldExecuteOnProjectWhenCpdSkipPropertyAndShouldRunPropertyNotSet() {
+    Project project = createProject();
+
+    testShouldRun(project, true);
+  }
+
+  private void testShouldRun(Project project, boolean shouldRun) {
 
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
     PhpCpdSensor sensor = getSensor(project, executor);
@@ -68,7 +114,7 @@ public class PhpPhpCpdSensorTest {
     PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
     Project project = createProject();
     PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.php.cpd.skip", "true");
+    conf.setProperty("sonar.cpd.skip", "true");
     conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, "false");
 
     PhpCpdSensor sensor = new PhpCpdSensor(configuration, null, null);

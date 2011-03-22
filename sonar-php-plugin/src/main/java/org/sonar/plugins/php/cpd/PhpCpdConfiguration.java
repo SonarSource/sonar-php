@@ -64,6 +64,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   /** The should run property key. */
   public static final String PHPCPD_SHOULD_RUN_PROPERTY_KEY = "sonar.phpcpd.shouldRun";
   public static final String PHPCPD_DEFAULT_SHOULD_RUN = "true";
+  public static final String PHPCPD_SKIP_PROPERTY_KEY = "sonar.cpd.skip";
 
   public static final String PHPCPD_ANALYZE_ONLY_KEY = "sonar.phpcpd.analyzeOnly";
   public static final String PHPCPD_DEFAULT_ANALYZE_ONLY = "false";
@@ -73,7 +74,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Instantiates a new php cpd configuration.
-   * 
+   *
    * @param project
    *          the project
    */
@@ -91,7 +92,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the suffixes command option.
-   * 
+   *
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {

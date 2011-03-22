@@ -27,6 +27,7 @@ import static java.lang.Boolean.parseBoolean;
 import static org.sonar.plugins.php.core.Php.PHP;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SKIP_PROPERTY_KEY;
 
 import java.io.File;
 
@@ -41,9 +42,9 @@ import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 /**
  * PhpCpd sensor that rely on "phpcpd" tool to perform copy paste detection.
- * 
+ *
  * @author akram
- * 
+ *
  */
 public class PhpCpdSensor implements Sensor {
 
@@ -71,21 +72,22 @@ public class PhpCpdSensor implements Sensor {
 
   /**
    * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   * 
-   * @param project
-   *          the project
-   * 
+   *
+   * @param project the project
+   *
    * @return true, if should execute on project
-   * 
+   *
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
     Configuration c = project.getConfiguration();
     Language language = project.getLanguage();
-    Boolean phpcpdDefaultShouldRun = parseBoolean(PHPCPD_DEFAULT_SHOULD_RUN);
-    return ((project.getPom() != null) && PHP.equals(language))
-        && ( !c.getBoolean(SONAR_PHP_CPD_SKIP_KEY, SONAR_DEFAULT_PHP_CPD_SKIP) || c.getBoolean(PHPCPD_SHOULD_RUN_PROPERTY_KEY,
-            phpcpdDefaultShouldRun));
+
+    Boolean phpcpdShouldRun = c.getBoolean(PHPCPD_SHOULD_RUN_PROPERTY_KEY, parseBoolean(PHPCPD_DEFAULT_SHOULD_RUN));
+    Boolean deprecatedPhpcpdSkip = c.getBoolean(SONAR_PHP_CPD_SKIP_KEY, !phpcpdShouldRun);
+    Boolean phpcpdSkip = c.getBoolean(PHPCPD_SKIP_PROPERTY_KEY, deprecatedPhpcpdSkip);
+
+    return ((project.getPom() != null) && PHP.equals(language) && !phpcpdSkip);
   }
 
   /**
