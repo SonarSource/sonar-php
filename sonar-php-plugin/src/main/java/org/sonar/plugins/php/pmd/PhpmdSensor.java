@@ -133,7 +133,7 @@ public class PhpmdSensor implements Sensor {
   public boolean shouldExecuteOnProject(Project project) {
     Configuration configuration = project.getConfiguration();
     Language language = project.getLanguage();
-    boolean result = (project.getPom() != null) && PHP.equals(language);
+    boolean result = PHP.equals(language);
     result = result && configuration.getBoolean(PHPMD_SHOULD_RUN_KEY, parseBoolean(PHPMD_DEFAULT_SHOULD_RUN));
     result = result && (project.getReuseExistingRulesConfig() || !profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY).isEmpty());
     return result;

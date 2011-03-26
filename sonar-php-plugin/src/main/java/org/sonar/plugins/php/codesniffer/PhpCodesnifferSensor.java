@@ -131,7 +131,7 @@ public class PhpCodesnifferSensor implements Sensor {
   public boolean shouldExecuteOnProject(Project project) {
     Configuration configuration = project.getConfiguration();
     Language language = project.getLanguage();
-    boolean result = (project.getPom() != null) && PHP.equals(language);
+    boolean result = PHP.equals(language);
     result = result && configuration.getBoolean(PHPCS_SHOULD_RUN_KEY, parseBoolean(PHPCS_DEFAULT_SHOULD_RUN));
     result = result && (project.getReuseExistingRulesConfig() || !profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty());
     return result;

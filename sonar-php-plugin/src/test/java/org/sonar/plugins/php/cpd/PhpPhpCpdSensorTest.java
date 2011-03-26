@@ -34,11 +34,44 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.Php;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 public class PhpPhpCpdSensorTest {
+
+  @Test
+  public void testShouldNotExecuteOnProjectWithNulPom() {
+    Project project = createProject();
+    project.setLanguage(Java.INSTANCE);
+    project.setPom(null);
+
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty("sonar.cpd.skip", "false");
+
+    testShouldRun(project, false);
+  }
+
+  @Test
+  public void testShouldNotExecuteOnNonPhpProject() {
+    Project project = createProject();
+    project.setLanguage(Java.INSTANCE);
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty("sonar.cpd.skip", "false");
+
+    testShouldRun(project, false);
+  }
+
+  @Test
+  public void testShouldNotExecuteOnNonPhpProjectWithSonarCpdSkipIsTrue() {
+    Project project = createProject();
+    project.setLanguage(Java.INSTANCE);
+    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
+    conf.setProperty("sonar.cpd.skip", "true");
+
+    testShouldRun(project, false);
+  }
 
   @Test
   public void testShouldExecuteOnProjectWhenCpdSkipPropertyFalse() {

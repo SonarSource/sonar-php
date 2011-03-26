@@ -106,10 +106,11 @@ public class PhpUnitSensor implements Sensor {
 
     Configuration configuration = project.getConfiguration();
     Language language = project.getLanguage();
-    return (project.getPom() != null)
-        && PHP.equals(language)
+    boolean shouldExecute = PHP.equals(language);
+    shouldExecute = shouldExecute
         && (configuration.getBoolean(PHPUNIT_SHOULD_RUN_PROPERTY_KEY, parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN)) || configuration
             .getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE)));
+    return shouldExecute;
   }
 
   /**

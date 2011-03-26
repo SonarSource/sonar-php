@@ -42,15 +42,14 @@ import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 /**
  * PhpCpd sensor that rely on "phpcpd" tool to perform copy paste detection.
- *
+ * 
  * @author akram
- *
+ * 
  */
 public class PhpCpdSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCpdSensor.class);
   private static final String SONAR_PHP_CPD_SKIP_KEY = "sonar.php.cpd.skip";
-  private static final Boolean SONAR_DEFAULT_PHP_CPD_SKIP = false;
   /** The configuration. */
   private PhpCpdConfiguration configuration;
 
@@ -72,11 +71,12 @@ public class PhpCpdSensor implements Sensor {
 
   /**
    * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   *
-   * @param project the project
-   *
+   * 
+   * @param project
+   *          the project
+   * 
    * @return true, if should execute on project
-   *
+   * 
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
@@ -87,7 +87,7 @@ public class PhpCpdSensor implements Sensor {
     Boolean deprecatedPhpcpdSkip = c.getBoolean(SONAR_PHP_CPD_SKIP_KEY, !phpcpdShouldRun);
     Boolean phpcpdSkip = c.getBoolean(PHPCPD_SKIP_PROPERTY_KEY, deprecatedPhpcpdSkip);
 
-    return ((project.getPom() != null) && PHP.equals(language) && !phpcpdSkip);
+    return (PHP.equals(language) && !phpcpdSkip);
   }
 
   /**
