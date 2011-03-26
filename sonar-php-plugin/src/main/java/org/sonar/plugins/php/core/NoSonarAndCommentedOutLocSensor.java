@@ -20,6 +20,9 @@
 
 package org.sonar.plugins.php.core;
 
+import static org.sonar.api.measures.CoreMetrics.COMMENTED_OUT_CODE_LINES;
+import static org.sonar.plugins.php.core.Php.PHP;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -33,8 +36,8 @@ import org.sonar.api.batch.Phase;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.NoSonarFilter;
-import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.recognizer.CamelCaseDetector;
@@ -70,17 +73,17 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
   public void analyse(Project project, SensorContext context) {
-    List<File> sourceFiles = project.getFileSystem().getSourceFiles();
-    List<File> directories = project.getFileSystem().getSourceDirs();
+    ProjectFileSystem fileSystem = project.getFileSystem();
+    List<File> sourceFiles = fileSystem.getSourceFiles();
+    List<File> directories = fileSystem.getSourceDirs();
     for (File file : sourceFiles) {
       PhpFile phpFile = PhpFile.getInstance(project).fromIOFile(file, directories, false);
-      if (phpFile == null) {
-        continue;
-      }
-      Source source = analyseSourceCode(file);
-      if (source != null) {
-        filter.addResource(phpFile, source.getNoSonarTagLines());
-        context.saveMeasure(phpFile, CoreMetrics.COMMENTED_OUT_CODE_LINES, (double) source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES));
+      if (phpFile != null) {
+        Source source = analyseSourceCode(file);
+        if (source != null) {
+          filter.addResource(phpFile, source.getNoSonarTagLines());
+          context.saveMeasure(phpFile, COMMENTED_OUT_CODE_LINES, (double) source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES));
+        }
       }
     }
   }
@@ -101,7 +104,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return Php.PHP.equals(project.getLanguage());
+    return PHP.equals(project.getLanguage());
   }
 
   private static class PhpLanguageFootprint implements LanguageFootprint {
