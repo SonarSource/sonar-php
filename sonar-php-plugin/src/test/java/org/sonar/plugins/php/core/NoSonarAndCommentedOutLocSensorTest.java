@@ -20,15 +20,73 @@
 
 package org.sonar.plugins.php.core;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.core.Php.PHP;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
+import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.checks.NoSonarFilter;
+import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.resources.Java;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.resources.Resource;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.text.Source;
 
 public class NoSonarAndCommentedOutLocSensorTest {
+
+  @Test
+  public void testAnalyse() {
+    NoSonarFilter noSonarFilter = new NoSonarFilter();
+    NoSonarAndCommentedOutLocSensor sensor = new NoSonarAndCommentedOutLocSensor(noSonarFilter);
+    SensorContext context = mock(SensorContext.class);
+    Project project = getMockProject();
+    sensor.analyse(project, context);
+    assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
+    // Mail.php contains 9 commented oud code lines.
+    verify(context).saveMeasure(new PhpFile("Mail.php"), CoreMetrics.COMMENTED_OUT_CODE_LINES, 9d);
+  }
+
+  @Test
+  public void testShouldNotRunOnJavaProject() {
+    NoSonarFilter noSonarFilter = new NoSonarFilter();
+    NoSonarAndCommentedOutLocSensor sensor = new NoSonarAndCommentedOutLocSensor(noSonarFilter);
+    SensorContext context = mock(SensorContext.class);
+    Project project = getMockProject();
+    when(project.getLanguage()).thenReturn(Java.INSTANCE);
+    sensor.analyse(project, context);
+    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
+  }
+
+  @Test
+  public void testAnalyseEmptySourceFiles() {
+    NoSonarFilter noSonarFilter = new NoSonarFilter();
+    NoSonarAndCommentedOutLocSensor sensor = new NoSonarAndCommentedOutLocSensor(noSonarFilter);
+    SensorContext context = mock(SensorContext.class);
+    Project project = getMockProject();
+
+    File file = new File(this.getClass().getResource("/Mail.php").getPath());
+    ProjectFileSystem fs = project.getFileSystem();
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(file.getParentFile()));
+    List<File> files = Arrays.asList(new File("fake"));
+    when(fs.getSourceFiles(PHP)).thenReturn(files);
+
+    sensor.analyse(project, context);
+    verify(context, never()).saveMeasure(any(Resource.class), any(org.sonar.api.measures.Metric.class), any(Double.class));
+
+  }
 
   @Test
   public void testAnalyseSourceCode() {
@@ -69,4 +127,25 @@ public class NoSonarAndCommentedOutLocSensorTest {
     assertEquals(5, source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES));
   }
 
+  /**
+   * @return a mock project used by all tests cases in this class.
+   */
+  private Project getMockProject() {
+    Project project = mock(Project.class);
+    when(project.getLanguage()).thenReturn(PHP);
+    Configuration config = mock(Configuration.class);
+
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
+
+    File file = new File(this.getClass().getResource("/Mail.php").getPath());
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(file.getParentFile()));
+
+    List<File> files = Arrays.asList(file, new File("fake"));
+    when(fs.getSourceFiles(PHP)).thenReturn(files);
+    when(project.getConfiguration()).thenReturn(config);
+    return project;
+  }
 }

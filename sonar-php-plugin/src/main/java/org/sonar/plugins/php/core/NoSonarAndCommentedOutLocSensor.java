@@ -20,7 +20,6 @@
 
 package org.sonar.plugins.php.core;
 
-import static org.sonar.api.measures.CoreMetrics.COMMENTED_OUT_CODE_LINES;
 import static org.sonar.plugins.php.core.Php.PHP;
 
 import java.io.File;
@@ -36,6 +35,7 @@ import org.sonar.api.batch.Phase;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.NoSonarFilter;
+import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
@@ -74,7 +74,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    */
   public void analyse(Project project, SensorContext context) {
     ProjectFileSystem fileSystem = project.getFileSystem();
-    List<File> sourceFiles = fileSystem.getSourceFiles();
+    List<File> sourceFiles = fileSystem.getSourceFiles(PHP);
     List<File> directories = fileSystem.getSourceDirs();
     for (File file : sourceFiles) {
       PhpFile phpFile = PhpFile.getInstance(project).fromIOFile(file, directories, false);
@@ -82,7 +82,8 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
         Source source = analyseSourceCode(file);
         if (source != null) {
           filter.addResource(phpFile, source.getNoSonarTagLines());
-          context.saveMeasure(phpFile, COMMENTED_OUT_CODE_LINES, (double) source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES));
+          double measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
+          context.saveMeasure(phpFile, CoreMetrics.COMMENTED_OUT_CODE_LINES, measure);
         }
       }
     }

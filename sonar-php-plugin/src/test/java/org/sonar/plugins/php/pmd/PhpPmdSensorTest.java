@@ -26,6 +26,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -101,11 +105,9 @@ public class PhpPmdSensorTest {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME))
-        .thenReturn("tot.xml");
-    when(
-        configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn(PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH);
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("tot.xml");
+    String defaultReportFile = PHPMD_DEFAULT_REPORT_FILE_PATH;
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, defaultReportFile)).thenReturn(defaultReportFile);
     when(configuration.getBoolean(PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, false)).thenReturn(true);
     when(project.getConfiguration()).thenReturn(configuration);
     when(project.getLanguage()).thenReturn(Php.PHP);
@@ -128,11 +130,9 @@ public class PhpPmdSensorTest {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME))
-        .thenReturn("tot.xml");
-    when(
-        configuration.getString(PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn(PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH);
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("tot.xml");
+    String defaultReportFile = PHPMD_DEFAULT_REPORT_FILE_PATH;
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, defaultReportFile)).thenReturn(defaultReportFile);
     when(project.getConfiguration()).thenReturn(configuration);
     return project;
   }

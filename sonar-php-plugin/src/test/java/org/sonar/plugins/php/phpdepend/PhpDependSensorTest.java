@@ -23,6 +23,7 @@ package org.sonar.plugins.php.phpdepend;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.api.resources.Java.INSTANCE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
 
 import java.io.File;
@@ -30,7 +31,6 @@ import java.io.File;
 import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
-import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.core.Php;
@@ -46,7 +46,7 @@ public class PhpDependSensorTest {
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
     Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(Java.INSTANCE);
+    when(project.getLanguage()).thenReturn(INSTANCE);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getBuildDir()).thenReturn(new File(DEFAULT_REPORT_FILE_PATH));
@@ -58,8 +58,7 @@ public class PhpDependSensorTest {
     when(config.getProject()).thenReturn(project);
     when(executor.getConfiguration()).thenReturn(config);
 
-    when(configuration.getString(PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(
-        "pdepend.xml");
+    when(configuration.getString(PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
     when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
 
