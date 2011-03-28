@@ -103,7 +103,7 @@ public class PhpUnitResultParser implements BatchExtension {
       Log.debug("Tests suites: " + testSuites);
       return testSuites;
     } catch (IOException e) {
-      throw new SonarException("Can't read PhpUnit report : " + report.getName(), e);
+      throw new SonarException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
     } finally {
       IOUtils.closeQuietly(inputStream);
     }
