@@ -1,6 +1,6 @@
 /*
  * Sonar PHP Plugin
- * Copyright (C) 2010 Akram Ben Aissi
+ * Copyright (C) 2010 Sonar PHP Plugin
  * dev@sonar.codehaus.org
  *
  * This program is free software; you can redistribute it and/or
