@@ -23,7 +23,7 @@
   </ciManagement>
   <inceptionYear>2010</inceptionYear>
   <organization>
-    <name>Akram Ben Aissi</name>
+    <name>Sonar PHP Plugin</name>
   </organization>
   <licenses>
     <license>
@@ -39,6 +39,10 @@
       <id>akram</id>
       <name>Akram Ben Aissi</name>
       <email>akram.benaissi@free.fr</email>
+    </developer>
+    <developer>
+      <id>proofek</id>
+      <name>Sebastian Marek</name>
     </developer>
   </developers>
 
@@ -126,32 +130,32 @@
       <id>package</id>
       <build>
         <plugins>
-        <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>LATEST</version>
-        <executions>
-          <execution>
-            <id>add-source</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>src/main/java2</source>
-              </sources>
-            </configuration>
-          </execution>
-      
-          
-          
-        </executions>
-      </plugin>
-        
-        
-        
-        
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>LATEST</version>
+            <executions>
+              <execution>
+                <id>add-source</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>src/main/java2</source>
+                  </sources>
+                </configuration>
+              </execution>
+
+
+
+            </executions>
+          </plugin>
+
+
+
+
           <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <dependencies>
