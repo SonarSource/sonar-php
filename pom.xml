@@ -11,7 +11,7 @@
 
   <groupId>org.codehaus.sonar-plugins</groupId>
   <artifactId>sonar-php</artifactId>
-  <version>0.4</version>
+  <version>0.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Sonar PHP Project</name>
   <description>Enables analysis of PHP projects into Sonar.</description>
@@ -43,9 +43,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.4</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.4</developerConnection>
-    <url>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/sonar-php-0.4</url>
+    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php</developerConnection>
+    <url>http://svn.sonar-plugins.codehaus.org</url>
   </scm>
   <issueManagement>
     <system>JIRA</system>
