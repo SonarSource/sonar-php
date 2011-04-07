@@ -9,7 +9,7 @@
     <relativePath>../parent</relativePath>
   </parent>
 
-  <groupId>org.codehaus.sonar-plugins</groupId>
+  <groupId>org.codehaus.sonar-plugins.sonar-php-plugin</groupId>
   <artifactId>sonar-php</artifactId>
   <version>0.5-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -55,15 +55,6 @@
     <system>Bamboo</system>
     <url>http://ci.codehaus.org/browse/SONAR-PHP</url>
   </ciManagement>
-  <profiles>
-    <profile>
-      <id>release</id>
-      <modules>
-        <module>sonar-php-plugin</module>
-      </modules>
-    </profile>
-  </profiles>
-
 
 </project>
 
