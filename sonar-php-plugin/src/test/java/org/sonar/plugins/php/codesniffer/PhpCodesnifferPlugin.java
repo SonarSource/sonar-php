@@ -49,16 +49,16 @@ import org.sonar.plugins.php.core.PhpPlugin;
   @Property(key = PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY,
       defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_ANALYZE_ONLY, name = "Should the plugin only parse analysis report.",
       description = PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_DESCRIPTION, project = true),
-  @Property(key = PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY, defaultValue = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SHOULD_RUN,
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY, defaultValue = "false",
       name = "Should the plugin run on this project.",
-      description = "If set to false, the plugin will not execute itself for this project.", project = true) })
+      description = "If set to true, the plugin will not execute itself for this project.", project = true) })
 public class PhpCodesnifferPlugin implements Plugin {
 
   /**
    * Gets the description.
-   * 
+   *
    * @return the description
-   * 
+   *
    * @see org.sonar.api.Plugin#getDescription()
    */
   public String getDescription() {
@@ -67,9 +67,9 @@ public class PhpCodesnifferPlugin implements Plugin {
 
   /**
    * Gets the extensions.
-   * 
+   *
    * @return the extensions
-   * 
+   *
    * @see org.sonar.api.Plugin#getExtensions()
    */
   public List<Class<? extends Extension>> getExtensions() {
@@ -81,9 +81,9 @@ public class PhpCodesnifferPlugin implements Plugin {
 
   /**
    * Gets the key.
-   * 
+   *
    * @return the key
-   * 
+   *
    * @see org.sonar.api.Plugin#getKey()
    */
   public String getKey() {
@@ -92,9 +92,9 @@ public class PhpCodesnifferPlugin implements Plugin {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
-   * 
+   *
    * @see org.sonar.api.Plugin#getName()
    */
   public String getName() {
@@ -103,9 +103,9 @@ public class PhpCodesnifferPlugin implements Plugin {
 
   /**
    * To string.
-   * 
+   *
    * @return the string
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override

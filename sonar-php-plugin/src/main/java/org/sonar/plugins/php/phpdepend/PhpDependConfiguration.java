@@ -69,7 +69,7 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Instantiates a new php depend configuration depending on given project.
-   * 
+   *
    * @param project
    *          the project to be analyzed
    */
@@ -79,7 +79,7 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the report filecommand option.
-   * 
+   *
    * @return the report filecommand option
    */
   public String getReportFileCommandOption() {
@@ -88,7 +88,7 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the suffixes command option.
-   * 
+   *
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
@@ -140,9 +140,17 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
     return Boolean.parseBoolean(PDEPEND_DEFAULT_ANALYZE_ONLY);
   }
 
+  /**
+   * @deprecated
+   */
   @Override
   protected boolean shouldRunDefault() {
     return Boolean.parseBoolean(PDEPEND_DEFAULT_SHOULD_RUN);
+  }
+
+  @Override
+  protected boolean skipDefault() {
+    return false;
   }
 
   @Override

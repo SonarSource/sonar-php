@@ -19,13 +19,13 @@
  */
 
 /**
- * 
+ *
  */
 package org.sonar.plugins.php.core;
 
 /**
  * @author Akram Ben Aissi
- * 
+ *
  */
 public final class PhpPluginConfiguration {
 
@@ -33,8 +33,8 @@ public final class PhpPluginConfiguration {
   public static final String PHP_FILE_SUFFIXES_DESCRIPTION = "Comma-separated list of suffixes for files to analyze."
       + " To not filter, leave the list empty.";
 
-  public static final String PHPCS_EXECUTE_MESSAGE = "Execute PHP_CodeSniffer";
-  public static final String PHPCS_EXECUTE_DESCRIPTION = "If true PhpCodeSniffer engine will be run and its violations will be "
+  public static final String PHPCS_EXECUTE_MESSAGE = "Skip PHP_CodeSniffer execution";
+  public static final String PHPCS_EXECUTE_DESCRIPTION = "If true PhpCodeSniffer engine will not run and its violations will not be "
       + "present in Sonar dashboard.";
 
   public static final String PDEPEND_EXECUTE_MESSAGE = "Execute Pdepend";

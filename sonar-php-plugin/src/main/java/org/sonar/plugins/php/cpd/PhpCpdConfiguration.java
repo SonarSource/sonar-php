@@ -141,10 +141,20 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#shouldRunDefault()
+   *
+   * @deprecated
    */
   @Override
   protected boolean shouldRunDefault() {
     return true;
+  }
+
+  /**
+   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#skipDefault()
+   */
+  @Override
+  protected boolean skipDefault() {
+    return false;
   }
 
   @Override

@@ -69,7 +69,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Instantiates a new php pmd configuration.
-   * 
+   *
    * @param project
    *          the project
    */
@@ -79,7 +79,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the project source folders.
-   * 
+   *
    * @return List<File> the source folders
    */
   public List<File> getSourceDir() {
@@ -168,6 +168,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #shouldRunDefault()
+   * @deprecated
    */
   @Override
   protected boolean shouldRunDefault() {
@@ -175,8 +176,16 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
+   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #skipDefault()
+   */
+  @Override
+  protected boolean skipDefault() {
+    return false;
+  }
+
+  /**
    * Gets the level.
-   * 
+   *
    * @return the level
    */
   public String getLevel() {
@@ -185,7 +194,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the ignore list.
-   * 
+   *
    * @return the ignore list
    */
   public String getIgnoreList() {
@@ -198,7 +207,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the rulesets.
-   * 
+   *
    * @return the rulesets
    */
   public String getRulesets() {

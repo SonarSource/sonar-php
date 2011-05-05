@@ -24,9 +24,8 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPC
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_MESSAGE;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_ANALYZE_ONLY;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_STANDARD_ARGUMENT;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_DESCRIPTION;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_MESSAGE;
 import static org.sonar.plugins.php.core.PhpPlugin.DEFAULT_SUFFIXES;
@@ -130,7 +129,7 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
       description = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_DESCRIPTION),
 
   // PhpCodeSniffer configuration
-  @Property(key = PHPCS_SHOULD_RUN_KEY, defaultValue = PHPCS_DEFAULT_SHOULD_RUN, name = PHPCS_EXECUTE_MESSAGE, project = true,
+  @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = PHPCS_EXECUTE_MESSAGE, project = true,
       global = true, description = PHPCS_EXECUTE_DESCRIPTION),
   @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = PHPCS_DEFAULT_ANALYZE_ONLY, name = PHPCS_ANALYZE_ONLY_MESSAGE, project = true,
       global = true, description = PHPCS_ANALYZE_ONLY_DESCRIPTION),
@@ -181,7 +180,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the description.
-   * 
+   *
    * @return the description
    * @see org.sonar.api.Plugin#getDescription()
    */
@@ -192,7 +191,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the extensions.
-   * 
+   *
    * @return the extensions
    * @see org.sonar.api.Plugin#getExtensions()
    */
@@ -252,7 +251,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the key.
-   * 
+   *
    * @return the key
    * @see org.sonar.api.Plugin#getKey()
    */
@@ -262,7 +261,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    * @see org.sonar.api.Plugin#getName()
    */
@@ -272,7 +271,7 @@ public class PhpPlugin implements Plugin {
 
   /**
    * To string.
-   * 
+   *
    * @return the string
    * @see java.lang.Object#toString()
    */

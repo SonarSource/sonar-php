@@ -21,8 +21,9 @@
 package org.sonar.plugins.php.codesniffer;
 
 import static java.lang.Boolean.parseBoolean;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SKIP;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 import static org.sonar.plugins.php.core.Php.PHP;
 
@@ -38,7 +39,6 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
@@ -61,7 +61,7 @@ public class PhpCodesnifferSensor implements Sensor {
 
   /**
    * Instantiates a new php codesniffer sensor.
-   * 
+   *
    * @param rulesManager
    *          the rules manager
    */
@@ -74,12 +74,12 @@ public class PhpCodesnifferSensor implements Sensor {
 
   /**
    * Launches the external tool (if configured so) and analyze result file.
-   * 
+   *
    * @param project
    *          the project
    * @param context
    *          the context
-   * 
+   *
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
   public void analyse(Project project, SensorContext context) {
@@ -119,29 +119,43 @@ public class PhpCodesnifferSensor implements Sensor {
   }
 
   /**
-   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   * 
-   * @param project
-   *          the project
-   * 
-   * @return true, if should execute on project
-   * 
+   * Returns <code>true</code> if the given project language is PHP and
+   * the project configuration is set to allow plugin to run.
+   *
+   * @param Project the project
+   *
+   * @return bool
+   *
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
+
+    if (!PHP.equals(project.getLanguage())) {
+        return false;
+    }
+
     Configuration configuration = project.getConfiguration();
-    Language language = project.getLanguage();
-    boolean result = PHP.equals(language);
-    result = result && configuration.getBoolean(PHPCS_SHOULD_RUN_KEY, parseBoolean(PHPCS_DEFAULT_SHOULD_RUN));
-    result = result && (project.getReuseExistingRulesConfig() || !profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty());
-    return result;
+
+    boolean skip = configuration.getBoolean(
+      PHPCS_SKIP_KEY, !configuration.getBoolean(PHPCS_SHOULD_RUN_KEY, !parseBoolean(PHPCS_DEFAULT_SKIP))
+    );
+
+    if (skip) {
+        return false;
+    }
+
+    if (!project.getReuseExistingRulesConfig() || profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty()) {
+        return false;
+    }
+
+    return true;
   }
 
   /**
    * To string.
-   * 
+   *
    * @return the string
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override
