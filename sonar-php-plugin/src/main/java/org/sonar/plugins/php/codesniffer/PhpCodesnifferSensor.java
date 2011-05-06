@@ -144,7 +144,7 @@ public class PhpCodesnifferSensor implements Sensor {
         return false;
     }
 
-    if (!project.getReuseExistingRulesConfig() || profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty()) {
+    if (!project.getReuseExistingRulesConfig() && profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty()) {
         return false;
     }
 

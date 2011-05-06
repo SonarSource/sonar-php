@@ -189,21 +189,7 @@ public class PhpCodesnifferSensorTest {
   }
 
   @Test
-  public void shouldNotLaunchIfConfiguredNotToUseExternalRulesConfiguration() {
-
-    Project project = mock(Project.class);
-    PropertiesConfiguration config = new PropertiesConfiguration();
-
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-    when(project.getReuseExistingRulesConfig()).thenReturn(false);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, null);
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
-  }
-
-  @Test
-  public void shouldNotLaunchIfNoActiveRulesPresent() {
+  public void shouldNotLaunchIfNotReusingExistingRulesAndNoActiveRulesPresent() {
 
     Project project = mock(Project.class);
     RulesProfile profile = mock(RulesProfile.class);
@@ -211,7 +197,7 @@ public class PhpCodesnifferSensorTest {
 
     when(project.getLanguage()).thenReturn(Php.PHP);
     when(project.getConfiguration()).thenReturn(config);
-    when(project.getReuseExistingRulesConfig()).thenReturn(true);
+    when(project.getReuseExistingRulesConfig()).thenReturn(false);
 
     PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, profile);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
