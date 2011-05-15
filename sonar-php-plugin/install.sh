@@ -1,6 +1,6 @@
 #!/bin/sh
-SONAR_PLUGINS_HOME=/opt/sonar-2.2/extensions/plugins/
-SONAR_PHP_PLUGIN_VERSION=0.3-SNAPSHOT
+SONAR_PLUGINS_HOME=/home/akram/sonar/sonar-2.7/extensions/plugins/
+SONAR_PHP_PLUGIN_VERSION=0.5-SNAPSHOT
 
 mvn -DskipTests=true package
 

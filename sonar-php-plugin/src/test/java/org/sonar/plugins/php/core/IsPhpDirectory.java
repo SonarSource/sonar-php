@@ -65,8 +65,9 @@ public class IsPhpDirectory extends BaseMatcher<Resource<PhpPackage>> {
    * 
    * @see org.hamcrest.Matcher#matches(java.lang.Object)
    */
+
   public boolean matches(Object o) {
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("unchecked")
     Resource resource = (Resource) o;
     boolean result = ResourceUtils.isDirectory(resource) && Php.PHP.equals(resource.getLanguage());
     if (result && key != null) {

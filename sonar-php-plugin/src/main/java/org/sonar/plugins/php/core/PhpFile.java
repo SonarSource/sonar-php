@@ -51,16 +51,17 @@ public class PhpFile extends Resource<PhpPackage> {
   private static final String SEPARATOR = "/";
 
   private static Map<Project, PhpFile> instances = new HashMap<Project, PhpFile>();
+  private static Map<Project, List<File>> sourceFilesByProject = new HashMap<Project, List<File>>();
+  private static Map<Project, List<File>> testFilesByProject = new HashMap<Project, List<File>>();
 
   private boolean unitTest;
   private String filename;
   private String packageKey;
   private String longName;
-  private PhpPackage parent = null;
+  private PhpPackage parent;
+  private Project project;
 
-  protected Project project;
-
-  public PhpFile(Project project) {
+  private PhpFile(Project project) {
     this.project = project;
   }
 
@@ -114,8 +115,8 @@ public class PhpFile extends Resource<PhpPackage> {
     if (path != null) {
       File file = new File(path);
       ProjectFileSystem fileSystem = project.getFileSystem();
-      List<File> sourceFiles = fileSystem.getSourceFiles(PHP);
-      List<File> testFiles = fileSystem.getTestFiles(PHP);
+      List<File> sourceFiles = getSourceFiles(project);
+      List<File> testFiles = getTestFiles(project);
       if (sourceFiles.contains(file)) {
         phpFile = fromIOFile(file, fileSystem.getSourceDirs(), false);
       }
@@ -334,6 +335,39 @@ public class PhpFile extends Resource<PhpPackage> {
     builder.append("parent", parent);
     builder.append("unitTest", unitTest);
     return builder.toString();
+  }
+
+  /**
+   * @return the project
+   */
+  public Project getProject() {
+    return project;
+  }
+
+  /**
+   * @param project
+   * @return source files of the project. Avoid accessing the filesystem several times during analysis.
+   */
+  private List<File> getSourceFiles(Project project) {
+    List<File> files = sourceFilesByProject.get(project);
+    if (files == null) {
+      files = project.getFileSystem().getSourceFiles(PHP);
+      sourceFilesByProject.put(project, files);
+    }
+    return files;
+  }
+
+  /**
+   * @param project
+   * @return test files of the project. Avoid accessing the filesystem several times during analysis.
+   */
+  private List<File> getTestFiles(Project project) {
+    List<File> files = testFilesByProject.get(project);
+    if (files == null) {
+      files = project.getFileSystem().getTestFiles(PHP);
+      testFilesByProject.put(project, files);
+    }
+    return files;
   }
 
 }

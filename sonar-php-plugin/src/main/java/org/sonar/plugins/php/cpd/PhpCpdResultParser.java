@@ -56,7 +56,7 @@ import com.thoughtworks.xstream.XStream;
  * @author akram
  * 
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("unchecked")
 public class PhpCpdResultParser implements BatchExtension {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCpdResultParser.class);
@@ -109,6 +109,7 @@ public class PhpCpdResultParser implements BatchExtension {
    */
   private void parseFile(SensorContext context, File file, Project project) {
     List<DuplicationNode> duplications = getDuplications(file);
+    @SuppressWarnings("unchecked")
     Map<Resource, ClassDuplicationData> duplicationsData = new HashMap<Resource, ClassDuplicationData>();
 
     for (DuplicationNode duplication : duplications) {
