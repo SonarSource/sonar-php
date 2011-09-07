@@ -46,9 +46,9 @@
   </developers>
 
   <properties>
-    <sonar.version>2.3</sonar.version>
+    <sonar.version>2.8</sonar.version>
     <sonar.pluginClass>org.sonar.plugins.php.core.PhpPlugin</sonar.pluginClass>
-    <sonar.runtimeVersion>2.3</sonar.runtimeVersion>
+    <sonar.runtimeVersion>2.8</sonar.runtimeVersion>
     <sonar.pluginName>PHP</sonar.pluginName>
   </properties>
 
@@ -56,6 +56,12 @@
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-plugin-api</artifactId>
+      <version>${sonar.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-batch</artifactId>
       <version>${sonar.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -103,6 +109,17 @@
       <groupId>org.easytesting</groupId>
       <artifactId>fest-assert</artifactId>
       <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- TODO http://jira.codehaus.org/browse/SONAR-2011
+    We need following dependency, otherwise we will receive
+    java.lang.NoClassDefFoundError: org/apache/maven/project/MavenProject
+    during call mock(org.sonar.api.resources.Project.class)
+    -->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.0.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -58,27 +58,8 @@ public class PhpSourceImporter extends AbstractSourceImporter {
   }
 
   /**
-   * Analyse the project source dirs.
-   * 
-   * @param project
-   *          the project to be analyzed
-   * @param context
-   *          the context the execution context
-   * @see org.sonar.api.batch.AbstractSourceImporter#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
-   */
-  @Override
-  public void analyse(Project project, SensorContext context) {
-    try {
-      LOG.info("Importing files from project " + project.getName());
-      doAnalyse(project, context);
-    } catch (IOException e) {
-      throw new SonarException("Parsing source files ended abnormaly", e);
-    }
-  }
-
-  /**
    * Creates the resource.
-   * 
+   *
    * @param file
    *          the file
    * @param sourceDirs
@@ -95,38 +76,6 @@ public class PhpSourceImporter extends AbstractSourceImporter {
       phpFile = PhpFile.getInstance(project).fromIOFile(file, sourceDirs, unitTest);
     }
     return phpFile;
-  }
-
-  /**
-   * Imports php file contains in the source and tests folders.
-   * 
-   * @param project
-   *          the project
-   * @param context
-   *          the context
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
-   */
-  protected void doAnalyse(Project project, SensorContext context) throws IOException {
-    // Importing source files
-    ProjectFileSystem fileSystem = project.getFileSystem();
-    Charset sourceCharset = fileSystem.getSourceCharset();
-
-    List<File> sourceDirs = fileSystem.getSourceDirs();
-    List<File> sourceFiles = fileSystem.getSourceFiles(PHP);
-    parseDirs(context, sourceFiles, sourceDirs, false, sourceCharset);
-    for (File directory : sourceDirs) {
-      LOG.info(directory.getName());
-    }
-
-    // Importing tests files
-    List<File> testDirs = fileSystem.getTestDirs();
-    List<File> testFiles = fileSystem.getTestFiles(PHP);
-    parseDirs(context, testFiles, testDirs, true, sourceCharset);
-    // Display source dirs and tests directories if info level is enabled.
-    for (File directory : testDirs) {
-      LOG.info(directory.getName());
-    }
   }
 
   /**

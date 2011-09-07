@@ -37,13 +37,16 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.DefaultProjectFileSystem;
+import org.sonar.api.resources.Languages;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.phpunit.PhpUnitPlugin;
 
 /**
  * Tests the basic functionality of the PhpSourceImporter.
- * 
+ *
  * @author juergen_kellerer, 2010-10-21
  * @version 1.0
  */
@@ -70,12 +73,15 @@ public class PhpSourceImporterTest {
 
     Configuration configuration = mock(Configuration.class);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
+    when(configuration.getBoolean(CoreProperties.CORE_IMPORT_SOURCES_PROPERTY,
+            CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE)).thenReturn(true);
 
     context = mock(SensorContext.class);
     project = mock(Project.class);
     when(project.getPom()).thenReturn(new MavenProject());
+    when(project.getConfiguration()).thenReturn(configuration);
 
-    DefaultProjectFileSystem fileSystem = new DefaultProjectFileSystem(project);
+    DefaultProjectFileSystem fileSystem = new DefaultProjectFileSystem(project, new Languages(Php.PHP));
     fileSystem.addSourceDir(sources);
     fileSystem.addTestDir(tests);
     fileSystem.addTestDir(testsBelowSources);
@@ -110,7 +116,6 @@ public class PhpSourceImporterTest {
       PhpFile file = PhpFile.getInstance(project).fromIOFile(new File(tests, name), Arrays.asList(tests), true);
       verify(context).saveSource(file, phpCode);
     }
-    verifyNoMoreInteractions(context);
   }
 
   void createFiles(File path, boolean isTest) throws Exception {

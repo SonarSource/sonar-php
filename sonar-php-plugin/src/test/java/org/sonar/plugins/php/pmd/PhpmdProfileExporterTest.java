@@ -147,5 +147,10 @@ public class PhpmdProfileExporterTest {
       }
       return null;
     }
+
+    public Rule findById(int ruleId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
   }
 }

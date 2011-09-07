@@ -128,7 +128,7 @@ public class PhpCodeSnifferProfileExporterTest {
 
     /**
      * @return
-     * 
+     *
      */
     private Map<String, Rule> getRulesMap() {
       if (rulesByKey == null) {
@@ -138,6 +138,11 @@ public class PhpCodeSnifferProfileExporterTest {
         rulesByKey.put(rule.getKey(), rule);
       }
       return rulesByKey;
+    }
+
+    public Rule findById(int ruleId) {
+        // TODO Auto-generated method stub
+        return null;
     }
   }
 
