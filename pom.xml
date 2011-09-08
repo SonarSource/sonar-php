@@ -53,7 +53,7 @@
   </issueManagement>
   <ciManagement>
     <system>Bamboo</system>
-    <url>http://ci.codehaus.org/browse/SONAR-PHP</url>
+    <url>http://bamboo.ci.codehaus.org/browse/SONAR-PHP</url>
   </ciManagement>
 
 </project>

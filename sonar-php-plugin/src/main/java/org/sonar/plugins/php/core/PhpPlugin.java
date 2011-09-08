@@ -79,9 +79,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sonar.api.Extension;
-import org.sonar.api.Plugin;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
+import org.sonar.api.SonarPlugin;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferPriorityMapper;
@@ -161,7 +161,7 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
       name = PHPCPD_MIN_LINES_MESSAGE, project = true, global = true, description = PHPCPD_MIN_LINES_DESCRIPTION),
   @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS,
       name = PHPCPD_MIN_TOKENS_MESSAGE, project = true, global = true, description = PHPCPD_MIN_TOKENS_MESSAGE) })
-public class PhpPlugin implements Plugin {
+public class PhpPlugin extends SonarPlugin {
 
   /** All the valid php files suffixes. */
   public static final String DEFAULT_SUFFIXES = "php,php3,php4,php5,phtml,inc";
@@ -177,17 +177,6 @@ public class PhpPlugin implements Plugin {
   public static final String CODESNIFFER_PLUGIN_KEY = "PHP_CodeSniffer";
 
   public static final String PLUGIN_NAME = "PHP";
-
-  /**
-   * Gets the description.
-   *
-   * @return the description
-   * @see org.sonar.api.Plugin#getDescription()
-   */
-  public final String getDescription() {
-    return "Sonar PHP Plugin is set of tool that brings PHP support to sonar. It rely on Sonar core, "
-        + "PDepend, Phpmd, PHP_CodeSniffer, Phpunit and Phpcpd tools.";
-  }
 
   /**
    * Gets the extensions.
@@ -247,26 +236,6 @@ public class PhpPlugin implements Plugin {
     extensions.add(PhpCpdSensor.class);
 
     return extensions;
-  }
-
-  /**
-   * Gets the key.
-   *
-   * @return the key
-   * @see org.sonar.api.Plugin#getKey()
-   */
-  public final String getKey() {
-    return KEY;
-  }
-
-  /**
-   * Gets the name.
-   *
-   * @return the name
-   * @see org.sonar.api.Plugin#getName()
-   */
-  public final String getName() {
-    return PLUGIN_NAME;
   }
 
   /**
