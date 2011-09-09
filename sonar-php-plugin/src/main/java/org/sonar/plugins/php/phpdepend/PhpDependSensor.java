@@ -21,7 +21,7 @@
 package org.sonar.plugins.php.phpdepend;
 
 import static java.lang.Boolean.parseBoolean;
-import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_SHOULD_RUN_PROPERTY_KEY;
 

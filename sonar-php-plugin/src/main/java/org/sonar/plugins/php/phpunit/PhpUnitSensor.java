@@ -21,7 +21,7 @@
 package org.sonar.plugins.php.phpunit;
 
 import static java.lang.Boolean.parseBoolean;
-import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY;

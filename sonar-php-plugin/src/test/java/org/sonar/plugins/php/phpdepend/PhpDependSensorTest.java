@@ -33,7 +33,7 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.api.Php;
 
 public class PhpDependSensorTest {
 

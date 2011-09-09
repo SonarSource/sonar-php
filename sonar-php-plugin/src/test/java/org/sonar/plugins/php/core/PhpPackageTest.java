@@ -23,6 +23,7 @@ package org.sonar.plugins.php.core;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.sonar.plugins.php.api.PhpPackage;
 
 /**
  * The Class PhpPackageTest.

@@ -18,11 +18,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 
-package org.sonar.plugins.php.core;
+package org.sonar.plugins.php.api;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.AbstractLanguage;
+import org.sonar.plugins.php.core.PhpPlugin;
 
 /**
  * This class defines the PHP language.
@@ -37,7 +38,7 @@ public final class Php extends AbstractLanguage {
   /**
    * An array containing all PHP keywords.
    */
-  static final String[] PHP_KEYWORDS_ARRAY = new String[] { "and", "or", "xor", "exception", "array", "as", "break", "case", "class",
+  public static final String[] PHP_KEYWORDS_ARRAY = new String[] { "and", "or", "xor", "exception", "array", "as", "break", "case", "class",
     "const", "continue", "declare", "default", "die", "do", "echo", "else", "elseif", "empty", "enddeclare", "endfor", "endforeach",
     "endif", "endswitch", "endwhile", "eval", "exit", "extends", "for", "foreach", "function", "global", "if", "include", "include_once",
     "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "unset", "use", "var", "while", "final",
@@ -47,7 +48,7 @@ public final class Php extends AbstractLanguage {
   /**
    * An array containing reserved variables.
    */
-  static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[] { "__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
+  public static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[] { "__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
     "__DIR__", "__FILE__", "__LINE__", "$this" };
 
   /** An php instance. */
@@ -85,7 +86,7 @@ public final class Php extends AbstractLanguage {
 
   /**
    * Allows to know if the given file name has a valid suffix.
-   * 
+   *
    * @param fileName
    *          String representing the file name
    * @return boolean <code>true</code> if the file name's suffix is known, <code>false</code> any other way

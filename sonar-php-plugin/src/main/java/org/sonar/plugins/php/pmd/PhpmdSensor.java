@@ -21,7 +21,7 @@
 package org.sonar.plugins.php.pmd;
 
 import static java.lang.Boolean.parseBoolean;
-import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
@@ -42,7 +42,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
-import org.sonar.plugins.php.core.PhpFile;
+import org.sonar.plugins.php.api.PhpFile;
 
 /**
  * The plugin entry point.

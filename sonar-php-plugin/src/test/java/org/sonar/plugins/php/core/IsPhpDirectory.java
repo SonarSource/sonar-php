@@ -24,6 +24,8 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.ResourceUtils;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpPackage;
 
 /**
  * The Class IsPhpDirectory.
@@ -41,7 +43,7 @@ public class IsPhpDirectory extends BaseMatcher<Resource<PhpPackage>> {
 
   /**
    * Instantiates a new checks if is php directory.
-   * 
+   *
    * @param key
    *          the key
    */
@@ -54,7 +56,7 @@ public class IsPhpDirectory extends BaseMatcher<Resource<PhpPackage>> {
    */
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
    */
   public void describeTo(Description arg0) {
@@ -62,12 +64,12 @@ public class IsPhpDirectory extends BaseMatcher<Resource<PhpPackage>> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.hamcrest.Matcher#matches(java.lang.Object)
    */
 
   public boolean matches(Object o) {
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     Resource resource = (Resource) o;
     boolean result = ResourceUtils.isDirectory(resource) && Php.PHP.equals(resource.getLanguage());
     if (result && key != null) {

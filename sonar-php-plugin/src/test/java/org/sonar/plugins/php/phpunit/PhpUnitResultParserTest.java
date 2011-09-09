@@ -35,7 +35,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.core.PhpFile;
+import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.plugins.php.core.PhpPlugin;
 
 import com.thoughtworks.xstream.XStreamException;

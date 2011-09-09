@@ -47,7 +47,7 @@ import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.api.Php;
 
 /**
  * The Class PhpPmdSensorTest.

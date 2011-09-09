@@ -27,7 +27,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.api.Php.PHP;
 
 import java.io.File;
 import java.util.Arrays;
@@ -42,6 +42,7 @@ import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
+import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.text.Source;
 

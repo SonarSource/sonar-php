@@ -21,7 +21,7 @@
 package org.sonar.plugins.php.pmd;
 
 import static org.sonar.api.CoreProperties.PROJECT_EXCLUSIONS_PROPERTY;
-import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_OPTION;

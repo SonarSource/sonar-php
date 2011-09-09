@@ -20,11 +20,7 @@
 
 package org.sonar.plugins.php.core;
 
-import static org.sonar.plugins.php.core.Php.PHP;
-
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -33,10 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.AbstractSourceImporter;
 import org.sonar.api.batch.Phase;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpFile;
 
 /**
  * The PhpSourceImporter is in charge of analysing and loading valid php files. All source files under source folder and test source folder

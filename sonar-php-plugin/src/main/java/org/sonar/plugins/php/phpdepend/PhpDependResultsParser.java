@@ -50,7 +50,7 @@ import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ResourceUtils;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.core.PhpFile;
+import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.plugins.php.phpdepend.xml.ClassNode;
 import org.sonar.plugins.php.phpdepend.xml.FileNode;
 import org.sonar.plugins.php.phpdepend.xml.FunctionNode;

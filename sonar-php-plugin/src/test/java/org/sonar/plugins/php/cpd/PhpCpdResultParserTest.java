@@ -44,7 +44,7 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.core.PhpFile;
+import org.sonar.plugins.php.api.PhpFile;
 
 public class PhpCpdResultParserTest {
 

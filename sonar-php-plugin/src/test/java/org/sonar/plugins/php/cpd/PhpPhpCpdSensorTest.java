@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 public class PhpPhpCpdSensorTest {

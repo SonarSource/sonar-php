@@ -24,7 +24,7 @@ import java.io.InputStream;
 
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.XMLRuleParser;
-import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.PhpRuleRepository;
 
 /**

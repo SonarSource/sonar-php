@@ -33,6 +33,8 @@ import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpFile;
 
 /**
  * The Class PhpFileTest.

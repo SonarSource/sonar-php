@@ -20,7 +20,7 @@
 
 package org.sonar.plugins.php.core;
 
-import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.api.Php.PHP;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,6 +39,8 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.recognizer.CamelCaseDetector;
 import org.sonar.squid.recognizer.CodeRecognizer;

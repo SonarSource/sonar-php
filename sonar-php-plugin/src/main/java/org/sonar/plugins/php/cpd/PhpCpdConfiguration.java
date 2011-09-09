@@ -26,8 +26,8 @@ package org.sonar.plugins.php.cpd;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
-import org.sonar.plugins.php.core.Php;
 
 /***
  * @author akram

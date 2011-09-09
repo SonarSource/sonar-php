@@ -24,7 +24,7 @@
 package org.sonar.plugins.php.cpd;
 
 import static java.lang.Boolean.parseBoolean;
-import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SKIP_PROPERTY_KEY;

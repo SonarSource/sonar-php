@@ -37,7 +37,7 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.PhpProfileImporter;
 import org.sonar.plugins.php.pmd.xml.PmdProperty;
 import org.sonar.plugins.php.pmd.xml.PmdRule;

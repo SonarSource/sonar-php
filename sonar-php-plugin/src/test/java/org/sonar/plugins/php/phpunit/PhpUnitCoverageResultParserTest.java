@@ -30,7 +30,7 @@ import static org.sonar.api.measures.CoreMetrics.COVERAGE;
 import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
 import static org.sonar.api.measures.CoreMetrics.LINES_TO_COVER;
 import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
-import static org.sonar.plugins.php.core.Php.PHP;
+import static org.sonar.plugins.php.api.Php.PHP;
 
 import java.io.File;
 import java.util.Arrays;
@@ -42,8 +42,8 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.core.PhpFile;
-import org.sonar.plugins.php.core.PhpPackage;
+import org.sonar.plugins.php.api.PhpFile;
+import org.sonar.plugins.php.api.PhpPackage;
 import org.sonar.plugins.php.core.PhpPlugin;
 
 public class PhpUnitCoverageResultParserTest {

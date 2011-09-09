@@ -20,8 +20,8 @@
 
 package org.sonar.plugins.php.core;
 
-import static org.sonar.plugins.php.core.Php.PHP_KEYWORDS_ARRAY;
-import static org.sonar.plugins.php.core.Php.PHP_RESERVED_VARIABLES_ARRAY;
+import static org.sonar.plugins.php.api.Php.PHP_KEYWORDS_ARRAY;
+import static org.sonar.plugins.php.api.Php.PHP_RESERVED_VARIABLES_ARRAY;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +35,7 @@ import org.sonar.colorizer.CppDocTokenizer;
 import org.sonar.colorizer.KeywordsTokenizer;
 import org.sonar.colorizer.StringTokenizer;
 import org.sonar.colorizer.Tokenizer;
+import org.sonar.plugins.php.api.Php;
 
 /**
  * @author freddy.mallet

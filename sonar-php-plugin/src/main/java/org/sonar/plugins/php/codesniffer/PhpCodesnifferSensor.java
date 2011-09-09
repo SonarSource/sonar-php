@@ -21,11 +21,11 @@
 package org.sonar.plugins.php.codesniffer;
 
 import static java.lang.Boolean.parseBoolean;
+import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SKIP;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
-import static org.sonar.plugins.php.core.Php.PHP;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
-import org.sonar.plugins.php.core.PhpFile;
+import org.sonar.plugins.php.api.PhpFile;
 
 /**
  * The Class PhpCodesnifferPluginSensor.

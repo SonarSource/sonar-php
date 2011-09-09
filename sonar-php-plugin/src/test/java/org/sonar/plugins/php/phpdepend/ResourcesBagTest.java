@@ -25,7 +25,7 @@ import static org.hamcrest.core.Is.is;
 
 import org.junit.Test;
 import org.sonar.api.measures.Metric;
-import org.sonar.plugins.php.core.PhpFile;
+import org.sonar.plugins.php.api.PhpFile;
 
 /**
  * The Class ResourcesBagTest.

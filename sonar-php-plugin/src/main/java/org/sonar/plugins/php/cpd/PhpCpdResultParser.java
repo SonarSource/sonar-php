@@ -43,7 +43,7 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.core.PhpFile;
+import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.plugins.php.cpd.xml.DuplicationNode;
 import org.sonar.plugins.php.cpd.xml.FileNode;
 import org.sonar.plugins.php.cpd.xml.PmdCpdNode;

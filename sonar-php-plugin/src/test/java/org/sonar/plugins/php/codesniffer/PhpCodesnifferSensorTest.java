@@ -36,7 +36,7 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.ActiveRule;
-import org.sonar.plugins.php.core.Php;
+import org.sonar.plugins.php.api.Php;
 
 /**
  * The Class PhpCodesnifferSensorTest.

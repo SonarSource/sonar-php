@@ -42,6 +42,8 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.DefaultProjectFileSystem;
 import org.sonar.api.resources.Languages;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.plugins.php.phpunit.PhpUnitPlugin;
 
 /**

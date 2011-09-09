@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.ProfileImporter;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.pmd.PhpmdProfileImporter;
 import org.sonar.plugins.php.pmd.xml.PmdProperty;
 import org.sonar.plugins.php.pmd.xml.PmdRule;

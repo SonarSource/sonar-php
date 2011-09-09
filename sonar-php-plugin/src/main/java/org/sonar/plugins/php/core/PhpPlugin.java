@@ -82,6 +82,7 @@ import org.sonar.api.Extension;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferPriorityMapper;
