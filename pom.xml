@@ -19,14 +19,19 @@
 
   <modules>
     <module>sonar-php-plugin</module>
+    <!-- Following modules deactivated as they are not in SNAPSHOT version => we must know what to do with them 
     <module>phpmd-rulesets</module>
     <module>phpcodesniffer-rulesets</module>
+    -->
   </modules>
+  
   <inceptionYear>2010</inceptionYear>
+  
   <organization>
-    <name>Akram Ben Aissi</name>
-    <url>http://www.akram.benaissi.com</url>
+    <name>Codehaus Sonar Plugins</name>
+    <url>http://sonar-plugins.codehaus.org/</url>
   </organization>
+  
   <licenses>
     <license>
       <name>GNU LGPL v3</name>
@@ -34,11 +39,25 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  
   <developers>
     <developer>
       <id>akram</id>
       <name>Akram Ben Aissi</name>
       <email>akram.benaissi@free.fr</email>
+    </developer>
+    <developer>
+      <name>Sebastian Marek</name>
+      <email>smarek@plus.net</email>
+    </developer>
+    <developer>
+      <id>fabemn</id>
+      <name>Fabrice Bellingard</name>
+      <email>fabrice.bellingard@sonarsource.com</email>
+    </developer>
+    <developer>
+      <name>Gennadiy Litvinyuk</name>
+      <email>gennadiy@gmail.com</email>
     </developer>
   </developers>
 
@@ -55,6 +74,68 @@
     <system>Bamboo</system>
     <url>http://bamboo.ci.codehaus.org/browse/SONAR-PHP</url>
   </ciManagement>
+
+  <profiles>
+    <profile>
+      <id>m2e</id>
+      <activation>
+        <!-- This profile is active only when used from Eclipse m2e and is 
+          used only to store settings. -->
+        <property>
+          <name>m2e.version</name>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.eclipse.m2e</groupId>
+              <artifactId>lifecycle-mapping</artifactId>
+              <version>1.0.0</version>
+              <configuration>
+                <lifecycleMappingMetadata>
+                  <pluginExecutions>
+                    <pluginExecution>
+                      <pluginExecutionFilter>
+                        <groupId>
+                          com.mycila.maven-license-plugin
+                        </groupId>
+                        <artifactId>
+                          maven-license-plugin
+                        </artifactId>
+                        <versionRange>
+                          [1.9.0,)
+                        </versionRange>
+                        <goals>
+                          <goal>check</goal>
+                        </goals>
+                      </pluginExecutionFilter>
+                      <action>
+                        <ignore />
+                      </action>
+                    </pluginExecution>
+                    <pluginExecution>
+                      <pluginExecutionFilter>
+                        <groupId>org.codehaus.sonar</groupId>
+                        <artifactId>sonar-packaging-maven-plugin</artifactId>
+                        <versionRange>[1.0,)</versionRange>
+                        <goals>
+                          <goal>check-dependencies</goal>
+                        </goals>
+                      </pluginExecutionFilter>
+                      <action>
+                        <ignore />
+                      </action>
+                    </pluginExecution>
+                  </pluginExecutions>
+                </lifecycleMappingMetadata>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
 
