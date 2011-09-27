@@ -19,10 +19,8 @@
 
   <modules>
     <module>sonar-php-plugin</module>
-    <!-- Following modules deactivated as they are not in SNAPSHOT version => we must know what to do with them 
     <module>phpmd-rulesets</module>
     <module>phpcodesniffer-rulesets</module>
-    -->
   </modules>
   
   <inceptionYear>2010</inceptionYear>
