@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
@@ -59,7 +58,7 @@ public class PhpUnitResultParser implements BatchExtension {
   private static final int PRECISION = 1;
 
   /** The logger. */
-  private static Logger logger = LoggerFactory.getLogger(PhpUnitResultParser.class);
+  private static Logger LOG = LoggerFactory.getLogger(PhpUnitResultParser.class);
 
   /** The context. */
   private SensorContext context;
@@ -100,7 +99,7 @@ public class PhpUnitResultParser implements BatchExtension {
       xstream.processAnnotations(TestCase.class);
       inputStream = new FileInputStream(report);
       TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
-      Log.debug("Tests suites: " + testSuites);
+      LOG.debug("Tests suites: " + testSuites);
       return testSuites;
     } catch (IOException e) {
       throw new SonarException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
@@ -144,7 +143,7 @@ public class PhpUnitResultParser implements BatchExtension {
     if (reportFile == null) {
       insertZeroWhenNoReports(context);
     } else {
-      logger.info("Parsing file : ", reportFile);
+      LOG.info("Parsing file: " + reportFile.getAbsolutePath());
       parseFile(context, reportFile, project);
     }
   }

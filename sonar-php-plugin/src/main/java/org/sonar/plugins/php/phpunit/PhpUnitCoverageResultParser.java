@@ -91,7 +91,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
     if (coverageReportFile == null) {
       insertZeroWhenNoReports();
     } else {
-      logger.info("Parsing file : {0}", coverageReportFile.getName());
+      logger.info("Parsing file: " + coverageReportFile.getAbsolutePath());
       parseFile(context, coverageReportFile);
     }
   }
