@@ -1,6 +1,6 @@
 /*
  * Sonar PHP Plugin
- * Copyright (C) 2010 Sonar PHP Plugin
+ * Copyright (C) 2010 Codehaus Sonar Plugins
  * dev@sonar.codehaus.org
  *
  * This program is free software; you can redistribute it and/or
@@ -17,12 +17,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-
 package org.sonar.plugins.php.core;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -44,11 +42,10 @@ import org.sonar.api.resources.Languages;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpFile;
-import org.sonar.plugins.php.phpunit.PhpUnitPlugin;
 
 /**
  * Tests the basic functionality of the PhpSourceImporter.
- *
+ * 
  * @author juergen_kellerer, 2010-10-21
  * @version 1.0
  */
@@ -75,8 +72,8 @@ public class PhpSourceImporterTest {
 
     Configuration configuration = mock(Configuration.class);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
-    when(configuration.getBoolean(CoreProperties.CORE_IMPORT_SOURCES_PROPERTY,
-            CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE)).thenReturn(true);
+    when(configuration.getBoolean(CoreProperties.CORE_IMPORT_SOURCES_PROPERTY, CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE))
+        .thenReturn(true);
 
     context = mock(SensorContext.class);
     project = mock(Project.class);

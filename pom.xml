@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -9,27 +10,27 @@
     <relativePath>../parent</relativePath>
   </parent>
 
-  <groupId>org.codehaus.sonar-plugins.sonar-php-plugin</groupId>
-  <artifactId>sonar-php</artifactId>
+  <groupId>org.codehaus.sonar-plugins.php</groupId>
+  <artifactId>parent</artifactId>
   <version>0.5-SNAPSHOT</version>
   <packaging>pom</packaging>
+
   <name>Sonar PHP Project</name>
   <description>Enables analysis of PHP projects into Sonar.</description>
+  <inceptionYear>2010</inceptionYear>
+  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
 
+  <organization>
+    <name>Codehaus Sonar Plugins</name>
+    <url>http://sonar-plugins.codehaus.org/</url>
+  </organization>
 
   <modules>
     <module>sonar-php-plugin</module>
     <module>phpmd-rulesets</module>
     <module>phpcodesniffer-rulesets</module>
   </modules>
-  
-  <inceptionYear>2010</inceptionYear>
-  
-  <organization>
-    <name>Codehaus Sonar Plugins</name>
-    <url>http://sonar-plugins.codehaus.org/</url>
-  </organization>
-  
+
   <licenses>
     <license>
       <name>GNU LGPL v3</name>
@@ -37,7 +38,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <developers>
     <developer>
       <id>akram</id>
@@ -45,8 +46,9 @@
       <email>akram.benaissi@free.fr</email>
     </developer>
     <developer>
+      <id>proofek</id>
       <name>Sebastian Marek</name>
-      <email>smarek@plus.net</email>
+      <email>proofek@gmail.com</email>
     </developer>
     <developer>
       <id>fabemn</id>
@@ -54,6 +56,7 @@
       <email>fabrice.bellingard@sonarsource.com</email>
     </developer>
     <developer>
+      <id>gennadiyl</id>
       <name>Gennadiy Litvinyuk</name>
       <email>gennadiy@gmail.com</email>
     </developer>

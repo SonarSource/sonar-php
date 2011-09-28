@@ -1,6 +1,6 @@
 /*
  * Sonar PHP Plugin
- * Copyright (C) 2010 Sonar PHP Plugin
+ * Copyright (C) 2010 Codehaus Sonar Plugins
  * dev@sonar.codehaus.org
  *
  * This program is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-
 package org.sonar.plugins.php.pmd;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -34,16 +33,30 @@ import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAM
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.junit.After;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 
 public class PhpmdExecutorTest {
 
+  @After
+  public void cleanFolder() {
+    File tempFolder = new File("C:/");
+    if (tempFolder.isDirectory()) {
+      try {
+        FileUtils.deleteDirectory(tempFolder);
+      } catch (IOException e) {
+      }
+    }
+  }
+  
   /**
    * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()} .
    */

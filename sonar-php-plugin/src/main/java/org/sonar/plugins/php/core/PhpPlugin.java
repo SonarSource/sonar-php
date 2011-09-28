@@ -1,6 +1,6 @@
 /*
  * Sonar PHP Plugin
- * Copyright (C) 2010 Sonar PHP Plugin
+ * Copyright (C) 2010 Codehaus Sonar Plugins
  * dev@sonar.codehaus.org
  *
  * This program is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-
 package org.sonar.plugins.php.core;
 
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_DESCRIPTION;
@@ -239,14 +238,14 @@ public class PhpPlugin extends SonarPlugin {
     return extensions;
   }
 
-  /**
-   * To string.
-   *
-   * @return the string
-   * @see java.lang.Object#toString()
-   */
-  @Override
-  public final String toString() {
-    return getKey();
-  }
+//  /**
+//   * To string.
+//   *
+//   * @return the string
+//   * @see java.lang.Object#toString()
+//   */
+//  @Override
+//  public final String toString() {
+//    return getKey();
+//  }
 }

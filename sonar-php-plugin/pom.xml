@@ -1,50 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.codehaus.sonar-plugins.sonar-php-plugin</groupId>
-    <artifactId>sonar-php</artifactId>
+    <groupId>org.codehaus.sonar-plugins.php</groupId>
+    <artifactId>parent</artifactId>
     <version>0.5-SNAPSHOT</version>
   </parent>
 
   <artifactId>sonar-php-plugin</artifactId>
-  <groupId>org.codehaus.sonar-plugins</groupId>
-  <version>0.5-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
+
   <name>Sonar PHP Plugin</name>
   <description>Sonar PHP Plugin is set of tools that brings PHP support to sonar. It relies on Sonar core, PHP Depend, PHPMD, PHP_CodeSniffer, PHPUnit and phpcpd tools</description>
-  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
-
-  <ciManagement>
-    <system>bamboo</system>
-    <url>http://bamboo.ci.codehaus.org/browse/SONAR-PHP</url>
-  </ciManagement>
-  <inceptionYear>2010</inceptionYear>
-  <organization>
-    <name>Sonar PHP Plugin</name>
-  </organization>
-  <licenses>
-    <license>
-      <name>GNU LGPL 3</name>
-      <url>http://www.gnu.org/licenses/lgpl.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-
-
-  <developers>
-    <developer>
-      <id>akram</id>
-      <name>Akram Ben Aissi</name>
-      <email>akram.benaissi@free.fr</email>
-    </developer>
-    <developer>
-      <id>proofek</id>
-      <name>Sebastian Marek</name>
-      <email>proofek@gmail.com</email>
-    </developer>
-  </developers>
 
   <properties>
     <sonar.version>2.8</sonar.version>
@@ -107,11 +76,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-project</artifactId>
-        <version>2.0.6</version>
-        <type>jar</type>
-        <scope>test</scope>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.0.6</version>
+      <type>jar</type>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <profiles>
@@ -129,79 +98,6 @@
               <downloadJavadocs>false</downloadJavadocs>
               <downloadSources>true</downloadSources>
             </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>package</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <version>LATEST</version>
-            <executions>
-              <execution>
-                <id>add-source</id>
-                <phase>generate-sources</phase>
-                <goals>
-                  <goal>add-source</goal>
-                </goals>
-                <configuration>
-                  <sources>
-                    <source>src/main/java2</source>
-                  </sources>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <dependencies>
-              <dependency>
-                <groupId>yguard</groupId>
-                <artifactId>yguard</artifactId>
-                <version>2.1.0</version>
-                <scope>system</scope>
-                <systemPath>lib/yguard.jar</systemPath>
-              </dependency>
-            </dependencies>
-            <executions>
-              <execution>
-                <phase>package</phase>
-                <configuration>
-                  <tasks>
-                    <property refid="maven.compile.classpath" name="mvn.classpath" />
-                    <!-- <echo message="Using Maven Classpath: ${mvn.classpath}" /> -->
-                    <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" />
-                    <yguard>
-                      <!-- Input file and output file is the same. -->
-                      <inoutpair in="${project.build.directory}/${project.build.finalName}.jar" out="${project.build.directory}/${project.build.finalName}.jar" />
-                      <!-- Obfuscate classes plus string references. -->
-                      <rename logfile="${project.build.directory}/yguard.log.xml" replaceClassNameStrings="true">
-                        <!-- Keep the only class to be used for easy running and its public method main(). -->
-                        <keep>
-                          <class classes="public" methods="public">
-                            <patternset>
-                              <include name="**.*Profile" />
-                              <include name="**.PhpPlugin" />
-                            </patternset>
-                          </class>
-                        </keep>
-                      </rename>
-                      <!-- There are some external libraries used - Maven knows details. -->
-                      <externalclasses>
-                        <pathelement path="${mvn.classpath}" />
-                      </externalclasses>
-                    </yguard>
-                  </tasks>
-                </configuration>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>
