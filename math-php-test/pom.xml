@@ -16,7 +16,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>LATEST</version>
         <executions>
           <execution>
             <id>add-source</id>
@@ -87,7 +86,12 @@
     
   </properties>
 
-
+  <!-- Info added to check that the PHP plugin works correctly with the SCM plugin -->
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</developerConnection>
+    <url>http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</url>
+  </scm>
 
   <pluginRepositories>
     <pluginRepository>
