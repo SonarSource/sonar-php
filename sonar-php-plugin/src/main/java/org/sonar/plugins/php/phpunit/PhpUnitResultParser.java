@@ -36,9 +36,9 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
@@ -114,10 +114,10 @@ public class PhpUnitResultParser implements BatchExtension {
    *          the unit test report
    * @param project
    *          the project
-   * @return PhpFile pointed by the report
+   * @return Resource<?> the file pointed by the report
    */
-  private PhpFile getUnitTestResource(PhpUnitTestReport report, Project project) {
-    return PhpFile.getInstance(project).fromAbsolutePath(report.getFile(), project.getFileSystem().getTestDirs(), true);
+  private Resource<?> getUnitTestResource(PhpUnitTestReport report, Project project) {
+    return org.sonar.api.resources.File.fromIOFile(new File(report.getFile()), project.getFileSystem().getTestDirs());
   }
 
   /**

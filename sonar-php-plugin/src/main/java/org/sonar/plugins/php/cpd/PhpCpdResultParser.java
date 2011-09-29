@@ -42,7 +42,6 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.plugins.php.cpd.xml.DuplicationNode;
 import org.sonar.plugins.php.cpd.xml.FileNode;
 import org.sonar.plugins.php.cpd.xml.PmdCpdNode;
@@ -134,9 +133,8 @@ public class PhpCpdResultParser implements BatchExtension {
    */
   private void processClassMeasure(SensorContext context, Map<Resource, ClassDuplicationData> duplicationsData, FileNode original,
       FileNode copied, DuplicationNode duplication, Project project) {
-    PhpFile instance = PhpFile.getInstance(project);
-    Resource file = instance.fromAbsolutePath(copied.getPath(), project.getFileSystem().getSourceDirs(), false);
-    Resource targetPhpClass = instance.fromAbsolutePath(original.getPath(), project.getFileSystem().getSourceDirs(), false);
+    org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(new File(copied.getPath()), project);
+    org.sonar.api.resources.File targetPhpClass = org.sonar.api.resources.File.fromIOFile(new File(original.getPath()), project);
     if (file != null) {
       ClassDuplicationData data = duplicationsData.get(file);
       if (data == null) {

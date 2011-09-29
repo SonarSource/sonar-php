@@ -35,11 +35,12 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.resources.InputFile;
+import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.recognizer.CamelCaseDetector;
 import org.sonar.squid.recognizer.CodeRecognizer;
@@ -75,12 +76,11 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    */
   public void analyse(Project project, SensorContext context) {
     ProjectFileSystem fileSystem = project.getFileSystem();
-    List<File> sourceFiles = fileSystem.getSourceFiles(PHP);
-    List<File> directories = fileSystem.getSourceDirs();
-    for (File file : sourceFiles) {
-      PhpFile phpFile = PhpFile.getInstance(project).fromIOFile(file, directories, false);
+    List<InputFile> sourceFiles = fileSystem.mainFiles(Php.KEY);
+    for (InputFile file : sourceFiles) {
+      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file.getFile(), project);
       if (phpFile != null) {
-        Source source = analyseSourceCode(file);
+        Source source = analyseSourceCode(file.getFile());
         if (source != null) {
           filter.addResource(phpFile, source.getNoSonarTagLines());
           double measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);

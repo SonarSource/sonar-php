@@ -41,7 +41,6 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
-import org.sonar.plugins.php.api.PhpFile;
 
 /**
  * The plugin entry point.
@@ -105,7 +104,7 @@ public class PhpmdSensor implements Sensor {
       for (PhpmdViolation violation : violations) {
         Rule rule = ruleFinder.findByKey(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY, violation.getRuleKey());
         if (rule != null) {
-          PhpFile resource = (PhpFile) context.getResource(PhpFile.getInstance(project).fromAbsolutePath(violation.getFileName(), project));
+          org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
           if (context.getResource(resource) != null) {
             Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
             contextViolations.add(v);

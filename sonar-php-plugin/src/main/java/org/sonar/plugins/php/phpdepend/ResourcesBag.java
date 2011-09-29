@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.sonar.api.measures.Metric;
-import org.sonar.plugins.php.api.PhpFile;
+import org.sonar.api.resources.File;
 
 /**
  * The Class ResourcesBag.
@@ -85,13 +85,13 @@ public class ResourcesBag {
   }
 
   /** The resource measures. */
-  private Map<PhpFile, MeasuresByMetric> resourceMeasures;
+  private Map<File, MeasuresByMetric> resourceMeasures;
 
   /**
    * Instantiates a new resources bag.
    */
   public ResourcesBag() {
-    this.resourceMeasures = new HashMap<PhpFile, MeasuresByMetric>();
+    this.resourceMeasures = new HashMap<File, MeasuresByMetric>();
   }
 
   /**
@@ -104,7 +104,7 @@ public class ResourcesBag {
    * @param resource
    *          the resource
    */
-  public void add(Double value, Metric metric, PhpFile resource) {
+  public void add(Double value, Metric metric, File resource) {
     MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
     if (measuresByMetric == null) {
       measuresByMetric = new MeasuresByMetric();
@@ -122,7 +122,7 @@ public class ResourcesBag {
    *          the resource
    * @return the measure
    */
-  public Double getMeasure(Metric metric, PhpFile resource) {
+  public Double getMeasure(Metric metric, File resource) {
     MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
     return measuresByMetric.getMeasure(metric);
   }
@@ -134,7 +134,7 @@ public class ResourcesBag {
    *          the resource
    * @return the metrics
    */
-  public Set<Metric> getMetrics(PhpFile resource) {
+  public Set<Metric> getMetrics(File resource) {
     MeasuresByMetric measuresByMetric = resourceMeasures.get(resource);
     return measuresByMetric.getMetrics();
   }
@@ -144,7 +144,7 @@ public class ResourcesBag {
    * 
    * @return the resources
    */
-  public Set<PhpFile> getResources() {
+  public Set<File> getResources() {
     return resourceMeasures.keySet();
   }
 }

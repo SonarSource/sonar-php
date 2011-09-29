@@ -43,7 +43,6 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.PhpFile;
 
 public class PhpCpdResultParserTest {
 
@@ -85,7 +84,7 @@ public class PhpCpdResultParserTest {
     File xmlFile = FileUtils.toFile(getClass().getResource(reportFile));
     parser.parse(xmlFile);
 
-    PhpFile mathPhp = new PhpFile("Math.php");
+    org.sonar.api.resources.File mathPhp = new org.sonar.api.resources.File("Math.php");
     verify(context).saveMeasure(mathPhp, DUPLICATED_FILES, 1.0);
     verify(context).saveMeasure(mathPhp, DUPLICATED_LINES, 0.0);
     verify(context).saveMeasure(mathPhp, DUPLICATED_BLOCKS, 0.0);

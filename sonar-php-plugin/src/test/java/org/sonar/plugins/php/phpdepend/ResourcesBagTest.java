@@ -24,7 +24,8 @@ import static org.hamcrest.core.Is.is;
 
 import org.junit.Test;
 import org.sonar.api.measures.Metric;
-import org.sonar.plugins.php.api.PhpFile;
+import org.sonar.api.measures.Metric.ValueType;
+import org.sonar.api.resources.File;
 
 /**
  * The Class ResourcesBagTest.
@@ -38,7 +39,7 @@ public class ResourcesBagTest {
   public void shouldGetAPreviousAddedValueToAResource() {
     ResourcesBag resourcesBag = new ResourcesBag();
     Metric metric = aMetricFixture();
-    PhpFile resource = aResourceFixture();
+    File resource = aResourceFixture();
 
     resourcesBag.add(1d, metric, resource);
 
@@ -67,7 +68,7 @@ public class ResourcesBagTest {
   public void shouldDoTheSumWhenAddingTwiceAFile() {
     ResourcesBag resourcesBag = new ResourcesBag();
     Metric metric = aMetricFixture();
-    PhpFile resource = aResourceFixture();
+    File resource = aResourceFixture();
 
     resourcesBag.add(1d, metric, resource);
     resourcesBag.add(3d, metric, resource);
@@ -84,7 +85,7 @@ public class ResourcesBagTest {
     ResourcesBag resourcesBag = new ResourcesBag();
     Metric metric = aMetricFixture();
     Metric anotherMetric = anotherMetricFixture();
-    PhpFile resource = aResourceFixture();
+    File resource = aResourceFixture();
 
     resourcesBag.add(1d, metric, resource);
     resourcesBag.add(2d, metric, resource);
@@ -103,7 +104,7 @@ public class ResourcesBagTest {
    * @return the metric
    */
   public Metric aMetricFixture() {
-    return new Metric("aKey");
+    return new Metric.Builder("m1", "Metric 1", ValueType.BOOL).create();
   }
 
   /**
@@ -112,7 +113,7 @@ public class ResourcesBagTest {
    * @return the metric
    */
   public Metric anotherMetricFixture() {
-    return new Metric("anotherKey");
+    return new Metric.Builder("m2", "Metric 2", ValueType.BOOL).create();
   }
 
   /**
@@ -120,7 +121,7 @@ public class ResourcesBagTest {
    * 
    * @return the resource
    */
-  public PhpFile aResourceFixture() {
-    return new PhpFile("aKey");
+  public File aResourceFixture() {
+    return new File("aKey");
   }
 }

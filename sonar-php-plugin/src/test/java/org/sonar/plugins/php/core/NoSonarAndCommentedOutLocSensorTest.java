@@ -30,18 +30,18 @@ import static org.sonar.plugins.php.api.Php.PHP;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
-import org.sonar.plugins.php.api.PhpFile;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.text.Source;
 
@@ -56,7 +56,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
     sensor.analyse(project, context);
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
     // Mail.php contains 9 commented oud code lines.
-    verify(context).saveMeasure(new PhpFile("Mail.php"), CoreMetrics.COMMENTED_OUT_CODE_LINES, 9d);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Mail.php"), CoreMetrics.COMMENTED_OUT_CODE_LINES, 9d);
   }
 
   @Test
@@ -77,11 +77,11 @@ public class NoSonarAndCommentedOutLocSensorTest {
     SensorContext context = mock(SensorContext.class);
     Project project = getMockProject();
 
-    File file = new File(this.getClass().getResource("/Mail.php").getPath());
-    ProjectFileSystem fs = project.getFileSystem();
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(file.getParentFile()));
-    List<File> files = Arrays.asList(new File("fake"));
-    when(fs.getSourceFiles(PHP)).thenReturn(files);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(fs);
+    File fakeFile = new File("fake.php");
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(fakeFile.getParentFile()));
+    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(fakeFile.getParentFile(), Arrays.asList(fakeFile, new File("fake"))));
 
     sensor.analyse(project, context);
     verify(context, never()).saveMeasure(any(Resource.class), any(org.sonar.api.measures.Metric.class), any(Double.class));
@@ -137,14 +137,10 @@ public class NoSonarAndCommentedOutLocSensorTest {
 
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
+    File f1 = new File(this.getClass().getResource("/Mail.php").getPath());
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(f1.getParentFile()));
+    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(f1.getParentFile(), Arrays.asList(f1, new File("fake"))));
 
-    File file = new File(this.getClass().getResource("/Mail.php").getPath());
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(file.getParentFile()));
-
-    List<File> files = Arrays.asList(file, new File("fake"));
-    when(fs.getSourceFiles(PHP)).thenReturn(files);
     when(project.getConfiguration()).thenReturn(config);
     return project;
   }

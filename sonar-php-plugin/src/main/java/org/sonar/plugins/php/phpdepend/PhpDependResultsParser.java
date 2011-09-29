@@ -49,7 +49,6 @@ import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ResourceUtils;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.plugins.php.phpdepend.xml.ClassNode;
 import org.sonar.plugins.php.phpdepend.xml.FileNode;
 import org.sonar.plugins.php.phpdepend.xml.FunctionNode;
@@ -135,7 +134,7 @@ public class PhpDependResultsParser implements BatchExtension {
    * @param value
    *          the value
    */
-  private void addMeasure(PhpFile file, Metric metric, Double value) {
+  private void addMeasure(org.sonar.api.resources.File file, Metric metric, Double value) {
     if (value != null) {
       resourcesBag.add(value, metric, file);
     }
@@ -148,7 +147,7 @@ public class PhpDependResultsParser implements BatchExtension {
    * @param metric
    * @param value
    */
-  private void addMeasureIfNecessary(PhpFile file, Metric metric, double value) {
+  private void addMeasureIfNecessary(org.sonar.api.resources.File file, Metric metric, double value) {
     Double measure = resourcesBag.getMeasure(metric, file);
     if (measure == null || measure == 0) {
       resourcesBag.add(value, metric, file);
@@ -164,7 +163,8 @@ public class PhpDependResultsParser implements BatchExtension {
    *          representing the class in the report file
    * @param methodComplexityDistribution
    */
-  private void collectClassMeasures(ClassNode classNode, PhpFile file, RangeDistributionBuilder methodComplexityDistribution) {
+  private void collectClassMeasures(ClassNode classNode, org.sonar.api.resources.File file,
+      RangeDistributionBuilder methodComplexityDistribution) {
     addMeasureIfNecessary(file, LINES, classNode.getLinesNumber());
     addMeasureIfNecessary(file, COMMENT_LINES, classNode.getCommentLineNumber());
     addMeasureIfNecessary(file, NCLOC, classNode.getCodeLinesNumber());
@@ -189,7 +189,8 @@ public class PhpDependResultsParser implements BatchExtension {
    *          representing the class in the report file
    * @param methodComplexityDistribution
    */
-  private void collectFunctionsMeasures(FunctionNode functionNode, PhpFile file, RangeDistributionBuilder methodComplexityDistribution) {
+  private void collectFunctionsMeasures(FunctionNode functionNode, org.sonar.api.resources.File file,
+      RangeDistributionBuilder methodComplexityDistribution) {
     addMeasureIfNecessary(file, LINES, functionNode.getLinesNumber());
     addMeasureIfNecessary(file, COMMENT_LINES, functionNode.getCommentLineNumber());
     addMeasureIfNecessary(file, NCLOC, functionNode.getCodeLinesNumber());
@@ -208,7 +209,7 @@ public class PhpDependResultsParser implements BatchExtension {
    * @param fileNode
    *          the node representing the file in the report file.
    */
-  private void collectFileMeasures(FileNode fileNode, PhpFile file) {
+  private void collectFileMeasures(FileNode fileNode, org.sonar.api.resources.File file) {
     addMeasure(file, LINES, fileNode.getLinesNumber());
     addMeasure(file, CoreMetrics.NCLOC, fileNode.getCodeLinesNumber());
     addMeasure(file, CoreMetrics.COMMENT_LINES, fileNode.getCommentLineNumber());
@@ -243,7 +244,7 @@ public class PhpDependResultsParser implements BatchExtension {
    * @param methodNode
    *          the method node
    */
-  private void collectMethodMeasures(MethodNode methodNode, PhpFile file) {
+  private void collectMethodMeasures(MethodNode methodNode, org.sonar.api.resources.File file) {
     // Adds one method to this file
     addMeasure(file, CoreMetrics.FUNCTIONS, 1.0);
     addMeasure(file, CoreMetrics.COMPLEXITY, methodNode.getComplexity());
@@ -264,7 +265,7 @@ public class PhpDependResultsParser implements BatchExtension {
     List<FileNode> files = metricsNode.getFiles();
     for (FileNode fileNode : files) {
       String fileName = fileNode.getFileName();
-      PhpFile currentResourceFile = PhpFile.getInstance(project).fromAbsolutePath(fileName, project);
+      org.sonar.api.resources.File currentResourceFile = org.sonar.api.resources.File.fromIOFile(new File(fileName), project);
       if (currentResourceFile != null) {
         if (measureUnitTests || !ResourceUtils.isUnitTestClass(currentResourceFile)) {
           collectFileMeasures(fileNode, currentResourceFile);
@@ -352,7 +353,7 @@ public class PhpDependResultsParser implements BatchExtension {
    * @param measure
    *          the corresponding value
    */
-  private void saveMeasure(PhpFile resource, Metric metric, Double measure) {
+  private void saveMeasure(org.sonar.api.resources.File resource, Metric metric, Double measure) {
     if (LOG.isDebugEnabled()) {
       LOG.debug("Saving " + metric.getName() + " for resource " + resource.getKey() + " with value " + measure);
     }
@@ -366,7 +367,7 @@ public class PhpDependResultsParser implements BatchExtension {
    */
   private void saveMeasures() {
     LOG.info("Saving measures...");
-    for (PhpFile resource : resourcesBag.getResources()) {
+    for (org.sonar.api.resources.File resource : resourcesBag.getResources()) {
       for (Metric metric : resourcesBag.getMetrics(resource)) {
         if (metrics.contains(metric)) {
           Double measure = resourcesBag.getMeasure(metric, resource);

@@ -21,8 +21,8 @@ package org.sonar.plugins.php.codesniffer;
 
 import static java.lang.Boolean.parseBoolean;
 import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SKIP;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 
@@ -42,7 +42,6 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
-import org.sonar.plugins.php.api.PhpFile;
 
 /**
  * The Class PhpCodesnifferPluginSensor.
@@ -60,7 +59,7 @@ public class PhpCodesnifferSensor implements Sensor {
 
   /**
    * Instantiates a new php codesniffer sensor.
-   *
+   * 
    * @param rulesManager
    *          the rules manager
    */
@@ -73,12 +72,12 @@ public class PhpCodesnifferSensor implements Sensor {
 
   /**
    * Launches the external tool (if configured so) and analyze result file.
-   *
+   * 
    * @param project
    *          the project
    * @param context
    *          the context
-   *
+   * 
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
   public void analyse(Project project, SensorContext context) {
@@ -101,7 +100,8 @@ public class PhpCodesnifferSensor implements Sensor {
       // get the rule from the repository
       Rule rule = ruleFinder.findByKey(PHPCS_REPOSITORY_KEY, ruleKey);
       if (rule != null) {
-        PhpFile resource = (PhpFile) context.getResource(PhpFile.getInstance(project).fromAbsolutePath(violation.getFileName(), project));
+        org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
+        LOG.info("------> " + resource);
         if (context.getResource(resource) != null) {
           Violation v = Violation.create(rule, resource).setLineId(violation.getLine()).setMessage(violation.getLongMessage());
           contextViolations.add(v);
@@ -118,33 +118,32 @@ public class PhpCodesnifferSensor implements Sensor {
   }
 
   /**
-   * Returns <code>true</code> if the given project language is PHP and
-   * the project configuration is set to allow plugin to run.
-   *
-   * @param Project the project
-   *
+   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
+   * 
+   * @param Project
+   *          the project
+   * 
    * @return bool
-   *
+   * 
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
 
-    if (!PHP.equals(project.getLanguage())) {
-        return false;
+    if ( !PHP.equals(project.getLanguage())) {
+      return false;
     }
 
     Configuration configuration = project.getConfiguration();
 
-    boolean skip = configuration.getBoolean(
-      PHPCS_SKIP_KEY, !configuration.getBoolean(PHPCS_SHOULD_RUN_KEY, !parseBoolean(PHPCS_DEFAULT_SKIP))
-    );
+    boolean skip = configuration.getBoolean(PHPCS_SKIP_KEY,
+        !configuration.getBoolean(PHPCS_SHOULD_RUN_KEY, !parseBoolean(PHPCS_DEFAULT_SKIP)));
 
     if (skip) {
-        return false;
+      return false;
     }
 
-    if (!project.getReuseExistingRulesConfig() && profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty()) {
-        return false;
+    if ( !project.getReuseExistingRulesConfig() && profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty()) {
+      return false;
     }
 
     return true;
@@ -152,9 +151,9 @@ public class PhpCodesnifferSensor implements Sensor {
 
   /**
    * To string.
-   *
+   * 
    * @return the string
-   *
+   * 
    * @see java.lang.Object#toString()
    */
   @Override

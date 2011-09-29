@@ -19,29 +19,12 @@
  */
 package org.sonar.plugins.php.core;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.sonar.api.CoreProperties;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.DefaultProjectFileSystem;
-import org.sonar.api.resources.Languages;
-import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Language;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpFile;
 
 /**
  * Tests the basic functionality of the PhpSourceImporter.
@@ -51,77 +34,11 @@ import org.sonar.plugins.php.api.PhpFile;
  */
 public class PhpSourceImporterTest {
 
-  static List<String> sourceNames = Arrays.asList("one.php", "two.php", "three.php");
-  static List<String> testNames = Arrays.asList("oneTest.php", "twoTest.php", "threeTest.php");
-  static String phpCode = "<?php ?>";
-
-  @Rule
-  public TemporaryFolder tempFolder = new TemporaryFolder();
-
-  private Project project;
-  private SensorContext context;
-
-  File sources, tests, testsBelowSources;
-
-  @Before
-  public void init() throws Exception {
-    tempFolder.create();
-    sources = tempFolder.newFolder("sources");
-    tests = tempFolder.newFolder("tests");
-    testsBelowSources = tempFolder.newFolder("sources/tests");
-
-    Configuration configuration = mock(Configuration.class);
-    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
-    when(configuration.getBoolean(CoreProperties.CORE_IMPORT_SOURCES_PROPERTY, CoreProperties.CORE_IMPORT_SOURCES_DEFAULT_VALUE))
-        .thenReturn(true);
-
-    context = mock(SensorContext.class);
-    project = mock(Project.class);
-    when(project.getPom()).thenReturn(new MavenProject());
-    when(project.getConfiguration()).thenReturn(configuration);
-
-    DefaultProjectFileSystem fileSystem = new DefaultProjectFileSystem(project, new Languages(Php.PHP));
-    fileSystem.addSourceDir(sources);
-    fileSystem.addTestDir(tests);
-    fileSystem.addTestDir(testsBelowSources);
-
-    when(project.getFileSystem()).thenReturn(fileSystem);
-  }
-
   @Test
-  public void testAnalyseAddsTestsAndSources() throws Exception {
-    doTestAnalyseAddsTestsAndSources(sources, tests);
+  public void testCreateImporter() throws Exception {
+    Php php = new Php();
+    PhpSourceImporter importer = new PhpSourceImporter(php);
+    assertThat(importer.getLanguage(), is((Language) php));
   }
 
-  @Test
-  @Ignore("Not implemented yet: Need more time to implement a better fix")
-  public void testAnalyseAddsTestsAndSourcesWhenTestsAreBelowSources() throws Exception {
-    doTestAnalyseAddsTestsAndSources(sources, testsBelowSources);
-  }
-
-  void doTestAnalyseAddsTestsAndSources(File sources, File tests) throws Exception {
-    createFiles(sources, false);
-    createFiles(tests, true);
-
-    PhpSourceImporter importer = new PhpSourceImporter(project);
-    importer.analyse(project, context);
-    importer.toString();
-
-    for (String name : sourceNames) {
-      PhpFile file = PhpFile.getInstance(project).fromIOFile(new File(sources, name), Arrays.asList(sources), false);
-      verify(context).saveSource(file, phpCode);
-    }
-    for (String name : testNames) {
-      PhpFile file = PhpFile.getInstance(project).fromIOFile(new File(tests, name), Arrays.asList(tests), true);
-      verify(context).saveSource(file, phpCode);
-    }
-  }
-
-  void createFiles(File path, boolean isTest) throws Exception {
-    for (String s : isTest ? testNames : sourceNames) {
-      FileWriter fw = new FileWriter(new File(path, s));
-      fw.write(phpCode);
-      fw.close();
-    }
-  }
 }

@@ -117,50 +117,50 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
  * This class is the sonar entry point of this plugin. It declares all the extension that can be launched with this plugin
  */
 @Properties({
-  // Global Php Configuration
-  @Property(key = FILE_SUFFIXES_KEY, defaultValue = DEFAULT_SUFFIXES, name = PHP_FILE_SUFFIXES_MESSAGE, project = true, global = true,
-      description = PHP_FILE_SUFFIXES_DESCRIPTION),
+    // Global Php Configuration
+    @Property(key = FILE_SUFFIXES_KEY, defaultValue = DEFAULT_SUFFIXES, name = PHP_FILE_SUFFIXES_MESSAGE, project = true, global = true,
+        description = PHP_FILE_SUFFIXES_DESCRIPTION),
 
-  // Phpmd configuration: Disabling Phpmd is not a good idea cause almost all metrics rely on it.
-  @Property(key = PHPMD_SHOULD_RUN_KEY, defaultValue = PHPMD_DEFAULT_SHOULD_RUN, name = PHPMD_SHOULD_RUN_MESSAGE, project = true,
-      global = true, description = PHPMD_SHOULD_RUN_DESCRIPTION),
-  @Property(key = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, defaultValue = PhpmdConfiguration.PHPMD_DEFAULT_ANALYZE_ONLY,
-      name = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_MESSAGE, project = true, global = true,
-      description = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_DESCRIPTION),
+    // Phpmd configuration: Disabling Phpmd is not a good idea cause almost all metrics rely on it.
+    @Property(key = PHPMD_SHOULD_RUN_KEY, defaultValue = PHPMD_DEFAULT_SHOULD_RUN, name = PHPMD_SHOULD_RUN_MESSAGE, project = true,
+        global = true, description = PHPMD_SHOULD_RUN_DESCRIPTION),
+    @Property(key = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, defaultValue = PhpmdConfiguration.PHPMD_DEFAULT_ANALYZE_ONLY,
+        name = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_MESSAGE, project = true, global = true,
+        description = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_DESCRIPTION),
 
-  // PhpCodeSniffer configuration
-  @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = PHPCS_EXECUTE_MESSAGE, project = true,
-      global = true, description = PHPCS_EXECUTE_DESCRIPTION),
-  @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = PHPCS_DEFAULT_ANALYZE_ONLY, name = PHPCS_ANALYZE_ONLY_MESSAGE, project = true,
-      global = true, description = PHPCS_ANALYZE_ONLY_DESCRIPTION),
-  @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = PHPCS_DEFAULT_STANDARD_ARGUMENT,
-      name = PHPCS_STANDARD_MESSAGE, project = true, global = true, description = PHPCS_STANDARD_DESCRIPTION),
+    // PhpCodeSniffer configuration
+    @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = PHPCS_EXECUTE_MESSAGE, project = true, global = true,
+        description = PHPCS_EXECUTE_DESCRIPTION),
+    @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = PHPCS_DEFAULT_ANALYZE_ONLY, name = PHPCS_ANALYZE_ONLY_MESSAGE, project = true,
+        global = true, description = PHPCS_ANALYZE_ONLY_DESCRIPTION),
+    @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = PHPCS_DEFAULT_STANDARD_ARGUMENT,
+        name = PHPCS_STANDARD_MESSAGE, project = true, global = true, description = PHPCS_STANDARD_DESCRIPTION),
 
-  // PhPdepend configuration
-  @Property(key = PDEPEND_SHOULD_RUN_PROPERTY_KEY, defaultValue = PDEPEND_DEFAULT_SHOULD_RUN, name = PDEPEND_EXECUTE_MESSAGE,
-      project = true, global = true, description = PDEPEND_EXECUTE_DESCRIPTION),
-  @Property(key = PDEPEND_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PDEPEND_DEFAULT_ANALYZE_ONLY, name = PDEPEND_ANALYZE_ONLY_MESSAGE,
-      project = true, global = true, description = PDEPEND_ANALYZE_ONLY_DESCRIPTION),
+    // PhPdepend configuration
+    @Property(key = PDEPEND_SHOULD_RUN_PROPERTY_KEY, defaultValue = PDEPEND_DEFAULT_SHOULD_RUN, name = PDEPEND_EXECUTE_MESSAGE,
+        project = true, global = true, description = PDEPEND_EXECUTE_DESCRIPTION),
+    @Property(key = PDEPEND_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PDEPEND_DEFAULT_ANALYZE_ONLY, name = PDEPEND_ANALYZE_ONLY_MESSAGE,
+        project = true, global = true, description = PDEPEND_ANALYZE_ONLY_DESCRIPTION),
 
-  // Phpunit Configuration
-  @Property(key = PHPUNIT_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_SHOULD_RUN, name = PHPUNIT_EXECUTE_MESSAGE,
-      project = true, global = true, description = PHPUNIT_EXECUTE_MESSAGE),
-  @Property(key = PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE,
-      name = PHPUNIT_COVERAGE_EXECUTE_MESSAGE, project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
-  @Property(key = PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_ANALYZE_ONLY, name = PHPUNIT_ANALYZE_ONLY_DESCRIPTION,
-      project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
-  @Property(key = PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_MAIN_TEST_FILE,
-      name = PHPUNIT_MAIN_TEST_FILE_MESSAGE, project = true, global = true, description = PHPUNIT_MAIN_TEST_FILE_DESCRIPTION),
+    // Phpunit Configuration
+    @Property(key = PHPUNIT_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_SHOULD_RUN, name = PHPUNIT_EXECUTE_MESSAGE,
+        project = true, global = true, description = PHPUNIT_EXECUTE_MESSAGE),
+    @Property(key = PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE,
+        name = PHPUNIT_COVERAGE_EXECUTE_MESSAGE, project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
+    @Property(key = PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_ANALYZE_ONLY,
+        name = PHPUNIT_ANALYZE_ONLY_DESCRIPTION, project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
+    @Property(key = PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_MAIN_TEST_FILE,
+        name = PHPUNIT_MAIN_TEST_FILE_MESSAGE, project = true, global = true, description = PHPUNIT_MAIN_TEST_FILE_DESCRIPTION),
 
-  // PhpCpd configuration
-  @Property(key = PHPCPD_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPCPD_DEFAULT_SHOULD_RUN, name = PHPCPD_EXECUTE_MESSAGE, project = true,
-      global = true, description = PHPCPD_EXECUTE_DESCRIPTION),
-  @Property(key = PHPCPD_ANALYZE_ONLY_KEY, defaultValue = PHPCPD_DEFAULT_ANALYZE_ONLY, name = PHPCPD_ANALYZE_ONLY_MESSAGE, project = true,
-      global = true, description = PHPCPD_ANALYZE_ONLY_DESCRIPTION),
-  @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES,
-      name = PHPCPD_MIN_LINES_MESSAGE, project = true, global = true, description = PHPCPD_MIN_LINES_DESCRIPTION),
-  @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS,
-      name = PHPCPD_MIN_TOKENS_MESSAGE, project = true, global = true, description = PHPCPD_MIN_TOKENS_MESSAGE) })
+    // PhpCpd configuration
+    @Property(key = PHPCPD_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPCPD_DEFAULT_SHOULD_RUN, name = PHPCPD_EXECUTE_MESSAGE,
+        project = true, global = true, description = PHPCPD_EXECUTE_DESCRIPTION),
+    @Property(key = PHPCPD_ANALYZE_ONLY_KEY, defaultValue = PHPCPD_DEFAULT_ANALYZE_ONLY, name = PHPCPD_ANALYZE_ONLY_MESSAGE,
+        project = true, global = true, description = PHPCPD_ANALYZE_ONLY_DESCRIPTION),
+    @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES,
+        name = PHPCPD_MIN_LINES_MESSAGE, project = true, global = true, description = PHPCPD_MIN_LINES_DESCRIPTION),
+    @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS,
+        name = PHPCPD_MIN_TOKENS_MESSAGE, project = true, global = true, description = PHPCPD_MIN_TOKENS_MESSAGE) })
 public class PhpPlugin extends SonarPlugin {
 
   /** All the valid php files suffixes. */
@@ -171,16 +171,11 @@ public class PhpPlugin extends SonarPlugin {
   /** The php plugin key. */
   public static final String KEY = "PHP Language";
 
-  /** The PHPMD plugin KEY. */
-  public static final String PHPMD_PLUGIN_KEY = "PHPMD";
-  /** The CodeSniffer plugin KEY. */
-  public static final String CODESNIFFER_PLUGIN_KEY = "PHP_CodeSniffer";
-
   public static final String PLUGIN_NAME = "PHP";
 
   /**
    * Gets the extensions.
-   *
+   * 
    * @return the extensions
    * @see org.sonar.api.Plugin#getExtensions()
    */
@@ -189,10 +184,10 @@ public class PhpPlugin extends SonarPlugin {
 
     extensions.add(Php.class);
 
-    // Source importer
+    // Core extensions
     extensions.add(PhpSourceImporter.class);
-    // Php Source Code Colorizer
     extensions.add(PhpSourceCodeColorizer.class);
+    extensions.add(NoSonarAndCommentedOutLocSensor.class);
 
     // PhpDepend
     extensions.add(PhpDependExecutor.class);
@@ -211,7 +206,6 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PhpmdProfileExporter.class);
 
     // Code sniffer
-    extensions.add(NoSonarAndCommentedOutLocSensor.class);
     extensions.add(PhpCodeSnifferRuleRepository.class);
     extensions.add(PhpCodeSnifferExecutor.class);
     extensions.add(PhpCodeSnifferViolationsXmlParser.class);
@@ -237,15 +231,4 @@ public class PhpPlugin extends SonarPlugin {
 
     return extensions;
   }
-
-//  /**
-//   * To string.
-//   *
-//   * @return the string
-//   * @see java.lang.Object#toString()
-//   */
-//  @Override
-//  public final String toString() {
-//    return getKey();
-//  }
 }

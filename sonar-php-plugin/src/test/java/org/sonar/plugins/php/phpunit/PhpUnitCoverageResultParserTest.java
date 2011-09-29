@@ -22,14 +22,11 @@ package org.sonar.plugins.php.phpunit;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.sonar.api.measures.CoreMetrics.COVERAGE;
 import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
-import static org.sonar.api.measures.CoreMetrics.LINES_TO_COVER;
 import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
-import static org.sonar.plugins.php.api.Php.PHP;
 
 import java.io.File;
 import java.util.Arrays;
@@ -39,10 +36,10 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.Measure;
+import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.api.PhpFile;
-import org.sonar.plugins.php.api.PhpPackage;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.PhpPlugin;
 
 public class PhpUnitCoverageResultParserTest {
@@ -60,38 +57,29 @@ public class PhpUnitCoverageResultParserTest {
    * Inits the.
    */
   private void init() {
-    try {
-      config = mock(PhpUnitConfiguration.class);
-      project = mock(Project.class);
-      context = mock(SensorContext.class);
-      MavenProject mavenProject = mock(MavenProject.class);
-      ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    config = mock(PhpUnitConfiguration.class);
+    project = mock(Project.class);
+    context = mock(SensorContext.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/main")));
 
-      when(project.getPom()).thenReturn(mavenProject);
-      when(project.getFileSystem()).thenReturn(fs);
-      when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/main")));
+    File f1 = new File("C:/projets/PHP/Monkey/Sources/main/Monkey2.php");
+    File f2 = new File("C:/projets/PHP/Monkey/Sources/main/Monkey.php");
+    File f3 = new File("C:/projets/PHP/Monkey/Sources/main/Banana1.php");
+    File f4 = new File("C:/projets/PHP/Monkey/Sources/test/Banana.php");
+    File f5 = new File("C:/projets/PHP/Monkey/Sources/main/Money.inc");
+    when(fs.mainFiles(Php.KEY)).thenReturn(
+        InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/main"), Arrays.asList(f1, f2, f3, f5)));
+    when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/test"), Arrays.asList(f4)));
 
-      File f1 = new File("C:/projets/PHP/Money/Sources/main/Monkey2.php");
-      File f2 = new File("C:/projets/PHP/Monkey/sources/main/Monkey.php");
-      File f3 = new File("C:/projets/PHP/Monkey/sources/main/Banana1.php");
-      File f4 = new File("C:/projets/PHP/Monkey/sources/test/Banana.php");
-      File f5 = new File("C:/projets/PHP/Monkey/sources/main/Money.inc");
-      when(fs.getSourceFiles(PHP)).thenReturn(Arrays.asList(f1, f2, f3, f5));
+    File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml").getFile());
+    when(config.getReportFile()).thenReturn(reportFile);
+    Configuration configuration = mock(Configuration.class);
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
-      when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/test")));
-      when(fs.getTestFiles(PHP)).thenReturn(Arrays.asList(f4));
-
-      when(mavenProject.getPackaging()).thenReturn("maven-plugin");
-      File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml").getFile());
-      when(config.getReportFile()).thenReturn(reportFile);
-      Configuration configuration = mock(Configuration.class);
-      when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
-
-      PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
-      parser.parse(config.getReportFile());
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
+    parser.parse(config.getReportFile());
   }
 
   /**
@@ -103,7 +91,6 @@ public class PhpUnitCoverageResultParserTest {
     project = mock(Project.class);
     context = mock(SensorContext.class);
     MavenProject mavenProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mavenProject);
     when(mavenProject.getPackaging()).thenReturn("maven-plugin");
     when(config.getReportFile()).thenReturn(new File("path/to/nowhere"));
     PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
@@ -119,7 +106,6 @@ public class PhpUnitCoverageResultParserTest {
     project = mock(Project.class);
     context = mock(SensorContext.class);
     MavenProject mavenProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mavenProject);
     when(mavenProject.getPackaging()).thenReturn("maven-plugin");
     PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
     parser.parse(null);
@@ -131,14 +117,8 @@ public class PhpUnitCoverageResultParserTest {
    */
   @Test()
   public void shouldGenerateCoverageMeasures() {
-
     init();
-    verify(context).saveMeasure(new PhpFile("Banana.php", true), LINES_TO_COVER, 4.0);
-    verify(context).saveMeasure(new PhpFile("Monkey.php"), UNCOVERED_LINES, 2.0);
-    // Sonar core engine will consolidate coverage on package level using coverage on files. So we have to ensure that saveMeasure on
-    // PhpPackage is never called.
-    verify(context, never()).saveMeasure(new PhpPackage("Animals"), null, 4.0);
-
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), UNCOVERED_LINES, 2.0);
   }
 
   /**
@@ -147,7 +127,7 @@ public class PhpUnitCoverageResultParserTest {
   @Test()
   public void shouldNotGenerateCoverageMeasures() {
     init();
-    verify(context, never()).saveMeasure(new PhpFile("IndexControllerTest.php", true), COVERAGE, 1.0);
+    verify(context, never()).saveMeasure(new org.sonar.api.resources.File("IndexControllerTest.php"), COVERAGE, 1.0);
   }
 
   /**
@@ -157,18 +137,7 @@ public class PhpUnitCoverageResultParserTest {
   public void shouldGenerateLineHitsMeasures() {
     init();
     Measure monkeyCoverage = new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1");
-    verify(context, atLeastOnce()).saveMeasure(new PhpFile("Monkey.php", true), monkeyCoverage);
-    Measure bananaCoverage = new Measure(COVERAGE_LINE_HITS_DATA, "34=0;35=0;38=0;40=0;45=1;46=1");
-    verify(context, atLeastOnce()).saveMeasure(new PhpFile("Banana.php"), bananaCoverage);
-  }
-
-  /**
-   * Should generate project converage metric.
-   */
-  @Test()
-  public void shouldGenerateProjectCoverageMeasures() {
-    init();
-    verify(context, times(1)).saveMeasure(LINES_TO_COVER, 100.0);
+    verify(context, atLeastOnce()).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), monkeyCoverage);
   }
 
 }

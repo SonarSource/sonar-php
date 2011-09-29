@@ -27,14 +27,12 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.api.PhpFile;
 import org.sonar.plugins.php.core.PhpPlugin;
 
 import com.thoughtworks.xstream.XStreamException;
@@ -60,33 +58,24 @@ public class PhpUnitResultParserTest {
    * Inits the.
    */
   private void init() {
-    try {
+    Configuration configuration = mock(Configuration.class);
+    config = mock(PhpUnitConfiguration.class);
+    project = mock(Project.class);
+    context = mock(SensorContext.class);
 
-      Configuration configuration = mock(Configuration.class);
-      config = mock(PhpUnitConfiguration.class);
-      project = mock(Project.class);
-      context = mock(SensorContext.class);
+    when(project.getConfiguration()).thenReturn(configuration);
+    when(config.getProject()).thenReturn(project);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\main")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+    File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml").getFile());
+    when(config.getReportFile()).thenReturn(reportFile);
 
-      when(project.getConfiguration()).thenReturn(configuration);
-      when(config.getProject()).thenReturn(project);
+    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
-      MavenProject mavenProject = mock(MavenProject.class);
-      ProjectFileSystem fs = mock(ProjectFileSystem.class);
-      when(project.getPom()).thenReturn(mavenProject);
-      when(project.getFileSystem()).thenReturn(fs);
-      when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-      when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-      when(mavenProject.getPackaging()).thenReturn("php");
-      File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml").getFile());
-      when(config.getReportFile()).thenReturn(reportFile);
-
-      when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
-
-      PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
-      parser.parse(config.getReportFile());
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
+    parser.parse(config.getReportFile());
   }
 
   /**
@@ -97,9 +86,6 @@ public class PhpUnitResultParserTest {
     config = mock(PhpUnitConfiguration.class);
     project = mock(Project.class);
     context = mock(SensorContext.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(mavenProject.getPackaging()).thenReturn("maven-plugin");
     when(config.getReportFile()).thenReturn(new File("path/to/nowhere"));
     PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
     parser.parse(null);
@@ -114,9 +100,6 @@ public class PhpUnitResultParserTest {
     config = mock(PhpUnitConfiguration.class);
     project = mock(Project.class);
     context = mock(SensorContext.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(mavenProject.getPackaging()).thenReturn("maven-plugin");
     PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
     parser.parse(null);
     verify(context).saveMeasure(metric, 0.0);
@@ -130,9 +113,6 @@ public class PhpUnitResultParserTest {
     config = mock(PhpUnitConfiguration.class);
     project = mock(Project.class);
     context = mock(SensorContext.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(mavenProject.getPackaging()).thenReturn("maven-plugin");
     when(config.getReportFile()).thenReturn(
         new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit-invalid.xml").getFile()));
     PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
@@ -146,8 +126,8 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateTestsMeasures() {
     metric = CoreMetrics.TESTS;
     init();
-    verify(context).saveMeasure(new PhpFile("Monkey.php", true), metric, 3.0);
-    verify(context).saveMeasure(new PhpFile("Banana.php", true), metric, 1.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), metric, 3.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 1.0);
   }
 
   /**
@@ -157,8 +137,8 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateFailedMeasures() {
     metric = CoreMetrics.TEST_FAILURES;
     init();
-    verify(context).saveMeasure(new PhpFile("Monkey.php", true), metric, 2.0);
-    verify(context).saveMeasure(new PhpFile("Banana.php", true), metric, 0.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), metric, 2.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 0.0);
   }
 
   /**
@@ -168,8 +148,8 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateErrorMeasures() {
     metric = CoreMetrics.TEST_ERRORS;
     init();
-    verify(context).saveMeasure(new PhpFile("Monkey.php", true), metric, 1.0);
-    verify(context).saveMeasure(new PhpFile("Banana.php", true), metric, 1.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), metric, 1.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 1.0);
   }
 
   /**
@@ -179,14 +159,14 @@ public class PhpUnitResultParserTest {
   public void shouldGenerateTestExecutionTimeMeasures() {
     metric = CoreMetrics.TEST_EXECUTION_TIME;
     init();
-    PhpFile monkey = new PhpFile("Monkey.php", true);
+    org.sonar.api.resources.File monkey = new org.sonar.api.resources.File("Monkey.php");
     verify(context).saveMeasure(monkey, metric, 447.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TESTS, 3.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_ERRORS, 1.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_FAILURES, 2.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_FAILURES, 2.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
-    verify(context).saveMeasure(new PhpFile("Banana.php", true), metric, 570.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 570.0);
   }
 
 }
