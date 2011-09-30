@@ -69,7 +69,7 @@ public class PhpmdProfileExporterTest {
     assertThat(messages).isNotNull();
     assertThat(messages.hasErrors()).isFalse();
     assertThat(messages.hasWarnings()).isFalse();
-    assertThat(messages.hasWarnings()).isFalse();
+    assertThat(messages.hasInfos()).isFalse();
 
     StringWriter xmlOutput = new StringWriter();
     exporter.exportProfile(rulesProfile, xmlOutput);

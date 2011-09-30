@@ -1,11 +1,53 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <rules>
+  <!-- Code Size Rules -->
   <rule key="Code Size Rules/CyclomaticComplexity" priority="CRITICAL">
     <name><![CDATA[Class cyclomatic complexity exceed maximum]]></name>
-    <configKey>rulesets/codesize.xml/CyclomaticComplexity</configKey>
+    <configKey><![CDATA[rulesets/codesize.xml/CyclomaticComplexity]]></configKey>
     <category name="Maintainability"/>
-    <description><![CDATA[Class cyclomatic complexity exceed maximum]]></description>
-    <param key="maximum" type="i">
+    <description><![CDATA[<p>Complexity is determined by the number of decision points in a method plus one for the method entry. The decision points are 'if', 'while', 'for', and 'case labels'. Generally, 1-4 is low complexity, 5-7 indicates moderate complexity, 8-10 is high complexity, and 11+ is very high complexity.</p>
+<p>Example:</p>
+<pre>
+// Cyclomatic Complexity = 12
+class Foo {
+1   public function example()  {
+2       if ($a == $b)  {
+3           if ($a1 == $b1) {
+                fiddle();
+4           } else if ($a2 == $b2) {
+                fiddle();
+            }  else {
+                fiddle();
+            }
+5       } else if ($c == $d) {
+6           while ($c == $d) {
+                fiddle();
+            }
+7        } else if ($e == $f) {
+8           for ($n = 0; $n &lt; $h; $n++) {
+                fiddle();
+            }
+        } else{
+            switch ($z) {
+9               case 1:
+                    fiddle();
+                    break;
+10              case 2:
+                    fiddle();
+                    break;
+11              case 3:
+                    fiddle();
+                    break;
+12              default:
+                    fiddle();
+                    break;
+            }
+        }
+    }
+}
+</pre>
+	]]></description>
+	<param key="maximum" type="i">
       <description><![CDATA[The maximum cyclomatic complexity threshold. Default is 10.]]></description>
     </param>
   </rule>
@@ -14,118 +56,453 @@
     <name><![CDATA[Class NPath Complexity exceeds maximum]]></name>
     <configKey><![CDATA[rulesets/codesize.xml/NPathComplexity]]></configKey>
     <category name="Maintainability"/>
-    <description><![CDATA[Class NPath Complexity exceeds maximum]]></description>
+    <description><![CDATA[<p>The NPath complexity of a method is the number of acyclic execution paths through that method. A threshold of 200 is generally considered the point where measures should be taken to reduce complexity.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    function bar() {
+        // lots of complicated code
+    }
+}
+</pre>
+    ]]></description>
   </rule>
 
   <rule key="Code Size Rules/ExcessiveMethodLength" priority="BLOCKER">
     <name><![CDATA[Method length exceeds maximum]]></name>
     <configKey><![CDATA[rulesets/codesize.xml/ExcessiveMethodLength]]></configKey>
     <category name="Maintainability"/>
-    <description><![CDATA[Method length exceeds maximum]]></description>
+    <description><![CDATA[<p>Violations of this rule usually indicate that the method is doing too much. Try to reduce the method size by creating helper methods and removing any copy/pasted code.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    public function doSomething() {
+        print("Hello world!" . PHP_EOL);
+        print("Hello world!" . PHP_EOL);
+        // 98 copies omitted for brevity.
+    }
+}
+</pre>
+]]></description>
   </rule>
 
   <rule key="Code Size Rules/ExcessiveClassLength" priority="MAJOR">
     <name><![CDATA[Class length exceeds maximum]]></name>
     <configKey><![CDATA[rulesets/codesize.xml/ExcessiveClassLength]]></configKey>
     <category name="Maintainability"/>
-    <description><![CDATA[Class length exceeds maximum]]></description>
+    <description><![CDATA[<p>Long Class files are indications that the class may be trying to do too much. Try to break it down, and reduce the size to something manageable.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    public function bar() {
+      // 1000 lines of code
+    }
+}
+</pre>
+]]></description>
   </rule>
-
-  <!-- <rule key="Code Size Rules/UnusedPrivateField" priority="BLOCKER"> -->
-  <!-- <name><![CDATA[Unused private field]]></name> -->
-  <!-- <configKey><![CDATA[rulesets/codesize.xml/UnusedPrivateField]]></configKey> -->
-  <!-- <category name="Maintainability"/> -->
-  <!-- <description><![CDATA[Unused private field]]></description> -->
-  <!-- </rule> -->
 
   <rule key="Code Size Rules/ExcessiveParameterList" priority="BLOCKER">
     <name><![CDATA[Method has too many parameters]]></name>
     <configKey><![CDATA[rulesets/codesize.xml/ExcessiveParameterList]]></configKey>
     <category name="Maintainability"/>
-    <description><![CDATA[Method has too many parameters]]></description>
+    <description><![CDATA[<p>Long parameter lists can indicate that a new object should be created to wrap the numerous parameters. Basically, try to group the parameters together.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    public function addData(
+        $p0, $p1, $p2, $p3, $p4, $p5,
+        $p5, $p6, $p7, $p8, $p9, $p10) {
+    }
+}
+</pre>
+]]></description>
   </rule>
 
   <rule key="Code Size Rules/ExcessivePublicCount" priority="MAJOR">
     <name><![CDATA[Number of public methods and attributes in class exceeds maximum]]></name>
     <configKey><![CDATA[rulesets/codesize.xml/ExcessivePublicCount]]></configKey>
     <category name="Maintainability"/>
-    <description><![CDATA[Number of public methods and attributes in class exceeds maximum]]></description>
+    <description><![CDATA[<p>A large number of public methods and attributes declared in a class can indicate the class may need to be broken up as increased effort will be required to thoroughly test it.</p>
+<p>Example:</p>
+<pre>
+public class Foo {
+    public $value;
+    public $something;
+    public $var;
+    // [... more more public attributes ...]
+
+    public function doWork() {}
+    public function doMoreWork() {}
+    public function doWorkAgain() {}
+    // [... more more public methods ...]
+}
+</pre>
+    ]]></description>
   </rule>
 
   <rule key="Code Size Rules/TooManyFields" priority="MAJOR">
     <name><![CDATA[Number of class fields exceeds maximum]]></name>
     <configKey><![CDATA[rulesets/codesize.xml/TooManyFields]]></configKey>
     <category name="Maintainability"/>
-    <description><![CDATA[Number of class fields exceeds maximum]]></description>
+    <description><![CDATA[<p>Classes that have too many fields could be redesigned to have fewer fields, possibly through some nested object grouping of some of the information. For example, a class with city/state/zip fields could instead have one Address field.</p>
+<p>Example:</p>
+<pre>
+class Person {
+   protected $one;
+   private $_two;
+   private $_three;
+   [... many more fields ...]
+}
+</pre>
+]]></description>
   </rule>
 
   <rule key="Code Size Rules/TooManyMethods" priority="MAJOR">
     <name><![CDATA[Number of methods in class exceeds maximum]]></name>
+    <configKey><![CDATA[rulesets/codesize.xml/ExcessiveClassComplexity]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[<p>A class with too many methods is probably a good suspect for refactoring, in order to reduce its complexity and find a way to have more fine grained objects.</p>]]></description>
+  </rule>
+
+  <rule key="Code Size Rules/ExcessiveClassComplexity" priority="MAJOR">
+    <name><![CDATA[Weighted methods per class exceeds maximum]]></name>
     <configKey><![CDATA[rulesets/codesize.xml/TooManyMethods]]></configKey>
     <category name="Maintainability"/>
-    <description><![CDATA[Number of methods in class exceeds maximum]]></description>
+    <description><![CDATA[
+<p>The WMC of a class is a good indicator of how much time and effort is required to modify and maintain this class. A large number of methods also means that this class has a greater potential impact on derived classes.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    public function bar()  {
+        if ($a == $b)  {
+            if ($a1 == $b1) {
+                fiddle();
+            } else if ($a2 == $b2) {
+                fiddle();
+            }  else {
+            }
+        }
+    }
+    public function baz()  {
+        if ($a == $b)  {
+            if ($a1 == $b1) {
+                fiddle();
+            } else if ($a2 == $b2) {
+                fiddle();
+            }  else {
+            }
+        }
+    }
+    // Several other complex methods
+}
+</pre>
+	]]></description>
   </rule>
+
+  <!-- Design Rules -->
+
+  <rule key="Design Rules/ExitExpression" priority="MAJOR">
+    <name><![CDATA[An exit-expression is used]]></name>
+    <configKey><![CDATA[rulesets/design.xml/ExitExpression]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[<p>An exit-expression within regular code is untestable and therefore it should be avoided. Consider to move the exit-expression into some kind of startup script where an error/exception code is returned to the calling environment.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    public function bar($param)  {
+        if ($param === 42) {
+            exit(23);
+        }
+    }
+}
+</pre>
+	]]></description>
+  </rule>
+
+  <rule key="Design Rules/EvalExpression" priority="MAJOR">
+    <name><![CDATA[An aval-expression is used]]></name>
+    <configKey><![CDATA[rulesets/design.xml/EvalExpression]]></configKey>
+    <category name="Security"/>
+    <description><![CDATA[<p>An eval-expression is untestable, a security risk and bad practice. Therefore it should be avoided. Consider to replace the eval-expression with regular code.</p>
+<p>Example:</p>
+<pre>class Foo {
+    public function bar($param)  {
+        if ($param === 42) {
+            eval('$param = 23;');
+        }
+    }
+}
+</pre>
+	]]></description>
+  </rule>
+
+  <rule key="Design Rules/GotoStatement" priority="MAJOR">
+    <name><![CDATA[A goto-statement is used]]></name>
+    <configKey><![CDATA[rulesets/design.xml/GotoStatement]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[<p>Goto makes code harder to read and it is nearly impossible to understand the control flow of an application that uses this language construct. Therefore it should be avoided. Consider to replace Goto with regular control structures and separate methods/function, which are easier to read.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    public function bar($param)  {
+        A:
+        if ($param === 42) {
+            goto X;
+        }
+        Y:
+        if (time() % 42 === 23) {
+            goto Z;
+        }
+        X:
+        if (time() % 23 === 42) {
+            goto Y;
+        }
+        Z:
+        return 42;
+    }
+}
+</pre>
+	]]></description>
+  </rule>
+
+  <rule key="Design Rules/NumberOfChildren" priority="MAJOR">
+    <name><![CDATA[A class has too many children.]]></name>
+    <configKey><![CDATA[rulesets/design.xml/NumberOfChildren]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[<p>A class with an excessive number of children is an indicator for an unbalanced class hierarchy. You should consider to refactor this class hierarchy.</p>]]></description>
+  </rule>
+
+  <rule key="Design Rules/DepthOfInheritance" priority="MAJOR">
+    <name><![CDATA[A class has too many parents.]]></name>
+    <configKey><![CDATA[rulesets/design.xml/DepthOfInheritance]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[<p>A class with many parents is an indicator for an unbalanced and wrong class hierarchy. You should consider to refactor this class hierarchy.</p>]]></description>
+  </rule>
+
+  <rule key="Design Rules/CouplingBetweenObjects" priority="MAJOR">
+    <name><![CDATA[A class has too many dependencies.]]></name>
+    <configKey><![CDATA[rulesets/design.xml/CouplingBetweenObjects]]></configKey>
+    <category name="Maintainability"/>
+    <description><![CDATA[<p>A class with to many dependencies has negative impacts on several quality aspects of a class. This includes quality criterias like stability, maintainability and understandability.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    /**
+     * @var \foo\bar\X
+     */
+    private $x = null;
+
+    /**
+     * @var \foo\bar\Y
+     */
+    private $y = null;
+
+    /**
+     * @var \foo\bar\Z
+     */
+    private $z = null;
+
+    public function setFoo(\Foo $foo) {}
+    public function setBar(\Bar $bar) {}
+    public function setBaz(\Baz $baz) {}
+
+    /**
+     * @return \SplObjectStorage
+     * @throws \OutOfRangeException
+     * @throws \InvalidArgumentException
+     * @throws \ErrorException
+     */
+    public function process(Iterator $it) {}
+
+    // ...
+}
+</pre>    
+    ]]></description>
+  </rule>
+
+  <!-- Naming Rules -->
 
   <rule key="Naming Rules/ShortVariable" priority="MINOR">
     <name><![CDATA[Variable name is shorter than minimum]]></name>
     <configKey><![CDATA[rulesets/naming.xml/ShortVariable]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Variable name is shorter than minimum]]></description>
+    <description><![CDATA[<p>A field, local variable, or a parameter has a very short name.</p>
+<p>Example:</p>
+<pre>
+class Something {
+    private $q = 15;                            // VIOLATION - Field
+    public static function main(array $as) {    // VIOLATION - Formal
+        $r = 20 + $this-&gt;q;                    // VIOLATION - Local
+        for (int $i = 0; $i &lt; 10; $i++) {      // Not a Violation (inside FOR)
+            $r += $this-&gt;q;
+        }
+    }
+}
+</pre>
+    ]]></description>
   </rule>
 
   <rule key="Naming Rules/LongVariable" priority="INFO">
     <name><![CDATA[Variable name lenght exceeds maximum]]></name>
     <configKey><![CDATA[rulesets/naming.xml/LongVariable]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Variable name lenght exceeds maximum]]></description>
+    <description><![CDATA[<p>A field, formal or local variable is declared with a long name.</p>
+<p>Example:</p>
+<pre>
+class Something {
+    protected $reallyLongIntName = -3;                      // VIOLATION - Field
+    public static function main(array $argumentsList[]) {   // VIOLATION - Formal
+        $otherReallyLongName = -5;                          // VIOLATION - Local
+        for ($interestingIntIndex = 0;                      // VIOLATION - For
+             $interestingIntIndex &lt; 10;
+             $interestingIntIndex++ ) {
+        }
+    }
+}
+</pre>    
+    ]]></description>
   </rule>
+  
   <rule key="Naming Rules/ShortMethodName" priority="INFO">
     <name><![CDATA[Method name is shorter than minimum]]></name>
     <configKey><![CDATA[rulesets/naming.xml/ShortMethodName]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Method name is shorter than minimum]]></description>
+    <description><![CDATA[<p>Very short method names are used.</p>
+<p>Example:</p>
+<pre>
+class ShortMethod {
+    public function a($index) { // Violation
+    }
+}
+</pre>
+	]]></description>
   </rule>
+  
   <rule key="Naming Rules/ConstructorWithNameAsEnclosingClass" priority="INFO">
     <name><![CDATA[Constructor name contains class]]></name>
     <configKey><![CDATA[rulesets/naming.xml/ConstructorWithNameAsEnclosingClass]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Constructor name contains class]]></description>
+    <description><![CDATA[<p>A constructor method should not have the same name as the enclosing class, consider to use the PHP 5 __construct method.</p>
+<p>Example:</p>
+<pre>
+class MyClass {
+    // this is bad because it is PHP 4 style
+    public function MyClass() {}
+    // this is good because it is a PHP 5 constructor
+    public function __construct() {}
+}
+</pre>
+]]></description>
   </rule>
   <rule key="Naming Rules/ConstantNamingConventions" priority="MINOR">
     <name><![CDATA[Constant name does not match pattern]]></name>
     <configKey><![CDATA[rulesets/naming.xml/ConstantNamingConventions]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Constant name does not match pattern]]></description>
+    <description><![CDATA[<p>Class/Interface constant names should always be defined in uppercase.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    const MY_NUM = 0;  // ok
+    const myTest = ""; // fail
+}
+</pre>
+]]></description>
   </rule>
   <rule key="Naming Rules/BooleanGetMethodName" priority="INFO">
     <name><![CDATA[Name of method returning boolean starting with get]]></name>
     <configKey><![CDATA[rulesets/naming.xml/BooleanGetMethodName]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Name of method returning boolean starting with get]]></description>
+    <description><![CDATA[<p>Looks for methods named 'getX()' with 'boolean' as the return type. The convention is to name these methods 'isX()' or 'hasX()'.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    /**
+     * @return boolean
+     */
+    public function getFoo() {} // bad
+    
+    /**
+     * @return bool
+     */
+    public function isFoo();    // ok
+    
+    /**
+     * @return boolean
+     */
+    public function getFoo($bar); // ok, unless checkParameterizedMethods=true
+}
+</pre>
+    ]]></description>
   </rule>
+
+  <!-- Unused Code Rules -->
 
   <rule key="Unused Code Rules/UnusedPrivateField" priority="MAJOR">
     <name><![CDATA[Unused private field]]></name>
     <configKey><![CDATA[rulesets/unusedcode.xml/UnusedPrivateField]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Unused private field]]></description>
+    <description><![CDATA[<p>A private field is declared and/or assigned a value, but not used.</p>
+<p>Example:</p>
+<pre>
+class Something
+{
+    private static $FOO = 2; // Unused
+    private $i = 5;          // Unused
+    private $j = 6;
+    public function addOne()
+    {
+        return $this-&gt;j++;
+    }
+}
+</pre>
+    ]]></description>
   </rule>
   <rule key="Unused Code Rules/UnusedLocalVariable" priority="MAJOR">
     <name><![CDATA[Unused local variable]]></name>
     <configKey><![CDATA[rulesets/unusedcode.xml/UnusedLocalVariable]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Unused local variable]]></description>
+    <description><![CDATA[<p>A local variable is declared and/or assigned, but not used.</p>
+<p>Example:</p>
+<pre>
+class Foo {
+    public function doSomething()
+    {
+        $i = 5; // Unused
+    }
+}
+</pre>
+    ]]></description>
   </rule>
   <rule key="Unused Code Rules/UnusedPrivateMethod" priority="MAJOR">
     <name><![CDATA[Unused private method]]></name>
     <configKey><![CDATA[rulesets/unusedcode.xml/UnusedPrivateMethod]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Unused private method]]></description>
+    <description><![CDATA[<p>A private method is declared but is unused.</p>
+<p>Example:</p>
+<pre>
+class Something
+{
+    private function foo() {} // unused
+}
+</pre>
+]]></description>
   </rule>
   <rule key="Unused Code Rules/UnusedFormalParameter" priority="MAJOR">
     <name><![CDATA[Unused formal parameter]]></name>
     <configKey><![CDATA[rulesets/unusedcode.xml/UnusedFormalParameter]]></configKey>
     <category name="Usability"/>
-    <description><![CDATA[Unused formal parameter]]></description>
+    <description><![CDATA[<p>Avoid passing parameters to methods or constructors and then not using those parameters.</p>
+<p>Example:</p>
+<pre>
+class Foo
+{
+    private function bar($howdy)
+    {
+        // $howdy is not used
+    }
+}
+</pre>
+    ]]></description>
   </rule>
 </rules>

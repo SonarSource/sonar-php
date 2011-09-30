@@ -20,10 +20,6 @@
     </rule>
     <rule>
       <repositoryKey>phppmd_rules</repositoryKey>
-      <key><![CDATA[Code Size Rules/UnusedPrivateField]]></key>
-    </rule>
-    <rule>
-      <repositoryKey>phppmd_rules</repositoryKey>
       <key><![CDATA[Code Size Rules/ExcessiveParameterList]]></key>
     </rule>
     <rule>
@@ -37,6 +33,35 @@
     <rule>
       <repositoryKey>phppmd_rules</repositoryKey>
       <key><![CDATA[Code Size Rules/TooManyMethods]]></key>
+    </rule>
+    <rule>
+      <repositoryKey>phppmd_rules</repositoryKey>
+      <key><![CDATA[Code Size Rules/ExcessiveClassComplexity]]></key>
+    </rule>
+    
+    <rule>
+      <repositoryKey>phppmd_rules</repositoryKey>
+      <key><![CDATA[Design Rules/ExitExpression]]></key>
+    </rule>
+    <rule>
+      <repositoryKey>phppmd_rules</repositoryKey>
+      <key><![CDATA[Design Rules/EvalExpression]]></key>
+    </rule>
+    <rule>
+      <repositoryKey>phppmd_rules</repositoryKey>
+      <key><![CDATA[Design Rules/GotoStatement]]></key>
+    </rule>
+    <rule>
+      <repositoryKey>phppmd_rules</repositoryKey>
+      <key><![CDATA[Design Rules/NumberOfChildren]]></key>
+    </rule>
+    <rule>
+      <repositoryKey>phppmd_rules</repositoryKey>
+      <key><![CDATA[Design Rules/DepthOfInheritance]]></key>
+    </rule>
+    <rule>
+      <repositoryKey>phppmd_rules</repositoryKey>
+      <key><![CDATA[Design Rules/CouplingBetweenObjects]]></key>
     </rule>
 
 
@@ -81,8 +106,5 @@
       <repositoryKey>phppmd_rules</repositoryKey>
       <key><![CDATA[Unused Code Rules/UnusedPrivateMethod]]></key>
     </rule>
-
   </rules>
 </profile>
-
-

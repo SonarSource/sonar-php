@@ -199,7 +199,6 @@ public class PhpDependConfigurationTest {
     when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
     PhpDependConfiguration config = new PhpDependConfiguration(project);
-    System.out.println(config.getReportFile().getPath().replace('/', '\\'));
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.xml");
   }
 
