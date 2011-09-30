@@ -100,6 +100,7 @@ import org.sonar.plugins.php.phpdepend.PhpDependExecutor;
 import org.sonar.plugins.php.phpdepend.PhpDependResultsParser;
 import org.sonar.plugins.php.phpdepend.PhpDependSensor;
 import org.sonar.plugins.php.phpunit.PhpUnitConfiguration;
+import org.sonar.plugins.php.phpunit.PhpUnitCoverageDecorator;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitExecutor;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
@@ -222,6 +223,7 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PhpUnitExecutor.class);
     extensions.add(PhpUnitResultParser.class);
     extensions.add(PhpUnitCoverageResultParser.class);
+    extensions.add(PhpUnitCoverageDecorator.class);
 
     // Phpcpd
     extensions.add(PhpCpdConfiguration.class);

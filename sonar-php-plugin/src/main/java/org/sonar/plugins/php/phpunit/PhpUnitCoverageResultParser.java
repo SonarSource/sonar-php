@@ -33,6 +33,7 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PropertiesBuilder;
 import org.sonar.api.resources.Project;
+import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
@@ -77,19 +78,10 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    *          the coverage report file
    */
   public void parse(File coverageReportFile) {
-    if (coverageReportFile == null) {
-      insertZeroWhenNoReports();
-    } else {
+    if (coverageReportFile != null) {
       logger.info("Parsing file: " + coverageReportFile.getAbsolutePath());
       parseFile(context, coverageReportFile);
     }
-  }
-
-  /**
-   * Insert zero when no reports.
-   */
-  private void insertZeroWhenNoReports() {
-    context.saveMeasure(CoreMetrics.COVERAGE, 0d);
   }
 
   /**
@@ -135,8 +127,10 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
     // Save uncovered statements (lines)
     double totalStatementsCount = metrics.getTotalStatementsCount();
     double uncoveredLines = totalStatementsCount - metrics.getCoveredStatements();
+    double lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
     context.saveMeasure(phpFile, CoreMetrics.LINES_TO_COVER, totalStatementsCount);
     context.saveMeasure(phpFile, CoreMetrics.UNCOVERED_LINES, uncoveredLines);
+    context.saveMeasure(phpFile, CoreMetrics.LINE_COVERAGE, ParsingUtils.scaleValue(lineCoverage * 100.0));
   }
 
   /**

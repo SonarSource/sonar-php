@@ -98,21 +98,6 @@ public class PhpUnitCoverageResultParserTest {
   }
 
   /**
-   * Should save zero value when report not found.
-   */
-  @Test
-  public void shouldSaveZeroValueWhenReportNotFound() {
-    config = mock(PhpUnitConfiguration.class);
-    project = mock(Project.class);
-    context = mock(SensorContext.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    when(mavenProject.getPackaging()).thenReturn("maven-plugin");
-    PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
-    parser.parse(null);
-    verify(context).saveMeasure(COVERAGE, 0.0);
-  }
-
-  /**
    * Should generate coverage metrics.
    */
   @Test()
