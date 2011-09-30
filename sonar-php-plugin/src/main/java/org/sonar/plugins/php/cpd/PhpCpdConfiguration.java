@@ -200,12 +200,8 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   /**
    * @return
    */
-  public String getExcludePackages() {
-    String[] values = getProject().getConfiguration().getStringArray(PHPCPD_EXCLUDE_PACKAGE_KEY);
-    if (values != null && values.length > 0) {
-      return StringUtils.join(values, PHPCPD_DIRECTORY_SEPARATOR);
-    }
-    return null;
+  public String[] getExcludePackages() {
+    return getProject().getConfiguration().getStringArray(PHPCPD_EXCLUDE_PACKAGE_KEY);
   }
 
 }
