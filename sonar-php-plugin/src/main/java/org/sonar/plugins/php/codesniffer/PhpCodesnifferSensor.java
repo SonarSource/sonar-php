@@ -101,7 +101,6 @@ public class PhpCodesnifferSensor implements Sensor {
       Rule rule = ruleFinder.findByKey(PHPCS_REPOSITORY_KEY, ruleKey);
       if (rule != null) {
         org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
-        LOG.info("------> " + resource);
         if (context.getResource(resource) != null) {
           Violation v = Violation.create(rule, resource).setLineId(violation.getLine()).setMessage(violation.getLongMessage());
           contextViolations.add(v);
