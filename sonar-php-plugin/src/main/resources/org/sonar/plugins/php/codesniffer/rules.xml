@@ -2855,24 +2855,6 @@
     <configKey>rulesets/OperatorBracket</configKey>
     <description><![CDATA[Arithmetic operation must be bracketed]]></description>
   </rule>
-  <rule key="Squiz.Formatting.OutputBufferingIndent.InvalidClose" priority="MAJOR">
-    <category name="Maintainability"/>
-    <name>OutputBufferingIndentInvalidClose</name>
-    <configKey>rulesets/OutputBufferingIndent</configKey>
-    <description><![CDATA[Output buffering must be closed using ob_end_clean or ob_end_flush]]></description>
-  </rule>
-  <rule key="Squiz.Formatting.OutputBufferingIndent.NotClosed" priority="MAJOR">
-    <category name="Maintainability"/>
-    <name>OutputBufferingIndentNotClosed</name>
-    <configKey>rulesets/OutputBufferingIndent</configKey>
-    <description><![CDATA[Output buffering]]></description>
-  </rule>
-  <rule key="Squiz.Formatting.OutputBufferingIndent.Incorrect" priority="MAJOR">
-    <category name="Maintainability"/>
-    <name>OutputBufferingIndentIncorrect</name>
-    <configKey>rulesets/OutputBufferingIndent</configKey>
-    <description><![CDATA[Buffered line not indented correctly; expected at least %s spaces but found %s]]></description>
-  </rule>
   <rule key="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceBeforeEquals" priority="MAJOR">
     <category name="Maintainability"/>
     <name>FunctionDeclarationArgumentSpacingSpaceBeforeEquals</name>

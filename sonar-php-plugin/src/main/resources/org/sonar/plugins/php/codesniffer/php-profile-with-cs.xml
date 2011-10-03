@@ -3722,30 +3722,6 @@
       <description><![CDATA[Arithmetic operation must be bracketed]]></description>
     </rule>
     <rule priority="MAJOR">
-      <key>Squiz.Formatting.OutputBufferingIndent.InvalidClose</key>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <category name="Maintainability"/>
-      <name>OutputBufferingIndentInvalidClose</name>
-      <configKey>rulesets/OutputBufferingIndent</configKey>
-      <description><![CDATA[Output buffering must be closed using ob_end_clean or ob_end_flush]]></description>
-    </rule>
-    <rule priority="MAJOR">
-      <key>Squiz.Formatting.OutputBufferingIndent.NotClosed</key>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <category name="Maintainability"/>
-      <name>OutputBufferingIndentNotClosed</name>
-      <configKey>rulesets/OutputBufferingIndent</configKey>
-      <description><![CDATA[Output buffering]]></description>
-    </rule>
-    <rule priority="MAJOR">
-      <key>Squiz.Formatting.OutputBufferingIndent.Incorrect</key>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <category name="Maintainability"/>
-      <name>OutputBufferingIndentIncorrect</name>
-      <configKey>rulesets/OutputBufferingIndent</configKey>
-      <description><![CDATA[Buffered line not indented correctly; expected at least %s spaces but found %s]]></description>
-    </rule>
-    <rule priority="MAJOR">
       <key>Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceBeforeEquals</key>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
       <category name="Maintainability"/>
