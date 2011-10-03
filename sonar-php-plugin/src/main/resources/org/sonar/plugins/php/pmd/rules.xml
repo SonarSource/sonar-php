@@ -344,7 +344,7 @@ class Something {
   </rule>
 
   <rule key="Naming Rules/LongVariable" priority="INFO">
-    <name><![CDATA[Variable name lenght exceeds maximum]]></name>
+    <name><![CDATA[Variable name length exceeds maximum]]></name>
     <configKey><![CDATA[rulesets/naming.xml/LongVariable]]></configKey>
     <category name="Usability"/>
     <description><![CDATA[<p>A field, formal or local variable is declared with a long name.</p>
