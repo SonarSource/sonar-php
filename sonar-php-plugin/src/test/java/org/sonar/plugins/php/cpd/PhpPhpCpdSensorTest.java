@@ -141,7 +141,7 @@ public class PhpPhpCpdSensorTest {
   }
 
   @Test
-  public void generalSkip() {
+  public void testGeneralSkip() {
 
     PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
     Project project = createProject();
@@ -169,7 +169,7 @@ public class PhpPhpCpdSensorTest {
   }
 
   @Test
-  public void AnalyzeExecutesTheToolWhenNotInAnalyzeOnlyMode() {
+  public void testAnalyzeExecutesTheToolWhenNotInAnalyzeOnlyMode() {
 
     Project project = createProject();
 
@@ -187,7 +187,7 @@ public class PhpPhpCpdSensorTest {
   }
 
   @Test
-  public void AnalyzeDoesntExecuteTheToolWhenInAnalyzeOnlyMode() {
+  public void testAnalyzeDoesntExecuteTheToolWhenInAnalyzeOnlyMode() {
 
     Project project = createProject();
 

@@ -89,8 +89,7 @@ public final class PmdRule implements Comparable<String> {
    */
   @Override
   public boolean equals(Object obj) {
-    String[] excludeFields = { "priority", "message", "name", "properties", "clazz" };
-    return EqualsBuilder.reflectionEquals(this, obj, excludeFields);
+    return EqualsBuilder.reflectionEquals(this, obj, new String[] { "priority", "message", "name", "properties", "clazz" });
   }
 
   public String getPriority() {

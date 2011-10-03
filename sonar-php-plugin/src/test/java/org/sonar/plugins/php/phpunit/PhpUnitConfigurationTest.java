@@ -52,6 +52,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.utils.SonarException;
 
 /**
  * The Class PhpDependConfigurationTest.
@@ -97,7 +98,7 @@ public class PhpUnitConfigurationTest {
   /**
    * Should get valid suffixe option.
    */
-  @Test(expected = PhpUnitConfigurationException.class)
+  @Test(expected = SonarException.class)
   public void shouldThrowExceptionIfReportFileDoesNotExist() {
     Project project = mock(Project.class);
     Configuration c = getMockConfiguration(project);
@@ -111,7 +112,7 @@ public class PhpUnitConfigurationTest {
    * 
    * @throws IOException
    */
-  @Test(expected = PhpUnitConfigurationException.class)
+  @Test(expected = SonarException.class)
   @Ignore
   public void shouldThrowExceptionIfReportIsNotInTestOrSourceDirs() throws IOException {
     Project project = mock(Project.class);
@@ -138,7 +139,7 @@ public class PhpUnitConfigurationTest {
     PhpUnitConfiguration config = new PhpUnitConfiguration(project);
     try {
       config.getMainTestClass();
-    } catch (PhpUnitConfigurationException e) {
+    } catch (SonarException e) {
       assertEquals(true, e.getMessage().contains("not present neither in test directories nor in source"));
       throw e;
     }

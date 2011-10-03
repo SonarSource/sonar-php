@@ -57,7 +57,7 @@ public class PhpUnitResultParser implements BatchExtension {
   private static final int PRECISION = 1;
 
   /** The logger. */
-  private static Logger LOG = LoggerFactory.getLogger(PhpUnitResultParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitResultParser.class);
 
   /** The context. */
   private SensorContext context;

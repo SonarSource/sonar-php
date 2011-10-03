@@ -80,21 +80,19 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
   public void parse(File coverageReportFile) {
     if (coverageReportFile != null) {
       logger.info("Parsing file: " + coverageReportFile.getAbsolutePath());
-      parseFile(context, coverageReportFile);
+      parseFile(coverageReportFile);
     }
   }
 
   /**
    * Parses the file.
    * 
-   * @param context
-   *          the context
    * @param coverageReportFile
    *          the coverage report file
    * @param project
    *          the project
    */
-  private void parseFile(SensorContext context, File coverageReportFile) {
+  private void parseFile(File coverageReportFile) {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
     List<ProjectNode> projects = coverage.getProjects();

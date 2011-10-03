@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.sonar.api.resources.Project;
+import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
 
 /**
@@ -129,7 +130,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
       StringBuilder message = new StringBuilder("The specificied main class file cannot be found: ");
       message.append(reportFileName).append(". If you don't have a main test file, consider using a phpunit.xml file and do not ");
       message.append("use ").append(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY).append(" property.");
-      throw new PhpUnitConfigurationException(message.toString());
+      throw new SonarException(message.toString());
     }
     return file.getAbsolutePath();
   }
