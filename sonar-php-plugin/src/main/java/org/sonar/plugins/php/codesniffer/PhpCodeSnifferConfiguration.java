@@ -47,8 +47,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   public static final String PHPCS_ANALYZE_ONLY_KEY = "sonar.phpCodesniffer.analyzeOnly";
   public static final String PHPCS_SHOULD_RUN_KEY = "sonar.phpCodesniffer.shouldRun";
   public static final String PHPCS_SKIP_KEY = "sonar.phpCodesniffer.skip";
-  public static final String PHPCS_DEFAULT_ANALYZE_ONLY = "false";
-  public static final String PHPCS_DEFAULT_SKIP = "false";
   public static final String PHPCS_SEVERITY_KEY = "sonar.phpCodesniffer.levelArgument";
 
   public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER = "--severity=";
@@ -92,7 +90,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
 
   /**
    * Instantiates a new php checkstyle configuration.
-   *
+   * 
    * @param project
    *          the pom
    */
@@ -123,10 +121,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Gets the default report file name.
-   *
-   * @return the default report file name
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getDefaultReportFileName()
+   * {@inheritDoc}
    */
   @Override
   protected String getDefaultReportFileName() {
@@ -134,10 +129,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Gets the default report file path.
-   *
-   * @return the default report file path
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getPhpunitDefaultReportFilePath()
+   * {@inheritDoc}
    */
   @Override
   protected String getDefaultReportFilePath() {
@@ -145,10 +137,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Gets the report file name key.
-   *
-   * @return the report file name key
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getReportFileNameKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getReportFileNameKey() {
@@ -156,10 +145,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Gets the report file relative path key.
-   *
-   * @return the report file relative path key
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getReportFileRelativePathKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getReportFileRelativePathKey() {
@@ -167,10 +153,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Gets the should analyse only key.
-   *
-   * @return the should analyse only key
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getShouldAnalyzeOnlyKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getShouldAnalyzeOnlyKey() {
@@ -178,10 +161,15 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Gets the should run key.
-   *
-   * @return the should run key
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getShouldRunKey()
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getSkipKey() {
+    return PHPCS_SKIP_KEY;
+  }
+
+  /**
+   * {@inheritDoc}
    */
   @Override
   protected String getShouldRunKey() {
@@ -189,45 +177,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Should analyze only default.
-   *
-   * @return true, if should analyze only default
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#shouldAnalyseOnlyDefault()
-   */
-  @Override
-  protected boolean shouldAnalyzeOnlyDefault() {
-    return Boolean.parseBoolean(PHPCS_DEFAULT_ANALYZE_ONLY);
-  }
-
-  /**
-   * Should run default.
-   *
-   * @deprecated
-   *
-   * @return true, if should run default
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#shouldRunDefault()
-   */
-  @Override
-  protected boolean shouldRunDefault() {
-    return true;
-  }
-
-  /**
-   * Skip the the tool execution default.
-   *
-   * @return bool
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#skipDefault()
-   */
-  @Override
-  protected boolean skipDefault() {
-    return Boolean.parseBoolean(PHPCS_DEFAULT_SKIP);
-  }
-
-  /**
-   * Gets the argument line key.
-   *
-   * @return the argument line key
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getPhpunitArgumentLineKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getArgumentLineKey() {
@@ -235,10 +185,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Gets the default argument line value.
-   *
-   * @return the default argument line
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getPhpunitDefaultArgumentLine()
+   * {@inheritDoc}
    */
   @Override
   protected String getDefaultArgumentLine() {
@@ -246,10 +193,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
   }
 
   /**
-   * Gets the external tool command line
-   *
-   * @return the external tool command line
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getCommandLine()
+   * {@inheritDoc}
    */
   @Override
   protected String getCommandLine() {
@@ -258,7 +202,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
 
   /**
    * Gets the level argument value.
-   *
+   * 
    * @return the level
    */
   public String getLevel() {
@@ -267,7 +211,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
 
   /**
    * Gets the standard argument value.
-   *
+   * 
    * @return the standard
    */
   public String getStandard() {
@@ -276,7 +220,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration 
 
   /**
    * Gets the ignore list argument value.
-   *
+   * 
    * @return the ignore list
    */
   public List<String> getExclusionPatterns() {

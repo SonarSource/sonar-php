@@ -20,120 +20,83 @@
 package org.sonar.plugins.php.pmd;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
 
-import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
-import org.junit.Before;
+import org.apache.commons.configuration.BaseConfiguration;
 import org.junit.Test;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.rules.Violation;
-import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.MockUtils;
+
+import com.google.common.collect.Lists;
 
 /**
  * The Class PhpPmdSensorTest.
  */
 public class PhpPmdSensorTest {
 
-  @Before
-  public void setUp() {
-    // new Php();
-  }
-
-  /**
-   * Sould not launch on non php project.
-   */
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
-    Project project = getMockProject(Java.INSTANCE);
-    PhpmdSensor sensor = getSensor(project);
+    Project project = mock(Project.class);
+    when(project.getLanguage()).thenReturn(Java.INSTANCE);
+
+    PhpmdSensor sensor = createSensor(project, null, null, false);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
-  /**
-   * @param project
-   * @return
-   */
-  private PhpmdSensor getSensor(Project project) {
-    RulesProfile profile = mock(RulesProfile.class);
-    RuleFinder finder = mock(RuleFinder.class);
-    PhpmdExecutor executor = mock(PhpmdExecutor.class);
-    PhpmdSensor sensor = new PhpmdSensor(profile, finder, executor);
-    return sensor;
-  }
-
-  /**
-   * Sould launch on php project.
-   */
   @Test
-  public void shouldLaunchOnPhpProject() {
-    Project project = getMockProject(Php.PHP);
-    PhpmdSensor sensor = getSensor(project);
+  public void shouldLaunch() {
+    RulesProfile profile = createRulesProfile();
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpmdExecutor executor = mock(PhpmdExecutor.class);
+    PhpmdSensor sensor = createSensor(project, executor, profile, false);
+
+    assertEquals(true, sensor.shouldExecuteOnProject(project));
+  }
+
+  @Test
+  public void shouldNotLaunchIfSkip() {
+    RulesProfile profile = mock(RulesProfile.class);
+    when(profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY)).thenReturn(new ArrayList<ActiveRule>());
+
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpmdExecutor executor = mock(PhpmdExecutor.class);
+    PhpmdSensor sensor = createSensor(project, executor, profile, true);
+
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
-  /**
-   * Sould not launch parsing when no report can be found.
-   */
-  @Test(expected = SonarException.class)
-  public void shouldNotLaunchParsingWhenNoReportCanBeFound() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("tot.xml");
-    String defaultReportFile = PHPMD_DEFAULT_REPORT_FILE_PATH;
-    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, defaultReportFile)).thenReturn(defaultReportFile);
-    when(configuration.getBoolean(PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, false)).thenReturn(true);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    PhpmdSensor sensor = getSensor(project);
-    SensorContext context = mock(SensorContext.class);
-    sensor.analyse(project, context);
-    verify(context, never()).saveViolation(any(Violation.class));
+  @Test
+  public void shouldNotLaunchIfNoActiveRule() {
+    RulesProfile profile = mock(RulesProfile.class);
+    when(profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY)).thenReturn(new ArrayList<ActiveRule>());
+
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpmdExecutor executor = mock(PhpmdExecutor.class);
+    PhpmdSensor sensor = createSensor(project, executor, profile, false);
+
+    assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
-  /**
-   * @return a mock project used by all tests cases in this class.
-   */
-  private Project getMockProject(AbstractLanguage language) {
-    Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(language);
-    Configuration configuration = mock(Configuration.class);
+  protected PhpmdSensor createSensor(Project project, PhpmdExecutor executor, RulesProfile profile, boolean skip) {
+    RuleFinder ruleFinder = mock(RuleFinder.class);
+    PhpmdConfiguration conf = mock(PhpmdConfiguration.class);
+    when(conf.isSkip()).thenReturn(skip);
+    return new PhpmdSensor(conf, executor, profile, ruleFinder);
+  }
 
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("tot.xml");
-    String defaultReportFile = PHPMD_DEFAULT_REPORT_FILE_PATH;
-    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, defaultReportFile)).thenReturn(defaultReportFile);
-    when(project.getConfiguration()).thenReturn(configuration);
-    return project;
+  protected RulesProfile createRulesProfile() {
+    RulesProfile profile = mock(RulesProfile.class);
+    ActiveRule rule = mock(ActiveRule.class);
+    when(profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY)).thenReturn(Lists.newArrayList(rule));
+    return profile;
   }
 
 }

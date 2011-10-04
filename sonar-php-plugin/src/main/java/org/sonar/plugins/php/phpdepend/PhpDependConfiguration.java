@@ -38,9 +38,8 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
 
   public static final String PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY = "sonar.phpDepend.reportFileName";
   public static final String PDEPEND_ANALYZE_ONLY_PROPERTY_KEY = "sonar.phpDepend.analyzeOnly";
-  public static final String PDEPEND_DEFAULT_ANALYZE_ONLY = "false";
+  public static final String PDEPEND_SKIP_KEY = "sonar.phpDepend.skip";
   public static final String PDEPEND_SHOULD_RUN_PROPERTY_KEY = "sonar.phpDepend.shouldRun";
-  public static final String PDEPEND_DEFAULT_SHOULD_RUN = "true";
   public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = "sonar.phpDepend.reportFileRelativePath";
   public static final String PDEPEND_SUFFIXES_OPT = "suffix";
   public static final String PDEPEND_IGNORE_KEY = "sonar.phpDepend.ignore";
@@ -68,7 +67,7 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Instantiates a new php depend configuration depending on given project.
-   *
+   * 
    * @param project
    *          the project to be analyzed
    */
@@ -78,7 +77,7 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the report filecommand option.
-   *
+   * 
    * @return the report filecommand option
    */
   public String getReportFileCommandOption() {
@@ -87,71 +86,88 @@ public class PhpDependConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the suffixes command option.
-   *
+   * 
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
     return "--" + PDEPEND_SUFFIXES_OPT + "=" + StringUtils.join(Php.PHP.getFileSuffixes(), ",");
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getArgumentLineKey() {
     return PDEPEND_ARGUMENT_LINE_KEY;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getDefaultArgumentLine() {
     return PDEPEND_DEFAULT_ARGUMENT_LINE;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getDefaultReportFileName() {
     return PDEPEND_DEFAULT_REPORT_FILE_NAME;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getDefaultReportFilePath() {
     return DEFAULT_REPORT_FILE_PATH;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getReportFileNameKey() {
     return PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getReportFileRelativePathKey() {
     return PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getShouldAnalyzeOnlyKey() {
     return PDEPEND_ANALYZE_ONLY_PROPERTY_KEY;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getShouldRunKey() {
     return PDEPEND_SHOULD_RUN_PROPERTY_KEY;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  protected boolean shouldAnalyzeOnlyDefault() {
-    return Boolean.parseBoolean(PDEPEND_DEFAULT_ANALYZE_ONLY);
+  protected String getSkipKey() {
+    return PDEPEND_SKIP_KEY;
   }
 
   /**
-   * @deprecated
+   * {@inheritDoc}
    */
-  @Override
-  protected boolean shouldRunDefault() {
-    return Boolean.parseBoolean(PDEPEND_DEFAULT_SHOULD_RUN);
-  }
-
-  @Override
-  protected boolean skipDefault() {
-    return false;
-  }
-
   @Override
   protected String getCommandLine() {
     return PDEPEND_COMMAND_LINE;

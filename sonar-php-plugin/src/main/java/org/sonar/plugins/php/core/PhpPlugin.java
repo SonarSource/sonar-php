@@ -22,7 +22,6 @@ package org.sonar.plugins.php.core;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_MESSAGE;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_ANALYZE_ONLY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_STANDARD_ARGUMENT;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_DESCRIPTION;
@@ -45,31 +44,23 @@ import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHP_FILE_SUFFIXE
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_MESSAGE;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_ANALYZE_ONLY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_MESSAGE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_PROPERTY_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_ANALYZE_ONLY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_SHOULD_RUN_PROPERTY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_ANALYZE_ONLY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_MAIN_TEST_FILE;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_DESCRIPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_MESSAGE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_PROPERTY_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_SHOULD_RUN;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_DESCRIPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_MESSAGE;
@@ -123,41 +114,41 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
         description = PHP_FILE_SUFFIXES_DESCRIPTION),
 
     // Phpmd configuration: Disabling Phpmd is not a good idea cause almost all metrics rely on it.
-    @Property(key = PHPMD_SHOULD_RUN_KEY, defaultValue = PHPMD_DEFAULT_SHOULD_RUN, name = PHPMD_SHOULD_RUN_MESSAGE, project = true,
-        global = true, description = PHPMD_SHOULD_RUN_DESCRIPTION),
-    @Property(key = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, defaultValue = PhpmdConfiguration.PHPMD_DEFAULT_ANALYZE_ONLY,
+    @Property(key = PHPMD_SHOULD_RUN_KEY, defaultValue = "true", name = PHPMD_SHOULD_RUN_MESSAGE, project = true, global = true,
+        description = PHPMD_SHOULD_RUN_DESCRIPTION),
+    @Property(key = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, defaultValue = "false",
         name = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_MESSAGE, project = true, global = true,
         description = PhpmdConfiguration.PHPMD_ANALYZE_ONLY_DESCRIPTION),
 
     // PhpCodeSniffer configuration
     @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = PHPCS_EXECUTE_MESSAGE, project = true, global = true,
         description = PHPCS_EXECUTE_DESCRIPTION),
-    @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = PHPCS_DEFAULT_ANALYZE_ONLY, name = PHPCS_ANALYZE_ONLY_MESSAGE, project = true,
-        global = true, description = PHPCS_ANALYZE_ONLY_DESCRIPTION),
+    @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = "false", name = PHPCS_ANALYZE_ONLY_MESSAGE, project = true, global = true,
+        description = PHPCS_ANALYZE_ONLY_DESCRIPTION),
     @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = PHPCS_DEFAULT_STANDARD_ARGUMENT,
         name = PHPCS_STANDARD_MESSAGE, project = true, global = true, description = PHPCS_STANDARD_DESCRIPTION),
 
     // PhPdepend configuration
-    @Property(key = PDEPEND_SHOULD_RUN_PROPERTY_KEY, defaultValue = PDEPEND_DEFAULT_SHOULD_RUN, name = PDEPEND_EXECUTE_MESSAGE,
-        project = true, global = true, description = PDEPEND_EXECUTE_DESCRIPTION),
-    @Property(key = PDEPEND_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PDEPEND_DEFAULT_ANALYZE_ONLY, name = PDEPEND_ANALYZE_ONLY_MESSAGE,
-        project = true, global = true, description = PDEPEND_ANALYZE_ONLY_DESCRIPTION),
+    @Property(key = PDEPEND_SHOULD_RUN_PROPERTY_KEY, defaultValue = "true", name = PDEPEND_EXECUTE_MESSAGE, project = true, global = true,
+        description = PDEPEND_EXECUTE_DESCRIPTION),
+    @Property(key = PDEPEND_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = "false", name = PDEPEND_ANALYZE_ONLY_MESSAGE, project = true,
+        global = true, description = PDEPEND_ANALYZE_ONLY_DESCRIPTION),
 
     // Phpunit Configuration
-    @Property(key = PHPUNIT_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_SHOULD_RUN, name = PHPUNIT_EXECUTE_MESSAGE,
-        project = true, global = true, description = PHPUNIT_EXECUTE_MESSAGE),
-    @Property(key = PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE,
-        name = PHPUNIT_COVERAGE_EXECUTE_MESSAGE, project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
-    @Property(key = PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_ANALYZE_ONLY,
-        name = PHPUNIT_ANALYZE_ONLY_DESCRIPTION, project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
+    @Property(key = PHPUNIT_SHOULD_RUN_PROPERTY_KEY, defaultValue = "true", name = PHPUNIT_EXECUTE_MESSAGE, project = true, global = true,
+        description = PHPUNIT_EXECUTE_MESSAGE),
+    @Property(key = PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, defaultValue = "true", name = PHPUNIT_COVERAGE_EXECUTE_MESSAGE,
+        project = true, global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
+    @Property(key = PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY, defaultValue = "false", name = PHPUNIT_ANALYZE_ONLY_DESCRIPTION, project = true,
+        global = true, description = PHPUNIT_COVERAGE_EXECUTE_MESSAGE),
     @Property(key = PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY, defaultValue = PHPUNIT_DEFAULT_MAIN_TEST_FILE,
         name = PHPUNIT_MAIN_TEST_FILE_MESSAGE, project = true, global = true, description = PHPUNIT_MAIN_TEST_FILE_DESCRIPTION),
 
     // PhpCpd configuration
-    @Property(key = PHPCPD_SHOULD_RUN_PROPERTY_KEY, defaultValue = PHPCPD_DEFAULT_SHOULD_RUN, name = PHPCPD_EXECUTE_MESSAGE,
-        project = true, global = true, description = PHPCPD_EXECUTE_DESCRIPTION),
-    @Property(key = PHPCPD_ANALYZE_ONLY_KEY, defaultValue = PHPCPD_DEFAULT_ANALYZE_ONLY, name = PHPCPD_ANALYZE_ONLY_MESSAGE,
-        project = true, global = true, description = PHPCPD_ANALYZE_ONLY_DESCRIPTION),
+    @Property(key = PHPCPD_SHOULD_RUN_PROPERTY_KEY, defaultValue = "true", name = PHPCPD_EXECUTE_MESSAGE, project = true, global = true,
+        description = PHPCPD_EXECUTE_DESCRIPTION),
+    @Property(key = PHPCPD_ANALYZE_ONLY_KEY, defaultValue = "false", name = PHPCPD_ANALYZE_ONLY_MESSAGE, project = true, global = true,
+        description = PHPCPD_ANALYZE_ONLY_DESCRIPTION),
     @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES,
         name = PHPCPD_MIN_LINES_MESSAGE, project = true, global = true, description = PHPCPD_MIN_LINES_DESCRIPTION),
     @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, defaultValue = PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS,

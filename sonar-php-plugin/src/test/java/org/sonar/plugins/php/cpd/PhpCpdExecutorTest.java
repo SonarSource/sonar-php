@@ -55,7 +55,7 @@ public class PhpCpdExecutorTest {
     PhpCpdConfiguration c = mock(PhpCpdConfiguration.class);
     when(c.getMinimunNumberOfIdenticalLines()).thenReturn(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES);
     when(c.getMinimunNumberOfIdenticalTokens()).thenReturn(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS);
-    String[] excludedPackages = {"test1", "test2"};
+    String[] excludedPackages = { "test1", "test2" };
     when(c.getExcludePackages()).thenReturn(excludedPackages);
     when(c.isStringPropertySet(PHPCPD_EXCLUDE_PACKAGE_KEY)).thenReturn(true);
 
@@ -85,7 +85,7 @@ public class PhpCpdExecutorTest {
 
     expected.add(PHPCPD_EXCLUDE_OPTION);
     expected.add("test1");
-    
+
     expected.add(PHPCPD_EXCLUDE_OPTION);
     expected.add("test2");
 

@@ -70,7 +70,7 @@ public class PhpUnitConfigurationTest {
 
     when(project.getConfiguration()).thenReturn(c);
     PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-    assertEquals(true, config.shouldRunCoverage());
+    assertEquals(false, config.shouldSkipCoverage());
 
     when(c.getString(PHPUNIT_FILTER_PROPERTY_KEY, PHPUNIT_DEFAULT_FILTER)).thenReturn(PHPUNIT_DEFAULT_FILTER);
     assertEquals(PHPUNIT_DEFAULT_FILTER, config.getFilter());

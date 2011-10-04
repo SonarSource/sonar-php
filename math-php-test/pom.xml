@@ -70,13 +70,13 @@
   <!-- some properties that you may want to change -->
   <properties>
     <sonar.language>php</sonar.language>
-    <sonar.phpPmd.shouldRun>true</sonar.phpPmd.shouldRun>
-    <sonar.phpCodesniffer.shouldRun>true</sonar.phpCodesniffer.shouldRun>
-    <sonar.phpDepend.shouldRun>true</sonar.phpDepend.shouldRun>
-    <sonar.phpUnit.coverage.shouldRun>true</sonar.phpUnit.coverage.shouldRun>
-    <sonar.phpUnit.shouldRun>true</sonar.phpUnit.shouldRun>
+    <sonar.phpPmd.skip>false</sonar.phpPmd.skip>
+    <sonar.phpCodesniffer.skip>false</sonar.phpCodesniffer.skip>
+    <sonar.phpDepend.skip>false</sonar.phpDepend.skip>
+    <sonar.phpUnit.coverage.skip>false</sonar.phpUnit.coverage.skip>
+    <sonar.phpUnit.skip>false</sonar.phpUnit.skip>
     <sonar.phpUnit.mainTestClass>/source/tests/AllTests2.php</sonar.phpUnit.mainTestClass>
-    <sonar.phpcpd.shouldRun>true</sonar.phpcpd.shouldRun>
+    <sonar.phpcpd.skip>false</sonar.phpcpd.skip>
     <sonar.phpcpd.excludes>source/tests</sonar.phpcpd.excludes>
 
     <!-- to enable mutliple source directories. The phase must patch with 

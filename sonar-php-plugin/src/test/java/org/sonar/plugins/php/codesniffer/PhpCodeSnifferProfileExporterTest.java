@@ -127,7 +127,7 @@ public class PhpCodeSnifferProfileExporterTest {
 
     /**
      * @return
-     *
+     * 
      */
     private Map<String, Rule> getRulesMap() {
       if (rulesByKey == null) {
@@ -140,8 +140,8 @@ public class PhpCodeSnifferProfileExporterTest {
     }
 
     public Rule findById(int ruleId) {
-        // TODO Auto-generated method stub
-        return null;
+      // TODO Auto-generated method stub
+      return null;
     }
   }
 

@@ -86,7 +86,7 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.PhpPluginAbstractExecutor#getCommandLine()
+   * {@inheritDoc}
    */
   @Override
   protected List<String> getCommandLine() {
@@ -130,7 +130,7 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
       result.add(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
     }
     result.add(PHPUNIT_LOG_JUNIT_OPTION + configuration.getReportFile());
-    if (configuration.shouldRunCoverage()) {
+    if ( !configuration.shouldSkipCoverage()) {
       result.add(PHPUNIT_COVERAGE_CLOVER_OPTION + configuration.getCoverageReportFile());
     }
   }
@@ -194,7 +194,7 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.PhpPluginAbstractExecutor#getExecutedTool()
+   * {@inheritDoc}
    */
   @Override
   protected String getExecutedTool() {

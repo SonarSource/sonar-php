@@ -37,16 +37,16 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   public static final String PHPMD_REPORT_FILE_NAME_PROPERTY_KEY = "sonar.phpPmd.reportFileName";
   public static final String PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = "sonar.phpPmd.reportFileRelativePath";
 
+  public static final String PHPMD_SKIP_KEY = "sonar.phpPmd.skip";
+
   public static final String PHPMD_SHOULD_RUN_KEY = "sonar.phpPmd.shouldRun";
   public static final String PHPMD_SHOULD_RUN_MESSAGE = "Execute PHPMD";
-  public static final String PHPMD_DEFAULT_SHOULD_RUN = "true";
   public static final String PHPMD_SHOULD_RUN_DESCRIPTION = "Disabling PHPMD is not a good idea because almost all metrics rely on it.";
 
   public static final String PHPMD_ARGUMENT_LINE_KEY = "sonar.phpPmd.argumentLine";
   public static final String PHPMD_DEFAULT_ARGUMENT_LINE = " ";
 
   public static final String PHPMD_ANALYZE_ONLY_KEY = "sonar.phpPmd.analyzeOnly";
-  public static final String PHPMD_DEFAULT_ANALYZE_ONLY = "false";
   public static final String PHPMD_ANALYZE_ONLY_MESSAGE = "Only analyze existing Phpmd report files";
   public static final String PHPMD_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will the plugin will only parse the result file."
       + " If set to false launch tool and parse result.";
@@ -68,7 +68,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Instantiates a new php pmd configuration.
-   *
+   * 
    * @param project
    *          the project
    */
@@ -78,7 +78,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the project source folders.
-   *
+   * 
    * @return List<File> the source folders
    */
   public List<File> getSourceDir() {
@@ -86,7 +86,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getPhpunitArgumentLineKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getArgumentLineKey() {
@@ -94,7 +94,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getCommandLine()
+   * {@inheritDoc}
    */
   @Override
   protected String getCommandLine() {
@@ -102,7 +102,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getPhpunitDefaultArgumentLine()
+   * {@inheritDoc}
    */
   @Override
   protected String getDefaultArgumentLine() {
@@ -110,7 +110,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getDefaultReportFileName()
+   * {@inheritDoc}
    */
   @Override
   protected String getDefaultReportFileName() {
@@ -118,7 +118,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getPhpunitDefaultReportFilePath()
+   * {@inheritDoc}
    */
   @Override
   protected String getDefaultReportFilePath() {
@@ -126,7 +126,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getReportFileNameKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getReportFileNameKey() {
@@ -134,7 +134,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getReportFileRelativePathKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getReportFileRelativePathKey() {
@@ -142,7 +142,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getShouldAnalyzeOnlyKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getShouldAnalyzeOnlyKey() {
@@ -150,7 +150,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #getShouldRunKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getShouldRunKey() {
@@ -158,33 +158,16 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #shouldAnalyzeOnlyDefault()
+   * {@inheritDoc}
    */
   @Override
-  protected boolean shouldAnalyzeOnlyDefault() {
-    return Boolean.getBoolean(PHPMD_DEFAULT_ANALYZE_ONLY);
-  }
-
-  /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #shouldRunDefault()
-   * @deprecated
-   */
-  @Override
-  protected boolean shouldRunDefault() {
-    return Boolean.getBoolean(PHPMD_DEFAULT_SHOULD_RUN);
-  }
-
-  /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration #skipDefault()
-   */
-  @Override
-  protected boolean skipDefault() {
-    return false;
+  protected String getSkipKey() {
+    return PHPMD_SKIP_KEY;
   }
 
   /**
    * Gets the level.
-   *
+   * 
    * @return the level
    */
   public String getLevel() {
@@ -193,7 +176,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the ignore list.
-   *
+   * 
    * @return the ignore list
    */
   public String getIgnoreList() {
@@ -206,7 +189,7 @@ public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the rulesets.
-   *
+   * 
    * @return the rulesets
    */
   public String getRulesets() {

@@ -19,14 +19,9 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import static java.lang.Boolean.parseBoolean;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY;
-
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Decorator;
@@ -48,9 +43,9 @@ public class PhpUnitCoverageDecorator implements Decorator {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageDecorator.class);
 
-  private Configuration configuration;
+  private PhpUnitConfiguration configuration;
 
-  public PhpUnitCoverageDecorator(Configuration configuration) {
+  public PhpUnitCoverageDecorator(PhpUnitConfiguration configuration) {
     this.configuration = configuration;
   }
 
@@ -61,7 +56,7 @@ public class PhpUnitCoverageDecorator implements Decorator {
     if ( !Php.KEY.equals(project.getLanguageKey())) {
       return false;
     }
-    return configuration.getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE));
+    return !configuration.shouldSkipCoverage();
   }
 
   @DependedUpon

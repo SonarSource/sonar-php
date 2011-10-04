@@ -61,11 +61,7 @@ public class PhpmdExecutor extends PhpPluginAbstractExecutor {
   }
 
   /**
-   * Gets a complete command line with configured arguments
-   * 
-   * @return the command line
-   * 
-   * @see org.sonar.plugins.php.core.PhpPluginAbstractExecutor#getCommandLine()
+   * {@inheritDoc}
    */
   @Override
   protected List<String> getCommandLine() {
@@ -119,11 +115,7 @@ public class PhpmdExecutor extends PhpPluginAbstractExecutor {
   }
 
   /**
-   * Gets the executed tool.
-   * 
-   * @return the executed tool
-   * 
-   * @see org.sonar.plugins.php.core.PhpPluginAbstractExecutor#getExecutedTool()
+   * {@inheritDoc}
    */
   @Override
   protected String getExecutedTool() {

@@ -55,9 +55,7 @@ public class PhpCpdExecutor extends PhpPluginAbstractExecutor {
   }
 
   /**
-   * Return the command line depending configuration and arguments.
-   * 
-   * @see org.sonar.plugins.php.core.PhpPluginAbstractExecutor#getCommandLine()
+   * {@inheritDoc}
    */
   @Override
   protected List<String> getCommandLine() {
@@ -81,14 +79,14 @@ public class PhpCpdExecutor extends PhpPluginAbstractExecutor {
 
     if (configuration.isStringPropertySet(PHPCPD_EXCLUDE_PACKAGE_KEY)) {
       String[] excludedPackages = configuration.getExcludePackages();
-      
+
       if (excludedPackages != null) {
         for (String excludedPackage : excludedPackages) {
           result.add(PHPCPD_EXCLUDE_OPTION);
           result.add(excludedPackage);
         }
       }
-      
+
     }
     List<File> sourceDirectories = configuration.getSourceDirectories();
     if (sourceDirectories != null && !sourceDirectories.isEmpty()) {
@@ -97,9 +95,19 @@ public class PhpCpdExecutor extends PhpPluginAbstractExecutor {
     return result;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getExecutedTool() {
     return PHPCPD_COMMAND_LINE;
+  }
+
+  /**
+   * @return the configuration
+   */
+  public PhpCpdConfiguration getConfiguration() {
+    return configuration;
   }
 
 }

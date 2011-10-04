@@ -22,20 +22,19 @@ package org.sonar.plugins.php.codesniffer;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.BaseConfiguration;
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.ActiveRule;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.MockUtils;
+
+import com.google.common.collect.Lists;
 
 /**
  * The Class PhpCodesnifferSensorTest.
@@ -44,157 +43,59 @@ public class PhpCodesnifferSensorTest {
 
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
-
     Project project = mock(Project.class);
     when(project.getLanguage()).thenReturn(Java.INSTANCE);
 
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, null);
+    PhpCodesnifferSensor sensor = createSensor(project, null, null, false);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
-  public void shouldNotLaunchWhenShouldRunSetToFalseAndSkipNotSet() {
+  public void shouldLaunch() {
+    RulesProfile profile = createRulesProfile();
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
+    PhpCodesnifferSensor sensor = createSensor(project, executor, profile, false);
 
-    Project project = mock(Project.class);
-    PropertiesConfiguration config = new PropertiesConfiguration();
-    config.setProperty(PHPCS_SHOULD_RUN_KEY, false);
-
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, null);
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
-  }
-
-  @Test
-  public void shouldLaunchWhenShouldRunSetToTrueAndSkipNotSet() {
-
-    Project project = mock(Project.class);
-    RulesProfile profile = mock(RulesProfile.class);
-
-    PropertiesConfiguration config = new PropertiesConfiguration();
-    config.setProperty(PHPCS_SHOULD_RUN_KEY, true);
-
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-    when(project.getReuseExistingRulesConfig()).thenReturn(true);
-
-    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    activeRules.add(mock(ActiveRule.class));
-    when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(activeRules);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, profile);
     assertEquals(true, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
-  public void shouldNotLaunchWhenSkipSetToTrueAndShouldRunNotSet() {
+  public void shouldNotLaunchIfSkip() {
+    RulesProfile profile = mock(RulesProfile.class);
+    when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(new ArrayList<ActiveRule>());
 
-    Project project = mock(Project.class);
-    PropertiesConfiguration config = new PropertiesConfiguration();
-    config.setProperty(PHPCS_SKIP_KEY, true);
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
+    PhpCodesnifferSensor sensor = createSensor(project, executor, profile, true);
 
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, null);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
-  public void shouldLaunchWhenSkipSetToFalseAndShouldRunNotSet() {
-
-    Project project = mock(Project.class);
+  public void shouldNotLaunchIfNoActiveRule() {
     RulesProfile profile = mock(RulesProfile.class);
-    PropertiesConfiguration config = new PropertiesConfiguration();
-    config.setProperty(PHPCS_SKIP_KEY, false);
+    when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(new ArrayList<ActiveRule>());
 
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-    when(project.getReuseExistingRulesConfig()).thenReturn(true);
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
+    PhpCodesnifferSensor sensor = createSensor(project, executor, profile, false);
 
-    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    activeRules.add(mock(ActiveRule.class));
-    when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(activeRules);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, profile);
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
-  }
-
-  @Test
-  public void shouldNotLaunchIgnoringShouldRunValueWhenSkipSetToTrue() {
-
-    Project project = mock(Project.class);
-    RulesProfile profile = mock(RulesProfile.class);
-    PropertiesConfiguration config = new PropertiesConfiguration();
-    config.setProperty(PHPCS_SKIP_KEY, true);
-    config.setProperty(PHPCS_SHOULD_RUN_KEY, false);
-
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-    when(project.getReuseExistingRulesConfig()).thenReturn(true);
-
-    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    activeRules.add(mock(ActiveRule.class));
-    when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(activeRules);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, profile);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
-  @Test
-  public void shouldLaunchIgnoringShouldRunValueWhenSkipSetToFalse() {
-
-    Project project = mock(Project.class);
-    RulesProfile profile = mock(RulesProfile.class);
-    PropertiesConfiguration config = new PropertiesConfiguration();
-    config.setProperty(PHPCS_SKIP_KEY, false);
-    config.setProperty(PHPCS_SHOULD_RUN_KEY, true);
-
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-    when(project.getReuseExistingRulesConfig()).thenReturn(true);
-
-    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    activeRules.add(mock(ActiveRule.class));
-    when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(activeRules);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, profile);
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
+  protected PhpCodesnifferSensor createSensor(Project project, PhpCodeSnifferExecutor executor, RulesProfile profile, boolean skip) {
+    PhpCodeSnifferViolationsXmlParser parser = mock(PhpCodeSnifferViolationsXmlParser.class);
+    PhpCodeSnifferConfiguration conf = mock(PhpCodeSnifferConfiguration.class);
+    when(conf.isSkip()).thenReturn(skip);
+    return new PhpCodesnifferSensor(conf, executor, profile, parser);
   }
 
-  @Test
-  public void shouldLaunchByDefaultWhenShouldRunAndSkipNotSet() {
-
-    Project project = mock(Project.class);
+  protected RulesProfile createRulesProfile() {
     RulesProfile profile = mock(RulesProfile.class);
-    PropertiesConfiguration config = new PropertiesConfiguration();
-
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-    when(project.getReuseExistingRulesConfig()).thenReturn(true);
-
-    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    activeRules.add(mock(ActiveRule.class));
-    when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(activeRules);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, profile);
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
-  }
-
-  @Test
-  public void shouldNotLaunchIfNotReusingExistingRulesAndNoActiveRulesPresent() {
-
-    Project project = mock(Project.class);
-    RulesProfile profile = mock(RulesProfile.class);
-    PropertiesConfiguration config = new PropertiesConfiguration();
-
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getConfiguration()).thenReturn(config);
-    when(project.getReuseExistingRulesConfig()).thenReturn(false);
-
-    PhpCodesnifferSensor sensor = new PhpCodesnifferSensor(null, null, profile);
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
+    ActiveRule rule = mock(ActiveRule.class);
+    when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(Lists.newArrayList(rule));
+    return profile;
   }
 
 }

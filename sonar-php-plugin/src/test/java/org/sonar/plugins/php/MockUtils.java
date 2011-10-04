@@ -36,12 +36,25 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.php.api.Php;
 
 /**
  * @author akbenaissi
  * 
  */
 public class MockUtils {
+
+  public static Project createMockProject(Configuration config) {
+    Project project = mock(Project.class);
+    when(project.getLanguage()).thenReturn(Php.PHP);
+    when(project.getConfiguration()).thenReturn(config);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("target/MockProject/src")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("target/MockProject/test")));
+    when(fs.getBuildDir()).thenReturn(new File("target/MockProject/target"));
+    return project;
+  }
 
   public static String getFile(String path) {
     File f = new File("working");

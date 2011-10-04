@@ -19,10 +19,7 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static java.lang.Boolean.parseBoolean;
 import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_SHOULD_RUN;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SHOULD_RUN_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
 
 import java.io.File;
@@ -30,13 +27,11 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
@@ -57,7 +52,7 @@ public class PhpmdSensor implements Sensor {
   private RuleFinder ruleFinder;
 
   /** The plugin configuration. */
-  private PhpmdConfiguration config;
+  private PhpmdConfiguration configuration;
 
   /** The plugin configuration. */
   private PhpmdExecutor executor;
@@ -68,32 +63,24 @@ public class PhpmdSensor implements Sensor {
    * @param rulesManager
    *          the rules manager
    */
-  public PhpmdSensor(RulesProfile profile, RuleFinder ruleFinder, PhpmdExecutor executor) {
+  public PhpmdSensor(PhpmdConfiguration conf, PhpmdExecutor executor, RulesProfile profile, RuleFinder ruleFinder) {
     super();
+    this.configuration = conf;
     this.ruleFinder = ruleFinder;
     this.profile = profile;
     this.executor = executor;
   }
 
   /**
-   * Launches the external tool (if configured so) and analyze result file.
-   * 
-   * @param project
-   *          the project
-   * @param context
-   *          the context
-   * 
-   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   * {@inheritDoc}
    */
   public void analyse(Project project, SensorContext context) {
-    // If configured so, execute the tool
-    PhpmdConfiguration configuration = getConfiguration(project);
     if ( !configuration.isAnalyseOnly()) {
       // PhpmdExecutor executor = new PhpmdExecutor(config);
       configuration.createWorkingDirectory();
       executor.execute();
     }
-    File report = config.getReportFile();
+    File report = configuration.getReportFile();
     LOG.info("Phpmd  report file: " + report.getAbsolutePath());
     PhpmdViolationsXmlParser reportParser;
     try {
@@ -119,43 +106,22 @@ public class PhpmdSensor implements Sensor {
   }
 
   /**
-   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   * 
-   * @param project
-   *          the project
-   * 
-   * @return true, if should execute on project
-   * 
-   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
+   * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    Configuration configuration = project.getConfiguration();
-    Language language = project.getLanguage();
-    boolean result = PHP.equals(language);
-    result = result && configuration.getBoolean(PHPMD_SHOULD_RUN_KEY, parseBoolean(PHPMD_DEFAULT_SHOULD_RUN));
-    result = result && (project.getReuseExistingRulesConfig() || !profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY).isEmpty());
-    return result;
+    if ( !PHP.equals(project.getLanguage())) {
+      return false;
+    }
+
+    return !configuration.isSkip() && !profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY).isEmpty();
   }
 
-  /***
-   * @see java.lang.Object#toString()
+  /**
+   * {@inheritDoc}
    */
   @Override
   public String toString() {
     return getClass().getSimpleName();
   }
 
-  /**
-   * Gets the configuration. If config field is null initialize it, other way only returns it.
-   * 
-   * @param project
-   *          the project
-   * @return the configuration
-   */
-  private PhpmdConfiguration getConfiguration(Project project) {
-    if (config == null) {
-      config = new PhpmdConfiguration(project);
-    }
-    return config;
-  }
 }

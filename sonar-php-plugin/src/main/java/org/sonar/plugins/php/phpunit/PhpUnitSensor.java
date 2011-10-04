@@ -19,19 +19,12 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import static java.lang.Boolean.parseBoolean;
 import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_PROPERTY_KEY;
 
-import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
@@ -47,6 +40,8 @@ public class PhpUnitSensor implements Sensor {
 
   /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitSensor.class);
+
+  private PhpUnitConfiguration configuration;
   private PhpUnitExecutor executor;
   private PhpUnitResultParser parser;
   private PhpUnitCoverageResultParser coverageParser;
@@ -55,32 +50,27 @@ public class PhpUnitSensor implements Sensor {
    * @param executor
    * @param parser
    */
-  public PhpUnitSensor(PhpUnitExecutor executor, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
+  public PhpUnitSensor(PhpUnitConfiguration conf, PhpUnitExecutor executor, PhpUnitResultParser parser,
+      PhpUnitCoverageResultParser coverageParser) {
     super();
+    this.configuration = conf;
     this.executor = executor;
     this.parser = parser;
     this.coverageParser = coverageParser;
   }
 
   /**
-   * Analyse.
-   * 
-   * @param project
-   *          the project
-   * @param context
-   *          the context
-   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   * {@inheritDoc}
    */
   public void analyse(Project project, SensorContext context) {
     try {
-      PhpUnitConfiguration configuration = executor.getConfiguration();
       configuration.createWorkingDirectory();
 
       if ( !configuration.isAnalyseOnly()) {
         executor.execute();
       }
       parser.parse(configuration.getReportFile());
-      if (configuration.shouldRunCoverage()) {
+      if ( !configuration.shouldSkipCoverage()) {
         coverageParser.parse(configuration.getCoverageReportFile());
       }
     } catch (XStreamException e) {
@@ -93,30 +83,18 @@ public class PhpUnitSensor implements Sensor {
   }
 
   /**
-   * Determines whether or not this sensor will be executed on the given project.
-   * 
-   * @param project
-   *          The project to be analyzed
-   * @return boolean <code>true</code> if project's language is php a,d the project configuration says so, <code>false</code> in any other
-   *         case.
-   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
+   * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
+    if ( !PHP.equals(project.getLanguage())) {
+      return false;
+    }
 
-    Configuration configuration = project.getConfiguration();
-    Language language = project.getLanguage();
-    boolean shouldExecute = PHP.equals(language);
-    shouldExecute = shouldExecute
-        && (configuration.getBoolean(PHPUNIT_SHOULD_RUN_PROPERTY_KEY, parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN)) || configuration
-            .getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, parseBoolean(PHPUNIT_DEFAULT_SHOULD_RUN_COVERAGE)));
-    return shouldExecute;
+    return !configuration.isSkip() || !configuration.shouldSkipCoverage();
   }
 
   /**
-   * To string.
-   * 
-   * @return the string
-   * @see java.lang.Object#toString()
+   * {@inheritDoc}
    */
   @Override
   public String toString() {

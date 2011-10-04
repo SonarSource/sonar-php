@@ -41,6 +41,8 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   private static final String WINDOWS_BAT_SUFFIX = ".bat";
 
   protected Project project;
+  /** Indicates whether the tool should be executed or not. */
+  protected boolean skip;
   /** Indicates whether the plugin should only analyze results or launch tool. */
   protected boolean analyzeOnly;
   /** The tool argument line. */
@@ -56,20 +58,14 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   protected AbstractPhpPluginConfiguration(Project project) {
     this.project = project;
     Configuration configuration = getProject().getConfiguration();
-    if (getReportFileNameKey() != null) {
-      this.reportFileName = configuration.getString(getReportFileNameKey(), getDefaultReportFileName());
-    }
-    if (getReportFileRelativePathKey() != null) {
-      this.reportFileRelativePath = configuration.getString(getReportFileRelativePathKey(), getDefaultReportFilePath());
-      String absolutePath = getProject().getFileSystem().getBuildDir().getAbsolutePath();
-      File reportDirectory = new File(absolutePath, reportFileRelativePath);
-      reportDirectory.mkdir();
-    }
-    if (getArgumentLineKey() != null) {
-      this.argumentLine = configuration.getString(getArgumentLineKey(), getDefaultArgumentLine());
-    }
-    if (getShouldAnalyzeOnlyKey() != null) {
-      this.analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), shouldAnalyzeOnlyDefault());
+    this.reportFileName = configuration.getString(getReportFileNameKey(), getDefaultReportFileName());
+    this.reportFileRelativePath = configuration.getString(getReportFileRelativePathKey(), getDefaultReportFilePath());
+    this.argumentLine = configuration.getString(getArgumentLineKey(), getDefaultArgumentLine());
+    this.analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), false);
+    if (isStringPropertySet(getSkipKey())) {
+      skip = project.getConfiguration().getBoolean(getSkipKey());
+    } else if (isStringPropertySet(getShouldRunKey())) {
+      skip = !project.getConfiguration().getBoolean(getShouldRunKey());
     }
   }
 
@@ -153,15 +149,6 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   }
 
   /**
-   * Checks if is analyze only.
-   * 
-   * @return true, if is analyze only
-   */
-  public boolean isAnalyseOnly() {
-    return analyzeOnly;
-  }
-
-  /**
    * Checks if running os is windows.
    * 
    * @return true, if os is windows
@@ -192,6 +179,24 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
    */
   public boolean isStringPropertySet(String key) {
     return project.getConfiguration().containsKey(key);
+  }
+
+  /**
+   * Checks if is analyze only.
+   * 
+   * @return true, if is analyze only
+   */
+  public boolean isAnalyseOnly() {
+    return analyzeOnly;
+  }
+
+  /**
+   * Checks if the tool should be skipped.
+   * 
+   * @return true, if it should be skipped
+   */
+  public boolean isSkip() {
+    return skip;
   }
 
   /**
@@ -260,33 +265,19 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   protected abstract String getShouldAnalyzeOnlyKey();
 
   /**
+   * Get the parameter that tells if the sensor must be skipped or not
+   * 
+   * @return the parameter name
+   */
+  protected abstract String getSkipKey();
+
+  /**
    * Gets the should run key.
+   * 
+   * @deprecated Not used anymore, "skip" is preferred (this method should disappear some day)
    * 
    * @return the should run key
    */
   protected abstract String getShouldRunKey();
-
-  /**
-   * Should analyze only default.
-   * 
-   * @return true, if successful
-   */
-  protected abstract boolean shouldAnalyzeOnlyDefault();
-
-  /**
-   * Should run default.
-   * 
-   * @deprecated
-   * 
-   * @return true, if successful
-   */
-  protected abstract boolean shouldRunDefault();
-
-  /**
-   * Skip the the tool execution default.
-   * 
-   * @return bool
-   */
-  protected abstract boolean skipDefault();
 
 }

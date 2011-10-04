@@ -19,185 +19,74 @@
  */
 package org.sonar.plugins.php.cpd;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.maven.project.MavenProject;
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 public class PhpPhpCpdSensorTest {
 
   @Test
-  public void testShouldNotExecuteOnProjectWithNulPom() {
-    Project project = createProject();
-    project.setLanguage(Java.INSTANCE);
-    project.setPom(null);
-
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.cpd.skip", "false");
-
-    testShouldRun(project, false);
-  }
-
-  @Test
-  public void testShouldNotExecuteOnNonPhpProject() {
-    Project project = createProject();
-    project.setLanguage(Java.INSTANCE);
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.cpd.skip", "false");
-
-    testShouldRun(project, false);
-  }
-
-  @Test
-  public void testShouldNotExecuteOnNonPhpProjectWithSonarCpdSkipIsTrue() {
-    Project project = createProject();
-    project.setLanguage(Java.INSTANCE);
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.cpd.skip", "true");
-
-    testShouldRun(project, false);
-  }
-
-  @Test
-  public void testShouldExecuteOnProjectWhenCpdSkipPropertyFalse() {
-    Project project = createProject();
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.cpd.skip", "false");
-
-    testShouldRun(project, true);
-  }
-
-  @Test
-  public void testShouldNotExecuteOnProjectWhenCpdSkipPropertyTrue() {
-    Project project = createProject();
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.cpd.skip", "true");
-
-    testShouldRun(project, false);
-  }
-
-  @Test
-  public void testShouldExecuteOnProjectWhenCpdSkipPropertyNotSetButDeprecatedCpdSkipPropertyFalse() {
-    Project project = createProject();
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.php.cpd.skip", "false");
-
-    testShouldRun(project, true);
-  }
-
-  @Test
-  public void testShouldNotExecuteOnProjectWhenCpdSkipPropertyNotSetButDeprecatedCpdSkipPropertyTrue() {
-    Project project = createProject();
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.php.cpd.skip", "true");
-
-    testShouldRun(project, false);
-  }
-
-  @Test
-  public void testShouldExecuteOnProjectWhenBothCpdSkipPropertyNotSetButShouldRunPropertyTrue() {
-    Project project = createProject();
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, "true");
-
-    testShouldRun(project, true);
-  }
-
-  @Test
-  public void testShouldNotExecuteOnProjectWhenBothCpdSkipPropertyNotSetButShouldRunPropertyFalse() {
-    Project project = createProject();
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, "false");
-
-    testShouldRun(project, false);
-  }
-
-  @Test
-  public void testShouldExecuteOnProjectWhenCpdSkipPropertyAndShouldRunPropertyNotSet() {
-    Project project = createProject();
-
-    testShouldRun(project, true);
-  }
-
-  private void testShouldRun(Project project, boolean shouldRun) {
+  public void shouldNotLaunchOnNonPhpProject() {
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    when(project.getLanguage()).thenReturn(Java.INSTANCE);
 
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
-    PhpCpdSensor sensor = getSensor(project, executor);
-    assertEquals(shouldRun, sensor.shouldExecuteOnProject(project));
+    PhpCpdSensor sensor = createSensor(project, executor);
+
+    assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
-  public void testGeneralSkip() {
-
-    PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
-    Project project = createProject();
-    PropertiesConfiguration conf = (PropertiesConfiguration) project.getConfiguration();
-    conf.setProperty("sonar.cpd.skip", "true");
-    conf.setProperty(PHPCPD_SHOULD_RUN_PROPERTY_KEY, "false");
-
-    PhpCpdSensor sensor = new PhpCpdSensor(configuration, null, null);
-    assertFalse(sensor.shouldExecuteOnProject(project));
-  }
-
-  @Test
-  public void testAnalyze() {
-
-    Project project = createProject();
-    project.setPom(new MavenProject());
+  public void shouldLaunch() {
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
+    PhpCpdSensor sensor = createSensor(project, executor);
 
-    PhpCpdSensor sensor = getSensor(project, executor);
-    assertTrue(sensor.shouldExecuteOnProject(project));
-    SensorContext context = mock(SensorContext.class);
-
-    sensor.analyse(project, context);
-
+    assertEquals(true, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
-  public void testAnalyzeExecutesTheToolWhenNotInAnalyzeOnlyMode() {
-
-    Project project = createProject();
-
-    PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
-    when(configuration.isAnalyseOnly()).thenReturn(false);
-
+  public void shouldNotLaunchIfSkip() {
+    Configuration conf = new BaseConfiguration();
+    conf.setProperty("sonar.phpcpd.skip", true);
+    Project project = MockUtils.createMockProject(conf);
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
+    PhpCpdSensor sensor = createSensor(project, executor);
 
-    PhpCpdSensor sensor = new PhpCpdSensor(configuration, executor, mock(PhpCpdResultParser.class));
+    assertEquals(false, sensor.shouldExecuteOnProject(project));
+  }
 
+  @Test
+  public void testAnalyse() {
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
+    PhpCpdSensor sensor = createSensor(project, executor);
     SensorContext context = mock(SensorContext.class);
     sensor.analyse(project, context);
 
-    verify(executor).execute();
+    verify(executor, times(1)).execute();
   }
 
   @Test
-  public void testAnalyzeDoesntExecuteTheToolWhenInAnalyzeOnlyMode() {
-
-    Project project = createProject();
-
-    PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
-    when(configuration.isAnalyseOnly()).thenReturn(true);
-
+  public void testAnalyseWithoutExecutingTool() {
+    Configuration conf = new BaseConfiguration();
+    conf.setProperty("sonar.phpcpd.analyzeOnly", true);
+    Project project = MockUtils.createMockProject(conf);
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
-
-    PhpCpdSensor sensor = new PhpCpdSensor(configuration, executor, mock(PhpCpdResultParser.class));
-
+    PhpCpdSensor sensor = createSensor(project, executor);
     SensorContext context = mock(SensorContext.class);
     sensor.analyse(project, context);
 
@@ -206,39 +95,18 @@ public class PhpPhpCpdSensorTest {
 
   @Test
   public void testAnalyzeExitsGracefullyOnError() {
-    PropertiesConfiguration conf = new PropertiesConfiguration();
-    Project project = createProject().setConfiguration(conf);
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
     PhpCpdExecutor executor = mock(PhpCpdExecutor.class);
-
-    PhpCpdSensor sensor = getSensor(project, executor);
-    assertTrue(sensor.shouldExecuteOnProject(project));
-    SensorContext context = mock(SensorContext.class);
     doThrow(new PhpPluginExecutionException()).when(executor).execute();
-
+    PhpCpdSensor sensor = createSensor(project, executor);
+    SensorContext context = mock(SensorContext.class);
     sensor.analyse(project, context);
   }
 
-  /**
-   * @param project
-   * @return
-   */
-  private PhpCpdSensor getSensor(Project project, PhpCpdExecutor executor) {
-    PhpCpdConfiguration configuration = mock(PhpCpdConfiguration.class);
-
+  protected PhpCpdSensor createSensor(Project project, PhpCpdExecutor executor) {
     PhpCpdResultParser parser = mock(PhpCpdResultParser.class);
-
-    PhpCpdSensor sensor = new PhpCpdSensor(configuration, executor, parser);
-
+    PhpCpdSensor sensor = new PhpCpdSensor(new PhpCpdConfiguration(project), executor, parser);
     return sensor;
-  }
-
-  private Project createProject() {
-    PropertiesConfiguration conf = new PropertiesConfiguration();
-    Project project = new Project("php_project");
-    project.setConfiguration(conf);
-    project.setPom(new MavenProject());
-    project.setLanguage(Php.PHP);
-    return project;
   }
 
 }

@@ -23,8 +23,10 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.both;
+import static org.junit.matchers.JUnitMatchers.hasItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,60 +38,59 @@ import org.junit.Test;
  * Test for TestSuites.
  * 
  * @author gennadiyl
- *
+ * 
  */
 public class TestSuitesTest {
-	
-	private TestSuites testSuites;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		testSuites = new TestSuites();
-	}
+  private TestSuites testSuites;
 
-	/**
-	 * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#setTestSuites(java.util.List)}.
-	 */
-	@Test
-	public void testSetTestSuites() {
-		List<TestSuite> testSuitesList = new ArrayList<TestSuite>();
-		
-		testSuites.setTestSuites(testSuitesList);
-		assertSame(testSuitesList, testSuites.getTestSuites());
-	}
+  /**
+   * @throws java.lang.Exception
+   */
+  @Before
+  public void setUp() throws Exception {
+    testSuites = new TestSuites();
+  }
 
-	/**
-	 * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#addTestSuite(org.sonar.plugins.php.phpunit.xml.TestSuite)}.
-	 */
-	@Test
-	public void testAddTestSuite() {
-		TestSuite suite = getTestSuite("name");
-		
-		testSuites.addTestSuite(suite);
-		
-		assertThat(testSuites.getTestSuites(), hasItem(suite));
-	}
-	
-	/**
-	 * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#addTestSuite(org.sonar.plugins.php.phpunit.xml.TestSuite)}.
-	 */
-	@Test
-	public void testAddMultipleTestSuite() {
-		TestSuite suite1 = getTestSuite("name1");
-		TestSuite suite2 = getTestSuite("name2");
-		
-		testSuites.addTestSuite(suite1);
-		testSuites.addTestSuite(suite2);
-		
-		assertThat(testSuites.getTestSuites(), both(hasItem(suite1)).and(hasItem(suite2)));
-	}
-	
-	private TestSuite getTestSuite(String name) {
-		return new TestSuite(name, "file", "fullPackage", "category", "packageName", "subpackage", "tests",
-				"assertions", 0, 0, 0, null, null);
-	}
+  /**
+   * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#setTestSuites(java.util.List)}.
+   */
+  @Test
+  public void testSetTestSuites() {
+    List<TestSuite> testSuitesList = new ArrayList<TestSuite>();
+
+    testSuites.setTestSuites(testSuitesList);
+    assertSame(testSuitesList, testSuites.getTestSuites());
+  }
+
+  /**
+   * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#addTestSuite(org.sonar.plugins.php.phpunit.xml.TestSuite)}.
+   */
+  @Test
+  public void testAddTestSuite() {
+    TestSuite suite = getTestSuite("name");
+
+    testSuites.addTestSuite(suite);
+
+    assertThat(testSuites.getTestSuites(), hasItem(suite));
+  }
+
+  /**
+   * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#addTestSuite(org.sonar.plugins.php.phpunit.xml.TestSuite)}.
+   */
+  @Test
+  public void testAddMultipleTestSuite() {
+    TestSuite suite1 = getTestSuite("name1");
+    TestSuite suite2 = getTestSuite("name2");
+
+    testSuites.addTestSuite(suite1);
+    testSuites.addTestSuite(suite2);
+
+    assertThat(testSuites.getTestSuites(), both(hasItem(suite1)).and(hasItem(suite2)));
+  }
+
+  private TestSuite getTestSuite(String name) {
+    return new TestSuite(name, "file", "fullPackage", "category", "packageName", "subpackage", "tests", "assertions", 0, 0, 0, null, null);
+  }
 
 }

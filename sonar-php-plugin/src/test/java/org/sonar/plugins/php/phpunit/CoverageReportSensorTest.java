@@ -31,13 +31,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.DecoratorContext;
@@ -126,14 +123,14 @@ public class CoverageReportSensorTest {
 
   @Test
   public void testShouldNotExecuteOnProjectIfSkip() throws Exception {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY, "false");
+    PhpUnitConfiguration conf = mock(PhpUnitConfiguration.class);
+    when(conf.shouldSkipCoverage()).thenReturn(true);
     PhpUnitCoverageDecorator decorator = new PhpUnitCoverageDecorator(conf);
     assertFalse(decorator.shouldExecuteOnProject(project));
   }
 
   private PhpUnitCoverageDecorator createDecorator() {
-    Configuration conf = new BaseConfiguration();
+    PhpUnitConfiguration conf = mock(PhpUnitConfiguration.class);
     PhpUnitCoverageDecorator decorator = new PhpUnitCoverageDecorator(conf);
     return decorator;
   }

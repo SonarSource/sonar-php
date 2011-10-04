@@ -19,11 +19,7 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import static java.lang.Boolean.parseBoolean;
 import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_DEFAULT_SKIP;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SHOULD_RUN_KEY;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 
 import java.io.File;
@@ -32,7 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
@@ -48,41 +43,29 @@ import org.sonar.api.rules.Violation;
  */
 public class PhpCodesnifferSensor implements Sensor {
 
-  /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(PhpCodesnifferSensor.class);
 
+  private PhpCodeSnifferConfiguration configuration;
   private PhpCodeSnifferExecutor executor;
-
   private PhpCodeSnifferViolationsXmlParser parser;
-  /**   */
   private RulesProfile profile;
 
   /**
    * Instantiates a new php codesniffer sensor.
-   * 
-   * @param rulesManager
-   *          the rules manager
    */
-  public PhpCodesnifferSensor(PhpCodeSnifferExecutor executor, PhpCodeSnifferViolationsXmlParser parser, RulesProfile profile) {
+  public PhpCodesnifferSensor(PhpCodeSnifferConfiguration conf, PhpCodeSnifferExecutor executor, RulesProfile profile,
+      PhpCodeSnifferViolationsXmlParser parser) {
     super();
+    this.configuration = conf;
     this.executor = executor;
     this.parser = parser;
     this.profile = profile;
   }
 
   /**
-   * Launches the external tool (if configured so) and analyze result file.
-   * 
-   * @param project
-   *          the project
-   * @param context
-   *          the context
-   * 
-   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   * {@inheritDoc}
    */
   public void analyse(Project project, SensorContext context) {
-
-    PhpCodeSnifferConfiguration configuration = executor.getConfiguration();
     configuration.createWorkingDirectory();
 
     if ( !configuration.isAnalyseOnly()) {
@@ -117,43 +100,18 @@ public class PhpCodesnifferSensor implements Sensor {
   }
 
   /**
-   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   * 
-   * @param Project
-   *          the project
-   * 
-   * @return bool
-   * 
-   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
+   * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-
     if ( !PHP.equals(project.getLanguage())) {
       return false;
     }
 
-    Configuration configuration = project.getConfiguration();
-
-    boolean skip = configuration.getBoolean(PHPCS_SKIP_KEY,
-        !configuration.getBoolean(PHPCS_SHOULD_RUN_KEY, !parseBoolean(PHPCS_DEFAULT_SKIP)));
-
-    if (skip) {
-      return false;
-    }
-
-    if ( !project.getReuseExistingRulesConfig() && profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty()) {
-      return false;
-    }
-
-    return true;
+    return !configuration.isSkip() && !profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY).isEmpty();
   }
 
   /**
-   * To string.
-   * 
-   * @return the string
-   * 
-   * @see java.lang.Object#toString()
+   * {@inheritDoc}
    */
   @Override
   public String toString() {

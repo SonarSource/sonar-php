@@ -22,20 +22,14 @@
  */
 package org.sonar.plugins.php.cpd;
 
-import static java.lang.Boolean.parseBoolean;
 import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_SHOULD_RUN;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SHOULD_RUN_PROPERTY_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SKIP_PROPERTY_KEY;
 
 import java.io.File;
 
-import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
@@ -48,7 +42,7 @@ import org.sonar.plugins.php.core.PhpPluginExecutionException;
 public class PhpCpdSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCpdSensor.class);
-  private static final String SONAR_PHP_CPD_SKIP_KEY = "sonar.php.cpd.skip";
+
   /** The configuration. */
   private PhpCpdConfiguration configuration;
 
@@ -69,33 +63,21 @@ public class PhpCpdSensor implements Sensor {
   }
 
   /**
-   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   * 
-   * @param project
-   *          the project
-   * 
-   * @return true, if should execute on project
-   * 
-   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
+   * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    Configuration c = project.getConfiguration();
-    Language language = project.getLanguage();
+    if ( !PHP.equals(project.getLanguage())) {
+      return false;
+    }
 
-    Boolean phpcpdShouldRun = c.getBoolean(PHPCPD_SHOULD_RUN_PROPERTY_KEY, parseBoolean(PHPCPD_DEFAULT_SHOULD_RUN));
-    Boolean deprecatedPhpcpdSkip = c.getBoolean(SONAR_PHP_CPD_SKIP_KEY, !phpcpdShouldRun);
-    Boolean phpcpdSkip = c.getBoolean(PHPCPD_SKIP_PROPERTY_KEY, deprecatedPhpcpdSkip);
-
-    return (PHP.equals(language) && !phpcpdSkip);
+    return !configuration.isSkip();
   }
 
   /**
-   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   * {@inheritDoc}
    */
   public void analyse(Project project, SensorContext context) {
-
     try {
-
       if ( !configuration.isAnalyseOnly()) {
         executor.execute();
       }

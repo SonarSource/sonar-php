@@ -19,19 +19,14 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import static java.lang.Boolean.parseBoolean;
 import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_SHOULD_RUN;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_SHOULD_RUN_PROPERTY_KEY;
 
 import java.io.File;
 
-import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
@@ -43,6 +38,7 @@ public class PhpDependSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpDependSensor.class);
 
+  private PhpDependConfiguration configuration;
   private PhpDependExecutor executor;
   private PhpDependResultsParser parser;
 
@@ -50,18 +46,18 @@ public class PhpDependSensor implements Sensor {
    * @param executor
    * @param parser
    */
-  public PhpDependSensor(PhpDependExecutor executor, PhpDependResultsParser parser) {
+  public PhpDependSensor(PhpDependConfiguration config, PhpDependExecutor executor, PhpDependResultsParser parser) {
     super();
+    this.configuration = config;
     this.executor = executor;
     this.parser = parser;
   }
 
   /**
-   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
+   * {@inheritDoc}
    */
   public void analyse(Project project, SensorContext context) {
     try {
-      PhpDependConfiguration configuration = executor.getConfiguration();
       configuration.createWorkingDirectory();
       if ( !configuration.isAnalyseOnly()) {
         executor.execute();
@@ -74,23 +70,18 @@ public class PhpDependSensor implements Sensor {
   }
 
   /**
-   * Returns <code>true</code> if the given project language is PHP and the project configuration is set to allow plugin to run.
-   * 
-   * @param project
-   *          the project
-   * 
-   * @return true, if should execute on project
-   * 
-   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api .resources.Project)
+   * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    Configuration configuration = project.getConfiguration();
-    Language language = project.getLanguage();
-    return PHP.equals(language) && configuration.getBoolean(PDEPEND_SHOULD_RUN_PROPERTY_KEY, parseBoolean(PDEPEND_DEFAULT_SHOULD_RUN));
+    if ( !PHP.equals(project.getLanguage())) {
+      return false;
+    }
+
+    return !configuration.isSkip();
   }
 
   /**
-   * The name of the sensor.
+   * {@inheritDoc}
    */
   @Override
   public String toString() {

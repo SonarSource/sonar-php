@@ -20,102 +20,93 @@
 package org.sonar.plugins.php.phpdepend;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.api.resources.Java.INSTANCE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
 
-import java.io.File;
-
+import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
 import org.junit.Test;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.MockUtils;
+import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 public class PhpDependSensorTest {
 
-  private static final String DEFAULT_REPORT_FILE_NAME = PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME;
-  private static final String DEFAULT_REPORT_FILE_PATH = PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH;
-  private static final String SHOULD_RUN_PROPERTY_KEY = PhpDependConfiguration.PDEPEND_SHOULD_RUN_PROPERTY_KEY;
-  private static final String DEFAULT_SHOULD_RUN = PhpDependConfiguration.PDEPEND_DEFAULT_SHOULD_RUN;
-  private static final String REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
-
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
-    Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(INSTANCE);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getBuildDir()).thenReturn(new File(DEFAULT_REPORT_FILE_PATH));
-    Configuration configuration = mock(Configuration.class);
-    PhpDependResultsParser parser = mock(PhpDependResultsParser.class);
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    when(project.getLanguage()).thenReturn(Java.INSTANCE);
+
     PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSensor sensor = new PhpDependSensor(executor, parser);
-    PhpDependConfiguration config = mock(PhpDependConfiguration.class);
-    when(config.getProject()).thenReturn(project);
-    when(executor.getConfiguration()).thenReturn(config);
+    PhpDependSensor sensor = createSensor(project, executor);
 
-    when(configuration.getString(PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
-
-    // when(config.isShouldRun()).thenReturn(true);
-    // new Php();
-
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
-
-    // when(config.isShouldRun()).thenReturn(false);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
-  public void shouldLaunchOnPhpProjectIfConfiguredSo() {
-    Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getBuildDir()).thenReturn(new File(DEFAULT_REPORT_FILE_NAME));
-    Configuration configuration = mock(Configuration.class);
-
-    PhpDependResultsParser parser = mock(PhpDependResultsParser.class);
+  public void shouldLaunch() {
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
     PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSensor sensor = new PhpDependSensor(executor, parser);
-    PhpDependConfiguration config = mock(PhpDependConfiguration.class);
-    when(executor.getConfiguration()).thenReturn(config);
-    when(config.getProject()).thenReturn(project);
+    PhpDependSensor sensor = createSensor(project, executor);
 
-    String reportFileNamePropertyKey = PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
-    when(configuration.getString(reportFileNamePropertyKey, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
-    // when(config.shouldExecuteOnProject()).thenReturn(true);
-    when(configuration.getBoolean(SHOULD_RUN_PROPERTY_KEY, Boolean.parseBoolean(DEFAULT_SHOULD_RUN))).thenReturn(Boolean.TRUE);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    when(project.getPom()).thenReturn(new MavenProject());
     assertEquals(true, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
-  public void shouldNotLaunchOnPhpProjectIfConfiguredSo() {
-    Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(Php.PHP);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getBuildDir()).thenReturn(new File(DEFAULT_REPORT_FILE_PATH));
-    Configuration configuration = mock(Configuration.class);
-
-    PhpDependResultsParser parser = mock(PhpDependResultsParser.class);
+  public void shouldNotLaunchIfSkip() {
+    Configuration conf = new BaseConfiguration();
+    conf.setProperty("sonar.phpDepend.skip", true);
+    Project project = MockUtils.createMockProject(conf);
     PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSensor sensor = new PhpDependSensor(executor, parser);
-    PhpDependConfiguration config = mock(PhpDependConfiguration.class);
-    when(executor.getConfiguration()).thenReturn(config);
+    PhpDependSensor sensor = createSensor(project, executor);
 
-    when(configuration.getString(PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
-    when(configuration.getBoolean(SHOULD_RUN_PROPERTY_KEY, Boolean.FALSE)).thenReturn(Boolean.FALSE);
-    when(project.getConfiguration()).thenReturn(configuration);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
+
+  @Test
+  public void testAnalyse() {
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpDependExecutor executor = mock(PhpDependExecutor.class);
+    PhpDependSensor sensor = createSensor(project, executor);
+    SensorContext context = mock(SensorContext.class);
+    sensor.analyse(project, context);
+
+    verify(executor, times(1)).execute();
+  }
+
+  @Test
+  public void testAnalyseWithoutExecutingTool() {
+    Configuration conf = new BaseConfiguration();
+    conf.setProperty("sonar.phpDepend.analyzeOnly", true);
+    Project project = MockUtils.createMockProject(conf);
+    PhpDependExecutor executor = mock(PhpDependExecutor.class);
+    PhpDependSensor sensor = createSensor(project, executor);
+    SensorContext context = mock(SensorContext.class);
+    sensor.analyse(project, context);
+
+    verify(executor, never()).execute();
+  }
+
+  @Test
+  public void testAnalyzeExitsGracefullyOnError() {
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpDependExecutor executor = mock(PhpDependExecutor.class);
+    doThrow(new PhpPluginExecutionException()).when(executor).execute();
+    PhpDependSensor sensor = createSensor(project, executor);
+    SensorContext context = mock(SensorContext.class);
+    sensor.analyse(project, context);
+  }
+
+  protected PhpDependSensor createSensor(Project project, PhpDependExecutor executor) {
+    PhpDependResultsParser parser = mock(PhpDependResultsParser.class);
+    PhpDependSensor sensor = new PhpDependSensor(new PhpDependConfiguration(project), executor, parser);
+    return sensor;
+  }
+
 }

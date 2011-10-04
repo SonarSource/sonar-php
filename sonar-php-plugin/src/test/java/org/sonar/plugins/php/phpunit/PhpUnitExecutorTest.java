@@ -58,7 +58,7 @@ public class PhpUnitExecutorTest {
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
     PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
-    when(config.shouldRunCoverage()).thenReturn(false);
+    when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
     assertTrue("Should not return any coverage options", !commandLine.contains("--coverage-clover=phpUnit.coverage.xml"));
@@ -87,7 +87,7 @@ public class PhpUnitExecutorTest {
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
     PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
-    when(config.shouldRunCoverage()).thenReturn(false);
+    when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     File reportFile = new File("phpunit.xml");
     when(config.getReportFile()).thenReturn(reportFile);
@@ -121,7 +121,7 @@ public class PhpUnitExecutorTest {
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
     PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
-    when(config.shouldRunCoverage()).thenReturn(false);
+    when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
     assertThat(commandLine).isNotEmpty();
@@ -153,7 +153,7 @@ public class PhpUnitExecutorTest {
     when(configuration.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
 
     PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
-    when(config.shouldRunCoverage()).thenReturn(false);
+    when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
     assertThat(commandLine).isNotEmpty();
@@ -185,7 +185,7 @@ public class PhpUnitExecutorTest {
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
     PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
-    when(config.shouldRunCoverage()).thenReturn(false);
+    when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
     assertThat(commandLine).isNotEmpty();
@@ -215,7 +215,7 @@ public class PhpUnitExecutorTest {
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir, testDir2));
 
     PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
-    when(config.shouldRunCoverage()).thenReturn(false);
+    when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
     assertThat(commandLine).isNotEmpty();

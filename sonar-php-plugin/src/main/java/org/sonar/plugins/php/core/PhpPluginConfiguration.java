@@ -24,7 +24,7 @@ package org.sonar.plugins.php.core;
 
 /**
  * @author Akram Ben Aissi
- *
+ * 
  */
 public final class PhpPluginConfiguration {
 

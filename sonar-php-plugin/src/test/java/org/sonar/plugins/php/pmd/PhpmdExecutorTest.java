@@ -56,7 +56,7 @@ public class PhpmdExecutorTest {
       }
     }
   }
-  
+
   /**
    * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()} .
    */
@@ -78,7 +78,7 @@ public class PhpmdExecutorTest {
     String f1 = new File("C:/projets/PHP/Monkey/sources/main").toString();
     String f2 = getFile("C:/projets/PHP/Monkey/target/pmd.xml");
     String[] expected = new String[] { "phpmd.bat", f1, "xml", "codesize,unusedcode,naming", "--reportfile", f2, "--extensions",
-      StringUtils.join(extensions, ",") };
+        StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(Arrays.asList(expected));
   }
@@ -108,7 +108,7 @@ public class PhpmdExecutorTest {
     String f1 = new File("C:/projets/PHP/Monkey/sources/main").toString();
     String f2 = getFile("C:/projets/PHP/Monkey/target/pmd.xml");
     String[] expected = new String[] { "phpmd.bat", f1, "xml", "codesize,unusedcode,naming", "--reportfile", f2, "--extensions",
-      StringUtils.join(extensions, ",") };
+        StringUtils.join(extensions, ",") };
     assertThat(commandLine).isEqualTo(Arrays.asList(expected));
   }
 

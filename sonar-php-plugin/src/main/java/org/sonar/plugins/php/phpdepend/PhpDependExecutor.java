@@ -59,6 +59,9 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
     PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected List<String> getCommandLine() {
     List<String> result = new ArrayList<String>();
@@ -95,6 +98,9 @@ public class PhpDependExecutor extends PhpPluginAbstractExecutor {
     return result;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected String getExecutedTool() {
     return PhpDependConfiguration.PDEPEND_COMMAND_LINE;

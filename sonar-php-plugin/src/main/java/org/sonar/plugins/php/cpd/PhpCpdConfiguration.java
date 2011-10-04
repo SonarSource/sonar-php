@@ -62,18 +62,16 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   public static final String PHPCPD_DEFAULT_REPORT_FILE_PATH = "/logs";
   /** The should run property key. */
   public static final String PHPCPD_SHOULD_RUN_PROPERTY_KEY = "sonar.phpcpd.shouldRun";
-  public static final String PHPCPD_DEFAULT_SHOULD_RUN = "true";
-  public static final String PHPCPD_SKIP_PROPERTY_KEY = "sonar.cpd.skip";
+  public static final String PHPCPD_SKIP_KEY = "sonar.phpcpd.skip";
 
   public static final String PHPCPD_ANALYZE_ONLY_KEY = "sonar.phpcpd.analyzeOnly";
-  public static final String PHPCPD_DEFAULT_ANALYZE_ONLY = "false";
   public static final String PHPCPD_ANALYZE_ONLY_MESSAGE = "Only analyze existing phpcpd files";
   public static final String PHPCPD_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse "
       + "the result file. If set to false launch tool and parse result.";
 
   /**
    * Instantiates a new php cpd configuration.
-   *
+   * 
    * @param project
    *          the project
    */
@@ -82,7 +80,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getCommandLine()
+   * {@inheritDoc}
    */
   @Override
   protected String getCommandLine() {
@@ -91,7 +89,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the suffixes command option.
-   *
+   * 
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
@@ -99,7 +97,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getPhpunitArgumentLineKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getArgumentLineKey() {
@@ -107,7 +105,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getPhpunitDefaultArgumentLine()
+   * {@inheritDoc}
    */
   @Override
   protected String getDefaultArgumentLine() {
@@ -115,7 +113,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getDefaultReportFileName()
+   * {@inheritDoc}
    */
   @Override
   protected String getDefaultReportFileName() {
@@ -123,7 +121,7 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getShouldRunKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getShouldRunKey() {
@@ -131,38 +129,23 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#shouldAnalyzeOnlyDefault()
+   * {@inheritDoc}
    */
   @Override
-  protected boolean shouldAnalyzeOnlyDefault() {
-    return Boolean.parseBoolean(PHPCPD_DEFAULT_ANALYZE_ONLY);
+  protected String getSkipKey() {
+    return PHPCPD_SKIP_KEY;
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#shouldRunDefault()
-   *
-   * @deprecated
+   * {@inheritDoc}
    */
-  @Override
-  protected boolean shouldRunDefault() {
-    return true;
-  }
-
-  /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#skipDefault()
-   */
-  @Override
-  protected boolean skipDefault() {
-    return false;
-  }
-
   @Override
   protected String getDefaultReportFilePath() {
     return PHPCPD_DEFAULT_REPORT_FILE_PATH;
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getReportFileRelativePathKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getReportFileRelativePathKey() {
@@ -170,13 +153,17 @@ public class PhpCpdConfiguration extends AbstractPhpPluginConfiguration {
   }
 
   /**
-   * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getReportFileNameKey()
+   * {@inheritDoc}
    */
   @Override
   protected String getReportFileNameKey() {
     return PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected String getShouldAnalyzeOnlyKey() {
     return PHPCPD_ANALYZE_ONLY_KEY;
   }
