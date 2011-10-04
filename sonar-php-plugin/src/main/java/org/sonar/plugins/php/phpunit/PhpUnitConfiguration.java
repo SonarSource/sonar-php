@@ -30,7 +30,7 @@ import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
 
 /**
  * This class handles the php unit configuration.
- *
+ * 
  * @version 0.1 @author JTama
  * @version 0.3 @author Akram Ben Aissi
  */
@@ -81,32 +81,28 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
   public static final String PHPUNIT_MAIN_TEST_FILE_MESSAGE = "File containing the main method calling all the tests";
   public static final String PHPUNIT_MAIN_TEST_FILE_DESCRIPTION = "The project main test file including the relative path "
       + "ie : \"/source/tests/AllTests.php\". If not present, phpunit will look for phpunit.xml file in test directory.";
-  public static final String PHPUNIT_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse the analyzis "
-      + "result file. If set to false the plugin will launch tool and parse result. If the option sonar.dynamicAnalisys is set to true,"
-      + " this plugin will also parse analyzis file only.";
+  public static final String PHPUNIT_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse the analysis "
+      + "result file. If set to false the plugin will launch tool and parse result.";
   public static final String PHPUNIT_SHOULD_RUN_DESCRIPTION = "If set to true the plugin will launch tool and parse result."
       + " If set to false the plugin will only parse the result file.";
   public static final String PHPUNIT_SHOULD_RUN_COVERAGE_DESCRIPTION = "If set to true the plugin will compute coverage on php files";
 
   /**
    * Instantiates a new php unit configuration.
-   *
+   * 
    * @param project
    *          the a project
    */
   public PhpUnitConfiguration(Project project) {
     super(project);
-    if (getShouldAnalyzeOnlyKey() != null) {
-      // Enable dynamic anaylisis if analyze only is set or dynamic analysis is set to false
-      Configuration configuration = project.getConfiguration();
-      analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), shouldAnalyzeOnlyDefault())
-          || !configuration.getBoolean(SONAR_DYNAMIC_ANALYSIS, DEFAULT_SONAR_DYNAMIC_ANALYSIS);
-    }
+    // Enable dynamic analysis if analyze only is set or dynamic analysis is set to false
+    Configuration configuration = project.getConfiguration();
+    analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), shouldAnalyzeOnlyDefault());
   }
 
   /**
    * Gets the main test class.
-   *
+   * 
    * @return the main test class
    */
   public String getMainTestClass() {
@@ -137,7 +133,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the argument line key.
-   *
+   * 
    * @return the argument line key
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getArgumentLineKey()
    */
@@ -148,7 +144,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the command line.
-   *
+   * 
    * @return the command line
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getCommandLine()
    */
@@ -159,7 +155,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the default argument line.
-   *
+   * 
    * @return the default argument line
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getDefaultArgumentLine()
    */
@@ -170,7 +166,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the default report file name.
-   *
+   * 
    * @return the default report file name
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getDefaultReportFileName()
    */
@@ -181,7 +177,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the default report file path.
-   *
+   * 
    * @return the default report file path
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getDefaultReportFilePath()
    */
@@ -192,7 +188,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the report file name key.
-   *
+   * 
    * @return the report file name key
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getReportFileNameKey()
    */
@@ -203,7 +199,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the report file relative path key.
-   *
+   * 
    * @return the report file relative path key
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getReportFileRelativePathKey()
    */
@@ -214,7 +210,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the should analyze only key.
-   *
+   * 
    * @return the should analyze only key
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getShouldAnalyzeOnlyKey()
    */
@@ -225,7 +221,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the should run key.
-   *
+   * 
    * @return the should run key
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#getShouldRunKey()
    */
@@ -236,7 +232,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Should analyze only default.
-   *
+   * 
    * @return true, if should analyze only default
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#shouldAnalyzeOnlyDefault()
    */
@@ -247,6 +243,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Should run default.
+   * 
    * @deprecated
    * @return true, if should run default
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#shouldRunDefault()
@@ -258,6 +255,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Should skip the run default.
+   * 
    * @return false
    * @see org.sonar.plugins.php.core.AbstractPhpPluginConfiguration#skipDefault()
    */
@@ -268,7 +266,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Should run coverage.
-   *
+   * 
    * @return true, if successful
    */
   public boolean shouldRunCoverage() {
@@ -278,7 +276,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the coverage report file.
-   *
+   * 
    * @return the coverage report file
    */
   public File getCoverageReportFile() {
@@ -290,7 +288,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the user defined filter.
-   *
+   * 
    * @return the user defined filter.
    */
   public String getFilter() {
@@ -299,7 +297,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the user defined boot strap.
-   *
+   * 
    * @return the user defined filter.
    */
   public String getBootstrap() {
@@ -308,7 +306,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the user defined configuration file.
-   *
+   * 
    * @return the user defined configuration file.
    */
   public String getConfiguration() {
@@ -317,7 +315,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the user defined loader.
-   *
+   * 
    * @return the user defined loader.
    */
   public String getLoader() {
@@ -326,7 +324,7 @@ public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
 
   /**
    * Gets the user defined group.
-   *
+   * 
    * @return the user defined group.
    */
   public String getGroup() {

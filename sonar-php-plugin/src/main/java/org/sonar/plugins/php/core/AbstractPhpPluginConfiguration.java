@@ -30,7 +30,7 @@ import org.sonar.api.BatchExtension;
 import org.sonar.api.resources.Project;
 
 /**
- *
+ * 
  * Each php plugin should redefine properties names, it handles common properties initialization.
  */
 public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
@@ -39,8 +39,6 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpPluginConfiguration.class);
   /** Suffix used by windows for script files */
   private static final String WINDOWS_BAT_SUFFIX = ".bat";
-  protected static final String SONAR_DYNAMIC_ANALYSIS = "sonar.dynamicAnalysis";
-  protected static final Boolean DEFAULT_SONAR_DYNAMIC_ANALYSIS = true;
 
   protected Project project;
   /** Indicates whether the plugin should only analyze results or launch tool. */
@@ -77,7 +75,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Gets the argument line.
-   *
+   * 
    * @return the argument line
    */
   public String getArgumentLine() {
@@ -86,13 +84,13 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Gets operating system dependent launching script name.
-   *
+   * 
    * <pre>
    * As an example:
    * For windows php unit launching script is : punit.bat
    * For Unix  php unit launching script is : punit
    * </pre>
-   *
+   * 
    * @return the command line
    */
   public String getOsDependentToolScriptName() {
@@ -119,12 +117,12 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Gets the report file.
-   *
+   * 
    * <pre>
    * The path is construct as followed :
    * {PORJECT_BUILD_DIR}\{CONFIG_RELATIVE_REPORT_FILE}\{CONFIG_REPORT_FILE_NAME}
    * </pre>
-   *
+   * 
    * @return the report file
    */
   public File getReportFile() {
@@ -138,7 +136,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Gets the source directories.
-   *
+   * 
    * @return the source directories
    */
   public List<File> getSourceDirectories() {
@@ -147,7 +145,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Gets the project test source directories.
-   *
+   * 
    * @return List<File> A list of all test source folders
    */
   public List<File> getTestDirectories() {
@@ -156,7 +154,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Checks if is analyze only.
-   *
+   * 
    * @return true, if is analyze only
    */
   public boolean isAnalyseOnly() {
@@ -165,7 +163,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Checks if running os is windows.
-   *
+   * 
    * @return true, if os is windows
    */
   public boolean isOsWindows() {
@@ -187,7 +185,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
    * value.equals("  ") return false
    * value.equals(" toto ") return true
    * </pre>
-   *
+   * 
    * @param key
    *          the property's key
    * @return <code>true<code> if property is not null or empty; <code>false</code> any other way.
@@ -198,49 +196,49 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Gets the argument line key.
-   *
+   * 
    * @return the argument line key
    */
   protected abstract String getArgumentLineKey();
 
   /**
    * Gets the command line.
-   *
+   * 
    * @return the command line
    */
   protected abstract String getCommandLine();
 
   /**
    * Gets the default argument line.
-   *
+   * 
    * @return the default argument line
    */
   protected abstract String getDefaultArgumentLine();
 
   /**
    * Gets the default report file name.
-   *
+   * 
    * @return the default report file name
    */
   protected abstract String getDefaultReportFileName();
 
   /**
    * Gets the default report file path.
-   *
+   * 
    * @return the default report file path
    */
   protected abstract String getDefaultReportFilePath();
 
   /**
    * Gets the report file name key.
-   *
+   * 
    * @return the report file name key
    */
   protected abstract String getReportFileNameKey();
 
   /**
    * Gets the report file relative path.
-   *
+   * 
    * @return the report file relative path
    */
   public String getReportFileRelativePath() {
@@ -249,44 +247,44 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
 
   /**
    * Gets the report file relative path key.
-   *
+   * 
    * @return the report file relative path key
    */
   protected abstract String getReportFileRelativePathKey();
 
   /**
    * Gets the should analyze only key.
-   *
+   * 
    * @return the should analyze only key
    */
   protected abstract String getShouldAnalyzeOnlyKey();
 
   /**
    * Gets the should run key.
-   *
+   * 
    * @return the should run key
    */
   protected abstract String getShouldRunKey();
 
   /**
    * Should analyze only default.
-   *
+   * 
    * @return true, if successful
    */
   protected abstract boolean shouldAnalyzeOnlyDefault();
 
   /**
    * Should run default.
-   *
+   * 
    * @deprecated
-   *
+   * 
    * @return true, if successful
    */
   protected abstract boolean shouldRunDefault();
 
   /**
    * Skip the the tool execution default.
-   *
+   * 
    * @return bool
    */
   protected abstract boolean skipDefault();
