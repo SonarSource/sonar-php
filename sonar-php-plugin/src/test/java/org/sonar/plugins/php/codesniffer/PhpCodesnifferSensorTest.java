@@ -46,7 +46,7 @@ public class PhpCodesnifferSensorTest {
     Project project = mock(Project.class);
     when(project.getLanguage()).thenReturn(Java.INSTANCE);
 
-    PhpCodesnifferSensor sensor = createSensor(project, null, null, false);
+    PhpCodeSnifferSensor sensor = createSensor(project, null, null, false);
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
@@ -55,7 +55,7 @@ public class PhpCodesnifferSensorTest {
     RulesProfile profile = createRulesProfile();
     Project project = MockUtils.createMockProject(new BaseConfiguration());
     PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
-    PhpCodesnifferSensor sensor = createSensor(project, executor, profile, false);
+    PhpCodeSnifferSensor sensor = createSensor(project, executor, profile, false);
 
     assertEquals(true, sensor.shouldExecuteOnProject(project));
   }
@@ -67,7 +67,7 @@ public class PhpCodesnifferSensorTest {
 
     Project project = MockUtils.createMockProject(new BaseConfiguration());
     PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
-    PhpCodesnifferSensor sensor = createSensor(project, executor, profile, true);
+    PhpCodeSnifferSensor sensor = createSensor(project, executor, profile, true);
 
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
@@ -79,16 +79,16 @@ public class PhpCodesnifferSensorTest {
 
     Project project = MockUtils.createMockProject(new BaseConfiguration());
     PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
-    PhpCodesnifferSensor sensor = createSensor(project, executor, profile, false);
+    PhpCodeSnifferSensor sensor = createSensor(project, executor, profile, false);
 
     assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
-  protected PhpCodesnifferSensor createSensor(Project project, PhpCodeSnifferExecutor executor, RulesProfile profile, boolean skip) {
+  protected PhpCodeSnifferSensor createSensor(Project project, PhpCodeSnifferExecutor executor, RulesProfile profile, boolean skip) {
     PhpCodeSnifferViolationsXmlParser parser = mock(PhpCodeSnifferViolationsXmlParser.class);
     PhpCodeSnifferConfiguration conf = mock(PhpCodeSnifferConfiguration.class);
     when(conf.isSkip()).thenReturn(skip);
-    return new PhpCodesnifferSensor(conf, executor, profile, parser);
+    return new PhpCodeSnifferSensor(conf, executor, profile, parser);
   }
 
   protected RulesProfile createRulesProfile() {

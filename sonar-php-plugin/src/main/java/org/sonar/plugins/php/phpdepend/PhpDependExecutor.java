@@ -34,12 +34,12 @@ import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
+import org.sonar.plugins.php.core.AbstractPhpExecutor;
 
 /**
  * The Class PhpDependExecutor.
  */
-public class PhpDependExecutor extends PhpPluginAbstractExecutor {
+public class PhpDependExecutor extends AbstractPhpExecutor {
 
   /**
    * 

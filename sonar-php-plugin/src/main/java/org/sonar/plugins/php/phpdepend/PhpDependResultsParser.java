@@ -231,7 +231,7 @@ public class PhpDependResultsParser implements BatchExtension {
         collectFunctionsMeasures(funcNode, file, methodComplexityDistribution);
       }
     }
-    // String fileName = fileNode.getFileName();
+
     context.saveMeasure(file, classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
     context.saveMeasure(file, methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
   }

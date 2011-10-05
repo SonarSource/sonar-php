@@ -22,9 +22,9 @@ package org.sonar.plugins.php.codesniffer;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
-import static org.sonar.plugins.php.core.PhpPlugin.FILE_SUFFIXES_KEY;
 
 import java.io.File;
 import java.util.List;
@@ -33,7 +33,7 @@ import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.core.PhpPlugin;
+import org.sonar.plugins.php.PhpPlugin;
 
 /**
  * @author akram

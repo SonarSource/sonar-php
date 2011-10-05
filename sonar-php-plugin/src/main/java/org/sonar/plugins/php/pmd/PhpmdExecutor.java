@@ -34,12 +34,12 @@ import java.util.List;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
+import org.sonar.plugins.php.core.AbstractPhpExecutor;
 
 /**
  * The Class PhpCheckstyleExecutor.
  */
-public class PhpmdExecutor extends PhpPluginAbstractExecutor {
+public class PhpmdExecutor extends AbstractPhpExecutor {
 
   private static final String PHPMD_PATH_SEPARATOR = ",";
   /** The config. */

@@ -24,12 +24,12 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
+import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
 /**
  * The PhpPmd configuration class. It handles report file path and name with default options
  */
-public class PhpmdConfiguration extends AbstractPhpPluginConfiguration {
+public class PhpmdConfiguration extends AbstractPhpConfiguration {
 
   private static final String PHPMD_COMMAND_LINE = "phpmd";
   public static final String PHPMD_DEFAULT_REPORT_FILE_NAME = "pmd.xml";

@@ -76,7 +76,6 @@ public class PhpmdSensor implements Sensor {
    */
   public void analyse(Project project, SensorContext context) {
     if ( !configuration.isAnalyseOnly()) {
-      // PhpmdExecutor executor = new PhpmdExecutor(config);
       configuration.createWorkingDirectory();
       executor.execute();
     }

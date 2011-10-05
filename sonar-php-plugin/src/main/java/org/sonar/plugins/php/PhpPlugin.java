@@ -17,8 +17,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.core;
+package org.sonar.plugins.php;
 
+import static org.sonar.plugins.php.PhpPlugin.DEFAULT_SUFFIXES;
+import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_DESCRIPTION;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_MESSAGE;
@@ -26,8 +28,6 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPC
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_DESCRIPTION;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_MESSAGE;
-import static org.sonar.plugins.php.core.PhpPlugin.DEFAULT_SUFFIXES;
-import static org.sonar.plugins.php.core.PhpPlugin.FILE_SUFFIXES_KEY;
 import static org.sonar.plugins.php.core.PhpPluginConfiguration.PDEPEND_EXECUTE_DESCRIPTION;
 import static org.sonar.plugins.php.core.PhpPluginConfiguration.PDEPEND_EXECUTE_MESSAGE;
 import static org.sonar.plugins.php.core.PhpPluginConfiguration.PHPCPD_EXECUTE_DESCRIPTION;
@@ -81,7 +81,10 @@ import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileExporter;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileImporter;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferViolationsXmlParser;
-import org.sonar.plugins.php.codesniffer.PhpCodesnifferSensor;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferSensor;
+import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
+import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
+import org.sonar.plugins.php.core.PhpSourceImporter;
 import org.sonar.plugins.php.cpd.PhpCpdConfiguration;
 import org.sonar.plugins.php.cpd.PhpCpdExecutor;
 import org.sonar.plugins.php.cpd.PhpCpdResultParser;
@@ -201,7 +204,7 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PhpCodeSnifferRuleRepository.class);
     extensions.add(PhpCodeSnifferExecutor.class);
     extensions.add(PhpCodeSnifferViolationsXmlParser.class);
-    extensions.add(PhpCodesnifferSensor.class);
+    extensions.add(PhpCodeSnifferSensor.class);
     extensions.add(PhpCodeSnifferProfile.class);
     extensions.add(PhpCodeSnifferConfiguration.class);
     extensions.add(PhpCodeSnifferPriorityMapper.class);

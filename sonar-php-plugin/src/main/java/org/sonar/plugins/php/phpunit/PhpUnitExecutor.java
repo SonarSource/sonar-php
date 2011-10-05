@@ -45,13 +45,14 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
+import org.sonar.plugins.php.core.AbstractPhpExecutor;
 
 /**
  * The Class PhpUnitExecutor.
  */
-public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
+public class PhpUnitExecutor extends AbstractPhpExecutor {
 
   /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitExecutor.class);
@@ -160,7 +161,7 @@ public class PhpUnitExecutor extends PhpPluginAbstractExecutor {
       // in case of multiple source directories, phpunit.xml file is generated and passed to phpunit.
       LOG.warn("Phpunit does not support multiple source directories for the moment.");
       LOG.warn("Group your tests folder under the same directory or use phpunit.xml file");
-      List<File> testFiles = project.getFileSystem().getTestFiles(PHP);
+      List<File> testFiles = InputFileUtils.toFiles(project.getFileSystem().testFiles("php"));
       LOG.info("Generating phpunit.xml file containing all your test files...");
       File phpunitXml = createPhpunitConfigurationFile(testFiles);
       LOG.warn(phpunitXml + " file generated.");

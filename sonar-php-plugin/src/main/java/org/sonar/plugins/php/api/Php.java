@@ -22,7 +22,7 @@ package org.sonar.plugins.php.api;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.AbstractLanguage;
-import org.sonar.plugins.php.core.PhpPlugin;
+import org.sonar.plugins.php.PhpPlugin;
 
 /**
  * This class defines the PHP language.

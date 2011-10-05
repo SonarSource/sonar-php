@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.ProfileImporter;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.pmd.PhpmdProfileImporter;
 import org.sonar.plugins.php.pmd.xml.PmdProperty;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
@@ -51,7 +50,7 @@ public abstract class PhpProfileImporter extends ProfileImporter {
     setSupportedLanguages(Php.KEY);
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(PhpmdProfileImporter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpProfileImporter.class);
 
   /**
    * @param messages

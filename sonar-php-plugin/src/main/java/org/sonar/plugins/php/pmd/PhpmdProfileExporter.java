@@ -89,9 +89,9 @@ public class PhpmdProfileExporter extends ProfileExporter {
     PmdRuleset ruleset = new PmdRuleset(profileName);
 
     for (ActiveRule activeRule : activeRules) {
-      if (activeRule.getRule().getPluginName().equals(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY)) {
+      if (activeRule.getRule().getRepositoryKey().equals(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY)) {
         String configKey = activeRule.getRule().getConfigKey();
-        PmdRule rule = new PmdRule(configKey, mapper.to(activeRule.getPriority()));
+        PmdRule rule = new PmdRule(configKey, mapper.to(activeRule.getSeverity()));
         List<ActiveRuleParam> activeRuleParams = activeRule.getActiveRuleParams();
         if (activeRuleParams != null && !activeRuleParams.isEmpty()) {
           List<PmdProperty> properties = new ArrayList<PmdProperty>();

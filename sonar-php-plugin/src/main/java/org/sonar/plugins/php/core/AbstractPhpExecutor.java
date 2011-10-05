@@ -43,7 +43,7 @@ import org.sonar.api.profiles.RulesProfile;
  * streams and logging. In nominal case implementing executor should just construct the desire command line.
  */
 
-public abstract class PhpPluginAbstractExecutor implements BatchExtension {
+public abstract class AbstractPhpExecutor implements BatchExtension {
 
   /**
    * The Class AsyncPipe.
@@ -93,7 +93,7 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
   }
 
   /** The logger */
-  private static final Logger LOG = LoggerFactory.getLogger(PhpPluginAbstractExecutor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpExecutor.class);
   private static final int DEFAUT_BUFFER_INITIAL_SIZE = 1024;
   private static final String RULESET_PREFIX = "ruleset";
   private static final String XML_SUFFIX = ".xml";
@@ -129,7 +129,7 @@ public abstract class PhpPluginAbstractExecutor implements BatchExtension {
     }
   }
 
-  protected File getRuleset(AbstractPhpPluginConfiguration configuration, RulesProfile profile, ProfileExporter exporter) {
+  protected File getRuleset(AbstractPhpConfiguration configuration, RulesProfile profile, ProfileExporter exporter) {
     File workingDir = configuration.createWorkingDirectory();
     File ruleset = null;
     try {

@@ -37,12 +37,12 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.plugins.php.core.PhpPluginAbstractExecutor;
+import org.sonar.plugins.php.core.AbstractPhpExecutor;
 
 /**
  * The Class PhpCheckstyleExecutor.
  */
-public class PhpCodeSnifferExecutor extends PhpPluginAbstractExecutor {
+public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
 
   private static final String EXCLUSION_PATTERN_SEPARATOR = ",";
 

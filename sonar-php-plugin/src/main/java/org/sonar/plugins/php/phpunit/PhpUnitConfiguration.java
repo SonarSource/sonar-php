@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.commons.configuration.Configuration;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
+import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
 /**
  * This class handles the php unit configuration.
@@ -34,7 +34,7 @@ import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
  * @version 0.1 @author JTama
  * @version 0.3 @author Akram Ben Aissi
  */
-public class PhpUnitConfiguration extends AbstractPhpPluginConfiguration {
+public class PhpUnitConfiguration extends AbstractPhpConfiguration {
 
   public static final String PHPUNIT_DEFAULT_REPORT_FILE_NAME = "phpunit.xml";
   public static final String PHPUNIT_DEFAULT_REPORT_FILE_PATH = "/logs";

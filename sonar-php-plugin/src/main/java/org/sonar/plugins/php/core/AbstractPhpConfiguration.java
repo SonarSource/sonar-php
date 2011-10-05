@@ -33,10 +33,10 @@ import org.sonar.api.resources.Project;
  * 
  * Each php plugin should redefine properties names, it handles common properties initialization.
  */
-public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
+public abstract class AbstractPhpConfiguration implements BatchExtension {
 
   /** The logger. */
-  private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpPluginConfiguration.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpConfiguration.class);
   /** Suffix used by windows for script files */
   private static final String WINDOWS_BAT_SUFFIX = ".bat";
 
@@ -55,7 +55,7 @@ public abstract class AbstractPhpPluginConfiguration implements BatchExtension {
   /**
    * @param project
    */
-  protected AbstractPhpPluginConfiguration(Project project) {
+  protected AbstractPhpConfiguration(Project project) {
     this.project = project;
     Configuration configuration = getProject().getConfiguration();
     this.reportFileName = configuration.getString(getReportFileNameKey(), getDefaultReportFileName());

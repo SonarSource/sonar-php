@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.sonar.api.CoreProperties.PROJECT_EXCLUSIONS_PROPERTY;
 import static org.sonar.plugins.php.MockUtils.getFile;
 import static org.sonar.plugins.php.MockUtils.getMockProject;
-import static org.sonar.plugins.php.core.PhpPlugin.FILE_SUFFIXES_KEY;
+import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
 
 import java.io.File;

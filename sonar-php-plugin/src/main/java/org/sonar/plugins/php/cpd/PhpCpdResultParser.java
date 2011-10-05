@@ -54,7 +54,6 @@ import com.thoughtworks.xstream.XStream;
  * @author akram
  * 
  */
-@SuppressWarnings("unchecked")
 public class PhpCpdResultParser implements BatchExtension {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCpdResultParser.class);
@@ -107,8 +106,7 @@ public class PhpCpdResultParser implements BatchExtension {
    */
   private void parseFile(SensorContext context, File file, Project project) {
     List<DuplicationNode> duplications = getDuplications(file);
-    @SuppressWarnings("unchecked")
-    Map<Resource, ClassDuplicationData> duplicationsData = new HashMap<Resource, ClassDuplicationData>();
+    Map<Resource<?>, ClassDuplicationData> duplicationsData = new HashMap<Resource<?>, ClassDuplicationData>();
 
     for (DuplicationNode duplication : duplications) {
       List<FileNode> files = duplication.getFiles();
@@ -131,7 +129,7 @@ public class PhpCpdResultParser implements BatchExtension {
    * @param duplication
    * @param project
    */
-  private void processClassMeasure(SensorContext context, Map<Resource, ClassDuplicationData> duplicationsData, FileNode original,
+  private void processClassMeasure(SensorContext context, Map<Resource<?>, ClassDuplicationData> duplicationsData, FileNode original,
       FileNode copied, DuplicationNode duplication, Project project) {
     org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(new File(copied.getPath()), project);
     org.sonar.api.resources.File targetPhpClass = org.sonar.api.resources.File.fromIOFile(new File(original.getPath()), project);
@@ -193,7 +191,7 @@ public class PhpCpdResultParser implements BatchExtension {
     private double duplicatedLines;
     private double duplicatedBlocks;
 
-    private Resource resource;
+    private Resource<?> resource;
     private SensorContext context;
     private List<StringBuilder> duplicationXMLEntries = new ArrayList<StringBuilder>();
 
@@ -203,7 +201,7 @@ public class PhpCpdResultParser implements BatchExtension {
      * @param resource
      * @param context
      */
-    private ClassDuplicationData(Resource resource, SensorContext context) {
+    private ClassDuplicationData(Resource<?> resource, SensorContext context) {
       this.context = context;
       this.resource = resource;
     }
@@ -217,8 +215,8 @@ public class PhpCpdResultParser implements BatchExtension {
      * @param duplicatedLines
      */
 
-    protected void cumulate(Resource target, Double targetDuplicationStartLine, Double duplicationStartLine, Double duplicatedLines) {
-      Resource resolvedResource = context.getResource(target);
+    protected void cumulate(Resource<?> target, Double targetDuplicationStartLine, Double duplicationStartLine, Double duplicatedLines) {
+      Resource<?> resolvedResource = context.getResource(target);
       if (resolvedResource != null) {
         StringBuilder xml = new StringBuilder(SONAR_DUPLICATION_DUPLICATION_LINES_TAG);
         xml.append(duplicatedLines.intValue()).append(SONAR_DUPLICATION_START_ATTRIBUTE).append(duplicationStartLine.intValue());

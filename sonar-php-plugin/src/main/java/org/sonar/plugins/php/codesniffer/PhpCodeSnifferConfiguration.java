@@ -33,12 +33,12 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.core.AbstractPhpPluginConfiguration;
+import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
 /**
  * The Class PhpCheckstyleConfiguration.
  */
-public class PhpCodeSnifferConfiguration extends AbstractPhpPluginConfiguration {
+public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
 
   public static final String PHPCS_DEFAULT_REPORT_FILE_NAME = "codesniffer.xml";
   public static final String PHPCS_DEFAULT_REPORT_FILE_PATH = "/logs";

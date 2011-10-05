@@ -89,9 +89,9 @@ public class PhpCodeSnifferProfileExporter extends ProfileExporter {
   protected PmdRuleset createRuleset(List<ActiveRule> activeRules, String profileName) {
     PmdRuleset ruleset = new PmdRuleset(profileName);
     for (ActiveRule activeRule : activeRules) {
-      if (activeRule.getRule().getPluginName().equals(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY)) {
+      if (activeRule.getRule().getRepositoryKey().equals(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY)) {
         String configKey = activeRule.getRule().getKey();
-        PmdRule rule = new PmdRule(configKey, mapper.to(activeRule.getPriority()));
+        PmdRule rule = new PmdRule(configKey, mapper.to(activeRule.getSeverity()));
         List<PmdProperty> properties = null;
         List<ActiveRuleParam> activeRuleParams = activeRule.getActiveRuleParams();
         if (activeRuleParams != null && !activeRuleParams.isEmpty()) {

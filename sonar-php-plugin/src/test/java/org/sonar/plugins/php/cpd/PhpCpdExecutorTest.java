@@ -36,7 +36,7 @@ import java.util.List;
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.core.PhpPlugin;
+import org.sonar.plugins.php.PhpPlugin;
 
 /**
  * @author akram

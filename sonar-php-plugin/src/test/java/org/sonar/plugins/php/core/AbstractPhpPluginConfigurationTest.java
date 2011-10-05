@@ -105,7 +105,7 @@ public class AbstractPhpPluginConfigurationTest {
     assertEquals(false, conf.isSkip());
   }
 
-  class FakeConfiguration extends AbstractPhpPluginConfiguration {
+  class FakeConfiguration extends AbstractPhpConfiguration {
 
     public FakeConfiguration(Project project) {
       super(project);
