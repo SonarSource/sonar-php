@@ -20,8 +20,6 @@
 package org.sonar.plugins.php.cpd;
 
 import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_COMMAND_LINE;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DIRECTORY_SEPARATOR;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_EXCLUDE_OPTION;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_EXCLUDE_PACKAGE_KEY;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_MODIFIER;
@@ -39,6 +37,8 @@ import org.sonar.plugins.php.core.AbstractPhpExecutor;
  * The Class PhpDependExecutor.
  */
 public class PhpCpdExecutor extends AbstractPhpExecutor {
+
+  private static final String PHPCPD_DIRECTORY_SEPARATOR = " ";
 
   /** The configuration. */
   private PhpCpdConfiguration configuration;
@@ -100,7 +100,7 @@ public class PhpCpdExecutor extends AbstractPhpExecutor {
    */
   @Override
   protected String getExecutedTool() {
-    return PHPCPD_COMMAND_LINE;
+    return configuration.getCommandLine();
   }
 
   /**

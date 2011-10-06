@@ -40,52 +40,34 @@ import org.sonar.plugins.php.core.AbstractPhpConfiguration;
  */
 public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
 
-  public static final String PHPCS_DEFAULT_REPORT_FILE_NAME = "codesniffer.xml";
-  public static final String PHPCS_DEFAULT_REPORT_FILE_PATH = "/logs";
-  public static final String PHPCS_REPORT_FILE_NAME_PROPERTY_KEY = "sonar.phpCodesniffer.reportFileName";
-  public static final String PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = "sonar.phpCodesniffer.reportFileRelativePath";
-  public static final String PHPCS_ANALYZE_ONLY_KEY = "sonar.phpCodesniffer.analyzeOnly";
-  public static final String PHPCS_SHOULD_RUN_KEY = "sonar.phpCodesniffer.shouldRun";
-  public static final String PHPCS_SKIP_KEY = "sonar.phpCodesniffer.skip";
-  public static final String PHPCS_SEVERITY_KEY = "sonar.phpCodesniffer.levelArgument";
+  private static final String PHPCS_COMMAND_LINE = "phpcs";
+  private static final String PHP_CODESNIFFER_TMP_RULESET_FILENAME = "phpcs-ruleset.xml";
 
-  public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER = "--severity=";
-  public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY = "sonar.phpCodesniffer.severity.modifier";
-
-  public static final String PHPCS_STANDARD_ARGUMENT_KEY = "sonar.phpCodesniffer.standardArgument";
-  public static final String PHPCS_DEFAULT_STANDARD_ARGUMENT = "Pear";
-  public static final String PHPCS_STANDARD_MODIFIER = "--standard=";
-  public static final String PHPCS_STANDARD_MESSAGE = "Ruleset (or standard) to run PHP_CodeSniffer with";
-  public static final String PHPCS_STANDARD_DESCRIPTION = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. "
-      + "If no one is specified all standards will be launched";
-
-  public static final String PHPCS_REPORT_FILE_MODIFIER = "--report-file=";
-  public static final String PHPCS_ARGUMENT_LINE_KEY = "sonar.phpCodesniffer.argumentLine";
-  public static final String PHPCS_DEFAULT_ARGUMENT_LINE = " ";
-  public static final String PHPCS_IGNORE_ARGUMENT_KEY = "sonar.phpCodesniffer.ignoreArgument";
+  // -- CodeSniffer tool options ---
   public static final String PHPCS_REPORT_MODIFIER = "--report=checkstyle";
+  public static final String PHPCS_REPORT_FILE_MODIFIER = "--report-file=";
+  public static final String PHPCS_STANDARD_MODIFIER = "--standard=";
+  public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER = "--severity=";
   public static final String PHPCS_EXTENSIONS_MODIFIER = "--extensions=";
   public static final String PHPCS_IGNORE_MODIFIER = "--ignore=";
 
-  public static final String PHPCS_ANALYZE_ONLY_MESSAGE = "Only analyze existing PHP_CodeSniffer violation files";
-  public static final String PHPCS_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will the plugin will only parse the result file."
-      + " If set to false launch tool and parse result.";
-  /** The Constant PDEPEND_COMMAND_LINE. */
+  // --- Sonar config parameters ---
+  public static final String PHPCS_SKIP_KEY = "sonar.phpCodesniffer.skip";
+  public static final String PHPCS_SHOULD_RUN_KEY = "sonar.phpCodesniffer.shouldRun"; // OLD param that will be removed soon
+  public static final String PHPCS_ANALYZE_ONLY_KEY = "sonar.phpCodesniffer.analyzeOnly";
+  public static final String PHPCS_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpCodesniffer.reportFileRelativePath";
+  public static final String PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
+  public static final String PHPCS_REPORT_FILE_NAME_KEY = "sonar.phpCodesniffer.reportFileName";
+  public static final String PHPCS_REPORT_FILE_NAME_DEFVALUE = "codesniffer.xml";
+  public static final String PHPCS_STANDARD_ARGUMENT_KEY = "sonar.phpCodesniffer.standardArgument";
+  public static final String PHPCS_STANDARD_ARGUMENT_DEFVALUE = "Pear";
+  public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY = "sonar.phpCodesniffer.severity.modifier";
+  public static final String PHPCS_SEVERITY_KEY = "sonar.phpCodesniffer.levelArgument";
+  public static final String PHPCS_IGNORE_ARGUMENT_KEY = "sonar.phpCodesniffer.ignoreArgument";
+  public static final String PHPCS_ARGUMENT_LINE_KEY = "sonar.phpCodesniffer.argumentLine";
 
-  private static final String PHPCS_COMMAND_LINE = "phpcs";
-
-  private static final String PHP_CODESNIFFER_TMP_RULESET_FILENAME = "phpcs-ruleset.xml";
-
-  /**   */
-  private Project project;
-
-  /** Used to export the project current active profile and generate a tmp ruleset to pass to PHP_CodeSniffer. */
   private PhpCodeSnifferProfileExporter exporter;
-
-  /**   */
   private RulesProfile profile;
-
-  /** The rule finder. */
   private RuleFinder ruleFinder;
 
   /**
@@ -96,7 +78,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   public PhpCodeSnifferConfiguration(Project project, PhpCodeSnifferProfileExporter exporter, RulesProfile profile, RuleFinder ruleFinder) {
     super(project);
-    this.project = project;
     this.exporter = exporter;
     this.profile = profile;
     this.ruleFinder = ruleFinder;
@@ -125,7 +106,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFileName() {
-    return PHPCS_DEFAULT_REPORT_FILE_NAME;
+    return PHPCS_REPORT_FILE_NAME_DEFVALUE;
   }
 
   /**
@@ -133,7 +114,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFilePath() {
-    return PHPCS_DEFAULT_REPORT_FILE_PATH;
+    return PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -141,7 +122,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileNameKey() {
-    return PHPCS_REPORT_FILE_NAME_PROPERTY_KEY;
+    return PHPCS_REPORT_FILE_NAME_KEY;
   }
 
   /**
@@ -149,7 +130,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileRelativePathKey() {
-    return PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+    return PHPCS_REPORT_FILE_RELATIVE_PATH_KEY;
   }
 
   /**
@@ -189,7 +170,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultArgumentLine() {
-    return PHPCS_DEFAULT_ARGUMENT_LINE;
+    return " ";
   }
 
   /**
@@ -215,7 +196,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    * @return the standard
    */
   public String getStandard() {
-    return getProject().getConfiguration().getString(PHPCS_STANDARD_ARGUMENT_KEY, PHPCS_DEFAULT_STANDARD_ARGUMENT);
+    return getProject().getConfiguration().getString(PHPCS_STANDARD_ARGUMENT_KEY, PHPCS_STANDARD_ARGUMENT_DEFVALUE);
   }
 
   /**

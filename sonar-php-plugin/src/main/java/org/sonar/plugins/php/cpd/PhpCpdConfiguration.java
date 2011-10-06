@@ -33,41 +33,30 @@ import org.sonar.plugins.php.core.AbstractPhpConfiguration;
  */
 public class PhpCpdConfiguration extends AbstractPhpConfiguration {
 
-  /** PhpCpd command line. */
-  public static final String PHPCPD_COMMAND_LINE = "phpcpd";
+  private static final String PHPCPD_COMMAND_LINE = "phpcpd";
+
+  // -- PHPMD tool options ---
   public static final String PHPCPD_REPORT_FILE_OPTION = "--log-pmd";
-  /** The report file name property key. */
-  public static final String PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY = "sonar.phpcpd.reportFileName";
-  /** The relative report path property key. */
-  public static final String PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = "sonar.phpcpd.reportFileRelativePath";
-
-  /** The default report file name. */
-  public static final String PHPCPD_DEFAULT_REPORT_FILE_NAME = "php-cpd.xml";
   public static final String PHPCPD_SUFFIXES = "--suffixes";
-  public static final String PHPCPD_EXCLUDE_PACKAGE_KEY = "sonar.phpcpd.excludes";
   public static final String PHPCPD_EXCLUDE_OPTION = "--exclude";
-
-  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY = "sonar.phpcpd.min.lines";
   public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_MODIFIER = "--min-lines";
-  public static final String PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES = "3";
-
-  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY = "sonar.phpcpd.min.tokens";
   public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_MODIFIER = "--min-tokens";
-  public static final String PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS = "5";
 
-  public static final String PHPCPD_DIRECTORY_SEPARATOR = " ";
-  public static final String PHPCPD_MODIFIER_VALUE_SEPARATOR = " ";
-  private static final String PHPCPD_SUFFIXE_SEPARATOR = ",";
-  /** The default report path beginning after {PROJETC_BUILD_PATH}. */
-  public static final String PHPCPD_DEFAULT_REPORT_FILE_PATH = "/logs";
-  /** The should run property key. */
-  public static final String PHPCPD_SHOULD_RUN_PROPERTY_KEY = "sonar.phpcpd.shouldRun";
+  // --- Sonar config parameters ---
   public static final String PHPCPD_SKIP_KEY = "sonar.phpcpd.skip";
-
+  public static final String PHPCPD_SHOULD_RUN_KEY = "sonar.phpcpd.shouldRun"; // OLD param that will be removed soon
   public static final String PHPCPD_ANALYZE_ONLY_KEY = "sonar.phpcpd.analyzeOnly";
-  public static final String PHPCPD_ANALYZE_ONLY_MESSAGE = "Only analyze existing phpcpd files";
-  public static final String PHPCPD_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse "
-      + "the result file. If set to false launch tool and parse result.";
+  public static final String PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpcpd.reportFileRelativePath";
+  public static final String PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
+  public static final String PHPCPD_REPORT_FILE_NAME_KEY = "sonar.phpcpd.reportFileName";
+  public static final String PHPCPD_REPORT_FILE_NAME_DEFVALUE = "php-cpd.xml";
+  public static final String PHPCPD_EXCLUDE_PACKAGE_KEY = "sonar.phpcpd.excludes";
+  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY = "sonar.phpcpd.min.lines";
+  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE = "3";
+  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY = "sonar.phpcpd.min.tokens";
+  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE = "5";
+
+  private static final String PHPCPD_SUFFIXE_SEPARATOR = ",";
 
   /**
    * Instantiates a new php cpd configuration.
@@ -117,7 +106,7 @@ public class PhpCpdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFileName() {
-    return PHPCPD_DEFAULT_REPORT_FILE_NAME;
+    return PHPCPD_REPORT_FILE_NAME_DEFVALUE;
   }
 
   /**
@@ -125,7 +114,7 @@ public class PhpCpdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getShouldRunKey() {
-    return PHPCPD_SHOULD_RUN_PROPERTY_KEY;
+    return PHPCPD_SHOULD_RUN_KEY;
   }
 
   /**
@@ -141,7 +130,7 @@ public class PhpCpdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFilePath() {
-    return PHPCPD_DEFAULT_REPORT_FILE_PATH;
+    return PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -149,7 +138,7 @@ public class PhpCpdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileRelativePathKey() {
-    return PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+    return PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY;
   }
 
   /**
@@ -157,7 +146,7 @@ public class PhpCpdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileNameKey() {
-    return PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY;
+    return PHPCPD_REPORT_FILE_NAME_KEY;
   }
 
   /**
@@ -173,7 +162,7 @@ public class PhpCpdConfiguration extends AbstractPhpConfiguration {
    */
   public String getMinimunNumberOfIdenticalLines() {
     Configuration configuration = getProject().getConfiguration();
-    return configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES);
+    return configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE);
   }
 
   /**
@@ -181,7 +170,7 @@ public class PhpCpdConfiguration extends AbstractPhpConfiguration {
    */
   public String getMinimunNumberOfIdenticalTokens() {
     Configuration configuration = getProject().getConfiguration();
-    return configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS);
+    return configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE);
   }
 
   /**

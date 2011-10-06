@@ -30,40 +30,30 @@ import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 public class PhpDependConfiguration extends AbstractPhpConfiguration {
 
   public static final String PDEPEND_COMMAND_LINE = "pdepend";
-  public static final String PDEPEND_DEFAULT_REPORT_FILE_NAME = "pdepend.xml";
-  public static final String DEFAULT_REPORT_FILE_PATH = "/logs";
-  protected static final String PDEPEND_COMMAND_LINE_DEFAUT_PATH = "";
-  protected static final String PDEPEND_KEY_PATH = "sonar.phpdepend.path";
-  protected static final String PDEPEND_OPT = "phpunit-xml";
 
-  public static final String PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY = "sonar.phpDepend.reportFileName";
-  public static final String PDEPEND_ANALYZE_ONLY_PROPERTY_KEY = "sonar.phpDepend.analyzeOnly";
-  public static final String PDEPEND_SKIP_KEY = "sonar.phpDepend.skip";
-  public static final String PDEPEND_SHOULD_RUN_PROPERTY_KEY = "sonar.phpDepend.shouldRun";
-  public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = "sonar.phpDepend.reportFileRelativePath";
-  public static final String PDEPEND_SUFFIXES_OPT = "suffix";
-  public static final String PDEPEND_IGNORE_KEY = "sonar.phpDepend.ignore";
-  public static final String PDEPEND_DEFAULT_IGNORE = " ";
+  // -- PHPDepend tool options ---
+  protected static final String PDEPEND_OPT = "--phpunit-xml";
+  public static final String PDEPEND_SUFFIXES_OPT = "--suffix";
+  public static final String PDEPEND_WITHOUT_ANNOTATION_OPTION = "--without-annotations=";
+  public static final String PDEPEND_BAD_DOCUMENTATION_OPTION = "--bad-documentation=";
+  public static final String PDEPEND_EXCLUDE_OPTION = "--exclude=";
   public static final String PDEPEND_IGNORE_OPTION = "--ignore=";
 
-  public static final String PDEPEND_EXCLUDE_PACKAGE_KEY = "sonar.phpDepend.exclude";
-  public static final String PDEPEND_DEFAULT_EXCLUDE_PACKAGES = " ";
-  public static final String PDEPEND_EXCLUDE_OPTION = "--exclude=";
+  // --- Sonar config parameters ---
+  public static final String PDEPEND_SKIP_KEY = "sonar.phpDepend.skip";
+  public static final String PDEPEND_SHOULD_RUN_PROPERTY_KEY = "sonar.phpDepend.shouldRun"; // OLD param that will be removed soon
+  public static final String PDEPEND_ANALYZE_ONLY_KEY = "sonar.phpDepend.analyzeOnly";
+  public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpDepend.reportFileRelativePath";
+  public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
+  public static final String PDEPEND_REPORT_FILE_NAME_KEY = "sonar.phpDepend.reportFileName";
+  public static final String PDEPEND_REPORT_FILE_NAME_DEFVALUE = "pdepend.xml";
   public static final String PDEPEND_WITHOUT_ANNOTATION_KEY = "sonar.phpDepend.withoutAnnotations";
-  public static final String PDEPEND_DEFAULT_WITHOUT_ANNOTATION = "false";
-  public static final String PDEPEND_WITHOUT_ANNOTATION_OPTION = "--without-annotations=";
+  public static final String PDEPEND_WITHOUT_ANNOTATION_DEFVALUE = "false";
   public static final String PDEPEND_BAD_DOCUMENTATION_KEY = "sonar.phpDepend.badDocumentation";
-  public static final String PDEPEND_DEFAULT_BAD_DOCUMENTATION = "false";
-  public static final String PDEPEND_BAD_DOCUMENTATION_OPTION = "--bad-documentation=";
+  public static final String PDEPEND_BAD_DOCUMENTATION_DEFVALUE = "false";
+  public static final String PDEPEND_EXCLUDE_PACKAGE_KEY = "sonar.phpDepend.exclude";
+  public static final String PDEPEND_IGNORE_KEY = "sonar.phpDepend.ignore";
   public static final String PDEPEND_ARGUMENT_LINE_KEY = "sonar.phpDepend.argumentLine";
-  public static final String PDEPEND_DEFAULT_ARGUMENT_LINE = "";
-
-  public static final String PDEPEND_SHOULD_RUN_DESCRIPTION = "If set to true the plugin will launch tool and parse result."
-      + " If set to false the plugin will only parse the result file.";
-
-  public static final String PDEPEND_ANALYZE_ONLY_MESSAGE = "Only analyze existing pdepend files";
-  public static final String PDEPEND_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will the plugin will only parse "
-      + "the result file. If set to false launch tool and parse result.";
 
   /**
    * Instantiates a new php depend configuration depending on given project.
@@ -81,7 +71,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    * @return the report filecommand option
    */
   public String getReportFileCommandOption() {
-    return "--" + PDEPEND_OPT + "=" + getReportFile().getAbsolutePath();
+    return PDEPEND_OPT + "=" + getReportFile().getAbsolutePath();
   }
 
   /**
@@ -90,7 +80,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    * @return the suffixes command option
    */
   public String getSuffixesCommandOption() {
-    return "--" + PDEPEND_SUFFIXES_OPT + "=" + StringUtils.join(Php.PHP.getFileSuffixes(), ",");
+    return PDEPEND_SUFFIXES_OPT + "=" + StringUtils.join(Php.PHP.getFileSuffixes(), ",");
   }
 
   /**
@@ -106,7 +96,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultArgumentLine() {
-    return PDEPEND_DEFAULT_ARGUMENT_LINE;
+    return "";
   }
 
   /**
@@ -114,7 +104,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFileName() {
-    return PDEPEND_DEFAULT_REPORT_FILE_NAME;
+    return PDEPEND_REPORT_FILE_NAME_DEFVALUE;
   }
 
   /**
@@ -122,7 +112,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFilePath() {
-    return DEFAULT_REPORT_FILE_PATH;
+    return PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -130,7 +120,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileNameKey() {
-    return PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
+    return PDEPEND_REPORT_FILE_NAME_KEY;
   }
 
   /**
@@ -138,7 +128,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileRelativePathKey() {
-    return PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+    return PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
   }
 
   /**
@@ -146,7 +136,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getShouldAnalyzeOnlyKey() {
-    return PDEPEND_ANALYZE_ONLY_PROPERTY_KEY;
+    return PDEPEND_ANALYZE_ONLY_KEY;
   }
 
   /**
@@ -190,11 +180,11 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   }
 
   public boolean isBadDocumentation() {
-    return getProject().getConfiguration().getBoolean(PDEPEND_BAD_DOCUMENTATION_KEY, Boolean.valueOf(PDEPEND_DEFAULT_BAD_DOCUMENTATION));
+    return getProject().getConfiguration().getBoolean(PDEPEND_BAD_DOCUMENTATION_KEY, Boolean.valueOf(PDEPEND_BAD_DOCUMENTATION_DEFVALUE));
   }
 
   public boolean isWithoutAnnotation() {
-    return getProject().getConfiguration().getBoolean(PDEPEND_WITHOUT_ANNOTATION_KEY, Boolean.valueOf(PDEPEND_DEFAULT_WITHOUT_ANNOTATION));
+    return getProject().getConfiguration().getBoolean(PDEPEND_WITHOUT_ANNOTATION_KEY, Boolean.valueOf(PDEPEND_WITHOUT_ANNOTATION_DEFVALUE));
   }
 
 }

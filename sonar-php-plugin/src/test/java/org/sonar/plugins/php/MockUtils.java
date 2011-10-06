@@ -24,10 +24,10 @@ package org.sonar.plugins.php;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -78,8 +78,9 @@ public class MockUtils {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File(sourceDir)));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/Sources/test")));
     when(fs.getBuildDir()).thenReturn(new File("C:/projets/PHP/Monkey/target"));
-    when(c.getString(PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY, PDEPEND_DEFAULT_REPORT_FILE_NAME)).thenReturn(PDEPEND_DEFAULT_REPORT_FILE_NAME);
-    when(c.getString(PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn(DEFAULT_REPORT_FILE_PATH);
+    when(c.getString(PDEPEND_REPORT_FILE_NAME_KEY, PDEPEND_REPORT_FILE_NAME_DEFVALUE)).thenReturn(PDEPEND_REPORT_FILE_NAME_DEFVALUE);
+    when(c.getString(PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
+        PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
     when(project.getConfiguration()).thenReturn(c);
     return project;
   }

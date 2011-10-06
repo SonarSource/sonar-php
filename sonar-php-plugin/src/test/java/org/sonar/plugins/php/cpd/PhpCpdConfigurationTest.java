@@ -25,14 +25,14 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_REPORT_FILE_NAME;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_REPORT_FILE_PATH;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -70,11 +70,11 @@ public class PhpCpdConfigurationTest {
   public void testGetMinimunNumbeOfIdenticalLines() {
     Project project = mock(Project.class);
     Configuration configuration = getMockConfiguration(project);
-    when(configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES))
-        .thenReturn(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES);
+    when(configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE))
+        .thenReturn(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE);
     when(project.getConfiguration()).thenReturn(configuration);
     PhpCpdConfiguration config = new PhpCpdConfiguration(project);
-    assertEquals(config.getMinimunNumberOfIdenticalLines(), PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES);
+    assertEquals(config.getMinimunNumberOfIdenticalLines(), PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE);
   }
 
   /**
@@ -84,11 +84,11 @@ public class PhpCpdConfigurationTest {
   public void testGetMinimunNumbeOfIdenticalTokens() {
     Project project = mock(Project.class);
     Configuration configuration = getMockConfiguration(project);
-    when(configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS))
-        .thenReturn(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS);
+    when(configuration.getString(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE))
+        .thenReturn(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE);
     when(project.getConfiguration()).thenReturn(configuration);
     PhpCpdConfiguration config = new PhpCpdConfiguration(project);
-    assertEquals(config.getMinimunNumberOfIdenticalTokens(), PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS);
+    assertEquals(config.getMinimunNumberOfIdenticalTokens(), PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE);
   }
 
   /**
@@ -98,8 +98,8 @@ public class PhpCpdConfigurationTest {
   public void shouldReturnDefaultReportFileWithDefaultPath() {
     Project project = mock(Project.class);
     Configuration configuration = getMockConfiguration(project);
-    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPCPD_DEFAULT_REPORT_FILE_PATH)).thenReturn(
-        PHPCPD_DEFAULT_REPORT_FILE_PATH);
+    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY, PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
+        PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
     when(project.getConfiguration()).thenReturn(configuration);
     PhpCpdConfiguration config = new PhpCpdConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\php-cpd.xml");
@@ -113,7 +113,7 @@ public class PhpCpdConfigurationTest {
     Project project = mock(Project.class);
     Configuration configuration = getMockConfiguration(project);
 
-    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPCPD_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY, PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
     PhpCpdConfiguration config = new PhpCpdConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\php-cpd.xml");
@@ -128,8 +128,8 @@ public class PhpCpdConfigurationTest {
     Configuration configuration = getMockConfiguration(project);
 
     String customReportFileName = "php-cpd-my-custom-file.xml";
-    when(configuration.getString(PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY, PHPCPD_DEFAULT_REPORT_FILE_NAME)).thenReturn(customReportFileName);
-    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPCPD_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(configuration.getString(PHPCPD_REPORT_FILE_NAME_KEY, PHPCPD_REPORT_FILE_NAME_DEFVALUE)).thenReturn(customReportFileName);
+    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY, PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
     PhpCpdConfiguration config = new PhpCpdConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\" + customReportFileName);
@@ -152,10 +152,10 @@ public class PhpCpdConfigurationTest {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PHPCPD_REPORT_FILE_NAME_PROPERTY_KEY, PHPCPD_DEFAULT_REPORT_FILE_NAME)).thenReturn(
-        PHPCPD_DEFAULT_REPORT_FILE_NAME);
-    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPCPD_DEFAULT_REPORT_FILE_PATH)).thenReturn(
-        PHPCPD_DEFAULT_REPORT_FILE_PATH);
+    when(configuration.getString(PHPCPD_REPORT_FILE_NAME_KEY, PHPCPD_REPORT_FILE_NAME_DEFVALUE)).thenReturn(
+        PHPCPD_REPORT_FILE_NAME_DEFVALUE);
+    when(configuration.getString(PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY, PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
+        PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
 
     return configuration;
   }

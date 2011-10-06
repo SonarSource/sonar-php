@@ -25,13 +25,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.DEFAULT_REPORT_FILE_PATH;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_COMMAND_LINE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_DEFAULT_REPORT_FILE_NAME;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -47,9 +47,9 @@ import org.sonar.api.resources.ProjectFileSystem;
  */
 public class PhpDependConfigurationTest {
 
-  private static final String REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = PDEPEND_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
-  private static final String DEFAULT_REPORT_FILE_NAME = PDEPEND_DEFAULT_REPORT_FILE_NAME;
-  private static final String REPORT_FILE_NAME_PROPERTY_KEY = PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY;
+  private static final String REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
+  private static final String DEFAULT_REPORT_FILE_NAME = PDEPEND_REPORT_FILE_NAME_DEFVALUE;
+  private static final String REPORT_FILE_NAME_PROPERTY_KEY = PDEPEND_REPORT_FILE_NAME_KEY;
 
   @Test
   public void testGetReportFileNameKeyIsNull() {
@@ -58,7 +58,7 @@ public class PhpDependConfigurationTest {
     Configuration c = project.getConfiguration();
     String[] excludeDirs = new String[] { "a", "b" };
     when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(excludeDirs);
-    when(c.getStringArray(PDEPEND_REPORT_FILE_NAME_PROPERTY_KEY)).thenReturn(null);
+    when(c.getStringArray(PDEPEND_REPORT_FILE_NAME_KEY)).thenReturn(null);
     assertEquals("a,b", config.getIgnoreDirs());
   }
 
@@ -176,7 +176,8 @@ public class PhpDependConfigurationTest {
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
     when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn(DEFAULT_REPORT_FILE_PATH);
+    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
+        PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
     when(project.getConfiguration()).thenReturn(configuration);
     return project;
   }
@@ -196,7 +197,7 @@ public class PhpDependConfigurationTest {
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
     when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
     PhpDependConfiguration config = new PhpDependConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.xml");
@@ -214,7 +215,7 @@ public class PhpDependConfigurationTest {
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
     when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.summary.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
     PhpDependConfiguration config = new PhpDependConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.summary.xml");

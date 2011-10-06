@@ -32,39 +32,27 @@ import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 public class PhpmdConfiguration extends AbstractPhpConfiguration {
 
   private static final String PHPMD_COMMAND_LINE = "phpmd";
-  public static final String PHPMD_DEFAULT_REPORT_FILE_NAME = "pmd.xml";
-  public static final String PHPMD_DEFAULT_REPORT_FILE_PATH = "/logs";
-  public static final String PHPMD_REPORT_FILE_NAME_PROPERTY_KEY = "sonar.phpPmd.reportFileName";
-  public static final String PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = "sonar.phpPmd.reportFileRelativePath";
 
-  public static final String PHPMD_SKIP_KEY = "sonar.phpPmd.skip";
-
-  public static final String PHPMD_SHOULD_RUN_KEY = "sonar.phpPmd.shouldRun";
-  public static final String PHPMD_SHOULD_RUN_MESSAGE = "Execute PHPMD";
-  public static final String PHPMD_SHOULD_RUN_DESCRIPTION = "Disabling PHPMD is not a good idea because almost all metrics rely on it.";
-
-  public static final String PHPMD_ARGUMENT_LINE_KEY = "sonar.phpPmd.argumentLine";
-  public static final String PHPMD_DEFAULT_ARGUMENT_LINE = " ";
-
-  public static final String PHPMD_ANALYZE_ONLY_KEY = "sonar.phpPmd.analyzeOnly";
-  public static final String PHPMD_ANALYZE_ONLY_MESSAGE = "Only analyze existing Phpmd report files";
-  public static final String PHPMD_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will the plugin will only parse the result file."
-      + " If set to false launch tool and parse result.";
-
-  public static final String PHPMD_REPORT_FILE_OPTION = "--reportfile";
-  public static final String PHPMD_LEVEL_ARGUMENT_KEY = "sonar.phpPmd.minimumPriority";
-  public static final String PHPMD_LEVEL_OPTION = "--minimumpriority";
-  public static final String PHPMD_DEFAULT_LEVEL_ARGUMENT = "2";
-  public static final String PHPMD_DEFAULT_LEVEL_DESCRIPTION = "The lowest level events won't be included in report file.Values "
-      + "goes from 1(Strong) to 5(Weak) (only integers)";
-
-  public static final String PHPMD_DEFAULT_IGNORE_ARGUMENT = " ";
-  public static final String PHPMD_EXTENSIONS_OPTION = "--extensions";
-  public static final String PHPMD_IGNORE_ARGUMENT_KEY = "sonar.phpPmd.ignore";
-  public static final String PHPMD_IGNORE_OPTION = "--ignore";
+  // -- PHPMD tool options ---
   public static final String PHPMD_REPORT_FORMAT = "xml";
+  public static final String PHPMD_REPORT_FILE_OPTION = "--reportfile";
+  public static final String PHPMD_LEVEL_OPTION = "--minimumpriority";
+  public static final String PHPMD_EXTENSIONS_OPTION = "--extensions";
+  public static final String PHPMD_IGNORE_OPTION = "--ignore";
   public static final String PHPMD_DEFAULT_RULESET_ARGUMENT = "codesize,unusedcode,naming";
-  public static final String PHPMD_RULESETS_ARGUMENT_KEY = "sonar.phpPmd.Rulsets";
+
+  // --- Sonar config parameters ---
+  public static final String PHPMD_SKIP_KEY = "sonar.phpPmd.skip";
+  public static final String PHPMD_SHOULD_RUN_KEY = "sonar.phpPmd.shouldRun"; // OLD param that will be removed soon
+  public static final String PHPMD_ANALYZE_ONLY_KEY = "sonar.phpPmd.analyzeOnly";
+  public static final String PHPMD_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpPmd.reportFileRelativePath";
+  public static final String PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
+  public static final String PHPMD_REPORT_FILE_NAME_KEY = "sonar.phpPmd.reportFileName";
+  public static final String PHPMD_REPORT_FILE_NAME_DEFVALUE = "pmd.xml";
+  public static final String PHPMD_LEVEL_ARGUMENT_KEY = "sonar.phpPmd.minimumPriority";
+  public static final String PHPMD_LEVEL_ARGUMENT_DEFVALUE = "2";
+  public static final String PHPMD_IGNORE_ARGUMENT_KEY = "sonar.phpPmd.ignore";
+  public static final String PHPMD_ARGUMENT_LINE_KEY = "sonar.phpPmd.argumentLine";
 
   /**
    * Instantiates a new php pmd configuration.
@@ -114,7 +102,7 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFileName() {
-    return PHPMD_DEFAULT_REPORT_FILE_NAME;
+    return PHPMD_REPORT_FILE_NAME_DEFVALUE;
   }
 
   /**
@@ -122,7 +110,7 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFilePath() {
-    return PHPMD_DEFAULT_REPORT_FILE_PATH;
+    return PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -130,7 +118,7 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileNameKey() {
-    return PHPMD_REPORT_FILE_NAME_PROPERTY_KEY;
+    return PHPMD_REPORT_FILE_NAME_KEY;
   }
 
   /**
@@ -138,7 +126,7 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileRelativePathKey() {
-    return PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+    return PHPMD_REPORT_FILE_RELATIVE_PATH_KEY;
   }
 
   /**
@@ -171,7 +159,7 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    * @return the level
    */
   public String getLevel() {
-    return getProject().getConfiguration().getString(PHPMD_LEVEL_ARGUMENT_KEY, PHPMD_DEFAULT_LEVEL_ARGUMENT);
+    return getProject().getConfiguration().getString(PHPMD_LEVEL_ARGUMENT_KEY, PHPMD_LEVEL_ARGUMENT_DEFVALUE);
   }
 
   /**
@@ -193,10 +181,6 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    * @return the rulesets
    */
   public String getRulesets() {
-    String[] values = getProject().getConfiguration().getStringArray(PHPMD_RULESETS_ARGUMENT_KEY);
-    if (values != null && values.length > 0) {
-      return StringUtils.join(values, ',');
-    }
     return PHPMD_DEFAULT_RULESET_ARGUMENT;
   }
 }

@@ -22,19 +22,19 @@ package org.sonar.plugins.php.phpunit;
 import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_OPTION;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_OPTION;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_OPTION;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_OPTION;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_OPTION;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_OPTION;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_PROPERTY_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,18 +96,18 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
     Configuration c = configuration.getProject().getConfiguration();
     addBasicOptions(result);
 
-    boolean useMaintTestClass = true;
-    if (configuration.isStringPropertySet(PHPUNIT_CONFIGURATION_PROPERTY_KEY)) {
+    boolean useMainTestClass = true;
+    if (configuration.isStringPropertySet(PHPUNIT_CONFIGURATION_KEY)) {
       result.add(PHPUNIT_CONFIGURATION_OPTION + configuration.getConfiguration());
-      useMaintTestClass = false;
+      useMainTestClass = false;
     }
     addExtendedOptions(result, c);
-    if (useMaintTestClass && configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY)) {
+    if (useMainTestClass && configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_KEY)) {
       result.add(project.getName());
       result.add(configuration.getMainTestClass());
     }
     // source directory is appended phpunit.
-    if ( !useMaintTestClass || !c.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY) || c.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)) {
+    if ( !useMainTestClass || !c.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY) || c.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)) {
       result.add(getTestDirectoryOrFiles());
     }
     return result;
@@ -118,16 +118,16 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    * @param c
    */
   private void addExtendedOptions(List<String> result, Configuration c) {
-    if (configuration.isStringPropertySet(PHPUNIT_LOADER_PROPERTY_KEY)) {
+    if (configuration.isStringPropertySet(PHPUNIT_LOADER_KEY)) {
       result.add(PHPUNIT_LOADER_OPTION + configuration.getLoader());
     }
-    if (configuration.isStringPropertySet(PHPUNIT_GROUP_PROPERTY_KEY)) {
+    if (configuration.isStringPropertySet(PHPUNIT_GROUP_KEY)) {
       result.add(PHPUNIT_GROUP_OPTION + configuration.getGroup());
     }
     if (configuration.isStringPropertySet(PHPUNIT_ARGUMENT_LINE_KEY)) {
       result.add(configuration.getArgumentLine());
     }
-    if (c.containsKey(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY) && c.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)) {
+    if (c.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY) && c.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)) {
       result.add(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
     }
     result.add(PHPUNIT_LOG_JUNIT_OPTION + configuration.getReportFile());
@@ -140,10 +140,10 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    * @param result
    */
   private void addBasicOptions(List<String> result) {
-    if (configuration.isStringPropertySet(PHPUNIT_FILTER_PROPERTY_KEY)) {
+    if (configuration.isStringPropertySet(PHPUNIT_FILTER_KEY)) {
       result.add(PHPUNIT_FILTER_OPTION + configuration.getFilter());
     }
-    if (configuration.isStringPropertySet(PHPUNIT_BOOTSTRAP_PROPERTY_KEY)) {
+    if (configuration.isStringPropertySet(PHPUNIT_BOOTSTRAP_KEY)) {
       result.add(PHPUNIT_BOOTSTRAP_OPTION + configuration.getBootstrap());
     }
   }

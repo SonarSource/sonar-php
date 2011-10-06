@@ -58,7 +58,7 @@ public class PhpTest {
   public void shouldCheckCustomValidPhpExtensions() {
     Configuration configuration = mock(Configuration.class);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(
-        StringUtils.split(PhpPlugin.DEFAULT_SUFFIXES + ",php6,php7", ","));
+        StringUtils.split(PhpPlugin.FILE_SUFFIXES_DEFVALUE + ",php6,php7", ","));
     Php.PHP.setConfiguration(configuration);
     assertTrue(Php.hasValidSuffixes("goodExtension.php6"));
     assertTrue(Php.hasValidSuffixes("goodExtension.php7"));

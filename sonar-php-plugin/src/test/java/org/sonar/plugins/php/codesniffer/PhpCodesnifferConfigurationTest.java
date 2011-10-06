@@ -55,12 +55,12 @@ public class PhpCodesnifferConfigurationTest {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    String reportFileNamePropertyKey = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_PROPERTY_KEY;
-    String defaultReportFileName = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_NAME;
+    String reportFileNamePropertyKey = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY;
+    String defaultReportFileName = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE;
     when(config.getString(reportFileNamePropertyKey, defaultReportFileName)).thenReturn(defaultReportFileName);
 
-    String defaultReportFilePath = PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_PATH;
-    String reportFileRelativePathPropertyKey = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+    String defaultReportFilePath = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+    String reportFileRelativePathPropertyKey = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY;
     when(config.getString(reportFileRelativePathPropertyKey, defaultReportFilePath)).thenReturn(defaultReportFilePath);
     when(project.getConfiguration()).thenReturn(config);
 
@@ -87,12 +87,12 @@ public class PhpCodesnifferConfigurationTest {
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
     when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_PROPERTY_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_NAME)).thenReturn(
-        PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_NAME);
+        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY,
+            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE)).thenReturn(
+        PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE);
     when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY,
+            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
 
     RulesProfile profile = mock(RulesProfile.class);
@@ -118,11 +118,11 @@ public class PhpCodesnifferConfigurationTest {
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
     when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_PROPERTY_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_NAME)).thenReturn("codesniffer-summary.xml");
+        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY,
+            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE)).thenReturn("codesniffer-summary.xml");
     when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY,
+            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
 
     RulesProfile profile = mock(RulesProfile.class);
@@ -149,11 +149,11 @@ public class PhpCodesnifferConfigurationTest {
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
     when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_PROPERTY_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_NAME)).thenReturn("codesniffer-summary.xml");
+        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY,
+            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE)).thenReturn("codesniffer-summary.xml");
     when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY,
+            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
 
     RulesProfile profile = mock(RulesProfile.class);
@@ -180,11 +180,11 @@ public class PhpCodesnifferConfigurationTest {
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
     when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
     when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_PROPERTY_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_NAME)).thenReturn("codesniffer-summary.xml");
+        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY,
+            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE)).thenReturn("codesniffer-summary.xml");
     when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_DEFAULT_REPORT_FILE_PATH)).thenReturn("reports");
+        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY,
+            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
     when(project.getConfiguration()).thenReturn(configuration);
     RulesProfile profile = mock(RulesProfile.class);
     PhpCodeSnifferProfileExporter exporter = mock(PhpCodeSnifferProfileExporter.class);

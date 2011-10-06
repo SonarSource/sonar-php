@@ -36,55 +36,39 @@ import org.sonar.plugins.php.core.AbstractPhpConfiguration;
  */
 public class PhpUnitConfiguration extends AbstractPhpConfiguration {
 
-  public static final String PHPUNIT_DEFAULT_REPORT_FILE_NAME = "phpunit.xml";
-  public static final String PHPUNIT_DEFAULT_REPORT_FILE_PATH = "/logs";
-  public static final String PHPUNIT_REPORT_FILE_NAME_PROPERTY_KEY = "sonar.phpUnit.reportFileName";
-  public static final String PHPUNIT_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = "sonar.phpUnit.reportFileRelativePath";
-  public static final String PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY = "sonar.phpUnit.analyzeOnly";
-  public static final String PHPUNIT_SHOULD_RUN_PROPERTY_KEY = "sonar.phpUnit.shouldRun";
-  public static final String PHPUNIT_SKIP_KEY = "sonar.phpUnit.skip";
   private static final String PHPUNIT_COMMAND_LINE = "phpunit";
 
-  public static final String PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY = "sonar.phpUnit.mainTestClass";
-  public static final String PHPUNIT_DEFAULT_MAIN_TEST_FILE = "AllTests.php";
-  public static final String PHPUNIT_DEFAULT_COVERAGE_REPORT_FILE = "phpunit.coverage.xml";
-  public static final String PHPUNIT_COVERAGE_REPORT_FILE_PROPERTY_KEY = "sonar.phpUnit.coverageReportFile";
-  public static final String PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY = "sonar.phpUnit.coverage.shouldRun";
-  public static final String PHPUNIT_COVERAGE_SKIP_PROPERTY_KEY = "sonar.phpUnit.coverage.skip";
-
+  // -- PHPUnit tool options ---
   public static final String PHPUNIT_FILTER_OPTION = "--filter=";
-  public static final String PHPUNIT_FILTER_PROPERTY_KEY = "sonar.phpUnit.filter";
-  public static final String PHPUNIT_DEFAULT_FILTER = " ";
   public static final String PHPUNIT_BOOTSTRAP_OPTION = "--bootstrap=";
-  public static final String PHPUNIT_BOOTSTRAP_PROPERTY_KEY = "sonar.phpUnit.bootstrap";
-  public static final String PHPUNIT_DEFAULT_BOOTSTRAP = " ";
   public static final String PHPUNIT_CONFIGURATION_OPTION = "--configuration=";
-  public static final String PHPUNIT_CONFIGURATION_PROPERTY_KEY = "sonar.phpUnit.configuration";
-
   public static final String PHPUNIT_IGNORE_CONFIGURATION_OPTION = "--no-configuration";
-  public static final String PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY = "sonar.phpUnit.ignore.configuration";
-
-  public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY = "sonar.phpUnit.analyze.test.directory";
-  public static final Boolean PHPUNIT_DEFAULT_ANALYZE_TEST_DIRECTORY = true;
-
-  public static final String PHPUNIT_DEFAULT_CONFIGURATION = " ";
   public static final String PHPUNIT_LOADER_OPTION = "--loader=";
-  public static final String PHPUNIT_LOADER_PROPERTY_KEY = "sonar.phpUnit.loader";
-  public static final String PHPUNIT_DEFAULT_LOADER = " ";
   public static final String PHPUNIT_GROUP_OPTION = "--group=";
-  public static final String PHPUNIT_GROUP_PROPERTY_KEY = "sonar.phpUnit.group";
-  public static final String PHPUNIT_DEFAULT_GROUP = " ";
-  public static final String PHPUNIT_ARGUMENT_LINE_KEY = "sonar.phpUnit.argumentLine";
-  public static final String PHPUNIT_DEFAULT_ARGUMENT_LINE = "";
 
-  public static final String PHPUNIT_MAIN_TEST_FILE_MESSAGE = "File containing the main method calling all the tests";
-  public static final String PHPUNIT_MAIN_TEST_FILE_DESCRIPTION = "The project main test file including the relative path "
-      + "ie : \"/source/tests/AllTests.php\". If not present, phpunit will look for phpunit.xml file in test directory.";
-  public static final String PHPUNIT_ANALYZE_ONLY_DESCRIPTION = "If set to true the plugin will only parse the analysis "
-      + "result file. If set to false the plugin will launch tool and parse result.";
-  public static final String PHPUNIT_SHOULD_RUN_DESCRIPTION = "If set to true the plugin will launch tool and parse result."
-      + " If set to false the plugin will only parse the result file.";
-  public static final String PHPUNIT_SHOULD_RUN_COVERAGE_DESCRIPTION = "If set to true the plugin will compute coverage on php files";
+  // --- Sonar config parameters ---
+  public static final String PHPUNIT_SKIP_KEY = "sonar.phpUnit.skip";
+  public static final String PHPUNIT_SHOULD_RUN_KEY = "sonar.phpUnit.shouldRun"; // OLD param that will be removed soon
+  public static final String PHPUNIT_COVERAGE_SKIP_KEY = "sonar.phpUnit.coverage.skip";
+  public static final String PHPUNIT_SHOULD_RUN_COVERAGE_KEY = "sonar.phpUnit.coverage.shouldRun"; // OLD param that will be removed soon
+  public static final String PHPUNIT_ANALYZE_ONLY_KEY = "sonar.phpUnit.analyzeOnly";
+  public static final String PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpUnit.reportFileRelativePath";
+  public static final String PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
+  public static final String PHPUNIT_REPORT_FILE_NAME_KEY = "sonar.phpUnit.reportFileName";
+  public static final String PHPUNIT_REPORT_FILE_NAME_DEFVALUE = "phpunit.xml";
+  public static final String PHPUNIT_COVERAGE_REPORT_FILE_KEY = "sonar.phpUnit.coverageReportFile";
+  public static final String PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE = "phpunit.coverage.xml";
+  public static final String PHPUNIT_MAIN_TEST_FILE_KEY = "sonar.phpUnit.mainTestClass";
+  public static final String PHPUNIT_MAIN_TEST_FILE_DEFVALUE = "AllTests.php";
+  public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY = "sonar.phpUnit.analyze.test.directory";
+  public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE = "true";
+  public static final String PHPUNIT_FILTER_KEY = "sonar.phpUnit.filter";
+  public static final String PHPUNIT_BOOTSTRAP_KEY = "sonar.phpUnit.bootstrap";
+  public static final String PHPUNIT_CONFIGURATION_KEY = "sonar.phpUnit.configuration";
+  public static final String PHPUNIT_IGNORE_CONFIGURATION_KEY = "sonar.phpUnit.ignore.configuration";
+  public static final String PHPUNIT_LOADER_KEY = "sonar.phpUnit.loader";
+  public static final String PHPUNIT_GROUP_KEY = "sonar.phpUnit.group";
+  public static final String PHPUNIT_ARGUMENT_LINE_KEY = "sonar.phpUnit.argumentLine";
 
   private boolean skipCoverage;
 
@@ -100,10 +84,10 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
     Configuration configuration = project.getConfiguration();
     analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), false);
 
-    if (isStringPropertySet(PHPUNIT_COVERAGE_SKIP_PROPERTY_KEY)) {
-      skipCoverage = project.getConfiguration().getBoolean(PHPUNIT_COVERAGE_SKIP_PROPERTY_KEY);
-    } else if (isStringPropertySet(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY)) {
-      skipCoverage = !project.getConfiguration().getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_PROPERTY_KEY);
+    if (isStringPropertySet(PHPUNIT_COVERAGE_SKIP_KEY)) {
+      skipCoverage = project.getConfiguration().getBoolean(PHPUNIT_COVERAGE_SKIP_KEY);
+    } else if (isStringPropertySet(PHPUNIT_SHOULD_RUN_COVERAGE_KEY)) {
+      skipCoverage = !project.getConfiguration().getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_KEY);
     }
   }
 
@@ -113,7 +97,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @return the main test class
    */
   public String getMainTestClass() {
-    String reportFileName = getProject().getConfiguration().getString(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY, PHPUNIT_DEFAULT_MAIN_TEST_FILE);
+    String reportFileName = getProject().getConfiguration().getString(PHPUNIT_MAIN_TEST_FILE_KEY, PHPUNIT_MAIN_TEST_FILE_DEFVALUE);
     List<File> directories = new ArrayList<File>(getTestDirectories());
     directories.addAll(getSourceDirectories());
 
@@ -132,7 +116,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
     if ( !file.exists()) {
       StringBuilder message = new StringBuilder("The specificied main class file cannot be found: ");
       message.append(reportFileName).append(". If you don't have a main test file, consider using a phpunit.xml file and do not ");
-      message.append("use ").append(PHPUNIT_MAIN_TEST_FILE_PROPERTY_KEY).append(" property.");
+      message.append("use ").append(PHPUNIT_MAIN_TEST_FILE_KEY).append(" property.");
       throw new SonarException(message.toString());
     }
     return file.getAbsolutePath();
@@ -159,7 +143,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultArgumentLine() {
-    return PHPUNIT_DEFAULT_ARGUMENT_LINE;
+    return "";
   }
 
   /**
@@ -167,7 +151,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFileName() {
-    return PHPUNIT_DEFAULT_REPORT_FILE_NAME;
+    return PHPUNIT_REPORT_FILE_NAME_DEFVALUE;
   }
 
   /**
@@ -175,7 +159,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getDefaultReportFilePath() {
-    return PHPUNIT_DEFAULT_REPORT_FILE_PATH;
+    return PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -183,7 +167,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileNameKey() {
-    return PHPUNIT_REPORT_FILE_NAME_PROPERTY_KEY;
+    return PHPUNIT_REPORT_FILE_NAME_KEY;
   }
 
   /**
@@ -191,7 +175,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getReportFileRelativePathKey() {
-    return PHPUNIT_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+    return PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY;
   }
 
   /**
@@ -199,7 +183,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected final String getShouldAnalyzeOnlyKey() {
-    return PHPUNIT_ANALYZE_ONLY_PROPERTY_KEY;
+    return PHPUNIT_ANALYZE_ONLY_KEY;
   }
 
   /**
@@ -207,7 +191,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    */
   @Override
   protected String getShouldRunKey() {
-    return PHPUNIT_SHOULD_RUN_PROPERTY_KEY;
+    return PHPUNIT_SHOULD_RUN_KEY;
   }
 
   /**
@@ -235,8 +219,8 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public File getCoverageReportFile() {
     Configuration configuration = getProject().getConfiguration();
     return new File(getProject().getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath())
-        .append(File.separator)
-        .append(configuration.getString(PHPUNIT_COVERAGE_REPORT_FILE_PROPERTY_KEY, PHPUNIT_DEFAULT_COVERAGE_REPORT_FILE)).toString());
+        .append(File.separator).append(configuration.getString(PHPUNIT_COVERAGE_REPORT_FILE_KEY, PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE))
+        .toString());
   }
 
   /**
@@ -245,7 +229,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @return the user defined filter.
    */
   public String getFilter() {
-    return getProject().getConfiguration().getString(PHPUNIT_FILTER_PROPERTY_KEY, PHPUNIT_DEFAULT_FILTER);
+    return getProject().getConfiguration().getString(PHPUNIT_FILTER_KEY, " ");
   }
 
   /**
@@ -254,7 +238,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @return the user defined filter.
    */
   public String getBootstrap() {
-    return getProject().getConfiguration().getString(PHPUNIT_BOOTSTRAP_PROPERTY_KEY, PHPUNIT_DEFAULT_BOOTSTRAP);
+    return getProject().getConfiguration().getString(PHPUNIT_BOOTSTRAP_KEY, " ");
   }
 
   /**
@@ -263,7 +247,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @return the user defined configuration file.
    */
   public String getConfiguration() {
-    return getProject().getConfiguration().getString(PHPUNIT_CONFIGURATION_PROPERTY_KEY, PHPUNIT_DEFAULT_CONFIGURATION);
+    return getProject().getConfiguration().getString(PHPUNIT_CONFIGURATION_KEY, " ");
   }
 
   /**
@@ -272,7 +256,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @return the user defined loader.
    */
   public String getLoader() {
-    return getProject().getConfiguration().getString(PHPUNIT_LOADER_PROPERTY_KEY, PHPUNIT_DEFAULT_LOADER);
+    return getProject().getConfiguration().getString(PHPUNIT_LOADER_KEY, " ");
   }
 
   /**
@@ -281,7 +265,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @return the user defined group.
    */
   public String getGroup() {
-    return getProject().getConfiguration().getString(PHPUNIT_GROUP_PROPERTY_KEY, PHPUNIT_DEFAULT_GROUP);
+    return getProject().getConfiguration().getString(PHPUNIT_GROUP_KEY, " ");
   }
 
 }

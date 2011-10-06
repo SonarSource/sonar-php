@@ -26,11 +26,11 @@ import static org.sonar.api.CoreProperties.PROJECT_EXCLUSIONS_PROPERTY;
 import static org.sonar.plugins.php.MockUtils.getFile;
 import static org.sonar.plugins.php.MockUtils.getMockProject;
 import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_NAME;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_REPORT_FILE_PATH;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_ARGUMENT_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_PROPERTY_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_KEY;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,8 +66,8 @@ public class PhpmdExecutorTest {
     Configuration configuration = project.getConfiguration();
     String[] extensions = new String[] { "php", "php3", "php4" };
     when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(extensions);
-    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn("/");
-    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("pmd.xml");
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("/");
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_KEY, PHPMD_REPORT_FILE_NAME_DEFVALUE)).thenReturn("pmd.xml");
 
     PhpmdConfiguration c = getWindowsConfiguration(project);
     PhpmdProfileExporter e = mock(PhpmdProfileExporter.class);
@@ -89,8 +89,8 @@ public class PhpmdExecutorTest {
     Configuration configuration = project.getConfiguration();
     String[] extensions = new String[] { "php", "php3", "php4" };
     when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(extensions);
-    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn("/");
-    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("pmd.xml");
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("/");
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_KEY, PHPMD_REPORT_FILE_NAME_DEFVALUE)).thenReturn("pmd.xml");
 
     PhpmdConfiguration c = getWindowsConfiguration(project);
     PhpmdProfileExporter e = mock(PhpmdProfileExporter.class);
@@ -118,8 +118,8 @@ public class PhpmdExecutorTest {
     Configuration configuration = project.getConfiguration();
     String[] extensions = new String[] { "php", "php3", "php4" };
     when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(extensions);
-    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn("/");
-    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("pmd.xml");
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("/");
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_KEY, PHPMD_REPORT_FILE_NAME_DEFVALUE)).thenReturn("pmd.xml");
 
     PhpmdConfiguration c = getWindowsConfiguration(project);
     PhpmdProfileExporter e = mock(PhpmdProfileExporter.class);
@@ -155,8 +155,8 @@ public class PhpmdExecutorTest {
     Configuration configuration = project.getConfiguration();
     String[] extensions = new String[] { "php", "php3", "php4" };
     when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(extensions);
-    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_PATH)).thenReturn("/");
-    when(configuration.getString(PHPMD_REPORT_FILE_NAME_PROPERTY_KEY, PHPMD_DEFAULT_REPORT_FILE_NAME)).thenReturn("pmd.xml");
+    when(configuration.getString(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("/");
+    when(configuration.getString(PHPMD_REPORT_FILE_NAME_KEY, PHPMD_REPORT_FILE_NAME_DEFVALUE)).thenReturn("pmd.xml");
 
     PhpmdConfiguration c = getWindowsConfiguration(project);
     PhpmdProfileExporter e = mock(PhpmdProfileExporter.class);

@@ -22,11 +22,11 @@ package org.sonar.plugins.php.cpd;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_EXCLUDE_OPTION;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_EXCLUDE_PACKAGE_KEY;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_MODIFIER;
+import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE;
 import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_MODIFIER;
 
 import java.io.File;
@@ -53,8 +53,8 @@ public class PhpCpdExecutorTest {
     Configuration configuration = mock(Configuration.class);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
     PhpCpdConfiguration c = mock(PhpCpdConfiguration.class);
-    when(c.getMinimunNumberOfIdenticalLines()).thenReturn(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES);
-    when(c.getMinimunNumberOfIdenticalTokens()).thenReturn(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS);
+    when(c.getMinimunNumberOfIdenticalLines()).thenReturn(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE);
+    when(c.getMinimunNumberOfIdenticalTokens()).thenReturn(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE);
     String[] excludedPackages = { "test1", "test2" };
     when(c.getExcludePackages()).thenReturn(excludedPackages);
     when(c.isStringPropertySet(PHPCPD_EXCLUDE_PACKAGE_KEY)).thenReturn(true);
@@ -75,10 +75,10 @@ public class PhpCpdExecutorTest {
     expected.add(phpcpdScriptName);
 
     expected.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_MODIFIER);
-    expected.add(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_LINES.toString());
+    expected.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE.toString());
 
     expected.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_MODIFIER);
-    expected.add(PHPCPD_DEFAULT_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS.toString());
+    expected.add(PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE.toString());
     expected.add("--log-pmd");
 
     expected.add(reportFile);

@@ -94,8 +94,6 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
       }
     }
 
-    // result.add(PhpCodeSnifferConfiguration.PHPCS_STANDARD_MODIFIER + configuration.getRuleSet().getAbsolutePath());
-
     List<String> exclusionPatterns = configuration.getExclusionPatterns();
     boolean exclusionPatternsNotEmpty = exclusionPatterns != null && !exclusionPatterns.isEmpty();
     if (configuration.isStringPropertySet(PHPCS_IGNORE_ARGUMENT_KEY) && exclusionPatternsNotEmpty) {

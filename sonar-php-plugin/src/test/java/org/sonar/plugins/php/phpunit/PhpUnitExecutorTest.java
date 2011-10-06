@@ -25,8 +25,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_OPTION;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_OPTION;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -76,8 +76,8 @@ public class PhpUnitExecutorTest {
     when(project.getConfiguration()).thenReturn(configuration);
     when(config.getProject()).thenReturn(project);
 
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(true);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(true);
+    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
+    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
 
     String phpunit = "phpunit";
     when(config.getOsDependentToolScriptName()).thenReturn(phpunit);
@@ -112,8 +112,8 @@ public class PhpUnitExecutorTest {
     when(project.getConfiguration()).thenReturn(configuration);
     when(config.getProject()).thenReturn(project);
 
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(false);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(true);
+    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
+    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
 
     ProjectFileSystem pfs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(pfs);
@@ -143,8 +143,8 @@ public class PhpUnitExecutorTest {
     when(project.getConfiguration()).thenReturn(configuration);
     when(config.getProject()).thenReturn(project);
 
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(false);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(true);
+    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
+    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
 
     File testDir = new File("c:/php/math-php-test/sources/test");
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
@@ -175,8 +175,8 @@ public class PhpUnitExecutorTest {
     when(project.getConfiguration()).thenReturn(configuration);
     when(config.getProject()).thenReturn(project);
 
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(false);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(true);
+    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
+    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
 
     when(configuration.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
     when(configuration.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(false);
@@ -207,8 +207,8 @@ public class PhpUnitExecutorTest {
     when(project.getConfiguration()).thenReturn(configuration);
     when(config.getProject()).thenReturn(project);
 
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(false);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_PROPERTY_KEY)).thenReturn(true);
+    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
+    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
 
     File testDir = new File("c:/php/math-php-test/sources/test");
     File testDir2 = new File("c:/php/math-php-test/sources/test2");
