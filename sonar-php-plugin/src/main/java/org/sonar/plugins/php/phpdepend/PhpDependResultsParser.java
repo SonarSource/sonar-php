@@ -25,6 +25,8 @@ import static org.sonar.api.measures.CoreMetrics.COMPLEXITY;
 import static org.sonar.api.measures.CoreMetrics.FILES;
 import static org.sonar.api.measures.CoreMetrics.FUNCTIONS;
 import static org.sonar.api.measures.CoreMetrics.LINES;
+import static org.sonar.api.measures.CoreMetrics.DEPTH_IN_TREE;
+import static org.sonar.api.measures.CoreMetrics.NUMBER_OF_CHILDREN;
 import static org.sonar.api.measures.CoreMetrics.NCLOC;
 
 import java.io.File;
@@ -168,8 +170,8 @@ public class PhpDependResultsParser implements BatchExtension {
     addMeasureIfNecessary(file, LINES, classNode.getLinesNumber());
     addMeasureIfNecessary(file, COMMENT_LINES, classNode.getCommentLineNumber());
     addMeasureIfNecessary(file, NCLOC, classNode.getCodeLinesNumber());
-    // Adds one class to this file
-    addMeasure(file, CLASSES, 1.0);
+    addMeasureIfNecessary(file, DEPTH_IN_TREE, classNode.getDepthInTreeNumber());
+    addMeasureIfNecessary(file, NUMBER_OF_CHILDREN, classNode.getNumberOfChildrenClassesNumber());
     // for all methods in this class.
     List<MethodNode> methodes = classNode.getMethodes();
     if (methodes != null && !methodes.isEmpty()) {
@@ -194,8 +196,6 @@ public class PhpDependResultsParser implements BatchExtension {
     addMeasureIfNecessary(file, LINES, functionNode.getLinesNumber());
     addMeasureIfNecessary(file, COMMENT_LINES, functionNode.getCommentLineNumber());
     addMeasureIfNecessary(file, NCLOC, functionNode.getCodeLinesNumber());
-    // Adds one class to this file
-    addMeasure(file, FUNCTIONS, 1.0);
     addMeasure(file, COMPLEXITY, functionNode.getComplexity());
     methodComplexityDistribution.add(functionNode.getComplexity());
   }
@@ -213,6 +213,13 @@ public class PhpDependResultsParser implements BatchExtension {
     addMeasure(file, LINES, fileNode.getLinesNumber());
     addMeasure(file, CoreMetrics.NCLOC, fileNode.getCodeLinesNumber());
     addMeasure(file, CoreMetrics.COMMENT_LINES, fileNode.getCommentLineNumber());
+    
+    // Classes in File
+    addMeasure(file, CLASSES, fileNode.getClassNumber());
+    
+    // Functions in File
+    addMeasure(file, FUNCTIONS, fileNode.getFunctionsNumber());
+    
     // Adds one file to this php file
     addMeasure(file, CoreMetrics.FILES, 1.0);
     // for all class in this file

@@ -46,6 +46,11 @@ public final class FileNode {
   @XStreamAsAttribute
   @XStreamAlias("cloc")
   private double commentLineNumber;
+  
+  /** The functions number. */
+  @XStreamAsAttribute
+  @XStreamAlias("functions")
+  private double functionsNumber;
 
   /** The lines number. */
   @XStreamAsAttribute
@@ -250,5 +255,23 @@ public final class FileNode {
   public void setLinesNumber(final double linesNumber) {
     this.linesNumber = linesNumber;
   }
+
+	/**
+	 * Sets functions number.
+	 * 
+	 * @param functionsNumber the functionsNumber to set
+	 */
+	public void setFunctionsNumber(double functionsNumber) {
+		this.functionsNumber = functionsNumber;
+	}
+
+	/**
+	 * Returns functions number
+	 * 
+	 * @return the functionsNumber
+	 */
+	public double getFunctionsNumber() {
+		return functionsNumber;
+	}
 
 }

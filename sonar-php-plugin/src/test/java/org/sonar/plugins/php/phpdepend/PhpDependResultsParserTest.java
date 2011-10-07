@@ -80,7 +80,7 @@ public class PhpDependResultsParserTest {
       java.io.File f5 = new java.io.File("C:/projets/PHP/Money/Sources/main/Money.inc");
 
       when(fileSystem.mainFiles(Php.KEY)).thenReturn(
-          InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/main"), Arrays.asList(f1, f2, f3, f4, f5)));
+          InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/main"), Arrays.asList(f2, f3, f4, f5)));
       when(fileSystem.testFiles(Php.KEY)).thenReturn(
           InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/test"), Arrays.asList(f1)));
 
@@ -175,7 +175,7 @@ public class PhpDependResultsParserTest {
   public void shouldGenerateFunctionsCountMeasure() {
     metric = CoreMetrics.FUNCTIONS;
     init(PDEPEND_RESULT);
-    verify(context).saveMeasure(new File("Money.php"), metric, 16.0);
+    verify(context).saveMeasure(new File("Money.php"), metric, 17.0);
     verify(context).saveMeasure(new File("MoneyBag.php"), metric, 18.0);
     verify(context).saveMeasure(new File("Common/IMoney.php"), metric, 8.0);
   }
@@ -203,7 +203,7 @@ public class PhpDependResultsParserTest {
     verify(context).saveMeasure(new File("MoneyBag.php"), metric, 39.0);
     verify(context).saveMeasure(new File("Common/IMoney.php"), metric, 0.0);
   }
-
+  
   /**
    * Should not generate dir or project measures.
    */

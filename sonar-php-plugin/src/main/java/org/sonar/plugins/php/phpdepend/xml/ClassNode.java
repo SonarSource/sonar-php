@@ -32,6 +32,11 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("class")
 public final class ClassNode {
 
+    /** The depth in tree line number. */
+    @XStreamAsAttribute
+    @XStreamAlias("dit")
+    private double depthInTreeNumber;
+    
   /** The code lines number. */
   @XStreamAsAttribute
   @XStreamAlias("ncloc")
@@ -56,6 +61,11 @@ public final class ClassNode {
   @XStreamAsAttribute
   @XStreamAlias("nom")
   private double methodNumber;
+  
+  /** The number of children classes number. */
+  @XStreamAsAttribute
+  @XStreamAlias("nocc")
+  private double numberOfChildrenClassesNumber;
 
   /** The methodes. */
   @XStreamImplicit
@@ -76,7 +86,7 @@ public final class ClassNode {
    *          the methodes
    */
   public ClassNode(final double codeLinesNumber, final double commentLineNumber, final double linesNumber, final double complexity,
-      final double methodNumber, final List<MethodNode> methodes) {
+      final double methodNumber, final double depthInTreeNumber, final List<MethodNode> methodes) {
     super();
     this.codeLinesNumber = codeLinesNumber;
     this.commentLineNumber = commentLineNumber;
@@ -84,6 +94,7 @@ public final class ClassNode {
     this.methodNumber = methodNumber;
     this.methodes = methodes;
     this.linesNumber = linesNumber;
+    this.depthInTreeNumber = depthInTreeNumber;
   }
 
   /**
@@ -152,6 +163,15 @@ public final class ClassNode {
   public double getMethodNumber() {
     return methodNumber;
   }
+  
+  /**
+   * Gets the depth in ree
+   * 
+   * @return the method number
+   */
+  public double getDepthInTreeNumber() {
+	  return depthInTreeNumber;
+  }
 
   /**
    * Sets the classes.
@@ -212,4 +232,28 @@ public final class ClassNode {
   public void setMethodNumber(final double methodNumber) {
     this.methodNumber = methodNumber;
   }
+  
+  /**
+   * Sets the method number.
+   * 
+   * @param depthInTreeNumber
+   *          the depth in tree number
+   */
+  public void setDepthInTreeNumber(final double depthInTreeNumber) {
+	  this.depthInTreeNumber = depthInTreeNumber;
+  }
+
+	/**
+	 * @param numberOfChildrenClassesNumber the numberOfChildrenClassesNumber to set
+	 */
+	public void setNumberOfChildrenClassesNumber(double numberOfChildrenClassesNumber) {
+		this.numberOfChildrenClassesNumber = numberOfChildrenClassesNumber;
+	}
+	
+	/**
+	 * @return the numberOfChildrenClassesNumber
+	 */
+	public double getNumberOfChildrenClassesNumber() {
+		return numberOfChildrenClassesNumber;
+	}
 }
