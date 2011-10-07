@@ -138,9 +138,6 @@ public class PhpCodeSnifferProfileExporter extends ProfileExporter {
       addAttribute(ruleNode, "class", pmdRule.getClazz());
       addAttribute(ruleNode, "message", pmdRule.getMessage());
       addAttribute(ruleNode, "name", pmdRule.getName());
-      String priority = pmdRule.getPriority();
-      addChild(ruleNode, "priority", priority);
-      addChild(ruleNode, "severity", priority);
       // Then manager properties (kind of parameters)
       if (pmdRule.hasProperties()) {
         Element propertiesNode = new Element("properties");

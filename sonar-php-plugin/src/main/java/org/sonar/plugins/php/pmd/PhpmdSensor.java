@@ -88,14 +88,12 @@ public class PhpmdSensor implements Sensor {
       List<PhpmdViolation> violations = reportParser.getViolations();
       List<Violation> contextViolations = new ArrayList<Violation>();
       for (PhpmdViolation violation : violations) {
-        Rule rule = ruleFinder.findByKey(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY, violation.getRuleKey());
-        if (rule != null) {
-          org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
-          if (context.getResource(resource) != null) {
-            Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
-            contextViolations.add(v);
-            LOG.debug("Violation found: " + v);
-          }
+        Rule rule = Rule.create(PHPMD_REPOSITORY_KEY, violation.getRuleKey());
+        org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
+        if (context.getResource(resource) != null) {
+          Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
+          contextViolations.add(v);
+          LOG.debug("Violation found: " + v);
         }
       }
       context.saveViolations(contextViolations);
