@@ -107,6 +107,14 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
   public boolean shouldExecuteOnProject(Project project) {
     return PHP.equals(project.getLanguage());
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return "NoSonar and Commented out LOC Sensor";
+  }
 
   private static class PhpLanguageFootprint implements LanguageFootprint {
 

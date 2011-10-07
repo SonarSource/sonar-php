@@ -115,6 +115,6 @@ public class PhpCodeSnifferSensor implements Sensor {
    */
   @Override
   public String toString() {
-    return getClass().getSimpleName();
+    return "PHP_CodeSniffer Sensor";
   }
 }

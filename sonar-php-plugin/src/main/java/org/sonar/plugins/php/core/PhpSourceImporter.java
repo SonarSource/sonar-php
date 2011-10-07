@@ -36,4 +36,11 @@ public class PhpSourceImporter extends AbstractSourceImporter {
     super(php);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return "PHP Source Importer";
+  }
 }

@@ -98,6 +98,6 @@ public class PhpUnitSensor implements Sensor {
    */
   @Override
   public String toString() {
-    return getClass().getSimpleName();
+    return "phpunit Sensor";
   }
 }

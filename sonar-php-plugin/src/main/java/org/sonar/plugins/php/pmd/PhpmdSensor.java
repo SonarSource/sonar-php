@@ -120,7 +120,7 @@ public class PhpmdSensor implements Sensor {
    */
   @Override
   public String toString() {
-    return getClass().getSimpleName();
+    return "PHP Mess Detector Sensor";
   }
 
 }
