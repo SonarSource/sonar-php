@@ -89,8 +89,6 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    * 
    * @param coverageReportFile
    *          the coverage report file
-   * @param project
-   *          the project
    */
   private void parseFile(File coverageReportFile) {
     CoverageNode coverage = getCoverage(coverageReportFile);
@@ -138,8 +136,6 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    *          the line
    * @param lineHits
    *          the line hits
-   * @param fileName
-   *          the class name
    */
   private void saveLineMeasure(LineNode line, PropertiesBuilder<Integer, Integer> lineHits) {
     lineHits.add(line.getNum(), line.getCount());

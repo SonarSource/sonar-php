@@ -116,7 +116,7 @@ public class PhpUnitResultParser implements BatchExtension {
    *          the project
    * @return Resource<?> the file pointed by the report
    */
-  private Resource<?> getUnitTestResource(PhpUnitTestReport report, Project project) {
+  private Resource<?> getUnitTestResource(PhpUnitTestReport report) {
     return org.sonar.api.resources.File.fromIOFile(new File(report.getFile()), project.getFileSystem().getTestDirs());
   }
 
@@ -128,7 +128,7 @@ public class PhpUnitResultParser implements BatchExtension {
    * @param context
    *          the execution context
    */
-  private void insertZeroWhenNoReports(SensorContext context) {
+  private void insertZeroWhenNoReports() {
     context.saveMeasure(CoreMetrics.TESTS, 0.0);
   }
 
@@ -140,10 +140,10 @@ public class PhpUnitResultParser implements BatchExtension {
    */
   protected void parse(File reportFile) {
     if (reportFile == null) {
-      insertZeroWhenNoReports(context);
+      insertZeroWhenNoReports();
     } else {
       LOG.info("Parsing file: " + reportFile.getAbsolutePath());
-      parseFile(context, reportFile, project);
+      parseFile(reportFile);
     }
   }
 
@@ -154,14 +154,12 @@ public class PhpUnitResultParser implements BatchExtension {
    *          the execution context
    * @param report
    *          the report file
-   * @param project
-   *          the project
    */
-  private void parseFile(SensorContext context, File report, Project project) {
+  private void parseFile(File report) {
     TestSuites testSuites = getTestSuites(report);
     List<PhpUnitTestReport> fileReports = readSuites(testSuites);
     for (PhpUnitTestReport fileReport : fileReports) {
-      saveTestReportMeasures(context, project, fileReport);
+      saveTestReportMeasures(fileReport);
     }
   }
 
@@ -196,9 +194,9 @@ public class PhpUnitResultParser implements BatchExtension {
    * @param project
    *          the project
    */
-  private void saveClassMeasure(SensorContext context, PhpUnitTestReport fileReport, Metric metric, double value, Project project) {
+  private void saveClassMeasure(PhpUnitTestReport fileReport, Metric metric, double value) {
     if ( !Double.isNaN(value)) {
-      context.saveMeasure(getUnitTestResource(fileReport, project), metric, value);
+      context.saveMeasure(getUnitTestResource(fileReport), metric, value);
     }
   }
 
@@ -212,26 +210,26 @@ public class PhpUnitResultParser implements BatchExtension {
    * @param fileReport
    *          the unit test report
    */
-  private void saveTestReportMeasures(SensorContext context, Project project, PhpUnitTestReport fileReport) {
+  private void saveTestReportMeasures(PhpUnitTestReport fileReport) {
     if ( !fileReport.isValid()) {
       return;
     }
     if (fileReport.getTests() > 0) {
       double testsCount = fileReport.getTests() - fileReport.getSkipped();
       if (fileReport.getSkipped() > 0) {
-        saveClassMeasure(context, fileReport, CoreMetrics.SKIPPED_TESTS, fileReport.getSkipped(), project);
+        saveClassMeasure(fileReport, CoreMetrics.SKIPPED_TESTS, fileReport.getSkipped());
       }
       double duration = Math.round(fileReport.getTime() * MILLISECONDS);
-      saveClassMeasure(context, fileReport, CoreMetrics.TEST_EXECUTION_TIME, duration, project);
-      saveClassMeasure(context, fileReport, CoreMetrics.TESTS, testsCount, project);
-      saveClassMeasure(context, fileReport, CoreMetrics.TEST_ERRORS, fileReport.getErrors(), project);
-      saveClassMeasure(context, fileReport, CoreMetrics.TEST_FAILURES, fileReport.getFailures(), project);
+      saveClassMeasure(fileReport, CoreMetrics.TEST_EXECUTION_TIME, duration);
+      saveClassMeasure(fileReport, CoreMetrics.TESTS, testsCount);
+      saveClassMeasure(fileReport, CoreMetrics.TEST_ERRORS, fileReport.getErrors());
+      saveClassMeasure(fileReport, CoreMetrics.TEST_FAILURES, fileReport.getFailures());
       double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
       if (testsCount > 0) {
         double percentage = passedTests * PERCENT / testsCount;
-        saveClassMeasure(context, fileReport, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage), project);
+        saveClassMeasure(fileReport, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
       }
-      saveTestsDetails(context, fileReport, project);
+      saveTestsDetails(fileReport);
     }
   }
 
@@ -242,10 +240,8 @@ public class PhpUnitResultParser implements BatchExtension {
    *          the context
    * @param fileReport
    *          the file report
-   * @param project
-   *          the project
    */
-  private void saveTestsDetails(SensorContext context, PhpUnitTestReport fileReport, Project project) {
+  private void saveTestsDetails(PhpUnitTestReport fileReport) {
     StringBuilder details = new StringBuilder();
     details.append("<tests-details>");
     for (TestCase detail : fileReport.getDetails()) {
@@ -263,6 +259,6 @@ public class PhpUnitResultParser implements BatchExtension {
       }
     }
     details.append("</tests-details>");
-    context.saveMeasure(getUnitTestResource(fileReport, project), new Measure(CoreMetrics.TEST_DATA, details.toString()));
+    context.saveMeasure(getUnitTestResource(fileReport), new Measure(CoreMetrics.TEST_DATA, details.toString()));
   }
 }
