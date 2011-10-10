@@ -31,11 +31,13 @@ import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBE
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.PhpPlugin;
 
 /**
@@ -68,6 +70,9 @@ public class PhpCpdExecutorTest {
     Project p = mock(Project.class);
     when(p.getConfiguration()).thenReturn(configuration);
     when(c.getProject()).thenReturn(p);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(p.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("srcDir")));
 
     PhpCpdExecutor executor = new PhpCpdExecutor(c);
     List<String> commandLine = executor.getCommandLine();
@@ -84,10 +89,10 @@ public class PhpCpdExecutorTest {
     expected.add(reportFile);
 
     expected.add(PHPCPD_EXCLUDE_OPTION);
-    expected.add("test1");
+    expected.add("srcDir" + File.separator + "test1");
 
     expected.add(PHPCPD_EXCLUDE_OPTION);
-    expected.add("test2");
+    expected.add("srcDir" + File.separator + "test2");
 
     assertEquals(expected, commandLine);
   }

@@ -82,8 +82,10 @@ public class PhpCpdExecutor extends AbstractPhpExecutor {
 
       if (excludedPackages != null) {
         for (String excludedPackage : excludedPackages) {
-          result.add(PHPCPD_EXCLUDE_OPTION);
-          result.add(excludedPackage);
+          for (File sourceDir : configuration.getProject().getFileSystem().getSourceDirs()) {
+            result.add(PHPCPD_EXCLUDE_OPTION);
+            result.add(sourceDir + File.separator + excludedPackage);
+          }
         }
       }
 
