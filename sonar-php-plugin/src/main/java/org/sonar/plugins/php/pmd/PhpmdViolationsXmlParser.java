@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import java.net.URL;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,17 +53,17 @@ public class PhpmdViolationsXmlParser {
 
   private static final String RULE_KEY_RULESET_SEPARATOR = "/";
 
-  private final URL url;
+  private final File report;
 
   /**
    * Instantiates a new pmd violations xml parser.
    * 
-   * @param url
+   * @param report
    */
-  public PhpmdViolationsXmlParser(URL url) {
-    this.url = url;
-    LOG.debug("Report file for Phpms is " + url);
-    if (url == null) {
+  public PhpmdViolationsXmlParser(File report) {
+    this.report = report;
+    LOG.debug("Report file for Phpms is " + report);
+    if (report == null) {
       throw new SonarException("URL associated to phpmd report file is null, check that report is existant");
     }
   }
@@ -77,7 +77,7 @@ public class PhpmdViolationsXmlParser {
     try {
       SMInputFactory inputFactory = new SMInputFactory(XMLInputFactory.newInstance());
       // <pmd>
-      SMInputCursor rootNodeCursor = inputFactory.rootElementCursor(url).advance();
+      SMInputCursor rootNodeCursor = inputFactory.rootElementCursor(report).advance();
       // <file>
       SMInputCursor fileNodeCursor = rootNodeCursor.childElementCursor(FILE_NODE_NAME).advance();
       while (fileNodeCursor.asEvent() != null) {

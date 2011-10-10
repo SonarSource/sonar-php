@@ -32,7 +32,6 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.ActiveRule;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.php.MockUtils;
 
 import com.google.common.collect.Lists;
@@ -86,10 +85,9 @@ public class PhpPmdSensorTest {
   }
 
   protected PhpmdSensor createSensor(Project project, PhpmdExecutor executor, RulesProfile profile, boolean skip) {
-    RuleFinder ruleFinder = mock(RuleFinder.class);
     PhpmdConfiguration conf = mock(PhpmdConfiguration.class);
     when(conf.isSkip()).thenReturn(skip);
-    return new PhpmdSensor(conf, executor, profile, ruleFinder);
+    return new PhpmdSensor(conf, executor, profile);
   }
 
   protected RulesProfile createRulesProfile() {

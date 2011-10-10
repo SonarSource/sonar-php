@@ -23,7 +23,6 @@ import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,6 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
 
 /**
@@ -48,9 +46,6 @@ public class PhpmdSensor implements Sensor {
   /** The rules profile. */
   private RulesProfile profile;
 
-  /** The rules finder. */
-  private RuleFinder ruleFinder;
-
   /** The plugin configuration. */
   private PhpmdConfiguration configuration;
 
@@ -63,10 +58,9 @@ public class PhpmdSensor implements Sensor {
    * @param rulesManager
    *          the rules manager
    */
-  public PhpmdSensor(PhpmdConfiguration conf, PhpmdExecutor executor, RulesProfile profile, RuleFinder ruleFinder) {
+  public PhpmdSensor(PhpmdConfiguration conf, PhpmdExecutor executor, RulesProfile profile) {
     super();
     this.configuration = conf;
-    this.ruleFinder = ruleFinder;
     this.profile = profile;
     this.executor = executor;
   }
@@ -81,25 +75,19 @@ public class PhpmdSensor implements Sensor {
     }
     File report = configuration.getReportFile();
     LOG.info("Phpmd  report file: " + report.getAbsolutePath());
-    PhpmdViolationsXmlParser reportParser;
-    try {
-      reportParser = new PhpmdViolationsXmlParser(report.toURI().toURL());
-
-      List<PhpmdViolation> violations = reportParser.getViolations();
-      List<Violation> contextViolations = new ArrayList<Violation>();
-      for (PhpmdViolation violation : violations) {
-        Rule rule = Rule.create(PHPMD_REPOSITORY_KEY, violation.getRuleKey());
-        org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
-        if (context.getResource(resource) != null) {
-          Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
-          contextViolations.add(v);
-          LOG.debug("Violation found: " + v);
-        }
+    PhpmdViolationsXmlParser reportParser = new PhpmdViolationsXmlParser(report);
+    List<PhpmdViolation> violations = reportParser.getViolations();
+    List<Violation> contextViolations = new ArrayList<Violation>();
+    for (PhpmdViolation violation : violations) {
+      Rule rule = Rule.create(PHPMD_REPOSITORY_KEY, violation.getRuleKey());
+      org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
+      if (context.getResource(resource) != null) {
+        Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
+        contextViolations.add(v);
+        LOG.debug("Violation found: " + v);
       }
-      context.saveViolations(contextViolations);
-    } catch (MalformedURLException e) {
-      LOG.error("Phpmd report file cannot be concerted to url " + report);
     }
+    context.saveViolations(contextViolations);
   }
 
   /**
