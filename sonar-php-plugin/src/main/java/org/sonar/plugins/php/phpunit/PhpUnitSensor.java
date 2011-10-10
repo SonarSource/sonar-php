@@ -86,7 +86,7 @@ public class PhpUnitSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if ( !PHP.equals(project.getLanguage())) {
+    if ( !PHP.equals(project.getLanguage()) || !configuration.isDynamicAnalysisEnabled()) {
       return false;
     }
 

@@ -122,6 +122,14 @@ public class CoverageReportSensorTest {
   }
 
   @Test
+  public void testShouldNotExecuteIfNotDynamicAnalysis() throws Exception {
+    PhpUnitConfiguration conf = mock(PhpUnitConfiguration.class);
+    when(conf.isDynamicAnalysisEnabled()).thenReturn(false);
+    PhpUnitCoverageDecorator decorator = new PhpUnitCoverageDecorator(conf);
+    assertFalse(decorator.shouldExecuteOnProject(project));
+  }
+
+  @Test
   public void testShouldNotExecuteOnProjectIfSkip() throws Exception {
     PhpUnitConfiguration conf = mock(PhpUnitConfiguration.class);
     when(conf.shouldSkipCoverage()).thenReturn(true);
@@ -131,6 +139,7 @@ public class CoverageReportSensorTest {
 
   private PhpUnitCoverageDecorator createDecorator() {
     PhpUnitConfiguration conf = mock(PhpUnitConfiguration.class);
+    when(conf.isDynamicAnalysisEnabled()).thenReturn(true);
     PhpUnitCoverageDecorator decorator = new PhpUnitCoverageDecorator(conf);
     return decorator;
   }

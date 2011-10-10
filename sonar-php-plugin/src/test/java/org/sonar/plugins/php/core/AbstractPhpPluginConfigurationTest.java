@@ -105,6 +105,24 @@ public class AbstractPhpPluginConfigurationTest {
     assertEquals(false, conf.isSkip());
   }
 
+  @Test
+  public void testDynamicAnalysisProperty() {
+    Configuration config = new BaseConfiguration();
+    Project project = MockUtils.createMockProject(config);
+    FakeConfiguration conf = new FakeConfiguration(project);
+    assertEquals(true, conf.isDynamicAnalysisEnabled());
+
+    // Set to FALSE
+    config.setProperty("sonar.dynamicAnalysis", "false");
+    conf = new FakeConfiguration(project);
+    assertEquals(false, conf.isDynamicAnalysisEnabled());
+
+    // Set to REUSE REPORTS (may be possible in Sonar, does not make sense for the moment in PHP plugin but must not break)
+    config.setProperty("sonar.dynamicAnalysis", "reuseReports");
+    conf = new FakeConfiguration(project);
+    assertEquals(true, conf.isDynamicAnalysisEnabled());
+  }
+
   class FakeConfiguration extends AbstractPhpConfiguration {
 
     public FakeConfiguration(Project project) {

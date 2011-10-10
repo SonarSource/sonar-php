@@ -53,7 +53,7 @@ public class PhpUnitCoverageDecorator implements Decorator {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if ( !Php.KEY.equals(project.getLanguageKey())) {
+    if ( !Php.KEY.equals(project.getLanguageKey()) || !configuration.isDynamicAnalysisEnabled()) {
       return false;
     }
     return !configuration.shouldSkipCoverage();

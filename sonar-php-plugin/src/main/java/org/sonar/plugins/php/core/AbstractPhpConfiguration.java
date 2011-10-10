@@ -41,6 +41,8 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   private static final String WINDOWS_BAT_SUFFIX = ".bat";
 
   protected Project project;
+  /** Indicates whether dynamic analysis (test & unit test) should be activated or not. */
+  protected boolean isDynamicAnalysis;
   /** Indicates whether the tool should be executed or not. */
   protected boolean skip;
   /** Indicates whether the plugin should only analyze results or launch tool. */
@@ -66,6 +68,10 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
       skip = project.getConfiguration().getBoolean(getSkipKey());
     } else if (isStringPropertySet(getShouldRunKey())) {
       skip = !project.getConfiguration().getBoolean(getShouldRunKey());
+    }
+    String dynamicAnalysis = configuration.getString("sonar.dynamicAnalysis", "true");
+    if (!"false".equalsIgnoreCase(dynamicAnalysis)) {
+      isDynamicAnalysis = true;
     }
   }
 
@@ -179,6 +185,15 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    */
   public boolean isStringPropertySet(String key) {
     return project.getConfiguration().containsKey(key);
+  }
+
+  /**
+   * Tells whether dynamic analysis is enabled or not
+   * 
+   * @return true if dynamic analysis is enabled
+   */
+  public boolean isDynamicAnalysisEnabled() {
+    return isDynamicAnalysis;
   }
 
   /**

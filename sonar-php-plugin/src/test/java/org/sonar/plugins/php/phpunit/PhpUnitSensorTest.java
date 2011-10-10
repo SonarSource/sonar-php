@@ -37,6 +37,15 @@ import org.sonar.plugins.php.MockUtils;
 public class PhpUnitSensorTest {
 
   @Test
+  public void shouldLaunch() {
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
+    PhpUnitSensor sensor = createSensor(project, executor);
+
+    assertEquals(true, sensor.shouldExecuteOnProject(project));
+  }
+
+  @Test
   public void shouldNotLaunchOnNonPhpProject() {
     Project project = MockUtils.createMockProject(new BaseConfiguration());
     when(project.getLanguage()).thenReturn(Java.INSTANCE);
@@ -48,12 +57,14 @@ public class PhpUnitSensorTest {
   }
 
   @Test
-  public void shouldLaunch() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
+  public void shouldNotLaunchIfNotDynamicAnalysis() {
+    Configuration conf = new BaseConfiguration();
+    conf.setProperty("sonar.dynamicAnalysis", "false");
+    Project project = MockUtils.createMockProject(conf);
     PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
     PhpUnitSensor sensor = createSensor(project, executor);
 
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
+    assertEquals(false, sensor.shouldExecuteOnProject(project));
   }
 
   @Test
