@@ -208,3 +208,19 @@ class PhpUnderControl_Example_Math
         return $v8;
     }
 }
+
+class InnerClassFoo
+{
+    public function add($v1 , $v2)
+    {
+        return ($v1 + $v2);
+    }
+}
+
+class InnerClassBar
+{
+    public function add($v1 , $v2)
+    {
+        return ($v1 + $v2);
+    }
+}
