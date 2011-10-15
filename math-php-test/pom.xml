@@ -32,40 +32,8 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.phpmaven</groupId>
-        <artifactId>maven-php-plugin</artifactId>
-        <extensions>true</extensions>
-        <version>1.1</version>
-        <configuration>
-          <sourceDirectory>/source/src</sourceDirectory>
-          <testDirectory>/source/tests</testDirectory>
-          <testFile>AllTests.php</testFile>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
-
-  <dependencies><!-- phpUnit for PHP 5 -->
-    <dependency>
-      <groupId>org.phpunit</groupId>
-      <artifactId>phpunit5</artifactId>
-      <version>3.3.9</version>
-    </dependency>
-  </dependencies>
-  <!-- phpUnit for PHP 4 -->
-  <!-- <dependency> <groupId>org.phpunit</groupId> <artifactId>phpunit4</artifactId> 
-    <version>1.3.2-SNAPSHOT</version> </dependency> -->
-
-  <reporting>
-    <plugins>
-      <!-- Doxygen Documentation -->
-      <plugin>
-        <groupId>org.phpmaven</groupId>
-        <artifactId>maven-php-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
 
   <!-- some properties that you may want to change -->
   <properties>
@@ -92,48 +60,6 @@
     <url>http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</url>
   </scm>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>release-repo1.php-maven.org</id>
-      <name>PHP-Maven 2 Release Repository</name>
-      <url>http://repo1.php-maven.org/release</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-    <pluginRepository>
-      <id>snapshot-repo1.php-maven.org</id>
-      <name>PHP-Maven 2 Snapshot Repository</name>
-      <url>http://repo1.php-maven.org/snapshot</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-  <repositories>
-    <repository>
-      <id>release-repo1.php-maven.org</id>
-      <name>PHP-Maven 2 Release Repository</name>
-      <url>http://repo1.php-maven.org/release</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-    <repository>
-      <id>snapshot-repo1.php-maven.org</id>
-      <name>PHP-Maven 2 Snapshot Repository</name>
-      <url>http://repo1.php-maven.org/snapshot</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
 
 
 </project>
