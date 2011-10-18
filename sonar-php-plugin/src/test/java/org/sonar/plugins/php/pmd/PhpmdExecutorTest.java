@@ -42,20 +42,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.sonar.api.resources.Project;
 
+@Ignore
 public class PhpmdExecutorTest {
 
-  @After
-  public void cleanFolder() {
-    File tempFolder = new File("C:/");
-    if (tempFolder.isDirectory()) {
-      try {
-        FileUtils.deleteDirectory(tempFolder);
-      } catch (IOException e) {
-      }
-    }
-  }
 
   /**
    * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()} .
