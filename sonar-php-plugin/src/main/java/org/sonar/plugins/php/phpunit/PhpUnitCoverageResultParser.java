@@ -23,7 +23,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -31,8 +33,10 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.PropertiesBuilder;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
@@ -47,6 +51,9 @@ import com.thoughtworks.xstream.XStream;
  * The Class PhpUnitCoverageResultParser.
  */
 public class PhpUnitCoverageResultParser implements BatchExtension {
+
+  // Used for debugging purposes to store measure by resource
+  private static final Map<Resource<?>, Measure> measureByResource = new HashMap<Resource<?>, Measure>();
 
   /** The logger. */
   private static Logger logger = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
@@ -109,24 +116,41 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    *          the file
    */
   private void saveCoverageMeasure(FileNode fileNode) {
-    org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(new File(fileNode.getName()), project);
+    File file = new File(fileNode.getName());
+    org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file, project);
+    // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
+    // targeted file for coverage is not null.
+    if (phpFile != null) {
+      // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
+      // This should look like (lineNumner=Count) : 1=0;2=1;3=1....
+      PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<Integer, Integer>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
+      for (LineNode line : fileNode.getLines()) {
+        saveLineMeasure(line, lineHits);
+      }
+      MetricsNode metrics = fileNode.getMetrics();
+      Measure measure = lineHits.build();
+      logMeasureByResource(phpFile, measure);
+      context.saveMeasure(phpFile, measure);
 
-    // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
-    // This should look like (lineNumner=Count) : 1=0;2=1;3=1....
-    PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<Integer, Integer>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
-    for (LineNode line : fileNode.getLines()) {
-      saveLineMeasure(line, lineHits);
+      // Save uncovered statements (lines)
+      double totalStatementsCount = metrics.getTotalStatementsCount();
+      double uncoveredLines = totalStatementsCount - metrics.getCoveredStatements();
+      double lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
+      context.saveMeasure(phpFile, CoreMetrics.LINES_TO_COVER, totalStatementsCount);
+      context.saveMeasure(phpFile, CoreMetrics.UNCOVERED_LINES, uncoveredLines);
+      context.saveMeasure(phpFile, CoreMetrics.LINE_COVERAGE, ParsingUtils.scaleValue(lineCoverage * 100.0));
     }
-    MetricsNode metrics = fileNode.getMetrics();
-    context.saveMeasure(phpFile, lineHits.build());
+  }
 
-    // Save uncovered statements (lines)
-    double totalStatementsCount = metrics.getTotalStatementsCount();
-    double uncoveredLines = totalStatementsCount - metrics.getCoveredStatements();
-    double lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
-    context.saveMeasure(phpFile, CoreMetrics.LINES_TO_COVER, totalStatementsCount);
-    context.saveMeasure(phpFile, CoreMetrics.UNCOVERED_LINES, uncoveredLines);
-    context.saveMeasure(phpFile, CoreMetrics.LINE_COVERAGE, ParsingUtils.scaleValue(lineCoverage * 100.0));
+  private void logMeasureByResource(org.sonar.api.resources.File phpFile, Measure measure) {
+    if (logger.isDebugEnabled()) {
+      Measure alreadySaved = measureByResource.get(phpFile);
+      if (alreadySaved == null) {
+        measureByResource.put(phpFile, measure);
+      } else {
+        logger.debug("Measure {} already saved for resoruce {}", measure, phpFile);
+      }
+    }
   }
 
   /**

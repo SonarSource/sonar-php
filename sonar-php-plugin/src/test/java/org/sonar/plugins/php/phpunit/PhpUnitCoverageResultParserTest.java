@@ -19,26 +19,30 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.api.measures.CoreMetrics.COVERAGE;
 import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
 import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.resources.Resource;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
 
@@ -69,9 +73,12 @@ public class PhpUnitCoverageResultParserTest {
     File f3 = new File("C:/projets/PHP/Monkey/Sources/main/Banana1.php");
     File f4 = new File("C:/projets/PHP/Monkey/Sources/test/Banana.php");
     File f5 = new File("C:/projets/PHP/Monkey/Sources/main/Money.inc");
-    when(fs.mainFiles(Php.KEY)).thenReturn(
-        InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/main"), Arrays.asList(f1, f2, f3, f5)));
-    when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/test"), Arrays.asList(f4)));
+    File f6 = new File("C:/projets/PHP/Monkey/sources/test/application/default/controllers/IndexControllerTest.php");
+
+    List<File> sourceFiles = Arrays.asList(f1, f2, f3, f5);
+    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/main"), sourceFiles));
+    List<File> testFiles = Arrays.asList(f4, f6);
+    when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
 
     File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml").getFile());
     when(config.getReportFile()).thenReturn(reportFile);
@@ -112,7 +119,9 @@ public class PhpUnitCoverageResultParserTest {
   @Test()
   public void shouldNotGenerateCoverageMeasures() {
     init();
-    verify(context, never()).saveMeasure(new org.sonar.api.resources.File("IndexControllerTest.php"), COVERAGE, 1.0);
+    org.sonar.api.resources.File file = new org.sonar.api.resources.File("IndexControllerTest.php");
+    verify(context, never()).saveMeasure(eq(file), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
+    verify(context, never()).saveMeasure((Resource<?>) eq(null), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
   }
 
   /**
