@@ -135,6 +135,17 @@ public class PhpDependResultsParserTest {
   }
 
   /**
+   * Should not stop if a file name is empty
+   */
+  @Test
+  public void shouldNotStopIfFilenameEmpty() {
+    project = mock(Project.class);
+    PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
+    parser.parse(new java.io.File(getClass().getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-with-empty-filename.xml")
+        .getFile()));
+  }
+
+  /**
    * Should not throw an exception if metric not found.
    */
   @Test
@@ -203,7 +214,7 @@ public class PhpDependResultsParserTest {
     verify(context).saveMeasure(new File("MoneyBag.php"), metric, 39.0);
     verify(context).saveMeasure(new File("Common/IMoney.php"), metric, 0.0);
   }
-  
+
   /**
    * Should not generate dir or project measures.
    */
