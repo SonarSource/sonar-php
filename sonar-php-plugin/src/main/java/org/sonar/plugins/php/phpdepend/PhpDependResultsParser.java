@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
@@ -272,7 +273,7 @@ public class PhpDependResultsParser implements BatchExtension {
     List<FileNode> files = metricsNode.getFiles();
     for (FileNode fileNode : files) {
       String fileName = fileNode.getFileName();
-      if (fileName.isEmpty()) {
+      if (StringUtils.isEmpty(fileName)) {
           continue;
       }
       org.sonar.api.resources.File currentResourceFile = org.sonar.api.resources.File.fromIOFile(new File(fileName), project);
