@@ -37,7 +37,7 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   public static final String PHPMD_REPORT_FORMAT = "xml";
   public static final String PHPMD_REPORT_FILE_OPTION = "--reportfile";
   public static final String PHPMD_LEVEL_OPTION = "--minimumpriority";
-  public static final String PHPMD_EXTENSIONS_OPTION = "--extensions";
+  public static final String PHPMD_EXTENSIONS_OPTION = "--suffixes";
   public static final String PHPMD_IGNORE_OPTION = "--ignore";
   public static final String PHPMD_DEFAULT_RULESET_ARGUMENT = "codesize,unusedcode,naming";
 

@@ -61,7 +61,7 @@ public class PhpmdExecutorTest {
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] { "target/MockProject/src", "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--extensions", StringUtils.join(extensions, ",") };
+        "--suffixes", StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
   }
@@ -84,7 +84,7 @@ public class PhpmdExecutorTest {
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] { "target/MockProject/src", "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--extensions", StringUtils.join(extensions, ",") };
+        "--suffixes", StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
   }
@@ -107,7 +107,7 @@ public class PhpmdExecutorTest {
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] { "target/MockProject/src", "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--ignore", StringUtils.join(sonarExclusionPattern, ","), "--extensions", StringUtils.join(extensions, ",") };
+        "--ignore", StringUtils.join(sonarExclusionPattern, ","), "--suffixes", StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
   }
@@ -132,7 +132,7 @@ public class PhpmdExecutorTest {
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] { "target/MockProject/src", "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--ignore", StringUtils.join(phpmdExclusionPattern, ",") + "," + StringUtils.join(sonarExclusionPattern, ","), "--extensions",
+        "--ignore", StringUtils.join(phpmdExclusionPattern, ",") + "," + StringUtils.join(sonarExclusionPattern, ","), "--suffixes",
         StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
