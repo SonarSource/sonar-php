@@ -1,17 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--                                                                                         -->
+<!--  Example of POM that can be used to run a Sonar analysis on a PHP project with Maven.   -->
+<!--  => more documentation at http://docs.codehaus.org/display/SONAR/Analyse+with+Maven     -->
+<!--                                                                                         -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>fr.hashcode</groupId>
   <artifactId>mathematics</artifactId>
   <name>PHP Mathematics</name>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <!-- For the moment, specify pom as packaging for php projects -->
   <packaging>pom</packaging>
+
+  <!-- Info used by the SCM plugin -->
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</developerConnection>
+    <url>http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</url>
+  </scm>
+
   <build>
     <!-- You cannot omit this one, because maven will implicitely add src/main/java 
       to it -->
     <sourceDirectory>${basedir}/source/src</sourceDirectory>
-    <!--testSourceDirectory>${basedir}/source/tests</testSourceDirectory -->
+    <testSourceDirectory>${basedir}/source/tests</testSourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -38,6 +52,7 @@
   <!-- some properties that you may want to change -->
   <properties>
     <sonar.language>php</sonar.language>
+
     <sonar.phpPmd.skip>false</sonar.phpPmd.skip>
     <sonar.phpCodesniffer.skip>false</sonar.phpCodesniffer.skip>
     <sonar.phpDepend.skip>false</sonar.phpDepend.skip>
@@ -52,14 +67,5 @@
     <sonar.phase>generate-sources</sonar.phase>
     
   </properties>
-
-  <!-- Info added to check that the PHP plugin works correctly with the SCM plugin -->
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</developerConnection>
-    <url>http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test</url>
-  </scm>
-
-
 
 </project>
