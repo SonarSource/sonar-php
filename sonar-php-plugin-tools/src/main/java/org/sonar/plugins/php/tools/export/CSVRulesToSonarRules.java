@@ -1,3 +1,4 @@
+package org.sonar.plugins.php.tools.export;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -24,11 +25,6 @@ public class CSVRulesToSonarRules {
     FileOutputStream out = new FileOutputStream(outputFile);
     BufferedOutputStream output = new BufferedOutputStream(out);
 
-    /*
-     * <rule key="PHPCS/Generic/RC_DYNAMIC_ERROR" priority="MAJOR"> <category name="Maintainability" /> <name>RC_DYNAMIC_ERROR</name>
-     * <configKey>rulesets/RC_DYNAMIC_ERROR</configKey> <description>:message</description> </rule>
-     * key,priority,category,name,configKey,description
-     */
     StringBuilder buffer = new StringBuilder("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><rules>");
     // first line contains colum, so we skip it.
     String line = reader.readLine();
@@ -36,12 +32,12 @@ public class CSVRulesToSonarRules {
     while (line != null) {
       String[] tokens = line.split(",");
       buffer.append("<rule key=\"").append(tokens[0]).append("\" priority=\"").append(tokens[1]).append("\">");
-      buffer.append("<category name=\"").append(tokens[2]).append("\" />");
-      buffer.append("<name>").append(tokens[3]).append("</name>");
-      buffer.append("<configKey>").append(tokens[4]).append("</configKey>");
-      String description = tokens[3];
-      if (tokens.length > 5) {
-        description = tokens[5];
+      buffer.append("<category name=\"Maintainability\"/>");
+      buffer.append("<name>").append(tokens[2]).append("</name>");
+      buffer.append("<configKey>").append(tokens[3]).append("</configKey>");
+      String description = tokens[2];
+      if (tokens.length > 4) {
+        description = tokens[4];
         if (description.startsWith("\"")) {
           description = description.substring(1);
         }

@@ -1,3 +1,4 @@
+package org.sonar.plugins.php.tools.export;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -25,11 +26,7 @@ public class CSVRulesToSonarProfile {
     FileOutputStream out = new FileOutputStream(outputFile);
     BufferedOutputStream output = new BufferedOutputStream(out);
     String line = reader.readLine();
-    /*
-     * <rule priority="BLOCKER"> <key>Code Size Rules/ExcessiveClassLength</key> <repositoryKey>php_codesniffer_rules</repositoryKey>
-     * <category name="Maintainability" /> <name>ExcessiveClassLength</name> <configKey>Code Size Rules/ExcessiveClassLength</configKey>
-     * <description>:message</description> </rule>
-     */
+
     StringBuilder buffer = new StringBuilder("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><profile>");
     buffer.append("<name>PHP_CodeSniffer rules</name><language>php</language><rules>");
     // first line contains colum, so we skip it.
@@ -40,12 +37,12 @@ public class CSVRulesToSonarProfile {
       buffer.append("<rule priority=\"").append(tokens[1]).append("\">");
       buffer.append("<key>").append(tokens[0]).append("</key>\n");
       buffer.append("<repositoryKey>php_codesniffer_rules</repositoryKey>\n");
-      buffer.append("<category name=\"").append(tokens[2]).append("\" />");
-      buffer.append("<name>").append(tokens[3]).append("</name>");
-      buffer.append("<configKey>").append(tokens[4]).append("</configKey>");
-      String description = tokens[3];
-      if (tokens.length > 5) {
-        description = tokens[5];
+      buffer.append("<category name=\"Maintainability\"/>");
+      buffer.append("<name>").append(tokens[2]).append("</name>");
+      buffer.append("<configKey>").append(tokens[3]).append("</configKey>");
+      String description = tokens[2];
+      if (tokens.length > 4) {
+        description = tokens[4];
         if (description.startsWith("\"")) {
           description = description.substring(1);
         }

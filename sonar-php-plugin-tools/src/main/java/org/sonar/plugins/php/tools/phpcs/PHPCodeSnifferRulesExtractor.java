@@ -1,3 +1,5 @@
+package org.sonar.plugins.php.tools.phpcs;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,6 +13,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @author Akram Ben Aissi
  * 
@@ -22,43 +27,31 @@ public class PHPCodeSnifferRulesExtractor {
   private static final int SNIFF_NAME_POSITION = 3;
   private static final String $PHPCS_FILE_ADD_ERROR_OR_WARNING = "\\s*(.*)->add(Warning|Error)\\([^,]*, [^,]*, ([^,]*)(,[^,]*)*\\);";
   private static final String $ERROR_DELIMITOR = "\\s*\\$error\\s*=(.*);";
-  private static final String ROOT_PATH = "D:\\tmp\\phpcs\\CodeSniffer\\Standards\\";
+  private static final String RULES_CSV_FILE = "all-phpcs-rules.csv";
 
   private static final String EXTENSION = "Sniff.php";
   private static final String SNIFFS_DIRECTORY = ".Sniffs";
 
-  /**
-   * @param args
-   * @throws IOException
-   */
-  public static void main(String[] args) throws IOException {
-    String l = "      $phpcsFile->addWarning($error, $stackPtr, 'NotAllowed');";
-    Pattern p = Pattern.compile($PHPCS_FILE_ADD_ERROR_OR_WARNING);
-    Matcher matcher = p.matcher(l);
-    matcher.groupCount();
-    matcher.matches();
-    // matcher.group(0);
-    matcher.group(1);
-    matcher.group(2);
-    matcher.group(3);
-    // matcher.group(4);
-    // matcher.group(5);
+  private String outputDir;
+  private String inputDir;
 
-    String l2 = "       $phpcsFile->addError($error, $stackPtr, 'NotAllowedWarning', $data);";
-    Matcher matcher2 = p.matcher(l);
-    matcher2 = p.matcher(l2);
-    matcher.groupCount();
-    matcher2.matches();
-    // matcher.group(0);
-    matcher2.group(1);
-    matcher2.group(2);
-    matcher2.group(3);
-    // matcher2.group(4);
-    // matcher2.group(5);
-    List<File> files = getSniffFiles(ROOT_PATH);
+  public PHPCodeSnifferRulesExtractor(String inputDir, String outputDir) {
+    this.inputDir = new File(inputDir).getAbsolutePath() + File.separator;
+    this.outputDir = outputDir;
+  }
+
+  public File extractSniffs() throws IOException {
+    File outputFolder = new File(outputDir);
+    if (outputFolder.exists()) {
+      FileUtils.deleteDirectory(outputFolder);
+    }
+    outputFolder.mkdirs();
+
+    List<File> files = getSniffFiles(inputDir);
     List<String> sniffs = extractSniffNames(files);
-    writeSniffsToFile("d:/tmp/all-phpcs-rules.csv", sniffs);
+    writeSniffsToFile(outputDir + RULES_CSV_FILE, sniffs);
 
+    return new File(outputDir + RULES_CSV_FILE);
   }
 
   /**
@@ -66,7 +59,7 @@ public class PHPCodeSnifferRulesExtractor {
    * @param sniffs
    * @throws IOException
    */
-  static void writeSniffsToFile(String path, List<String> sniffs) throws IOException {
+  private void writeSniffsToFile(String path, List<String> sniffs) throws IOException {
     FileOutputStream stream = new FileOutputStream(path);
     OutputStreamWriter streamWriter = new OutputStreamWriter(stream);
     BufferedWriter writer = new BufferedWriter(streamWriter);
@@ -82,9 +75,9 @@ public class PHPCodeSnifferRulesExtractor {
    * @return
    * @throws IOException
    */
-  static List<String> extractSniffNames(List<File> files) throws IOException {
+  private List<String> extractSniffNames(List<File> files) throws IOException {
     List<String> sniffs = new ArrayList<String>();
-    String header = "key,priority,category,name,configKey,description\n";
+    String header = "key,priority,name,configKey,description\n";
     sniffs.add(header);
 
     Pattern descriptionPattern = Pattern.compile($ERROR_DELIMITOR);
@@ -94,40 +87,35 @@ public class PHPCodeSnifferRulesExtractor {
       FileInputStream inputStream = new FileInputStream(file);
       InputStreamReader streamReader = new InputStreamReader(inputStream);
       BufferedReader reader = new BufferedReader(streamReader);
-      String prefix = file.getAbsolutePath().replace(ROOT_PATH, "").replace(EXTENSION, "");
-      prefix = prefix.replaceAll("\\\\", ".").replace(SNIFFS_DIRECTORY, "");
+      String prefix = file.getAbsolutePath().replace(inputDir, "").replace(EXTENSION, "");
+      prefix = prefix.replaceAll("\\\\", ".").replaceAll("/", ".").replace(SNIFFS_DIRECTORY, "");
       String line = reader.readLine();
+      String description = null;
       while (line != null) {
         Matcher descriptionMatcher = descriptionPattern.matcher(line);
+        Matcher sniffMatcher = addErrorPattern.matcher(line);
         if (descriptionMatcher.matches()) {
-          String description = clean(descriptionMatcher.group(SNIFF_DESCRIPTION_POSITION));
-          // On recherche la prochaine occurence de addError ou addWarning
-          Matcher sniffMatcher = addErrorPattern.matcher(line);
-          String key = "";
-          while ((line = reader.readLine()) != null && !sniffMatcher.matches()) {
-            sniffMatcher = addErrorPattern.matcher(line);
+          description = clean(descriptionMatcher.group(SNIFF_DESCRIPTION_POSITION));
+        } else if (sniffMatcher.matches() && description != null) {
+          String key = clean(sniffMatcher.group(SNIFF_NAME_POSITION));
+          if ( !StringUtils.isBlank(key) && Character.isUpperCase(key.charAt(0))) {
+            String name = getName(prefix);
+            // key,priority,category,name,configKey,description
+            StringBuilder sniff = new StringBuilder(prefix).append(".").append(key).append(",");
+            String level = "MAJOR";
+            sniff.append(level).append(",");
+            sniff.append(name).append(key).append(",");
+            sniff.append("rulesets/").append(name).append(",");
+            if ("".equals(description)) {
+              sniff.append("No description available");
+            }
+            sniff.append(description).append("\n");
+            sniffs.add(sniff.toString());
           }
-          if (line != null) {
-            key = clean(sniffMatcher.group(SNIFF_NAME_POSITION));
-          }
-          String name = getName(prefix);
-          // key,priority,category,name,configKey,description
-          StringBuilder sniff = new StringBuilder(prefix).append(".").append(key).append(",");
-          String level = "MAJOR";
-          sniff.append(level).append(",");
-          sniff.append("Maintainability").append(",");
-          sniff.append(name).append(key).append(",");
-          sniff.append("rulesets/").append(name).append(",");
-          if ("".equals(description)) {
-            sniff.append("No description available");
-          }
-          sniff.append(description).append("\n");
-          sniffs.add(sniff.toString());
+          description = null;
         }
-        // Sin on est pas arrivé à la fin du fichier on recommence.
-        if (line != null) {
-          line = reader.readLine();
-        }
+
+        line = reader.readLine();
       }
     }
     return sniffs;
@@ -151,7 +139,7 @@ public class PHPCodeSnifferRulesExtractor {
    * @param ROOT_PATH
    * @return a recursively list of all directories contained in path
    */
-  static List<File> getSniffFiles(String rootPath) {
+  private List<File> getSniffFiles(String rootPath) {
     return getSniffFiles(rootPath, true);
   }
 
@@ -159,7 +147,7 @@ public class PHPCodeSnifferRulesExtractor {
    * @param ROOT_PATH
    * @return a recursively list of all directories contained in path
    */
-  private static List<File> getSniffFiles(String rootPath, boolean start) {
+  private List<File> getSniffFiles(String rootPath, boolean start) {
     List<File> files = new ArrayList<File>();
     File root = new File(rootPath);
     if ( !start && !root.isDirectory()) {
@@ -182,7 +170,7 @@ public class PHPCodeSnifferRulesExtractor {
    * @param child
    * @return
    */
-  private static List<File> directoryContainsOnlySniffs(File child) {
+  private List<File> directoryContainsOnlySniffs(File child) {
     List<File> files = new ArrayList<File>();
     for (File file : child.listFiles()) {
       if (file.isDirectory() || !file.getName().endsWith(EXTENSION)) {
