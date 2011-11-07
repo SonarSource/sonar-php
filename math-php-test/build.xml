@@ -1,65 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="ci-example"  default="build" basedir=".">
+<!--                                                                                                -->
+<!--  Example of build script that can be used to run a Sonar analysis on a PHP project with Ant.   -->
+<!--  => more documentation at http://docs.codehaus.org/display/SONAR/Analyse+with+Ant+Task         -->
+<!--                                                                                                -->
 
-  <property name="php.pear.path" value="/usr/share/php" />
+<project name="PHP Mathematics Sonar Analysis"  default="sonar" basedir=".">
 
-  <target name="build" depends="php-lint, php-documentor, phpunit-tu"/>
+  <!-- Define the Sonar task if this hasn't been done in a common script -->
+  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+  	<!-- NOTE: change this path according to your installation! -->
+    <classpath path="/opt/sonar-ant-task/sonar-ant-task-1.2.jar" />
+  </taskdef>
+  
+  <!-- Add the target -->
+  <target name="sonar">
+    <property name="sonar.projectName" value="PHP Mathematics" />
+    <property name="sonar.sources" value="source/src" />
+    <property name="sonar.tests" value="source/tests" />
+    <property name="sonar.language" value="php" />
+    
+    <property name="sonar.phpUnit.mainTestClass" value="source/tests/AllTests2.php" />
+    <property name="sonar.phpcpd.excludes" value="source/tests" />
 
-  <target name="checkout">
-     <exec executable="svn" dir="${basedir}/source" failonerror="on">
-       <arg line="up"/>
-     </exec>
-   </target>
+    <!-- Example of properties that can be uncommented to enable reuse of existing PHP Code Sniffer reports -->
+    <!--
+    <property name="sonar.phpCodesniffer.analyzeOnly" value="true" />
+    <property name="sonar.phpCodesniffer.reportFileRelativePath" value="../../logs" />
+    <property name="sonar.phpCodesniffer.reportFileName" value="cs-report.xml" />
+    -->
 
-
-  <target name="delete-old-builds">
-    <exec executable="phpuc" dir="${basedir}/../" failonerror="off">
-      <arg line="clean --project-name ${ant.project.name} --keep-builds 10 /var/cruisecontrol" />
-    </exec>
-  </target>
-
-  <target name="php-lint">
-     <apply executable="php" failonerror="true">
-       <arg value="-l" />
-       <fileset dir="${basedir}/source/">
-         <include name="**/*.php" />
-       </fileset>
-     </apply>
-   </target>
-
-  <target name="php-documentor">
-    <exec executable="phpdoc" dir="${basedir}/source" logerror="on">
-      <arg line="--title '${ant.project.name}'
-                 --undocumentedelements on
-                 --parseprivate on
-                 --target ${basedir}/build/api
-                 --directory '${basedir}/source'" />
-   </exec>
-  </target>
-
-  <target name="php-codesniffer">
-    <exec executable="sqlics" dir="${basedir}/source"
-      error="/tmp/checkstyle.error.log">
-      <arg line=" --standard=GN --report=checkstyle --report-file=${basedir}/build/logs/checkstyle.xml  ${basedir}/source"/>
-    </exec>
-  </target>
-
-  <target name="phpunit-tu">
-    <exec executable="phpunit" dir="${basedir}/source" failonerror="off">
-      <arg line="--log-junit '${basedir}/build/logs/phpunit.xml'
-                 --coverage-html '${basedir}/build/coverage' ci-example ${basedir}/source/tests/AllTests.php" />
-    </exec>
-  </target>
-
-  <target name="pdepend">
-    <exec executable="pdepend" dir="${basedir}/source">
-      <arg line="
-      --jdepend-chart=${basedir}/build/graph/08-pdepend.jdepend.chart.svg
-      --jdepend-xml=${basedir}/build/logs/pdepend.jdepend.xml
-      --overview-pyramid=${basedir}/build/graph/09-pdepend.pyramid.svg
-      --summary-xml=${basedir}/build/logs/pdepend.summary.xml
-      ${basedir}/source/" />
-    </exec>
+    <property name="sonar.scm.url" value="scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test" />
+ 
+    <sonar:sonar key="fr.hashcode:mathematics" version="1.0-SNAPSHOT" xmlns:sonar="antlib:org.sonar.ant"/>
   </target>
 
 </project>
