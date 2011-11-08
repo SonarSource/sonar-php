@@ -60,7 +60,7 @@ public class PhpmdExecutorTest {
 
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
-    String[] expected = new String[] { "target/MockProject/src", "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
+    String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
         "--suffixes", StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
@@ -83,7 +83,7 @@ public class PhpmdExecutorTest {
 
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
-    String[] expected = new String[] { "target/MockProject/src", "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
+    String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
         "--suffixes", StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
@@ -106,7 +106,7 @@ public class PhpmdExecutorTest {
 
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
-    String[] expected = new String[] { "target/MockProject/src", "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
+    String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
         "--ignore", StringUtils.join(sonarExclusionPattern, ","), "--suffixes", StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
@@ -131,11 +131,19 @@ public class PhpmdExecutorTest {
 
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
-    String[] expected = new String[] { "target/MockProject/src", "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
+    String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
         "--ignore", StringUtils.join(phpmdExclusionPattern, ",") + "," + StringUtils.join(sonarExclusionPattern, ","), "--suffixes",
         StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
+  }
+
+  protected String getSrcRelativePathAccordingToOs() {
+    if (SystemUtils.IS_OS_WINDOWS) {
+      return "target\\MockProject\\src";
+    } else {
+      return "target/MockProject/src";
+    }
   }
 
   private List<String> getExpectedCommandLineAccordingToOs(String[] expected) {
