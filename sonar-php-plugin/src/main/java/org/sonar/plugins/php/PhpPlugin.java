@@ -98,7 +98,6 @@ import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferPriorityMapper;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfile;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileExporter;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileImporter;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository;
@@ -107,6 +106,11 @@ import org.sonar.plugins.php.codesniffer.PhpCodeSnifferViolationsXmlParser;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.core.PhpSourceImporter;
+import org.sonar.plugins.php.core.profiles.AllPhpCSProfile;
+import org.sonar.plugins.php.core.profiles.AllPhpmdProfile;
+import org.sonar.plugins.php.core.profiles.PearProfile;
+import org.sonar.plugins.php.core.profiles.SonarWayProfile;
+import org.sonar.plugins.php.core.profiles.ZendProfile;
 import org.sonar.plugins.php.cpd.PhpCpdConfiguration;
 import org.sonar.plugins.php.cpd.PhpCpdExecutor;
 import org.sonar.plugins.php.cpd.PhpCpdResultParser;
@@ -123,7 +127,6 @@ import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitSensor;
 import org.sonar.plugins.php.pmd.PhpmdConfiguration;
 import org.sonar.plugins.php.pmd.PhpmdExecutor;
-import org.sonar.plugins.php.pmd.PhpmdProfile;
 import org.sonar.plugins.php.pmd.PhpmdProfileExporter;
 import org.sonar.plugins.php.pmd.PhpmdProfileImporter;
 import org.sonar.plugins.php.pmd.PhpmdRuleRepository;
@@ -306,6 +309,13 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PhpSourceCodeColorizer.class);
     extensions.add(NoSonarAndCommentedOutLocSensor.class);
 
+    // Profiles
+    extensions.add(SonarWayProfile.class);
+    extensions.add(AllPhpmdProfile.class);
+    extensions.add(AllPhpCSProfile.class);
+    extensions.add(PearProfile.class);
+    extensions.add(ZendProfile.class);
+
     // PhpDepend
     extensions.add(PhpDependExecutor.class);
     extensions.add(PhpDependResultsParser.class);
@@ -317,7 +327,6 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PhpmdRuleRepository.class);
     extensions.add(PhpmdConfiguration.class);
     extensions.add(PhpmdExecutor.class);
-    extensions.add(PhpmdProfile.class);
     extensions.add(PmdRulePriorityMapper.class);
     extensions.add(PhpmdProfileImporter.class);
     extensions.add(PhpmdProfileExporter.class);
@@ -327,7 +336,6 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PhpCodeSnifferExecutor.class);
     extensions.add(PhpCodeSnifferViolationsXmlParser.class);
     extensions.add(PhpCodeSnifferSensor.class);
-    extensions.add(PhpCodeSnifferProfile.class);
     extensions.add(PhpCodeSnifferConfiguration.class);
     extensions.add(PhpCodeSnifferPriorityMapper.class);
     extensions.add(PhpCodeSnifferProfileExporter.class);

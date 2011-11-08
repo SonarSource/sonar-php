@@ -1,5 +1,5 @@
 <profile>
-  <name>PHPMD Rules</name>
+  <name>All PHPMD Rules</name>
   <language>php</language>
   <rules>
     <rule>

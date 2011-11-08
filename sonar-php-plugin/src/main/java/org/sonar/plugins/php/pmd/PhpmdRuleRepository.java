@@ -29,7 +29,7 @@ import org.sonar.plugins.php.core.PhpRuleRepository;
 public final class PhpmdRuleRepository extends PhpRuleRepository {
 
   public static final String PHPMD_REPOSITORY_KEY = "phppmd_rules";
-  public static final String PHPMD_REPOSITORY_NAME = "Phpmd Rules";
+  public static final String PHPMD_REPOSITORY_NAME = "PHPMD";
   // for user extensions
   private ServerFileSystem fileSystem;
   private XMLRuleParser parser;

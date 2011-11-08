@@ -17,24 +17,35 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.codesniffer;
+package org.sonar.plugins.php.core.profiles;
 
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.ValidationMessages;
 
-public final class PhpCodeSnifferProfile extends ProfileDefinition {
+/**
+ * Profile used for applications developed with Zend.
+ */
+public final class ZendProfile extends ProfileDefinition {
 
-  private XMLProfileParser parser;
+  private final XMLProfileParser parser;
 
-  public PhpCodeSnifferProfile(XMLProfileParser parser) {
+  /**
+   * Creates the profile.
+   * 
+   * @param parser
+   *          the XML file parser
+   */
+  public ZendProfile(XMLProfileParser parser) {
     this.parser = parser;
   }
 
+  /**
+   * @see org.sonar.api.profiles.ProfileDefinition#createProfile(org.sonar.api.utils.ValidationMessages)
+   */
   @Override
   public RulesProfile createProfile(ValidationMessages messages) {
-    return parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/codesniffer/php-profile-with-cs.xml", messages);
+    return parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/profiles/zend-profile.xml", messages);
   }
-
 }

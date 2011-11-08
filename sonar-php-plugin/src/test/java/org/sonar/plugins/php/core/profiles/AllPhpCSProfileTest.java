@@ -17,12 +17,11 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.codesniffer;
+package org.sonar.plugins.php.core.profiles;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_NAME;
 
 import java.util.List;
 
@@ -35,8 +34,9 @@ import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileExporterTest.MockPhpCodeSnifferRuleFinder;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository;
 
-public class PhpCodeSnifferProfileTest {
+public class AllPhpCSProfileTest {
 
   @Test
   public void testCreateProfileValidationMessages() {
@@ -46,10 +46,10 @@ public class PhpCodeSnifferProfileTest {
     RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
 
     XMLProfileParser parser = new XMLProfileParser(ruleFinder);
-    PhpCodeSnifferProfile profile = new PhpCodeSnifferProfile(parser);
+    AllPhpCSProfile profile = new AllPhpCSProfile(parser);
     ValidationMessages messages = ValidationMessages.create();
     RulesProfile rulesProfile = profile.createProfile(messages);
     assertNotNull(rulesProfile);
-    assertEquals(PHPCS_REPOSITORY_NAME, rulesProfile.getName());
+    assertEquals("All PHP CodeSniffer Rules", rulesProfile.getName());
   }
 }

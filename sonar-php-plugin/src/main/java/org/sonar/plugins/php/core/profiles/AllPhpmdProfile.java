@@ -17,24 +17,29 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.pmd;
+package org.sonar.plugins.php.core.profiles;
 
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.ValidationMessages;
 
-public final class PhpmdProfile extends ProfileDefinition {
+/**
+ * Profile that gathers all the PHPMD rules.
+ * 
+ * NOTE: this profile should be removed once we have defined appropriate profiles that uses both PHPCS and PHPMD rules.
+ */
+public final class AllPhpmdProfile extends ProfileDefinition {
 
-  /**
-   * 
-   */
   private final XMLProfileParser parser;
 
   /**
-   * @param importer
+   * Creates the profile.
+   * 
+   * @param parser
+   *          the XML file parser
    */
-  public PhpmdProfile(XMLProfileParser parser) {
+  public AllPhpmdProfile(XMLProfileParser parser) {
     this.parser = parser;
   }
 
@@ -43,6 +48,6 @@ public final class PhpmdProfile extends ProfileDefinition {
    */
   @Override
   public RulesProfile createProfile(ValidationMessages messages) {
-    return parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/pmd/php-profile-with-pmd.xml", messages);
+    return parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/profiles/all-phpmd-profile.xml", messages);
   }
 }
