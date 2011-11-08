@@ -27,7 +27,7 @@ import org.sonar.api.ServerExtension;
 import org.sonar.api.rules.RulePriority;
 
 /**
- * The Class PmdRulePriorityMapper.
+ * Class that maps Sonar and PHPMD priority/severity ranges.
  */
 public class PmdRulePriorityMapper implements ServerExtension, BatchExtension {
 
@@ -37,7 +37,7 @@ public class PmdRulePriorityMapper implements ServerExtension, BatchExtension {
   private static final RulePriority DEFAULT_RULE_PRIORITY = RulePriority.MAJOR;
 
   /**
-   * 
+   * Creates a PmdRulePriorityMapper
    */
   public PmdRulePriorityMapper() {
     from.put("1", RulePriority.BLOCKER);
@@ -53,7 +53,6 @@ public class PmdRulePriorityMapper implements ServerExtension, BatchExtension {
     to.put(RulePriority.MAJOR, "3");
     to.put(RulePriority.MINOR, "4");
     to.put(RulePriority.INFO, "5");
-
   }
 
   /**

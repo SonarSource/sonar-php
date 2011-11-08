@@ -39,40 +39,51 @@ public class PhpCodeSnifferPriorityMapperTest {
   @Test
   public void testFromWithRegularValues() {
     PhpCodeSnifferPriorityMapper mapper = new PhpCodeSnifferPriorityMapper();
-    assertEquals(RulePriority.BLOCKER, mapper.from("error"));
-    assertEquals(RulePriority.MAJOR, mapper.from("warning"));
-    assertEquals(RulePriority.INFO, mapper.from("info"));
+    assertEquals(RulePriority.BLOCKER, mapper.from("10"));
+    assertEquals(RulePriority.CRITICAL, mapper.from("9"));
+    assertEquals(RulePriority.MAJOR, mapper.from("8"));
+    assertEquals(RulePriority.MINOR, mapper.from("7"));
+    assertEquals(RulePriority.INFO, mapper.from("6"));
+    assertEquals(RulePriority.INFO, mapper.from("0"));
   }
 
   /**
    * Test method for {@link org.sonar.plugins.php.checkstyle.PhpCodeSnifferPriorityMapper#from(java.lang.String)}.
    */
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testFromWithUnknownInput() {
     PhpCodeSnifferPriorityMapper mapper = new PhpCodeSnifferPriorityMapper();
-    mapper.from("RANDOM");
+    assertEquals(RulePriority.MAJOR, mapper.from("foo"));
   }
 
   /**
    * Test method for {@link org.sonar.plugins.php.checkstyle.PhpCodeSnifferPriorityMapper#from(java.lang.String)}.
    */
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testFromWithNullValue() {
     PhpCodeSnifferPriorityMapper mapper = new PhpCodeSnifferPriorityMapper();
-    mapper.from(null);
+    assertEquals(RulePriority.MAJOR, mapper.from(null));
+  }
+
+  /**
+   * Test method for {@link org.sonar.plugins.php.checkstyle.PhpCodeSnifferPriorityMapper#to(org.sonar.api.rules.RulePriority)}.
+   */
+  @Test
+  public void testTo() {
+    PhpCodeSnifferPriorityMapper mapper = new PhpCodeSnifferPriorityMapper();
+    assertEquals("6", mapper.to(RulePriority.INFO));
+    assertEquals("7", mapper.to(RulePriority.MINOR));
+    assertEquals("8", mapper.to(RulePriority.MAJOR));
+    assertEquals("9", mapper.to(RulePriority.CRITICAL));
+    assertEquals("10", mapper.to(RulePriority.BLOCKER));
   }
 
   /**
    * Test method for {@link org.sonar.plugins.php.checkstyle.PhpCodeSnifferPriorityMapper#to(org.sonar.api.rules.RulePriority)}.
    */
   @Test(expected = IllegalArgumentException.class)
-  public void testTo() {
+  public void testToIfUnexistingPriority() {
     PhpCodeSnifferPriorityMapper mapper = new PhpCodeSnifferPriorityMapper();
-    assertEquals("info", mapper.to(RulePriority.INFO));
-    assertEquals("info", mapper.to(RulePriority.MINOR));
-    assertEquals("warning", mapper.to(RulePriority.MAJOR));
-    assertEquals("error", mapper.to(RulePriority.BLOCKER));
-    assertEquals("error", mapper.to(RulePriority.CRITICAL));
     assertEquals(null, mapper.to(null));
   }
 }

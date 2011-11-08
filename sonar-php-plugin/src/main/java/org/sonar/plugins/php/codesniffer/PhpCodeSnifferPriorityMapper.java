@@ -27,46 +27,57 @@ import org.sonar.api.BatchExtension;
 import org.sonar.api.ServerExtension;
 import org.sonar.api.rules.RulePriority;
 
+/**
+ * Class that maps Sonar and PHPCS priority/severity ranges.
+ */
 public final class PhpCodeSnifferPriorityMapper implements ServerExtension, BatchExtension {
 
-  private static final String INFO_PRIORITY = "info";
-  private static final String WARNING_PRIORITY = "warning";
-  private static final String ERROR_PRIORITY = "error";
-
-  private Map<String, RulePriority> from = new TreeMap<String, RulePriority>(String.CASE_INSENSITIVE_ORDER);
+  private Map<String, RulePriority> from = new TreeMap<String, RulePriority>();
   private Map<RulePriority, String> to = new HashMap<RulePriority, String>();
 
   /**
-   * 
+   * Creates the PhpCodeSnifferPriorityMapper
    */
   public PhpCodeSnifferPriorityMapper() {
+    from.put("10", RulePriority.BLOCKER);
+    from.put("9", RulePriority.CRITICAL);
+    from.put("8", RulePriority.MAJOR);
+    from.put("7", RulePriority.MINOR);
+    from.put("6", RulePriority.INFO);
+    from.put("5", RulePriority.INFO);
+    from.put("4", RulePriority.INFO);
+    from.put("3", RulePriority.INFO);
+    from.put("2", RulePriority.INFO);
+    from.put("1", RulePriority.INFO);
+    from.put("0", RulePriority.INFO);
 
-    from.put(ERROR_PRIORITY, RulePriority.BLOCKER);
-    from.put(WARNING_PRIORITY, RulePriority.MAJOR);
-    from.put(INFO_PRIORITY, RulePriority.INFO);
-
-    to.put(RulePriority.BLOCKER, ERROR_PRIORITY);
-    to.put(RulePriority.CRITICAL, ERROR_PRIORITY);
-    to.put(RulePriority.MAJOR, WARNING_PRIORITY);
-    to.put(RulePriority.MINOR, INFO_PRIORITY);
-    to.put(RulePriority.INFO, INFO_PRIORITY);
-
+    to.put(RulePriority.BLOCKER, "10");
+    to.put(RulePriority.CRITICAL, "9");
+    to.put(RulePriority.MAJOR, "8");
+    to.put(RulePriority.MINOR, "7");
+    to.put(RulePriority.INFO, "6");
   }
 
   /**
+   * Returns the Sonar priority corresponding to the given PHPCS severity.
+   * 
    * @param priority
-   * @return
+   *          the PHPCS severity
+   * @return the Sonar priority
    */
   public RulePriority from(String priority) {
     if (priority == null || from.get(priority) == null) {
-      throw new IllegalArgumentException("Priority not supported: " + priority);
+      return RulePriority.MAJOR;
     }
     return from.get(priority);
   }
 
   /**
+   * Returns the PHPCS priority corresponding to the given Sonar severity.
+   * 
    * @param rulePriority
-   * @return
+   *          the Sonar priority
+   * @return the PHPCS severity
    */
   public String to(RulePriority rulePriority) {
     String priority = to.get(rulePriority);

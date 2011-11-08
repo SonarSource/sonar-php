@@ -3,7 +3,7 @@
   <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
     <priority>4</priority>
     <properties>
-      <property name="maximum" value="30" pluginname="plugin name" description="Max CC"/>
+      <property name="reportLevel" value="30" pluginname="plugin name" description="Max CC"/>
     </properties>
   </rule>
   <rule ref="rulesets/codesize.xml/NPathComplexity">

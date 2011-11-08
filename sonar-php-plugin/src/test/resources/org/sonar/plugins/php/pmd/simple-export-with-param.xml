@@ -3,7 +3,7 @@
   <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
     <priority>4</priority>
     <properties>
-      <property name="maximum" value="30" />
+      <property name="reportLevel" value="30" />
     </properties>
   </rule>
   <rule ref="rulesets/codesize.xml/NPathComplexity">

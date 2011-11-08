@@ -130,6 +130,7 @@ public class PhpmdProfileExporter extends ProfileExporter {
    */
   protected String exportPmdRulesetToXml(PmdRuleset pmdRuleset) {
     Element eltRuleset = new Element("ruleset");
+    addAttribute(eltRuleset, "name", pmdRuleset.getName());
     for (PmdRule pmdRule : pmdRuleset.getPmdRules()) {
       Element eltRule = new Element("rule");
       addAttribute(eltRule, "ref", pmdRule.getRef());
