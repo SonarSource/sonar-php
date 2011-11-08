@@ -50,6 +50,6 @@ public class SonarWayProfileTest {
     ValidationMessages messages = ValidationMessages.create();
     RulesProfile rulesProfile = profile.createProfile(messages);
     assertNotNull(rulesProfile);
-    assertEquals("Sonar PHP Way", rulesProfile.getName());
+    assertEquals("Sonar Way", rulesProfile.getName());
   }
 }
