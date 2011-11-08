@@ -47,7 +47,7 @@ class Foo {
 }
 </pre>
 	]]></description>
-	<param key="maximum" type="i">
+	<param key="reportLevel" type="i">
       <description><![CDATA[The maximum cyclomatic complexity threshold. Default is 10.]]></description>
     </param>
   </rule>
@@ -66,6 +66,9 @@ class Foo {
 }
 </pre>
     ]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[The npath reporting threshold. Default is 200.]]></description>
+    </param>
   </rule>
 
   <rule key="Code Size Rules/ExcessiveMethodLength" priority="BLOCKER">
@@ -84,6 +87,9 @@ class Foo {
 }
 </pre>
 ]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[The method size reporting threshold. Default is 100.]]></description>
+    </param>
   </rule>
 
   <rule key="Code Size Rules/ExcessiveClassLength" priority="MAJOR">
@@ -100,6 +106,9 @@ class Foo {
 }
 </pre>
 ]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[The class size reporting threshold. Default is 1000.]]></description>
+    </param>
   </rule>
 
   <rule key="Code Size Rules/ExcessiveParameterList" priority="BLOCKER">
@@ -117,6 +126,9 @@ class Foo {
 }
 </pre>
 ]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[The parameter count reporting threshold. Default is 10.]]></description>
+    </param>
   </rule>
 
   <rule key="Code Size Rules/ExcessivePublicCount" priority="MAJOR">
@@ -139,6 +151,9 @@ public class Foo {
 }
 </pre>
     ]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[The public item reporting threshold. Default is 45.]]></description>
+    </param>
   </rule>
 
   <rule key="Code Size Rules/TooManyFields" priority="MAJOR">
@@ -156,6 +171,9 @@ class Person {
 }
 </pre>
 ]]></description>
+    <param key="maxfields" type="i">
+      <description><![CDATA[The field count reporting threshold. Default is 15.]]></description>
+    </param>
   </rule>
 
   <rule key="Code Size Rules/TooManyMethods" priority="MAJOR">
@@ -163,6 +181,9 @@ class Person {
     <configKey><![CDATA[rulesets/codesize.xml/ExcessiveClassComplexity]]></configKey>
     <category name="Maintainability"/>
     <description><![CDATA[<p>A class with too many methods is probably a good suspect for refactoring, in order to reduce its complexity and find a way to have more fine grained objects.</p>]]></description>
+    <param key="maxmethods" type="i">
+      <description><![CDATA[The method count reporting threshold. Default is 10.]]></description>
+    </param>
   </rule>
 
   <rule key="Code Size Rules/ExcessiveClassComplexity" priority="MAJOR">
@@ -198,6 +219,9 @@ class Foo {
 }
 </pre>
 	]]></description>
+    <param key="maximum" type="i">
+      <description><![CDATA[The maximum WMC tolerable for a class. Default is 50.]]></description>
+    </param>
   </rule>
 
   <!-- Design Rules -->
@@ -271,6 +295,9 @@ class Foo {
     <configKey><![CDATA[rulesets/design.xml/NumberOfChildren]]></configKey>
     <category name="Maintainability"/>
     <description><![CDATA[<p>A class with an excessive number of children is an indicator for an unbalanced class hierarchy. You should consider to refactor this class hierarchy.</p>]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[Maximum number of acceptable child classes. Default is 12.]]></description>
+    </param>
   </rule>
 
   <rule key="Design Rules/DepthOfInheritance" priority="MAJOR">
@@ -278,6 +305,9 @@ class Foo {
     <configKey><![CDATA[rulesets/design.xml/DepthOfInheritance]]></configKey>
     <category name="Maintainability"/>
     <description><![CDATA[<p>A class with many parents is an indicator for an unbalanced and wrong class hierarchy. You should consider to refactor this class hierarchy.</p>]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[Maximum number of acceptable parent classes. Default is 6.]]></description>
+    </param>
   </rule>
 
   <rule key="Design Rules/CouplingBetweenObjects" priority="MAJOR">
@@ -319,6 +349,9 @@ class Foo {
 }
 </pre>    
     ]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[Maximum number of acceptable dependencies. Default is 13.]]></description>
+    </param>
   </rule>
 
   <!-- Naming Rules -->
@@ -341,6 +374,9 @@ class Something {
 }
 </pre>
     ]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[Minimum length for a variable, property or parameter name. Default is 3.]]></description>
+    </param>
   </rule>
 
   <rule key="Naming Rules/LongVariable" priority="INFO">
@@ -362,6 +398,9 @@ class Something {
 }
 </pre>    
     ]]></description>
+    <param key="maximum" type="i">
+      <description><![CDATA[The variable length reporting threshold. Default is 20.]]></description>
+    </param>
   </rule>
   
   <rule key="Naming Rules/ShortMethodName" priority="INFO">
@@ -377,6 +416,9 @@ class ShortMethod {
 }
 </pre>
 	]]></description>
+    <param key="minimum" type="i">
+      <description><![CDATA[Minimum length for a method or function name. Default is 3.]]></description>
+    </param>
   </rule>
   
   <rule key="Naming Rules/ConstructorWithNameAsEnclosingClass" priority="INFO">
@@ -434,6 +476,9 @@ class Foo {
 }
 </pre>
     ]]></description>
+    <param key="checkParameterizedMethods" type="b">
+      <description><![CDATA[Applies only to methods without parameter when set to true. Default is false.]]></description>
+    </param>
   </rule>
 
   <!-- Unused Code Rules -->
