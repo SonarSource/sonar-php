@@ -6,8 +6,5 @@
   <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop.CanSimplify">
     <severity>8</severity>
   </rule>
-  <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall.NotAllowed">
-    <severity>8</severity>
-  </rule>
 </ruleset>
 

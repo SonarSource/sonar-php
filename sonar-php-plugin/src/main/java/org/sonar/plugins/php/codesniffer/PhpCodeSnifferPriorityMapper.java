@@ -49,7 +49,6 @@ public final class PhpCodeSnifferPriorityMapper implements ServerExtension, Batc
     from.put("3", RulePriority.INFO);
     from.put("2", RulePriority.INFO);
     from.put("1", RulePriority.INFO);
-    from.put("0", RulePriority.INFO);
 
     to.put(RulePriority.BLOCKER, "10");
     to.put(RulePriority.CRITICAL, "9");

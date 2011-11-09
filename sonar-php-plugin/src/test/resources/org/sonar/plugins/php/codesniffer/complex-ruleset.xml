@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="PHP_CodeSniffer rules">
   <rule ref="Generic.Files.LineEndings.InvalidEOLChar">
-    <priority>warning</priority>
-    <severity>warning</severity>
+    <severity>2</severity>
     <properties>
-      <property name="eolChar" value="\n"/>
+      <property name="eolChar" value="FOO"/>
     </properties>
-    <parameters>
-      <parameter>
-        <key>eolChar</key>
-        <value><![CDATA[aaa]]></value>
-      </parameter>
-    </parameters>
   </rule>
   <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop.CanSimplify">
-    <priority>error</priority>
-    <severity>error</severity>
+    <severity>9</severity>
   </rule>
   <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall.NotAllowed">
-    <priority>info</priority>
-    <severity>info</severity>
+  </rule>
+  <rule ref="Generic.CodeAnalysis.JumbledIncrementer.Found">
+    <severity>0</severity>
   </rule>
 </ruleset>

@@ -145,13 +145,21 @@ public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
       Namespace namespace = ruleSetNode.getNamespace();
       PmdRuleset pmdResultset = new PmdRuleset(ruleSetNode.getAttributeValue("name"));
       for (Element ruleNode : getChildren(ruleSetNode, "rule", namespace)) {
-        PmdRule pmdRule = new PmdRule(ruleNode.getAttributeValue("ref"));
-        pmdRule.setClazz(ruleNode.getAttributeValue("class"));
-        pmdRule.setName(ruleNode.getAttributeValue("name"));
-        pmdRule.setMessage(ruleNode.getAttributeValue("message"));
-        parsePmdPriority(ruleNode, pmdRule, namespace);
-        parsePmdProperties(ruleNode, pmdRule, namespace);
-        pmdResultset.addRule(pmdRule);
+        Element severityNode = ruleNode.getChild("severity", namespace);
+        String severity = "";
+        if (severityNode != null) {
+          severity = severityNode.getValue();
+        }
+        // we must check for "0" severity, which would mean that the sniff should be ignored
+        if ( !"0".equals(severity)) {
+          PmdRule pmdRule = new PmdRule(ruleNode.getAttributeValue("ref"));
+          pmdRule.setClazz(ruleNode.getAttributeValue("class"));
+          pmdRule.setName(ruleNode.getAttributeValue("name"));
+          pmdRule.setMessage(ruleNode.getAttributeValue("message"));
+          pmdRule.setPriority(severity);
+          parsePmdProperties(ruleNode, pmdRule, namespace);
+          pmdResultset.addRule(pmdRule);
+        }
       }
       return pmdResultset;
     } catch (JDOMException e) {

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="PHP_CodeSniffer rules">
   <rule ref="Generic.Files.LineEndings.InvalidEOLChar">
-    <severity>8</severity>
+    <severity>6</severity>
     <properties>
-      <property name="eolChar" value="\n" />
+      <property name="eolChar" value="FOO" />
     </properties>
   </rule>
   <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop.CanSimplify">
-    <severity>8</severity>
+    <severity>9</severity>
   </rule>
   <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall.NotAllowed">
     <severity>8</severity>

@@ -147,7 +147,10 @@ public class PhpmdProfileImporter extends PhpProfileImporter {
         pmdRule.setClazz(ruleNode.getAttributeValue("class"));
         pmdRule.setName(ruleNode.getAttributeValue("name"));
         pmdRule.setMessage(ruleNode.getAttributeValue("message"));
-        parsePmdPriority(ruleNode, pmdRule, namespace);
+        Element priorityNode = ruleNode.getChild("priority", namespace);
+        if (priorityNode != null) {
+          pmdRule.setPriority(priorityNode.getValue());
+        }
         parsePmdProperties(ruleNode, pmdRule, namespace);
         pmdResultset.addRule(pmdRule);
       }

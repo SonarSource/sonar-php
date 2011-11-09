@@ -44,7 +44,7 @@ public class PhpCodeSnifferPriorityMapperTest {
     assertEquals(RulePriority.MAJOR, mapper.from("8"));
     assertEquals(RulePriority.MINOR, mapper.from("7"));
     assertEquals(RulePriority.INFO, mapper.from("6"));
-    assertEquals(RulePriority.INFO, mapper.from("0"));
+    assertEquals(RulePriority.INFO, mapper.from("1"));
   }
 
   /**

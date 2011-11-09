@@ -81,10 +81,4 @@ public abstract class PhpProfileImporter extends ProfileImporter {
     }
   }
 
-  protected final void parsePmdPriority(Element ruleNode, PmdRule pmdRule, Namespace namespace) {
-    for (Element priorityNode : getChildren(ruleNode, "priority", namespace)) {
-      pmdRule.setPriority(priorityNode.getValue());
-    }
-  }
-
 }
