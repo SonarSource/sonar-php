@@ -24,6 +24,7 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHP
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collection;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -80,44 +81,50 @@ public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
     return createRuleProfile(ruleSet, messages);
   }
 
-  /**
-   * @param pmdRuleset
-   * @param messages
-   * @return
-   */
-  protected RulesProfile createRuleProfile(PmdRuleset pmdRuleset, ValidationMessages messages) {
+  private RulesProfile createRuleProfile(PmdRuleset pmdRuleset, ValidationMessages messages) {
     RulesProfile profile = RulesProfile.create(pmdRuleset.getName(), Php.KEY);
+    Collection<Rule> allPhpCsRules = ruleFinder.findAll(RuleQuery.create().withRepositoryKey(PHPCS_REPOSITORY_KEY));
     for (PmdRule pmdRule : pmdRuleset.getPmdRules()) {
-      boolean isRuleValid = true;
       String key = pmdRule.getRef();
       if (key == null) {
         messages.addWarningText("A rule without 'ref' attribute can't be imported. see '" + pmdRule.getClazz() + "'");
-        isRuleValid = false;
-      }
-      // Attention: rule is retrieved using the key field which different of what is done on PmdImporter that uses configKey.
-      Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(PHPCS_REPOSITORY_KEY).withKey(key));
-      if (rule == null) {
-        StringBuilder message = new StringBuilder("Unable to import unknown PMD rule '");
-        message.append(key).append("' consider adding an extension in sonar extenions directory");
-        messages.addWarningText(message.toString());
-        isRuleValid = false;
-      }
-      ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
-      if (isRuleValid && pmdRule.getProperties() != null) {
-        createRule(messages, pmdRule, key, rule, activeRule);
+      } else {
+        // Attention: rule is retrieved using the key field which different of what is done on PmdImporter that uses configKey.
+        Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(PHPCS_REPOSITORY_KEY).withKey(key));
+        if (rule != null) {
+          addRuleToProfile(rule, profile, pmdRule, messages);
+        } else {
+          // let's try to find if we can find rules that belong to a sniff called "key"
+          findPotentialRulesAndAddToProfile(key, pmdRule, allPhpCsRules, profile, messages);
+        }
       }
     }
     return profile;
   }
 
-  /**
-   * @param messages
-   * @param pmdRule
-   * @param key
-   * @param rule
-   * @param activeRule
-   */
-  private void createRule(ValidationMessages messages, PmdRule pmdRule, String key, Rule rule, ActiveRule activeRule) {
+  private void findPotentialRulesAndAddToProfile(String key, PmdRule pmdRule, Collection<Rule> allPhpCsRules, RulesProfile profile,
+      ValidationMessages messages) {
+    boolean found = false;
+    for (Rule currentRule : allPhpCsRules) {
+      if (currentRule.getKey().startsWith(key)) {
+        addRuleToProfile(currentRule, profile, pmdRule, messages);
+      }
+    }
+    if ( !found) {
+      StringBuilder message = new StringBuilder("Unable to import unknown PhpCodeSniffer rule '");
+      message.append(key).append("' consider adding an extension in sonar extenions directory");
+      messages.addWarningText(message.toString());
+    }
+  }
+
+  private void addRuleToProfile(Rule rule, RulesProfile profile, PmdRule pmdRule, ValidationMessages messages) {
+    ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
+    if (pmdRule.getProperties() != null) {
+      completeRuleWitProperties(activeRule, rule, pmdRule, messages);
+    }
+  }
+
+  private void completeRuleWitProperties(ActiveRule activeRule, Rule rule, PmdRule pmdRule, ValidationMessages messages) {
     for (PmdProperty prop : pmdRule.getProperties()) {
       String name = prop.getName();
       if (rule.getParam(name) != null) {
@@ -126,18 +133,13 @@ public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
         activeRule.setParameter(name, ruleValue);
       } else {
         StringBuilder message = new StringBuilder("The property '").append(name);
-        message.append("' is not supported in the PhpCodeSniffer rule: ").append(key);
+        message.append("' is not supported in the PhpCodeSniffer rule: ").append(rule.getKey());
         messages.addWarningText(message.toString());
       }
     }
   }
 
-  /**
-   * @param pmdConfigurationFile
-   * @param messages
-   * @return
-   */
-  protected PmdRuleset parseRuleset(Reader pmdConfigurationFile, ValidationMessages messages) {
+  private PmdRuleset parseRuleset(Reader pmdConfigurationFile, ValidationMessages messages) {
     try {
       SAXBuilder parser = new SAXBuilder();
       Document dom = parser.build(pmdConfigurationFile);
@@ -169,12 +171,8 @@ public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
     }
   }
 
-  /**
-   * @param messages
-   * @param e
-   */
   private PmdRuleset emptyRuleSetAndLogMessage(ValidationMessages messages, Exception e) {
-    String errorMessage = "The PMD configuration file is not valid";
+    String errorMessage = "The PhpCodeSniffer configuration file is not valid";
     messages.addErrorText(errorMessage + " : " + e.getMessage());
     LOG.error(errorMessage, e);
     return new PmdRuleset();

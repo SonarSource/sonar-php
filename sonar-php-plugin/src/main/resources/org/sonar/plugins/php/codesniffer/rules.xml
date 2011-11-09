@@ -225,13 +225,13 @@
     <category name="Maintainability" />
     <name>DisallowShortOpenTagFound</name>
     <configKey>rulesets/DisallowShortOpenTag</configKey>
-    <description><![CDATA[Short PHP opening tag used; expected "<?php" but found "%s]]></description>
+    <description><![CDATA[Short PHP opening tag used; expected &ldquo;&lt;?php&ldquo; but found &ldquo;%s]]></description>
   </rule>
   <rule key="Generic.PHP.DisallowShortOpenTag.EchoFound" priority="MAJOR">
     <category name="Maintainability" />
     <name>DisallowShortOpenTagEchoFound</name>
     <configKey>rulesets/DisallowShortOpenTag</configKey>
-    <description><![CDATA[Short PHP opening tag used with echo; expected "<?php echo %s ..." but found "%s %s ...]]></description>
+    <description><![CDATA[Short PHP opening tag used with echo; expected &ldquo;&lt;?php echo %s ...&ldquo; but found &ldquo;%s %s ...]]></description>
   </rule>
   <rule key="Generic.PHP.ForbiddenFunctions.Found" priority="MAJOR">
     <category name="Maintainability" />
@@ -1010,8 +1010,7 @@
   <rule key="PEAR.Functions.FunctionDeclaration.NewlineBeforeOpenBrace" priority="MAJOR">
     <category name="Maintainability" />
     <name>FunctionDeclarationNewlineBeforeOpenBrace</name>
-    <configKey>rulesets/FunctionDeclarationNewlineBeforeOpenBrace
-    </configKey>
+    <configKey>rulesets/FunctionDeclarationNewlineBeforeOpenBrace</configKey>
     <description><![CDATA[New line before open brace]]></description>
   </rule>
   <rule key="PEAR.Functions.FunctionDeclaration.cod" priority="MAJOR">

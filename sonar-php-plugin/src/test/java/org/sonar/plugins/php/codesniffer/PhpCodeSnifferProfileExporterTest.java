@@ -114,7 +114,7 @@ public class PhpCodeSnifferProfileExporterTest {
     }
 
     public Collection<Rule> findAll(RuleQuery query) {
-      throw new UnsupportedOperationException();
+      return rules;
     }
 
     public Rule find(RuleQuery query) {

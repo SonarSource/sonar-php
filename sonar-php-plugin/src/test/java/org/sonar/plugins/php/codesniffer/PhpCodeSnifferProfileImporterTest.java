@@ -21,6 +21,7 @@ package org.sonar.plugins.php.codesniffer;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -93,6 +94,43 @@ public class PhpCodeSnifferProfileImporterTest {
         nullValue());
   }
 
+  @Test
+  public void testImportPearProfileWithGenericSniffs() throws IOException, SAXException {
+    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    List<Rule> rules = repository.createRules();
+
+    RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
+    PhpCodeSnifferProfileImporter importer = new PhpCodeSnifferProfileImporter(ruleFinder, mapper);
+    Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/pear-ruleset.xml"));
+    RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
+
+    List<ActiveRule> activeRules = rulesProfile.getActiveRules();
+    assertThat(activeRules.size(), is(15));
+    // just check that the "eolChar" param has been passed to the "Generic.Files.LineEndings.InvalidEOLChar" rule
+    // NOTE : be carefull, this test may be broken if this sniff does not exist anymore in the PHPCS rules.xml file
+    for (ActiveRule activeRule : activeRules) {
+      if ("Generic.Files.LineEndings.InvalidEOLChar".equals(activeRule.getRuleKey())) {
+        assertThat(activeRule.getParameter("eolChar"), is("\\n"));
+      }
+    }
+  }
+
+  @Test
+  public void testImportWithInvalidFile() throws IOException, SAXException {
+    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    List<Rule> rules = repository.createRules();
+
+    RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
+    PhpCodeSnifferProfileImporter importer = new PhpCodeSnifferProfileImporter(ruleFinder, mapper);
+    ValidationMessages messages = ValidationMessages.create();
+    
+    Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/invalid-ruleset.xml"));
+    importer.importProfile(reader, messages);
+    assertThat(messages.getErrors().get(0), startsWith("The PhpCodeSniffer configuration file is not valid"));
+  }
+
   public static class MockPhpCodeSnifferRuleFinder implements RuleFinder {
 
     private List<Rule> rules;
@@ -107,14 +145,16 @@ public class PhpCodeSnifferProfileImporterTest {
     }
 
     public Collection<Rule> findAll(RuleQuery query) {
-      throw new UnsupportedOperationException();
+      return rules;
     }
 
     public Rule find(RuleQuery query) {
       Map<String, Rule> rulesByKey = getRulesMap();
       String key = query.getKey();
       Rule rule = rulesByKey.get(key);
-      rule.setRepositoryKey(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY);
+      if (rule != null) {
+        rule.setRepositoryKey(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY);
+      }
       return rule;
     }
 
