@@ -19,11 +19,11 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collection;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -31,22 +31,19 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.core.PhpProfileImporter;
-import org.sonar.plugins.php.pmd.xml.PmdProperty;
+import org.sonar.plugins.php.core.AbstractPhpProfileImporter;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
 
 /**
- *
- *
+ * The profile importer for PHPMD
  */
-public class PhpmdProfileImporter extends PhpProfileImporter {
+public class PhpmdProfileImporter extends AbstractPhpProfileImporter {
 
   public static final String XPATH_CLASS = "net.sourceforge.pmd.rules.XPathRule";
   public static final String XPATH_EXPRESSION_PARAM = "xpath";
@@ -55,10 +52,13 @@ public class PhpmdProfileImporter extends PhpProfileImporter {
   private final RuleFinder ruleFinder;
 
   /**
+   * Creates a new {@link PhpmdProfileImporter}
+   * 
    * @param ruleFinder
+   *          the Rule finder
    */
-  public PhpmdProfileImporter(RuleFinder ruleFinder) {
-    super(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY, PhpmdRuleRepository.PHPMD_REPOSITORY_NAME);
+  public PhpmdProfileImporter(RuleFinder ruleFinder, PmdRulePriorityMapper mapper) {
+    super(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY, PhpmdRuleRepository.PHPMD_REPOSITORY_NAME, mapper);
     setSupportedLanguages(Php.KEY);
     this.ruleFinder = ruleFinder;
   }
@@ -72,13 +72,9 @@ public class PhpmdProfileImporter extends PhpProfileImporter {
     return createRuleProfile(pmdRuleset, messages);
   }
 
-  /**
-   * @param pmdRuleset
-   * @param messages
-   * @return
-   */
-  protected RulesProfile createRuleProfile(PmdRuleset pmdRuleset, ValidationMessages messages) {
+  private RulesProfile createRuleProfile(PmdRuleset pmdRuleset, ValidationMessages messages) {
     RulesProfile profile = RulesProfile.create();
+    Collection<Rule> allPhpmdRules = ruleFinder.findAll(RuleQuery.create().withRepositoryKey(PHPMD_REPOSITORY_KEY));
     for (PmdRule pmdRule : pmdRuleset.getPmdRules()) {
       if (XPATH_CLASS.equals(pmdRule.getClazz())) {
         StringBuilder message = new StringBuilder("PMD XPath rule '").append(pmdRule.getName());
@@ -87,53 +83,44 @@ public class PhpmdProfileImporter extends PhpProfileImporter {
       }
       String configKey = pmdRule.getRef();
       if (configKey == null) {
-        StringBuilder message = new StringBuilder("Rule '").append(pmdRule.getClazz());
-        message.append("' does not have a 'ref' attribute and can't be imported");
-        messages.addWarningText(message.toString());
+        messages.addWarningText("A rule without 'ref' attribute can't be imported. see '" + pmdRule.getClazz() + "'");
       } else {
         Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(PHPMD_REPOSITORY_KEY).withConfigKey(configKey));
-        if (rule == null) {
-          StringBuilder message = new StringBuilder("Unable to import unknown PMD rule '");
-          message.append(configKey).append("' consider adding an extension in sonar extenions directory");
-          messages.addWarningText(message.toString());
+        if (rule != null) {
+          addRuleToProfile(rule, profile, pmdRule, messages);
         } else {
-          createRule(messages, profile, pmdRule, configKey, rule);
+          // let's try to find if we can find rules that belong to a sniff called "key"
+          findPotentialRulesAndAddToProfile(configKey, pmdRule, allPhpmdRules, profile, messages);
         }
       }
     }
     return profile;
   }
 
-  /**
-   * @param messages
-   * @param profile
-   * @param pmdRule
-   * @param configKey
-   * @param rule
-   */
-  private void createRule(ValidationMessages messages, RulesProfile profile, PmdRule pmdRule, String configKey, Rule rule) {
-    PmdRulePriorityMapper mapper = new PmdRulePriorityMapper();
-    ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
-    if (pmdRule.getProperties() != null) {
-      for (PmdProperty prop : pmdRule.getProperties()) {
-        String name = prop.getName();
-        if (rule.getParam(name) != null) {
-          String value = prop.getValue();
-          String ruleValue = prop.isCdataValue() && isBlank(value) ? prop.getCdataValue() : value;
-          activeRule.setParameter(name, ruleValue);
-        } else {
-          StringBuilder message = new StringBuilder("The property '").append(name);
-          message.append("' is not supported in the pmd rule: ").append(configKey);
-          messages.addWarningText(message.toString());
-        }
+  private void findPotentialRulesAndAddToProfile(String configKey, PmdRule pmdRule, Collection<Rule> allPhpmdRules, RulesProfile profile,
+      ValidationMessages messages) {
+    boolean found = false;
+    for (Rule currentRule : allPhpmdRules) {
+      if (currentRule.getConfigKey().startsWith(configKey)) {
+        addRuleToProfile(currentRule, profile, pmdRule, messages);
+        found = true;
       }
+    }
+    if ( !found) {
+      StringBuilder message = new StringBuilder("Unable to import unknown PHPMD rule '");
+      message.append(configKey).append("' consider adding an extension in sonar extenions directory");
+      messages.addWarningText(message.toString());
     }
   }
 
   /**
+   * Parse the given PHPMD config file.
+   * 
    * @param pmdConfigurationFile
+   *          the config file
    * @param messages
-   * @return
+   *          the error messages if any
+   * @return the corresponding set of Pmd rules
    */
   protected PmdRuleset parsePmdRuleset(Reader pmdConfigurationFile, ValidationMessages messages) {
     try {

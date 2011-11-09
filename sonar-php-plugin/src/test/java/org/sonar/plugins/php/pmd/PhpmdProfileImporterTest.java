@@ -23,23 +23,25 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleQuery;
+import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
 import org.sonar.test.TestUtils;
@@ -54,7 +56,7 @@ public class PhpmdProfileImporterTest {
   public void before() {
     messages = ValidationMessages.create();
     RuleFinder finder = createRuleFinder();
-    importer = new PhpmdProfileImporter(finder);
+    importer = new PhpmdProfileImporter(finder, new PmdRulePriorityMapper());
   }
 
   @Test
@@ -91,7 +93,7 @@ public class PhpmdProfileImporterTest {
 
     ActiveRule activeRule = profile.getActiveRuleByConfigKey(REPOSITORY_KEY, "rulesets/codesize.xml/CyclomaticComplexity");
     assertThat(activeRule.getActiveRuleParams().size(), is(1));
-    assertThat(activeRule.getParameter("max"), is("30"));
+    assertThat(activeRule.getParameter("reportLevel"), is("30"));
   }
 
   @Test
@@ -144,27 +146,69 @@ public class PhpmdProfileImporterTest {
   @Test
   public void testImportingUnknownRules() {
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/pmd/simple-ruleset.xml"));
-    importer = new PhpmdProfileImporter(mock(RuleFinder.class));
+    importer = new PhpmdProfileImporter(mock(RuleFinder.class), new PmdRulePriorityMapper());
     RulesProfile profile = importer.importProfile(reader, messages);
 
     assertThat(profile.getActiveRules().size(), is(0));
     assertThat(messages.getWarnings().size(), is(3));
   }
 
-  private RuleFinder createRuleFinder() {
-    RuleFinder ruleFinder = mock(RuleFinder.class);
-    when(ruleFinder.find((RuleQuery) anyObject())).thenAnswer(new Answer<Rule>() {
+  @Test
+  public void testImportingRulesetWithEntireUnusedCodeRuleset() {
+    Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/pmd/entire-unusedcode-ruleset.xml"));
+    importer = new PhpmdProfileImporter(createRuleFinder(), new PmdRulePriorityMapper());
+    RulesProfile profile = importer.importProfile(reader, messages);
 
-      public Rule answer(InvocationOnMock iom) throws Throwable {
-        RuleQuery query = (RuleQuery) iom.getArguments()[0];
-        Rule rule = Rule.create(query.getRepositoryKey(), query.getConfigKey(), "Rule name - " + query.getConfigKey())
-            .setConfigKey(query.getConfigKey()).setPriority(RulePriority.BLOCKER);
-        if (rule.getConfigKey().equals("rulesets/codesize.xml/CyclomaticComplexity")) {
-          rule.createParameter("max");
-        }
-        return rule;
+    assertThat(messages.getWarnings().size(), is(0));
+    assertThat(profile.getActiveRules().size(), is(4));
+  }
+
+  private RuleFinder createRuleFinder() {
+    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
+    PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser());
+    List<Rule> rules = repository.createRules();
+    return new MockPhpmdRuleFinder(rules);
+  }
+
+  public static class MockPhpmdRuleFinder implements RuleFinder {
+
+    private List<Rule> rules;
+    private static Map<String, Rule> rulesByConfigKey = new HashMap<String, Rule>();
+
+    public MockPhpmdRuleFinder(List<Rule> rules) {
+      this.rules = rules;
+    }
+
+    public Rule findByKey(String repositoryKey, String key) {
+      throw new UnsupportedOperationException();
+    }
+
+    public Collection<Rule> findAll(RuleQuery query) {
+      return rules;
+    }
+
+    public Rule find(RuleQuery query) {
+      Map<String, Rule> rulesByConfigKey = getRulesMap();
+      String configKey = query.getConfigKey();
+      Rule rule = rulesByConfigKey.get(configKey);
+      if (rule != null) {
+        rule.setRepositoryKey(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY);
       }
-    });
-    return ruleFinder;
+      return rule;
+    }
+
+    private Map<String, Rule> getRulesMap() {
+      if (rulesByConfigKey == null) {
+        rulesByConfigKey = new HashMap<String, Rule>();
+      }
+      for (Rule rule : rules) {
+        rulesByConfigKey.put(rule.getConfigKey(), rule);
+      }
+      return rulesByConfigKey;
+    }
+
+    public Rule findById(int ruleId) {
+      return null;
+    }
   }
 }

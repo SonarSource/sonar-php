@@ -26,11 +26,12 @@ import java.util.TreeMap;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.ServerExtension;
 import org.sonar.api.rules.RulePriority;
+import org.sonar.plugins.php.core.PriorityMapper;
 
 /**
  * Class that maps Sonar and PHPCS priority/severity ranges.
  */
-public final class PhpCodeSnifferPriorityMapper implements ServerExtension, BatchExtension {
+public final class PhpCodeSnifferPriorityMapper implements ServerExtension, BatchExtension, PriorityMapper {
 
   private Map<String, RulePriority> from = new TreeMap<String, RulePriority>();
   private Map<RulePriority, String> to = new HashMap<RulePriority, String>();
@@ -57,12 +58,10 @@ public final class PhpCodeSnifferPriorityMapper implements ServerExtension, Batc
     to.put(RulePriority.INFO, "6");
   }
 
-  /**
-   * Returns the Sonar priority corresponding to the given PHPCS severity.
+  /*
+   * (non-Javadoc)
    * 
-   * @param priority
-   *          the PHPCS severity
-   * @return the Sonar priority
+   * @see org.sonar.plugins.php.codesniffer.PriorityMapper#from(java.lang.String)
    */
   public RulePriority from(String priority) {
     if (priority == null || from.get(priority) == null) {
@@ -71,12 +70,10 @@ public final class PhpCodeSnifferPriorityMapper implements ServerExtension, Batc
     return from.get(priority);
   }
 
-  /**
-   * Returns the PHPCS priority corresponding to the given Sonar severity.
+  /*
+   * (non-Javadoc)
    * 
-   * @param rulePriority
-   *          the Sonar priority
-   * @return the PHPCS severity
+   * @see org.sonar.plugins.php.codesniffer.PriorityMapper#to(org.sonar.api.rules.RulePriority)
    */
   public String to(RulePriority rulePriority) {
     String priority = to.get(rulePriority);

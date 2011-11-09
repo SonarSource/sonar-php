@@ -52,12 +52,7 @@ public class PhpCodeSnifferProfileImporterTest {
 
   @Test
   public void testImportProfile() throws IOException, SAXException {
-    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
-    List<Rule> rules = repository.createRules();
-
-    RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
-    PhpCodeSnifferProfileImporter importer = new PhpCodeSnifferProfileImporter(ruleFinder, mapper);
+    PhpCodeSnifferProfileImporter importer = createImporter();
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/simple-ruleset.xml"));
     RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
     assertThat(rulesProfile.getActiveRules().size(), is(2));
@@ -65,12 +60,7 @@ public class PhpCodeSnifferProfileImporterTest {
 
   @Test
   public void testImportComplexProfile() throws IOException, SAXException {
-    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
-    List<Rule> rules = repository.createRules();
-
-    RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
-    PhpCodeSnifferProfileImporter importer = new PhpCodeSnifferProfileImporter(ruleFinder, mapper);
+    PhpCodeSnifferProfileImporter importer = createImporter();
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/complex-ruleset.xml"));
     RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
     assertThat(rulesProfile.getActiveRules().size(), is(3));
@@ -96,12 +86,7 @@ public class PhpCodeSnifferProfileImporterTest {
 
   @Test
   public void testImportPearProfileWithGenericSniffs() throws IOException, SAXException {
-    ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
-    List<Rule> rules = repository.createRules();
-
-    RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
-    PhpCodeSnifferProfileImporter importer = new PhpCodeSnifferProfileImporter(ruleFinder, mapper);
+    PhpCodeSnifferProfileImporter importer = createImporter();
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/pear-ruleset.xml"));
     RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
 
@@ -118,17 +103,22 @@ public class PhpCodeSnifferProfileImporterTest {
 
   @Test
   public void testImportWithInvalidFile() throws IOException, SAXException {
+    PhpCodeSnifferProfileImporter importer = createImporter();
+    ValidationMessages messages = ValidationMessages.create();
+
+    Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/invalid-ruleset.xml"));
+    importer.importProfile(reader, messages);
+    assertThat(messages.getErrors().get(0), startsWith("The PhpCodeSniffer configuration file is not valid"));
+  }
+
+  private PhpCodeSnifferProfileImporter createImporter() {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
     PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
     PhpCodeSnifferProfileImporter importer = new PhpCodeSnifferProfileImporter(ruleFinder, mapper);
-    ValidationMessages messages = ValidationMessages.create();
-    
-    Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/invalid-ruleset.xml"));
-    importer.importProfile(reader, messages);
-    assertThat(messages.getErrors().get(0), startsWith("The PhpCodeSniffer configuration file is not valid"));
+    return importer;
   }
 
   public static class MockPhpCodeSnifferRuleFinder implements RuleFinder {
@@ -158,10 +148,6 @@ public class PhpCodeSnifferProfileImporterTest {
       return rule;
     }
 
-    /**
-     * @return
-     * 
-     */
     private Map<String, Rule> getRulesMap() {
       if (rulesByKey == null) {
         rulesByKey = new HashMap<String, Rule>();

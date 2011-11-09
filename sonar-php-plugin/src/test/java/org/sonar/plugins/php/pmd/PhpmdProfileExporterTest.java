@@ -61,7 +61,7 @@ public class PhpmdProfileExporterTest {
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new PhpmdRuleFinder(rules);
-    PhpmdProfileImporter importer = new PhpmdProfileImporter(ruleFinder);
+    PhpmdProfileImporter importer = new PhpmdProfileImporter(ruleFinder, new PmdRulePriorityMapper());
     String path = "/org/sonar/plugins/php/pmd/simple-ruleset-with-param.xml";
     Reader reader = new StringReader(TestUtils.getResourceContent(path));
     ValidationMessages messages = ValidationMessages.create();
@@ -85,7 +85,7 @@ public class PhpmdProfileExporterTest {
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new PhpmdRuleFinder(rules);
-    PhpmdProfileImporter importer = new PhpmdProfileImporter(ruleFinder);
+    PhpmdProfileImporter importer = new PhpmdProfileImporter(ruleFinder, new PmdRulePriorityMapper());
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/pmd/simple-ruleset.xml"));
     ValidationMessages messages = ValidationMessages.create();
     RulesProfile rulesProfile = importer.importProfile(reader, messages);
@@ -134,7 +134,7 @@ public class PhpmdProfileExporterTest {
     }
 
     public Collection<Rule> findAll(RuleQuery query) {
-      throw new UnsupportedOperationException();
+      return rules;
     }
 
     public Rule find(RuleQuery query) {

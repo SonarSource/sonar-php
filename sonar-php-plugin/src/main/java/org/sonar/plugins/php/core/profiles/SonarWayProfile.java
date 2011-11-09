@@ -46,7 +46,8 @@ public final class SonarWayProfile extends ProfileDefinition {
    */
   @Override
   public RulesProfile createProfile(ValidationMessages messages) {
-    RulesProfile profile = parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/profiles/sonar-way-profile.xml", messages);
+    RulesProfile profile = parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/profiles/sonar-way-profile.xml",
+        messages);
     profile.setDefaultProfile(true);
     return profile;
   }

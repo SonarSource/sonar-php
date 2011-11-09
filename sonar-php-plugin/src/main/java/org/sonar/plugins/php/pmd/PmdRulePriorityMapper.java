@@ -25,11 +25,12 @@ import java.util.Map;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.ServerExtension;
 import org.sonar.api.rules.RulePriority;
+import org.sonar.plugins.php.core.PriorityMapper;
 
 /**
  * Class that maps Sonar and PHPMD priority/severity ranges.
  */
-public class PmdRulePriorityMapper implements ServerExtension, BatchExtension {
+public final class PmdRulePriorityMapper implements ServerExtension, BatchExtension, PriorityMapper {
 
   private Map<String, RulePriority> from = new HashMap<String, RulePriority>();
   private Map<RulePriority, String> to = new HashMap<RulePriority, String>();
@@ -55,29 +56,19 @@ public class PmdRulePriorityMapper implements ServerExtension, BatchExtension {
     to.put(RulePriority.INFO, "5");
   }
 
-  /**
-   * Returns a RulePriority instance from a given string
+  /*
+   * (non-Javadoc)
    * 
-   * @param level
-   *          the given value
-   * 
-   * @return the rule priority
-   * 
-   * @see org.sonar.api.rules.RulePriorityMapper#from(java.lang.Object) Major priority will be returned if given level is null
+   * @see org.sonar.plugins.php.codesniffer.PriorityMapper#from(java.lang.String)
    */
   public RulePriority from(String level) {
     return from.get(level);
   }
 
-  /**
-   * Returns a string from a RulePriority instance.
+  /*
+   * (non-Javadoc)
    * 
-   * @param priority
-   *          the priority
-   * 
-   * @return the string
-   * 
-   * @see org.sonar.api.rules.RulePriorityMapper#to(org.sonar.api.rules.RulePriority)
+   * @see org.sonar.plugins.php.codesniffer.PriorityMapper#to(org.sonar.api.rules.RulePriority)
    */
   public String to(RulePriority priority) {
     String level = to.get(priority);

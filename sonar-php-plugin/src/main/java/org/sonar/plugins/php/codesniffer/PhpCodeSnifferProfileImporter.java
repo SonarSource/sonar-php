@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 
 import java.io.IOException;
@@ -34,42 +33,33 @@ import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.core.PhpProfileImporter;
-import org.sonar.plugins.php.pmd.xml.PmdProperty;
+import org.sonar.plugins.php.core.AbstractPhpProfileImporter;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
 
 /**
- * @author Akram Ben Aissi
- * 
+ * Profile importer for PHPCS.
  */
-public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
+public class PhpCodeSnifferProfileImporter extends AbstractPhpProfileImporter {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCodeSnifferProfileImporter.class);
-  /**
-   * 
-   */
   private final RuleFinder ruleFinder;
 
   /**
+   * Creates a {@link PhpCodeSnifferProfileImporter}
    * 
-   */
-  private final PhpCodeSnifferPriorityMapper mapper;
-
-  /**
    * @param ruleFinder
+   *          the rule finder
    */
   public PhpCodeSnifferProfileImporter(RuleFinder ruleFinder, PhpCodeSnifferPriorityMapper mapper) {
-    super(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY, PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_NAME);
+    super(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY, PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_NAME, mapper);
     setSupportedLanguages(Php.KEY);
     this.ruleFinder = ruleFinder;
-    this.mapper = mapper;
   }
 
   /**
@@ -108,34 +98,13 @@ public class PhpCodeSnifferProfileImporter extends PhpProfileImporter {
     for (Rule currentRule : allPhpCsRules) {
       if (currentRule.getKey().startsWith(key)) {
         addRuleToProfile(currentRule, profile, pmdRule, messages);
+        found = true;
       }
     }
     if ( !found) {
       StringBuilder message = new StringBuilder("Unable to import unknown PhpCodeSniffer rule '");
       message.append(key).append("' consider adding an extension in sonar extenions directory");
       messages.addWarningText(message.toString());
-    }
-  }
-
-  private void addRuleToProfile(Rule rule, RulesProfile profile, PmdRule pmdRule, ValidationMessages messages) {
-    ActiveRule activeRule = profile.activateRule(rule, mapper.from(pmdRule.getPriority()));
-    if (pmdRule.getProperties() != null) {
-      completeRuleWitProperties(activeRule, rule, pmdRule, messages);
-    }
-  }
-
-  private void completeRuleWitProperties(ActiveRule activeRule, Rule rule, PmdRule pmdRule, ValidationMessages messages) {
-    for (PmdProperty prop : pmdRule.getProperties()) {
-      String name = prop.getName();
-      if (rule.getParam(name) != null) {
-        String value = prop.getValue();
-        String ruleValue = prop.isCdataValue() && isBlank(value) ? prop.getCdataValue() : value;
-        activeRule.setParameter(name, ruleValue);
-      } else {
-        StringBuilder message = new StringBuilder("The property '").append(name);
-        message.append("' is not supported in the PhpCodeSniffer rule: ").append(rule.getKey());
-        messages.addWarningText(message.toString());
-      }
     }
   }
 

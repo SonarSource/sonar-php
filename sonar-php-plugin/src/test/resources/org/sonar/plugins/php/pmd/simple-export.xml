@@ -2,6 +2,9 @@
 <ruleset>
   <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
     <priority>4</priority>
+    <properties>
+      <property name="reportLevel" value="30" />
+    </properties>
   </rule>
   <rule ref="rulesets/codesize.xml/NPathComplexity">
     <priority>3</priority>

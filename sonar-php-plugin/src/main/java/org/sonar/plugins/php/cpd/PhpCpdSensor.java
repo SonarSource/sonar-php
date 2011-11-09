@@ -89,7 +89,7 @@ public class PhpCpdSensor implements Sensor {
       LOG.error("Error occured while launching phpcpd", e);
     }
   }
-  
+
   /**
    * {@inheritDoc}
    */

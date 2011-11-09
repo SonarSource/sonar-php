@@ -107,7 +107,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
   public boolean shouldExecuteOnProject(Project project) {
     return PHP.equals(project.getLanguage());
   }
-  
+
   /**
    * {@inheritDoc}
    */

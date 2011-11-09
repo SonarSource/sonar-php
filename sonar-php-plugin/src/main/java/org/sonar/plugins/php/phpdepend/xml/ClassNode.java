@@ -32,11 +32,11 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("class")
 public final class ClassNode {
 
-    /** The depth in tree line number. */
-    @XStreamAsAttribute
-    @XStreamAlias("dit")
-    private double depthInTreeNumber;
-    
+  /** The depth in tree line number. */
+  @XStreamAsAttribute
+  @XStreamAlias("dit")
+  private double depthInTreeNumber;
+
   /** The code lines number. */
   @XStreamAsAttribute
   @XStreamAlias("ncloc")
@@ -61,7 +61,7 @@ public final class ClassNode {
   @XStreamAsAttribute
   @XStreamAlias("nom")
   private double methodNumber;
-  
+
   /** The number of children classes number. */
   @XStreamAsAttribute
   @XStreamAlias("nocc")
@@ -163,14 +163,14 @@ public final class ClassNode {
   public double getMethodNumber() {
     return methodNumber;
   }
-  
+
   /**
    * Gets the depth in ree
    * 
    * @return the method number
    */
   public double getDepthInTreeNumber() {
-	  return depthInTreeNumber;
+    return depthInTreeNumber;
   }
 
   /**
@@ -232,7 +232,7 @@ public final class ClassNode {
   public void setMethodNumber(final double methodNumber) {
     this.methodNumber = methodNumber;
   }
-  
+
   /**
    * Sets the method number.
    * 
@@ -240,20 +240,21 @@ public final class ClassNode {
    *          the depth in tree number
    */
   public void setDepthInTreeNumber(final double depthInTreeNumber) {
-	  this.depthInTreeNumber = depthInTreeNumber;
+    this.depthInTreeNumber = depthInTreeNumber;
   }
 
-	/**
-	 * @param numberOfChildrenClassesNumber the numberOfChildrenClassesNumber to set
-	 */
-	public void setNumberOfChildrenClassesNumber(double numberOfChildrenClassesNumber) {
-		this.numberOfChildrenClassesNumber = numberOfChildrenClassesNumber;
-	}
-	
-	/**
-	 * @return the numberOfChildrenClassesNumber
-	 */
-	public double getNumberOfChildrenClassesNumber() {
-		return numberOfChildrenClassesNumber;
-	}
+  /**
+   * @param numberOfChildrenClassesNumber
+   *          the numberOfChildrenClassesNumber to set
+   */
+  public void setNumberOfChildrenClassesNumber(double numberOfChildrenClassesNumber) {
+    this.numberOfChildrenClassesNumber = numberOfChildrenClassesNumber;
+  }
+
+  /**
+   * @return the numberOfChildrenClassesNumber
+   */
+  public double getNumberOfChildrenClassesNumber() {
+    return numberOfChildrenClassesNumber;
+  }
 }

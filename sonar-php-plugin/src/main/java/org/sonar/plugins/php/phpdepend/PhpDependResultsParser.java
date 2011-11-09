@@ -22,12 +22,12 @@ package org.sonar.plugins.php.phpdepend;
 import static org.sonar.api.measures.CoreMetrics.CLASSES;
 import static org.sonar.api.measures.CoreMetrics.COMMENT_LINES;
 import static org.sonar.api.measures.CoreMetrics.COMPLEXITY;
+import static org.sonar.api.measures.CoreMetrics.DEPTH_IN_TREE;
 import static org.sonar.api.measures.CoreMetrics.FILES;
 import static org.sonar.api.measures.CoreMetrics.FUNCTIONS;
 import static org.sonar.api.measures.CoreMetrics.LINES;
-import static org.sonar.api.measures.CoreMetrics.DEPTH_IN_TREE;
-import static org.sonar.api.measures.CoreMetrics.NUMBER_OF_CHILDREN;
 import static org.sonar.api.measures.CoreMetrics.NCLOC;
+import static org.sonar.api.measures.CoreMetrics.NUMBER_OF_CHILDREN;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -95,7 +95,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Instantiates a new php depend results parser.
-   *
+   * 
    * @param config
    *          the config
    * @param context
@@ -110,7 +110,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Returns true if unit tests are counted when measuring complexity and LOC.
-   *
+   * 
    * @return true if unit tests are counted when measuring complexity and LOC.
    */
   public boolean isMeasureUnitTests() {
@@ -119,7 +119,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Sets whether unit tests are counted when measuring complexity and LOC.
-   *
+   * 
    * @param measureUnitTests
    *          true if unit tests are counted when measuring complexity and LOC.
    */
@@ -129,7 +129,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * If the given value is not null, the metric, resource and value will be associated
-   *
+   * 
    * @param file
    *          the file
    * @param metric
@@ -145,7 +145,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Adds the measure if the given metrics isn't already present on this resource.
-   *
+   * 
    * @param file
    * @param metric
    * @param value
@@ -159,7 +159,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Collects the given class measures and launches {@see #collectFunctionMeasures(MethodNode, PhpFile)} for all its descendant.
-   *
+   * 
    * @param file
    *          the php related file
    * @param classNode
@@ -185,7 +185,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Collects the given function measures.
-   *
+   * 
    * @param file
    *          the php related file
    * @param functionNode
@@ -204,7 +204,7 @@ public class PhpDependResultsParser implements BatchExtension {
   /**
    * Collect the fiven php file measures and launches {@see #collectClassMeasures(ClassNode, PhpFile)} for all its descendant. Indeed even
    * if it's not a good practice it isn't illegal to have more than one public class in one php file.
-   *
+   * 
    * @param file
    *          the php file
    * @param fileNode
@@ -246,7 +246,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Collect function measures.
-   *
+   * 
    * @param file
    *          the file
    * @param methodNode
@@ -260,7 +260,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Collect measures.
-   *
+   * 
    * @param reportXml
    *          the report xml
    * @throws FileNotFoundException
@@ -274,7 +274,7 @@ public class PhpDependResultsParser implements BatchExtension {
     for (FileNode fileNode : files) {
       String fileName = fileNode.getFileName();
       if (StringUtils.isEmpty(fileName)) {
-          continue;
+        continue;
       }
       org.sonar.api.resources.File currentResourceFile = org.sonar.api.resources.File.fromIOFile(new File(fileName), project);
       if (currentResourceFile != null) {
@@ -290,7 +290,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Gets the metrics.
-   *
+   * 
    * @return the metrics
    */
   private Set<Metric> getMetrics() {
@@ -307,7 +307,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Gets the metrics.
-   *
+   * 
    * @param report
    *          the report
    * @return the metrics
@@ -356,7 +356,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Saves on measure in the context. One value is associated with a metric and a resource.
-   *
+   * 
    * @param resource
    *          Can be a PhpFile or a PhpPackage
    * @param metric
@@ -373,7 +373,7 @@ public class PhpDependResultsParser implements BatchExtension {
 
   /**
    * Saves all the measure contained in the resourceBag used for this analysis.
-   *
+   * 
    * @throws ParseException
    */
   private void saveMeasures() {
