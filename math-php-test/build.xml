@@ -20,7 +20,6 @@
     <property name="sonar.language" value="php" />
     
     <property name="sonar.phpUnit.mainTestClass" value="source/tests/AllTests2.php" />
-    <property name="sonar.phpcpd.excludes" value="source/tests" />
 
     <!-- Example of properties that can be uncommented to enable reuse of existing PHP Code Sniffer reports -->
     <!--

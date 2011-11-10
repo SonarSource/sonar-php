@@ -104,44 +104,6 @@ public class PhpUnitConfigurationTest {
 
   /**
    * Should get valid suffixe option.
-   * 
-   * @throws IOException
-   */
-  @Test(expected = SonarException.class)
-  @Ignore
-  public void shouldThrowExceptionIfReportIsNotInTestOrSourceDirs() throws IOException {
-    Project project = mock(Project.class);
-    Configuration c = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-
-    File temp = File.createTempFile("fake", "file");
-
-    File baseDir = temp.getParentFile();
-
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File(baseDir, "target"));
-    when(fs.getBasedir()).thenReturn(baseDir);
-
-    when(c.getString(PHPUNIT_REPORT_FILE_NAME_KEY, PHPUNIT_REPORT_FILE_NAME_DEFVALUE)).thenReturn("phpunit.xml");
-
-    when(c.getString(PHPUNIT_MAIN_TEST_FILE_KEY, PHPUNIT_MAIN_TEST_FILE_DEFVALUE)).thenReturn(temp.getName());
-    when(c.getString(PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("d:\\logs\\");
-    when(project.getConfiguration()).thenReturn(c);
-    PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-    try {
-      config.getMainTestClass();
-    } catch (SonarException e) {
-      assertEquals(true, e.getMessage().contains("not present neither in test directories nor in source"));
-      throw e;
-    }
-  }
-
-  /**
-   * Should get valid suffixe option.
    */
   @Test
   public void shouldReturnDefaultReportFileWithDefaultPath() {

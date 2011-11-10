@@ -60,7 +60,6 @@
     <sonar.phpUnit.skip>false</sonar.phpUnit.skip>
     <sonar.phpUnit.mainTestClass>/source/tests/AllTests2.php</sonar.phpUnit.mainTestClass>
     <sonar.phpcpd.skip>false</sonar.phpcpd.skip>
-    <sonar.phpcpd.excludes>source/tests</sonar.phpcpd.excludes>
 
     <!-- to enable mutliple source directories. The phase must patch with 
       the build-helper-maven-plugin exectution phase -->

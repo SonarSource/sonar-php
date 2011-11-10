@@ -89,10 +89,10 @@ public class PhpCpdExecutorTest {
     expected.add(reportFile);
 
     expected.add(PHPCPD_EXCLUDE_OPTION);
-    expected.add("srcDir" + File.separator + "test1");
+    expected.add(new File("srcDir", "test1").getAbsolutePath());
 
     expected.add(PHPCPD_EXCLUDE_OPTION);
-    expected.add("srcDir" + File.separator + "test2");
+    expected.add(new File("srcDir", "test2").getAbsolutePath());
 
     assertEquals(expected, commandLine);
   }
