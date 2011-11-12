@@ -61,7 +61,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public static final String PHPUNIT_MAIN_TEST_FILE_KEY = "sonar.phpUnit.mainTestClass";
   public static final String PHPUNIT_MAIN_TEST_FILE_DEFVALUE = "AllTests.php";
   public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY = "sonar.phpUnit.analyze.test.directory";
-  public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE = "true";
+  public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE = "false";
   public static final String PHPUNIT_FILTER_KEY = "sonar.phpUnit.filter";
   public static final String PHPUNIT_BOOTSTRAP_KEY = "sonar.phpUnit.bootstrap";
   public static final String PHPUNIT_CONFIGURATION_KEY = "sonar.phpUnit.configuration";

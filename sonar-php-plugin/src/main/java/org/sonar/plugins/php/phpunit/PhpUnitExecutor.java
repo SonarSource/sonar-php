@@ -96,20 +96,26 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
     Configuration c = configuration.getProject().getConfiguration();
     addBasicOptions(result);
 
-    boolean useMainTestClass = true;
-    if (configuration.isStringPropertySet(PHPUNIT_CONFIGURATION_KEY)) {
+    boolean useConfigFile = configuration.isStringPropertySet(PHPUNIT_CONFIGURATION_KEY);
+    if (useConfigFile) {
       result.add(PHPUNIT_CONFIGURATION_OPTION + configuration.getConfiguration());
-      useMainTestClass = false;
     }
-    addExtendedOptions(result, c);
-    if (useMainTestClass && configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_KEY)) {
-      result.add(project.getName());
-      result.add(configuration.getMainTestClass());
+    addExtendedOptions(result);
+
+    if (!useConfigFile) {
+
+      boolean ignoreConfigFile = c.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY) && c.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY);
+      if (ignoreConfigFile) {
+        result.add(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
+      }
+
+      if (configuration.isStringPropertySet(PHPUNIT_MAIN_TEST_FILE_KEY)) {
+        result.add(configuration.getMainTestClass());
+      } else if (c.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY) || ignoreConfigFile) {
+        result.add(getTestDirectoryOrFiles());
+      }
     }
-    // source directory is appended phpunit.
-    if ( !useMainTestClass || !c.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY) || c.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)) {
-      result.add(getTestDirectoryOrFiles());
-    }
+
     return result;
   }
 
@@ -117,7 +123,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    * @param result
    * @param c
    */
-  private void addExtendedOptions(List<String> result, Configuration c) {
+  private void addExtendedOptions(List<String> result) {
     if (configuration.isStringPropertySet(PHPUNIT_LOADER_KEY)) {
       result.add(PHPUNIT_LOADER_OPTION + configuration.getLoader());
     }
@@ -126,9 +132,6 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
     }
     if (configuration.isStringPropertySet(PHPUNIT_ARGUMENT_LINE_KEY)) {
       result.add(configuration.getArgumentLine());
-    }
-    if (c.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY) && c.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)) {
-      result.add(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
     }
     result.add(PHPUNIT_LOG_JUNIT_OPTION + configuration.getReportFile());
     if ( !configuration.shouldSkipCoverage()) {

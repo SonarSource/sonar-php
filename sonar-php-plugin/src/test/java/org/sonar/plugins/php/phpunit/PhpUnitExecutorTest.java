@@ -27,6 +27,7 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_OPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_OPTION;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -96,7 +97,7 @@ public class PhpUnitExecutorTest {
     assertThat(commandLine).isNotEmpty();
     assertThat(commandLine).contains(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
 
-    List<String> expected = Arrays.asList(phpunit, "--no-configuration", "--log-junit=" + reportFile, testDir.toString());
+    List<String> expected = Arrays.asList(phpunit, "--log-junit=" + reportFile, "--no-configuration", testDir.toString());
     assertThat(commandLine).isEqualTo(expected);
   }
 
@@ -207,6 +208,7 @@ public class PhpUnitExecutorTest {
     when(project.getConfiguration()).thenReturn(configuration);
     when(config.getProject()).thenReturn(project);
 
+    when(configuration.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
     when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
     when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
 
@@ -232,4 +234,36 @@ public class PhpUnitExecutorTest {
     assertThat(commandLine).excludes(testDir.toString());
   }
 
+  @Test
+  public void testDontAddTestDirectoryToCmdLineWhenUsingCustomXmlConfigFile()
+  {
+    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
+    Project project = mock(Project.class);
+    MavenProject mProject = mock(MavenProject.class);
+    when(project.getPom()).thenReturn(mProject);
+    when(mProject.getBasedir()).thenReturn(new File("toto"));
+    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
+
+    when(project.getFileSystem()).thenReturn(pfs);
+    Configuration configuration = mock(Configuration.class);
+    when(project.getConfiguration()).thenReturn(configuration);
+    when(config.getProject()).thenReturn(project);
+
+    String phpunitXml = "myConfig.xml";
+    File coverageXml = new File("phpunit.coverage.xml");
+    when(config.isStringPropertySet(PHPUNIT_CONFIGURATION_KEY)).thenReturn(true);
+    when(config.getCoverageReportFile()).thenReturn(coverageXml);
+    when(config.getConfiguration()).thenReturn(phpunitXml);
+
+    String phpunit = "phpunit";
+    when(config.getOsDependentToolScriptName()).thenReturn(phpunit);
+    File reportFile = new File("phpunit.xml");
+    when(config.getReportFile()).thenReturn(reportFile);
+    
+    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    List<String> commandLine = executor.getCommandLine();
+
+    List<String> expected = Arrays.asList(phpunit, "--configuration=" + phpunitXml, "--log-junit=" + reportFile, "--coverage-clover=" + coverageXml);
+    assertThat(commandLine).isEqualTo(expected);
+  }
 }
