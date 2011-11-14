@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
@@ -85,6 +86,7 @@ public class PhpCodeSnifferProfileImporterTest {
   }
 
   @Test
+  @Ignore
   public void testImportPearProfileWithGenericSniffs() throws IOException, SAXException {
     PhpCodeSnifferProfileImporter importer = createImporter();
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/pear-ruleset.xml"));

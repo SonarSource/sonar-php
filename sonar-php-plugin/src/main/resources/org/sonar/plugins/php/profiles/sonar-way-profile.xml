@@ -77,15 +77,19 @@
       <repositoryKey>phppmd_rules</repositoryKey>
       <key><![CDATA[Unused Code Rules/UnusedPrivateMethod]]></key>
     </rule>
-    <rule>
-      <repositoryKey>phppmd_rules</repositoryKey>
-      <key><![CDATA[Unused Code Rules/UnusedPrivateMethod]]></key>
-    </rule>
 
     <!-- PHP CodeSniffer rules -->
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Generic.Classes.DuplicateClassName.Found</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
       <key>Generic.CodeAnalysis.EmptyStatement.NotAllowed</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Generic.CodeAnalysis.EmptyStatement.NotAllowedWarning</key>
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
@@ -113,11 +117,23 @@
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Commenting.Todo.TaskFound</key>
+      <key>Generic.CodeAnalysis.UselessOverridingMethodSniff.Found</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Generic.ControlStructures.InlineControlStructure.NotAllowed</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Generic.ControlStructures.InlineControlStructure.Discouraged</key>
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
       <key>Generic.Files.LineEndings.InvalidEOLChar</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Generic.Files.LineLength.TooLong</key>
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
@@ -129,67 +145,7 @@
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Formatting.MultipleStatementAlignment.Incorrect</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Formatting.NoSpaceAfterCast.SpaceFound</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Formatting.SpaceAfterCast.NoSpace</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Formatting.SpaceAfterCast.TooMuchSpace</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
       <key>Generic.Functions.CallTimePassByReference.NotAllowed</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.FunctionCallArgumentSpacing.SpaceBeforeComma</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.FunctionCallArgumentSpacing.NoSpaceAfterComma</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.FunctionCallArgumentSpacing.NoSpaceBeforeEquals</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.FunctionCallArgumentSpacing.NoSpaceAfterEquals</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.OpeningFunctionBraceBsdAllman.BraceSpacing</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.OpeningFunctionBraceBsdAllman.BraceIndent</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.OpeningFunctionBraceKernighanRitchie.BraceOnNewLine</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.OpeningFunctionBraceKernighanRitchie.SpaceBeforeBrace</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.Functions.OpeningFunctionBraceKernighanRitchie.SpaceBeforeBrace</key>
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
@@ -197,7 +153,15 @@
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Generic.Metrics.CyclomaticComplexity.TooHigh</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
       <key>Generic.Metrics.NestingLevel.MaxExceeded</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Generic.Metrics.NestingLevel.TooHigh</key>
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
@@ -217,55 +181,11 @@
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.PHP.DisallowShortOpenTag.Found</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.PHP.DisallowShortOpenTag.EchoFound</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.PHP.ForbiddenFunctions.Found</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.PHP.LowerCaseConstant.Found</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
       <key>Generic.PHP.NoSilencedErrors.Forbidden</key>
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.PHP.NoSilencedErrors.Discouraged</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.PHP.UpperCaseConstant.Found</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
       <key>Generic.Strings.UnnecessaryStringConcat.Found</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.VersionControl.SubversionProperties.Unexpected</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.VersionControl.SubversionProperties.Missing</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.VersionControl.SubversionProperties.NoMatch</key>
-    </rule>
-    <rule>
-      <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.VersionControl.SubversionProperties.</key>
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
@@ -277,8 +197,79 @@
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.WhiteSpace.ScopeIndent.Incorrect</key>
+      <key>PEAR.Files.IncludingFile.BracketsNotRequired</key>
     </rule>
-    
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>PEAR.Files.IncludingFile.UseIncludeOnce</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>PEAR.Files.IncludingFile.UseInclude</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>PEAR.Files.IncludingFile.UseRequireOnce</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>PEAR.Files.IncludingFile.UseRequire</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>PEAR.Functions.ValidDefaultValue.NotAtEnd</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Classes.DuplicateProperty.Found</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Classes.SelfMemberReference.IncorrectCase</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Classes.SelfMemberReference.NotUsed</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Classes.SelfMemberReference.SpaceBefore</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Classes.SelfMemberReference.SpaceAfter</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Functions.FunctionDuplicateArgument.Found</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Objects.ObjectInstantiation.NotAssigned</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.PHP.CommentedOutCode.Found</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.PHP.GlobalKeyword.NotAllowed</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.PHP.NonExecutableCode.Unreachable</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.PHP.NonExecutableCode.ReturnNotRequired</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Scope.MemberVarScope.Missing</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Squiz.Scope.StaticThisUsage.Found</key>
+    </rule>
   </rules>
 </profile>

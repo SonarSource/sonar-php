@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <rules>
-  <rule key="Generic.Classes.DuplicateClassName.Found" priority="MAJOR">
+  <rule key="Generic.Classes.DuplicateClassName.Found" priority="BLOCKER">
     <category name="Maintainability" />
     <name>DuplicateClassNameFound</name>
     <configKey>rulesets/DuplicateClassName</configKey>
@@ -12,7 +12,13 @@
     <configKey>rulesets/EmptyStatement</configKey>
     <description><![CDATA[Empty %s statement detected]]></description>
   </rule>
-  <rule key="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop.CanSimplify" priority="MAJOR">
+  <rule key="Generic.CodeAnalysis.EmptyStatement.NotAllowedWarning" priority="MINOR">
+    <category name="Maintainability" />
+    <name>EmptyStatementNotAllowedWarning</name>
+    <configKey>rulesets/EmptyStatement</configKey>
+    <description><![CDATA[Empty %s statement detected]]></description>
+  </rule>
+  <rule key="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop.CanSimplify" priority="MINOR">
     <category name="Maintainability" />
     <name>ForLoopShouldBeWhileLoopCanSimplify</name>
     <configKey>rulesets/ForLoopShouldBeWhileLoop</configKey>
@@ -36,7 +42,7 @@
     <configKey>rulesets/UnconditionalIfStatement</configKey>
     <description><![CDATA[Avoid IF statements that are always true or false]]></description>
   </rule>
-  <rule key="Generic.CodeAnalysis.UnnecessaryFinalModifier.Found" priority="MAJOR">
+  <rule key="Generic.CodeAnalysis.UnnecessaryFinalModifier.Found" priority="MINOR">
     <category name="Maintainability" />
     <name>UnnecessaryFinalModifierFound</name>
     <configKey>rulesets/UnnecessaryFinalModifier</configKey>
@@ -48,13 +54,31 @@
     <configKey>rulesets/UnusedFunctionParameter</configKey>
     <description><![CDATA[The method parameter %s is never used]]></description>
   </rule>
-  <rule key="Generic.Commenting.Todo.TaskFound" priority="MAJOR">
+  <rule key="Generic.CodeAnalysis.UselessOverridingMethod.Found" priority="MINOR">
+    <category name="Maintainability" />
+    <name>UselessOverridingMethodFound</name>
+    <configKey>rulesets/UselessOverridingMethod</configKey>
+    <description><![CDATA[Unnecessary overriden method that simply call its parent]]></description>
+  </rule>
+  <rule key="Generic.Commenting.Todo.TaskFound" priority="INFO">
     <category name="Maintainability" />
     <name>Todotyp</name>
     <configKey>rulesets/Todo</configKey>
     <description><![CDATA[Comment refers to a TODO task]]></description>
   </rule>
-  <rule key="Generic.Files.LineEndings.InvalidEOLChar" priority="MAJOR">
+  <rule key="Generic.ControlStructures.InlineControlStructure.NotAllowed" priority="MAJOR">
+    <category name="Maintainability" />
+    <name>InlineControlStructureNotAllowed</name>
+    <configKey>rulesets/InlineControlStructureNotAllowed</configKey>
+    <description><![CDATA[This inline control structure is not allowed]]></description>
+  </rule>
+  <rule key="Generic.ControlStructures.InlineControlStructure.Discouraged" priority="INFO">
+    <category name="Maintainability" />
+    <name>InlineControlStructureDiscouraged</name>
+    <configKey>rulesets/InlineControlStructureDiscouraged</configKey>
+    <description><![CDATA[This inline  control structures is discouraged]]></description>
+  </rule>
+  <rule key="Generic.Files.LineEndings.InvalidEOLChar" priority="MINOR">
     <category name="Maintainability" />
     <name>LineEndingsInvalidEOLChar</name>
     <configKey>rulesets/LineEndings</configKey>
@@ -65,17 +89,27 @@
       <defaultValue><![CDATA[\n]]></defaultValue>
     </param>
   </rule>
-  <rule key="Generic.Files.LineLength.TooLong" priority="MAJOR">
+  <rule key="Generic.Files.LineLength.TooLong" priority="MINOR">
     <category name="Maintainability" />
     <name>LineLengthTooLong</name>
     <configKey>rulesets/LineLengthTooLong</configKey>
     <description><![CDATA[Line is too long]]></description>
+    <param>
+      <key>lineLimit</key>
+      <description>The limit that the length of a line should not exceed.</description>
+      <defaultValue>80</defaultValue>
+    </param>
   </rule>
   <rule key="Generic.Files.LineLength.MaxExceeded" priority="MAJOR">
     <category name="Maintainability" />
     <name>LineLengthMaxExceeded</name>
     <configKey>rulesets/LineLength</configKey>
     <description><![CDATA[Line exceeds maximum limit of %s characters; contains %s characters]]></description>
+    <param>
+      <key>absoluteLineLimit</key>
+      <description>The limit that the length of a line must not exceed.</description>
+      <defaultValue>120</defaultValue>
+    </param>
   </rule>
   <rule key="Generic.Formatting.DisallowMultipleStatements.SameLine" priority="MAJOR">
     <category name="Maintainability" />
@@ -88,20 +122,30 @@
     <name>MultipleStatementAlignmenttyp</name>
     <configKey>rulesets/MultipleStatementAlignment</configKey>
     <description><![CDATA[Equals sign not aligned correctly; expected %s but found %s]]></description>
+    <param>
+      <key>maxPadding</key>
+      <description>The maximum amount of padding before the alignment is ignored</description>
+      <defaultValue>1000</defaultValue>
+    </param>
+    <param>
+      <key>ignoreMultiLine</key>
+      <description>The maximum amount of padding before the alignment is ignored</description>
+      <defaultValue>false</defaultValue>
+    </param>
   </rule>
-  <rule key="Generic.Formatting.NoSpaceAfterCast.SpaceFound" priority="MAJOR">
+  <rule key="Generic.Formatting.NoSpaceAfterCast.SpaceFound" priority="MINOR">
     <category name="Maintainability" />
     <name>NoSpaceAfterCastSpaceFound</name>
     <configKey>rulesets/NoSpaceAfterCast</configKey>
     <description><![CDATA[A cast statement must not be followed by a space]]></description>
   </rule>
-  <rule key="Generic.Formatting.SpaceAfterCast.NoSpace" priority="MAJOR">
+  <rule key="Generic.Formatting.SpaceAfterCast.NoSpace" priority="MINOR">
     <category name="Maintainability" />
     <name>SpaceAfterCastNoSpace</name>
     <configKey>rulesets/SpaceAfterCast</configKey>
     <description><![CDATA[A cast statement must be followed by a single space]]></description>
   </rule>
-  <rule key="Generic.Formatting.SpaceAfterCast.TooMuchSpace" priority="MAJOR">
+  <rule key="Generic.Formatting.SpaceAfterCast.TooMuchSpace" priority="MINOR">
     <category name="Maintainability" />
     <name>SpaceAfterCastTooMuchSpace</name>
     <configKey>rulesets/SpaceAfterCast</configKey>
@@ -113,31 +157,31 @@
     <configKey>rulesets/CallTimePassByReference</configKey>
     <description><![CDATA[Call-time pass-by-reference calls are prohibited]]></description>
   </rule>
-  <rule key="Generic.Functions.FunctionCallArgumentSpacing.SpaceBeforeComma" priority="MAJOR">
+  <rule key="Generic.Functions.FunctionCallArgumentSpacing.SpaceBeforeComma" priority="MINOR">
     <category name="Maintainability" />
     <name>FunctionCallArgumentSpacingSpaceBeforeComma</name>
     <configKey>rulesets/FunctionCallArgumentSpacing</configKey>
     <description><![CDATA[Space found before comma in function call]]></description>
   </rule>
-  <rule key="Generic.Functions.FunctionCallArgumentSpacing.NoSpaceAfterComma" priority="MAJOR">
+  <rule key="Generic.Functions.FunctionCallArgumentSpacing.NoSpaceAfterComma" priority="MINOR">
     <category name="Maintainability" />
     <name>FunctionCallArgumentSpacingNoSpaceAfterComma</name>
     <configKey>rulesets/FunctionCallArgumentSpacing</configKey>
     <description><![CDATA[No space found after comma in function call]]></description>
   </rule>
-  <rule key="Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma" priority="MAJOR">
+  <rule key="Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma" priority="MINOR">
     <category name="Maintainability" />
     <name>FunctionCallArgumentSpacingTooMuchSpaceAfterComma</name>
     <configKey>rulesets/FunctionCallArgumentSpacing</configKey>
     <description><![CDATA[Expected 1 space after comma in function call; %s found]]></description>
   </rule>
-  <rule key="Generic.Functions.FunctionCallArgumentSpacing.NoSpaceBeforeEquals" priority="MAJOR">
+  <rule key="Generic.Functions.FunctionCallArgumentSpacing.NoSpaceBeforeEquals" priority="MINOR">
     <category name="Maintainability" />
     <name>FunctionCallArgumentSpacingNoSpaceBeforeEquals</name>
     <configKey>rulesets/FunctionCallArgumentSpacing</configKey>
     <description><![CDATA[Expected 1 space before = sign of default value]]></description>
   </rule>
-  <rule key="Generic.Functions.FunctionCallArgumentSpacing.NoSpaceAfterEquals" priority="MAJOR">
+  <rule key="Generic.Functions.FunctionCallArgumentSpacing.NoSpaceAfterEquals" priority="MINOR">
     <category name="Maintainability" />
     <name>FunctionCallArgumentSpacingNoSpaceAfterEquals</name>
     <configKey>rulesets/FunctionCallArgumentSpacing</configKey>
@@ -184,12 +228,44 @@
     <name>CyclomaticComplexityMaxExceeded</name>
     <configKey>rulesets/CyclomaticComplexity</configKey>
     <description><![CDATA[Function\'s cyclomatic complexity (%s) exceeds allowed maximum of %s]]></description>
+    <param>
+      <key>absoluteComplexity</key>
+      <description>The limit that the complexity must not exceed.</description>
+      <defaultValue>20</defaultValue>
+    </param>
+  </rule>
+  <rule key="Generic.Metrics.CyclomaticComplexity.TooHigh" priority="MINOR">
+    <category name="Maintainability" />
+    <name>CyclomaticComplexityTooHigh</name>
+    <configKey>rulesets/CyclomaticComplexity</configKey>
+    <description><![CDATA[Function\'s cyclomatic complexity (%s) exceeds %s; consider refactoring the function]]></description>
+    <param>
+      <key>complexity</key>
+      <description>The limit that the complexity should not exceed.</description>
+      <defaultValue>10</defaultValue>
+    </param>
   </rule>
   <rule key="Generic.Metrics.NestingLevel.MaxExceeded" priority="MAJOR">
     <category name="Maintainability" />
     <name>NestingLevelMaxExceeded</name>
     <configKey>rulesets/NestingLevel</configKey>
     <description><![CDATA[Function\'s nesting level (%s) exceeds allowed maximum of %s]]></description>
+    <param>
+      <key>absoluteNestingLevel</key>
+      <description>The limit that the nesting level should not exceed.</description>
+      <defaultValue>10</defaultValue>
+    </param>
+  </rule>
+  <rule key="Generic.Metrics.NestingLevel.TooHigh" priority="MINOR">
+    <category name="Maintainability" />
+    <name>NestingLevelTooHigh</name>
+    <configKey>rulesets/NestingLevel</configKey>
+    <description><![CDATA[Function\'s nesting level (%s) exceeds %s; consider refactoring the function]]></description>
+    <param>
+      <key>nestingLevel</key>
+      <description>The limit that the nesting level should not exceed.</description>
+      <defaultValue>5</defaultValue>
+    </param>
   </rule>
   <rule key="Generic.NamingConventions.ConstructorName.OldStyle" priority="MAJOR">
     <category name="Maintainability" />
@@ -197,23 +273,17 @@
     <configKey>rulesets/ConstructorName</configKey>
     <description><![CDATA[PHP4 style constructors are not allowed; use "__construct()" instead]]></description>
   </rule>
-  <rule key="Generic.NamingConventions.ConstructorName.OldStyleCall" priority="MAJOR">
+  <rule key="Generic.NamingConventions.ConstructorName.OldStyleCall" priority="INFO">
     <category name="Maintainability" />
     <name>ConstructorNameOldStyleCall</name>
     <configKey>rulesets/ConstructorName</configKey>
     <description><![CDATA[PHP4 style calls to parent constructors are not allowed; use "parent::__construct()" instead]]></description>
   </rule>
-  <rule key="Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase" priority="MAJOR">
+  <rule key="Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase" priority="INFO">
     <category name="Maintainability" />
     <name>UpperCaseConstantNameClassConstantNotUpperCase</name>
     <configKey>rulesets/UpperCaseConstantName</configKey>
     <description><![CDATA[Class constants must be uppercase; expected %s but found %s]]></description>
-  </rule>
-  <rule key="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase" priority="MAJOR">
-    <category name="Maintainability" />
-    <name>UpperCaseConstantNameConstantNotUpperCase</name>
-    <configKey>rulesets/UpperCaseConstantName</configKey>
-    <description><![CDATA[Constants must be uppercase; expected %s but found %s]]></description>
   </rule>
   <rule key="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase" priority="MAJOR">
     <category name="Maintainability" />
@@ -237,7 +307,7 @@
     <category name="Maintainability" />
     <name>ForbiddenFunctionstyp</name>
     <configKey>rulesets/ForbiddenFunctions</configKey>
-    <description><![CDATA[The use of function %s() is ]]></description>
+    <description><![CDATA[The use of function %s() is forbidden]]></description>
   </rule>
   <rule key="Generic.PHP.LowerCaseConstant.Found" priority="MAJOR">
     <category name="Maintainability" />
@@ -293,19 +363,29 @@
     <configKey>rulesets/SubversionProperties</configKey>
     <description><![CDATA[Error opening file; could not get Subversion properties]]></description>
   </rule>
-  <rule key="Generic.WhiteSpace.DisallowTabIndent.TabsUsed" priority="MAJOR">
+  <rule key="Generic.WhiteSpace.DisallowTabIndent.TabsUsed" priority="INFO">
     <category name="Maintainability" />
     <name>DisallowTabIndentTabsUsed</name>
     <configKey>rulesets/DisallowTabIndent</configKey>
     <description><![CDATA[Spaces must be used to indent lines; tabs are not allowed]]></description>
   </rule>
-  <rule key="Generic.WhiteSpace.ScopeIndent.Incorrect" priority="MAJOR">
+  <rule key="Generic.WhiteSpace.ScopeIndent.Incorrect" priority="INFO">
     <category name="Maintainability" />
     <name>ScopeIndentIncorrect</name>
     <configKey>rulesets/ScopeIndent</configKey>
     <description><![CDATA[Line indented incorrectly; expected %s spaces]]></description>
+    <param>
+      <key>indent</key>
+      <description>The number of spaces code should be indented.</description>
+      <defaultValue>4</defaultValue>
+    </param>
+    <param>
+      <key>exact</key>
+      <description>Does the indent need to be exactly right.</description>
+      <defaultValue>false</defaultValue>
+    </param>
   </rule>
-  <rule key="Generic.WhiteSpace.ScopeIndent.typ" priority="MAJOR">
+  <rule key="Generic.WhiteSpace.ScopeIndent.typ" priority="INFO">
     <category name="Maintainability" />
     <name>ScopeIndenttyp</name>
     <configKey>rulesets/ScopeIndent</configKey>
@@ -496,6 +576,11 @@
     <name>ClassDeclarationSpaceBeforeBrace</name>
     <configKey>rulesets/ClassDeclaration</configKey>
     <description><![CDATA[Expected %s spaces before opening brace; %s found]]></description>
+    <param>
+      <key>indent</key>
+      <description>The number of spaces code should be indented.</description>
+      <defaultValue>4</defaultValue>
+    </param>
   </rule>
   <rule key="PEAR.Commenting.ClassComment.WrongStyle" priority="MAJOR">
     <category name="Maintainability" />
@@ -905,7 +990,7 @@
     <configKey>rulesets/MultiLineCondition</configKey>
     <description><![CDATA[There must be a single space between the closing parenthesis and the opening brace of a multi-line IF statement]]></description>
   </rule>
-  <rule key="PEAR.Files.IncludingFile.BracketsNotRequired" priority="MAJOR">
+  <rule key="PEAR.Files.IncludingFile.BracketsNotRequired" priority="INFO">
     <category name="Maintainability" />
     <name>IncludingFileBracketsNotRequired</name>
     <configKey>rulesets/IncludingFile</configKey>
@@ -1031,7 +1116,7 @@
     <configKey>rulesets/FunctionDeclaration</configKey>
     <description><![CDATA[The closing parenthesis of a multi-line function declaration must be on a new line]]></description>
   </rule>
-  <rule key="PEAR.Functions.ValidDefaultValue.NotAtEnd" priority="MAJOR">
+  <rule key="PEAR.Functions.ValidDefaultValue.NotAtEnd" priority="BLOCKER">
     <category name="Maintainability" />
     <name>ValidDefaultValueNotAtEnd</name>
     <configKey>rulesets/ValidDefaultValue</configKey>
@@ -1427,7 +1512,7 @@
     <configKey>rulesets/ClassFileName</configKey>
     <description><![CDATA[%s name doesn\'t match filename; expected "%s %s]]></description>
   </rule>
-  <rule key="Squiz.Classes.DuplicateProperty.Found" priority="MAJOR">
+  <rule key="Squiz.Classes.DuplicateProperty.Found" priority="CRITICAL">
     <category name="Maintainability" />
     <name>DuplicatePropertyFound</name>
     <configKey>rulesets/DuplicateProperty</configKey>
@@ -1439,25 +1524,25 @@
     <configKey>rulesets/LowercaseClassKeywords</configKey>
     <description><![CDATA[%s keyword must be lowercase; expected "%s" but found "%s]]></description>
   </rule>
-  <rule key="Squiz.Classes.SelfMemberReference.IncorrectCase" priority="MAJOR">
+  <rule key="Squiz.Classes.SelfMemberReference.IncorrectCase" priority="INFO">
     <category name="Maintainability" />
     <name>SelfMemberReferenceIncorrectCase</name>
     <configKey>rulesets/SelfMemberReference</configKey>
     <description><![CDATA[Must use "self::" for local static member reference; found "%s::]]></description>
   </rule>
-  <rule key="Squiz.Classes.SelfMemberReference.NotUsed" priority="MAJOR">
+  <rule key="Squiz.Classes.SelfMemberReference.NotUsed" priority="MINOR">
     <category name="Maintainability" />
     <name>SelfMemberReferenceNotUsed</name>
     <configKey>rulesets/SelfMemberReference</configKey>
     <description><![CDATA[Must use "self::" for local static member reference]]></description>
   </rule>
-  <rule key="Squiz.Classes.SelfMemberReference.SpaceBefore" priority="MAJOR">
+  <rule key="Squiz.Classes.SelfMemberReference.SpaceBefore" priority="INFO">
     <category name="Maintainability" />
     <name>SelfMemberReferenceSpaceBefore</name>
     <configKey>rulesets/SelfMemberReference</configKey>
     <description><![CDATA[Expected 0 spaces before double colon; %s found]]></description>
   </rule>
-  <rule key="Squiz.Classes.SelfMemberReference.SpaceAfter" priority="MAJOR">
+  <rule key="Squiz.Classes.SelfMemberReference.SpaceAfter" priority="INFO">
     <category name="Maintainability" />
     <name>SelfMemberReferenceSpaceAfter</name>
     <configKey>rulesets/SelfMemberReference</configKey>
@@ -2933,7 +3018,7 @@
     <configKey>rulesets/FunctionDeclarationArgumentSpacing</configKey>
     <description><![CDATA[Expected 0 spaces between argument "%s" and closing bracket; %s found]]></description>
   </rule>
-  <rule key="Squiz.Functions.FunctionDuplicateArgument.Found" priority="MAJOR">
+  <rule key="Squiz.Functions.FunctionDuplicateArgument.Found" priority="BLOCKER">
     <category name="Maintainability" />
     <name>FunctionDuplicateArgumentFound</name>
     <configKey>rulesets/FunctionDuplicateArgument</configKey>
@@ -3227,6 +3312,18 @@
     <configKey>rulesets/LowercasePHPFunctions</configKey>
     <description><![CDATA[Calls to inbuilt PHP functions must be lowercase; expected "%s" but found "%s]]></description>
   </rule>
+  <rule key="Squiz.PHP.NonExecutableCode.Unreachable" priority="MAJOR">
+    <category name="Maintainability" />
+    <name>NonExecutableCodeUnreachable</name>
+    <configKey>rulesets/NonExecutableCodeUnreachable</configKey>
+    <description><![CDATA[Code after %s statement cannot be executed]]></description>
+  </rule>
+  <rule key="Squiz.PHP.NonExecutableCode.ReturnNotRequired" priority="MAJOR">
+    <category name="Maintainability" />
+    <name>NonExecutableCodeReturnNotRequired</name>
+    <configKey>rulesets/NonExecutableCodeReturnNotRequired</configKey>
+    <description><![CDATA[Empty return statement not required here]]></description>
+  </rule>
   <rule key="Squiz.Scope.MemberVarScope.Missing" priority="MAJOR">
     <category name="Maintainability" />
     <name>MemberVarScopeMissing</name>
@@ -3239,7 +3336,7 @@
     <configKey>rulesets/MethodScope</configKey>
     <description><![CDATA[No scope modifier specified for function "%s]]></description>
   </rule>
-  <rule key="Squiz.Scope.StaticThisUsage.Found" priority="MAJOR">
+  <rule key="Squiz.Scope.StaticThisUsage.Found" priority="BLOCKER">
     <category name="Maintainability" />
     <name>StaticThisUsageFound</name>
     <configKey>rulesets/StaticThisUsage</configKey>
