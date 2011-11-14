@@ -26,46 +26,32 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
- * The ProjectNode represent the analyzed project in the PhpUnit coverage report file.
+ * The PackageNode represents the analyzed packages in the PhpUnit coverage report file.
  */
 @XStreamAlias("project")
-public class ProjectNode {
+public class PackageNode {
 
   /** The project files. */
   @XStreamImplicit
   @XStreamAlias("file")
   private List<FileNode> files;
 
-  /** The project files. */
-  @XStreamImplicit
-  @XStreamAlias("package")
-  private List<PackageNode> packages;
-
   /** The project name. */
   @XStreamAsAttribute
   private String name;
 
-  /** The project metrics. */
-  @XStreamAlias("metrics")
-  private MetricsNode metrics;
-
   /**
-   * Gets the metrics.
+   * Instantiates a new package node.
    * 
-   * @return the metrics
+   * @param files
+   *          the files
+   * @param name
+   *          the name
    */
-  public MetricsNode getMetrics() {
-    return metrics;
-  }
-
-  /**
-   * Sets the metrics.
-   * 
-   * @param metrics
-   *          the new metrics
-   */
-  public void setMetrics(MetricsNode metrics) {
-    this.metrics = metrics;
+  public PackageNode(List<FileNode> files, String name) {
+    super();
+    this.files = files;
+    this.name = name;
   }
 
   /**
@@ -75,23 +61,6 @@ public class ProjectNode {
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Instantiates a new project node.
-   * 
-   * @param files
-   *          the files
-   * @param name
-   *          the name
-   * @param metrics
-   *          the metrics
-   */
-  public ProjectNode(List<FileNode> files, String name, MetricsNode metrics) {
-    super();
-    this.files = files;
-    this.name = name;
-    this.metrics = metrics;
   }
 
   /**
@@ -121,24 +90,5 @@ public class ProjectNode {
    */
   public void setFiles(List<FileNode> files) {
     this.files = files;
-  }
-
-  /**
-   * Gets the packages.
-   * 
-   * @return the packages
-   */
-  public List<PackageNode> getPackages() {
-    return packages;
-  }
-
-  /**
-   * Sets the packages.
-   * 
-   * @param packages
-   *          the new packages
-   */
-  public void setPackages(List<PackageNode> packages) {
-    this.packages = packages;
   }
 }

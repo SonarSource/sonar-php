@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1234543251" phpunit="3.3.1">
+  <project name="AllTests" timestamp="1234543251">
+    <package name="api">
+      <file name="C:/projets/PHP/Monkey/sources/main/Monkey.php">
+        <class name="Monkey" namespace="global" fullPackage="Animals.Monkey" category="Monkey" package="Animals">
+          <metrics methods="2" coveredmethods="0" statements="3" coveredstatements="0" elements="6" coveredelements="3"/>
+        </class>
+        <line num="34" type="method" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="40" type="stmt" count="0"/>
+        <line num="45" type="method" count="1"/>
+        <line num="46" type="stmt" count="1"/>
+        <metrics loc="49" ncloc="20" classes="1" methods="2" coveredmethods="2" statements="4" coveredstatements="2" elements="6" coveredelements="3"/>
+      </file>
+    </package>
+    <metrics files="34" loc="3147" ncloc="1621" classes="34" methods="94" coveredmethods="25" statements="100" coveredstatements="25" elements="100" coveredelements="25"/>
+  </project>
+</coverage>

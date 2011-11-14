@@ -60,7 +60,7 @@ public class PhpUnitCoverageResultParserTest {
   /**
    * Inits the.
    */
-  private void init() {
+  private void init(String reportPath) {
     config = mock(PhpUnitConfiguration.class);
     project = mock(Project.class);
     context = mock(SensorContext.class);
@@ -80,7 +80,7 @@ public class PhpUnitCoverageResultParserTest {
     List<File> testFiles = Arrays.asList(f4, f6);
     when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
 
-    File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml").getFile());
+    File reportFile = new File(getClass().getResource(reportPath).getFile());
     when(config.getReportFile()).thenReturn(reportFile);
     Configuration configuration = mock(Configuration.class);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
@@ -105,11 +105,20 @@ public class PhpUnitCoverageResultParserTest {
   }
 
   /**
+   * Should parse even when there's a package node.
+   */
+  @Test
+  public void shouldParseEvenWithPackageNode() {
+    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage-with-package.xml");
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), UNCOVERED_LINES, 2.0);
+  }
+
+  /**
    * Should generate coverage metrics.
    */
   @Test()
   public void shouldGenerateCoverageMeasures() {
-    init();
+    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
     verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), UNCOVERED_LINES, 2.0);
   }
 
@@ -118,7 +127,7 @@ public class PhpUnitCoverageResultParserTest {
    */
   @Test()
   public void shouldNotGenerateCoverageMeasures() {
-    init();
+    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
     org.sonar.api.resources.File file = new org.sonar.api.resources.File("IndexControllerTest.php");
     verify(context, never()).saveMeasure(eq(file), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
     verify(context, never()).saveMeasure((Resource<?>) eq(null), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
@@ -129,7 +138,7 @@ public class PhpUnitCoverageResultParserTest {
    */
   @Test()
   public void shouldGenerateLineHitsMeasures() {
-    init();
+    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
     Measure monkeyCoverage = new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1");
     verify(context, atLeastOnce()).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), monkeyCoverage);
   }

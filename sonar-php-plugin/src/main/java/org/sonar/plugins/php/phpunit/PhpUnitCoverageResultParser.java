@@ -43,6 +43,7 @@ import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
 import org.sonar.plugins.php.phpunit.xml.LineNode;
 import org.sonar.plugins.php.phpunit.xml.MetricsNode;
+import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
 import com.thoughtworks.xstream.XStream;
@@ -103,7 +104,22 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      for (FileNode file : projectNode.getFiles()) {
+      parseFileNodes(projectNode.getFiles());
+      parsePackagesNodes(projectNode.getPackages());
+    }
+  }
+
+  private void parsePackagesNodes(List<PackageNode> packages) {
+    if (packages != null) {
+      for (PackageNode packageNode : packages) {
+        parseFileNodes(packageNode.getFiles());
+      }
+    }
+  }
+
+  private void parseFileNodes(List<FileNode> fileNodes) {
+    if (fileNodes != null) {
+      for (FileNode file : fileNodes) {
         saveCoverageMeasure(file);
       }
     }
