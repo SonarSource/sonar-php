@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
@@ -86,14 +85,13 @@ public class PhpCodeSnifferProfileImporterTest {
   }
 
   @Test
-  @Ignore
   public void testImportPearProfileWithGenericSniffs() throws IOException, SAXException {
     PhpCodeSnifferProfileImporter importer = createImporter();
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/pear-ruleset.xml"));
     RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
 
     List<ActiveRule> activeRules = rulesProfile.getActiveRules();
-    assertThat(activeRules.size(), is(15));
+    assertThat(activeRules.size(), is(16));
     // just check that the "eolChar" param has been passed to the "Generic.Files.LineEndings.InvalidEOLChar" rule
     // NOTE : be carefull, this test may be broken if this sniff does not exist anymore in the PHPCS rules.xml file
     for (ActiveRule activeRule : activeRules) {
