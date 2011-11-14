@@ -25,6 +25,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.jdom.CDATA;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -133,14 +134,24 @@ public class PhpCodeSnifferProfileExporter extends ProfileExporter {
     addAttribute(rulesetNode, "name", pmdRuleset.getName());
     addChild(rulesetNode, "description", pmdRuleset.getDescription());
     for (PmdRule pmdRule : pmdRuleset.getPmdRules()) {
+      // Generate the main <rule> element
       Element ruleNode = new Element("rule");
       addAttribute(ruleNode, "ref", pmdRule.getRef());
       addAttribute(ruleNode, "class", pmdRule.getClazz());
       addAttribute(ruleNode, "message", pmdRule.getMessage());
       addAttribute(ruleNode, "name", pmdRule.getName());
       addChild(ruleNode, "severity", pmdRule.getPriority());
-      // Then manager properties (kind of parameters)
+      rulesetNode.addContent(ruleNode);
+      // If there are params, generate another <rule> element
+      // IMPORTANT NOTE: this is a hack because PHPCS does not currently accept parameters for rules.
+      // The params need to be set on the sniff itself after the declaration of the rule...
+      // SEE: https://jira.codehaus.org/browse/SONARPLUGINS-1508
       if (pmdRule.hasProperties()) {
+        // => "ruleNode" is a new element !!
+        ruleNode = new Element("rule");
+        // => but this element must refer to the sniff, not to the rule
+        addAttribute(ruleNode, "ref", StringUtils.substringBeforeLast(pmdRule.getRef(), "."));
+        // and then add the properties "normally"
         Element propertiesNode = new Element("properties");
         ruleNode.addContent(propertiesNode);
         for (PmdProperty property : pmdRule.getProperties()) {
@@ -155,8 +166,9 @@ public class PhpCodeSnifferProfileExporter extends ProfileExporter {
           }
           propertiesNode.addContent(propertyNode);
         }
+        // and we add this extra <rule> element
+        rulesetNode.addContent(ruleNode);
       }
-      rulesetNode.addContent(ruleNode);
     }
     XMLOutputter serializer = new XMLOutputter(Format.getPrettyFormat());
     StringWriter xml = new StringWriter();

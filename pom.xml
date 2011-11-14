@@ -42,9 +42,9 @@
 
   <developers>
     <developer>
-      <id>akram</id>
-      <name>Akram Ben Aissi</name>
-      <email>akram.benaissi@free.fr</email>
+      <id>fabemn</id>
+      <name>Fabrice Bellingard</name>
+      <email>fabrice.bellingard@sonarsource.com</email>
     </developer>
     <developer>
       <id>proofek</id>
@@ -52,14 +52,14 @@
       <email>proofek@gmail.com</email>
     </developer>
     <developer>
-      <id>fabemn</id>
-      <name>Fabrice Bellingard</name>
-      <email>fabrice.bellingard@sonarsource.com</email>
-    </developer>
-    <developer>
       <id>gennadiyl</id>
       <name>Gennadiy Litvinyuk</name>
       <email>gennadiy@gmail.com</email>
+    </developer>
+    <developer>
+      <id>akram</id>
+      <name>Akram Ben Aissi</name>
+      <email>akram.benaissi@free.fr</email>
     </developer>
   </developers>
 

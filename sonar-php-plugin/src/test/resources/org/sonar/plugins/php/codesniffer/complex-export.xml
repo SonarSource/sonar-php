@@ -2,6 +2,8 @@
 <ruleset name="PHP_CodeSniffer rules">
   <rule ref="Generic.Files.LineEndings.InvalidEOLChar">
     <severity>6</severity>
+  </rule>
+  <rule ref="Generic.Files.LineEndings">
     <properties>
       <property name="eolChar" value="FOO" />
     </properties>
