@@ -61,6 +61,11 @@
       <name>Akram Ben Aissi</name>
       <email>akram.benaissi@free.fr</email>
     </developer>
+    <developer>
+      <id>blacksun</id>
+      <name>Gabriele Santini</name>
+      <email>gab.santini@gmail.com</email>
+    </developer>
   </developers>
 
   <scm>
