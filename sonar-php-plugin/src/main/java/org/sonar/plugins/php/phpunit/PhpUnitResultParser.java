@@ -86,7 +86,7 @@ public class PhpUnitResultParser implements BatchExtension {
    *          the report
    * @return the test suites
    */
-  private TestSuites getTestSuites(File report) {
+  protected TestSuites getTestSuites(File report) {
     InputStream inputStream = null;
     try {
       XStream xstream = new XStream();
@@ -170,7 +170,7 @@ public class PhpUnitResultParser implements BatchExtension {
    *          the test suites
    * @return List<PhpUnitTestReport> A list of all test reports
    */
-  public List<PhpUnitTestReport> readSuites(TestSuites testSuites) {
+  private List<PhpUnitTestReport> readSuites(TestSuites testSuites) {
     List<PhpUnitTestReport> result = new ArrayList<PhpUnitTestReport>();
     for (TestSuite testSuite : testSuites.getTestSuites()) {
       PhpTestSuiteReader reader = new PhpTestSuiteReader();
@@ -196,7 +196,10 @@ public class PhpUnitResultParser implements BatchExtension {
    */
   private void saveClassMeasure(PhpUnitTestReport fileReport, Metric metric, double value) {
     if ( !Double.isNaN(value)) {
-      context.saveMeasure(getUnitTestResource(fileReport), metric, value);
+      Resource<?> unitTestResource = getUnitTestResource(fileReport);
+      if (unitTestResource != null) {
+        context.saveMeasure(unitTestResource, metric, value);
+      }
     }
   }
 
@@ -210,7 +213,7 @@ public class PhpUnitResultParser implements BatchExtension {
    * @param fileReport
    *          the unit test report
    */
-  private void saveTestReportMeasures(PhpUnitTestReport fileReport) {
+  protected void saveTestReportMeasures(PhpUnitTestReport fileReport) {
     if ( !fileReport.isValid()) {
       return;
     }
@@ -259,6 +262,9 @@ public class PhpUnitResultParser implements BatchExtension {
       }
     }
     details.append("</tests-details>");
-    context.saveMeasure(getUnitTestResource(fileReport), new Measure(CoreMetrics.TEST_DATA, details.toString()));
+    Resource<?> unitTestResource = getUnitTestResource(fileReport);
+    if (unitTestResource != null) {
+      context.saveMeasure(unitTestResource, new Measure(CoreMetrics.TEST_DATA, details.toString()));
+    }
   }
 }

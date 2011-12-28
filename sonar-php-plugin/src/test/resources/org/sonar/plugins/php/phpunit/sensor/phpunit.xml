@@ -27,5 +27,8 @@
 		<testcase name="testFallFromTreeAction" class="Banana" file="C:\projets\PHP\Monkey\Sources\test\Banana.php" line="51" assertions="0" time="0.57">
 			<error>yo</error>
 		</testcase>
+        <testcase name="skippedTest" class="Banana" file="C:\projets\PHP\Monkey\Sources\test\Banana.php" line="21" assertions="0" time="0.83">
+          <status>skipped</status>
+        </testcase>
 	</testsuite>
 </testsuites>
