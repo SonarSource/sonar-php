@@ -116,7 +116,7 @@ public class PhpUnitCoverageResultParserTest {
   /**
    * Should generate coverage metrics.
    */
-  @Test()
+  @Test
   public void shouldGenerateCoverageMeasures() {
     init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
     verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), UNCOVERED_LINES, 2.0);
@@ -125,7 +125,7 @@ public class PhpUnitCoverageResultParserTest {
   /**
    * Should not generate coverage metrics for files that are not under project sources dirs.
    */
-  @Test()
+  @Test
   public void shouldNotGenerateCoverageMeasures() {
     init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
     org.sonar.api.resources.File file = new org.sonar.api.resources.File("IndexControllerTest.php");
@@ -136,11 +136,18 @@ public class PhpUnitCoverageResultParserTest {
   /**
    * Should generate line hits metrics.
    */
-  @Test()
+  @Test
   public void shouldGenerateLineHitsMeasures() {
     init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
     Measure monkeyCoverage = new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1");
     verify(context, atLeastOnce()).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), monkeyCoverage);
+  }
+
+  // https://jira.codehaus.org/browse/SONARPLUGINS-1591
+  @Test
+  public void shouldNotFailIfNoStatementCount() {
+    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage-with-no-statements-covered.xml");
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.LINE_COVERAGE, 0.0d);
   }
 
 }

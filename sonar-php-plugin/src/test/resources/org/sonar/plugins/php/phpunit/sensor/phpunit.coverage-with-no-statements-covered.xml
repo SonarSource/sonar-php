@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1234543251" phpunit="3.3.1">
+  <project name="AllTests" timestamp="1234543251">
+    <file name="C:/projets/PHP/Monkey/sources/main/Monkey.php">
+      <class name="IndexControllerTest" namespace="global">
+        <metrics methods="1" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <line num="31" type="method" count="0"/>
+      <metrics loc="0" ncloc="0" classes="1" methods="1" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <metrics files="1" loc="0" ncloc="0" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+  </project>
+</coverage>

@@ -57,7 +57,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
   private static final Map<Resource<?>, Measure> measureByResource = new HashMap<Resource<?>, Measure>();
 
   /** The logger. */
-  private static Logger logger = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
 
   /** The project. */
   private Project project;
@@ -87,7 +87,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    */
   public void parse(File coverageReportFile) {
     if (coverageReportFile != null) {
-      logger.info("Parsing file: " + coverageReportFile.getAbsolutePath());
+      LOG.info("Parsing file: " + coverageReportFile.getAbsolutePath());
       parseFile(coverageReportFile);
     }
   }
@@ -131,7 +131,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    * @param fileNode
    *          the file
    */
-  private void saveCoverageMeasure(FileNode fileNode) {
+  protected void saveCoverageMeasure(FileNode fileNode) {
     File file = new File(fileNode.getName());
     org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file, project);
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
@@ -151,7 +151,10 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
       // Save uncovered statements (lines)
       double totalStatementsCount = metrics.getTotalStatementsCount();
       double uncoveredLines = totalStatementsCount - metrics.getCoveredStatements();
-      double lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
+      double lineCoverage = 0;
+      if (metrics.getCoveredStatements() != 0) {
+        lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
+      }
       context.saveMeasure(phpFile, CoreMetrics.LINES_TO_COVER, totalStatementsCount);
       context.saveMeasure(phpFile, CoreMetrics.UNCOVERED_LINES, uncoveredLines);
       context.saveMeasure(phpFile, CoreMetrics.LINE_COVERAGE, ParsingUtils.scaleValue(lineCoverage * 100.0));
@@ -159,12 +162,12 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
   }
 
   private void logMeasureByResource(org.sonar.api.resources.File phpFile, Measure measure) {
-    if (logger.isDebugEnabled()) {
+    if (LOG.isDebugEnabled()) {
       Measure alreadySaved = measureByResource.get(phpFile);
       if (alreadySaved == null) {
         measureByResource.put(phpFile, measure);
       } else {
-        logger.debug("Measure {} already saved for resoruce {}", measure, phpFile);
+        LOG.debug("Measure {} already saved for resoruce {}", measure, phpFile);
       }
     }
   }
