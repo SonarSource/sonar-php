@@ -117,7 +117,7 @@
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
-      <key>Generic.CodeAnalysis.UselessOverridingMethodSniff.Found</key>
+      <key>Generic.CodeAnalysis.UselessOverridingMethod.Found</key>
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>

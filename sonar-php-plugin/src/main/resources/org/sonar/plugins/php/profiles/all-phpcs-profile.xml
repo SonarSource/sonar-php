@@ -33,6 +33,10 @@
     </rule>
     <rule>
       <repositoryKey>php_codesniffer_rules</repositoryKey>
+      <key>Generic.CodeAnalysis.UselessOverridingMethod.Found</key>
+    </rule>
+    <rule>
+      <repositoryKey>php_codesniffer_rules</repositoryKey>
       <key>Generic.Commenting.Todo.TaskFound</key>
     </rule>
     <rule>
