@@ -20,10 +20,12 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 
@@ -69,8 +71,7 @@ public class PhpTestSuiteReader {
    *          the test suite
    * @return List<PhpUnitTestReport> A list containing on report per php class
    */
-  public List<PhpUnitTestReport> readSuite(TestSuite testSuite, String parentFileName) {
-    List<PhpUnitTestReport> result = new ArrayList<PhpUnitTestReport>();
+  public void readSuite(TestSuite testSuite, String parentFileName) {
     List<TestSuite> testSuites = testSuite.getTestSuites();
     if (testSuites != null) {
       for (TestSuite childSuite : testSuites) {
@@ -84,11 +85,7 @@ public class PhpTestSuiteReader {
         String testClassName = testCase.getClassName();
         // For test cases with @dataProvider. we get the fileName in the enclosing testSuite in the name attribute before string "::"
         if (testClassName == null) {
-          String name = testSuite.getName();
-          int testSuiteClassIndex = name.indexOf(TESTSUITE_CLASS_NAME_SEPARATOR);
-          if (testSuiteClassIndex > 0) {
-            testClassName = name.substring(0, testSuiteClassIndex);
-          }
+          testClassName = StringUtils.substringBefore(testSuite.getName(), TESTSUITE_CLASS_NAME_SEPARATOR);
         }
         PhpUnitTestReport report = reportsPerClass.get(testClassName);
         // If no reports exists for this class we create one
@@ -111,8 +108,15 @@ public class PhpTestSuiteReader {
         cumulateTestCaseDetails(testCase, report);
       }
     }
-    result.addAll(reportsPerClass.values());
-    return result;
+  }
+
+  /**
+   * Returns the collection of test results for the suite that has been analyzed.
+   * 
+   * @return the collection of {@link PhpUnitTestReport} objects
+   */
+  public Collection<PhpUnitTestReport> getReportsPerClass() {
+    return reportsPerClass.values();
   }
 
 }

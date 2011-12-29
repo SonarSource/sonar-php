@@ -74,8 +74,10 @@ public class PhpUnitCoverageDecorator implements Decorator {
       context.saveMeasure(CoreMetrics.LINE_COVERAGE, 0.0);
       // for LINES_TO_COVER and UNCOVERED_LINES, we use NCLOC as an approximation
       Measure ncloc = context.getMeasure(CoreMetrics.NCLOC);
-      if (ncloc != null) {
+      if (ncloc != null && context.getMeasure(CoreMetrics.LINES_TO_COVER) == null) {
         context.saveMeasure(CoreMetrics.LINES_TO_COVER, ncloc.getValue());
+      }
+      if (ncloc != null && context.getMeasure(CoreMetrics.UNCOVERED_LINES) == null) {
         context.saveMeasure(CoreMetrics.UNCOVERED_LINES, ncloc.getValue());
       }
     }

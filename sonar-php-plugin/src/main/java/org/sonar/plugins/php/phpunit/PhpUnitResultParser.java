@@ -34,7 +34,6 @@ import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
-import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.ParsingUtils;
@@ -174,33 +173,10 @@ public class PhpUnitResultParser implements BatchExtension {
     List<PhpUnitTestReport> result = new ArrayList<PhpUnitTestReport>();
     for (TestSuite testSuite : testSuites.getTestSuites()) {
       PhpTestSuiteReader reader = new PhpTestSuiteReader();
-      List<PhpUnitTestReport> list = reader.readSuite(testSuite, null);
-      result.addAll(list);
+      reader.readSuite(testSuite, null);
+      result.addAll(reader.getReportsPerClass());
     }
     return result;
-  }
-
-  /**
-   * Save class measure.
-   * 
-   * @param context
-   *          the context
-   * @param fileReport
-   *          the file report
-   * @param metric
-   *          the metric
-   * @param value
-   *          the value
-   * @param project
-   *          the project
-   */
-  private void saveClassMeasure(PhpUnitTestReport fileReport, Metric metric, double value) {
-    if ( !Double.isNaN(value)) {
-      Resource<?> unitTestResource = getUnitTestResource(fileReport);
-      if (unitTestResource != null) {
-        context.saveMeasure(unitTestResource, metric, value);
-      }
-    }
   }
 
   /**
@@ -217,22 +193,26 @@ public class PhpUnitResultParser implements BatchExtension {
     if ( !fileReport.isValid()) {
       return;
     }
-    if (fileReport.getTests() > 0) {
+    Resource<?> unitTestResource = getUnitTestResource(fileReport);
+    if (unitTestResource != null) {// fileReport.getTests() > 0) {
       double testsCount = fileReport.getTests() - fileReport.getSkipped();
       if (fileReport.getSkipped() > 0) {
-        saveClassMeasure(fileReport, CoreMetrics.SKIPPED_TESTS, fileReport.getSkipped());
+        context.saveMeasure(unitTestResource, CoreMetrics.SKIPPED_TESTS, (double) fileReport.getSkipped());
       }
       double duration = Math.round(fileReport.getTime() * MILLISECONDS);
-      saveClassMeasure(fileReport, CoreMetrics.TEST_EXECUTION_TIME, duration);
-      saveClassMeasure(fileReport, CoreMetrics.TESTS, testsCount);
-      saveClassMeasure(fileReport, CoreMetrics.TEST_ERRORS, fileReport.getErrors());
-      saveClassMeasure(fileReport, CoreMetrics.TEST_FAILURES, fileReport.getFailures());
-      double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
+      context.saveMeasure(unitTestResource, CoreMetrics.TEST_EXECUTION_TIME, duration);
+      context.saveMeasure(unitTestResource, CoreMetrics.TESTS, testsCount);
+      context.saveMeasure(unitTestResource, CoreMetrics.TEST_ERRORS, (double) fileReport.getErrors());
+      context.saveMeasure(unitTestResource, CoreMetrics.TEST_FAILURES, (double) fileReport.getFailures());
       if (testsCount > 0) {
+        double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
         double percentage = passedTests * PERCENT / testsCount;
-        saveClassMeasure(fileReport, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
+        context.saveMeasure(unitTestResource, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
       }
       saveTestsDetails(fileReport);
+    } else {
+      LOG.debug("Following file is not located in the test folder specified in the Sonar configuration: " + fileReport.getFile()
+          + ". The test results won't be reported in Sonar.");
     }
   }
 

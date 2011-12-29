@@ -45,7 +45,7 @@ import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 
-public class CoverageReportSensorTest {
+public class PhpUnitCoverageDecoratorTest {
 
   private Project project;
 
