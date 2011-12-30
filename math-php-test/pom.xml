@@ -22,49 +22,27 @@
   </scm>
 
   <build>
-    <!-- You cannot omit this one, because maven will implicitely add src/main/java 
-      to it -->
     <sourceDirectory>${basedir}/source/src</sourceDirectory>
     <testSourceDirectory>${basedir}/source/tests</testSourceDirectory>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>add-source</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>source/src</source>
-                <!--<source>source/tests</source> -->
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
   </build>
 
-  <!-- some properties that you may want to change -->
   <properties>
     <sonar.language>php</sonar.language>
 
-    <sonar.phpPmd.skip>false</sonar.phpPmd.skip>
-    <sonar.phpCodesniffer.skip>false</sonar.phpCodesniffer.skip>
-    <sonar.phpDepend.skip>false</sonar.phpDepend.skip>
-    <sonar.phpUnit.coverage.skip>false</sonar.phpUnit.coverage.skip>
-    <sonar.phpUnit.skip>false</sonar.phpUnit.skip>
-    <sonar.phpUnit.mainTestClass>/source/tests/AllTests2.php</sonar.phpUnit.mainTestClass>
-    <sonar.phpcpd.skip>false</sonar.phpcpd.skip>
+    <!-- ************ Optional properties ************ -->
 
-    <!-- to enable mutliple source directories. The phase must patch with 
-      the build-helper-maven-plugin exectution phase -->
-    <sonar.phase>generate-sources</sonar.phase>
+    <!-- Property used for PhpUnit -->
+    <!-- Please note that starting with version 0.6 of the PHP Plugin, using a PhpUnit config file is preferred ("sonar.phpUnit.configuration") -->
+    <sonar.phpUnit.mainTestClass>/source/tests/AllTests2.php</sonar.phpUnit.mainTestClass>
+
+    <!-- Example of properties that can be uncommented to enable reuse of existing PHP Code Sniffer reports -->
+    <!--
+    <sonar.phpCodesniffer.analyzeOnly>true</sonar.phpCodesniffer.analyzeOnly>
+    <sonar.phpCodesniffer.reportFileRelativePath>../../logs"</sonar.phpCodesniffer.reportFileRelativePath>
+    <sonar.phpCodesniffer.reportFileName>cs-report.xml</sonar.phpCodesniffer.reportFileName>
+    -->
     
+    <!-- For more properties, go to http://docs.codehaus.org/display/SONAR/PHP+plugin+configuration+options -->
   </properties>
 
 </project>

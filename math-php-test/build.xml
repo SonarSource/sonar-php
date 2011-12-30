@@ -14,11 +14,17 @@
   
   <!-- Add the target -->
   <target name="sonar">
+  	<!-- ************ Required properties ************ -->
     <property name="sonar.projectName" value="PHP Mathematics" />
+    <property name="sonar.scm.url" value="scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test" /> <!-- (required only if SCM plugin is used) -->
     <property name="sonar.sources" value="source/src" />
     <property name="sonar.tests" value="source/tests" />
     <property name="sonar.language" value="php" />
     
+  	<!-- ************ Optional properties ************ -->
+  	
+  	<!-- Property used for PhpUnit -->
+  	<!-- Please note that starting with version 0.6 of the PHP Plugin, using a PhpUnit config file is preferred ("sonar.phpUnit.configuration") -->
     <property name="sonar.phpUnit.mainTestClass" value="source/tests/AllTests2.php" />
 
     <!-- Example of properties that can be uncommented to enable reuse of existing PHP Code Sniffer reports -->
@@ -27,9 +33,10 @@
     <property name="sonar.phpCodesniffer.reportFileRelativePath" value="../../logs" />
     <property name="sonar.phpCodesniffer.reportFileName" value="cs-report.xml" />
     -->
-
-    <property name="sonar.scm.url" value="scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test" />
  
+  	<!-- For more properties, go to http://docs.codehaus.org/display/SONAR/PHP+plugin+configuration+options -->
+  	
+  	<!-- Call for the Sonar task that will launch the analysis -->
     <sonar:sonar key="fr.hashcode:mathematics" version="1.0-SNAPSHOT" xmlns:sonar="antlib:org.sonar.ant"/>
   </target>
 
