@@ -52,9 +52,9 @@ public class PhpCpdConfiguration extends AbstractPhpConfiguration {
   public static final String PHPCPD_REPORT_FILE_NAME_DEFVALUE = "php-cpd.xml";
   public static final String PHPCPD_EXCLUDE_PACKAGE_KEY = "sonar.phpcpd.excludes";
   public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY = "sonar.phpcpd.min.lines";
-  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE = "3";
+  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE = "4";
   public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY = "sonar.phpcpd.min.tokens";
-  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE = "5";
+  public static final String PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE = "15";
 
   private static final String PHPCPD_SUFFIXE_SEPARATOR = ",";
 
