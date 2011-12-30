@@ -23,7 +23,6 @@ import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_DEFVALUE;
 import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_IGNORE_ARGUMENT_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
@@ -184,9 +183,6 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
             + "used in conjunction with property '" + PHPCS_SEVERITY_KEY + "'.", category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
     @Property(key = PHPCS_SEVERITY_KEY, defaultValue = "", name = "Severity level value", project = true, global = true,
         description = "Specifies what the minimum severity level must be to report a violation in the report.",
-        category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
-    @Property(key = PHPCS_IGNORE_ARGUMENT_KEY, defaultValue = "", name = "Files and directories to ignore", project = true, global = true,
-        description = "Comma separated string of files or directories that will be ignored during the parsing process.",
         category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
     @Property(key = PHPCS_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
         description = "Additionnal paramters that can be passed to PHP CodeSniffer tool.", category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),

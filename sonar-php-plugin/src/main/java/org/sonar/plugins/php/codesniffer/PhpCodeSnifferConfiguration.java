@@ -63,7 +63,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   public static final String PHPCS_STANDARD_ARGUMENT_DEFVALUE = "Pear";
   public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY = "sonar.phpCodesniffer.severity.modifier";
   public static final String PHPCS_SEVERITY_KEY = "sonar.phpCodesniffer.levelArgument";
-  public static final String PHPCS_IGNORE_ARGUMENT_KEY = "sonar.phpCodesniffer.ignoreArgument";
   public static final String PHPCS_ARGUMENT_LINE_KEY = "sonar.phpCodesniffer.argumentLine";
 
   private PhpCodeSnifferProfileExporter exporter;

@@ -35,6 +35,8 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.PhpPlugin;
 
+import com.google.common.collect.Lists;
+
 /**
  * @author akram
  * 
@@ -49,15 +51,8 @@ public class PhpCodesnifferExecutorTest {
     Configuration configuration = mock(Configuration.class);
     when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
-    Project p = mock(Project.class);
-    when(p.getConfiguration()).thenReturn(configuration);
-    when(c.getProject()).thenReturn(p);
-    when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
 
-    RulesProfile profile = mock(RulesProfile.class);
-    PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);
-
-    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c, e, profile);
+    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
     executor.getCommandLine();
   }
 
@@ -70,16 +65,10 @@ public class PhpCodesnifferExecutorTest {
     String[] suffixes = new String[] { "php", "php2" };
     when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(suffixes);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
-    Project p = mock(Project.class);
-    when(p.getConfiguration()).thenReturn(configuration);
-    when(c.getProject()).thenReturn(p);
-    when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
 
-    RulesProfile profile = mock(RulesProfile.class);
-    PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);
-    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c, e, profile);
-
+    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
     List<String> commandLine = executor.getCommandLine();
+
     String expected = "--extensions=php,php2";
     assertThat(commandLine).contains(expected);
   }
@@ -93,10 +82,6 @@ public class PhpCodesnifferExecutorTest {
     String[] suffixes = new String[] { "php", "php2" };
     when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(suffixes);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
-    Project p = mock(Project.class);
-    when(p.getConfiguration()).thenReturn(configuration);
-    when(c.getProject()).thenReturn(p);
-    when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
 
     String modifierKey = PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
     when(configuration.getString(modifierKey, PHPCS_SEVERITY_OR_LEVEL_MODIFIER)).thenReturn(PHPCS_SEVERITY_OR_LEVEL_MODIFIER);
@@ -106,14 +91,38 @@ public class PhpCodesnifferExecutorTest {
     when(c.getSeverityModifier()).thenReturn(severityModifier);
     when(c.getLevel()).thenReturn(level);
 
-    RulesProfile profile = mock(RulesProfile.class);
-    PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);
-    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c, e, profile);
-
+    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
     List<String> commandLine = executor.getCommandLine();
+
     String expected = "--extensions=php,php2";
     assertThat(commandLine).contains(expected);
     assertThat(commandLine).contains(severityModifier + level);
+  }
 
+  /**
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   */
+  @Test
+  public void testGetCommandLineWithExclusions() {
+    Configuration configuration = mock(Configuration.class);
+    PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
+    when(c.getExclusionPatterns()).thenReturn(Lists.newArrayList("**/Bar/**", "*Foo.php"));
+
+    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
+    List<String> commandLine = executor.getCommandLine();
+
+    String expected = "--ignore=**/Bar/**,*Foo.php";
+    assertThat(commandLine).contains(expected);
+  }
+
+  private PhpCodeSnifferExecutor createExecutor(Configuration configuration, PhpCodeSnifferConfiguration c) {
+    Project p = mock(Project.class);
+    when(p.getConfiguration()).thenReturn(configuration);
+    when(c.getProject()).thenReturn(p);
+    when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
+    RulesProfile profile = mock(RulesProfile.class);
+    PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);
+    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c, e, profile);
+    return executor;
   }
 }

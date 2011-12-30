@@ -22,7 +22,6 @@ package org.sonar.plugins.php.codesniffer;
 import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_EXTENSIONS_MODIFIER;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_IGNORE_ARGUMENT_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_IGNORE_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_MODIFIER;
@@ -95,8 +94,7 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
     }
 
     List<String> exclusionPatterns = configuration.getExclusionPatterns();
-    boolean exclusionPatternsNotEmpty = exclusionPatterns != null && !exclusionPatterns.isEmpty();
-    if (configuration.isStringPropertySet(PHPCS_IGNORE_ARGUMENT_KEY) && exclusionPatternsNotEmpty) {
+    if (exclusionPatterns != null && !exclusionPatterns.isEmpty()) {
       String ignorePatterns = StringUtils.join(exclusionPatterns, EXCLUSION_PATTERN_SEPARATOR);
       StringBuilder sb = new StringBuilder(PHPCS_IGNORE_MODIFIER).append(ignorePatterns);
       result.add(sb.toString());
