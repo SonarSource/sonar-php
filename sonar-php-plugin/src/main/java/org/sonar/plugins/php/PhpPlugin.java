@@ -31,17 +31,6 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPC
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_DEFVALUE;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_ANALYZE_ONLY_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_EXCLUDE_PACKAGE_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_NAME_DEFVALUE;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_NAME_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY;
-import static org.sonar.plugins.php.cpd.PhpCpdConfiguration.PHPCPD_SKIP_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_DEFVALUE;
@@ -110,10 +99,7 @@ import org.sonar.plugins.php.core.profiles.AllPhpmdProfile;
 import org.sonar.plugins.php.core.profiles.PearProfile;
 import org.sonar.plugins.php.core.profiles.SonarWayProfile;
 import org.sonar.plugins.php.core.profiles.ZendProfile;
-import org.sonar.plugins.php.cpd.PhpCpdConfiguration;
-import org.sonar.plugins.php.cpd.PhpCpdExecutor;
-import org.sonar.plugins.php.cpd.PhpCpdResultParser;
-import org.sonar.plugins.php.cpd.PhpCpdSensor;
+import org.sonar.plugins.php.duplications.PhpCPDMapping;
 import org.sonar.plugins.php.phpdepend.PhpDependConfiguration;
 import org.sonar.plugins.php.phpdepend.PhpDependExecutor;
 import org.sonar.plugins.php.phpdepend.PhpDependResultsParser;
@@ -253,30 +239,7 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
     @Property(key = PHPUNIT_GROUP_KEY, defaultValue = "", name = "Groups to run", project = true, global = true,
         description = "Only runs tests from the specified group(s).", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT),
     @Property(key = PHPUNIT_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-        description = "Additionnal paramters that can be passed to PHPUnit tool.", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT),
-
-    // ------------------ PhpCpd configuration ------------------
-    @Property(key = PHPCPD_SKIP_KEY, defaultValue = "false", name = "Disable PhpCpd", project = true, global = true,
-        description = "If true, copy/paste measures for PHP will not be computed.", category = PhpPlugin.CATEGORY_PHP_PHP_CPD),
-    @Property(key = PHPCPD_ANALYZE_ONLY_KEY, defaultValue = "false", name = "Only analyze existing PHP CPD report files", project = true,
-        global = true, description = "By default, the plugin will launch PHP CPD and parse the generated result file."
-            + "If this option is set to true, the plugin will only reuse an existing report file.",
-        category = PhpPlugin.CATEGORY_PHP_PHP_CPD),
-    @Property(key = PHPCPD_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPCPD_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-        name = "Report file path", project = true, global = true, description = "Relative path of the report file to analyse.",
-        category = PhpPlugin.CATEGORY_PHP_PHP_CPD),
-    @Property(key = PHPCPD_REPORT_FILE_NAME_KEY, defaultValue = PHPCPD_REPORT_FILE_NAME_DEFVALUE, name = "Report file name",
-        project = true, global = true, description = "Name of the report file to analyse.", category = PhpPlugin.CATEGORY_PHP_PHP_CPD),
-    @Property(key = PHPCPD_EXCLUDE_PACKAGE_KEY, defaultValue = "", name = "Exclude package", project = true, global = true,
-        description = "Comma-separated list of packages to exclude.", category = PhpPlugin.CATEGORY_PHP_PHP_CPD),
-    @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_KEY, defaultValue = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_LINES_DEFVALUE,
-        name = "Minimum number of identical lines", project = true, global = true,
-        description = "The minimum number of identical lines to consider to detect a copy/paste.",
-        category = PhpPlugin.CATEGORY_PHP_PHP_CPD),
-    @Property(key = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_KEY, defaultValue = PHPCPD_MINIMUM_NUMBER_OF_IDENTICAL_TOKENS_DEFVALUE,
-        name = "Minimum number of identical tokens", project = true, global = true,
-        description = "The minimum number of identical tokens to consider to detect a copy/paste",
-        category = PhpPlugin.CATEGORY_PHP_PHP_CPD) })
+        description = "Additionnal paramters that can be passed to PHPUnit tool.", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT) })
 public class PhpPlugin extends SonarPlugin {
 
   protected static final String CATEGORY_PHP_PHP_CPD = "PHP CPD";
@@ -312,6 +275,9 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PearProfile.class);
     extensions.add(ZendProfile.class);
 
+    // Duplications
+    extensions.add(PhpCPDMapping.class);
+
     // PhpDepend
     extensions.add(PhpDependExecutor.class);
     extensions.add(PhpDependResultsParser.class);
@@ -344,12 +310,6 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PhpUnitResultParser.class);
     extensions.add(PhpUnitCoverageResultParser.class);
     extensions.add(PhpUnitCoverageDecorator.class);
-
-    // Phpcpd
-    extensions.add(PhpCpdConfiguration.class);
-    extensions.add(PhpCpdExecutor.class);
-    extensions.add(PhpCpdResultParser.class);
-    extensions.add(PhpCpdSensor.class);
 
     return extensions;
   }
