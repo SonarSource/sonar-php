@@ -36,7 +36,6 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARG
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_DEFVALUE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
@@ -66,7 +65,6 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SKIP_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_ARGUMENT_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_LEVEL_ARGUMENT_DEFVALUE;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_LEVEL_ARGUMENT_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_DEFVALUE;
@@ -140,11 +138,8 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
     @Property(key = PHPMD_LEVEL_ARGUMENT_KEY, defaultValue = PHPMD_LEVEL_ARGUMENT_DEFVALUE, name = "Mimimum priority", project = true,
         global = true, description = "The lowest level events won't be included in report file. "
             + "Values goes from 1(Strong) to 5(Weak) (only integers)", category = PhpPlugin.CATEGORY_PHP_PHPMD),
-    @Property(key = PHPMD_IGNORE_ARGUMENT_KEY, defaultValue = "", name = "Files and directories to ignore", project = true, global = true,
-        description = "Comma separated string of files or directories that will be ignored during the parsing process.",
-        category = PhpPlugin.CATEGORY_PHP_PHPMD),
     @Property(key = PHPMD_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-        description = "Additionnal paramters that can be passed to PHPMD tool.", category = PhpPlugin.CATEGORY_PHP_PHPMD),
+        description = "Additionnal parameters that can be passed to PHPMD tool.", category = PhpPlugin.CATEGORY_PHP_PHPMD),
 
     // ------------------ PhpCodeSniffer configuration ------------------
     @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = "Disable PHP CodeSniffer", project = true, global = true,
@@ -171,7 +166,7 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
         description = "Specifies what the minimum severity level must be to report a violation in the report.",
         category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
     @Property(key = PHPCS_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-        description = "Additionnal paramters that can be passed to PHP CodeSniffer tool.", category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
+        description = "Additionnal parameters that can be passed to PHP CodeSniffer tool.", category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
 
     // ------------------ PhPdepend configuration ------------------
     @Property(key = PDEPEND_SKIP_KEY, defaultValue = "false", name = "Disable PHP Depend", project = true, global = true,
@@ -195,11 +190,8 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
     @Property(key = PDEPEND_EXCLUDE_PACKAGE_KEY, defaultValue = "", name = "Package to exclude", project = true, global = true,
         description = "Comma separated string of packages that will be excluded during the parsing process.",
         category = PhpPlugin.CATEGORY_PHP_PHP_DEPEND),
-    @Property(key = PDEPEND_IGNORE_KEY, defaultValue = "", name = "Directories to ignore", project = true, global = true,
-        description = "Comma separated string of directories that will be ignored during the parsing process.",
-        category = PhpPlugin.CATEGORY_PHP_PHP_DEPEND),
     @Property(key = PDEPEND_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-        description = "Additionnal paramters that can be passed to PHP Depend tool.", category = PhpPlugin.CATEGORY_PHP_PHP_DEPEND),
+        description = "Additionnal parameters that can be passed to PHP Depend tool.", category = PhpPlugin.CATEGORY_PHP_PHP_DEPEND),
 
     // ------------------ Phpunit Configuration ------------------
     @Property(key = PHPUNIT_SKIP_KEY, defaultValue = "false", name = "Disable PHPUnit", project = true, global = true,
@@ -239,7 +231,7 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
     @Property(key = PHPUNIT_GROUP_KEY, defaultValue = "", name = "Groups to run", project = true, global = true,
         description = "Only runs tests from the specified group(s).", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT),
     @Property(key = PHPUNIT_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-        description = "Additionnal paramters that can be passed to PHPUnit tool.", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT) })
+        description = "Additionnal parameters that can be passed to PHPUnit tool.", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT) })
 public class PhpPlugin extends SonarPlugin {
 
   protected static final String CATEGORY_PHP_PHP_CPD = "PHP CPD";

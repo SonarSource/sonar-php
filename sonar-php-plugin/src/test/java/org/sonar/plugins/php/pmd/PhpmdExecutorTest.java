@@ -21,9 +21,8 @@ package org.sonar.plugins.php.pmd;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.sonar.api.CoreProperties.PROJECT_EXCLUSIONS_PROPERTY;
+import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_ARGUMENT_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_KEY;
 
@@ -53,29 +52,7 @@ public class PhpmdExecutorTest {
     String[] extensions = new String[] { "php", "php3", "php4" };
     conf.setProperty(FILE_SUFFIXES_KEY, extensions);
     Project project = MockUtils.createMockProject(conf);
-    PhpmdConfiguration phpmdConfiguration = new PhpmdConfiguration(project);
-
-    PhpmdProfileExporter exporter = mock(PhpmdProfileExporter.class);
-    PhpmdExecutor executor = new PhpmdExecutor(phpmdConfiguration, exporter, null);
-
-    List<String> commandLine = executor.getCommandLine();
-    String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
-    String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--suffixes", StringUtils.join(extensions, ",") };
-
-    assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
-  }
-
-  @Test
-  public void testGetIgnoreDirsWithNotNullWithSonarExclusionNull() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, "/");
-    conf.setProperty(PHPMD_REPORT_FILE_NAME_KEY, "pmd.xml");
-    conf.setProperty(PHPMD_IGNORE_ARGUMENT_KEY, new String[] { "Math,Math3*" });
-    conf.setProperty(PROJECT_EXCLUSIONS_PROPERTY, null);
-    String[] extensions = new String[] { "php", "php3", "php4" };
-    conf.setProperty(FILE_SUFFIXES_KEY, extensions);
-    Project project = MockUtils.createMockProject(conf);
+    when(project.getExclusionPatterns()).thenReturn(new String[0]);
     PhpmdConfiguration phpmdConfiguration = new PhpmdConfiguration(project);
 
     PhpmdProfileExporter exporter = mock(PhpmdProfileExporter.class);
@@ -94,11 +71,11 @@ public class PhpmdExecutorTest {
     Configuration conf = new BaseConfiguration();
     conf.setProperty(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, "/");
     conf.setProperty(PHPMD_REPORT_FILE_NAME_KEY, "pmd.xml");
+    String[] extensions = new String[] { "php", "php3", "php4" };
+    conf.setProperty(FILE_SUFFIXES_KEY, extensions);
+    Project project = MockUtils.createMockProject(conf);
     String[] sonarExclusionPattern = { "*test", "**/math" };
-    conf.setProperty(PROJECT_EXCLUSIONS_PROPERTY, sonarExclusionPattern);
-    String[] extensions = new String[] { "php", "php3", "php4" };
-    conf.setProperty(FILE_SUFFIXES_KEY, extensions);
-    Project project = MockUtils.createMockProject(conf);
+    when(project.getExclusionPatterns()).thenReturn(sonarExclusionPattern);
     PhpmdConfiguration phpmdConfiguration = new PhpmdConfiguration(project);
 
     PhpmdProfileExporter exporter = mock(PhpmdProfileExporter.class);
@@ -107,33 +84,7 @@ public class PhpmdExecutorTest {
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--ignore", StringUtils.join(sonarExclusionPattern, ","), "--suffixes", StringUtils.join(extensions, ",") };
-
-    assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
-  }
-
-  @Test
-  public void testGetIgnoreDirsNotNullWithSonarExclusionNotNull() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, "/");
-    conf.setProperty(PHPMD_REPORT_FILE_NAME_KEY, "pmd.xml");
-    String[] phpmdExclusionPattern = { "*Math5.php" };
-    conf.setProperty(PHPMD_IGNORE_ARGUMENT_KEY, phpmdExclusionPattern);
-    String[] sonarExclusionPattern = { "sites/all/", "files", "*Math4.php" };
-    conf.setProperty(PROJECT_EXCLUSIONS_PROPERTY, sonarExclusionPattern);
-    String[] extensions = new String[] { "php", "php3", "php4" };
-    conf.setProperty(FILE_SUFFIXES_KEY, extensions);
-    Project project = MockUtils.createMockProject(conf);
-    PhpmdConfiguration phpmdConfiguration = new PhpmdConfiguration(project);
-
-    PhpmdProfileExporter exporter = mock(PhpmdProfileExporter.class);
-    PhpmdExecutor executor = new PhpmdExecutor(phpmdConfiguration, exporter, null);
-
-    List<String> commandLine = executor.getCommandLine();
-    String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
-    String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--ignore", StringUtils.join(phpmdExclusionPattern, ",") + "," + StringUtils.join(sonarExclusionPattern, ","), "--suffixes",
-        StringUtils.join(extensions, ",") };
+        "--exclude", StringUtils.join(sonarExclusionPattern, ","), "--suffixes", StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
   }

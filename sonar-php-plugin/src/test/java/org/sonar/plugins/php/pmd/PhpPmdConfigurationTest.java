@@ -23,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_DEFAULT_RULESET_ARGUMENT;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_ARGUMENT_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_DEFVALUE;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
@@ -33,7 +32,6 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
@@ -47,9 +45,6 @@ public class PhpPmdConfigurationTest {
   public void testGetRulesetsWithEmpty() {
     Project project = getMockProject();
     PhpmdConfiguration config = new PhpmdConfiguration(project);
-    Configuration c = project.getConfiguration();
-    String[] excludeDirs = new String[] {};
-    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(excludeDirs);
     assertEquals(PHPMD_DEFAULT_RULESET_ARGUMENT, config.getRulesets());
   }
 
@@ -57,38 +52,17 @@ public class PhpPmdConfigurationTest {
   public void testGetRulesetsWithNull() {
     Project project = getMockProject();
     PhpmdConfiguration config = new PhpmdConfiguration(project);
-    Configuration c = project.getConfiguration();
-    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(null);
     assertEquals(PHPMD_DEFAULT_RULESET_ARGUMENT, config.getRulesets());
   }
 
   @Test
-  public void testGetIgnoreListWithNotNull() {
+  public void testGetExclusionPatterns() {
     Project project = getMockProject();
-    PhpmdConfiguration config = new PhpmdConfiguration(project);
-    Configuration c = project.getConfiguration();
     String[] excludeDirs = new String[] { "a", "b" };
-    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(excludeDirs);
-    assertEquals("a,b", config.getIgnoreList());
-  }
-
-  @Test
-  public void testGetIgnoreListWithEmpty() {
-    Project project = getMockProject();
+    when(project.getExclusionPatterns()).thenReturn(excludeDirs);
     PhpmdConfiguration config = new PhpmdConfiguration(project);
-    Configuration c = project.getConfiguration();
-    String[] excludeDirs = new String[] {};
-    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(excludeDirs);
-    assertEquals(null, config.getIgnoreList());
-  }
-
-  @Test
-  public void testGetIgnoreListWithNull() {
-    Project project = getMockProject();
-    PhpmdConfiguration config = new PhpmdConfiguration(project);
-    Configuration c = project.getConfiguration();
-    when(c.getStringArray(PHPMD_IGNORE_ARGUMENT_KEY)).thenReturn(null);
-    assertEquals(null, config.getIgnoreList());
+    assertEquals(config.getExclusionPatterns().get(0), "a");
+    assertEquals(config.getExclusionPatterns().get(1), "b");
   }
 
   /**
@@ -98,9 +72,7 @@ public class PhpPmdConfigurationTest {
   public void shouldReturnDefaultReportFileWithDefaultPath() {
     Project project = mock(Project.class);
     Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
@@ -120,9 +92,7 @@ public class PhpPmdConfigurationTest {
   public void shouldReturnDefaultReportFileWithCustomPath() {
     Project project = mock(Project.class);
     Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
@@ -147,9 +117,7 @@ public class PhpPmdConfigurationTest {
   private Project getMockProject() {
     Project project = mock(Project.class);
     Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));

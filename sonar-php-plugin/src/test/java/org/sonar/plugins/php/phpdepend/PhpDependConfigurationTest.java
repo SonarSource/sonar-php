@@ -27,7 +27,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_COMMAND_LINE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
@@ -41,6 +40,7 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.php.pmd.PhpmdConfiguration;
 
 /**
  * The Class PhpDependConfigurationTest.
@@ -52,34 +52,13 @@ public class PhpDependConfigurationTest {
   private static final String REPORT_FILE_NAME_PROPERTY_KEY = PDEPEND_REPORT_FILE_NAME_KEY;
 
   @Test
-  public void testGetReportFileNameKeyIsNull() {
+  public void testGetExclusionPatterns() {
     Project project = getMockProject();
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-    Configuration c = project.getConfiguration();
     String[] excludeDirs = new String[] { "a", "b" };
-    when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(excludeDirs);
-    when(c.getStringArray(PDEPEND_REPORT_FILE_NAME_KEY)).thenReturn(null);
-    assertEquals("a,b", config.getIgnoreDirs());
-  }
-
-  @Test
-  public void testGetIgnoreDirsWithNotNull() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-    Configuration c = project.getConfiguration();
-    String[] excludeDirs = new String[] { "a", "b" };
-    when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(excludeDirs);
-    assertEquals("a,b", config.getIgnoreDirs());
-  }
-
-  @Test
-  public void testGetIgnoreDirsWithEmpty() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-    Configuration c = project.getConfiguration();
-    String[] excludeDirs = new String[] {};
-    when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(excludeDirs);
-    assertThat(config.getIgnoreDirs()).isEqualTo("");
+    when(project.getExclusionPatterns()).thenReturn(excludeDirs);
+    PhpmdConfiguration config = new PhpmdConfiguration(project);
+    assertEquals(config.getExclusionPatterns().get(0), "a");
+    assertEquals(config.getExclusionPatterns().get(1), "b");
   }
 
   @Test
@@ -109,15 +88,6 @@ public class PhpDependConfigurationTest {
     String[] excludeDirs = new String[] {};
     when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(excludeDirs);
     assertEquals(null, config.getExcludePackages());
-  }
-
-  @Test
-  public void testGetIgnoreDirsWithNull() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-    Configuration c = project.getConfiguration();
-    when(c.getStringArray(PDEPEND_IGNORE_KEY)).thenReturn(null);
-    assertThat(config.getIgnoreDirs()).isEqualTo("");
   }
 
   /**

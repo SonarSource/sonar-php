@@ -19,6 +19,9 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.api.Php;
@@ -52,7 +55,6 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   public static final String PDEPEND_BAD_DOCUMENTATION_KEY = "sonar.phpDepend.badDocumentation";
   public static final String PDEPEND_BAD_DOCUMENTATION_DEFVALUE = "false";
   public static final String PDEPEND_EXCLUDE_PACKAGE_KEY = "sonar.phpDepend.exclude";
-  public static final String PDEPEND_IGNORE_KEY = "sonar.phpDepend.ignore";
   public static final String PDEPEND_ARGUMENT_LINE_KEY = "sonar.phpDepend.argumentLine";
 
   /**
@@ -171,12 +173,13 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
     return null;
   }
 
-  public String getIgnoreDirs() {
-    String[] values = getProject().getConfiguration().getStringArray(PDEPEND_IGNORE_KEY);
-    if (values != null && values.length > 0) {
-      return StringUtils.join(values, ',');
-    }
-    return StringUtils.EMPTY;
+  /**
+   * Gets the ignore list argument value.
+   * 
+   * @return the ignore list
+   */
+  public List<String> getExclusionPatterns() {
+    return Arrays.asList(getProject().getExclusionPatterns());
   }
 
   public boolean isBadDocumentation() {

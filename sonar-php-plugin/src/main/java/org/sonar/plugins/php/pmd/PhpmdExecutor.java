@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.sonar.api.CoreProperties.PROJECT_EXCLUSIONS_PROPERTY;
 import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXCLUDE_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_IGNORE_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FORMAT;
 
@@ -31,7 +30,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.php.core.AbstractPhpExecutor;
@@ -93,23 +91,14 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
   }
 
   /**
-   * @return the command line ignore option depending on sonar exclusions and phpmd specific exclusion.
+   * @return the command line ignore option depending on sonar exclusions
    */
   private List<String> getIgnoreArguments() {
     List<String> ignoreArguments = new ArrayList<String>();
-    boolean sonarExclusionsIsSet = configuration.isStringPropertySet(PROJECT_EXCLUSIONS_PROPERTY);
-    boolean ignoreKeyIsSet = configuration.isStringPropertySet(PHPMD_IGNORE_OPTION);
-    if (ignoreKeyIsSet || sonarExclusionsIsSet) {
-      String ignoreList = configuration.getIgnoreList();
-      String ignore = ignoreList != null ? ignoreList : "";
-      Configuration projectConfiguration = configuration.getProject().getConfiguration();
-      String[] sonarExclusions = projectConfiguration.getStringArray(PROJECT_EXCLUSIONS_PROPERTY);
-      if (sonarExclusionsIsSet && sonarExclusions != null) {
-        ignore += StringUtils.isBlank(ignore) ? "" : ",";
-        ignore += StringUtils.join(sonarExclusions, ",");
-      }
-      ignoreArguments.add(PHPMD_IGNORE_OPTION);
-      ignoreArguments.add(ignore);
+    List<String> sonarExclusions = configuration.getExclusionPatterns();
+    if (sonarExclusions != null && !sonarExclusions.isEmpty()) {
+      ignoreArguments.add(PHPMD_EXCLUDE_OPTION);
+      ignoreArguments.add(StringUtils.join(sonarExclusions, ","));
     }
     return ignoreArguments;
   }
