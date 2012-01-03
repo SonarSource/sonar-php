@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php.duplications;
 
-import org.sonar.duplications.token.TokenChunker;
+import org.sonar.plugins.php.duplications.internal.TokenChunker;
 
 /**
  * No PHP language specification document could be found to help produce this tokenizer. So http://php.net/manual/en/langref.php was used

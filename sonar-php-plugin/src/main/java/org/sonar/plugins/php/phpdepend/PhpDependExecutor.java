@@ -96,11 +96,4 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
     return PhpDependConfiguration.PDEPEND_COMMAND_LINE;
   }
 
-  /**
-   * @return the configuration
-   */
-  public PhpDependConfiguration getConfiguration() {
-    return configuration;
-  }
-
 }

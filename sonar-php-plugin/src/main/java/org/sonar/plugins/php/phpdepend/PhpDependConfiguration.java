@@ -37,8 +37,8 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   // -- PHPDepend tool options ---
   protected static final String PDEPEND_OPT = "--phpunit-xml";
   public static final String PDEPEND_SUFFIXES_OPT = "--suffix";
-  public static final String PDEPEND_WITHOUT_ANNOTATION_OPTION = "--without-annotations=";
-  public static final String PDEPEND_BAD_DOCUMENTATION_OPTION = "--bad-documentation=";
+  public static final String PDEPEND_WITHOUT_ANNOTATION_OPTION = "--without-annotations";
+  public static final String PDEPEND_BAD_DOCUMENTATION_OPTION = "--bad-documentation";
   public static final String PDEPEND_EXCLUDE_OPTION = "--exclude=";
   public static final String PDEPEND_IGNORE_OPTION = "--ignore=";
 

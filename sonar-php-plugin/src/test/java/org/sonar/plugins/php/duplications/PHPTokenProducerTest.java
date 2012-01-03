@@ -35,9 +35,9 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.sonar.duplications.token.Token;
-import org.sonar.duplications.token.TokenChunker;
-import org.sonar.duplications.token.TokenQueue;
+import org.sonar.plugins.php.duplications.internal.Token;
+import org.sonar.plugins.php.duplications.internal.TokenChunker;
+import org.sonar.plugins.php.duplications.internal.TokenQueue;
 import org.sonar.test.TestUtils;
 
 import com.google.common.collect.Lists;

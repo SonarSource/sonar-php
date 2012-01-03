@@ -34,10 +34,11 @@ import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.AbstractCpdMapping;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
-import org.sonar.duplications.token.Token;
-import org.sonar.duplications.token.TokenChunker;
-import org.sonar.duplications.token.TokenQueue;
+import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.duplications.internal.Token;
+import org.sonar.plugins.php.duplications.internal.TokenChunker;
+import org.sonar.plugins.php.duplications.internal.TokenQueue;
 
 /**
  * Temporary PHP CPD engine mapping class, used until we can migrate to Sonar CPD Engine.
@@ -83,10 +84,16 @@ public class PhpCPDMapping extends AbstractCpdMapping {
     private static final String USE_KEYWORD = "use";
     private static final String SEMI_COLON = ";";
 
+    /**
+     * Creates a {@link {@link PHPCPDTokenizer}
+     */
     public PHPCPDTokenizer() {
       this.tokenChunker = PhpTokenProducer.build();
     }
 
+    /**
+     * Cuts the given source into a list of tokens.
+     */
     public final void tokenize(SourceCode source, Tokens cpdTokens) {
       String fileName = source.getFileName();
 
@@ -112,7 +119,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
           }
         }
       } catch (FileNotFoundException e) {
-        throw new RuntimeException(e);
+        throw new SonarException(e);
       } finally {
         IOUtils.closeQuietly(reader);
       }

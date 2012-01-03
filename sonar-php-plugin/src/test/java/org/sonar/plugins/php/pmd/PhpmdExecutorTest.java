@@ -20,9 +20,12 @@
 package org.sonar.plugins.php.pmd;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_KEY;
 
@@ -45,7 +48,7 @@ public class PhpmdExecutorTest {
    * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()} .
    */
   @Test
-  public void testGetCommandLine() {
+  public void testSimpleCommandLine() {
     Configuration conf = new BaseConfiguration();
     conf.setProperty(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, "/");
     conf.setProperty(PHPMD_REPORT_FILE_NAME_KEY, "pmd.xml");
@@ -64,13 +67,15 @@ public class PhpmdExecutorTest {
         "--suffixes", StringUtils.join(extensions, ",") };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
+    assertThat(executor.getExecutedTool(), is("PHPMD"));
   }
 
   @Test
-  public void testGetIgnoreDirsNullWithSonarExclusionNotNull() {
+  public void testCommandLineWithSeveralParameters() {
     Configuration conf = new BaseConfiguration();
     conf.setProperty(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, "/");
     conf.setProperty(PHPMD_REPORT_FILE_NAME_KEY, "pmd.xml");
+    conf.setProperty(PHPMD_ARGUMENT_LINE_KEY, "--foo=bar --foo2=bar2");
     String[] extensions = new String[] { "php", "php3", "php4" };
     conf.setProperty(FILE_SUFFIXES_KEY, extensions);
     Project project = MockUtils.createMockProject(conf);
@@ -84,7 +89,7 @@ public class PhpmdExecutorTest {
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--exclude", StringUtils.join(sonarExclusionPattern, ","), "--suffixes", StringUtils.join(extensions, ",") };
+        "--exclude", StringUtils.join(sonarExclusionPattern, ","), "--suffixes", StringUtils.join(extensions, ","), "--foo=bar --foo2=bar2" };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
   }
