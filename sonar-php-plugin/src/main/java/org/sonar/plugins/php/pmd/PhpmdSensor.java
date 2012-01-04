@@ -74,7 +74,6 @@ public class PhpmdSensor implements Sensor {
       executor.execute();
     }
     File report = configuration.getReportFile();
-    LOG.info("Phpmd  report file: " + report.getAbsolutePath());
     PhpmdViolationsXmlParser reportParser = new PhpmdViolationsXmlParser(report);
     List<PhpmdViolation> violations = reportParser.getViolations();
     List<Violation> contextViolations = new ArrayList<Violation>();

@@ -69,6 +69,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public static final String PHPUNIT_LOADER_KEY = "sonar.phpUnit.loader";
   public static final String PHPUNIT_GROUP_KEY = "sonar.phpUnit.group";
   public static final String PHPUNIT_ARGUMENT_LINE_KEY = "sonar.phpUnit.argumentLine";
+  public static final String PHPUNIT_TIMEOUT_KEY = "sonar.phpUnit.timeout";
 
   private boolean skipCoverage;
 
@@ -200,6 +201,14 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getSkipKey() {
     return PHPUNIT_SKIP_KEY;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getTimeoutKey() {
+    return PHPUNIT_TIMEOUT_KEY;
   }
 
   /**

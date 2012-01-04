@@ -56,6 +56,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   public static final String PDEPEND_BAD_DOCUMENTATION_DEFVALUE = "false";
   public static final String PDEPEND_EXCLUDE_PACKAGE_KEY = "sonar.phpDepend.exclude";
   public static final String PDEPEND_ARGUMENT_LINE_KEY = "sonar.phpDepend.argumentLine";
+  public static final String PDEPEND_TIMEOUT_KEY = "sonar.phpDepend.timeout";
 
   /**
    * Instantiates a new php depend configuration depending on given project.
@@ -163,6 +164,14 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getCommandLine() {
     return PDEPEND_COMMAND_LINE;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getTimeoutKey() {
+    return PDEPEND_TIMEOUT_KEY;
   }
 
   public String getExcludePackages() {

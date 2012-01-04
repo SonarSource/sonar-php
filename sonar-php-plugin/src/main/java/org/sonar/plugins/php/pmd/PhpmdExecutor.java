@@ -28,11 +28,14 @@ import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FORMAT;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.php.core.AbstractPhpExecutor;
+
+import com.google.common.collect.Lists;
 
 /**
  * The Class PhpCheckstyleExecutor.
@@ -40,10 +43,15 @@ import org.sonar.plugins.php.core.AbstractPhpExecutor;
 public class PhpmdExecutor extends AbstractPhpExecutor {
 
   private static final String PHPMD_PATH_SEPARATOR = ",";
-  /** The config. */
   private PhpmdConfiguration configuration;
   private PhpmdProfileExporter exporter;
   private RulesProfile profile;
+
+  /**
+   * https://github.com/manuelpichler/phpmd/blob/master/src/main/php/PHP/PMD/TextUI/Command.php <br/>
+   * '2' means there are violations (=> but the process has completed)
+   */
+  private static final Collection<Integer> acceptedExitCodes = Lists.newArrayList(0, 2);
 
   /**
    * Instantiates a new php checkstyle executor.
@@ -52,6 +60,8 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
    *          the configuration
    */
   public PhpmdExecutor(PhpmdConfiguration configuration, PhpmdProfileExporter exporter, RulesProfile profile) {
+    // PHPMD has 1 specific acceptable exit code ('2'), so we must pass this on the constructor
+    super(configuration, acceptedExitCodes);
     this.configuration = configuration;
     PHP.setConfiguration(configuration.getProject().getConfiguration());
     this.exporter = exporter;

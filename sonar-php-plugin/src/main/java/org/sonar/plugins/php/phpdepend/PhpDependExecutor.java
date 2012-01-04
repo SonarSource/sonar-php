@@ -52,6 +52,9 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
    *          the configuration
    */
   public PhpDependExecutor(PhpDependConfiguration configuration) {
+    // PHPDepend has no specific valid exit code (only the standard '0'), so we can use the default constructor
+    // see https://github.com/pdepend/pdepend/blob/master/src/main/php/PHP/Depend/TextUI/Runner.php
+    super(configuration);
     this.configuration = configuration;
     PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
@@ -93,7 +96,7 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
    */
   @Override
   protected String getExecutedTool() {
-    return PhpDependConfiguration.PDEPEND_COMMAND_LINE;
+    return "PHP Depend";
   }
 
 }

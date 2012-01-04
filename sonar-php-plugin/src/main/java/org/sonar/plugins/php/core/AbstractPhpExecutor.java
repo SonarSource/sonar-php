@@ -19,16 +19,11 @@
  */
 package org.sonar.plugins.php.core;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,6 +32,11 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.utils.SonarException;
+import org.sonar.api.utils.command.Command;
+import org.sonar.api.utils.command.CommandExecutor;
+
+import com.google.common.collect.Lists;
 
 /**
  * Abstract php plugin executor. This class handles common executor needs such as running the process, reading its common and error output
@@ -45,87 +45,41 @@ import org.sonar.api.profiles.RulesProfile;
 
 public abstract class AbstractPhpExecutor implements BatchExtension {
 
-  /**
-   * The Class AsyncPipe.
-   */
-  private static class AsyncPipe extends Thread {
-
-    /** The logger. */
-    private static final Logger LOG = LoggerFactory.getLogger(AsyncPipe.class);
-    /** The input stream. */
-    private BufferedReader reader;
-
-    /** The output stream. */
-    private BufferedWriter writer;
-
-    /**
-     * Instantiates a new async pipe.
-     * 
-     * @param input
-     *          an InputStream
-     * @param output
-     *          an OutputStream
-     */
-    public AsyncPipe(InputStream input, ByteArrayOutputStream output) {
-      this.reader = new BufferedReader(new InputStreamReader(input));
-      this.writer = new BufferedWriter(new OutputStreamWriter(output));
-    }
-
-    /**
-     * @see java.lang.Thread#run()
-     */
-    @Override
-    public void run() {
-      try {
-        // Reads the process input stream and writes it to the output stream
-        String line = reader.readLine();
-        while (line != null) {
-          synchronized (writer) {
-            writer.write(line);
-            LOG.debug(line);
-          }
-          line = reader.readLine();
-        }
-      } catch (IOException e) {
-        LOG.error("Can't execute the Async Pipe", e);
-      }
-    }
-  }
-
-  /** The logger */
   private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpExecutor.class);
-  private static final int DEFAUT_BUFFER_INITIAL_SIZE = 1024;
+  private static final long MINUTES_TO_MILLISECONDS = 60000;
   private static final String RULESET_PREFIX = "ruleset";
   private static final String XML_SUFFIX = ".xml";
+
+  private AbstractPhpConfiguration configuration;
+  private Collection<Integer> acceptedExitCodes;
+
+  protected AbstractPhpExecutor(AbstractPhpConfiguration configuration) {
+    this(configuration, Lists.newArrayList(0));
+  }
+
+  protected AbstractPhpExecutor(AbstractPhpConfiguration configuration, Collection<Integer> acceptedExitCodes) {
+    this.configuration = configuration;
+    this.acceptedExitCodes = acceptedExitCodes;
+  }
 
   /**
    * Executes the external tool.
    */
   public void execute() {
-    try {
-      // Gets the tool command line
-      List<String> commandLine = getCommandLine();
-      ProcessBuilder builder = new ProcessBuilder(commandLine);
-      LOG.info("Executing " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
-      // Starts the process
-      Process p = builder.start();
-      // And handles it's normal and error stream in separated threads.
+    List<String> commandLine = getCommandLine();
+    LOG.info("Executing " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
 
-      ByteArrayOutputStream output = new ByteArrayOutputStream(DEFAUT_BUFFER_INITIAL_SIZE);
-      AsyncPipe outputStreamThread = new AsyncPipe(p.getInputStream(), output);
-      outputStreamThread.start();
-
-      ByteArrayOutputStream error = new ByteArrayOutputStream(DEFAUT_BUFFER_INITIAL_SIZE);
-      AsyncPipe errorStreamThread = new AsyncPipe(p.getErrorStream(), error);
-      errorStreamThread.start();
-
-      LOG.info(getExecutedTool() + " ended with returned code '{}'.", p.waitFor());
-    } catch (IOException e) {
-      LOG.error("Can't execute the external tool", e);
-      throw new PhpPluginExecutionException(e);
-    } catch (InterruptedException e) {
-      LOG.error("Async pipe interrupted: ", e);
-      throw new PhpPluginExecutionException(e);
+    Iterator<String> commandLineIterator = commandLine.iterator();
+    Command command = Command.create(commandLineIterator.next());
+    while (commandLineIterator.hasNext()) {
+      command.addArgument(commandLineIterator.next());
+    }
+    int exitCode = CommandExecutor.create().execute(command, configuration.getTimeout() * MINUTES_TO_MILLISECONDS);
+    if ( !acceptedExitCodes.contains(exitCode)) {
+      throw new SonarException(getExecutedTool() + " execution failed with returned code '" + exitCode
+          + "'. Please check the documentation of " + getExecutedTool() + " to know more about this failure.");
+    } else {
+      LOG.info(getExecutedTool() + " succeeded with returned code '{}'.", exitCode);
     }
   }
 

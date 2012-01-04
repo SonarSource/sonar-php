@@ -63,7 +63,7 @@ public class PhpDependExecutorTest {
     List<String> expected = Arrays.asList(s1, s2, s3, s4);
     
     assertThat(commandLine).isEqualTo(expected);
-    assertThat(executor.getExecutedTool(), is("pdepend"));
+    assertThat(executor.getExecutedTool(), is("PHP Depend"));
   }
 
   @Test

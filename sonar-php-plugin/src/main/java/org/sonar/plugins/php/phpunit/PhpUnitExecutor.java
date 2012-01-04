@@ -39,6 +39,7 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TE
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
@@ -48,6 +49,8 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.AbstractPhpExecutor;
+
+import com.google.common.collect.Lists;
 
 /**
  * The Class PhpUnitExecutor.
@@ -65,6 +68,12 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
 
   private static final String XML_SUFFIX = ".xml";
 
+  /**
+   * See https://github.com/sebastianbergmann/phpunit/blob/3.6/PHPUnit/TextUI/TestRunner.php <br/>
+   * '1' means there are "test" failures (=> but the process has completed)
+   */
+  private static final Collection<Integer> acceptedExitCodes = Lists.newArrayList(0, 1);
+
   /** The configuration. */
   private final PhpUnitConfiguration configuration;
 
@@ -80,7 +89,8 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    *          the project
    */
   public PhpUnitExecutor(PhpUnitConfiguration config, Project project) {
-    super();
+    // PHPUnit has 1 specific acceptable exit code ('1'), so we must pass this on the constructor
+    super(config, acceptedExitCodes);
     this.configuration = config;
     this.project = project;
     PHP.setConfiguration(configuration.getProject().getConfiguration());
@@ -102,7 +112,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
     }
     addExtendedOptions(result);
 
-    if (!useConfigFile) {
+    if ( !useConfigFile) {
 
       boolean ignoreConfigFile = c.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY) && c.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY);
       if (ignoreConfigFile) {
@@ -202,11 +212,11 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    */
   @Override
   protected String getExecutedTool() {
-    return "Phpunit";
+    return "PhpUnit";
   }
 
   /**
-   * @return the configuration
+   * {@inheritDoc}
    */
   public PhpUnitConfiguration getConfiguration() {
     return configuration;

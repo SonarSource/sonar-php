@@ -165,6 +165,11 @@ public class AbstractPhpPluginConfigurationTest {
     }
 
     @Override
+    protected String getTimeoutKey() {
+      return "";
+    }
+
+    @Override
     protected String getShouldAnalyzeOnlyKey() {
       return "analyze";
     }

@@ -30,6 +30,7 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPC
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +39,8 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.php.core.AbstractPhpExecutor;
 
+import com.google.common.collect.Lists;
+
 /**
  * The Class PhpCheckstyleExecutor.
  */
@@ -45,14 +48,17 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
 
   private static final String EXCLUSION_PATTERN_SEPARATOR = ",";
 
-  /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(PhpCodeSnifferExecutor.class);
 
-  /** The PhpCodeSnifferConfiguration. */
   private PhpCodeSnifferConfiguration configuration;
-
   private PhpCodeSnifferProfileExporter exporter;
   private RulesProfile profile;
+
+  /**
+   * https://github.com/squizlabs/PHP_CodeSniffer/blob/master/scripts/phpcs <br/>
+   * The code is not really clear about exit codes, but '1' seems to mean there are violations (=> but the process has completed)
+   */
+  private static final Collection<Integer> acceptedExitCodes = Lists.newArrayList(0, 1);
 
   /**
    * Instantiates a new php codesniffer executor.
@@ -61,6 +67,8 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
    *          the configuration
    */
   public PhpCodeSnifferExecutor(PhpCodeSnifferConfiguration configuration, PhpCodeSnifferProfileExporter exporter, RulesProfile profile) {
+    // PHPCodesniffer has 1 specific acceptable exit code ('1'), so we must pass this on the constructor
+    super(configuration, acceptedExitCodes);
     this.configuration = configuration;
     PHP.setConfiguration(configuration.getProject().getConfiguration());
     this.exporter = exporter;
@@ -100,10 +108,12 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
       result.add(sb.toString());
     }
 
-    if (configuration.isStringPropertySet(PHPCS_ARGUMENT_LINE_KEY)) {
-      result.add(PHPCS_IGNORE_MODIFIER + configuration.getArgumentLine());
-    }
     result.add(PHPCS_EXTENSIONS_MODIFIER + StringUtils.join(PHP.getFileSuffixes(), EXCLUSION_PATTERN_SEPARATOR));
+
+    if (configuration.isStringPropertySet(PHPCS_ARGUMENT_LINE_KEY)) {
+      result.add(configuration.getArgumentLine());
+    }
+
     // Do not use the StringUtils.join() method here, because all the path will be treated as a single one
     for (File file : configuration.getSourceDirectories()) {
       result.add(file.getAbsolutePath());
@@ -118,13 +128,6 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
   @Override
   protected String getExecutedTool() {
     return "PHPCodeSniffer";
-  }
-
-  /**
-   * @return the configuration
-   */
-  public PhpCodeSnifferConfiguration getConfiguration() {
-    return configuration;
   }
 
 }

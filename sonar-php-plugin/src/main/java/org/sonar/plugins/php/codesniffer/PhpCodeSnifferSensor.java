@@ -72,7 +72,6 @@ public class PhpCodeSnifferSensor implements Sensor {
       executor.execute();
     }
     File report = configuration.getReportFile();
-    LOG.info("PhpCodeSniffer  report file: " + report.getAbsolutePath());
     List<PhpCodeSnifferViolation> violations = parser.getViolations(report);
 
     List<Violation> contextViolations = new ArrayList<Violation>();

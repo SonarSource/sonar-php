@@ -52,6 +52,7 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   public static final String PHPMD_LEVEL_ARGUMENT_KEY = "sonar.phpPmd.minimumPriority";
   public static final String PHPMD_LEVEL_ARGUMENT_DEFVALUE = "2";
   public static final String PHPMD_ARGUMENT_LINE_KEY = "sonar.phpPmd.argumentLine";
+  public static final String PHPMD_TIMEOUT_KEY = "sonar.phpPmd.timeout";
 
   /**
    * Instantiates a new php pmd configuration.
@@ -150,6 +151,14 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getSkipKey() {
     return PHPMD_SKIP_KEY;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getTimeoutKey() {
+    return PHPMD_TIMEOUT_KEY;
   }
 
   /**

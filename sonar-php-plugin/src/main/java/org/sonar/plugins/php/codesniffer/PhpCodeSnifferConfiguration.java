@@ -64,6 +64,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY = "sonar.phpCodesniffer.severity.modifier";
   public static final String PHPCS_SEVERITY_KEY = "sonar.phpCodesniffer.levelArgument";
   public static final String PHPCS_ARGUMENT_LINE_KEY = "sonar.phpCodesniffer.argumentLine";
+  public static final String PHPCS_TIMEOUT_KEY = "sonar.phpCodesniffer.timeout";
 
   private PhpCodeSnifferProfileExporter exporter;
   private RulesProfile profile;
@@ -178,6 +179,14 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getCommandLine() {
     return PHPCS_COMMAND_LINE;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getTimeoutKey() {
+    return PHPCS_TIMEOUT_KEY;
   }
 
   /**

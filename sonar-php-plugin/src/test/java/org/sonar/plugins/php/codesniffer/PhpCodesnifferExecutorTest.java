@@ -20,9 +20,12 @@
 package org.sonar.plugins.php.codesniffer;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
 
@@ -54,6 +57,7 @@ public class PhpCodesnifferExecutorTest {
 
     PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
     executor.getCommandLine();
+    assertThat(executor.getExecutedTool(), is("PHPCodeSniffer"));
   }
 
   /**
@@ -113,6 +117,39 @@ public class PhpCodesnifferExecutorTest {
 
     String expected = "--ignore=**/Bar/**,*Foo.php";
     assertThat(commandLine).contains(expected);
+  }
+
+  /**
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   */
+  @Test
+  public void testGetCommandLineWithExtraArguments() {
+    Configuration configuration = mock(Configuration.class);
+    PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
+    when(c.isStringPropertySet(PHPCS_ARGUMENT_LINE_KEY)).thenReturn(true);
+    when(c.getArgumentLine()).thenReturn("--foo=bar --foo2=bar2");
+
+    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
+    List<String> commandLine = executor.getCommandLine();
+
+    String expected = "--foo=bar --foo2=bar2";
+    assertThat(commandLine).contains(expected);
+  }
+
+  /**
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   */
+  @Test
+  public void testGetCommandLineWithDirsToAnalyse() {
+    Configuration configuration = mock(Configuration.class);
+    PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
+    File sourceDir = new File("target/fakeProject/src");
+    when(c.getSourceDirectories()).thenReturn(Lists.newArrayList(sourceDir));
+
+    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
+    List<String> commandLine = executor.getCommandLine();
+
+    assertThat(commandLine).contains(sourceDir.getAbsolutePath());
   }
 
   private PhpCodeSnifferExecutor createExecutor(Configuration configuration, PhpCodeSnifferConfiguration c) {

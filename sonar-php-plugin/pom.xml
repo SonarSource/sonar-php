@@ -18,6 +18,8 @@
     <sonar.version>2.11</sonar.version>
     <sonar.pluginClass>org.sonar.plugins.php.PhpPlugin</sonar.pluginClass>
     <sonar.pluginName>PHP</sonar.pluginName>
+    <!-- Those classes are excluded as they are just a temporary copy of Sonar core classes -->
+    <sonar.exclusions>org/sonar/plugins/php/duplications/internal/*.java</sonar.exclusions>
   </properties>
 
   <dependencies>

@@ -35,6 +35,11 @@ import org.sonar.api.resources.Project;
  */
 public abstract class AbstractPhpConfiguration implements BatchExtension {
 
+  /**
+   * Default timeout used for external tool execution
+   */
+  public static final int DEFAULT_TIMEOUT = 30;
+  
   /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpConfiguration.class);
   /** Suffix used by windows for script files */
@@ -53,6 +58,8 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   private String reportFileName;
   /** The report file relative path. */
   private String reportFileRelativePath;
+  /** The timeout (in minutes) used to execute the tool */
+  private int timeout;
 
   /**
    * @param project
@@ -64,6 +71,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
     this.reportFileRelativePath = configuration.getString(getReportFileRelativePathKey(), getDefaultReportFilePath());
     this.argumentLine = configuration.getString(getArgumentLineKey(), getDefaultArgumentLine());
     this.analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), false);
+    this.timeout = configuration.getInt(getTimeoutKey(), DEFAULT_TIMEOUT);
     if (isStringPropertySet(getSkipKey())) {
       skip = project.getConfiguration().getBoolean(getSkipKey());
     } else if (isStringPropertySet(getShouldRunKey())) {
@@ -215,6 +223,15 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   }
 
   /**
+   * The timeout (in minutes) used to execute the tool.
+   * 
+   * @return the timeout
+   */
+  public int getTimeout() {
+    return timeout;
+  }
+
+  /**
    * Gets the argument line key.
    * 
    * @return the argument line key
@@ -294,5 +311,12 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * @return the should run key
    */
   protected abstract String getShouldRunKey();
+
+  /**
+   * Get the parameter that gives the timeout for the tool
+   * 
+   * @return the parameter name
+   */
+  protected abstract String getTimeoutKey();
 
 }

@@ -31,6 +31,7 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPC
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_DEFVALUE;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_TIMEOUT_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_DEFVALUE;
@@ -43,6 +44,7 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REP
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_SKIP_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_DEFVALUE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_TIMEOUT_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
@@ -63,6 +65,7 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SKIP_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_LEVEL_ARGUMENT_DEFVALUE;
@@ -72,6 +75,8 @@ import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAM
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SKIP_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_TIMEOUT_KEY;
+import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,6 +145,8 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
             + "Values goes from 1(Strong) to 5(Weak) (only integers)", category = PhpPlugin.CATEGORY_PHP_PHPMD),
     @Property(key = PHPMD_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
         description = "Additionnal parameters that can be passed to PHPMD tool.", category = PhpPlugin.CATEGORY_PHP_PHPMD),
+    @Property(key = PHPMD_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
+        description = "Maximum number of minutes that the execution of the tool should take.", category = PhpPlugin.CATEGORY_PHP_PHPMD),
 
     // ------------------ PhpCodeSniffer configuration ------------------
     @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = "Disable PHP CodeSniffer", project = true, global = true,
@@ -167,6 +174,8 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
         category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
     @Property(key = PHPCS_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
         description = "Additionnal parameters that can be passed to PHP CodeSniffer tool.", category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
+    @Property(key = PHPCS_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
+        description = "Maximum number of minutes that the execution of the tool should take.", category = PhpPlugin.CATEGORY_PHP_CODE_SNIFFER),
 
     // ------------------ PhPdepend configuration ------------------
     @Property(key = PDEPEND_SKIP_KEY, defaultValue = "false", name = "Disable PHP Depend", project = true, global = true,
@@ -192,6 +201,8 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
         category = PhpPlugin.CATEGORY_PHP_PHP_DEPEND),
     @Property(key = PDEPEND_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
         description = "Additionnal parameters that can be passed to PHP Depend tool.", category = PhpPlugin.CATEGORY_PHP_PHP_DEPEND),
+    @Property(key = PDEPEND_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
+        description = "Maximum number of minutes that the execution of the tool should take.", category = PhpPlugin.CATEGORY_PHP_PHP_DEPEND),
 
     // ------------------ Phpunit Configuration ------------------
     @Property(key = PHPUNIT_SKIP_KEY, defaultValue = "false", name = "Disable PHPUnit", project = true, global = true,
@@ -231,10 +242,11 @@ import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
     @Property(key = PHPUNIT_GROUP_KEY, defaultValue = "", name = "Groups to run", project = true, global = true,
         description = "Only runs tests from the specified group(s).", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT),
     @Property(key = PHPUNIT_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-        description = "Additionnal parameters that can be passed to PHPUnit tool.", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT) })
+        description = "Additionnal parameters that can be passed to PHPUnit tool.", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT),
+    @Property(key = PHPUNIT_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
+        description = "Maximum number of minutes that the execution of the tool should take.", category = PhpPlugin.CATEGORY_PHP_PHP_UNIT) })
 public class PhpPlugin extends SonarPlugin {
 
-  protected static final String CATEGORY_PHP_PHP_CPD = "PHP CPD";
   protected static final String CATEGORY_PHP_PHP_UNIT = "PHP Unit";
   protected static final String CATEGORY_PHP_PHP_DEPEND = "PHP Depend";
   protected static final String CATEGORY_PHP_CODE_SNIFFER = "PHP CodeSniffer";
