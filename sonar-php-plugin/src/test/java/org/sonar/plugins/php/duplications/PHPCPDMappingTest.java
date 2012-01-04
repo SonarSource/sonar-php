@@ -57,7 +57,7 @@ public class PHPCPDMappingTest {
     Tokens tokens = new Tokens();
     tokenizer.tokenize(source, tokens);
 
-    assertThat(tokens.size(), is(30));
+    assertThat(tokens.size(), is(33));
   }
 
 }
