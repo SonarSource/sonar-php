@@ -23,11 +23,7 @@ import org.sonar.plugins.php.duplications.internal.TokenChunker;
 
 /**
  * No PHP language specification document could be found to help produce this tokenizer. So http://php.net/manual/en/langref.php was used
- * for that purpose. <br/>
- * <br/>
- * <i>Note: Heredoc (http://www.php.net/manual/en/language.types.string.php#language.types.string.syntax.heredoc) and Nowdoc
- * (http://www.php.net/manual/en/language.types.string.php#language.types.string.syntax.nowdoc) are not supported yet. Writing a
- * pre-processor would be required to handle those cases. </i>
+ * for that purpose.
  */
 public final class PhpTokenProducer {
 
@@ -37,6 +33,8 @@ public final class PhpTokenProducer {
   private static final String NORMALIZED_CHARACTER_LITERAL = "$CHARS";
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
 
+  private static final String LABEL = "[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*+";
+  private static final String NEWLINE = "(?:\\n\\r|\\r|\\n)";
   private static final String EXP = "([Ee][+-]?+[0-9]++)";
 
   /**
@@ -53,11 +51,12 @@ public final class PhpTokenProducer {
         .ignore("#[^\\n\\r]*+")
         .ignore("/\\*[\\s\\S]*?\\*/")
         // String Literals
+        .token("<<<(['\"]?)(" + LABEL + ")+\\1[\\s\\S]*?" + NEWLINE + "\\2", NORMALIZED_CHARACTER_LITERAL)
         .token("\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\"", NORMALIZED_CHARACTER_LITERAL)
         // Character Literals
         .token("'([^'\\n\\\\]*+(\\\\.)?+)*+'", NORMALIZED_CHARACTER_LITERAL)
         // Identifiers, Keywords, Boolean Literals, The Null Literal
-        .token("[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*+")
+        .token(LABEL)
         // Floating-Point Literals
         .token("[+-]?[0-9]++\\.([0-9]++)?+" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL) // Decimal
         .token("[+-]?\\.[0-9]++" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL) // Decimal

@@ -21,6 +21,7 @@ package org.sonar.plugins.php.duplications;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -179,6 +180,19 @@ public class PHPTokenProducerTest {
   }
 
   @Test
+  public void shouldNormalizeHeredocLiterals() {
+    assertThat("regular heredoc", chunk("<<<EOT\nThis is a heredoc string \n on multiple lines\nEOT"), isStringLiteral());
+    assertThat("wrong heredoc", chunk("<<<EOT\nThis is a wrong heredoc string \n on multiple lines\n EOT"), not(isStringLiteral()));
+    assertThat("doublequote heredoc", chunk("<<<\"EOT\"\nThis is a heredoc string \n on multiple lines\nEOT"), isStringLiteral());
+  }
+
+  @Test
+  public void shouldNormalizeNowdocLiterals() {
+    assertThat("regular nowdoc", chunk("<<<'EOT'\nThis is a heredoc string \n on multiple lines\nEOT"), isStringLiteral());
+    assertThat("regular nowdoc", chunk("<<<'EOT'\nThis is a heredoc string \n on multiple lines  EOT"), not(isStringLiteral()));
+  }
+
+  @Test
   public void shouldPreserveSeparators() {
     assertThat(
         chunk("(){}[];,."),
@@ -195,7 +209,7 @@ public class PHPTokenProducerTest {
   @Test
   public void realExamples() {
     assertThat(chunk(TestUtils.getResource("org/sonar/plugins/php/duplications/BigFile.php")).size(), greaterThan(0));
-    assertThat(chunk(TestUtils.getResource("org/sonar/plugins/php/duplications/SmallFile.php")).size(), is(41));
+    assertThat(chunk(TestUtils.getResource("org/sonar/plugins/php/duplications/SmallFile.php")).size(), is(44));
   }
 
   private TokenQueue chunk(File file) {
