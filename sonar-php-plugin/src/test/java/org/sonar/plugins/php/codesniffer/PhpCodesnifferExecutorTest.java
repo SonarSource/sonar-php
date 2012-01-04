@@ -127,13 +127,13 @@ public class PhpCodesnifferExecutorTest {
     Configuration configuration = mock(Configuration.class);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
     when(c.isStringPropertySet(PHPCS_ARGUMENT_LINE_KEY)).thenReturn(true);
-    when(c.getArgumentLine()).thenReturn("--foo=bar --foo2=bar2");
+    when(c.getArgumentLine()).thenReturn("  --foo=bar --foo2=bar2 ");
 
     PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
     List<String> commandLine = executor.getCommandLine();
 
-    String expected = "--foo=bar --foo2=bar2";
-    assertThat(commandLine).contains(expected);
+    assertThat(commandLine).contains("--foo=bar");
+    assertThat(commandLine).contains("--foo2=bar2");
   }
 
   /**

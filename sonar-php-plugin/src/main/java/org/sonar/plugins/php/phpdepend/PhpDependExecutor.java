@@ -33,6 +33,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.php.core.AbstractPhpExecutor;
 
+import com.google.common.collect.Lists;
+
 /**
  * The Class PhpDependExecutor.
  */
@@ -84,7 +86,7 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
       result.add(PDEPEND_WITHOUT_ANNOTATION_OPTION);
     }
     if (configuration.isStringPropertySet(PDEPEND_ARGUMENT_LINE_KEY)) {
-      result.add(configuration.getArgumentLine());
+      result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
     // SONARPLUGINS-547 PhpDependExecutor: wrong dirs params
     result.add(StringUtils.join(configuration.getSourceDirectories(), PHPDEPEND_DIRECTORY_SEPARATOR));

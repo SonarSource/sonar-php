@@ -44,6 +44,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.resources.InputFileUtils;
@@ -141,7 +142,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
       result.add(PHPUNIT_GROUP_OPTION + configuration.getGroup());
     }
     if (configuration.isStringPropertySet(PHPUNIT_ARGUMENT_LINE_KEY)) {
-      result.add(configuration.getArgumentLine());
+      result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
     result.add(PHPUNIT_LOG_JUNIT_OPTION + configuration.getReportFile());
     if ( !configuration.shouldSkipCoverage()) {

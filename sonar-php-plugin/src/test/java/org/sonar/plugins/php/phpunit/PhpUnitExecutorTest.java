@@ -20,14 +20,16 @@
 package org.sonar.plugins.php.phpunit;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_OPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_OPTION;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -40,6 +42,31 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 
 public class PhpUnitExecutorTest {
+
+  @Test
+  public void testSimpleCommandLineWithMoreArguments() {
+    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
+    when(config.isStringPropertySet(PHPUNIT_ARGUMENT_LINE_KEY)).thenReturn(true);
+    when(config.getArgumentLine()).thenReturn("  --foo=bar --foo2=bar2 ");
+    Project project = mock(Project.class);
+    MavenProject mProject = mock(MavenProject.class);
+    when(project.getPom()).thenReturn(mProject);
+    when(mProject.getBasedir()).thenReturn(new File("toto"));
+
+    Configuration configuration = mock(Configuration.class);
+    when(project.getConfiguration()).thenReturn(configuration);
+    when(config.getProject()).thenReturn(project);
+
+    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(pfs);
+    File testDir = new File("c:/php/math-php-test/sources/test");
+    when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
+
+    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    List<String> commandLine = executor.getCommandLine();
+    assertTrue("Should contain extra arguments", commandLine.contains("--foo=bar"));
+    assertTrue("Should contain extra arguments", commandLine.contains("--foo2=bar2"));
+  }
 
   @Test
   public void shouldReturnCommandLineWithoutCoverageOptions() {
@@ -62,7 +89,7 @@ public class PhpUnitExecutorTest {
     when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
-    assertTrue("Should not return any coverage options", !commandLine.contains("--coverage-clover=phpUnit.coverage.xml"));
+    assertFalse("Should not return any coverage options", commandLine.contains("--coverage-clover=phpUnit.coverage.xml"));
   }
 
   @Test
@@ -235,8 +262,7 @@ public class PhpUnitExecutorTest {
   }
 
   @Test
-  public void testDontAddTestDirectoryToCmdLineWhenUsingCustomXmlConfigFile()
-  {
+  public void testDontAddTestDirectoryToCmdLineWhenUsingCustomXmlConfigFile() {
     PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
     Project project = mock(Project.class);
     MavenProject mProject = mock(MavenProject.class);
@@ -259,11 +285,12 @@ public class PhpUnitExecutorTest {
     when(config.getOsDependentToolScriptName()).thenReturn(phpunit);
     File reportFile = new File("phpunit.xml");
     when(config.getReportFile()).thenReturn(reportFile);
-    
+
     PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
     List<String> commandLine = executor.getCommandLine();
 
-    List<String> expected = Arrays.asList(phpunit, "--configuration=" + phpunitXml, "--log-junit=" + reportFile, "--coverage-clover=" + coverageXml);
+    List<String> expected = Arrays.asList(phpunit, "--configuration=" + phpunitXml, "--log-junit=" + reportFile, "--coverage-clover="
+        + coverageXml);
     assertThat(commandLine).isEqualTo(expected);
   }
 }

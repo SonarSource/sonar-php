@@ -111,7 +111,7 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
     result.add(PHPCS_EXTENSIONS_MODIFIER + StringUtils.join(PHP.getFileSuffixes(), EXCLUSION_PATTERN_SEPARATOR));
 
     if (configuration.isStringPropertySet(PHPCS_ARGUMENT_LINE_KEY)) {
-      result.add(configuration.getArgumentLine());
+      result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
 
     // Do not use the StringUtils.join() method here, because all the path will be treated as a single one

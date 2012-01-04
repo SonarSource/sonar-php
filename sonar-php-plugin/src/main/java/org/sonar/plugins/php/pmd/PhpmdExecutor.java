@@ -95,7 +95,7 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
     result.add(PHPMD_EXTENSIONS_OPTION);
     result.add(StringUtils.join(PHP.getFileSuffixes(), ","));
     if (configuration.isStringPropertySet(PHPMD_ARGUMENT_LINE_KEY)) {
-      result.add(configuration.getArgumentLine());
+      result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
     return result;
   }

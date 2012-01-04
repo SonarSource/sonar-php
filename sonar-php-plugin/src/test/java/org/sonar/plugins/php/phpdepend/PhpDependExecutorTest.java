@@ -71,7 +71,7 @@ public class PhpDependExecutorTest {
     Configuration conf = new BaseConfiguration();
     conf.setProperty(PDEPEND_EXCLUDE_PACKAGE_KEY, "foo,bar");
     conf.setProperty(PDEPEND_WITHOUT_ANNOTATION_KEY, "true");
-    conf.setProperty(PDEPEND_ARGUMENT_LINE_KEY, "--foo=bar --foo2=bar2");
+    conf.setProperty(PDEPEND_ARGUMENT_LINE_KEY, "  --foo=bar --foo2=bar2 ");
     Project project = MockUtils.createMockProject(conf);
     PhpDependConfiguration config = getWindowsConfiguration(project);
     String[] sonarExclusionPattern = { "*test", "**/math" };
@@ -85,10 +85,11 @@ public class PhpDependExecutorTest {
     String s4 = "--exclude=foo,bar";
     String s5 = "--ignore=" + StringUtils.join(sonarExclusionPattern, ",");
     String s6 = "--without-annotations";
-    String s7 = "--foo=bar --foo2=bar2";
-    String s8 = new File("target/MockProject/src").toString();
+    String s7 = "--foo=bar";
+    String s8 = "--foo2=bar2";
+    String s9 = new File("target/MockProject/src").toString();
 
-    List<String> expected = Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8);
+    List<String> expected = Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8, s9);
 
     assertThat(commandLine).isEqualTo(expected);
   }

@@ -75,7 +75,7 @@ public class PhpmdExecutorTest {
     Configuration conf = new BaseConfiguration();
     conf.setProperty(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, "/");
     conf.setProperty(PHPMD_REPORT_FILE_NAME_KEY, "pmd.xml");
-    conf.setProperty(PHPMD_ARGUMENT_LINE_KEY, "--foo=bar --foo2=bar2");
+    conf.setProperty(PHPMD_ARGUMENT_LINE_KEY, " --foo=bar  --foo2=bar2 ");
     String[] extensions = new String[] { "php", "php3", "php4" };
     conf.setProperty(FILE_SUFFIXES_KEY, extensions);
     Project project = MockUtils.createMockProject(conf);
@@ -89,7 +89,8 @@ public class PhpmdExecutorTest {
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] { getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-        "--exclude", StringUtils.join(sonarExclusionPattern, ","), "--suffixes", StringUtils.join(extensions, ","), "--foo=bar --foo2=bar2" };
+        "--exclude", StringUtils.join(sonarExclusionPattern, ","), "--suffixes", StringUtils.join(extensions, ","), "--foo=bar",
+        "--foo2=bar2" };
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
   }
