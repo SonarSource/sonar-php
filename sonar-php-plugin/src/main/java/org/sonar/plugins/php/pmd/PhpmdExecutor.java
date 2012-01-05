@@ -51,7 +51,7 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
    * https://github.com/manuelpichler/phpmd/blob/master/src/main/php/PHP/PMD/TextUI/Command.php <br/>
    * '2' means there are violations (=> but the process has completed)
    */
-  private static final Collection<Integer> acceptedExitCodes = Lists.newArrayList(0, 2);
+  private static final Collection<Integer> ACCEPTED_EXIT_CODES = Lists.newArrayList(0, 2);
 
   /**
    * Instantiates a new php checkstyle executor.
@@ -61,7 +61,7 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
    */
   public PhpmdExecutor(PhpmdConfiguration configuration, PhpmdProfileExporter exporter, RulesProfile profile) {
     // PHPMD has 1 specific acceptable exit code ('2'), so we must pass this on the constructor
-    super(configuration, acceptedExitCodes);
+    super(configuration, ACCEPTED_EXIT_CODES);
     this.configuration = configuration;
     PHP.setConfiguration(configuration.getProject().getConfiguration());
     this.exporter = exporter;

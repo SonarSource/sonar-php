@@ -73,7 +73,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    * See https://github.com/sebastianbergmann/phpunit/blob/3.6/PHPUnit/TextUI/TestRunner.php <br/>
    * '1' means there are "test" failures (=> but the process has completed)
    */
-  private static final Collection<Integer> acceptedExitCodes = Lists.newArrayList(0, 1);
+  private static final Collection<Integer> ACCEPTED_EXIT_CODES = Lists.newArrayList(0, 1);
 
   /** The configuration. */
   private final PhpUnitConfiguration configuration;
@@ -91,7 +91,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    */
   public PhpUnitExecutor(PhpUnitConfiguration config, Project project) {
     // PHPUnit has 1 specific acceptable exit code ('1'), so we must pass this on the constructor
-    super(config, acceptedExitCodes);
+    super(config, ACCEPTED_EXIT_CODES);
     this.configuration = config;
     this.project = project;
     PHP.setConfiguration(configuration.getProject().getConfiguration());

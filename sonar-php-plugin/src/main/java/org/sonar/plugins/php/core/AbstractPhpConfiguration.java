@@ -39,7 +39,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * Default timeout used for external tool execution
    */
   public static final int DEFAULT_TIMEOUT = 30;
-  
+
   /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpConfiguration.class);
   /** Suffix used by windows for script files */
@@ -72,9 +72,9 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
     this.argumentLine = configuration.getString(getArgumentLineKey(), getDefaultArgumentLine());
     this.analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), false);
     this.timeout = configuration.getInt(getTimeoutKey(), DEFAULT_TIMEOUT);
-    if (isStringPropertySet(getSkipKey())) {
+    if (isStringPropertySet(getSkipKey())) { // NOSONAR Use of non final method, that is not final for mocking purposes
       skip = project.getConfiguration().getBoolean(getSkipKey());
-    } else if (isStringPropertySet(getShouldRunKey())) {
+    } else if (isStringPropertySet(getShouldRunKey())) { // NOSONAR Use of non final method, that is not final for mocking purposes
       skip = !project.getConfiguration().getBoolean(getShouldRunKey());
     }
     String dynamicAnalysis = configuration.getString("sonar.dynamicAnalysis", "true");
@@ -310,6 +310,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * 
    * @return the should run key
    */
+  @Deprecated
   protected abstract String getShouldRunKey();
 
   /**

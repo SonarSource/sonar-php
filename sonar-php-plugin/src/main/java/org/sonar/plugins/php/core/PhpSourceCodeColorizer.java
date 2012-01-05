@@ -22,9 +22,6 @@ package org.sonar.plugins.php.core;
 import static org.sonar.plugins.php.api.Php.PHP_KEYWORDS_ARRAY;
 import static org.sonar.plugins.php.api.Php.PHP_RESERVED_VARIABLES_ARRAY;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,22 +33,13 @@ import org.sonar.colorizer.StringTokenizer;
 import org.sonar.colorizer.Tokenizer;
 import org.sonar.plugins.php.api.Php;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 /**
- * @author freddy.mallet
- * 
+ * Class used to colorize source code in HTML.
  */
 public class PhpSourceCodeColorizer extends CodeColorizerFormat {
-
-  /**
-   * 
-   */
-  private static final Set<String> PHP_KEYWORDS = new HashSet<String>();
-  private static final Set<String> PHP_RESERVED_VARIABLES = new HashSet<String>();
-
-  static {
-    Collections.addAll(PHP_KEYWORDS, PHP_KEYWORDS_ARRAY);
-    Collections.addAll(PHP_RESERVED_VARIABLES, PHP_RESERVED_VARIABLES_ARRAY);
-  }
 
   /**
    * Simple constructor
@@ -68,13 +56,15 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
    */
   @Override
   public List<Tokenizer> getTokenizers() {
+    Set<String> keywords = Sets.newHashSet(PHP_RESERVED_VARIABLES_ARRAY);
+    keywords.addAll(Sets.newHashSet(PHP_KEYWORDS_ARRAY));
+
     String tagAfter = "</span>";
-    KeywordsTokenizer phpKeyWordsTokenizer = new KeywordsTokenizer("<span class=\"k\">", tagAfter, PHP_KEYWORDS);
-    KeywordsTokenizer phpVariablesTokenizer = new KeywordsTokenizer("<span class=\"c\">", tagAfter, PHP_RESERVED_VARIABLES);
-    CppDocTokenizer cppDocTokenizer = new CppDocTokenizer("<span class=\"cppd\">", tagAfter);
-    CDocTokenizer cDocTokenizer = new CDocTokenizer("<span class=\"cd\">", tagAfter);
-    StringTokenizer stringTokenizer = new StringTokenizer("<span class=\"s\">", tagAfter);
-    return Collections.unmodifiableList(Arrays.asList(cDocTokenizer, cppDocTokenizer, phpKeyWordsTokenizer, stringTokenizer,
-        phpVariablesTokenizer));
+    List<Tokenizer> tokenizers = Lists.newArrayList();
+    tokenizers.add(new CDocTokenizer("<span class=\"cd\">", tagAfter));
+    tokenizers.add(new CppDocTokenizer("<span class=\"cppd\">", tagAfter));
+    tokenizers.add(new KeywordsTokenizer("<span class=\"k\">", tagAfter, keywords));
+    tokenizers.add(new StringTokenizer("<span class=\"s\">", tagAfter));
+    return tokenizers;
   }
 }

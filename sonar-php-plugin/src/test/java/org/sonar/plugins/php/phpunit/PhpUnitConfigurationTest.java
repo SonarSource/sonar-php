@@ -38,12 +38,10 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_KEY;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;

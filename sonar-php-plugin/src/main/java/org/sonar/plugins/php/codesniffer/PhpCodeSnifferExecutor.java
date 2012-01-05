@@ -58,7 +58,7 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
    * https://github.com/squizlabs/PHP_CodeSniffer/blob/master/scripts/phpcs <br/>
    * The code is not really clear about exit codes, but '1' seems to mean there are violations (=> but the process has completed)
    */
-  private static final Collection<Integer> acceptedExitCodes = Lists.newArrayList(0, 1);
+  private static final Collection<Integer> ACCEPTED_EXIT_CODES = Lists.newArrayList(0, 1);
 
   /**
    * Instantiates a new php codesniffer executor.
@@ -68,7 +68,7 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
    */
   public PhpCodeSnifferExecutor(PhpCodeSnifferConfiguration configuration, PhpCodeSnifferProfileExporter exporter, RulesProfile profile) {
     // PHPCodesniffer has 1 specific acceptable exit code ('1'), so we must pass this on the constructor
-    super(configuration, acceptedExitCodes);
+    super(configuration, ACCEPTED_EXIT_CODES);
     this.configuration = configuration;
     PHP.setConfiguration(configuration.getProject().getConfiguration());
     this.exporter = exporter;

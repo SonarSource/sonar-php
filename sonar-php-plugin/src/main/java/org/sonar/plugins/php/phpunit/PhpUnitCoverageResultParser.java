@@ -54,7 +54,7 @@ import com.thoughtworks.xstream.XStream;
 public class PhpUnitCoverageResultParser implements BatchExtension {
 
   // Used for debugging purposes to store measure by resource
-  private static final Map<Resource<?>, Measure> measureByResource = new HashMap<Resource<?>, Measure>();
+  private static final Map<Resource<?>, Measure> MEASURES_BY_RESOURCE = new HashMap<Resource<?>, Measure>();
 
   /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
@@ -163,9 +163,9 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
 
   private void logMeasureByResource(org.sonar.api.resources.File phpFile, Measure measure) {
     if (LOG.isDebugEnabled()) {
-      Measure alreadySaved = measureByResource.get(phpFile);
+      Measure alreadySaved = MEASURES_BY_RESOURCE.get(phpFile);
       if (alreadySaved == null) {
-        measureByResource.put(phpFile, measure);
+        MEASURES_BY_RESOURCE.put(phpFile, measure);
       } else {
         LOG.debug("Measure {} already saved for resoruce {}", measure, phpFile);
       }

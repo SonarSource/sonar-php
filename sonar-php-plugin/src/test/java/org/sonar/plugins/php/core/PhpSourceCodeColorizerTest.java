@@ -33,9 +33,29 @@ public class PhpSourceCodeColorizerTest {
   CodeColorizer codeColorizer = new CodeColorizer(phpColorizer.getTokenizers());
 
   @Test
+  public void testHighlightCDoc() {
+    assertThat(highlight("// Hello class"), containsString("<span class=\"cd\">// Hello class</span>"));
+  }
+
+  @Test
+  public void testHighlightCppDoc() {
+    assertThat(highlight("/* Hello class */"), containsString("<span class=\"cppd\">/* Hello class */</span>"));
+  }
+
+  @Test
   public void testHighlightPhpKeywords() {
     assertThat(highlight("interface"), containsString("<span class=\"k\">interface</span>"));
     assertThat(highlight("isset"), containsString("<span class=\"k\">isset</span>"));
+  }
+
+  @Test
+  public void testHighlightReservedVariables() {
+    assertThat(highlight("__FUNCTION__"), containsString("<span class=\"k\">__FUNCTION__</span>"));
+  }
+
+  @Test
+  public void testHighlightString() {
+    assertThat(highlight("\"Hello class 100\""), containsString("<span class=\"s\">\"Hello class 100\"</span>"));
   }
 
   private String highlight(String phpSourceCode) {
