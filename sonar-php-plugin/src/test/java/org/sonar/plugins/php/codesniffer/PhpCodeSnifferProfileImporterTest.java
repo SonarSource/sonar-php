@@ -59,6 +59,14 @@ public class PhpCodeSnifferProfileImporterTest {
   }
 
   @Test
+  public void testImportProfileWithNoPriority() throws IOException, SAXException {
+    PhpCodeSnifferProfileImporter importer = createImporter();
+    Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/simple-ruleset-with-no-priority.xml"));
+    RulesProfile rulesProfile = importer.importProfile(reader, ValidationMessages.create());
+    assertThat(rulesProfile.getActiveRules().size(), is(1));
+  }
+
+  @Test
   public void testImportComplexProfile() throws IOException, SAXException {
     PhpCodeSnifferProfileImporter importer = createImporter();
     Reader reader = new StringReader(TestUtils.getResourceContent("/org/sonar/plugins/php/codesniffer/complex-ruleset.xml"));
