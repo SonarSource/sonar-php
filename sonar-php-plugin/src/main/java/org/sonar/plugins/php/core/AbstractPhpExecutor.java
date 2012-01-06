@@ -71,6 +71,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
 
     Iterator<String> commandLineIterator = commandLine.iterator();
     Command command = Command.create(commandLineIterator.next());
+    command.setDirectory(configuration.getProject().getFileSystem().getBasedir());
     while (commandLineIterator.hasNext()) {
       command.addArgument(commandLineIterator.next());
     }
