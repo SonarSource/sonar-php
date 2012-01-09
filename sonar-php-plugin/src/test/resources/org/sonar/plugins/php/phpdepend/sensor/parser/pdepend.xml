@@ -21,6 +21,7 @@
       <method name="__construct" ccn="1" cloc="0" loc="5" locExecutable="4" ncloc="5" npath="1" />
       <method name="amount" ccn="1" cloc="0" loc="4" locExecutable="3" ncloc="4" npath="1" />
     </class>
+    <function name="add" ccn="1" cloc="0" lloc="1" loc="4" locExecutable="3" ncloc="4" npath="1"/>
   </file>
   <file name="C:/projets/PHP/Money/Sources/main/MoneyBag.php" classes="1" cloc="56" functions="0" loc="251" locExecutable="150" ncloc="195">
     <class name="MoneyBag" cis="32" cloc="0" cr="0.15" csz="40" dit="0" impl="1" loc="188" locExecutable="145" ncloc="188" nom="18" rcr="0.21375" vars="1" varsi="1" varsnp="0" wmc="39" wmci="39" wmcnp="32">

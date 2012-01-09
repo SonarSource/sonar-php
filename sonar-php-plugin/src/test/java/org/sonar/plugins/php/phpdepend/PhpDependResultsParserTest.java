@@ -42,6 +42,7 @@ import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.test.TestUtils;
 
 /**
  * The Class PhpDependResultsParserTest.
@@ -109,29 +110,18 @@ public class PhpDependResultsParserTest {
     verify(context, never()).saveMeasure(eq(file), eq(metric), anyDouble());
   }
 
-  /**
-   * Should not throw an exception when report not found.
-   */
-  @Test
-  public void shouldNotThrowAnExceptionWhenReportNotFound() {
+  @Test(expected = SonarException.class)
+  public void shouldThrowAnExceptionWhenReportNotFound() {
     project = mock(Project.class);
     PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
     parser.parse(new java.io.File("path/to/nowhere"));
   }
 
-  /**
-   * Should throw an exception when file isn't valid
-   */
   @Test(expected = SonarException.class)
-  public void shouldThrowAnExceptionWhenReportIsInvalid() {
-    try {
-      project = mock(Project.class);
-      PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
-      parser
-          .parse(new java.io.File(getClass().getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-invalid.xml").getFile()));
-    } catch (SonarException e) {
-      throw new SonarException();
-    }
+  public void shouldFailIfReportInvalid() {
+    project = mock(Project.class);
+    PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
+    parser.parse(TestUtils.getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-invalid.xml"));
   }
 
   /**
@@ -210,7 +200,7 @@ public class PhpDependResultsParserTest {
   public void shouldGenerateComplextyMeasure() {
     metric = CoreMetrics.COMPLEXITY;
     init(PDEPEND_RESULT);
-    verify(context).saveMeasure(new File("Money.php"), metric, 21.0);
+    verify(context).saveMeasure(new File("Money.php"), metric, 22.0);
     verify(context).saveMeasure(new File("MoneyBag.php"), metric, 39.0);
     verify(context).saveMeasure(new File("Common/IMoney.php"), metric, 0.0);
   }

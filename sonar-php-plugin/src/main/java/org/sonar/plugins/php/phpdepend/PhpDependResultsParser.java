@@ -19,34 +19,17 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import static org.sonar.api.measures.CoreMetrics.CLASSES;
-import static org.sonar.api.measures.CoreMetrics.COMMENT_LINES;
-import static org.sonar.api.measures.CoreMetrics.COMPLEXITY;
-import static org.sonar.api.measures.CoreMetrics.DEPTH_IN_TREE;
-import static org.sonar.api.measures.CoreMetrics.FILES;
-import static org.sonar.api.measures.CoreMetrics.FUNCTIONS;
-import static org.sonar.api.measures.CoreMetrics.LINES;
-import static org.sonar.api.measures.CoreMetrics.NCLOC;
-import static org.sonar.api.measures.CoreMetrics.NUMBER_OF_CHILDREN;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
@@ -67,31 +50,19 @@ import com.thoughtworks.xstream.XStreamException;
  */
 public class PhpDependResultsParser implements BatchExtension {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PhpDependResultsParser.class);
-  private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = { 1, 2, 4, 6, 8, 10, 12 };
-  private static final Number[] CLASSES_DISTRIB_BOTTOM_LIMITS = { 0, 5, 10, 20, 30, 60, 90 };
+  private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
+  private static final Number[] CLASSES_DISTRIB_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
   /**
    * The context.
    */
   private SensorContext context;
-
-  /**
-   * The metrics.
-   */
-  private Set<Metric> metrics;
-
   /**
    * The project.
    */
   private Project project;
-
-  /**
-   * Resources bag to store metrics and their values.
-   */
-  private ResourcesBag resourcesBag;
-
-  private boolean measureUnitTests = true;
+  private double classComplexity;
+  private int numberOfMethods;
 
   /**
    * Instantiates a new php depend results parser.
@@ -104,205 +75,98 @@ public class PhpDependResultsParser implements BatchExtension {
   public PhpDependResultsParser(Project project, SensorContext context) {
     this.project = project;
     this.context = context;
-    this.resourcesBag = new ResourcesBag();
-    this.metrics = getMetrics();
   }
 
   /**
-   * Returns true if unit tests are counted when measuring complexity and LOC.
-   * 
-   * @return true if unit tests are counted when measuring complexity and LOC.
+   * Parses the pdepend report file.
    */
-  public boolean isMeasureUnitTests() {
-    return measureUnitTests;
-  }
-
-  /**
-   * Sets whether unit tests are counted when measuring complexity and LOC.
-   * 
-   * @param measureUnitTests
-   *          true if unit tests are counted when measuring complexity and LOC.
-   */
-  public void setMeasureUnitTests(boolean measureUnitTests) {
-    this.measureUnitTests = measureUnitTests;
-  }
-
-  /**
-   * If the given value is not null, the metric, resource and value will be associated
-   * 
-   * @param file
-   *          the file
-   * @param metric
-   *          the metric
-   * @param value
-   *          the value
-   */
-  private void addMeasure(org.sonar.api.resources.File file, Metric metric, Double value) {
-    if (value != null) {
-      resourcesBag.add(value, metric, file);
+  public void parse(File reportXml) {
+    if (!reportXml.exists()) {
+      throw new SonarException("PDepdend result file not found: " + reportXml.getAbsolutePath() + ".");
     }
-  }
 
-  /**
-   * Adds the measure if the given metrics isn't already present on this resource.
-   * 
-   * @param file
-   * @param metric
-   * @param value
-   */
-  private void addMeasureIfNecessary(org.sonar.api.resources.File file, Metric metric, double value) {
-    Double measure = resourcesBag.getMeasure(metric, file);
-    if (measure == null || measure == 0) {
-      resourcesBag.add(value, metric, file);
+    MetricsNode metricsNode = getMetrics(reportXml);
+    List<FileNode> files = metricsNode.getFiles();
+    for (FileNode fileNode : files) {
+      analyzeFileNode(fileNode);
     }
+
   }
 
-  /**
-   * Collects the given class measures and launches {@see #collectFunctionMeasures(MethodNode, PhpFile)} for all its descendant.
-   * 
-   * @param file
-   *          the php related file
-   * @param classNode
-   *          representing the class in the report file
-   * @param methodComplexityDistribution
-   */
-  private void collectClassMeasures(ClassNode classNode, org.sonar.api.resources.File file,
-      RangeDistributionBuilder methodComplexityDistribution) {
-    addMeasureIfNecessary(file, LINES, classNode.getLinesNumber());
-    addMeasureIfNecessary(file, COMMENT_LINES, classNode.getCommentLineNumber());
-    addMeasureIfNecessary(file, NCLOC, classNode.getCodeLinesNumber());
-    addMeasureIfNecessary(file, DEPTH_IN_TREE, classNode.getDepthInTreeNumber());
-    addMeasureIfNecessary(file, NUMBER_OF_CHILDREN, classNode.getNumberOfChildrenClassesNumber());
-    // for all methods in this class.
-    List<MethodNode> methodes = classNode.getMethodes();
-    if (methodes != null && !methodes.isEmpty()) {
-      for (MethodNode methodNode : methodes) {
-        collectMethodMeasures(methodNode, file);
-        methodComplexityDistribution.add(methodNode.getComplexity());
+  protected void analyzeFileNode(FileNode fileNode) {
+    String fileName = fileNode.getFileName();
+    if (!StringUtils.isEmpty(fileName)) {
+      org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.fromIOFile(new File(fileName), project);
+      if (sonarFile != null && !ResourceUtils.isUnitTestClass(sonarFile)) {
+        saveMeasures(sonarFile, fileNode);
       }
     }
   }
 
-  /**
-   * Collects the given function measures.
-   * 
-   * @param file
-   *          the php related file
-   * @param functionNode
-   *          representing the class in the report file
-   * @param methodComplexityDistribution
-   */
-  private void collectFunctionsMeasures(FunctionNode functionNode, org.sonar.api.resources.File file,
-      RangeDistributionBuilder methodComplexityDistribution) {
-    addMeasureIfNecessary(file, LINES, functionNode.getLinesNumber());
-    addMeasureIfNecessary(file, COMMENT_LINES, functionNode.getCommentLineNumber());
-    addMeasureIfNecessary(file, NCLOC, functionNode.getCodeLinesNumber());
-    addMeasure(file, COMPLEXITY, functionNode.getComplexity());
-    methodComplexityDistribution.add(functionNode.getComplexity());
-  }
+  protected void saveMeasures(org.sonar.api.resources.File sonarFile, FileNode fileNode) {
+    saveSimpleMeasures(sonarFile, fileNode);
 
-  /**
-   * Collect the fiven php file measures and launches {@see #collectClassMeasures(ClassNode, PhpFile)} for all its descendant. Indeed even
-   * if it's not a good practice it isn't illegal to have more than one public class in one php file.
-   * 
-   * @param file
-   *          the php file
-   * @param fileNode
-   *          the node representing the file in the report file.
-   */
-  private void collectFileMeasures(FileNode fileNode, org.sonar.api.resources.File file) {
-    addMeasure(file, LINES, fileNode.getLinesNumber());
-    addMeasure(file, CoreMetrics.NCLOC, fileNode.getCodeLinesNumber());
-    addMeasure(file, CoreMetrics.COMMENT_LINES, fileNode.getCommentLineNumber());
-
-    // Classes in File
-    addMeasure(file, CLASSES, fileNode.getClassNumber());
-
-    // Functions in File
-    addMeasure(file, FUNCTIONS, fileNode.getFunctionsNumber());
-
-    // Adds one file to this php file
-    addMeasure(file, CoreMetrics.FILES, 1.0);
-    // for all class in this file
     RangeDistributionBuilder classComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION,
         CLASSES_DISTRIB_BOTTOM_LIMITS);
     RangeDistributionBuilder methodComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION,
         FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
-    if (fileNode.getClasses() != null) {
-      for (ClassNode classNode : fileNode.getClasses()) {
-        collectClassMeasures(classNode, file, methodComplexityDistribution);
-        classComplexityDistribution.add(classNode.getComplexity());
-      }// for all class in this file
-    }
+
+    classComplexity = 0.0;
+    numberOfMethods = 0;
+    analyseClasses(sonarFile, fileNode, classComplexityDistribution, methodComplexityDistribution);
+    analyseFunctions(fileNode, methodComplexityDistribution);
+
+    context.saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, new Double(numberOfMethods));
+    context.saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, classComplexity);
+    context.saveMeasure(sonarFile, classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+    context.saveMeasure(sonarFile, methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+  }
+
+  protected void analyseFunctions(FileNode fileNode, RangeDistributionBuilder methodComplexityDistribution) {
     if (fileNode.getFunctions() != null) {
       for (FunctionNode funcNode : fileNode.getFunctions()) {
-        collectFunctionsMeasures(funcNode, file, methodComplexityDistribution);
+        numberOfMethods += 1;
+        classComplexity += funcNode.getComplexity();
+        methodComplexityDistribution.add(funcNode.getComplexity());
       }
     }
-
-    context.saveMeasure(file, classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
-    context.saveMeasure(file, methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
   }
 
-  /**
-   * Collect function measures.
-   * 
-   * @param file
-   *          the file
-   * @param methodNode
-   *          the method node
-   */
-  private void collectMethodMeasures(MethodNode methodNode, org.sonar.api.resources.File file) {
-    // Adds one method to this file
-    addMeasure(file, CoreMetrics.FUNCTIONS, 1.0);
-    addMeasure(file, CoreMetrics.COMPLEXITY, methodNode.getComplexity());
-  }
-
-  /**
-   * Collect measures.
-   * 
-   * @param reportXml
-   *          the report xml
-   * @throws FileNotFoundException
-   *           the file not found exception
-   * @throws ParseException
-   *           the parse exception
-   */
-  protected void collectMeasures(File reportXml) throws FileNotFoundException, ParseException {
-    MetricsNode metricsNode = getMetrics(reportXml);
-    List<FileNode> files = metricsNode.getFiles();
-    for (FileNode fileNode : files) {
-      String fileName = fileNode.getFileName();
-      if (StringUtils.isEmpty(fileName)) {
-        continue;
-      }
-      org.sonar.api.resources.File currentResourceFile = org.sonar.api.resources.File.fromIOFile(new File(fileName), project);
-      if (currentResourceFile != null) {
-        if (measureUnitTests || !ResourceUtils.isUnitTestClass(currentResourceFile)) {
-          collectFileMeasures(fileNode, currentResourceFile);
+  protected void analyseClasses(org.sonar.api.resources.File sonarFile, FileNode fileNode,
+      RangeDistributionBuilder classComplexityDistribution, RangeDistributionBuilder methodComplexityDistribution) {
+    if (fileNode.getClasses() != null) {
+      boolean firstClass = true;
+      for (ClassNode classNode : fileNode.getClasses()) {
+        if (firstClass) {
+          // we save the DIT and NumberOfChildren only for the first class, as usually there will be only 1 class per file
+          context.saveMeasure(sonarFile, CoreMetrics.DEPTH_IN_TREE, classNode.getDepthInTreeNumber());
+          context.saveMeasure(sonarFile, CoreMetrics.NUMBER_OF_CHILDREN, classNode.getNumberOfChildrenClassesNumber());
+          firstClass = false;
         }
-      } else {
-        LOG.warn("The following file doesn't belong to current project sources or tests : " + fileName);
+
+        double innerClassComplexity = 0.0;
+        // for all methods in this class.
+        List<MethodNode> methodes = classNode.getMethodes();
+        if (methodes != null && !methodes.isEmpty()) {
+          for (MethodNode methodNode : methodes) {
+            numberOfMethods += 1;
+            innerClassComplexity += methodNode.getComplexity();
+            methodComplexityDistribution.add(methodNode.getComplexity());
+          }
+        }
+
+        classComplexityDistribution.add(innerClassComplexity);
+        classComplexity += innerClassComplexity;
       }
     }
-    saveMeasures();
   }
 
-  /**
-   * Gets the metrics.
-   * 
-   * @return the metrics
-   */
-  private Set<Metric> getMetrics() {
-    Set<Metric> metricsNode = new HashSet<Metric>();
-    metricsNode.add(LINES);
-    metricsNode.add(NCLOC);
-    metricsNode.add(FUNCTIONS);
-    metricsNode.add(COMMENT_LINES);
-    metricsNode.add(FILES);
-    metricsNode.add(COMPLEXITY);
-    metricsNode.add(CLASSES);
-    return metricsNode;
+  protected void saveSimpleMeasures(org.sonar.api.resources.File sonarFile, FileNode fileNode) {
+    context.saveMeasure(sonarFile, CoreMetrics.FILES, 1.0);
+    context.saveMeasure(sonarFile, CoreMetrics.CLASSES, fileNode.getClassNumber());
+    context.saveMeasure(sonarFile, CoreMetrics.LINES, fileNode.getLinesNumber());
+    context.saveMeasure(sonarFile, CoreMetrics.NCLOC, fileNode.getCodeLinesNumber());
+    context.saveMeasure(sonarFile, CoreMetrics.COMMENT_LINES, fileNode.getCommentLineNumber());
   }
 
   /**
@@ -332,59 +196,6 @@ public class PhpDependResultsParser implements BatchExtension {
       throw new SonarException("Can't read report : " + report.getName(), e);
     } finally {
       IOUtils.closeQuietly(inputStream);
-    }
-  }
-
-  /**
-   * Parses the pdepend report file.
-   */
-  public void parse(File reportXml) {
-    // If no files can be found, plugin will stop normally only logging the
-    // error
-    if ( !reportXml.exists()) {
-      LOG.error("Result file not found : " + reportXml.getAbsolutePath() + ". Plugin will stop");
-      return;
-    }
-    try {
-      LOG.info("Collecting measures...");
-      collectMeasures(reportXml);
-    } catch (Exception e) {
-      LOG.error("Report file is invalid or can't be found, plugin will stop.", e);
-      throw new SonarException(e);
-    }
-  }
-
-  /**
-   * Saves on measure in the context. One value is associated with a metric and a resource.
-   * 
-   * @param resource
-   *          Can be a PhpFile or a PhpPackage
-   * @param metric
-   *          the metric evaluated
-   * @param measure
-   *          the corresponding value
-   */
-  private void saveMeasure(org.sonar.api.resources.File resource, Metric metric, Double measure) {
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("Saving " + metric.getName() + " for resource " + resource.getKey() + " with value " + measure);
-    }
-    context.saveMeasure(resource, metric, measure);
-  }
-
-  /**
-   * Saves all the measure contained in the resourceBag used for this analysis.
-   * 
-   * @throws ParseException
-   */
-  private void saveMeasures() {
-    LOG.info("Saving measures...");
-    for (org.sonar.api.resources.File resource : resourcesBag.getResources()) {
-      for (Metric metric : resourcesBag.getMetrics(resource)) {
-        if (metrics.contains(metric)) {
-          Double measure = resourcesBag.getMeasure(metric, resource);
-          saveMeasure(resource, metric, measure);
-        }
-      }
     }
   }
 
