@@ -66,11 +66,11 @@ public class PhpUnitSensor implements Sensor {
     try {
       configuration.createWorkingDirectory();
 
-      if ( !configuration.isAnalyseOnly()) {
+      if (!configuration.isAnalyseOnly()) {
         executor.execute();
       }
       parser.parse(configuration.getReportFile());
-      if ( !configuration.shouldSkipCoverage()) {
+      if (!configuration.shouldSkipCoverage()) {
         coverageParser.parse(configuration.getCoverageReportFile());
       }
     } catch (XStreamException e) {
@@ -86,7 +86,7 @@ public class PhpUnitSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if ( !PHP.equals(project.getLanguage()) || !configuration.isDynamicAnalysisEnabled()) {
+    if (!PHP.equals(project.getLanguage()) || !configuration.isDynamicAnalysisEnabled()) {
       return false;
     }
 

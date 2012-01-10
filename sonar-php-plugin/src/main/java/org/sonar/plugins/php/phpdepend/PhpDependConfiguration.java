@@ -19,9 +19,6 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.api.Php;
@@ -40,7 +37,6 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   public static final String PDEPEND_WITHOUT_ANNOTATION_OPTION = "--without-annotations";
   public static final String PDEPEND_BAD_DOCUMENTATION_OPTION = "--bad-documentation";
   public static final String PDEPEND_EXCLUDE_OPTION = "--exclude=";
-  public static final String PDEPEND_IGNORE_OPTION = "--ignore=";
 
   // --- Sonar config parameters ---
   public static final String PDEPEND_SKIP_KEY = "sonar.phpDepend.skip";
@@ -180,15 +176,6 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
       return StringUtils.join(values, ',');
     }
     return null;
-  }
-
-  /**
-   * Gets the ignore list argument value.
-   * 
-   * @return the ignore list
-   */
-  public List<String> getExclusionPatterns() {
-    return Arrays.asList(getProject().getExclusionPatterns());
   }
 
   public boolean isBadDocumentation() {

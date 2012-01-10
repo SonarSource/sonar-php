@@ -55,16 +55,6 @@ public class PhpPmdConfigurationTest {
     assertEquals(PHPMD_DEFAULT_RULESET_ARGUMENT, config.getRulesets());
   }
 
-  @Test
-  public void testGetExclusionPatterns() {
-    Project project = getMockProject();
-    String[] excludeDirs = new String[] { "a", "b" };
-    when(project.getExclusionPatterns()).thenReturn(excludeDirs);
-    PhpmdConfiguration config = new PhpmdConfiguration(project);
-    assertEquals(config.getExclusionPatterns().get(0), "a");
-    assertEquals(config.getExclusionPatterns().get(1), "b");
-  }
-
   /**
    * Should get valid suffixe option.
    */

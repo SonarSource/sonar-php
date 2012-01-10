@@ -21,7 +21,6 @@ package org.sonar.plugins.php.pmd;
 
 import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXCLUDE_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FORMAT;
@@ -89,28 +88,12 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
     result.add(PHPMD_REPORT_FILE_OPTION);
     result.add(configuration.getReportFile().getAbsolutePath());
 
-    List<String> ignoreArguments = getIgnoreArguments();
-    result.addAll(ignoreArguments);
-
     result.add(PHPMD_EXTENSIONS_OPTION);
     result.add(StringUtils.join(PHP.getFileSuffixes(), ","));
     if (configuration.isStringPropertySet(PHPMD_ARGUMENT_LINE_KEY)) {
       result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
     return result;
-  }
-
-  /**
-   * @return the command line ignore option depending on sonar exclusions
-   */
-  private List<String> getIgnoreArguments() {
-    List<String> ignoreArguments = new ArrayList<String>();
-    List<String> sonarExclusions = configuration.getExclusionPatterns();
-    if (sonarExclusions != null && !sonarExclusions.isEmpty()) {
-      ignoreArguments.add(PHPMD_EXCLUDE_OPTION);
-      ignoreArguments.add(StringUtils.join(sonarExclusions, ","));
-    }
-    return ignoreArguments;
   }
 
   /**

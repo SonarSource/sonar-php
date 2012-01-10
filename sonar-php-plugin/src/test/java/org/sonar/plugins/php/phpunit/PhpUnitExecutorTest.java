@@ -290,7 +290,7 @@ public class PhpUnitExecutorTest {
     List<String> commandLine = executor.getCommandLine();
 
     List<String> expected = Arrays.asList(phpunit, "--configuration=" + phpunitXml, "--log-junit=" + reportFile, "--coverage-clover="
-        + coverageXml);
+      + coverageXml);
     assertThat(commandLine).isEqualTo(expected);
   }
 }

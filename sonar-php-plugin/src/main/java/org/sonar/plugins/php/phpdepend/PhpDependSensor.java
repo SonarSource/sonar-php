@@ -59,7 +59,7 @@ public class PhpDependSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     try {
       configuration.createWorkingDirectory();
-      if ( !configuration.isAnalyseOnly()) {
+      if (!configuration.isAnalyseOnly()) {
         executor.execute();
       }
       File reportFile = configuration.getReportFile();
@@ -73,7 +73,7 @@ public class PhpDependSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if ( !PHP.equals(project.getLanguage())) {
+    if (!PHP.equals(project.getLanguage())) {
       return false;
     }
 

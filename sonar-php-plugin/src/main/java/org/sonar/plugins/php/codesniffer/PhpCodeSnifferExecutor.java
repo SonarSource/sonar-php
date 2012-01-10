@@ -22,7 +22,6 @@ package org.sonar.plugins.php.codesniffer;
 import static org.sonar.plugins.php.api.Php.PHP;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_EXTENSIONS_MODIFIER;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_IGNORE_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY;
@@ -99,13 +98,6 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
       if (ruleset != null) {
         result.add(PHPCS_STANDARD_MODIFIER + ruleset.getAbsolutePath());
       }
-    }
-
-    List<String> exclusionPatterns = configuration.getExclusionPatterns();
-    if (exclusionPatterns != null && !exclusionPatterns.isEmpty()) {
-      String ignorePatterns = StringUtils.join(exclusionPatterns, EXCLUSION_PATTERN_SEPARATOR);
-      StringBuilder sb = new StringBuilder(PHPCS_IGNORE_MODIFIER).append(ignorePatterns);
-      result.add(sb.toString());
     }
 
     result.add(PHPCS_EXTENSIONS_MODIFIER + StringUtils.join(PHP.getFileSuffixes(), EXCLUSION_PATTERN_SEPARATOR));

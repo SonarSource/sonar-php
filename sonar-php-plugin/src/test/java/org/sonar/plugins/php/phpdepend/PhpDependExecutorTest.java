@@ -37,7 +37,6 @@ import java.util.List;
 
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
@@ -61,7 +60,7 @@ public class PhpDependExecutorTest {
     String s3 = "--suffix=php,php3,php4,php5,phtml,inc";
     String s4 = new File("C:/projets/PHP/Monkey/sources/main").toString();
     List<String> expected = Arrays.asList(s1, s2, s3, s4);
-    
+
     assertThat(commandLine).isEqualTo(expected);
     assertThat(executor.getExecutedTool(), is("PHP Depend"));
   }
@@ -74,8 +73,6 @@ public class PhpDependExecutorTest {
     conf.setProperty(PDEPEND_ARGUMENT_LINE_KEY, "  --foo=bar --foo2=bar2 ");
     Project project = MockUtils.createMockProject(conf);
     PhpDependConfiguration config = getWindowsConfiguration(project);
-    String[] sonarExclusionPattern = { "*test", "**/math" };
-    when(project.getExclusionPatterns()).thenReturn(sonarExclusionPattern);
 
     PhpDependExecutor executor = new PhpDependExecutor(config);
     List<String> commandLine = executor.getCommandLine();
@@ -83,13 +80,12 @@ public class PhpDependExecutorTest {
     String s2 = "--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath();
     String s3 = "--suffix=php,php3,php4,php5,phtml,inc";
     String s4 = "--exclude=foo,bar";
-    String s5 = "--ignore=" + StringUtils.join(sonarExclusionPattern, ",");
-    String s6 = "--without-annotations";
-    String s7 = "--foo=bar";
-    String s8 = "--foo2=bar2";
-    String s9 = new File("target/MockProject/src").toString();
+    String s5 = "--without-annotations";
+    String s6 = "--foo=bar";
+    String s7 = "--foo2=bar2";
+    String s8 = new File("target/MockProject/src").toString();
 
-    List<String> expected = Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8, s9);
+    List<String> expected = Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8);
 
     assertThat(commandLine).isEqualTo(expected);
   }

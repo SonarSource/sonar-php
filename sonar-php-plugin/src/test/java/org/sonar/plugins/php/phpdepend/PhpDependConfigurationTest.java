@@ -40,7 +40,6 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.pmd.PhpmdConfiguration;
 
 /**
  * The Class PhpDependConfigurationTest.
@@ -50,16 +49,6 @@ public class PhpDependConfigurationTest {
   private static final String REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
   private static final String DEFAULT_REPORT_FILE_NAME = PDEPEND_REPORT_FILE_NAME_DEFVALUE;
   private static final String REPORT_FILE_NAME_PROPERTY_KEY = PDEPEND_REPORT_FILE_NAME_KEY;
-
-  @Test
-  public void testGetExclusionPatterns() {
-    Project project = getMockProject();
-    String[] excludeDirs = new String[] { "a", "b" };
-    when(project.getExclusionPatterns()).thenReturn(excludeDirs);
-    PhpmdConfiguration config = new PhpmdConfiguration(project);
-    assertEquals(config.getExclusionPatterns().get(0), "a");
-    assertEquals(config.getExclusionPatterns().get(1), "b");
-  }
 
   @Test
   public void testGetExcludePackageWithNull() {
@@ -75,7 +64,7 @@ public class PhpDependConfigurationTest {
     Project project = getMockProject();
     PhpDependConfiguration config = getWindowsConfiguration(project);
     Configuration c = project.getConfiguration();
-    String[] excludeDirs = new String[] { "a", "b" };
+    String[] excludeDirs = new String[] {"a", "b"};
     when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(excludeDirs);
     assertEquals("a,b", config.getExcludePackages());
   }

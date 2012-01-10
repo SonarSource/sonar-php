@@ -76,9 +76,9 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
       command.addArgument(commandLineIterator.next());
     }
     int exitCode = CommandExecutor.create().execute(command, configuration.getTimeout() * MINUTES_TO_MILLISECONDS);
-    if ( !acceptedExitCodes.contains(exitCode)) {
+    if (!acceptedExitCodes.contains(exitCode)) {
       throw new SonarException(getExecutedTool() + " execution failed with returned code '" + exitCode
-          + "'. Please check the documentation of " + getExecutedTool() + " to know more about this failure.");
+        + "'. Please check the documentation of " + getExecutedTool() + " to know more about this failure.");
     } else {
       LOG.info(getExecutedTool() + " succeeded with returned code '{}'.", exitCode);
     }

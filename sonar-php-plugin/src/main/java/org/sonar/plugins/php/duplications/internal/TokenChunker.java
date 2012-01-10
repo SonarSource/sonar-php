@@ -49,7 +49,8 @@ public final class TokenChunker {
       channelDispatcher.consume(code, queue);
       return queue;
     } catch (Exception e) {
-      throw new DuplicationsException("Unable to lex source code at line : " + code.getLinePosition() + " and column : " + code.getColumnPosition(), e);
+      throw new DuplicationsException("Unable to lex source code at line : " + code.getLinePosition() + " and column : "
+        + code.getColumnPosition(), e);
     }
   }
 

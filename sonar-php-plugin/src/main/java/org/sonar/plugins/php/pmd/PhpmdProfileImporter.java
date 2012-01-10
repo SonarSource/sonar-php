@@ -106,7 +106,7 @@ public class PhpmdProfileImporter extends AbstractPhpProfileImporter {
         found = true;
       }
     }
-    if ( !found) {
+    if (!found) {
       StringBuilder message = new StringBuilder("Unable to import unknown PHPMD rule '");
       message.append(configKey).append("' consider adding an extension in sonar extenions directory");
       messages.addWarningText(message.toString());

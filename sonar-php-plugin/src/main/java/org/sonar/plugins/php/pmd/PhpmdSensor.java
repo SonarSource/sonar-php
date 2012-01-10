@@ -69,7 +69,7 @@ public class PhpmdSensor implements Sensor {
    * {@inheritDoc}
    */
   public void analyse(Project project, SensorContext context) {
-    if ( !configuration.isAnalyseOnly()) {
+    if (!configuration.isAnalyseOnly()) {
       configuration.createWorkingDirectory();
       executor.execute();
     }
@@ -93,7 +93,7 @@ public class PhpmdSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if ( !PHP.equals(project.getLanguage())) {
+    if (!PHP.equals(project.getLanguage())) {
       return false;
     }
 

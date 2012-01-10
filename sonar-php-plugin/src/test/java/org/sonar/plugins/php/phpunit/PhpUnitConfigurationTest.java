@@ -83,7 +83,7 @@ public class PhpUnitConfigurationTest {
     when(c.getString(PHPUNIT_COVERAGE_REPORT_FILE_KEY, PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE)).thenReturn(
         PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE);
     File expectedReportFile = new File(project.getFileSystem().getBuildDir(), config.getReportFileRelativePath() + File.separator
-        + PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE);
+      + PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE);
     assertEquals(expectedReportFile, config.getCoverageReportFile());
 
   }

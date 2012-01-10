@@ -24,7 +24,6 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARG
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_OPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_OPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_IGNORE_OPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_OPTION;
 
 import java.util.ArrayList;
@@ -72,11 +71,6 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
     result.add(configuration.getSuffixesCommandOption());
     if (configuration.isStringPropertySet(PDEPEND_EXCLUDE_PACKAGE_KEY)) {
       result.add(PDEPEND_EXCLUDE_OPTION + configuration.getExcludePackages());
-    }
-
-    List<String> sonarExclusions = configuration.getExclusionPatterns();
-    if (sonarExclusions != null && !sonarExclusions.isEmpty()) {
-      result.add(PDEPEND_IGNORE_OPTION + StringUtils.join(sonarExclusions, ","));
     }
 
     if (configuration.isBadDocumentation()) {

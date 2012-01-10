@@ -78,7 +78,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
       skip = !project.getConfiguration().getBoolean(getShouldRunKey());
     }
     String dynamicAnalysis = configuration.getString("sonar.dynamicAnalysis", "true");
-    if ( !"false".equalsIgnoreCase(dynamicAnalysis)) {
+    if (!"false".equalsIgnoreCase(dynamicAnalysis)) {
       isDynamicAnalysis = true;
     }
   }

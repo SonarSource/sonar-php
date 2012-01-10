@@ -172,7 +172,7 @@ public class PhpUnitResultParserTest {
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
     verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 570.0);
   }
-  
+
   @Test
   public void shouldNotSaveTestReportMeasuresIfReportInvalid() throws Exception {
     context = mock(SensorContext.class);
@@ -180,8 +180,8 @@ public class PhpUnitResultParserTest {
     parser.saveTestReportMeasures(new PhpUnitTestReport());
     verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
   }
-  
-  @Test(expected=SonarException.class)
+
+  @Test(expected = SonarException.class)
   public void testGetTestSuitesWithUnexistingFile() throws Exception {
     PhpUnitResultParser parser = new PhpUnitResultParser(null, null);
     parser.getTestSuites(new File("target/unexistingFile.xml"));

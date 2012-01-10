@@ -116,7 +116,7 @@ public class PhpDependResultsParser implements BatchExtension {
     analyseClasses(sonarFile, fileNode, classComplexityDistribution, methodComplexityDistribution);
     analyseFunctions(fileNode, methodComplexityDistribution);
 
-    context.saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, new Double(numberOfMethods));
+    context.saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, (double) numberOfMethods);
     context.saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, classComplexity);
     context.saveMeasure(sonarFile, classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
     context.saveMeasure(sonarFile, methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));

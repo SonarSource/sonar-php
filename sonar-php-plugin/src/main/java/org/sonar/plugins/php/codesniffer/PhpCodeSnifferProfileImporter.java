@@ -101,7 +101,7 @@ public class PhpCodeSnifferProfileImporter extends AbstractPhpProfileImporter {
         found = true;
       }
     }
-    if ( !found) {
+    if (!found) {
       StringBuilder message = new StringBuilder("Unable to import unknown PhpCodeSniffer rule '");
       message.append(key).append("' consider adding an extension in sonar extenions directory");
       messages.addWarningText(message.toString());
@@ -122,7 +122,7 @@ public class PhpCodeSnifferProfileImporter extends AbstractPhpProfileImporter {
           severity = severityNode.getValue();
         }
         // we must check for "0" severity, which would mean that the sniff should be ignored
-        if ( !"0".equals(severity)) {
+        if (!"0".equals(severity)) {
           PmdRule pmdRule = new PmdRule(ruleNode.getAttributeValue("ref"));
           pmdRule.setClazz(ruleNode.getAttributeValue("class"));
           pmdRule.setName(ruleNode.getAttributeValue("name"));

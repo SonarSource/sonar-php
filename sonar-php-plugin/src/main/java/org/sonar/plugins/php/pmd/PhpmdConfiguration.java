@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.pmd;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import org.sonar.api.resources.Project;
@@ -38,7 +37,6 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   public static final String PHPMD_REPORT_FILE_OPTION = "--reportfile";
   public static final String PHPMD_LEVEL_OPTION = "--minimumpriority";
   public static final String PHPMD_EXTENSIONS_OPTION = "--suffixes";
-  public static final String PHPMD_EXCLUDE_OPTION = "--exclude";
   public static final String PHPMD_DEFAULT_RULESET_ARGUMENT = "codesize,unusedcode,naming";
 
   // --- Sonar config parameters ---
@@ -177,14 +175,5 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    */
   public String getRulesets() {
     return PHPMD_DEFAULT_RULESET_ARGUMENT;
-  }
-
-  /**
-   * Gets the ignore list argument value.
-   * 
-   * @return the ignore list
-   */
-  public List<String> getExclusionPatterns() {
-    return Arrays.asList(getProject().getExclusionPatterns());
   }
 }

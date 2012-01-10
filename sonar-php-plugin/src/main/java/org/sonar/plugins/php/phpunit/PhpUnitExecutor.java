@@ -113,7 +113,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
     }
     addExtendedOptions(result);
 
-    if ( !useConfigFile) {
+    if (!useConfigFile) {
 
       boolean ignoreConfigFile = c.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY) && c.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY);
       if (ignoreConfigFile) {
@@ -145,7 +145,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
       result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
     result.add(PHPUNIT_LOG_JUNIT_OPTION + configuration.getReportFile());
-    if ( !configuration.shouldSkipCoverage()) {
+    if (!configuration.shouldSkipCoverage()) {
       result.add(PHPUNIT_COVERAGE_CLOVER_OPTION + configuration.getCoverageReportFile());
     }
   }
@@ -202,7 +202,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
       FileUtils.writeStringToFile(ruleset, xml.toString());
     } catch (IOException e) {
       String msg = "Error while creating  temporary phpunit.xml from files: " + testFiles + " to file : " + ruleset + " in dir "
-          + workingDir;
+        + workingDir;
       LOG.error(msg);
     }
     return ruleset.length() > 0 ? ruleset : null;

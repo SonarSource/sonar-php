@@ -66,7 +66,7 @@ public class PhpCodesnifferExecutorTest {
   @Test
   public void testGetCommandLine2() {
     Configuration configuration = mock(Configuration.class);
-    String[] suffixes = new String[] { "php", "php2" };
+    String[] suffixes = new String[] {"php", "php2"};
     when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(suffixes);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
 
@@ -83,7 +83,7 @@ public class PhpCodesnifferExecutorTest {
   @Test
   public void testGetCommandLine3() {
     Configuration configuration = mock(Configuration.class);
-    String[] suffixes = new String[] { "php", "php2" };
+    String[] suffixes = new String[] {"php", "php2"};
     when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(suffixes);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
 
@@ -101,22 +101,6 @@ public class PhpCodesnifferExecutorTest {
     String expected = "--extensions=php,php2";
     assertThat(commandLine).contains(expected);
     assertThat(commandLine).contains(severityModifier + level);
-  }
-
-  /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
-   */
-  @Test
-  public void testGetCommandLineWithExclusions() {
-    Configuration configuration = mock(Configuration.class);
-    PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
-    when(c.getExclusionPatterns()).thenReturn(Lists.newArrayList("**/Bar/**", "*Foo.php"));
-
-    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
-    List<String> commandLine = executor.getCommandLine();
-
-    String expected = "--ignore=**/Bar/**,*Foo.php";
-    assertThat(commandLine).contains(expected);
   }
 
   /**

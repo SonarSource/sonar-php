@@ -190,7 +190,7 @@ public class PhpUnitResultParser implements BatchExtension {
    *          the unit test report
    */
   protected void saveTestReportMeasures(PhpUnitTestReport fileReport) {
-    if ( !fileReport.isValid()) {
+    if (!fileReport.isValid()) {
       return;
     }
     Resource<?> unitTestResource = getUnitTestResource(fileReport);
@@ -212,7 +212,7 @@ public class PhpUnitResultParser implements BatchExtension {
       saveTestsDetails(fileReport);
     } else {
       LOG.debug("Following file is not located in the test folder specified in the Sonar configuration: " + fileReport.getFile()
-          + ". The test results won't be reported in Sonar.");
+        + ". The test results won't be reported in Sonar.");
     }
   }
 

@@ -24,8 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -49,7 +47,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   public static final String PHPCS_STANDARD_MODIFIER = "--standard=";
   public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER = "--severity=";
   public static final String PHPCS_EXTENSIONS_MODIFIER = "--extensions=";
-  public static final String PHPCS_IGNORE_MODIFIER = "--ignore=";
 
   // --- Sonar config parameters ---
   public static final String PHPCS_SKIP_KEY = "sonar.phpCodesniffer.skip";
@@ -205,15 +202,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   public String getStandard() {
     return getProject().getConfiguration().getString(PHPCS_STANDARD_ARGUMENT_KEY, PHPCS_STANDARD_ARGUMENT_DEFVALUE);
-  }
-
-  /**
-   * Gets the ignore list argument value.
-   * 
-   * @return the ignore list
-   */
-  public List<String> getExclusionPatterns() {
-    return Arrays.asList(getProject().getExclusionPatterns());
   }
 
   /**
