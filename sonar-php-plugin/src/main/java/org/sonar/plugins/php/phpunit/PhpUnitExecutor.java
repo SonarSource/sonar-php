@@ -71,9 +71,10 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
 
   /**
    * See https://github.com/sebastianbergmann/phpunit/blob/3.6/PHPUnit/TextUI/TestRunner.php <br/>
-   * '1' means there are "test" failures (=> but the process has completed)
+   * '1' means there are "test" failures (=> but the process has completed) <br/>
+   * '2' means there are "test" errors (=> but the process has completed)
    */
-  private static final Collection<Integer> ACCEPTED_EXIT_CODES = Lists.newArrayList(0, 1);
+  private static final Collection<Integer> ACCEPTED_EXIT_CODES = Lists.newArrayList(0, 1, 2);
 
   /** The configuration. */
   private final PhpUnitConfiguration configuration;
