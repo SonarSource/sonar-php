@@ -46,6 +46,9 @@ public class LineNode {
   @XStreamAsAttribute
   private String type;
 
+  public LineNode() {
+  }
+
   /**
    * Instantiates a new line node.
    * 

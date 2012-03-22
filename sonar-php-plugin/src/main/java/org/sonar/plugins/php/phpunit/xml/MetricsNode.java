@@ -57,6 +57,9 @@ public final class MetricsNode {
   @XStreamAlias("statements")
   private double totalStatementsCount;
 
+  public MetricsNode() {
+  }
+
   /**
    * Instantiates a new metrics node.
    * 

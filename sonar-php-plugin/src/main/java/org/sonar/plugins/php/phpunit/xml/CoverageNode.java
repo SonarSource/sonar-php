@@ -35,6 +35,9 @@ public class CoverageNode {
   @XStreamAlias("project")
   private List<ProjectNode> projects;
 
+  public CoverageNode() {
+  }
+
   /**
    * Instantiates a new coverage node.
    * 

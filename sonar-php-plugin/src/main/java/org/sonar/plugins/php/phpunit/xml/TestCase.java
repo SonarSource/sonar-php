@@ -84,6 +84,9 @@ public final class TestCase {
   @XStreamAlias("failure")
   private String failure;
 
+  public TestCase() {
+  }
+
   /**
    * Instantiates a new test case.
    * 

@@ -35,6 +35,9 @@ public final class MetricsNode {
   @XStreamImplicit
   private List<FileNode> files;
 
+  public MetricsNode() {
+  }
+
   /**
    * Instantiates a new metrics.
    * 

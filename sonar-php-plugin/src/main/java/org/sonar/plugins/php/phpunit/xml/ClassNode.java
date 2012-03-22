@@ -33,6 +33,9 @@ public class ClassNode {
   @XStreamAlias("metrics")
   private Object ignoredNode;
 
+  public ClassNode() {
+  }
+
   /**
    * @return the ignoredNode
    */

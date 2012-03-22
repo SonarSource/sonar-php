@@ -70,6 +70,9 @@ public final class FileNode {
   @XStreamImplicit
   private List<FunctionNode> functions;
 
+  public FileNode() {
+  }
+
   /**
    * Instantiates a new file node.
    * 

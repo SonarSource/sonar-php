@@ -40,6 +40,9 @@ public class PackageNode {
   @XStreamAsAttribute
   private String name;
 
+  public PackageNode() {
+  }
+
   /**
    * Instantiates a new package node.
    * 

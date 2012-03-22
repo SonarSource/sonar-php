@@ -84,6 +84,9 @@ public final class TestSuite {
   @XStreamImplicit(itemFieldName = "testcase")
   private List<TestCase> testCases;
 
+  public TestSuite() {
+  }
+
   /**
    * Instantiates a new test suite.
    * 

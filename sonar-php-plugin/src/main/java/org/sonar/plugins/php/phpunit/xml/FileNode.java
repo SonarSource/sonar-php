@@ -44,6 +44,9 @@ public class FileNode {
   @XStreamAlias("metrics")
   private MetricsNode metrics;
 
+  public FileNode() {
+  }
+
   /**
    * Instantiates a new file node.
    * 

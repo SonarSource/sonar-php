@@ -44,6 +44,9 @@ public class RulesetNode {
   @XStreamImplicit(itemFieldName = "rule")
   private List<RuleNode> rules;
 
+  public RulesetNode() {
+  }
+
   /**
    * Instantiates a new ruleset.
    * 

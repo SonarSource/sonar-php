@@ -48,6 +48,9 @@ public final class FunctionNode {
   @XStreamAlias("ccn")
   private double complexity;
 
+  public FunctionNode() {
+  }
+
   /**
    * Instantiates a new class node.
    * 

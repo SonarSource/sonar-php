@@ -34,6 +34,9 @@ public class PackageNode {
   @XStreamImplicit
   private List<FileNode> files;
 
+  public PackageNode() {
+  }
+
   /**
    * Default constructor with a list of classes.
    * 

@@ -35,6 +35,9 @@ public final class TestSuites {
   @XStreamImplicit(itemFieldName = "testsuite")
   private List<TestSuite> testSuites;
 
+  public TestSuites() {
+  }
+
   /**
    * Gets the test suites.
    * 

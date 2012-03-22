@@ -178,6 +178,9 @@ public class RuleNode implements Comparable<String> {
   @XStreamAlias("properties")
   private PropertiesNode properties;
 
+  public RuleNode() {
+  }
+
   /**
    * Instantiates a new rule.
    * 

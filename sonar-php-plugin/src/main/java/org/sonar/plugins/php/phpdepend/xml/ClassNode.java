@@ -71,6 +71,9 @@ public final class ClassNode {
   @XStreamImplicit
   private List<MethodNode> methodes;
 
+  public ClassNode() {
+  }
+
   /**
    * Instantiates a new class node.
    * 

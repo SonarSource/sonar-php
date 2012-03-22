@@ -33,6 +33,9 @@ public final class MethodNode {
   @XStreamAlias("ccn")
   private double complexity;
 
+  public MethodNode() {
+  }
+
   /**
    * Instantiates a new method node.
    * 

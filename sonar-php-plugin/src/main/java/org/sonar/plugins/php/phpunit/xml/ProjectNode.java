@@ -49,6 +49,9 @@ public class ProjectNode {
   @XStreamAlias("metrics")
   private MetricsNode metrics;
 
+  public ProjectNode() {
+  }
+
   /**
    * Gets the metrics.
    * 

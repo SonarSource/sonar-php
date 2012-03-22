@@ -40,6 +40,9 @@ public class PropertyNode {
   @XStreamAsAttribute
   private String description;
 
+  public PropertyNode() {
+  }
+
   /**
    * Instantiates a new property.
    * 
