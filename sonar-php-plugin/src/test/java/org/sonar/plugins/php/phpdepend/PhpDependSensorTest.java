@@ -19,24 +19,25 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.Rule;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
+import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 public class PhpDependSensorTest {
+
+  @Rule
+  public ExpectedException exception = ExpectedException.none();
 
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
@@ -103,10 +104,30 @@ public class PhpDependSensorTest {
     sensor.analyse(project, context);
   }
 
-  protected PhpDependSensor createSensor(Project project, PhpDependExecutor executor) {
-    PhpDependResultsParser parser = mock(PhpDependResultsParser.class);
-    PhpDependSensor sensor = new PhpDependSensor(new PhpDependConfiguration(project), executor, parser);
-    return sensor;
+  @Test
+  public void testAnalyseSummaryXmlFile() {
+    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    SensorContext context = mock(SensorContext.class);
+    PhpDependExecutor executor = mock(PhpDependExecutor.class);
+    PhpDependSummaryReportParser parser = new PhpDependSummaryReportParser(project, context);
+    PhpDependSensor sensor = createSensor(project, executor, parser);
+    exception.expect(SonarException.class);
+    exception.expectMessage("Php Depend summary-xml report parser is not ready yet. Please switch to phpunit-xml for now.");
+    sensor.analyse(project, context);
+
+    verify(executor, times(1)).execute();
   }
 
+  protected PhpDependSensor createSensor(Project project, PhpDependExecutor executor) {
+    PhpDependPhpUnitReportParser parser = mock(PhpDependPhpUnitReportParser.class);
+    return createSensor(project, executor, parser);
+  }
+
+  protected PhpDependSensor createSensor(Project project, PhpDependExecutor executor, PhpDependResultsParser parser) {
+    PhpDependConfiguration conf = new PhpDependConfiguration(project);
+    PhpDependParserSelector parserSelector = mock(PhpDependParserSelector.class);
+    when(parserSelector.select(conf)).thenReturn(parser);
+    PhpDependSensor sensor = new PhpDependSensor(conf, executor, parserSelector);
+    return sensor;
+  }
 }

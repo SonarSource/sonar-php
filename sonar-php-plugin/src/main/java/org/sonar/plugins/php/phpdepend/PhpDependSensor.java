@@ -19,16 +19,16 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import static org.sonar.plugins.php.api.Php.PHP;
-
-import java.io.File;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
+
+import java.io.File;
+
+import static org.sonar.plugins.php.api.Php.PHP;
 
 /**
  * This class is in charge of knowing wether or not it has to be launched depending on a given project. In case it has to be launched, the
@@ -43,14 +43,15 @@ public class PhpDependSensor implements Sensor {
   private PhpDependResultsParser parser;
 
   /**
+   * @param config
    * @param executor
-   * @param parser
+   * @param parserSelector
    */
-  public PhpDependSensor(PhpDependConfiguration config, PhpDependExecutor executor, PhpDependResultsParser parser) {
+  public PhpDependSensor(PhpDependConfiguration config, PhpDependExecutor executor, PhpDependParserSelector parserSelector) {
     super();
     this.configuration = config;
     this.executor = executor;
-    this.parser = parser;
+    this.parser = parserSelector.select(config);
   }
 
   /**

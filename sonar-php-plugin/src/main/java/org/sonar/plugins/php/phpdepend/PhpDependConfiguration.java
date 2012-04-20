@@ -21,6 +21,7 @@ package org.sonar.plugins.php.phpdepend;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.resources.Project;
+import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
@@ -32,7 +33,6 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   public static final String PDEPEND_COMMAND_LINE = "pdepend";
 
   // -- PHPDepend tool options ---
-  protected static final String PDEPEND_OPT = "--phpunit-xml";
   public static final String PDEPEND_SUFFIXES_OPT = "--suffix";
   public static final String PDEPEND_WITHOUT_ANNOTATION_OPTION = "--without-annotations";
   public static final String PDEPEND_BAD_DOCUMENTATION_OPTION = "--bad-documentation";
@@ -44,8 +44,13 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   public static final String PDEPEND_ANALYZE_ONLY_KEY = "sonar.phpDepend.analyzeOnly";
   public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpDepend.reportFileRelativePath";
   public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
+  public static final String PDEPEND_REPORT_TYPE = "sonar.phpDepend.reportType";
+  public static final String PDEPEND_REPORT_TYPE_DEFVALUE = "phpunit-xml";
+  public static final String PDEPEND_REPORT_TYPE_PHPUNIT = "phpunit-xml";
+  public static final String PDEPEND_REPORT_TYPE_SUMMARY = "summary-xml";
   public static final String PDEPEND_REPORT_FILE_NAME_KEY = "sonar.phpDepend.reportFileName";
   public static final String PDEPEND_REPORT_FILE_NAME_DEFVALUE = "pdepend.xml";
+
   public static final String PDEPEND_WITHOUT_ANNOTATION_KEY = "sonar.phpDepend.withoutAnnotations";
   public static final String PDEPEND_WITHOUT_ANNOTATION_DEFVALUE = "false";
   public static final String PDEPEND_BAD_DOCUMENTATION_KEY = "sonar.phpDepend.badDocumentation";
@@ -70,7 +75,15 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    * @return the report filecommand option
    */
   public String getReportFileCommandOption() {
-    return PDEPEND_OPT + "=" + getReportFile().getAbsolutePath();
+    String reportType = getProject().getConfiguration().getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE);
+    String outputOption;
+    if (reportType.equals(PDEPEND_REPORT_TYPE_PHPUNIT) || reportType.equals(PDEPEND_REPORT_TYPE_SUMMARY)) {
+      outputOption = "--" + reportType;
+    } else {
+      throw new SonarException("Invalid PHP Depend report type: " + reportType + ". Supported types: phpunit-xml, summary-xml");
+    }
+
+    return outputOption + "=" + getReportFile().getAbsolutePath();
   }
 
   /**

@@ -19,17 +19,6 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import static org.mockito.Matchers.anyDouble;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
@@ -44,10 +33,18 @@ import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
+
 /**
- * The Class PhpDependResultsParserTest.
+ * The Class PhpDependPhpUnitReportParserTest.
  */
-public class PhpDependResultsParserTest {
+public class PhpDependPhpUnitReportParserTest {
 
   /** The context. */
   private SensorContext context;
@@ -87,7 +84,7 @@ public class PhpDependResultsParserTest {
 
       Set<Metric> metrics = new HashSet<Metric>();
       metrics.add(metric);
-      PhpDependResultsParser parser = new PhpDependResultsParser(project, context);
+      PhpDependPhpUnitReportParser parser = new PhpDependPhpUnitReportParser(project, context);
 
       Configuration configuration = mock(Configuration.class);
       // new Php();
@@ -113,14 +110,14 @@ public class PhpDependResultsParserTest {
   @Test(expected = SonarException.class)
   public void shouldThrowAnExceptionWhenReportNotFound() {
     project = mock(Project.class);
-    PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
+    PhpDependPhpUnitReportParser parser = new PhpDependPhpUnitReportParser(project, null);
     parser.parse(new java.io.File("path/to/nowhere"));
   }
 
   @Test(expected = SonarException.class)
   public void shouldFailIfReportInvalid() {
     project = mock(Project.class);
-    PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
+    PhpDependPhpUnitReportParser parser = new PhpDependPhpUnitReportParser(project, null);
     parser.parse(TestUtils.getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-invalid.xml"));
   }
 
@@ -130,7 +127,7 @@ public class PhpDependResultsParserTest {
   @Test
   public void shouldNotStopIfFilenameEmpty() {
     project = mock(Project.class);
-    PhpDependResultsParser parser = new PhpDependResultsParser(project, null);
+    PhpDependPhpUnitReportParser parser = new PhpDependPhpUnitReportParser(project, null);
     parser.parse(new java.io.File(getClass().getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-with-empty-filename.xml")
         .getFile()));
   }

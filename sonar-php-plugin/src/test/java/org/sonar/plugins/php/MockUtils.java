@@ -22,21 +22,18 @@
  */
 package org.sonar.plugins.php;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
-
-import java.io.File;
-import java.util.Arrays;
-
 import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.api.Php;
+
+import java.io.File;
+import java.util.Arrays;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.*;
 
 /**
  * @author akbenaissi
@@ -79,10 +76,22 @@ public class MockUtils {
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/Sources/test")));
     when(fs.getBuildDir()).thenReturn(new File("C:/projets/PHP/Monkey/target"));
     when(c.getString(PDEPEND_REPORT_FILE_NAME_KEY, PDEPEND_REPORT_FILE_NAME_DEFVALUE)).thenReturn(PDEPEND_REPORT_FILE_NAME_DEFVALUE);
+    when(c.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(PDEPEND_REPORT_TYPE_DEFVALUE);
     when(c.getString(PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
         PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
     when(project.getConfiguration()).thenReturn(c);
     return project;
   }
 
+  public static Project getMockProject(String sourceDir, Configuration c) {
+    Project project = mock(Project.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File(sourceDir)));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/Sources/test")));
+    when(fs.getBuildDir()).thenReturn(new File("C:/projets/PHP/Monkey/target"));
+    return project;
+  }
 }
