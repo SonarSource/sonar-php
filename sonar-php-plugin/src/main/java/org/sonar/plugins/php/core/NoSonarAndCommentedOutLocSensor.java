@@ -24,6 +24,7 @@ import static org.sonar.plugins.php.api.Php.PHP;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -91,13 +92,22 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
 
   protected static Source analyseSourceCode(File file) {
     Source result = null;
+    FileReader reader = null;
     try {
-      result = new Source(new FileReader(file), new CodeRecognizer(CODE_RECOGNIZER_SENSITIVITY, new PhpLanguageFootprint()));
+      reader = new FileReader(file);
+      result = new Source(reader, new CodeRecognizer(CODE_RECOGNIZER_SENSITIVITY, new PhpLanguageFootprint()));
     } catch (FileNotFoundException e) {
       throw new SonarException("Unable to open file '" + file.getAbsolutePath() + "'", e);
     } catch (RuntimeException rEx) {
-      LOG.error("error while parsing file '" + file.getAbsolutePath() + "'", rEx);
+      LOG.error("Error while parsing file '" + file.getAbsolutePath() + "'", rEx);
+    } finally {
+      try {
+        reader.close();
+      } catch (IOException IoEx) {
+        LOG.error("Error while closing file '" + file.getAbsolutePath() + "'", IoEx);
+      }
     }
+    
     return result;
   }
 
