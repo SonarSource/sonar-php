@@ -245,7 +245,7 @@ class Foo {
   </rule>
 
   <rule key="Design Rules/EvalExpression" priority="MAJOR">
-    <name><![CDATA[An aval-expression is used]]></name>
+    <name><![CDATA[An eval-expression is used]]></name>
     <configKey><![CDATA[rulesets/design.xml/EvalExpression]]></configKey>
     <category name="Security"/>
     <description><![CDATA[<p>An eval-expression is untestable, a security risk and bad practice. Therefore it should be avoided. Consider to replace the eval-expression with regular code.</p>
