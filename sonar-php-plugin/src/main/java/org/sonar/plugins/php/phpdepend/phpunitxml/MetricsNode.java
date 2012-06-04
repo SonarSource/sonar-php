@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.phpdepend.xml;
+package org.sonar.plugins.php.phpdepend.phpunitxml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
- * The MetricsNode class represent a phpdepend metrics node. It's used by XStream to marschall or unmarshall xml files.
+ * The MetricsNode class represent a phpdepend metrics node. It's used by XStream to marschall or unmarshall phpunitxml files.
  */
 @XStreamAlias("metrics")
 public final class MetricsNode {

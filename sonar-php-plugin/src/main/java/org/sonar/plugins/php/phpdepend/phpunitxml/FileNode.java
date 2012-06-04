@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.phpdepend.xml;
+package org.sonar.plugins.php.phpdepend.phpunitxml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
- * The FileNode class represent a phpdepend file node. It's used by XStream to marschall or unmarshall xml files.
+ * The FileNode class represent a phpdepend file node. It's used by XStream to marschall or unmarshall phpunitxml files.
  */
 @XStreamAlias("file")
 public final class FileNode {

@@ -21,13 +21,12 @@ package org.sonar.plugins.php.phpdepend;
 
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.Rule;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
@@ -102,20 +101,6 @@ public class PhpDependSensorTest {
     PhpDependSensor sensor = createSensor(project, executor);
     SensorContext context = mock(SensorContext.class);
     sensor.analyse(project, context);
-  }
-
-  @Test
-  public void testAnalyseSummaryXmlFile() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
-    SensorContext context = mock(SensorContext.class);
-    PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSummaryReportParser parser = new PhpDependSummaryReportParser(project, context);
-    PhpDependSensor sensor = createSensor(project, executor, parser);
-    exception.expect(SonarException.class);
-    exception.expectMessage("Php Depend summary-xml report parser is not ready yet. Please switch to phpunit-xml for now.");
-    sensor.analyse(project, context);
-
-    verify(executor, times(1)).execute();
   }
 
   protected PhpDependSensor createSensor(Project project, PhpDependExecutor executor) {

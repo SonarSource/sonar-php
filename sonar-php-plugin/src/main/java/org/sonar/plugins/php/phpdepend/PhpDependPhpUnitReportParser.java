@@ -29,7 +29,7 @@ import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ResourceUtils;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.phpdepend.xml.*;
+import org.sonar.plugins.php.phpdepend.phpunitxml.*;
 import org.sonar.api.batch.SensorContext;
 
 import java.io.File;
@@ -75,7 +75,7 @@ public class PhpDependPhpUnitReportParser extends PhpDependResultsParser {
   protected void analyzeFileNode(FileNode fileNode) {
     String fileName = fileNode.getFileName();
     if (!StringUtils.isEmpty(fileName)) {
-      org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.fromIOFile(new File(fileName), project);
+      org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.fromIOFile(new File(fileName), getProject());
       if (sonarFile != null && !ResourceUtils.isUnitTestClass(sonarFile)) {
         saveMeasures(sonarFile, fileNode);
       }
@@ -85,27 +85,31 @@ public class PhpDependPhpUnitReportParser extends PhpDependResultsParser {
   protected void saveMeasures(org.sonar.api.resources.File sonarFile, FileNode fileNode) {
     saveSimpleMeasures(sonarFile, fileNode);
 
-    RangeDistributionBuilder classComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION,
-        CLASSES_DISTRIB_BOTTOM_LIMITS);
-    RangeDistributionBuilder methodComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION,
-        FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
+    RangeDistributionBuilder classComplexityDistribution = new RangeDistributionBuilder(
+        CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION,
+        CLASSES_DISTRIB_BOTTOM_LIMITS
+    );
+    RangeDistributionBuilder methodComplexityDistribution = new RangeDistributionBuilder(
+        CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION,
+        FUNCTIONS_DISTRIB_BOTTOM_LIMITS
+    );
 
-    classComplexity = 0.0;
-    numberOfMethods = 0;
+    setClassComplexity(0.0);
+    setNumberOfMethods(0);
     analyseClasses(sonarFile, fileNode, classComplexityDistribution, methodComplexityDistribution);
     analyseFunctions(fileNode, methodComplexityDistribution);
 
-    context.saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, (double) numberOfMethods);
-    context.saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, classComplexity);
-    context.saveMeasure(sonarFile, classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
-    context.saveMeasure(sonarFile, methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+    getContext().saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, (double) getNumberOfMethods());
+    getContext().saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, getClassComplexity());
+    getContext().saveMeasure(sonarFile, classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+    getContext().saveMeasure(sonarFile, methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
   }
 
   protected void analyseFunctions(FileNode fileNode, RangeDistributionBuilder methodComplexityDistribution) {
     if (fileNode.getFunctions() != null) {
       for (FunctionNode funcNode : fileNode.getFunctions()) {
-        numberOfMethods += 1;
-        classComplexity += funcNode.getComplexity();
+        increaseNumberOfMethods();
+        increaseClassComplexity(funcNode.getComplexity());
         methodComplexityDistribution.add(funcNode.getComplexity());
       }
     }
@@ -118,8 +122,8 @@ public class PhpDependPhpUnitReportParser extends PhpDependResultsParser {
       for (ClassNode classNode : fileNode.getClasses()) {
         if (firstClass) {
           // we save the DIT and NumberOfChildren only for the first class, as usually there will be only 1 class per file
-          context.saveMeasure(sonarFile, CoreMetrics.DEPTH_IN_TREE, classNode.getDepthInTreeNumber());
-          context.saveMeasure(sonarFile, CoreMetrics.NUMBER_OF_CHILDREN, classNode.getNumberOfChildrenClassesNumber());
+          getContext().saveMeasure(sonarFile, CoreMetrics.DEPTH_IN_TREE, classNode.getDepthInTreeNumber());
+          getContext().saveMeasure(sonarFile, CoreMetrics.NUMBER_OF_CHILDREN, classNode.getNumberOfChildrenClassesNumber());
           firstClass = false;
         }
 
@@ -128,24 +132,24 @@ public class PhpDependPhpUnitReportParser extends PhpDependResultsParser {
         List<MethodNode> methodes = classNode.getMethodes();
         if (methodes != null && !methodes.isEmpty()) {
           for (MethodNode methodNode : methodes) {
-            numberOfMethods += 1;
+            increaseNumberOfMethods();
             innerClassComplexity += methodNode.getComplexity();
             methodComplexityDistribution.add(methodNode.getComplexity());
           }
         }
 
         classComplexityDistribution.add(innerClassComplexity);
-        classComplexity += innerClassComplexity;
+        increaseClassComplexity(innerClassComplexity);
       }
     }
   }
 
   protected void saveSimpleMeasures(org.sonar.api.resources.File sonarFile, FileNode fileNode) {
-    context.saveMeasure(sonarFile, CoreMetrics.FILES, 1.0);
-    context.saveMeasure(sonarFile, CoreMetrics.CLASSES, fileNode.getClassNumber());
-    context.saveMeasure(sonarFile, CoreMetrics.LINES, fileNode.getLinesNumber());
-    context.saveMeasure(sonarFile, CoreMetrics.NCLOC, fileNode.getCodeLinesNumber());
-    context.saveMeasure(sonarFile, CoreMetrics.COMMENT_LINES, fileNode.getCommentLineNumber());
+    getContext().saveMeasure(sonarFile, CoreMetrics.FILES, 1.0);
+    getContext().saveMeasure(sonarFile, CoreMetrics.CLASSES, fileNode.getClassNumber());
+    getContext().saveMeasure(sonarFile, CoreMetrics.LINES, fileNode.getLinesNumber());
+    getContext().saveMeasure(sonarFile, CoreMetrics.NCLOC, fileNode.getCodeLinesNumber());
+    getContext().saveMeasure(sonarFile, CoreMetrics.COMMENT_LINES, fileNode.getCommentLineNumber());
   }
 
   /**

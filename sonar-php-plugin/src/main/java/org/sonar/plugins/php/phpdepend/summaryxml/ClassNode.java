@@ -17,52 +17,36 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.phpdepend.xml;
+package org.sonar.plugins.php.phpdepend.summaryxml;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.util.List;
 
 /**
- * The MethoNode class represent a phpdepend function node. It's used by XStream to marschall or unmarshall xml files.
+ * The FileNode class represent a Php Depend summary-xml files node.
+ * It's used by XStream to marschall or unmarshall xml files.
  */
-@XStreamAlias("method")
-public final class MethodNode {
+@XStreamAlias("class")
+public class ClassNode {
+  @XStreamAlias("file")
+  private FileNode file;
 
-  /** The complexity. */
-  @XStreamAsAttribute
-  @XStreamAlias("ccn")
-  private double complexity;
+  @XStreamImplicit
+  private List<MethodNode> methods;
 
-  public MethodNode() {
+  /**
+   * Returns MethodNodes in the current ClassNode
+   */
+  public List<MethodNode> getMethods() {
+    return methods;
   }
 
   /**
-   * Instantiates a new method node.
-   * 
-   * @param complexity
-   *          the complexity
+   * Returns FileNode for the current ClassNode
    */
-  public MethodNode(final double complexity) {
-    super();
-    this.complexity = complexity;
-  }
-
-  /**
-   * Gets the complexity.
-   * 
-   * @return the complexity
-   */
-  public double getComplexity() {
-    return complexity;
-  }
-
-  /**
-   * Sets the complexity.
-   * 
-   * @param complexity
-   *          the new complexity
-   */
-  public void setComplexity(final double complexity) {
-    this.complexity = complexity;
+  public FileNode getFile() {
+    return file;
   }
 }

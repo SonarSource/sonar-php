@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metrics generated="2012-04-27T22:13:31" pdepend="0.10.6" ahh="0.44444444444444" andc="0" calls="135" ccn="253" ccn2="263" cloc="1092" clsa="0" clsc="10" eloc="1242" fanout="8" leafs="8" lloc="737" loc="2644" maxDIT="2" ncloc="1552" noc="10" nof="1" noi="0" nom="105" nop="3" roots="2">
+  <files>
+    <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math3.php" cloc="74" eloc="126" lloc="72" loc="227" ncloc="153"/>
+    <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Bar/Math4.php" cloc="74" eloc="112" lloc="68" loc="211" ncloc="137"/>
+    <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Foo/Math5.php" cloc="74" eloc="112" lloc="68" loc="211" ncloc="137"/>
+    <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math.php" cloc="74" eloc="116" lloc="70" loc="215" ncloc="141"/>
+    <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math2.php" cloc="74" eloc="112" lloc="68" loc="211" ncloc="137"/>
+    <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests/AllTests.php" cloc="77" eloc="44" lloc="22" loc="135" ncloc="58"/>
+    <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests/AllTests2.php" cloc="91" eloc="65" lloc="29" loc="172" ncloc="81"/>
+    <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Mail.php" cloc="554" eloc="555" lloc="340" loc="1262" ncloc="708"/>
+  </files>
+  <package name="+global" cr="0.405" noc="2" nof="0" noi="0" nom="2" rcr="0.15">
+    <class name="InnerClassFoo" ca="0" cbo="0" ce="0" cis="1" cloc="0" cr="0.15" csz="1" dit="0" eloc="3" impl="0" lloc="1" loc="7" ncloc="7" noam="0" nocc="0" nom="1" noom="0" npm="1" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="1" wmci="1" wmcnp="1">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math3.php"/>
+      <method name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+    </class>
+    <class name="InnerClassBar" ca="0" cbo="0" ce="0" cis="1" cloc="0" cr="0.15" csz="1" dit="0" eloc="3" impl="0" lloc="1" loc="7" ncloc="7" noam="0" nocc="0" nom="1" noom="0" npm="1" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="1" wmci="1" wmcnp="1">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math3.php"/>
+      <method name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+    </class>
+  </package>
+  <package name="Example" cr="0.15" noc="7" nof="1" noi="0" nom="40" rcr="0.235">
+    <class name="PhpUnderControl_Example_Math" ca="2" cbo="0" ce="0" cis="4" cloc="22" cr="0.15" csz="4" dit="0" eloc="104" impl="0" lloc="64" loc="156" ncloc="134" noam="0" nocc="0" nom="4" noom="0" npm="4" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="24" wmci="24" wmcnp="24">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Bar/Math4.php"/>
+      <method name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="sub" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="div" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+      <method name="complex" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+    </class>
+    <class name="PhpUnderControl_Example2_Math" ca="0" cbo="0" ce="0" cis="4" cloc="22" cr="0.15" csz="4" dit="0" eloc="104" impl="0" lloc="64" loc="156" ncloc="134" noam="0" nocc="0" nom="4" noom="0" npm="4" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="24" wmci="24" wmcnp="24">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Foo/Math5.php"/>
+      <method name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="sub" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="div" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+      <method name="complex" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+    </class>
+    <class name="PhpUnderControl_Example_Math" ca="0" cbo="0" ce="0" cis="4" cloc="22" cr="0.15" csz="4" dit="0" eloc="104" impl="0" lloc="64" loc="156" ncloc="134" noam="0" nocc="0" nom="4" noom="0" npm="4" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="24" wmci="24" wmcnp="24">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math.php"/>
+      <method name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="sub" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="div" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+      <method name="complex" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+    </class>
+    <class name="PhpUnderControl_Example2_Math" ca="0" cbo="0" ce="0" cis="4" cloc="22" cr="0.15" csz="4" dit="0" eloc="104" impl="0" lloc="64" loc="156" ncloc="134" noam="0" nocc="0" nom="4" noom="0" npm="4" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="24" wmci="24" wmcnp="24">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math2.php"/>
+      <method name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="sub" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="div" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+      <method name="complex" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+    </class>
+    <class name="PhpUnderControl_Example_Math" ca="0" cbo="0" ce="0" cis="4" cloc="22" cr="0.15" csz="4" dit="0" eloc="104" impl="0" lloc="64" loc="156" ncloc="134" noam="0" nocc="0" nom="4" noom="0" npm="4" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="24" wmci="24" wmcnp="24">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math3.php"/>
+      <method name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="sub" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="div" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+      <method name="complex" ccn="11" ccn2="11" cloc="0" eloc="49" lloc="31" loc="60" ncloc="60" npath="3600"/>
+    </class>
+    <class name="PhpUnderControl_Example_MathTest" ca="0" cbo="1" ce="1" cis="9" cloc="32" cr="0.15" csz="10" dit="2" eloc="28" impl="0" lloc="10" loc="83" ncloc="51" noam="9" nocc="0" nom="9" noom="0" npm="9" rcr="0.21375" vars="1" varsi="1" varsnp="0" wmc="9" wmci="9" wmcnp="9">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests/AllTests.php"/>
+      <method name="setUp" ccn="1" ccn2="1" cloc="0" eloc="4" lloc="2" loc="6" ncloc="6" npath="1"/>
+      <method name="testAddSuccess" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testSubSuccess" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testSubFail" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testDataProviderOneWillFail" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testDataProviderAllWillFail" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testFail" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testMarkSkip" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testMarkIncomplete" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+    </class>
+    <class name="PhpUnderControl_Example_MathTest" ca="0" cbo="1" ce="1" cis="11" cloc="46" cr="0.15" csz="12" dit="2" eloc="47" impl="0" lloc="15" loc="120" ncloc="74" noam="11" nocc="0" nom="11" noom="0" npm="11" rcr="0.21375" vars="1" varsi="1" varsnp="0" wmc="11" wmci="11" wmcnp="11">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests/AllTests2.php"/>
+      <method name="setUp" ccn="1" ccn2="1" cloc="0" eloc="4" lloc="2" loc="6" ncloc="6" npath="1"/>
+      <method name="testAddSuccess" ccn="1" ccn2="1" cloc="0" eloc="4" lloc="2" loc="5" ncloc="5" npath="1"/>
+      <method name="testSubSuccess" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testSubFail" ccn="1" ccn2="1" cloc="0" eloc="4" lloc="2" loc="5" ncloc="5" npath="1"/>
+      <method name="testDataProviderOneWillFail" ccn="1" ccn2="1" cloc="0" eloc="4" lloc="2" loc="5" ncloc="5" npath="1"/>
+      <method name="testDataProviderAllWillFail" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testFail" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testMarkSkip" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="testMarkIncomplete" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="dataProviderOne" ccn="1" ccn2="1" cloc="0" eloc="8" lloc="1" loc="9" ncloc="9" npath="1"/>
+      <method name="dataProviderTwo" ccn="1" ccn2="1" cloc="0" eloc="8" lloc="1" loc="9" ncloc="9" npath="1"/>
+    </class>
+    <function name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math.php"/>
+    </function>
+  </package>
+  <package name="Zend_Mail" cr="0.15" noc="1" nof="0" noi="0" nom="63" rcr="0.1925">
+    <class name="Zend_Mail" ca="0" cbo="6" ce="6" cis="56" cloc="515" cr="0.15" csz="82" dit="2" eloc="464" impl="0" lloc="254" loc="1210" ncloc="695" noam="63" nocc="0" nom="63" noom="0" npm="55" rcr="0.2775" vars="19" varsi="19" varsnp="1" wmc="120" wmci="120" wmcnp="101">
+      <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Mail.php"/>
+      <method name="setDefaultTransport" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="getDefaultTransport" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="clearDefaultTransport" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="__construct" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="getCharset" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="setType" ccn="2" ccn2="2" cloc="3" eloc="13" lloc="6" loc="18" ncloc="15" npath="2"/>
+      <method name="getType" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="setMimeBoundary" ccn="1" ccn2="1" cloc="0" eloc="4" lloc="2" loc="6" ncloc="6" npath="1"/>
+      <method name="getMimeBoundary" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="getEncodingOfHeaders" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="getHeaderEncoding" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="setEncodingOfHeaders" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="setHeaderEncoding" ccn="2" ccn2="2" cloc="3" eloc="12" lloc="6" loc="17" ncloc="14" npath="2"/>
+      <method name="setBodyText" ccn="2" ccn2="2" cloc="0" eloc="12" lloc="9" loc="16" ncloc="16" npath="2"/>
+      <method name="getBodyText" ccn="2" ccn2="3" cloc="0" eloc="7" lloc="4" loc="9" ncloc="9" npath="3"/>
+      <method name="setBodyHtml" ccn="2" ccn2="2" cloc="0" eloc="12" lloc="9" loc="16" ncloc="16" npath="2"/>
+      <method name="getBodyHtml" ccn="2" ccn2="3" cloc="0" eloc="7" lloc="4" loc="9" ncloc="9" npath="3"/>
+      <method name="addAttachment" ccn="1" ccn2="1" cloc="0" eloc="5" lloc="3" loc="7" ncloc="7" npath="1"/>
+      <method name="createAttachment" ccn="1" ccn2="1" cloc="0" eloc="9" lloc="7" loc="17" ncloc="17" npath="1"/>
+      <method name="getPartCount" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="_encodeHeader" ccn="3" ccn2="3" cloc="0" eloc="10" lloc="5" loc="12" ncloc="12" npath="3"/>
+      <method name="_storeHeader" ccn="3" ccn2="3" cloc="0" eloc="10" lloc="5" loc="13" ncloc="13" npath="4"/>
+      <method name="_clearHeader" ccn="2" ccn2="2" cloc="0" eloc="5" lloc="2" loc="6" ncloc="6" npath="2"/>
+      <method name="_addRecipientAndHeader" ccn="1" ccn2="1" cloc="1" eloc="6" lloc="4" loc="8" ncloc="7" npath="1"/>
+      <method name="addTo" ccn="4" ccn2="4" cloc="0" eloc="10" lloc="6" loc="13" ncloc="13" npath="12"/>
+      <method name="addCc" ccn="4" ccn2="4" cloc="0" eloc="9" lloc="5" loc="12" ncloc="12" npath="12"/>
+      <method name="addBcc" ccn="3" ccn2="3" cloc="0" eloc="9" lloc="5" loc="12" ncloc="12" npath="4"/>
+      <method name="getRecipients" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="clearRecipients" ccn="1" ccn2="1" cloc="0" eloc="8" lloc="6" loc="11" ncloc="11" npath="1"/>
+      <method name="setFrom" ccn="2" ccn2="2" cloc="3" eloc="11" lloc="8" loc="17" ncloc="14" npath="2"/>
+      <method name="setReplyTo" ccn="2" ccn2="2" cloc="3" eloc="11" lloc="8" loc="17" ncloc="14" npath="2"/>
+      <method name="getFrom" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="getReplyTo" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="clearFrom" ccn="1" ccn2="1" cloc="0" eloc="5" lloc="3" loc="7" ncloc="7" npath="1"/>
+      <method name="clearReplyTo" ccn="1" ccn2="1" cloc="0" eloc="5" lloc="3" loc="7" ncloc="7" npath="1"/>
+      <method name="setDefaultFrom" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="getDefaultFrom" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="clearDefaultFrom" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="setFromToDefaultFrom" ccn="2" ccn2="2" cloc="0" eloc="10" lloc="6" loc="12" ncloc="12" npath="2"/>
+      <method name="setDefaultReplyTo" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="getDefaultReplyTo" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="clearDefaultReplyTo" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="setReplyToFromDefault" ccn="2" ccn2="2" cloc="0" eloc="10" lloc="6" loc="12" ncloc="12" npath="2"/>
+      <method name="setReturnPath" ccn="2" ccn2="2" cloc="3" eloc="11" lloc="7" loc="15" ncloc="12" npath="2"/>
+      <method name="getReturnPath" ccn="2" ccn2="2" cloc="0" eloc="6" lloc="3" loc="8" ncloc="8" npath="2"/>
+      <method name="clearReturnPath" ccn="1" ccn2="1" cloc="0" eloc="5" lloc="3" loc="7" ncloc="7" npath="1"/>
+      <method name="setSubject" ccn="2" ccn2="2" cloc="3" eloc="11" lloc="7" loc="15" ncloc="12" npath="2"/>
+      <method name="getSubject" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="clearSubject" ccn="1" ccn2="1" cloc="0" eloc="5" lloc="3" loc="7" ncloc="7" npath="1"/>
+      <method name="setDate" ccn="7" ccn2="8" cloc="9" eloc="29" lloc="20" loc="39" ncloc="30" npath="8"/>
+      <method name="getDate" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="clearDate" ccn="1" ccn2="1" cloc="0" eloc="5" lloc="3" loc="7" ncloc="7" npath="1"/>
+      <method name="setMessageId" ccn="4" ccn2="5" cloc="3" eloc="16" lloc="11" loc="22" ncloc="19" npath="8"/>
+      <method name="getMessageId" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="clearMessageId" ccn="1" ccn2="1" cloc="0" eloc="5" lloc="3" loc="7" ncloc="7" npath="1"/>
+      <method name="createMessageId" ccn="5" ccn2="5" cloc="0" eloc="22" lloc="14" loc="28" ncloc="28" npath="12"/>
+      <method name="addHeader" ccn="2" ccn2="2" cloc="3" eloc="14" lloc="8" loc="20" ncloc="17" npath="2"/>
+      <method name="getHeaders" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1"/>
+      <method name="send" ccn="6" ccn2="8" cloc="0" eloc="21" lloc="13" loc="27" ncloc="27" npath="54"/>
+      <method name="_filterEmail" ccn="1" ccn2="1" cloc="0" eloc="11" lloc="2" loc="13" ncloc="13" npath="1"/>
+      <method name="_filterName" ccn="1" ccn2="1" cloc="0" eloc="10" lloc="2" loc="12" ncloc="12" npath="1"/>
+      <method name="_filterOther" ccn="1" ccn2="1" cloc="0" eloc="7" lloc="2" loc="9" ncloc="9" npath="1"/>
+      <method name="_formatAddress" ccn="3" ccn2="7" cloc="0" eloc="14" lloc="7" loc="15" ncloc="15" npath="7"/>
+    </class>
+  </package>
+</metrics>

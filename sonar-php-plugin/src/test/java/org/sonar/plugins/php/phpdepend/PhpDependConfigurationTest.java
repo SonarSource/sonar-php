@@ -19,27 +19,23 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.maven.project.MavenProject;
+import org.junit.Test;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.utils.SonarException;
+
+import java.io.File;
+import java.util.Arrays;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_COMMAND_LINE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
-
-import java.io.File;
-import java.util.Arrays;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.*;
 
 /**
  * The Class PhpDependConfigurationTest.
@@ -178,6 +174,89 @@ public class PhpDependConfigurationTest {
     when(project.getConfiguration()).thenReturn(configuration);
     PhpDependConfiguration config = new PhpDependConfiguration(project);
     assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.summary.xml");
+  }
+
+  @Test
+  public void shouldReturnDefaultReportFileOptionByDefault() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests")));
+    when(fs.getBuildDir()).thenReturn(new File("/Volumes/git/sonar/sonar-php-trunk-git/target"));
+    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
+    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("logs");
+    when(configuration.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(PDEPEND_REPORT_TYPE_DEFVALUE);
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpDependConfiguration config = new PhpDependConfiguration(project);
+
+    String cli = config.getReportFileCommandOption();
+    assertEquals(cli, "--phpunit-xml=/Volumes/git/sonar/sonar-php-trunk-git/target/logs/pdepend.xml");
+  }
+
+  @Test
+  public void shouldReturnPhpUnitReportFileOptionWhenRequested() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests")));
+    when(fs.getBuildDir()).thenReturn(new File("/Volumes/git/sonar/sonar-php-trunk-git/target"));
+    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
+    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("logs");
+    when(configuration.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(PDEPEND_REPORT_TYPE_PHPUNIT);
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpDependConfiguration config = new PhpDependConfiguration(project);
+
+    String cli = config.getReportFileCommandOption();
+    assertEquals(cli, "--phpunit-xml=/Volumes/git/sonar/sonar-php-trunk-git/target/logs/pdepend.xml");
+  }
+
+  @Test
+  public void shouldReturnSummaryReportFileOptionWhenRequested() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests")));
+    when(fs.getBuildDir()).thenReturn(new File("/Volumes/git/sonar/sonar-php-trunk-git/target"));
+    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("summary.xml");
+    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("logs");
+    when(configuration.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(PDEPEND_REPORT_TYPE_SUMMARY);
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpDependConfiguration config = new PhpDependConfiguration(project);
+
+    String cli = config.getReportFileCommandOption();
+    assertEquals(cli, "--summary-xml=/Volumes/git/sonar/sonar-php-trunk-git/target/logs/summary.xml");
+  }
+
+  @Test(expected = SonarException.class)
+  public void shouldThrowExceptionWhenNotSupportedReportFileOptionUsed() {
+    Project project = mock(Project.class);
+    Configuration configuration = mock(Configuration.class);
+    MavenProject mavenProject = mock(MavenProject.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getPom()).thenReturn(mavenProject);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests")));
+    when(fs.getBuildDir()).thenReturn(new File("/Volumes/git/sonar/sonar-php-trunk-git/target"));
+    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("summary.xml");
+    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("logs");
+    when(configuration.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn("not-supported");
+    when(project.getConfiguration()).thenReturn(configuration);
+    PhpDependConfiguration config = new PhpDependConfiguration(project);
+
+    String cli = config.getReportFileCommandOption();
   }
 
   /**

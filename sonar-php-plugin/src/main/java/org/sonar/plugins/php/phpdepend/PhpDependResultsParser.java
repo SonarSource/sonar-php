@@ -37,14 +37,16 @@ public abstract class PhpDependResultsParser implements BatchExtension {
   /**
    * The context.
    */
-  protected SensorContext context;
+  private SensorContext context;
 
   /**
    * The project.
    */
-  protected Project project;
-  protected double classComplexity;
-  protected int numberOfMethods;
+  private Project project;
+
+  private double classComplexity;
+
+  private int numberOfMethods;
 
   /**
    * Instantiates a new php depend results parser.
@@ -91,6 +93,25 @@ public abstract class PhpDependResultsParser implements BatchExtension {
     return numberOfMethods;
   }
 
+  public void increaseClassComplexity() {
+    classComplexity++;
+  }
+
+  public void increaseClassComplexity(double classComplexity) {
+    this.classComplexity = this.classComplexity + classComplexity;
+  }
+
+  public void setClassComplexity(double classComplexity) {
+    this.classComplexity = classComplexity;
+  }
+
+  public void increaseNumberOfMethods() {
+    numberOfMethods++;
+  }
+
+  public void setNumberOfMethods(int numberOfMethods) {
+    this.numberOfMethods = numberOfMethods;
+  }
   /**
    * Parses given Xml report
    *

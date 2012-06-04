@@ -17,53 +17,23 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.phpdepend.xml;
-
-import java.util.List;
+package org.sonar.plugins.php.phpdepend.summaryxml;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
- * The PackegeNode class represent a phpdepend metrics node. It's used by XStream to marschall or unmarshall xml files.
+ * The FileNode class represent a Php Depend summary-xml files node.
+ * It's used by XStream to marschall or unmarshall xml files.
  */
-@XStreamAlias("package")
-public class PackageNode {
-
-  /** The files. */
-  @XStreamImplicit
-  private List<FileNode> files;
-
-  public PackageNode() {
-  }
+@XStreamAlias("function")
+public class FunctionNode {
+  @XStreamAlias("file")
+  private FileNode file;
 
   /**
-   * Default constructor with a list of classes.
-   * 
-   * @param files
+   * Returns FileNode for the current FunctionNode
    */
-  public PackageNode(List<FileNode> files) {
-    super();
-    this.files = files;
+  public FileNode getFile() {
+    return file;
   }
-
-  /**
-   * Gets the files.
-   * 
-   * @return the files
-   */
-  public List<FileNode> getFiles() {
-    return files;
-  }
-
-  /**
-   * Sets the files.
-   * 
-   * @param files
-   *          the new files
-   */
-  public void setFiles(List<FileNode> files) {
-    this.files = files;
-  }
-
 }
