@@ -69,17 +69,17 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/php</developerConnection>
-    <url>http://svn.sonar-plugins.codehaus.org</url>
+    <connection>scm:git:git@github.com:SonarCommunity/sonar-php.git</connection>
+    <developerConnection>scm:git:git@github.com:SonarCommunity/sonar-php.git</developerConnection>
+    <url>https://github.com/SonarCommunity/sonar-php</url>
   </scm>
   <issueManagement>
     <system>JIRA</system>
     <url>http://jira.codehaus.org/browse/SONARPLUGINS/component/13723</url>
   </issueManagement>
   <ciManagement>
-    <system>Bamboo</system>
-    <url>http://bamboo.ci.codehaus.org/browse/SONAR-PHP</url>
+    <system>Cloudbees</system>
+    <url>https://sonarplugins.ci.cloudbees.com/job/php/</url>
   </ciManagement>
 
   <profiles>
