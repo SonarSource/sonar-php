@@ -21,6 +21,8 @@ package org.sonar.plugins.php.codesniffer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.Properties;
+import org.sonar.api.Property;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
@@ -36,12 +38,55 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_DEFVALUE;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_TIMEOUT_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
+import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
 
 /**
  * The Class PhpCodesnifferPluginSensor.
  */
+@Properties({
+  @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = "Disable PHP CodeSniffer", project = true, global = true,
+    description = "If true, PhpCodeSniffer engine will not run and its violations will not be present in Sonar dashboard.",
+    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = "false", name = "Only analyze existing PHP CodeSniffer report files",
+    project = true, global = true,
+    description = "By default, the plugin will launch PHP CodeSniffer and parse the generated result file."
+      + "If this option is set to true, the plugin will only reuse an existing report file.",
+    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PHPCS_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
+    name = "Report file path", project = true, global = true, description = "Relative path of the report file to analyse.",
+    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PHPCS_REPORT_FILE_NAME_KEY, defaultValue = PHPCS_REPORT_FILE_NAME_DEFVALUE, name = "Report file name", project = true,
+    global = true, description = "Name of the report file to analyse.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = PHPCS_STANDARD_ARGUMENT_DEFVALUE,
+    name = "Ruleset (or standard) to run PHP_CodeSniffer with", project = true, global = true,
+    description = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. "
+      + "If no one is specified all standards will be launched", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY, defaultValue = "", name = "Severity modifier", project = true, global = true,
+    description = "Allows to specify a seveity modifier, like '--error-severity=' or '--warning-severity=', "
+      + "used in conjunction with property '" + PHPCS_SEVERITY_KEY + "'.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PHPCS_SEVERITY_KEY, defaultValue = "", name = "Severity level value", project = true, global = true,
+    description = "Specifies what the minimum severity level must be to report a violation in the report.",
+    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PHPCS_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
+    description = "Additionnal parameters that can be passed to PHP CodeSniffer tool.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PHPCS_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
+    description = "Maximum number of minutes that the execution of the tool should take.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER)
+})
 public class PhpCodeSnifferSensor implements Sensor {
+
+  protected static final String CATEGORY_PHP_CODE_SNIFFER = "PHP CodeSniffer";
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpCodeSnifferSensor.class);
 
