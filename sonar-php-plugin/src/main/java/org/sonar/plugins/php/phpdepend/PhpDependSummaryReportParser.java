@@ -97,6 +97,7 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
       return null;
     }
   }
+
   /**
    * Gets the metrics.
    *

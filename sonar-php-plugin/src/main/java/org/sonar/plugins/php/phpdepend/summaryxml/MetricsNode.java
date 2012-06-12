@@ -44,32 +44,32 @@ public final class MetricsNode {
    * Matches metrics in packages with the global file nodes
    */
   public void findMatchingMetrics() {
-      for (PackageNode packageNode : packages) {
-        List<ClassNode> classes = packageNode.getClasses();
-        if (classes != null) {
-          for (ClassNode classNode : classes) {
-            FileNode fileNode = getFileNodeByFileName(classNode.getFile().getFilename());
-            if (fileNode == null) {
-              continue;
-            }
-            fileNode.increaseClassNumber();
-            List<MethodNode> methods = classNode.getMethods();
-            if (methods != null) {
-              fileNode.increaseMethodNumber(methods.size());
-            }
+    for (PackageNode packageNode : packages) {
+      List<ClassNode> classes = packageNode.getClasses();
+      if (classes != null) {
+        for (ClassNode classNode : classes) {
+          FileNode fileNode = getFileNodeByFileName(classNode.getFile().getFilename());
+          if (fileNode == null) {
+            continue;
           }
-        }
-        List<FunctionNode> functions = packageNode.getFunctions();
-        if (functions != null) {
-          for (FunctionNode functionNode : functions) {
-            FileNode fileNode = getFileNodeByFileName(functionNode.getFile().getFilename());
-            if (fileNode == null) {
-              continue;
-            }
-            fileNode.increaseFunctionNumber();
+          fileNode.increaseClassNumber();
+          List<MethodNode> methods = classNode.getMethods();
+          if (methods != null) {
+            fileNode.increaseMethodNumber(methods.size());
           }
         }
       }
+      List<FunctionNode> functions = packageNode.getFunctions();
+      if (functions != null) {
+        for (FunctionNode functionNode : functions) {
+          FileNode fileNode = getFileNodeByFileName(functionNode.getFile().getFilename());
+          if (fileNode == null) {
+            continue;
+          }
+          fileNode.increaseFunctionNumber();
+        }
+      }
+    }
   }
 
   /**

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -29,8 +28,6 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.PhpPlugin;
-import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpConstants;
 
 import java.util.Arrays;
@@ -97,13 +94,15 @@ public class PhpDependSummaryReportParserTest {
 
   @Test(expected = SonarException.class)
   public void shouldThrowAnExceptionWhenReportNotFound() {
-    /*Configuration c = mock(Configuration.class);
-    Project project = getMockProject("/path/to/sources", c);
-    when(c.getString(PDEPEND_REPORT_FILE_NAME_KEY, PDEPEND_REPORT_FILE_NAME_DEFVALUE)).thenReturn(PDEPEND_REPORT_FILE_NAME_DEFVALUE);
-    when(c.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn("summary-xml");
-    when(c.getString(PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
-        PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
-    when(project.getConfiguration()).thenReturn(c);*/
+    /*
+     * Configuration c = mock(Configuration.class);
+     * Project project = getMockProject("/path/to/sources", c);
+     * when(c.getString(PDEPEND_REPORT_FILE_NAME_KEY, PDEPEND_REPORT_FILE_NAME_DEFVALUE)).thenReturn(PDEPEND_REPORT_FILE_NAME_DEFVALUE);
+     * when(c.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn("summary-xml");
+     * when(c.getString(PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
+     * PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
+     * when(project.getConfiguration()).thenReturn(c);
+     */
     Project project = getMockProject();
 
     PhpDependSummaryReportParser parser = new PhpDependSummaryReportParser(project, null);

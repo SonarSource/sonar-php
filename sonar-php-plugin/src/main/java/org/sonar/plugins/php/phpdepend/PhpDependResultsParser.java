@@ -24,6 +24,7 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 
 import java.io.File;
+
 /**
  * Php Depend Result Parser abstraction layer
  *
@@ -112,6 +113,7 @@ public abstract class PhpDependResultsParser implements BatchExtension {
   public void setNumberOfMethods(int numberOfMethods) {
     this.numberOfMethods = numberOfMethods;
   }
+
   /**
    * Parses given Xml report
    *

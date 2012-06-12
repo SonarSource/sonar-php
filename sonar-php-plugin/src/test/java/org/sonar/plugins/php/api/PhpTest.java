@@ -21,8 +21,6 @@ package org.sonar.plugins.php.api;
 
 import org.junit.Test;
 import org.sonar.api.config.Settings;
-import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpConstants;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
