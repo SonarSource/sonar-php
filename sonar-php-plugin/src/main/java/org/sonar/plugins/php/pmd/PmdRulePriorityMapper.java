@@ -19,13 +19,13 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.sonar.api.BatchExtension;
 import org.sonar.api.ServerExtension;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.plugins.php.core.PriorityMapper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class that maps Sonar and PHPMD priority/severity ranges.

@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.api.Php;
 
 import java.io.File;
 import java.util.Arrays;
@@ -35,7 +36,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.*;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_COMMAND_LINE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_PHPUNIT;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_SUMMARY;
 
 /**
  * The Class PhpDependConfigurationTest.
@@ -105,7 +115,7 @@ public class PhpDependConfigurationTest {
     Project project = getMockProject();
     PhpDependConfiguration config = new PhpDependConfiguration(project);
 
-    String suffixesOption = config.getSuffixesCommandOption();
+    String suffixesOption = config.getSuffixesCommandOption(new Php());
     assertThat(suffixesOption).isNotNull();
     assertThat(suffixesOption).contains(",");
   }

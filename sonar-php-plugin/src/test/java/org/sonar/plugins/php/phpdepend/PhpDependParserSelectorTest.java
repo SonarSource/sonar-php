@@ -28,11 +28,11 @@ import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
-import static org.junit.Assert.assertThat;
 
 /**
  * The Class PhpDependParserSelectorTest.

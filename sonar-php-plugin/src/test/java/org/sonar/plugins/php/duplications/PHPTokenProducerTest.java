@@ -19,10 +19,14 @@
  */
 package org.sonar.plugins.php.duplications;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
+import com.google.common.collect.Lists;
+import org.apache.commons.io.IOUtils;
+import org.hamcrest.Matcher;
+import org.junit.Test;
+import org.sonar.plugins.php.duplications.internal.Token;
+import org.sonar.plugins.php.duplications.internal.TokenChunker;
+import org.sonar.plugins.php.duplications.internal.TokenQueue;
+import org.sonar.test.TestUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,15 +37,10 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matcher;
-import org.junit.Test;
-import org.sonar.plugins.php.duplications.internal.Token;
-import org.sonar.plugins.php.duplications.internal.TokenChunker;
-import org.sonar.plugins.php.duplications.internal.TokenQueue;
-import org.sonar.test.TestUtils;
-
-import com.google.common.collect.Lists;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 public class PHPTokenProducerTest {
 

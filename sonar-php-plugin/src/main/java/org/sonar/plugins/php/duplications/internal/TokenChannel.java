@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php.duplications.internal;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.sonar.channel.Channel;
 import org.sonar.channel.CodeBuffer.Cursor;
 import org.sonar.channel.CodeReader;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class TokenChannel extends Channel<TokenQueue> {
 

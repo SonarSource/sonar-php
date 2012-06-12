@@ -19,11 +19,11 @@
  */
 package org.sonar.plugins.php.pmd.xml;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class PmdRule implements Comparable<String> {
 

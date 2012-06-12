@@ -19,16 +19,6 @@
  */
 package org.sonar.plugins.php.core;
 
-import static org.sonar.plugins.php.api.Php.PHP;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Phase;
@@ -40,7 +30,7 @@ import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.recognizer.CamelCaseDetector;
 import org.sonar.squid.recognizer.CodeRecognizer;
@@ -50,6 +40,14 @@ import org.sonar.squid.recognizer.EndWithDetector;
 import org.sonar.squid.recognizer.KeywordsDetector;
 import org.sonar.squid.recognizer.LanguageFootprint;
 import org.sonar.squid.text.Source;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Phase(name = Phase.Name.PRE)
 // The NoSonarFilter must be fed before launching the violation engines
@@ -76,7 +74,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    */
   public void analyse(Project project, SensorContext context) {
     ProjectFileSystem fileSystem = project.getFileSystem();
-    List<InputFile> sourceFiles = fileSystem.mainFiles(Php.KEY);
+    List<InputFile> sourceFiles = fileSystem.mainFiles(PhpConstants.LANGUAGE_KEY);
     for (InputFile file : sourceFiles) {
       org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file.getFile(), project);
       if (phpFile != null) {
@@ -107,7 +105,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
         LOG.error("Error while closing file '" + file.getAbsolutePath() + "'", IoEx);
       }
     }
-    
+
     return result;
   }
 
@@ -115,7 +113,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return PHP.equals(project.getLanguage());
+    return PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey());
   }
 
   /**
@@ -138,7 +136,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     public PhpLanguageFootprint() {
       detectors.add(new EndWithDetector(END_WITH_DETECTOR_PROBABILITY, '}', ';', '{'));
       detectors.add(new KeywordsDetector(BOOLEAN_OPERATOR_PROBABILITY, "||", "&&"));
-      detectors.add(new KeywordsDetector(PHP_KEYWORDS_PROBABILITY, Php.PHP_KEYWORDS_ARRAY));
+      detectors.add(new KeywordsDetector(PHP_KEYWORDS_PROBABILITY, PhpConstants.PHP_KEYWORDS_ARRAY));
       detectors.add(new ContainsDetector(CONDITIONAL_PROBABILITY, "++", "for(", "if(", "while(", "catch(", "switch(", "try{", "else{"));
       detectors.add(new CamelCaseDetector(CAMEL_CASE_PROBABILITY));
     }

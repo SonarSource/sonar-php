@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import java.util.List;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
+import java.util.List;
 
 /**
  * The Class FileNode.

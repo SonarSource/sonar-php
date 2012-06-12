@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import java.io.InputStream;
-
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.XMLRuleParser;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.core.PhpRuleRepository;
+
+import java.io.InputStream;
 
 public final class PhpmdRuleRepository extends PhpRuleRepository {
 
@@ -39,7 +39,7 @@ public final class PhpmdRuleRepository extends PhpRuleRepository {
    * @param parser
    */
   public PhpmdRuleRepository(ServerFileSystem fileSystem, XMLRuleParser parser) {
-    super(PHPMD_REPOSITORY_KEY, Php.KEY);
+    super(PHPMD_REPOSITORY_KEY, PhpConstants.LANGUAGE_KEY);
     setName(PHPMD_REPOSITORY_NAME);
     this.fileSystem = fileSystem;
     this.parser = parser;

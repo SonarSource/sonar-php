@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php.core;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 import org.sonar.api.resources.Language;
 import org.sonar.plugins.php.api.Php;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests the basic functionality of the PhpSourceImporter.

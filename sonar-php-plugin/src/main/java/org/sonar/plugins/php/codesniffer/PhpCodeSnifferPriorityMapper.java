@@ -19,14 +19,14 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.sonar.api.BatchExtension;
 import org.sonar.api.ServerExtension;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.plugins.php.core.PriorityMapper;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Class that maps Sonar and PHPCS priority/severity ranges.

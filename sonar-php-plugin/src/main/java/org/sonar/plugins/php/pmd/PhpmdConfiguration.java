@@ -19,11 +19,11 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import java.io.File;
-import java.util.List;
-
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * The PhpPmd configuration class. It handles report file path and name with default options

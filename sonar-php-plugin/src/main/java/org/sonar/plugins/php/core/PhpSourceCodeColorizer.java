@@ -19,22 +19,18 @@
  */
 package org.sonar.plugins.php.core;
 
-import static org.sonar.plugins.php.api.Php.PHP_KEYWORDS_ARRAY;
-import static org.sonar.plugins.php.api.Php.PHP_RESERVED_VARIABLES_ARRAY;
-
-import java.util.List;
-import java.util.Set;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.sonar.api.web.CodeColorizerFormat;
 import org.sonar.colorizer.CDocTokenizer;
 import org.sonar.colorizer.CppDocTokenizer;
 import org.sonar.colorizer.KeywordsTokenizer;
 import org.sonar.colorizer.StringTokenizer;
 import org.sonar.colorizer.Tokenizer;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class used to colorize source code in HTML.
@@ -45,7 +41,7 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
    * Simple constructor
    */
   public PhpSourceCodeColorizer() {
-    super(Php.KEY);
+    super(PhpConstants.LANGUAGE_KEY);
   }
 
   /**
@@ -56,8 +52,8 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
    */
   @Override
   public List<Tokenizer> getTokenizers() {
-    Set<String> keywords = Sets.newHashSet(PHP_RESERVED_VARIABLES_ARRAY);
-    keywords.addAll(Sets.newHashSet(PHP_KEYWORDS_ARRAY));
+    Set<String> keywords = Sets.newHashSet(PhpConstants.PHP_RESERVED_VARIABLES_ARRAY);
+    keywords.addAll(Sets.newHashSet(PhpConstants.PHP_KEYWORDS_ARRAY));
 
     String tagAfter = "</span>";
     List<Tokenizer> tokenizers = Lists.newArrayList();

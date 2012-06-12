@@ -19,10 +19,10 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.util.List;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
+
+import java.util.List;
 
 /**
  * The Class PhpUnitTestReport.

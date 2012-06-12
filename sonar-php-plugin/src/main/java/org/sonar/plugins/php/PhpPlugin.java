@@ -24,40 +24,109 @@ import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.codesniffer.*;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferPriorityMapper;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileExporter;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileImporter;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferSensor;
+import org.sonar.plugins.php.codesniffer.PhpCodeSnifferViolationsXmlParser;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.core.PhpSourceImporter;
-import org.sonar.plugins.php.core.profiles.*;
+import org.sonar.plugins.php.core.profiles.AllPhpCSProfile;
+import org.sonar.plugins.php.core.profiles.AllPhpmdProfile;
+import org.sonar.plugins.php.core.profiles.PearProfile;
+import org.sonar.plugins.php.core.profiles.SonarWayProfile;
+import org.sonar.plugins.php.core.profiles.ZendProfile;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
 import org.sonar.plugins.php.phpdepend.PhpDependConfiguration;
 import org.sonar.plugins.php.phpdepend.PhpDependExecutor;
-import org.sonar.plugins.php.phpdepend.PhpDependSensor;
 import org.sonar.plugins.php.phpdepend.PhpDependParserSelector;
 import org.sonar.plugins.php.phpdepend.PhpDependPhpUnitReportParser;
+import org.sonar.plugins.php.phpdepend.PhpDependSensor;
 import org.sonar.plugins.php.phpdepend.PhpDependSummaryReportParser;
-import org.sonar.plugins.php.phpunit.*;
-import org.sonar.plugins.php.pmd.*;
+import org.sonar.plugins.php.phpunit.PhpUnitConfiguration;
+import org.sonar.plugins.php.phpunit.PhpUnitCoverageDecorator;
+import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitExecutor;
+import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitSensor;
+import org.sonar.plugins.php.pmd.PhpmdConfiguration;
+import org.sonar.plugins.php.pmd.PhpmdExecutor;
+import org.sonar.plugins.php.pmd.PhpmdProfileExporter;
+import org.sonar.plugins.php.pmd.PhpmdProfileImporter;
+import org.sonar.plugins.php.pmd.PhpmdRuleRepository;
+import org.sonar.plugins.php.pmd.PhpmdSensor;
+import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_DEFVALUE;
-import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.*;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_DEFVALUE;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_TIMEOUT_KEY;
 import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.*;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.*;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.*;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_SKIP_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_TIMEOUT_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_SKIP_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_DEFVALUE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SKIP_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_LEVEL_ARGUMENT_DEFVALUE;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_LEVEL_ARGUMENT_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_SKIP_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_TIMEOUT_KEY;
 
 /**
  * This class is the sonar entry point of this plugin. It declares all the extension that can be launched with this plugin.
  */
 @Properties({
-  // ------------------ Global Php Configuration ------------------
-  @Property(key = FILE_SUFFIXES_KEY, defaultValue = FILE_SUFFIXES_DEFVALUE, name = "File suffixes", project = true, global = true,
-    description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty."),
-
   // ------------------ Phpmd configuration ------------------
   @Property(key = PHPMD_SKIP_KEY, defaultValue = "false", name = "Disable PHPMD", project = true, global = true,
     description = "Disabling PHPMD is not a good idea because almost all metrics rely on it.", category = PhpPlugin.CATEGORY_PHP_PHPMD),
@@ -182,10 +251,6 @@ public class PhpPlugin extends SonarPlugin {
   protected static final String CATEGORY_PHP_PHP_DEPEND = "PHP Depend";
   protected static final String CATEGORY_PHP_CODE_SNIFFER = "PHP CodeSniffer";
   protected static final String CATEGORY_PHP_PHPMD = "PHP PMD";
-
-  /** All the valid php files suffixes. */
-  public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
-  public static final String FILE_SUFFIXES_DEFVALUE = "php,php3,php4,php5,phtml,inc";
 
   /**
    * Gets the extensions.

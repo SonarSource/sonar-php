@@ -19,19 +19,6 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
@@ -45,6 +32,19 @@ import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
 import org.sonar.test.TestUtils;
+
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class PhpmdProfileImporterTest {
 

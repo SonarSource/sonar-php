@@ -19,13 +19,6 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
@@ -34,6 +27,13 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.Violation;
+import org.sonar.plugins.php.api.PhpConstants;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
 
 /**
  * The plugin entry point.
@@ -93,7 +93,7 @@ public class PhpmdSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!PHP.equals(project.getLanguage())) {
+    if (!PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())) {
       return false;
     }
 

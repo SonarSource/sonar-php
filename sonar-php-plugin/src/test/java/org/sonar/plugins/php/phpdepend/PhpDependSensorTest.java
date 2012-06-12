@@ -25,13 +25,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class PhpDependSensorTest {
 
@@ -41,7 +45,7 @@ public class PhpDependSensorTest {
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
     Project project = MockUtils.createMockProject(new BaseConfiguration());
-    when(project.getLanguage()).thenReturn(Java.INSTANCE);
+    when(project.getLanguageKey()).thenReturn("java");
 
     PhpDependExecutor executor = mock(PhpDependExecutor.class);
     PhpDependSensor sensor = createSensor(project, executor);

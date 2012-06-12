@@ -19,15 +19,15 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.php.phpunit.xml.TestCase;
+import org.sonar.plugins.php.phpunit.xml.TestSuite;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.sonar.plugins.php.phpunit.xml.TestCase;
-import org.sonar.plugins.php.phpunit.xml.TestSuite;
 
 /**
  * The PhpTestSuiteParser .

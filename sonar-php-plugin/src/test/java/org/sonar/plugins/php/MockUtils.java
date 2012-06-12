@@ -27,13 +27,19 @@ import org.apache.maven.project.MavenProject;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 
 import java.io.File;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.*;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
 
 /**
  * @author akbenaissi
@@ -43,7 +49,8 @@ public class MockUtils {
 
   public static Project createMockProject(Configuration config) {
     Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(Php.PHP);
+    when(project.getLanguage()).thenReturn(new Php());
+    when(project.getLanguageKey()).thenReturn(PhpConstants.LANGUAGE_KEY);
     when(project.getConfiguration()).thenReturn(config);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);

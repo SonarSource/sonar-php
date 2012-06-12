@@ -19,12 +19,6 @@
  */
 package org.sonar.plugins.php.core.profiles;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
@@ -35,6 +29,12 @@ import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileExporterTest.MockPhpCodeSnifferRuleFinder;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 public class AllPhpCSProfileTest {
 

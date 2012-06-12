@@ -19,22 +19,21 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_OPTION;
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FORMAT;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.core.AbstractPhpExecutor;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.plugins.php.core.AbstractPhpExecutor;
-
-import com.google.common.collect.Lists;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_OPTION;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FORMAT;
 
 /**
  * The Class PhpCheckstyleExecutor.
@@ -58,11 +57,10 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
    * @param configuration
    *          the configuration
    */
-  public PhpmdExecutor(PhpmdConfiguration configuration, PhpmdProfileExporter exporter, RulesProfile profile) {
+  public PhpmdExecutor(Php php, PhpmdConfiguration configuration, PhpmdProfileExporter exporter, RulesProfile profile) {
     // PHPMD has 1 specific acceptable exit code ('2'), so we must pass this on the constructor
-    super(configuration, ACCEPTED_EXIT_CODES);
+    super(php, configuration, ACCEPTED_EXIT_CODES);
     this.configuration = configuration;
-    PHP.setConfiguration(configuration.getProject().getConfiguration());
     this.exporter = exporter;
     this.profile = profile;
   }
@@ -89,7 +87,7 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
     result.add(configuration.getReportFile().getAbsolutePath());
 
     result.add(PHPMD_EXTENSIONS_OPTION);
-    result.add(StringUtils.join(PHP.getFileSuffixes(), ","));
+    result.add(StringUtils.join(getPhpLanguage().getFileSuffixes(), ","));
     if (configuration.isStringPropertySet(PHPMD_ARGUMENT_LINE_KEY)) {
       result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }

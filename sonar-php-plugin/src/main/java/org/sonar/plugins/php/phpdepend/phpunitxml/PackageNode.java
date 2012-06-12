@@ -19,10 +19,10 @@
  */
 package org.sonar.plugins.php.phpdepend.phpunitxml;
 
-import java.util.List;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.util.List;
 
 /**
  * The PackegeNode class represent a phpdepend metrics node. It's used by XStream to marschall or unmarshall phpunitxml files.

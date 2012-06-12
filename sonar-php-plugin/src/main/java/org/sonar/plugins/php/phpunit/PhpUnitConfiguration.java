@@ -19,14 +19,14 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.configuration.Configuration;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class handles the php unit configuration.

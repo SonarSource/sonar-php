@@ -19,14 +19,7 @@
  */
 package org.sonar.plugins.php.core;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
@@ -35,8 +28,15 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.SonarException;
 import org.sonar.api.utils.command.Command;
 import org.sonar.api.utils.command.CommandExecutor;
+import org.sonar.plugins.php.api.Php;
 
-import com.google.common.collect.Lists;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Abstract php plugin executor. This class handles common executor needs such as running the process, reading its common and error output
@@ -50,16 +50,22 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
   private static final String RULESET_PREFIX = "ruleset";
   private static final String XML_SUFFIX = ".xml";
 
+  private Php php;
   private AbstractPhpConfiguration configuration;
   private Collection<Integer> acceptedExitCodes;
 
-  protected AbstractPhpExecutor(AbstractPhpConfiguration configuration) {
-    this(configuration, Lists.newArrayList(0));
+  protected AbstractPhpExecutor(Php php, AbstractPhpConfiguration configuration) {
+    this(php, configuration, Lists.newArrayList(0));
   }
 
-  protected AbstractPhpExecutor(AbstractPhpConfiguration configuration, Collection<Integer> acceptedExitCodes) {
+  protected AbstractPhpExecutor(Php php, AbstractPhpConfiguration configuration, Collection<Integer> acceptedExitCodes) {
+    this.php = php;
     this.configuration = configuration;
     this.acceptedExitCodes = acceptedExitCodes;
+  }
+
+  protected Php getPhpLanguage() {
+    return php;
   }
 
   /**

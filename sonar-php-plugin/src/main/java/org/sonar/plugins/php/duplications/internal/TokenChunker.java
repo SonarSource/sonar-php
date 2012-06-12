@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php.duplications.internal;
 
-import java.io.Reader;
-import java.io.StringReader;
-
 import org.sonar.channel.ChannelDispatcher;
 import org.sonar.channel.CodeReader;
 import org.sonar.duplications.DuplicationsException;
+
+import java.io.Reader;
+import java.io.StringReader;
 
 public final class TokenChunker {
 

@@ -22,10 +22,6 @@
  */
 package org.sonar.plugins.php.core;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-
-import java.util.List;
-
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.slf4j.Logger;
@@ -35,10 +31,14 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.pmd.xml.PmdProperty;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
+
+import java.util.List;
+
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Abstract class for profile importers.
@@ -57,7 +57,7 @@ public abstract class AbstractPhpProfileImporter extends ProfileImporter {
    */
   protected AbstractPhpProfileImporter(String key, String name, PriorityMapper mapper) {
     super(key, name);
-    setSupportedLanguages(Php.KEY);
+    setSupportedLanguages(PhpConstants.LANGUAGE_KEY);
     this.priorityMapper = mapper;
   }
 

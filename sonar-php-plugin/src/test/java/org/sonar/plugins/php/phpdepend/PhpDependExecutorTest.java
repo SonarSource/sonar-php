@@ -19,27 +19,26 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.MockUtils.getFile;
-import static org.sonar.plugins.php.MockUtils.getMockProject;
-import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
+import org.sonar.plugins.php.api.Php;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.MockUtils.getFile;
+import static org.sonar.plugins.php.MockUtils.getMockProject;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY;
 
 public class PhpDependExecutorTest {
 
@@ -48,12 +47,10 @@ public class PhpDependExecutorTest {
    */
   @Test
   public void testSimpleCommandLine() {
-    Configuration configuration = mock(Configuration.class);
-    when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(null);
     Project project = getMockProject();
     when(project.getExclusionPatterns()).thenReturn(new String[0]);
     PhpDependConfiguration c = getWindowsConfiguration(project);
-    PhpDependExecutor executor = new PhpDependExecutor(c);
+    PhpDependExecutor executor = new PhpDependExecutor(new Php(), c);
     List<String> commandLine = executor.getCommandLine();
     String s1 = "pdepend.bat";
     String s2 = "--phpunit-xml=" + getFile("C:/projets/PHP/Monkey/target/logs/pdepend.xml");
@@ -74,7 +71,7 @@ public class PhpDependExecutorTest {
     Project project = MockUtils.createMockProject(conf);
     PhpDependConfiguration config = getWindowsConfiguration(project);
 
-    PhpDependExecutor executor = new PhpDependExecutor(config);
+    PhpDependExecutor executor = new PhpDependExecutor(new Php(), config);
     List<String> commandLine = executor.getCommandLine();
     String s1 = "pdepend.bat";
     String s2 = "--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath();

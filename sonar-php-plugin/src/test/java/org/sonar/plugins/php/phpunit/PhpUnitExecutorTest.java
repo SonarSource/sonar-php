@@ -19,6 +19,17 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.maven.project.MavenProject;
+import org.junit.Test;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.php.api.Php;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -30,16 +41,6 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGU
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_OPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_OPTION;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 
 public class PhpUnitExecutorTest {
 
@@ -62,7 +63,7 @@ public class PhpUnitExecutorTest {
     File testDir = new File("c:/php/math-php-test/sources/test");
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
-    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
     List<String> commandLine = executor.getCommandLine();
     assertTrue("Should contain extra arguments", commandLine.contains("--foo=bar"));
     assertTrue("Should contain extra arguments", commandLine.contains("--foo2=bar2"));
@@ -85,7 +86,7 @@ public class PhpUnitExecutorTest {
     File testDir = new File("c:/php/math-php-test/sources/test");
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
-    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
     when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
@@ -114,7 +115,7 @@ public class PhpUnitExecutorTest {
     File testDir = new File("c:/php/math-php-test/sources/test");
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
-    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
     when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     File reportFile = new File("phpunit.xml");
@@ -148,7 +149,7 @@ public class PhpUnitExecutorTest {
     File testDir = new File("c:/php/math-php-test/sources/test");
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
-    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
     when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
@@ -180,7 +181,7 @@ public class PhpUnitExecutorTest {
     when(configuration.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
     when(configuration.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
 
-    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
     when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
@@ -212,7 +213,7 @@ public class PhpUnitExecutorTest {
     File testDir = new File("c:/php/math-php-test/sources/test");
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
 
-    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
     when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
@@ -243,7 +244,7 @@ public class PhpUnitExecutorTest {
     File testDir2 = new File("c:/php/math-php-test/sources/test2");
     when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir, testDir2));
 
-    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
     when(config.shouldSkipCoverage()).thenReturn(true);
     when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
     List<String> commandLine = executor.getCommandLine();
@@ -286,7 +287,7 @@ public class PhpUnitExecutorTest {
     File reportFile = new File("phpunit.xml");
     when(config.getReportFile()).thenReturn(reportFile);
 
-    PhpUnitExecutor executor = new PhpUnitExecutor(config, project);
+    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
     List<String> commandLine = executor.getCommandLine();
 
     List<String> expected = Arrays.asList(phpunit, "--configuration=" + phpunitXml, "--log-junit=" + reportFile, "--coverage-clover="

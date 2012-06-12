@@ -19,20 +19,19 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import static org.sonar.plugins.php.api.Php.PHP;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.core.AbstractPhpExecutor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_OPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_OPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_OPTION;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.sonar.plugins.php.core.AbstractPhpExecutor;
-
-import com.google.common.collect.Lists;
 
 /**
  * The Class PhpDependExecutor.
@@ -52,12 +51,11 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
    * @param configuration
    *          the configuration
    */
-  public PhpDependExecutor(PhpDependConfiguration configuration) {
+  public PhpDependExecutor(Php php, PhpDependConfiguration configuration) {
     // PHPDepend has no specific valid exit code (only the standard '0'), so we can use the default constructor
     // see https://github.com/pdepend/pdepend/blob/master/src/main/php/PHP/Depend/TextUI/Runner.php
-    super(configuration);
+    super(php, configuration);
     this.configuration = configuration;
-    PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
 
   /**
@@ -68,7 +66,7 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
     List<String> result = new ArrayList<String>();
     result.add(configuration.getOsDependentToolScriptName());
     result.add(configuration.getReportFileCommandOption());
-    result.add(configuration.getSuffixesCommandOption());
+    result.add(configuration.getSuffixesCommandOption(getPhpLanguage()));
     if (configuration.isStringPropertySet(PDEPEND_EXCLUDE_PACKAGE_KEY)) {
       result.add(PDEPEND_EXCLUDE_OPTION + configuration.getExcludePackages());
     }

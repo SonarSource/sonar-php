@@ -19,23 +19,6 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_CLASS;
-import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_EXPRESSION_PARAM;
-import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_MESSAGE_PARAM;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
@@ -49,6 +32,23 @@ import org.sonar.plugins.php.pmd.xml.PmdProperty;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.test.TestUtils;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Collection;
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_CLASS;
+import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_EXPRESSION_PARAM;
+import static org.sonar.plugins.php.pmd.PhpmdProfileImporter.XPATH_MESSAGE_PARAM;
 
 public class PhpmdProfileExporterTest {
 

@@ -22,7 +22,10 @@ package org.sonar.plugins.php.phpdepend;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.utils.SonarException;
 
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.*;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_PHPUNIT;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_SUMMARY;
 
 /**
  * Parser selector for Php Depend. Depending on the option set, different type of files will be parsed.

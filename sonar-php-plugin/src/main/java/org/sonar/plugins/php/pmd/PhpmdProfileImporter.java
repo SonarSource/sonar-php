@@ -19,12 +19,6 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Collection;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -35,10 +29,16 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.core.AbstractPhpProfileImporter;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Collection;
+
+import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
 
 /**
  * The profile importer for PHPMD
@@ -59,7 +59,7 @@ public class PhpmdProfileImporter extends AbstractPhpProfileImporter {
    */
   public PhpmdProfileImporter(RuleFinder ruleFinder, PmdRulePriorityMapper mapper) {
     super(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY, PhpmdRuleRepository.PHPMD_REPOSITORY_NAME, mapper);
-    setSupportedLanguages(Php.KEY);
+    setSupportedLanguages(PhpConstants.LANGUAGE_KEY);
     this.ruleFinder = ruleFinder;
   }
 

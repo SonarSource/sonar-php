@@ -19,15 +19,6 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
@@ -37,6 +28,15 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
+import org.sonar.plugins.php.api.PhpConstants;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 
 /**
  * The Class PhpCodesnifferPluginSensor.
@@ -102,7 +102,7 @@ public class PhpCodeSnifferSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!PHP.equals(project.getLanguage())) {
+    if (!PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())) {
       return false;
     }
 

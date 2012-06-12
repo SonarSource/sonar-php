@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * The Class TestCase.

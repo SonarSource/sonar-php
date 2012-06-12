@@ -19,12 +19,6 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jdom.CDATA;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -35,10 +29,16 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.pmd.xml.PmdProperty;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Akram Ben Aissi
@@ -56,7 +56,7 @@ public class PhpmdProfileExporter extends ProfileExporter {
    */
   public PhpmdProfileExporter(PmdRulePriorityMapper mapper) {
     super(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY, PhpmdRuleRepository.PHPMD_REPOSITORY_NAME);
-    setSupportedLanguages(Php.KEY);
+    setSupportedLanguages(PhpConstants.LANGUAGE_KEY);
     setMimeType("application/xml");
     this.mapper = mapper;
   }

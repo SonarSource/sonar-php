@@ -19,21 +19,6 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import static org.mockito.Matchers.anyDouble;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
-import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.configuration.Configuration;
 import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
@@ -43,8 +28,21 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
-import org.sonar.plugins.php.PhpPlugin;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
+import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
 public class PhpUnitCoverageResultParserTest {
 
@@ -76,14 +74,12 @@ public class PhpUnitCoverageResultParserTest {
     File f6 = new File("C:/projets/PHP/Monkey/sources/test/application/default/controllers/IndexControllerTest.php");
 
     List<File> sourceFiles = Arrays.asList(f1, f2, f3, f5);
-    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/main"), sourceFiles));
+    when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/main"), sourceFiles));
     List<File> testFiles = Arrays.asList(f4, f6);
-    when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
+    when(fs.testFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
 
     File reportFile = new File(getClass().getResource(reportPath).getFile());
     when(config.getReportFile()).thenReturn(reportFile);
-    Configuration configuration = mock(Configuration.class);
-    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
 
     PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
     parser.parse(config.getReportFile());

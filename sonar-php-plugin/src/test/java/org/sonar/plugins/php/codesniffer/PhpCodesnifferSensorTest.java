@@ -19,13 +19,7 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
-
-import java.util.ArrayList;
-
+import com.google.common.collect.Lists;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
@@ -34,7 +28,12 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.plugins.php.MockUtils;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 
 /**
  * The Class PhpCodesnifferSensorTest.

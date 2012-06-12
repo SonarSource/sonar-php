@@ -19,18 +19,18 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.io.FileUtils;
+import org.junit.Test;
+import org.sonar.api.utils.SonarException;
+
+import javax.xml.stream.XMLStreamException;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.Test;
-import org.sonar.api.utils.SonarException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PhpCodeSnifferViolationsXmlParserTest {
 

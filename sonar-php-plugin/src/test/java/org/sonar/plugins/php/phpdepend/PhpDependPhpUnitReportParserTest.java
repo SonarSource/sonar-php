@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -29,8 +28,7 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.PhpPlugin;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.test.TestUtils;
 
 import java.util.Arrays;
@@ -39,7 +37,10 @@ import java.util.Set;
 
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * The Class PhpDependPhpUnitReportParserTest.
@@ -77,19 +78,15 @@ public class PhpDependPhpUnitReportParserTest {
       java.io.File f4 = new java.io.File("C:/projets/PHP/Money/Sources/main/Common/IMoney.php");
       java.io.File f5 = new java.io.File("C:/projets/PHP/Money/Sources/main/Money.inc");
 
-      when(fileSystem.mainFiles(Php.KEY)).thenReturn(
+      when(fileSystem.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(
           InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/main"), Arrays.asList(f2, f3, f4, f5)));
-      when(fileSystem.testFiles(Php.KEY)).thenReturn(
+      when(fileSystem.testFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(
           InputFileUtils.create(new java.io.File("C:/projets/PHP/Money/Sources/test"), Arrays.asList(f1)));
 
       Set<Metric> metrics = new HashSet<Metric>();
       metrics.add(metric);
       PhpDependPhpUnitReportParser parser = new PhpDependPhpUnitReportParser(project, context);
 
-      Configuration configuration = mock(Configuration.class);
-      // new Php();
-      when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
-      Php.PHP.setConfiguration(configuration);
       parser.parse(xmlReport);
     } catch (Exception e) {
       throw new RuntimeException(e);

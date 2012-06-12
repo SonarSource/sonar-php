@@ -19,7 +19,23 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import static org.sonar.plugins.php.api.Php.PHP;
+import com.google.common.collect.Lists;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.resources.InputFileUtils;
+import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.core.AbstractPhpExecutor;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_KEY;
@@ -35,23 +51,6 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_OPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sonar.api.resources.InputFileUtils;
-import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.core.AbstractPhpExecutor;
-
-import com.google.common.collect.Lists;
 
 /**
  * The Class PhpUnitExecutor.
@@ -90,12 +89,11 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    * @param project
    *          the project
    */
-  public PhpUnitExecutor(PhpUnitConfiguration config, Project project) {
+  public PhpUnitExecutor(Php php, PhpUnitConfiguration config, Project project) {
     // PHPUnit has 1 specific acceptable exit code ('1'), so we must pass this on the constructor
-    super(config, ACCEPTED_EXIT_CODES);
+    super(php, config, ACCEPTED_EXIT_CODES);
     this.configuration = config;
     this.project = project;
-    PHP.setConfiguration(configuration.getProject().getConfiguration());
   }
 
   /**

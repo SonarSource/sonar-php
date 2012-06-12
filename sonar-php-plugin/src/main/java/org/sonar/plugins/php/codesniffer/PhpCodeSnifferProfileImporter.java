@@ -19,12 +19,6 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Collection;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -37,10 +31,16 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.core.AbstractPhpProfileImporter;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Collection;
+
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 
 /**
  * Profile importer for PHPCS.
@@ -58,7 +58,7 @@ public class PhpCodeSnifferProfileImporter extends AbstractPhpProfileImporter {
    */
   public PhpCodeSnifferProfileImporter(RuleFinder ruleFinder, PhpCodeSnifferPriorityMapper mapper) {
     super(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY, PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_NAME, mapper);
-    setSupportedLanguages(Php.KEY);
+    setSupportedLanguages(PhpConstants.LANGUAGE_KEY);
     this.ruleFinder = ruleFinder;
   }
 
@@ -72,7 +72,7 @@ public class PhpCodeSnifferProfileImporter extends AbstractPhpProfileImporter {
   }
 
   private RulesProfile createRuleProfile(PmdRuleset pmdRuleset, ValidationMessages messages) {
-    RulesProfile profile = RulesProfile.create(pmdRuleset.getName(), Php.KEY);
+    RulesProfile profile = RulesProfile.create(pmdRuleset.getName(), PhpConstants.LANGUAGE_KEY);
     Collection<Rule> allPhpCsRules = ruleFinder.findAll(RuleQuery.create().withRepositoryKey(PHPCS_REPOSITORY_KEY));
     for (PmdRule pmdRule : pmdRuleset.getPmdRules()) {
       String key = pmdRule.getRef();

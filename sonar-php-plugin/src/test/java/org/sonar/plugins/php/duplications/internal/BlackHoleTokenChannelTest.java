@@ -19,13 +19,13 @@
  */
 package org.sonar.plugins.php.duplications.internal;
 
+import org.junit.Test;
+import org.sonar.channel.CodeReader;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyZeroInteractions;
-
-import org.junit.Test;
-import org.sonar.channel.CodeReader;
 
 public class BlackHoleTokenChannelTest {
 

@@ -31,14 +31,15 @@ import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.MockUtils.getMockProject;
 
 /**
@@ -79,19 +80,15 @@ public class PhpDependSummaryReportParserTest {
       java.io.File f7 = new java.io.File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests/AllTests.php");
       java.io.File f8 = new java.io.File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests/AllTests2.php");
 
-      when(fileSystem.mainFiles(Php.KEY)).thenReturn(
+      when(fileSystem.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(
           InputFileUtils.create(new java.io.File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src"), Arrays.asList(f1, f2, f3, f4, f5, f6)));
-      when(fileSystem.testFiles(Php.KEY)).thenReturn(
+      when(fileSystem.testFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(
           InputFileUtils.create(new java.io.File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests"), Arrays.asList(f7, f8)));
 
       Set<Metric> metrics = new HashSet<Metric>();
       metrics.add(metric);
       PhpDependSummaryReportParser parser = new PhpDependSummaryReportParser(project, context);
 
-      Configuration configuration = mock(Configuration.class);
-
-      when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
-      Php.PHP.setConfiguration(configuration);
       parser.parse(xmlReport);
     } catch (Exception e) {
       throw new RuntimeException(e);

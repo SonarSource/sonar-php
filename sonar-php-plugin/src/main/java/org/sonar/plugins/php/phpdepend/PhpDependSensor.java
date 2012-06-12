@@ -24,11 +24,10 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 import java.io.File;
-
-import static org.sonar.plugins.php.api.Php.PHP;
 
 /**
  * This class is in charge of knowing wether or not it has to be launched depending on a given project. In case it has to be launched, the
@@ -74,7 +73,7 @@ public class PhpDependSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!PHP.equals(project.getLanguage())) {
+    if (!PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())) {
       return false;
     }
 

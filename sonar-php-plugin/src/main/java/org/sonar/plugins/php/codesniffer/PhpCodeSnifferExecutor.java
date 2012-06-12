@@ -19,26 +19,25 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import static org.sonar.plugins.php.api.Php.PHP;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_EXTENSIONS_MODIFIER;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_MODIFIER;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_MODIFIER;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_MODIFIER;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.core.AbstractPhpExecutor;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.plugins.php.core.AbstractPhpExecutor;
-
-import com.google.common.collect.Lists;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_EXTENSIONS_MODIFIER;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_MODIFIER;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_MODIFIER;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_MODIFIER;
 
 /**
  * The Class PhpCheckstyleExecutor.
@@ -65,11 +64,10 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
    * @param configuration
    *          the configuration
    */
-  public PhpCodeSnifferExecutor(PhpCodeSnifferConfiguration configuration, PhpCodeSnifferProfileExporter exporter, RulesProfile profile) {
+  public PhpCodeSnifferExecutor(Php php, PhpCodeSnifferConfiguration configuration, PhpCodeSnifferProfileExporter exporter, RulesProfile profile) {
     // PHPCodesniffer has 1 specific acceptable exit code ('1'), so we must pass this on the constructor
-    super(configuration, ACCEPTED_EXIT_CODES);
+    super(php, configuration, ACCEPTED_EXIT_CODES);
     this.configuration = configuration;
-    PHP.setConfiguration(configuration.getProject().getConfiguration());
     this.exporter = exporter;
     this.profile = profile;
   }
@@ -100,7 +98,7 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
       }
     }
 
-    result.add(PHPCS_EXTENSIONS_MODIFIER + StringUtils.join(PHP.getFileSuffixes(), EXCLUSION_PATTERN_SEPARATOR));
+    result.add(PHPCS_EXTENSIONS_MODIFIER + StringUtils.join(getPhpLanguage().getFileSuffixes(), EXCLUSION_PATTERN_SEPARATOR));
 
     if (configuration.isStringPropertySet(PHPCS_ARGUMENT_LINE_KEY)) {
       result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));

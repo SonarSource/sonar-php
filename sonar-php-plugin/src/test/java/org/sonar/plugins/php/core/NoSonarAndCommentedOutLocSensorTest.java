@@ -19,6 +19,22 @@
  */
 package org.sonar.plugins.php.core;
 
+import org.apache.commons.configuration.Configuration;
+import org.junit.Test;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.checks.NoSonarFilter;
+import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.resources.InputFileUtils;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.resources.Resource;
+import org.sonar.plugins.php.api.PhpConstants;
+import org.sonar.squid.measures.Metric;
+import org.sonar.squid.text.Source;
+
+import java.io.File;
+import java.util.Arrays;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -26,24 +42,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.api.Php.PHP;
-
-import java.io.File;
-import java.util.Arrays;
-
-import org.apache.commons.configuration.Configuration;
-import org.junit.Test;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.checks.NoSonarFilter;
-import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.InputFileUtils;
-import org.sonar.api.resources.Java;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.resources.Resource;
-import org.sonar.plugins.php.api.Php;
-import org.sonar.squid.measures.Metric;
-import org.sonar.squid.text.Source;
 
 public class NoSonarAndCommentedOutLocSensorTest {
 
@@ -65,7 +63,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
     NoSonarAndCommentedOutLocSensor sensor = new NoSonarAndCommentedOutLocSensor(noSonarFilter);
     SensorContext context = mock(SensorContext.class);
     Project project = getMockProject();
-    when(project.getLanguage()).thenReturn(Java.INSTANCE);
+    when(project.getLanguageKey()).thenReturn("java");
     sensor.analyse(project, context);
     assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
@@ -81,7 +79,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
     when(project.getFileSystem()).thenReturn(fs);
     File fakeFile = new File("fake.php");
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(fakeFile.getParentFile()));
-    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(fakeFile.getParentFile(), Arrays.asList(fakeFile, new File("fake"))));
+    when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(InputFileUtils.create(fakeFile.getParentFile(), Arrays.asList(fakeFile, new File("fake"))));
 
     sensor.analyse(project, context);
     verify(context, never()).saveMeasure(any(Resource.class), any(org.sonar.api.measures.Metric.class), any(Double.class));
@@ -132,14 +130,14 @@ public class NoSonarAndCommentedOutLocSensorTest {
    */
   private Project getMockProject() {
     Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(PHP);
+    when(project.getLanguageKey()).thenReturn(PhpConstants.LANGUAGE_KEY);
     Configuration config = mock(Configuration.class);
 
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
     File f1 = new File(this.getClass().getResource("/Mail.php").getPath());
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(f1.getParentFile()));
-    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(f1.getParentFile(), Arrays.asList(f1, new File("fake"))));
+    when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(InputFileUtils.create(f1.getParentFile(), Arrays.asList(f1, new File("fake"))));
 
     when(project.getConfiguration()).thenReturn(config);
     return project;

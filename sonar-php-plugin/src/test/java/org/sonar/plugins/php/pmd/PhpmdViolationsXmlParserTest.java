@@ -19,13 +19,13 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.junit.Test;
+import org.sonar.test.TestUtils;
 
 import java.io.File;
 import java.util.List;
 
-import org.junit.Test;
-import org.sonar.test.TestUtils;
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * The Class PhpmdViolationsXmlParserTest.

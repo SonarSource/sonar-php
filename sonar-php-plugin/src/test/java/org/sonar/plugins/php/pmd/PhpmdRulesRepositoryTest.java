@@ -19,16 +19,16 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.XMLRuleParser;
+
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 public class PhpmdRulesRepositoryTest {
 

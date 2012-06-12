@@ -19,28 +19,28 @@
  */
 package org.sonar.plugins.php.pmd;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang.SystemUtils;
+import org.junit.Test;
+import org.sonar.api.config.Settings;
+import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.MockUtils;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
+
+import java.io.File;
+import java.util.List;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_KEY;
-
-import java.io.File;
-import java.util.List;
-
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.SystemUtils;
-import org.junit.Test;
-import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.MockUtils;
-
-import com.google.common.collect.Lists;
 
 public class PhpmdExecutorTest {
 
@@ -49,22 +49,22 @@ public class PhpmdExecutorTest {
    */
   @Test
   public void testSimpleCommandLine() {
+    Settings settings = new Settings();
+    settings.appendProperty(PhpConstants.FILE_SUFFIXES_KEY, " php, php3, php4");
     Configuration conf = new BaseConfiguration();
     conf.setProperty(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, "/");
     conf.setProperty(PHPMD_REPORT_FILE_NAME_KEY, "pmd.xml");
-    String[] extensions = new String[] {"php", "php3", "php4"};
-    conf.setProperty(FILE_SUFFIXES_KEY, extensions);
     Project project = MockUtils.createMockProject(conf);
     when(project.getExclusionPatterns()).thenReturn(new String[0]);
     PhpmdConfiguration phpmdConfiguration = new PhpmdConfiguration(project);
 
     PhpmdProfileExporter exporter = mock(PhpmdProfileExporter.class);
-    PhpmdExecutor executor = new PhpmdExecutor(phpmdConfiguration, exporter, null);
+    PhpmdExecutor executor = new PhpmdExecutor(new Php(settings), phpmdConfiguration, exporter, null);
 
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] {getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-      "--suffixes", StringUtils.join(extensions, ",")};
+      "--suffixes", "php,php3,php4"};
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));
     assertThat(executor.getExecutedTool(), is("PHPMD"));
@@ -72,22 +72,22 @@ public class PhpmdExecutorTest {
 
   @Test
   public void testCommandLineWithSeveralParameters() {
+    Settings settings = new Settings();
+    settings.appendProperty(PhpConstants.FILE_SUFFIXES_KEY, " php, php3, php4");
     Configuration conf = new BaseConfiguration();
     conf.setProperty(PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, "/");
     conf.setProperty(PHPMD_REPORT_FILE_NAME_KEY, "pmd.xml");
     conf.setProperty(PHPMD_ARGUMENT_LINE_KEY, " --foo=bar  --foo2=bar2 ");
-    String[] extensions = new String[] {"php", "php3", "php4"};
-    conf.setProperty(FILE_SUFFIXES_KEY, extensions);
     Project project = MockUtils.createMockProject(conf);
     PhpmdConfiguration phpmdConfiguration = new PhpmdConfiguration(project);
 
     PhpmdProfileExporter exporter = mock(PhpmdProfileExporter.class);
-    PhpmdExecutor executor = new PhpmdExecutor(phpmdConfiguration, exporter, null);
+    PhpmdExecutor executor = new PhpmdExecutor(new Php(settings), phpmdConfiguration, exporter, null);
 
     List<String> commandLine = executor.getCommandLine();
     String reportFile = new File("target/MockProject/target/pmd.xml").getAbsolutePath();
     String[] expected = new String[] {getSrcRelativePathAccordingToOs(), "xml", "codesize,unusedcode,naming", "--reportfile", reportFile,
-      "--suffixes", StringUtils.join(extensions, ","), "--foo=bar",
+      "--suffixes", "php,php3,php4", "--foo=bar",
       "--foo2=bar2"};
 
     assertThat(commandLine).isEqualTo(getExpectedCommandLineAccordingToOs(expected));

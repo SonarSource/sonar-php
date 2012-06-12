@@ -19,12 +19,6 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.jdom.CDATA;
 import org.jdom.Document;
@@ -36,10 +30,16 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.ActiveRuleParam;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.pmd.xml.PmdProperty;
 import org.sonar.plugins.php.pmd.xml.PmdRule;
 import org.sonar.plugins.php.pmd.xml.PmdRuleset;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Akram Ben Aissi
@@ -57,7 +57,7 @@ public class PhpCodeSnifferProfileExporter extends ProfileExporter {
    */
   public PhpCodeSnifferProfileExporter(PhpCodeSnifferPriorityMapper mapper) {
     super(PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY, PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_NAME);
-    setSupportedLanguages(Php.KEY);
+    setSupportedLanguages(PhpConstants.LANGUAGE_KEY);
     setMimeType("application/xml");
     this.mapper = mapper;
   }

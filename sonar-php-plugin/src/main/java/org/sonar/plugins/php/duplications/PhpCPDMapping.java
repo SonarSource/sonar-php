@@ -19,17 +19,10 @@
  */
 package org.sonar.plugins.php.duplications;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Iterator;
-
 import net.sourceforge.pmd.cpd.SourceCode;
 import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
-
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.AbstractCpdMapping;
 import org.sonar.api.resources.Language;
@@ -39,6 +32,12 @@ import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.duplications.internal.Token;
 import org.sonar.plugins.php.duplications.internal.TokenChunker;
 import org.sonar.plugins.php.duplications.internal.TokenQueue;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Iterator;
 
 /**
  * Temporary PHP CPD engine mapping class, used until we can migrate to Sonar CPD Engine.

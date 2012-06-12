@@ -19,20 +19,19 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
+import org.junit.Test;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.MockUtils;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
-import org.junit.Test;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.Java;
-import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.MockUtils;
 
 public class PhpUnitSensorTest {
 
@@ -48,7 +47,7 @@ public class PhpUnitSensorTest {
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
     Project project = MockUtils.createMockProject(new BaseConfiguration());
-    when(project.getLanguage()).thenReturn(Java.INSTANCE);
+    when(project.getLanguageKey()).thenReturn("java");
 
     PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
     PhpUnitSensor sensor = createSensor(project, executor);

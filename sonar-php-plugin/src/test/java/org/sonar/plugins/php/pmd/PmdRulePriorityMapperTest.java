@@ -22,10 +22,10 @@
  */
 package org.sonar.plugins.php.pmd;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 import org.sonar.api.rules.RulePriority;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author akram

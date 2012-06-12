@@ -19,6 +19,14 @@
  */
 package org.sonar.plugins.php.pmd;
 
+import org.apache.commons.configuration.Configuration;
+import org.junit.Test;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
+
+import java.io.File;
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -27,14 +35,6 @@ import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAM
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_RELATIVE_PATH_KEY;
-
-import java.io.File;
-import java.util.Arrays;
-
-import org.apache.commons.configuration.Configuration;
-import org.junit.Test;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 
 /**
  * The Class PhpDependConfigurationTest.

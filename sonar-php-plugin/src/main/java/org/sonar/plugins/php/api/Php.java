@@ -19,68 +19,65 @@
  */
 package org.sonar.plugins.php.api;
 
-import org.apache.commons.configuration.Configuration;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.api.Properties;
+import org.sonar.api.Property;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.AbstractLanguage;
-import org.sonar.plugins.php.PhpPlugin;
+
+import java.util.List;
 
 /**
  * This class defines the PHP language.
  */
+@Properties({
+  @Property(
+    key = PhpConstants.FILE_SUFFIXES_KEY,
+    defaultValue = PhpConstants.FILE_SUFFIXES_DEFVALUE,
+    name = "File suffixes",
+    description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.",
+    project = true,
+    global = true)
+})
 public final class Php extends AbstractLanguage {
 
-  private Configuration configuration;
-
-  /** The php language name */
-  public static final String PHP_LANGUAGE_NAME = "PHP";
+  private Settings settings;
 
   /**
-   * An array containing all PHP keywords.
+   * Construct the PHP language.
    */
-  public static final String[] PHP_KEYWORDS_ARRAY = new String[] {"and", "or", "xor", "exception", "array", "as", "break", "case",
-    "class", "const", "continue", "declare", "default", "die", "do", "echo", "else", "elseif", "empty", "enddeclare", "endfor",
-    "endforeach", "endif", "endswitch", "endwhile", "eval", "exit", "extends", "for", "foreach", "function", "global", "if", "include",
-    "include_once", "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "unset", "use", "var",
-    "while", "final", "php_user_filter", "interface", "implements", "instanceof", "public", "private", "protected", "abstract", "clone",
-    "try", "catch", "throw", "cfunction", "old_function", "this", "final", "namespace", "goto"};
+  public Php(Settings settings) {
+    super(PhpConstants.LANGUAGE_KEY, PhpConstants.LANGUAGE_NAME);
+    this.settings = settings;
+  }
 
   /**
-   * An array containing reserved variables.
+   * Only for testing purposes.
    */
-  public static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[] {"__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
-    "__DIR__", "__FILE__", "__LINE__", "$this"};
-
-  /** An php instance. */
-  public static final Php PHP = new Php();
-
-  /** The php language key. */
-  public static final String KEY = "php";
-
-  /**
-   * Construct the PHP language instance based on its key.
-   */
-
   public Php() {
-    super(KEY, PHP_LANGUAGE_NAME);
+    this(new Settings());
   }
 
   /**
-   * @param configuration
-   *          the configuration to set
+   * {@inheritDoc}
    */
-  public void setConfiguration(Configuration configuration) {
-    this.configuration = configuration;
-  }
-
   public String[] getFileSuffixes() {
-    String[] suffixes = StringUtils.split(PhpPlugin.FILE_SUFFIXES_DEFVALUE, ",");
-    if (configuration != null) {
-      String[] configuredSuffixes = configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY);
-      if (configuredSuffixes != null && configuredSuffixes.length > 0) {
-        suffixes = configuredSuffixes;
-      }
+    String[] suffixes = filterEmptyStrings(settings.getStringArray(PhpConstants.FILE_SUFFIXES_KEY));
+    if (suffixes.length == 0) {
+      suffixes = StringUtils.split(PhpConstants.FILE_SUFFIXES_DEFVALUE, ",");
     }
     return suffixes;
+  }
+
+  private String[] filterEmptyStrings(String[] stringArray) {
+    List<String> nonEmptyStrings = Lists.newArrayList();
+    for (String string : stringArray) {
+      if (StringUtils.isNotBlank(string.trim())) {
+        nonEmptyStrings.add(string.trim());
+      }
+    }
+    return nonEmptyStrings.toArray(new String[nonEmptyStrings.size()]);
   }
 
   /**
@@ -90,9 +87,9 @@ public final class Php extends AbstractLanguage {
    *          String representing the file name
    * @return boolean <code>true</code> if the file name's suffix is known, <code>false</code> any other way
    */
-  public static boolean hasValidSuffixes(String fileName) {
+  public boolean hasValidSuffixes(String fileName) {
     String pathLowerCase = StringUtils.lowerCase(fileName);
-    for (String suffix : PHP.getFileSuffixes()) {
+    for (String suffix : getFileSuffixes()) {
       if (pathLowerCase.endsWith("." + StringUtils.lowerCase(suffix))) {
         return true;
       }

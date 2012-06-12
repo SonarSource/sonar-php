@@ -19,13 +19,13 @@
  */
 package org.sonar.plugins.php.core;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
+
+import static org.junit.Assert.assertEquals;
 
 public class AbstractPhpPluginConfigurationTest {
 

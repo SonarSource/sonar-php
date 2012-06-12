@@ -19,26 +19,27 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
+import org.junit.Test;
+import org.sonar.api.config.Settings;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.PhpConstants;
+
+import java.io.File;
+import java.util.List;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.PhpPlugin.FILE_SUFFIXES_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
-
-import java.io.File;
-import java.util.List;
-
-import org.apache.commons.configuration.Configuration;
-import org.junit.Test;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.PhpPlugin;
-
-import com.google.common.collect.Lists;
 
 /**
  * @author akram
@@ -51,11 +52,9 @@ public class PhpCodesnifferExecutorTest {
    */
   @Test
   public void testGetCommandLine1() {
-    Configuration configuration = mock(Configuration.class);
-    when(configuration.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY)).thenReturn(null);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
 
-    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
+    PhpCodeSnifferExecutor executor = createExecutor(new BaseConfiguration(), new Settings(), c);
     executor.getCommandLine();
     assertThat(executor.getExecutedTool(), is("PHPCodeSniffer"));
   }
@@ -65,12 +64,11 @@ public class PhpCodesnifferExecutorTest {
    */
   @Test
   public void testGetCommandLine2() {
-    Configuration configuration = mock(Configuration.class);
-    String[] suffixes = new String[] {"php", "php2"};
-    when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(suffixes);
+    Settings settings = new Settings();
+    settings.appendProperty(PhpConstants.FILE_SUFFIXES_KEY, "php, php2");
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
 
-    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
+    PhpCodeSnifferExecutor executor = createExecutor(new BaseConfiguration(), settings, c);
     List<String> commandLine = executor.getCommandLine();
 
     String expected = "--extensions=php,php2";
@@ -82,11 +80,11 @@ public class PhpCodesnifferExecutorTest {
    */
   @Test
   public void testGetCommandLine3() {
-    Configuration configuration = mock(Configuration.class);
-    String[] suffixes = new String[] {"php", "php2"};
-    when(configuration.getStringArray(FILE_SUFFIXES_KEY)).thenReturn(suffixes);
+    Settings settings = new Settings();
+    settings.appendProperty(PhpConstants.FILE_SUFFIXES_KEY, "php, php2");
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
 
+    Configuration configuration = mock(Configuration.class);
     String modifierKey = PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
     when(configuration.getString(modifierKey, PHPCS_SEVERITY_OR_LEVEL_MODIFIER)).thenReturn(PHPCS_SEVERITY_OR_LEVEL_MODIFIER);
     when(c.isStringPropertySet(PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY)).thenReturn(true);
@@ -95,7 +93,7 @@ public class PhpCodesnifferExecutorTest {
     when(c.getSeverityModifier()).thenReturn(severityModifier);
     when(c.getLevel()).thenReturn(level);
 
-    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
+    PhpCodeSnifferExecutor executor = createExecutor(configuration, settings, c);
     List<String> commandLine = executor.getCommandLine();
 
     String expected = "--extensions=php,php2";
@@ -108,12 +106,11 @@ public class PhpCodesnifferExecutorTest {
    */
   @Test
   public void testGetCommandLineWithExtraArguments() {
-    Configuration configuration = mock(Configuration.class);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
     when(c.isStringPropertySet(PHPCS_ARGUMENT_LINE_KEY)).thenReturn(true);
     when(c.getArgumentLine()).thenReturn("  --foo=bar --foo2=bar2 ");
 
-    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
+    PhpCodeSnifferExecutor executor = createExecutor(new BaseConfiguration(), new Settings(), c);
     List<String> commandLine = executor.getCommandLine();
 
     assertThat(commandLine).contains("--foo=bar");
@@ -125,25 +122,24 @@ public class PhpCodesnifferExecutorTest {
    */
   @Test
   public void testGetCommandLineWithDirsToAnalyse() {
-    Configuration configuration = mock(Configuration.class);
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
     File sourceDir = new File("target/fakeProject/src");
     when(c.getSourceDirectories()).thenReturn(Lists.newArrayList(sourceDir));
 
-    PhpCodeSnifferExecutor executor = createExecutor(configuration, c);
+    PhpCodeSnifferExecutor executor = createExecutor(new BaseConfiguration(), new Settings(), c);
     List<String> commandLine = executor.getCommandLine();
 
     assertThat(commandLine).contains(sourceDir.getAbsolutePath());
   }
 
-  private PhpCodeSnifferExecutor createExecutor(Configuration configuration, PhpCodeSnifferConfiguration c) {
+  private PhpCodeSnifferExecutor createExecutor(Configuration configuration, Settings settings, PhpCodeSnifferConfiguration c) {
     Project p = mock(Project.class);
     when(p.getConfiguration()).thenReturn(configuration);
     when(c.getProject()).thenReturn(p);
     when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
     RulesProfile profile = mock(RulesProfile.class);
     PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);
-    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(c, e, profile);
+    PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(new Php(settings), c, e, profile);
     return executor;
   }
 }

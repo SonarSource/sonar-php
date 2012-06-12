@@ -19,11 +19,11 @@
  */
 package org.sonar.plugins.php.duplications.internal;
 
+import org.junit.Test;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 public class TokenTest {
 

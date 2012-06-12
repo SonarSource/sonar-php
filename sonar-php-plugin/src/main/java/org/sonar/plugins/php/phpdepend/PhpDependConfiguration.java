@@ -91,8 +91,8 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    * 
    * @return the suffixes command option
    */
-  public String getSuffixesCommandOption() {
-    return PDEPEND_SUFFIXES_OPT + "=" + StringUtils.join(Php.PHP.getFileSuffixes(), ",");
+  public String getSuffixesCommandOption(Php php) {
+    return PDEPEND_SUFFIXES_OPT + "=" + StringUtils.join(php.getFileSuffixes(), ",");
   }
 
   /**

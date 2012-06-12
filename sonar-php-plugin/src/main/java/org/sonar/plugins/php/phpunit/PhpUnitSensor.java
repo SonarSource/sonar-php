@@ -19,17 +19,15 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import static org.sonar.plugins.php.api.Php.PHP;
-
+import com.thoughtworks.xstream.XStreamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
-
-import com.thoughtworks.xstream.XStreamException;
 
 /**
  * The Class PhpUnitSensor is used by the plugin to collect metrics concerning punit framework. This class doesn't launch the tests, it only
@@ -86,7 +84,7 @@ public class PhpUnitSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!PHP.equals(project.getLanguage()) || !configuration.isDynamicAnalysisEnabled()) {
+    if (!PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey()) || !configuration.isDynamicAnalysisEnabled()) {
       return false;
     }
 
