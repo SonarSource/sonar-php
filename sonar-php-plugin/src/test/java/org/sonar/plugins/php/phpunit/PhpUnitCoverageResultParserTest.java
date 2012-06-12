@@ -146,4 +146,11 @@ public class PhpUnitCoverageResultParserTest {
     verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.LINE_COVERAGE, 0.0d);
   }
 
+  // https://jira.codehaus.org/browse/SONARPLUGINS-1675
+  @Test
+  public void shouldNotFailIfNoLineForFileNode() {
+    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage-with-filenode-without-line.xml");
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.LINE_COVERAGE, 0.0d);
+  }
+
 }

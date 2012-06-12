@@ -139,8 +139,10 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
       // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
       // This should look like (lineNumner=Count) : 1=0;2=1;3=1....
       PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<Integer, Integer>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
-      for (LineNode line : fileNode.getLines()) {
-        saveLineMeasure(line, lineHits);
+      if (fileNode.getLines() != null) {
+        for (LineNode line : fileNode.getLines()) {
+          saveLineMeasure(line, lineHits);
+        }
       }
       MetricsNode metrics = fileNode.getMetrics();
       Measure measure = lineHits.build();
