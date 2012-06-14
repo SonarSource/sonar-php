@@ -102,7 +102,7 @@ public class PhpmdProfileImporterTest {
     RulesProfile profile = importer.importProfile(reader, messages);
 
     ActiveRule activeRule = profile.getActiveRuleByConfigKey(REPOSITORY_KEY, "rulesets/codesize.xml/NPathComplexity");
-    assertThat(activeRule.getPriority(), is(RulePriority.MAJOR)); // reuse the rule default priority
+    assertThat(activeRule.getSeverity(), is(RulePriority.MAJOR)); // reuse the rule default priority
   }
 
   @Test
@@ -111,10 +111,10 @@ public class PhpmdProfileImporterTest {
     RulesProfile profile = importer.importProfile(reader, messages);
 
     ActiveRule activeRule = profile.getActiveRuleByConfigKey(REPOSITORY_KEY, "rulesets/codesize.xml/CyclomaticComplexity");
-    assertThat(activeRule.getPriority(), is(RulePriority.MINOR));
+    assertThat(activeRule.getSeverity(), is(RulePriority.MINOR));
 
     activeRule = profile.getActiveRuleByConfigKey(REPOSITORY_KEY, "rulesets/codesize.xml/ExcessiveMethodLength");
-    assertThat(activeRule.getPriority(), is(RulePriority.CRITICAL));
+    assertThat(activeRule.getSeverity(), is(RulePriority.CRITICAL));
   }
 
   @Test

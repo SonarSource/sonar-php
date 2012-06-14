@@ -28,6 +28,7 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.PhpConstants;
 
 import java.util.Arrays;
@@ -37,7 +38,6 @@ import java.util.Set;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.MockUtils.getMockProject;
 
 /**
  * The Class PhpDependSummaryReportParserTest.
@@ -94,18 +94,7 @@ public class PhpDependSummaryReportParserTest {
 
   @Test(expected = SonarException.class)
   public void shouldThrowAnExceptionWhenReportNotFound() {
-    /*
-     * Configuration c = mock(Configuration.class);
-     * Project project = getMockProject("/path/to/sources", c);
-     * when(c.getString(PDEPEND_REPORT_FILE_NAME_KEY, PDEPEND_REPORT_FILE_NAME_DEFVALUE)).thenReturn(PDEPEND_REPORT_FILE_NAME_DEFVALUE);
-     * when(c.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn("summary-xml");
-     * when(c.getString(PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
-     * PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
-     * when(project.getConfiguration()).thenReturn(c);
-     */
-    Project project = getMockProject();
-
-    PhpDependSummaryReportParser parser = new PhpDependSummaryReportParser(project, null);
+    PhpDependSummaryReportParser parser = new PhpDependSummaryReportParser(MockUtils.createMockProject(), null);
     parser.parse(new java.io.File("path/to/nowhere"));
   }
 

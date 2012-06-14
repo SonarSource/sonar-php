@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.core;
 
-import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.NoSonarFilter;
@@ -131,7 +130,6 @@ public class NoSonarAndCommentedOutLocSensorTest {
   private Project getMockProject() {
     Project project = mock(Project.class);
     when(project.getLanguageKey()).thenReturn(PhpConstants.LANGUAGE_KEY);
-    Configuration config = mock(Configuration.class);
 
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
@@ -139,7 +137,6 @@ public class NoSonarAndCommentedOutLocSensorTest {
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(f1.getParentFile()));
     when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(InputFileUtils.create(f1.getParentFile(), Arrays.asList(f1, new File("fake"))));
 
-    when(project.getConfiguration()).thenReturn(config);
     return project;
   }
 }

@@ -20,8 +20,6 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.batch.Sensor;
@@ -102,9 +100,6 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT
 public class PhpUnitSensor implements Sensor {
 
   protected static final String CATEGORY_PHP_PHP_UNIT = "PHP Unit";
-
-  /** The logger. */
-  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitSensor.class);
 
   private PhpUnitConfiguration configuration;
   private PhpUnitExecutor executor;

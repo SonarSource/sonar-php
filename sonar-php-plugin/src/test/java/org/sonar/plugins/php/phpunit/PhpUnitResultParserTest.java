@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
-import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -60,12 +59,10 @@ public class PhpUnitResultParserTest {
    * Inits the.
    */
   private void init() {
-    Configuration configuration = mock(Configuration.class);
     config = mock(PhpUnitConfiguration.class);
     project = mock(Project.class);
     context = mock(SensorContext.class);
 
-    when(project.getConfiguration()).thenReturn(configuration);
     when(config.getProject()).thenReturn(project);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);

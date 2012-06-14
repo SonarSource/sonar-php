@@ -140,7 +140,7 @@ public class PhpmdProfileExporterTest {
     public Rule find(RuleQuery query) {
       for (Rule rule : rules) {
         if (query.getConfigKey().equals(rule.getConfigKey())) {
-          rule.setPluginName(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY);
+          rule.setRepositoryKey(PhpmdRuleRepository.PHPMD_REPOSITORY_KEY);
           return rule;
         }
       }

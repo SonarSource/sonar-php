@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.codesniffer;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.configuration.BaseConfiguration;
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Java;
@@ -52,7 +51,7 @@ public class PhpCodesnifferSensorTest {
   @Test
   public void shouldLaunch() {
     RulesProfile profile = createRulesProfile();
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    Project project = MockUtils.createMockProject();
     PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
     PhpCodeSnifferSensor sensor = createSensor(project, executor, profile, false);
 
@@ -64,7 +63,7 @@ public class PhpCodesnifferSensorTest {
     RulesProfile profile = mock(RulesProfile.class);
     when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(new ArrayList<ActiveRule>());
 
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    Project project = MockUtils.createMockProject();
     PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
     PhpCodeSnifferSensor sensor = createSensor(project, executor, profile, true);
 
@@ -76,7 +75,7 @@ public class PhpCodesnifferSensorTest {
     RulesProfile profile = mock(RulesProfile.class);
     when(profile.getActiveRulesByRepository(PHPCS_REPOSITORY_KEY)).thenReturn(new ArrayList<ActiveRule>());
 
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
+    Project project = MockUtils.createMockProject();
     PhpCodeSnifferExecutor executor = mock(PhpCodeSnifferExecutor.class);
     PhpCodeSnifferSensor sensor = createSensor(project, executor, profile, false);
 

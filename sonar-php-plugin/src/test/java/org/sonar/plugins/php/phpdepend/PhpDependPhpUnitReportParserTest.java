@@ -23,6 +23,8 @@ import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
+import org.sonar.api.measures.Metric.Builder;
+import org.sonar.api.measures.Metric.ValueType;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
@@ -134,7 +136,7 @@ public class PhpDependPhpUnitReportParserTest {
    */
   @Test
   public void shouldNotThrowAnExceptionIfMetricNotFound() {
-    metric = new Metric("not a true metric");
+    metric = new Builder("fake", "Fake", ValueType.BOOL).create();
     init(PDEPEND_RESULT);
     verify(context, never()).saveMeasure(eq(metric), anyDouble());
   }
