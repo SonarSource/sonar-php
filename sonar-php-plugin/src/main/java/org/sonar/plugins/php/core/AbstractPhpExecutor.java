@@ -101,7 +101,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
       String msg = "Error while creating  temporary ruleset from profile: " + profile + " to file : " + ruleset + " in dir " + workingDir;
       LOG.error(msg);
     }
-    return ruleset.length() > 0 ? ruleset : null;
+    return (ruleset != null && ruleset.length() > 0) ? ruleset : null;
   }
 
   /**

@@ -48,7 +48,7 @@ public final class MetricsNode {
       List<ClassNode> classes = packageNode.getClasses();
       if (classes != null) {
         for (ClassNode classNode : classes) {
-          FileNode fileNode = getFileNodeByFileName(classNode.getFile().getFilename());
+          FileNode fileNode = getFileNodeByFileName(classNode.getFile().getFileName());
           if (fileNode == null) {
             continue;
           }
@@ -62,7 +62,7 @@ public final class MetricsNode {
       List<FunctionNode> functions = packageNode.getFunctions();
       if (functions != null) {
         for (FunctionNode functionNode : functions) {
-          FileNode fileNode = getFileNodeByFileName(functionNode.getFile().getFilename());
+          FileNode fileNode = getFileNodeByFileName(functionNode.getFile().getFileName());
           if (fileNode == null) {
             continue;
           }
@@ -79,7 +79,7 @@ public final class MetricsNode {
    */
   private FileNode getFileNodeByFileName(String filename) {
     for (FileNode fileNode : files) {
-      if (fileNode.getFilename().equals(filename)) {
+      if (fileNode.getFileName().equals(filename)) {
         return fileNode;
       }
     }

@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.core;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Phase;
@@ -44,7 +45,6 @@ import org.sonar.squid.text.Source;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -99,11 +99,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     } catch (RuntimeException rEx) {
       LOG.error("Error while parsing file '" + file.getAbsolutePath() + "'", rEx);
     } finally {
-      try {
-        reader.close();
-      } catch (IOException IoEx) {
-        LOG.error("Error while closing file '" + file.getAbsolutePath() + "'", IoEx);
-      }
+      IOUtils.closeQuietly(reader);
     }
 
     return result;

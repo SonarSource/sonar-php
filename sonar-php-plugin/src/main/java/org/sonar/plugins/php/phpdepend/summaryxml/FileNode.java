@@ -57,7 +57,7 @@ public final class FileNode {
   /**
    * Returns filename of the current FileNode
    */
-  public String getFilename() {
+  public String getFileName() {
     return fileName;
   }
 

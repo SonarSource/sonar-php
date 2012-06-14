@@ -24,6 +24,9 @@ package org.sonar.plugins.php.api;
  */
 public final class PhpConstants {
 
+  private PhpConstants() {
+  }
+
   public static final String LANGUAGE_NAME = "PHP";
   public static final String LANGUAGE_KEY = "php";
 

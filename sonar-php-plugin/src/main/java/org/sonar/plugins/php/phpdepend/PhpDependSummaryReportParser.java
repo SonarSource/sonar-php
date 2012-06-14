@@ -85,7 +85,7 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
   }
 
   private File validProjectFile(FileNode fileNode) {
-    String fileName = fileNode.getFilename();
+    String fileName = fileNode.getFileName();
     if (StringUtils.isEmpty(fileName)) {
       return null;
     }

@@ -193,7 +193,7 @@ public class PhpUnitResultParser implements BatchExtension {
       return;
     }
     Resource<?> unitTestResource = getUnitTestResource(fileReport);
-    if (unitTestResource != null) {// fileReport.getTests() > 0) {
+    if (unitTestResource != null) {
       double testsCount = fileReport.getTests() - fileReport.getSkipped();
       if (fileReport.getSkipped() > 0) {
         context.saveMeasure(unitTestResource, CoreMetrics.SKIPPED_TESTS, (double) fileReport.getSkipped());

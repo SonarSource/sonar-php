@@ -193,7 +193,7 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
         + workingDir;
       LOG.error(msg);
     }
-    return ruleset.length() > 0 ? ruleset : null;
+    return (ruleset != null && ruleset.length() > 0) ? ruleset : null;
   }
 
   /**
