@@ -32,11 +32,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_EXTENSIONS_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_MODIFIER;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_MODIFIER;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_MODIFIER;
 
 /**
@@ -83,13 +81,12 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
     result.add(PHPCS_REPORT_MODIFIER);
 
     // default level is no level, but can be overriden if set.
-    if (configuration.isStringPropertySet(PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY)) {
-      String severityOption = configuration.getSeverityModifier();
-      result.add(severityOption + configuration.getLevel());
+    if (configuration.getLevel() != null && configuration.getSeverityModifier() != null) {
+      result.add(configuration.getSeverityModifier() + configuration.getLevel());
     }
     // default standard is no standard (but maybe Pear is taken)
     // use a generated ruleset from the current profile and pass it to standard.
-    if (configuration.isStringPropertySet(PHPCS_STANDARD_ARGUMENT_KEY)) {
+    if (configuration.getStandard() != null) {
       result.add(PHPCS_STANDARD_MODIFIER + configuration.getStandard());
     } else {
       File ruleset = getRuleset(configuration, profile, exporter);
@@ -100,7 +97,7 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
 
     result.add(PHPCS_EXTENSIONS_MODIFIER + StringUtils.join(getPhpLanguage().getFileSuffixes(), EXCLUSION_PATTERN_SEPARATOR));
 
-    if (configuration.isStringPropertySet(PHPCS_ARGUMENT_LINE_KEY)) {
+    if (configuration.getArgumentLine() != null) {
       result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
 

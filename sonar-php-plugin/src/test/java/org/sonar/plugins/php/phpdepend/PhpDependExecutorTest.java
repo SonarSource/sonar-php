@@ -19,107 +19,82 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.MockUtils.getFile;
-import static org.sonar.plugins.php.MockUtils.getMockProject;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY;
 
 public class PhpDependExecutorTest {
 
-  /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()} .
-   */
-  @Test
-  public void testSimpleCommandLine() {
-    Project project = getMockProject();
-    when(project.getExclusionPatterns()).thenReturn(new String[0]);
-    PhpDependConfiguration c = getWindowsConfiguration(project);
-    PhpDependExecutor executor = new PhpDependExecutor(new Php(), c);
-    List<String> commandLine = executor.getCommandLine();
-    String s1 = "pdepend.bat";
-    String s2 = "--phpunit-xml=" + getFile("C:/projets/PHP/Monkey/target/logs/pdepend.xml");
-    String s3 = "--suffix=php,php3,php4,php5,phtml,inc";
-    String s4 = new File("C:/projets/PHP/Monkey/sources/main").toString();
-    List<String> expected = Arrays.asList(s1, s2, s3, s4);
+  private Settings settings;
+  private PhpDependExecutor executor;
 
-    assertThat(commandLine).isEqualTo(expected);
+  @Before
+  public void init() throws Exception {
+    settings = Settings.createForComponent(new PhpDependSensor(null, null, null));
+    Project project = MockUtils.createMockProject();
+    PhpDependConfiguration configuration = new PhpDependConfiguration(settings, project);
+    executor = new PhpDependExecutor(new Php(), configuration);
+  }
+
+  @Test
+  public void testGetExecutedTool() throws Exception {
     assertThat(executor.getExecutedTool(), is("PHP Depend"));
   }
 
   @Test
-  public void testCommandLineWithSeveralParameters() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty(PDEPEND_EXCLUDE_PACKAGE_KEY, "foo,bar");
-    conf.setProperty(PDEPEND_WITHOUT_ANNOTATION_KEY, "true");
-    conf.setProperty(PDEPEND_ARGUMENT_LINE_KEY, "  --foo=bar --foo2=bar2 ");
-    Project project = MockUtils.createMockProject(conf);
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-
-    PhpDependExecutor executor = new PhpDependExecutor(new Php(), config);
+  public void testSimpleCommandLine() {
     List<String> commandLine = executor.getCommandLine();
-    String s1 = "pdepend.bat";
-    String s2 = "--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath();
-    String s3 = "--suffix=php,php3,php4,php5,phtml,inc";
-    String s4 = "--exclude=foo,bar";
-    String s5 = "--without-annotations";
-    String s6 = "--foo=bar";
-    String s7 = "--foo2=bar2";
-    String s8 = new File("target/MockProject/src").toString();
+    assertThat(commandLine.get(0)).startsWith("pdepend");
+    assertThat(commandLine.get(1)).isEqualTo("--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath());
+    assertThat(commandLine.get(2)).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
+    assertThat(commandLine.get(3)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
+  }
 
-    List<String> expected = Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8);
+  @Test
+  public void testCommandLineWithSeveralParameters() {
+    // Given
+    settings.setProperty(PDEPEND_EXCLUDE_PACKAGE_KEY, "foo,bar");
+    settings.setProperty(PDEPEND_WITHOUT_ANNOTATION_KEY, "true");
+    settings.setProperty(PDEPEND_BAD_DOCUMENTATION_KEY, "true");
+    settings.setProperty(PDEPEND_ARGUMENT_LINE_KEY, "  --foo=bar --foo2=bar2 ");
 
-    assertThat(commandLine).isEqualTo(expected);
+    // Verify
+    List<String> commandLine = executor.getCommandLine();
+    assertThat(commandLine.get(0)).startsWith("pdepend");
+    assertThat(commandLine.get(1)).isEqualTo("--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath());
+    assertThat(commandLine.get(2)).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
+    assertThat(commandLine.get(3)).isEqualTo("--exclude=foo,bar");
+    assertThat(commandLine.get(4)).isEqualTo("--bad-documentation");
+    assertThat(commandLine.get(5)).isEqualTo("--without-annotations");
+    assertThat(commandLine.get(6)).isEqualTo("--foo=bar");
+    assertThat(commandLine.get(7)).isEqualTo("--foo2=bar2");
+    assertThat(commandLine.get(8)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
   }
 
   /**
-   * Gets the windows configuration.
-   * 
-   * @return the windows configuration
+   * SONARPLUGINS-1718
    */
-  private PhpDependConfiguration getWindowsConfiguration(Project project) {
-    return getConfiguration(project, true, "");
-  }
+  @Test
+  public void testCommandLineWithStarInArgumentLineProperty() {
+    // Given
+    settings.setProperty(PDEPEND_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
 
-  /**
-   * Gets the configuration.
-   * 
-   * @param isOsWindows
-   *          the is os windows
-   * @param path
-   *          the path
-   * @return the configuration
-   */
-
-  private PhpDependConfiguration getConfiguration(Project project, final boolean isOsWindows, final String path) {
-    PhpDependConfiguration config = new PhpDependConfiguration(project) {
-
-      @SuppressWarnings("unused")
-      public String getCommandLinePath() {
-        return path;
-      }
-
-      @Override
-      public boolean isOsWindows() {
-        return isOsWindows;
-      }
-    };
-    return config;
+    // Verify
+    assertThat(executor.getCommandLine().get(3)).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
   }
 
 }

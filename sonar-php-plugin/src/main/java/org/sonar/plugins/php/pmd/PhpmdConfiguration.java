@@ -19,11 +19,9 @@
  */
 package org.sonar.plugins.php.pmd;
 
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * The PhpPmd configuration class. It handles report file path and name with default options
@@ -58,17 +56,26 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    * @param project
    *          the project
    */
-  public PhpmdConfiguration(Project project) {
-    super(project);
+  public PhpmdConfiguration(Settings settings, Project project) {
+    super(settings, project);
   }
 
   /**
-   * Gets the project source folders.
+   * Gets the level.
    * 
-   * @return List<File> the source folders
+   * @return the level
    */
-  public List<File> getSourceDir() {
-    return getProject().getFileSystem().getSourceDirs();
+  public String getLevel() {
+    return getSettings().getString(PHPMD_LEVEL_ARGUMENT_KEY);
+  }
+
+  /**
+   * Gets the rulesets.
+   * 
+   * @return the rulesets
+   */
+  public String getRulesets() {
+    return PHPMD_DEFAULT_RULESET_ARGUMENT;
   }
 
   /**
@@ -85,30 +92,6 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getCommandLine() {
     return PHPMD_COMMAND_LINE;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultArgumentLine() {
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultReportFileName() {
-    return PHPMD_REPORT_FILE_NAME_DEFVALUE;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultReportFilePath() {
-    return PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -157,23 +140,5 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getTimeoutKey() {
     return PHPMD_TIMEOUT_KEY;
-  }
-
-  /**
-   * Gets the level.
-   * 
-   * @return the level
-   */
-  public String getLevel() {
-    return getProject().getConfiguration().getString(PHPMD_LEVEL_ARGUMENT_KEY, PHPMD_LEVEL_ARGUMENT_DEFVALUE);
-  }
-
-  /**
-   * Gets the rulesets.
-   * 
-   * @return the rulesets
-   */
-  public String getRulesets() {
-    return PHPMD_DEFAULT_RULESET_ARGUMENT;
   }
 }

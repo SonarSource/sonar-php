@@ -19,298 +19,94 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.utils.SonarException;
+import org.junit.rules.ExpectedException;
+import org.sonar.api.config.Settings;
+import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 
 import java.io.File;
-import java.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_COMMAND_LINE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_DEFVALUE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_PHPUNIT;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_SUMMARY;
+import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
 
 /**
  * The Class PhpDependConfigurationTest.
  */
 public class PhpDependConfigurationTest {
 
-  private static final String REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY = PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
-  private static final String DEFAULT_REPORT_FILE_NAME = PDEPEND_REPORT_FILE_NAME_DEFVALUE;
-  private static final String REPORT_FILE_NAME_PROPERTY_KEY = PDEPEND_REPORT_FILE_NAME_KEY;
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
-  @Test
-  public void testGetExcludePackageWithNull() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-    Configuration c = project.getConfiguration();
-    when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(null);
-    assertEquals(null, config.getExcludePackages());
+  private Settings settings;
+  private PhpDependConfiguration phpConfig;
+
+  @Before
+  public void init() throws Exception {
+    settings = Settings.createForComponent(new PhpDependSensor(null, null, null));
+    phpConfig = new PhpDependConfiguration(settings, MockUtils.createMockProject());
   }
 
   @Test
-  public void testGetExcludePackageWithNotNull() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-    Configuration c = project.getConfiguration();
-    String[] excludeDirs = new String[] {"a", "b"};
-    when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(excludeDirs);
-    assertEquals("a,b", config.getExcludePackages());
+  public void shouldReturnDefaultValues() {
+    assertThat(phpConfig.getCommandLine()).isEqualTo("pdepend");
+    assertThat(phpConfig.isSkip()).isFalse();
+    assertThat(phpConfig.isAnalyseOnly()).isFalse();
+    File report = new File("target/MockProject/target/logs/pdepend.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    assertThat(phpConfig.isWithoutAnnotation()).isFalse();
+    assertThat(phpConfig.isBadDocumentation()).isFalse();
+    assertThat(phpConfig.getExcludePackages()).isNull();
+    assertThat(phpConfig.getArgumentLine()).isNull();
+    assertThat(phpConfig.getTimeout()).isEqualTo(DEFAULT_TIMEOUT);
+    assertThat(phpConfig.getReportType()).isEqualTo("phpunit-xml");
+    assertThat(phpConfig.getReportFileCommandOption()).isEqualTo("--phpunit-xml=" + report.getAbsolutePath());
   }
 
   @Test
-  public void testGetExcludePackageWithEmpty() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-    Configuration c = project.getConfiguration();
-    String[] excludeDirs = new String[] {};
-    when(c.getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY)).thenReturn(excludeDirs);
-    assertEquals(null, config.getExcludePackages());
-  }
+  public void shouldReturnCustomProperties() {
+    // Given
+    settings.setProperty(PhpDependConfiguration.PDEPEND_SKIP_KEY, "true");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_KEY, "true");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY, "my-pdepend.xml");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, "reports");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY, "true");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_KEY, "true");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY, "a,b,c");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_TIMEOUT_KEY, "120");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_REPORT_TYPE, "summary-xml");
 
-  /**
-   * Should get command line for windows.
-   */
-  @Test
-  public void shouldGetCommandLineForWindows() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = getWindowsConfiguration(project);
-
-    assertThat(config.getOsDependentToolScriptName(), is(PDEPEND_COMMAND_LINE + ".bat"));
-  }
-
-  /**
-   * Should get command line for not windows.
-   */
-  @Test
-  public void shouldGetCommandLineForNotWindows() {
-    Project project = getMockProject();
-    // new Php();
-    PhpDependConfiguration config = getNotWindowsConfiguration(project);
-    assertThat(config.getOsDependentToolScriptName(), is(PDEPEND_COMMAND_LINE));
-  }
-
-  /**
-   * S Should get valid suffixe option.
-   */
-  @Test
-  public void shouldGetValidSuffixeOption() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-
-    String suffixesOption = config.getSuffixesCommandOption(new Php());
-    assertThat(suffixesOption).isNotNull();
-    assertThat(suffixesOption).contains(",");
-  }
-
-  /**
-   * Should get valid suffixe option.
-   */
-  @Test
-  public void shouldReturnDefaultReportFileWithDefaultPath() {
-    Project project = getMockProject();
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\pdepend.xml");
-  }
-
-  private Project getMockProject() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
-        PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
-    when(project.getConfiguration()).thenReturn(configuration);
-    return project;
-  }
-
-  /**
-   * Should get valid suffixe option.
-   */
-  @Test
-  public void shouldReturnDefaultReportFileWithCustomPath() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn(DEFAULT_REPORT_FILE_NAME);
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.xml");
+    // Verify
+    assertThat(phpConfig.getCommandLine()).isEqualTo("pdepend");
+    assertThat(phpConfig.isSkip()).isTrue();
+    assertThat(phpConfig.isAnalyseOnly()).isTrue();
+    File report = new File("target/MockProject/target/reports/my-pdepend.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    assertThat(phpConfig.isWithoutAnnotation()).isTrue();
+    assertThat(phpConfig.isBadDocumentation()).isTrue();
+    assertThat(phpConfig.getExcludePackages()).isEqualTo("a,b,c");
+    assertThat(phpConfig.getArgumentLine()).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    assertThat(phpConfig.getTimeout()).isEqualTo(120);
+    assertThat(phpConfig.getReportType()).isEqualTo("summary-xml");
+    assertThat(phpConfig.getReportFileCommandOption()).isEqualTo("--summary-xml=" + report.getAbsolutePath());
   }
 
   @Test
-  public void shouldReturnCustomReportFileWithCustomPath() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.summary.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\pdepend.summary.xml");
+  public void shouldFailIfBadReportType() {
+    settings.setProperty(PhpDependConfiguration.PDEPEND_REPORT_TYPE, "foo-xml");
+
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("Invalid PHP Depend report type: foo-xml. Supported types: phpunit-xml, summary-xml");
+
+    phpConfig.getReportFileCommandOption();
   }
 
   @Test
-  public void shouldReturnDefaultReportFileOptionByDefault() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests")));
-    when(fs.getBuildDir()).thenReturn(new File("/Volumes/git/sonar/sonar-php-trunk-git/target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("logs");
-    when(configuration.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(PDEPEND_REPORT_TYPE_DEFVALUE);
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-
-    String cli = config.getReportFileCommandOption();
-    assertEquals(cli, "--phpunit-xml=/Volumes/git/sonar/sonar-php-trunk-git/target/logs/pdepend.xml");
-  }
-
-  @Test
-  public void shouldReturnPhpUnitReportFileOptionWhenRequested() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests")));
-    when(fs.getBuildDir()).thenReturn(new File("/Volumes/git/sonar/sonar-php-trunk-git/target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("pdepend.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("logs");
-    when(configuration.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(PDEPEND_REPORT_TYPE_PHPUNIT);
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-
-    String cli = config.getReportFileCommandOption();
-    assertEquals(cli, "--phpunit-xml=/Volumes/git/sonar/sonar-php-trunk-git/target/logs/pdepend.xml");
-  }
-
-  @Test
-  public void shouldReturnSummaryReportFileOptionWhenRequested() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests")));
-    when(fs.getBuildDir()).thenReturn(new File("/Volumes/git/sonar/sonar-php-trunk-git/target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("summary.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("logs");
-    when(configuration.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(PDEPEND_REPORT_TYPE_SUMMARY);
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-
-    String cli = config.getReportFileCommandOption();
-    assertEquals(cli, "--summary-xml=/Volumes/git/sonar/sonar-php-trunk-git/target/logs/summary.xml");
-  }
-
-  @Test(expected = SonarException.class)
-  public void shouldThrowExceptionWhenNotSupportedReportFileOptionUsed() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/tests")));
-    when(fs.getBuildDir()).thenReturn(new File("/Volumes/git/sonar/sonar-php-trunk-git/target"));
-    when(configuration.getString(REPORT_FILE_NAME_PROPERTY_KEY, DEFAULT_REPORT_FILE_NAME)).thenReturn("summary.xml");
-    when(configuration.getString(REPORT_FILE_RELATIVE_PATH_PROPERTY_KEY, PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("logs");
-    when(configuration.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn("not-supported");
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpDependConfiguration config = new PhpDependConfiguration(project);
-
-    String cli = config.getReportFileCommandOption();
-  }
-
-  /**
-   * Gets the windows configuration.
-   * 
-   * @return the windows configuration
-   */
-  private PhpDependConfiguration getWindowsConfiguration(Project project) {
-    return getConfiguration(project, true, "");
-  }
-
-  /**
-   * Gets the not windows configuration.
-   * 
-   * @return the not windows configuration
-   */
-  private PhpDependConfiguration getNotWindowsConfiguration(Project project) {
-    return getConfiguration(project, false, "");
-  }
-
-  /**
-   * Gets the configuration.
-   * 
-   * @param isOsWindows
-   *          the is os windows
-   * @param path
-   *          the path
-   * @return the configuration
-   */
-
-  private PhpDependConfiguration getConfiguration(Project project, final boolean isOsWindows, final String path) {
-    PhpDependConfiguration config = new PhpDependConfiguration(project) {
-
-      @SuppressWarnings("unused")
-      public String getCommandLinePath() {
-        return path;
-      }
-
-      @Override
-      public boolean isOsWindows() {
-        return isOsWindows;
-      }
-    };
-    return config;
+  public void shouldReturnSuffixesCommandOption() throws Exception {
+    assertThat(phpConfig.getSuffixesCommandOption(new Php(settings))).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
   }
 
 }

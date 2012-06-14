@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_EXTENSIONS_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_OPTION;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FORMAT;
@@ -88,7 +87,7 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
 
     result.add(PHPMD_EXTENSIONS_OPTION);
     result.add(StringUtils.join(getPhpLanguage().getFileSuffixes(), ","));
-    if (configuration.isStringPropertySet(PHPMD_ARGUMENT_LINE_KEY)) {
+    if (configuration.getArgumentLine() != null) {
       result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
     return result;

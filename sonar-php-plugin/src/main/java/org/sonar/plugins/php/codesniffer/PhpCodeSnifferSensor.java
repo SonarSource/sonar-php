@@ -47,7 +47,6 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPC
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
-import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_DEFVALUE;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_TIMEOUT_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository.PHPCS_REPOSITORY_KEY;
 import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
@@ -69,7 +68,7 @@ import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOU
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_REPORT_FILE_NAME_KEY, defaultValue = PHPCS_REPORT_FILE_NAME_DEFVALUE, name = "Report file name", project = true,
     global = true, description = "Name of the report file to analyse.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
-  @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = PHPCS_STANDARD_ARGUMENT_DEFVALUE,
+  @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = "",
     name = "Ruleset (or standard) to run PHP_CodeSniffer with", project = true, global = true,
     description = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. "
       + "If no one is specified all standards will be launched", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),

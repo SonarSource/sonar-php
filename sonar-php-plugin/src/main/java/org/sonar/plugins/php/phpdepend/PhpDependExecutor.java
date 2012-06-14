@@ -27,10 +27,8 @@ import org.sonar.plugins.php.core.AbstractPhpExecutor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_OPTION;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_OPTION;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_OPTION;
 
 /**
@@ -67,7 +65,7 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
     result.add(configuration.getOsDependentToolScriptName());
     result.add(configuration.getReportFileCommandOption());
     result.add(configuration.getSuffixesCommandOption(getPhpLanguage()));
-    if (configuration.isStringPropertySet(PDEPEND_EXCLUDE_PACKAGE_KEY)) {
+    if (configuration.getExcludePackages() != null) {
       result.add(PDEPEND_EXCLUDE_OPTION + configuration.getExcludePackages());
     }
 
@@ -77,7 +75,7 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
     if (configuration.isWithoutAnnotation()) {
       result.add(PDEPEND_WITHOUT_ANNOTATION_OPTION);
     }
-    if (configuration.isStringPropertySet(PDEPEND_ARGUMENT_LINE_KEY)) {
+    if (configuration.getArgumentLine() != null) {
       result.addAll(Lists.newArrayList(StringUtils.split(configuration.getArgumentLine(), ' ')));
     }
     // SONARPLUGINS-547 PhpDependExecutor: wrong dirs params

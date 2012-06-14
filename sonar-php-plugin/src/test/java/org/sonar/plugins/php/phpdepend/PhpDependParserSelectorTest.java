@@ -19,20 +19,16 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import org.apache.commons.configuration.Configuration;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.sonar.api.resources.Project;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.MockUtils;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
 
 /**
  * The Class PhpDependParserSelectorTest.
@@ -41,52 +37,45 @@ public class PhpDependParserSelectorTest {
   @Rule
   public ExpectedException exception = ExpectedException.none();
 
+  @Mock
+  private PhpDependConfiguration phpConfig;
+
+  @Mock
+  private PhpDependPhpUnitReportParser phpunitParser;
+
+  @Mock
+  private PhpDependSummaryReportParser summaryParser;
+
+  private PhpDependParserSelector parserSelector;
+
+  @Before
+  public void init() throws Exception {
+    MockitoAnnotations.initMocks(this);
+
+    parserSelector = new PhpDependParserSelector(phpunitParser, summaryParser, phpConfig);
+  }
+
   @Test
   public void testSelectThrowsExceptionWhenInvalidReportUsed() {
-    String reportType = "invalid-xml";
-    Configuration c = mock(Configuration.class);
-    when(c.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(reportType);
-    Project project = MockUtils.createMockProject(c);
-
-    PhpDependPhpUnitReportParser phpunitParser = mock(PhpDependPhpUnitReportParser.class);
-    PhpDependSummaryReportParser summaryParser = mock(PhpDependSummaryReportParser.class);
-    PhpDependParserSelector parserSelector = new PhpDependParserSelector(phpunitParser, summaryParser);
-    PhpDependConfiguration conf = new PhpDependConfiguration(project);
+    when(phpConfig.getReportType()).thenReturn("invalid-xml");
 
     exception.expect(SonarException.class);
-    exception.expectMessage("Invalid PHP Depend report type: " + reportType + ". Supported types: phpunit-xml, summary-xml");
-    parserSelector.select(conf);
+    exception.expectMessage("Invalid PHP Depend report type: invalid-xml. Supported types: phpunit-xml, summary-xml");
+
+    parserSelector.select();
   }
 
   @Test
   public void testParserSelectorChoosesPhpUnitParser() {
-    String reportType = "phpunit-xml";
-    Configuration c = mock(Configuration.class);
-    when(c.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(PDEPEND_REPORT_TYPE_DEFVALUE);
-    Project project = MockUtils.createMockProject(c);
+    when(phpConfig.getReportType()).thenReturn(PhpDependConfiguration.PDEPEND_REPORT_TYPE_PHPUNIT);
 
-    PhpDependPhpUnitReportParser phpunitParser = mock(PhpDependPhpUnitReportParser.class);
-    PhpDependSummaryReportParser summaryParser = mock(PhpDependSummaryReportParser.class);
-    PhpDependParserSelector parserSelector = new PhpDependParserSelector(phpunitParser, summaryParser);
-    PhpDependConfiguration conf = new PhpDependConfiguration(project);
-
-    PhpDependResultsParser parser = parserSelector.select(conf);
-    assertThat(parser, is(PhpDependPhpUnitReportParser.class));
+    assertThat(parserSelector.select()).isEqualTo(phpunitParser);
   }
 
   @Test
   public void testParserSelectorChoosesSummaryParser() {
-    String reportType = "summary-xml";
-    Configuration c = mock(Configuration.class);
-    when(c.getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE)).thenReturn(reportType);
-    Project project = MockUtils.createMockProject(c);
+    when(phpConfig.getReportType()).thenReturn(PhpDependConfiguration.PDEPEND_REPORT_TYPE_SUMMARY);
 
-    PhpDependPhpUnitReportParser phpunitParser = mock(PhpDependPhpUnitReportParser.class);
-    PhpDependSummaryReportParser summaryParser = mock(PhpDependSummaryReportParser.class);
-    PhpDependParserSelector parserSelector = new PhpDependParserSelector(phpunitParser, summaryParser);
-    PhpDependConfiguration conf = new PhpDependConfiguration(project);
-
-    PhpDependResultsParser parser = parserSelector.select(conf);
-    assertThat(parser, is(PhpDependSummaryReportParser.class));
+    assertThat(parserSelector.select()).isEqualTo(summaryParser);
   }
 }

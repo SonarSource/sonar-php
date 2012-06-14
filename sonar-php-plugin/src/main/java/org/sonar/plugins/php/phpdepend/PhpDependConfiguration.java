@@ -20,8 +20,8 @@
 package org.sonar.plugins.php.phpdepend;
 
 import org.apache.commons.lang.StringUtils;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
@@ -65,8 +65,8 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    * @param project
    *          the project to be analyzed
    */
-  public PhpDependConfiguration(Project project) {
-    super(project);
+  public PhpDependConfiguration(Settings settings, Project project) {
+    super(settings, project);
   }
 
   /**
@@ -75,15 +75,28 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    * @return the report filecommand option
    */
   public String getReportFileCommandOption() {
-    String reportType = getProject().getConfiguration().getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE);
-    String outputOption;
+    String reportType = getReportType();
     if (reportType.equals(PDEPEND_REPORT_TYPE_PHPUNIT) || reportType.equals(PDEPEND_REPORT_TYPE_SUMMARY)) {
-      outputOption = "--" + reportType;
+      return "--" + reportType + "=" + getReportFile().getAbsolutePath();
     } else {
-      throw new SonarException("Invalid PHP Depend report type: " + reportType + ". Supported types: phpunit-xml, summary-xml");
+      throw new IllegalArgumentException("Invalid PHP Depend report type: " + reportType + ". Supported types: phpunit-xml, summary-xml");
     }
+  }
 
-    return outputOption + "=" + getReportFile().getAbsolutePath();
+  public String getReportType() {
+    return getSettings().getString(PDEPEND_REPORT_TYPE);
+  }
+
+  public String getExcludePackages() {
+    return getSettings().getString(PDEPEND_EXCLUDE_PACKAGE_KEY);
+  }
+
+  public boolean isBadDocumentation() {
+    return getSettings().getBoolean(PDEPEND_BAD_DOCUMENTATION_KEY);
+  }
+
+  public boolean isWithoutAnnotation() {
+    return getSettings().getBoolean(PDEPEND_WITHOUT_ANNOTATION_KEY);
   }
 
   /**
@@ -101,30 +114,6 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getArgumentLineKey() {
     return PDEPEND_ARGUMENT_LINE_KEY;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultArgumentLine() {
-    return "";
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultReportFileName() {
-    return PDEPEND_REPORT_FILE_NAME_DEFVALUE;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultReportFilePath() {
-    return PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -181,22 +170,6 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getTimeoutKey() {
     return PDEPEND_TIMEOUT_KEY;
-  }
-
-  public String getExcludePackages() {
-    String[] values = getProject().getConfiguration().getStringArray(PDEPEND_EXCLUDE_PACKAGE_KEY);
-    if (values != null && values.length > 0) {
-      return StringUtils.join(values, ',');
-    }
-    return null;
-  }
-
-  public boolean isBadDocumentation() {
-    return getProject().getConfiguration().getBoolean(PDEPEND_BAD_DOCUMENTATION_KEY, Boolean.valueOf(PDEPEND_BAD_DOCUMENTATION_DEFVALUE));
-  }
-
-  public boolean isWithoutAnnotation() {
-    return getProject().getConfiguration().getBoolean(PDEPEND_WITHOUT_ANNOTATION_KEY, Boolean.valueOf(PDEPEND_WITHOUT_ANNOTATION_DEFVALUE));
   }
 
 }

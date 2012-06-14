@@ -19,15 +19,16 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.MockUtils;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import java.io.File;
+
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,98 +36,115 @@ import static org.mockito.Mockito.when;
 
 public class PhpUnitSensorTest {
 
+  @Mock
+  private PhpUnitConfiguration phpConfig;
+
+  @Mock
+  private PhpUnitExecutor executor;
+
+  @Mock
+  private PhpUnitResultParser parser;
+
+  @Mock
+  private PhpUnitCoverageResultParser coverageParser;
+
+  @Mock
+  private Project project;
+
+  @Mock
+  private SensorContext context;
+
+  private PhpUnitSensor sensor;
+
+  @Before
+  public void init() throws Exception {
+    MockitoAnnotations.initMocks(this);
+
+    when(project.getLanguageKey()).thenReturn("php");
+    when(phpConfig.isDynamicAnalysisEnabled()).thenReturn(true);
+
+    sensor = new PhpUnitSensor(phpConfig, executor, parser, coverageParser);
+  }
+
+  @Test
+  public void testToString() {
+    assertThat(sensor.toString()).isEqualTo("PHPUnit Sensor");
+  }
+
   @Test
   public void shouldLaunch() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
-    PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
-    PhpUnitSensor sensor = createSensor(project, executor);
-
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
+    assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
   @Test
   public void shouldNotLaunchOnNonPhpProject() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
     when(project.getLanguageKey()).thenReturn("java");
 
-    PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
-    PhpUnitSensor sensor = createSensor(project, executor);
-
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
+    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 
   @Test
   public void shouldNotLaunchIfNotDynamicAnalysis() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty("sonar.dynamicAnalysis", "false");
-    Project project = MockUtils.createMockProject(conf);
-    PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
-    PhpUnitSensor sensor = createSensor(project, executor);
+    when(phpConfig.isDynamicAnalysisEnabled()).thenReturn(false);
 
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
+    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 
   @Test
-  public void shouldNotLaunchIfBothSkip() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty("sonar.phpUnit.skip", true);
-    conf.setProperty("sonar.phpUnit.coverage.skip", true);
-    Project project = MockUtils.createMockProject(conf);
-    PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
-    PhpUnitSensor sensor = createSensor(project, executor);
+  public void shouldNotLaunchIfSkipTestAndCoverage() {
+    when(phpConfig.isSkip()).thenReturn(true);
+    when(phpConfig.shouldSkipCoverage()).thenReturn(true);
 
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
+    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 
   @Test
-  public void shouldLaunchIfOnlyOneSkip() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty("sonar.phpUnit.skip", true);
-    Project project = MockUtils.createMockProject(conf);
-    PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
-    PhpUnitSensor sensor = createSensor(project, executor);
+  public void shouldLaunchIfSkipCoverageButNotTests() {
+    when(phpConfig.shouldSkipCoverage()).thenReturn(true);
 
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
-
-    // and the other way around
-    conf = new BaseConfiguration();
-    conf.setProperty("sonar.phpUnit.coverage.skip", true);
-    project = MockUtils.createMockProject(conf);
-    executor = mock(PhpUnitExecutor.class);
-    sensor = createSensor(project, executor);
-
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
+    assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
   @Test
   public void testAnalyse() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
-    PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
-    PhpUnitSensor sensor = createSensor(project, executor);
-    SensorContext context = mock(SensorContext.class);
+    File report = new File("target/MockProject/target/report.xml");
+    when(phpConfig.getReportFile()).thenReturn(report);
+    File coverageReport = new File("target/MockProject/target/coverage-report.xml");
+    when(phpConfig.getCoverageReportFile()).thenReturn(coverageReport);
+
     sensor.analyse(project, context);
 
     verify(executor, times(1)).execute();
+    verify(parser, times(1)).parse(report);
+    verify(coverageParser, times(1)).parse(coverageReport);
+  }
+
+  @Test
+  public void testAnalyseWithoutCoverage() {
+    when(phpConfig.shouldSkipCoverage()).thenReturn(true);
+    File report = new File("target/MockProject/target/report.xml");
+    when(phpConfig.getReportFile()).thenReturn(report);
+
+    sensor.analyse(project, context);
+
+    verify(executor, times(1)).execute();
+    verify(parser, times(1)).parse(report);
+    verify(coverageParser, never()).parse(report);
   }
 
   @Test
   public void testAnalyseWithoutExecutingTool() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty("sonar.phpUnit.analyzeOnly", true);
-    Project project = MockUtils.createMockProject(conf);
-    PhpUnitExecutor executor = mock(PhpUnitExecutor.class);
-    PhpUnitSensor sensor = createSensor(project, executor);
-    SensorContext context = mock(SensorContext.class);
+    when(phpConfig.isAnalyseOnly()).thenReturn(true);
+    File report = new File("target/MockProject/target/report.xml");
+    when(phpConfig.getReportFile()).thenReturn(report);
+    File coverageReport = new File("target/MockProject/target/coverage-report.xml");
+    when(phpConfig.getCoverageReportFile()).thenReturn(coverageReport);
+
     sensor.analyse(project, context);
 
     verify(executor, never()).execute();
-  }
-
-  protected PhpUnitSensor createSensor(Project project, PhpUnitExecutor executor) {
-    PhpUnitResultParser parser = mock(PhpUnitResultParser.class);
-    PhpUnitCoverageResultParser coverageResultParser = mock(PhpUnitCoverageResultParser.class);
-    PhpUnitSensor sensor = new PhpUnitSensor(new PhpUnitConfiguration(project), executor, parser, coverageResultParser);
-    return sensor;
+    verify(parser, times(1)).parse(report);
+    verify(coverageParser, times(1)).parse(coverageReport);
   }
 
 }

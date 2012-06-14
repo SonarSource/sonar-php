@@ -47,6 +47,22 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REP
  */
 public class MockUtils {
 
+  /**
+   * Preferred method to create mock project
+   */
+  public static Project createMockProject() {
+    Project project = mock(Project.class);
+    when(project.getLanguage()).thenReturn(new Php());
+    when(project.getLanguageKey()).thenReturn(PhpConstants.LANGUAGE_KEY);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("target/MockProject/src").getAbsoluteFile()));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("target/MockProject/test").getAbsoluteFile()));
+    when(fs.getBuildDir()).thenReturn(new File("target/MockProject/target").getAbsoluteFile());
+    when(fs.getBasedir()).thenReturn(new File("target/MockProject").getAbsoluteFile());
+    return project;
+  }
+
   public static Project createMockProject(Configuration config) {
     Project project = mock(Project.class);
     when(project.getLanguage()).thenReturn(new Php());

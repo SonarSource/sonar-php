@@ -19,19 +19,20 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
-import static org.junit.Assert.assertEquals;
+import java.io.File;
+
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,81 +43,89 @@ public class PhpDependSensorTest {
   @Rule
   public ExpectedException exception = ExpectedException.none();
 
+  @Mock
+  private PhpDependConfiguration phpConfig;
+
+  @Mock
+  private PhpDependExecutor executor;
+
+  @Mock
+  private PhpDependParserSelector parserSelector;
+
+  @Mock
+  private PhpDependResultsParser parser;
+
+  @Mock
+  private Project project;
+
+  @Mock
+  private SensorContext context;
+
+  private PhpDependSensor sensor;
+
+  @Before
+  public void init() throws Exception {
+    MockitoAnnotations.initMocks(this);
+
+    when(project.getLanguageKey()).thenReturn("php");
+    when(parserSelector.select()).thenReturn(parser);
+
+    sensor = new PhpDependSensor(phpConfig, executor, parserSelector);
+  }
+
   @Test
-  public void shouldNotLaunchOnNonPhpProject() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
-    when(project.getLanguageKey()).thenReturn("java");
-
-    PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSensor sensor = createSensor(project, executor);
-
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
+  public void testToString() {
+    assertThat(sensor.toString()).isEqualTo("PHP Depend Sensor");
   }
 
   @Test
   public void shouldLaunch() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
-    PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSensor sensor = createSensor(project, executor);
+    assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
+  }
 
-    assertEquals(true, sensor.shouldExecuteOnProject(project));
+  @Test
+  public void shouldNotLaunchOnNonPhpProject() {
+    when(project.getLanguageKey()).thenReturn("java");
+
+    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 
   @Test
   public void shouldNotLaunchIfSkip() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty("sonar.phpDepend.skip", true);
-    Project project = MockUtils.createMockProject(conf);
-    PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSensor sensor = createSensor(project, executor);
+    when(phpConfig.isSkip()).thenReturn(true);
 
-    assertEquals(false, sensor.shouldExecuteOnProject(project));
+    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 
   @Test
   public void testAnalyse() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
-    PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSensor sensor = createSensor(project, executor);
-    SensorContext context = mock(SensorContext.class);
+    File report = new File("target/MockProject/target/report.xml");
+    when(phpConfig.getReportFile()).thenReturn(report);
+
     sensor.analyse(project, context);
 
     verify(executor, times(1)).execute();
+    verify(parser, times(1)).parse(report);
   }
 
   @Test
   public void testAnalyseWithoutExecutingTool() {
-    Configuration conf = new BaseConfiguration();
-    conf.setProperty("sonar.phpDepend.analyzeOnly", true);
-    Project project = MockUtils.createMockProject(conf);
-    PhpDependExecutor executor = mock(PhpDependExecutor.class);
-    PhpDependSensor sensor = createSensor(project, executor);
-    SensorContext context = mock(SensorContext.class);
+    File report = new File("target/MockProject/target/report.xml");
+    when(phpConfig.getReportFile()).thenReturn(report);
+    when(phpConfig.isAnalyseOnly()).thenReturn(true);
+
     sensor.analyse(project, context);
 
     verify(executor, never()).execute();
+    verify(parser, times(1)).parse(report);
   }
 
   @Test
   public void testAnalyzeExitsGracefullyOnError() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
-    PhpDependExecutor executor = mock(PhpDependExecutor.class);
     doThrow(new PhpPluginExecutionException()).when(executor).execute();
-    PhpDependSensor sensor = createSensor(project, executor);
-    SensorContext context = mock(SensorContext.class);
+
     sensor.analyse(project, context);
-  }
 
-  protected PhpDependSensor createSensor(Project project, PhpDependExecutor executor) {
-    PhpDependPhpUnitReportParser parser = mock(PhpDependPhpUnitReportParser.class);
-    return createSensor(project, executor, parser);
-  }
-
-  protected PhpDependSensor createSensor(Project project, PhpDependExecutor executor, PhpDependResultsParser parser) {
-    PhpDependConfiguration conf = new PhpDependConfiguration(project);
-    PhpDependParserSelector parserSelector = mock(PhpDependParserSelector.class);
-    when(parserSelector.select(conf)).thenReturn(parser);
-    PhpDependSensor sensor = new PhpDependSensor(conf, executor, parserSelector);
-    return sensor;
+    // No exception is thrown
   }
 }

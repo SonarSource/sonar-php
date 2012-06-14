@@ -19,114 +19,30 @@
  */
 package org.sonar.plugins.php.core;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang.SystemUtils;
 import org.junit.Test;
-import org.sonar.api.resources.Project;
+import org.sonar.api.config.Settings;
 import org.sonar.plugins.php.MockUtils;
 
-import static org.junit.Assert.assertEquals;
+import static org.fest.assertions.Assertions.assertThat;
 
 public class AbstractPhpPluginConfigurationTest {
 
   @Test
   public void shouldNotSkipWhenShouldRunAndSkipNotSet() {
-    Project project = MockUtils.createMockProject(new BaseConfiguration());
-    FakeConfiguration conf = new FakeConfiguration(project);
+    FakeConfiguration conf = new FakeConfiguration();
 
-    assertEquals(false, conf.isSkip());
-  }
-
-  @Test
-  public void shouldSkipWhenShouldRunSetToFalseAndSkipNotSet() {
-    Configuration config = new BaseConfiguration();
-    config.setProperty("run", false);
-
-    Project project = MockUtils.createMockProject(config);
-    FakeConfiguration conf = new FakeConfiguration(project);
-
-    assertEquals(true, conf.isSkip());
-  }
-
-  @Test
-  public void shouldNotSkipWhenShouldRunSetToTrueAndSkipNotSet() {
-    Configuration config = new BaseConfiguration();
-    config.setProperty("run", true);
-
-    Project project = MockUtils.createMockProject(config);
-    FakeConfiguration conf = new FakeConfiguration(project);
-
-    assertEquals(false, conf.isSkip());
-  }
-
-  @Test
-  public void shouldSkipWhenSkipSetToTrueAndShouldRunNotSet() {
-    Configuration config = new BaseConfiguration();
-    config.setProperty("skip", true);
-
-    Project project = MockUtils.createMockProject(config);
-    FakeConfiguration conf = new FakeConfiguration(project);
-
-    assertEquals(true, conf.isSkip());
-  }
-
-  @Test
-  public void shouldNotSkipWhenSkipSetToFalseAndShouldRunNotSet() {
-    Configuration config = new BaseConfiguration();
-    config.setProperty("skip", false);
-
-    Project project = MockUtils.createMockProject(config);
-    FakeConfiguration conf = new FakeConfiguration(project);
-
-    assertEquals(false, conf.isSkip());
-  }
-
-  @Test
-  public void shouldSkipIgnoringShouldRunValueWhenSkipSetToTrue() {
-    Configuration config = new BaseConfiguration();
-    config.setProperty("skip", true);
-    config.setProperty("run", true);
-
-    Project project = MockUtils.createMockProject(config);
-    FakeConfiguration conf = new FakeConfiguration(project);
-
-    assertEquals(true, conf.isSkip());
-  }
-
-  @Test
-  public void shouldNotSkipIgnoringShouldRunValueWhenSkipSetToFalse() {
-    Configuration config = new BaseConfiguration();
-    config.setProperty("skip", false);
-    config.setProperty("run", true);
-
-    Project project = MockUtils.createMockProject(config);
-    FakeConfiguration conf = new FakeConfiguration(project);
-
-    assertEquals(false, conf.isSkip());
-  }
-
-  @Test
-  public void testDynamicAnalysisProperty() {
-    Configuration config = new BaseConfiguration();
-    Project project = MockUtils.createMockProject(config);
-    FakeConfiguration conf = new FakeConfiguration(project);
-    assertEquals(true, conf.isDynamicAnalysisEnabled());
-
-    // Set to FALSE
-    config.setProperty("sonar.dynamicAnalysis", "false");
-    conf = new FakeConfiguration(project);
-    assertEquals(false, conf.isDynamicAnalysisEnabled());
-
-    // Set to REUSE REPORTS (may be possible in Sonar, does not make sense for the moment in PHP plugin but must not break)
-    config.setProperty("sonar.dynamicAnalysis", "reuseReports");
-    conf = new FakeConfiguration(project);
-    assertEquals(true, conf.isDynamicAnalysisEnabled());
+    if (SystemUtils.IS_OS_WINDOWS) {
+      assertThat(conf.getOsDependentToolScriptName()).isEqualTo("fake-exec.bat");
+    } else {
+      assertThat(conf.getOsDependentToolScriptName()).isEqualTo("fake-exec");
+    }
   }
 
   class FakeConfiguration extends AbstractPhpConfiguration {
 
-    public FakeConfiguration(Project project) {
-      super(project);
+    public FakeConfiguration() {
+      super(new Settings(), MockUtils.createMockProject());
     }
 
     @Override
@@ -136,22 +52,7 @@ public class AbstractPhpPluginConfigurationTest {
 
     @Override
     protected String getCommandLine() {
-      return "";
-    }
-
-    @Override
-    protected String getDefaultArgumentLine() {
-      return "";
-    }
-
-    @Override
-    protected String getDefaultReportFileName() {
-      return "";
-    }
-
-    @Override
-    protected String getDefaultReportFilePath() {
-      return "";
+      return "fake-exec";
     }
 
     @Override
@@ -171,17 +72,17 @@ public class AbstractPhpPluginConfigurationTest {
 
     @Override
     protected String getShouldAnalyzeOnlyKey() {
-      return "analyze";
+      return "";
     }
 
     @Override
     protected String getSkipKey() {
-      return "skip";
+      return "";
     }
 
     @Override
     protected String getShouldRunKey() {
-      return "run";
+      return "";
     }
 
   }

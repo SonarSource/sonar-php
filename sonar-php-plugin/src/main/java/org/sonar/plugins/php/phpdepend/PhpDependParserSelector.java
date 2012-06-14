@@ -22,8 +22,6 @@ package org.sonar.plugins.php.phpdepend;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.utils.SonarException;
 
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
-import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_PHPUNIT;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_SUMMARY;
 
@@ -35,15 +33,17 @@ public class PhpDependParserSelector implements BatchExtension {
 
   private PhpDependPhpUnitReportParser phpunitParser;
   private PhpDependSummaryReportParser summaryParser;
+  private PhpDependConfiguration config;
 
   /**
    * @param phpunitParser Parser for Php Depend phpunit-xml report
    * @param summaryParser Parser for Php Depend summary-xml report
    */
-  public PhpDependParserSelector(PhpDependPhpUnitReportParser phpunitParser, PhpDependSummaryReportParser summaryParser) {
+  public PhpDependParserSelector(PhpDependPhpUnitReportParser phpunitParser, PhpDependSummaryReportParser summaryParser, PhpDependConfiguration config) {
     super();
     this.phpunitParser = phpunitParser;
     this.summaryParser = summaryParser;
+    this.config = config;
   }
 
   /**
@@ -53,12 +53,12 @@ public class PhpDependParserSelector implements BatchExtension {
    * @return PhpDependResultsParser
    * @throws SonarException
    */
-  public PhpDependResultsParser select(PhpDependConfiguration config) {
-    String reportType = config.getProject().getConfiguration().getString(PDEPEND_REPORT_TYPE, PDEPEND_REPORT_TYPE_DEFVALUE);
-    if (reportType.equals(PDEPEND_REPORT_TYPE_PHPUNIT)) {
-      return this.phpunitParser;
-    } else if (reportType.equals(PDEPEND_REPORT_TYPE_SUMMARY)) {
-      return this.summaryParser;
+  public PhpDependResultsParser select() {
+    String reportType = config.getReportType();
+    if (PDEPEND_REPORT_TYPE_PHPUNIT.equals(reportType)) {
+      return phpunitParser;
+    } else if (PDEPEND_REPORT_TYPE_SUMMARY.equals(reportType)) {
+      return summaryParser;
     } else {
       throw new SonarException("Invalid PHP Depend report type: " + reportType + ". Supported types: phpunit-xml, summary-xml");
     }

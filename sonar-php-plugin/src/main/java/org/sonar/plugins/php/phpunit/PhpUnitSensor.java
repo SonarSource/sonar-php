@@ -29,7 +29,6 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.PhpConstants;
-import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_KEY;
@@ -45,7 +44,6 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_DEFVALUE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_NAME_DEFVALUE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_NAME_KEY;
@@ -77,9 +75,9 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT
   @Property(key = PHPUNIT_COVERAGE_REPORT_FILE_KEY, defaultValue = PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE,
     name = "Coverage report file name", project = true, global = true, description = "Name of the coverage report file to analyse.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
-  @Property(key = PHPUNIT_MAIN_TEST_FILE_KEY, defaultValue = PHPUNIT_MAIN_TEST_FILE_DEFVALUE,
+  @Property(key = PHPUNIT_MAIN_TEST_FILE_KEY, defaultValue = "",
     name = "File containing the main method calling all the tests", project = true, global = true,
-    description = "The project main test file including the relative path, ie : \"/source/tests/AllTests.php\". "
+    description = "The project main test file including the relative path, e.g. : \"/source/tests/AllTests.php\". "
       + "If not present, phpunit will look for phpunit.xml file in test directory.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY, defaultValue = PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE,
     name = "Should analyse the whole test directory", project = true, global = true,
@@ -141,11 +139,7 @@ public class PhpUnitSensor implements Sensor {
         coverageParser.parse(configuration.getCoverageReportFile());
       }
     } catch (XStreamException e) {
-      LOG.error("Report file is invalid, plugin will stop.", e);
-      throw new SonarException(e);
-    } catch (PhpPluginExecutionException e) {
-      LOG.error("Error occured while launching PhpUnit", e);
-      throw new SonarException(e);
+      throw new SonarException("Report file is invalid, plugin will stop.", e);
     }
   }
 
@@ -157,7 +151,7 @@ public class PhpUnitSensor implements Sensor {
       return false;
     }
 
-    return !configuration.isSkip() || !configuration.shouldSkipCoverage();
+    return !configuration.isSkip();
   }
 
   /**
@@ -165,6 +159,6 @@ public class PhpUnitSensor implements Sensor {
    */
   @Override
   public String toString() {
-    return "phpunit Sensor";
+    return "PHPUnit Sensor";
   }
 }

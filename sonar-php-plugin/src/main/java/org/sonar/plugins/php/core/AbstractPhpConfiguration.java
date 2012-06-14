@@ -19,11 +19,12 @@
  */
 package org.sonar.plugins.php.core;
 
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 
 import java.io.File;
@@ -42,45 +43,55 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
 
   /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(AbstractPhpConfiguration.class);
+
   /** Suffix used by windows for script files */
   private static final String WINDOWS_BAT_SUFFIX = ".bat";
 
-  protected Project project;
-  /** Indicates whether dynamic analysis (test & unit test) should be activated or not. */
-  protected boolean isDynamicAnalysis;
-  /** Indicates whether the tool should be executed or not. */
-  protected boolean skip;
-  /** Indicates whether the plugin should only analyze results or launch tool. */
-  protected boolean analyzeOnly;
-  /** The tool argument line. */
-  private String argumentLine;
-  /** The report file name. */
-  private String reportFileName;
-  /** The report file relative path. */
-  private String reportFileRelativePath;
-  /** The timeout (in minutes) used to execute the tool */
-  private int timeout;
+  private Settings settings;
+  private Project project;
 
   /**
    * @param project
    */
-  protected AbstractPhpConfiguration(Project project) {
+  protected AbstractPhpConfiguration(Settings settings, Project project) {
+    this.settings = settings;
     this.project = project;
-    Configuration configuration = getProject().getConfiguration();
-    this.reportFileName = configuration.getString(getReportFileNameKey(), getDefaultReportFileName());
-    this.reportFileRelativePath = configuration.getString(getReportFileRelativePathKey(), getDefaultReportFilePath());
-    this.argumentLine = configuration.getString(getArgumentLineKey(), getDefaultArgumentLine());
-    this.analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), false);
-    this.timeout = configuration.getInt(getTimeoutKey(), DEFAULT_TIMEOUT);
-    if (isStringPropertySet(getSkipKey())) { // NOSONAR Use of non final method, that is not final for mocking purposes
-      skip = project.getConfiguration().getBoolean(getSkipKey());
-    } else if (isStringPropertySet(getShouldRunKey())) { // NOSONAR Use of non final method, that is not final for mocking purposes
-      skip = !project.getConfiguration().getBoolean(getShouldRunKey());
-    }
-    String dynamicAnalysis = configuration.getString("sonar.dynamicAnalysis", "true");
-    if (!"false".equalsIgnoreCase(dynamicAnalysis)) {
-      isDynamicAnalysis = true;
-    }
+  }
+
+  /**
+   * Gets the report file name.
+   * 
+   * @return the report file name
+   */
+  public String getReportFileName() {
+    return settings.getString(getReportFileNameKey());
+  }
+
+  /**
+   * Gets the report file relative path.
+   * 
+   * @return the report file relative path
+   */
+  public String getReportFileRelativePath() {
+    return settings.getString(getReportFileRelativePathKey());
+  }
+
+  /**
+   * Gets the report file.
+   * 
+   * <pre>
+   * The path is construct as followed :
+   * {PORJECT_BUILD_DIR}\{CONFIG_RELATIVE_REPORT_FILE}\{CONFIG_REPORT_FILE_NAME}
+   * </pre>
+   * 
+   * @return the report file
+   */
+  public File getReportFile() {
+    StringBuilder fileName = new StringBuilder(getReportFileRelativePath()).append(File.separator);
+    fileName.append(getReportFileName());
+    File reportFile = new File(getProject().getFileSystem().getBuildDir(), fileName.toString());
+    LOG.info("Report file for: " + getCommandLine() + " : " + reportFile);
+    return reportFile;
   }
 
   /**
@@ -89,7 +100,63 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * @return the argument line
    */
   public String getArgumentLine() {
-    return argumentLine;
+    return settings.getString(getArgumentLineKey());
+  }
+
+  /**
+   * The timeout (in minutes) used to execute the tool.
+   * 
+   * @return the timeout
+   */
+  public int getTimeout() {
+    String timeoutKey = getTimeoutKey();
+    int timeout = 0;
+    if (settings.hasKey(timeoutKey)) {
+      timeout = settings.getInt(timeoutKey);
+    } else {
+      String defaultTimeout = settings.getDefaultValue(timeoutKey);
+      if (StringUtils.isNotEmpty(defaultTimeout)) {
+        timeout = Integer.parseInt(defaultTimeout);
+      }
+    }
+    return timeout;
+  }
+
+  /**
+   * Checks if is analyze only.
+   * 
+   * @return true, if is analyze only
+   */
+  public boolean isAnalyseOnly() {
+    return getBooleanFromSettings(getShouldAnalyzeOnlyKey());
+  }
+
+  /**
+   * Checks if the tool should be skipped.
+   * 
+   * @return true, if it should be skipped
+   */
+  public boolean isSkip() {
+    boolean skip = false;
+    if (settings.hasKey(getSkipKey())) {
+      skip = settings.getBoolean(getSkipKey());
+    } else if (settings.hasKey(getShouldRunKey())) {
+      skip = !settings.getBoolean(getShouldRunKey());
+    }
+    return skip;
+  }
+
+  /**
+   * Tells whether dynamic analysis is enabled or not
+   * 
+   * @return true if dynamic analysis is enabled
+   */
+  public boolean isDynamicAnalysisEnabled() {
+    boolean isDynamicAnalysis = true;
+    if (settings.hasKey("sonar.dynamicAnalysis")) {
+      isDynamicAnalysis = settings.getBoolean("sonar.dynamicAnalysis");
+    }
+    return isDynamicAnalysis;
   }
 
   /**
@@ -126,25 +193,6 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   }
 
   /**
-   * Gets the report file.
-   * 
-   * <pre>
-   * The path is construct as followed :
-   * {PORJECT_BUILD_DIR}\{CONFIG_RELATIVE_REPORT_FILE}\{CONFIG_REPORT_FILE_NAME}
-   * </pre>
-   * 
-   * @return the report file
-   */
-  public File getReportFile() {
-    StringBuilder fileName = new StringBuilder(reportFileRelativePath).append(File.separator);
-    fileName.append(reportFileName);
-    File reportFile = new File(getProject().getFileSystem().getBuildDir(), fileName.toString());
-    LOG.info("Report file for: " + getCommandLine() + " : " + reportFile);
-    return reportFile;
-
-  }
-
-  /**
    * Gets the source directories.
    * 
    * @return the source directories
@@ -172,6 +220,8 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   }
 
   /**
+   * Returns the current project
+   * 
    * @return the project
    */
   public Project getProject() {
@@ -179,64 +229,27 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   }
 
   /**
-   * Returns <code>true<code> if property is not null or empty.
-   * <pre>
-   * value.equals(null) return false
-   * value.equals("") return false
-   * value.equals("  ") return false
-   * value.equals(" toto ") return true
-   * </pre>
+   * Returns the settings of the project
    * 
-   * @param key
-   *          the property's key
-   * @return <code>true<code> if property is not null or empty; <code>false</code> any other way.
+   * @return the settings
    */
-  public boolean isStringPropertySet(String key) {
-    return project.getConfiguration().containsKey(key);
+  protected Settings getSettings() {
+    return settings;
   }
 
   /**
-   * Tells whether dynamic analysis is enabled or not
-   * 
-   * @return true if dynamic analysis is enabled
+   * If the settings has the key, then returns the value.
+   * If not, then tries to find the default value.
+   * It no default value is specified, then false is returned.
    */
-  public boolean isDynamicAnalysisEnabled() {
-    return isDynamicAnalysis;
+  protected final boolean getBooleanFromSettings(String key) {
+    if (getSettings().hasKey(key)) {
+      return getSettings().getBoolean(key);
+    } else {
+      String defaultValue = getSettings().getDefaultValue(key);
+      return StringUtils.isNotEmpty(defaultValue) && Boolean.parseBoolean(defaultValue);
+    }
   }
-
-  /**
-   * Checks if is analyze only.
-   * 
-   * @return true, if is analyze only
-   */
-  public boolean isAnalyseOnly() {
-    return analyzeOnly;
-  }
-
-  /**
-   * Checks if the tool should be skipped.
-   * 
-   * @return true, if it should be skipped
-   */
-  public boolean isSkip() {
-    return skip;
-  }
-
-  /**
-   * The timeout (in minutes) used to execute the tool.
-   * 
-   * @return the timeout
-   */
-  public int getTimeout() {
-    return timeout;
-  }
-
-  /**
-   * Gets the argument line key.
-   * 
-   * @return the argument line key
-   */
-  protected abstract String getArgumentLineKey();
 
   /**
    * Gets the command line.
@@ -246,25 +259,11 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   protected abstract String getCommandLine();
 
   /**
-   * Gets the default argument line.
+   * Gets the argument line key.
    * 
-   * @return the default argument line
+   * @return the argument line key
    */
-  protected abstract String getDefaultArgumentLine();
-
-  /**
-   * Gets the default report file name.
-   * 
-   * @return the default report file name
-   */
-  protected abstract String getDefaultReportFileName();
-
-  /**
-   * Gets the default report file path.
-   * 
-   * @return the default report file path
-   */
-  protected abstract String getDefaultReportFilePath();
+  protected abstract String getArgumentLineKey();
 
   /**
    * Gets the report file name key.
@@ -272,15 +271,6 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * @return the report file name key
    */
   protected abstract String getReportFileNameKey();
-
-  /**
-   * Gets the report file relative path.
-   * 
-   * @return the report file relative path
-   */
-  public String getReportFileRelativePath() {
-    return reportFileRelativePath;
-  }
 
   /**
    * Gets the report file relative path key.
@@ -304,6 +294,13 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   protected abstract String getSkipKey();
 
   /**
+   * Get the parameter that gives the timeout for the tool
+   * 
+   * @return the parameter name
+   */
+  protected abstract String getTimeoutKey();
+
+  /**
    * Gets the should run key.
    * 
    * @deprecated Not used anymore, "skip" is preferred (this method should disappear some day)
@@ -312,12 +309,5 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    */
   @Deprecated
   protected abstract String getShouldRunKey();
-
-  /**
-   * Get the parameter that gives the timeout for the tool
-   * 
-   * @return the parameter name
-   */
-  protected abstract String getTimeoutKey();
 
 }

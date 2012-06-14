@@ -50,7 +50,7 @@ public class PhpTest {
   @Test
   public void shouldCheckCustomValidPhpExtensions() {
     Settings settings = new Settings();
-    settings.appendProperty(PhpConstants.FILE_SUFFIXES_KEY, " php6  , php7, , ");
+    settings.setProperty(PhpConstants.FILE_SUFFIXES_KEY, " php6  , php7, , ");
 
     Php php = new Php(settings);
     assertTrue(php.hasValidSuffixes("goodExtension.php6"));

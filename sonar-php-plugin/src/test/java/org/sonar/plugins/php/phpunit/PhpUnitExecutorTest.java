@@ -19,11 +19,13 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 
 import java.io.File;
@@ -31,267 +33,126 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_OPTION;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_SKIP_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_OPTION;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_KEY;
 
 public class PhpUnitExecutorTest {
 
+  private Settings settings;
+  private PhpUnitExecutor executor;
+  private Project project;
+
+  @Before
+  public void init() throws Exception {
+    settings = Settings.createForComponent(new PhpUnitSensor(null, null, null, null));
+    project = MockUtils.createMockProject();
+    PhpUnitConfiguration configuration = new PhpUnitConfiguration(settings, project);
+    executor = new PhpUnitExecutor(new Php(), configuration, project);
+  }
+
+  @Test
+  public void testGetExecutedTool() throws Exception {
+    assertThat(executor.getExecutedTool(), is("PHPUnit"));
+  }
+
+  @Test
+  public void testSimplestCommandLine() {
+    // Given
+    settings.setProperty(PHPUNIT_COVERAGE_SKIP_KEY, "true");
+
+    // Verify
+    List<String> commandLine = executor.getCommandLine();
+    assertThat(commandLine.size()).isEqualTo(2);
+
+    assertThat(commandLine.get(0)).startsWith("phpunit");
+    assertThat(commandLine.get(1)).isEqualTo("--log-junit=" + new File("target/MockProject/target/logs/phpunit.xml").getAbsolutePath());
+  }
+
   @Test
   public void testSimpleCommandLineWithMoreArguments() {
-    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
-    when(config.isStringPropertySet(PHPUNIT_ARGUMENT_LINE_KEY)).thenReturn(true);
-    when(config.getArgumentLine()).thenReturn("  --foo=bar --foo2=bar2 ");
-    Project project = mock(Project.class);
-    MavenProject mProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mProject);
-    when(mProject.getBasedir()).thenReturn(new File("toto"));
+    // Given
+    settings.setProperty(PHPUNIT_FILTER_KEY, "filters");
+    settings.setProperty(PHPUNIT_BOOTSTRAP_KEY, "src/bootstrap.php");
+    settings.setProperty(PHPUNIT_CONFIGURATION_KEY, "conf/config.xml");
+    settings.setProperty(PHPUNIT_LOADER_KEY, "loaders");
+    settings.setProperty(PHPUNIT_GROUP_KEY, "groups");
+    settings.setProperty(PHPUNIT_ARGUMENT_LINE_KEY, "--foo=bar --foo2=bar2");
 
-    Configuration configuration = mock(Configuration.class);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(config.getProject()).thenReturn(project);
-
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(pfs);
-    File testDir = new File("c:/php/math-php-test/sources/test");
-    when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
-
-    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
+    // Verify
     List<String> commandLine = executor.getCommandLine();
-    assertTrue("Should contain extra arguments", commandLine.contains("--foo=bar"));
-    assertTrue("Should contain extra arguments", commandLine.contains("--foo2=bar2"));
+    assertThat(commandLine.size()).isEqualTo(10);
+
+    assertThat(commandLine.get(0)).startsWith("phpunit");
+    assertThat(commandLine.get(1)).isEqualTo("--filter=filters");
+    assertThat(commandLine.get(2)).isEqualTo("--bootstrap=src/bootstrap.php");
+    assertThat(commandLine.get(3)).isEqualTo("--configuration=conf/config.xml");
+    assertThat(commandLine.get(4)).isEqualTo("--loader=loaders");
+    assertThat(commandLine.get(5)).isEqualTo("--group=groups");
+    assertThat(commandLine.get(6)).isEqualTo("--foo=bar");
+    assertThat(commandLine.get(7)).isEqualTo("--foo2=bar2");
+    assertThat(commandLine.get(8)).isEqualTo("--log-junit=" + new File("target/MockProject/target/logs/phpunit.xml").getAbsolutePath());
+    assertThat(commandLine.get(9)).isEqualTo("--coverage-clover=" + new File("target/MockProject/target/logs/phpunit.coverage.xml").getAbsolutePath());
   }
 
   @Test
-  public void shouldReturnCommandLineWithoutCoverageOptions() {
-    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
-    Project project = mock(Project.class);
-    MavenProject mProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mProject);
-    when(mProject.getBasedir()).thenReturn(new File("toto"));
+  public void testCommandWithoutConfigurationFileAndNoMainClass() throws Exception {
+    // Given
+    settings.setProperty(PHPUNIT_IGNORE_CONFIGURATION_KEY, "true");
 
-    Configuration configuration = mock(Configuration.class);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(config.getProject()).thenReturn(project);
-
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(pfs);
-    File testDir = new File("c:/php/math-php-test/sources/test");
-    when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
-
-    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
-    when(config.shouldSkipCoverage()).thenReturn(true);
-    when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
+    // Verify
     List<String> commandLine = executor.getCommandLine();
-    assertFalse("Should not return any coverage options", commandLine.contains("--coverage-clover=phpUnit.coverage.xml"));
+    assertThat(commandLine.size()).isEqualTo(5);
+
+    assertThat(commandLine.get(3)).isEqualTo("--no-configuration");
+    assertThat(commandLine.get(4)).isEqualTo(new File("target/MockProject/test").getAbsolutePath());
   }
 
   @Test
-  public void testIgnoreDefaultConfigurationFile() {
-    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
-    Project project = mock(Project.class);
-    MavenProject mProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mProject);
-    when(mProject.getBasedir()).thenReturn(new File("toto"));
+  public void testCommandWithAnalyseTestDirectoriesAndMutipleTestDirs() throws Exception {
+    // Given
+    settings.setProperty(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY, "true");
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(
+        new File("target/MockProject/test1").getAbsoluteFile(),
+        new File("target/MockProject/test2").getAbsoluteFile()));
+    when(fs.getBuildDir()).thenReturn(new File("target/MockProject/target").getAbsoluteFile());
+    when(project.getFileSystem()).thenReturn(fs);
 
-    Configuration configuration = mock(Configuration.class);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(config.getProject()).thenReturn(project);
-
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
-
-    String phpunit = "phpunit";
-    when(config.getOsDependentToolScriptName()).thenReturn(phpunit);
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(pfs);
-    File testDir = new File("c:/php/math-php-test/sources/test");
-    when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
-
-    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
-    when(config.shouldSkipCoverage()).thenReturn(true);
-    when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
-    File reportFile = new File("phpunit.xml");
-    when(config.getReportFile()).thenReturn(reportFile);
-
+    // Verify
     List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine).isNotEmpty();
-    assertThat(commandLine).contains(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
+    assertThat(commandLine.size()).isEqualTo(4);
+    assertThat(commandLine.get(3)).startsWith("--configuration=" + new File("target/MockProject/target/logs/phpunit").getAbsolutePath());
 
-    List<String> expected = Arrays.asList(phpunit, "--log-junit=" + reportFile, "--no-configuration", testDir.toString());
-    assertThat(commandLine).isEqualTo(expected);
+    // clean temp file created
+    FileUtils.deleteDirectory(new File("target/MockProject/target/"));
   }
 
   @Test
-  public void testNoIgnoreDefaultConfigurationFile() {
-    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
-    Project project = mock(Project.class);
-    MavenProject mProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mProject);
-    when(mProject.getBasedir()).thenReturn(new File("toto"));
+  public void testCommandWithMainClass() throws Exception {
+    // Given
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY, "AllTests.php");
 
-    Configuration configuration = mock(Configuration.class);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(config.getProject()).thenReturn(project);
+    FileUtils.forceMkdir(new File("target/MockProject"));
+    File mainClass = new File("target/MockProject/AllTests.php");
+    mainClass.createNewFile();
 
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
-
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(pfs);
-    File testDir = new File("c:/php/math-php-test/sources/test");
-    when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
-
-    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
-    when(config.shouldSkipCoverage()).thenReturn(true);
-    when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
+    // Verify
     List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine).isNotEmpty();
-    assertThat(commandLine).excludes(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
-  }
+    assertThat(commandLine.size()).isEqualTo(4);
+    assertThat(commandLine.get(3)).startsWith(new File("target/MockProject/AllTests.php").getAbsolutePath());
 
-  @Test
-  public void testAnalyseTestDirectory() {
-    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
-    Project project = mock(Project.class);
-    MavenProject mProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mProject);
-    when(mProject.getBasedir()).thenReturn(new File("toto"));
-
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(pfs);
-
-    Configuration configuration = mock(Configuration.class);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(config.getProject()).thenReturn(project);
-
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
-
-    File testDir = new File("c:/php/math-php-test/sources/test");
-    when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
-
-    when(configuration.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
-    when(configuration.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
-
-    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
-    when(config.shouldSkipCoverage()).thenReturn(true);
-    when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine).isNotEmpty();
-    assertThat(commandLine).excludes(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
-    assertThat(commandLine).contains(testDir.toString());
-  }
-
-  @Test
-  public void testDoNotAnalyseTestDirectory() {
-    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
-    Project project = mock(Project.class);
-    MavenProject mProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mProject);
-    when(mProject.getBasedir()).thenReturn(new File("toto"));
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-
-    when(project.getFileSystem()).thenReturn(pfs);
-    Configuration configuration = mock(Configuration.class);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(config.getProject()).thenReturn(project);
-
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
-
-    when(configuration.containsKey(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
-    when(configuration.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(false);
-
-    File testDir = new File("c:/php/math-php-test/sources/test");
-    when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir));
-
-    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
-    when(config.shouldSkipCoverage()).thenReturn(true);
-    when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine).isNotEmpty();
-    assertThat(commandLine).excludes(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
-    assertThat(commandLine).excludes(testDir.toString());
-  }
-
-  @Test
-  public void testAnalyseMultipleTestDirectories() {
-    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
-    Project project = mock(Project.class);
-    MavenProject mProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mProject);
-    when(mProject.getBasedir()).thenReturn(new File("toto"));
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-
-    when(project.getFileSystem()).thenReturn(pfs);
-    Configuration configuration = mock(Configuration.class);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(config.getProject()).thenReturn(project);
-
-    when(configuration.getBoolean(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY)).thenReturn(true);
-    when(configuration.containsKey(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(false);
-    when(configuration.getBoolean(PHPUNIT_IGNORE_CONFIGURATION_KEY)).thenReturn(true);
-
-    File testDir = new File("c:/php/math-php-test/sources/test");
-    File testDir2 = new File("c:/php/math-php-test/sources/test2");
-    when(project.getFileSystem().getTestDirs()).thenReturn(Arrays.asList(testDir, testDir2));
-
-    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
-    when(config.shouldSkipCoverage()).thenReturn(true);
-    when(config.getCoverageReportFile()).thenReturn(new File("phpUnit.coverage.xml"));
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine).isNotEmpty();
-
-    boolean found = false;
-    for (String command : commandLine) {
-      if (command != null && command.startsWith(PHPUNIT_CONFIGURATION_OPTION)) {
-        found = true;
-        break;
-      }
-    }
-    assertThat(found).isTrue();
-    assertThat(commandLine).excludes(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
-    assertThat(commandLine).excludes(testDir.toString());
-  }
-
-  @Test
-  public void testDontAddTestDirectoryToCmdLineWhenUsingCustomXmlConfigFile() {
-    PhpUnitConfiguration config = mock(PhpUnitConfiguration.class);
-    Project project = mock(Project.class);
-    MavenProject mProject = mock(MavenProject.class);
-    when(project.getPom()).thenReturn(mProject);
-    when(mProject.getBasedir()).thenReturn(new File("toto"));
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-
-    when(project.getFileSystem()).thenReturn(pfs);
-    Configuration configuration = mock(Configuration.class);
-    when(project.getConfiguration()).thenReturn(configuration);
-    when(config.getProject()).thenReturn(project);
-
-    String phpunitXml = "myConfig.xml";
-    File coverageXml = new File("phpunit.coverage.xml");
-    when(config.isStringPropertySet(PHPUNIT_CONFIGURATION_KEY)).thenReturn(true);
-    when(config.getCoverageReportFile()).thenReturn(coverageXml);
-    when(config.getConfiguration()).thenReturn(phpunitXml);
-
-    String phpunit = "phpunit";
-    when(config.getOsDependentToolScriptName()).thenReturn(phpunit);
-    File reportFile = new File("phpunit.xml");
-    when(config.getReportFile()).thenReturn(reportFile);
-
-    PhpUnitExecutor executor = new PhpUnitExecutor(new Php(), config, project);
-    List<String> commandLine = executor.getCommandLine();
-
-    List<String> expected = Arrays.asList(phpunit, "--configuration=" + phpunitXml, "--log-junit=" + reportFile, "--coverage-clover="
-      + coverageXml);
-    assertThat(commandLine).isEqualTo(expected);
+    // and clean the created file
+    mainClass.delete();
   }
 }

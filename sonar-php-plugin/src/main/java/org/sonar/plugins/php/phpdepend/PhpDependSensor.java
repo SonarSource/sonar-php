@@ -89,7 +89,7 @@ public class PhpDependSensor implements Sensor {
 
   private PhpDependConfiguration configuration;
   private PhpDependExecutor executor;
-  private PhpDependResultsParser parser;
+  private PhpDependParserSelector parserSelector;
 
   /**
    * @param config
@@ -100,13 +100,14 @@ public class PhpDependSensor implements Sensor {
     super();
     this.configuration = config;
     this.executor = executor;
-    this.parser = parserSelector.select(config);
+    this.parserSelector = parserSelector;
   }
 
   /**
    * {@inheritDoc}
    */
   public void analyse(Project project, SensorContext context) {
+    PhpDependResultsParser parser = parserSelector.select();
     try {
       configuration.createWorkingDirectory();
       if (!configuration.isAnalyseOnly()) {

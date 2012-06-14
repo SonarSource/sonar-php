@@ -19,168 +19,132 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.utils.SonarException;
+import org.junit.rules.ExpectedException;
+import org.sonar.api.config.Settings;
+import org.sonar.plugins.php.MockUtils;
 
 import java.io.File;
-import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_LOADER_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_DEFVALUE;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_NAME_DEFVALUE;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_NAME_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY;
-import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SHOULD_RUN_COVERAGE_KEY;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
 
 /**
  * The Class PhpDependConfigurationTest.
  */
 public class PhpUnitConfigurationTest {
 
-  /**
-   * Should get valid suffixe option.
-   */
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
+  private Settings settings;
+  private PhpUnitConfiguration phpConfig;
+
+  @Before
+  public void init() throws Exception {
+    settings = Settings.createForComponent(new PhpUnitSensor(null, null, null, null));
+    phpConfig = new PhpUnitConfiguration(settings, MockUtils.createMockProject());
+  }
+
   @Test
-  public void testConfigurationParameters() {
-    Project project = mock(Project.class);
-    Configuration c = getMockConfiguration(project);
-    when(c.getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_KEY, true)).thenReturn(true);
-
-    when(project.getConfiguration()).thenReturn(c);
-    PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-    assertEquals(false, config.shouldSkipCoverage());
-
-    when(c.getString(PHPUNIT_FILTER_KEY, " ")).thenReturn(" ");
-    assertEquals(" ", config.getFilter());
-
-    when(c.getString(PHPUNIT_BOOTSTRAP_KEY, " ")).thenReturn(" ");
-    assertEquals(" ", config.getBootstrap());
-
-    when(c.getString(PHPUNIT_CONFIGURATION_KEY, " ")).thenReturn(" ");
-    assertEquals(" ", config.getConfiguration());
-
-    when(c.getString(PHPUNIT_LOADER_KEY, " ")).thenReturn(" ");
-    assertEquals(" ", config.getLoader());
-
-    when(c.getString(PHPUNIT_GROUP_KEY, " ")).thenReturn(" ");
-    assertEquals(" ", config.getGroup());
-
-    when(c.getString(PHPUNIT_COVERAGE_REPORT_FILE_KEY, PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE)).thenReturn(
-        PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE);
-    File expectedReportFile = new File(project.getFileSystem().getBuildDir(), config.getReportFileRelativePath() + File.separator
-      + PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE);
-    assertEquals(expectedReportFile, config.getCoverageReportFile());
-
+  public void shouldReturnDefaultValues() {
+    assertThat(phpConfig.getCommandLine()).isEqualTo("phpunit");
+    assertThat(phpConfig.isSkip()).isFalse();
+    assertThat(phpConfig.shouldSkipCoverage()).isFalse();
+    assertThat(phpConfig.isAnalyseOnly()).isFalse();
+    File report = new File("target/MockProject/target/logs/phpunit.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    File coverageReport = new File("target/MockProject/target/logs/phpunit.coverage.xml");
+    assertThat(phpConfig.getCoverageReportFile().getAbsolutePath()).isEqualTo(coverageReport.getAbsolutePath());
+    assertThat(phpConfig.getMainTestClass()).isNull();
+    assertThat(phpConfig.isAnalyseTestDirectory()).isFalse();
+    assertThat(phpConfig.getFilter()).isNull();
+    assertThat(phpConfig.getBootstrap()).isNull();
+    assertThat(phpConfig.getConfiguration()).isNull();
+    assertThat(phpConfig.isIgnoreDefaultConfiguration()).isFalse();
+    assertThat(phpConfig.getLoader()).isNull();
+    assertThat(phpConfig.getGroup()).isNull();
+    assertThat(phpConfig.getArgumentLine()).isNull();
+    assertThat(phpConfig.getTimeout()).isEqualTo(DEFAULT_TIMEOUT);
   }
 
-  /**
-   * Should get valid suffixe option.
-   */
-  @Test(expected = SonarException.class)
-  public void shouldThrowExceptionIfReportFileDoesNotExist() {
-    Project project = mock(Project.class);
-    Configuration c = getMockConfiguration(project);
-    when(project.getConfiguration()).thenReturn(c);
-    PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-    config.getMainTestClass();
-  }
-
-  /**
-   * Should get valid suffixe option.
-   */
   @Test
-  public void shouldReturnDefaultReportFileWithDefaultPath() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PHPUNIT_REPORT_FILE_NAME_KEY, PHPUNIT_REPORT_FILE_NAME_DEFVALUE)).thenReturn(
-        PHPUNIT_REPORT_FILE_NAME_DEFVALUE);
-    when(configuration.getString(PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn(
-        PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE);
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\phpunit.xml");
+  public void shouldReturnCustomProperties() {
+    // Given
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_SKIP_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_COVERAGE_SKIP_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_REPORT_FILE_NAME_KEY, "my-phpunit.xml");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_KEY, "my-coverage.xml");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, "reports");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY, "AllTests.php");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_FILTER_KEY, "foo");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_KEY, "bootstrap.php");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY, "config.xml");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_LOADER_KEY, "loader");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_GROUP_KEY, "groups");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_TIMEOUT_KEY, "120");
+
+    // Verify
+    assertThat(phpConfig.getCommandLine()).isEqualTo("phpunit");
+    assertThat(phpConfig.isSkip()).isTrue();
+    assertThat(phpConfig.shouldSkipCoverage()).isTrue();
+    assertThat(phpConfig.isAnalyseOnly()).isTrue();
+    File report = new File("target/MockProject/target/reports/my-phpunit.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    File coverageReport = new File("target/MockProject/target/reports/my-coverage.xml");
+    assertThat(phpConfig.getCoverageReportFile().getAbsolutePath()).isEqualTo(coverageReport.getAbsolutePath());
+    assertThat(phpConfig.getMainTestClass()).isEqualTo("AllTests.php");
+    assertThat(phpConfig.isAnalyseTestDirectory()).isTrue();
+    assertThat(phpConfig.getFilter()).isEqualTo("foo");
+    assertThat(phpConfig.getBootstrap()).isEqualTo("bootstrap.php");
+    assertThat(phpConfig.getConfiguration()).isEqualTo("config.xml");
+    assertThat(phpConfig.isIgnoreDefaultConfiguration()).isTrue();
+    assertThat(phpConfig.getLoader()).isEqualTo("loader");
+    assertThat(phpConfig.getGroup()).isEqualTo("groups");
+    assertThat(phpConfig.getArgumentLine()).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    assertThat(phpConfig.getTimeout()).isEqualTo(120);
   }
 
-  /**
-   * Should get valid suffixe option.
-   */
   @Test
-  public void shouldReturnDefaultReportFileWithCustomPath() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PHPUNIT_REPORT_FILE_NAME_KEY, PHPUNIT_REPORT_FILE_NAME_DEFVALUE)).thenReturn(
-        PHPUNIT_REPORT_FILE_NAME_DEFVALUE);
-    when(configuration.getString(PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\phpunit.xml");
+  public void shouldFindMainClassInSources() throws Exception {
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY, "AllTests.php");
+
+    FileUtils.forceMkdir(new File("target/MockProject/test"));
+    File mainClass = new File("target/MockProject/test/AllTests.php");
+    mainClass.createNewFile();
+
+    assertThat(phpConfig.getMainTestClassFilePath()).isEqualTo(mainClass.getAbsolutePath());
+    mainClass.delete();
   }
 
-  /**
-   * Should return custom report file with custom path.
-   */
   @Test
-  public void shouldReturnCustomReportFileWithCustomPath() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(configuration.getString(PHPUNIT_REPORT_FILE_NAME_KEY, PHPUNIT_REPORT_FILE_NAME_DEFVALUE)).thenReturn("punit.summary.xml");
-    when(configuration.getString(PHPUNIT_REPORT_FILE_NAME_KEY, PHPUNIT_REPORT_FILE_NAME_DEFVALUE)).thenReturn("punit.summary.xml");
-    when(configuration.getString(PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
-    PhpUnitConfiguration config = new PhpUnitConfiguration(project);
-    assertEquals(config.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\punit.summary.xml");
+  public void shouldFindMainClassInBaseDir() throws Exception {
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY, "AllTests.php");
+
+    FileUtils.forceMkdir(new File("target/MockProject"));
+    File mainClass = new File("target/MockProject/AllTests.php");
+    mainClass.createNewFile();
+
+    assertThat(phpConfig.getMainTestClassFilePath()).isEqualTo(mainClass.getAbsolutePath());
+    mainClass.delete();
   }
 
-  private Configuration getMockConfiguration(Project project) {
-    Configuration c = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(fs.getBasedir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\"));
+  @Test
+  public void shouldFailIfMainClassNotFound() throws Exception {
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY, "AllTests.php");
 
-    when(c.getString(PHPUNIT_REPORT_FILE_NAME_KEY, PHPUNIT_REPORT_FILE_NAME_DEFVALUE)).thenReturn("phpunit.xml");
-    when(c.getString(PHPUNIT_MAIN_TEST_FILE_KEY, PHPUNIT_MAIN_TEST_FILE_DEFVALUE)).thenReturn("/out/of/dir/mainTestClass.php");
-    when(c.getString(PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("d:\\logs\\");
-    return c;
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("The specificied main class file cannot be found: AllTests.php. " +
+      "If you don't have a main test file, consider using a phpunit.xml file and do not use sonar.phpUnit.mainTestClass property.");
+
+    phpConfig.getMainTestClassFilePath();
   }
+
 }

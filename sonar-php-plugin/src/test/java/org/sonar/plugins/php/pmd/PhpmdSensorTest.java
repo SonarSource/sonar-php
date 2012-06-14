@@ -36,9 +36,9 @@ import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY;
 
 /**
- * The Class PhpPmdSensorTest.
+ * The Class PhpmdSensorTest.
  */
-public class PhpPmdSensorTest {
+public class PhpmdSensorTest {
 
   @Test
   public void shouldNotLaunchOnNonPhpProject() {

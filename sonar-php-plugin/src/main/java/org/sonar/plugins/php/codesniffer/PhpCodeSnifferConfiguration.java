@@ -21,6 +21,7 @@ package org.sonar.plugins.php.codesniffer;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
+import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.RuleFinder;
@@ -57,7 +58,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   public static final String PHPCS_REPORT_FILE_NAME_KEY = "sonar.phpCodesniffer.reportFileName";
   public static final String PHPCS_REPORT_FILE_NAME_DEFVALUE = "codesniffer.xml";
   public static final String PHPCS_STANDARD_ARGUMENT_KEY = "sonar.phpCodesniffer.standardArgument";
-  public static final String PHPCS_STANDARD_ARGUMENT_DEFVALUE = "Pear";
   public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY = "sonar.phpCodesniffer.severity.modifier";
   public static final String PHPCS_SEVERITY_KEY = "sonar.phpCodesniffer.levelArgument";
   public static final String PHPCS_ARGUMENT_LINE_KEY = "sonar.phpCodesniffer.argumentLine";
@@ -73,11 +73,58 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    * @param project
    *          the pom
    */
-  public PhpCodeSnifferConfiguration(Project project, PhpCodeSnifferProfileExporter exporter, RulesProfile profile, RuleFinder ruleFinder) {
-    super(project);
+  public PhpCodeSnifferConfiguration(Settings settings, Project project, PhpCodeSnifferProfileExporter exporter, RulesProfile profile, RuleFinder ruleFinder) {
+    super(settings, project);
     this.exporter = exporter;
     this.profile = profile;
     this.ruleFinder = ruleFinder;
+  }
+
+  /**
+   * Gets the level argument value.
+   * 
+   * @return the level
+   */
+  public String getLevel() {
+    return getSettings().getString(PHPCS_SEVERITY_KEY);
+  }
+
+  /**
+   * Gets the standard argument value.
+   * 
+   * @return the standard
+   */
+  public String getStandard() {
+    return getSettings().getString(PHPCS_STANDARD_ARGUMENT_KEY);
+  }
+
+  /**
+   * @return
+   */
+  public String getSeverityModifier() {
+    return getSettings().getString(PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY);
+  }
+
+  /**
+   * @return the ruleFinder
+   */
+  public RuleFinder getRuleFinder() {
+    return ruleFinder;
+  }
+
+  /**
+   * @param ruleFinder
+   *          the ruleFinder to set
+   */
+  public void setRuleFinder(RuleFinder finder) {
+    this.ruleFinder = finder;
+  }
+
+  /**
+   * @return the profile
+   */
+  public RulesProfile getProfile() {
+    return profile;
   }
 
   /**
@@ -85,33 +132,17 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   public File getRuleSet() {
     Writer writer = null;
-    File xmlFile = new File(project.getFileSystem().getSonarWorkingDirectory(), PHP_CODESNIFFER_TMP_RULESET_FILENAME);
+    File xmlFile = new File(getProject().getFileSystem().getSonarWorkingDirectory(), PHP_CODESNIFFER_TMP_RULESET_FILENAME);
     try {
       writer = new OutputStreamWriter(new FileOutputStream(xmlFile, false), CharEncoding.UTF_8);
       exporter.exportProfile(profile, writer);
       writer.flush();
       return xmlFile;
     } catch (IOException e) {
-      throw new SonarException("Fail to export temporary ruleset file to " + xmlFile.getPath(), e);
+      throw new SonarException("Fail to export temporary ruleset file to " + xmlFile.getAbsolutePath(), e);
     } finally {
       IOUtils.closeQuietly(writer);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultReportFileName() {
-    return PHPCS_REPORT_FILE_NAME_DEFVALUE;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultReportFilePath() {
-    return PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -166,14 +197,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    * {@inheritDoc}
    */
   @Override
-  protected String getDefaultArgumentLine() {
-    return " ";
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected String getCommandLine() {
     return PHPCS_COMMAND_LINE;
   }
@@ -184,53 +207,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getTimeoutKey() {
     return PHPCS_TIMEOUT_KEY;
-  }
-
-  /**
-   * Gets the level argument value.
-   * 
-   * @return the level
-   */
-  public String getLevel() {
-    return getProject().getConfiguration().getString(PHPCS_SEVERITY_KEY);
-  }
-
-  /**
-   * Gets the standard argument value.
-   * 
-   * @return the standard
-   */
-  public String getStandard() {
-    return getProject().getConfiguration().getString(PHPCS_STANDARD_ARGUMENT_KEY, PHPCS_STANDARD_ARGUMENT_DEFVALUE);
-  }
-
-  /**
-   * @return
-   */
-  public String getSeverityModifier() {
-    return getProject().getConfiguration().getString(PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY, PHPCS_SEVERITY_OR_LEVEL_MODIFIER);
-  }
-
-  /**
-   * @return the ruleFinder
-   */
-  public RuleFinder getRuleFinder() {
-    return ruleFinder;
-  }
-
-  /**
-   * @param ruleFinder
-   *          the ruleFinder to set
-   */
-  public void setRuleFinder(RuleFinder finder) {
-    this.ruleFinder = finder;
-  }
-
-  /**
-   * @return the profile
-   */
-  public RulesProfile getProfile() {
-    return profile;
   }
 
 }

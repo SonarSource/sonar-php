@@ -19,9 +19,10 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
 import java.io.File;
@@ -30,11 +31,10 @@ import java.util.List;
 
 /**
  * This class handles the php unit configuration.
- * 
- * @version 0.1 @author JTama
- * @version 0.3 @author Akram Ben Aissi
  */
 public class PhpUnitConfiguration extends AbstractPhpConfiguration {
+
+  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitConfiguration.class);
 
   private static final String PHPUNIT_COMMAND_LINE = "phpunit";
 
@@ -59,7 +59,6 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public static final String PHPUNIT_COVERAGE_REPORT_FILE_KEY = "sonar.phpUnit.coverageReportFile";
   public static final String PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE = "phpunit.coverage.xml";
   public static final String PHPUNIT_MAIN_TEST_FILE_KEY = "sonar.phpUnit.mainTestClass";
-  public static final String PHPUNIT_MAIN_TEST_FILE_DEFVALUE = "AllTests.php";
   public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY = "sonar.phpUnit.analyze.test.directory";
   public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE = "false";
   public static final String PHPUNIT_FILTER_KEY = "sonar.phpUnit.filter";
@@ -71,25 +70,114 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public static final String PHPUNIT_ARGUMENT_LINE_KEY = "sonar.phpUnit.argumentLine";
   public static final String PHPUNIT_TIMEOUT_KEY = "sonar.phpUnit.timeout";
 
-  private boolean skipCoverage;
-
   /**
    * Instantiates a new php unit configuration.
    * 
    * @param project
    *          the a project
    */
-  public PhpUnitConfiguration(Project project) {
-    super(project);
-    // Enable dynamic analysis if analyze only is set or dynamic analysis is set to false
-    Configuration configuration = project.getConfiguration();
-    analyzeOnly = configuration.getBoolean(getShouldAnalyzeOnlyKey(), false);
+  public PhpUnitConfiguration(Settings settings, Project project) {
+    super(settings, project);
+  }
 
-    if (isStringPropertySet(PHPUNIT_COVERAGE_SKIP_KEY)) {
-      skipCoverage = project.getConfiguration().getBoolean(PHPUNIT_COVERAGE_SKIP_KEY);
-    } else if (isStringPropertySet(PHPUNIT_SHOULD_RUN_COVERAGE_KEY)) {
-      skipCoverage = !project.getConfiguration().getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_KEY);
+  /**
+   * Should run coverage.
+   * 
+   * @return true, if successful
+   */
+  public boolean shouldSkipCoverage() {
+    boolean skip = false;
+    if (getSettings().hasKey(PHPUNIT_COVERAGE_SKIP_KEY)) {
+      skip = getSettings().getBoolean(PHPUNIT_COVERAGE_SKIP_KEY);
+    } else if (getSettings().hasKey(PHPUNIT_SHOULD_RUN_COVERAGE_KEY)) {
+      skip = !getSettings().getBoolean(PHPUNIT_SHOULD_RUN_COVERAGE_KEY);
     }
+    return skip;
+  }
+
+  /**
+   * Gets the coverage report file name.
+   * 
+   * @return the report file name
+   */
+  public String getCoverageReportFileName() {
+    return getSettings().getString(PHPUNIT_COVERAGE_REPORT_FILE_KEY);
+  }
+
+  /**
+   * Gets the coverage report file.
+   * 
+   * @return the coverage report file
+   */
+  public File getCoverageReportFile() {
+    StringBuilder fileName = new StringBuilder(getReportFileRelativePath()).append(File.separator);
+    fileName.append(getCoverageReportFileName());
+    File reportFile = new File(getProject().getFileSystem().getBuildDir(), fileName.toString());
+    LOG.info("Report file for: " + getCommandLine() + " : " + reportFile);
+    return reportFile;
+  }
+
+  /**
+   * Gets the user defined filter.
+   * 
+   * @return the user defined filter.
+   */
+  public String getFilter() {
+    return getSettings().getString(PHPUNIT_FILTER_KEY);
+  }
+
+  /**
+   * Gets the user defined boot strap.
+   * 
+   * @return the user defined filter.
+   */
+  public String getBootstrap() {
+    return getSettings().getString(PHPUNIT_BOOTSTRAP_KEY);
+  }
+
+  /**
+   * Gets the user defined configuration file.
+   * 
+   * @return the user defined configuration file.
+   */
+  public String getConfiguration() {
+    return getSettings().getString(PHPUNIT_CONFIGURATION_KEY);
+  }
+
+  /**
+   * Gets the user defined loader.
+   * 
+   * @return the user defined loader.
+   */
+  public String getLoader() {
+    return getSettings().getString(PHPUNIT_LOADER_KEY);
+  }
+
+  /**
+   * Gets the user defined group.
+   * 
+   * @return the user defined group.
+   */
+  public String getGroup() {
+    return getSettings().getString(PHPUNIT_GROUP_KEY);
+  }
+
+  /**
+   * Checks if analyze test directories.
+   * 
+   * @return true, if analyze test directories
+   */
+  public boolean isAnalyseTestDirectory() {
+    return getBooleanFromSettings(PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY);
+  }
+
+  /**
+   * Checks if default configuration should be ignored.
+   * 
+   * @return true, if default conf should be ignored
+   */
+  public boolean isIgnoreDefaultConfiguration() {
+    return getBooleanFromSettings(PHPUNIT_IGNORE_CONFIGURATION_KEY);
   }
 
   /**
@@ -98,7 +186,16 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @return the main test class
    */
   public String getMainTestClass() {
-    String reportFileName = getProject().getConfiguration().getString(PHPUNIT_MAIN_TEST_FILE_KEY, PHPUNIT_MAIN_TEST_FILE_DEFVALUE);
+    return getSettings().getString(PHPUNIT_MAIN_TEST_FILE_KEY);
+  }
+
+  /**
+   * Gets the path of the main test class.
+   * 
+   * @return the path of main test class
+   */
+  public String getMainTestClassFilePath() {
+    String mainFileName = getSettings().getString(PHPUNIT_MAIN_TEST_FILE_KEY);
     List<File> directories = new ArrayList<File>(getTestDirectories());
     directories.addAll(getSourceDirectories());
 
@@ -106,19 +203,19 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
     // if no file with that name is found in test directories, check in the sources
     for (File directory : directories) {
       if (directory.isDirectory()) {
-        File file = new File(directory.getAbsolutePath(), reportFileName);
+        File file = new File(directory.getAbsolutePath(), mainFileName);
         if (file.exists()) {
           return file.getAbsolutePath();
         }
       }
     }
     // Otherwise return the file in the base directory
-    File file = new File(getProject().getFileSystem().getBasedir(), reportFileName);
+    File file = new File(getProject().getFileSystem().getBasedir(), mainFileName);
     if (!file.exists()) {
       StringBuilder message = new StringBuilder("The specificied main class file cannot be found: ");
-      message.append(reportFileName).append(". If you don't have a main test file, consider using a phpunit.xml file and do not ");
+      message.append(mainFileName).append(". If you don't have a main test file, consider using a phpunit.xml file and do not ");
       message.append("use ").append(PHPUNIT_MAIN_TEST_FILE_KEY).append(" property.");
-      throw new SonarException(message.toString());
+      throw new IllegalStateException(message.toString());
     }
     return file.getAbsolutePath();
   }
@@ -137,30 +234,6 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getCommandLine() {
     return PHPUNIT_COMMAND_LINE;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultArgumentLine() {
-    return "";
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultReportFileName() {
-    return PHPUNIT_REPORT_FILE_NAME_DEFVALUE;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getDefaultReportFilePath() {
-    return PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
   }
 
   /**
@@ -209,72 +282,6 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getTimeoutKey() {
     return PHPUNIT_TIMEOUT_KEY;
-  }
-
-  /**
-   * Should run coverage.
-   * 
-   * @return true, if successful
-   */
-  public boolean shouldSkipCoverage() {
-    return skipCoverage;
-  }
-
-  /**
-   * Gets the coverage report file.
-   * 
-   * @return the coverage report file
-   */
-  public File getCoverageReportFile() {
-    Configuration configuration = getProject().getConfiguration();
-    return new File(getProject().getFileSystem().getBuildDir(), new StringBuilder().append(getReportFileRelativePath())
-        .append(File.separator).append(configuration.getString(PHPUNIT_COVERAGE_REPORT_FILE_KEY, PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE))
-        .toString());
-  }
-
-  /**
-   * Gets the user defined filter.
-   * 
-   * @return the user defined filter.
-   */
-  public String getFilter() {
-    return getProject().getConfiguration().getString(PHPUNIT_FILTER_KEY, " ");
-  }
-
-  /**
-   * Gets the user defined boot strap.
-   * 
-   * @return the user defined filter.
-   */
-  public String getBootstrap() {
-    return getProject().getConfiguration().getString(PHPUNIT_BOOTSTRAP_KEY, " ");
-  }
-
-  /**
-   * Gets the user defined configuration file.
-   * 
-   * @return the user defined configuration file.
-   */
-  public String getConfiguration() {
-    return getProject().getConfiguration().getString(PHPUNIT_CONFIGURATION_KEY, " ");
-  }
-
-  /**
-   * Gets the user defined loader.
-   * 
-   * @return the user defined loader.
-   */
-  public String getLoader() {
-    return getProject().getConfiguration().getString(PHPUNIT_LOADER_KEY, " ");
-  }
-
-  /**
-   * Gets the user defined group.
-   * 
-   * @return the user defined group.
-   */
-  public String getGroup() {
-    return getProject().getConfiguration().getString(PHPUNIT_GROUP_KEY, " ");
   }
 
 }

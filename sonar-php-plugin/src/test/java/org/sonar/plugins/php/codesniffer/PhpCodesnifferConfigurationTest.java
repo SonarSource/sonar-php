@@ -19,181 +19,82 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.maven.project.MavenProject;
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.rules.RuleFinder;
+import org.sonar.plugins.php.MockUtils;
 
 import java.io.File;
-import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
 
 /**
  * The Class PhpDependConfigurationTest.
  */
 public class PhpCodesnifferConfigurationTest {
 
-  private static final String CODESNIFFER_SUMMARY_XML = "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer-summary.xml";
+  private Settings settings;
+  private PhpCodeSnifferConfiguration phpConfig;
 
-  /**
-   * Should get valid suffixe option.
-   */
-  @Test
-  public void shouldReturnDefaultReportFileWithDefaultPath() {
-    Project project = mock(Project.class);
-    Configuration config = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    String reportFileNamePropertyKey = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY;
-    String defaultReportFileName = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE;
-    when(config.getString(reportFileNamePropertyKey, defaultReportFileName)).thenReturn(defaultReportFileName);
-
-    String defaultReportFilePath = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
-    String reportFileRelativePathPropertyKey = PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY;
-    when(config.getString(reportFileRelativePathPropertyKey, defaultReportFilePath)).thenReturn(defaultReportFilePath);
-    when(project.getConfiguration()).thenReturn(config);
-
-    RulesProfile profile = mock(RulesProfile.class);
-    PhpCodeSnifferProfileExporter exporter = mock(PhpCodeSnifferProfileExporter.class);
-    RuleFinder finder = mock(RuleFinder.class);
-
-    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(project, exporter, profile, finder);
-    assertEquals(phpConfig.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\logs\\codesniffer.xml");
+  @Before
+  public void init() throws Exception {
+    settings = Settings.createForComponent(new PhpCodeSnifferSensor(null, null, null, null));
+    phpConfig = createPhpCodesnifferConfiguration(settings);
   }
 
-  /**
-   * Should get valid suffixe option.
-   */
   @Test
-  public void shouldReturnDefaultReportFileWithCustomPath() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE)).thenReturn(
-        PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE);
-    when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
-
-    RulesProfile profile = mock(RulesProfile.class);
-    PhpCodeSnifferProfileExporter exporter = mock(PhpCodeSnifferProfileExporter.class);
-    RuleFinder finder = mock(RuleFinder.class);
-
-    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(project, exporter, profile, finder);
-    assertEquals(phpConfig.getReportFile().getPath().replace('/', '\\'), "C:\\projets\\PHP\\Monkey\\target\\reports\\codesniffer.xml");
+  public void shouldReturnDefaultValues() {
+    assertThat(phpConfig.getCommandLine()).isEqualTo("phpcs");
+    assertThat(phpConfig.isSkip()).isFalse();
+    assertThat(phpConfig.isAnalyseOnly()).isFalse();
+    File report = new File("target/MockProject/target/logs/codesniffer.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    assertThat(phpConfig.getStandard()).isNull();
+    assertThat(phpConfig.getLevel()).isNull();
+    assertThat(phpConfig.getSeverityModifier()).isNull();
+    assertThat(phpConfig.getArgumentLine()).isNull();
+    assertThat(phpConfig.getTimeout()).isEqualTo(DEFAULT_TIMEOUT);
   }
 
-  /**
-   * Should return custom report file with custom path.
-   */
   @Test
-  public void shouldReturnCustomReportFileWithCustomPath() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE)).thenReturn("codesniffer-summary.xml");
-    when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
+  public void shouldReturnCustomProperties() {
+    // Given
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY, "true");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY, "true");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY, "codesniffer-summary.xml");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY, "reports");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, "PEAR");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY, "--level=");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY, "error");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_TIMEOUT_KEY, "120");
 
-    RulesProfile profile = mock(RulesProfile.class);
-    PhpCodeSnifferProfileExporter exporter = mock(PhpCodeSnifferProfileExporter.class);
-
-    RuleFinder finder = mock(RuleFinder.class);
-
-    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(project, exporter, profile, finder);
-    assertEquals(phpConfig.getReportFile().getPath().replace('/', '\\'), CODESNIFFER_SUMMARY_XML);
+    // Verify
+    assertThat(phpConfig.getCommandLine()).isEqualTo("phpcs");
+    assertThat(phpConfig.isSkip()).isTrue();
+    assertThat(phpConfig.isAnalyseOnly()).isTrue();
+    File report = new File("target/MockProject/target/reports/codesniffer-summary.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    assertThat(phpConfig.getStandard()).isEqualTo("PEAR");
+    assertThat(phpConfig.getSeverityModifier()).isEqualTo("--level=");
+    assertThat(phpConfig.getLevel()).isEqualTo("error");
+    assertThat(phpConfig.getArgumentLine()).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    assertThat(phpConfig.getTimeout()).isEqualTo(120);
   }
 
-  /**
-   * Should return custom report file with custom path.
-   */
-  @Test
-  public void shouldReturnIgnoreList() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE)).thenReturn("codesniffer-summary.xml");
-    when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
+  private PhpCodeSnifferConfiguration createPhpCodesnifferConfiguration(Settings settings) {
+    Project project = MockUtils.createMockProject();
 
     RulesProfile profile = mock(RulesProfile.class);
     PhpCodeSnifferProfileExporter exporter = mock(PhpCodeSnifferProfileExporter.class);
     RuleFinder finder = mock(RuleFinder.class);
 
-    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(project, exporter, profile, finder);
-    assertEquals(phpConfig.getReportFile().getPath().replace('/', '\\'), CODESNIFFER_SUMMARY_XML);
-
-  }
-
-  /**
-   * Should return custom report file with custom path.
-   */
-  @Test
-  public void shouldReturnLevelAndCommandLine() {
-    Project project = mock(Project.class);
-    Configuration configuration = mock(Configuration.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getPom()).thenReturn(mavenProject);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    when(fs.getBuildDir()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target"));
-    when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE)).thenReturn("codesniffer-summary.xml");
-    when(
-        configuration.getString(PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY,
-            PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE)).thenReturn("reports");
-    when(project.getConfiguration()).thenReturn(configuration);
-    RulesProfile profile = mock(RulesProfile.class);
-    PhpCodeSnifferProfileExporter exporter = mock(PhpCodeSnifferProfileExporter.class);
-    RuleFinder finder = mock(RuleFinder.class);
-
-    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(project, exporter, profile, finder);
-    assertEquals(phpConfig.getReportFile().getPath().replace('/', '\\'), CODESNIFFER_SUMMARY_XML);
-
-    assertEquals("phpcs", phpConfig.getCommandLine());
-
+    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(settings, project, exporter, profile, finder);
+    return phpConfig;
   }
 }
