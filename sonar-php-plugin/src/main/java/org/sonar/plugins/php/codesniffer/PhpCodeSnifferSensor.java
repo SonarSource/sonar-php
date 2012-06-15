@@ -93,17 +93,19 @@ public class PhpCodeSnifferSensor implements Sensor {
   private PhpCodeSnifferExecutor executor;
   private PhpCodeSnifferViolationsXmlParser parser;
   private RulesProfile profile;
+  private RuleFinder ruleFinder;
 
   /**
    * Instantiates a new php codesniffer sensor.
    */
   public PhpCodeSnifferSensor(PhpCodeSnifferConfiguration conf, PhpCodeSnifferExecutor executor, RulesProfile profile,
-      PhpCodeSnifferViolationsXmlParser parser) {
+      PhpCodeSnifferViolationsXmlParser parser, RuleFinder ruleFinder) {
     super();
     this.configuration = conf;
     this.executor = executor;
     this.parser = parser;
     this.profile = profile;
+    this.ruleFinder = ruleFinder;
   }
 
   /**
@@ -121,9 +123,7 @@ public class PhpCodeSnifferSensor implements Sensor {
     List<Violation> contextViolations = new ArrayList<Violation>();
     Set<String> unfoundViolations = new HashSet<String>();
     for (PhpCodeSnifferViolation violation : violations) {
-      RuleFinder ruleFinder = configuration.getRuleFinder();
       String ruleKey = violation.getRuleKey();
-      // get the rule from the repository
       Rule rule = ruleFinder.findByKey(PHPCS_REPOSITORY_KEY, ruleKey);
       if (rule != null) {
         org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);

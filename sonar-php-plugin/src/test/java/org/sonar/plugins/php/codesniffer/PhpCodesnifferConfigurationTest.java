@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.php.MockUtils;
 
 import java.io.File;
@@ -43,7 +42,7 @@ public class PhpCodesnifferConfigurationTest {
 
   @Before
   public void init() throws Exception {
-    settings = Settings.createForComponent(new PhpCodeSnifferSensor(null, null, null, null));
+    settings = Settings.createForComponent(new PhpCodeSnifferSensor(null, null, null, null, null));
     phpConfig = createPhpCodesnifferConfiguration(settings);
   }
 
@@ -92,9 +91,8 @@ public class PhpCodesnifferConfigurationTest {
 
     RulesProfile profile = mock(RulesProfile.class);
     PhpCodeSnifferProfileExporter exporter = mock(PhpCodeSnifferProfileExporter.class);
-    RuleFinder finder = mock(RuleFinder.class);
 
-    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(settings, project, exporter, profile, finder);
+    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(settings, project, exporter, profile);
     return phpConfig;
   }
 }

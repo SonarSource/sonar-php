@@ -39,7 +39,7 @@ public class PhpmdConfigurationTest {
 
   @Before
   public void init() throws Exception {
-    settings = Settings.createForComponent(new PhpmdSensor(null, null, null));
+    settings = Settings.createForComponent(new PhpmdSensor(null, null, null, null));
     phpConfig = new PhpmdConfiguration(settings, MockUtils.createMockProject());
   }
 

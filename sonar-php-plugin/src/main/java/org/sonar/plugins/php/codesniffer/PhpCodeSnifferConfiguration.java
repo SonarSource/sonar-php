@@ -24,7 +24,6 @@ import org.apache.commons.lang.CharEncoding;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
-import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
@@ -65,7 +64,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
 
   private PhpCodeSnifferProfileExporter exporter;
   private RulesProfile profile;
-  private RuleFinder ruleFinder;
 
   /**
    * Instantiates a new php checkstyle configuration.
@@ -73,11 +71,10 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    * @param project
    *          the pom
    */
-  public PhpCodeSnifferConfiguration(Settings settings, Project project, PhpCodeSnifferProfileExporter exporter, RulesProfile profile, RuleFinder ruleFinder) {
+  public PhpCodeSnifferConfiguration(Settings settings, Project project, PhpCodeSnifferProfileExporter exporter, RulesProfile profile) {
     super(settings, project);
     this.exporter = exporter;
     this.profile = profile;
-    this.ruleFinder = ruleFinder;
   }
 
   /**
@@ -103,21 +100,6 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   public String getSeverityModifier() {
     return getSettings().getString(PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY);
-  }
-
-  /**
-   * @return the ruleFinder
-   */
-  public RuleFinder getRuleFinder() {
-    return ruleFinder;
-  }
-
-  /**
-   * @param ruleFinder
-   *          the ruleFinder to set
-   */
-  public void setRuleFinder(RuleFinder finder) {
-    this.ruleFinder = finder;
   }
 
   /**

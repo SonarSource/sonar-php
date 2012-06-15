@@ -28,6 +28,7 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
 import org.sonar.plugins.php.api.PhpConstants;
 
@@ -87,17 +88,21 @@ public class PhpmdSensor implements Sensor {
   /** The plugin configuration. */
   private PhpmdExecutor executor;
 
+  /** The rule finder */
+  private RuleFinder ruleFinder;
+
   /**
    * /** Instantiates a new php pmd sensor.
    * 
    * @param rulesManager
    *          the rules manager
    */
-  public PhpmdSensor(PhpmdConfiguration conf, PhpmdExecutor executor, RulesProfile profile) {
+  public PhpmdSensor(PhpmdConfiguration conf, PhpmdExecutor executor, RulesProfile profile, RuleFinder ruleFinder) {
     super();
     this.configuration = conf;
     this.profile = profile;
     this.executor = executor;
+    this.ruleFinder = ruleFinder;
   }
 
   /**
@@ -113,12 +118,14 @@ public class PhpmdSensor implements Sensor {
     List<PhpmdViolation> violations = reportParser.getViolations();
     List<Violation> contextViolations = new ArrayList<Violation>();
     for (PhpmdViolation violation : violations) {
-      Rule rule = Rule.create(PHPMD_REPOSITORY_KEY, violation.getRuleKey());
-      org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
-      if (context.getResource(resource) != null) {
-        Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
-        contextViolations.add(v);
-        LOG.debug("Violation found: " + v);
+      Rule rule = ruleFinder.findByKey(PHPMD_REPOSITORY_KEY, violation.getRuleKey());
+      if (rule != null) {
+        org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(new File(violation.getFileName()), project);
+        if (context.getResource(resource) != null) {
+          Violation v = Violation.create(rule, resource).setLineId(violation.getBeginLine()).setMessage(violation.getLongMessage());
+          contextViolations.add(v);
+          LOG.debug("Violation found: " + v);
+        }
       }
     }
     context.saveViolations(contextViolations);

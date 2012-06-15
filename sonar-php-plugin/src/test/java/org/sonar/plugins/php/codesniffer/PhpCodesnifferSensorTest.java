@@ -25,6 +25,7 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.ActiveRule;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.plugins.php.MockUtils;
 
 import java.util.ArrayList;
@@ -86,7 +87,9 @@ public class PhpCodesnifferSensorTest {
     PhpCodeSnifferViolationsXmlParser parser = mock(PhpCodeSnifferViolationsXmlParser.class);
     PhpCodeSnifferConfiguration conf = mock(PhpCodeSnifferConfiguration.class);
     when(conf.isSkip()).thenReturn(skip);
-    return new PhpCodeSnifferSensor(conf, executor, profile, parser);
+    RuleFinder ruleFinder = mock(RuleFinder.class);
+
+    return new PhpCodeSnifferSensor(conf, executor, profile, parser, ruleFinder);
   }
 
   protected RulesProfile createRulesProfile() {

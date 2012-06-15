@@ -52,7 +52,7 @@ public class PhpmdExecutorTest {
   public void init() throws Exception {
     MockitoAnnotations.initMocks(this);
 
-    settings = Settings.createForComponent(new PhpmdSensor(null, null, null));
+    settings = Settings.createForComponent(new PhpmdSensor(null, null, null, null));
     Project project = MockUtils.createMockProject();
     PhpmdConfiguration configuration = new PhpmdConfiguration(settings, project);
     executor = new PhpmdExecutor(new Php(), configuration, exporter, profile);
