@@ -26,11 +26,11 @@ import org.sonar.plugins.php.MockUtils;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class AbstractPhpPluginConfigurationTest {
+public class AbstractPhpConfigurationTest {
 
   @Test
   public void shouldNotSkipWhenShouldRunAndSkipNotSet() {
-    FakeConfiguration conf = new FakeConfiguration();
+    FakeConfiguration conf = new FakeConfiguration(new Settings());
 
     if (SystemUtils.IS_OS_WINDOWS) {
       assertThat(conf.getOsDependentToolScriptName()).isEqualTo("fake-exec.bat");
@@ -39,10 +39,38 @@ public class AbstractPhpPluginConfigurationTest {
     }
   }
 
+  @Test
+  public void testIsDynamicAnalysisEnabled() {
+    Settings settings = new Settings();
+    FakeConfiguration conf = new FakeConfiguration(settings);
+    assertThat(conf.isDynamicAnalysisEnabled()).isTrue();
+
+    settings.setProperty("sonar.dynamicAnalysis", "false");
+    conf = new FakeConfiguration(settings);
+    assertThat(conf.isDynamicAnalysisEnabled()).isFalse();
+  }
+
+  @Test
+  public void testOldParamShouldRun() {
+    Settings settings = new Settings();
+    FakeConfiguration conf = new FakeConfiguration(settings);
+    assertThat(conf.isSkip()).isFalse();
+
+    // one version
+    settings.setProperty("shouldRun", "false");
+    conf = new FakeConfiguration(settings);
+    assertThat(conf.isSkip()).isTrue();
+
+    // and the contrary
+    settings.setProperty("shouldRun", "true");
+    conf = new FakeConfiguration(settings);
+    assertThat(conf.isSkip()).isFalse();
+  }
+
   class FakeConfiguration extends AbstractPhpConfiguration {
 
-    public FakeConfiguration() {
-      super(new Settings(), MockUtils.createMockProject());
+    public FakeConfiguration(Settings settings) {
+      super(settings, MockUtils.createMockProject());
     }
 
     @Override
@@ -82,7 +110,7 @@ public class AbstractPhpPluginConfigurationTest {
 
     @Override
     protected String getShouldRunKey() {
-      return "";
+      return "shouldRun";
     }
 
   }

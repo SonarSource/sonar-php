@@ -92,12 +92,10 @@ public class PhpDependPhpUnitReportParser extends PhpDependResultsParser {
 
     RangeDistributionBuilder classComplexityDistribution = new RangeDistributionBuilder(
         CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION,
-        CLASSES_DISTRIB_BOTTOM_LIMITS
-        );
+        CLASSES_DISTRIB_BOTTOM_LIMITS);
     RangeDistributionBuilder methodComplexityDistribution = new RangeDistributionBuilder(
         CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION,
-        FUNCTIONS_DISTRIB_BOTTOM_LIMITS
-        );
+        FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
 
     setClassComplexity(0.0);
     setNumberOfMethods(0);
