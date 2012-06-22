@@ -82,6 +82,10 @@
     <url>https://sonarplugins.ci.cloudbees.com/job/php/</url>
   </ciManagement>
 
+  <properties>
+    <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+  </properties>
+
   <profiles>
     <profile>
       <id>m2e</id>
