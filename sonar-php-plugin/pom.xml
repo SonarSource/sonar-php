@@ -13,6 +13,7 @@
 
   <name>Sonar PHP Plugin</name>
   <description>Sonar PHP Plugin is set of tools that brings PHP support to sonar. It relies on Sonar core, PHP Depend, PHPMD, PHP_CodeSniffer and PHPUnit</description>
+  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
 
   <properties>
     <sonar.version>2.12</sonar.version>
