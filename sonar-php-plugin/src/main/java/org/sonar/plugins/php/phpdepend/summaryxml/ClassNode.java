@@ -20,12 +20,13 @@
 package org.sonar.plugins.php.phpdepend.summaryxml;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import java.util.List;
 
 /**
- * The FileNode class represent a Php Depend summary-xml files node.
+ * The ClassNode class represent a Php Depend summary-xml class node.
  * It's used by XStream to marschall or unmarshall xml files.
  */
 @XStreamAlias("class")
@@ -35,6 +36,21 @@ public class ClassNode {
 
   @XStreamImplicit
   private List<MethodNode> methods;
+
+  /** The depth of inheritance tree */
+  @XStreamAsAttribute
+  @XStreamAlias("dit")
+  private double depthInTreeNumber;
+
+  /** The number of children classes */
+  @XStreamAsAttribute
+  @XStreamAlias("nocc")
+  private double numberOfChildrenClasses;
+
+  /** WMC metric - total complexity of the class */
+  @XStreamAsAttribute
+  @XStreamAlias("wmc")
+  private double weightedMethodCount;
 
   /**
    * Returns MethodNodes in the current ClassNode
@@ -48,5 +64,26 @@ public class ClassNode {
    */
   public FileNode getFile() {
     return file;
+  }
+
+  /**
+   * Returns depth of inheritance tree metric for the given class
+   */
+  public double getDepthInTreeNumber() {
+    return depthInTreeNumber;
+  }
+
+  /**
+   * Returns the number of children classes metric
+   */
+  public double getNumberOfChildrenClasses() {
+    return numberOfChildrenClasses;
+  }
+
+  /**
+   * Returns the total complexity of the class (through WMC metric)
+   */
+  public double getWeightedMethodCount() {
+    return weightedMethodCount;
   }
 }

@@ -20,9 +20,10 @@
 package org.sonar.plugins.php.phpdepend.summaryxml;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 /**
- * The FileNode class represent a Php Depend summary-xml files node.
+ * The FunctionNode class represent a Php Depend summary-xml function node.
  * It's used by XStream to marschall or unmarshall xml files.
  */
 @XStreamAlias("function")
@@ -30,10 +31,22 @@ public class FunctionNode {
   @XStreamAlias("file")
   private FileNode file;
 
+  /** The cyclomatic complexity number. */
+  @XStreamAsAttribute
+  @XStreamAlias("ccn2")
+  private double cycloComplexity;
+
   /**
    * Returns FileNode for the current FunctionNode
    */
   public FileNode getFile() {
     return file;
+  }
+
+  /**
+   * Returns cyclomatic complexity number of a function
+   */
+  public double getComplexity() {
+    return cycloComplexity;
   }
 }

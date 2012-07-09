@@ -36,6 +36,9 @@ public final class MetricsNode {
   @XStreamImplicit
   private List<PackageNode> packages;
 
+  /**
+   * Returns list of FileNode element in the given MetricsNode
+   */
   public List<FileNode> getFiles() {
     return files;
   }
@@ -53,6 +56,7 @@ public final class MetricsNode {
             continue;
           }
           fileNode.increaseClassNumber();
+          fileNode.addClassNode(classNode);
           List<MethodNode> methods = classNode.getMethods();
           if (methods != null) {
             fileNode.increaseMethodNumber(methods.size());
@@ -67,6 +71,7 @@ public final class MetricsNode {
             continue;
           }
           fileNode.increaseFunctionNumber();
+          fileNode.addFunctionNode(functionNode);
         }
       }
     }

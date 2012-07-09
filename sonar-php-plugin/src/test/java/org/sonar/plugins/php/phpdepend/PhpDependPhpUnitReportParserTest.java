@@ -22,6 +22,7 @@ package org.sonar.plugins.php.phpdepend;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.Metric.Builder;
 import org.sonar.api.measures.Metric.ValueType;
@@ -31,6 +32,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.PhpConstants;
+import org.sonar.plugins.php.HasComplexityDistribution;
 import org.sonar.test.TestUtils;
 
 import java.util.Arrays;
@@ -38,6 +40,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -190,10 +193,10 @@ public class PhpDependPhpUnitReportParserTest {
   }
 
   /**
-   * Should generate complexty measure.
+   * Should generate complexity measure.
    */
   @Test
-  public void shouldGenerateComplextyMeasure() {
+  public void shouldGenerateComplexityMeasure() {
     metric = CoreMetrics.COMPLEXITY;
     init(PDEPEND_RESULT);
     verify(context).saveMeasure(new File("Money.php"), metric, 22.0);
@@ -221,4 +224,30 @@ public class PhpDependPhpUnitReportParserTest {
     verify(context).saveMeasure(new File("Money.inc"), metric, 39.0);
   }
 
+  @Test
+  /**
+   * It was hard to have a seperate test case for class and method complexity.
+   * Only assume because saveMeasure() method call arguments types are the same
+   */
+  public void testShouldGenerateComplexityDistribution() {
+    init(PDEPEND_RESULT);
+
+    verify(context).saveMeasure(
+        eq(new File("Money.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=1;5=0;10=1;20=0;30=0;60=0;90=0"))
+    );
+    verify(context).saveMeasure(
+        eq(new File("Money.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=15;2=1;4=1;6=0;8=0;10=0;12=0"))
+    );
+
+    verify(context).saveMeasure(
+        eq(new File("MoneyBag.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=0;30=1;60=0;90=0"))
+    );
+    verify(context).saveMeasure(
+        eq(new File("MoneyBag.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=8;2=8;4=0;6=2;8=0;10=0;12=0"))
+    );
+  }
 }

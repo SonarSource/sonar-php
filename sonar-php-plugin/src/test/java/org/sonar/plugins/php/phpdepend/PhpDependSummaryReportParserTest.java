@@ -22,6 +22,7 @@ package org.sonar.plugins.php.phpdepend;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.InputFileUtils;
@@ -30,11 +31,14 @@ import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.PhpConstants;
+import org.sonar.plugins.php.HasComplexityDistribution;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -120,5 +124,105 @@ public class PhpDependSummaryReportParserTest {
     verify(context).saveMeasure(new File("Math.php"), metric, 1.0);
     verify(context).saveMeasure(new File("Math2.php"), metric, 1.0);
     verify(context).saveMeasure(new File("Mail.php"), metric, 1.0);
+  }
+
+  @Test
+  public void testShouldGenerateDitMeasure() {
+    metric = CoreMetrics.DEPTH_IN_TREE;
+    init(SUMMARY_RESULT);
+    verify(context).saveMeasure(new File("Math3.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Bar/Math4.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Foo/Math5.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Math.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Math2.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Mail.php"), metric, 2.0);
+  }
+
+  @Test
+  public void testShouldGenerateNoccMeasure() {
+    metric = CoreMetrics.NUMBER_OF_CHILDREN;
+    init(SUMMARY_RESULT);
+    verify(context).saveMeasure(new File("Math3.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Bar/Math4.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Foo/Math5.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Math.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Math2.php"), metric, 0.0);
+    verify(context).saveMeasure(new File("Mail.php"), metric, 0.0);
+  }
+
+  @Test
+  public void testShouldGenerateComplexityMeasure() {
+    metric = CoreMetrics.COMPLEXITY;
+    init(SUMMARY_RESULT);
+    verify(context).saveMeasure(new File("Math3.php"), metric, 1.0);
+    verify(context).saveMeasure(new File("Bar/Math4.php"), metric, 24.0);
+    verify(context).saveMeasure(new File("Foo/Math5.php"), metric, 24.0);
+    verify(context).saveMeasure(new File("Math.php"), metric, 24.0);
+    verify(context).saveMeasure(new File("Math2.php"), metric, 24.0);
+    verify(context).saveMeasure(new File("Mail.php"), metric, 120.0);
+  }
+
+  @Test
+  /**
+   * It was hard to have a seperate test case for class and method complexity.
+   * Only assume because saveMeasure() method call arguments types are the same
+   */
+  public void testShouldGenerateComplexityDistribution() {
+    init(SUMMARY_RESULT);
+
+    verify(context).saveMeasure(
+      eq(new File("Math3.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=1;5=0;10=0;20=0;30=0;60=0;90=0"))
+    );
+
+    verify(context).saveMeasure(
+      eq(new File("Math3.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=4;2=0;4=0;6=0;8=0;10=2;12=0"))
+    );
+
+    verify(context).saveMeasure(
+      eq(new File("Bar/Math4.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
+    );
+    verify(context).saveMeasure(
+      eq(new File("Bar/Math4.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
+    );
+
+    verify(context).saveMeasure(
+      eq(new File("Foo/Math5.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
+    );
+    verify(context).saveMeasure(
+      eq(new File("Foo/Math5.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
+    );
+
+    verify(context).saveMeasure(
+      eq(new File("Math.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
+    );
+    verify(context).saveMeasure(
+      eq(new File("Math.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=3;2=0;4=0;6=0;8=0;10=2;12=0"))
+    );
+
+    verify(context).saveMeasure(
+      eq(new File("Math2.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
+    );
+    verify(context).saveMeasure(
+      eq(new File("Math2.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
+    );
+
+    verify(context).saveMeasure(
+      eq(new File("Mail.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=0;30=0;60=0;90=1"))
+    );
+    verify(context).saveMeasure(
+      eq(new File("Mail.php")),
+      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=38;2=18;4=4;6=1;8=2;10=0;12=0"))
+    );
   }
 }

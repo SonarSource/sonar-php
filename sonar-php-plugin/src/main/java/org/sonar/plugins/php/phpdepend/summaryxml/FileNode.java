@@ -22,6 +22,9 @@ package org.sonar.plugins.php.phpdepend.summaryxml;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The FileNode class represent a Php Depend summary-xml files node.
  * It's used by XStream to marschall or unmarshall xml files.
@@ -48,17 +51,65 @@ public final class FileNode {
   @XStreamAlias("cloc")
   private double commentLineNumber;
 
+  private List<ClassNode> classes;
+
+  private List<FunctionNode> functions;
+
   private int classNumber = 0;
 
   private int methodNumber = 0;
 
   private int functionNumber = 0;
 
+  public FileNode() {
+    super();
+  }
+
   /**
    * Returns filename of the current FileNode
    */
   public String getFileName() {
     return fileName;
+  }
+
+  /**
+   * Returns list of classes in the file
+   */
+  public List<ClassNode> getClasses() {
+    return classes;
+  }
+
+  /**
+   * Returns list of functions in the file
+   */
+  public List<FunctionNode> getFunctions() {
+    return functions;
+  }
+
+  /**
+   * Adds a classNode to list of classes
+   * that belong to the given file node
+   *
+   * @param classNode A class node
+   */
+  public void addClassNode(ClassNode classNode) {
+    if (classes == null) {
+      classes = new ArrayList<ClassNode>();
+    }
+    classes.add(classNode);
+  }
+
+  /**
+   * Adds a functionNode to list of functions
+   * that belong to the given file node
+   *
+   * @param functionNode A function node
+   */
+  public void addFunctionNode(FunctionNode functionNode) {
+    if (functions == null) {
+      functions = new ArrayList<FunctionNode>();
+    }
+    functions.add(functionNode);
   }
 
   /**
