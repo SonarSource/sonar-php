@@ -141,7 +141,7 @@ public class PhpUnitConfigurationTest {
     settings.setProperty(PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY, "AllTests.php");
 
     thrown.expect(IllegalStateException.class);
-    thrown.expectMessage("The specificied main class file cannot be found: AllTests.php. " +
+    thrown.expectMessage("The specified main class file cannot be found: AllTests.php. " +
       "If you don't have a main test file, consider using a phpunit.xml file and do not use sonar.phpUnit.mainTestClass property.");
 
     phpConfig.getMainTestClassFilePath();

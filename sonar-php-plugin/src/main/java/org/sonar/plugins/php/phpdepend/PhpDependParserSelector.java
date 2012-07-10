@@ -19,12 +19,13 @@
  */
 package org.sonar.plugins.php.phpdepend;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.utils.SonarException;
 
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_PHPUNIT;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_SUMMARY;
-
 /**
  * Parser selector for Php Depend. Depending on the option set, different type of files will be parsed.
  * As of now choice will be either phpunit-xml or summary-xml
@@ -34,6 +35,7 @@ public class PhpDependParserSelector implements BatchExtension {
   private PhpDependPhpUnitReportParser phpunitParser;
   private PhpDependSummaryReportParser summaryParser;
   private PhpDependConfiguration config;
+  private static final Logger LOG = LoggerFactory.getLogger(PhpDependParserSelector.class);
 
   /**
    * @param phpunitParser Parser for Php Depend phpunit-xml report
@@ -49,13 +51,13 @@ public class PhpDependParserSelector implements BatchExtension {
   /**
    * Selects appropriate parser depending on configuration option
    *
-   * @param config Php Depend Configuration
    * @return PhpDependResultsParser
    * @throws SonarException
    */
   public PhpDependResultsParser select() {
     String reportType = config.getReportType();
     if (PDEPEND_REPORT_TYPE_PHPUNIT.equals(reportType)) {
+      LOG.info("WARNING: Using deprecated format of PHP Depend report. Support for phpunit-xml report will be removed soon.");
       return phpunitParser;
     } else if (PDEPEND_REPORT_TYPE_SUMMARY.equals(reportType)) {
       return summaryParser;

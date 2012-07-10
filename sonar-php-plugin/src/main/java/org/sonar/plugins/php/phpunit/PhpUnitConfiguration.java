@@ -212,7 +212,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
     // Otherwise return the file in the base directory
     File file = new File(getProject().getFileSystem().getBasedir(), mainFileName);
     if (!file.exists()) {
-      StringBuilder message = new StringBuilder("The specificied main class file cannot be found: ");
+      StringBuilder message = new StringBuilder("The specified main class file cannot be found: ");
       message.append(mainFileName).append(". If you don't have a main test file, consider using a phpunit.xml file and do not ");
       message.append("use ").append(PHPUNIT_MAIN_TEST_FILE_KEY).append(" property.");
       throw new IllegalStateException(message.toString());

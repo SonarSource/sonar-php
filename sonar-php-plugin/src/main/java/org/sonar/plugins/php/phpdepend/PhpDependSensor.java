@@ -49,7 +49,7 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY;
 
 /**
- * This class is in charge of knowing wether or not it has to be launched depending on a given project. In case it has to be launched, the
+ * This class is in charge of knowing whether or not it has to be launched depending on a given project. In case it has to be launched, the
  * sensor, choose between execute phpDepend and analyze its result or only analyze its result
  */
 @Properties({
@@ -75,11 +75,11 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
     description = "Comma separated string of packages that will be excluded during the parsing process.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-    description = "Additionnal parameters that can be passed to PHP Depend tool.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
+    description = "Additional parameters that can be passed to PHP Depend tool.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
     description = "Maximum number of minutes that the execution of the tool should take.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_REPORT_TYPE, defaultValue = PDEPEND_REPORT_TYPE_DEFVALUE, name = "XML report type", project = true, global = true,
-    description = "Type of report PHP Depend will generate and Sonar analyse afterwards.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND)
+    description = "Type of report PHP Depend will generate and Sonar analyse afterwards. Valid values: summary-xml, phpunit-xml (deprecated)", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND)
 })
 public class PhpDependSensor implements Sensor {
 
@@ -116,7 +116,7 @@ public class PhpDependSensor implements Sensor {
       File reportFile = configuration.getReportFile();
       parser.parse(reportFile);
     } catch (PhpPluginExecutionException e) {
-      LOG.error("Error occured while launching PhpDepend", e);
+      LOG.error("Error occurred while launching PhpDepend", e);
     }
   }
 
