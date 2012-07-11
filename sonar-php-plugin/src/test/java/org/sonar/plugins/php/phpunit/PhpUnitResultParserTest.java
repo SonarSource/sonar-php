@@ -27,6 +27,7 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.test.TestUtils;
 
 import java.io.File;
 import java.util.Arrays;
@@ -68,7 +69,7 @@ public class PhpUnitResultParserTest {
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    File reportFile = new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml").getFile());
+    File reportFile = TestUtils.getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml");
     when(config.getReportFile()).thenReturn(reportFile);
 
     PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
@@ -110,8 +111,7 @@ public class PhpUnitResultParserTest {
     config = mock(PhpUnitConfiguration.class);
     project = mock(Project.class);
     context = mock(SensorContext.class);
-    when(config.getReportFile()).thenReturn(
-        new File(getClass().getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit-invalid.xml").getFile()));
+    when(config.getReportFile()).thenReturn(TestUtils.getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit-invalid.xml"));
     PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
     parser.parse(config.getReportFile());
   }

@@ -30,6 +30,7 @@ import org.sonar.api.resources.Resource;
 import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.text.Source;
+import org.sonar.test.TestUtils;
 
 import java.io.File;
 import java.util.Arrays;
@@ -133,7 +134,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
 
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
-    File f1 = new File(this.getClass().getResource("/Mail.php").getPath());
+    File f1 = TestUtils.getResource("/Mail.php");
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(f1.getParentFile()));
     when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(InputFileUtils.create(f1.getParentFile(), Arrays.asList(f1, new File("fake"))));
 

@@ -31,8 +31,8 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.HasComplexityDistribution;
+import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.test.TestUtils;
 
 import java.util.Arrays;
@@ -130,8 +130,7 @@ public class PhpDependPhpUnitReportParserTest {
   public void shouldNotStopIfFilenameEmpty() {
     project = mock(Project.class);
     PhpDependPhpUnitReportParser parser = new PhpDependPhpUnitReportParser(project, null);
-    parser.parse(new java.io.File(getClass().getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-with-empty-filename.xml")
-        .getFile()));
+    parser.parse(TestUtils.getResource("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-with-empty-filename.xml"));
   }
 
   /**
@@ -235,19 +234,19 @@ public class PhpDependPhpUnitReportParserTest {
     verify(context).saveMeasure(
         eq(new File("Money.php")),
         (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=1;5=0;10=1;20=0;30=0;60=0;90=0"))
-    );
+        );
     verify(context).saveMeasure(
         eq(new File("Money.php")),
         (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=15;2=1;4=1;6=0;8=0;10=0;12=0"))
-    );
+        );
 
     verify(context).saveMeasure(
         eq(new File("MoneyBag.php")),
         (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=0;30=1;60=0;90=0"))
-    );
+        );
     verify(context).saveMeasure(
         eq(new File("MoneyBag.php")),
         (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=8;2=8;4=0;6=2;8=0;10=0;12=0"))
-    );
+        );
   }
 }
