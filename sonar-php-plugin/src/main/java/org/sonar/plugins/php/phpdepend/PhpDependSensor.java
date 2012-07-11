@@ -79,7 +79,8 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
   @Property(key = PDEPEND_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
     description = "Maximum number of minutes that the execution of the tool should take.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_REPORT_TYPE, defaultValue = PDEPEND_REPORT_TYPE_DEFVALUE, name = "XML report type", project = true, global = true,
-    description = "Type of report PHP Depend will generate and Sonar analyse afterwards. Valid values: summary-xml, phpunit-xml (deprecated)", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND)
+    description = "Type of report PHP Depend will generate and Sonar analyse afterwards. Valid values: summary-xml, phpunit-xml (deprecated)",
+    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND)
 })
 public class PhpDependSensor implements Sensor {
 

@@ -122,20 +122,10 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
             firstClass = false;
           }
 
-          List<MethodNode> methods = classNode.getMethods();
-          if (methods != null) {
-            for (MethodNode methodNode : methods) {
-              methodComplexityDistribution.add(methodNode.getComplexity());
-            }
-          }
+          updateMethodComplexityDistribution(classNode, methodComplexityDistribution);
         }
 
-        List<FunctionNode> functions = fileNode.getFunctions();
-        if (functions != null) {
-          for (FunctionNode functionNode : functions) {
-            methodComplexityDistribution.add(functionNode.getComplexity());
-          }
-        }
+        updateMethodComplexityDistribution(fileNode, methodComplexityDistribution);
       }
 
       Measure measure = classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY);
@@ -147,6 +137,24 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
           sonarFile,
           methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY)
       );
+    }
+  }
+
+  private void updateMethodComplexityDistribution(FileNode fileNode, RangeDistributionBuilder methodComplexityDistribution) {
+    List<FunctionNode> functions = fileNode.getFunctions();
+    if (functions != null) {
+      for (FunctionNode functionNode : functions) {
+        methodComplexityDistribution.add(functionNode.getComplexity());
+      }
+    }
+  }
+
+  private void updateMethodComplexityDistribution(ClassNode classNode, RangeDistributionBuilder methodComplexityDistribution) {
+    List<MethodNode> methods = classNode.getMethods();
+    if (methods != null) {
+      for (MethodNode methodNode : methods) {
+        methodComplexityDistribution.add(methodNode.getComplexity());
+      }
     }
   }
 

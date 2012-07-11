@@ -49,7 +49,6 @@ public class PhpmdRulesRepositoryTest {
       assertNotNull(rule.getDescription());
       assertNotNull(rule.getName());
       assertNotNull(rule.getSeverity());
-      // assertNotNull(rule.getPluginName());
     }
   }
 
