@@ -20,8 +20,8 @@
 package org.sonar.plugins.php;
 
 import org.mockito.ArgumentMatcher;
-import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.Measure;
+import org.sonar.api.measures.Metric;
 
 /**
  * Argument matcher for verifing complexity distribution

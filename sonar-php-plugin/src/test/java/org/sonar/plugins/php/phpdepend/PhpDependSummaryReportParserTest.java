@@ -29,9 +29,9 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.HasComplexityDistribution;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.PhpConstants;
-import org.sonar.plugins.php.HasComplexityDistribution;
 
 import java.util.Arrays;
 import java.util.HashSet;

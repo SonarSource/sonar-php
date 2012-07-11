@@ -32,7 +32,12 @@ import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ResourceUtils;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.phpdepend.summaryxml.*;
+import org.sonar.plugins.php.phpdepend.summaryxml.ClassNode;
+import org.sonar.plugins.php.phpdepend.summaryxml.FileNode;
+import org.sonar.plugins.php.phpdepend.summaryxml.FunctionNode;
+import org.sonar.plugins.php.phpdepend.summaryxml.MethodNode;
+import org.sonar.plugins.php.phpdepend.summaryxml.MetricsNode;
+import org.sonar.plugins.php.phpdepend.summaryxml.PackageNode;
 
 import java.io.FileInputStream;
 import java.io.IOException;
