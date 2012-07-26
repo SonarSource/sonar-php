@@ -5,8 +5,7 @@
   <parent>
     <groupId>org.codehaus.sonar-plugins</groupId>
     <artifactId>parent</artifactId>
-    <version>13</version>
-    <relativePath>../parent</relativePath>
+    <version>14</version>
   </parent>
 
   <groupId>org.codehaus.sonar-plugins.php</groupId>
@@ -16,13 +15,19 @@
 
   <name>Sonar PHP Project</name>
   <description>Enables analysis of PHP projects into Sonar.</description>
-  <inceptionYear>2010</inceptionYear>
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
-
+  <inceptionYear>2010</inceptionYear>
   <organization>
     <name>Codehaus Sonar Plugins</name>
     <url>http://sonar-plugins.codehaus.org/</url>
   </organization>
+  <licenses>
+    <license>
+      <name>GNU LGPL v3</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <modules>
     <module>sonar-php-plugin</module>
@@ -31,14 +36,6 @@
     <module>phpcodesniffer-rulesets</module>
     -->
   </modules>
-
-  <licenses>
-    <license>
-      <name>GNU LGPL v3</name>
-      <url>http://www.gnu.org/licenses/lgpl.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
 
   <developers>
     <developer>
