@@ -85,6 +85,7 @@
     <function name="add" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="4" ncloc="4" npath="1">
       <file name="/Volumes/git/sonar/sonar-php-trunk-git/math-php-test/source/src/Math.php"/>
     </function>
+    <method name="add1" ccn="1" ccn2="1" cloc="0" eloc="8" lloc="1" loc="9" ncloc="9" npath="1"/>
   </package>
   <package name="Zend_Mail" cr="0.15" noc="1" nof="0" noi="0" nom="63" rcr="0.1925">
     <class name="Zend_Mail" ca="0" cbo="6" ce="6" cis="56" cloc="515" cr="0.15" csz="82" dit="2" eloc="464" impl="0" lloc="254" loc="1210" ncloc="695" noam="63" nocc="0" nom="63" noom="0" npm="55" rcr="0.2775" vars="19" varsi="19" varsnp="1" wmc="120" wmci="120" wmcnp="101">

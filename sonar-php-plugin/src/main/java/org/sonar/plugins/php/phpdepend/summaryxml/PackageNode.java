@@ -36,6 +36,9 @@ public class PackageNode {
   @XStreamImplicit
   private List<FunctionNode> functions;
 
+  @XStreamImplicit
+  private List<MethodNode> methods;
+
   /**
    * Returns ClassNodes in the current PackageNode
    */

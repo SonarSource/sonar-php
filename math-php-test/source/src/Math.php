@@ -41,11 +41,7 @@
  * @version   SVN: $Id: Math.php 4429 2009-01-04 15:39:45Z mapi $
  * @link      http://www.phpundercontrol.org/
  */
-function add($v1 , $v2)
-    {
-        return ($v1 + $v2);
-    }
-
+require_once 'MathTrait.php';
 /**
  * Simple math class.
  *
@@ -58,18 +54,7 @@ function add($v1 , $v2)
  */
 class PhpUnderControl_Example_Math
 {
-    /**
-     * Adds the two given values.
-     *
-     * @param integer $v1 Value one.
-     * @param integer $v2 Value two.
-     *
-     * @return integer.
-     */
-    public function add($v1 , $v2)
-    {
-        return ($v1 + $v2);
-    }
+    use PhpUnderControl_Example_MathTrait;
 
     /**
      * Subtract param two from param one
