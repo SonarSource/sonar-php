@@ -21,6 +21,7 @@
     <sonar.pluginName>PHP</sonar.pluginName>
     <!-- Those classes are excluded as they are just a temporary copy of Sonar core classes -->
     <sonar.exclusions>org/sonar/plugins/php/duplications/internal/*.java</sonar.exclusions>
+    <sonarCommonRules.version>1.1</sonarCommonRules.version>
   </properties>
 
   <dependencies>
@@ -29,6 +30,11 @@
       <artifactId>sonar-plugin-api</artifactId>
       <version>${sonar.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar.common-rules</groupId>
+      <artifactId>sonar-common-rules</artifactId>
+      <version>${sonarCommonRules.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jdom</groupId>
