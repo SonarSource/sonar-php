@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
+import org.sonar.api.PropertyType;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
@@ -55,10 +56,12 @@ import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY
 @Properties({
   // ------------------ Phpmd configuration ------------------
   @Property(key = PHPMD_SKIP_KEY, defaultValue = "false", name = "Disable PHPMD", project = true, global = true,
-    description = "Disabling PHPMD is not a good idea because almost all metrics rely on it.", category = PhpmdSensor.CATEGORY_PHP_PHPMD),
+    description = "Disabling PHPMD is not a good idea because almost all metrics rely on it.", category = PhpmdSensor.CATEGORY_PHP_PHPMD,
+    type = PropertyType.BOOLEAN),
   @Property(key = PHPMD_ANALYZE_ONLY_KEY, defaultValue = "false", name = "Only analyze existing Phpmd report files", project = true,
     global = true, description = "By default, the plugin will launch PHPMD and parse the generated result file."
-      + "If this option is set to true, the plugin will only reuse an existing report file.", category = PhpmdSensor.CATEGORY_PHP_PHPMD),
+      + "If this option is set to true, the plugin will only reuse an existing report file.", category = PhpmdSensor.CATEGORY_PHP_PHPMD,
+    type = PropertyType.BOOLEAN),
   @Property(key = PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
     name = "Report file path", project = true, global = true, description = "Relative path of the report file to analyse.",
     category = PhpmdSensor.CATEGORY_PHP_PHPMD),

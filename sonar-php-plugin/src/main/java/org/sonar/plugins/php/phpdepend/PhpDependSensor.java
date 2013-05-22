@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
+import org.sonar.api.PropertyType;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
@@ -55,11 +56,13 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
 @Properties({
   @Property(key = PDEPEND_SKIP_KEY, defaultValue = "false", name = "Disable PHP Depend", project = true, global = true,
     description = "If true, PHP Depend engine will not run and its violations will not be present in Sonar dashboard.",
-    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
+    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
+    type = PropertyType.BOOLEAN),
   @Property(key = PDEPEND_ANALYZE_ONLY_KEY, defaultValue = "false", name = "Only analyze existing PHP Depend report files",
     project = true, global = true, description = "By default, the plugin will launch PHP Depend and parse the generated result file."
       + "If this option is set to true, the plugin will only reuse an existing report file.",
-    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
+    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
+    type = PropertyType.BOOLEAN),
   @Property(key = PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
     name = "Report file path", project = true, global = true, description = "Relative path of the report file to analyse.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
@@ -67,10 +70,12 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
     project = true, global = true, description = "Name of the report file to analyse.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_WITHOUT_ANNOTATION_KEY, defaultValue = PDEPEND_WITHOUT_ANNOTATION_DEFVALUE, name = "Without annotation",
     project = true, global = true, description = "If set to true, tells PHP Depend to not parse doc comment annotations.",
-    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
+    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
+    type = PropertyType.BOOLEAN),
   @Property(key = PDEPEND_BAD_DOCUMENTATION_KEY, defaultValue = PDEPEND_BAD_DOCUMENTATION_DEFVALUE, name = "Check bad documentation",
     project = true, global = true, description = "If set to true, tells PHP Depend to check "
-      + "that annotations are used for documentation.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
+      + "that annotations are used for documentation.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
+    type = PropertyType.BOOLEAN),
   @Property(key = PDEPEND_EXCLUDE_PACKAGE_KEY, defaultValue = "", name = "Package to exclude", project = true, global = true,
     description = "Comma separated string of packages that will be excluded during the parsing process.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),

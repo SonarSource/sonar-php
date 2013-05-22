@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
+import org.sonar.api.PropertyType;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.profiles.RulesProfile;
@@ -57,12 +58,14 @@ import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOU
 @Properties({
   @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = "Disable PHP CodeSniffer", project = true, global = true,
     description = "If true, PhpCodeSniffer engine will not run and its violations will not be present in Sonar dashboard.",
-    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER,
+    type = PropertyType.BOOLEAN),
   @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = "false", name = "Only analyze existing PHP CodeSniffer report files",
     project = true, global = true,
     description = "By default, the plugin will launch PHP CodeSniffer and parse the generated result file."
       + "If this option is set to true, the plugin will only reuse an existing report file.",
-    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER,
+    type = PropertyType.BOOLEAN),
   @Property(key = PHPCS_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
     name = "Report file path", project = true, global = true, description = "Relative path of the report file to analyse.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
