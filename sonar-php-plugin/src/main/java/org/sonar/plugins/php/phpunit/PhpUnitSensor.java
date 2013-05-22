@@ -142,11 +142,10 @@ public class PhpUnitSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey()) || !configuration.isDynamicAnalysisEnabled()) {
-      return false;
-    }
-
-    return !configuration.isSkip();
+    return PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())
+      && configuration.isDynamicAnalysisEnabled()
+      && !configuration.isSkip()
+      && !project.getFileSystem().testFiles(PhpConstants.LANGUAGE_KEY).isEmpty();
   }
 
   /**

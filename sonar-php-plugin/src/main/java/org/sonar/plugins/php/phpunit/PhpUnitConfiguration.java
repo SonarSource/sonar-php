@@ -22,7 +22,7 @@ package org.sonar.plugins.php.phpunit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
 import java.io.File;
@@ -76,8 +76,8 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @param project
    *          the a project
    */
-  public PhpUnitConfiguration(Settings settings, Project project) {
-    super(settings, project);
+  public PhpUnitConfiguration(Settings settings, ProjectFileSystem fileSystem) {
+    super(settings, fileSystem);
   }
 
   /**
@@ -112,7 +112,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public File getCoverageReportFile() {
     StringBuilder fileName = new StringBuilder(getReportFileRelativePath()).append(File.separator);
     fileName.append(getCoverageReportFileName());
-    File reportFile = new File(getProject().getFileSystem().getBuildDir(), fileName.toString());
+    File reportFile = new File(getFileSystem().getBuildDir(), fileName.toString());
     LOG.info("Report file for: " + getCommandLine() + " : " + reportFile);
     return reportFile;
   }
@@ -210,7 +210,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
       }
     }
     // Otherwise return the file in the base directory
-    File file = new File(getProject().getFileSystem().getBasedir(), mainFileName);
+    File file = new File(getFileSystem().getBasedir(), mainFileName);
     if (!file.exists()) {
       StringBuilder message = new StringBuilder("The specified main class file cannot be found: ");
       message.append(mainFileName).append(". If you don't have a main test file, consider using a phpunit.xml file and do not ");

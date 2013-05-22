@@ -20,7 +20,7 @@
 package org.sonar.plugins.php.pmd;
 
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
 /**
@@ -56,8 +56,8 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
    * @param project
    *          the project
    */
-  public PhpmdConfiguration(Settings settings, Project project) {
-    super(settings, project);
+  public PhpmdConfiguration(Settings settings, ProjectFileSystem fileSystem) {
+    super(settings, fileSystem);
   }
 
   /**

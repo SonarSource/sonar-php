@@ -125,11 +125,9 @@ public class PhpDependSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())) {
-      return false;
-    }
-
-    return !configuration.isSkip();
+    return PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())
+      && !configuration.isSkip()
+      && !project.getFileSystem().mainFiles(PhpConstants.LANGUAGE_KEY).isEmpty();
   }
 
   /**

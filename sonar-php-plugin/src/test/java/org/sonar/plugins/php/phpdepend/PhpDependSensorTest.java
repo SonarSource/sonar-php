@@ -27,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.core.PhpPluginExecutionException;
 
 import java.io.File;
@@ -80,6 +81,7 @@ public class PhpDependSensorTest {
 
   @Test
   public void shouldLaunch() {
+    project = MockUtils.createMockProject();
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 

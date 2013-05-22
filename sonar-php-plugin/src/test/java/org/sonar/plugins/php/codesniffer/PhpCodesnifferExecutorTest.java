@@ -24,7 +24,6 @@ import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpConstants;
 
@@ -139,8 +138,6 @@ public class PhpCodesnifferExecutorTest {
   }
 
   private PhpCodeSnifferExecutor createExecutor(Settings settings, PhpCodeSnifferConfiguration c) {
-    Project p = mock(Project.class);
-    when(c.getProject()).thenReturn(p);
     when(c.getRuleSet()).thenReturn(new File("C:\\projets\\PHP\\Monkey\\target\\logs\\php"));
     RulesProfile profile = mock(RulesProfile.class);
     PhpCodeSnifferProfileExporter e = mock(PhpCodeSnifferProfileExporter.class);

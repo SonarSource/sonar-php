@@ -54,7 +54,7 @@ public class PhpmdExecutorTest {
 
     settings = Settings.createForComponent(new PhpmdSensor(null, null, null, null));
     Project project = MockUtils.createMockProject();
-    PhpmdConfiguration configuration = new PhpmdConfiguration(settings, project);
+    PhpmdConfiguration configuration = new PhpmdConfiguration(settings, project.getFileSystem());
     executor = new PhpmdExecutor(new Php(), configuration, exporter, profile);
   }
 

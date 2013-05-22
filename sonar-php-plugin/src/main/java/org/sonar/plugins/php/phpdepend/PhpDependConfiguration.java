@@ -21,7 +21,7 @@ package org.sonar.plugins.php.phpdepend;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
@@ -65,8 +65,8 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
    * @param project
    *          the project to be analyzed
    */
-  public PhpDependConfiguration(Settings settings, Project project) {
-    super(settings, project);
+  public PhpDependConfiguration(Settings settings, ProjectFileSystem fileSystem) {
+    super(settings, fileSystem);
   }
 
   /**

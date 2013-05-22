@@ -64,8 +64,8 @@ public class PhpUnitResultParserTest {
     project = mock(Project.class);
     context = mock(SensorContext.class);
 
-    when(config.getProject()).thenReturn(project);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(config.getFileSystem()).thenReturn(fs);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\main")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));

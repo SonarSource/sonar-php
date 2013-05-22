@@ -135,11 +135,10 @@ public class PhpmdSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())) {
-      return false;
-    }
-
-    return !configuration.isSkip() && !profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY).isEmpty();
+    return PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())
+      && !configuration.isSkip()
+      && !project.getFileSystem().mainFiles(PhpConstants.LANGUAGE_KEY).isEmpty()
+      && !profile.getActiveRulesByRepository(PHPMD_REPOSITORY_KEY).isEmpty();
   }
 
   /**

@@ -92,7 +92,7 @@ public class PhpCodesnifferConfigurationTest {
     RulesProfile profile = mock(RulesProfile.class);
     PhpCodeSnifferProfileExporter exporter = mock(PhpCodeSnifferProfileExporter.class);
 
-    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(settings, project, exporter, profile);
+    PhpCodeSnifferConfiguration phpConfig = new PhpCodeSnifferConfiguration(settings, project.getFileSystem(), exporter, profile);
     return phpConfig;
   }
 }

@@ -46,7 +46,7 @@ public class PhpUnitConfigurationTest {
   @Before
   public void init() throws Exception {
     settings = Settings.createForComponent(new PhpUnitSensor(null, null, null, null));
-    phpConfig = new PhpUnitConfiguration(settings, MockUtils.createMockProject());
+    phpConfig = new PhpUnitConfiguration(settings, MockUtils.createMockProject().getFileSystem());
   }
 
   @Test

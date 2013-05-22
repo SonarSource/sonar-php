@@ -25,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.MockUtils;
 
 import java.io.File;
 
@@ -73,6 +74,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldLaunch() {
+    project = MockUtils.createMockProject();
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
@@ -100,6 +102,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldLaunchIfSkipCoverageButNotTests() {
+    project = MockUtils.createMockProject();
     when(phpConfig.shouldSkipCoverage()).thenReturn(true);
 
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();

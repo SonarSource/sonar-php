@@ -22,6 +22,7 @@
  */
 package org.sonar.plugins.php;
 
+import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.api.Php;
@@ -42,7 +43,9 @@ public class MockUtils {
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("target/MockProject/src").getAbsoluteFile()));
+    when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/src/Foo.php")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("target/MockProject/test").getAbsoluteFile()));
+    when(fs.testFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/test/FooTest.php")));
     when(fs.getBuildDir()).thenReturn(new File("target/MockProject/target").getAbsoluteFile());
     when(fs.getBasedir()).thenReturn(new File("target/MockProject").getAbsoluteFile());
     return project;

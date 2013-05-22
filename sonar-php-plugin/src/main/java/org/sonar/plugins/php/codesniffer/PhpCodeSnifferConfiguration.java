@@ -23,7 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.core.AbstractPhpConfiguration;
 
@@ -71,8 +71,8 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    * @param project
    *          the pom
    */
-  public PhpCodeSnifferConfiguration(Settings settings, Project project, PhpCodeSnifferProfileExporter exporter, RulesProfile profile) {
-    super(settings, project);
+  public PhpCodeSnifferConfiguration(Settings settings, ProjectFileSystem fileSsytem, PhpCodeSnifferProfileExporter exporter, RulesProfile profile) {
+    super(settings, fileSsytem);
     this.exporter = exporter;
     this.profile = profile;
   }
@@ -114,7 +114,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
    */
   public File getRuleSet() {
     Writer writer = null;
-    File xmlFile = new File(getProject().getFileSystem().getSonarWorkingDirectory(), PHP_CODESNIFFER_TMP_RULESET_FILENAME);
+    File xmlFile = new File(getFileSystem().getSonarWorkingDirectory(), PHP_CODESNIFFER_TMP_RULESET_FILENAME);
     try {
       writer = new OutputStreamWriter(new FileOutputStream(xmlFile, false), CharEncoding.UTF_8);
       exporter.exportProfile(profile, writer);

@@ -70,7 +70,7 @@ public class AbstractPhpConfigurationTest {
   class FakeConfiguration extends AbstractPhpConfiguration {
 
     public FakeConfiguration(Settings settings) {
-      super(settings, MockUtils.createMockProject());
+      super(settings, MockUtils.createMockProject().getFileSystem());
     }
 
     @Override

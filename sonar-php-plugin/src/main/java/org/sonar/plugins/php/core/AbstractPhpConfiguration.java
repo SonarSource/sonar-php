@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 
 import java.io.File;
 import java.util.List;
@@ -48,14 +48,14 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   private static final String WINDOWS_BAT_SUFFIX = ".bat";
 
   private Settings settings;
-  private Project project;
+  private final ProjectFileSystem fileSystem;
 
   /**
    * @param project
    */
-  protected AbstractPhpConfiguration(Settings settings, Project project) {
+  protected AbstractPhpConfiguration(Settings settings, ProjectFileSystem fileSystem) {
     this.settings = settings;
-    this.project = project;
+    this.fileSystem = fileSystem;
   }
 
   /**
@@ -89,7 +89,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   public File getReportFile() {
     StringBuilder fileName = new StringBuilder(getReportFileRelativePath()).append(File.separator);
     fileName.append(getReportFileName());
-    File reportFile = new File(getProject().getFileSystem().getBuildDir(), fileName.toString());
+    File reportFile = new File(getFileSystem().getBuildDir(), fileName.toString());
     LOG.info("Report file for: " + getCommandLine() + " : " + reportFile);
     return reportFile;
   }
@@ -184,7 +184,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * @return the created working directory.
    */
   public File createWorkingDirectory() {
-    File target = getProject().getFileSystem().getBuildDir();
+    File target = getFileSystem().getBuildDir();
     File logs = new File(target, getReportFileRelativePath());
     synchronized (this) {
       logs.mkdirs();
@@ -198,7 +198,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * @return the source directories
    */
   public List<File> getSourceDirectories() {
-    return getProject().getFileSystem().getSourceDirs();
+    return getFileSystem().getSourceDirs();
   }
 
   /**
@@ -207,7 +207,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * @return List<File> A list of all test source folders
    */
   public List<File> getTestDirectories() {
-    return getProject().getFileSystem().getTestDirs();
+    return getFileSystem().getTestDirs();
   }
 
   /**
@@ -220,12 +220,12 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
   }
 
   /**
-   * Returns the current project
+   * Returns the current module filesystem
    * 
    * @return the project
    */
-  public Project getProject() {
-    return project;
+  public ProjectFileSystem getFileSystem() {
+    return fileSystem;
   }
 
   /**
