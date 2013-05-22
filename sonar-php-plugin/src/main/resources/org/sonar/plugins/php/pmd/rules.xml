@@ -178,7 +178,7 @@ class Person {
 
   <rule key="Code Size Rules/TooManyMethods" priority="MAJOR">
     <name><![CDATA[Number of methods in class exceeds maximum]]></name>
-    <configKey><![CDATA[rulesets/codesize.xml/ExcessiveClassComplexity]]></configKey>
+    <configKey><![CDATA[rulesets/codesize.xml/TooManyMethods]]></configKey>
     <category name="Maintainability"/>
     <description><![CDATA[<p>A class with too many methods is probably a good suspect for refactoring, in order to reduce its complexity and find a way to have more fine grained objects.</p>]]></description>
     <param key="maxmethods" type="i">
@@ -188,7 +188,7 @@ class Person {
 
   <rule key="Code Size Rules/ExcessiveClassComplexity" priority="MAJOR">
     <name><![CDATA[Weighted methods per class exceeds maximum]]></name>
-    <configKey><![CDATA[rulesets/codesize.xml/TooManyMethods]]></configKey>
+    <configKey><![CDATA[rulesets/codesize.xml/ExcessiveClassComplexity]]></configKey>
     <category name="Maintainability"/>
     <description><![CDATA[
 <p>The WMC of a class is a good indicator of how much time and effort is required to modify and maintain this class. A large number of methods also means that this class has a greater potential impact on derived classes.</p>
