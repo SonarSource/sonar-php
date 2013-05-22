@@ -5,7 +5,8 @@
   <parent>
     <groupId>org.codehaus.sonar-plugins</groupId>
     <artifactId>parent</artifactId>
-    <version>14</version>
+    <version>17</version>
+    <relativePath/>
   </parent>
 
   <groupId>org.codehaus.sonar-plugins.php</groupId>
@@ -63,6 +64,11 @@
       <name>Gabriele Santini</name>
       <email>gab.santini@gmail.com</email>
     </developer>
+    <developer>
+      <id>henryju</id>
+      <name>Julien Henry</name>
+      <email>julien.henry@sonarsource.com</email>
+    </developer>
   </developers>
 
   <scm>
@@ -82,67 +88,5 @@
   <properties>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
   </properties>
-
-  <profiles>
-    <profile>
-      <id>m2e</id>
-      <activation>
-        <!-- This profile is active only when used from Eclipse m2e and is 
-          used only to store settings. -->
-        <property>
-          <name>m2e.version</name>
-        </property>
-      </activation>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.eclipse.m2e</groupId>
-              <artifactId>lifecycle-mapping</artifactId>
-              <version>1.0.0</version>
-              <configuration>
-                <lifecycleMappingMetadata>
-                  <pluginExecutions>
-                    <pluginExecution>
-                      <pluginExecutionFilter>
-                        <groupId>
-                          com.mycila.maven-license-plugin
-                        </groupId>
-                        <artifactId>
-                          maven-license-plugin
-                        </artifactId>
-                        <versionRange>
-                          [1.9.0,)
-                        </versionRange>
-                        <goals>
-                          <goal>check</goal>
-                        </goals>
-                      </pluginExecutionFilter>
-                      <action>
-                        <ignore />
-                      </action>
-                    </pluginExecution>
-                    <pluginExecution>
-                      <pluginExecutionFilter>
-                        <groupId>org.codehaus.sonar</groupId>
-                        <artifactId>sonar-packaging-maven-plugin</artifactId>
-                        <versionRange>[1.0,)</versionRange>
-                        <goals>
-                          <goal>check-dependencies</goal>
-                        </goals>
-                      </pluginExecutionFilter>
-                      <action>
-                        <ignore />
-                      </action>
-                    </pluginExecution>
-                  </pluginExecutions>
-                </lifecycleMappingMetadata>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-  </profiles>
 
 </project>
