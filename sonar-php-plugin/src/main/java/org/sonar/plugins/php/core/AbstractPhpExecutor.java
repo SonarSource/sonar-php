@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.core;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
@@ -93,13 +94,16 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
   protected File getRuleset(AbstractPhpConfiguration configuration, RulesProfile profile, ProfileExporter exporter) {
     File workingDir = configuration.createWorkingDirectory();
     File ruleset = null;
+    Writer writer = null;
     try {
       ruleset = File.createTempFile(RULESET_PREFIX, XML_SUFFIX, workingDir);
-      Writer writer = new FileWriter(ruleset);
+      writer = new FileWriter(ruleset);
       exporter.exportProfile(profile, writer);
     } catch (IOException e) {
       String msg = "Error while creating  temporary ruleset from profile: " + profile + " to file : " + ruleset + " in dir " + workingDir;
       LOG.error(msg);
+    } finally {
+      IOUtils.closeQuietly(writer);
     }
     return (ruleset != null && ruleset.length() > 0) ? ruleset : null;
   }
