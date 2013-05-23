@@ -171,58 +171,63 @@ public class PhpDependSummaryReportParserTest {
     init(SUMMARY_RESULT);
 
     verify(context).saveMeasure(
-      eq(new File("Math3.php")),
+        eq(new File("Math3.php")),
         (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=1;5=0;10=0;20=0;30=0;60=0;90=0"))
-    );
+        );
 
     verify(context).saveMeasure(
-      eq(new File("Math3.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=4;2=0;4=0;6=0;8=0;10=2;12=0"))
-    );
+        eq(new File("Math3.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=4;2=0;4=0;6=0;8=0;10=2;12=0"))
+        );
 
     verify(context).saveMeasure(
-      eq(new File("Bar/Math4.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
-    );
+        eq(new File("Bar/Math4.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
+        );
     verify(context).saveMeasure(
-      eq(new File("Bar/Math4.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
-    );
+        eq(new File("Bar/Math4.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
+        );
 
     verify(context).saveMeasure(
-      eq(new File("Foo/Math5.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
-    );
+        eq(new File("Foo/Math5.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
+        );
     verify(context).saveMeasure(
-      eq(new File("Foo/Math5.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
-    );
+        eq(new File("Foo/Math5.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
+        );
 
     verify(context).saveMeasure(
-      eq(new File("Math.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
-    );
+        eq(new File("Math.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
+        );
     verify(context).saveMeasure(
-      eq(new File("Math.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=3;2=0;4=0;6=0;8=0;10=2;12=0"))
-    );
+        eq(new File("Math.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=3;2=0;4=0;6=0;8=0;10=2;12=0"))
+        );
 
     verify(context).saveMeasure(
-      eq(new File("Math2.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
-    );
+        eq(new File("Math2.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=1;30=0;60=0;90=0"))
+        );
     verify(context).saveMeasure(
-      eq(new File("Math2.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
-    );
+        eq(new File("Math2.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=2;2=0;4=0;6=0;8=0;10=2;12=0"))
+        );
 
     verify(context).saveMeasure(
-      eq(new File("Mail.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=0;30=0;60=0;90=1"))
-    );
+        eq(new File("Mail.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=0;20=0;30=0;60=0;90=1"))
+        );
     verify(context).saveMeasure(
-      eq(new File("Mail.php")),
-      (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=38;2=18;4=4;6=1;8=2;10=0;12=0"))
-    );
+        eq(new File("Mail.php")),
+        (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=38;2=18;4=4;6=1;8=2;10=0;12=0"))
+        );
+  }
+
+  @Test
+  public void shouldSupportTraitsInSummaryReport() {
+    init("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-traits-summary.xml");
   }
 }

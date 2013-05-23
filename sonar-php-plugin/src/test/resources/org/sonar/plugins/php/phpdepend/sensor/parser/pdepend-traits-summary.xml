@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metrics generated="2013-05-23T14:19:46" pdepend="1.1.0" ahh="0" andc="0" calls="2" ccn="3" ccn2="3" cloc="0" clsa="0" clsc="2" eloc="27" fanout="1" leafs="2" lloc="14" loc="35" maxDIT="0" ncloc="35" noc="2" nof="1" noi="0" nom="0" nop="1" roots="0">
+  <files>
+    <file name="/home/julien/Prog/Projects/sonar-tests/it-php/projects/traits-test/src/MyHelloWord.php" cloc="0" eloc="21" lloc="12" loc="28" ncloc="28"/>
+  </files>
+  <package name="+global" cr="0.15" noc="2" nof="1" noi="0" nom="0" rcr="0.15">
+    <method name="sayHello" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="3" ncloc="3" npath="1"/>
+    <class name="MyHelloWorld12" ca="1" cbo="0" ce="0" cis="0" cloc="0" cr="0.15" csz="0" dit="0" eloc="0" impl="0" lloc="0" loc="3" ncloc="3" noam="0" nocc="0" nom="0" noom="0" npm="0" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="0" wmci="0" wmcnp="0">
+      <file name="/home/julien/Prog/Projects/sonar-tests/it-php/projects/traits-test/src/MyHelloWord.php"/>
+    </class>
+    <class name="MyHelloWorld2" ca="0" cbo="0" ce="0" cis="0" cloc="0" cr="0.15" csz="0" dit="0" eloc="0" impl="0" lloc="0" loc="3" ncloc="3" noam="0" nocc="0" nom="0" noom="0" npm="0" rcr="0.15" vars="0" varsi="0" varsnp="0" wmc="0" wmci="0" wmcnp="0">
+      <file name="/home/julien/Prog/Projects/sonar-tests/it-php/projects/traits-test/src/MyHelloWord.php"/>
+    </class>
+    <method name="sayHello2" ccn="1" ccn2="1" cloc="0" eloc="3" lloc="1" loc="3" ncloc="3" npath="1"/>
+    <function name="main" ccn="1" ccn2="1" cloc="0" eloc="5" lloc="3" loc="5" ncloc="5" npath="1">
+      <file name="/home/julien/Prog/Projects/sonar-tests/it-php/projects/traits-test/src/MyHelloWord.php"/>
+    </function>
+  </package>
+</metrics>

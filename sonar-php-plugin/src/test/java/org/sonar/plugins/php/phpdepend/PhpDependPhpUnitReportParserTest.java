@@ -249,4 +249,10 @@ public class PhpDependPhpUnitReportParserTest {
         (Measure) argThat(new HasComplexityDistribution(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=8;2=8;4=0;6=2;8=0;10=0;12=0"))
         );
   }
+
+  @Test
+  public void shouldSupportTraitsInPhpUnitReport() {
+    init("/org/sonar/plugins/php/phpdepend/sensor/parser/pdepend-traits-phpunit.xml");
+  }
+
 }

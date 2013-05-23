@@ -70,6 +70,9 @@ public final class FileNode {
   @XStreamImplicit
   private List<FunctionNode> functions;
 
+  @XStreamImplicit
+  private List<MethodNode> methods;
+
   public FileNode() {
   }
 
