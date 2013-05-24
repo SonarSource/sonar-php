@@ -90,9 +90,8 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
    * {@inheritDoc}
    */
   @Override
-  protected List<String> getCommandLine() {
+  protected List<String> getCommandLineArguments() {
     List<String> result = new ArrayList<String>();
-    result.add(configuration.getOsDependentToolScriptName());
     addBasicOptions(result);
 
     String configFile = configuration.getConfiguration();
@@ -202,6 +201,11 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
   @Override
   protected String getExecutedTool() {
     return "PHPUnit";
+  }
+
+  @Override
+  protected String getPHARName() {
+    return "phpunit-3.7.20.phar";
   }
 
 }

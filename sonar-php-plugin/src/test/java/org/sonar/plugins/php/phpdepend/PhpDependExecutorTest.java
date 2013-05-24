@@ -57,11 +57,10 @@ public class PhpDependExecutorTest {
 
   @Test
   public void testSimpleCommandLine() {
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.get(0)).startsWith("pdepend");
-    assertThat(commandLine.get(1)).isEqualTo("--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath());
-    assertThat(commandLine.get(2)).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
-    assertThat(commandLine.get(3)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.get(0)).isEqualTo("--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath());
+    assertThat(commandLine.get(1)).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
+    assertThat(commandLine.get(2)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
   }
 
   @Test
@@ -73,16 +72,15 @@ public class PhpDependExecutorTest {
     settings.setProperty(PDEPEND_ARGUMENT_LINE_KEY, "  --foo=bar --foo2=bar2 ");
 
     // Verify
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.get(0)).startsWith("pdepend");
-    assertThat(commandLine.get(1)).isEqualTo("--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath());
-    assertThat(commandLine.get(2)).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
-    assertThat(commandLine.get(3)).isEqualTo("--exclude=foo,bar");
-    assertThat(commandLine.get(4)).isEqualTo("--bad-documentation");
-    assertThat(commandLine.get(5)).isEqualTo("--without-annotations");
-    assertThat(commandLine.get(6)).isEqualTo("--foo=bar");
-    assertThat(commandLine.get(7)).isEqualTo("--foo2=bar2");
-    assertThat(commandLine.get(8)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.get(0)).isEqualTo("--phpunit-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath());
+    assertThat(commandLine.get(1)).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
+    assertThat(commandLine.get(2)).isEqualTo("--exclude=foo,bar");
+    assertThat(commandLine.get(3)).isEqualTo("--bad-documentation");
+    assertThat(commandLine.get(4)).isEqualTo("--without-annotations");
+    assertThat(commandLine.get(5)).isEqualTo("--foo=bar");
+    assertThat(commandLine.get(6)).isEqualTo("--foo2=bar2");
+    assertThat(commandLine.get(7)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
   }
 
   /**
@@ -94,7 +92,7 @@ public class PhpDependExecutorTest {
     settings.setProperty(PDEPEND_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
 
     // Verify
-    assertThat(executor.getCommandLine().get(3)).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    assertThat(executor.getCommandLineArguments().get(2)).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
   }
 
 }

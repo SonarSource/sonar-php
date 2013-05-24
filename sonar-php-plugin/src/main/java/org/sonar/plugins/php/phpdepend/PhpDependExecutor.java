@@ -60,9 +60,8 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
    * {@inheritDoc}
    */
   @Override
-  protected List<String> getCommandLine() {
+  protected List<String> getCommandLineArguments() {
     List<String> result = new ArrayList<String>();
-    result.add(configuration.getOsDependentToolScriptName());
     result.add(configuration.getReportFileCommandOption());
     result.add(configuration.getSuffixesCommandOption(getPhpLanguage()));
     if (configuration.getExcludePackages() != null) {
@@ -89,6 +88,11 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
   @Override
   protected String getExecutedTool() {
     return "PHP Depend";
+  }
+
+  @Override
+  protected String getPHARName() {
+    return null;
   }
 
 }

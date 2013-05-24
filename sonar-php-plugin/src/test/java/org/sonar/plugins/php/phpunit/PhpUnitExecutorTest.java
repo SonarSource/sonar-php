@@ -72,11 +72,10 @@ public class PhpUnitExecutorTest {
     settings.setProperty(PHPUNIT_COVERAGE_SKIP_KEY, "true");
 
     // Verify
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.size()).isEqualTo(2);
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.size()).isEqualTo(1);
 
-    assertThat(commandLine.get(0)).startsWith("phpunit");
-    assertThat(commandLine.get(1)).isEqualTo("--log-junit=" + new File("target/MockProject/target/logs/phpunit.xml").getAbsolutePath());
+    assertThat(commandLine.get(0)).isEqualTo("--log-junit=" + new File("target/MockProject/target/logs/phpunit.xml").getAbsolutePath());
   }
 
   @Test
@@ -90,19 +89,18 @@ public class PhpUnitExecutorTest {
     settings.setProperty(PHPUNIT_ARGUMENT_LINE_KEY, "--foo=bar --foo2=bar2");
 
     // Verify
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.size()).isEqualTo(10);
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.size()).isEqualTo(9);
 
-    assertThat(commandLine.get(0)).startsWith("phpunit");
-    assertThat(commandLine.get(1)).isEqualTo("--filter=filters");
-    assertThat(commandLine.get(2)).isEqualTo("--bootstrap=src/bootstrap.php");
-    assertThat(commandLine.get(3)).isEqualTo("--configuration=conf/config.xml");
-    assertThat(commandLine.get(4)).isEqualTo("--loader=loaders");
-    assertThat(commandLine.get(5)).isEqualTo("--group=groups");
-    assertThat(commandLine.get(6)).isEqualTo("--foo=bar");
-    assertThat(commandLine.get(7)).isEqualTo("--foo2=bar2");
-    assertThat(commandLine.get(8)).isEqualTo("--log-junit=" + new File("target/MockProject/target/logs/phpunit.xml").getAbsolutePath());
-    assertThat(commandLine.get(9)).isEqualTo("--coverage-clover=" + new File("target/MockProject/target/logs/phpunit.coverage.xml").getAbsolutePath());
+    assertThat(commandLine.get(0)).isEqualTo("--filter=filters");
+    assertThat(commandLine.get(1)).isEqualTo("--bootstrap=src/bootstrap.php");
+    assertThat(commandLine.get(2)).isEqualTo("--configuration=conf/config.xml");
+    assertThat(commandLine.get(3)).isEqualTo("--loader=loaders");
+    assertThat(commandLine.get(4)).isEqualTo("--group=groups");
+    assertThat(commandLine.get(5)).isEqualTo("--foo=bar");
+    assertThat(commandLine.get(6)).isEqualTo("--foo2=bar2");
+    assertThat(commandLine.get(7)).isEqualTo("--log-junit=" + new File("target/MockProject/target/logs/phpunit.xml").getAbsolutePath());
+    assertThat(commandLine.get(8)).isEqualTo("--coverage-clover=" + new File("target/MockProject/target/logs/phpunit.coverage.xml").getAbsolutePath());
   }
 
   @Test
@@ -111,11 +109,11 @@ public class PhpUnitExecutorTest {
     settings.setProperty(PHPUNIT_IGNORE_CONFIGURATION_KEY, "true");
 
     // Verify
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.size()).isEqualTo(5);
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.size()).isEqualTo(4);
 
-    assertThat(commandLine.get(3)).isEqualTo("--no-configuration");
-    assertThat(commandLine.get(4)).isEqualTo(new File("target/MockProject/test").getAbsolutePath());
+    assertThat(commandLine.get(2)).isEqualTo("--no-configuration");
+    assertThat(commandLine.get(3)).isEqualTo(new File("target/MockProject/test").getAbsolutePath());
   }
 
   @Test
@@ -130,9 +128,9 @@ public class PhpUnitExecutorTest {
     when(project.getFileSystem()).thenReturn(fs);
 
     // Verify
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.size()).isEqualTo(4);
-    assertThat(commandLine.get(3)).startsWith("--configuration=" + new File("target/MockProject/target/logs/phpunit").getAbsolutePath());
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.size()).isEqualTo(3);
+    assertThat(commandLine.get(2)).startsWith("--configuration=" + new File("target/MockProject/target/logs/phpunit").getAbsolutePath());
 
     // clean temp file created
     FileUtils.deleteDirectory(new File("target/MockProject/target/"));
@@ -148,11 +146,23 @@ public class PhpUnitExecutorTest {
     mainClass.createNewFile();
 
     // Verify
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.size()).isEqualTo(4);
-    assertThat(commandLine.get(3)).startsWith(new File("target/MockProject/AllTests.php").getAbsolutePath());
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.size()).isEqualTo(3);
+    assertThat(commandLine.get(2)).startsWith(new File("target/MockProject/AllTests.php").getAbsolutePath());
 
     // and clean the created file
     mainClass.delete();
+  }
+
+  @Test
+  public void testTestCommand() throws Exception {
+    List<String> commandLine = executor.getTestCommandLine();
+    assertThat(commandLine.size()).isEqualTo(2);
+    assertThat(PhpUnitExecutor.prettyPrint(commandLine)).isEqualTo("phpunit --version");
+  }
+
+  @Test
+  public void testPHAREmbeddedURL() throws Exception {
+    assertThat(executor.getPHAREmbeddedURL()).isNotNull();
   }
 }

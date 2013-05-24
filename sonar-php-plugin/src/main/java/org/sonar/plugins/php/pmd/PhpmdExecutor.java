@@ -68,9 +68,8 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
    * {@inheritDoc}
    */
   @Override
-  protected List<String> getCommandLine() {
+  protected List<String> getCommandLineArguments() {
     List<String> result = new ArrayList<String>();
-    result.add(configuration.getOsDependentToolScriptName());
 
     // SONARPLUGINS-546 PhpmdExecutor: wrong dirs params
     result.add(StringUtils.join(configuration.getSourceDirectories(), PHPMD_PATH_SEPARATOR));
@@ -99,5 +98,10 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
   @Override
   protected String getExecutedTool() {
     return "PHPMD";
+  }
+
+  @Override
+  protected String getPHARName() {
+    return null;
   }
 }

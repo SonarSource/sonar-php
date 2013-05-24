@@ -74,9 +74,8 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
    * {@inheritDoc}
    */
   @Override
-  protected List<String> getCommandLine() {
+  protected List<String> getCommandLineArguments() {
     List<String> result = new ArrayList<String>();
-    result.add(configuration.getOsDependentToolScriptName());
     result.add(PHPCS_REPORT_FILE_MODIFIER + configuration.getReportFile());
     result.add(PHPCS_REPORT_MODIFIER);
 
@@ -115,6 +114,11 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
   @Override
   protected String getExecutedTool() {
     return "PHPCodeSniffer";
+  }
+
+  @Override
+  protected String getPHARName() {
+    return null;
   }
 
 }

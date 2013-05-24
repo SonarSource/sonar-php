@@ -41,19 +41,19 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPC
 public class PhpCodesnifferExecutorTest {
 
   /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLineArguments()}.
    */
   @Test
   public void testGetCommandLine() {
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
 
     PhpCodeSnifferExecutor executor = createExecutor(new Settings(), c);
-    executor.getCommandLine();
+    executor.getCommandLineArguments();
     assertThat(executor.getExecutedTool(), is("PHPCodeSniffer"));
   }
 
   /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLineArguments()}.
    */
   @Test
   public void testGetCommandLineWithExtensions() {
@@ -62,14 +62,14 @@ public class PhpCodesnifferExecutorTest {
     PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
 
     PhpCodeSnifferExecutor executor = createExecutor(settings, c);
-    List<String> commandLine = executor.getCommandLine();
+    List<String> commandLine = executor.getCommandLineArguments();
 
     String expected = "--extensions=php,php2";
     assertThat(commandLine).contains(expected);
   }
 
   /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLineArguments()}.
    */
   @Test
   public void testGetCommandLineWithSeverityLevel() {
@@ -86,7 +86,7 @@ public class PhpCodesnifferExecutorTest {
     when(c.getLevel()).thenReturn(level);
 
     PhpCodeSnifferExecutor executor = createExecutor(settings, c);
-    List<String> commandLine = executor.getCommandLine();
+    List<String> commandLine = executor.getCommandLineArguments();
 
     String expected = "--extensions=php,php2";
     assertThat(commandLine).contains(expected);
@@ -94,7 +94,7 @@ public class PhpCodesnifferExecutorTest {
   }
 
   /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLineArguments()}.
    */
   @Test
   public void testGetCommandLineWithStandards() {
@@ -102,13 +102,13 @@ public class PhpCodesnifferExecutorTest {
     when(c.getStandard()).thenReturn("PEAR");
 
     PhpCodeSnifferExecutor executor = createExecutor(new Settings(), c);
-    List<String> commandLine = executor.getCommandLine();
+    List<String> commandLine = executor.getCommandLineArguments();
 
     assertThat(commandLine).contains("--standard=PEAR");
   }
 
   /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLineArguments()}.
    */
   @Test
   public void testGetCommandLineWithExtraArguments() {
@@ -116,14 +116,14 @@ public class PhpCodesnifferExecutorTest {
     when(c.getArgumentLine()).thenReturn("  --foo=bar --foo2=bar2 ");
 
     PhpCodeSnifferExecutor executor = createExecutor(new Settings(), c);
-    List<String> commandLine = executor.getCommandLine();
+    List<String> commandLine = executor.getCommandLineArguments();
 
     assertThat(commandLine).contains("--foo=bar");
     assertThat(commandLine).contains("--foo2=bar2");
   }
 
   /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()}.
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLineArguments()}.
    */
   @Test
   public void testGetCommandLineWithDirsToAnalyse() {
@@ -132,7 +132,7 @@ public class PhpCodesnifferExecutorTest {
     when(c.getSourceDirectories()).thenReturn(Lists.newArrayList(sourceDir));
 
     PhpCodeSnifferExecutor executor = createExecutor(new Settings(), c);
-    List<String> commandLine = executor.getCommandLine();
+    List<String> commandLine = executor.getCommandLineArguments();
 
     assertThat(commandLine).contains(sourceDir.getAbsolutePath());
   }

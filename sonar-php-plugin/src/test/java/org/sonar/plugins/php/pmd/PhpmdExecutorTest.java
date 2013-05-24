@@ -64,19 +64,18 @@ public class PhpmdExecutorTest {
   }
 
   /**
-   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLine()} .
+   * Test method for {@link org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor#getCommandLineArguments()} .
    */
   @Test
   public void testSimpleCommandLine() {
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.get(0)).startsWith("phpmd");
-    assertThat(commandLine.get(1)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
-    assertThat(commandLine.get(2)).isEqualTo("xml");
-    assertThat(commandLine.get(3)).isEqualTo("codesize,unusedcode,naming");
-    assertThat(commandLine.get(4)).isEqualTo("--reportfile");
-    assertThat(commandLine.get(5)).isEqualTo(new File("target/MockProject/target/logs/pmd.xml").getAbsolutePath());
-    assertThat(commandLine.get(6)).isEqualTo("--suffixes");
-    assertThat(commandLine.get(7)).isEqualTo("php,php3,php4,php5,phtml,inc");
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.get(0)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
+    assertThat(commandLine.get(1)).isEqualTo("xml");
+    assertThat(commandLine.get(2)).isEqualTo("codesize,unusedcode,naming");
+    assertThat(commandLine.get(3)).isEqualTo("--reportfile");
+    assertThat(commandLine.get(4)).isEqualTo(new File("target/MockProject/target/logs/pmd.xml").getAbsolutePath());
+    assertThat(commandLine.get(5)).isEqualTo("--suffixes");
+    assertThat(commandLine.get(6)).isEqualTo("php,php3,php4,php5,phtml,inc");
   }
 
   @Test
@@ -85,9 +84,9 @@ public class PhpmdExecutorTest {
     settings.setProperty(PHPMD_ARGUMENT_LINE_KEY, "  --foo=bar --foo2=bar2 ");
 
     // Verify
-    List<String> commandLine = executor.getCommandLine();
-    assertThat(commandLine.get(8)).isEqualTo("--foo=bar");
-    assertThat(commandLine.get(9)).isEqualTo("--foo2=bar2");
+    List<String> commandLine = executor.getCommandLineArguments();
+    assertThat(commandLine.get(7)).isEqualTo("--foo=bar");
+    assertThat(commandLine.get(8)).isEqualTo("--foo2=bar2");
   }
 
 }
