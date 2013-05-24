@@ -158,7 +158,7 @@ public class PhpUnitExecutorTest {
   public void testTestCommand() throws Exception {
     List<String> commandLine = executor.getTestCommandLine();
     assertThat(commandLine.size()).isEqualTo(2);
-    assertThat(PhpUnitExecutor.prettyPrint(commandLine)).isEqualTo("phpunit --version");
+    assertThat(commandLine.get(1)).isEqualTo("--version");
   }
 
   @Test
