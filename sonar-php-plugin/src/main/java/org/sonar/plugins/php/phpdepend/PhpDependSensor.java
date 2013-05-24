@@ -87,7 +87,7 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
     description = "Type of report PHP Depend will generate and Sonar analyse afterwards. Valid values: summary-xml, phpunit-xml (deprecated)",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
     type = PropertyType.SINGLE_SELECT_LIST,
-    options = {"summary-xml", "phpunit-xml"})
+    options = {PhpDependConfiguration.PDEPEND_REPORT_TYPE_SUMMARY, PhpDependConfiguration.PDEPEND_REPORT_TYPE_PHPUNIT})
 })
 public class PhpDependSensor implements Sensor {
 

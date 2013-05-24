@@ -61,8 +61,8 @@ public class PhpDependConfigurationTest {
     assertThat(phpConfig.getExcludePackages()).isNull();
     assertThat(phpConfig.getArgumentLine()).isNull();
     assertThat(phpConfig.getTimeout()).isEqualTo(DEFAULT_TIMEOUT);
-    assertThat(phpConfig.getReportType()).isEqualTo("phpunit-xml");
-    assertThat(phpConfig.getReportFileCommandOption()).isEqualTo("--phpunit-xml=" + report.getAbsolutePath());
+    assertThat(phpConfig.getReportType()).isEqualTo("summary-xml");
+    assertThat(phpConfig.getReportFileCommandOption()).isEqualTo("--summary-xml=" + report.getAbsolutePath());
   }
 
   @Test

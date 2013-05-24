@@ -45,7 +45,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpDepend.reportFileRelativePath";
   public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
   public static final String PDEPEND_REPORT_TYPE = "sonar.phpDepend.reportType";
-  public static final String PDEPEND_REPORT_TYPE_DEFVALUE = "phpunit-xml";
+  public static final String PDEPEND_REPORT_TYPE_DEFVALUE = "summary-xml";
   public static final String PDEPEND_REPORT_TYPE_PHPUNIT = "phpunit-xml";
   public static final String PDEPEND_REPORT_TYPE_SUMMARY = "summary-xml";
   public static final String PDEPEND_REPORT_FILE_NAME_KEY = "sonar.phpDepend.reportFileName";
