@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Settings;
@@ -52,14 +53,50 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public static final String PHPUNIT_COVERAGE_SKIP_KEY = "sonar.phpUnit.coverage.skip";
   public static final String PHPUNIT_SHOULD_RUN_COVERAGE_KEY = "sonar.phpUnit.coverage.shouldRun"; // OLD param that will be removed soon
   public static final String PHPUNIT_ANALYZE_ONLY_KEY = "sonar.phpUnit.analyzeOnly";
+
+  /**
+   * @since 1.2
+   */
+  public static final String PHPUNIT_REPORT_PATH_KEY = "sonar.php.phpUnit.reportPath";
+  /**
+   * @since 1.2
+   */
+  public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.php.phpUnit.coverage.reportPath";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpUnit.reportFileRelativePath";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_REPORT_FILE_NAME_KEY = "sonar.phpUnit.reportFileName";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_REPORT_FILE_NAME_DEFVALUE = "phpunit.xml";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_COVERAGE_REPORT_FILE_KEY = "sonar.phpUnit.coverageReportFile";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE = "phpunit.coverage.xml";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_MAIN_TEST_FILE_KEY = "sonar.phpUnit.mainTestClass";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY = "sonar.phpUnit.analyze.test.directory";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE = "false";
   public static final String PHPUNIT_FILTER_KEY = "sonar.phpUnit.filter";
   public static final String PHPUNIT_BOOTSTRAP_KEY = "sonar.phpUnit.bootstrap";
@@ -69,6 +106,8 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public static final String PHPUNIT_GROUP_KEY = "sonar.phpUnit.group";
   public static final String PHPUNIT_ARGUMENT_LINE_KEY = "sonar.phpUnit.argumentLine";
   public static final String PHPUNIT_TIMEOUT_KEY = "sonar.phpUnit.timeout";
+
+  private File coverageReportFile;
 
   /**
    * Instantiates a new php unit configuration.
@@ -99,9 +138,24 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * Gets the coverage report file name.
    * 
    * @return the report file name
+   * @deprecated since 1.2
    */
+  @Deprecated
   public String getCoverageReportFileName() {
     return getSettings().getString(PHPUNIT_COVERAGE_REPORT_FILE_KEY);
+  }
+
+  /**
+   * Gets the coverage report path.
+   * 
+   * @return the report file path
+   */
+  public String getCoverageReportFilePath() {
+    return getSettings().getString(PHPUNIT_COVERAGE_REPORT_PATH_KEY);
+  }
+
+  public File getDefaultCoverageReportFile() {
+    return new File(getFileSystem().getSonarWorkingDirectory(), "phpunit.coverage.xml");
   }
 
   /**
@@ -110,11 +164,26 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
    * @return the coverage report file
    */
   public File getCoverageReportFile() {
-    StringBuilder fileName = new StringBuilder(getReportFileRelativePath()).append(File.separator);
-    fileName.append(getCoverageReportFileName());
-    File reportFile = new File(getFileSystem().getBuildDir(), fileName.toString());
-    LOG.info("Report file for: " + getCommandLine() + " : " + reportFile);
-    return reportFile;
+    if (coverageReportFile == null) {
+      String coverageReportPath = getCoverageReportFilePath();
+      if (StringUtils.isBlank(coverageReportPath)) {
+        // Test if deprecated properties are used
+        if (getSettings().hasKey(PHPUNIT_COVERAGE_REPORT_FILE_KEY)) {
+          LOG.warn("/!\\ " + PHPUNIT_COVERAGE_REPORT_FILE_KEY + " is deprecated. Please update project settings and use " + PHPUNIT_COVERAGE_REPORT_PATH_KEY);
+          StringBuilder fileName = new StringBuilder(getReportFileRelativePath()).append(File.separator);
+          fileName.append(getCoverageReportFileName());
+          coverageReportFile = new File(getFileSystem().getBuildDir(), fileName.toString());
+        }
+        else {
+          coverageReportFile = getDefaultCoverageReportFile();
+        }
+      }
+      else {
+        coverageReportFile = getFileSystem().resolvePath(coverageReportPath);
+      }
+      LOG.info("Report file for phpunit coverage: " + coverageReportFile);
+    }
+    return coverageReportFile;
   }
 
   /**
@@ -250,6 +319,11 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getReportFileRelativePathKey() {
     return PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY;
+  }
+
+  @Override
+  protected String getReportPathKey() {
+    return PHPUNIT_REPORT_PATH_KEY;
   }
 
   /**

@@ -94,6 +94,11 @@ public class AbstractPhpConfigurationTest {
     }
 
     @Override
+    protected String getReportPathKey() {
+      return "";
+    }
+
+    @Override
     protected String getTimeoutKey() {
       return "";
     }

@@ -58,7 +58,7 @@ public class PhpDependExecutorTest {
   @Test
   public void testSimpleCommandLine() {
     List<String> commandLine = executor.getCommandLineArguments();
-    assertThat(commandLine.get(0)).isEqualTo("--summary-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath());
+    assertThat(commandLine.get(0)).isEqualTo("--summary-xml=" + new File("target/MockProject/target/sonar/pdepend.xml").getAbsolutePath());
     assertThat(commandLine.get(1)).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
     assertThat(commandLine.get(2)).isEqualTo(new File("target/MockProject/src").getAbsolutePath());
   }
@@ -73,7 +73,7 @@ public class PhpDependExecutorTest {
 
     // Verify
     List<String> commandLine = executor.getCommandLineArguments();
-    assertThat(commandLine.get(0)).isEqualTo("--summary-xml=" + new File("target/MockProject/target/logs/pdepend.xml").getAbsolutePath());
+    assertThat(commandLine.get(0)).isEqualTo("--summary-xml=" + new File("target/MockProject/target/sonar/pdepend.xml").getAbsolutePath());
     assertThat(commandLine.get(1)).isEqualTo("--suffix=php,php3,php4,php5,phtml,inc");
     assertThat(commandLine.get(2)).isEqualTo("--exclude=foo,bar");
     assertThat(commandLine.get(3)).isEqualTo("--bad-documentation");

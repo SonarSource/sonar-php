@@ -54,7 +54,7 @@ public class PhpDependConfigurationTest {
     assertThat(phpConfig.getCommandLine()).isEqualTo("pdepend");
     assertThat(phpConfig.isSkip()).isFalse();
     assertThat(phpConfig.isAnalyseOnly()).isFalse();
-    File report = new File("target/MockProject/target/logs/pdepend.xml");
+    File report = new File("target/MockProject/target/sonar/pdepend.xml");
     assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
     assertThat(phpConfig.isWithoutAnnotation()).isFalse();
     assertThat(phpConfig.isBadDocumentation()).isFalse();
@@ -67,6 +67,34 @@ public class PhpDependConfigurationTest {
 
   @Test
   public void shouldReturnCustomProperties() {
+    // Given
+    settings.setProperty(PhpDependConfiguration.PDEPEND_SKIP_KEY, "true");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_KEY, "true");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_REPORT_PATH_KEY, "my-pdepend.xml");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_WITHOUT_ANNOTATION_KEY, "true");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_BAD_DOCUMENTATION_KEY, "true");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_EXCLUDE_PACKAGE_KEY, "a,b,c");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_TIMEOUT_KEY, "120");
+    settings.setProperty(PhpDependConfiguration.PDEPEND_REPORT_TYPE, "summary-xml");
+
+    // Verify
+    assertThat(phpConfig.getCommandLine()).isEqualTo("pdepend");
+    assertThat(phpConfig.isSkip()).isTrue();
+    assertThat(phpConfig.isAnalyseOnly()).isTrue();
+    File report = new File("target/MockProject/my-pdepend.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    assertThat(phpConfig.isWithoutAnnotation()).isTrue();
+    assertThat(phpConfig.isBadDocumentation()).isTrue();
+    assertThat(phpConfig.getExcludePackages()).isEqualTo("a,b,c");
+    assertThat(phpConfig.getArgumentLine()).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    assertThat(phpConfig.getTimeout()).isEqualTo(120);
+    assertThat(phpConfig.getReportType()).isEqualTo("summary-xml");
+    assertThat(phpConfig.getReportFileCommandOption()).isEqualTo("--summary-xml=" + report.getAbsolutePath());
+  }
+
+  @Test
+  public void shouldReturnCustomPropertiesUsingDeprecated() {
     // Given
     settings.setProperty(PhpDependConfiguration.PDEPEND_SKIP_KEY, "true");
     settings.setProperty(PhpDependConfiguration.PDEPEND_ANALYZE_ONLY_KEY, "true");

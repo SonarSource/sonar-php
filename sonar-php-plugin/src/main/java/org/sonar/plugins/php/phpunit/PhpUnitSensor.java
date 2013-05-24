@@ -38,6 +38,7 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTR
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_PATH_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_SKIP_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_KEY;
@@ -48,6 +49,7 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_REPORT_PATH_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SKIP_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT_KEY;
 
@@ -69,13 +71,19 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT
       + "If this option is set to true, the plugin will only reuse an existing report file.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
+  @Property(key = PHPUNIT_REPORT_PATH_KEY,
+    name = "Report file path", project = true, global = true, description = "Path of the report file to analyse.",
+    category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-    name = "Report file path", project = true, global = true, description = "Relative path of the report file to analyse.",
+    name = "Report relative file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_REPORT_FILE_NAME_KEY, defaultValue = PHPUNIT_REPORT_FILE_NAME_DEFVALUE, name = "Report file name",
-    project = true, global = true, description = "Name of the report file to analyse.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
+    project = true, global = true, description = "[DEPRECATED] Name of the report file to analyse.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
+  @Property(key = PHPUNIT_COVERAGE_REPORT_PATH_KEY,
+    name = "Coverage report file path", project = true, global = true, description = "Path of the coverage report file to analyse.",
+    category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_COVERAGE_REPORT_FILE_KEY, defaultValue = PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE,
-    name = "Coverage report file name", project = true, global = true, description = "Name of the coverage report file to analyse.",
+    name = "Coverage report file name", project = true, global = true, description = "[DEPRECATED] Name of the coverage report file to analyse.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_MAIN_TEST_FILE_KEY, defaultValue = "",
     name = "File containing the main method calling all the tests", project = true, global = true,

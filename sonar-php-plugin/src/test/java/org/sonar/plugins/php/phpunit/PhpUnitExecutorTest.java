@@ -75,7 +75,7 @@ public class PhpUnitExecutorTest {
     List<String> commandLine = executor.getCommandLineArguments();
     assertThat(commandLine.size()).isEqualTo(1);
 
-    assertThat(commandLine.get(0)).isEqualTo("--log-junit=" + new File("target/MockProject/target/logs/phpunit.xml").getAbsolutePath());
+    assertThat(commandLine.get(0)).isEqualTo("--log-junit=" + new File("target/MockProject/target/sonar/phpunit.xml").getAbsolutePath());
   }
 
   @Test
@@ -99,8 +99,8 @@ public class PhpUnitExecutorTest {
     assertThat(commandLine.get(4)).isEqualTo("--group=groups");
     assertThat(commandLine.get(5)).isEqualTo("--foo=bar");
     assertThat(commandLine.get(6)).isEqualTo("--foo2=bar2");
-    assertThat(commandLine.get(7)).isEqualTo("--log-junit=" + new File("target/MockProject/target/logs/phpunit.xml").getAbsolutePath());
-    assertThat(commandLine.get(8)).isEqualTo("--coverage-clover=" + new File("target/MockProject/target/logs/phpunit.coverage.xml").getAbsolutePath());
+    assertThat(commandLine.get(7)).isEqualTo("--log-junit=" + new File("target/MockProject/target/sonar/phpunit.xml").getAbsolutePath());
+    assertThat(commandLine.get(8)).isEqualTo("--coverage-clover=" + new File("target/MockProject/target/sonar/phpunit.coverage.xml").getAbsolutePath());
   }
 
   @Test

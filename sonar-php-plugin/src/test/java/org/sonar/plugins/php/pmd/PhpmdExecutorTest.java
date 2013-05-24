@@ -73,7 +73,7 @@ public class PhpmdExecutorTest {
     assertThat(commandLine.get(1)).isEqualTo("xml");
     assertThat(commandLine.get(2)).isEqualTo("codesize,unusedcode,naming");
     assertThat(commandLine.get(3)).isEqualTo("--reportfile");
-    assertThat(commandLine.get(4)).isEqualTo(new File("target/MockProject/target/logs/pmd.xml").getAbsolutePath());
+    assertThat(commandLine.get(4)).isEqualTo(new File("target/MockProject/target/sonar/phpmd.xml").getAbsolutePath());
     assertThat(commandLine.get(5)).isEqualTo("--suffixes");
     assertThat(commandLine.get(6)).isEqualTo("php,php3,php4,php5,phtml,inc");
   }

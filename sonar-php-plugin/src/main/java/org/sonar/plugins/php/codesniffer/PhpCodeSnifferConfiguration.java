@@ -52,9 +52,25 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   public static final String PHPCS_SKIP_KEY = "sonar.phpCodesniffer.skip";
   public static final String PHPCS_SHOULD_RUN_KEY = "sonar.phpCodesniffer.shouldRun"; // OLD param that will be removed soon
   public static final String PHPCS_ANALYZE_ONLY_KEY = "sonar.phpCodesniffer.analyzeOnly";
+  /**
+   * @since 1.2
+   */
+  public static final String PHPCS_REPORT_PATH_KEY = "sonar.php.codesniffer.reportPath";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPCS_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpCodesniffer.reportFileRelativePath";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPCS_REPORT_FILE_NAME_KEY = "sonar.phpCodesniffer.reportFileName";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPCS_REPORT_FILE_NAME_DEFVALUE = "codesniffer.xml";
   public static final String PHPCS_STANDARD_ARGUMENT_KEY = "sonar.phpCodesniffer.standardArgument";
   public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY = "sonar.phpCodesniffer.severity.modifier";
@@ -141,6 +157,11 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   @Override
   protected String getReportFileRelativePathKey() {
     return PHPCS_REPORT_FILE_RELATIVE_PATH_KEY;
+  }
+
+  @Override
+  protected String getReportPathKey() {
+    return PHPCS_REPORT_PATH_KEY;
   }
 
   /**

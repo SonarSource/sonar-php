@@ -55,9 +55,9 @@ public class PhpUnitConfigurationTest {
     assertThat(phpConfig.isSkip()).isFalse();
     assertThat(phpConfig.shouldSkipCoverage()).isFalse();
     assertThat(phpConfig.isAnalyseOnly()).isFalse();
-    File report = new File("target/MockProject/target/logs/phpunit.xml");
+    File report = new File("target/MockProject/target/sonar/phpunit.xml");
     assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
-    File coverageReport = new File("target/MockProject/target/logs/phpunit.coverage.xml");
+    File coverageReport = new File("target/MockProject/target/sonar/phpunit.coverage.xml");
     assertThat(phpConfig.getCoverageReportFile().getAbsolutePath()).isEqualTo(coverageReport.getAbsolutePath());
     assertThat(phpConfig.getMainTestClass()).isNull();
     assertThat(phpConfig.isAnalyseTestDirectory()).isFalse();
@@ -73,6 +73,46 @@ public class PhpUnitConfigurationTest {
 
   @Test
   public void shouldReturnCustomProperties() {
+    // Given
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_SKIP_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_COVERAGE_SKIP_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_ANALYZE_ONLY_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_REPORT_PATH_KEY, "my-phpunit.xml");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_PATH_KEY, "my-coverage.xml");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_MAIN_TEST_FILE_KEY, "AllTests.php");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_FILTER_KEY, "foo");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_KEY, "bootstrap.php");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY, "config.xml");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_IGNORE_CONFIGURATION_KEY, "true");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_LOADER_KEY, "loader");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_GROUP_KEY, "groups");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    settings.setProperty(PhpUnitConfiguration.PHPUNIT_TIMEOUT_KEY, "120");
+
+    // Verify
+    assertThat(phpConfig.getCommandLine()).isEqualTo("phpunit");
+    assertThat(phpConfig.isSkip()).isTrue();
+    assertThat(phpConfig.shouldSkipCoverage()).isTrue();
+    assertThat(phpConfig.isAnalyseOnly()).isTrue();
+    File report = new File("target/MockProject/my-phpunit.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    File coverageReport = new File("target/MockProject/my-coverage.xml");
+    assertThat(phpConfig.getCoverageReportFile().getAbsolutePath()).isEqualTo(coverageReport.getAbsolutePath());
+    assertThat(phpConfig.getMainTestClass()).isEqualTo("AllTests.php");
+    assertThat(phpConfig.isAnalyseTestDirectory()).isTrue();
+    assertThat(phpConfig.getFilter()).isEqualTo("foo");
+    assertThat(phpConfig.getBootstrap()).isEqualTo("bootstrap.php");
+    assertThat(phpConfig.getConfiguration()).isEqualTo("config.xml");
+    assertThat(phpConfig.isIgnoreDefaultConfiguration()).isTrue();
+    assertThat(phpConfig.getLoader()).isEqualTo("loader");
+    assertThat(phpConfig.getGroup()).isEqualTo("groups");
+    assertThat(phpConfig.getArgumentLine()).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    assertThat(phpConfig.getTimeout()).isEqualTo(120);
+  }
+
+  @Test
+  public void shouldReturnCustomPropertiesUsingDeprecated() {
     // Given
     settings.setProperty(PhpUnitConfiguration.PHPUNIT_SKIP_KEY, "true");
     settings.setProperty(PhpUnitConfiguration.PHPUNIT_COVERAGE_SKIP_KEY, "true");

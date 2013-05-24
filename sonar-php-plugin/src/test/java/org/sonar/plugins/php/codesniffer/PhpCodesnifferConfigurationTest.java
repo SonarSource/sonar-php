@@ -51,7 +51,7 @@ public class PhpCodesnifferConfigurationTest {
     assertThat(phpConfig.getCommandLine()).isEqualTo("phpcs");
     assertThat(phpConfig.isSkip()).isFalse();
     assertThat(phpConfig.isAnalyseOnly()).isFalse();
-    File report = new File("target/MockProject/target/logs/codesniffer.xml");
+    File report = new File("target/MockProject/target/sonar/phpcs.xml");
     assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
     assertThat(phpConfig.getStandard()).isNull();
     assertThat(phpConfig.getLevel()).isNull();
@@ -62,6 +62,31 @@ public class PhpCodesnifferConfigurationTest {
 
   @Test
   public void shouldReturnCustomProperties() {
+    // Given
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY, "true");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY, "true");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_REPORT_PATH_KEY, "codesniffer-summary.xml");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, "PEAR");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY, "--level=");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY, "error");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_TIMEOUT_KEY, "120");
+
+    // Verify
+    assertThat(phpConfig.getCommandLine()).isEqualTo("phpcs");
+    assertThat(phpConfig.isSkip()).isTrue();
+    assertThat(phpConfig.isAnalyseOnly()).isTrue();
+    File report = new File("target/MockProject/codesniffer-summary.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    assertThat(phpConfig.getStandard()).isEqualTo("PEAR");
+    assertThat(phpConfig.getSeverityModifier()).isEqualTo("--level=");
+    assertThat(phpConfig.getLevel()).isEqualTo("error");
+    assertThat(phpConfig.getArgumentLine()).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    assertThat(phpConfig.getTimeout()).isEqualTo(120);
+  }
+
+  @Test
+  public void shouldReturnCustomPropertiesUsingDeprecated() {
     // Given
     settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY, "true");
     settings.setProperty(PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY, "true");

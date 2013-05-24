@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.php;
 
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
@@ -31,6 +33,7 @@ import org.sonar.plugins.php.api.PhpConstants;
 import java.io.File;
 import java.util.Arrays;
 
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -42,13 +45,19 @@ public class MockUtils {
     when(project.getLanguageKey()).thenReturn(PhpConstants.LANGUAGE_KEY);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSonarWorkingDirectory()).thenReturn(new File("target/MockProject/target/sonar").getAbsoluteFile());
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("target/MockProject/src").getAbsoluteFile()));
     when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/src/Foo.php")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("target/MockProject/test").getAbsoluteFile()));
     when(fs.testFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/test/FooTest.php")));
     when(fs.getBuildDir()).thenReturn(new File("target/MockProject/target").getAbsoluteFile());
     when(fs.getBasedir()).thenReturn(new File("target/MockProject").getAbsoluteFile());
+    when(fs.resolvePath(anyString())).thenAnswer(new Answer<File>() {
+      public File answer(InvocationOnMock invocation) {
+        Object[] args = invocation.getArguments();
+        return new File("target/MockProject/" + args[0]).getAbsoluteFile();
+      }
+    });
     return project;
   }
-
 }

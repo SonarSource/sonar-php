@@ -48,7 +48,7 @@ public class PhpmdConfigurationTest {
     assertThat(phpConfig.getCommandLine()).isEqualTo("phpmd");
     assertThat(phpConfig.isSkip()).isFalse();
     assertThat(phpConfig.isAnalyseOnly()).isFalse();
-    File report = new File("target/MockProject/target/logs/pmd.xml");
+    File report = new File("target/MockProject/target/sonar/phpmd.xml");
     assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
     assertThat(phpConfig.getLevel()).isEqualTo("2");
     assertThat(phpConfig.getArgumentLine()).isNull();
@@ -57,6 +57,27 @@ public class PhpmdConfigurationTest {
 
   @Test
   public void shouldReturnCustomProperties() {
+    // Given
+    settings.setProperty(PhpmdConfiguration.PHPMD_SKIP_KEY, "true");
+    settings.setProperty(PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, "true");
+    settings.setProperty(PhpmdConfiguration.PHPMD_REPORT_PATH_KEY, "my-pmd.xml");
+    settings.setProperty(PhpmdConfiguration.PHPMD_LEVEL_ARGUMENT_KEY, "5");
+    settings.setProperty(PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY, "--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    settings.setProperty(PhpmdConfiguration.PHPMD_TIMEOUT_KEY, "120");
+
+    // Verify
+    assertThat(phpConfig.getCommandLine()).isEqualTo("phpmd");
+    assertThat(phpConfig.isSkip()).isTrue();
+    assertThat(phpConfig.isAnalyseOnly()).isTrue();
+    File report = new File("target/MockProject/my-pmd.xml");
+    assertThat(phpConfig.getReportFile().getAbsolutePath()).isEqualTo(report.getAbsolutePath());
+    assertThat(phpConfig.getLevel()).isEqualTo("5");
+    assertThat(phpConfig.getArgumentLine()).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
+    assertThat(phpConfig.getTimeout()).isEqualTo(120);
+  }
+
+  @Test
+  public void shouldReturnCustomPropertiesUsingDeprecated() {
     // Given
     settings.setProperty(PhpmdConfiguration.PHPMD_SKIP_KEY, "true");
     settings.setProperty(PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY, "true");
