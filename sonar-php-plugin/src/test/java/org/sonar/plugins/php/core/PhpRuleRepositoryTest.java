@@ -20,10 +20,12 @@
 package org.sonar.plugins.php.core;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.XMLRuleParser;
@@ -40,31 +42,38 @@ public class PhpRuleRepositoryTest {
   @Mock
   private ServerFileSystem fileSystem;
 
-  private FakeRuleRepository fakeRuleRepository;
+  private PhpRuleRepository fakeRuleRepository;
 
   @Before
   public void init() throws Exception {
     MockitoAnnotations.initMocks(this);
-
-    when(fileSystem.getExtensions("fake", "xml")).thenReturn(
-        Lists.newArrayList(TestUtils.getResource("/org/sonar/plugins/php/core/PhpRuleRepositoryTest/extended-ruleset.xml")));
-
-    fakeRuleRepository = new FakeRuleRepository(fileSystem);
   }
 
   @Test
   public void shouldCreateRulesWithExtensions() throws Exception {
+    when(fileSystem.getExtensions("fake", "xml")).thenReturn(
+        Lists.newArrayList(TestUtils.getResource("/org/sonar/plugins/php/core/PhpRuleRepositoryTest/extended-ruleset.xml")));
+    fakeRuleRepository = new FakeRuleRepositoryWithCustomRulesAsExtension(fileSystem);
     List<Rule> rules = fakeRuleRepository.createRules();
     assertThat(rules.size()).isEqualTo(4);
   }
 
-  class FakeRuleRepository extends PhpRuleRepository {
+  @Test
+  public void shouldCreateRulesWithProperty() throws Exception {
+    Settings settings = new Settings();
+    settings.setProperty("custom.rules", FileUtils.readFileToString(TestUtils.getResource("/org/sonar/plugins/php/core/PhpRuleRepositoryTest/extended-ruleset.xml")));
+    fakeRuleRepository = new FakeRuleRepositoryWithCustomRulesAsProperty(fileSystem, settings);
+    List<Rule> rules = fakeRuleRepository.createRules();
+    assertThat(rules.size()).isEqualTo(4);
+  }
+
+  class FakeRuleRepositoryWithCustomRulesAsExtension extends PhpRuleRepository {
 
     private ServerFileSystem fileSystem;
     private XMLRuleParser xmlRuleParser;
 
-    public FakeRuleRepository(ServerFileSystem fileSystem) {
-      super("fake", "php");
+    public FakeRuleRepositoryWithCustomRulesAsExtension(ServerFileSystem fileSystem) {
+      super("fake", "php", new Settings());
       setName("Fake repo");
       this.fileSystem = fileSystem;
       xmlRuleParser = new XMLRuleParser();
@@ -85,6 +94,46 @@ public class PhpRuleRepositoryTest {
     @Override
     protected String getRepositoryKey() {
       return "fake";
+    }
+
+    @Override
+    protected String getCustomRulePropertyKey() {
+      return "";
+    }
+  }
+
+  class FakeRuleRepositoryWithCustomRulesAsProperty extends PhpRuleRepository {
+
+    private ServerFileSystem fileSystem;
+    private XMLRuleParser xmlRuleParser;
+
+    public FakeRuleRepositoryWithCustomRulesAsProperty(ServerFileSystem fileSystem, Settings settings) {
+      super("fake", "php", settings);
+      setName("Fake repo");
+      this.fileSystem = fileSystem;
+      xmlRuleParser = new XMLRuleParser();
+    }
+
+    protected InputStream getRuleInputStream() {
+      return getClass().getResourceAsStream("/org/sonar/plugins/php/core/PhpRuleRepositoryTest/default-ruleset.xml");
+    }
+
+    public ServerFileSystem getFileSystem() {
+      return fileSystem;
+    }
+
+    public XMLRuleParser getParser() {
+      return xmlRuleParser;
+    }
+
+    @Override
+    protected String getRepositoryKey() {
+      return "fake";
+    }
+
+    @Override
+    protected String getCustomRulePropertyKey() {
+      return "custom.rules";
     }
   }
 

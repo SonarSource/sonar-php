@@ -19,12 +19,15 @@
  */
 package org.sonar.plugins.php.pmd;
 
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.core.PhpRuleRepository;
 
 import java.io.InputStream;
+
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_CUSTOM_RULES_PROP_KEY;
 
 public final class PhpmdRuleRepository extends PhpRuleRepository {
 
@@ -38,8 +41,8 @@ public final class PhpmdRuleRepository extends PhpRuleRepository {
    * @param fileSystem
    * @param parser
    */
-  public PhpmdRuleRepository(ServerFileSystem fileSystem, XMLRuleParser parser) {
-    super(PHPMD_REPOSITORY_KEY, PhpConstants.LANGUAGE_KEY);
+  public PhpmdRuleRepository(ServerFileSystem fileSystem, XMLRuleParser parser, Settings settings) {
+    super(PHPMD_REPOSITORY_KEY, PhpConstants.LANGUAGE_KEY, settings);
     setName(PHPMD_REPOSITORY_NAME);
     this.fileSystem = fileSystem;
     this.parser = parser;
@@ -72,6 +75,11 @@ public final class PhpmdRuleRepository extends PhpRuleRepository {
   @Override
   protected String getRepositoryKey() {
     return PHPMD_REPOSITORY_KEY;
+  }
+
+  @Override
+  protected String getCustomRulePropertyKey() {
+    return PHPMD_CUSTOM_RULES_PROP_KEY;
   }
 
 }

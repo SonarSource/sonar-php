@@ -21,6 +21,7 @@ package org.sonar.plugins.php.codesniffer;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.Rule;
@@ -53,7 +54,7 @@ public class PhpCodeSnifferProfileExporterTest {
   @Test(expected = SonarException.class)
   public void testExportProfileFail() throws IOException, SAXException {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser(), new Settings());
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
@@ -67,7 +68,7 @@ public class PhpCodeSnifferProfileExporterTest {
   @Test
   public void testExportComplexProfile() throws IOException, SAXException {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser(), new Settings());
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
@@ -85,7 +86,7 @@ public class PhpCodeSnifferProfileExporterTest {
   @Test
   public void testExportProfile() throws IOException, SAXException {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser(), new Settings());
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);

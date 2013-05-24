@@ -40,6 +40,7 @@ import java.util.List;
 import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_CUSTOM_RULES_PROP_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_LEVEL_ARGUMENT_DEFVALUE;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_LEVEL_ARGUMENT_KEY;
 import static org.sonar.plugins.php.pmd.PhpmdConfiguration.PHPMD_REPORT_FILE_NAME_DEFVALUE;
@@ -73,7 +74,11 @@ import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY
   @Property(key = PHPMD_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
     description = "Additionnal parameters that can be passed to PHPMD tool.", category = PhpmdSensor.CATEGORY_PHP_PHPMD),
   @Property(key = PHPMD_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
-    description = "Maximum number of minutes that the execution of the tool should take.", category = PhpmdSensor.CATEGORY_PHP_PHPMD)
+    description = "Maximum number of minutes that the execution of the tool should take.", category = PhpmdSensor.CATEGORY_PHP_PHPMD),
+  @Property(key = PHPMD_CUSTOM_RULES_PROP_KEY,
+    defaultValue = "", name = "PHPMD custom rules",
+    description = "XML description of PHPMD custom rules", type = PropertyType.TEXT,
+    global = true, project = false, category = PhpmdSensor.CATEGORY_PHP_PHPMD)
 })
 public class PhpmdSensor implements Sensor {
 

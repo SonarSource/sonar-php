@@ -22,6 +22,8 @@
  */
 package org.sonar.plugins.php.core;
 
+import org.apache.commons.lang.StringUtils;
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleRepository;
@@ -29,6 +31,7 @@ import org.sonar.api.rules.XMLRuleParser;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +41,15 @@ import java.util.List;
  */
 public abstract class PhpRuleRepository extends RuleRepository {
 
+  private final Settings settings;
+
   /**
    * @param key
    * @param language
    */
-  protected PhpRuleRepository(String key, String language) {
+  protected PhpRuleRepository(String key, String language, Settings settings) {
     super(key, language);
+    this.settings = settings;
   }
 
   /**
@@ -53,8 +59,17 @@ public abstract class PhpRuleRepository extends RuleRepository {
   public List<Rule> createRules() {
     List<Rule> rules = new ArrayList<Rule>();
     rules.addAll(getParser().parse(getRuleInputStream()));
+
+    // Custom rules:
+    // - old fashion: XML files in the file system
     for (File userExtensionXml : getFileSystem().getExtensions(getRepositoryKey(), "xml")) {
       rules.addAll(getParser().parse(userExtensionXml));
+    }
+
+    // - new fashion: through the Web interface
+    String customRules = settings.getString(getCustomRulePropertyKey());
+    if (StringUtils.isNotBlank(customRules)) {
+      rules.addAll(getParser().parse(new StringReader(customRules)));
     }
     return rules;
   }
@@ -64,6 +79,8 @@ public abstract class PhpRuleRepository extends RuleRepository {
   protected abstract XMLRuleParser getParser();
 
   protected abstract String getRepositoryKey();
+
+  protected abstract String getCustomRulePropertyKey();
 
   /**
    * @return an input stream pointing to a rules.xml file.

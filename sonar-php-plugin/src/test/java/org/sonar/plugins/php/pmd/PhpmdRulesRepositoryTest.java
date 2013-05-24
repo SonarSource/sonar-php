@@ -21,6 +21,7 @@ package org.sonar.plugins.php.pmd;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.XMLRuleParser;
@@ -38,7 +39,7 @@ public class PhpmdRulesRepositoryTest {
   public void setup() {
     ServerFileSystem fs = mock(ServerFileSystem.class);
     XMLRuleParser parser = new XMLRuleParser();
-    repository = new PhpmdRuleRepository(fs, parser);
+    repository = new PhpmdRuleRepository(fs, parser, new Settings());
   }
 
   @Test

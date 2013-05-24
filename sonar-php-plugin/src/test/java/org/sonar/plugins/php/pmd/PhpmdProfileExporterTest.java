@@ -21,6 +21,7 @@ package org.sonar.plugins.php.pmd;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.Rule;
@@ -57,7 +58,7 @@ public class PhpmdProfileExporterTest {
   @Test
   public void testExportProfileWithParam() throws IOException, SAXException {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser());
+    PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser(), new Settings());
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new PhpmdRuleFinder(rules);
@@ -81,7 +82,7 @@ public class PhpmdProfileExporterTest {
   @Test
   public void testExportProfile() throws IOException, SAXException {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser());
+    PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser(), new Settings());
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new PhpmdRuleFinder(rules);

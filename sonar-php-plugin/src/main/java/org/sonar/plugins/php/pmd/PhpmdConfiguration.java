@@ -67,6 +67,11 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   public static final String PHPMD_TIMEOUT_KEY = "sonar.phpPmd.timeout";
 
   /**
+   * since 1.2
+   */
+  public static final String PHPMD_CUSTOM_RULES_PROP_KEY = "sonar.phpPmd.customRules.definition";
+
+  /**
    * Instantiates a new php pmd configuration.
    * 
    * @param project

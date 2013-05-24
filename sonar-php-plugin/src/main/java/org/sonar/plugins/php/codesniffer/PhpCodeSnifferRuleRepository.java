@@ -19,12 +19,15 @@
  */
 package org.sonar.plugins.php.codesniffer;
 
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.plugins.php.core.PhpRuleRepository;
 
 import java.io.InputStream;
+
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_CUSTOM_RULES_PROP_KEY;
 
 /**
  * @author Akram Ben Aissi
@@ -38,8 +41,8 @@ public final class PhpCodeSnifferRuleRepository extends PhpRuleRepository {
   private ServerFileSystem fileSystem;
   private XMLRuleParser parser;
 
-  public PhpCodeSnifferRuleRepository(ServerFileSystem fileSystem, XMLRuleParser parser) {
-    super(PHPCS_REPOSITORY_KEY, PhpConstants.LANGUAGE_KEY);
+  public PhpCodeSnifferRuleRepository(ServerFileSystem fileSystem, XMLRuleParser parser, Settings settings) {
+    super(PHPCS_REPOSITORY_KEY, PhpConstants.LANGUAGE_KEY, settings);
     setName(PHPCS_REPOSITORY_NAME);
     this.fileSystem = fileSystem;
     this.parser = parser;
@@ -72,6 +75,11 @@ public final class PhpCodeSnifferRuleRepository extends PhpRuleRepository {
   @Override
   protected String getRepositoryKey() {
     return PHPCS_REPOSITORY_KEY;
+  }
+
+  @Override
+  protected String getCustomRulePropertyKey() {
+    return PHPCS_CUSTOM_RULES_PROP_KEY;
   }
 
 }

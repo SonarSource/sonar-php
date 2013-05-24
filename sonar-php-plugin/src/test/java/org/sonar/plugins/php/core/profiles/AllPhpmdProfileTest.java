@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.core.profiles;
 
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.profiles.XMLProfileParser;
@@ -41,7 +42,7 @@ public class AllPhpmdProfileTest {
   @Test
   public void testCreateProfileValidationMessages() {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser(), new Settings());
     List<Rule> rules = repository.createRules();
     RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);
 

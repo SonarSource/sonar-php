@@ -78,6 +78,11 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   public static final String PHPCS_ARGUMENT_LINE_KEY = "sonar.phpCodesniffer.argumentLine";
   public static final String PHPCS_TIMEOUT_KEY = "sonar.phpCodesniffer.timeout";
 
+  /**
+   * since 1.2
+   */
+  public static final String PHPCS_CUSTOM_RULES_PROP_KEY = "sonar.phpCodesniffer.customRules.definition";
+
   private PhpCodeSnifferProfileExporter exporter;
   private RulesProfile profile;
 

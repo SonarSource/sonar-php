@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.codesniffer;
 
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
@@ -121,7 +122,7 @@ public class PhpCodeSnifferProfileImporterTest {
 
   private PhpCodeSnifferProfileImporter createImporter() {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser());
+    PhpCodeSnifferRuleRepository repository = new PhpCodeSnifferRuleRepository(fileSystem, new XMLRuleParser(), new Settings());
     List<Rule> rules = repository.createRules();
 
     RuleFinder ruleFinder = new MockPhpCodeSnifferRuleFinder(rules);

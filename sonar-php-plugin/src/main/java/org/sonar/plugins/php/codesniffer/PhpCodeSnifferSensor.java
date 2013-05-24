@@ -41,6 +41,7 @@ import java.util.Set;
 
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ANALYZE_ONLY_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_ARGUMENT_LINE_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_CUSTOM_RULES_PROP_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_DEFVALUE;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
@@ -84,7 +85,11 @@ import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOU
   @Property(key = PHPCS_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
     description = "Additionnal parameters that can be passed to PHP CodeSniffer tool.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
-    description = "Maximum number of minutes that the execution of the tool should take.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER)
+    description = "Maximum number of minutes that the execution of the tool should take.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+  @Property(key = PHPCS_CUSTOM_RULES_PROP_KEY,
+    defaultValue = "", name = "PHP CodeSniffer custom rules",
+    description = "XML description of PHP CodeSniffer custom rules", type = PropertyType.TEXT,
+    global = true, project = false, category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER)
 })
 public class PhpCodeSnifferSensor implements Sensor {
 

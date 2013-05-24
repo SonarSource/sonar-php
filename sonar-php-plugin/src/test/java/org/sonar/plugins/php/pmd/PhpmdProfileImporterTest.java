@@ -21,6 +21,7 @@ package org.sonar.plugins.php.pmd;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.config.Settings;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
@@ -165,7 +166,7 @@ public class PhpmdProfileImporterTest {
 
   private RuleFinder createRuleFinder() {
     ServerFileSystem fileSystem = mock(ServerFileSystem.class);
-    PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser());
+    PhpmdRuleRepository repository = new PhpmdRuleRepository(fileSystem, new XMLRuleParser(), new Settings());
     List<Rule> rules = repository.createRules();
     return new MockPhpmdRuleFinder(rules);
   }
