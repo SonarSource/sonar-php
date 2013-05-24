@@ -55,7 +55,7 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   /**
    * @since 1.2
    */
-  public static final String PHPCS_REPORT_PATH_KEY = "sonar.php.codesniffer.reportPath";
+  public static final String PHPCS_REPORT_PATH_KEY = "sonar.phpCodesniffer.reportPath";
   /**
    * @deprecated since 1.2
    */

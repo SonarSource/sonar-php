@@ -44,7 +44,7 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   /**
    * @since 1.2
    */
-  public static final String PHPMD_REPORT_PATH_KEY = "sonar.php.phpmd.reportPath";
+  public static final String PHPMD_REPORT_PATH_KEY = "sonar.phpPmd.reportPath";
   /**
    * @deprecated since 1.2
    */

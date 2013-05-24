@@ -46,7 +46,7 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   /**
    * @since 1.2
    */
-  public static final String PDEPEND_REPORT_PATH_KEY = "sonar.php.pdepend.reportPath";
+  public static final String PDEPEND_REPORT_PATH_KEY = "sonar.phpDepend.reportPath";
   /**
    * @deprecated since 1.2
    */

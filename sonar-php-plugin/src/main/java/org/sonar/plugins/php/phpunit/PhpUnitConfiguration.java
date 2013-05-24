@@ -57,11 +57,11 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   /**
    * @since 1.2
    */
-  public static final String PHPUNIT_REPORT_PATH_KEY = "sonar.php.phpUnit.reportPath";
+  public static final String PHPUNIT_REPORT_PATH_KEY = "sonar.phpUnit.reportPath";
   /**
    * @since 1.2
    */
-  public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.php.phpUnit.coverage.reportPath";
+  public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.phpUnit.coverage.reportPath";
   /**
    * @deprecated since 1.2
    */
