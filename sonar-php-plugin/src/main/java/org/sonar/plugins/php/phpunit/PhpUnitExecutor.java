@@ -101,7 +101,8 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
     addExtendedOptions(result);
 
     if (configFile == null) {
-
+      LOG.warn("/!\\ Please use " + PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY
+        + " to configure PHPUnit with a phpunit.xml file. Other options are deprecated and will be removed soon.");
       boolean ignoreConfigFile = configuration.isIgnoreDefaultConfiguration();
       if (ignoreConfigFile) {
         result.add(PHPUNIT_IGNORE_CONFIGURATION_OPTION);
