@@ -49,6 +49,12 @@ public class PhpSourceCodeColorizerTest {
   }
 
   @Test
+  public void testHighlightTraitsKeywords() {
+    assertThat(highlight("trait"), containsString("<span class=\"k\">trait</span>"));
+    assertThat(highlight("use"), containsString("<span class=\"k\">use</span>"));
+  }
+
+  @Test
   public void testHighlightReservedVariables() {
     assertThat(highlight("__FUNCTION__"), containsString("<span class=\"k\">__FUNCTION__</span>"));
   }

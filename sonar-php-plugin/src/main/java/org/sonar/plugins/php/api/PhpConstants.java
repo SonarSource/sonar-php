@@ -40,7 +40,7 @@ public final class PhpConstants {
   public static final String[] PHP_KEYWORDS_ARRAY = new String[] {"and", "or", "xor", "exception", "array", "as", "break", "case",
     "class", "const", "continue", "declare", "default", "die", "do", "echo", "else", "elseif", "empty", "enddeclare", "endfor",
     "endforeach", "endif", "endswitch", "endwhile", "eval", "exit", "extends", "for", "foreach", "function", "global", "if", "include",
-    "include_once", "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "unset", "use", "var",
+    "include_once", "isset", "list", "new", "print", "require", "require_once", "return", "static", "switch", "trait", "unset", "use", "var",
     "while", "final", "php_user_filter", "interface", "implements", "instanceof", "public", "private", "protected", "abstract", "clone",
     "try", "catch", "throw", "cfunction", "old_function", "this", "final", "namespace", "goto"};
 
