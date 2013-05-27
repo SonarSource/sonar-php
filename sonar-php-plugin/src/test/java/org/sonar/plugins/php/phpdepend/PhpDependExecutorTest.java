@@ -95,4 +95,15 @@ public class PhpDependExecutorTest {
     assertThat(executor.getCommandLineArguments().get(2)).isEqualTo("--ignore=**/tests/**,**/jpgraph/**,**/Zend/**");
   }
 
+  @Test
+  public void testTestCommand() throws Exception {
+    List<String> commandLine = executor.getTestCommandLine();
+    assertThat(commandLine.size()).isEqualTo(2);
+    assertThat(commandLine.get(1)).isEqualTo("--version");
+  }
+
+  @Test
+  public void testPHAREmbeddedURL() throws Exception {
+    assertThat(executor.getPHAREmbeddedURL()).isNotNull();
+  }
 }

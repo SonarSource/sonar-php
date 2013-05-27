@@ -92,7 +92,7 @@ public class PhpDependExecutor extends AbstractPhpExecutor {
 
   @Override
   protected String getPHARName() {
-    return null;
+    return "pdepend-1.1.0.phar";
   }
 
 }
