@@ -89,4 +89,16 @@ public class PhpmdExecutorTest {
     assertThat(commandLine.get(8)).isEqualTo("--foo2=bar2");
   }
 
+  @Test
+  public void testTestCommand() throws Exception {
+    List<String> commandLine = executor.getTestCommandLine();
+    assertThat(commandLine.size()).isEqualTo(2);
+    assertThat(commandLine.get(1)).isEqualTo("--version");
+  }
+
+  @Test
+  public void testPHAREmbeddedURL() throws Exception {
+    assertThat(executor.getPHAREmbeddedURL()).isNotNull();
+  }
+
 }

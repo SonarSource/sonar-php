@@ -102,6 +102,6 @@ public class PhpmdExecutor extends AbstractPhpExecutor {
 
   @Override
   protected String getPHARName() {
-    return null;
+    return "phpmd-1.4.1.phar";
   }
 }
