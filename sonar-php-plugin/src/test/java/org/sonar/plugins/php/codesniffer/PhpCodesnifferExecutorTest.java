@@ -144,4 +144,20 @@ public class PhpCodesnifferExecutorTest {
     PhpCodeSnifferExecutor executor = new PhpCodeSnifferExecutor(new Php(settings), c, e, profile);
     return executor;
   }
+
+  @Test
+  public void testTestCommand() throws Exception {
+    PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
+    PhpCodeSnifferExecutor executor = createExecutor(new Settings(), c);
+    List<String> commandLine = executor.getTestCommandLine();
+    assertThat(commandLine.size()).isEqualTo(2);
+    assertThat(commandLine.get(1)).isEqualTo("--version");
+  }
+
+  @Test
+  public void testPHAREmbeddedURL() throws Exception {
+    PhpCodeSnifferConfiguration c = mock(PhpCodeSnifferConfiguration.class);
+    PhpCodeSnifferExecutor executor = createExecutor(new Settings(), c);
+    assertThat(executor.getPHAREmbeddedURL()).isNotNull();
+  }
 }

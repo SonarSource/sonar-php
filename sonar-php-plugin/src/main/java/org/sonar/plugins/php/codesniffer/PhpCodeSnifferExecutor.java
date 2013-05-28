@@ -118,7 +118,7 @@ public class PhpCodeSnifferExecutor extends AbstractPhpExecutor {
 
   @Override
   protected String getPHARName() {
-    return null;
+    return "phpcs-1.5.0-RC2.phar";
   }
 
 }
