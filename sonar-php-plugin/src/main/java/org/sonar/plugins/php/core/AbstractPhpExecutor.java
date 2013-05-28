@@ -29,7 +29,6 @@ import org.sonar.api.BatchExtension;
 import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.SonarException;
-import org.sonar.api.utils.TempFileUtils;
 import org.sonar.api.utils.command.Command;
 import org.sonar.api.utils.command.CommandExecutor;
 import org.sonar.plugins.php.api.Php;
@@ -101,13 +100,14 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
   }
 
   private void executePhar() {
-    File tempDir = null;
     try {
       URL pharURL = getPHAREmbeddedURL();
 
-      tempDir = TempFileUtils.createTempDirectory(getExecutedTool());
-      File tempPhar = new File(tempDir, getPHARName());
-      FileUtils.copyURLToFile(pharURL, tempPhar);
+      File workDir = new File(configuration.getFileSystem().getSonarWorkingDirectory(), getExecutedTool());
+      File tempPhar = new File(workDir, getPHARName());
+      if (!tempPhar.exists()) {
+        FileUtils.copyURLToFile(pharURL, tempPhar);
+      }
 
       List<String> commandLine = new LinkedList<String>();
       commandLine.add(PHP_COMMAND_LINE);
@@ -118,8 +118,6 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
       doExecute(commandLine);
     } catch (Exception e) {
       throw new SonarException("Error during execution of embedded " + getExecutedTool(), e);
-    } finally {
-      FileUtils.deleteQuietly(tempDir);
     }
   }
 
