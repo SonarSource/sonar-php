@@ -22,6 +22,7 @@
     <!-- Those classes are excluded as they are just a temporary copy of Sonar core classes -->
     <sonar.exclusions>org/sonar/plugins/php/duplications/internal/*.java</sonar.exclusions>
     <sonarCommonRules.version>1.1</sonarCommonRules.version>
+    <sslr.version>1.19.1</sslr.version>
   </properties>
 
   <dependencies>
@@ -37,6 +38,16 @@
       <version>${sonarCommonRules.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.sonar.sslr</groupId>
+      <artifactId>sslr-core</artifactId>
+      <version>${sslr.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-channel</artifactId>
+      <version>${sonar.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom</artifactId>
       <version>1.1</version>
@@ -46,6 +57,12 @@
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-testing-harness</artifactId>
       <version>${sonar.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar.sslr</groupId>
+      <artifactId>sslr-testing-harness</artifactId>
+      <version>${sslr.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -96,8 +113,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>1790000</maxsize>
-                  <minsize>1770000</minsize>
+                  <maxsize>2000000</maxsize>
+                  <minsize>1900000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>

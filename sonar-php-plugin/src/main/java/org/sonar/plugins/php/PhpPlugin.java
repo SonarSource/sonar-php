@@ -32,6 +32,7 @@ import org.sonar.plugins.php.codesniffer.PhpCodeSnifferSensor;
 import org.sonar.plugins.php.codesniffer.PhpCodeSnifferViolationsXmlParser;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.core.PhpCommonRulesEngineProvider;
+import org.sonar.plugins.php.core.PhpLexerSensor;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.core.PhpSourceImporter;
 import org.sonar.plugins.php.core.profiles.AllPhpCSProfile;
@@ -81,6 +82,7 @@ public class PhpPlugin extends SonarPlugin {
 
     // Core extensions
     extensions.add(PhpSourceImporter.class);
+    extensions.add(PhpLexerSensor.class);
     extensions.add(PhpSourceCodeColorizer.class);
     extensions.add(NoSonarAndCommentedOutLocSensor.class);
 

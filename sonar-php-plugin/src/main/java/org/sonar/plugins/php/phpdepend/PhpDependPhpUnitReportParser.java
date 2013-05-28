@@ -148,11 +148,7 @@ public class PhpDependPhpUnitReportParser extends PhpDependResultsParser {
   }
 
   protected void saveSimpleMeasures(org.sonar.api.resources.File sonarFile, FileNode fileNode) {
-    getContext().saveMeasure(sonarFile, CoreMetrics.FILES, 1.0);
     getContext().saveMeasure(sonarFile, CoreMetrics.CLASSES, fileNode.getClassNumber());
-    getContext().saveMeasure(sonarFile, CoreMetrics.LINES, fileNode.getLinesNumber());
-    getContext().saveMeasure(sonarFile, CoreMetrics.NCLOC, fileNode.getCodeLinesNumber());
-    getContext().saveMeasure(sonarFile, CoreMetrics.COMMENT_LINES, fileNode.getCommentLineNumber());
   }
 
   /**

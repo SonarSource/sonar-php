@@ -81,17 +81,13 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
       RangeDistributionBuilder classComplexityDistribution = new RangeDistributionBuilder(
           CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION,
           CLASSES_DISTRIB_BOTTOM_LIMITS
-      );
+          );
       RangeDistributionBuilder methodComplexityDistribution = new RangeDistributionBuilder(
           CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION,
           FUNCTIONS_DISTRIB_BOTTOM_LIMITS
-      );
+          );
 
-      getContext().saveMeasure(sonarFile, CoreMetrics.FILES, 1.0);
       getContext().saveMeasure(sonarFile, CoreMetrics.CLASSES, (double) fileNode.getClassNumber());
-      getContext().saveMeasure(sonarFile, CoreMetrics.LINES, fileNode.getLinesNumber());
-      getContext().saveMeasure(sonarFile, CoreMetrics.NCLOC, fileNode.getExecutableLinesNumber());
-      getContext().saveMeasure(sonarFile, CoreMetrics.COMMENT_LINES, fileNode.getCommentLinesNumber());
       getContext().saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, (double) fileNode.getFunctionNumber() + fileNode.getMethodNumber());
 
       List<ClassNode> classes = fileNode.getClasses();
@@ -108,12 +104,12 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
                 sonarFile,
                 CoreMetrics.DEPTH_IN_TREE,
                 classNode.getDepthInTreeNumber()
-            );
+                );
             getContext().saveMeasure(
                 sonarFile,
                 CoreMetrics.NUMBER_OF_CHILDREN,
                 classNode.getNumberOfChildrenClasses()
-            );
+                );
 
             double totalClassComplexity = classNode.getWeightedMethodCount();
             getContext().saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, totalClassComplexity);
@@ -132,11 +128,11 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
       getContext().saveMeasure(
           sonarFile,
           measure
-      );
+          );
       getContext().saveMeasure(
           sonarFile,
           methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY)
-      );
+          );
     }
   }
 

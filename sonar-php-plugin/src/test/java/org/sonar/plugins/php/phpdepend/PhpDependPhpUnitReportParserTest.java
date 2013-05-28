@@ -144,30 +144,6 @@ public class PhpDependPhpUnitReportParserTest {
   }
 
   /**
-   * Should generate loc measures.
-   */
-  @Test
-  public void shouldGenerateLocMeasures() {
-    metric = CoreMetrics.LINES;
-    init(PDEPEND_RESULT);
-    verify(context).saveMeasure(new File("Money.php"), metric, 188.0);
-    verify(context).saveMeasure(new File("MoneyBag.php"), metric, 251.0);
-    verify(context).saveMeasure(new File("Common/IMoney.php"), metric, 74.0);
-  }
-
-  /**
-   * Should generate ncloc measures.
-   */
-  @Test
-  public void shouldGenerateNclocMeasures() {
-    metric = CoreMetrics.NCLOC;
-    init(PDEPEND_RESULT);
-    verify(context).saveMeasure(new File("Money.php"), metric, 94.0);
-    verify(context).saveMeasure(new File("MoneyBag.php"), metric, 150.0);
-    verify(context).saveMeasure(new File("Common/IMoney.php"), metric, 15.0);
-  }
-
-  /**
    * Should generate functions count measure.
    */
   @Test

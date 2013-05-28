@@ -103,18 +103,6 @@ public class PhpDependSummaryReportParserTest {
   }
 
   @Test
-  public void testShouldGenerateLocMeasure() {
-    metric = CoreMetrics.LINES;
-    init(SUMMARY_RESULT);
-    verify(context).saveMeasure(new File("Math3.php"), metric, 227.0);
-    verify(context).saveMeasure(new File("Bar/Math4.php"), metric, 211.0);
-    verify(context).saveMeasure(new File("Foo/Math5.php"), metric, 211.0);
-    verify(context).saveMeasure(new File("Math.php"), metric, 215.0);
-    verify(context).saveMeasure(new File("Math2.php"), metric, 211.0);
-    verify(context).saveMeasure(new File("Mail.php"), metric, 1262.0);
-  }
-
-  @Test
   public void testShouldGenerateClassesCountMeasure() {
     metric = CoreMetrics.CLASSES;
     init(SUMMARY_RESULT);
