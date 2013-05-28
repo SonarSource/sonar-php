@@ -109,7 +109,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
     try {
       URL pharURL = getPHAREmbeddedURL();
 
-      File workDir = new File(configuration.getFileSystem().getSonarWorkingDirectory(), getExecutedTool());
+      File workDir = configuration.getFileSystem().getSonarWorkingDirectory();
       File tempPhar = new File(workDir, getPHARName());
       if (!tempPhar.exists()) {
         FileUtils.copyURLToFile(pharURL, tempPhar);
