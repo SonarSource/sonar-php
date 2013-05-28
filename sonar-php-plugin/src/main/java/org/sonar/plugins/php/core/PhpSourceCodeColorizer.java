@@ -24,6 +24,7 @@ import com.google.common.collect.Sets;
 import org.sonar.api.web.CodeColorizerFormat;
 import org.sonar.colorizer.CDocTokenizer;
 import org.sonar.colorizer.CppDocTokenizer;
+import org.sonar.colorizer.InlineDocTokenizer;
 import org.sonar.colorizer.KeywordsTokenizer;
 import org.sonar.colorizer.StringTokenizer;
 import org.sonar.colorizer.Tokenizer;
@@ -58,9 +59,18 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
     String tagAfter = "</span>";
     List<Tokenizer> tokenizers = Lists.newArrayList();
     tokenizers.add(new CDocTokenizer("<span class=\"cd\">", tagAfter));
+    tokenizers.add(new ShellCommentTokenizer("<span class=\"cd\">", tagAfter));
     tokenizers.add(new CppDocTokenizer("<span class=\"cppd\">", tagAfter));
     tokenizers.add(new KeywordsTokenizer("<span class=\"k\">", tagAfter, keywords));
     tokenizers.add(new StringTokenizer("<span class=\"s\">", tagAfter));
     return tokenizers;
+  }
+
+  private static class ShellCommentTokenizer extends InlineDocTokenizer {
+
+    public ShellCommentTokenizer(String tagBefore, String tagAfter) {
+      super("#", tagBefore, tagAfter);
+    }
+
   }
 }

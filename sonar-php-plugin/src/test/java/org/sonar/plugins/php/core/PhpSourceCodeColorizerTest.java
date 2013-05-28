@@ -38,6 +38,11 @@ public class PhpSourceCodeColorizerTest {
   }
 
   @Test
+  public void testHighlightShell() {
+    assertThat(highlight("# Hello class"), containsString("<span class=\"cd\"># Hello class</span>"));
+  }
+
+  @Test
   public void testHighlightCppDoc() {
     assertThat(highlight("/* Hello class */"), containsString("<span class=\"cppd\">/* Hello class */</span>"));
   }
