@@ -46,6 +46,7 @@ import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPC
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_REPORT_PATH_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY;
 import static org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration.PHPCS_SKIP_KEY;
@@ -67,11 +68,14 @@ import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOU
       + "If this option is set to true, the plugin will only reuse an existing report file.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER,
     type = PropertyType.BOOLEAN),
+  @Property(key = PHPCS_REPORT_PATH_KEY,
+    name = "Report file path", project = true, global = true, description = "Path of the report file to analyse.",
+    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-    name = "Report file path", project = true, global = true, description = "Relative path of the report file to analyse.",
+    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_REPORT_FILE_NAME_KEY, defaultValue = PHPCS_REPORT_FILE_NAME_DEFVALUE, name = "Report file name", project = true,
-    global = true, description = "Name of the report file to analyse.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+    global = true, description = "[DEPRECATED] Name of the report file to analyse.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = "",
     name = "Ruleset (or standard) to run PHP_CodeSniffer with", project = true, global = true,
     description = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. "

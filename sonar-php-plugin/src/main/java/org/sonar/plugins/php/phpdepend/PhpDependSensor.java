@@ -42,6 +42,7 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REP
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_NAME_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY;
+import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_PATH_KEY;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_REPORT_TYPE_DEFVALUE;
 import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_SKIP_KEY;
@@ -63,11 +64,14 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
       + "If this option is set to true, the plugin will only reuse an existing report file.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
     type = PropertyType.BOOLEAN),
+  @Property(key = PDEPEND_REPORT_PATH_KEY,
+    name = "Report file path", project = true, global = true, description = "Path of the report file to analyse.",
+    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-    name = "Report file path", project = true, global = true, description = "Relative path of the report file to analyse.",
+    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_REPORT_FILE_NAME_KEY, defaultValue = PDEPEND_REPORT_FILE_NAME_DEFVALUE, name = "Report file name",
-    project = true, global = true, description = "Name of the report file to analyse.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
+    project = true, global = true, description = "[DEPRECATED] Name of the report file to analyse.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_WITHOUT_ANNOTATION_KEY, defaultValue = PDEPEND_WITHOUT_ANNOTATION_DEFVALUE, name = "Without annotation",
     project = true, global = true, description = "If set to true, tells PHP Depend to not parse doc comment annotations.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
