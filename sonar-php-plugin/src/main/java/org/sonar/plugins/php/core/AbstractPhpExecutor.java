@@ -60,6 +60,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
   private Php php;
   private AbstractPhpConfiguration configuration;
   private Collection<Integer> acceptedExitCodes;
+  private boolean embeddedMode = false;
 
   protected AbstractPhpExecutor(Php php, AbstractPhpConfiguration configuration) {
     this(php, configuration, Lists.newArrayList(0));
@@ -75,14 +76,19 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
     return php;
   }
 
+  public boolean isEmbeddedMode() {
+    return embeddedMode;
+  }
+
   /**
    * Executes the external tool.
    */
   public void execute() {
-    if (testExternalTool()) {
+    if (verifyExternalTool()) {
       executeExternalTool();
     }
     else if (getPHARName() != null) {
+      embeddedMode = true;
       executePhar();
     }
     else {
@@ -149,7 +155,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
   /**
    * Test presence of external tool .
    */
-  public boolean testExternalTool() {
+  public boolean verifyExternalTool() {
     List<String> commandLine = getTestCommandLine();
     LOG.debug("Testing " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
 

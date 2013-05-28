@@ -19,8 +19,9 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.apache.maven.project.MavenProject;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
@@ -28,6 +29,7 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
+import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.test.TestUtils;
 
@@ -46,6 +48,9 @@ import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
 import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
 public class PhpUnitCoverageResultParserTest {
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   /** The context. */
   private SensorContext context;
@@ -82,22 +87,28 @@ public class PhpUnitCoverageResultParserTest {
     when(config.getReportFile()).thenReturn(TestUtils.getResource(reportPath));
 
     PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
-    parser.parse(config.getReportFile());
+    parser.parse(config.getReportFile(), false);
   }
 
-  /**
-   * Should not throw an exception when report not found.
-   */
   @Test
-  public void shouldNotThrowAnExceptionWhenReportNotFound() {
-    config = mock(PhpUnitConfiguration.class);
+  public void shouldThrowAnExceptionWhenReportNotFound() {
     project = mock(Project.class);
     context = mock(SensorContext.class);
-    MavenProject mavenProject = mock(MavenProject.class);
-    when(mavenProject.getPackaging()).thenReturn("maven-plugin");
-    when(config.getReportFile()).thenReturn(new File("path/to/nowhere"));
     PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
-    parser.parse(null);
+
+    thrown.expect(SonarException.class);
+    thrown.expectMessage("Can't read phpUnit report:");
+
+    parser.parse(new File("notfound.txt"), false);
+  }
+
+  @Test
+  public void shouldNotThrowAnExceptionWhenReportNotFoundAndEmbeddedMode() {
+    project = mock(Project.class);
+    context = mock(SensorContext.class);
+    PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
+
+    parser.parse(new File("notfound.txt"), true);
   }
 
   /**

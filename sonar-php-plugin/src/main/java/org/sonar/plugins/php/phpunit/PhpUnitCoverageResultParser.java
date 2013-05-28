@@ -84,8 +84,12 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    * @param coverageReportFile
    *          the coverage report file
    */
-  public void parse(File coverageReportFile) {
+  public void parse(File coverageReportFile, boolean isEmbeddedMode) {
     if (coverageReportFile != null) {
+      if (isEmbeddedMode && !coverageReportFile.exists()) {
+        LOG.warn("/!\\ Unable to find coverage report file. Please check configuration of XDebug in your php.ini.");
+        return;
+      }
       LOG.info("Parsing file: " + coverageReportFile.getAbsolutePath());
       parseFile(coverageReportFile);
     }
@@ -206,7 +210,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
       inputStream = new FileInputStream(coverageReportFile);
       return (CoverageNode) xstream.fromXML(inputStream);
     } catch (IOException e) {
-      throw new SonarException("Can't read pUnit report : " + coverageReportFile.getName(), e);
+      throw new SonarException("Can't read phpUnit report: " + coverageReportFile.getName(), e);
     } finally {
       IOUtils.closeQuietly(inputStream);
     }

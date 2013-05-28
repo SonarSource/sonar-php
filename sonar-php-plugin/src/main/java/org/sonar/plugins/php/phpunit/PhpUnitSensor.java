@@ -145,7 +145,7 @@ public class PhpUnitSensor implements Sensor {
       }
       parser.parse(configuration.getReportFile());
       if (!configuration.shouldSkipCoverage()) {
-        coverageParser.parse(configuration.getCoverageReportFile());
+        coverageParser.parse(configuration.getCoverageReportFile(), executor.isEmbeddedMode());
       }
     } catch (XStreamException e) {
       throw new SonarException("Report file is invalid, plugin will stop.", e);

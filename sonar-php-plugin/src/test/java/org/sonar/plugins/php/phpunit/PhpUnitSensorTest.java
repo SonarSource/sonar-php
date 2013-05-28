@@ -119,7 +119,7 @@ public class PhpUnitSensorTest {
 
     verify(executor, times(1)).execute();
     verify(parser, times(1)).parse(report);
-    verify(coverageParser, times(1)).parse(coverageReport);
+    verify(coverageParser, times(1)).parse(coverageReport, false);
   }
 
   @Test
@@ -132,7 +132,7 @@ public class PhpUnitSensorTest {
 
     verify(executor, times(1)).execute();
     verify(parser, times(1)).parse(report);
-    verify(coverageParser, never()).parse(report);
+    verify(coverageParser, never()).parse(report, false);
   }
 
   @Test
@@ -147,7 +147,7 @@ public class PhpUnitSensorTest {
 
     verify(executor, never()).execute();
     verify(parser, times(1)).parse(report);
-    verify(coverageParser, times(1)).parse(coverageReport);
+    verify(coverageParser, times(1)).parse(coverageReport, false);
   }
 
 }
