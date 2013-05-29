@@ -90,7 +90,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
         LOG.warn("/!\\ Unable to find coverage report file. Please check configuration of XDebug in your php.ini.");
         return;
       }
-      LOG.info("Parsing file: " + coverageReportFile.getAbsolutePath());
+      LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
       parseFile(coverageReportFile);
     }
   }

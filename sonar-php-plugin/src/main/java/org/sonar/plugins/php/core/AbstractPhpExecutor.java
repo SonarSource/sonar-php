@@ -106,24 +106,25 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
   }
 
   private void executePhar() {
+    File pharFile = null;
     try {
       URL pharURL = getPHAREmbeddedURL();
 
       File workDir = configuration.getFileSystem().getSonarWorkingDirectory();
-      File tempPhar = new File(workDir, getPHARName());
-      if (!tempPhar.exists()) {
-        extractPhar(pharURL, tempPhar);
-      }
+      pharFile = new File(workDir, getPHARName());
+      extractPhar(pharURL, pharFile);
 
       List<String> commandLine = new LinkedList<String>();
       commandLine.add(PHP_COMMAND_LINE);
-      commandLine.add(tempPhar.getAbsolutePath());
+      commandLine.add(pharFile.getAbsolutePath());
       commandLine.addAll(getCommandLineArguments());
       LOG.debug("Executing embedded " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
 
       doExecute(commandLine);
     } catch (Exception e) {
       throw new SonarException("Error during execution of embedded " + getExecutedTool(), e);
+    } finally {
+      FileUtils.deleteQuietly(pharFile);
     }
   }
 

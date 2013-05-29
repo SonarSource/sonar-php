@@ -140,7 +140,7 @@ public class PhpUnitResultParser implements BatchExtension {
     if (reportFile == null) {
       insertZeroWhenNoReports();
     } else {
-      LOG.info("Parsing file: " + reportFile.getAbsolutePath());
+      LOG.debug("Parsing file: " + reportFile.getAbsolutePath());
       parseFile(reportFile);
     }
   }
