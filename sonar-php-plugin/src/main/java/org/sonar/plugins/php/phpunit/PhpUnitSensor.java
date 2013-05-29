@@ -35,6 +35,7 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_KEY;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_DEFVALUE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_COVERAGE_REPORT_FILE_KEY;
@@ -97,7 +98,7 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT
     description = "Filter which tests to run.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_BOOTSTRAP_KEY, defaultValue = "", name = "Bootstrap file", project = true, global = true,
     description = "A 'bootstrap' PHP file that is run before the tests.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
-  @Property(key = PHPUNIT_CONFIGURATION_KEY, defaultValue = "", name = "Configuration file", project = true, global = true,
+  @Property(key = PHPUNIT_CONFIGURATION_KEY, defaultValue = PHPUNIT_CONFIGURATION_DEFVALUE, name = "Configuration file", project = true, global = true,
     description = "Read configuration from XML file.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_IGNORE_CONFIGURATION_KEY, defaultValue = "false", name = "Ignore default configuration", project = true,
     global = true, description = "[DEPRECATED] Ignore default configuration file (phpunit.xml).", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,

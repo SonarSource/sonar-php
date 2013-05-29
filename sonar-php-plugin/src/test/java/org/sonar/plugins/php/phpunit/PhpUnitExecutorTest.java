@@ -73,9 +73,10 @@ public class PhpUnitExecutorTest {
 
     // Verify
     List<String> commandLine = executor.getCommandLineArguments();
-    assertThat(commandLine.size()).isEqualTo(1);
+    assertThat(commandLine.size()).isEqualTo(2);
 
     assertThat(commandLine.get(0)).isEqualTo("--log-junit=" + new File("target/MockProject/target/sonar/phpunit.xml").getAbsolutePath());
+    assertThat(commandLine.get(1)).isEqualTo("--configuration=phpunit.xml.dist");
   }
 
   @Test

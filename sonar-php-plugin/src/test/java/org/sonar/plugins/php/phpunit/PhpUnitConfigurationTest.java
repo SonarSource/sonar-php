@@ -63,7 +63,7 @@ public class PhpUnitConfigurationTest {
     assertThat(phpConfig.isAnalyseTestDirectory()).isFalse();
     assertThat(phpConfig.getFilter()).isNull();
     assertThat(phpConfig.getBootstrap()).isNull();
-    assertThat(phpConfig.getConfiguration()).isNull();
+    assertThat(phpConfig.getConfiguration()).isEqualTo("phpunit.xml.dist");
     assertThat(phpConfig.isIgnoreDefaultConfiguration()).isFalse();
     assertThat(phpConfig.getLoader()).isNull();
     assertThat(phpConfig.getGroup()).isNull();

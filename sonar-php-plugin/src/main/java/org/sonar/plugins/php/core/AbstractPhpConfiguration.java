@@ -266,7 +266,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * 
    * @return the settings
    */
-  protected Settings getSettings() {
+  public Settings getSettings() {
     return settings;
   }
 

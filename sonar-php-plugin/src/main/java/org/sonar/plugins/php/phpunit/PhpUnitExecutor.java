@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_BOOTSTRAP_OPTION;
+import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_CONFIGURATION_OPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_FILTER_OPTION;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_GROUP_OPTION;
@@ -94,13 +95,12 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
     List<String> result = new ArrayList<String>();
     addBasicOptions(result);
 
-    String configFile = configuration.getConfiguration();
-    if (configFile != null) {
+    if (configuration.getSettings().hasKey(PHPUNIT_CONFIGURATION_KEY)) {
       result.add(PHPUNIT_CONFIGURATION_OPTION + configuration.getConfiguration());
+      addExtendedOptions(result);
     }
-    addExtendedOptions(result);
-
-    if (configFile == null) {
+    else {
+      addExtendedOptions(result);
       LOG.warn("/!\\ Please use " + PhpUnitConfiguration.PHPUNIT_CONFIGURATION_KEY
         + " to configure PHPUnit with a phpunit.xml file. Other options are deprecated and will be removed soon.");
       boolean ignoreConfigFile = configuration.isIgnoreDefaultConfiguration();
@@ -111,7 +111,11 @@ public class PhpUnitExecutor extends AbstractPhpExecutor {
       if (configuration.getMainTestClass() != null) {
         result.add(configuration.getMainTestClassFilePath());
       } else if (configuration.isAnalyseTestDirectory() || ignoreConfigFile) {
+        // This one should be in last position
         result.add(getTestDirectoryOrFiles());
+      } else {
+        // Use default value of PHPUnit configuration file
+        result.add(PHPUNIT_CONFIGURATION_OPTION + configuration.getConfiguration());
       }
     }
 
