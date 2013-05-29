@@ -64,7 +64,9 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * Gets the report file name.
    * 
    * @return the report file name
+   * @deprecated since 1.2
    */
+  @Deprecated
   public String getReportFileName() {
     return settings.getString(getReportFileNameKey());
   }
@@ -109,8 +111,8 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
       String reportPath = getReportPath();
       if (StringUtils.isBlank(reportPath)) {
         // Test if deprecated properties are used
-        if (getSettings().hasKey(getReportFileNameKey())) {
-          LOG.warn("/!\\ " + getReportFileNameKey() + " is deprecated. Please update project settings and use " + getReportPathKey());
+        if (getSettings().hasKey(getReportFileNameKey()) || getSettings().hasKey(getReportFileRelativePathKey())) {
+          LOG.warn("/!\\ " + getReportFileNameKey() + " and " + getReportFileRelativePathKey() + " are deprecated. Please update project settings and use " + getReportPathKey());
           StringBuilder fileName = new StringBuilder(getReportFileRelativePath()).append(File.separator);
           fileName.append(getReportFileName());
           reportFile = new File(getFileSystem().getBuildDir(), fileName.toString());

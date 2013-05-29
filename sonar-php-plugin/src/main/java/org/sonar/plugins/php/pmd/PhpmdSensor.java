@@ -68,10 +68,13 @@ import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY
     name = "Report file path", project = true, global = true, description = "Path of the report file to analyse.",
     category = PhpmdSensor.CATEGORY_PHP_PHPMD),
   @Property(key = PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse.",
+    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse. "
+      + "This property is deprecated: location of PHPMD report should be defined using the \"" + PHPMD_REPORT_PATH_KEY + "\" property only.",
     category = PhpmdSensor.CATEGORY_PHP_PHPMD),
   @Property(key = PHPMD_REPORT_FILE_NAME_KEY, defaultValue = PHPMD_REPORT_FILE_NAME_DEFVALUE, name = "Report file name", project = true,
-    global = true, description = "[DEPRECATED] Name of the report file to analyse.", category = PhpmdSensor.CATEGORY_PHP_PHPMD),
+    global = true, description = "[DEPRECATED] Name of the report file to analyse. "
+      + "This property is deprecated: location of PHPMD report should be defined using the \"" + PHPMD_REPORT_PATH_KEY + "\" property only.",
+    category = PhpmdSensor.CATEGORY_PHP_PHPMD),
   @Property(key = PHPMD_LEVEL_ARGUMENT_KEY, defaultValue = PHPMD_LEVEL_ARGUMENT_DEFVALUE, name = "Mimimum priority", project = true,
     global = true, description = "The lowest level events won't be included in report file. "
       + "Values goes from 1(Strong) to 5(Weak) (only integers)", category = PhpmdSensor.CATEGORY_PHP_PHPMD),

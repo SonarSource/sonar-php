@@ -172,8 +172,9 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
       String coverageReportPath = getCoverageReportFilePath();
       if (StringUtils.isBlank(coverageReportPath)) {
         // Test if deprecated properties are used
-        if (getSettings().hasKey(PHPUNIT_COVERAGE_REPORT_FILE_KEY)) {
-          LOG.warn("/!\\ " + PHPUNIT_COVERAGE_REPORT_FILE_KEY + " is deprecated. Please update project settings and use " + PHPUNIT_COVERAGE_REPORT_PATH_KEY);
+        if (getSettings().hasKey(PHPUNIT_COVERAGE_REPORT_FILE_KEY) || getSettings().hasKey(PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY)) {
+          LOG.warn("/!\\ " + PHPUNIT_COVERAGE_REPORT_FILE_KEY + " and " + PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY + " are deprecated. Please update project settings and use "
+            + PHPUNIT_COVERAGE_REPORT_PATH_KEY);
           StringBuilder fileName = new StringBuilder(getReportFileRelativePath()).append(File.separator);
           fileName.append(getCoverageReportFileName());
           coverageReportFile = new File(getFileSystem().getBuildDir(), fileName.toString());

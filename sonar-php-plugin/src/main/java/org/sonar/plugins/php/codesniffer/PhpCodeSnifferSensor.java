@@ -72,10 +72,13 @@ import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOU
     name = "Report file path", project = true, global = true, description = "Path of the report file to analyse.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse.",
+    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse. "
+      + "This property is deprecated: location of PHP CodeSniffer report should be defined using the \"" + PHPCS_REPORT_PATH_KEY + "\" property only.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_REPORT_FILE_NAME_KEY, defaultValue = PHPCS_REPORT_FILE_NAME_DEFVALUE, name = "Report file name", project = true,
-    global = true, description = "[DEPRECATED] Name of the report file to analyse.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+    global = true, description = "[DEPRECATED] Name of the report file to analyse. "
+      + "This property is deprecated: location of PHP CodeSniffer report should be defined using the \"" + PHPCS_REPORT_PATH_KEY + "\" property only.",
+    category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = "",
     name = "Ruleset (or standard) to run PHP_CodeSniffer with", project = true, global = true,
     description = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. "
@@ -149,7 +152,7 @@ public class PhpCodeSnifferSensor implements Sensor {
       }
     }
     for (String key : unfoundViolations) {
-      LOG.info("No violation found in repository " + PHPCS_REPOSITORY_KEY + " for violation " + key);
+      LOG.info("No rule found in repository " + PHPCS_REPOSITORY_KEY + " for key " + key);
     }
     context.saveViolations(contextViolations);
   }

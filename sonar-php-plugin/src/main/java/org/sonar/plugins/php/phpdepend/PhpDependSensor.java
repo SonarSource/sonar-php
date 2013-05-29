@@ -68,10 +68,13 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
     name = "Report file path", project = true, global = true, description = "Path of the report file to analyse.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse.",
+    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse. "
+      + "This property is deprecated: location of PHP Depend report should be defined using the \"" + PDEPEND_REPORT_PATH_KEY + "\" property only.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_REPORT_FILE_NAME_KEY, defaultValue = PDEPEND_REPORT_FILE_NAME_DEFVALUE, name = "Report file name",
-    project = true, global = true, description = "[DEPRECATED] Name of the report file to analyse.", category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
+    project = true, global = true, description = "[DEPRECATED] Name of the report file to analyse. "
+      + "This property is deprecated: location of PHP Depend report should be defined using the \"" + PDEPEND_REPORT_PATH_KEY + "\" property only.",
+    category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_WITHOUT_ANNOTATION_KEY, defaultValue = PDEPEND_WITHOUT_ANNOTATION_DEFVALUE, name = "Without annotation",
     project = true, global = true, description = "If set to true, tells PHP Depend to not parse doc comment annotations.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
