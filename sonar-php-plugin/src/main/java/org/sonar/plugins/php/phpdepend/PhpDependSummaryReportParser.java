@@ -101,13 +101,11 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
             getContext().saveMeasure(
                 sonarFile,
                 CoreMetrics.DEPTH_IN_TREE,
-                classNode.getDepthInTreeNumber()
-                );
+                classNode.getDepthInTreeNumber());
             getContext().saveMeasure(
                 sonarFile,
                 CoreMetrics.NUMBER_OF_CHILDREN,
-                classNode.getNumberOfChildrenClasses()
-                );
+                classNode.getNumberOfChildrenClasses());
 
             double totalClassComplexity = classNode.getWeightedMethodCount();
             getContext().saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, totalClassComplexity);
@@ -125,12 +123,10 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
       Measure measure = classComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY);
       getContext().saveMeasure(
           sonarFile,
-          measure
-          );
+          measure);
       getContext().saveMeasure(
           sonarFile,
-          methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY)
-          );
+          methodComplexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
     }
   }
 
