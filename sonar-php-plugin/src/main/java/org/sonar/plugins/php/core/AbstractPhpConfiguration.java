@@ -122,7 +122,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
       else {
         reportFile = getFileSystem().resolvePath(reportPath);
       }
-      LOG.info("Report file for: " + getCommandLine() + " : " + reportFile);
+      LOG.debug("Report file for: " + getCommandLine() + " : " + reportFile);
     }
     return reportFile;
   }

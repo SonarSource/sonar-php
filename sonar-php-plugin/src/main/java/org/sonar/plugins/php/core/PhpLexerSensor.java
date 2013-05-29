@@ -129,4 +129,12 @@ public class PhpLexerSensor implements Sensor {
   public boolean shouldExecuteOnProject(Project project) {
     return PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey());
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return "PHP Lexer Sensor";
+  }
 }

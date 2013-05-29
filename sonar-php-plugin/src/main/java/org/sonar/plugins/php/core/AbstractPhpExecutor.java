@@ -100,7 +100,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
     List<String> commandLine = new LinkedList<String>();
     commandLine.add(configuration.getOsDependentToolScriptName());
     commandLine.addAll(getCommandLineArguments());
-    LOG.info("Executing " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
+    LOG.debug("Executing " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
 
     doExecute(commandLine);
   }
@@ -119,7 +119,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
       commandLine.add(PHP_COMMAND_LINE);
       commandLine.add(tempPhar.getAbsolutePath());
       commandLine.addAll(getCommandLineArguments());
-      LOG.info("Executing embedded " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
+      LOG.debug("Executing embedded " + getExecutedTool() + " with command '{}'", prettyPrint(commandLine));
 
       doExecute(commandLine);
     } catch (Exception e) {
@@ -148,7 +148,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
       throw new SonarException(getExecutedTool() + " execution failed with returned code '" + exitCode
         + "'. Please check the documentation of " + getExecutedTool() + " to know more about this failure.");
     } else {
-      LOG.info(getExecutedTool() + " succeeded with returned code '{}'.", exitCode);
+      LOG.debug(getExecutedTool() + " succeeded with returned code '{}'.", exitCode);
     }
   }
 
