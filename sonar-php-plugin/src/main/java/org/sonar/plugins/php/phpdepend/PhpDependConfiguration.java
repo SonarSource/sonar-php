@@ -40,7 +40,11 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
 
   // --- Sonar config parameters ---
   public static final String PDEPEND_SKIP_KEY = "sonar.phpDepend.skip";
-  public static final String PDEPEND_SHOULD_RUN_PROPERTY_KEY = "sonar.phpDepend.shouldRun"; // OLD param that will be removed soon
+  /**
+   * @deprecated since 1.1
+   */
+  @Deprecated
+  public static final String PDEPEND_SHOULD_RUN_PROPERTY_KEY = "sonar.phpDepend.shouldRun";
   public static final String PDEPEND_ANALYZE_ONLY_KEY = "sonar.phpDepend.analyzeOnly";
 
   /**
@@ -50,10 +54,12 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpDepend.reportFileRelativePath";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
   public static final String PDEPEND_REPORT_TYPE = "sonar.phpDepend.reportType";
   public static final String PDEPEND_REPORT_TYPE_DEFVALUE = "summary-xml";
@@ -62,10 +68,12 @@ public class PhpDependConfiguration extends AbstractPhpConfiguration {
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PDEPEND_REPORT_FILE_NAME_KEY = "sonar.phpDepend.reportFileName";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PDEPEND_REPORT_FILE_NAME_DEFVALUE = "pdepend.xml";
 
   public static final String PDEPEND_WITHOUT_ANNOTATION_KEY = "sonar.phpDepend.withoutAnnotations";

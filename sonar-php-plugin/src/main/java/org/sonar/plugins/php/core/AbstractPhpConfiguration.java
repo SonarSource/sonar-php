@@ -311,7 +311,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * Gets the report file name key.
    * 
    * @return the report file name key
-   * @deprecated
+   * @deprecated since 1.2
    */
   @Deprecated
   protected abstract String getReportFileNameKey();
@@ -320,7 +320,7 @@ public abstract class AbstractPhpConfiguration implements BatchExtension {
    * Gets the report file relative path key.
    * 
    * @return the report file relative path key
-   * @deprecated
+   * @deprecated since 1.2
    */
   @Deprecated
   protected abstract String getReportFileRelativePathKey();

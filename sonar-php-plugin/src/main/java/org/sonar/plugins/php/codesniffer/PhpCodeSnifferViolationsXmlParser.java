@@ -62,14 +62,17 @@ public class PhpCodeSnifferViolationsXmlParser implements BatchExtension {
     String reportPath = reportFile.getAbsolutePath();
     LOG.debug("Getting violations form report file");
     List<PhpCodeSnifferViolation> violations = new ArrayList<PhpCodeSnifferViolation>();
-    try {// <checkstyle>
-      SMInputFactory inputFactory = new SMInputFactory(XMLInputFactory.newInstance());// <checkstyle>
-      SMInputCursor rootNodeCursor = inputFactory.rootElementCursor(reportFile).advance(); // <file>
+    try {
+      // <checkstyle>
+      SMInputFactory inputFactory = new SMInputFactory(XMLInputFactory.newInstance());
+      // <file>
+      SMInputCursor rootNodeCursor = inputFactory.rootElementCursor(reportFile).advance();
 
       SMInputCursor fileNodeCursor = rootNodeCursor.childElementCursor(FILE_NODE_NAME).advance();
       while (fileNodeCursor.asEvent() != null) {
         String fileName = fileNodeCursor.getAttrValue(FILE_NAME_ATTRIBUTE_NAME);
-        SMInputCursor violationNodeCursor = fileNodeCursor.childElementCursor().advance(); // <error>
+        // <error>
+        SMInputCursor violationNodeCursor = fileNodeCursor.childElementCursor().advance();
         while (violationNodeCursor.asEvent() != null) {
           violations.add(getViolation(fileName, violationNodeCursor));
           violationNodeCursor.advance();

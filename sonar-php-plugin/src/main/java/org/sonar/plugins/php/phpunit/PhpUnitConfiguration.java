@@ -49,9 +49,17 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
 
   // --- Sonar config parameters ---
   public static final String PHPUNIT_SKIP_KEY = "sonar.phpUnit.skip";
-  public static final String PHPUNIT_SHOULD_RUN_KEY = "sonar.phpUnit.shouldRun"; // OLD param that will be removed soon
+  /**
+   * @deprecated since 1.1
+   */
+  @Deprecated
+  public static final String PHPUNIT_SHOULD_RUN_KEY = "sonar.phpUnit.shouldRun";
   public static final String PHPUNIT_COVERAGE_SKIP_KEY = "sonar.phpUnit.coverage.skip";
-  public static final String PHPUNIT_SHOULD_RUN_COVERAGE_KEY = "sonar.phpUnit.coverage.shouldRun"; // OLD param that will be removed soon
+  /**
+   * @deprecated since 1.1
+   */
+  @Deprecated
+  public static final String PHPUNIT_SHOULD_RUN_COVERAGE_KEY = "sonar.phpUnit.coverage.shouldRun";
   public static final String PHPUNIT_ANALYZE_ONLY_KEY = "sonar.phpUnit.analyzeOnly";
 
   /**
@@ -65,38 +73,47 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpUnit.reportFileRelativePath";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_REPORT_FILE_NAME_KEY = "sonar.phpUnit.reportFileName";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_REPORT_FILE_NAME_DEFVALUE = "phpunit.xml";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_COVERAGE_REPORT_FILE_KEY = "sonar.phpUnit.coverageReportFile";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE = "phpunit.coverage.xml";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_MAIN_TEST_FILE_KEY = "sonar.phpUnit.mainTestClass";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY = "sonar.phpUnit.analyze.test.directory";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE = "false";
   public static final String PHPUNIT_FILTER_KEY = "sonar.phpUnit.filter";
   public static final String PHPUNIT_BOOTSTRAP_KEY = "sonar.phpUnit.bootstrap";
@@ -105,6 +122,7 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPUNIT_IGNORE_CONFIGURATION_KEY = "sonar.phpUnit.ignore.configuration";
   public static final String PHPUNIT_LOADER_KEY = "sonar.phpUnit.loader";
   public static final String PHPUNIT_GROUP_KEY = "sonar.phpUnit.group";

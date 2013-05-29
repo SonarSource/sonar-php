@@ -93,7 +93,8 @@ public class PhpLexerSensor implements Sensor {
   }
 
   @VisibleForTesting
-  void computePerLineMetrics(File file, Charset sourceCharset, int fileLength, FileLinesContext fileLinesContext, final Set<Integer> linesOfCode, final Set<Integer> linesOfComments) {
+  void computePerLineMetrics(File file, Charset sourceCharset, int fileLength, FileLinesContext fileLinesContext,
+      final Set<Integer> linesOfCode, final Set<Integer> linesOfComments) {
     PhpParserConfiguration config = PhpParserConfiguration.builder().setCharset(sourceCharset).build();
     Lexer lexer = PhpLexer.create(config);
 

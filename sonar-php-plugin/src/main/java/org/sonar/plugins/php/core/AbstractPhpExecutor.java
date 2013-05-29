@@ -160,8 +160,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
 
   @VisibleForTesting
   public int doExecute(Command command) {
-    int exitCode = CommandExecutor.create().execute(command, configuration.getTimeout() * MINUTES_TO_MILLISECONDS);
-    return exitCode;
+    return CommandExecutor.create().execute(command, configuration.getTimeout() * MINUTES_TO_MILLISECONDS);
   }
 
   /**

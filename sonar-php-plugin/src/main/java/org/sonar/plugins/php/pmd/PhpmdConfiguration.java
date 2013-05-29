@@ -39,7 +39,11 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
 
   // --- Sonar config parameters ---
   public static final String PHPMD_SKIP_KEY = "sonar.phpPmd.skip";
-  public static final String PHPMD_SHOULD_RUN_KEY = "sonar.phpPmd.shouldRun"; // OLD param that will be removed soon
+  /**
+   * @deprecated since 1.1
+   */
+  @Deprecated
+  public static final String PHPMD_SHOULD_RUN_KEY = "sonar.phpPmd.shouldRun";
   public static final String PHPMD_ANALYZE_ONLY_KEY = "sonar.phpPmd.analyzeOnly";
   /**
    * @since 1.2
@@ -48,18 +52,22 @@ public class PhpmdConfiguration extends AbstractPhpConfiguration {
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPMD_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpPmd.reportFileRelativePath";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPMD_REPORT_FILE_NAME_KEY = "sonar.phpPmd.reportFileName";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPMD_REPORT_FILE_NAME_DEFVALUE = "pmd.xml";
   public static final String PHPMD_LEVEL_ARGUMENT_KEY = "sonar.phpPmd.minimumPriority";
   public static final String PHPMD_LEVEL_ARGUMENT_DEFVALUE = "2";

@@ -58,13 +58,19 @@ public final class PhpTokenProducer {
         // Identifiers, Keywords, Boolean Literals, The Null Literal
         .token(LABEL)
         // Floating-Point Literals
-        .token("[+-]?[0-9]++\\.([0-9]++)?+" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL) // Decimal
-        .token("[+-]?\\.[0-9]++" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL) // Decimal
-        .token("[+-]?[0-9]++" + EXP, NORMALIZED_NUMERIC_LITERAL) // Decimal
+        // - Decimal
+        .token("[+-]?[0-9]++\\.([0-9]++)?+" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL)
+        // - Decimal
+        .token("[+-]?\\.[0-9]++" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL)
+        // - Decimal
+        .token("[+-]?[0-9]++" + EXP, NORMALIZED_NUMERIC_LITERAL)
         // Integer Literals
-        .token("[+-]?0[xX][0-9a-fA-F]++", NORMALIZED_NUMERIC_LITERAL) // Hexadecimal
-        .token("[+-]?0[b][01]++", NORMALIZED_NUMERIC_LITERAL) // Binary
-        .token("[+-]?[0-9]++", NORMALIZED_NUMERIC_LITERAL) // Decimal and Octal
+        // - Hexadecimal
+        .token("[+-]?0[xX][0-9a-fA-F]++", NORMALIZED_NUMERIC_LITERAL)
+        // - Binary
+        .token("[+-]?0[b][01]++", NORMALIZED_NUMERIC_LITERAL)
+        // - Decimal and Octal
+        .token("[+-]?[0-9]++", NORMALIZED_NUMERIC_LITERAL)
         // Any other character
         .token(".")
         .build();

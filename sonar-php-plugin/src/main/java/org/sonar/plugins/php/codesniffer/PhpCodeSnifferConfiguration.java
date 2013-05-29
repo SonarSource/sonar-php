@@ -50,7 +50,11 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
 
   // --- Sonar config parameters ---
   public static final String PHPCS_SKIP_KEY = "sonar.phpCodesniffer.skip";
-  public static final String PHPCS_SHOULD_RUN_KEY = "sonar.phpCodesniffer.shouldRun"; // OLD param that will be removed soon
+  /**
+   * @deprecated since 1.1
+   */
+  @Deprecated
+  public static final String PHPCS_SHOULD_RUN_KEY = "sonar.phpCodesniffer.shouldRun";
   public static final String PHPCS_ANALYZE_ONLY_KEY = "sonar.phpCodesniffer.analyzeOnly";
   /**
    * @since 1.2
@@ -59,18 +63,22 @@ public class PhpCodeSnifferConfiguration extends AbstractPhpConfiguration {
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPCS_REPORT_FILE_RELATIVE_PATH_KEY = "sonar.phpCodesniffer.reportFileRelativePath";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE = "/logs";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPCS_REPORT_FILE_NAME_KEY = "sonar.phpCodesniffer.reportFileName";
   /**
    * @deprecated since 1.2
    */
+  @Deprecated
   public static final String PHPCS_REPORT_FILE_NAME_DEFVALUE = "codesniffer.xml";
   public static final String PHPCS_STANDARD_ARGUMENT_KEY = "sonar.phpCodesniffer.standardArgument";
   public static final String PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY = "sonar.phpCodesniffer.severity.modifier";

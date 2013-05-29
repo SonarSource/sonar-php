@@ -80,12 +80,10 @@ public class PhpDependSummaryReportParser extends PhpDependResultsParser {
 
       RangeDistributionBuilder classComplexityDistribution = new RangeDistributionBuilder(
           CoreMetrics.CLASS_COMPLEXITY_DISTRIBUTION,
-          CLASSES_DISTRIB_BOTTOM_LIMITS
-          );
+          CLASSES_DISTRIB_BOTTOM_LIMITS);
       RangeDistributionBuilder methodComplexityDistribution = new RangeDistributionBuilder(
           CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION,
-          FUNCTIONS_DISTRIB_BOTTOM_LIMITS
-          );
+          FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
 
       getContext().saveMeasure(sonarFile, CoreMetrics.CLASSES, (double) fileNode.getClassNumber());
       getContext().saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, (double) fileNode.getFunctionNumber() + fileNode.getMethodNumber());
