@@ -102,6 +102,9 @@ public class PhpUnitConfiguration extends AbstractPhpConfiguration {
   public static final String PHPUNIT_BOOTSTRAP_KEY = "sonar.phpUnit.bootstrap";
   public static final String PHPUNIT_CONFIGURATION_KEY = "sonar.phpUnit.configuration";
   public static final String PHPUNIT_CONFIGURATION_DEFVALUE = "phpunit.xml.dist";
+  /**
+   * @deprecated since 1.2
+   */
   public static final String PHPUNIT_IGNORE_CONFIGURATION_KEY = "sonar.phpUnit.ignore.configuration";
   public static final String PHPUNIT_LOADER_KEY = "sonar.phpUnit.loader";
   public static final String PHPUNIT_GROUP_KEY = "sonar.phpUnit.group";

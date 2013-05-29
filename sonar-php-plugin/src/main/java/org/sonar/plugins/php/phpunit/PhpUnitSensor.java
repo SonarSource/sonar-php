@@ -89,10 +89,12 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT
   @Property(key = PHPUNIT_MAIN_TEST_FILE_KEY, defaultValue = "",
     name = "File containing the main method calling all the tests", project = true, global = true,
     description = "[DEPRECATED] The project main test file including the relative path, e.g. : \"/source/tests/AllTests.php\". "
-      + "If not present, phpunit will look for phpunit.xml file in test directory.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
+      + "If not present, phpunit will look for phpunit.xml file in test directory. "
+      + "This property is deprecated: tests should be run using the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property only.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY, defaultValue = PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE,
     name = "Should analyse the whole test directory", project = true, global = true,
-    description = "[DEPRECATED] If set to false, only tests listed in the main test file will be run.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
+    description = "[DEPRECATED] If set to false, only tests listed in the main test file will be run. "
+      + "This property is deprecated: tests should be run using the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property only.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPUNIT_FILTER_KEY, defaultValue = "", name = "Test filter", project = true, global = true,
     description = "Filter which tests to run.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
@@ -100,8 +102,15 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT
     description = "A 'bootstrap' PHP file that is run before the tests.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_CONFIGURATION_KEY, defaultValue = PHPUNIT_CONFIGURATION_DEFVALUE, name = "Configuration file", project = true, global = true,
     description = "Read configuration from XML file.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
-  @Property(key = PHPUNIT_IGNORE_CONFIGURATION_KEY, defaultValue = "false", name = "Ignore default configuration", project = true,
-    global = true, description = "[DEPRECATED] Ignore default configuration file (phpunit.xml).", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
+  @Property(
+    key = PHPUNIT_IGNORE_CONFIGURATION_KEY,
+    defaultValue = "false",
+    name = "Ignore default configuration",
+    project = true,
+    global = true,
+    description = "[DEPRECATED] Ignore default configuration file (phpunit.xml). "
+      + "This property is deprecated: tests should be run using the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property only.",
+    category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPUNIT_LOADER_KEY, defaultValue = "", name = "PHPUnit loader", project = true, global = true,
     description = "Specifies which TestSuiteLoader implementation to use.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
