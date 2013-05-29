@@ -22,20 +22,29 @@ package org.sonar.plugins.php.phpunit;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.utils.command.Command;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY;
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_ARGUMENT_LINE_KEY;
@@ -59,6 +68,9 @@ public class PhpUnitExecutorTest {
     project = MockUtils.createMockProject();
     PhpUnitConfiguration configuration = new PhpUnitConfiguration(settings, project.getFileSystem());
     executor = new PhpUnitExecutor(new Php(), configuration, project);
+    executor = spy(executor);
+    // Disable real Phar extraction
+    doNothing().when(executor).extractPhar(any(URL.class), any(File.class));
   }
 
   @Test
@@ -67,14 +79,44 @@ public class PhpUnitExecutorTest {
   }
 
   @Test
-  public void testSimplestCommandLine() {
+  public void testSimplestCommandLineWithEmbedded() {
     // Given
     settings.setProperty(PHPUNIT_COVERAGE_SKIP_KEY, "true");
 
+    // First execution is for testing external tool presence
+    doReturn(1).doReturn(0).when(executor).doExecute(any(Command.class));
+
+    executor.execute();
+
     // Verify
-    List<String> commandLine = executor.getCommandLineArguments();
+    ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(Command.class);
+    verify(executor, times(2)).doExecute(argument.capture());
+    List<String> commandLine = argument.getValue().getArguments();
+    assertThat(commandLine.size()).isEqualTo(3);
+
+    assertThat(executor.isEmbeddedMode()).isTrue();
+    assertThat(commandLine.get(0)).endsWith(".phar");
+    assertThat(commandLine.get(1)).isEqualTo("--log-junit=" + new File("target/MockProject/target/sonar/phpunit.xml").getAbsolutePath());
+    assertThat(commandLine.get(2)).isEqualTo("--configuration=phpunit.xml.dist");
+  }
+
+  @Test
+  public void testSimplestCommandLineWithExternalTool() {
+    // Given
+    settings.setProperty(PHPUNIT_COVERAGE_SKIP_KEY, "true");
+
+    // First execution is for testing external tool presence
+    doReturn(0).doReturn(0).when(executor).doExecute(any(Command.class));
+
+    executor.execute();
+
+    // Verify
+    ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(Command.class);
+    verify(executor, times(2)).doExecute(argument.capture());
+    List<String> commandLine = argument.getValue().getArguments();
     assertThat(commandLine.size()).isEqualTo(2);
 
+    assertThat(executor.isEmbeddedMode()).isFalse();
     assertThat(commandLine.get(0)).isEqualTo("--log-junit=" + new File("target/MockProject/target/sonar/phpunit.xml").getAbsolutePath());
     assertThat(commandLine.get(1)).isEqualTo("--configuration=phpunit.xml.dist");
   }

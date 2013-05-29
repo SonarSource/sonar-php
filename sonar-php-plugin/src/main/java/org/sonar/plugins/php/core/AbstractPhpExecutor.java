@@ -112,7 +112,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
       File workDir = configuration.getFileSystem().getSonarWorkingDirectory();
       File tempPhar = new File(workDir, getPHARName());
       if (!tempPhar.exists()) {
-        FileUtils.copyURLToFile(pharURL, tempPhar);
+        extractPhar(pharURL, tempPhar);
       }
 
       List<String> commandLine = new LinkedList<String>();
@@ -125,6 +125,11 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
     } catch (Exception e) {
       throw new SonarException("Error during execution of embedded " + getExecutedTool(), e);
     }
+  }
+
+  @VisibleForTesting
+  public void extractPhar(URL pharURL, File dest) throws IOException {
+    FileUtils.copyURLToFile(pharURL, dest);
   }
 
   @VisibleForTesting
@@ -143,13 +148,19 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
     while (commandLineIterator.hasNext()) {
       command.addArgument(commandLineIterator.next());
     }
-    int exitCode = CommandExecutor.create().execute(command, configuration.getTimeout() * MINUTES_TO_MILLISECONDS);
+    int exitCode = doExecute(command);
     if (!acceptedExitCodes.contains(exitCode)) {
       throw new SonarException(getExecutedTool() + " execution failed with returned code '" + exitCode
         + "'. Please check the documentation of " + getExecutedTool() + " to know more about this failure.");
     } else {
       LOG.debug(getExecutedTool() + " succeeded with returned code '{}'.", exitCode);
     }
+  }
+
+  @VisibleForTesting
+  public int doExecute(Command command) {
+    int exitCode = CommandExecutor.create().execute(command, configuration.getTimeout() * MINUTES_TO_MILLISECONDS);
+    return exitCode;
   }
 
   /**
@@ -166,7 +177,7 @@ public abstract class AbstractPhpExecutor implements BatchExtension {
       command.addArgument(commandLineIterator.next());
     }
     try {
-      int exitCode = CommandExecutor.create().execute(command, configuration.getTimeout() * MINUTES_TO_MILLISECONDS);
+      int exitCode = doExecute(command);
       LOG.debug(getExecutedTool() + " test succeeded with returned code '{}'.", exitCode);
       return exitCode == 0;
     } catch (Exception e) {
