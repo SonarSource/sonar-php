@@ -116,7 +116,7 @@ public class PhpLexerTest {
   }
 
   @Test
-  public void lexRealFile() {
+  public void reallife() {
     List<Token> tokens = lexer.lex(this.getClass().getResource("/Math2.php"));
     assertThat(tokens.size()).isEqualTo(1206);
   }
