@@ -43,7 +43,7 @@ public final class PhpLexer {
         .withCharset(conf.getCharset())
 
         .withChannel(new BlackHoleChannel("\\s++"))
-        .withChannel(commentRegexp("(?s)(?:#|//)(?:[^?\\r\\n]|\\?(?![\\>r\\n]))*+|/\\*(?:(?!\\*/).)*+\\*/"))
+        .withChannel(commentRegexp("(?s)(?:#|//)(?:[^?\\r\\n]|\\?(?![>]))*+|/\\*(?:(?!\\*/).)*+\\*/"))
         .withChannel(regexp(STRING, "(?s)'(?:[^'\\\\]|\\\\'|\\\\\\\\|\\\\[^'\\\\])*+'|\"(?:[^\"\\\\]|\\\\\"|\\\\\\\\|\\\\[^\"\\\\])*+\""))
         .withChannel(
             regexp(STRING, "(?s)<<<['\"]?+((?:[_]|\\p{L}\\p{M}*+)(?:[_0-9]|\\p{L}\\p{M}*+)*+)['\"]?+(?=[\r\n])(?:(?![\r\n]\\1;?(?:[\r\n]|(?!.))).)*+[\r\n]\\1"))

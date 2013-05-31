@@ -46,6 +46,7 @@ public class PhpLexerTest {
     assertThat(lexer.lex("#foo\r"), hasComment("#foo"));
     assertThat(lexer.lex("#foo\n"), hasComment("#foo"));
     assertThat(lexer.lex("#bonjour\nIDENTIFIER"), hasComment("#bonjour"));
+    assertThat(lexer.lex("#foo?\n"), hasComment("#foo?"));
   }
 
   @Test
@@ -55,6 +56,7 @@ public class PhpLexerTest {
     assertThat(lexer.lex("//foo\r"), hasComment("//foo"));
     assertThat(lexer.lex("//foo\n"), hasComment("//foo"));
     assertThat(lexer.lex("//bonjour\nIDENTIFIER"), hasComment("//bonjour"));
+    assertThat(lexer.lex("//foo?\n"), hasComment("//foo?"));
   }
 
   @Test
