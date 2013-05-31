@@ -98,7 +98,7 @@ public class PhpLexerTest {
   }
 
   @Test
-  public void heredoc_string() {
+  public void heredoc_and_newdoc_string() {
     assertThat(lexer.lex("<<<F\nF"), hasToken("<<<F\nF", PhpLexerType.STRING));
     assertThat(lexer.lex("<<<FOO\nFOO"), hasToken("<<<FOO\nFOO", PhpLexerType.STRING));
     assertThat(lexer.lex("<<<'FOO'\nFOO"), hasToken("<<<'FOO'\nFOO", PhpLexerType.STRING));
