@@ -69,7 +69,7 @@ import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOU
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPCS_REPORT_PATH_KEY,
-    name = "Report file path", project = true, global = true, description = "Relative path to the report to analyze. Exemple: path/to/phpcs.xml.",
+    name = "Report file path", project = true, global = true, description = "Relative path to the report to analyze. Example: path/to/phpcs.xml.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
     name = "Report file path (Deprecated)", project = true, global = true, description = "Replaced by the \"" + PHPCS_REPORT_PATH_KEY + "\" property.",
@@ -78,9 +78,9 @@ import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOU
     global = true, description = "Replaced by the \"" + PHPCS_REPORT_PATH_KEY + "\" property.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = "",
-    name = "Ruleset (or standard) to run PHP_CodeSniffer with", project = true, global = true,
-    description = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. "
-      + "If no one is specified all standards will be launched", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+    name = "Ruleset (or standard) to run PHP CodeSniffer with", project = true, global = true,
+    description = "The ruleset file (or the standard name) used to run PHP CodeSniffer against. "
+      + "If none is specified all standards will be launched", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY, defaultValue = "", name = "Severity modifier", project = true, global = true,
     description = "Allows to specify a severity modifier, like \"--error-severity=\" or \"--warning-severity=\", "
       + "used in conjunction with property \"" + PHPCS_SEVERITY_KEY + "\".", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),

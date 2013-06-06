@@ -65,7 +65,7 @@ import static org.sonar.plugins.php.pmd.PhpmdRuleRepository.PHPMD_REPOSITORY_KEY
       + PHPMD_REPORT_PATH_KEY + "\" property will be used.", category = PhpmdSensor.CATEGORY_PHP_PHPMD,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPMD_REPORT_PATH_KEY,
-    name = "Report file path", project = true, global = true, description = "Relative path to the report to analyse. Exemple: path/to/phpmd.xml.",
+    name = "Report file path", project = true, global = true, description = "Relative path to the report to analyse. Example: path/to/phpmd.xml.",
     category = PhpmdSensor.CATEGORY_PHP_PHPMD),
   @Property(key = PHPMD_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPMD_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
     name = "Report file path (Deprecated)", project = true, global = true, description = "Replaced by the \"" + PHPMD_REPORT_PATH_KEY + "\" property.",

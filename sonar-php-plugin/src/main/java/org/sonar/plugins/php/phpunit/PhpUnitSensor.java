@@ -71,7 +71,7 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPUNIT_REPORT_PATH_KEY,
-    name = "Report file path", project = true, global = true, description = "Relative path to the report file to analyze. Exemple: path/to/phpunit.xml.",
+    name = "Report file path", project = true, global = true, description = "Relative path to the report file to analyze. Example: path/to/phpunit.xml.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
     name = "Report relative file path (Deprecated)", project = true, global = true, description = "Replaced by the \"" + PHPUNIT_REPORT_PATH_KEY + "\" and \""

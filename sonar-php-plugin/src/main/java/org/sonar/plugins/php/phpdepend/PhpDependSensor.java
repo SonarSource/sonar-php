@@ -66,7 +66,7 @@ import static org.sonar.plugins.php.phpdepend.PhpDependConfiguration.PDEPEND_WIT
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND,
     type = PropertyType.BOOLEAN),
   @Property(key = PDEPEND_REPORT_PATH_KEY,
-    name = "Report file path", project = true, global = true, description = "Relative path to the report to analyze. Exemple: path/to/pdepend.xml.",
+    name = "Report file path", project = true, global = true, description = "Relative path to the report to analyze. Example: path/to/pdepend.xml.",
     category = PhpDependSensor.CATEGORY_PHP_PHP_DEPEND),
   @Property(key = PDEPEND_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PDEPEND_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
     name = "Report file path (Deprecated)", project = true, global = true, description = "Replaced by the \"" + PDEPEND_REPORT_PATH_KEY + "\" property.",
