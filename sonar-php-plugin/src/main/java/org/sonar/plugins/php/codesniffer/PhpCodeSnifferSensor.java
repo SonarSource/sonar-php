@@ -59,40 +59,38 @@ import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOU
  */
 @Properties({
   @Property(key = PHPCS_SKIP_KEY, defaultValue = "false", name = "Disable PHP CodeSniffer", project = true, global = true,
-    description = "If true, PhpCodeSniffer engine will not run and its violations will not be present in Sonar dashboard.",
+    description = "If set to true, PHP CodeSniffer will not run.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPCS_ANALYZE_ONLY_KEY, defaultValue = "false", name = "Only analyze existing PHP CodeSniffer report files",
     project = true, global = true,
-    description = "By default, the plugin will launch PHP CodeSniffer and parse the generated result file."
-      + "If this option is set to true, the plugin will only reuse an existing report file.",
+    description = "If set to false, PHP CodeSniffer will be executed. If set to true, PHP CodeSniffer will not be executed and the report provided through the \""
+      + PHPCS_REPORT_PATH_KEY + "\" property will be used.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPCS_REPORT_PATH_KEY,
-    name = "Report file path", project = true, global = true, description = "Path of the report file to analyse.",
+    name = "Report file path", project = true, global = true, description = "Relative path to the report to analyze. Exemple: path/to/phpcs.xml.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPCS_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-    name = "Report file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse. "
-      + "This property is deprecated: location of PHP CodeSniffer report should be defined using the \"" + PHPCS_REPORT_PATH_KEY + "\" property only.",
+    name = "Report file path (Deprecated)", project = true, global = true, description = "Replaced by the \"" + PHPCS_REPORT_PATH_KEY + "\" property.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
-  @Property(key = PHPCS_REPORT_FILE_NAME_KEY, defaultValue = PHPCS_REPORT_FILE_NAME_DEFVALUE, name = "Report file name", project = true,
-    global = true, description = "[DEPRECATED] Name of the report file to analyse. "
-      + "This property is deprecated: location of PHP CodeSniffer report should be defined using the \"" + PHPCS_REPORT_PATH_KEY + "\" property only.",
+  @Property(key = PHPCS_REPORT_FILE_NAME_KEY, defaultValue = PHPCS_REPORT_FILE_NAME_DEFVALUE, name = "Report file name (Deprecated)", project = true,
+    global = true, description = "Replaced by the \"" + PHPCS_REPORT_PATH_KEY + "\" property.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PhpCodeSnifferConfiguration.PHPCS_STANDARD_ARGUMENT_KEY, defaultValue = "",
     name = "Ruleset (or standard) to run PHP_CodeSniffer with", project = true, global = true,
     description = "The ruleset file (or the standard name) used to run PHP_CodeSniffer against. "
       + "If no one is specified all standards will be launched", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_SEVERITY_OR_LEVEL_MODIFIER_KEY, defaultValue = "", name = "Severity modifier", project = true, global = true,
-    description = "Allows to specify a seveity modifier, like '--error-severity=' or '--warning-severity=', "
-      + "used in conjunction with property '" + PHPCS_SEVERITY_KEY + "'.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+    description = "Allows to specify a severity modifier, like \"--error-severity=\" or \"--warning-severity=\", "
+      + "used in conjunction with property \"" + PHPCS_SEVERITY_KEY + "\".", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_SEVERITY_KEY, defaultValue = "", name = "Severity level value", project = true, global = true,
-    description = "Specifies what the minimum severity level must be to report a violation in the report.",
+    description = "Only issues whose severity is greater or equal to this property will be logged.",
     category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-    description = "Additionnal parameters that can be passed to PHP CodeSniffer tool.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+    description = "Additionnal parameters that can be passed to PHP CodeSniffer.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
-    description = "Maximum number of minutes that the execution of the tool should take.", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
+    description = "Execution of PHP CodeSniffer will be stopped after this amount of time (in minutes).", category = PhpCodeSnifferSensor.CATEGORY_PHP_CODE_SNIFFER),
   @Property(key = PHPCS_CUSTOM_RULES_PROP_KEY,
     defaultValue = "", name = "PHP CodeSniffer custom rules",
     description = "XML description of PHP CodeSniffer custom rules", type = PropertyType.TEXT,

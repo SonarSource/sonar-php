@@ -55,66 +55,58 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_SKIP_KE
 import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT_KEY;
 
 /**
- * The Class PhpUnitSensor is used by the plugin to collect metrics concerning punit framework. This class doesn't launch the tests, it only
- * reads the results contains in the files found under the report directory set as a plugin property and which names begin with "punit" and
- * end with ".xml".
+ * The Class PhpUnitSensor is used by the plugin to collect metrics concerning PHPUnit framework.
  */
 @Properties({
   @Property(key = PHPUNIT_SKIP_KEY, defaultValue = "false", name = "Disable PHPUnit", project = true, global = true,
-    description = "If true, PHPUnit tests will not run and unit tests counts will not be present in Sonar dashboard.",
+    description = "If set to true, PHPUnit will not run.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPUNIT_COVERAGE_SKIP_KEY, defaultValue = "false", name = "Disable PHPUnit coverage", project = true, global = true,
     description = "If true, code coverage measures will not be computed.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPUNIT_ANALYZE_ONLY_KEY, defaultValue = "false", name = "Only analyze existing PHPUnit report files", project = true,
-    global = true, description = "By default, the plugin will launch PHP Unit and parse the generated result file."
-      + "If this option is set to true, the plugin will only reuse an existing report file.",
+    global = true, description = "If set to false, PHPUnit will be executed. If set to true, PHPUnit will not be executed and the report provided through the \""
+      + PHPUNIT_REPORT_PATH_KEY + "\" property will be used.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPUNIT_REPORT_PATH_KEY,
-    name = "Report file path", project = true, global = true, description = "Path of the report file to analyse.",
+    name = "Report file path", project = true, global = true, description = "Relative path to the report file to analyze. Exemple: path/to/phpunit.xml.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_REPORT_FILE_RELATIVE_PATH_KEY, defaultValue = PHPUNIT_REPORT_FILE_RELATIVE_PATH_DEFVALUE,
-    name = "Report relative file path", project = true, global = true, description = "[DEPRECATED] Relative path of the report file to analyse. "
-      + "This property is deprecated: location of PHPUnit reports should be defined using the \"" + PHPUNIT_REPORT_PATH_KEY + "\" and \"" + PHPUNIT_COVERAGE_REPORT_PATH_KEY
-      + "\" properties only.",
+    name = "Report relative file path (Deprecated)", project = true, global = true, description = "Replaced by the \"" + PHPUNIT_REPORT_PATH_KEY + "\" and \""
+      + PHPUNIT_COVERAGE_REPORT_PATH_KEY
+      + "\" properties.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
-  @Property(key = PHPUNIT_REPORT_FILE_NAME_KEY, defaultValue = PHPUNIT_REPORT_FILE_NAME_DEFVALUE, name = "Report file name",
-    project = true, global = true, description = "[DEPRECATED] Name of the report file to analyse. "
-      + "This property is deprecated: location of PHPUnit report should be defined using the \"" + PHPUNIT_REPORT_PATH_KEY + "\" property only.",
+  @Property(key = PHPUNIT_REPORT_FILE_NAME_KEY, defaultValue = PHPUNIT_REPORT_FILE_NAME_DEFVALUE, name = "Report file name (Deprecated)",
+    project = true, global = true, description = "Replaced by the \"" + PHPUNIT_REPORT_PATH_KEY + "\" property.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_COVERAGE_REPORT_PATH_KEY,
     name = "Coverage report file path", project = true, global = true, description = "Path of the coverage report file to analyse.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_COVERAGE_REPORT_FILE_KEY, defaultValue = PHPUNIT_COVERAGE_REPORT_FILE_DEFVALUE,
-    name = "Coverage report file name", project = true, global = true, description = "[DEPRECATED] Name of the coverage report file to analyse. "
-      + "This property is deprecated: location of PHPUnit coverage report should be defined using the \"" + PHPUNIT_COVERAGE_REPORT_PATH_KEY + "\" property only.",
+    name = "Coverage report file name (Deprecated)", project = true, global = true, description = "Replaced by the \"" + PHPUNIT_COVERAGE_REPORT_PATH_KEY + "\" property.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_MAIN_TEST_FILE_KEY, defaultValue = "",
-    name = "File containing the main method calling all the tests", project = true, global = true,
-    description = "[DEPRECATED] The project main test file including the relative path, e.g. : \"/source/tests/AllTests.php\". "
-      + "If not present, phpunit will look for phpunit.xml file in test directory. "
-      + "This property is deprecated: tests should be run using the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property only.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
+    name = "File containing the main method calling all the tests (Deprecated)", project = true, global = true,
+    description = "Replaced by the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_ANALYZE_TEST_DIRECTORY_KEY, defaultValue = PHPUNIT_ANALYZE_TEST_DIRECTORY_DEFVALUE,
-    name = "Should analyse the whole test directory", project = true, global = true,
-    description = "[DEPRECATED] If set to false, only tests listed in the main test file will be run. "
-      + "This property is deprecated: tests should be run using the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property only.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
+    name = "Should analyse the whole test directory (Deprecated)", project = true, global = true,
+    description = "Replaced by the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPUNIT_FILTER_KEY, defaultValue = "", name = "Test filter", project = true, global = true,
     description = "Filter which tests to run.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_BOOTSTRAP_KEY, defaultValue = "", name = "Bootstrap file", project = true, global = true,
-    description = "A 'bootstrap' PHP file that is run before the tests.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
+    description = "A \"bootstrap\" PHP file that is run before the tests.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_CONFIGURATION_KEY, defaultValue = PHPUNIT_CONFIGURATION_DEFVALUE, name = "Configuration file", project = true, global = true,
     description = "Read configuration from XML file.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(
     key = PHPUNIT_IGNORE_CONFIGURATION_KEY,
     defaultValue = "false",
-    name = "Ignore default configuration",
+    name = "Ignore default configuration (Deprecated)",
     project = true,
     global = true,
-    description = "[DEPRECATED] Ignore default configuration file (phpunit.xml). "
-      + "This property is deprecated: tests should be run using the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property only.",
+    description = "Replaced by the \"" + PHPUNIT_CONFIGURATION_KEY + "\" property.",
     category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT,
     type = PropertyType.BOOLEAN),
   @Property(key = PHPUNIT_LOADER_KEY, defaultValue = "", name = "PHPUnit loader", project = true, global = true,
@@ -122,13 +114,13 @@ import static org.sonar.plugins.php.phpunit.PhpUnitConfiguration.PHPUNIT_TIMEOUT
   @Property(key = PHPUNIT_GROUP_KEY, defaultValue = "", name = "Groups to run", project = true, global = true,
     description = "Only runs tests from the specified group(s).", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_ARGUMENT_LINE_KEY, defaultValue = "", name = "Additional arguments", project = true, global = true,
-    description = "Additionnal parameters that can be passed to PHPUnit tool.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
+    description = "Additionnal parameters that can be passed to PHPUnit.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT),
   @Property(key = PHPUNIT_TIMEOUT_KEY, defaultValue = "" + DEFAULT_TIMEOUT, name = "Timeout", project = true, global = true,
-    description = "Maximum number of minutes that the execution of the tool should take.", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT)
+    description = "Execution of PHPUnit will be stopped after this amount of time (in minutes).", category = PhpUnitSensor.CATEGORY_PHP_PHP_UNIT)
 })
 public class PhpUnitSensor implements Sensor {
 
-  protected static final String CATEGORY_PHP_PHP_UNIT = "PHP Unit";
+  protected static final String CATEGORY_PHP_PHP_UNIT = "PHPUnit";
 
   private PhpUnitConfiguration configuration;
   private PhpUnitExecutor executor;
