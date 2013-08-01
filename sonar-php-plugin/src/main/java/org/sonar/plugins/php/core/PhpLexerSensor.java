@@ -21,11 +21,11 @@ package org.sonar.plugins.php.core;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
+import com.google.common.io.Files;
 import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.impl.Lexer;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
@@ -77,15 +77,17 @@ public class PhpLexerSensor implements Sensor {
   protected void analyseSourceCode(Project project, org.sonar.api.resources.File phpFile, File file, SensorContext context) throws IOException {
     Charset sourceCharset = project.getFileSystem().getSourceCharset();
 
-    int fileLength = FileUtils.readLines(file, sourceCharset.name()).size();
-    context.saveMeasure(phpFile, CoreMetrics.LINES, Double.valueOf(fileLength));
+    String content = Files.toString(file, sourceCharset);
+    String[] lines = content.split("(\r)?\n|\r", -1);
+
+    context.saveMeasure(phpFile, CoreMetrics.LINES, Double.valueOf(lines.length));
     context.saveMeasure(phpFile, CoreMetrics.FILES, 1.0);
     FileLinesContext fileLinesContext = fileLinesContextFactory.createFor(phpFile);
 
     final Set<Integer> linesOfCode = Sets.newHashSet();
     final Set<Integer> linesOfComments = Sets.newHashSet();
 
-    computePerLineMetrics(file, sourceCharset, fileLength, fileLinesContext, linesOfCode, linesOfComments);
+    computePerLineMetrics(file, sourceCharset, lines.length, fileLinesContext, linesOfCode, linesOfComments);
 
     context.saveMeasure(phpFile, CoreMetrics.NCLOC, Double.valueOf(linesOfCode.size()));
     context.saveMeasure(phpFile, CoreMetrics.COMMENT_LINES, Double.valueOf(linesOfComments.size()));

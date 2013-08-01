@@ -22,15 +22,21 @@ package org.sonar.plugins.php.core;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Sets;
 import org.junit.Test;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class PhpLexerSensorTest {
 
@@ -39,11 +45,25 @@ public class PhpLexerSensorTest {
       .build();
 
   @Test
-  public void computeLinesMetricsOnRealFile() throws URISyntaxException {
-    PhpLexerSensor sensor = new PhpLexerSensor(mock(FileLinesContextFactory.class));
+  public void computeLinesMetricsOnRealFile() throws Exception {
+    FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
+    FileLinesContext fileLinesContext = mock(FileLinesContext.class);
+    when(fileLinesContextFactory.createFor(any(org.sonar.api.resources.Resource.class))).thenReturn(fileLinesContext);
+    PhpLexerSensor sensor = new PhpLexerSensor(fileLinesContextFactory);
+
+    Project project = mock(Project.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(fs.getSourceCharset()).thenReturn(Charsets.UTF_8);
+    when(project.getFileSystem()).thenReturn(fs);
+    SensorContext context = mock(SensorContext.class);
+    org.sonar.api.resources.File phpFile = mock(org.sonar.api.resources.File.class);
+    sensor.analyseSourceCode(project, phpFile, new File(this.getClass().getResource("/Math2.php").toURI()), context);
+
+    verify(context).saveMeasure(phpFile, CoreMetrics.LINES, 212.0);
+
     final Set<Integer> linesOfCode = Sets.newHashSet();
     final Set<Integer> linesOfComments = Sets.newHashSet();
-    sensor.computePerLineMetrics(new File(this.getClass().getResource("/Math2.php").toURI()), Charsets.UTF_8, 212, mock(FileLinesContext.class), linesOfCode, linesOfComments);
+    sensor.computePerLineMetrics(new File(this.getClass().getResource("/Math2.php").toURI()), Charsets.UTF_8, 212, fileLinesContext, linesOfCode, linesOfComments);
 
     assertThat(linesOfCode).contains(1);
     assertThat(linesOfComments).excludes(1);
@@ -63,5 +83,4 @@ public class PhpLexerSensorTest {
     assertThat(linesOfComments).excludes(44);
 
   }
-
 }
