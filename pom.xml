@@ -32,7 +32,8 @@
 
   <modules>
     <module>sonar-php-plugin</module>
-    <!-- TODO: Those modules do not need to be built, and they may even be removed soon... 
+    <module>php-squid</module>
+    <!-- TODO: Those modules do not need to be built, and they may even be removed soon...
     <module>phpmd-rulesets</module>
     <module>phpcodesniffer-rulesets</module>
     -->
@@ -87,7 +88,46 @@
   </ciManagement>
 
   <properties>
+    <license.title>Sonar PHP Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+
+    <sonar.version>3.2</sonar.version>
+    <sslr.version>1.19.2</sslr.version>
   </properties>
 
+  <dependencies>
+  <dependency>
+    <groupId>org.codehaus.sonar</groupId>
+    <artifactId>sonar-channel</artifactId>
+    <version>${sonar.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.codehaus.sonar</groupId>
+    <artifactId>sonar-plugin-api</artifactId>
+    <version>${sonar.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.codehaus.sonar.sslr</groupId>
+    <artifactId>sslr-core</artifactId>
+    <version>${sslr.version}</version>
+  </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-testing-harness</artifactId>
+      <version>${sonar.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar.sslr</groupId>
+      <artifactId>sslr-testing-harness</artifactId>
+      <version>${sslr.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
