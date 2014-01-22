@@ -63,6 +63,7 @@ public enum PHPKeyword implements TokenType {
   EXIT("exit"),
   EXTENDS("extends"),
   FINAL("final"),
+  FINALLY("finally"),
   FOR("for"),
   FOREACH("foreach"),
   FUNCTION("function"),
