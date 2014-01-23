@@ -36,7 +36,7 @@ public class WhileStatementTest extends RuleTest {
   @Test
   public void test() {
     assertThat(p)
-      .matches("while (a) {}")
-      .matches("while (a): endwhile;");
+      .matches("while ($a) {}")
+      .matches("while ($a): endwhile;");
   }
 }

@@ -26,19 +26,29 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class NewIfStatementTest extends RuleTest {
+public class StatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.ALTERNATIVE_IF_STATEMENT));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.STATEMENT));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("if ($a): endif;")
-      .matches("if ($a): elseif (a): endif;")
-      .matches("if ($a): elseif (a): else: endif;")
-      .matches("if ($a): else: endif;");
+      .matches("{}")
+      .matches("label:")
+      .matches("if (): endif;")
+      .matches("while() {}")
+      .matches("for ($i = 1; $i <= 10; $i++) {}")
+      .matches("switch ($a) {}")
+      .matches("break;")
+      .matches("continue;")
+      .matches("return;")
+      .matches(";")
+      .matches("yield $a;")
+      .matches("global $a;")
+      .matches("echo \"Hi\";")
+      .matches("unset($a);");
   }
 }

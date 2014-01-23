@@ -98,6 +98,7 @@ public enum PHPKeyword implements TokenType {
   VAR("var"),
   WHILE("while"),
   XOR("xor"),
+  YIELD("yield"),
 
   // Reserved name
   CONSTANT_CLASS("__CLASS__"),

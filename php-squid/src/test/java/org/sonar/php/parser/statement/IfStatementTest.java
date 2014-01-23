@@ -36,10 +36,10 @@ public class IfStatementTest extends RuleTest {
   @Test
   public void test() { // TODO: update when parenthesis_expr complete
     assertThat(p)
-      .matches("if (a) {}")
-      .matches("if (a) {} elseif (a) {}")
-      .matches("if (a) {} elseif (a) {} else {}")
-      .matches("if (a) {} else {}")
-      .matches("if (a) ; else ;");
+      .matches("if ($a) {}")
+      .matches("if ($a) {} elseif ($a) {}")
+      .matches("if ($a) {} elseif ($a) {} else {}")
+      .matches("if ($a) {} else {}")
+      .matches("if ($a) ; else ;");
   }
 }

@@ -36,8 +36,8 @@ public class SwicthStatementTest extends RuleTest {
   @Test
   public void test() {
     assertThat(p)
-      .matches("switch (a) {}")
-      .matches("switch (a): endswitch;")
-      .matches("switch (a): ; endswitch;"); // TODO: complete when cas_list complete
+      .matches("switch ($a) {}")
+      .matches("switch ($a): endswitch;")
+      .matches("switch ($a): ; endswitch;"); // TODO: complete when cas_list complete
   }
 }

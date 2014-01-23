@@ -65,6 +65,7 @@ public enum PHPPunctuator implements TokenType {
   ARROW("->"),
   DOUBLEARROW("=>"),
 
+  DOLAR("$"),
   DOLAR_LCURLY("${"),
   LCURLYBRACE("{"),
   RCURLYBRACE("}"),

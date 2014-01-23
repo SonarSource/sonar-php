@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.parser.expression;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,19 +26,19 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class NewIfStatementTest extends RuleTest {
+public class FunctionCallTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.ALTERNATIVE_IF_STATEMENT));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.FUNCTION_CALL));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("if ($a): endif;")
-      .matches("if ($a): elseif (a): endif;")
-      .matches("if ($a): elseif (a): else: endif;")
-      .matches("if ($a): else: endif;");
+      .matches("namespace\\foo()")
+      .matches("foo()")
+      .matches("foo::a()")
+      .matches("foo::$a()");
   }
 }

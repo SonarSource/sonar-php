@@ -37,6 +37,8 @@ public class FullyQualifiedClassNameTest extends RuleTest {
   public void test() {
     assertThat(p)
       .matches("namespace\\NS")
-      .matches("NS");
+      .matches("NS")
+
+      .notMatches("namespace\\\\NS");
   }
 }
