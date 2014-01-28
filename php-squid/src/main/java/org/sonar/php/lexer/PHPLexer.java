@@ -84,11 +84,11 @@ public class PHPLexer {
       .withChannel(new BlackHoleChannel(WHITESPACE))
       .withChannel(commentRegexp(COMMENT))
 
-        // String Literals
+      // String Literals
       .withChannel(regexp(GenericTokenType.LITERAL, NUMERIC_LITERAL))
       .withChannel(regexp(GenericTokenType.LITERAL, STRING_LITERAL))
 
-        // PHP tags
+      // PHP tags
       .withChannel(regexp(PHPTokenType.OPEN_TAG, OPEN_TAG))
       .withChannel(regexp(PHPTokenType.CLOSE_TAG, CLOSE_TAG))
 
@@ -96,7 +96,6 @@ public class PHPLexer {
       .withChannel(regexp(PHPTokenType.VAR_IDENTIFIER, VAR_IDENTIFIER))
 
       .withChannel(new PunctuatorChannel(PHPPunctuator.values()));
-
 
     return builder.build();
   }

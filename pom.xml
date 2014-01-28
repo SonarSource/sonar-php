@@ -33,6 +33,7 @@
   <modules>
     <module>sonar-php-plugin</module>
     <module>php-squid</module>
+    <module>sslr-php-toolkit</module>
     <!-- TODO: Those modules do not need to be built, and they may even be removed soon...
     <module>phpmd-rulesets</module>
     <module>phpcodesniffer-rulesets</module>
@@ -95,6 +96,7 @@
     <sslr.version>1.19.2</sslr.version>
   </properties>
 
+  <dependencyManagement>
   <dependencies>
   <dependency>
     <groupId>org.codehaus.sonar</groupId>
@@ -109,6 +111,11 @@
   <dependency>
     <groupId>org.codehaus.sonar.sslr</groupId>
     <artifactId>sslr-core</artifactId>
+    <version>${sslr.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.codehaus.sonar.sslr</groupId>
+    <artifactId>sslr-toolkit</artifactId>
     <version>${sslr.version}</version>
   </dependency>
     <dependency>
@@ -129,5 +136,16 @@
       <version>${sslr.version}</version>
       <scope>test</scope>
     </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>0.9.30</version>
+      </dependency>
+      <dependency>
+        <groupId>org.easytesting</groupId>
+        <artifactId>fest-assert</artifactId>
+        <version>1.4</version>
+      </dependency>
   </dependencies>
+  </dependencyManagement>
 </project>
