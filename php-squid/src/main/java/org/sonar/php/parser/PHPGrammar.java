@@ -585,7 +585,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(ASSIGNMENT_EXPR).is(b.firstOf(
       b.sequence(VARIABLE, EQU, AND, b.firstOf(VARIABLE, NEW_EXPR)), //TODO: check 'AND' or rename
-      b.sequence(VARIABLE, ASSIGNMENT_OPERATOR, ASSIGNMENT_EXPR),
+      b.sequence(CONDITIONAL_EXPR, ASSIGNMENT_OPERATOR, ASSIGNMENT_EXPR),
       CONDITIONAL_EXPR));
     b.rule(ASSIGNMENT_OPERATOR).is(b.firstOf(EQU, COMPOUND_ASSIGNMENT, LOGICAL_ASSIGNMENT));
     b.rule(COMPOUND_ASSIGNMENT).is(b.firstOf(STAR_EQU, DIVEQUAL, MOD_EQU, PLUS_EQU, MINUS_EQU, SL_EQU, SR_EQU, CONCATEQUAL));
@@ -636,7 +636,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(METHOD_BODY).is(b.firstOf(SEMICOLON, BLOCK));
 
     b.rule(PARAMETER_LIST).is(PARAMETER, b.zeroOrMore(COMMA, PARAMETER));
-   b.rule(PARAMETER).is(b.optional(OPTIONAL_CLASS_TYPE), b.optional(AND), b.optional(ELIPSIS), VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
+    b.rule(PARAMETER).is(b.optional(OPTIONAL_CLASS_TYPE), b.optional(AND), b.optional(ELIPSIS), VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
     b.rule(OPTIONAL_CLASS_TYPE).is(b.firstOf(ARRAY, CALLABLE, FULLY_QUALIFIED_CLASS_NAME));
 
     b.rule(CLASS_VARIABLE_DECLARATION).is(VARIABLE_MODIFIERS, VARIABLE_DECLARATION, b.zeroOrMore(COMMA, VARIABLE_DECLARATION), SEMICOLON);
@@ -762,9 +762,9 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(FOREACH_STATEMENT).is(FOREACH, LPARENTHESIS, FOREACH_EXPR, RPARENTHESIS, b.optional(INNER_FOREACH_STATEMENT));
     b.rule(FOREACH_EXPR).is(ASSIGNMENT_EXPR, AS, FOREACH_VARIABLE, b.optional(DOUBLEARROW, FOREACH_VARIABLE));
-      b.rule(FOREACH_VARIABLE).is(b.firstOf(
-        b.sequence(b.optional(AND), VARIABLE),
-        b.sequence(LIST, LPARENTHESIS, ASSIGNMENT_LIST, RPARENTHESIS)));
+    b.rule(FOREACH_VARIABLE).is(b.firstOf(
+      b.sequence(b.optional(AND), VARIABLE),
+      b.sequence(LIST, LPARENTHESIS, ASSIGNMENT_LIST, RPARENTHESIS)));
     b.rule(INNER_FOREACH_STATEMENT).is(b.firstOf(
       b.sequence(COLON, b.optional(INNER_STATEMENT_LIST), ENDFOREACH, SEMICOLON),
       STATEMENT));
@@ -796,7 +796,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(ECHO_STATEMENT).is(ECHO, ASSIGNMENT_EXPR, b.zeroOrMore(COMMA, ASSIGNMENT_EXPR), SEMICOLON); // TODO: TEST when expr complete
 
-    b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, VARIABLE, RPARENTHESIS, SEMICOLON);
+    b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, UNSET_VARIABLES, RPARENTHESIS, SEMICOLON);
     b.rule(UNSET_VARIABLES).is(VARIABLE, b.zeroOrMore(COMMA, VARIABLE));
 
     b.rule(CLASS_STATEMENT).is(b.firstOf(

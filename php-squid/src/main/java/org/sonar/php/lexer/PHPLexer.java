@@ -20,11 +20,10 @@
 package org.sonar.php.lexer;
 
 import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.TokenType;
 import com.sonar.sslr.impl.Lexer;
-import com.sonar.sslr.impl.channel.*;
+import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.IdentifierAndKeywordChannel;
-import org.apache.commons.lang.ArrayUtils;
+import com.sonar.sslr.impl.channel.PunctuatorChannel;
 
 import java.nio.charset.Charset;
 
@@ -97,7 +96,6 @@ public class PHPLexer {
       .withChannel(regexp(PHPTokenType.VAR_IDENTIFIER, VAR_IDENTIFIER))
 
       .withChannel(new PunctuatorChannel(PHPPunctuator.values()));
-
 
 
     return builder.build();
