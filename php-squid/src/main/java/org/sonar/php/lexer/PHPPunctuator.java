@@ -106,13 +106,4 @@ public enum PHPPunctuator implements TokenType {
   public String getValue() {
     return value;
   }
-
-  public static String[] getPunctuatorValues() {
-    PHPKeyword[] keywordsEnum = PHPKeyword.values();
-    String[] keywords = new String[keywordsEnum.length];
-    for (int i = 0; i < keywords.length; i++) {
-      keywords[i] = keywordsEnum[i].getValue();
-    }
-    return keywords;
-  }
 }
