@@ -24,12 +24,9 @@ import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.impl.Lexer;
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Collection;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
