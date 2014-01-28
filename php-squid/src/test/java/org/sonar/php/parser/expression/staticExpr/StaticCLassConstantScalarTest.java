@@ -26,7 +26,7 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class StaticCLassConstantScalarTest extends RuleTest {
+public class StaticClassConstantScalarTest extends RuleTest {
 
   @Before
   public void setUp() {
