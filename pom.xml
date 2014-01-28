@@ -94,6 +94,7 @@
 
     <sonar.version>3.2</sonar.version>
     <sslr.version>1.19.2</sslr.version>
+    <junit.version>4.10</junit.version>
   </properties>
 
   <dependencyManagement>
