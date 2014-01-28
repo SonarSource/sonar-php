@@ -26,20 +26,16 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class IfStatementTest extends RuleTest {
+public class ThrowStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.IF_STATEMENT));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.THROW_STATEMENT));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("if ($a) {}")
-      .matches("if ($a) {} elseif ($a) {}")
-      .matches("if ($a) {} elseif ($a) {} else {}")
-      .matches("if ($a) {} else {}")
-      .matches("if ($a) ; else ;");
+      .matches("Throw $e;");
   }
 }

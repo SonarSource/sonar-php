@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.parser.expression;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,20 +26,18 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class IfStatementTest extends RuleTest {
+public class ArrayPairTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.IF_STATEMENT));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.ARRAY_PAIR));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("if ($a) {}")
-      .matches("if ($a) {} elseif ($a) {}")
-      .matches("if ($a) {} elseif ($a) {} else {}")
-      .matches("if ($a) {} else {}")
-      .matches("if ($a) ; else ;");
+      .matches("&$a")
+      .matches("$a=>$b")
+      .matches("$a=>&$b");
   }
 }

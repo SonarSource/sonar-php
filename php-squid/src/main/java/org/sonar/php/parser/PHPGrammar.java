@@ -253,7 +253,6 @@ public enum PHPGrammar implements GrammarRuleKey {
   TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED,
   TRAIT_METHOD_REFERENCE,
   TRAIT_ALIAS,
-  TRAIT_REFERENCE_LIST,
   TRAIT_PRECEDENCE,
   TRAIT_ADAPTATION_STATEMENT,
   TRAIT_ADAPTATIONS,
@@ -346,7 +345,6 @@ public enum PHPGrammar implements GrammarRuleKey {
   CLASS_CONSTANT,
   EXIT_EXPR,
   LIST_EXPR,
-  CAST_EXPR,
   LIST_ASSIGNMENT_EXPR,
   ASSIGNMENT_LIST_ELEMENT,
   ASSIGNMENT_LIST,
@@ -417,7 +415,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(VARIABLE_NAME).is(b.firstOf(
       IDENTIFIER,
-      KEYWORDS, //TODO: Add all keywords and check syntax
+      KEYWORDS,
       b.sequence(LCURLYBRACE, ASSIGNMENT_EXPR, RCURLYBRACE)));
 
     b.rule(DIMENSIONAL_OFFSET).is(LBRACKET, b.optional(ASSIGNMENT_EXPR), RBRACKET);
@@ -439,14 +437,14 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(ARRAY, LPARENTHESIS, b.optional(ARRAY_PAIR_LIST), RPARENTHESIS),
       b.sequence(LBRACKET, b.optional(ARRAY_PAIR_LIST), RBRACKET)));
 
-    b.rule(COMBINED_SCALAR_OFFSET).is(COMBINED_SCALAR /*TODO: or T_CONSTANT_ENCAPSED_STRING -> check syntax*/, b.zeroOrMore(DIMENSIONAL_OFFSET)); // TODO: TEST
+    b.rule(COMBINED_SCALAR_OFFSET).is(COMBINED_SCALAR, b.zeroOrMore(DIMENSIONAL_OFFSET));
 
-    b.rule(COMBINED_SCALAR).is(b.firstOf( //TODO: TEST
+    b.rule(COMBINED_SCALAR).is(b.firstOf(
       b.sequence(ARRAY, LPARENTHESIS, b.optional(ARRAY_PAIR_LIST), RPARENTHESIS),
       b.sequence(LBRACKET, b.optional(ARRAY_PAIR_LIST), RBRACKET)));
 
     b.rule(ARRAY_PAIR_LIST).is(ARRAY_PAIR, b.zeroOrMore(COMMA, ARRAY_PAIR), b.optional(COMMA));
-    b.rule(ARRAY_PAIR).is(b.firstOf( // TODO: TEST
+    b.rule(ARRAY_PAIR).is(b.firstOf(
       b.sequence(ASSIGNMENT_EXPR, b.optional(DOUBLEARROW, b.firstOf(ALIAS_VARIABLE, ASSIGNMENT_EXPR))),
       ALIAS_VARIABLE));
     b.rule(STATIC_ARRAY_PAIR_LIST).is(STATIC_ARRAY_PAIR, b.zeroOrMore(COMMA, STATIC_ARRAY_PAIR), b.optional(COMMA));
@@ -460,7 +458,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(STATIC_CLASS_NAME_SCALAR).is(CLASS_NAME, DOUBLECOLON, CLASS);
     b.rule(STATIC_CLASS_CONSTANT_SCALAR).is(CLASS_NAME, DOUBLECOLON, IDENTIFIER);
-    b.rule(COMMON_SCALAR).is(b.firstOf( // TODO: HEREDOC & are exponents exclude ?
+    b.rule(COMMON_SCALAR).is(b.firstOf( // TODO: HEREDOC
       LITERAL,
       "__CLASS__",
       "__FILE__",
@@ -471,26 +469,19 @@ public enum PHPGrammar implements GrammarRuleKey {
       "__NAMESPACE__",
       "__TRAIT__"));
 
-    // Unary expression
     b.rule(STATIC_UNARY_EXPR).is(b.firstOf(
       b.sequence(b.firstOf(PLUS, MINUS, TILDA, BANG), STATIC_SCALAR_VALUE),
       STATIC_SCALAR_VALUE));
 
-    // Binary expressions
     b.rule(STATIC_CONCATENATION_EXPR).is(STATIC_UNARY_EXPR, b.zeroOrMore(DOT, STATIC_UNARY_EXPR));
-
-    b.rule(STATIC_MULTIPLICATIVE_EXPR).is(STATIC_CONCATENATION_EXPR, b.zeroOrMore(MULIPLICATIVE_OPERATOR, STATIC_CONCATENATION_EXPR)); // TODO: CHeck changement unary -> concatenation
+    b.rule(STATIC_MULTIPLICATIVE_EXPR).is(STATIC_CONCATENATION_EXPR, b.zeroOrMore(MULIPLICATIVE_OPERATOR, STATIC_CONCATENATION_EXPR));
     b.rule(MULIPLICATIVE_OPERATOR).is(b.firstOf(STAR, DIV, MOD));
-
     b.rule(STATIC_ADDITIVE_EXPR).is(STATIC_MULTIPLICATIVE_EXPR, b.zeroOrMore(ADDITIVE_OPERATOR, STATIC_MULTIPLICATIVE_EXPR));
     b.rule(ADDITIVE_OPERATOR).is(b.firstOf(PLUS, MINUS));
-
     b.rule(STATIC_SHIFT_EXPR).is(STATIC_ADDITIVE_EXPR, b.zeroOrMore(SHIFT_OPERATOR, STATIC_ADDITIVE_EXPR));
     b.rule(SHIFT_OPERATOR).is(b.firstOf(SL, SR));
-
     b.rule(STATIC_RELATIONAL_EXPR).is(STATIC_SHIFT_EXPR, b.zeroOrMore(RELATIONAL_OPERATOR, STATIC_SHIFT_EXPR));
     b.rule(RELATIONAL_OPERATOR).is(b.firstOf(LE, GE, LT, GT));
-
     b.rule(STATIC_EQUALITY_EXPR).is(STATIC_RELATIONAL_EXPR, b.zeroOrMore(EQUALITY_OPERATOR, STATIC_RELATIONAL_EXPR));
     b.rule(EQUALITY_OPERATOR).is(b.firstOf(
       NOTEQUAL2,
@@ -512,9 +503,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(LPARENTHESIS, STATIC_CONDITIONAL_EXPR, RPARENTHESIS),
       STATIC_LOGICAL_OR_EXPR));
 
-    //b.rule(CAST_EXPR).is(LPARENTHESIS, CAST_TYPE, RPARENTHESIS, ASSIGNMENT_EXPR); TODO: remove ?
     b.rule(CAST_TYPE).is(LPARENTHESIS, b.firstOf("INTEGER", "INT", "DOUBLE", "FLOAT", "STRING", ARRAY, "OBJECT", "BOOLEAN", "BOOL", "BINARY", UNSET), RPARENTHESIS);
-
 
     b.rule(POSTFIX_EXPR).is(b.firstOf( // TODO: to complete
       //YIELD, TODO: check
@@ -566,7 +555,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(CLONE, ASSIGNMENT_EXPR),
       b.sequence(PRINT, ASSIGNMENT_EXPR)));
 
-    b.rule(NEW_EXPR).is(NEW, CLASS_NAME_REFERENCE, b.optional(FUNCTION_CALL_PARAMETER_LIST)); // TODO: TEST
+    b.rule(NEW_EXPR).is(NEW, CLASS_NAME_REFERENCE, b.optional(FUNCTION_CALL_PARAMETER_LIST));
     b.rule(CLASS_NAME_REFERENCE).is(b.firstOf(
       b.sequence(BASE_VARIABLE, b.zeroOrMore(ARROW, OBJECT_PROPERTY)),
       CLASS_NAME));
@@ -576,7 +565,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(b.firstOf(INC, DEC), POSTFIX_EXPR),
       b.sequence(b.firstOf(PLUS, MINUS, TILDA, BANG), UNARY_EXPR),
       b.sequence(PHPPunctuator.AT, POSTFIX_EXPR),
-      b.sequence(CAST_TYPE, ASSIGNMENT_EXPR), // TODO: check assignment_expr
+      b.sequence(CAST_TYPE, ASSIGNMENT_EXPR),
       POSTFIX_EXPR));
 
     // Binary expressions
@@ -595,7 +584,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(CONDITIONAL_EXPR).is(LOGICAL_OR_EXPR, b.optional(QUERY, b.optional(ASSIGNMENT_EXPR), COLON, LOGICAL_OR_EXPR));
 
     b.rule(ASSIGNMENT_EXPR).is(b.firstOf(
-      b.sequence(VARIABLE, EQU, AND, b.firstOf(VARIABLE, NEW_EXPR)), //TODO: check 'AND' or rename
+      b.sequence(VARIABLE, EQU, AND, b.firstOf(VARIABLE, NEW_EXPR)),
       b.sequence(CONDITIONAL_EXPR, ASSIGNMENT_OPERATOR, ASSIGNMENT_EXPR),
       CONDITIONAL_EXPR));
     b.rule(ASSIGNMENT_OPERATOR).is(b.firstOf(EQU, COMPOUND_ASSIGNMENT, LOGICAL_ASSIGNMENT));
@@ -788,7 +777,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(CATCH_STATEMENT).is(CATCH, LPARENTHESIS, FULLY_QUALIFIED_CLASS_NAME, VAR_IDENTIFIER, RPARENTHESIS, LCURLYBRACE, b.optional(INNER_STATEMENT_LIST), RCURLYBRACE);
     b.rule(FINALLY_STATEMENT).is(FINALLY, LCURLYBRACE, b.optional(INNER_STATEMENT_LIST), RCURLYBRACE);
 
-    b.rule(THROW_STATEMENT).is(THROW, ASSIGNMENT_EXPR, SEMICOLON); // TODO: TEST when expr complete
+    b.rule(THROW_STATEMENT).is(THROW, ASSIGNMENT_EXPR, SEMICOLON);
     b.rule(GOTO_STATEMENT).is(GOTO, IDENTIFIER, SEMICOLON);
 
     b.rule(YIELD_STATEMENT).is(YIELD_EXPRESSION, SEMICOLON);
@@ -803,7 +792,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(STATIC_VAR_LIST).is(STATIC_VAR, b.zeroOrMore(COMMA, STATIC_VAR));
     b.rule(STATIC_VAR).is(VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
 
-    b.rule(ECHO_STATEMENT).is(ECHO, ASSIGNMENT_EXPR, b.zeroOrMore(COMMA, ASSIGNMENT_EXPR), SEMICOLON); // TODO: TEST when expr complete
+    b.rule(ECHO_STATEMENT).is(ECHO, ASSIGNMENT_EXPR, b.zeroOrMore(COMMA, ASSIGNMENT_EXPR), SEMICOLON);
 
     b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, UNSET_VARIABLES, RPARENTHESIS, SEMICOLON);
     b.rule(UNSET_VARIABLES).is(VARIABLE, b.zeroOrMore(COMMA, VARIABLE));
