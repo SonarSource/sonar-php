@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.parser.statement;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,17 +26,17 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class BaseVariableTest extends RuleTest {
+public class TraitPrecedenceTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BASE_VARIABLE));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.TRAIT_PRECEDENCE));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("$a")
-      .matches("Foo::$a");
+      .matches("Foo::Bar insteadof Toto")
+      .matches("Foo::Bar insteadof Toto, Tata");
   }
 }

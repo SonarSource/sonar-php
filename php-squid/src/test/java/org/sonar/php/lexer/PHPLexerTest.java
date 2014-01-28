@@ -41,7 +41,7 @@ public class PHPLexerTest {
     Lexer lexer = PHPLexer.create(Charsets.UTF_8);
     List<Token> tokens = lexer.lex(FileUtils.toFile(getClass().getResource("melting-pot-for-lexing.php")));
 
-    assertThat(tokens.size()).isEqualTo(125);
+    assertThat(tokens.size()).isEqualTo(126);
 
     Token mail = tokens.get(5);
     assertThat(mail.getOriginalValue()).isEqualTo("Mail");

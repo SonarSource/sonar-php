@@ -37,6 +37,7 @@ public class EchoStatementTest extends RuleTest {
   public void test() {
     assertThat(p)
       .matches("echo \"Hello World!\";")
-      .matches("echo $a;");
+      .matches("echo $a;")
+      .matches("echo $a, $b;");
   }
 }

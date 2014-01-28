@@ -26,17 +26,28 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class BaseVariableTest extends RuleTest {
+public class CommonScalarTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BASE_VARIABLE));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.COMMON_SCALAR));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("$a")
-      .matches("Foo::$a");
+      .matches("1")
+      .matches("1.2")
+      .matches("\"foo\"")
+      .matches("'foo'")
+      .matches("__LINE__")
+      .matches("__FILE__")
+      .matches("__DIR__")
+      .matches("__FUNCTION__")
+      .matches("__CLASS__")
+      .matches("__TRAIT__")
+      .matches("__METHOD__")
+      .matches("__NAMESPACE__");
+// ;
   }
 }

@@ -37,7 +37,6 @@ public class GlobalVarTest extends RuleTest {
   public void test() {
     assertThat(p)
       .matches("$a")
-      .matches("$$a")
-      .matches("${\"foo\"}");
+      .matches("$$a");
   }
 }

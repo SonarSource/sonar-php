@@ -37,7 +37,6 @@ public class YieldExpressionTest extends RuleTest {
   public void test() {
     assertThat(p)
       .matches("yield $a")
-    //.matches("yield $var=>expr_without_var") TODO: when expr_without_variable complete
       .matches("yield $a=>$b");
   }
 }

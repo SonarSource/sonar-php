@@ -50,6 +50,7 @@ public enum PHPPunctuator implements TokenType {
 
   PLUS("+"),
   MINUS("-"),
+  TILDA("~"),
 
   XOR("^"),
   STAR("*"),
@@ -76,6 +77,7 @@ public enum PHPPunctuator implements TokenType {
   DOT("."),
   SEMICOLON(";"),
   COMMA(","),
+  ELIPSIS("..."),
 
   AT("@"),
   BANG("!"),

@@ -26,17 +26,19 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class BaseVariableTest extends RuleTest {
+public class ObjectDimListTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BASE_VARIABLE));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.OBJECT_DIM_LIST));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("$a")
-      .matches("Foo::$a");
+      .matches("foo")
+      .matches("foo[\"foo\"]")
+      .matches("foo[$a]{\"foo\"}")
+      .matches("foo[$a]{\"foo\"}[$b]");
   }
 }

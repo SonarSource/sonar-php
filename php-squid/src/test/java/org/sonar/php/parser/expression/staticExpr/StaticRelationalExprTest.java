@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.parser.expression.staticExpr;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,17 +26,24 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class BaseVariableTest extends RuleTest {
+public class StaticRelationalExprTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BASE_VARIABLE));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.STATIC_RELATIONAL_EXPR));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("$a")
-      .matches("Foo::$a");
+      .matches("foo")
+      .matches("foo > bar")
+      .matches("foo < bar")
+      .matches("foo >= bar")
+      .matches("foo <= bar");
+
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.ASSIGNMENT_EXPR));
+    assertThat(p)
+      .matches("($baseYear-1900)");
   }
 }

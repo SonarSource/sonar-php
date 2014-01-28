@@ -25,10 +25,9 @@ import com.sonar.sslr.api.TokenType;
 public enum PHPKeyword implements TokenType {
 
   // Reserved words
-
-  NULL("null"),
-  TRUE("true"),
-  FALSE("false"),
+//  NULL("null"),
+//  TRUE("true"),
+//  FALSE("false"),
 
   // Keywords
 
@@ -98,16 +97,7 @@ public enum PHPKeyword implements TokenType {
   VAR("var"),
   WHILE("while"),
   XOR("xor"),
-  YIELD("yield"),
-
-  // Reserved name
-  CONSTANT_CLASS("__CLASS__"),
-  CONSTANT_FUNCTION("__FUNCTION__"),
-  CONSTANT_FILE("__FILE__"),
-  CONSTANT_LINE("__LINE__"),
-  CONSTANT_METHOD("__METHOD__"),
-  CONSTANT_NAMESPACE("__NAMESPACE__"),
-  CONSTANT_TRAIT("__TRAIT__");
+  YIELD("yield");
 
   private final String value;
 

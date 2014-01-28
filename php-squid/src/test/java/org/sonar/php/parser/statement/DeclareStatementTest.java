@@ -36,7 +36,7 @@ public class DeclareStatementTest extends RuleTest {
   @Test
   public void test() {
     assertThat(p)
-      .matches("declare (a) {}")
+      .matches("declare (a);")
       .matches("declare (a): enddeclare;");
   }
 }
