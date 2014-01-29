@@ -34,6 +34,7 @@ import com.sonar.sslr.squid.metrics.CounterVisitor;
 import com.sonar.sslr.squid.metrics.LinesOfCodeVisitor;
 import com.sonar.sslr.squid.metrics.LinesVisitor;
 import org.sonar.php.api.PHPMetric;
+import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPParser;
 import org.sonar.squid.api.SourceCode;
@@ -111,6 +112,7 @@ public class PHPAstScanner {
       .subscribeTo(PHPGrammar.INTERFACE_DECLARATION)
       .build());
 
+    builder.withSquidAstVisitor(new ComplexityVisitor());
     builder.withSquidAstVisitor(CommentsVisitor.<Grammar>builder().withCommentMetric(PHPMetric.COMMENT_LINES)
       .withNoSonar(true)
         //.withIgnoreHeaderComment(false)

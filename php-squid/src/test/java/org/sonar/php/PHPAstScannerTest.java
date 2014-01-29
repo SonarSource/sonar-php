@@ -79,4 +79,10 @@ public class PHPAstScannerTest {
     assertThat(file.getNoSonarTagLines()).contains(13);
     assertThat(file.getNoSonarTagLines().size()).isEqualTo(1);
   }
+
+  @Test
+  public void complexity() {
+    SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/complexity.php"));
+    assertThat(file.getInt(PHPMetric.COMPLEXITY)).isEqualTo(16);
+  }
 }
