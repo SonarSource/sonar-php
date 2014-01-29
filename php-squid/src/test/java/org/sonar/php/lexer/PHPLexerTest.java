@@ -34,9 +34,9 @@ import static org.fest.assertions.Assertions.assertThat;
 public class PHPLexerTest {
 
   @Test
-  public void testLexVbSourceCode() throws FileNotFoundException {
+  public void testLexPHPSourceCode() throws FileNotFoundException {
     Lexer lexer = PHPLexer.create(Charsets.UTF_8);
-    List<Token> tokens = lexer.lex(FileUtils.toFile(getClass().getResource("melting-pot-for-lexing.php")));
+    List<Token> tokens = lexer.lex(FileUtils.toFile(getClass().getResource("/lexer/melting-pot-for-lexing.php")));
 
     assertThat(tokens.size()).isEqualTo(126);
 

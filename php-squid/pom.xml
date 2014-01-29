@@ -12,18 +12,17 @@
   <artifactId>php-squid</artifactId>
 
   <name>PHP :: Squid</name>
+
   <dependencies>
-
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.version}</version>
-    </dependency>
-
     <dependency>
       <groupId>org.codehaus.sonar.sslr</groupId>
       <artifactId>sslr-core</artifactId>
       <version>${sslr.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
+      <artifactId>sslr-squid-bridge</artifactId>
+      <version>${sslrSquid.version}</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.sonar.sslr</groupId>
@@ -32,9 +31,15 @@
     </dependency>
 
     <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-testing-harness</artifactId>
+      <version>${sonar.version}</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
     </dependency>
   </dependencies>
+
 </project>
