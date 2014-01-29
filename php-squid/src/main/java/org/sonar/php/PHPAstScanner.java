@@ -124,7 +124,7 @@ public class PHPAstScanner {
       .subscribeTo(
         PHPGrammar.USE_STATEMENT,
         PHPGrammar.CONSTANT_DECLARATION,
-        PHPGrammar.HALT_COMPILER_STATMENT,
+        PHPGrammar.HALT_COMPILER_STATEMENT,
         PHPGrammar.IF_STATEMENT,
         PHPGrammar.ALTERNATIVE_IF_STATEMENT,
         PHPGrammar.FOR_STATEMENT,

@@ -30,7 +30,7 @@ public class HaltCompilerStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.HALT_COMPILER_STATMENT));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.HALT_COMPILER_STATEMENT));
   }
 
   @Test
