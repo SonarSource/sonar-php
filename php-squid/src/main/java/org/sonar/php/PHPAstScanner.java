@@ -19,6 +19,7 @@
  */
 package org.sonar.php;
 
+import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.CommentAnalyser;
 import com.sonar.sslr.api.Grammar;
@@ -58,7 +59,7 @@ public class PHPAstScanner {
     if (!file.isFile()) {
       throw new IllegalArgumentException("File '" + file + "' not found.");
     }
-    AstScanner<Grammar> scanner = create(visitors);
+    AstScanner<Grammar> scanner = create(new PHPConfiguration(Charsets.UTF_8), visitors);
     scanner.scanFile(file);
     Collection<SourceCode> sources = scanner.getIndex().search(new QueryByType(SourceFile.class));
     if (sources.size() != 1) {
@@ -67,9 +68,9 @@ public class PHPAstScanner {
     return (SourceFile) sources.iterator().next();
   }
 
-  public static AstScanner<Grammar> create(SquidAstVisitor<Grammar>... visitors) {
+  public static AstScanner<Grammar> create(PHPConfiguration conf, SquidAstVisitor<Grammar>... visitors) {
     final SquidAstVisitorContextImpl<Grammar> context = new SquidAstVisitorContextImpl<Grammar>(new SourceProject("PHP Project"));
-    final Parser<Grammar> parser = PHPParser.create();
+    final Parser<Grammar> parser = PHPParser.create(conf);
 
     AstScanner.Builder<Grammar> builder = AstScanner.<Grammar>builder(context).setBaseParser(parser);
 
@@ -115,7 +116,7 @@ public class PHPAstScanner {
     builder.withSquidAstVisitor(new ComplexityVisitor());
     builder.withSquidAstVisitor(CommentsVisitor.<Grammar>builder().withCommentMetric(PHPMetric.COMMENT_LINES)
       .withNoSonar(true)
-        //.withIgnoreHeaderComment(false)
+      .withIgnoreHeaderComment(conf.getIgnoreHeaderComments())
       .build());
 
     builder.withSquidAstVisitor(CounterVisitor.<Grammar>builder()

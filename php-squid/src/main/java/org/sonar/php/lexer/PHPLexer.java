@@ -24,11 +24,10 @@ import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.IdentifierAndKeywordChannel;
 import com.sonar.sslr.impl.channel.PunctuatorChannel;
+import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.api.PHPTokenType;
-
-import java.nio.charset.Charset;
 
 import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.commentRegexp;
 import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
@@ -79,19 +78,19 @@ public class PHPLexer {
   // Numeric
   private static final String NUMERIC_LITERAL = EXPONENT_DNUM + "|" + DNUM + "|" + INTEGER_LITERAL;
 
-  public static Lexer create(Charset charset) {
+  public static Lexer create(PHPConfiguration conf) {
     Lexer.Builder builder = Lexer.builder()
       .withFailIfNoChannelToConsumeOneCharacter(true)
-      .withCharset(charset)
+      .withCharset(conf.getCharset())
 
       .withChannel(new BlackHoleChannel(WHITESPACE))
       .withChannel(commentRegexp(COMMENT))
 
-      // String Literals
+        // String Literals
       .withChannel(regexp(GenericTokenType.LITERAL, NUMERIC_LITERAL))
       .withChannel(regexp(GenericTokenType.LITERAL, STRING_LITERAL))
 
-      // PHP tags
+        // PHP tags
       .withChannel(regexp(PHPTokenType.OPEN_TAG, OPEN_TAG))
       .withChannel(regexp(PHPTokenType.CLOSE_TAG, CLOSE_TAG))
 

@@ -17,19 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser;
+package org.sonar.php;
 
-import com.google.common.base.Charsets;
-import com.sonar.sslr.api.Grammar;
-import com.sonar.sslr.impl.Parser;
-import org.sonar.php.PHPConfiguration;
-import org.sonar.php.lexer.PHPLexer;
+import org.sonar.squid.api.SquidConfiguration;
 
-public class PHPParser {
+import java.nio.charset.Charset;
 
-  public static Parser<Grammar> create(PHPConfiguration conf) {
-    return Parser.builder(PHPGrammar.create().build())
-      .withLexer(PHPLexer.create(conf)).build();
+public class PHPConfiguration extends SquidConfiguration {
+
+  private boolean ignoreHeaderComments;
+
+  public PHPConfiguration(Charset charset) {
+    super(charset);
   }
 
+  public void setIgnoreHeaderComments(boolean ignoreHeaderComments) {
+    this.ignoreHeaderComments = ignoreHeaderComments;
+  }
+
+  public boolean getIgnoreHeaderComments() {
+    return ignoreHeaderComments;
+  }
 }

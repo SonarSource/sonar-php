@@ -19,11 +19,13 @@
  */
 package org.sonar.php.parser;
 
+import com.google.common.base.Charsets;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.impl.Parser;
+import org.sonar.php.PHPConfiguration;
 import org.sonar.php.parser.PHPParser;
 
 public class RuleTest {
 
-  protected Parser<Grammar> p = PHPParser.create();
+  protected Parser<Grammar> p = PHPParser.create(new PHPConfiguration(Charsets.UTF_8));
 }

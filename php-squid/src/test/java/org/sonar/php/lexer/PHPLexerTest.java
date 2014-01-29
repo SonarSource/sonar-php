@@ -25,6 +25,7 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.impl.Lexer;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPTokenType;
 
 import java.io.FileNotFoundException;
@@ -36,7 +37,7 @@ public class PHPLexerTest {
 
   @Test
   public void testLexPHPSourceCode() throws FileNotFoundException {
-    Lexer lexer = PHPLexer.create(Charsets.UTF_8);
+    Lexer lexer = PHPLexer.create(new PHPConfiguration(Charsets.UTF_8));
     List<Token> tokens = lexer.lex(FileUtils.toFile(getClass().getResource("/lexer/melting-pot-for-lexing.php")));
 
     assertThat(tokens.size()).isEqualTo(126);

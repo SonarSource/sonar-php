@@ -19,9 +19,11 @@
  */
 package org.sonar.php.toolkit;
 
+import com.google.common.base.Charsets;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.impl.Parser;
 import org.sonar.colorizer.Tokenizer;
+import org.sonar.php.PHPConfiguration;
 import org.sonar.php.parser.PHPParser;
 import org.sonar.sslr.toolkit.AbstractConfigurationModel;
 import org.sonar.sslr.toolkit.ConfigurationProperty;
@@ -38,7 +40,7 @@ public class PhpConfigurationModel extends AbstractConfigurationModel {
 
   @Override
   public Parser<? extends Grammar> doGetParser() {
-    return PHPParser.create();
+    return PHPParser.create(new PHPConfiguration(Charsets.UTF_8));
   }
 
   @Override
