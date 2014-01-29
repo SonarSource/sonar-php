@@ -47,6 +47,7 @@ public class ComplexityVisitor extends SquidAstVisitor<Grammar> {
       PHPGrammar.CATCH_STATEMENT,
       PHPGrammar.RETURN_STATEMENT,
       PHPGrammar.THROW_STATEMENT,
+      PHPGrammar.GOTO_STATEMENT,
 
       // Expressions
       PHPPunctuator.QUERY,

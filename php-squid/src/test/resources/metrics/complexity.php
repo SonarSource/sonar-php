@@ -36,13 +36,17 @@ function f2($p) {          // +1 function declaration
   } catch (Exception $e) {  // +1 catch statement
   }
 
-  a ? b + 1 && c - 1 : d * 1 || e / 1; // +3
+ a:
+    a ? b + 1 && c - 1 : d * 1 || e / 1; // +3
+
+  goto a;                   // +1 goto statement
+
   return;                   // +0 last return in method
 }
 
 class A {
 
   public function f($a) {   // +1 method declaration
-    return;                 // +0 last return in method
+      return;                 // +0 last return in method
   }
 }

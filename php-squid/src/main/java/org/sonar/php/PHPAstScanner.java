@@ -139,6 +139,7 @@ public class PHPAstScanner {
         PHPGrammar.EMPTY_STATEMENT,
         PHPGrammar.EXPRESSION_STATEMENT,
         PHPGrammar.UNSET_VARIABLE_STATEMENT,
+        PHPGrammar.LABEL,
         PHPGrammar.GOTO_STATEMENT,
         PHPGrammar.DECLARE_STATEMENT,
         PHPGrammar.ECHO_STATEMENT,

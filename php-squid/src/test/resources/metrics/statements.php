@@ -37,13 +37,14 @@ try {                     // +1 try statement
 } catch (Exception $e) {
 }
 
-unset ($a);               // +1 unset statement
+a:                        // +1 label statement
+  unset ($a);             // +1 unset statement
 
 goto a;                   // +1 goto satement
 
 $a = 1;                   // +1 expression statement
 
-declare(ticks=1)         // +1 declare statement
+declare(ticks=1)          // +1 declare statement
 
 echo $a;                  // +1 echo statement
 

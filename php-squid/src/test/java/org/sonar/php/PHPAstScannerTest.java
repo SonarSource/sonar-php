@@ -69,7 +69,7 @@ public class PHPAstScannerTest {
   @Test
   public void statements() {
     SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.php"));
-    assertThat(file.getInt(PHPMetric.STATEMENTS)).isEqualTo(24);
+    assertThat(file.getInt(PHPMetric.STATEMENTS)).isEqualTo(25);
   }
 
   @Test
@@ -83,6 +83,6 @@ public class PHPAstScannerTest {
   @Test
   public void complexity() {
     SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/complexity.php"));
-    assertThat(file.getInt(PHPMetric.COMPLEXITY)).isEqualTo(16);
+    assertThat(file.getInt(PHPMetric.COMPLEXITY)).isEqualTo(17);
   }
 }
