@@ -24,6 +24,9 @@ import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.IdentifierAndKeywordChannel;
 import com.sonar.sslr.impl.channel.PunctuatorChannel;
+import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.api.PHPTokenType;
 
 import java.nio.charset.Charset;
 

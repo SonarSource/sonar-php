@@ -25,6 +25,7 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.impl.Lexer;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.sonar.php.api.PHPTokenType;
 
 import java.io.FileNotFoundException;
 import java.util.List;
