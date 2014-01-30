@@ -24,6 +24,8 @@ import com.sonar.sslr.squid.AstScanner;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.PersistenceMode;
+import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.php.PHPAstScanner;
@@ -32,12 +34,17 @@ import org.sonar.php.api.PHPMetric;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squid.api.SourceCode;
 import org.sonar.squid.api.SourceFile;
+import org.sonar.squid.api.SourceFunction;
+import org.sonar.squid.indexer.QueryByParent;
 import org.sonar.squid.indexer.QueryByType;
 
 import java.io.File;
 import java.util.Collection;
 
 public class PHPSquidSensor implements Sensor {
+
+  private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
+  private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
   private Project project;
   private SensorContext context;
@@ -64,6 +71,8 @@ public class PHPSquidSensor implements Sensor {
       org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.fromIOFile(new java.io.File(squidFile.getKey()), project);
 
       saveFileMeasures(sonarFile, squidFile);
+      saveFunctionsComplexityDistribution(sonarFile, squidFile);
+      saveFilesComplexityDistribution(sonarFile, squidFile);
     }
   }
 
@@ -76,6 +85,21 @@ public class PHPSquidSensor implements Sensor {
     context.saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, squidFile.getDouble(PHPMetric.FUNCTIONS));
     context.saveMeasure(sonarFile, CoreMetrics.STATEMENTS, squidFile.getDouble(PHPMetric.STATEMENTS));
     context.saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, squidFile.getDouble(PHPMetric.COMPLEXITY));
+  }
+
+  private void saveFunctionsComplexityDistribution(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
+    Collection<SourceCode> squidFunctionsInFile = scanner.getIndex().search(new QueryByParent(squidFile), new QueryByType(SourceFunction.class));
+    RangeDistributionBuilder complexityDistribution = new RangeDistributionBuilder(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
+    for (SourceCode squidFunction : squidFunctionsInFile) {
+      complexityDistribution.add(squidFunction.getDouble(PHPMetric.COMPLEXITY));
+    }
+    context.saveMeasure(sonarFile, complexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+  }
+
+  private void saveFilesComplexityDistribution(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
+    RangeDistributionBuilder complexityDistribution = new RangeDistributionBuilder(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, FILES_DISTRIB_BOTTOM_LIMITS);
+    complexityDistribution.add(squidFile.getDouble(PHPMetric.COMPLEXITY));
+    context.saveMeasure(sonarFile, complexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
   }
 
   private PHPConfiguration createConfiguration() {
