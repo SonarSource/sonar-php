@@ -33,12 +33,6 @@ import org.sonar.plugins.php.core.profiles.PearProfile;
 import org.sonar.plugins.php.core.profiles.SonarWayProfile;
 import org.sonar.plugins.php.core.profiles.ZendProfile;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
-import org.sonar.plugins.php.phpdepend.PhpDependConfiguration;
-import org.sonar.plugins.php.phpdepend.PhpDependExecutor;
-import org.sonar.plugins.php.phpdepend.PhpDependParserSelector;
-import org.sonar.plugins.php.phpdepend.PhpDependPhpUnitReportParser;
-import org.sonar.plugins.php.phpdepend.PhpDependSensor;
-import org.sonar.plugins.php.phpdepend.PhpDependSummaryReportParser;
 import org.sonar.plugins.php.phpunit.PhpUnitConfiguration;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageDecorator;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
@@ -83,14 +77,6 @@ public class PhpPlugin extends SonarPlugin {
 
     // Duplications
     extensions.add(PhpCPDMapping.class);
-
-    // PhpDepend
-    extensions.add(PhpDependExecutor.class);
-    extensions.add(PhpDependParserSelector.class);
-    extensions.add(PhpDependPhpUnitReportParser.class);
-    extensions.add(PhpDependSummaryReportParser.class);
-    extensions.add(PhpDependConfiguration.class);
-    extensions.add(PhpDependSensor.class);
 
     // PhpUnit
     extensions.add(PhpUnitConfiguration.class);
