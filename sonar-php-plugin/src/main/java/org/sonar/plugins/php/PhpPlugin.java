@@ -29,11 +29,7 @@ import org.sonar.plugins.php.core.PhpCommonRulesEngineProvider;
 import org.sonar.plugins.php.core.PhpLexerSensor;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.core.PhpSourceImporter;
-import org.sonar.plugins.php.core.profiles.AllPhpCSProfile;
-import org.sonar.plugins.php.core.profiles.AllPhpmdProfile;
-import org.sonar.plugins.php.core.profiles.PearProfile;
 import org.sonar.plugins.php.core.profiles.SonarWayProfile;
-import org.sonar.plugins.php.core.profiles.ZendProfile;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
 import org.sonar.plugins.php.phpunit.PhpUnitConfiguration;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageDecorator;
@@ -77,13 +73,6 @@ public class PhpPlugin extends SonarPlugin {
 
     // Common rules
     extensions.add(PhpCommonRulesEngineProvider.class);
-
-    // Profiles
-    extensions.add(SonarWayProfile.class);
-    extensions.add(AllPhpmdProfile.class);
-    extensions.add(AllPhpCSProfile.class);
-    extensions.add(PearProfile.class);
-    extensions.add(ZendProfile.class);
 
     // Duplications
     extensions.add(PhpCPDMapping.class);
