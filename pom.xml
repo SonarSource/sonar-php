@@ -38,6 +38,12 @@
 
   <developers>
     <developer>
+      <id>lindamartin</id>
+      <name>Linda Martin</name>
+      <email>linda.martin@sonarsource.com</email>
+      <organization>SonarSource</organization>
+    </developer>
+    <developer>
       <id>fabemn</id>
       <name>Fabrice Bellingard</name>
       <email>fabrice.bellingard@sonarsource.com</email>
@@ -88,77 +94,80 @@
     <license.title>Sonar PHP Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-    <sonar.version>3.2</sonar.version>
+    <sonar.version>3.0</sonar.version>
     <sslr.version>1.19.2</sslr.version>
     <sslrSquid.version>2.3</sslrSquid.version>
-    <junit.version>4.10</junit.version>
+    <sonarCommonRules.version>1.1</sonarCommonRules.version>
   </properties>
 
   <dependencyManagement>
-  <dependencies>
-   <dependency>
-    <groupId>${project.groupId}</groupId>
-    <artifactId>php-squid</artifactId>
-    <version>${project.version}</version>
-  </dependency>
-  <dependency>
-    <groupId>org.codehaus.sonar</groupId>
-    <artifactId>sonar-channel</artifactId>
-    <version>${sonar.version}</version>
-  </dependency>
-  <dependency>
-    <groupId>org.codehaus.sonar</groupId>
-    <artifactId>sonar-plugin-api</artifactId>
-    <version>${sonar.version}</version>
-  </dependency>
-  <dependency>
-    <groupId>org.codehaus.sonar.sslr</groupId>
-    <artifactId>sslr-core</artifactId>
-    <version>${sslr.version}</version>
-  </dependency>
-  <dependency>
-    <groupId>org.codehaus.sonar.sslr</groupId>
-    <artifactId>sslr-toolkit</artifactId>
-    <version>${sslr.version}</version>
-  </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.10</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar.sslr</groupId>
-      <artifactId>sslr-testing-harness</artifactId>
-      <version>${sslr.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>0.9.30</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.6.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.easytesting</groupId>
-      <artifactId>fest-assert</artifactId>
-      <version>1.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
-      <artifactId>sslr-squid-bridge</artifactId>
-      <version>2.3</version>
-    </dependency>
-  </dependencies>
+    <dependencies>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>php-squid</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.sonar</groupId>
+        <artifactId>sonar-channel</artifactId>
+        <version>${sonar.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.sonar</groupId>
+        <artifactId>sonar-plugin-api</artifactId>
+        <version>${sonar.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.sonar</groupId>
+        <artifactId>sonar-testing-harness</artifactId>
+        <version>${sonar.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.sonar.sslr</groupId>
+        <artifactId>sslr-core</artifactId>
+        <version>${sslr.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.sonar.sslr</groupId>
+        <artifactId>sslr-toolkit</artifactId>
+        <version>${sslr.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
+        <artifactId>sslr-squid-bridge</artifactId>
+        <version>2.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.sonar.sslr</groupId>
+        <artifactId>sslr-testing-harness</artifactId>
+        <version>${sslr.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.sonar.common-rules</groupId>
+        <artifactId>sonar-common-rules</artifactId>
+        <version>${sonarCommonRules.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.10</version>
+      </dependency>
+      <dependency>
+        <groupId>org.easytesting</groupId>
+        <artifactId>fest-assert</artifactId>
+        <version>1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>0.9.30</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.6.2</version>
+      </dependency>
+    </dependencies>
   </dependencyManagement>
+
 </project>

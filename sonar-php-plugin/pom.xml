@@ -16,13 +16,10 @@
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
 
   <properties>
-    <sonar.version>3.0</sonar.version>
     <sonar.pluginClass>org.sonar.plugins.php.PhpPlugin</sonar.pluginClass>
     <sonar.pluginName>PHP</sonar.pluginName>
     <!-- Those classes are excluded as they are just a temporary copy of Sonar core classes -->
     <sonar.exclusions>org/sonar/plugins/php/duplications/internal/*.java</sonar.exclusions>
-    <sonarCommonRules.version>1.1</sonarCommonRules.version>
-    <sslr.version>1.19.1</sslr.version>
   </properties>
 
   <dependencies>
@@ -33,64 +30,26 @@
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-plugin-api</artifactId>
-      <version>${sonar.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.sonar.common-rules</groupId>
       <artifactId>sonar-common-rules</artifactId>
-      <version>${sonarCommonRules.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar.sslr</groupId>
-      <artifactId>sslr-core</artifactId>
-      <version>${sslr.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-channel</artifactId>
-      <version>${sonar.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jdom</groupId>
-      <artifactId>jdom</artifactId>
-      <version>1.1</version>
     </dependency>
     <!-- unit tests -->
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.sonar.sslr</groupId>
       <artifactId>sslr-testing-harness</artifactId>
-      <version>${sslr.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
-      <version>3.1</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-ws-client</artifactId>
-      <version>${sonar.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.easytesting</groupId>
       <artifactId>fest-assert</artifactId>
-      <version>1.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -99,10 +58,6 @@
       <version>2.0.6</version>
       <type>jar</type>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
-      <artifactId>sslr-squid-bridge</artifactId>
     </dependency>
   </dependencies>
 
@@ -121,8 +76,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>1200000</maxsize>
-                  <minsize>1000000</minsize>
+                  <maxsize>1000000</maxsize>
+                  <minsize>900000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>
