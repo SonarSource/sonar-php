@@ -36,7 +36,6 @@
     <module>sslr-php-toolkit</module>
     <!-- TODO: Those modules do not need to be built, and they may even be removed soon...
     <module>phpmd-rulesets</module>
-    <module>phpcodesniffer-rulesets</module>
     -->
   </modules>
 

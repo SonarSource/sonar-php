@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<checkstyle version="1.3.0RC1">
-  <file name="D:\hashcode\math-php-test\source\src\Mail.php">
-    <error line="15" column="1" severity="error"
-      message="@category tag comment indented incorrectly; expected 2 spaces but found 3" source="PEAR.Commenting.FileComment.TagIndent" />
-    <error line="16" column="1" severity="error"
-      message="@package tag comment indented incorrectly; expected 3 spaces but found 4" source="PEAR.Commenting.FileComment.TagIndent" />
-  </file>
-</checkstyle>

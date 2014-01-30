@@ -1,9 +1,0 @@
-<module name="Checker">
-  <module name="Translation"/>
-  <module name="TreeWalker">
-    <module name="AnonInnerLength">
-      <property name="max" value="15"/>
-    </module>
-    <module name="TypeName"/>
-  </module>
-</module>

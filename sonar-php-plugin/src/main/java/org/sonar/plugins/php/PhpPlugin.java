@@ -22,14 +22,6 @@ package org.sonar.plugins.php;
 import org.sonar.api.Extension;
 import org.sonar.api.SonarPlugin;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferConfiguration;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferExecutor;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferPriorityMapper;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileExporter;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferProfileImporter;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferRuleRepository;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferSensor;
-import org.sonar.plugins.php.codesniffer.PhpCodeSnifferViolationsXmlParser;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.core.PhpCommonRulesEngineProvider;
 import org.sonar.plugins.php.core.PhpLexerSensor;
@@ -71,7 +63,7 @@ public class PhpPlugin extends SonarPlugin {
 
   /**
    * Gets the extensions.
-   * 
+   *
    * @return the extensions
    * @see org.sonar.api.Plugin#getExtensions()
    */
@@ -115,16 +107,6 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PmdRulePriorityMapper.class);
     extensions.add(PhpmdProfileImporter.class);
     extensions.add(PhpmdProfileExporter.class);
-
-    // Code sniffer
-    extensions.add(PhpCodeSnifferRuleRepository.class);
-    extensions.add(PhpCodeSnifferExecutor.class);
-    extensions.add(PhpCodeSnifferViolationsXmlParser.class);
-    extensions.add(PhpCodeSnifferSensor.class);
-    extensions.add(PhpCodeSnifferConfiguration.class);
-    extensions.add(PhpCodeSnifferPriorityMapper.class);
-    extensions.add(PhpCodeSnifferProfileExporter.class);
-    extensions.add(PhpCodeSnifferProfileImporter.class);
 
     // PhpUnit
     extensions.add(PhpUnitConfiguration.class);

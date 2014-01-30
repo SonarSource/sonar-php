@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="PHP_CodeSniffer rules">
-  <rule ref="Generic.CodeAnalysis.EmptyStatement.NotAllowed">
-  </rule>
-</ruleset>
