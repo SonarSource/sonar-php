@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<metrics ahh="0" andc="0" calls="148" ccn="85" classes="4" cloc="251" clsa="0" clsc="4" fanout="42" files="4"  functions="1" interfs="1" leafs="4" loc="768" locExecutable="411" maxdit="0" ncloc="517" nom="66" nop="2"          roots="0">
-  <file name="" classes="2" cloc="68" functions="1" loc="188" locExecutable="94" ncloc="120">
-  </file>
-</metrics>
