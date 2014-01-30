@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php.duplications;
 
-import org.sonar.plugins.php.duplications.internal.TokenChunker;
+import org.sonar.duplications.token.TokenChunker;
 
 /**
  * No PHP language specification document could be found to help produce this tokenizer. So http://php.net/manual/en/langref.php was used
@@ -39,7 +39,7 @@ public final class PhpTokenProducer {
 
   /**
    * Creates a {@link TokenChunker} for the PHP language.
-   * 
+   *
    * @return a TokenChunker
    */
   public static TokenChunker build() {

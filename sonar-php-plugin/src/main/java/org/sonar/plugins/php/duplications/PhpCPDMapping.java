@@ -28,10 +28,10 @@ import org.sonar.api.batch.AbstractCpdMapping;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
+import org.sonar.duplications.token.Token;
+import org.sonar.duplications.token.TokenChunker;
+import org.sonar.duplications.token.TokenQueue;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.duplications.internal.Token;
-import org.sonar.plugins.php.duplications.internal.TokenChunker;
-import org.sonar.plugins.php.duplications.internal.TokenQueue;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,7 +41,7 @@ import java.util.Iterator;
 
 /**
  * Temporary PHP CPD engine mapping class, used until we can migrate to Sonar CPD Engine.
- * 
+ *
  */
 public class PhpCPDMapping extends AbstractCpdMapping {
 
@@ -50,7 +50,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
 
   /**
    * Creates a {@link PhpCPDMapping} object
-   * 
+   *
    * @param php
    * @param project
    */
@@ -61,7 +61,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
 
   /**
    * Returns the language
-   * 
+   *
    * @return the language
    */
   public Language getLanguage() {
@@ -70,7 +70,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
 
   /**
    * Returns the tokenizer
-   * 
+   *
    * @return the tokenizer
    */
   public Tokenizer getTokenizer() {

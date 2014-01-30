@@ -23,9 +23,9 @@ import com.google.common.collect.Lists;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.sonar.plugins.php.duplications.internal.Token;
-import org.sonar.plugins.php.duplications.internal.TokenChunker;
-import org.sonar.plugins.php.duplications.internal.TokenQueue;
+import org.sonar.duplications.token.Token;
+import org.sonar.duplications.token.TokenChunker;
+import org.sonar.duplications.token.TokenQueue;
 import org.sonar.test.TestUtils;
 
 import java.io.File;
@@ -194,9 +194,9 @@ public class PHPTokenProducerTest {
   @Test
   public void shouldPreserveSeparators() {
     assertThat(
-        chunk("(){}[];,."),
-        isTokens(new Token("(", 1, 0), new Token(")", 1, 1), new Token("{", 1, 2), new Token("}", 1, 3), new Token("[", 1, 4), new Token(
-            "]", 1, 5), new Token(";", 1, 6), new Token(",", 1, 7), new Token(".", 1, 8)));
+      chunk("(){}[];,."),
+      isTokens(new Token("(", 1, 0), new Token(")", 1, 1), new Token("{", 1, 2), new Token("}", 1, 3), new Token("[", 1, 4), new Token(
+        "]", 1, 5), new Token(";", 1, 6), new Token(",", 1, 7), new Token(".", 1, 8)));
   }
 
   @Test
