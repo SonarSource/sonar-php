@@ -28,6 +28,7 @@ import org.sonar.colorizer.InlineDocTokenizer;
 import org.sonar.colorizer.KeywordsTokenizer;
 import org.sonar.colorizer.StringTokenizer;
 import org.sonar.colorizer.Tokenizer;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpConstants;
 
 import java.util.List;
@@ -42,13 +43,13 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
    * Simple constructor
    */
   public PhpSourceCodeColorizer() {
-    super(PhpConstants.LANGUAGE_KEY);
+    super(Php.KEY);
   }
 
   /**
    * We use here the C/C++ tokenizers, the custom PHP Tokenizer and the standard String tokenir (handles simple quotes and double quotes
    * delimited strings).
-   * 
+   *
    * @see org.sonar.api.web.CodeColorizerFormat#getTokenizers()
    */
   @Override

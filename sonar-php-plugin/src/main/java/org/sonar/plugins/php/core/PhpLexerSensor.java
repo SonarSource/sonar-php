@@ -36,6 +36,7 @@ import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpConstants;
 
 import java.io.File;
@@ -61,7 +62,7 @@ public class PhpLexerSensor implements Sensor {
    */
   public void analyse(Project project, SensorContext context) {
     ProjectFileSystem fileSystem = project.getFileSystem();
-    List<InputFile> sourceFiles = fileSystem.mainFiles(PhpConstants.LANGUAGE_KEY);
+    List<InputFile> sourceFiles = fileSystem.mainFiles(Php.KEY);
     for (InputFile file : sourceFiles) {
       org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file.getFile(), project);
       if (phpFile != null) {
@@ -130,7 +131,7 @@ public class PhpLexerSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey());
+    return Php.KEY.equals(project.getLanguageKey());
   }
 
   /**

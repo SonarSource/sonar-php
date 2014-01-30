@@ -30,6 +30,7 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.ResourceUtils;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpConstants;
 
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class PhpUnitCoverageDecorator implements Decorator {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey()) || !configuration.isDynamicAnalysisEnabled()) {
+    if (!Php.KEY.equals(project.getLanguageKey()) || !configuration.isDynamicAnalysisEnabled()) {
       return false;
     }
     return !configuration.shouldSkipCoverage();

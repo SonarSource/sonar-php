@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 /**
- * 
+ *
  */
 package org.sonar.plugins.php;
 
@@ -42,14 +42,14 @@ public class MockUtils {
   public static Project createMockProject() {
     Project project = mock(Project.class);
     when(project.getLanguage()).thenReturn(new Php());
-    when(project.getLanguageKey()).thenReturn(PhpConstants.LANGUAGE_KEY);
+    when(project.getLanguageKey()).thenReturn(Php.KEY);
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSonarWorkingDirectory()).thenReturn(new File("target/MockProject/target/sonar").getAbsoluteFile());
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("target/MockProject/src").getAbsoluteFile()));
-    when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/src/Foo.php")));
+    when(fs.mainFiles(Php.KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/src/Foo.php")));
     when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("target/MockProject/test").getAbsoluteFile()));
-    when(fs.testFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/test/FooTest.php")));
+    when(fs.testFiles(Php.KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/test/FooTest.php")));
     when(fs.getBuildDir()).thenReturn(new File("target/MockProject/target").getAbsoluteFile());
     when(fs.getBasedir()).thenReturn(new File("target/MockProject").getAbsoluteFile());
     when(fs.resolvePath(anyString())).thenAnswer(new Answer<File>() {

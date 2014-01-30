@@ -25,22 +25,20 @@ import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.AbstractLanguage;
+import org.sonar.plugins.php.PhpPlugin;
 
 import java.util.List;
 
 /**
  * This class defines the PHP language.
  */
-@Properties({
-  @Property(
-    key = PhpConstants.FILE_SUFFIXES_KEY,
-    defaultValue = PhpConstants.FILE_SUFFIXES_DEFVALUE,
-    name = "File suffixes",
-    description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.",
-    project = true,
-    global = true)
-})
 public final class Php extends AbstractLanguage {
+
+
+  public static final String NAME = "PHP";
+  public static final String KEY = "php";
+
+  public static final String DEFAULT_FILE_SUFFIXES = "php,php3,php4,php5,phtml,inc";
 
   private Settings settings;
 
@@ -48,7 +46,7 @@ public final class Php extends AbstractLanguage {
    * Construct the PHP language.
    */
   public Php(Settings settings) {
-    super(PhpConstants.LANGUAGE_KEY, PhpConstants.LANGUAGE_NAME);
+    super(KEY, NAME);
     this.settings = settings;
   }
 
@@ -63,9 +61,9 @@ public final class Php extends AbstractLanguage {
    * {@inheritDoc}
    */
   public String[] getFileSuffixes() {
-    String[] suffixes = filterEmptyStrings(settings.getStringArray(PhpConstants.FILE_SUFFIXES_KEY));
+    String[] suffixes = filterEmptyStrings(settings.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY));
     if (suffixes.length == 0) {
-      suffixes = StringUtils.split(PhpConstants.FILE_SUFFIXES_DEFVALUE, ",");
+      suffixes = StringUtils.split(Php.DEFAULT_FILE_SUFFIXES, ",");
     }
     return suffixes;
   }
@@ -82,7 +80,7 @@ public final class Php extends AbstractLanguage {
 
   /**
    * Allows to know if the given file name has a valid suffix.
-   * 
+   *
    * @param fileName
    *          String representing the file name
    * @return boolean <code>true</code> if the file name's suffix is known, <code>false</code> any other way

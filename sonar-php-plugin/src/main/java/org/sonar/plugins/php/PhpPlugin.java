@@ -20,6 +20,8 @@
 package org.sonar.plugins.php;
 
 import org.sonar.api.Extension;
+import org.sonar.api.Properties;
+import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
@@ -43,10 +45,18 @@ import org.sonar.plugins.php.phpunit.PhpUnitSensor;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class is the sonar entry point of this plugin. It declares all the extension that can be launched with this plugin.
- */
+@Properties({
+  @Property(
+    key = PhpPlugin.FILE_SUFFIXES_KEY,
+    defaultValue = Php.DEFAULT_FILE_SUFFIXES,
+    name = "File suffixes",
+    description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.",
+    global = true,
+    project = true)
+})
 public class PhpPlugin extends SonarPlugin {
+
+  public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
 
   /**
    * Gets the extensions.

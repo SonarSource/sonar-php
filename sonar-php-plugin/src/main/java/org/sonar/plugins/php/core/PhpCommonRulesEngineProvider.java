@@ -22,6 +22,7 @@ package org.sonar.plugins.php.core;
 import org.sonar.api.resources.Project;
 import org.sonar.commonrules.api.CommonRulesEngine;
 import org.sonar.commonrules.api.CommonRulesEngineProvider;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpConstants;
 
 public class PhpCommonRulesEngineProvider extends CommonRulesEngineProvider {
@@ -46,7 +47,7 @@ public class PhpCommonRulesEngineProvider extends CommonRulesEngineProvider {
 
   @Override
   protected String getLanguageKey() {
-    return PhpConstants.LANGUAGE_KEY;
+    return Php.KEY;
   }
 
 }

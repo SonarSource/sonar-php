@@ -27,6 +27,7 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpConstants;
 
 import static org.sonar.plugins.php.core.AbstractPhpConfiguration.DEFAULT_TIMEOUT;
@@ -163,10 +164,10 @@ public class PhpUnitSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return PhpConstants.LANGUAGE_KEY.equals(project.getLanguageKey())
+    return Php.KEY.equals(project.getLanguageKey())
       && configuration.isDynamicAnalysisEnabled()
       && !configuration.isSkip()
-      && !project.getFileSystem().testFiles(PhpConstants.LANGUAGE_KEY).isEmpty();
+      && !project.getFileSystem().testFiles(Php.KEY).isEmpty();
   }
 
   /**

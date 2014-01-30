@@ -27,13 +27,6 @@ public final class PhpConstants {
   private PhpConstants() {
   }
 
-  public static final String LANGUAGE_NAME = "PHP";
-  public static final String LANGUAGE_KEY = "php";
-
-  /** All the valid php files suffixes. */
-  public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
-  public static final String FILE_SUFFIXES_DEFVALUE = "php,php3,php4,php5,phtml,inc";
-
   /**
    * An array containing all PHP keywords.
    */

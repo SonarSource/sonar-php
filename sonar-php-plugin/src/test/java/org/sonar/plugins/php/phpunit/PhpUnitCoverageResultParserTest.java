@@ -30,6 +30,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.test.TestUtils;
 
@@ -80,9 +81,9 @@ public class PhpUnitCoverageResultParserTest {
     File f6 = new File("C:/projets/PHP/Monkey/sources/test/application/default/controllers/IndexControllerTest.php");
 
     List<File> sourceFiles = Arrays.asList(f1, f2, f3, f5);
-    when(fs.mainFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/main"), sourceFiles));
+    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/main"), sourceFiles));
     List<File> testFiles = Arrays.asList(f4, f6);
-    when(fs.testFiles(PhpConstants.LANGUAGE_KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
+    when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
 
     when(config.getReportFile()).thenReturn(TestUtils.getResource(reportPath));
 

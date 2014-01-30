@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api;
 
 import org.junit.Test;
 import org.sonar.api.config.Settings;
+import org.sonar.plugins.php.PhpPlugin;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -50,7 +51,7 @@ public class PhpTest {
   @Test
   public void shouldCheckCustomValidPhpExtensions() {
     Settings settings = new Settings();
-    settings.setProperty(PhpConstants.FILE_SUFFIXES_KEY, " php6  , php7, , ");
+    settings.setProperty(PhpPlugin.FILE_SUFFIXES_KEY, " php6  , php7, , ");
 
     Php php = new Php(settings);
     assertTrue(php.hasValidSuffixes("goodExtension.php6"));
