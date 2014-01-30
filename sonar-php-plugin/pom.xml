@@ -27,6 +27,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>php-squid</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-plugin-api</artifactId>
       <version>${sonar.version}</version>
@@ -96,6 +100,10 @@
       <type>jar</type>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
+      <artifactId>sslr-squid-bridge</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -113,8 +121,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>900000</maxsize>
-                  <minsize>800000</minsize>
+                  <maxsize>1200000</maxsize>
+                  <minsize>1000000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>

@@ -67,16 +67,20 @@ public class PhpPlugin extends SonarPlugin {
 
     // Core extensions
     extensions.add(PhpSourceImporter.class);
-    extensions.add(PhpLexerSensor.class);
+  //extensions.add(PhpLexerSensor.class); TODO: safely delete
     extensions.add(PhpSourceCodeColorizer.class);
     extensions.add(NoSonarAndCommentedOutLocSensor.class);
-
-    // Common rules
-    extensions.add(PhpCommonRulesEngineProvider.class);
 
     // Duplications
     extensions.add(PhpCPDMapping.class);
 
+    // Common rules
+    extensions.add(PhpCommonRulesEngineProvider.class);
+
+    extensions.add(PHPSquidSensor.class);
+
+    extensions.add(PHPRuleRepository.class);
+    extensions.add(SonarWayProfile.class);
     // PhpUnit
     extensions.add(PhpUnitConfiguration.class);
     extensions.add(PhpUnitSensor.class);

@@ -24,29 +24,17 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.ValidationMessages;
 
-/**
- * Profile used for applications developed no specific framework.
- */
 public final class SonarWayProfile extends ProfileDefinition {
 
   private final XMLProfileParser parser;
 
-  /**
-   * Creates the profile.
-   * 
-   * @param parser
-   *          the XML file parser
-   */
   public SonarWayProfile(XMLProfileParser parser) {
     this.parser = parser;
   }
 
-  /**
-   * @see org.sonar.api.profiles.ProfileDefinition#createProfile(org.sonar.api.utils.ValidationMessages)
-   */
   @Override
   public RulesProfile createProfile(ValidationMessages messages) {
-    RulesProfile profile = parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/profiles/sonar-way-profile.xml",
+    RulesProfile profile = parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/sonar-way-profile.xml",
         messages);
     profile.setDefaultProfile(true);
     return profile;

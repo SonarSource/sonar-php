@@ -96,6 +96,11 @@
 
   <dependencyManagement>
   <dependencies>
+   <dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>php-squid</artifactId>
+    <version>${project.version}</version>
+  </dependency>
   <dependency>
     <groupId>org.codehaus.sonar</groupId>
     <artifactId>sonar-channel</artifactId>
@@ -148,6 +153,11 @@
       <groupId>org.easytesting</groupId>
       <artifactId>fest-assert</artifactId>
       <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.sonar.sslr-squid-bridge</groupId>
+      <artifactId>sslr-squid-bridge</artifactId>
+      <version>2.3</version>
     </dependency>
   </dependencies>
   </dependencyManagement>
