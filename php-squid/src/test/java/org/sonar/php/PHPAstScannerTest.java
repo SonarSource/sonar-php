@@ -70,7 +70,7 @@ public class PHPAstScannerTest {
   @Test
   public void statements() {
     SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/statements.php"));
-    assertThat(file.getInt(PHPMetric.STATEMENTS)).isEqualTo(25);
+    assertThat(file.getInt(PHPMetric.STATEMENTS)).isEqualTo(26);
   }
 
   @Test

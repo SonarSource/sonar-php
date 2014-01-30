@@ -123,6 +123,7 @@ public class PHPAstScanner {
       .setMetricDef(PHPMetric.STATEMENTS)
       .subscribeTo(
         PHPGrammar.USE_STATEMENT,
+        PHPGrammar.NAMESPACE_STATEMENT,
         PHPGrammar.CONSTANT_DECLARATION,
         PHPGrammar.HALT_COMPILER_STATEMENT,
         PHPGrammar.IF_STATEMENT,

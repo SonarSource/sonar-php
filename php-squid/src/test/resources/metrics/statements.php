@@ -1,5 +1,7 @@
 <?php
 
+namespace NS;
+
 use myNamespace as NS;    // +1 se statement
 
 global $a;                // +1 global statement
