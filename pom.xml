@@ -34,9 +34,6 @@
     <module>sonar-php-plugin</module>
     <module>php-squid</module>
     <module>sslr-php-toolkit</module>
-    <!-- TODO: Those modules do not need to be built, and they may even be removed soon...
-    <module>phpmd-rulesets</module>
-    -->
   </modules>
 
   <developers>

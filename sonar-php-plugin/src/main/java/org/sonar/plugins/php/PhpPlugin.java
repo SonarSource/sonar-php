@@ -45,13 +45,6 @@ import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitExecutor;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitSensor;
-import org.sonar.plugins.php.pmd.PhpmdConfiguration;
-import org.sonar.plugins.php.pmd.PhpmdExecutor;
-import org.sonar.plugins.php.pmd.PhpmdProfileExporter;
-import org.sonar.plugins.php.pmd.PhpmdProfileImporter;
-import org.sonar.plugins.php.pmd.PhpmdRuleRepository;
-import org.sonar.plugins.php.pmd.PhpmdSensor;
-import org.sonar.plugins.php.pmd.PmdRulePriorityMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,15 +91,6 @@ public class PhpPlugin extends SonarPlugin {
     extensions.add(PhpDependSummaryReportParser.class);
     extensions.add(PhpDependConfiguration.class);
     extensions.add(PhpDependSensor.class);
-
-    // Phpmd
-    extensions.add(PhpmdSensor.class);
-    extensions.add(PhpmdRuleRepository.class);
-    extensions.add(PhpmdConfiguration.class);
-    extensions.add(PhpmdExecutor.class);
-    extensions.add(PmdRulePriorityMapper.class);
-    extensions.add(PhpmdProfileImporter.class);
-    extensions.add(PhpmdProfileExporter.class);
 
     // PhpUnit
     extensions.add(PhpUnitConfiguration.class);
