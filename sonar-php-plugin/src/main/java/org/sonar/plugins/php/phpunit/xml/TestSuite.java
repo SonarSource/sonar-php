@@ -31,54 +31,61 @@ import java.util.List;
 @XStreamAlias("testsuite")
 public final class TestSuite {
 
-  /** The name. */
+  /**
+   * The name.
+   */
   @XStreamAsAttribute
   private String name;
 
-  /** The file. */
+  /**
+   * The file.
+   */
   @XStreamAsAttribute
   private String file;
 
-  /** The tests. */
+  /**
+   * The tests.
+   */
   @XStreamAsAttribute
   private String tests;
 
-  /** The assertions. */
+  /**
+   * The assertions.
+   */
   @XStreamAsAttribute
   private String assertions;
 
-  /** The time. */
+  /**
+   * The time.
+   */
   @XStreamAsAttribute
   private double time;
 
-  /** The test suites. */
+  /**
+   * The test suites.
+   */
   @XStreamImplicit(itemFieldName = "testsuite")
   private List<TestSuite> testSuites;
 
-  /** The test cases. */
+  /**
+   * The test cases.
+   */
   @XStreamImplicit(itemFieldName = "testcase")
   private List<TestCase> testCases;
 
   /**
    * Instantiates a new test suite.
    *
-   * @param name
-   *          the name
-   * @param file
-   *          the file
-   * @param tests
-   *          the tests
-   * @param assertions
-   *          the assertions
-   * @param time
-   *          the time
-   * @param testSuites
-   *          the test suites
-   * @param testCases
-   *          the test cases
+   * @param name       the name
+   * @param file       the file
+   * @param tests      the tests
+   * @param assertions the assertions
+   * @param time       the time
+   * @param testSuites the test suites
+   * @param testCases  the test cases
    */
   public TestSuite(final String name, final String file, final String tests, final String assertions,
-      final double time, final List<TestSuite> testSuites, final List<TestCase> testCases) {
+                   final double time, final List<TestSuite> testSuites, final List<TestCase> testCases) {
     super();
     this.name = name;
     this.file = file;
@@ -101,8 +108,7 @@ public final class TestSuite {
   /**
    * Sets the name.
    *
-   * @param name
-   *          the new name
+   * @param name the new name
    */
   public void setName(final String name) {
     this.name = name;
@@ -120,8 +126,7 @@ public final class TestSuite {
   /**
    * Sets the file.
    *
-   * @param file
-   *          the new file
+   * @param file the new file
    */
   public void setFile(final String file) {
     this.file = file;
@@ -139,8 +144,7 @@ public final class TestSuite {
   /**
    * Sets the tests.
    *
-   * @param tests
-   *          the new tests
+   * @param tests the new tests
    */
   public void setTests(final String tests) {
     this.tests = tests;
@@ -158,8 +162,7 @@ public final class TestSuite {
   /**
    * Sets the assertions.
    *
-   * @param assertions
-   *          the new assertions
+   * @param assertions the new assertions
    */
   public void setAssertions(final String assertions) {
     this.assertions = assertions;

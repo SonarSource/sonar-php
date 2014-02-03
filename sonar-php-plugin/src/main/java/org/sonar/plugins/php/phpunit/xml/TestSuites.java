@@ -31,7 +31,9 @@ import java.util.List;
 @XStreamAlias("testsuites")
 public final class TestSuites {
 
-  /** The test suites. */
+  /**
+   * The test suites.
+   */
   @XStreamImplicit(itemFieldName = "testsuite")
   private List<TestSuite> testSuites;
 
@@ -47,8 +49,7 @@ public final class TestSuites {
   /**
    * Sets the test suites.
    *
-   * @param testSuites
-   *          the new test suites
+   * @param testSuites the new test suites
    */
   public void setTestSuites(final List<TestSuite> testSuites) {
     this.testSuites = testSuites;
@@ -57,8 +58,7 @@ public final class TestSuites {
   /**
    * Adds the test suite.
    *
-   * @param testSuite
-   *          the test suite
+   * @param testSuite the test suite
    */
   public void addTestSuite(final TestSuite testSuite) {
     if (testSuites == null) {

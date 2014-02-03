@@ -32,28 +32,31 @@ import java.util.List;
 @XStreamAlias("file")
 public class FileNode {
 
-  /** The lines. */
+  /**
+   * The lines.
+   */
   @XStreamImplicit(itemFieldName = "line")
   private List<LineNode> lines;
 
-  /** The ignored nodes. */
+  /**
+   * The ignored nodes.
+   */
   @XStreamOmitField
   @XStreamImplicit(itemFieldName = "class")
   private List<ClassNode> ignoredNodes;
 
-  /** The metrics. */
+  /**
+   * The metrics.
+   */
   @XStreamAlias("metrics")
   private MetricsNode metrics;
 
   /**
    * Instantiates a new file node.
    *
-   * @param lines
-   *          the lines
-   * @param metrics
-   *          the metrics
-   * @param name
-   *          the name
+   * @param lines   the lines
+   * @param metrics the metrics
+   * @param name    the name
    */
   public FileNode(List<LineNode> lines, MetricsNode metrics, String name) {
     super();
@@ -62,7 +65,9 @@ public class FileNode {
     this.name = name;
   }
 
-  /** The name. */
+  /**
+   * The name.
+   */
   @XStreamAsAttribute
   private String name;
 
@@ -78,8 +83,7 @@ public class FileNode {
   /**
    * Sets the lines.
    *
-   * @param lines
-   *          the new lines
+   * @param lines the new lines
    */
   public void setLines(List<LineNode> lines) {
     this.lines = lines;
@@ -97,8 +101,7 @@ public class FileNode {
   /**
    * Sets the metrics.
    *
-   * @param metrics
-   *          the new metrics
+   * @param metrics the new metrics
    */
   public void setMetrics(MetricsNode metrics) {
     this.metrics = metrics;
@@ -116,8 +119,7 @@ public class FileNode {
   /**
    * Sets the name.
    *
-   * @param name
-   *          the new name
+   * @param name the new name
    */
   public void setName(String name) {
     this.name = name;

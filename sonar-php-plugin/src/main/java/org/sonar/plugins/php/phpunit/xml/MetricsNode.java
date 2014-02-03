@@ -27,12 +27,16 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public final class MetricsNode {
 
-  /** The The number of covered statements. */
+  /**
+   * The The number of covered statements.
+   */
   @XStreamAsAttribute
   @XStreamAlias("coveredstatements")
   private double coveredStatements;
 
-  /** The total statements count. */
+  /**
+   * The total statements count.
+   */
   @XStreamAsAttribute
   @XStreamAlias("statements")
   private double totalStatementsCount;
@@ -40,10 +44,8 @@ public final class MetricsNode {
   /**
    * Instantiates a new metrics node.
    *
-   * @param totalStatementsCount
-   *          the total statements count
-   * @param coveredstatements
-   *          the coveredstatements
+   * @param totalStatementsCount the total statements count
+   * @param coveredstatements    the coveredstatements
    */
   public MetricsNode(double totalStatementsCount, double coveredstatements) {
     super();

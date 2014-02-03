@@ -31,21 +31,29 @@ import java.util.List;
 @XStreamAlias("project")
 public class ProjectNode {
 
-  /** The project files. */
+  /**
+   * The project files.
+   */
   @XStreamImplicit
   @XStreamAlias("file")
   private List<FileNode> files;
 
-  /** The project files. */
+  /**
+   * The project files.
+   */
   @XStreamImplicit
   @XStreamAlias("package")
   private List<PackageNode> packages;
 
-  /** The project name. */
+  /**
+   * The project name.
+   */
   @XStreamAsAttribute
   private String name;
 
-  /** The project metrics. */
+  /**
+   * The project metrics.
+   */
   @XStreamAlias("metrics")
   private MetricsNode metrics;
 
@@ -61,8 +69,7 @@ public class ProjectNode {
   /**
    * Sets the metrics.
    *
-   * @param metrics
-   *          the new metrics
+   * @param metrics the new metrics
    */
   public void setMetrics(MetricsNode metrics) {
     this.metrics = metrics;
@@ -80,12 +87,9 @@ public class ProjectNode {
   /**
    * Instantiates a new project node.
    *
-   * @param files
-   *          the files
-   * @param name
-   *          the name
-   * @param metrics
-   *          the metrics
+   * @param files   the files
+   * @param name    the name
+   * @param metrics the metrics
    */
   public ProjectNode(List<FileNode> files, String name, MetricsNode metrics) {
     super();
@@ -97,8 +101,7 @@ public class ProjectNode {
   /**
    * Sets the name.
    *
-   * @param name
-   *          the new name
+   * @param name the new name
    */
   public void setName(String name) {
     this.name = name;
@@ -116,8 +119,7 @@ public class ProjectNode {
   /**
    * Sets the files.
    *
-   * @param files
-   *          the new files
+   * @param files the new files
    */
   public void setFiles(List<FileNode> files) {
     this.files = files;

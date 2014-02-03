@@ -31,22 +31,24 @@ import java.util.List;
 @XStreamAlias("project")
 public class PackageNode {
 
-  /** The project files. */
+  /**
+   * The project files.
+   */
   @XStreamImplicit
   @XStreamAlias("file")
   private List<FileNode> files;
 
-  /** The project name. */
+  /**
+   * The project name.
+   */
   @XStreamAsAttribute
   private String name;
 
   /**
    * Instantiates a new package node.
    *
-   * @param files
-   *          the files
-   * @param name
-   *          the name
+   * @param files the files
+   * @param name  the name
    */
   public PackageNode(List<FileNode> files, String name) {
     super();
@@ -66,8 +68,7 @@ public class PackageNode {
   /**
    * Sets the name.
    *
-   * @param name
-   *          the new name
+   * @param name the new name
    */
   public void setName(String name) {
     this.name = name;
@@ -85,8 +86,7 @@ public class PackageNode {
   /**
    * Sets the files.
    *
-   * @param files
-   *          the new files
+   * @param files the new files
    */
   public void setFiles(List<FileNode> files) {
     this.files = files;

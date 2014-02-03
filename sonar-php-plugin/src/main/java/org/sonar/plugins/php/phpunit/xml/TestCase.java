@@ -30,79 +30,100 @@ import org.apache.commons.lang.StringUtils;
 @XStreamAlias("testcase")
 public final class TestCase {
 
-  /** The Constant STATUS_ERROR. */
+  /**
+   * The Constant STATUS_ERROR.
+   */
   public static final String STATUS_ERROR = "error";
 
-  /** The Constant STATUS_FAILURE. */
+  /**
+   * The Constant STATUS_FAILURE.
+   */
   public static final String STATUS_FAILURE = "failure";
 
-  /** The Constant STATUS_OK. */
+  /**
+   * The Constant STATUS_OK.
+   */
   public static final String STATUS_OK = "ok";
 
-  /** The Constant STATUS_SKIPPED. */
+  /**
+   * The Constant STATUS_SKIPPED.
+   */
   public static final String STATUS_SKIPPED = "skipped";
 
-  /** The assertions. */
+  /**
+   * The assertions.
+   */
   @XStreamAsAttribute
   private int assertions;
 
-  /** The class name. */
+  /**
+   * The class name.
+   */
   @XStreamAsAttribute
   @XStreamAlias("class")
   private String className;
 
-  /** The error message. */
+  /**
+   * The error message.
+   */
   @XStreamAsAttribute
   private String errorMessage;
 
-  /** The file. */
+  /**
+   * The file.
+   */
   @XStreamAsAttribute
   private String file;
 
-  /** The line. */
+  /**
+   * The line.
+   */
   @XStreamAsAttribute
   private int line;
 
-  /** The name. */
+  /**
+   * The name.
+   */
   @XStreamAsAttribute
   private String name;
 
-  /** The status. */
+  /**
+   * The status.
+   */
   @XStreamOmitField
   private String status;
 
-  /** The time. */
+  /**
+   * The time.
+   */
   @XStreamAsAttribute
   private double time;
 
-  /** The error. */
+  /**
+   * The error.
+   */
   @XStreamAlias("error")
   private String error;
 
-  /** The failure. */
+  /**
+   * The failure.
+   */
   @XStreamAlias("failure")
   private String failure;
 
   /**
    * Instantiates a new test case.
    *
-   * @param assertions
-   *          the assertions
-   * @param errorMessage
-   *          the error message
-   * @param file
-   *          the file
-   * @param line
-   *          the line
-   * @param name
-   *          the name
-   * @param status
-   *          the status
-   * @param time
-   *          the time
+   * @param assertions   the assertions
+   * @param errorMessage the error message
+   * @param file         the file
+   * @param line         the line
+   * @param name         the name
+   * @param status       the status
+   * @param time         the time
    */
   public TestCase(final int assertions, final String className, final String errorMessage, final String file, final int line,
-      final String name, final String status, final String error, final String failure, final double time) {
+                  final String name, final String status, final String error, final String failure, final double time) {
     super();
     this.assertions = assertions;
     this.className = className;
@@ -210,8 +231,7 @@ public final class TestCase {
   /**
    * Sets the assertions.
    *
-   * @param assertions
-   *          the new assertions
+   * @param assertions the new assertions
    */
   public void setAssertions(final int assertions) {
     this.assertions = assertions;
@@ -220,8 +240,7 @@ public final class TestCase {
   /**
    * Sets the file.
    *
-   * @param file
-   *          the new file
+   * @param file the new file
    */
   public void setFile(final String file) {
     this.file = file;
@@ -230,8 +249,7 @@ public final class TestCase {
   /**
    * Sets the line.
    *
-   * @param line
-   *          the new line
+   * @param line the new line
    */
   public void setLine(final int line) {
     this.line = line;
@@ -240,8 +258,7 @@ public final class TestCase {
   /**
    * Sets the name.
    *
-   * @param name
-   *          the new name
+   * @param name the new name
    */
   public void setName(final String name) {
     this.name = name;
@@ -256,9 +273,9 @@ public final class TestCase {
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append("TestCase [assertions=").append(assertions).append(", fileName=").append(className).append(", errorMessage=")
-        .append(errorMessage).append(", file=").append(file).append(", line=").append(line).append(", name=").append(name)
-        .append(", status=").append(status).append(", time=").append(time).append(", error=").append(error).append(", failure=")
-        .append(failure).append("]");
+      .append(errorMessage).append(", file=").append(file).append(", line=").append(line).append(", name=").append(name)
+      .append(", status=").append(status).append(", time=").append(time).append(", error=").append(error).append(", failure=")
+      .append(failure).append("]");
     return builder.toString();
   }
 

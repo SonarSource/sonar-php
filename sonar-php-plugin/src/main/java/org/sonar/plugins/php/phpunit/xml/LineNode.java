@@ -28,27 +28,30 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 @XStreamAlias("line")
 public class LineNode {
 
-  /** The count. */
+  /**
+   * The count.
+   */
   @XStreamAsAttribute
   private int count;
 
-  /** The num. */
+  /**
+   * The num.
+   */
   @XStreamAsAttribute
   private int num;
 
-  /** The type. */
+  /**
+   * The type.
+   */
   @XStreamAsAttribute
   private String type;
 
   /**
    * Instantiates a new line node.
    *
-   * @param num
-   *          the num
-   * @param type
-   *          the type
-   * @param count
-   *          the count
+   * @param num   the num
+   * @param type  the type
+   * @param count the count
    */
   public LineNode(int num, String type, int count) {
     super();
@@ -87,8 +90,7 @@ public class LineNode {
   /**
    * Sets the type.
    *
-   * @param type
-   *          the new type
+   * @param type the new type
    */
   public void setType(String type) {
     this.type = type;

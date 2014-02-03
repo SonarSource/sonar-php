@@ -28,7 +28,9 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @XStreamAlias("class")
 public class ClassNode {
 
-  /** The ignored node. */
+  /**
+   * The ignored node.
+   */
   @XStreamOmitField
   @XStreamAlias("metrics")
   private Object ignoredNode;

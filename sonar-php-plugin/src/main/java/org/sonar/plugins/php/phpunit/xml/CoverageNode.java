@@ -30,7 +30,9 @@ import java.util.List;
 @XStreamAlias("coverage")
 public class CoverageNode {
 
-  /** The projects. */
+  /**
+   * The projects.
+   */
   @XStreamImplicit
   @XStreamAlias("project")
   private List<ProjectNode> projects;
@@ -38,8 +40,7 @@ public class CoverageNode {
   /**
    * Instantiates a new coverage node.
    *
-   * @param projects
-   *          the projects
+   * @param projects the projects
    */
   public CoverageNode(List<ProjectNode> projects) {
     super();
