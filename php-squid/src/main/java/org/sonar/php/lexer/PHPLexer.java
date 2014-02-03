@@ -33,9 +33,6 @@ import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.commentRegexp;
 import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
 
 public class PHPLexer {
-  
-  public PHPLexer() {
-  }
 
   private static final String WHITESPACE = "[ \\t\\r\\n]++";
 
@@ -80,6 +77,10 @@ public class PHPLexer {
 
   // Numeric
   private static final String NUMERIC_LITERAL = EXPONENT_DNUM + "|" + DNUM + "|" + INTEGER_LITERAL;
+
+
+  public PHPLexer() {
+  }
 
   public static Lexer create(PHPConfiguration conf) {
     Lexer.Builder builder = Lexer.builder()
