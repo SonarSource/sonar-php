@@ -81,15 +81,6 @@ public class FileNode {
   }
 
   /**
-   * Sets the lines.
-   *
-   * @param lines the new lines
-   */
-  public void setLines(List<LineNode> lines) {
-    this.lines = lines;
-  }
-
-  /**
    * Gets the metrics.
    *
    * @return the metrics

@@ -19,26 +19,39 @@
  */
 package org.sonar.plugins.php.core;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.resources.Language;
 import org.sonar.plugins.php.api.Php;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 /**
  * Tests the basic functionality of the PhpSourceImporter.
- * 
+ *
  * @author juergen_kellerer, 2010-10-21
  * @version 1.0
  */
 public class PhpSourceImporterTest {
 
+  Php php;
+  private PhpSourceImporter importer;
+
+  @Before
+  public void setUp() {
+    php = new Php();
+    importer = new PhpSourceImporter(php);
+  }
+
   @Test
   public void testCreateImporter() throws Exception {
-    Php php = new Php();
-    PhpSourceImporter importer = new PhpSourceImporter(php);
     assertThat(importer.getLanguage(), is((Language) php));
   }
 
+  @Test
+  public void testToString() throws Exception {
+    assertNotNull(importer.toString());
+  }
 }
