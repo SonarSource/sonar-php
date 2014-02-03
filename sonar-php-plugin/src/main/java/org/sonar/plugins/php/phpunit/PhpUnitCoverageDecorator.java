@@ -44,9 +44,6 @@ public class PhpUnitCoverageDecorator implements Decorator {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageDecorator.class);
 
-  public PhpUnitCoverageDecorator() {
-  }
-
   /**
    * {@inheritDoc}
    */
