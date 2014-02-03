@@ -26,6 +26,9 @@ import org.sonar.php.lexer.PHPLexer;
 
 public class PHPParser {
 
+  private PHPParser() {
+  }
+
   public static Parser<Grammar> create(PHPConfiguration conf) {
     return Parser.builder(PHPGrammar.create().build())
       .withLexer(PHPLexer.create(conf)).build();

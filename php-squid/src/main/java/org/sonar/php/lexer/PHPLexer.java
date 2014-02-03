@@ -33,6 +33,9 @@ import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.commentRegexp;
 import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
 
 public class PHPLexer {
+  
+  public PHPLexer() {
+  }
 
   private static final String WHITESPACE = "[ \\t\\r\\n]++";
 
