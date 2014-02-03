@@ -78,7 +78,6 @@ public class PhpPlugin extends SonarPlugin {
 
     // Core extensions
     extensions.add(PhpSourceImporter.class);
-    //extensions.add(PhpLexerSensor.class); TODO: safely delete
     extensions.add(PhpSourceCodeColorizer.class);
     extensions.add(NoSonarAndCommentedOutLocSensor.class);
 
