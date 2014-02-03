@@ -49,12 +49,9 @@ public class ProjectNode {
   @XStreamAlias("metrics")
   private MetricsNode metrics;
 
-  public ProjectNode() {
-  }
-
   /**
    * Gets the metrics.
-   * 
+   *
    * @return the metrics
    */
   public MetricsNode getMetrics() {
@@ -63,7 +60,7 @@ public class ProjectNode {
 
   /**
    * Sets the metrics.
-   * 
+   *
    * @param metrics
    *          the new metrics
    */
@@ -73,7 +70,7 @@ public class ProjectNode {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    */
   public String getName() {
@@ -82,7 +79,7 @@ public class ProjectNode {
 
   /**
    * Instantiates a new project node.
-   * 
+   *
    * @param files
    *          the files
    * @param name
@@ -99,7 +96,7 @@ public class ProjectNode {
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the new name
    */
@@ -109,7 +106,7 @@ public class ProjectNode {
 
   /**
    * Gets the files.
-   * 
+   *
    * @return the files
    */
   public List<FileNode> getFiles() {
@@ -118,7 +115,7 @@ public class ProjectNode {
 
   /**
    * Sets the files.
-   * 
+   *
    * @param files
    *          the new files
    */
@@ -128,20 +125,10 @@ public class ProjectNode {
 
   /**
    * Gets the packages.
-   * 
+   *
    * @return the packages
    */
   public List<PackageNode> getPackages() {
     return packages;
-  }
-
-  /**
-   * Sets the packages.
-   * 
-   * @param packages
-   *          the new packages
-   */
-  public void setPackages(List<PackageNode> packages) {
-    this.packages = packages;
   }
 }

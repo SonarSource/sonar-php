@@ -32,23 +32,4 @@ public class ClassNode {
   @XStreamOmitField
   @XStreamAlias("metrics")
   private Object ignoredNode;
-
-  public ClassNode() {
-  }
-
-  /**
-   * @return the ignoredNode
-   */
-  public final Object getIgnoredNode() {
-    return ignoredNode;
-  }
-
-  /**
-   * @param ignoredNode
-   *          the ignoredNode to set
-   */
-  public final void setIgnoredNode(Object ignoredNode) {
-    this.ignoredNode = ignoredNode;
-  }
-
 }

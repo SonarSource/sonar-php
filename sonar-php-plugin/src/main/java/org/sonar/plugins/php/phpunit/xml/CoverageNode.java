@@ -35,12 +35,9 @@ public class CoverageNode {
   @XStreamAlias("project")
   private List<ProjectNode> projects;
 
-  public CoverageNode() {
-  }
-
   /**
    * Instantiates a new coverage node.
-   * 
+   *
    * @param projects
    *          the projects
    */
@@ -51,21 +48,10 @@ public class CoverageNode {
 
   /**
    * Gets the projects.
-   * 
+   *
    * @return the projects
    */
   public List<ProjectNode> getProjects() {
     return projects;
   }
-
-  /**
-   * Sets the projects.
-   * 
-   * @param projects
-   *          the new projects
-   */
-  public void setProjects(List<ProjectNode> projects) {
-    this.projects = projects;
-  }
-
 }

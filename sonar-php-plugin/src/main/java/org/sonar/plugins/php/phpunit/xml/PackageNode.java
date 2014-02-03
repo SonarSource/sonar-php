@@ -40,12 +40,9 @@ public class PackageNode {
   @XStreamAsAttribute
   private String name;
 
-  public PackageNode() {
-  }
-
   /**
    * Instantiates a new package node.
-   * 
+   *
    * @param files
    *          the files
    * @param name
@@ -59,7 +56,7 @@ public class PackageNode {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    */
   public String getName() {
@@ -68,7 +65,7 @@ public class PackageNode {
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the new name
    */
@@ -78,7 +75,7 @@ public class PackageNode {
 
   /**
    * Gets the files.
-   * 
+   *
    * @return the files
    */
   public List<FileNode> getFiles() {
@@ -87,7 +84,7 @@ public class PackageNode {
 
   /**
    * Sets the files.
-   * 
+   *
    * @param files
    *          the new files
    */

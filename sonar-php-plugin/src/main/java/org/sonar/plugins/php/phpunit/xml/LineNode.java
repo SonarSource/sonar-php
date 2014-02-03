@@ -28,12 +28,6 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 @XStreamAlias("line")
 public class LineNode {
 
-  /** The Constant METHODE_TYPE. */
-  public static final String METHODE_TYPE = "method";
-
-  /** The Constant STATEMENT_TYPE. */
-  public static final String STATEMENT_TYPE = "stmt";
-
   /** The count. */
   @XStreamAsAttribute
   private int count;
@@ -46,12 +40,9 @@ public class LineNode {
   @XStreamAsAttribute
   private String type;
 
-  public LineNode() {
-  }
-
   /**
    * Instantiates a new line node.
-   * 
+   *
    * @param num
    *          the num
    * @param type
@@ -68,7 +59,7 @@ public class LineNode {
 
   /**
    * Gets the count.
-   * 
+   *
    * @return the count
    */
   public int getCount() {
@@ -77,7 +68,7 @@ public class LineNode {
 
   /**
    * Gets the num.
-   * 
+   *
    * @return the num
    */
   public int getNum() {
@@ -86,7 +77,7 @@ public class LineNode {
 
   /**
    * Gets the type.
-   * 
+   *
    * @return the type
    */
   public String getType() {
@@ -94,28 +85,8 @@ public class LineNode {
   }
 
   /**
-   * Sets the count.
-   * 
-   * @param count
-   *          the new count
-   */
-  public void setCount(int count) {
-    this.count = count;
-  }
-
-  /**
-   * Sets the num.
-   * 
-   * @param num
-   *          the new num
-   */
-  public void setNum(int num) {
-    this.num = num;
-  }
-
-  /**
    * Sets the type.
-   * 
+   *
    * @param type
    *          the new type
    */

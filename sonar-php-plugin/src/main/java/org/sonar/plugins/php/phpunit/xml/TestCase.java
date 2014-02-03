@@ -83,16 +83,11 @@ public final class TestCase {
   @XStreamAlias("failure")
   private String failure;
 
-  public TestCase() {
-  }
-
   /**
    * Instantiates a new test case.
-   * 
+   *
    * @param assertions
    *          the assertions
-   * @param fileName
-   *          the class name
    * @param errorMessage
    *          the error message
    * @param file
@@ -123,7 +118,7 @@ public final class TestCase {
 
   /**
    * Gets the assertions.
-   * 
+   *
    * @return the assertions
    */
   public int getAssertions() {
@@ -132,33 +127,25 @@ public final class TestCase {
 
   /**
    * Gets the class name.
-   * 
+   *
    * @return the class name
    */
   public String getClassName() {
     return className;
   }
 
-  public String getError() {
-    return error;
-  }
-
   /**
    * Gets the error message.
-   * 
+   *
    * @return the error message
    */
   public String getErrorMessage() {
     return errorMessage;
   }
 
-  public String getFailure() {
-    return failure;
-  }
-
   /**
    * Gets the file.
-   * 
+   *
    * @return the file
    */
   public String getFile() {
@@ -167,7 +154,7 @@ public final class TestCase {
 
   /**
    * Gets the line.
-   * 
+   *
    * @return the line
    */
   public int getLine() {
@@ -176,7 +163,7 @@ public final class TestCase {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    */
   public String getName() {
@@ -195,7 +182,7 @@ public final class TestCase {
 
   /**
    * Gets the status. Computes the status depending on the presence of field failure and error
-   * 
+   *
    * @return the status
    */
   public String getStatus() {
@@ -213,7 +200,7 @@ public final class TestCase {
 
   /**
    * Gets the time.
-   * 
+   *
    * @return the time
    */
   public double getTime() {
@@ -222,7 +209,7 @@ public final class TestCase {
 
   /**
    * Sets the assertions.
-   * 
+   *
    * @param assertions
    *          the new assertions
    */
@@ -231,36 +218,8 @@ public final class TestCase {
   }
 
   /**
-   * Sets the class name.
-   * 
-   * @param fileName
-   *          the new class name
-   */
-  public void setClassName(final String className) {
-    this.className = className;
-  }
-
-  public void setError(String error) {
-    this.error = error;
-  }
-
-  /**
-   * Sets the error message.
-   * 
-   * @param errorMessage
-   *          the new error message
-   */
-  public void setErrorMessage(final String errorMessage) {
-    this.errorMessage = errorMessage;
-  }
-
-  public void setFailure(String failure) {
-    this.failure = failure;
-  }
-
-  /**
    * Sets the file.
-   * 
+   *
    * @param file
    *          the new file
    */
@@ -270,7 +229,7 @@ public final class TestCase {
 
   /**
    * Sets the line.
-   * 
+   *
    * @param line
    *          the new line
    */
@@ -280,7 +239,7 @@ public final class TestCase {
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the new name
    */
@@ -288,29 +247,9 @@ public final class TestCase {
     this.name = name;
   }
 
-  /**
-   * Sets the status.
-   * 
-   * @param status
-   *          the new status
-   */
-  public void setStatus(final String status) {
-    this.status = status;
-  }
-
-  /**
-   * Sets the time.
-   * 
-   * @param time
-   *          the new time
-   */
-  public void setTime(final double time) {
-    this.time = time;
-  }
-
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override

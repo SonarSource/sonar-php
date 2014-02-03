@@ -40,16 +40,14 @@ public class FileNode {
   @XStreamOmitField
   @XStreamImplicit(itemFieldName = "class")
   private List<ClassNode> ignoredNodes;
+
   /** The metrics. */
   @XStreamAlias("metrics")
   private MetricsNode metrics;
 
-  public FileNode() {
-  }
-
   /**
    * Instantiates a new file node.
-   * 
+   *
    * @param lines
    *          the lines
    * @param metrics
@@ -70,7 +68,7 @@ public class FileNode {
 
   /**
    * Gets the lines.
-   * 
+   *
    * @return the lines
    */
   public List<LineNode> getLines() {
@@ -79,7 +77,7 @@ public class FileNode {
 
   /**
    * Sets the lines.
-   * 
+   *
    * @param lines
    *          the new lines
    */
@@ -89,7 +87,7 @@ public class FileNode {
 
   /**
    * Gets the metrics.
-   * 
+   *
    * @return the metrics
    */
   public MetricsNode getMetrics() {
@@ -98,7 +96,7 @@ public class FileNode {
 
   /**
    * Sets the metrics.
-   * 
+   *
    * @param metrics
    *          the new metrics
    */
@@ -108,7 +106,7 @@ public class FileNode {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    */
   public String getName() {
@@ -116,23 +114,8 @@ public class FileNode {
   }
 
   /**
-   * @return the ignoredNodes
-   */
-  public final List<ClassNode> getIgnoredNodes() {
-    return ignoredNodes;
-  }
-
-  /**
-   * @param ignoredNodes
-   *          the ignoredNodes to set
-   */
-  public final void setIgnoredNodes(List<ClassNode> ignoredNodes) {
-    this.ignoredNodes = ignoredNodes;
-  }
-
-  /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the new name
    */

@@ -36,9 +36,9 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 
 /**
  * Test for TestSuites.
- * 
+ *
  * @author gennadiyl
- * 
+ *
  */
 public class TestSuitesTest {
 
@@ -90,7 +90,7 @@ public class TestSuitesTest {
   }
 
   private TestSuite getTestSuite(String name) {
-    return new TestSuite(name, "file", "fullPackage", "category", "packageName", "subpackage", "tests", "assertions", 0, 0, 0, null, null);
+    return new TestSuite(name, "file", "tests", "assertions", 0, null, null);
   }
 
 }
