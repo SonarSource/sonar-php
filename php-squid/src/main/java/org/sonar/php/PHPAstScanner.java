@@ -49,6 +49,30 @@ import java.util.Collection;
 
 public class PHPAstScanner {
 
+  private static class PHPCommentAnalyser extends CommentAnalyser{
+    @Override
+    public boolean isBlank(String line) {
+      for (int i = 0; i < line.length(); i++) {
+        if (Character.isLetterOrDigit(line.charAt(i))) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    @Override
+    public String getContents(String comment) {
+      if (comment.startsWith("//")) {
+        return comment.substring(2);
+      } else if (comment.startsWith("#")) {
+        return comment.substring(1);
+      } else {
+        return comment.substring(2, comment.length() - 2);
+      }
+    }
+  }
+
   private PHPAstScanner() {
   }
 
@@ -74,35 +98,8 @@ public class PHPAstScanner {
 
     AstScanner.Builder<Grammar> builder = AstScanner.<Grammar>builder(context).setBaseParser(parser);
 
-    /* Metrics */
     builder.withMetrics(PHPMetric.values());
-
-     /* Comments */
-    builder.setCommentAnalyser(new CommentAnalyser() {
-      @Override
-      public boolean isBlank(String line) {
-        for (int i = 0; i < line.length(); i++) {
-          if (Character.isLetterOrDigit(line.charAt(i))) {
-            return false;
-          }
-        }
-
-        return true;
-      }
-
-      @Override
-      public String getContents(String comment) {
-        if (comment.startsWith("//")) {
-          return comment.substring(2);
-        } else if (comment.startsWith("#")) {
-          return comment.substring(1);
-        } else {
-          return comment.substring(2, comment.length() - 2);
-        }
-      }
-    });
-
-    /* Files */
+    builder.setCommentAnalyser(new PHPCommentAnalyser());
     builder.setFilesMetric(PHPMetric.FILES);
 
        /* Metrics */
