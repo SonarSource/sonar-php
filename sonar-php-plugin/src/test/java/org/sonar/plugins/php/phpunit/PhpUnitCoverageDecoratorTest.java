@@ -29,6 +29,7 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
+import org.sonar.plugins.php.MockUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,24 +47,26 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Ignore
+
 public class PhpUnitCoverageDecoratorTest {
 
+  private File file;
   private Project project;
+  private PhpUnitCoverageDecorator decorator;
 
   @Before
   public void init() {
-    project = mock(Project.class);
-    when(project.getLanguageKey()).thenReturn("php");
+    file = new File("Foo");
+    project = MockUtils.newMockPHPProject();;
+    decorator = new PhpUnitCoverageDecorator();
   }
 
   @Test
   public void testDecorate() throws Exception {
-    PhpUnitCoverageDecorator decorator = createDecorator();
-    Resource<?> projectResource = new File("Foo");
     DecoratorContext context = mock(DecoratorContext.class);
     when(context.getMeasure(CoreMetrics.NCLOC)).thenReturn(new Measure(CoreMetrics.NCLOC, 100.0));
-    decorator.decorate(projectResource, context);
+    decorator.decorate(file, context);
+
     verify(context, times(1)).saveMeasure(CoreMetrics.LINE_COVERAGE, 0.0);
     verify(context, times(1)).saveMeasure(CoreMetrics.LINES_TO_COVER, 100.0);
     verify(context, times(1)).saveMeasure(CoreMetrics.UNCOVERED_LINES, 100.0);
@@ -71,11 +74,10 @@ public class PhpUnitCoverageDecoratorTest {
 
   @Test
   public void testDecorateWithNoNCLOC() throws Exception {
-    PhpUnitCoverageDecorator decorator = createDecorator();
-    Resource<?> projectResource = new File("Foo");
     DecoratorContext context = mock(DecoratorContext.class);
     when(context.getMeasure(CoreMetrics.NCLOC)).thenReturn(null);
-    decorator.decorate(projectResource, context);
+    decorator.decorate(file, context);
+
     verify(context, times(1)).saveMeasure(CoreMetrics.LINE_COVERAGE, 0.0);
     verify(context, never()).saveMeasure(eq(CoreMetrics.LINES_TO_COVER), anyDouble());
     verify(context, never()).saveMeasure(eq(CoreMetrics.UNCOVERED_LINES), anyDouble());
@@ -83,27 +85,23 @@ public class PhpUnitCoverageDecoratorTest {
 
   @Test
   public void testDontDecorateIfNotFile() throws Exception {
-    PhpUnitCoverageDecorator decorator = createDecorator();
-    Resource<?> projectResource = new Project("Foo");
     DecoratorContext context = mock(DecoratorContext.class);
-    decorator.decorate(projectResource, context);
+    decorator.decorate(new Project("Foo"), context);
+
     verify(context, never()).saveMeasure(any(Metric.class), anyDouble());
   }
 
   @Test
   public void testDontDecorateIfFileAlreadyHasLineCoverageMeasure() throws Exception {
-    PhpUnitCoverageDecorator decorator = createDecorator();
-    Resource<?> projectResource = new File("Foo");
     DecoratorContext context = mock(DecoratorContext.class);
     when(context.getMeasure(CoreMetrics.LINE_COVERAGE)).thenReturn(new Measure());
-    decorator.decorate(projectResource, context);
+
+    decorator.decorate(file, context);
     verify(context, never()).saveMeasure(any(Metric.class), anyDouble());
   }
 
   @Test
   public void testDependedUponMetrics() throws Exception {
-    PhpUnitCoverageDecorator decorator = createDecorator();
-
     List<Metric> metrics = Arrays.asList(CoreMetrics.COVERAGE, CoreMetrics.LINE_COVERAGE, CoreMetrics.LINES_TO_COVER,
         CoreMetrics.UNCOVERED_LINES);
 
@@ -112,32 +110,7 @@ public class PhpUnitCoverageDecoratorTest {
 
   @Test
   public void testShouldExecuteOnProject() throws Exception {
-    PhpUnitCoverageDecorator decorator = createDecorator();
     assertTrue(decorator.shouldExecuteOnProject(project));
+    assertFalse(decorator.shouldExecuteOnProject(MockUtils.newMockJavaProject()));
   }
-
-  @Test
-  public void testShouldNotExecuteOnNotPhpProject() throws Exception {
-    when(project.getLanguageKey()).thenReturn("java");
-    PhpUnitCoverageDecorator decorator = createDecorator();
-    assertFalse(decorator.shouldExecuteOnProject(project));
-  }
-
-  @Test
-  public void testShouldNotExecuteIfNotDynamicAnalysis() throws Exception {
-    PhpUnitCoverageDecorator decorator = new PhpUnitCoverageDecorator();
-    assertFalse(decorator.shouldExecuteOnProject(project));
-  }
-
-  @Test
-  public void testShouldNotExecuteOnProjectIfSkip() throws Exception {
-    PhpUnitCoverageDecorator decorator = new PhpUnitCoverageDecorator();
-    assertFalse(decorator.shouldExecuteOnProject(project));
-  }
-
-  private PhpUnitCoverageDecorator createDecorator() {
-    PhpUnitCoverageDecorator decorator = new PhpUnitCoverageDecorator();
-    return decorator;
-  }
-
 }
