@@ -24,24 +24,21 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
+import org.sonar.plugins.php.PhpPlugin;
+import org.sonar.test.TestUtils;
 
-import java.io.File;
+import java.util.Properties;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class PhpUnitSensorTest {
 
-  @Mock
-  private PhpUnitConfiguration phpConfig;
 
-  @Mock
-  private PhpUnitExecutor executor;
 
   @Mock
   private PhpUnitResultParser parser;
@@ -50,21 +47,19 @@ public class PhpUnitSensorTest {
   private PhpUnitCoverageResultParser coverageParser;
 
   @Mock
-  private Project project;
-
-  @Mock
   private SensorContext context;
 
+  private Project project;
+  private Settings settings;
   private PhpUnitSensor sensor;
 
   @Before
   public void init() throws Exception {
     MockitoAnnotations.initMocks(this);
 
-    when(project.getLanguageKey()).thenReturn("php");
-    when(phpConfig.isDynamicAnalysisEnabled()).thenReturn(true);
-
-    sensor = new PhpUnitSensor(phpConfig, executor, parser, coverageParser);
+    settings = newSettings();
+    project = MockUtils.newMockPHPProject();
+    sensor = new PhpUnitSensor(settings, parser, coverageParser);
   }
 
   @Test
@@ -73,81 +68,29 @@ public class PhpUnitSensorTest {
   }
 
   @Test
-  public void shouldLaunch() {
-    project = MockUtils.createMockProject();
+  public void shouldExecuteOnProject() {
+    assertThat(sensor.shouldExecuteOnProject(MockUtils.newMockJavaProject())).isFalse();
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
-  @Test
-  public void shouldNotLaunchOnNonPhpProject() {
-    when(project.getLanguageKey()).thenReturn("java");
-
-    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
-  }
-
-  @Test
-  public void shouldNotLaunchIfNotDynamicAnalysis() {
-    when(phpConfig.isDynamicAnalysisEnabled()).thenReturn(false);
-
-    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
-  }
-
-  @Test
-  public void shouldNotLaunchIfSkipTestAndCoverage() {
-    when(phpConfig.isSkip()).thenReturn(true);
-    when(phpConfig.shouldSkipCoverage()).thenReturn(true);
-
-    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
-  }
-
-  @Test
-  public void shouldLaunchIfSkipCoverageButNotTests() {
-    project = MockUtils.createMockProject();
-    when(phpConfig.shouldSkipCoverage()).thenReturn(true);
-
-    assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
-  }
 
   @Test
   public void testAnalyse() {
-    File report = new File("target/MockProject/target/report.xml");
-    when(phpConfig.getReportFile()).thenReturn(report);
-    File coverageReport = new File("target/MockProject/target/coverage-report.xml");
-    when(phpConfig.getCoverageReportFile()).thenReturn(coverageReport);
-
     sensor.analyse(project, context);
 
-    verify(executor, times(1)).execute();
-    verify(parser, times(1)).parse(report);
-    verify(coverageParser, times(1)).parse(coverageReport, false);
+    verify(parser, times(1)).parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT));
+    verify(coverageParser, times(1)).parse(TestUtils.getResource(MockUtils.PHPUNIT_COVERAGE_REPORT));
   }
 
-  @Test
-  public void testAnalyseWithoutCoverage() {
-    when(phpConfig.shouldSkipCoverage()).thenReturn(true);
-    File report = new File("target/MockProject/target/report.xml");
-    when(phpConfig.getReportFile()).thenReturn(report);
+  private static Settings newSettings() {
+    Settings settings = new Settings();
+    Properties props = new Properties();
 
-    sensor.analyse(project, context);
+    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, TestUtils.getResource(MockUtils.PHPUNIT_REPORT).getPath());
+    props.put(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, TestUtils.getResource(MockUtils.PHPUNIT_COVERAGE_REPORT).getPath());
 
-    verify(executor, times(1)).execute();
-    verify(parser, times(1)).parse(report);
-    verify(coverageParser, never()).parse(report, false);
+    settings.addProperties(props);
+
+    return settings;
   }
-
-  @Test
-  public void testAnalyseWithoutExecutingTool() {
-    when(phpConfig.isAnalyseOnly()).thenReturn(true);
-    File report = new File("target/MockProject/target/report.xml");
-    when(phpConfig.getReportFile()).thenReturn(report);
-    File coverageReport = new File("target/MockProject/target/coverage-report.xml");
-    when(phpConfig.getCoverageReportFile()).thenReturn(coverageReport);
-
-    sensor.analyse(project, context);
-
-    verify(executor, never()).execute();
-    verify(parser, times(1)).parse(report);
-    verify(coverageParser, times(1)).parse(coverageReport, false);
-  }
-
 }

@@ -65,7 +65,7 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Instantiates a new php unit result parser.
-   * 
+   *
    * @param project
    *          the project
    * @param context
@@ -79,7 +79,7 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Gets the test suites.
-   * 
+   *
    * @param report
    *          the report
    * @return the test suites
@@ -107,12 +107,9 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Gets the php file pointed by the report.
-   * 
+   *
    * @param report
    *          the unit test report
-   * @param project
-   *          the project
-   * @return Resource<?> the file pointed by the report
    */
   private Resource<?> getUnitTestResource(PhpUnitTestReport report) {
     return org.sonar.api.resources.File.fromIOFile(new File(report.getFile()), project.getFileSystem().getTestDirs());
@@ -120,11 +117,6 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Insert zero when no reports can be found.
-   * 
-   * @param project
-   *          the analyzed project
-   * @param context
-   *          the execution context
    */
   private void insertZeroWhenNoReports() {
     context.saveMeasure(CoreMetrics.TESTS, 0.0);
@@ -132,7 +124,7 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Collect the metrics found.
-   * 
+   *
    * @param reportFile
    *          the reports directories to be scan
    */
@@ -147,9 +139,7 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Parses the report file.
-   * 
-   * @param context
-   *          the execution context
+   *
    * @param report
    *          the report file
    */
@@ -163,7 +153,7 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Launches {@see PhpTestSuiteReader#readSuite(TestSuite)} for all its descendants.
-   * 
+   *
    * @param testSuites
    *          the test suites
    * @return List<PhpUnitTestReport> A list of all test reports
@@ -180,11 +170,7 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Saves the measures contained in the test report.
-   * 
-   * @param context
-   *          the execution context
-   * @param project
-   *          the analyzed project
+   *
    * @param fileReport
    *          the unit test report
    */
@@ -217,9 +203,7 @@ public class PhpUnitResultParser implements BatchExtension {
 
   /**
    * Save tests details.
-   * 
-   * @param context
-   *          the context
+   *
    * @param fileReport
    *          the file report
    */

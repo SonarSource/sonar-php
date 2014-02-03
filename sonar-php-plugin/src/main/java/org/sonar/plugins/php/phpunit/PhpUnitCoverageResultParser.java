@@ -21,6 +21,7 @@ package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.io.IOUtils;
+import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
@@ -55,22 +56,14 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
   // Used for debugging purposes to store measure by resource
   private static final Map<Resource<?>, Measure> MEASURES_BY_RESOURCE = new HashMap<Resource<?>, Measure>();
 
-  /** The logger. */
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
-
-  /** The project. */
   private Project project;
-
-  /** The context. */
   private SensorContext context;
 
   /**
    * Instantiates a new php unit coverage result parser.
-   * 
-   * @param project
-   *          the project
-   * @param context
-   *          the context
+   *
+   * @param context the context
    */
   public PhpUnitCoverageResultParser(Project project, SensorContext context) {
     super();
@@ -79,17 +72,12 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
   }
 
   /**
-   * Parses the.
-   * 
-   * @param coverageReportFile
-   *          the coverage report file
+   * Parses PHPUnit coverage file.
+   *
+   * @param coverageReportFile the coverage report file
    */
-  public void parse(File coverageReportFile, boolean isEmbeddedMode) {
+  public void parse(File coverageReportFile) {
     if (coverageReportFile != null) {
-      if (isEmbeddedMode && !coverageReportFile.exists()) {
-        LOG.warn("/!\\ Unable to find coverage report file. Please check configuration of XDebug in your php.ini.");
-        return;
-      }
       LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
       parseFile(coverageReportFile);
     }
@@ -97,9 +85,8 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
 
   /**
    * Parses the file.
-   * 
-   * @param coverageReportFile
-   *          the coverage report file
+   *
+   * @param coverageReportFile the coverage report file
    */
   private void parseFile(File coverageReportFile) {
     CoverageNode coverage = getCoverage(coverageReportFile);
@@ -107,6 +94,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
+      Log.info("Project: " + projectNode.getName());
       parseFileNodes(projectNode.getFiles());
       parsePackagesNodes(projectNode.getPackages());
     }
@@ -130,13 +118,12 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
 
   /**
    * Saves the required metrics found on the fileNode
-   * 
-   * @param fileNode
-   *          the file
+   *
+   * @param fileNode the file
    */
   protected void saveCoverageMeasure(FileNode fileNode) {
-    File file = new File(fileNode.getName());
-    org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file, project);
+    org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(new File(fileNode.getName()), project);
+
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
     if (phpFile != null) {
@@ -160,30 +147,29 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
       if (metrics.getCoveredStatements() != 0) {
         lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
       }
+
       context.saveMeasure(phpFile, CoreMetrics.LINES_TO_COVER, totalStatementsCount);
       context.saveMeasure(phpFile, CoreMetrics.UNCOVERED_LINES, uncoveredLines);
       context.saveMeasure(phpFile, CoreMetrics.LINE_COVERAGE, ParsingUtils.scaleValue(lineCoverage * 100.0));
     }
   }
 
-  private void logMeasureByResource(org.sonar.api.resources.File phpFile, Measure measure) {
+  private void logMeasureByResource(Resource resource, Measure measure) {
     if (LOG.isDebugEnabled()) {
-      Measure alreadySaved = MEASURES_BY_RESOURCE.get(phpFile);
+      Measure alreadySaved = MEASURES_BY_RESOURCE.get(resource);
       if (alreadySaved == null) {
-        MEASURES_BY_RESOURCE.put(phpFile, measure);
+        MEASURES_BY_RESOURCE.put(resource, measure);
       } else {
-        LOG.debug("Measure {} already saved for resoruce {}", measure, phpFile);
+        LOG.debug("Measure {} already saved for resoruce {}", measure, resource);
       }
     }
   }
 
   /**
    * Save line measure.
-   * 
-   * @param line
-   *          the line
-   * @param lineHits
-   *          the line hits
+   *
+   * @param line     the line
+   * @param lineHits the line hits
    */
   private void saveLineMeasure(LineNode line, PropertiesBuilder<Integer, Integer> lineHits) {
     lineHits.add(line.getNum(), line.getCount());
@@ -191,9 +177,8 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
 
   /**
    * Gets the coverage.
-   * 
-   * @param coverageReportFile
-   *          the coverage report file
+   *
+   * @param coverageReportFile the coverage report file
    * @return the coverage
    */
   private CoverageNode getCoverage(File coverageReportFile) {

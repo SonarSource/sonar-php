@@ -20,6 +20,8 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -39,41 +41,21 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * The Class PhpUnitResultParserTest.
- */
 public class PhpUnitResultParserTest {
 
-  /** The context. */
+  private static final String REPORT_DIRECTORY = "/org/sonar/plugins/php/phpunit/sensor/";
   private SensorContext context;
-
-  /** The config. */
-  private PhpUnitConfiguration config;
-
-  /** The project. */
   private Project project;
+  private PhpUnitResultParser parser;
 
-  /** The metric. */
-  private Metric metric;
 
-  /**
-   * Inits the.
-   */
-  private void init() {
-    config = mock(PhpUnitConfiguration.class);
-    project = mock(Project.class);
+  @Before
+  public void setUp() throws Exception {
     context = mock(SensorContext.class);
+    project = mock(Project.class);
+    mockProjectFileSystem(project);
 
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(config.getFileSystem()).thenReturn(fs);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-    File reportFile = TestUtils.getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit.xml");
-    when(config.getReportFile()).thenReturn(reportFile);
-
-    PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
-    parser.parse(config.getReportFile());
+    parser = new PhpUnitResultParser(project, context);
   }
 
   /**
@@ -81,26 +63,12 @@ public class PhpUnitResultParserTest {
    */
   @Test
   public void shouldNotThrowAnExceptionWhenReportNotFound() {
-    config = mock(PhpUnitConfiguration.class);
     project = mock(Project.class);
     context = mock(SensorContext.class);
-    when(config.getReportFile()).thenReturn(new File("path/to/nowhere"));
     PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
     parser.parse(null);
-  }
 
-  /**
-   * Should save zero value when report not found.
-   */
-  @Test
-  public void shouldSaveZeroValueWhenReportNotFound() {
-    metric = CoreMetrics.TESTS;
-    config = mock(PhpUnitConfiguration.class);
-    project = mock(Project.class);
-    context = mock(SensorContext.class);
-    PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
-    parser.parse(null);
-    verify(context).saveMeasure(metric, 0.0);
+    verify(context).saveMeasure(CoreMetrics.TESTS, 0.0);
   }
 
   /**
@@ -108,12 +76,9 @@ public class PhpUnitResultParserTest {
    */
   @Test(expected = XStreamException.class)
   public void shouldNotThrowAnExceptionWhenReportIsInvalid() {
-    config = mock(PhpUnitConfiguration.class);
-    project = mock(Project.class);
-    context = mock(SensorContext.class);
-    when(config.getReportFile()).thenReturn(TestUtils.getResource("/org/sonar/plugins/php/phpunit/sensor/phpunit-invalid.xml"));
-    PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
-    parser.parse(config.getReportFile());
+    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit-invalid.xml"));
+
+    verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
   }
 
   /**
@@ -121,63 +86,42 @@ public class PhpUnitResultParserTest {
    */
   @Test()
   public void shouldGenerateTestsMeasures() {
-    metric = CoreMetrics.TESTS;
-    init();
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), metric, 3.0);
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 1.0);
+    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.xml"));
+
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.TESTS, 3.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), CoreMetrics.TESTS, 1.0);
+
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.TEST_FAILURES, 2.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), CoreMetrics.TEST_FAILURES, 0.0);
+
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.TEST_ERRORS, 1.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), CoreMetrics.TEST_ERRORS, 1.0);
+
+    shouldGenerateTestExecutionTimeMeasures();
   }
 
-  /**
-   * Should generate failure test metrics.
-   */
-  @Test()
-  public void shouldGenerateFailedMeasures() {
-    metric = CoreMetrics.TEST_FAILURES;
-    init();
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), metric, 2.0);
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 0.0);
-  }
-
-  /**
-   * Should generate error test metrics.
-   */
-  @Test()
-  public void shouldGenerateErrorMeasures() {
-    metric = CoreMetrics.TEST_ERRORS;
-    init();
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), metric, 1.0);
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 1.0);
-  }
-
-  /**
-   * Should generate execution time test metrics.
-   */
-  @Test()
   public void shouldGenerateTestExecutionTimeMeasures() {
-    metric = CoreMetrics.TEST_EXECUTION_TIME;
-    init();
     org.sonar.api.resources.File monkey = new org.sonar.api.resources.File("Monkey.php");
-    verify(context).saveMeasure(monkey, metric, 447.0);
+    verify(context).saveMeasure(monkey, CoreMetrics.TEST_EXECUTION_TIME, 447.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TESTS, 3.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_ERRORS, 1.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_FAILURES, 2.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_FAILURES, 2.0);
     verify(context).saveMeasure(monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), metric, 570.0);
+    verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), CoreMetrics.TEST_EXECUTION_TIME, 570.0);
   }
 
-  @Test
-  public void shouldNotSaveTestReportMeasuresIfReportInvalid() throws Exception {
-    context = mock(SensorContext.class);
-    PhpUnitResultParser parser = new PhpUnitResultParser(null, context);
-    parser.saveTestReportMeasures(new PhpUnitTestReport());
-    verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
-  }
 
   @Test(expected = SonarException.class)
   public void testGetTestSuitesWithUnexistingFile() throws Exception {
-    PhpUnitResultParser parser = new PhpUnitResultParser(null, null);
     parser.getTestSuites(new File("target/unexistingFile.xml"));
   }
 
+  private static void mockProjectFileSystem(Project project) {
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+
+    when(project.getFileSystem()).thenReturn(fs);
+    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\main")));
+    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+  }
 }

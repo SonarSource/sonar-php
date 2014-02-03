@@ -31,7 +31,6 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.ResourceUtils;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpConstants;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,24 +39,19 @@ import java.util.List;
  * Decorates resources that do not have coverage metrics because they were not touched by any test, and thus not present in the coverage
  * report file.
  */
+
 public class PhpUnitCoverageDecorator implements Decorator {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageDecorator.class);
 
-  private PhpUnitConfiguration configuration;
-
-  public PhpUnitCoverageDecorator(PhpUnitConfiguration configuration) {
-    this.configuration = configuration;
+  public PhpUnitCoverageDecorator() {
   }
 
   /**
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    if (!Php.KEY.equals(project.getLanguageKey()) || !configuration.isDynamicAnalysisEnabled()) {
-      return false;
-    }
-    return !configuration.shouldSkipCoverage();
+    return Php.KEY.equals(project.getLanguageKey());
   }
 
   @DependedUpon

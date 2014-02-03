@@ -26,19 +26,25 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.test.TestUtils;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Properties;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class MockUtils {
+
+  public static final String PHPUNIT_REPORT = "org/sonar/plugins/php/phpunit/sensor/phpunit.xml";
+  public static final String PHPUNIT_COVERAGE_REPORT = "org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml";
 
   private MockUtils() {
   }
@@ -66,7 +72,7 @@ public class MockUtils {
     return project;
   }
 
-  public static Project createMockProjectBis() { // TODO: rename
+  public static Project newMockPHPProject() {
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
     when(fs.getSourceCharset()).thenReturn(Charsets.UTF_8);
     when(fs.getSourceDirs()).thenReturn(ImmutableList.of(new File("src/test/resources/")));
@@ -78,6 +84,13 @@ public class MockUtils {
     when(project.getFileSystem()).thenReturn(fs);
 
     return project;
+  }
+
+  public static Project newMockJavaProject() {
+    Project javaProject = mock(Project.class);
+    when(javaProject.getLanguageKey()).thenReturn("java");
+
+    return javaProject;
   }
 
 }

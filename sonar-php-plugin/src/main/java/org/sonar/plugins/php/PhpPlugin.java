@@ -26,15 +26,12 @@ import org.sonar.api.SonarPlugin;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.core.PhpCommonRulesEngineProvider;
-import org.sonar.plugins.php.core.PhpLexerSensor;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.core.PhpSourceImporter;
 import org.sonar.plugins.php.core.profiles.SonarWayProfile;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
-import org.sonar.plugins.php.phpunit.PhpUnitConfiguration;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageDecorator;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitExecutor;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitSensor;
 
@@ -48,11 +45,25 @@ import java.util.List;
     name = "File suffixes",
     description = "Comma-separated list of suffixes for files to analyze. To not filter, leave the list empty.",
     global = true,
-    project = true)
+    project = true),
+  @Property(key = PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY,
+    name = "Unit tests report file path",
+    project = true,
+    global = true,
+    description = "Path of the unit tests report file to analyse.",
+    category = "PHPUnit"),
+  @Property(key = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
+    name = "Coverage report file path",
+    project = true,
+    global = true,
+    description = "Path of the coverage report file to analyse.",
+    category = "PHPUnit")
 })
 public class PhpPlugin extends SonarPlugin {
 
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
+  public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.phpUnit.coverage.reportPath";
+  public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.phpUnit.tests.reportPath";
 
   /**
    * Gets the extensions.
@@ -67,7 +78,7 @@ public class PhpPlugin extends SonarPlugin {
 
     // Core extensions
     extensions.add(PhpSourceImporter.class);
-  //extensions.add(PhpLexerSensor.class); TODO: safely delete
+    //extensions.add(PhpLexerSensor.class); TODO: safely delete
     extensions.add(PhpSourceCodeColorizer.class);
     extensions.add(NoSonarAndCommentedOutLocSensor.class);
 
@@ -81,10 +92,9 @@ public class PhpPlugin extends SonarPlugin {
 
     extensions.add(PHPRuleRepository.class);
     extensions.add(SonarWayProfile.class);
+
     // PhpUnit
-    extensions.add(PhpUnitConfiguration.class);
     extensions.add(PhpUnitSensor.class);
-    extensions.add(PhpUnitExecutor.class);
     extensions.add(PhpUnitResultParser.class);
     extensions.add(PhpUnitCoverageResultParser.class);
     extensions.add(PhpUnitCoverageDecorator.class);

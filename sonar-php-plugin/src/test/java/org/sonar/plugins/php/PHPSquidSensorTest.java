@@ -40,7 +40,7 @@ public class PHPSquidSensorTest {
 
   @Before
   public void setUp() {
-    project = MockUtils.createMockProjectBis();
+    project = MockUtils.newMockPHPProject();
     sensor = new PHPSquidSensor();
   }
 

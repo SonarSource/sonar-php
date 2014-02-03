@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -31,7 +32,6 @@ import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.test.TestUtils;
 
 import java.io.File;
@@ -50,26 +50,79 @@ import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
 public class PhpUnitCoverageResultParserTest {
 
+  private static final String REPORT_DIRECTORY = "/org/sonar/plugins/php/phpunit/sensor/";
+  private static final org.sonar.api.resources.File monkeyResource = new org.sonar.api.resources.File("Monkey.php");
   @Rule
   public ExpectedException thrown = ExpectedException.none();
-
-  /** The context. */
+  private PhpUnitCoverageResultParser parser;
   private SensorContext context;
-
-  /** The config. */
-  private PhpUnitConfiguration config;
-
-  /** The project. */
   private Project project;
 
-  /**
-   * Inits the.
-   */
-  private void init(String reportPath) {
-    config = mock(PhpUnitConfiguration.class);
-    project = mock(Project.class);
+  @Before
+  public void setUp() throws Exception {
     context = mock(SensorContext.class);
+    project = mock(Project.class);
+    mockProjectFileSystem(project);
+
+    parser = new PhpUnitCoverageResultParser(project, context);
+  }
+
+  @Test
+  public void shouldThrowAnExceptionWhenReportNotFound() {
+    thrown.expect(SonarException.class);
+    thrown.expectMessage("Can't read phpUnit report:");
+
+    parser.parse(new File("notfound.txt"));
+  }
+
+  /**
+   * Should parse even when there's a package node.
+   */
+  @Test
+  public void shouldParseEvenWithPackageNode() {
+    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.coverage-with-package.xml"));
+    verify(context).saveMeasure(monkeyResource, UNCOVERED_LINES, 2.0);
+  }
+
+  /**
+   * Should generate coverage metrics.
+   */
+  @Test
+  public void shouldGenerateCoverageMeasures() {
+    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.coverage.xml"));
+
+    verify(context, atLeastOnce()).saveMeasure(monkeyResource, new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1"));
+    verify(context).saveMeasure(monkeyResource, UNCOVERED_LINES, 2.0);
+    verifyNoMeasureForFileOutOfSourcesDirs();
+  }
+
+  /**
+   * Should not generate coverage metrics for files that are not under project sources dirs.
+   */
+  public void verifyNoMeasureForFileOutOfSourcesDirs() {
+    org.sonar.api.resources.File file = new org.sonar.api.resources.File("IndexControllerTest.php");
+
+    verify(context, never()).saveMeasure(eq(file), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
+    verify(context, never()).saveMeasure((Resource<?>) eq(null), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
+  }
+
+  // https://jira.codehaus.org/browse/SONARPLUGINS-1591
+  @Test
+  public void shouldNotFailIfNoStatementCount() {
+    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.coverage-with-no-statements-covered.xml"));
+    verify(context).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
+  }
+
+  // https://jira.codehaus.org/browse/SONARPLUGINS-1675
+  @Test
+  public void shouldNotFailIfNoLineForFileNode() {
+    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.coverage-with-filenode-without-line.xml"));
+    verify(context).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
+  }
+
+  private static void mockProjectFileSystem(Project project) {
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
+
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/main")));
 
@@ -82,87 +135,10 @@ public class PhpUnitCoverageResultParserTest {
 
     List<File> sourceFiles = Arrays.asList(f1, f2, f3, f5);
     when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/main"), sourceFiles));
+
     List<File> testFiles = Arrays.asList(f4, f6);
     when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
 
-    when(config.getReportFile()).thenReturn(TestUtils.getResource(reportPath));
-
-    PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
-    parser.parse(config.getReportFile(), false);
-  }
-
-  @Test
-  public void shouldThrowAnExceptionWhenReportNotFound() {
-    project = mock(Project.class);
-    context = mock(SensorContext.class);
-    PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
-
-    thrown.expect(SonarException.class);
-    thrown.expectMessage("Can't read phpUnit report:");
-
-    parser.parse(new File("notfound.txt"), false);
-  }
-
-  @Test
-  public void shouldNotThrowAnExceptionWhenReportNotFoundAndEmbeddedMode() {
-    project = mock(Project.class);
-    context = mock(SensorContext.class);
-    PhpUnitCoverageResultParser parser = new PhpUnitCoverageResultParser(project, context);
-
-    parser.parse(new File("notfound.txt"), true);
-  }
-
-  /**
-   * Should parse even when there's a package node.
-   */
-  @Test
-  public void shouldParseEvenWithPackageNode() {
-    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage-with-package.xml");
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), UNCOVERED_LINES, 2.0);
-  }
-
-  /**
-   * Should generate coverage metrics.
-   */
-  @Test
-  public void shouldGenerateCoverageMeasures() {
-    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), UNCOVERED_LINES, 2.0);
-  }
-
-  /**
-   * Should not generate coverage metrics for files that are not under project sources dirs.
-   */
-  @Test
-  public void shouldNotGenerateCoverageMeasures() {
-    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
-    org.sonar.api.resources.File file = new org.sonar.api.resources.File("IndexControllerTest.php");
-    verify(context, never()).saveMeasure(eq(file), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
-    verify(context, never()).saveMeasure((Resource<?>) eq(null), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
-  }
-
-  /**
-   * Should generate line hits metrics.
-   */
-  @Test
-  public void shouldGenerateLineHitsMeasures() {
-    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml");
-    Measure monkeyCoverage = new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1");
-    verify(context, atLeastOnce()).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), monkeyCoverage);
-  }
-
-  // https://jira.codehaus.org/browse/SONARPLUGINS-1591
-  @Test
-  public void shouldNotFailIfNoStatementCount() {
-    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage-with-no-statements-covered.xml");
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.LINE_COVERAGE, 0.0d);
-  }
-
-  // https://jira.codehaus.org/browse/SONARPLUGINS-1675
-  @Test
-  public void shouldNotFailIfNoLineForFileNode() {
-    init("/org/sonar/plugins/php/phpunit/sensor/phpunit.coverage-with-filenode-without-line.xml");
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.LINE_COVERAGE, 0.0d);
   }
 
 }
