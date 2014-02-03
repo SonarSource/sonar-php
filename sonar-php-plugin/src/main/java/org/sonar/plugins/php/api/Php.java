@@ -21,8 +21,6 @@ package org.sonar.plugins.php.api;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.Properties;
-import org.sonar.api.Property;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.plugins.php.PhpPlugin;
@@ -81,8 +79,7 @@ public final class Php extends AbstractLanguage {
   /**
    * Allows to know if the given file name has a valid suffix.
    *
-   * @param fileName
-   *          String representing the file name
+   * @param fileName String representing the file name
    * @return boolean <code>true</code> if the file name's suffix is known, <code>false</code> any other way
    */
   public boolean hasValidSuffixes(String fileName) {

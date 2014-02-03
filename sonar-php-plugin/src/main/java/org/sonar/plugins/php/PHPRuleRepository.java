@@ -32,16 +32,13 @@ public class PHPRuleRepository extends RuleRepository {
 
   private static final String REPOSITORY_NAME = "SonarQube";
   private static final String REPOSITORY_KEY = "php";
-  private final Settings settings;
-  private final ServerFileSystem fileSystem;
+
   private final XMLRuleParser parser;
 
   public PHPRuleRepository(ServerFileSystem fileSystem, XMLRuleParser parser, Settings settings) {
     super(REPOSITORY_KEY, Php.KEY);
     setName(REPOSITORY_NAME);
 
-    this.fileSystem = fileSystem;
-    this.settings = settings;
     this.parser = parser;
   }
 

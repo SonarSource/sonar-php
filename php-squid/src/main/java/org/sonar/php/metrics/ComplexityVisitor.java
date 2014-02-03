@@ -66,7 +66,7 @@ public class ComplexityVisitor extends SquidAstVisitor<Grammar> {
 
   private static boolean isLastReturn(AstNode returnNode) {
     AstNode nextNode = returnNode.getNextAstNode();
-    return (nextNode.is(PHPPunctuator.RCURLYBRACE) && isClosingFunction(nextNode));
+    return nextNode.is(PHPPunctuator.RCURLYBRACE) && isClosingFunction(nextNode);
   }
 
   private static boolean isClosingFunction(AstNode rCurlyBrace) {

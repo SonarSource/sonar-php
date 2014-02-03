@@ -33,6 +33,12 @@ import java.util.List;
 public class FileNode {
 
   /**
+   * The name.
+   */
+  @XStreamAsAttribute
+  private String name;
+
+  /**
    * The lines.
    */
   @XStreamImplicit(itemFieldName = "line")
@@ -64,12 +70,6 @@ public class FileNode {
     this.metrics = metrics;
     this.name = name;
   }
-
-  /**
-   * The name.
-   */
-  @XStreamAsAttribute
-  private String name;
 
   /**
    * Gets the lines.

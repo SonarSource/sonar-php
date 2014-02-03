@@ -58,6 +58,20 @@ public class ProjectNode {
   private MetricsNode metrics;
 
   /**
+   * Instantiates a new project node.
+   *
+   * @param files   the files
+   * @param name    the name
+   * @param metrics the metrics
+   */
+  public ProjectNode(List<FileNode> files, String name, MetricsNode metrics) {
+    super();
+    this.files = files;
+    this.name = name;
+    this.metrics = metrics;
+  }
+
+  /**
    * Gets the metrics.
    *
    * @return the metrics
@@ -82,20 +96,6 @@ public class ProjectNode {
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Instantiates a new project node.
-   *
-   * @param files   the files
-   * @param name    the name
-   * @param metrics the metrics
-   */
-  public ProjectNode(List<FileNode> files, String name, MetricsNode metrics) {
-    super();
-    this.files = files;
-    this.name = name;
-    this.metrics = metrics;
   }
 
   /**
