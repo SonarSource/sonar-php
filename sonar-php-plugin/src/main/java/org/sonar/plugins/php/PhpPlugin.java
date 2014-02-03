@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php;
 
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.Extension;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
@@ -72,32 +73,30 @@ public class PhpPlugin extends SonarPlugin {
    * @see org.sonar.api.Plugin#getExtensions()
    */
   public List<Class<? extends Extension>> getExtensions() {
-    List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
+    return ImmutableList.of(
 
-    extensions.add(Php.class);
+    Php.class,
 
     // Core extensions
-    extensions.add(PhpSourceImporter.class);
-    extensions.add(PhpSourceCodeColorizer.class);
-    extensions.add(NoSonarAndCommentedOutLocSensor.class);
+    PhpSourceImporter.class,
+    PhpSourceCodeColorizer.class,
+    NoSonarAndCommentedOutLocSensor.class,
 
     // Duplications
-    extensions.add(PhpCPDMapping.class);
+    PhpCPDMapping.class,
 
     // Common rules
-    extensions.add(PhpCommonRulesEngineProvider.class);
+    PhpCommonRulesEngineProvider.class,
 
-    extensions.add(PHPSquidSensor.class);
+    PHPSquidSensor.class,
 
-    extensions.add(PHPRuleRepository.class);
-    extensions.add(SonarWayProfile.class);
+    PHPRuleRepository.class,
+    SonarWayProfile.class,
 
     // PhpUnit
-    extensions.add(PhpUnitSensor.class);
-    extensions.add(PhpUnitResultParser.class);
-    extensions.add(PhpUnitCoverageResultParser.class);
-    extensions.add(PhpUnitCoverageDecorator.class);
-
-    return extensions;
+    PhpUnitSensor.class,
+    PhpUnitResultParser.class,
+    PhpUnitCoverageResultParser.class,
+    PhpUnitCoverageDecorator.class);
   }
 }
