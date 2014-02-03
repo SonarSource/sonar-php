@@ -58,4 +58,9 @@ function f($p) {
 
 __halt_compiler();        // +1 halt compiler statement
 
+class C {
+  use myTrait;            // +1 use trait statement
+  const B = 1;            // +1 class const declaration
+  private $a;             // +1 class variable declaration
+}
 

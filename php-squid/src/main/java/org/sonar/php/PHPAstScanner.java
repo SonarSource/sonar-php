@@ -148,9 +148,9 @@ public class PHPAstScanner {
         PHPGrammar.STATIC_STATEMENT,
         PHPGrammar.YIELD_STATEMENT,
         PHPGrammar.GLOBAL_STATEMENT,
-        PHPGrammar.CLASS_VARIABLE_DECLARATION, // TODO: add to test
-        PHPGrammar.CLASS_CONSTANT_DECLARATION, // TODO: add to test
-        PHPGrammar.TRAIT_USE_STATEMENT) // TODO: add to test
+        PHPGrammar.CLASS_VARIABLE_DECLARATION,
+        PHPGrammar.CLASS_CONSTANT_DECLARATION,
+        PHPGrammar.TRAIT_USE_STATEMENT)
       .build());
 
 
