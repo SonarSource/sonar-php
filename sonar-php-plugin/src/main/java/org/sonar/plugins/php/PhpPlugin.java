@@ -36,7 +36,6 @@ import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitSensor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Properties({
@@ -75,28 +74,28 @@ public class PhpPlugin extends SonarPlugin {
   public List<Class<? extends Extension>> getExtensions() {
     return ImmutableList.of(
 
-    Php.class,
+      Php.class,
 
-    // Core extensions
-    PhpSourceImporter.class,
-    PhpSourceCodeColorizer.class,
-    NoSonarAndCommentedOutLocSensor.class,
+      // Core extensions
+      PhpSourceImporter.class,
+      PhpSourceCodeColorizer.class,
+      NoSonarAndCommentedOutLocSensor.class,
 
-    // Duplications
-    PhpCPDMapping.class,
+      // Duplications
+      PhpCPDMapping.class,
 
-    // Common rules
-    PhpCommonRulesEngineProvider.class,
+      // Common rules
+      PhpCommonRulesEngineProvider.class,
 
-    PHPSquidSensor.class,
+      PHPSquidSensor.class,
 
-    PHPRuleRepository.class,
-    SonarWayProfile.class,
+      PHPRuleRepository.class,
+      SonarWayProfile.class,
 
-    // PhpUnit
-    PhpUnitSensor.class,
-    PhpUnitResultParser.class,
-    PhpUnitCoverageResultParser.class,
-    PhpUnitCoverageDecorator.class);
+      // PhpUnit
+      PhpUnitSensor.class,
+      PhpUnitResultParser.class,
+      PhpUnitCoverageResultParser.class,
+      PhpUnitCoverageDecorator.class);
   }
 }
