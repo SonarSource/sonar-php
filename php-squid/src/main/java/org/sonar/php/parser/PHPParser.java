@@ -19,7 +19,6 @@
  */
 package org.sonar.php.parser;
 
-import com.google.common.base.Charsets;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.impl.Parser;
 import org.sonar.php.PHPConfiguration;
