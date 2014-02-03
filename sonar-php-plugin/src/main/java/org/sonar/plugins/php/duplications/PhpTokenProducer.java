@@ -27,15 +27,15 @@ import org.sonar.duplications.token.TokenChunker;
  */
 public final class PhpTokenProducer {
 
-  private PhpTokenProducer() {
-  }
-
   private static final String NORMALIZED_CHARACTER_LITERAL = "$CHARS";
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
 
   private static final String LABEL = "[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*+";
   private static final String NEWLINE = "(?:\\n\\r|\\r|\\n)";
   private static final String EXP = "([Ee][+-]?+[0-9]++)";
+
+  private PhpTokenProducer() {
+  }
 
   /**
    * Creates a {@link TokenChunker} for the PHP language.
