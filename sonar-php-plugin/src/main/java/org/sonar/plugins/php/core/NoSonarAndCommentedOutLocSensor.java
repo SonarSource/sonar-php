@@ -31,8 +31,8 @@ import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpConstants;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.recognizer.CamelCaseDetector;
 import org.sonar.squid.recognizer.CodeRecognizer;
@@ -133,7 +133,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     public PhpLanguageFootprint() {
       detectors.add(new EndWithDetector(END_WITH_DETECTOR_PROBABILITY, '}', ';', '{'));
       detectors.add(new KeywordsDetector(BOOLEAN_OPERATOR_PROBABILITY, "||", "&&"));
-      detectors.add(new KeywordsDetector(PHP_KEYWORDS_PROBABILITY, PhpConstants.PHP_KEYWORDS_ARRAY));
+      detectors.add(new KeywordsDetector(PHP_KEYWORDS_PROBABILITY, PHPKeyword.getKeywordValues()));
       detectors.add(new ContainsDetector(CONDITIONAL_PROBABILITY, "++", "for(", "if(", "while(", "catch(", "switch(", "try{", "else{"));
       detectors.add(new CamelCaseDetector(CAMEL_CASE_PROBABILITY));
     }

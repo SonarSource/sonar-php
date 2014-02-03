@@ -37,7 +37,6 @@ import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,9 +49,6 @@ public class PhpLexerSensor implements Sensor {
   private static final Logger LOG = LoggerFactory.getLogger(PhpLexerSensor.class);
   private FileLinesContextFactory fileLinesContextFactory;
 
-  /**
-   * @param noSonarFilter
-   */
   public PhpLexerSensor(FileLinesContextFactory fileLinesContextFactory) {
     this.fileLinesContextFactory = fileLinesContextFactory;
   }
@@ -97,7 +93,7 @@ public class PhpLexerSensor implements Sensor {
 
   @VisibleForTesting
   void computePerLineMetrics(File file, Charset sourceCharset, int fileLength, FileLinesContext fileLinesContext,
-      final Set<Integer> linesOfCode, final Set<Integer> linesOfComments) {
+                             final Set<Integer> linesOfCode, final Set<Integer> linesOfComments) {
     PhpParserConfiguration config = PhpParserConfiguration.builder().setCharset(sourceCharset).build();
     Lexer lexer = PhpLexer.create(config);
 

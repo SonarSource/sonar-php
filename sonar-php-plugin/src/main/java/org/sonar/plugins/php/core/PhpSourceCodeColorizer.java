@@ -28,8 +28,8 @@ import org.sonar.colorizer.InlineDocTokenizer;
 import org.sonar.colorizer.KeywordsTokenizer;
 import org.sonar.colorizer.StringTokenizer;
 import org.sonar.colorizer.Tokenizer;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpConstants;
 
 import java.util.List;
 import java.util.Set;
@@ -38,6 +38,12 @@ import java.util.Set;
  * Class used to colorize source code in HTML.
  */
 public class PhpSourceCodeColorizer extends CodeColorizerFormat {
+
+  /**
+   * An array containing reserved variables.
+   */
+  public static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[]{"__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
+    "__DIR__", "__FILE__", "__LINE__", "$this"};
 
   /**
    * Simple constructor
@@ -54,8 +60,8 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
    */
   @Override
   public List<Tokenizer> getTokenizers() {
-    Set<String> keywords = Sets.newHashSet(PhpConstants.PHP_RESERVED_VARIABLES_ARRAY);
-    keywords.addAll(Sets.newHashSet(PhpConstants.PHP_KEYWORDS_ARRAY));
+    Set<String> keywords = Sets.newHashSet(PHP_RESERVED_VARIABLES_ARRAY);
+    keywords.addAll(Sets.newHashSet(PHPKeyword.getKeywordValues()));
 
     String tagAfter = "</span>";
     List<Tokenizer> tokenizers = Lists.newArrayList();

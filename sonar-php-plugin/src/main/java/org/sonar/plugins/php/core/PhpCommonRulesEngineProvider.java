@@ -23,7 +23,6 @@ import org.sonar.api.resources.Project;
 import org.sonar.commonrules.api.CommonRulesEngine;
 import org.sonar.commonrules.api.CommonRulesEngineProvider;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.PhpConstants;
 
 public class PhpCommonRulesEngineProvider extends CommonRulesEngineProvider {
 

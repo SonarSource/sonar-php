@@ -54,17 +54,8 @@ public class PhpUnitTestReport {
   private double time = 0;
 
   /**
-   * Gets the class key.
-   * 
-   * @return the class key
-   */
-  public String getClassKey() {
-    return classKey;
-  }
-
-  /**
    * Gets the details.
-   * 
+   *
    * @return the details
    */
   public List<TestCase> getDetails() {
@@ -73,7 +64,7 @@ public class PhpUnitTestReport {
 
   /**
    * Gets the number or errors.
-   * 
+   *
    * @return the errors
    */
   public int getErrors() {
@@ -82,7 +73,7 @@ public class PhpUnitTestReport {
 
   /**
    * Gets the number or failed tests.
-   * 
+   *
    * @return the failures
    */
   public int getFailures() {
@@ -91,7 +82,7 @@ public class PhpUnitTestReport {
 
   /**
    * Gets the file.
-   * 
+   *
    * @return the file
    */
   public String getFile() {
@@ -100,7 +91,7 @@ public class PhpUnitTestReport {
 
   /**
    * Gets the numbers of skipped tests.
-   * 
+   *
    * @return the skipped
    */
   public int getSkipped() {
@@ -109,7 +100,7 @@ public class PhpUnitTestReport {
 
   /**
    * Gets the numbers of tests.
-   * 
+   *
    * @return the tests
    */
   public int getTests() {
@@ -118,7 +109,7 @@ public class PhpUnitTestReport {
 
   /**
    * Gets the time.
-   * 
+   *
    * @return the time
    */
   public double getTime() {
@@ -127,7 +118,7 @@ public class PhpUnitTestReport {
 
   /**
    * Checks if is valid.
-   * 
+   *
    * @return true, if is valid
    */
   public boolean isValid() {
@@ -136,7 +127,7 @@ public class PhpUnitTestReport {
 
   /**
    * Sets the class key.
-   * 
+   *
    * @param classKey
    *          the new class key
    */
@@ -146,7 +137,7 @@ public class PhpUnitTestReport {
 
   /**
    * Sets the details.
-   * 
+   *
    * @param details
    *          the new details
    */
@@ -156,7 +147,7 @@ public class PhpUnitTestReport {
 
   /**
    * Sets the numbers of errors.
-   * 
+   *
    * @param errors
    *          the new errors
    */
@@ -166,7 +157,7 @@ public class PhpUnitTestReport {
 
   /**
    * Sets the numbers of failures.
-   * 
+   *
    * @param failures
    *          the new failures
    */
@@ -176,7 +167,7 @@ public class PhpUnitTestReport {
 
   /**
    * Sets the file.
-   * 
+   *
    * @param file
    *          the new file
    */
@@ -186,7 +177,7 @@ public class PhpUnitTestReport {
 
   /**
    * Sets the numbers of skipped.
-   * 
+   *
    * @param skipped
    *          the new skipped
    */
@@ -196,7 +187,7 @@ public class PhpUnitTestReport {
 
   /**
    * Sets the numbers of tests.
-   * 
+   *
    * @param tests
    *          the new tests
    */
@@ -206,7 +197,7 @@ public class PhpUnitTestReport {
 
   /**
    * Sets the time.
-   * 
+   *
    * @param time
    *          the new time
    */
