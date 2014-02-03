@@ -31,6 +31,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
@@ -50,7 +51,6 @@ import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
 public class PhpUnitCoverageResultParserTest {
 
-  private static final String REPORT_DIRECTORY = "/org/sonar/plugins/php/phpunit/sensor/";
   private static final org.sonar.api.resources.File monkeyResource = new org.sonar.api.resources.File("Monkey.php");
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -80,7 +80,7 @@ public class PhpUnitCoverageResultParserTest {
    */
   @Test
   public void shouldParseEvenWithPackageNode() {
-    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.coverage-with-package.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-package.xml"));
     verify(context).saveMeasure(monkeyResource, UNCOVERED_LINES, 2.0);
   }
 
@@ -89,7 +89,7 @@ public class PhpUnitCoverageResultParserTest {
    */
   @Test
   public void shouldGenerateCoverageMeasures() {
-    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.coverage.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_COVERAGE_REPORT));
 
     verify(context, atLeastOnce()).saveMeasure(monkeyResource, new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1"));
     verify(context).saveMeasure(monkeyResource, UNCOVERED_LINES, 2.0);
@@ -109,14 +109,14 @@ public class PhpUnitCoverageResultParserTest {
   // https://jira.codehaus.org/browse/SONARPLUGINS-1591
   @Test
   public void shouldNotFailIfNoStatementCount() {
-    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.coverage-with-no-statements-covered.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-no-statements-covered.xml"));
     verify(context).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
   }
 
   // https://jira.codehaus.org/browse/SONARPLUGINS-1675
   @Test
   public void shouldNotFailIfNoLineForFileNode() {
-    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.coverage-with-filenode-without-line.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-filenode-without-line.xml"));
     verify(context).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
   }
 

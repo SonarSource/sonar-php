@@ -29,6 +29,7 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.MockUtils;
 import org.sonar.test.TestUtils;
 
 import java.io.File;
@@ -43,7 +44,6 @@ import static org.mockito.Mockito.when;
 
 public class PhpUnitResultParserTest {
 
-  private static final String REPORT_DIRECTORY = "/org/sonar/plugins/php/phpunit/sensor/";
   private SensorContext context;
   private Project project;
   private PhpUnitResultParser parser;
@@ -76,7 +76,7 @@ public class PhpUnitResultParserTest {
    */
   @Test(expected = XStreamException.class)
   public void shouldNotThrowAnExceptionWhenReportIsInvalid() {
-    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit-invalid.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"));
 
     verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
   }
@@ -86,7 +86,7 @@ public class PhpUnitResultParserTest {
    */
   @Test()
   public void shouldGenerateTestsMeasures() {
-    parser.parse(TestUtils.getResource(REPORT_DIRECTORY + "phpunit.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT));
 
     verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.TESTS, 3.0);
     verify(context).saveMeasure(new org.sonar.api.resources.File("Banana.php"), CoreMetrics.TESTS, 1.0);

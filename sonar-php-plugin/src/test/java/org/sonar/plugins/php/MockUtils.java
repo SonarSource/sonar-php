@@ -43,33 +43,11 @@ import static org.mockito.Mockito.when;
 
 public class MockUtils {
 
-  public static final String PHPUNIT_REPORT = "org/sonar/plugins/php/phpunit/sensor/phpunit.xml";
-  public static final String PHPUNIT_COVERAGE_REPORT = "org/sonar/plugins/php/phpunit/sensor/phpunit.coverage.xml";
+  public static final String PHPUNIT_REPORT_DIR = "/org/sonar/plugins/php/phpunit/sensor/";
+  public static final String PHPUNIT_REPORT = PHPUNIT_REPORT_DIR + "phpunit.xml";
+  public static final String PHPUNIT_COVERAGE_REPORT = PHPUNIT_REPORT_DIR + "phpunit.coverage.xml";
 
   private MockUtils() {
-  }
-
-  public static Project createMockProject() {
-    Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(new Php());
-    when(project.getLanguageKey()).thenReturn(Php.KEY);
-
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSonarWorkingDirectory()).thenReturn(new File("target/MockProject/target/sonar").getAbsoluteFile());
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("target/MockProject/src").getAbsoluteFile()));
-    when(fs.mainFiles(Php.KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/src/Foo.php")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("target/MockProject/test").getAbsoluteFile()));
-    when(fs.testFiles(Php.KEY)).thenReturn(Arrays.asList(InputFileUtils.create(new File("target/MockProject"), "/test/FooTest.php")));
-    when(fs.getBuildDir()).thenReturn(new File("target/MockProject/target").getAbsoluteFile());
-    when(fs.getBasedir()).thenReturn(new File("target/MockProject").getAbsoluteFile());
-    when(fs.resolvePath(anyString())).thenAnswer(new Answer<File>() {
-      public File answer(InvocationOnMock invocation) {
-        Object[] args = invocation.getArguments();
-        return new File("target/MockProject/" + args[0]).getAbsoluteFile();
-      }
-    });
-    return project;
   }
 
   public static Project newMockPHPProject() {
