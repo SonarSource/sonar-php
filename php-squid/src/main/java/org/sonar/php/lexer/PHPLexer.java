@@ -79,7 +79,7 @@ public class PHPLexer {
   private static final String NUMERIC_LITERAL = EXPONENT_DNUM + "|" + DNUM + "|" + INTEGER_LITERAL;
 
 
-  public PHPLexer() {
+  private PHPLexer() {
   }
 
   public static Lexer create(PHPConfiguration conf) {
