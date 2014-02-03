@@ -35,7 +35,7 @@ public class PHPRuleRepository extends RuleRepository {
 
   private final XMLRuleParser parser;
 
-  public PHPRuleRepository(ServerFileSystem fileSystem, XMLRuleParser parser, Settings settings) {
+  public PHPRuleRepository(XMLRuleParser parser) {
     super(REPOSITORY_KEY, Php.KEY);
     setName(REPOSITORY_NAME);
 

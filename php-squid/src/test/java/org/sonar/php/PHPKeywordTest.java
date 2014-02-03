@@ -19,8 +19,10 @@
  */
 package org.sonar.php;
 
+import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
@@ -102,5 +104,11 @@ public class PHPKeywordTest extends RuleTest {
       .matches("var")
       .matches("while")
       .matches("xor");
+  }
+
+  @Test
+  public void getKeywordValues() {
+    Assertions.assertThat(PHPKeyword.getKeywordValues().length).isGreaterThan(0);
+
   }
 }

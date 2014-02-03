@@ -42,7 +42,7 @@ public class PhpSourceCodeColorizer extends CodeColorizerFormat {
   /**
    * An array containing reserved variables.
    */
-  public static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[]{"__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
+  private static final String[] PHP_RESERVED_VARIABLES_ARRAY = new String[]{"__FUNCTION__", "__CLASS__", "__METHOD__", "__NAMESPACE__",
     "__DIR__", "__FILE__", "__LINE__", "$this"};
 
   /**
