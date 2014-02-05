@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression.staticExpr;
+package org.sonar.php.parser.expression;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,18 +26,18 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class StaticConditionalExprTest extends RuleTest {
+public class ConditionalExpressionTest  extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.STATIC_CONDITIONAL_EXPR));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.CONDITIONAL_EXPR));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("foo")
-      .matches("foo ? : bar")
-      .matches("foo ? toto : bar");
+      .matches("true ? 1 : 0")
+      .matches("true ? : 0")
+      .matches("false ? 0 : false ? 1 : 0");
   }
 }

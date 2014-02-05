@@ -37,6 +37,27 @@ public class VariableTest extends RuleTest {
   public void test() {
     assertThat(p)
       .matches("f()->$a")
-      .matches("$a->$a[$b]");
+
+      .matches("a")
+      .matches("$a")
+      .matches("$a[]")
+      .matches("$a()")
+      .matches("$a->b")
+      .matches("$a->$a")
+      .matches("$a->b()")
+      .matches("$a::b")
+      .matches("$a::$b")
+      .matches("$a::b()")
+
+      .matches("$a->$b[$c]{'d'}")
+
+      .matches("$$a")
+      .matches("${'a'}")
+      .matches("$a{'a'}")
+      .matches("$a[$b]")
+
+      .matches("$a->{'b'}")
+
+      .matches("A::class");
   }
 }

@@ -30,7 +30,7 @@ public class UnaryExprTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.STATIC_UNARY_EXPR));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.UNARY_EXPR));
   }
 
   @Test
