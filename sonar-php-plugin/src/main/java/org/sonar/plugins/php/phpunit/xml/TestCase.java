@@ -112,32 +112,6 @@ public final class TestCase {
   private String failure;
 
   /**
-   * Instantiates a new test case.
-   *
-   * @param assertions   the assertions
-   * @param errorMessage the error message
-   * @param file         the file
-   * @param line         the line
-   * @param name         the name
-   * @param status       the status
-   * @param time         the time
-   */
-  public TestCase(final int assertions, final String className, final String errorMessage, final String file, final int line,
-                  final String name, final String status, final String error, final String failure, final double time) {
-    super();
-    this.assertions = assertions;
-    this.className = className;
-    this.errorMessage = errorMessage;
-    this.file = file;
-    this.line = line;
-    this.name = name;
-    this.status = status;
-    this.error = error;
-    this.failure = failure;
-    this.time = time;
-  }
-
-  /**
    * Gets the assertions.
    *
    * @return the assertions

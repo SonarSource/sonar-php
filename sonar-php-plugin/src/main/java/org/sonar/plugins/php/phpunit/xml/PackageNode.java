@@ -45,18 +45,6 @@ public class PackageNode {
   private String name;
 
   /**
-   * Instantiates a new package node.
-   *
-   * @param files the files
-   * @param name  the name
-   */
-  public PackageNode(List<FileNode> files, String name) {
-    super();
-    this.files = files;
-    this.name = name;
-  }
-
-  /**
    * Gets the name.
    *
    * @return the name

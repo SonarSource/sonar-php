@@ -57,19 +57,6 @@ public class FileNode {
   @XStreamAlias("metrics")
   private MetricsNode metrics;
 
-  /**
-   * Instantiates a new file node.
-   *
-   * @param lines   the lines
-   * @param metrics the metrics
-   * @param name    the name
-   */
-  public FileNode(List<LineNode> lines, MetricsNode metrics, String name) {
-    super();
-    this.lines = lines;
-    this.metrics = metrics;
-    this.name = name;
-  }
 
   /**
    * Gets the lines.

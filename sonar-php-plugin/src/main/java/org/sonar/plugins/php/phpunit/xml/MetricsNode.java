@@ -42,18 +42,6 @@ public final class MetricsNode {
   private double totalStatementsCount;
 
   /**
-   * Instantiates a new metrics node.
-   *
-   * @param totalStatementsCount the total statements count
-   * @param coveredstatements    the coveredstatements
-   */
-  public MetricsNode(double totalStatementsCount, double coveredstatements) {
-    super();
-    this.totalStatementsCount = totalStatementsCount;
-    this.coveredStatements = coveredstatements;
-  }
-
-  /**
    * Gets the coveredstatements.
    *
    * @return the coveredstatements

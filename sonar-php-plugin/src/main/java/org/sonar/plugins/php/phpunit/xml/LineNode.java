@@ -47,20 +47,6 @@ public class LineNode {
   private String type;
 
   /**
-   * Instantiates a new line node.
-   *
-   * @param num   the num
-   * @param type  the type
-   * @param count the count
-   */
-  public LineNode(int num, String type, int count) {
-    super();
-    this.num = num;
-    this.type = type;
-    this.count = count;
-  }
-
-  /**
    * Gets the count.
    *
    * @return the count

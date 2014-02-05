@@ -38,16 +38,6 @@ public class CoverageNode {
   private List<ProjectNode> projects;
 
   /**
-   * Instantiates a new coverage node.
-   *
-   * @param projects the projects
-   */
-  public CoverageNode(List<ProjectNode> projects) {
-    super();
-    this.projects = projects;
-  }
-
-  /**
    * Gets the projects.
    *
    * @return the projects
