@@ -31,6 +31,13 @@ class Mail extends Mime_Message
                     require_once 'Exception.php';
                     throw new Zend_Mail_Exception('Date Header must be ' .'strtotime()');
         }
+
+        $a = <<<EOF
+The <info>swiftmailer:spool:send</info> command sends all emails from the spool.
+
+<info>php app/console swiftmailer:spool:send --message-limit=10 --time-limit=10</info>
+EOF;
+
         return $this;
     }
 }

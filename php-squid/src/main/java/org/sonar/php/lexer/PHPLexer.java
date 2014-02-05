@@ -36,6 +36,12 @@ public class PHPLexer {
 
   private static final String WHITESPACE = "[ \\t\\r\\n]++";
 
+  // HEREDOC
+  private static final String HEREDOC = "(?s)"
+    + "<<<\"([^\r\n'\"]++)\".*?(?:\\r\\n?+|\\n)\\1"
+    + "|<<<'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\2"
+    + "|<<<([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
+
   // PHP Tags
   private static final String OPEN_TAG = "<\\?php|<\\?|<%";
   private static final String CLOSE_TAG = "\\?>|%>";
@@ -89,6 +95,7 @@ public class PHPLexer {
 
       .withChannel(new BlackHoleChannel(WHITESPACE))
       .withChannel(commentRegexp(COMMENT))
+      .withChannel(regexp(PHPTokenType.HEREDOC, HEREDOC))
 
         // String Literals
       .withChannel(regexp(GenericTokenType.LITERAL, NUMERIC_LITERAL))

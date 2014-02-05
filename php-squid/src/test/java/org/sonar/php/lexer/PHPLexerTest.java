@@ -39,8 +39,7 @@ public class PHPLexerTest {
   public void testLexPHPSourceCode() throws FileNotFoundException {
     Lexer lexer = PHPLexer.create(new PHPConfiguration(Charsets.UTF_8));
     List<Token> tokens = lexer.lex(FileUtils.toFile(getClass().getResource("/lexer/melting-pot-for-lexing.php")));
-
-    assertThat(tokens.size()).isEqualTo(126);
+    assertThat(tokens.size()).isEqualTo(130);
 
     Token mail = tokens.get(5);
     assertThat(mail.getOriginalValue()).isEqualTo("Mail");
@@ -54,5 +53,7 @@ public class PHPLexerTest {
     assertThat(exponent.getOriginalValue()).isEqualTo("7E-10");
     assertThat(exponent.getType()).isEqualTo(GenericTokenType.LITERAL);
 
+    Token heredoc = tokens.get(122);
+    assertThat(heredoc.getType()).isEqualTo(PHPTokenType.HEREDOC);
   }
 }

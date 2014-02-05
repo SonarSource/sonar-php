@@ -150,6 +150,7 @@ import static org.sonar.php.api.PHPPunctuator.TILDA;
 import static org.sonar.php.api.PHPPunctuator.XOR;
 import static org.sonar.php.api.PHPPunctuator.XOR_EQU;
 import static org.sonar.php.api.PHPTokenType.CLOSE_TAG;
+import static org.sonar.php.api.PHPTokenType.HEREDOC;
 import static org.sonar.php.api.PHPTokenType.OPEN_TAG;
 import static org.sonar.php.api.PHPTokenType.VAR_IDENTIFIER;
 
@@ -458,7 +459,8 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(STATIC_CLASS_NAME_SCALAR).is(CLASS_NAME, DOUBLECOLON, CLASS);
     b.rule(STATIC_CLASS_CONSTANT_SCALAR).is(CLASS_NAME, DOUBLECOLON, IDENTIFIER);
-    b.rule(COMMON_SCALAR).is(b.firstOf( // TODO: HEREDOC
+    b.rule(COMMON_SCALAR).is(b.firstOf( // TODO: TEST
+      HEREDOC,
       LITERAL,
       "__CLASS__",
       "__FILE__",
