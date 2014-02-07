@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.phpunit;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.batch.DecoratorContext;
 import org.sonar.api.measures.CoreMetrics;
@@ -28,7 +27,6 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.plugins.php.MockUtils;
 
 import java.util.Arrays;
@@ -57,7 +55,8 @@ public class PhpUnitCoverageDecoratorTest {
   @Before
   public void init() {
     file = new File("Foo");
-    project = MockUtils.newMockPHPProject();;
+    project = MockUtils.newMockPHPProject();
+    ;
     decorator = new PhpUnitCoverageDecorator();
   }
 
@@ -103,7 +102,7 @@ public class PhpUnitCoverageDecoratorTest {
   @Test
   public void testDependedUponMetrics() throws Exception {
     List<Metric> metrics = Arrays.asList(CoreMetrics.COVERAGE, CoreMetrics.LINE_COVERAGE, CoreMetrics.LINES_TO_COVER,
-        CoreMetrics.UNCOVERED_LINES);
+      CoreMetrics.UNCOVERED_LINES);
 
     assertThat(decorator.generatesCoverageMetrics(), equalTo(metrics));
   }

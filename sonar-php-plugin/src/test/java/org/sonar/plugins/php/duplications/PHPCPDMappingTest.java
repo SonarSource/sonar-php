@@ -52,7 +52,7 @@ public class PHPCPDMappingTest {
   @Test
   public void testTokenize() throws Exception {
     SourceCode source = new SourceCode(new SourceCode.FileCodeLoader(
-        TestUtils.getResource("org/sonar/plugins/php/duplications/SmallFile.php"), Charset.defaultCharset().displayName()));
+      TestUtils.getResource("org/sonar/plugins/php/duplications/SmallFile.php"), Charset.defaultCharset().displayName()));
     Tokens tokens = new Tokens();
     tokenizer.tokenize(source, tokens);
 

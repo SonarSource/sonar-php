@@ -21,7 +21,6 @@ package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;

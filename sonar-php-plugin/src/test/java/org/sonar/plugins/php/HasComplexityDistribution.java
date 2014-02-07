@@ -55,7 +55,7 @@ public class HasComplexityDistribution extends ArgumentMatcher {
 
     return (
       ((Measure) measure).getMetric().equals(expectedMetric) &&
-      ((Measure) measure).getData().equals(expectedMeasure)
+        ((Measure) measure).getData().equals(expectedMeasure)
     );
   }
 }

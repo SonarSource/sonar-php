@@ -54,22 +54,26 @@ public class PhpUnitResultParser implements BatchExtension {
 
   private static final int PRECISION = 1;
 
-  /** The logger. */
+  /**
+   * The logger.
+   */
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitResultParser.class);
 
-  /** The context. */
+  /**
+   * The context.
+   */
   private SensorContext context;
 
-  /** The project. */
+  /**
+   * The project.
+   */
   private Project project;
 
   /**
    * Instantiates a new php unit result parser.
    *
-   * @param project
-   *          the project
-   * @param context
-   *          the context
+   * @param project the project
+   * @param context the context
    */
   public PhpUnitResultParser(Project project, SensorContext context) {
     super();
@@ -80,8 +84,7 @@ public class PhpUnitResultParser implements BatchExtension {
   /**
    * Gets the test suites.
    *
-   * @param report
-   *          the report
+   * @param report the report
    * @return the test suites
    */
   protected TestSuites getTestSuites(File report) {
@@ -108,8 +111,7 @@ public class PhpUnitResultParser implements BatchExtension {
   /**
    * Gets the php file pointed by the report.
    *
-   * @param report
-   *          the unit test report
+   * @param report the unit test report
    */
   private Resource<?> getUnitTestResource(PhpUnitTestReport report) {
     return org.sonar.api.resources.File.fromIOFile(new File(report.getFile()), project.getFileSystem().getTestDirs());
@@ -125,8 +127,7 @@ public class PhpUnitResultParser implements BatchExtension {
   /**
    * Collect the metrics found.
    *
-   * @param reportFile
-   *          the reports directories to be scan
+   * @param reportFile the reports directories to be scan
    */
   protected void parse(File reportFile) {
     if (reportFile == null) {
@@ -140,8 +141,7 @@ public class PhpUnitResultParser implements BatchExtension {
   /**
    * Parses the report file.
    *
-   * @param report
-   *          the report file
+   * @param report the report file
    */
   private void parseFile(File report) {
     TestSuites testSuites = getTestSuites(report);
@@ -154,8 +154,7 @@ public class PhpUnitResultParser implements BatchExtension {
   /**
    * Launches {@see PhpTestSuiteReader#readSuite(TestSuite)} for all its descendants.
    *
-   * @param testSuites
-   *          the test suites
+   * @param testSuites the test suites
    * @return List<PhpUnitTestReport> A list of all test reports
    */
   private List<PhpUnitTestReport> readSuites(TestSuites testSuites) {
@@ -171,8 +170,7 @@ public class PhpUnitResultParser implements BatchExtension {
   /**
    * Saves the measures contained in the test report.
    *
-   * @param fileReport
-   *          the unit test report
+   * @param fileReport the unit test report
    */
   protected void saveTestReportMeasures(PhpUnitTestReport fileReport) {
     if (!fileReport.isValid()) {
@@ -204,8 +202,7 @@ public class PhpUnitResultParser implements BatchExtension {
   /**
    * Save tests details.
    *
-   * @param fileReport
-   *          the file report
+   * @param fileReport the file report
    */
   private void saveTestsDetails(PhpUnitTestReport fileReport) {
     StringBuilder details = new StringBuilder();

@@ -44,36 +44,36 @@ public final class PhpTokenProducer {
    */
   public static TokenChunker build() {
     return TokenChunker.builder()
-        // White Space
-        .ignore("\\s")
+      // White Space
+      .ignore("\\s")
         // Comments
-        .ignore("//[^\\n\\r]*+")
-        .ignore("#[^\\n\\r]*+")
-        .ignore("/\\*[\\s\\S]*?\\*/")
+      .ignore("//[^\\n\\r]*+")
+      .ignore("#[^\\n\\r]*+")
+      .ignore("/\\*[\\s\\S]*?\\*/")
         // String Literals
-        .token("<<<(['\"]?)(" + LABEL + ")+\\1[\\s\\S]*?" + NEWLINE + "\\2", NORMALIZED_CHARACTER_LITERAL)
-        .token("\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\"", NORMALIZED_CHARACTER_LITERAL)
+      .token("<<<(['\"]?)(" + LABEL + ")+\\1[\\s\\S]*?" + NEWLINE + "\\2", NORMALIZED_CHARACTER_LITERAL)
+      .token("\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\"", NORMALIZED_CHARACTER_LITERAL)
         // Character Literals
-        .token("'([^'\\n\\\\]*+(\\\\.)?+)*+'", NORMALIZED_CHARACTER_LITERAL)
+      .token("'([^'\\n\\\\]*+(\\\\.)?+)*+'", NORMALIZED_CHARACTER_LITERAL)
         // Identifiers, Keywords, Boolean Literals, The Null Literal
-        .token(LABEL)
+      .token(LABEL)
         // Floating-Point Literals
         // - Decimal
-        .token("[+-]?[0-9]++\\.([0-9]++)?+" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL)
+      .token("[+-]?[0-9]++\\.([0-9]++)?+" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL)
         // - Decimal
-        .token("[+-]?\\.[0-9]++" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL)
+      .token("[+-]?\\.[0-9]++" + EXP + "?+", NORMALIZED_NUMERIC_LITERAL)
         // - Decimal
-        .token("[+-]?[0-9]++" + EXP, NORMALIZED_NUMERIC_LITERAL)
+      .token("[+-]?[0-9]++" + EXP, NORMALIZED_NUMERIC_LITERAL)
         // Integer Literals
         // - Hexadecimal
-        .token("[+-]?0[xX][0-9a-fA-F]++", NORMALIZED_NUMERIC_LITERAL)
+      .token("[+-]?0[xX][0-9a-fA-F]++", NORMALIZED_NUMERIC_LITERAL)
         // - Binary
-        .token("[+-]?0[b][01]++", NORMALIZED_NUMERIC_LITERAL)
+      .token("[+-]?0[b][01]++", NORMALIZED_NUMERIC_LITERAL)
         // - Decimal and Octal
-        .token("[+-]?[0-9]++", NORMALIZED_NUMERIC_LITERAL)
+      .token("[+-]?[0-9]++", NORMALIZED_NUMERIC_LITERAL)
         // Any other character
-        .token(".")
-        .build();
+      .token(".")
+      .build();
   }
 
 }

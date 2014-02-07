@@ -41,7 +41,6 @@ import java.util.Iterator;
 
 /**
  * Temporary PHP CPD engine mapping class, used until we can migrate to Sonar CPD Engine.
- *
  */
 public class PhpCPDMapping extends AbstractCpdMapping {
 

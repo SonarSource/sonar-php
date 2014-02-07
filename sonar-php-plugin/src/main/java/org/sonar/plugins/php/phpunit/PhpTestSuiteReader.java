@@ -35,18 +35,18 @@ import java.util.Map;
 public class PhpTestSuiteReader {
 
   /**
-  */
+   */
   private static final String TESTSUITE_CLASS_NAME_SEPARATOR = "::";
-  /** The reports per class. */
+  /**
+   * The reports per class.
+   */
   private Map<String, PhpUnitTestReport> reportsPerClass = new HashMap<String, PhpUnitTestReport>();
 
   /**
    * Cumulates test case details.
-   * 
-   * @param testCase
-   *          the test case to analyse
-   * @param report
-   *          the report in which results will be added
+   *
+   * @param testCase the test case to analyse
+   * @param report   the report in which results will be added
    */
   private void cumulateTestCaseDetails(TestCase testCase, PhpUnitTestReport report) {
 
@@ -63,12 +63,11 @@ public class PhpTestSuiteReader {
 
   /**
    * Reads the given test suite.
-   * 
+   * <p/>
    * Due to a inconsistent XML format in phpUnit, we have to parse enclosing testsuite name for generated testcases when a testcase holds
    * the annotation dataProvider.
-   * 
-   * @param testSuite
-   *          the test suite
+   *
+   * @param testSuite the test suite
    * @return List<PhpUnitTestReport> A list containing on report per php class
    */
   public void readSuite(TestSuite testSuite, String parentFileName) {
@@ -112,7 +111,7 @@ public class PhpTestSuiteReader {
 
   /**
    * Returns the collection of test results for the suite that has been analyzed.
-   * 
+   *
    * @return the collection of {@link PhpUnitTestReport} objects
    */
   public Collection<PhpUnitTestReport> getReportsPerClass() {

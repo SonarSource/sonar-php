@@ -24,20 +24,13 @@ package org.sonar.plugins.php;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.sonar.api.config.Settings;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.test.TestUtils;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Properties;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

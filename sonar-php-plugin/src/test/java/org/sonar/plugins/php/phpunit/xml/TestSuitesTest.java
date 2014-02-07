@@ -38,7 +38,6 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
  * Test for TestSuites.
  *
  * @author gennadiyl
- *
  */
 public class TestSuitesTest {
 

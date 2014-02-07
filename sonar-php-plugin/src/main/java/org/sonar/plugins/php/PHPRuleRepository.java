@@ -22,7 +22,6 @@ package org.sonar.plugins.php;
 import org.sonar.api.rules.AnnotationRuleParser;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleRepository;
-import org.sonar.api.rules.XMLRuleParser;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 
