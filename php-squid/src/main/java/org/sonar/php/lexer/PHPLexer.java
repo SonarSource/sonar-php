@@ -34,7 +34,15 @@ import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
 
 public class PHPLexer {
 
-  private static final String WHITESPACE = "[ \\t\\r\\n]++";
+  /**
+   * LF, CR, LS, PS
+   */
+  public static final String LINE_TERMINATOR = "\\n\\r\\u2028\\u2029";
+
+  /**
+   * Tab, Vertical Tab, Form Feed, Space, No-break space, Byte Order Mark, Any other Unicode "space separator"
+   */
+  public static final String WHITESPACE = "\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}";
 
   // HEREDOC
   private static final String HEREDOC = "(?s)"
@@ -93,7 +101,7 @@ public class PHPLexer {
       .withFailIfNoChannelToConsumeOneCharacter(true)
       .withCharset(conf.getCharset())
 
-      .withChannel(new BlackHoleChannel(WHITESPACE))
+      .withChannel(new BlackHoleChannel("[" + WHITESPACE + LINE_TERMINATOR + "]++"))
       .withChannel(commentRegexp(COMMENT))
       .withChannel(regexp(PHPTokenType.HEREDOC, HEREDOC))
 
