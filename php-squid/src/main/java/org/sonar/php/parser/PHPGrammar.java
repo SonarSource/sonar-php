@@ -551,7 +551,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(CONSTANT_VAR_LIST).is(CONSTANT_VAR, b.zeroOrMore(COMMA, CONSTANT_VAR));
     b.rule(CONSTANT_VAR).is(IDENTIFIER, EQU, STATIC_SCALAR);
 
-    b.rule(METHOD_DECLARATION).is(b.zeroOrMore(MEMBER_MODIFIER), FUNCTION, b.optional(REFERENCE), IDENTIFIER, // TODO: TEST !
+    b.rule(METHOD_DECLARATION).is(b.zeroOrMore(MEMBER_MODIFIER), FUNCTION, b.optional(REFERENCE), IDENTIFIER,
       LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS, METHOD_BODY);
     b.rule(METHOD_BODY).is(b.firstOf(SEMICOLON, BLOCK));
 
