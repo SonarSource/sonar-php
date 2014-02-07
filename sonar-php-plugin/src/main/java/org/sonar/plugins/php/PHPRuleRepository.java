@@ -19,9 +19,11 @@
  */
 package org.sonar.plugins.php;
 
+import org.sonar.api.rules.AnnotationRuleParser;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleRepository;
 import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 
 import java.util.List;
@@ -29,19 +31,18 @@ import java.util.List;
 public class PHPRuleRepository extends RuleRepository {
 
   private static final String REPOSITORY_NAME = "SonarQube";
-  private static final String REPOSITORY_KEY = "php";
 
-  private final XMLRuleParser parser;
+  private final AnnotationRuleParser annotationRuleParser;
 
-  public PHPRuleRepository(XMLRuleParser parser) {
-    super(REPOSITORY_KEY, Php.KEY);
+  public PHPRuleRepository(AnnotationRuleParser annotationRuleParser) {
+    super(CheckList.REPOSITORY_KEY, Php.KEY);
     setName(REPOSITORY_NAME);
-
-    this.parser = parser;
+    this.annotationRuleParser = annotationRuleParser;
   }
 
   @Override
   public List<Rule> createRules() {
-    return parser.parse(getClass().getResourceAsStream("/org/sonar/plugins/php/rules.xml"));
+    return annotationRuleParser.parse(CheckList.REPOSITORY_KEY, CheckList.getChecks());
   }
+
 }

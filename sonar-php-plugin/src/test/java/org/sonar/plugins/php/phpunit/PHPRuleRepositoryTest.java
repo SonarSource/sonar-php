@@ -17,26 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.core.profiles;
+package org.sonar.plugins.php.phpunit;
 
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.profiles.XMLProfileParser;
-import org.sonar.api.utils.ValidationMessages;
+import org.junit.Test;
+import org.sonar.api.rules.AnnotationRuleParser;
+import org.sonar.api.rules.Rule;
+import org.sonar.php.checks.CheckList;
+import org.sonar.plugins.php.PHPRuleRepository;
 
-public final class SonarWayProfile extends ProfileDefinition {
+import java.util.List;
 
-  private final XMLProfileParser parser;
+import static org.fest.assertions.Assertions.assertThat;
 
-  public SonarWayProfile(XMLProfileParser parser) {
-    this.parser = parser;
-  }
+public class PHPRuleRepositoryTest {
 
-  @Override
-  public RulesProfile createProfile(ValidationMessages messages) {
-    RulesProfile profile = parser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/sonar-way-profile.xml",
-        messages);
-    profile.setDefaultProfile(true);
-    return profile;
+  @Test
+  public void test() {
+    PHPRuleRepository ruleRepository = new PHPRuleRepository(new AnnotationRuleParser());
+    assertThat(ruleRepository.getKey()).isEqualTo("php");
+    assertThat(ruleRepository.getName()).isEqualTo("SonarQube");
+    List<Rule> rules = ruleRepository.createRules();
+    assertThat(rules.size()).isEqualTo(CheckList.getChecks().size());
   }
 }

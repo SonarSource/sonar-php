@@ -29,7 +29,6 @@ import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.core.PhpCommonRulesEngineProvider;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.core.PhpSourceImporter;
-import org.sonar.plugins.php.core.profiles.SonarWayProfile;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageDecorator;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
@@ -90,7 +89,7 @@ public class PhpPlugin extends SonarPlugin {
       PHPSquidSensor.class,
 
       PHPRuleRepository.class,
-      SonarWayProfile.class,
+      PHPProfile.class,
 
       // PhpUnit
       PhpUnitSensor.class,

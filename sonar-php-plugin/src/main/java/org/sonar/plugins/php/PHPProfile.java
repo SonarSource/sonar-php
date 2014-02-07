@@ -17,8 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-@ParametersAreNonnullByDefault
-package org.sonar.plugins.php.core.profiles;
+package org.sonar.plugins.php;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.sonar.api.profiles.AnnotationProfileParser;
+import org.sonar.api.profiles.ProfileDefinition;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.utils.ValidationMessages;
+import org.sonar.php.checks.CheckList;
+import org.sonar.plugins.php.api.Php;
 
+public final class PHPProfile extends ProfileDefinition {
+
+  private final AnnotationProfileParser annotationProfileParser;
+
+  public PHPProfile(AnnotationProfileParser annotationProfileParser) {
+    this.annotationProfileParser = annotationProfileParser;
+  }
+
+  @Override
+  public RulesProfile createProfile(ValidationMessages validation) {
+    return annotationProfileParser.parse(CheckList.REPOSITORY_KEY, CheckList.SONAR_WAY_PROFILE, Php.KEY, CheckList.getChecks(), validation);
+  }
+}
