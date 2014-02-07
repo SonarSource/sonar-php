@@ -26,23 +26,24 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class UnaryExprTest extends RuleTest {
+public class InternalFunctionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.UNARY_EXPR));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.INTERNAL_FUNCTION));
   }
 
   @Test
   public void test() {
     assertThat(p)
-      .matches("$a")
-      .matches("+ $a")
-      .matches("- $a")
-      .matches("~ $a")
-      .matches("! $a")
-      .matches("@ $a")
-      .matches("(int) $a");
-
+      .matches("isset ($a, $b)")
+      .matches("empty ($a)")
+      .matches("include $a")
+      .matches("include $a")
+      .matches("include_once $a")
+      .matches("require $a")
+      .matches("require_once $a")
+      .matches("clone $a")
+      .matches("print $a");
   }
 }

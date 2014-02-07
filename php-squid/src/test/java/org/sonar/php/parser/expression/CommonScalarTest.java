@@ -47,7 +47,7 @@ public class CommonScalarTest extends RuleTest {
       .matches("__CLASS__")
       .matches("__TRAIT__")
       .matches("__METHOD__")
-      .matches("__NAMESPACE__");
-// ;
+      .matches("__NAMESPACE__")
+      .matches("<<<EOF\n $a\nEOF");
   }
 }

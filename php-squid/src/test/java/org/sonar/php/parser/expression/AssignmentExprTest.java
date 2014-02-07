@@ -50,6 +50,9 @@ public class AssignmentExprTest extends RuleTest {
       .matches("$a |= $b")
       .matches("$a -= $b")
       .matches("$a -= $b")
+
+      .matches("$a = &$b")
+      .matches("$a = &new Foo")
     ;
   }
 }

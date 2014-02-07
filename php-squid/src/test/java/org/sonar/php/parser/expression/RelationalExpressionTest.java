@@ -26,23 +26,20 @@ import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.sslr.tests.Assertions.assertThat;
 
-public class UnaryExprTest extends RuleTest {
+public class RelationalExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.UNARY_EXPR));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.RELATIONAL_EXPR));
   }
 
   @Test
   public void test() {
     assertThat(p)
       .matches("$a")
-      .matches("+ $a")
-      .matches("- $a")
-      .matches("~ $a")
-      .matches("! $a")
-      .matches("@ $a")
-      .matches("(int) $a");
-
+      .matches("$a < $a")
+      .matches("$a > $a")
+      .matches("$a >= $a")
+      .matches("$a <= $a");
   }
 }
