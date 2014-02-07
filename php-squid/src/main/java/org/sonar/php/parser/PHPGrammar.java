@@ -419,7 +419,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(ASSIGNMENT_EXPR, b.optional(DOUBLEARROW, b.firstOf(ALIAS_VARIABLE, ASSIGNMENT_EXPR))),
       ALIAS_VARIABLE));
 
-    b.rule(COMMON_SCALAR).is(b.firstOf( // TODO: TEST
+    b.rule(COMMON_SCALAR).is(b.firstOf(
       HEREDOC,
       LITERAL,
       "__CLASS__",
