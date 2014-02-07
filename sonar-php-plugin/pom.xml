@@ -12,7 +12,7 @@
   <artifactId>sonar-php-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
 
-  <name>Sonar PHP Plugin</name>
+  <name>PHP :: Sonar Plugin</name>
   <description>Enables analysis of PHP projects.</description>
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
 

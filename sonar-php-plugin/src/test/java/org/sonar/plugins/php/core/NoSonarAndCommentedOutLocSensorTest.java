@@ -1,5 +1,5 @@
 /*
- * Sonar PHP Plugin
+ * SonarQube PHP Plugin
  * Copyright (C) 2010 Codehaus Sonar Plugins
  * dev@sonar.codehaus.org
  *

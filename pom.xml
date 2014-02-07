@@ -14,7 +14,7 @@
   <version>1.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Sonar PHP Project</name>
+  <name>PHP</name>
   <description>Enables analysis of PHP projects into Sonar.</description>
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
   <inceptionYear>2010</inceptionYear>
@@ -92,7 +92,7 @@
   </ciManagement>
 
   <properties>
-    <license.title>Sonar PHP Plugin</license.title>
+    <license.title>SonarQube PHP Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
     <sonar.version>3.0</sonar.version>
