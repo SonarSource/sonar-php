@@ -19,19 +19,26 @@
  */
 package org.sonar.plugins.php;
 
+import com.google.common.collect.Lists;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.squid.AstScanner;
+import com.sonar.sslr.squid.SquidAstVisitor;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.checks.AnnotationCheckFactory;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
+import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
+import org.sonar.api.rules.Violation;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
+import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.squid.api.CheckMessage;
 import org.sonar.squid.api.SourceCode;
 import org.sonar.squid.api.SourceFile;
 import org.sonar.squid.api.SourceFunction;
@@ -40,6 +47,8 @@ import org.sonar.squid.indexer.QueryByType;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 
 public class PHPSquidSensor implements Sensor {
 
@@ -49,6 +58,13 @@ public class PHPSquidSensor implements Sensor {
   private Project project;
   private SensorContext context;
   private AstScanner<Grammar> scanner;
+  private RulesProfile profile;
+  private AnnotationCheckFactory annotationCheckFactory;
+
+  public PHPSquidSensor(RulesProfile profile) {
+    this.profile = profile;
+    this.annotationCheckFactory = AnnotationCheckFactory.create(profile, CheckList.REPOSITORY_KEY, CheckList.getChecks());
+  }
 
   @Override
   public boolean shouldExecuteOnProject(Project project) {
@@ -59,20 +75,23 @@ public class PHPSquidSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     this.project = project;
     this.context = context;
-    this.scanner = PHPAstScanner.create(createConfiguration());
 
+    List<SquidAstVisitor<Grammar>> visitors = getCheckVisitors();
+    this.scanner = PHPAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
     scanner.scanFiles(getProjectMainFiles());
-    saveMeasures(scanner.getIndex().search(new QueryByType(SourceFile.class)));
+
+    save(scanner.getIndex().search(new QueryByType(SourceFile.class)));
   }
 
-  private void saveMeasures(Collection<SourceCode> squidSourceFiles) {
+  private void save(Collection<SourceCode> squidSourceFiles) {
     for (SourceCode squidSourceFile : squidSourceFiles) {
       SourceFile squidFile = (SourceFile) squidSourceFile;
       org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.fromIOFile(new java.io.File(squidFile.getKey()), project);
 
-      saveFileMeasures(sonarFile, squidFile);
-      saveFunctionsComplexityDistribution(sonarFile, squidFile);
       saveFilesComplexityDistribution(sonarFile, squidFile);
+      saveFunctionsComplexityDistribution(sonarFile, squidFile);
+      saveFileMeasures(sonarFile, squidFile);
+      saveViolations(sonarFile, squidFile);
     }
   }
 
@@ -102,11 +121,27 @@ public class PHPSquidSensor implements Sensor {
     context.saveMeasure(sonarFile, complexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
   }
 
+  private void saveViolations(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
+    Collection<CheckMessage> messages = squidFile.getCheckMessages();
+    if (messages != null) {
+      for (CheckMessage message : messages) {
+        Violation violation = Violation.create(annotationCheckFactory.getActiveRule(message.getCheck()), sonarFile)
+          .setLineId(message.getLine())
+          .setMessage(message.getText(Locale.ENGLISH));
+        context.saveViolation(violation);
+      }
+    }
+  }
+
   private PHPConfiguration createConfiguration() {
     return new PHPConfiguration(project.getFileSystem().getSourceCharset());
   }
 
   private Collection<File> getProjectMainFiles() {
     return InputFileUtils.toFiles(project.getFileSystem().mainFiles(Php.KEY));
+  }
+
+  private List<SquidAstVisitor<Grammar>> getCheckVisitors() {
+    return Lists.newArrayList(annotationCheckFactory.getChecks());
   }
 }
