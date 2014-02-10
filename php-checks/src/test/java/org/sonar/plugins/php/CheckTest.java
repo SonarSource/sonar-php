@@ -17,24 +17,11 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks;
+package org.sonar.plugins.php;
 
-import com.google.common.collect.ImmutableList;
+import com.sonar.sslr.squid.checks.CheckMessagesVerifierRule;
 
-import java.util.List;
+public class CheckTest {
 
-public class CheckList {
-
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
-  }
-
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class
-    );
-  }
+  protected CheckMessagesVerifierRule checkMessagesVerifier = new CheckMessagesVerifierRule();
 }

@@ -1,4 +1,4 @@
-/*
+package org.sonar.plugins.php;/*
  * SonarQube PHP Plugin
  * Copyright (C) 2010 Codehaus Sonar Plugins
  * dev@sonar.codehaus.org
@@ -17,24 +17,14 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks;
+import java.io.File;
 
-import com.google.common.collect.ImmutableList;
+public class TestUtils {
 
-import java.util.List;
-
-public class CheckList {
-
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
+  private TestUtils() {
   }
 
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class
-    );
+  public static File getCheckFile(String filename) {
+    return new File("src/test/resources/checks/" + filename);
   }
 }
