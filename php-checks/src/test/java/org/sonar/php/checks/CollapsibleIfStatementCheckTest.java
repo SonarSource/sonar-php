@@ -19,27 +19,23 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squid.api.SourceFile;
 
-import java.util.List;
+public class CollapsibleIfStatementCheckTest extends CheckTest {
 
-public class CheckList {
+  @Test
+  public void test() {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("CollapsibleIfStatementCheck.php"), new CollapsibleIfStatementCheck());
 
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
-  }
-
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class,
-      TooManyCasesInSwitchCheck.class,
-      EmptyStatementCheck.class,
-      IfConditionAlwaysTrueOrFalseCheck.class,
-      CollapsibleIfStatementCheck.class,
-      TooManyFunctionParametersCheck.class
-    );
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(13).withMessage("Merge this if statement with the enclosing one.")
+      .next().atLine(43)
+      .next().atLine(48)
+      .next().atLine(69)
+      .noMore();
   }
 }
