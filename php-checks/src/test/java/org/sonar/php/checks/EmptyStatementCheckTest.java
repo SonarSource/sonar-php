@@ -19,25 +19,22 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squid.api.SourceFile;
 
-import java.util.List;
+public class EmptyStatementCheckTest extends CheckTest {
 
-public class CheckList {
+  @Test
+  public void test() {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("EmptyStatementCheck.php"), new EmptyStatementCheck());
 
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
-  }
-
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class,
-      TooManyCasesInSwitchCheck.class,
-      EmptyStatementCheck.class,
-      TooManyFunctionParametersCheck.class
-    );
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(6).withMessage("Remove this empty statement.")
+      .next().atLine(7)
+      .next().atLine(10)
+      .noMore();
   }
 }

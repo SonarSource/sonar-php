@@ -19,25 +19,27 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.squid.checks.SquidCheck;
+import org.sonar.check.BelongsToProfile;
+import org.sonar.check.Priority;
+import org.sonar.check.Rule;
+import org.sonar.php.parser.PHPGrammar;
 
-import java.util.List;
+@Rule(
+  key = "S1116",
+  priority = Priority.MAJOR)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
+public class EmptyStatementCheck extends SquidCheck<Grammar> {
 
-public class CheckList {
-
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
+  @Override
+  public void init() {
+    subscribeTo(PHPGrammar.EMPTY_STATEMENT);
   }
 
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class,
-      TooManyCasesInSwitchCheck.class,
-      EmptyStatementCheck.class,
-      TooManyFunctionParametersCheck.class
-    );
+  @Override
+  public void visitNode(AstNode astNode) {
+    getContext().createLineViolation(this, "Remove this empty statement.", astNode);
   }
 }
