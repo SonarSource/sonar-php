@@ -51,7 +51,7 @@ public class PHPLexerTest {
 
     Token exponent = tokens.get(27);
     assertThat(exponent.getOriginalValue()).isEqualTo("7E-10");
-    assertThat(exponent.getType()).isEqualTo(GenericTokenType.LITERAL);
+    assertThat(exponent.getType()).isEqualTo(PHPTokenType.NUMERIC_LITERAL);
 
     Token heredoc = tokens.get(122);
     assertThat(heredoc.getType()).isEqualTo(PHPTokenType.HEREDOC);

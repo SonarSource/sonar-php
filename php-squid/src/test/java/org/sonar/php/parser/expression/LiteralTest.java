@@ -17,29 +17,36 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.api;
+package org.sonar.php.parser.expression;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.TokenType;
+import org.junit.Before;
+import org.junit.Test;
+import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.parser.RuleTest;
 
-public enum PHPTokenType implements TokenType {
+import static org.sonar.sslr.tests.Assertions.assertThat;
 
-  OPEN_TAG, CLOSE_TAG, VAR_IDENTIFIER, HEREDOC, STRING_LITERAL, NUMERIC_LITERAL;
+public class LiteralTest extends RuleTest {
 
-  @Override
-  public boolean hasToBeSkippedFromAst(AstNode astNode) {
-    return false;
+  @Before
+  public void setUp() {
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.LITERAL));
   }
 
-  @Override
-  public String getName() {
-    return name();
+  @Test
+  public void test() {
+    assertThat(p)
+      .matches("<<<EOF\n $a\nEOF")
+
+      .matches("1")
+      .matches("1.2")
+
+      .matches("\"foo\"")
+      .matches("'foo'")
+
+      .matches("true")
+
+      .matches("null")
+      .matches("NULL");
   }
-
-  @Override
-  public String getValue() {
-    return name();
-  }
-
-
 }

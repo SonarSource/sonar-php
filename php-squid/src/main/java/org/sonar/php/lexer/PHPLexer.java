@@ -106,8 +106,8 @@ public class PHPLexer {
       .withChannel(regexp(PHPTokenType.HEREDOC, HEREDOC))
 
         // String Literals
-      .withChannel(regexp(GenericTokenType.LITERAL, NUMERIC_LITERAL))
-      .withChannel(regexp(GenericTokenType.LITERAL, STRING_LITERAL))
+      .withChannel(regexp(PHPTokenType.NUMERIC_LITERAL, NUMERIC_LITERAL))
+      .withChannel(regexp(PHPTokenType.STRING_LITERAL, STRING_LITERAL))
 
         // PHP tags
       .withChannel(regexp(PHPTokenType.OPEN_TAG, OPEN_TAG))

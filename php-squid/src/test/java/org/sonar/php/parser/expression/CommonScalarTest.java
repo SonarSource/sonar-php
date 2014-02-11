@@ -37,9 +37,6 @@ public class CommonScalarTest extends RuleTest {
   public void test() {
     assertThat(p)
       .matches("1")
-      .matches("1.2")
-      .matches("\"foo\"")
-      .matches("'foo'")
       .matches("__LINE__")
       .matches("__FILE__")
       .matches("__DIR__")
@@ -47,7 +44,6 @@ public class CommonScalarTest extends RuleTest {
       .matches("__CLASS__")
       .matches("__TRAIT__")
       .matches("__METHOD__")
-      .matches("__NAMESPACE__")
-      .matches("<<<EOF\n $a\nEOF");
+      .matches("__NAMESPACE__");
   }
 }

@@ -29,7 +29,6 @@ import java.util.List;
 
 import static com.sonar.sslr.api.GenericTokenType.EOF;
 import static com.sonar.sslr.api.GenericTokenType.IDENTIFIER;
-import static com.sonar.sslr.api.GenericTokenType.LITERAL;
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
 import static org.sonar.php.api.PHPKeyword.AS;
@@ -151,7 +150,9 @@ import static org.sonar.php.api.PHPPunctuator.XOR;
 import static org.sonar.php.api.PHPPunctuator.XOR_EQU;
 import static org.sonar.php.api.PHPTokenType.CLOSE_TAG;
 import static org.sonar.php.api.PHPTokenType.HEREDOC;
+import static org.sonar.php.api.PHPTokenType.NUMERIC_LITERAL;
 import static org.sonar.php.api.PHPTokenType.OPEN_TAG;
+import static org.sonar.php.api.PHPTokenType.STRING_LITERAL;
 import static org.sonar.php.api.PHPTokenType.VAR_IDENTIFIER;
 
 public enum PHPGrammar implements GrammarRuleKey {
@@ -283,6 +284,8 @@ public enum PHPGrammar implements GrammarRuleKey {
   YIELD_EXPRESSION,
   COMBINED_SCALAR,
   COMMON_SCALAR,
+  LITERAL,
+  BOOLEAN_LITERAL,
 
   LEXICAL_VARS,
   LEXICAL_VAR_LIST,
@@ -420,7 +423,6 @@ public enum PHPGrammar implements GrammarRuleKey {
       ALIAS_VARIABLE));
 
     b.rule(COMMON_SCALAR).is(b.firstOf(
-      HEREDOC,
       LITERAL,
       "__CLASS__",
       "__FILE__",
@@ -431,14 +433,17 @@ public enum PHPGrammar implements GrammarRuleKey {
       "__NAMESPACE__",
       "__TRAIT__"));
 
+    b.rule(LITERAL).is(b.firstOf(HEREDOC, NUMERIC_LITERAL, STRING_LITERAL, BOOLEAN_LITERAL, "NULL"));
+    b.rule(BOOLEAN_LITERAL).is(b.firstOf("TRUE", "FALSE"));
+
     b.rule(CAST_TYPE).is(LPARENTHESIS, b.firstOf("INTEGER", "INT", "DOUBLE", "FLOAT", "STRING", ARRAY, "OBJECT", "BOOLEAN", "BOOL", "BINARY", UNSET), RPARENTHESIS);
 
     b.rule(POSTFIX_EXPR).is(b.firstOf( // TODO: to complete
       //YIELD, TODO: check
       COMBINED_SCALAR_OFFSET,
       FUNCTION_EXPRESSION,
-      VARIABLE,
       COMMON_SCALAR,
+      VARIABLE,
       NEW_EXPR,
       EXIT_EXPR,
       LIST_ASSIGNMENT_EXPR,
