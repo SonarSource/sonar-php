@@ -484,7 +484,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(b.firstOf(PLUS, MINUS, TILDA, BANG), UNARY_EXPR),
       b.sequence(PHPPunctuator.AT, POSTFIX_EXPR),
       b.sequence(CAST_TYPE, ASSIGNMENT_EXPR),
-      POSTFIX_EXPR));
+      POSTFIX_EXPR)).skipIfOneChild();
     // Binary expressions
     b.rule(CONCATENATION_EXPR).is(UNARY_EXPR, b.zeroOrMore(DOT, UNARY_EXPR)).skipIfOneChild();
     b.rule(MULTIPLICATIVE_EXPR).is(CONCATENATION_EXPR, b.zeroOrMore(MULIPLICATIVE_OPERATOR, CONCATENATION_EXPR)).skipIfOneChild();
