@@ -19,26 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squid.api.SourceFile;
 
-import java.util.List;
+public class IfConditionAlwaysTrueOrFalseCheckTest extends CheckTest {
 
-public class CheckList {
+  @Test
+  public void test() {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("IfConditionAlwaysTrueOrFalseCheck.php"), new IfConditionAlwaysTrueOrFalseCheck());
 
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
-  }
-
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class,
-      TooManyCasesInSwitchCheck.class,
-      EmptyStatementCheck.class,
-      IfConditionAlwaysTrueOrFalseCheck.class,
-      TooManyFunctionParametersCheck.class
-    );
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(7).withMessage("Remove this \"if\" statement.")
+      .next().atLine(11)
+      .noMore();
   }
 }
