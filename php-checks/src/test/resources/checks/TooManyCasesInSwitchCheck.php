@@ -16,3 +16,6 @@ switch ($i) {
     default:
       break;
 }
+
+switch ($i) {
+}

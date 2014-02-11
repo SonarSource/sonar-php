@@ -58,11 +58,9 @@ public class PHPSquidSensor implements Sensor {
   private Project project;
   private SensorContext context;
   private AstScanner<Grammar> scanner;
-  private RulesProfile profile;
   private AnnotationCheckFactory annotationCheckFactory;
 
   public PHPSquidSensor(RulesProfile profile) {
-    this.profile = profile;
     this.annotationCheckFactory = AnnotationCheckFactory.create(profile, CheckList.REPOSITORY_KEY, CheckList.getChecks());
   }
 
