@@ -1,0 +1,34 @@
+<p>The <code>switch</code> statement should be used only to clearly define some new branches in the control flow. As soon as a <code>case</code> clause contains too many statements this highly decreases the readability of the overall control flow statement. In such case, the content of <code>case</code> clause should be extracted in a dedicated function</p>
+
+<h2>Noncompliant Code Example</h2>
+<p>The following code snippet illustrates this rule with the default threshold of 5:</p>
+<pre>
+switch ($var) {
+  case 0:  // 6 lines till next case
+    methodCall1();
+    methodCall2();
+    methodCall3();
+    methodCall4();
+    break;
+  default:
+    break;
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+switch ($var) {
+  case 0:
+    doSomething();
+    break;
+  default:
+    break;
+}
+
+function printSomething(){
+  methodCall1("");
+  methodCall2("");
+  methodCall3("");
+  methodCall4("");
+}
+</pre>
