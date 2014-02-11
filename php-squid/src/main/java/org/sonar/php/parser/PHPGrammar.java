@@ -284,7 +284,6 @@ public enum PHPGrammar implements GrammarRuleKey {
   YIELD_EXPRESSION,
   COMBINED_SCALAR,
   COMMON_SCALAR,
-  LITERAL,
   BOOLEAN_LITERAL,
 
   LEXICAL_VARS,
@@ -423,7 +422,11 @@ public enum PHPGrammar implements GrammarRuleKey {
       ALIAS_VARIABLE));
 
     b.rule(COMMON_SCALAR).is(b.firstOf(
-      LITERAL,
+      HEREDOC,
+      NUMERIC_LITERAL,
+      STRING_LITERAL,
+      BOOLEAN_LITERAL,
+      "NULL",
       "__CLASS__",
       "__FILE__",
       "__DIR__",
@@ -433,7 +436,6 @@ public enum PHPGrammar implements GrammarRuleKey {
       "__NAMESPACE__",
       "__TRAIT__"));
 
-    b.rule(LITERAL).is(b.firstOf(HEREDOC, NUMERIC_LITERAL, STRING_LITERAL, BOOLEAN_LITERAL, "NULL"));
     b.rule(BOOLEAN_LITERAL).is(b.firstOf("TRUE", "FALSE"));
 
     b.rule(CAST_TYPE).is(LPARENTHESIS, b.firstOf("INTEGER", "INT", "DOUBLE", "FLOAT", "STRING", ARRAY, "OBJECT", "BOOLEAN", "BOOL", "BINARY", UNSET), RPARENTHESIS);

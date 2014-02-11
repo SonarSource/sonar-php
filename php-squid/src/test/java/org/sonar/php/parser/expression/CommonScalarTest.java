@@ -36,7 +36,19 @@ public class CommonScalarTest extends RuleTest {
   @Test
   public void test() {
     assertThat(p)
+      .matches("<<<EOF\n $a\nEOF")
+
       .matches("1")
+      .matches("1.2")
+
+      .matches("\"foo\"")
+      .matches("'foo'")
+
+      .matches("true")
+
+      .matches("null")
+      .matches("NULL")
+
       .matches("__LINE__")
       .matches("__FILE__")
       .matches("__DIR__")
