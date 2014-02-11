@@ -695,6 +695,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(DECLARE_LIST).is(MEMBER_CONST_DECLARATION, b.zeroOrMore(COMMA, MEMBER_CONST_DECLARATION));
     b.rule(INNER_DECLARE_STATEMENT).is(b.firstOf(
       b.sequence(COLON, b.optional(INNER_STATEMENT_LIST), ENDDECLARE, SEMICOLON),
+      SEMICOLON,
       STATEMENT));
 
     b.rule(TRY_STATEMENT).is(TRY, LCURLYBRACE, b.optional(INNER_STATEMENT_LIST), RCURLYBRACE, b.zeroOrMore(CATCH_STATEMENT), b.optional(FINALLY_STATEMENT));
