@@ -45,3 +45,6 @@ class C {
 
 $a = function () { return 1; }; // OK
 
+if (a) {
+  return;
+}
