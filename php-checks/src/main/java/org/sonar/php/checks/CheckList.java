@@ -40,6 +40,7 @@ public class CheckList {
       IfConditionAlwaysTrueOrFalseCheck.class,
       CollapsibleIfStatementCheck.class,
       SwitchCaseTooBigCheck.class,
+      TooManyReturnCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
