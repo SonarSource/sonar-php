@@ -35,7 +35,7 @@ public class CollapsibleIfStatementCheckTest extends CheckTest {
       .next().atLine(13).withMessage("Merge this if statement with the enclosing one.")
       .next().atLine(43)
       .next().atLine(48)
-      .next().atLine(69)
+      .next().atLine(73)
       .noMore();
   }
 }
