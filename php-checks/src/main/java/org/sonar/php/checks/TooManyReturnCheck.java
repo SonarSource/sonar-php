@@ -72,7 +72,7 @@ public class TooManyReturnCheck extends SquidCheck<Grammar> {
     if (astNode.is(PHPGrammar.BLOCK) && isFunctionBlock(astNode)) {
       if (getReturnStatementCounter() > max) {
         getContext().createLineViolation(this, "Reduce the number of returns of this function {0}, down to the maximum allowed {1}.",
-          astNode, getReturnStatementCounter(), max);
+          astNode.getParent(), getReturnStatementCounter(), max);
       }
       returnStatementCounter.pop();
     }
