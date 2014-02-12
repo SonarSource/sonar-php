@@ -19,7 +19,6 @@
  */
 package org.sonar.php.lexer;
 
-import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.IdentifierAndKeywordChannel;

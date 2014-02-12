@@ -46,9 +46,9 @@ public class CollapsibleIfStatementCheck extends SquidCheck<Grammar> {
     if (!hasElseClause(astNode)) {
       AstNode singleChild = getSingleStatementChild(astNode);
 
-     if (singleChild != null && isIfStatementWithoutElse(singleChild)) {
-      getContext().createLineViolation(this, "Merge this if statement with the enclosing one.", singleChild);
-     }
+      if (singleChild != null && isIfStatementWithoutElse(singleChild)) {
+        getContext().createLineViolation(this, "Merge this if statement with the enclosing one.", singleChild);
+      }
     }
   }
 
