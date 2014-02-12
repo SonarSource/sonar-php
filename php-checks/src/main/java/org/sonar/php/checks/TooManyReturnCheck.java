@@ -79,7 +79,7 @@ public class TooManyReturnCheck extends SquidCheck<Grammar> {
   }
 
   private boolean isInFunctionBody() {
-    return returnStatementCounter.size() > 0;
+    return !returnStatementCounter.isEmpty();
   }
 
   private int getReturnStatementCounter() {
