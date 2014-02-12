@@ -49,7 +49,7 @@ public class IfConditionAlwaysTrueOrFalseCheck extends SquidCheck<Grammar> {
   }
 
   private static boolean isConditionABooleanLiteral(AstNode ifStatement) {
-    AstNode postfixExpr = ifStatement.getFirstChild(PHPGrammar.PARENTHESIS_EXPRESSION).getFirstChild(PHPGrammar.POSTFIX_EXPR);
+    AstNode postfixExpr = ifStatement.getFirstChild(PHPGrammar.PARENTHESIS_EXPRESSION).getFirstChild(PHPGrammar.EXPRESSION).getFirstChild(PHPGrammar.POSTFIX_EXPR);
     return postfixExpr != null && isASingleBooleanLiteral(postfixExpr);
   }
 
