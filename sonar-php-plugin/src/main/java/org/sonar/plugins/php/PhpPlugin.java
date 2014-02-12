@@ -49,20 +49,18 @@ import java.util.List;
     name = "Unit tests report file path",
     project = true,
     global = true,
-    description = "Path of the unit tests report file to analyse.",
-    category = "PHPUnit"),
+    description = "Path of the unit tests report file to analyse."),
   @Property(key = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
     name = "Coverage report file path",
     project = true,
     global = true,
-    description = "Path of the coverage report file to analyse.",
-    category = "PHPUnit")
+    description = "Path of the coverage report file to analyse.")
 })
 public class PhpPlugin extends SonarPlugin {
 
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
-  public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.phpUnit.coverage.reportPath";
-  public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.phpUnit.tests.reportPath";
+  public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.reportPath";
+  public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
 
   /**
    * Gets the extensions.
