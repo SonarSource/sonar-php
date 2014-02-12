@@ -5,7 +5,7 @@
 <h2>Noncompliant Code Example</h2>
 <pre>
 if (condition1) {
-  if (condition2) {             // Noncompliant
+  if (condition2) {
     ...
   }
 }
@@ -13,7 +13,7 @@ if (condition1) {
 
 <h2>Compliant Solution</h2>
 <pre>
-if (condition1 && condition2) { // Compliant
+if (condition1 && condition2) {
   ...
 }
 </pre>
