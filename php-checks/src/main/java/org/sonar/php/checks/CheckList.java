@@ -41,6 +41,7 @@ public class CheckList {
       CollapsibleIfStatementCheck.class,
       SwitchCaseTooBigCheck.class,
       TooManyReturnCheck.class,
+      FunctionNameCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
