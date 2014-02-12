@@ -32,8 +32,8 @@ public class IfConditionAlwaysTrueOrFalseCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("IfConditionAlwaysTrueOrFalseCheck.php"), new IfConditionAlwaysTrueOrFalseCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(7).withMessage("Remove this \"if\" statement.")
-      .next().atLine(11)
+      .next().atLine(13).withMessage("Remove this \"if\" statement.")
+      .next().atLine(17)
       .noMore();
   }
 }
