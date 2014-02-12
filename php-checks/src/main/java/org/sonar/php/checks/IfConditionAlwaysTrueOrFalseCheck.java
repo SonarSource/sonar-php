@@ -25,6 +25,7 @@ import com.sonar.sslr.squid.checks.SquidCheck;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 
 @Rule(
@@ -49,13 +50,6 @@ public class IfConditionAlwaysTrueOrFalseCheck extends SquidCheck<Grammar> {
   }
 
   private static boolean isConditionABooleanLiteral(AstNode ifStatement) {
-    AstNode postfixExpr = ifStatement.getFirstChild(PHPGrammar.PARENTHESIS_EXPRESSION).getFirstChild(PHPGrammar.EXPRESSION).getFirstChild(PHPGrammar.POSTFIX_EXPR);
-    return postfixExpr != null && isASingleBooleanLiteral(postfixExpr);
+    return CheckUtils.isExpressionABooleanLiteral(ifStatement.getFirstChild(PHPGrammar.PARENTHESIS_EXPRESSION).getFirstChild(PHPGrammar.EXPRESSION));
   }
-
-  private static boolean isASingleBooleanLiteral(AstNode postfixExpr) {
-    AstNode commonScalar = postfixExpr.getFirstChild(PHPGrammar.COMMON_SCALAR);
-    return commonScalar != null && commonScalar.getFirstChild().is(PHPGrammar.BOOLEAN_LITERAL);
-  }
-
 }
