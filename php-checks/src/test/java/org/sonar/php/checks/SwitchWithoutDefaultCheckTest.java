@@ -19,34 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squid.api.SourceFile;
 
-import java.util.List;
+public class SwitchWithoutDefaultCheckTest extends CheckTest {
 
-public class CheckList {
+  @Test
+  public void test() {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SwitchWithoutDefaultCheck.php"), new SwitchWithoutDefaultCheck());
 
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
-  }
-
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class,
-      TooManyCasesInSwitchCheck.class,
-      EmptyStatementCheck.class,
-      IfConditionAlwaysTrueOrFalseCheck.class,
-      CollapsibleIfStatementCheck.class,
-      SwitchCaseTooBigCheck.class,
-      TooManyReturnCheck.class,
-      FunctionNameCheck.class,
-      ReturnOfBooleanExpressionCheck.class,
-      BooleanEqualityComparisonCheck.class,
-      VariableVariablesCheck.class,
-      SwitchWithoutDefaultCheck.class,
-      TooManyFunctionParametersCheck.class
-    );
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(10).withMessage("Add a \"case default\" clause to this \"switch\" statement.")
+      .next().atLine(18).withMessage("Move this \"case default\" clause to the end of this \"switch\" statement.")
+      .noMore();
   }
 }

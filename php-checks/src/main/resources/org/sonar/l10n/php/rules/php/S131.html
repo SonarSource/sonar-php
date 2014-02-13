@@ -1,0 +1,43 @@
+<p>
+  The requirement for a final "default" clause is defensive programming.</br>
+  This clause should either take appropriate action or contain a suitable comment as to why no action is taken.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+switch ($param) {  //missing default clause
+  case 0:
+    do_something();
+    break;
+  case 1:
+    do_something_else();
+    break;
+}
+
+switch ($param) {
+  default: // default clause should be the last one
+    error();
+    break;
+  case 0:
+    do_something();
+    break;
+  case 1:
+    do_something_else();
+    break;
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+switch ($param) {
+  case 0:
+    do_something();
+    break;
+  case 1:
+    do_something_else();
+    break;
+  default:
+    error();
+    break;
+}
+</pre>
