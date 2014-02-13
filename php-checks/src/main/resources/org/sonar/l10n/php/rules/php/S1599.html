@@ -1,0 +1,13 @@
+<p>
+  PHP's variable variables feature is temptingly powerful, but can lead to unmaintainable code.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+$var = 'foo';
+$$var = 'bar';      //Noncompliant
+$$$var = 'hello';  //Noncompliant
+
+echo $foo; //will display 'bar'
+echo $bar; //will display 'hello'
+</pre>

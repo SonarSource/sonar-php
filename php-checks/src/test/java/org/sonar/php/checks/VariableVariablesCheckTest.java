@@ -19,33 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squid.api.SourceFile;
 
-import java.util.List;
+public class VariableVariablesCheckTest extends CheckTest {
 
-public class CheckList {
+  @Test
+  public void test() {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("VariableVariablesCheck.php"), new VariableVariablesCheck());
 
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
-  }
-
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class,
-      TooManyCasesInSwitchCheck.class,
-      EmptyStatementCheck.class,
-      IfConditionAlwaysTrueOrFalseCheck.class,
-      CollapsibleIfStatementCheck.class,
-      SwitchCaseTooBigCheck.class,
-      TooManyReturnCheck.class,
-      FunctionNameCheck.class,
-      ReturnOfBooleanExpressionCheck.class,
-      BooleanEqualityComparisonCheck.class,
-      VariableVariablesCheck.class,
-      TooManyFunctionParametersCheck.class
-    );
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(3).withMessage("Remove the use of this variable variable \"$a\".")
+      .next().atLine(4)
+      .noMore();
   }
 }

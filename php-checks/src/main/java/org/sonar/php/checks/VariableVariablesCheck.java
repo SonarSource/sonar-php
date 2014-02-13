@@ -19,33 +19,28 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.squid.checks.SquidCheck;
+import org.sonar.check.BelongsToProfile;
+import org.sonar.check.Priority;
+import org.sonar.check.Rule;
+import org.sonar.php.parser.PHPGrammar;
 
-import java.util.List;
+@Rule(
+  key = "S1599",
+  priority = Priority.MAJOR)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
+public class VariableVariablesCheck extends SquidCheck<Grammar> {
 
-public class CheckList {
-
-  public static final String REPOSITORY_KEY = "php";
-
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
-
-  private CheckList() {
+  @Override
+  public void init() {
+    subscribeTo(PHPGrammar.SIMPLE_INDIRECT_REFERENCE);
   }
 
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class>of(
-      EvalUseCheck.class,
-      TooManyCasesInSwitchCheck.class,
-      EmptyStatementCheck.class,
-      IfConditionAlwaysTrueOrFalseCheck.class,
-      CollapsibleIfStatementCheck.class,
-      SwitchCaseTooBigCheck.class,
-      TooManyReturnCheck.class,
-      FunctionNameCheck.class,
-      ReturnOfBooleanExpressionCheck.class,
-      BooleanEqualityComparisonCheck.class,
-      VariableVariablesCheck.class,
-      TooManyFunctionParametersCheck.class
-    );
+  @Override
+  public void visitNode(AstNode astNode) {
+    getContext().createLineViolation(this, "Remove the use of this variable variable \"{0}\".", astNode,
+      astNode.getNextAstNode().getTokenOriginalValue());
   }
 }
