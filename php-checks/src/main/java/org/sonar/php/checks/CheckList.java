@@ -48,6 +48,7 @@ public class CheckList {
       SwitchWithoutDefaultCheck.class,
       AtLeastThreeCasesInSwitchCheck.class,
       ForHidingWhileCheck.class,
+      TrailingCommentCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
