@@ -10,14 +10,19 @@ if ($a):
 elseif ($a):     // NOK
 endif;
 
-if ($a) {
-}
-
-if ($a) {
+if ($a) {        // OK
+} elseif ($a) {
 } else {
 }
 
-if ($a) {
+if ($a) {        // OK
+}
+
+if ($a) {        // OK
+} else {
+}
+
+if ($a) {        // OK
 } else {
   if ($a) {
   }
