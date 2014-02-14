@@ -47,6 +47,7 @@ public class CheckList {
       VariableVariablesCheck.class,
       SwitchWithoutDefaultCheck.class,
       AtLeastThreeCasesInSwitchCheck.class,
+      ForHidingWhileCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
