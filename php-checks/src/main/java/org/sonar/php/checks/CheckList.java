@@ -53,6 +53,7 @@ public class CheckList {
       TooManyLinesInFileCheck.class,
       LineLengthCheck.class,
       EmptyNestedBlockCheck.class,
+      NonEmptyCaseWithoutBreakCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
