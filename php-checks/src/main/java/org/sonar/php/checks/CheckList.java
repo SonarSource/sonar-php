@@ -51,6 +51,7 @@ public class CheckList {
       TrailingCommentCheck.class,
       ElseIfWithoutElseCheck.class,
       TooManyLinesInFileCheck.class,
+      LineLengthCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

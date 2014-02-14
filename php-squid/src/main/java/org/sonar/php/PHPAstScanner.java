@@ -34,6 +34,7 @@ import com.sonar.sslr.squid.metrics.CommentsVisitor;
 import com.sonar.sslr.squid.metrics.CounterVisitor;
 import com.sonar.sslr.squid.metrics.LinesOfCodeVisitor;
 import com.sonar.sslr.squid.metrics.LinesVisitor;
+import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.php.parser.PHPGrammar;
@@ -171,6 +172,9 @@ public class PHPAstScanner {
 
     /* External visitors (typically Check ones) */
     for (SquidAstVisitor<Grammar> visitor : visitors) {
+      if (visitor instanceof CharsetAwareVisitor) {
+        ((CharsetAwareVisitor) visitor).setCharset(conf.getCharset());
+      }
       builder.withSquidAstVisitor(visitor);
     }
 
