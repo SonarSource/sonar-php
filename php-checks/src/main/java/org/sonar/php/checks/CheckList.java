@@ -50,6 +50,7 @@ public class CheckList {
       ForHidingWhileCheck.class,
       TrailingCommentCheck.class,
       ElseIfWithoutElseCheck.class,
+      TooManyLinesInFileCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
