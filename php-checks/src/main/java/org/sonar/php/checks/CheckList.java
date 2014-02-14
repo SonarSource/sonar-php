@@ -49,6 +49,7 @@ public class CheckList {
       AtLeastThreeCasesInSwitchCheck.class,
       ForHidingWhileCheck.class,
       TrailingCommentCheck.class,
+      ElseIfWithoutElseCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
