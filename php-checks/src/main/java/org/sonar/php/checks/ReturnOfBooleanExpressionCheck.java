@@ -66,7 +66,7 @@ public class ReturnOfBooleanExpressionCheck extends SquidCheck<Grammar> {
   }
 
   private static boolean hasElseIf(AstNode ifStmt) {
-    return ifStmt.hasDirectChildren(PHPGrammar.ELSIF_LIST, PHPGrammar.ALTERNATIVE_ELSIF_LIST);
+    return ifStmt.hasDirectChildren(PHPGrammar.ELSEIF_LIST, PHPGrammar.ALTERNATIVE_ELSEIF_LIST);
   }
 
   private static boolean hasElse(AstNode ifStmt) {
