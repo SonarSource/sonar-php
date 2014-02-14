@@ -52,6 +52,7 @@ public class CheckList {
       ElseIfWithoutElseCheck.class,
       TooManyLinesInFileCheck.class,
       LineLengthCheck.class,
+      EmptyNestedBlockCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
