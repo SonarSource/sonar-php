@@ -55,6 +55,7 @@ public class CheckList {
       EmptyNestedBlockCheck.class,
       NonEmptyCaseWithoutBreakCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
+      NestedControlFlowDepthCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
