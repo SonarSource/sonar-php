@@ -1,0 +1,24 @@
+<p>
+  The following predefined variables are deprecated and should be replaced by the new versions:
+</p>
+<ul>
+  <li>$HTTP_SERVER_VARS -> $_SERVER</li>
+  <li>$HTTP_GET_VARS -> $_GET</li>
+  <li>$HTTP_POST_VARS -> $_POST</li>
+  <li>$HTTP_POST_FILES -> $_FILES</li>
+  <li>$HTTP_SESSION_VARS -> $_SESSION</li>
+  <li>$HTTP_ENV_VARS -> $_ENV</li>
+  <li>$HTTP_COOKIE_VARS -> $_COOKIE</li>
+</ul>
+
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+echo 'Name parameter value: ' . $HTTP_GET_VARS["name"];
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+echo 'Name parameter value: ' . $_GET["name"];
+</pre>
+

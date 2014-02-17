@@ -54,6 +54,7 @@ public class CheckList {
       LineLengthCheck.class,
       EmptyNestedBlockCheck.class,
       NonEmptyCaseWithoutBreakCheck.class,
+      DeprecatedPredefinedVariablesUseCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
