@@ -26,6 +26,7 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
@@ -43,9 +44,11 @@ public class PhpUnitSensor implements Sensor {
 
   private final PhpUnitCoverageResultParser coverageParser;
   private final PhpUnitResultParser parser;
+  private final ProjectFileSystem fileSystem;
 
-  public PhpUnitSensor(Settings settings, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
+  public PhpUnitSensor(ProjectFileSystem fileSystem, Settings settings, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
     super();
+    this.fileSystem = fileSystem;
     this.settings = settings;
     this.parser = parser;
     this.coverageParser = coverageParser;
@@ -63,7 +66,7 @@ public class PhpUnitSensor implements Sensor {
     String reportPath = settings.getString(reportPathKey);
 
     if (reportPath != null) {
-      File xmlFile = new File(reportPath);
+      File xmlFile = fileSystem.resolvePath(reportPath);
 
       if (xmlFile.exists()) {
         LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath);
