@@ -34,7 +34,7 @@ public class FunctionNameCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionNameCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Rename function \"DoSomething\" to match the regular expression " + check.DEFAULT + ".")
+      .next().atLine(12).withMessage("Rename function \"DoSomething\" to match the regular expression " + check.DEFAULT + ".")
       .noMore();
   }
 

@@ -34,7 +34,6 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S100",
   priority = Priority.MAJOR)
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class FunctionNameCheck extends SquidCheck<Grammar> {
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
@@ -58,8 +57,12 @@ public class FunctionNameCheck extends SquidCheck<Grammar> {
   public void visitNode(AstNode astNode) {
     String functionName = astNode.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
 
-    if (!pattern.matcher(functionName).matches()) {
+    if (!pattern.matcher(functionName).matches() && !isExcluded(functionName)) {
       getContext().createLineViolation(this, "Rename function \"{0}\" to match the regular expression {1}.", astNode, functionName, format);
     }
+  }
+
+  private static boolean isExcluded(String functionName) {
+    return "__construct".equals(functionName) || "__destruct".equals(functionName);
   }
 }
