@@ -38,10 +38,9 @@ import java.util.List;
 @Rule(
   key = "S103",
   priority = Priority.MAJOR)
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class LineLengthCheck extends SquidCheck<Grammar> implements CharsetAwareVisitor {
 
-  public static final int DEFAULT = 80;
+  public static final int DEFAULT = 120;
   private Charset charset;
 
   @RuleProperty(

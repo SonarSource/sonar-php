@@ -33,7 +33,7 @@ public class LineLengthCheckTest extends CheckTest {
   public void defaultValue() {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LineLengthCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Split this 87 characters long line (which is greater than " + check.DEFAULT + " authorized).")
+      .next().atLine(4).withMessage("Split this 122 characters long line (which is greater than " + check.DEFAULT + " authorized).")
       .noMore();
   }
 
