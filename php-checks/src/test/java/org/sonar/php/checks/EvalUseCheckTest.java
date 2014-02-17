@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifierRule;
 import org.junit.Test;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
@@ -33,7 +32,7 @@ public class EvalUseCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("EvalUseCheck.php"), new EvalUseCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Remove the use of eval.")
+      .next().atLine(4).withMessage("Remove this use of the \"eval\" function.")
       .noMore();
   }
 }

@@ -40,6 +40,6 @@ public class EvalUseCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Remove the use of eval.", astNode);
+    getContext().createLineViolation(this, "Remove this use of the \"eval\" function.", astNode);
   }
 }
