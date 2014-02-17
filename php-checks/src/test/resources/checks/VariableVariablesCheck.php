@@ -1,5 +1,5 @@
 <?php
 
-$$a;      // NOK
+$$$$$$a;  // NOK
 $$a = 1;  // NOK
-$a;        // OK
+$a;       // OK

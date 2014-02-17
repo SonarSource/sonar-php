@@ -22,9 +22,11 @@ package org.sonar.php.checks;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.squid.checks.SquidCheck;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 
 @Rule(
@@ -40,7 +42,7 @@ public class VariableVariablesCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Remove the use of this variable variable \"{0}\".", astNode,
-      astNode.getNextAstNode().getTokenOriginalValue());
+    String varName = StringUtils.repeat(PHPPunctuator.DOLAR.getValue(), astNode.getNumberOfChildren()) + astNode.getNextAstNode().getTokenOriginalValue();
+    getContext().createLineViolation(this, "Remove the use of this variable variable \"{0}\".", astNode, varName);
   }
 }

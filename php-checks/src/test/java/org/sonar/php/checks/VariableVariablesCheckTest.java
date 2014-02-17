@@ -32,7 +32,7 @@ public class VariableVariablesCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("VariableVariablesCheck.php"), new VariableVariablesCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Remove the use of this variable variable \"$a\".")
+      .next().atLine(3).withMessage("Remove the use of this variable variable \"$$$$$$a\".")
       .next().atLine(4)
       .noMore();
   }
