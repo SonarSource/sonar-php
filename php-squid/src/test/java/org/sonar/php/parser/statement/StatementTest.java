@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2010 Codehaus Sonar Plugins
+ * Copyright (C) 2010 SonarSource and Akram Ben Aissi
  * dev@sonar.codehaus.org
  *
  * This program is free software; you can redistribute it and/or
