@@ -46,7 +46,7 @@ public class PHPAstScannerTest {
   @Test
   public void lines() {
     SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines.php"));
-    assertThat(file.getInt(PHPMetric.LINES)).isEqualTo(16);
+    assertThat(file.getInt(PHPMetric.LINES)).isEqualTo(17);
   }
 
   @Test
@@ -77,7 +77,7 @@ public class PHPAstScannerTest {
   public void comments() {
     SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/comments.php"));
     assertThat(file.getInt(PHPMetric.COMMENT_LINES)).isEqualTo(3);
-    assertThat(file.getNoSonarTagLines()).contains(13);
+    assertThat(file.getNoSonarTagLines()).contains(14);
     assertThat(file.getNoSonarTagLines().size()).isEqualTo(1);
   }
 

@@ -1,7 +1,8 @@
+<?php
 /*
  * File Header
  */
-<?php
+
 /*
 Multi-line comment
 */
