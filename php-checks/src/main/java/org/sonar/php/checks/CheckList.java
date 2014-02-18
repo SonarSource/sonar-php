@@ -56,6 +56,7 @@ public class CheckList {
       NonEmptyCaseWithoutBreakCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
       NestedControlFlowDepthCheck.class,
+      StringLiteralDuplicatedCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
