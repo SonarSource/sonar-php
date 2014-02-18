@@ -57,6 +57,7 @@ public class CheckList {
       DeprecatedPredefinedVariablesUseCheck.class,
       NestedControlFlowDepthCheck.class,
       StringLiteralDuplicatedCheck.class,
+      FunctionComplexityCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
