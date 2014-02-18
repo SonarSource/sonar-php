@@ -17,24 +17,32 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.parser;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.sslr.tests.Assertions;
 
-public class SimpleIndirectReferenceVariableTest extends RuleTest {
+public class CompilationUnitTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.SIMPLE_INDIRECT_REFERENCE));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.BLOCK));
   }
 
   @Test
   public void test() {
-      matches("$");
-      matches("$$$$$");
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.COMPILATION_UNIT));
 
+    Assertions.assertThat(p)
+      .matches("<?php")
+
+      .matches("foo <?php")
+      .matches("foo <?")
+      .matches("foo <?= ")
+
+      .matches("<?php ?> foo")
+      .matches("<?php ?> foo <?php");
   }
+
 }

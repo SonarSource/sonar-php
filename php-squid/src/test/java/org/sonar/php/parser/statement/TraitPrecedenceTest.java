@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class TraitPrecedenceTest extends RuleTest {
 
   @Before
@@ -35,8 +33,7 @@ public class TraitPrecedenceTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("Foo::Bar insteadof Toto")
-      .matches("Foo::Bar insteadof Toto, Tata");
+      matches("Foo::Bar insteadof Toto");
+      matches("Foo::Bar insteadof Toto, Tata");
   }
 }

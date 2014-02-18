@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class UnqualifiedNameTest extends RuleTest {
 
   @Before
@@ -35,11 +33,9 @@ public class UnqualifiedNameTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("Foo")
-      .matches("Foo1")
-      .matches("Foo_Bar")
-      .notMatches("1Foo_Bar");
-    ;
+    matches("Foo");
+    matches("Foo1");
+    matches("Foo_Bar");
+    notMatches("1Foo_Bar");
   }
 }

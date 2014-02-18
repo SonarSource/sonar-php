@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class NewIfStatementTest extends RuleTest {
 
   @Before
@@ -35,10 +33,10 @@ public class NewIfStatementTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("if ($a): endif;")
-      .matches("if ($a): elseif (a): endif;")
-      .matches("if ($a): elseif (a): else: endif;")
-      .matches("if ($a): else: endif;");
+
+      matches("if ($a): endif;");
+      matches("if ($a): elseif (a): endif;");
+      matches("if ($a): elseif (a): else: endif;");
+      matches("if ($a): else: endif;");
   }
 }

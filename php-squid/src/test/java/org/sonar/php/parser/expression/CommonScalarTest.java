@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class CommonScalarTest extends RuleTest {
 
   @Before
@@ -35,27 +33,27 @@ public class CommonScalarTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("<<<EOF\n $a\nEOF")
 
-      .matches("1")
-      .matches("1.2")
+      matches("<<<EOF\n $a\nEOF");
 
-      .matches("\"foo\"")
-      .matches("'foo'")
+      matches("1");
+      matches("1.2");
 
-      .matches("true")
+      matches("\"foo\"");
+      matches("'foo'");
 
-      .matches("null")
-      .matches("NULL")
+      matches("true");
 
-      .matches("__LINE__")
-      .matches("__FILE__")
-      .matches("__DIR__")
-      .matches("__FUNCTION__")
-      .matches("__CLASS__")
-      .matches("__TRAIT__")
-      .matches("__METHOD__")
-      .matches("__NAMESPACE__");
+      matches("null");
+      matches("NULL");
+
+      matches("__LINE__");
+      matches("__FILE__");
+      matches("__DIR__");
+      matches("__FUNCTION__");
+      matches("__CLASS__");
+      matches("__TRAIT__");
+      matches("__METHOD__");
+      matches("__NAMESPACE__");
   }
 }

@@ -23,9 +23,20 @@ import com.google.common.base.Charsets;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.impl.Parser;
 import org.sonar.php.PHPConfiguration;
-import org.sonar.php.parser.PHPParser;
+import org.sonar.sslr.tests.Assertions;
 
 public class RuleTest {
 
   protected Parser<Grammar> p = PHPParser.create(new PHPConfiguration(Charsets.UTF_8));
+
+  protected void matches(String input) {
+    Assertions.assertThat(p)
+      .matches("<?" + input);
+  }
+
+  protected void notMatches(String input) {
+    Assertions.assertThat(p)
+      .notMatches("<?" + input);
+  }
+
 }

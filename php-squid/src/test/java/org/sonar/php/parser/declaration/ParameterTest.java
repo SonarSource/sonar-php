@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class ParameterTest extends RuleTest {
 
   @Before
@@ -35,13 +33,12 @@ public class ParameterTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("callable $a")
-      .matches("array $a")
-      .matches("Foo $a")
+      matches("callable $a");
+      matches("array $a");
+      matches("Foo $a");
 
-      .matches("&$a")
-      .matches("...$a")
-      .matches("$a = \"foo\"");
+      matches("&$a");
+      matches("...$a");
+      matches("$a = \"foo\"");
   }
 }

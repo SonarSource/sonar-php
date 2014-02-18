@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class DoWhileStatementTest extends RuleTest {
 
   @Before
@@ -35,7 +33,7 @@ public class DoWhileStatementTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("do {} while(a);");
+
+      matches("do {} while(a);");
   }
 }

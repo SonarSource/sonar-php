@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class TryStatementTest extends RuleTest {
 
   @Before
@@ -34,11 +32,10 @@ public class TryStatementTest extends RuleTest {
   }
 
   @Test
-  public void test() { // TODO: update when parenthesis_expr complete
-    assertThat(p)
-      .matches("try {}")
-      .matches("try {} finally {}")
-      .matches("try {} catch(Exception $e) {}")
-      .matches("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}");
+  public void test() {
+      matches("try {}");
+      matches("try {} finally {}");
+      matches("try {} catch(Exception $e) {}");
+      matches("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}");
   }
 }

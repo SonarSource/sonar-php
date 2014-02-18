@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class FunctionCallParameterListTest extends RuleTest {
 
   @Before
@@ -35,8 +33,8 @@ public class FunctionCallParameterListTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("()");
-      //.matches("(yield $a;)"); // TODO: complete with non_empty_function_call_parameter_list
+
+      matches("()");;
+      //matches("(yield $a;)"); // TODO: complete with non_empty_function_call_parameter_list
   }
 }

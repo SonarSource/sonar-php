@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class QualifiedNameTest extends RuleTest {
 
   @Before
@@ -35,10 +33,9 @@ public class QualifiedNameTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("Foo\\Bar")
-      .matches("Foo\\Bar\\SubFoo")
-      .notMatches("\\Foo")
-      .notMatches("Foo\\");
+      matches("Foo\\Bar");
+      matches("Foo\\Bar\\SubFoo");
+      notMatches("\\Foo");
+      notMatches("Foo\\");
   }
 }

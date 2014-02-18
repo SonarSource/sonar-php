@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class TraitAdaptationsTest extends RuleTest {
 
   @Before
@@ -35,10 +33,10 @@ public class TraitAdaptationsTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches(";")
-      .matches("{}")
-      .matches("{Foo::Bar insteadof Toto;}")
-      .matches("{Foo::Bar insteadof Toto; Foo as protected;}");
+
+      matches(";");
+      matches("{}");
+      matches("{Foo::Bar insteadof Toto;}");
+      matches("{Foo::Bar insteadof Toto; Foo as protected;}");
   }
 }

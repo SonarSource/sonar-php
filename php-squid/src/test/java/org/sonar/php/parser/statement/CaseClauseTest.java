@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class CaseClauseTest extends RuleTest {
 
   @Before
@@ -35,9 +33,9 @@ public class CaseClauseTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("case $a:")
-      .matches("case $a;")
-      .matches("case $a: exit;");
+
+      matches("case $a:");
+      matches("case $a;");
+      matches("case $a: exit;");
   }
 }

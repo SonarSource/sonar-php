@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class LogicalOrExpressionTest extends RuleTest {
 
   @Before
@@ -35,9 +33,9 @@ public class LogicalOrExpressionTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("$a")
-      .matches("$a || $a")
-      .matches("$a or $a");
+
+      matches("$a");
+      matches("$a || $a");
+      matches("$a or $a");
   }
 }

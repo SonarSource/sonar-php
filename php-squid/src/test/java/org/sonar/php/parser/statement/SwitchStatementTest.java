@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class SwitchStatementTest extends RuleTest {
 
   @Before
@@ -35,9 +33,9 @@ public class SwitchStatementTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("switch ($a) {}")
-      .matches("switch ($a): endswitch;")
-      .matches("switch ($a): ; endswitch;"); // TODO: complete when cas_list complete
+
+      matches("switch ($a) {}");
+      matches("switch ($a): endswitch;");
+      matches("switch ($a): ; endswitch;"); // TODO: complete when cas_list complete
   }
 }

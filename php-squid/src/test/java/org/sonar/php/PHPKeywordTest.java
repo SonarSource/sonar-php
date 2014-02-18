@@ -26,8 +26,6 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class PHPKeywordTest extends RuleTest {
 
   @Before
@@ -38,72 +36,71 @@ public class PHPKeywordTest extends RuleTest {
   @Test
   public void test() {
     // Exact list of keywords from PHP reference manual
-    assertThat(p)
-      .matches("__halt_compiler")
-      .matches("abstract")
-      .matches("and")
-      .matches("array")
-      .matches("as")
-      .matches("break")
-      .matches("callable")
-      .matches("case")
-      .matches("catch")
-      .matches("class")
-      .matches("clone")
-      .matches("const")
-      .matches("continue")
-      .matches("declare")
-      .matches("default")
-      .matches("die")
-      .matches("do")
-      .matches("echo")
-      .matches("else")
-      .matches("elseif")
-      .matches("empty")
-      .matches("enddeclare")
-      .matches("endfor")
-      .matches("endforeach")
-      .matches("endif")
-      .matches("endswitch")
-      .matches("endwhile")
-      .matches("eval")
-      .matches("exit")
-      .matches("extends")
-      .matches("final")
-      .matches("for")
-      .matches("foreach")
-      .matches("function")
-      .matches("global")
-      .matches("goto")
-      .matches("if")
-      .matches("implements")
-      .matches("include")
-      .matches("include_once")
-      .matches("instanceof")
-      .matches("insteadof")
-      .matches("interface")
-      .matches("isset")
-      .matches("list")
-      .matches("namespace")
-      .matches("new")
-      .matches("or")
-      .matches("print")
-      .matches("private")
-      .matches("protected")
-      .matches("public")
-      .matches("require")
-      .matches("require_once")
-      .matches("return")
-      .matches("static")
-      .matches("switch")
-      .matches("throw")
-      .matches("trait")
-      .matches("try")
-      .matches("unset")
-      .matches("use")
-      .matches("var")
-      .matches("while")
-      .matches("xor");
+      matches("__halt_compiler");
+      matches("abstract");
+      matches("and");
+      matches("array");
+      matches("as");
+      matches("break");
+      matches("callable");
+      matches("case");
+      matches("catch");
+      matches("class");
+      matches("clone");
+      matches("const");
+      matches("continue");
+      matches("declare");
+      matches("default");
+      matches("die");
+      matches("do");
+      matches("echo");
+      matches("else");
+      matches("elseif");
+      matches("empty");
+      matches("enddeclare");
+      matches("endfor");
+      matches("endforeach");
+      matches("endif");
+      matches("endswitch");
+      matches("endwhile");
+      matches("eval");
+      matches("exit");
+      matches("extends");
+      matches("final");
+      matches("for");
+      matches("foreach");
+      matches("function");
+      matches("global");
+      matches("goto");
+      matches("if");
+      matches("implements");
+      matches("include");
+      matches("include_once");
+      matches("instanceof");
+      matches("insteadof");
+      matches("interface");
+      matches("isset");
+      matches("list");
+      matches("namespace");
+      matches("new");
+      matches("or");
+      matches("print");
+      matches("private");
+      matches("protected");
+      matches("public");
+      matches("require");
+      matches("require_once");
+      matches("return");
+      matches("static");
+      matches("switch");
+      matches("throw");
+      matches("trait");
+      matches("try");
+      matches("unset");
+      matches("use");
+      matches("var");
+      matches("while");
+      matches("xor");
   }
 
   @Test

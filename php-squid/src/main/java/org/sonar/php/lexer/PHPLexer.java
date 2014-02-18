@@ -49,10 +49,6 @@ public class PHPLexer {
     + "|<<<'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\2"
     + "|<<<([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
 
-  // PHP Tags
-  private static final String OPEN_TAG = "<\\?php|<\\?|<%";
-  private static final String CLOSE_TAG = "\\?>|%>";
-
   // IDENTIFIERS
   private static final String LABEL = "[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*";
   private static final String VAR_IDENTIFIER_START = "\\$";
@@ -100,6 +96,7 @@ public class PHPLexer {
       .withFailIfNoChannelToConsumeOneCharacter(true)
       .withCharset(conf.getCharset())
 
+      .withChannel(new PHPTagsChannel())
       .withChannel(new BlackHoleChannel("[" + WHITESPACE + LINE_TERMINATOR + "]++"))
       .withChannel(commentRegexp(COMMENT))
       .withChannel(regexp(PHPTokenType.HEREDOC, HEREDOC))
@@ -107,10 +104,6 @@ public class PHPLexer {
         // String Literals
       .withChannel(regexp(PHPTokenType.NUMERIC_LITERAL, NUMERIC_LITERAL))
       .withChannel(regexp(PHPTokenType.STRING_LITERAL, STRING_LITERAL))
-
-        // PHP tags
-      .withChannel(regexp(PHPTokenType.OPEN_TAG, OPEN_TAG))
-      .withChannel(regexp(PHPTokenType.CLOSE_TAG, CLOSE_TAG))
 
       .withChannel(new IdentifierAndKeywordChannel(LABEL, false, PHPKeyword.values()))
       .withChannel(regexp(PHPTokenType.VAR_IDENTIFIER, VAR_IDENTIFIER))

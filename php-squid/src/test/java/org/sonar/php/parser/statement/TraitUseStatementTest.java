@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class TraitUseStatementTest extends RuleTest {
 
   @Before
@@ -35,7 +33,6 @@ public class TraitUseStatementTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("use Foo,Bar;");
+      matches("use Foo,Bar;");
   }
 }

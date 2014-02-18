@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class InternalFunctionTest extends RuleTest {
 
   @Before
@@ -35,15 +33,15 @@ public class InternalFunctionTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("isset ($a, $b)")
-      .matches("empty ($a)")
-      .matches("include $a")
-      .matches("include $a")
-      .matches("include_once $a")
-      .matches("require $a")
-      .matches("require_once $a")
-      .matches("clone $a")
-      .matches("print $a");
+
+      matches("isset ($a, $b)");
+      matches("empty ($a)");
+      matches("include $a");
+      matches("include $a");
+      matches("include_once $a");
+      matches("require $a");
+      matches("require_once $a");
+      matches("clone $a");
+      matches("print $a");
   }
 }

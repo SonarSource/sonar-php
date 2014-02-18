@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class EqualityExpressionTest extends RuleTest {
 
   @Before
@@ -35,12 +33,12 @@ public class EqualityExpressionTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("$a")
-      .matches("$a <> $a")
-      .matches("$a == $a")
-      .matches("$a === $a")
-      .matches("$a != $a")
-      .matches("$a !== $a");
+
+      matches("$a");
+      matches("$a <> $a");
+      matches("$a == $a");
+      matches("$a === $a");
+      matches("$a != $a");
+      matches("$a !== $a");
   }
 }

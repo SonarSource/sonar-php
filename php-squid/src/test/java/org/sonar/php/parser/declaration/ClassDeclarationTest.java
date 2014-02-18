@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class ClassDeclarationTest extends RuleTest {
 
   @Before
@@ -35,15 +33,15 @@ public class ClassDeclarationTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("trait C {}")
 
-      .matches("class C {}")
-      .matches("abstract class C {}")
-      .matches("final class C {}")
+      matches("trait C {}");
 
-      .matches("class C extends A {}")
-      .matches("class C implements B {}")
-      .matches("class C extends A implements B {}");
+      matches("class C {}");
+      matches("abstract class C {}");
+      matches("final class C {}");
+
+      matches("class C extends A {}");
+      matches("class C implements B {}");
+      matches("class C extends A implements B {}");
   }
 }

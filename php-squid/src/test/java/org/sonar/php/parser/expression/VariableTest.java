@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class VariableTest extends RuleTest {
 
   @Before
@@ -35,29 +33,28 @@ public class VariableTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("f()->$a")
+      matches("f()->$a");
 
-      .matches("a")
-      .matches("$a")
-      .matches("$a[]")
-      .matches("$a()")
-      .matches("$a->b")
-      .matches("$a->$a")
-      .matches("$a->b()")
-      .matches("$a::b")
-      .matches("$a::$b")
-      .matches("$a::b()")
+      matches("a");
+      matches("$a");
+      matches("$a[]");
+      matches("$a()");
+      matches("$a->b");
+      matches("$a->$a");
+      matches("$a->b()");
+      matches("$a::b");
+      matches("$a::$b");
+      matches("$a::b()");
 
-      .matches("$a->$b[$c]{'d'}")
+      matches("$a->$b[$c]{'d'}");
 
-      .matches("$$a")
-      .matches("${'a'}")
-      .matches("$a{'a'}")
-      .matches("$a[$b]")
+      matches("$$a");
+      matches("${'a'}");
+      matches("$a{'a'}");
+      matches("$a[$b]");
 
-      .matches("$a->{'b'}")
+      matches("$a->{'b'}");
 
-      .matches("A::class");
+      matches("A::class");
   }
 }

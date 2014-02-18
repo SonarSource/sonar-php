@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class ReferenceVariableTest extends RuleTest {
 
   @Before
@@ -35,11 +33,10 @@ public class ReferenceVariableTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("$a")
-      .matches("$a[$b]")
-      .matches("$a{\"foo\"}[$a]")
-      .matches("$a{\"foo\"}{\"foo\"}");
+      matches("$a");
+      matches("$a[$b]");
+      matches("$a{\"foo\"}[$a]");
+      matches("$a{\"foo\"}{\"foo\"}");
 
   }
 }

@@ -1,5 +1,7 @@
 <?php
 
+$GLOBALS['G'];
+
 if ($HTTP_POST_VARS["name"]) {  // NOK
 }
 

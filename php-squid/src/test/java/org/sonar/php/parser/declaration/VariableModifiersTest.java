@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class VariableModifiersTest extends RuleTest {
 
   @Before
@@ -35,9 +33,8 @@ public class VariableModifiersTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("var")
-      .matches("protected")
-      .matches("protected final");
+      matches("var");
+      matches("protected");
+      matches("protected final");
   }
 }

@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class UseFunctionDeclarationStatementTest extends RuleTest {
 
   @Before
@@ -35,7 +33,6 @@ public class UseFunctionDeclarationStatementTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("use function foo;");
+      matches("use function foo;");
   }
 }

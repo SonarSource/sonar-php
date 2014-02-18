@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class ObjectDimListTest extends RuleTest {
 
   @Before
@@ -35,10 +33,10 @@ public class ObjectDimListTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("foo")
-      .matches("foo[\"foo\"]")
-      .matches("foo[$a]{\"foo\"}")
-      .matches("foo[$a]{\"foo\"}[$b]");
+
+      matches("foo");
+      matches("foo[\"foo\"]");
+      matches("foo[$a]{\"foo\"}");
+      matches("foo[$a]{\"foo\"}[$b]");
   }
 }

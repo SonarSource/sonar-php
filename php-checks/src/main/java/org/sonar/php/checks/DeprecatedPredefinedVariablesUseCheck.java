@@ -63,10 +63,15 @@ public class DeprecatedPredefinedVariablesUseCheck extends SquidCheck<Grammar> {
 
   private static boolean isSimpleVariable(AstNode compoundNode) {
     AstNode compoundChild = compoundNode.getFirstChild();
+    if (compoundChild.isNot(PHPTokenType.VAR_IDENTIFIER)) {
+      return false;
+    }
 
-    return compoundChild.is(PHPTokenType.VAR_IDENTIFIER)
-      && compoundNode.getParent().getPreviousAstNode().isNot(PHPGrammar.SIMPLE_INDIRECT_REFERENCE)
-      && compoundChild.getPreviousAstNode().isNot(PHPPunctuator.ARROW, PHPPunctuator.DOUBLECOLON, PHPPunctuator.DOLAR_LCURLY);
+    return isNotVariableVariables(compoundNode) && compoundChild.getPreviousAstNode().isNot(PHPPunctuator.ARROW, PHPPunctuator.DOUBLECOLON, PHPPunctuator.DOLAR_LCURLY);
   }
 
+  private static boolean isNotVariableVariables(AstNode compoundNode) {
+    AstNode compoundParentPreviousNode = compoundNode.getParent().getPreviousAstNode();
+    return compoundParentPreviousNode != null && compoundParentPreviousNode.isNot(PHPGrammar.SIMPLE_INDIRECT_REFERENCE);
+  }
 }

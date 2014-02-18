@@ -32,8 +32,8 @@ public class DeprecatedPredefinedVariablesUseCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("DeprecatedPredefinedVariablesUseCheck.php"), new DeprecatedPredefinedVariablesUseCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Replace this use of the deprecated \"$HTTP_POST_VARS\" variable with \"$_POST\".")
-      .next().atLine(6).withMessage("Replace this use of the deprecated \"$HTTP_GET_VARS\" variable with \"$_GET\".")
+      .next().atLine(5).withMessage("Replace this use of the deprecated \"$HTTP_POST_VARS\" variable with \"$_POST\".")
+      .next().atLine(8).withMessage("Replace this use of the deprecated \"$HTTP_GET_VARS\" variable with \"$_GET\".")
       .noMore();
   }
 }

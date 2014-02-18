@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class NewExprTest extends RuleTest {
 
   @Before
@@ -35,9 +33,9 @@ public class NewExprTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("new Foo")
-      .matches("new Foo ()");
+
+      matches("new Foo");
+      matches("new Foo ()");
 
   }
 }

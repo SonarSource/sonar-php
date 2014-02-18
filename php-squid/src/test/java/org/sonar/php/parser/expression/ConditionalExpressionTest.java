@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class ConditionalExpressionTest  extends RuleTest {
 
   @Before
@@ -35,9 +33,9 @@ public class ConditionalExpressionTest  extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("true ? 1 : 0")
-      .matches("true ? : 0")
-      .matches("false ? 0 : false ? 1 : 0");
+
+      matches("true ? 1 : 0");
+      matches("true ? : 0");
+      matches("false ? 0 : false ? 1 : 0");
   }
 }

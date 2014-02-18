@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-import static org.sonar.sslr.tests.Assertions.assertThat;
-
 public class ForStatementTest extends RuleTest {
 
   @Before
@@ -35,9 +33,9 @@ public class ForStatementTest extends RuleTest {
 
   @Test
   public void test() {
-    assertThat(p)
-      .matches("for ($i = 1; $i <= a; $i++) {}")
-      .matches("for ($i = 1; ; $i++) {}")
-      .matches("for (; ; ) {}");
+
+      matches("for ($i = 1; $i <= a; $i++) {}");
+      matches("for ($i = 1; ; $i++) {}");
+      matches("for (; ; ) {}");
   }
 }

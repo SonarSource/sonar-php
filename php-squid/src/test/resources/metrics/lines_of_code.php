@@ -1,4 +1,8 @@
-<?php
+<p>
+html is not considered as lines of code
+</p>
+
+<?php /* opening tag is not considered as a line of code */
 /*
  * File Header
  */
@@ -14,3 +18,8 @@ class A {
     // NOSONAR comment
   }
 }
+/* closing tag is not considered as a line of code */ ?>
+
+<p>
+html is not considered as lines of code
+</p>

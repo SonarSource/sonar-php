@@ -24,7 +24,7 @@ import com.sonar.sslr.api.TokenType;
 
 public enum PHPTokenType implements TokenType {
 
-  OPEN_TAG, CLOSE_TAG, VAR_IDENTIFIER, HEREDOC, STRING_LITERAL, NUMERIC_LITERAL;
+  VAR_IDENTIFIER, HEREDOC, STRING_LITERAL, NUMERIC_LITERAL;
 
   @Override
   public boolean hasToBeSkippedFromAst(AstNode astNode) {

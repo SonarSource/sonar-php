@@ -52,7 +52,7 @@ public class PHPAstScannerTest {
   @Test
   public void lines_of_code() {
     SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines_of_code.php"));
-    assertThat(file.getInt(PHPMetric.LINES_OF_CODE)).isEqualTo(5);
+    assertThat(file.getInt(PHPMetric.LINES_OF_CODE)).isEqualTo(4);
   }
 
   @Test
