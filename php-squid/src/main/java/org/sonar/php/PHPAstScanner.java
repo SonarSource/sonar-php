@@ -103,7 +103,25 @@ public class PHPAstScanner {
     builder.setCommentAnalyser(new PHPCommentAnalyser());
     builder.setFilesMetric(PHPMetric.FILES);
 
-       /* Metrics */
+    /* Functions */
+    builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<Grammar>(new SourceCodeBuilderCallback() {
+      private int seq = 0;
+
+      @Override
+      public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
+        seq++;
+        SourceFunction function = new SourceFunction("function:" + seq);
+        function.setStartAtLine(astNode.getTokenLine());
+        return function;
+      }
+    }, PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
+
+    builder.withSquidAstVisitor(CounterVisitor.<Grammar>builder()
+      .setMetricDef(PHPMetric.FUNCTIONS)
+      .subscribeTo(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION)
+      .build());
+
+    /* Metrics */
     builder.withSquidAstVisitor(new LinesVisitor<Grammar>(PHPMetric.LINES));
     builder.withSquidAstVisitor(new LinesOfCodeVisitor<Grammar>(PHPMetric.LINES_OF_CODE));
     builder.withSquidAstVisitor(CounterVisitor.<Grammar>builder().setMetricDef(PHPMetric.CLASSES)
@@ -149,25 +167,6 @@ public class PHPAstScanner {
         PHPGrammar.CLASS_VARIABLE_DECLARATION,
         PHPGrammar.CLASS_CONSTANT_DECLARATION,
         PHPGrammar.TRAIT_USE_STATEMENT)
-      .build());
-
-
-    /* Functions */
-    builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<Grammar>(new SourceCodeBuilderCallback() {
-      private int seq = 0;
-
-      @Override
-      public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
-        seq++;
-        SourceFunction function = new SourceFunction("function:" + seq);
-        function.setStartAtLine(astNode.getTokenLine());
-        return function;
-      }
-    }, PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
-
-    builder.withSquidAstVisitor(CounterVisitor.<Grammar>builder()
-      .setMetricDef(PHPMetric.FUNCTIONS)
-      .subscribeTo(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION)
       .build());
 
     /* External visitors (typically Check ones) */
