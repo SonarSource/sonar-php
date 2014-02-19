@@ -61,11 +61,11 @@ public class LeftCurlyBraceEndsLineCheck extends SquidCheck<Grammar> {
   private static boolean isStatementBlock(AstNode lcurly) {
     return lcurly.getParent().getParent().is(PHPGrammar.STATEMENT)
       && lcurly.getParent().getParent().getParent().isNot(
-      PHPGrammar.INNER_DECLARE_STATEMENT,
-      PHPGrammar.INNER_FOREACH_STATEMENT,
-      PHPGrammar.INNER_FOR_STATEMENT,
+      PHPGrammar.DECLARE_STATEMENT,
+      PHPGrammar.FOREACH_STATEMENT,
+      PHPGrammar.FOR_STATEMENT,
       PHPGrammar.DO_WHILE_STATEMENT,
-      PHPGrammar.INNER_WHILE_STATEMENT,
+      PHPGrammar.WHILE_STATEMENT,
       PHPGrammar.ELSE_CLAUSE,
       PHPGrammar.ELSEIF_CLAUSE,
       PHPGrammar.IF_STATEMENT);
