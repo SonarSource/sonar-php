@@ -63,7 +63,8 @@ public class StringLiteralDuplicatedCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode node) {
-    visitOccurrence(node.getTokenOriginalValue(), node.getTokenLine());
+    String literal = node.getTokenOriginalValue();
+    visitOccurrence(StringUtils.substring(literal, 1, literal.length() - 1), node.getTokenLine());
   }
 
   @Override
@@ -81,8 +82,6 @@ public class StringLiteralDuplicatedCheck extends SquidCheck<Grammar> {
   }
 
   private void visitOccurrence(String literal, int line) {
-    literal = StringUtils.substring(literal, 1, literal.length() - 1);
-
     if (literal.length() >= MINIMAL_LITERAL_LENGTH) {
       if (!firstOccurrence.containsKey(literal)) {
         firstOccurrence.put(literal, line);
