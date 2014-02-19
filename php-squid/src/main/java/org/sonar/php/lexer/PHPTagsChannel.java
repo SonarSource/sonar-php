@@ -26,7 +26,7 @@ import org.sonar.channel.CodeReader;
 
 public class PHPTagsChannel extends Channel<Lexer> {
 
-  private static final String OPENING = "<\\?(php|=|)";
+  public static final String OPENING = "<\\?(php|=|)";
   private static final String CLOSING = "\\?>";
 
   private static final String START = "(?:(?!" + OPENING + ")[\\s\\S])*+(" + OPENING + ")?+";

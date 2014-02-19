@@ -59,6 +59,7 @@ public class CheckList {
       StringLiteralDuplicatedCheck.class,
       FunctionComplexityCheck.class,
       TabCharacterCheck.class,
+      FileHeaderCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
