@@ -24,15 +24,12 @@ import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import org.sonar.channel.Channel;
 import org.sonar.channel.CodeReader;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class PHPTagsChannel extends Channel<Lexer> {
 
   private static final String OPENING = "<\\?(php|=|)";
   private static final String CLOSING = "\\?>";
 
-  private static final String START = "(?:(?!"+ OPENING + ")[\\s\\S])*+(" + OPENING + ")?+";
+  private static final String START = "(?:(?!" + OPENING + ")[\\s\\S])*+(" + OPENING + ")?+";
   private static final String END = CLOSING + START;
 
   private final Channel<Lexer> start = new BlackHoleChannel(START);
