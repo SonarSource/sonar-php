@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 public class FileHeaderCheck extends SquidCheck<Grammar> implements CharsetAwareVisitor {
 
   private static final String DEFAULT_HEADER_FORMAT = "";
-  private static final Pattern PHP_OPEN_TAG = Pattern.compile(PHPTagsChannel.OPENING);;
+  private static final Pattern PHP_OPEN_TAG = Pattern.compile(PHPTagsChannel.OPENING);
 
   @RuleProperty(
     key = "headerFormat",
