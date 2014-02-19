@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.duplications;
 
+import com.google.common.base.Charsets;
 import net.sourceforge.pmd.cpd.SourceCode;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
@@ -26,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.test.TestUtils;
 
 import java.nio.charset.Charset;
@@ -41,11 +43,11 @@ public class PHPCPDMappingTest {
 
   @Before
   public void test() throws Exception {
-    ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
-    when(fileSystem.getSourceCharset()).thenReturn(Charset.forName("UTF-8"));
+    ModuleFileSystem fs = mock(ModuleFileSystem.class);
+    when(fs.sourceCharset()).thenReturn(Charsets.UTF_8);
     Project project = mock(Project.class);
-    when(project.getFileSystem()).thenReturn(fileSystem);
-    PhpCPDMapping phpcpdMapping = new PhpCPDMapping(null, project);
+
+    PhpCPDMapping phpcpdMapping = new PhpCPDMapping(null, project, fs);
     tokenizer = phpcpdMapping.getTokenizer();
   }
 

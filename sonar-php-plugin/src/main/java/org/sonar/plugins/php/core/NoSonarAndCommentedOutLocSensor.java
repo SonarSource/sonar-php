@@ -27,9 +27,9 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.scan.filesystem.FileQuery;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.Php;
@@ -62,24 +62,25 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    *
    */
   private final NoSonarFilter filter;
+  private final ModuleFileSystem filesystem;
 
   /**
    * @param noSonarFilter
    */
-  public NoSonarAndCommentedOutLocSensor(NoSonarFilter noSonarFilter) {
+  public NoSonarAndCommentedOutLocSensor(ModuleFileSystem filesystem, NoSonarFilter noSonarFilter) {
     this.filter = noSonarFilter;
+    this.filesystem = filesystem;
   }
 
   /**
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
   public void analyse(Project project, SensorContext context) {
-    ProjectFileSystem fileSystem = project.getFileSystem();
-    List<InputFile> sourceFiles = fileSystem.mainFiles(Php.KEY);
-    for (InputFile file : sourceFiles) {
-      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file.getFile(), project);
+    List<File> sourceFiles = filesystem.files(FileQuery.onSource().onLanguage(Php.KEY));
+    for (File file : sourceFiles) {
+      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file, filesystem.sourceDirs());
       if (phpFile != null) {
-        Source source = analyseSourceCode(file.getFile());
+        Source source = analyseSourceCode(file);
         if (source != null) {
           filter.addResource(phpFile, source.getNoSonarTagLines());
           double measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);

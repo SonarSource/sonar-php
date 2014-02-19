@@ -19,21 +19,22 @@
  */
 package org.sonar.plugins.php.core;
 
+import com.google.common.collect.ImmutableList;
+import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
+import org.sonar.api.scan.filesystem.FileQuery;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squid.measures.Metric;
 import org.sonar.squid.text.Source;
 import org.sonar.test.TestUtils;
 
 import java.io.File;
-import java.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -45,12 +46,29 @@ import static org.mockito.Mockito.when;
 
 public class NoSonarAndCommentedOutLocSensorTest {
 
+  private ModuleFileSystem fs;
+  private Project project;
+  private NoSonarFilter noSonarFilter;
+  private NoSonarAndCommentedOutLocSensor sensor;
+  private SensorContext context;
+
+  @Before
+  public void setUp() throws Exception {
+    File phpFile = TestUtils.getResource("/Mail.php");
+    fs = mock(ModuleFileSystem.class);
+    when(fs.sourceDirs()).thenReturn(ImmutableList.of(phpFile.getParentFile()));
+    when(fs.files(any(FileQuery.class))).thenReturn(ImmutableList.of(TestUtils.getResource("/Mail.php"), new File("fake")));
+
+    project = mock(Project.class);
+    when(project.getLanguageKey()).thenReturn(Php.KEY);
+
+    noSonarFilter = new NoSonarFilter();
+    context = mock(SensorContext.class);
+    sensor = new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter);
+  }
+
   @Test
   public void testAnalyse() {
-    NoSonarFilter noSonarFilter = new NoSonarFilter();
-    NoSonarAndCommentedOutLocSensor sensor = new NoSonarAndCommentedOutLocSensor(noSonarFilter);
-    SensorContext context = mock(SensorContext.class);
-    Project project = getMockProject();
     sensor.analyse(project, context);
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
     // Mail.php contains 9 commented oud code lines.
@@ -59,10 +77,6 @@ public class NoSonarAndCommentedOutLocSensorTest {
 
   @Test
   public void testShouldNotRunOnJavaProject() {
-    NoSonarFilter noSonarFilter = new NoSonarFilter();
-    NoSonarAndCommentedOutLocSensor sensor = new NoSonarAndCommentedOutLocSensor(noSonarFilter);
-    SensorContext context = mock(SensorContext.class);
-    Project project = getMockProject();
     when(project.getLanguageKey()).thenReturn("java");
     sensor.analyse(project, context);
     assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
@@ -70,18 +84,13 @@ public class NoSonarAndCommentedOutLocSensorTest {
 
   @Test
   public void testAnalyseEmptySourceFiles() {
-    NoSonarFilter noSonarFilter = new NoSonarFilter();
-    NoSonarAndCommentedOutLocSensor sensor = new NoSonarAndCommentedOutLocSensor(noSonarFilter);
-    SensorContext context = mock(SensorContext.class);
-    Project project = getMockProject();
-
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(fs);
     File fakeFile = new File("fake.php");
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(fakeFile.getParentFile()));
-    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(fakeFile.getParentFile(), Arrays.asList(fakeFile, new File("fake"))));
+    ModuleFileSystem localFs = mock(ModuleFileSystem.class);
+    when(fs.sourceDirs()).thenReturn(ImmutableList.of(new File("fake/directory/")));
+    when(fs.files(any(FileQuery.class))).thenReturn(ImmutableList.of(fakeFile, new File("fake")));
 
-    sensor.analyse(project, context);
+    NoSonarAndCommentedOutLocSensor localSensor = new NoSonarAndCommentedOutLocSensor(localFs, noSonarFilter);
+    localSensor.analyse(project, context);
     verify(context, never()).saveMeasure(any(Resource.class), any(org.sonar.api.measures.Metric.class), any(Double.class));
 
   }
@@ -123,21 +132,5 @@ public class NoSonarAndCommentedOutLocSensorTest {
     assertEquals(91, (int) source.getNoSonarTagLines().iterator().next());
 
     assertEquals(5, source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES));
-  }
-
-  /**
-   * @return a mock project used by all tests cases in this class.
-   */
-  private Project getMockProject() {
-    Project project = mock(Project.class);
-    when(project.getLanguageKey()).thenReturn(Php.KEY);
-
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(project.getFileSystem()).thenReturn(fs);
-    File f1 = TestUtils.getResource("/Mail.php");
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(f1.getParentFile()));
-    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(f1.getParentFile(), Arrays.asList(f1, new File("fake"))));
-
-    return project;
   }
 }

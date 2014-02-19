@@ -30,9 +30,10 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rules.Violation;
+import org.sonar.api.scan.filesystem.FileQuery;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
@@ -55,13 +56,14 @@ public class PHPSquidSensor implements Sensor {
   private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
   private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
-  private Project project;
   private SensorContext context;
   private AstScanner<Grammar> scanner;
   private AnnotationCheckFactory annotationCheckFactory;
+  private ModuleFileSystem fileSystem;
 
-  public PHPSquidSensor(RulesProfile profile) {
+  public PHPSquidSensor(RulesProfile profile, ModuleFileSystem filesystem) {
     this.annotationCheckFactory = AnnotationCheckFactory.create(profile, CheckList.REPOSITORY_KEY, CheckList.getChecks());
+    this.fileSystem = filesystem;
   }
 
   @Override
@@ -71,7 +73,6 @@ public class PHPSquidSensor implements Sensor {
 
   @Override
   public void analyse(Project project, SensorContext context) {
-    this.project = project;
     this.context = context;
 
     List<SquidAstVisitor<Grammar>> visitors = getCheckVisitors();
@@ -84,7 +85,7 @@ public class PHPSquidSensor implements Sensor {
   private void save(Collection<SourceCode> squidSourceFiles) {
     for (SourceCode squidSourceFile : squidSourceFiles) {
       SourceFile squidFile = (SourceFile) squidSourceFile;
-      org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.fromIOFile(new java.io.File(squidFile.getKey()), project);
+      org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.fromIOFile(new java.io.File(squidFile.getKey()), fileSystem.sourceDirs());
 
       saveFilesComplexityDistribution(sonarFile, squidFile);
       saveFunctionsComplexityDistribution(sonarFile, squidFile);
@@ -132,11 +133,11 @@ public class PHPSquidSensor implements Sensor {
   }
 
   private PHPConfiguration createConfiguration() {
-    return new PHPConfiguration(project.getFileSystem().getSourceCharset());
+    return new PHPConfiguration(fileSystem.sourceCharset());
   }
 
   private Collection<File> getProjectMainFiles() {
-    return InputFileUtils.toFiles(project.getFileSystem().mainFiles(Php.KEY));
+    return fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY));
   }
 
   private List<SquidAstVisitor<Grammar>> getCheckVisitors() {

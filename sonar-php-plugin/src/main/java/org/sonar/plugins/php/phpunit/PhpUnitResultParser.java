@@ -30,6 +30,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
@@ -68,6 +69,7 @@ public class PhpUnitResultParser implements BatchExtension {
    * The project.
    */
   private Project project;
+  private ModuleFileSystem fileSystem;
 
   /**
    * Instantiates a new php unit result parser.
@@ -75,10 +77,11 @@ public class PhpUnitResultParser implements BatchExtension {
    * @param project the project
    * @param context the context
    */
-  public PhpUnitResultParser(Project project, SensorContext context) {
+  public PhpUnitResultParser(Project project, SensorContext context, ModuleFileSystem fileSystem) {
     super();
     this.project = project;
     this.context = context;
+    this.fileSystem = fileSystem;
   }
 
   /**
@@ -114,7 +117,7 @@ public class PhpUnitResultParser implements BatchExtension {
    * @param report the unit test report
    */
   private Resource<?> getUnitTestResource(PhpUnitTestReport report) {
-    return org.sonar.api.resources.File.fromIOFile(new File(report.getFile()), project.getFileSystem().getTestDirs());
+    return org.sonar.api.resources.File.fromIOFile(new File(report.getFile()), fileSystem.testDirs());
   }
 
   /**

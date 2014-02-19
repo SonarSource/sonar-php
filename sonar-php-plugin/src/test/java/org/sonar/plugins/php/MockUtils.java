@@ -27,10 +27,13 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.scan.filesystem.FileQuery;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.plugins.php.api.Php;
 
 import java.io.File;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -43,16 +46,18 @@ public class MockUtils {
   private MockUtils() {
   }
 
-  public static Project newMockPHPProject() {
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(fs.getSourceCharset()).thenReturn(Charsets.UTF_8);
-    when(fs.getSourceDirs()).thenReturn(ImmutableList.of(new File("src/test/resources/")));
-    when(fs.mainFiles(Php.KEY)).thenReturn(ImmutableList.of(InputFileUtils.create(new File("src/test/resources/"), new File("src/test/resources/PHPSquidSensor.php"))));
+  public static ModuleFileSystem newMockModuleFileSystem() {
+    ModuleFileSystem fs = mock(ModuleFileSystem.class);
+    when(fs.sourceCharset()).thenReturn(Charsets.UTF_8);
+    when(fs.files(any(FileQuery.class))).thenReturn(ImmutableList.of(new File("src/test/resources/PHPSquidSensor.php")));
 
+    return fs;
+  }
+
+  public static Project newMockPHPProject() {
     Project project = mock(Project.class);
     when(project.getLanguage()).thenReturn(new Php());
     when(project.getLanguageKey()).thenReturn(Php.KEY);
-    when(project.getFileSystem()).thenReturn(fs);
 
     return project;
   }

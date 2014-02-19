@@ -27,6 +27,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -42,7 +43,7 @@ public class PHPSquidSensorTest {
   @Before
   public void setUp() {
     project = MockUtils.newMockPHPProject();
-    sensor = new PHPSquidSensor(mock(RulesProfile.class));
+    sensor = new PHPSquidSensor(mock(RulesProfile.class), MockUtils.newMockModuleFileSystem());
   }
 
   @Test

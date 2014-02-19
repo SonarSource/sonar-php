@@ -27,6 +27,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.test.TestUtils;
@@ -46,15 +47,18 @@ public class PhpUnitResultParserTest {
   private SensorContext context;
   private Project project;
   private PhpUnitResultParser parser;
-
+  private ModuleFileSystem fs;
 
   @Before
   public void setUp() throws Exception {
+    ModuleFileSystem fs = mock(ModuleFileSystem.class);
+    when(fs.sourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\main")));
+    when(fs.testDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
+
     context = mock(SensorContext.class);
     project = mock(Project.class);
-    mockProjectFileSystem(project);
 
-    parser = new PhpUnitResultParser(project, context);
+    parser = new PhpUnitResultParser(project, context, fs);
   }
 
   /**
@@ -64,7 +68,7 @@ public class PhpUnitResultParserTest {
   public void shouldNotThrowAnExceptionWhenReportNotFound() {
     project = mock(Project.class);
     context = mock(SensorContext.class);
-    PhpUnitResultParser parser = new PhpUnitResultParser(project, context);
+    PhpUnitResultParser parser = new PhpUnitResultParser(project, context, fs);
     parser.parse(null);
 
     verify(context).saveMeasure(CoreMetrics.TESTS, 0.0);
@@ -116,11 +120,4 @@ public class PhpUnitResultParserTest {
     parser.getTestSuites(new File("target/unexistingFile.xml"));
   }
 
-  private static void mockProjectFileSystem(Project project) {
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\main")));
-    when(fs.getTestDirs()).thenReturn(Arrays.asList(new File("C:\\projets\\PHP\\Monkey\\Sources\\test")));
-  }
 }

@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.AbstractCpdMapping;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.duplications.token.Token;
 import org.sonar.duplications.token.TokenChunker;
@@ -45,7 +46,7 @@ import java.util.Iterator;
 public class PhpCPDMapping extends AbstractCpdMapping {
 
   private Php php;
-  private Project project;
+  private ModuleFileSystem fileSystem;
 
   /**
    * Creates a {@link PhpCPDMapping} object
@@ -53,9 +54,9 @@ public class PhpCPDMapping extends AbstractCpdMapping {
    * @param php
    * @param project
    */
-  public PhpCPDMapping(Php php, Project project) {
+  public PhpCPDMapping(Php php, Project project, ModuleFileSystem fileSystem) {
     this.php = php;
-    this.project = project;
+    this.fileSystem = fileSystem;
   }
 
   /**
@@ -97,7 +98,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
 
       Reader reader = null;
       try {
-        reader = new InputStreamReader(new FileInputStream(fileName), project.getFileSystem().getSourceCharset());
+        reader = new InputStreamReader(new FileInputStream(fileName), fileSystem.sourceCharset());
         TokenQueue queue = tokenChunker.chunk(reader);
 
         Iterator<Token> iterator = queue.iterator();
