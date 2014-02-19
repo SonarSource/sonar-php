@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 public class FileHeaderCheck extends SquidCheck<Grammar> implements CharsetAwareVisitor {
 
   private static final String DEFAULT_HEADER_FORMAT = "";
-  private static Pattern openTag;
+  private static final Pattern PHP_OPEN_TAG = Pattern.compile(PHPTagsChannel.OPENING);;
 
   @RuleProperty(
     key = "headerFormat",
@@ -61,7 +61,6 @@ public class FileHeaderCheck extends SquidCheck<Grammar> implements CharsetAware
   @Override
   public void init() {
     expectedLines = headerFormat.split("(?:\r)?\n|\r");
-    openTag = Pattern.compile(PHPTagsChannel.OPENING);
   }
 
   @Override
@@ -81,7 +80,7 @@ public class FileHeaderCheck extends SquidCheck<Grammar> implements CharsetAware
   private static boolean matches(String[] expectedLines, List<String> lines) {
     boolean result;
 
-    if (openTag.matcher(lines.get(0)).matches()) {
+    if (PHP_OPEN_TAG.matcher(lines.get(0)).matches()) {
       lines.remove(0);
     }
 
