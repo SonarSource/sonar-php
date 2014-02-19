@@ -58,6 +58,7 @@ public class CheckList {
       NestedControlFlowDepthCheck.class,
       StringLiteralDuplicatedCheck.class,
       FunctionComplexityCheck.class,
+      TabCharacterCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
