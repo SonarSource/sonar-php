@@ -60,6 +60,7 @@ public class CheckList {
       FunctionComplexityCheck.class,
       TabCharacterCheck.class,
       FileHeaderCheck.class,
+      LeftCurlyBraceEndsLineCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
