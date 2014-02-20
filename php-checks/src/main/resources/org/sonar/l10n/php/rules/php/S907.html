@@ -1,0 +1,21 @@
+<p>
+  <code>goto</code> is an unstructured control flow statement. It makes code less readable and maintainable. Structured control flow statements such as if, for, while, continue or break should be used instead.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+$i = 0;
+loop:
+  echo("i = $i");
+  $i++;
+  if ($i < 10){
+    goto loop;
+  }
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+for ($i = 0; $i < 10; $i++){
+  echo("i = $i");
+}
+</pre>

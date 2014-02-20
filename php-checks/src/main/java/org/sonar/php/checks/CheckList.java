@@ -63,6 +63,7 @@ public class CheckList {
       LeftCurlyBraceEndsLineCheck.class,
       AlwaysUseCurlyBracesCheck.class,
       RightCurlyBraceStartsLineCheck.class,
+      GotoUseCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
