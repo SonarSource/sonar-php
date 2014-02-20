@@ -32,5 +32,15 @@ function f() {
         }
       }
     }
+
+    if (true) {                   // level 1
+        if (true) {               // level 2
+          if (true) {             // level 3
+
+          } else if (true) {      // level 3
+
+          }
+        }
+      }
   }
 }

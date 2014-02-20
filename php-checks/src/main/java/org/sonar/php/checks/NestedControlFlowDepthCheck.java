@@ -26,6 +26,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
@@ -66,14 +67,23 @@ public class NestedControlFlowDepthCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    nestingLevel++;
-    if (nestingLevel > max) {
-      getContext().createLineViolation(this, "Refactor this code to not nest more than {0} \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.", astNode, max);
+    if (!isElseIf(astNode)) {
+      nestingLevel++;
+      if (nestingLevel > max) {
+        getContext().createLineViolation(this, "Refactor this code to not nest more than {0} \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.", astNode, max);
+      }
     }
   }
 
   @Override
   public void leaveNode(AstNode astNode) {
-    nestingLevel--;
+    if (!isElseIf(astNode)) {
+      nestingLevel--;
+    }
+  }
+
+  private boolean isElseIf(AstNode astNode) {
+    AstNode parentPreviousSibling = astNode.getParent().getPreviousSibling();
+    return parentPreviousSibling != null && parentPreviousSibling.is(PHPKeyword.ELSE);
   }
 }
