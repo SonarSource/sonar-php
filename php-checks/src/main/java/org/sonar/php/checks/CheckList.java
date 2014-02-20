@@ -62,6 +62,7 @@ public class CheckList {
       FileHeaderCheck.class,
       LeftCurlyBraceEndsLineCheck.class,
       AlwaysUseCurlyBracesCheck.class,
+      RightCurlyBraceStartsLineCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
