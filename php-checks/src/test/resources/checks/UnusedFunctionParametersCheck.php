@@ -21,9 +21,17 @@ abstract class C {
       return $p1;
   }
 
-  public function f2($p1);               // OK
+  /*
+   * @inheritdoc
+   */
+  public function f2($p1) {              // OK
+    return 1;
+  }
+
+  public function f3($p1);               // OK
 }
 
 function f($p1, $p2) {                   // OK
   $p1 = $p2;
 }
+

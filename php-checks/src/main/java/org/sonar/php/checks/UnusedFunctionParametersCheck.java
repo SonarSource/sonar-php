@@ -23,6 +23,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.api.Token;
+import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.squid.checks.SquidCheck;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
@@ -50,7 +52,6 @@ public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
     private final Scope outerScope;
     private final AstNode functionDec;
     private final Map<String, Integer> arguments;
-    private boolean useArgumentsArray = false;
 
     public Scope(Scope outerScope, AstNode functionDec) {
       this.outerScope = outerScope;
@@ -120,11 +121,21 @@ public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
   public void leaveNode(AstNode astNode) {
     if (astNode.is(FUNCTION_DECLARATIONS) && !isAbstractMethod(astNode)) {
       // leave scope
-      if (!currentScope.useArgumentsArray) {
+      if (!isOverriding(astNode)) {
         reportUnusedArguments(astNode);
       }
       currentScope = currentScope.outerScope;
     }
+  }
+
+  private static boolean isOverriding(AstNode functionDec) {
+    Token functionToken = functionDec.getToken();
+    for (Trivia comment : functionToken.getTrivia()) {
+      if (StringUtils.containsIgnoreCase(comment.getToken().getValue(), "@inheritdoc")) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
