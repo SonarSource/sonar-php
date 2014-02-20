@@ -32,8 +32,12 @@ public class ElseIfWithoutElseCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ElseIfWithoutElseCheck.php"), new ElseIfWithoutElseCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Add the missing \"else\" clause.")
-      .next().atLine(10)
+      .next().atLine(5).withMessage("Add the missing \"else\" clause.")
+      .next().atLine(9)
+      .next().atLine(13)
+      .next().atLine(18)
+      .next().atLine(23)
+      .next().atLine(28)
       .noMore();
   }
 }

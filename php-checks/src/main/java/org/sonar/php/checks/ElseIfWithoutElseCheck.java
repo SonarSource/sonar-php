@@ -25,6 +25,7 @@ import com.sonar.sslr.squid.checks.SquidCheck;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 
 @Rule(
@@ -42,22 +43,32 @@ public class ElseIfWithoutElseCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (hasElseif(astNode) && !hasElse(astNode)) {
-      AstNode lastElseif = getLastElseif(astNode);
-
-      getContext().createLineViolation(this, "Add the missing \"else\" clause.", lastElseif);
+    if (isElseIf(astNode) && !hasElse(astNode)) {
+      AstNode reportNode = hasElseif(astNode) ? getLastElseif(astNode) : astNode;
+      reportIssue(reportNode);
+    } else if (hasElseif(astNode) && !hasElse(astNode)) {
+      reportIssue(getLastElseif(astNode));
     }
   }
 
-  private AstNode getLastElseif(AstNode ifStmt) {
+  private void reportIssue(AstNode node) {
+    getContext().createLineViolation(this, "Add the missing \"else\" clause.", node);
+  }
+
+  private static boolean isElseIf(AstNode ifStmt) {
+    AstNode parentPreviousSibling = ifStmt.getParent().getPreviousSibling();
+    return parentPreviousSibling != null && parentPreviousSibling.is(PHPKeyword.ELSE);
+  }
+
+  private static AstNode getLastElseif(AstNode ifStmt) {
     return ifStmt.getFirstChild(PHPGrammar.ELSEIF_LIST, PHPGrammar.ALTERNATIVE_ELSEIF_LIST).getLastChild();
   }
 
-  private boolean hasElseif(AstNode ifStmt) {
+  private static boolean hasElseif(AstNode ifStmt) {
     return ifStmt.hasDirectChildren(PHPGrammar.ELSEIF_LIST, PHPGrammar.ALTERNATIVE_ELSEIF_LIST);
   }
 
-  private boolean hasElse(AstNode ifStmt) {
+  private static boolean hasElse(AstNode ifStmt) {
     return ifStmt.hasDirectChildren(PHPGrammar.ELSE_CLAUSE, PHPGrammar.ALTERNATIVE_ELSE_CLAUSE);
   }
 }
