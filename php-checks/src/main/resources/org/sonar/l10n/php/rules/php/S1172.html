@@ -1,0 +1,17 @@
+<p>
+  Unused parameters are misleading. Whatever the value passed to such parameters is, the behavior will be the same.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+function doSomething($a, $b) { // "$a" is unused
+  return compute($b);
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+function doSomething($b) {
+  return compute($b);
+}
+</pre>

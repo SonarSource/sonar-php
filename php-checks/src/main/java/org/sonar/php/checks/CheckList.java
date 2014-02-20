@@ -66,6 +66,7 @@ public class CheckList {
       GotoUseCheck.class,
       ClassNameCheck.class,
       FieldNameCheck.class,
+      UnusedFunctionParametersCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
