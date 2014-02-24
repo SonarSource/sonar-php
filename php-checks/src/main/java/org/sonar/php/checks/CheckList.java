@@ -70,6 +70,7 @@ public class CheckList {
       ExpressionComplexityCheck.class,
       ForLoopCounterChangedCheck.class,
       ConstantNameCheck.class,
+      TooManyLinesInFunctionCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
