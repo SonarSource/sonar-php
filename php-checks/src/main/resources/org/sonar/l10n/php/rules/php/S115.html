@@ -1,21 +1,21 @@
 <p>
-  Sharing some naming conventions is a key point to make it possible for a team to efficiently collaborate. This rule allows to check that all constant names match a provided regular expression.
+Sharing some naming conventions is a key point to make it possible for a team to efficiently collaborate. This rule allows to check that all constant names match a provided regular expression.
 </p>
 
 <h2>Noncompliant Code Example</h2>
 <pre>
-define("bar", true);
+define("const1", true);
 
 class Foo {
-    const bar = "";
+    const const2 = "";
 }
 </pre>
 
 <h2>Compliant Solution</h2>
 <pre>
-define("BAR", true);
+define("CONST1", true);
 
 class Foo {
-    const BAR = "";
+    const CONST2 = "";
 }
 </pre>
