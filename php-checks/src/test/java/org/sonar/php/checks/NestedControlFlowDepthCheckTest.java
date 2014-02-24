@@ -38,7 +38,6 @@ public class NestedControlFlowDepthCheckTest extends CheckTest {
       .next().atLine(22)
       .next().atLine(25)
       .next().atLine(28)
-      .next().atLine(30)
       .noMore();
   }
 

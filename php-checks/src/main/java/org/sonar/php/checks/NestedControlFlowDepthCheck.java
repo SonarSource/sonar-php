@@ -69,7 +69,7 @@ public class NestedControlFlowDepthCheck extends SquidCheck<Grammar> {
   public void visitNode(AstNode astNode) {
     if (!isElseIf(astNode)) {
       nestingLevel++;
-      if (nestingLevel > max) {
+      if (nestingLevel == max + 1) {
         getContext().createLineViolation(this, "Refactor this code to not nest more than {0} \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.", astNode, max);
       }
     }
