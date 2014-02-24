@@ -36,7 +36,7 @@ import org.sonar.php.checks.utils.CommentContainsPatternChecker;
 public class TodoTagPresenceCheck extends SquidCheck<Grammar> implements AstAndTokenVisitor {
 
   private static final String PATTERN = "TODO";
-  private static final String MESSAGE = "Complete the task associated to this TODO comment.";
+  private static final String MESSAGE = "Complete the task associated to this \"TODO\" comment.";
 
   private final CommentContainsPatternChecker checker = new CommentContainsPatternChecker(this, PATTERN, MESSAGE);
 

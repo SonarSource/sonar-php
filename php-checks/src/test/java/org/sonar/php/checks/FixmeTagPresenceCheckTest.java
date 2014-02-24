@@ -32,7 +32,7 @@ public class FixmeTagPresenceCheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FixmeTagPresenceCheck.php"), new FixmeTagPresenceCheck());
 
     CheckMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Take the required action to fix the issue indicated by this comment.")
+      .next().atLine(4).withMessage("Take the required action to fix the issue indicated by this \"FIXME\" comment.")
       .next().atLine(8)
       .next().atLine(9)
       .next().atLine(12)

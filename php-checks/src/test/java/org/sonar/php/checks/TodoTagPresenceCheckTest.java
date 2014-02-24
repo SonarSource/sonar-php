@@ -32,7 +32,7 @@ public class TodoTagPresenceCheckTest extends CheckTest {
   public void test() {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TodoTagPresenceCheck.php"), new TodoTagPresenceCheck());
     CheckMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Complete the task associated to this TODO comment.")
+      .next().atLine(4).withMessage("Complete the task associated to this \"TODO\" comment.")
       .next().atLine(8)
       .next().atLine(9)
       .next().atLine(12)
