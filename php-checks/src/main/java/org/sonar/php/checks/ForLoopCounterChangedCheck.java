@@ -93,7 +93,7 @@ public class ForLoopCounterChangedCheck extends SquidCheck<Grammar> {
   }
 
   private void reportIssue(AstNode astNode, String counter) {
-    getContext().createLineViolation(this, "Refactor the code to avoid assigning the loop counter \"{0}\" within the loop body.", astNode, counter);
+    getContext().createLineViolation(this, "Refactor the code to avoid updating the loop counter \"{0}\" within the loop body.", astNode, counter);
   }
 
   private Set<String> getLoopsCounters(AstNode astNode) {

@@ -32,7 +32,7 @@ public class ForLoopCounterChangedCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ForLoopCounterChangedCheck.php"), new ForLoopCounterChangedCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Refactor the code to avoid assigning the loop counter \"$a\" within the loop body.")
+      .next().atLine(4).withMessage("Refactor the code to avoid updating the loop counter \"$a\" within the loop body.")
       .next().atLine(8)
       .next().atLine(12)
       .next().atLine(13)
