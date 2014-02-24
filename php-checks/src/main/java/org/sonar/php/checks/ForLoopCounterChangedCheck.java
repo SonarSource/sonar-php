@@ -78,16 +78,13 @@ public class ForLoopCounterChangedCheck extends SquidCheck<Grammar> {
   }
 
   private void check(AstNode astNode) {
-    String label = null;
+    String label;
 
     if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
       label = astNode.getFirstChild().getTokenOriginalValue();
-    } else if (astNode.is(PHPPunctuator.INC, PHPPunctuator.DEC)) {
-      if (astNode.getParent().is(PHPGrammar.UNARY_EXPR)) {
-        label = astNode.getNextAstNode().getTokenOriginalValue();
-      } else {
-        label = astNode.getPreviousAstNode().getTokenOriginalValue();
-      }
+    } else {
+      label = astNode.getParent().is(PHPGrammar.UNARY_EXPR) ? astNode.getNextAstNode().getTokenOriginalValue() :
+        astNode.getPreviousAstNode().getTokenOriginalValue();
     }
 
     if (counters.contains(label)) {
@@ -103,15 +100,8 @@ public class ForLoopCounterChangedCheck extends SquidCheck<Grammar> {
     Set<String> counterList = Sets.newHashSet();
     AstNode forExpr = astNode.getFirstChild(PHPPunctuator.SEMICOLON).getPreviousAstNode();
 
-    if (forExpr != null) {
-
-      for (AstNode expr : forExpr.getChildren(PHPGrammar.EXPRESSION)) {
-        if (expr.getFirstChild().is(PHPGrammar.POSTFIX_EXPR)) {
-          counterList.add(expr.getTokenOriginalValue());
-        } else {
-          counterList.add(expr.getFirstChild().getTokenOriginalValue());
-        }
-      }
+    for (AstNode expr : forExpr.getChildren(PHPGrammar.EXPRESSION)) {
+      counterList.add(expr.getFirstChild().getTokenOriginalValue());
     }
     return counterList;
   }

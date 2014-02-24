@@ -35,6 +35,8 @@ for ($h = 0; $h < 42; $h++) {
 
 $g++;                                    // OK
 ++$g;                                    // OK
+$g = 0;                                  // OK
+doSomething($i);                         // OK
 
 for ($i = 0; 0 < 42; $i++) {
   $i++;                                  // NOK
@@ -55,7 +57,13 @@ for ($i = 0; $i < 42; $i++) {
 for ($i = 0; $i < 10; $i++) {
   for ($k = 0; $k < 20; $i++) {           // NOK
     echo "Hello";
+    doSomething($i = 0);                  // NOK
   }
+}
+
+$i = 0;
+for ( ; $i > 0; $i++) {
+ $i = 1;                                  // OK
 }
 
 foreach ($myArray as $i) {

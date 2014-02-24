@@ -42,12 +42,13 @@ public class ForLoopCounterChangedCheckTest extends CheckTest {
       .next().atLine(24)
       .next().atLine(31)
       .next().atLine(32)
-      .next().atLine(40)
-      .next().atLine(41)
       .next().atLine(42)
       .next().atLine(43)
-      .next().atLine(47)
-      .next().atLine(56)
+      .next().atLine(44)
+      .next().atLine(45)
+      .next().atLine(49)
+      .next().atLine(58)
+      .next().atLine(60)
       .noMore();
   }
 }
