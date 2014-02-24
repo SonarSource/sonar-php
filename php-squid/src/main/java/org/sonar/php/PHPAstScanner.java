@@ -39,6 +39,7 @@ import org.sonar.php.api.PHPMetric;
 import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPParser;
+import org.sonar.squid.api.SourceClass;
 import org.sonar.squid.api.SourceCode;
 import org.sonar.squid.api.SourceFile;
 import org.sonar.squid.api.SourceFunction;
@@ -50,7 +51,7 @@ import java.util.Collection;
 
 public class PHPAstScanner {
 
-  private static class PHPCommentAnalyser extends CommentAnalyser{
+  private static class PHPCommentAnalyser extends CommentAnalyser {
     @Override
     public boolean isBlank(String line) {
       for (int i = 0; i < line.length(); i++) {
@@ -103,6 +104,24 @@ public class PHPAstScanner {
     builder.setCommentAnalyser(new PHPCommentAnalyser());
     builder.setFilesMetric(PHPMetric.FILES);
 
+    /* Classes */
+    builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<Grammar>(new SourceCodeBuilderCallback() {
+      private int seq = 0;
+
+      @Override
+      public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
+        seq++;
+        SourceClass cls = new SourceClass("class:" + seq);
+        cls.setStartAtLine(astNode.getTokenLine());
+        return cls;
+      }
+    }, PHPGrammar.CLASS_DECLARATION, PHPGrammar.INTERFACE_DECLARATION));
+
+    builder.withSquidAstVisitor(CounterVisitor.<Grammar>builder().setMetricDef(PHPMetric.CLASSES)
+      .subscribeTo(PHPGrammar.CLASS_DECLARATION)
+      .subscribeTo(PHPGrammar.INTERFACE_DECLARATION)
+      .build());
+
     /* Functions */
     builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<Grammar>(new SourceCodeBuilderCallback() {
       private int seq = 0;
@@ -124,10 +143,6 @@ public class PHPAstScanner {
     /* Metrics */
     builder.withSquidAstVisitor(new LinesVisitor<Grammar>(PHPMetric.LINES));
     builder.withSquidAstVisitor(new LinesOfCodeVisitor<Grammar>(PHPMetric.LINES_OF_CODE));
-    builder.withSquidAstVisitor(CounterVisitor.<Grammar>builder().setMetricDef(PHPMetric.CLASSES)
-      .subscribeTo(PHPGrammar.CLASS_DECLARATION)
-      .subscribeTo(PHPGrammar.INTERFACE_DECLARATION)
-      .build());
 
     builder.withSquidAstVisitor(new ComplexityVisitor());
     builder.withSquidAstVisitor(CommentsVisitor.<Grammar>builder().withCommentMetric(PHPMetric.COMMENT_LINES)

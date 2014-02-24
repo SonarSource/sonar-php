@@ -72,6 +72,7 @@ public class CheckList {
       ConstantNameCheck.class,
       TooManyLinesInFunctionCheck.class,
       TooManyMethodsInClassCheck.class,
+      ClassComplexityCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
