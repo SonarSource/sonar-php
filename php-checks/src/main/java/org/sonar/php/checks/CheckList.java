@@ -68,6 +68,7 @@ public class CheckList {
       FieldNameCheck.class,
       UnusedFunctionParametersCheck.class,
       ExpressionComplexityCheck.class,
+      ForLoopCounterChangedCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

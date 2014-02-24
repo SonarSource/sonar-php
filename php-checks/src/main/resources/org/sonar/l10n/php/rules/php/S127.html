@@ -1,0 +1,20 @@
+<p>
+  Loop counters should not be modified in the body of the loop to prevent unexpected side effects.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+for ($i = 0; $i < 10; $i++) {
+  echo $i;
+  if(condition) {
+    $i = 20;
+  }
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+for ($i = 0; $i < 10; $i++) {
+  echo $i;
+}
+</pre>
