@@ -1,7 +1,7 @@
 <?php
 
-function f (){
-  dorSomthing();}              // NOK
+function f () {
+  doSomthing();}               // NOK
 
 if (true){
   doSomething();}              // NOK
@@ -11,6 +11,10 @@ $a = function () {
 
 {
   echo $a;}                    // NOK
+
+function f() {
+  doSomthing();
+}                              // OK
 
 $var->
 {'user_' . $id};               // OK
