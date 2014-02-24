@@ -71,6 +71,7 @@ public class CheckList {
       ForLoopCounterChangedCheck.class,
       ConstantNameCheck.class,
       TooManyLinesInFunctionCheck.class,
+      TooManyMethodsInClassCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
