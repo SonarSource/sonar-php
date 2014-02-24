@@ -35,7 +35,7 @@ import org.sonar.php.checks.utils.CommentContainsPatternChecker;
 public class FixmeTagPresenceCheck extends SquidCheck<Grammar> implements AstAndTokenVisitor {
 
   private static final String PATTERN = "FIXME";
-  private static final String MESSAGE = "Take the required action to fix the issue indicated by this comment.";
+  private static final String MESSAGE = "Take the required action to fix the issue indicated by this \"FIXME\" comment.";
 
   private final CommentContainsPatternChecker checker = new CommentContainsPatternChecker(this, PATTERN, MESSAGE);
 
