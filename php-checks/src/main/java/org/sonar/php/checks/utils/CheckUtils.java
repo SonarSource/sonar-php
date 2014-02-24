@@ -21,6 +21,8 @@ package org.sonar.php.checks.utils;
 
 import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.GenericTokenType;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 
 public class CheckUtils {
@@ -39,4 +41,27 @@ public class CheckUtils {
     AstNode commonScalar = postfixExpr.getFirstChild(PHPGrammar.COMMON_SCALAR);
     return commonScalar != null && commonScalar.getFirstChild().is(PHPGrammar.BOOLEAN_LITERAL);
   }
+
+  /**
+   * Returns function or method's name, or "expression" if the given node is a function expression.
+   *
+   * @param functionDec FUNCTION_DECLARATION, METHOD_DECLARATION or FUNCTION_EXPRESSION
+   * @return name of function or "expression" if function expression
+   */
+  public static String getFunctionName(AstNode functionDec) {
+    Preconditions.checkArgument(functionDec.is(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
+    return functionDec.is(PHPGrammar.FUNCTION_EXPRESSION) ? "expression" : "\"" + functionDec.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue() + "\"";
+  }
+
+  /**
+   * Returns whether a method declaration has an implementation or not.
+   *
+   * @param methodDec METHOD_DECLARATION
+   * @return true if method declaration without implementation, false otherwise
+   */
+  public static boolean isAbstractMethod(AstNode methodDec) {
+    return methodDec.is(PHPGrammar.METHOD_DECLARATION)
+      && methodDec.getFirstChild(PHPGrammar.METHOD_BODY).getFirstChild().is(PHPPunctuator.SEMICOLON);
+  }
+
 }

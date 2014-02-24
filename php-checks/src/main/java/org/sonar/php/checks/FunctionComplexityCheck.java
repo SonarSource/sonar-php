@@ -28,6 +28,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPMetric;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squid.api.SourceFunction;
 
@@ -59,11 +60,8 @@ public class FunctionComplexityCheck extends SquidCheck<Grammar> {
 
       getContext().createLineViolation(this,
         "The Cyclomatic Complexity of this function {0} is {1} which is greater than {2} authorized.", node,
-        getFunctionName(node), function.getInt(PHPMetric.COMPLEXITY), threshold);
+        CheckUtils.getFunctionName(node), function.getInt(PHPMetric.COMPLEXITY), threshold);
     }
   }
 
-  private static String getFunctionName(AstNode node) {
-    return node.is(PHPGrammar.FUNCTION_EXPRESSION) ? "expression" : "\"" + node.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue() + "\"";
-  }
 }

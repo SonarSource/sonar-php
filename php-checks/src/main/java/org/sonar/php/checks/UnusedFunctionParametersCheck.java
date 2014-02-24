@@ -32,6 +32,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.api.PHPTokenType;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
@@ -92,7 +93,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.is(FUNCTION_DECLARATIONS) && !isAbstractMethod(astNode)) {
+    if (astNode.is(FUNCTION_DECLARATIONS) && !CheckUtils.isAbstractMethod(astNode)) {
       // enter new scope
       currentScope = new Scope(currentScope, astNode);
     } else if (currentScope != null && astNode.is(PHPGrammar.PARAMETER_LIST)) {
@@ -100,11 +101,6 @@ public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
     } else if (isVarIdentifierInsideFunction(astNode)) {
       currentScope.use(astNode);
     }
-  }
-
-  private static boolean isAbstractMethod(AstNode functionDec) {
-    return functionDec.is(PHPGrammar.METHOD_DECLARATION)
-      && functionDec.getFirstChild(PHPGrammar.METHOD_BODY).getFirstChild().is(PHPPunctuator.SEMICOLON);
   }
 
   private boolean isVarIdentifierInsideFunction(AstNode node) {
@@ -119,7 +115,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
 
   @Override
   public void leaveNode(AstNode astNode) {
-    if (astNode.is(FUNCTION_DECLARATIONS) && !isAbstractMethod(astNode)) {
+    if (astNode.is(FUNCTION_DECLARATIONS) && !CheckUtils.isAbstractMethod(astNode)) {
       // leave scope
       if (!isOverriding(astNode)) {
         reportUnusedArguments(astNode);
