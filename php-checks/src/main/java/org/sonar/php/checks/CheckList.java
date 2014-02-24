@@ -73,6 +73,7 @@ public class CheckList {
       TooManyLinesInFunctionCheck.class,
       TooManyMethodsInClassCheck.class,
       ClassComplexityCheck.class,
+      TodoTagPresenceCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
