@@ -40,6 +40,13 @@ public class FileHeaderCheckTest extends CheckTest {
       .noMore();
 
     check = new FileHeaderCheck();
+    check.headerFormat = "// copyright 2005";
+
+    file = PHPAstScanner.scanSingleFile(new File("src/test/resources/checks/FileHeaderCheck/file4.php"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages())
+      .noMore();
+
+    check = new FileHeaderCheck();
     check.headerFormat = "// copyright 20\\d\\d";
 
     file = PHPAstScanner.scanSingleFile(new File("src/test/resources/checks/FileHeaderCheck/file1.php"), check);
