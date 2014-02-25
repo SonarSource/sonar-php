@@ -33,11 +33,10 @@ public class ObjectMemberAccessTest extends RuleTest {
 
   @Test
   public void test() {
-
     matches("->b");
     matches("->$a");
     matches("->$b[$c]{'d'}");
+    matches("->$a[$a]");
     matches("->{'b'}");
-
   }
 }

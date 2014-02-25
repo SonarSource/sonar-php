@@ -279,7 +279,6 @@ public enum PHPGrammar implements GrammarRuleKey {
   STATIC_SCALAR,
 
   OBJECT_DIM_LIST,
-  OBJECT_PROPERTY,
 
   PARENTHESIS_EXPRESSION,
 
@@ -401,7 +400,6 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(OBJECT_MEMBER_ACCESS).is(ARROW, b.firstOf(VARIABLE_WITHOUT_OBJECTS, OBJECT_DIM_LIST, IDENTIFIER));
     b.rule(CLASS_MEMBER_ACCESS).is(DOUBLECOLON, b.firstOf(VARIABLE_WITHOUT_OBJECTS, IDENTIFIER, PHPKeyword.CLASS));
 
-    b.rule(OBJECT_PROPERTY).is(b.firstOf(OBJECT_DIM_LIST, VARIABLE_WITHOUT_OBJECTS));
     b.rule(OBJECT_DIM_LIST).is(VARIABLE_NAME, b.zeroOrMore(b.firstOf(
       b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE),
       DIMENSIONAL_OFFSET
@@ -481,7 +479,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(NEW_EXPR).is(NEW, CLASS_NAME_REFERENCE, b.optional(FUNCTION_CALL_PARAMETER_LIST));
     b.rule(CLASS_NAME_REFERENCE).is(b.firstOf(
-      b.sequence(BASE_VARIABLE, b.zeroOrMore(ARROW, OBJECT_PROPERTY)),
+      b.sequence(BASE_VARIABLE, b.zeroOrMore(OBJECT_MEMBER_ACCESS)),
       CLASS_NAME));
 
     // Unary expression
