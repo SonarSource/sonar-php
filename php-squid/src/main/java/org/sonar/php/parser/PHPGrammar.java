@@ -385,7 +385,6 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.firstOf(
         b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_NAME),
         CLASS_NAME,
-        REFERENCE_VARIABLE,
         VARIABLE_WITHOUT_OBJECTS,
         IDENTIFIER
       ),
