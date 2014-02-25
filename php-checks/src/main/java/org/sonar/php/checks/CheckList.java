@@ -77,6 +77,7 @@ public class CheckList {
       FixmeTagPresenceCheck.class,
       ConstructorDeclarationCheck.class,
       CallParentConstructorCheck.class,
+      TrailingWhitespaceCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
