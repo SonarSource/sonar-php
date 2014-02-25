@@ -24,38 +24,20 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-public class VariableTest extends RuleTest {
+public class ObjectMemberAccessTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.VARIABLE));
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.OBJECT_MEMBER_ACCESS));
   }
 
   @Test
   public void test() {
-      matches("f()->$a");
 
-      matches("a");
-      matches("$a");
+    matches("->b");
+    matches("->$a");
+    matches("->$b[$c]{'d'}");
+    matches("->{'b'}");
 
-      matches("$a[]");
-      matches("$a()");
-
-      matches("$a->b");
-      matches("$a->b()");
-
-      matches("$a::b()");
-      matches("Foo::$a");
-
-      matches("$a->$b[$c]{'d'}");
-
-      matches("$$a");
-      matches("${'a'}");
-      matches("$a{'a'}");
-      matches("$a[$b]");
-
-      matches("$a->{'b'}");
-
-      matches("A::class");
   }
 }
