@@ -70,21 +70,14 @@ public class ConstantNameCheck extends SquidCheck<Grammar> {
   }
 
   private void checkConstantName(AstNode node, String constName) {
-    if (constName != null && !pattern.matcher(constName).matches()) {
+    if (!pattern.matcher(constName).matches()) {
       getContext().createLineViolation(this, "Rename this constant \"{0}\" to match the regular expression {1}.", node, constName, format);
     }
   }
 
   private String getFirstParameter(AstNode astNode) {
-    AstNode parameters = astNode.getFirstChild(PHPGrammar.PARAMETER_LIST_FOR_CALL);
-
-    if (parameters != null) {
-      String firstParam = parameters.getFirstChild().getTokenOriginalValue();
-      if (STRING_LITERAL_PATTERN.matcher(firstParam).matches()) {
-        return StringUtils.substring(firstParam, 1, firstParam.length() - 1);
-      }
-    }
-    return null;
+    String firstParam = astNode.getFirstChild(PHPGrammar.PARAMETER_LIST_FOR_CALL).getFirstChild().getTokenOriginalValue();
+    return StringUtils.substring(firstParam, 1, firstParam.length() - 1);
   }
 
   private static boolean isCallToDefine(AstNode node) {
