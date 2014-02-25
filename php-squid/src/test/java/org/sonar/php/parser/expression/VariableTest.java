@@ -45,6 +45,7 @@ public class VariableTest extends RuleTest {
       matches("$a::b");
       matches("$a::$b");
       matches("$a::b()");
+      matches("Foo::$a");
 
       matches("$a->$b[$c]{'d'}");
 

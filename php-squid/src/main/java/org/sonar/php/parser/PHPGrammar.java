@@ -353,7 +353,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(BASE_VARIABLE).is(b.firstOf(
       VARIABLE_WITHOUT_OBJECTS,
-      STATIC_MEMBER));
+      VARIABLE));
 
     b.rule(SIMPLE_INDIRECT_REFERENCE).is(b.oneOrMore(DOLAR));
 
@@ -368,11 +368,6 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(DOLAR_LCURLY, EXPRESSION, RCURLYBRACE)));
 
     b.rule(CLASS_NAME).is(b.firstOf(STATIC, FULLY_QUALIFIED_CLASS_NAME));
-
-    b.rule(STATIC_MEMBER).is(b.firstOf(
-      CLASS_NAME,
-      REFERENCE_VARIABLE
-    ), DOUBLECOLON, VARIABLE_WITHOUT_OBJECTS);
 
     b.rule(FUNCTION_CALL_PARAMETER_LIST).is(LPARENTHESIS, b.optional(PARAMETER_LIST_FOR_CALL, b.zeroOrMore(COMMA, PARAMETER_LIST_FOR_CALL)), RPARENTHESIS);
     b.rule(PARAMETER_LIST_FOR_CALL).is(b.firstOf(ALIAS_VARIABLE, b.sequence(b.optional(ELIPSIS), EXPRESSION), YIELD_EXPRESSION));
@@ -390,6 +385,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.firstOf(
         b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_NAME),
         CLASS_NAME,
+        REFERENCE_VARIABLE,
         VARIABLE_WITHOUT_OBJECTS,
         IDENTIFIER
       ),
