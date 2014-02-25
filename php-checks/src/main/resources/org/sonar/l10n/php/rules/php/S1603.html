@@ -1,0 +1,17 @@
+<p>
+  In PHP 4, any function with the same name as the nesting class was considered a class constructor. In PHP 5, this mechanism has been deprecated and the "__construct" method name should be used instead.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+class Foo {
+  function Foo(){...}
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+class Foo {
+  function __construct(){...}
+}
+</pre>

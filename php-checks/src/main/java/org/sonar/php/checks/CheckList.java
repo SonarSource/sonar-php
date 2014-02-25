@@ -75,6 +75,7 @@ public class CheckList {
       ClassComplexityCheck.class,
       TodoTagPresenceCheck.class,
       FixmeTagPresenceCheck.class,
+      ConstructorDeclarationCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
