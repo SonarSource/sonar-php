@@ -60,7 +60,7 @@ public class MissingNewLineAtEOFCheck extends SquidCheck<Grammar> {
       return false;
     }
     String ch = new String(chars);
-    return "\n".equals(ch) || "\r".equals(ch);
+    return "\n".equals(ch) || "\r".equals(ch) || "\r\n".equals(ch);
   }
 
 }
