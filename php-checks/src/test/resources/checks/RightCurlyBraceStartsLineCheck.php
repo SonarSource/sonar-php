@@ -23,4 +23,4 @@ if (true) { doSomething(); }   // OK
 
 $var->{'user_' . $id};         // OK
 
-
+${$field} = '';                // OK
