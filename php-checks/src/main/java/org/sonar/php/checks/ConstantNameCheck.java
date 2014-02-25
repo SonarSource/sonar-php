@@ -41,7 +41,6 @@ public class ConstantNameCheck extends SquidCheck<Grammar> {
 
   public static final String DEFAULT = "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$";
   private Pattern pattern = null;
-  private static final Pattern STRING_LITERAL_PATTERN = Pattern.compile(PHPLexer.STRING_LITERAL);
 
   @RuleProperty(
     key = "format",
