@@ -20,15 +20,16 @@
 package org.sonar.php.parser;
 
 import com.google.common.collect.Lists;
+import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.api.PHPTokenType;
+import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.grammar.LexerfulGrammarBuilder;
 
 import java.util.List;
 
-import static com.sonar.sslr.api.GenericTokenType.EOF;
-import static com.sonar.sslr.api.GenericTokenType.IDENTIFIER;
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
 import static org.sonar.php.api.PHPKeyword.AS;
@@ -151,7 +152,6 @@ import static org.sonar.php.api.PHPPunctuator.XOR_EQU;
 import static org.sonar.php.api.PHPTokenType.HEREDOC;
 import static org.sonar.php.api.PHPTokenType.NUMERIC_LITERAL;
 import static org.sonar.php.api.PHPTokenType.STRING_LITERAL;
-import static org.sonar.php.api.PHPTokenType.VAR_IDENTIFIER;
 
 public enum PHPGrammar implements GrammarRuleKey {
 
@@ -187,7 +187,10 @@ public enum PHPGrammar implements GrammarRuleKey {
   CONSTANT_DECLARATION,
   CONSTANT_VAR,
 
-
+  /**
+   * End of statement.
+   */
+  EOS,
   STATEMENT,
   EMPTY_STATEMENT,
   LABEL,
@@ -330,14 +333,19 @@ public enum PHPGrammar implements GrammarRuleKey {
   ASSIGNMENT_LIST,
   FUNCTION_EXPRESSION,
   EXPRESSION,
-  KEYWORDS;
+  KEYWORDS,
+  SPACING,
+  IDENTIFIER,
+  VAR_IDENTIFIER;
 
   public static LexerfulGrammarBuilder create() {
     LexerfulGrammarBuilder b = LexerfulGrammarBuilder.create();
 
-    b.rule(COMPILATION_UNIT).is(b.optional(TOP_STATEMENT_LIST), EOF);
+    b.rule(COMPILATION_UNIT).is(b.optional(TOP_STATEMENT_LIST), SPACING, GenericTokenType.EOF);
 
+    lexical(b);
     keywords(b);
+    punctuators(b);
     declaration(b);
     statement(b);
     expression(b);
@@ -345,6 +353,12 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.setRootRule(COMPILATION_UNIT);
 
     return b;
+  }
+
+  private static void lexical(LexerfulGrammarBuilder b) {
+    b.rule(SPACING).is(b.zeroOrMore(PHPTagsChannel.CLOSING_TAG)).skip();
+    b.rule(IDENTIFIER).is(SPACING, GenericTokenType.IDENTIFIER).skip();
+    b.rule(VAR_IDENTIFIER).is(SPACING, PHPTokenType.VAR_IDENTIFIER).skip();
   }
 
   public static void expression(LexerfulGrammarBuilder b) {
@@ -418,7 +432,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(EXPRESSION, b.optional(DOUBLEARROW, b.firstOf(ALIAS_VARIABLE, EXPRESSION))),
       ALIAS_VARIABLE));
 
-    b.rule(COMMON_SCALAR).is(b.firstOf(
+    b.rule(COMMON_SCALAR).is(SPACING, b.firstOf(
       HEREDOC,
       NUMERIC_LITERAL,
       STRING_LITERAL,
@@ -435,7 +449,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(BOOLEAN_LITERAL).is(b.firstOf("TRUE", "FALSE"));
 
-    b.rule(CAST_TYPE).is(LPARENTHESIS, b.firstOf("INTEGER", "INT", "DOUBLE", "FLOAT", "STRING", ARRAY, "OBJECT", "BOOLEAN", "BOOL", "BINARY", UNSET), RPARENTHESIS);
+    b.rule(CAST_TYPE).is(LPARENTHESIS, SPACING, b.firstOf("INTEGER", "INT", "DOUBLE", "FLOAT", "STRING", ARRAY, "OBJECT", "BOOLEAN", "BOOL", "BINARY", UNSET), RPARENTHESIS);
 
     b.rule(POSTFIX_EXPR).is(b.firstOf( // TODO: to complete
       //YIELD, TODO: check
@@ -523,8 +537,8 @@ public enum PHPGrammar implements GrammarRuleKey {
   }
 
   public static void declaration(LexerfulGrammarBuilder b) {
-    b.rule(USE_CONST_DECLARATION_STATEMENT).is(USE, CONST, USE_FUNCTION_DECLARATIONS, SEMICOLON);
-    b.rule(USE_FUNCTION_DECLARATION_STATEMENT).is(USE, FUNCTION, USE_FUNCTION_DECLARATIONS, SEMICOLON); // TODO: to check
+    b.rule(USE_CONST_DECLARATION_STATEMENT).is(USE, CONST, USE_FUNCTION_DECLARATIONS, EOS);
+    b.rule(USE_FUNCTION_DECLARATION_STATEMENT).is(USE, FUNCTION, USE_FUNCTION_DECLARATIONS, EOS); // TODO: to check
     b.rule(USE_FUNCTION_DECLARATIONS).is(USE_FUNCTION_DECLARATION, b.zeroOrMore(COMMA, USE_FUNCTION_DECLARATION));
     b.rule(USE_FUNCTION_DECLARATION).is(NAMESPACE_NAME, b.optional(AS, IDENTIFIER));
 
@@ -553,22 +567,22 @@ public enum PHPGrammar implements GrammarRuleKey {
       LCURLYBRACE, b.zeroOrMore(CLASS_STATEMENT), RCURLYBRACE);
     b.rule(INTERFACE_EXTENDS_LIST).is(EXTENDS, INTERFACE_LIST);
 
-    b.rule(CONSTANT_DECLARATION).is(CONST, CONSTANT_VAR, b.zeroOrMore(COMMA, CONSTANT_VAR), SEMICOLON);
+    b.rule(CONSTANT_DECLARATION).is(CONST, CONSTANT_VAR, b.zeroOrMore(COMMA, CONSTANT_VAR), EOS);
     b.rule(CONSTANT_VAR).is(IDENTIFIER, EQU, STATIC_SCALAR);
 
     b.rule(METHOD_DECLARATION).is(b.zeroOrMore(MEMBER_MODIFIER), FUNCTION, b.optional(REFERENCE), IDENTIFIER,
       LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS, METHOD_BODY);
-    b.rule(METHOD_BODY).is(b.firstOf(SEMICOLON, BLOCK));
+    b.rule(METHOD_BODY).is(b.firstOf(EOS, BLOCK));
 
     b.rule(PARAMETER_LIST).is(PARAMETER, b.zeroOrMore(COMMA, PARAMETER));
     b.rule(PARAMETER).is(b.optional(OPTIONAL_CLASS_TYPE), b.optional(AND), b.optional(ELIPSIS), VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
     b.rule(OPTIONAL_CLASS_TYPE).is(b.firstOf(ARRAY, CALLABLE, FULLY_QUALIFIED_CLASS_NAME));
 
-    b.rule(CLASS_VARIABLE_DECLARATION).is(VARIABLE_MODIFIERS, VARIABLE_DECLARATION, b.zeroOrMore(COMMA, VARIABLE_DECLARATION), SEMICOLON);
+    b.rule(CLASS_VARIABLE_DECLARATION).is(VARIABLE_MODIFIERS, VARIABLE_DECLARATION, b.zeroOrMore(COMMA, VARIABLE_DECLARATION), EOS);
     b.rule(VARIABLE_DECLARATION).is(VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
     b.rule(VARIABLE_MODIFIERS).is(b.firstOf(VAR, b.oneOrMore(MEMBER_MODIFIER)));
 
-    b.rule(CLASS_CONSTANT_DECLARATION).is(CONST, MEMBER_CONST_DECLARATION, b.zeroOrMore(COMMA, MEMBER_CONST_DECLARATION), SEMICOLON);
+    b.rule(CLASS_CONSTANT_DECLARATION).is(CONST, MEMBER_CONST_DECLARATION, b.zeroOrMore(COMMA, MEMBER_CONST_DECLARATION), EOS);
     b.rule(MEMBER_CONST_DECLARATION).is(IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
 
     b.rule(MEMBER_MODIFIER).is(b.firstOf(
@@ -605,12 +619,12 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(FULLY_QUALIFIED_NAME).is(NS_SEPARATOR, IDENTIFIER, b.zeroOrMore(NS_SEPARATOR, IDENTIFIER));
 
     b.rule(NAMESPACE_STATEMENT).is(b.firstOf(
-      b.sequence(NAMESPACE, NAMESPACE_NAME, SEMICOLON),
+      b.sequence(NAMESPACE, NAMESPACE_NAME, EOS),
       b.sequence(NAMESPACE, b.optional(NAMESPACE_NAME), LCURLYBRACE, b.optional(TOP_STATEMENT_LIST), RCURLYBRACE)));
 
-    b.rule(USE_STATEMENT).is(USE, USE_DECLARATIONS, SEMICOLON);
+    b.rule(USE_STATEMENT).is(USE, USE_DECLARATIONS, EOS);
 
-    b.rule(HALT_COMPILER_STATEMENT).is(HALT_COMPILER, LPARENTHESIS, RPARENTHESIS, SEMICOLON);
+    b.rule(HALT_COMPILER_STATEMENT).is(HALT_COMPILER, LPARENTHESIS, RPARENTHESIS, EOS);
 
     b.rule(REFERENCE).is(AND);
     b.rule(FUNCTION_DECLARATION).is(FUNCTION, b.optional(REFERENCE), IDENTIFIER,
@@ -643,6 +657,8 @@ public enum PHPGrammar implements GrammarRuleKey {
       EXPRESSION_STATEMENT
     ));
 
+    b.rule(EOS).is(b.firstOf(SEMICOLON, PHPTagsChannel.CLOSING_TAG)).skip();
+
     b.rule(EMPTY_STATEMENT).is(SEMICOLON);
 
     b.rule(LABEL).is(IDENTIFIER, COLON);
@@ -654,73 +670,73 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(ELSE_CLAUSE).is(ELSE, STATEMENT);
 
     b.rule(ALTERNATIVE_IF_STATEMENT).is(IF, PARENTHESIS_EXPRESSION, COLON, b.optional(INNER_STATEMENT_LIST),
-      b.optional(ALTERNATIVE_ELSEIF_LIST), b.optional(ALTERNATIVE_ELSE_CLAUSE), ENDIF, SEMICOLON);
+      b.optional(ALTERNATIVE_ELSEIF_LIST), b.optional(ALTERNATIVE_ELSE_CLAUSE), ENDIF, EOS);
     b.rule(ALTERNATIVE_ELSEIF_LIST).is(b.oneOrMore(ALTERNATIVE_ELSEIF_CLAUSE));
     b.rule(ALTERNATIVE_ELSEIF_CLAUSE).is(ELSEIF, PARENTHESIS_EXPRESSION, COLON, b.optional(INNER_STATEMENT_LIST));
     b.rule(ALTERNATIVE_ELSE_CLAUSE).is(ELSE, COLON, b.optional(INNER_STATEMENT_LIST));
 
     b.rule(WHILE_STATEMENT).is(WHILE, PARENTHESIS_EXPRESSION, b.firstOf(ALTERNATIVE_WHILE_STATEMENT, STATEMENT));
-    b.rule(ALTERNATIVE_WHILE_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDWHILE, SEMICOLON);
+    b.rule(ALTERNATIVE_WHILE_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDWHILE, EOS);
 
-    b.rule(DO_WHILE_STATEMENT).is(DO, STATEMENT, WHILE, PARENTHESIS_EXPRESSION, SEMICOLON);
+    b.rule(DO_WHILE_STATEMENT).is(DO, STATEMENT, WHILE, PARENTHESIS_EXPRESSION, EOS);
 
     b.rule(FOR_STATEMENT).is(FOR, LPARENTHESIS, b.optional(FOR_EXRR), SEMICOLON, b.optional(FOR_EXRR), SEMICOLON, b.optional(FOR_EXRR),
       RPARENTHESIS, b.firstOf(ALTERNATIVE_FOR_STATEMENT, STATEMENT));
     b.rule(FOR_EXRR).is(EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION));
-    b.rule(ALTERNATIVE_FOR_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDFOR, SEMICOLON);
+    b.rule(ALTERNATIVE_FOR_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDFOR, EOS);
 
     b.rule(SWITCH_STATEMENT).is(SWITCH, PARENTHESIS_EXPRESSION, SWITCH_CASE_LIST);
     b.rule(SWITCH_CASE_LIST).is(b.firstOf(
       b.sequence(LCURLYBRACE, b.optional(SEMICOLON), b.optional(CASE_LIST), RCURLYBRACE),
-      b.sequence(COLON, b.optional(SEMICOLON), b.optional(CASE_LIST), ENDSWITCH, SEMICOLON)));
+      b.sequence(COLON, b.optional(SEMICOLON), b.optional(CASE_LIST), ENDSWITCH, EOS)));
 
     b.rule(CASE_LIST).is(b.oneOrMore(b.firstOf(CASE_CLAUSE, DEFAULT_CLAUSE)));
     b.rule(CASE_CLAUSE).is(CASE, EXPRESSION, CASE_SEPARTOR, b.optional(INNER_STATEMENT_LIST));
     b.rule(DEFAULT_CLAUSE).is(DEFAULT, CASE_SEPARTOR, b.optional(INNER_STATEMENT_LIST));
     b.rule(CASE_SEPARTOR).is(b.firstOf(COLON, SEMICOLON));
 
-    b.rule(BREAK_STATEMENT).is(BREAK, b.optional(EXPRESSION), SEMICOLON);
-    b.rule(CONTINUE_STATEMENT).is(CONTINUE, b.optional(EXPRESSION), SEMICOLON);
+    b.rule(BREAK_STATEMENT).is(BREAK, b.optional(EXPRESSION), EOS);
+    b.rule(CONTINUE_STATEMENT).is(CONTINUE, b.optional(EXPRESSION), EOS);
 
-    b.rule(RETURN_STATEMENT).is(RETURN, b.optional(EXPRESSION), SEMICOLON);
-    b.rule(EXPRESSION_STATEMENT).is(EXPRESSION, SEMICOLON);
+    b.rule(RETURN_STATEMENT).is(RETURN, b.optional(EXPRESSION), EOS);
+    b.rule(EXPRESSION_STATEMENT).is(EXPRESSION, EOS);
 
     b.rule(FOREACH_STATEMENT).is(FOREACH, LPARENTHESIS, FOREACH_EXPR, RPARENTHESIS, b.firstOf(ALTERNATIVE_FOREACH_STATEMENT, STATEMENT));
     b.rule(FOREACH_EXPR).is(EXPRESSION, AS, FOREACH_VARIABLE, b.optional(DOUBLEARROW, FOREACH_VARIABLE));
     b.rule(FOREACH_VARIABLE).is(b.firstOf(
       b.sequence(b.optional(AND), VARIABLE),
       b.sequence(LIST, LPARENTHESIS, ASSIGNMENT_LIST, RPARENTHESIS)));
-    b.rule(ALTERNATIVE_FOREACH_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDFOREACH, SEMICOLON);
+    b.rule(ALTERNATIVE_FOREACH_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDFOREACH, EOS);
 
     b.rule(DECLARE_STATEMENT).is(DECLARE, LPARENTHESIS, DECLARE_LIST, RPARENTHESIS, b.firstOf(
       ALTERNATIVE_DECLARE_STATEMENT,
-      SEMICOLON,
+      EOS,
       STATEMENT));
     b.rule(DECLARE_LIST).is(MEMBER_CONST_DECLARATION, b.zeroOrMore(COMMA, MEMBER_CONST_DECLARATION));
-    b.rule(ALTERNATIVE_DECLARE_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDDECLARE, SEMICOLON);
+    b.rule(ALTERNATIVE_DECLARE_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDDECLARE, EOS);
 
     b.rule(TRY_STATEMENT).is(TRY, BLOCK, b.zeroOrMore(CATCH_STATEMENT), b.optional(FINALLY_STATEMENT));
     b.rule(CATCH_STATEMENT).is(CATCH, LPARENTHESIS, FULLY_QUALIFIED_CLASS_NAME, VAR_IDENTIFIER, RPARENTHESIS, BLOCK);
     b.rule(FINALLY_STATEMENT).is(FINALLY, BLOCK);
 
-    b.rule(THROW_STATEMENT).is(THROW, EXPRESSION, SEMICOLON);
-    b.rule(GOTO_STATEMENT).is(GOTO, IDENTIFIER, SEMICOLON);
+    b.rule(THROW_STATEMENT).is(THROW, EXPRESSION, EOS);
+    b.rule(GOTO_STATEMENT).is(GOTO, IDENTIFIER, EOS);
 
-    b.rule(YIELD_STATEMENT).is(YIELD_EXPRESSION, SEMICOLON);
+    b.rule(YIELD_STATEMENT).is(YIELD_EXPRESSION, EOS);
 
-    b.rule(GLOBAL_STATEMENT).is(GLOBAL, GLOBAL_VAR_LIST, SEMICOLON);
+    b.rule(GLOBAL_STATEMENT).is(GLOBAL, GLOBAL_VAR_LIST, EOS);
     b.rule(GLOBAL_VAR_LIST).is(GLOBAL_VAR, b.zeroOrMore(COMMA, GLOBAL_VAR));
     b.rule(GLOBAL_VAR).is(b.firstOf(
       b.sequence(DOLAR, EXPRESSION),
       VAR_IDENTIFIER));
 
-    b.rule(STATIC_STATEMENT).is(STATIC, STATIC_VAR_LIST, SEMICOLON);
+    b.rule(STATIC_STATEMENT).is(STATIC, STATIC_VAR_LIST, EOS);
     b.rule(STATIC_VAR_LIST).is(STATIC_VAR, b.zeroOrMore(COMMA, STATIC_VAR));
     b.rule(STATIC_VAR).is(VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
 
-    b.rule(ECHO_STATEMENT).is(ECHO, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), SEMICOLON);
+    b.rule(ECHO_STATEMENT).is(ECHO, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), EOS);
 
-    b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, UNSET_VARIABLES, RPARENTHESIS, SEMICOLON);
+    b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, UNSET_VARIABLES, RPARENTHESIS, EOS);
     b.rule(UNSET_VARIABLES).is(VARIABLE, b.zeroOrMore(COMMA, VARIABLE));
 
     b.rule(CLASS_STATEMENT).is(b.firstOf(
@@ -732,8 +748,8 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(TRAIT_USE_STATEMENT).is(USE, INTERFACE_LIST, TRAIT_ADAPTATIONS);
     b.rule(TRAIT_ADAPTATIONS).is(b.firstOf(
       b.sequence(LCURLYBRACE, b.zeroOrMore(TRAIT_ADAPTATION_STATEMENT), RCURLYBRACE),
-      SEMICOLON));
-    b.rule(TRAIT_ADAPTATION_STATEMENT).is(b.firstOf(TRAIT_PRECEDENCE, TRAIT_ALIAS), SEMICOLON);
+      EOS));
+    b.rule(TRAIT_ADAPTATION_STATEMENT).is(b.firstOf(TRAIT_PRECEDENCE, TRAIT_ALIAS), EOS);
     b.rule(TRAIT_PRECEDENCE).is(TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED, INSTEADOF, INTERFACE_LIST);
     b.rule(TRAIT_ALIAS).is(TRAIT_METHOD_REFERENCE, AS, b.firstOf(
       b.sequence(b.optional(MEMBER_MODIFIER), IDENTIFIER),
@@ -750,11 +766,22 @@ public enum PHPGrammar implements GrammarRuleKey {
   }
 
   public static void keywords(LexerfulGrammarBuilder b) {
+    for (PHPKeyword k : PHPKeyword.values()) {
+      b.rule(k).is(SPACING, k.getValue().toUpperCase()).skip();
+    }
+
     List<PHPKeyword> keywords = Lists.newArrayList(PHPKeyword.values());
     Object[] rest = new Object[keywords.size() - 2];
     for (int i = 2; i < keywords.size(); i++) {
       rest[i - 2] = keywords.get(i);
     }
-    b.rule(KEYWORDS).is(b.firstOf(keywords.get(0), keywords.get(1), rest));
+    b.rule(KEYWORDS).is(SPACING, b.firstOf(keywords.get(0), keywords.get(1), rest));
   }
+
+  private static void punctuators(LexerfulGrammarBuilder b) {
+    for (PHPPunctuator p : PHPPunctuator.values()) {
+      b.rule(p).is(SPACING, p.getValue()).skip();
+    }
+  }
+
 }

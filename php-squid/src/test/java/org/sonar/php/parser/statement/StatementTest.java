@@ -33,7 +33,6 @@ public class StatementTest extends RuleTest {
 
   @Test
   public void test() {
-
       matches("{}");
       matches("label:");
       matches("if ($a): endif;");
@@ -49,4 +48,10 @@ public class StatementTest extends RuleTest {
       matches("echo \"Hi\";");
       matches("unset($a);");
   }
+
+  @Test
+  public void optional_semicolon() {
+    matches("continue ?>");
+  }
+
 }

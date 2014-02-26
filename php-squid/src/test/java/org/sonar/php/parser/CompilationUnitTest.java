@@ -37,12 +37,13 @@ public class CompilationUnitTest extends RuleTest {
     Assertions.assertThat(p)
       .matches("<?php")
 
-      .matches("foo <?php")
-      .matches("foo <?")
-      .matches("foo <?= ")
+      .matches("html <?php")
+      .matches("html <?")
+      .matches("html <?= ")
 
-      .matches("<?php ?> foo")
-      .matches("<?php ?> foo <?php");
+      .matches("<?php ?> html")
+      .matches("<?php ?> html <?php")
+      .matches("<?php ?> html <?php ?> html");
   }
 
 }
