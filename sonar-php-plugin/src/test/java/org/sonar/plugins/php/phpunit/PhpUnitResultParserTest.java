@@ -37,8 +37,10 @@ import java.util.Arrays;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -89,6 +91,10 @@ public class PhpUnitResultParserTest {
    */
   @Test()
   public void shouldGenerateTestsMeasures() {
+    parser = spy(parser);
+    doReturn(new org.sonar.api.resources.File("Monkey.php")).when(parser).getUnitTestResource("C:\\projets\\PHP\\Monkey\\Sources\\test\\Monkey.php");
+    doReturn(new org.sonar.api.resources.File("Banana.php")).when(parser).getUnitTestResource("C:\\projets\\PHP\\Monkey\\Sources\\test\\Banana.php");
+
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT));
 
     verify(context).saveMeasure(new org.sonar.api.resources.File("Monkey.php"), CoreMetrics.TESTS, 3.0);

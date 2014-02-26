@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.squid.AstScanner;
@@ -56,10 +57,11 @@ public class PHPSquidSensor implements Sensor {
   private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
   private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
-  private SensorContext context;
+  private final AnnotationCheckFactory annotationCheckFactory;
+  private final ModuleFileSystem fileSystem;
   private AstScanner<Grammar> scanner;
-  private AnnotationCheckFactory annotationCheckFactory;
-  private ModuleFileSystem fileSystem;
+  private SensorContext context;
+  private Project project;
 
   public PHPSquidSensor(RulesProfile profile, ModuleFileSystem filesystem) {
     this.annotationCheckFactory = AnnotationCheckFactory.create(profile, CheckList.REPOSITORY_KEY, CheckList.getChecks());
@@ -68,12 +70,13 @@ public class PHPSquidSensor implements Sensor {
 
   @Override
   public boolean shouldExecuteOnProject(Project project) {
-    return Php.KEY.equals(project.getLanguageKey());
+    return !fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY)).isEmpty();
   }
 
   @Override
   public void analyse(Project project, SensorContext context) {
     this.context = context;
+    this.project = project;
 
     List<SquidAstVisitor<Grammar>> visitors = getCheckVisitors();
     this.scanner = PHPAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
@@ -82,10 +85,15 @@ public class PHPSquidSensor implements Sensor {
     save(scanner.getIndex().search(new QueryByType(SourceFile.class)));
   }
 
+  @VisibleForTesting
+  org.sonar.api.resources.File getSonarResource(File file) {
+    return org.sonar.api.resources.File.fromIOFile(file, project);
+  }
+
   private void save(Collection<SourceCode> squidSourceFiles) {
     for (SourceCode squidSourceFile : squidSourceFiles) {
       SourceFile squidFile = (SourceFile) squidSourceFile;
-      org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.fromIOFile(new java.io.File(squidFile.getKey()), fileSystem.sourceDirs());
+      org.sonar.api.resources.File sonarFile = getSonarResource(new java.io.File(squidFile.getKey()));
 
       saveFilesComplexityDistribution(sonarFile, squidFile);
       saveFunctionsComplexityDistribution(sonarFile, squidFile);

@@ -22,21 +22,6 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableList;
-import org.sonar.api.resources.InputFileUtils;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
-import org.sonar.plugins.php.api.Php;
-
-import java.io.File;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 public class MockUtils {
 
   public static final String PHPUNIT_REPORT_DIR = "/org/sonar/plugins/php/phpunit/sensor/";
@@ -44,29 +29,6 @@ public class MockUtils {
   public static final String PHPUNIT_COVERAGE_REPORT = PHPUNIT_REPORT_DIR + "phpunit.coverage.xml";
 
   private MockUtils() {
-  }
-
-  public static ModuleFileSystem newMockModuleFileSystem() {
-    ModuleFileSystem fs = mock(ModuleFileSystem.class);
-    when(fs.sourceCharset()).thenReturn(Charsets.UTF_8);
-    when(fs.files(any(FileQuery.class))).thenReturn(ImmutableList.of(new File("src/test/resources/PHPSquidSensor.php")));
-
-    return fs;
-  }
-
-  public static Project newMockPHPProject() {
-    Project project = mock(Project.class);
-    when(project.getLanguage()).thenReturn(new Php());
-    when(project.getLanguageKey()).thenReturn(Php.KEY);
-
-    return project;
-  }
-
-  public static Project newMockJavaProject() {
-    Project javaProject = mock(Project.class);
-    when(javaProject.getLanguageKey()).thenReturn("java");
-
-    return javaProject;
   }
 
 }

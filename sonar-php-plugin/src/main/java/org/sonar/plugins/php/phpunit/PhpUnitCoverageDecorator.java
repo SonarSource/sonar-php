@@ -48,7 +48,7 @@ public class PhpUnitCoverageDecorator implements Decorator {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return Php.KEY.equals(project.getLanguageKey());
+    return !project.getFileSystem().mainFiles(Php.KEY).isEmpty();
   }
 
   @DependedUpon

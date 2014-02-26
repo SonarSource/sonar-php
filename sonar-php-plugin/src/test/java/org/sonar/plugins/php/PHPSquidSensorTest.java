@@ -19,6 +19,8 @@
  */
 package org.sonar.plugins.php;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -27,37 +29,46 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
+import org.sonar.api.scan.filesystem.FileQuery;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PHPSquidSensorTest {
 
   private Project project;
+  private final ModuleFileSystem fileSystem = mock(ModuleFileSystem.class);
   private PHPSquidSensor sensor;
 
   @Before
   public void setUp() {
-    project = MockUtils.newMockPHPProject();
-    sensor = new PHPSquidSensor(mock(RulesProfile.class), MockUtils.newMockModuleFileSystem());
+    project = mock(Project.class);
+    sensor = spy(new PHPSquidSensor(mock(RulesProfile.class), fileSystem));
   }
 
   @Test
   public void shouldExecuteOnProject() {
-    Project javaProject = mock(Project.class);
-    when(javaProject.getLanguageKey()).thenReturn("java");
-    assertThat(sensor.shouldExecuteOnProject(javaProject), is(false));
+    when(fileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.<java.io.File>of());
+    assertThat(sensor.shouldExecuteOnProject(null), is(false));
 
-    assertThat(sensor.shouldExecuteOnProject(project), is(true));
+    when(fileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.of(new java.io.File("file.php")));
+    assertThat(sensor.shouldExecuteOnProject(null), is(true));
   }
 
   @Test
   public void analyse() {
+    doReturn(new File("file")).when(sensor).getSonarResource(any(java.io.File.class));
+
     SensorContext context = mock(SensorContext.class);
+    when(fileSystem.sourceCharset()).thenReturn(Charsets.UTF_8);
+    when(fileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.of(new java.io.File("src/test/resources/PHPSquidSensor.php")));
 
     sensor.analyse(project, context);
 

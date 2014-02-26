@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.DecoratorContext;
@@ -26,7 +27,9 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.File;
+import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.MockUtils;
 
 import java.util.Arrays;
@@ -55,8 +58,7 @@ public class PhpUnitCoverageDecoratorTest {
   @Before
   public void init() {
     file = new File("Foo");
-    project = MockUtils.newMockPHPProject();
-    ;
+    project = mock(Project.class);
     decorator = new PhpUnitCoverageDecorator();
   }
 
@@ -109,7 +111,13 @@ public class PhpUnitCoverageDecoratorTest {
 
   @Test
   public void testShouldExecuteOnProject() throws Exception {
+    ProjectFileSystem fileSystem = mock(ProjectFileSystem.class);
+    when(project.getFileSystem()).thenReturn(fileSystem);
+
+    when(fileSystem.mainFiles("php")).thenReturn(ImmutableList.<InputFile>of());
+    assertFalse(decorator.shouldExecuteOnProject(project));
+
+    when(fileSystem.mainFiles("php")).thenReturn(ImmutableList.<InputFile>of(mock(InputFile.class)));
     assertTrue(decorator.shouldExecuteOnProject(project));
-    assertFalse(decorator.shouldExecuteOnProject(MockUtils.newMockJavaProject()));
   }
 }

@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.core;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,15 +59,9 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(NoSonarAndCommentedOutLocSensor.class);
 
-  /**
-   *
-   */
   private final NoSonarFilter filter;
   private final ModuleFileSystem filesystem;
 
-  /**
-   * @param noSonarFilter
-   */
   public NoSonarAndCommentedOutLocSensor(ModuleFileSystem filesystem, NoSonarFilter noSonarFilter) {
     this.filter = noSonarFilter;
     this.filesystem = filesystem;
@@ -78,7 +73,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     List<File> sourceFiles = filesystem.files(FileQuery.onSource().onLanguage(Php.KEY));
     for (File file : sourceFiles) {
-      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(file, filesystem.sourceDirs());
+      org.sonar.api.resources.File phpFile = getSonarResource(project, file);
       if (phpFile != null) {
         Source source = analyseSourceCode(file);
         if (source != null) {
@@ -88,6 +83,11 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
         }
       }
     }
+  }
+
+  @VisibleForTesting
+  org.sonar.api.resources.File getSonarResource(Project project, File file) {
+    return org.sonar.api.resources.File.fromIOFile(file, project);
   }
 
   protected static Source analyseSourceCode(File file) {
@@ -111,7 +111,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return Php.KEY.equals(project.getLanguageKey());
+    return !filesystem.files(FileQuery.onSource().onLanguage(Php.KEY)).isEmpty();
   }
 
   /**

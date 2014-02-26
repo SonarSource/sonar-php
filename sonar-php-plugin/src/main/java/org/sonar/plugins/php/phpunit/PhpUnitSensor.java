@@ -47,7 +47,6 @@ public class PhpUnitSensor implements Sensor {
   private final ProjectFileSystem fileSystem;
 
   public PhpUnitSensor(ProjectFileSystem fileSystem, Settings settings, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
-    super();
     this.fileSystem = fileSystem;
     this.settings = settings;
     this.parser = parser;
@@ -93,7 +92,7 @@ public class PhpUnitSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return Php.KEY.equals(project.getLanguageKey());
+    return !fileSystem.mainFiles(Php.KEY).isEmpty();
   }
 
   /**

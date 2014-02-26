@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.core;
 
 import com.google.common.collect.ImmutableList;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
@@ -37,10 +38,13 @@ import org.sonar.test.TestUtils;
 import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,32 +58,35 @@ public class NoSonarAndCommentedOutLocSensorTest {
 
   @Before
   public void setUp() throws Exception {
-    File phpFile = TestUtils.getResource("/Mail.php");
     fs = mock(ModuleFileSystem.class);
-    when(fs.sourceDirs()).thenReturn(ImmutableList.of(phpFile.getParentFile()));
-    when(fs.files(any(FileQuery.class))).thenReturn(ImmutableList.of(TestUtils.getResource("/Mail.php"), new File("fake")));
-
     project = mock(Project.class);
-    when(project.getLanguageKey()).thenReturn(Php.KEY);
 
     noSonarFilter = new NoSonarFilter();
     context = mock(SensorContext.class);
-    sensor = new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter);
+    sensor = spy(new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter));
   }
 
   @Test
   public void testAnalyse() {
+    File phpFile = TestUtils.getResource("/Mail.php");
+    when(fs.sourceDirs()).thenReturn(ImmutableList.of(phpFile.getParentFile()));
+    when(fs.files(any(FileQuery.class))).thenReturn(ImmutableList.of(TestUtils.getResource("/Mail.php")));
+
+    org.sonar.api.resources.File sonarFile = new org.sonar.api.resources.File("Mail.php");
+    doReturn(sonarFile).when(sensor).getSonarResource(any(Project.class), any(File.class));
+
     sensor.analyse(project, context);
-    assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
     // Mail.php contains 9 commented oud code lines.
-    verify(context).saveMeasure(new org.sonar.api.resources.File("Mail.php"), CoreMetrics.COMMENTED_OUT_CODE_LINES, 9d);
+    verify(context).saveMeasure(sonarFile, CoreMetrics.COMMENTED_OUT_CODE_LINES, 9d);
   }
 
   @Test
   public void testShouldNotRunOnJavaProject() {
-    when(project.getLanguageKey()).thenReturn("java");
-    sensor.analyse(project, context);
-    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
+    when(fs.files(any(FileQuery.class))).thenReturn(ImmutableList.<java.io.File>of());
+    assertThat(sensor.shouldExecuteOnProject(null)).isFalse();
+
+    when(fs.files(any(FileQuery.class))).thenReturn(ImmutableList.of(new java.io.File("file.php")));
+    assertThat(sensor.shouldExecuteOnProject(null)).isTrue();
   }
 
   @Test

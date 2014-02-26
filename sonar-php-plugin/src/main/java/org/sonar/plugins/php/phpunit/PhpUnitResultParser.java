@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -116,8 +117,13 @@ public class PhpUnitResultParser implements BatchExtension {
    *
    * @param report the unit test report
    */
-  private Resource<?> getUnitTestResource(PhpUnitTestReport report) {
-    return org.sonar.api.resources.File.fromIOFile(new File(report.getFile()), fileSystem.testDirs());
+  private Resource getUnitTestResource(PhpUnitTestReport report) {
+    return getUnitTestResource(report.getFile());
+  }
+
+  @VisibleForTesting
+  Resource getUnitTestResource(String filename) {
+    return org.sonar.api.resources.File.fromIOFile(new File(filename), project);
   }
 
   /**
@@ -179,7 +185,7 @@ public class PhpUnitResultParser implements BatchExtension {
     if (!fileReport.isValid()) {
       return;
     }
-    Resource<?> unitTestResource = getUnitTestResource(fileReport);
+    Resource unitTestResource = getUnitTestResource(fileReport);
     if (unitTestResource != null) {
       double testsCount = fileReport.getTests() - fileReport.getSkipped();
       if (fileReport.getSkipped() > 0) {
@@ -225,7 +231,7 @@ public class PhpUnitResultParser implements BatchExtension {
       }
     }
     details.append("</tests-details>");
-    Resource<?> unitTestResource = getUnitTestResource(fileReport);
+    Resource unitTestResource = getUnitTestResource(fileReport);
     if (unitTestResource != null) {
       context.saveMeasure(unitTestResource, new Measure(CoreMetrics.TEST_DATA, details.toString()));
     }

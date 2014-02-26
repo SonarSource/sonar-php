@@ -19,12 +19,15 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
+import org.sonar.api.resources.InputFile;
+import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.MockUtils;
@@ -43,6 +46,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PhpUnitSensorTest {
+
+  private final ProjectFileSystem projectFileSystem = mock(ProjectFileSystem.class);
 
   @Mock
   private PhpUnitResultParser parser;
@@ -64,8 +69,8 @@ public class PhpUnitSensorTest {
     MockitoAnnotations.initMocks(this);
 
     settings = newSettings();
-    project = MockUtils.newMockPHPProject();
-    sensor = new PhpUnitSensor(mock(ProjectFileSystem.class), settings, parser, coverageParser);
+    project = mock(Project.class);
+    sensor = new PhpUnitSensor(projectFileSystem, settings, parser, coverageParser);
   }
 
   @Test
@@ -75,7 +80,10 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldExecuteOnProject() {
-    assertThat(sensor.shouldExecuteOnProject(MockUtils.newMockJavaProject())).isFalse();
+    when(projectFileSystem.mainFiles("php")).thenReturn(ImmutableList.<InputFile>of());
+    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
+
+    when(projectFileSystem.mainFiles("php")).thenReturn(ImmutableList.<InputFile>of(mock(InputFile.class)));
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
