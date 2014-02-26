@@ -19,34 +19,25 @@
  */
 package org.sonar.plugins.php.core;
 
-import org.sonar.api.resources.Project;
 import org.sonar.commonrules.api.CommonRulesEngine;
-import org.sonar.commonrules.api.CommonRulesEngineProvider;
+import org.sonar.commonrules.api.CommonRulesRepository;
 import org.sonar.plugins.php.api.Php;
 
-public class PhpCommonRulesEngineProvider extends CommonRulesEngineProvider {
+public class PhpCommonRulesEngine extends CommonRulesEngine {
 
-  public PhpCommonRulesEngineProvider() {
-    super();
-  }
-
-  public PhpCommonRulesEngineProvider(Project project) {
-    super(project);
+  public PhpCommonRulesEngine() {
+    super(Php.KEY);
   }
 
   @Override
-  protected void doActivation(CommonRulesEngine engine) {
-    engine.activateRule("InsufficientBranchCoverage");
-    engine.activateRule("InsufficientCommentDensity");
-    engine.activateRule("DuplicatedBlocks");
-    engine.activateRule("InsufficientLineCoverage");
-    engine.activateRule("FailedUnitTests");
-    engine.activateRule("SkippedUnitTests");
-  }
-
-  @Override
-  protected String getLanguageKey() {
-    return Php.KEY;
+  protected void doEnableRules(CommonRulesRepository repository) {
+    repository
+      .enableInsufficientLineCoverageRule(null)
+      .enableInsufficientBranchCoverageRule(null)
+      .enableInsufficientCommentDensityRule(null)
+      .enableDuplicatedBlocksRule()
+      .enableFailedUnitTestsRule()
+      .enableSkippedUnitTestsRule();
   }
 
 }
