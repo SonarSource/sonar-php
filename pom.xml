@@ -84,7 +84,7 @@
   </scm>
   <issueManagement>
     <system>JIRA</system>
-    <url>http://jira.codehaus.org/browse/SONARPLUGINS/component/13723</url>
+    <url>http://jira.codehaus.org/browse/SONARPHP</url>
   </issueManagement>
   <ciManagement>
     <system>Cloudbees</system>
