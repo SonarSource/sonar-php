@@ -38,7 +38,6 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S1131",
   priority = Priority.MAJOR)
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TrailingWhitespaceCheck extends SquidCheck<Grammar> implements CharsetAwareVisitor {
 
   private Charset charset;
