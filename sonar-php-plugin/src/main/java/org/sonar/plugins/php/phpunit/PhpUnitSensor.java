@@ -81,10 +81,10 @@ public class PhpUnitSensor implements Sensor {
           throw new SonarException("Report file is invalid, plugin will stop.", e);
         }
       } else {
-        LOGGER.info("PHPUnit xml " + msg + "report not found: " + reportPath);
+        LOGGER.info("PHPUnit xml " + msg + " report not found: " + reportPath);
       }
     } else {
-      LOGGER.info("No PHPUnit report provided (see '" + reportPathKey + "' property)");
+      LOGGER.info("No PHPUnit " + msg + " report provided (see '" + reportPathKey + "' property)");
     }
   }
 
