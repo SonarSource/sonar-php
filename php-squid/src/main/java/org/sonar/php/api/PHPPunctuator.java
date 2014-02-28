@@ -23,7 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
-public enum PHPPunctuator implements TokenType, GrammarRuleKey {
+public enum PHPPunctuator implements TokenType {
 
   ANDEQUAL("&="),
   CONCATEQUAL(".="),

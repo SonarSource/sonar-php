@@ -25,3 +25,8 @@ $var->{'user_' . $id};
   echo $a;
 }
 
+if (true) { // TODO false positive ?>
+html
+<?php }
+
+if (true) { ?> html <? } // NOK

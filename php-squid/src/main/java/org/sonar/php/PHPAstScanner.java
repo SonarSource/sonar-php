@@ -23,6 +23,7 @@ import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.CommentAnalyser;
 import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.api.Token;
 import com.sonar.sslr.impl.Parser;
 import com.sonar.sslr.squid.AstScanner;
 import com.sonar.sslr.squid.SourceCodeBuilderCallback;
@@ -36,6 +37,7 @@ import com.sonar.sslr.squid.metrics.LinesOfCodeVisitor;
 import com.sonar.sslr.squid.metrics.LinesVisitor;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.api.PHPMetric;
+import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPParser;
@@ -142,7 +144,14 @@ public class PHPAstScanner {
 
     /* Metrics */
     builder.withSquidAstVisitor(new LinesVisitor<Grammar>(PHPMetric.LINES));
-    builder.withSquidAstVisitor(new LinesOfCodeVisitor<Grammar>(PHPMetric.LINES_OF_CODE));
+    builder.withSquidAstVisitor(new LinesOfCodeVisitor<Grammar>(PHPMetric.LINES_OF_CODE) {
+      @Override
+      public void visitToken(Token token) {
+        if (token.getType() != PHPTagsChannel.INLINE_HTML) {
+          super.visitToken(token);
+        }
+      }
+    });
 
     builder.withSquidAstVisitor(new ComplexityVisitor());
     builder.withSquidAstVisitor(CommentsVisitor.<Grammar>builder().withCommentMetric(PHPMetric.COMMENT_LINES)

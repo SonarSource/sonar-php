@@ -23,13 +23,13 @@ import com.google.common.collect.Lists;
 import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.grammar.LexerfulGrammarBuilder;
 
 import java.util.List;
 
+import static com.sonar.sslr.api.GenericTokenType.IDENTIFIER;
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
 import static org.sonar.php.api.PHPKeyword.AS;
@@ -152,6 +152,7 @@ import static org.sonar.php.api.PHPPunctuator.XOR_EQU;
 import static org.sonar.php.api.PHPTokenType.HEREDOC;
 import static org.sonar.php.api.PHPTokenType.NUMERIC_LITERAL;
 import static org.sonar.php.api.PHPTokenType.STRING_LITERAL;
+import static org.sonar.php.api.PHPTokenType.VAR_IDENTIFIER;
 
 public enum PHPGrammar implements GrammarRuleKey {
 
@@ -333,19 +334,14 @@ public enum PHPGrammar implements GrammarRuleKey {
   ASSIGNMENT_LIST,
   FUNCTION_EXPRESSION,
   EXPRESSION,
-  KEYWORDS,
-  SPACING,
-  IDENTIFIER,
-  VAR_IDENTIFIER;
+  KEYWORDS;
 
   public static LexerfulGrammarBuilder create() {
     LexerfulGrammarBuilder b = LexerfulGrammarBuilder.create();
 
-    b.rule(COMPILATION_UNIT).is(b.optional(TOP_STATEMENT_LIST), SPACING, GenericTokenType.EOF);
+    b.rule(COMPILATION_UNIT).is(b.optional(TOP_STATEMENT_LIST), GenericTokenType.EOF);
 
-    lexical(b);
     keywords(b);
-    punctuators(b);
     declaration(b);
     statement(b);
     expression(b);
@@ -353,12 +349,6 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.setRootRule(COMPILATION_UNIT);
 
     return b;
-  }
-
-  private static void lexical(LexerfulGrammarBuilder b) {
-    b.rule(SPACING).is(b.zeroOrMore(PHPTagsChannel.CLOSING_TAG)).skip();
-    b.rule(IDENTIFIER).is(SPACING, GenericTokenType.IDENTIFIER).skip();
-    b.rule(VAR_IDENTIFIER).is(SPACING, PHPTokenType.VAR_IDENTIFIER).skip();
   }
 
   public static void expression(LexerfulGrammarBuilder b) {
@@ -432,7 +422,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(EXPRESSION, b.optional(DOUBLEARROW, b.firstOf(ALIAS_VARIABLE, EXPRESSION))),
       ALIAS_VARIABLE));
 
-    b.rule(COMMON_SCALAR).is(SPACING, b.firstOf(
+    b.rule(COMMON_SCALAR).is(b.firstOf(
       HEREDOC,
       NUMERIC_LITERAL,
       STRING_LITERAL,
@@ -449,7 +439,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(BOOLEAN_LITERAL).is(b.firstOf("TRUE", "FALSE"));
 
-    b.rule(CAST_TYPE).is(LPARENTHESIS, SPACING, b.firstOf("INTEGER", "INT", "DOUBLE", "FLOAT", "STRING", ARRAY, "OBJECT", "BOOLEAN", "BOOL", "BINARY", UNSET), RPARENTHESIS);
+    b.rule(CAST_TYPE).is(LPARENTHESIS, b.firstOf("INTEGER", "INT", "DOUBLE", "FLOAT", "STRING", ARRAY, "OBJECT", "BOOLEAN", "BOOL", "BINARY", UNSET), RPARENTHESIS);
 
     b.rule(POSTFIX_EXPR).is(b.firstOf( // TODO martin: to complete
       //YIELD, TODO martin: check
@@ -652,12 +642,12 @@ public enum PHPGrammar implements GrammarRuleKey {
       TRY_STATEMENT,
       DECLARE_STATEMENT,
       GOTO_STATEMENT,
-      // TODO martin: INLINE_HTML ?
+      PHPTagsChannel.INLINE_HTML,
       UNSET_VARIABLE_STATEMENT,
       EXPRESSION_STATEMENT
     ));
 
-    b.rule(EOS).is(b.firstOf(SEMICOLON, PHPTagsChannel.CLOSING_TAG)).skip();
+    b.rule(EOS).is(b.firstOf(SEMICOLON, PHPTagsChannel.INLINE_HTML)).skip();
 
     b.rule(EMPTY_STATEMENT).is(SEMICOLON);
 
@@ -766,22 +756,12 @@ public enum PHPGrammar implements GrammarRuleKey {
   }
 
   public static void keywords(LexerfulGrammarBuilder b) {
-    for (PHPKeyword k : PHPKeyword.values()) {
-      b.rule(k).is(SPACING, k.getValue().toUpperCase()).skip();
-    }
-
     List<PHPKeyword> keywords = Lists.newArrayList(PHPKeyword.values());
     Object[] rest = new Object[keywords.size() - 2];
     for (int i = 2; i < keywords.size(); i++) {
       rest[i - 2] = keywords.get(i);
     }
-    b.rule(KEYWORDS).is(SPACING, b.firstOf(keywords.get(0), keywords.get(1), rest));
-  }
-
-  private static void punctuators(LexerfulGrammarBuilder b) {
-    for (PHPPunctuator p : PHPPunctuator.values()) {
-      b.rule(p).is(SPACING, p.getValue()).skip();
-    }
+    b.rule(KEYWORDS).is(b.firstOf(keywords.get(0), keywords.get(1), rest));
   }
 
 }

@@ -43,7 +43,7 @@ public class CompilationUnitTest extends RuleTest {
       .matches("<?php ?> html <?php")
       .matches("<?php ?> html <?php ?> html")
 
-        // comment ends end of PHP block
+      // PHP closing tag ends comment
       .matches("<?php { // comment ?> <?php } ?>");
   }
 
