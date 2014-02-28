@@ -49,7 +49,7 @@ public class PHPTagsChannel extends Channel<Lexer> {
   };
 
   public static final String OPENING = "<\\?(php|=|)";
-  private static final String CLOSING = "\\?>";
+  public static final String CLOSING = "\\?>";
 
   private static final String START = "(?:(?!" + OPENING + ")[\\s\\S])*+(" + OPENING + ")?+";
   private static final String END = CLOSING + START;

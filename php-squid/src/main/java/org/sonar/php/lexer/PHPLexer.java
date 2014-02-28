@@ -55,10 +55,15 @@ public class PHPLexer {
   private static final String VAR_IDENTIFIER = VAR_IDENTIFIER_START + LABEL;
 
   // COMMENTS
-  public static final String SINGLE_LINE_COMMENT1 = "//[^\\n\\r]*+";
-  public static final String SINGLE_LINE_COMMENT2 = "#[^\\n\\r]*+";
-  public static final String MULTI_LINE_COMMENT = "/\\*[\\s\\S]*?\\*/";
-  public static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT1 + "|" + SINGLE_LINE_COMMENT2 + "|" + MULTI_LINE_COMMENT + ")";
+
+  /**
+   * The "one-line" comment styles only comment to the end of the line or the current block of PHP code, whichever comes first.
+   */
+  private static final String SINGLE_LINE_COMMENT_CONTENT = "(?:(?!" + PHPTagsChannel.CLOSING + ")[^\\n\\r])*+";
+  private static final String SINGLE_LINE_COMMENT1 = "//" + SINGLE_LINE_COMMENT_CONTENT;
+  private static final String SINGLE_LINE_COMMENT2 = "#" + SINGLE_LINE_COMMENT_CONTENT;
+  private static final String MULTI_LINE_COMMENT = "/\\*[\\s\\S]*?\\*/";
+  private static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT1 + "|" + SINGLE_LINE_COMMENT2 + "|" + MULTI_LINE_COMMENT + ")";
 
   // LITERALS
 
