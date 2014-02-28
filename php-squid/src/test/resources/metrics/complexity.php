@@ -9,7 +9,7 @@ function f2($p) {          // +1 function declaration
   }
 
   if ($a):                  // +1 alternative if statement
-     ;                      // +1 empty statement
+     ;                      // +0 empty statement
   endif;
 
   for (; ; ) {              // +1 for statement
