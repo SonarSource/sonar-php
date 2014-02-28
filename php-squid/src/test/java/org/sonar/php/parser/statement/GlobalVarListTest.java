@@ -34,7 +34,7 @@ public class GlobalVarListTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$a");
-      matches("$a, $a");
+    matches("$a");
+    matches("$a, $a");
   }
 }

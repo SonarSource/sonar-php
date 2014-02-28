@@ -33,6 +33,6 @@ public class UseStatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("use NS;");
+    matches("use NS;");
   }
 }

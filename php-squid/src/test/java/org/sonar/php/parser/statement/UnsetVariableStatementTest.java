@@ -33,6 +33,6 @@ public class UnsetVariableStatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("unset($a);");
+    matches("unset($a);");
   }
 }

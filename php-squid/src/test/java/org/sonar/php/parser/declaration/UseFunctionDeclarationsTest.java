@@ -33,7 +33,7 @@ public class UseFunctionDeclarationsTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("foo");
-      matches("foo, bar");
+    matches("foo");
+    matches("foo, bar");
   }
 }

@@ -33,7 +33,7 @@ public class TraitMethodReferenceTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("Foo");
-      matches("Foo::bar");
+    matches("Foo");
+    matches("Foo::bar");
   }
 }

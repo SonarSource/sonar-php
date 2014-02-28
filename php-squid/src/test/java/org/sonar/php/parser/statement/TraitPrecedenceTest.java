@@ -33,7 +33,7 @@ public class TraitPrecedenceTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("Foo::Bar insteadof Toto");
-      matches("Foo::Bar insteadof Toto, Tata");
+    matches("Foo::Bar insteadof Toto");
+    matches("Foo::Bar insteadof Toto, Tata");
   }
 }

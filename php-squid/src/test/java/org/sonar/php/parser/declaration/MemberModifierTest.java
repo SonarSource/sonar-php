@@ -34,12 +34,12 @@ public class MemberModifierTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("public");
-      matches("protected");
-      matches("private");
-      matches("static");
-      matches("abstract");
-      matches("final");
+    matches("public");
+    matches("protected");
+    matches("private");
+    matches("static");
+    matches("abstract");
+    matches("final");
 
   }
 }

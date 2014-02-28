@@ -34,6 +34,6 @@ public class ThrowStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("Throw $e;");
+    matches("Throw $e;");
   }
 }

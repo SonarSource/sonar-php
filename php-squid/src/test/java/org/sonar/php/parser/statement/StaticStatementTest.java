@@ -34,6 +34,6 @@ public class StaticStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("static $a;");
+    matches("static $a;");
   }
 }

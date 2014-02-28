@@ -34,7 +34,7 @@ public class ConstantDeclarationTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("A");
-      matches("A = 1");
+    matches("A");
+    matches("A = 1");
   }
 }

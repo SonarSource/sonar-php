@@ -34,14 +34,14 @@ public class ClassDeclarationTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("trait C {}");
+    matches("trait C {}");
 
-      matches("class C {}");
-      matches("abstract class C {}");
-      matches("final class C {}");
+    matches("class C {}");
+    matches("abstract class C {}");
+    matches("final class C {}");
 
-      matches("class C extends A {}");
-      matches("class C implements B {}");
-      matches("class C extends A implements B {}");
+    matches("class C extends A {}");
+    matches("class C implements B {}");
+    matches("class C extends A implements B {}");
   }
 }

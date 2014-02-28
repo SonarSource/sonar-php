@@ -34,8 +34,8 @@ public class EchoStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("echo \"Hello World!\";");
-      matches("echo $a;");
-      matches("echo $a, $b;");
+    matches("echo \"Hello World!\";");
+    matches("echo $a;");
+    matches("echo $a, $b;");
   }
 }

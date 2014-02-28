@@ -33,7 +33,7 @@ public class YieldExpressionTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("yield $a");
-      matches("yield $a=>$b");
+    matches("yield $a");
+    matches("yield $a=>$b");
   }
 }

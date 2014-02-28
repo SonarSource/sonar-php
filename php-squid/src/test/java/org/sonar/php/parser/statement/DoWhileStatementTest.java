@@ -34,6 +34,6 @@ public class DoWhileStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("do {} while(a);");
+    matches("do {} while(a);");
   }
 }

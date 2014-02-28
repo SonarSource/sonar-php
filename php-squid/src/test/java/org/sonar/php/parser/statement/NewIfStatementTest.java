@@ -34,9 +34,9 @@ public class NewIfStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("if ($a): endif;");
-      matches("if ($a): elseif (a): endif;");
-      matches("if ($a): elseif (a): else: endif;");
-      matches("if ($a): else: endif;");
+    matches("if ($a): endif;");
+    matches("if ($a): elseif (a): endif;");
+    matches("if ($a): elseif (a): else: endif;");
+    matches("if ($a): else: endif;");
   }
 }

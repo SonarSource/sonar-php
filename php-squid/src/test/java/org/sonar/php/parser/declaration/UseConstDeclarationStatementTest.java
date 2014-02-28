@@ -33,6 +33,6 @@ public class UseConstDeclarationStatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("use const FOO;");
+    matches("use const FOO;");
   }
 }

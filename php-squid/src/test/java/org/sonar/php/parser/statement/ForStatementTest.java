@@ -34,8 +34,8 @@ public class ForStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("for ($i = 1; $i <= a; $i++) {}");
-      matches("for ($i = 1; ; $i++) {}");
-      matches("for (; ; ) {}");
+    matches("for ($i = 1; $i <= a; $i++) {}");
+    matches("for ($i = 1; ; $i++) {}");
+    matches("for (; ; ) {}");
   }
 }

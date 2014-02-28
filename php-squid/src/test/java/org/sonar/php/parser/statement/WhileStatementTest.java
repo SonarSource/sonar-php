@@ -33,7 +33,7 @@ public class WhileStatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("while ($a) {}");
-      matches("while ($a): endwhile;");
+    matches("while ($a) {}");
+    matches("while ($a): endwhile;");
   }
 }

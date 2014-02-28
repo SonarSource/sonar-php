@@ -34,8 +34,8 @@ public class ClassNameTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("static");
-      matches("Foo");
+    matches("static");
+    matches("Foo");
 
   }
 }

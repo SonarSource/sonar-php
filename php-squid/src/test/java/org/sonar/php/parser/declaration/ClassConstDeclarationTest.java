@@ -34,7 +34,7 @@ public class ClassConstDeclarationTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("const A;");
-      matches("const A, B;");
+    matches("const A;");
+    matches("const A, B;");
   }
 }

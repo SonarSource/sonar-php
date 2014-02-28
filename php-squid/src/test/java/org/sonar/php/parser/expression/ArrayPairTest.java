@@ -34,8 +34,8 @@ public class ArrayPairTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("&$a");
-      matches("$a=>$b");
-      matches("$a=>&$b");
+    matches("&$a");
+    matches("$a=>$b");
+    matches("$a=>&$b");
   }
 }

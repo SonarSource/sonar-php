@@ -33,9 +33,9 @@ public class FullyQualifiedClassNameTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("namespace\\NS");
-      matches("NS");
+    matches("namespace\\NS");
+    matches("NS");
 
-      notMatches("namespace\\\\NS");
+    notMatches("namespace\\\\NS");
   }
 }

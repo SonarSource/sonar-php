@@ -34,8 +34,8 @@ public class LogicalOrExpressionTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$a");
-      matches("$a || $a");
-      matches("$a or $a");
+    matches("$a");
+    matches("$a || $a");
+    matches("$a or $a");
   }
 }

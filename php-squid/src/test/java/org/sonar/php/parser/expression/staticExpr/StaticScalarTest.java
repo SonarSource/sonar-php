@@ -33,7 +33,7 @@ public class StaticScalarTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("Foo");
-      matches("array()");
+    matches("Foo");
+    matches("array()");
   }
 }

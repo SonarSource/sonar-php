@@ -34,9 +34,9 @@ public class ObjectDimListTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("foo");
-      matches("foo[\"foo\"]");
-      matches("foo[$a]{\"foo\"}");
-      matches("foo[$a]{\"foo\"}[$b]");
+    matches("foo");
+    matches("foo[\"foo\"]");
+    matches("foo[$a]{\"foo\"}");
+    matches("foo[$a]{\"foo\"}[$b]");
   }
 }

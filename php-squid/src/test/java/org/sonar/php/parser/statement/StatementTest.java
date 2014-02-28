@@ -33,20 +33,20 @@ public class StatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("{}");
-      matches("label:");
-      matches("if ($a): endif;");
-      matches("while($a) {}");
-      matches("for ($i = 1; $i <= 10; $i++) {}");
-      matches("switch ($a) {}");
-      matches("break;");
-      matches("continue;");
-      matches("return;");
-      matches(";");
-      matches("yield $a;");
-      matches("global $a;");
-      matches("echo \"Hi\";");
-      matches("unset($a);");
+    matches("{}");
+    matches("label:");
+    matches("if ($a): endif;");
+    matches("while($a) {}");
+    matches("for ($i = 1; $i <= 10; $i++) {}");
+    matches("switch ($a) {}");
+    matches("break;");
+    matches("continue;");
+    matches("return;");
+    matches(";");
+    matches("yield $a;");
+    matches("global $a;");
+    matches("echo \"Hi\";");
+    matches("unset($a);");
   }
 
   @Test

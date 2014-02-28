@@ -34,10 +34,10 @@ public class IfStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("if ($a) {}");
-      matches("if ($a) {} elseif ($a) {}");
-      matches("if ($a) {} elseif ($a) {} else {}");
-      matches("if ($a) {} else {}");
-      matches("if ($a) ; else ;");
+    matches("if ($a) {}");
+    matches("if ($a) {} elseif ($a) {}");
+    matches("if ($a) {} elseif ($a) {} else {}");
+    matches("if ($a) {} else {}");
+    matches("if ($a) ; else ;");
   }
 }

@@ -34,7 +34,7 @@ public class ForExprTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$i = 1");
-      matches("$i = 1, $j = 1");
+    matches("$i = 1");
+    matches("$i = 1, $j = 1");
   }
 }

@@ -34,8 +34,8 @@ public class ClassStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("var $a;");
-      matches("const A;");
-      matches("private function f() {}");
+    matches("var $a;");
+    matches("const A;");
+    matches("private function f() {}");
   }
 }

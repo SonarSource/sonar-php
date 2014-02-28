@@ -33,9 +33,8 @@ public class TraitAliasTest extends RuleTest {
 
   @Test
   public void test() {
-
-      matches("Foo as bar");
-      matches("Foo as protected bar");
-      matches("Foo as private");
+    matches("Foo as bar");
+    matches("Foo as protected bar");
+    matches("Foo as private");
   }
 }

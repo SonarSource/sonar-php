@@ -34,8 +34,8 @@ public class CaseClauseTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("case $a:");
-      matches("case $a;");
-      matches("case $a: exit;");
+    matches("case $a:");
+    matches("case $a;");
+    matches("case $a: exit;");
   }
 }

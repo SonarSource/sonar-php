@@ -33,10 +33,10 @@ public class ReferenceVariableTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("$a");
-      matches("$a[$b]");
-      matches("$a{\"foo\"}[$a]");
-      matches("$a{\"foo\"}{\"foo\"}");
+    matches("$a");
+    matches("$a[$b]");
+    matches("$a{\"foo\"}[$a]");
+    matches("$a{\"foo\"}{\"foo\"}");
 
   }
 }

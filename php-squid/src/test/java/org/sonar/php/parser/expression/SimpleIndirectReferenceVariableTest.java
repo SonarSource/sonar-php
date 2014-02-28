@@ -33,8 +33,8 @@ public class SimpleIndirectReferenceVariableTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("$");
-      matches("$$$$$");
+    matches("$");
+    matches("$$$$$");
 
   }
 }

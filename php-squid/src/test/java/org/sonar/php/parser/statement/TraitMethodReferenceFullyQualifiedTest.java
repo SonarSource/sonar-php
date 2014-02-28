@@ -33,6 +33,6 @@ public class TraitMethodReferenceFullyQualifiedTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("Foo::bar");
+    matches("Foo::bar");
   }
 }

@@ -33,7 +33,7 @@ public class UseDeclarationsTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("NS");
-      matches("NS, NS, NS");
+    matches("NS");
+    matches("NS, NS, NS");
   }
 }

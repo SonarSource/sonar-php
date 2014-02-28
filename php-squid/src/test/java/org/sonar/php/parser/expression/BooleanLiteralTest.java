@@ -34,9 +34,9 @@ public class BooleanLiteralTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("true");
-      matches("TRUE");
-      matches("false");
-      matches("FALSE");
+    matches("true");
+    matches("TRUE");
+    matches("false");
+    matches("FALSE");
   }
 }

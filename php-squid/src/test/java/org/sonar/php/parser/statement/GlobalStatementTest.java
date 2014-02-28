@@ -34,6 +34,6 @@ public class GlobalStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("global $a;");
+    matches("global $a;");
   }
 }

@@ -34,14 +34,14 @@ public class InternalFunctionTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("isset ($a, $b)");
-      matches("empty ($a)");
-      matches("include $a");
-      matches("include $a");
-      matches("include_once $a");
-      matches("require $a");
-      matches("require_once $a");
-      matches("clone $a");
-      matches("print $a");
+    matches("isset ($a, $b)");
+    matches("empty ($a)");
+    matches("include $a");
+    matches("include $a");
+    matches("include_once $a");
+    matches("require $a");
+    matches("require_once $a");
+    matches("clone $a");
+    matches("print $a");
   }
 }

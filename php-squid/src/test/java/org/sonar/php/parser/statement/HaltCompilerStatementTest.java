@@ -34,6 +34,6 @@ public class HaltCompilerStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("__halt_compiler ();");
+    matches("__halt_compiler ();");
   }
 }

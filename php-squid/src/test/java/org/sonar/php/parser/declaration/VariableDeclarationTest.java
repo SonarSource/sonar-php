@@ -33,7 +33,7 @@ public class VariableDeclarationTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("$a");
-      matches("$a = 1");
+    matches("$a");
+    matches("$a = 1");
   }
 }

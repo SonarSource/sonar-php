@@ -34,7 +34,7 @@ public class CombinedScalarTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("array()");
-      matches("[]");
+    matches("array()");
+    matches("[]");
   }
 }

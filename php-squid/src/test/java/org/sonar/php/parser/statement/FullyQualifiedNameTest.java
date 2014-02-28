@@ -33,10 +33,10 @@ public class FullyQualifiedNameTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("\\Foor");
-      matches("\\Foo\\Bar");
+    matches("\\Foor");
+    matches("\\Foo\\Bar");
 
-      notMatches("Foo\\Bar");
-      notMatches("\\Foo\\");
+    notMatches("Foo\\Bar");
+    notMatches("\\Foo\\");
   }
 }

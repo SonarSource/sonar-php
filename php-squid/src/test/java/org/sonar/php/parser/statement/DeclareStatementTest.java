@@ -34,8 +34,8 @@ public class DeclareStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("declare (a);");
-      matches("declare (a) {}");
-      matches("declare (a): enddeclare;");
+    matches("declare (a);");
+    matches("declare (a) {}");
+    matches("declare (a): enddeclare;");
   }
 }

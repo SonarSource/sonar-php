@@ -34,7 +34,7 @@ public class ClassVariableDeclarationTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("var $a;");
-      matches("var $a, $b;");
+    matches("var $a;");
+    matches("var $a, $b;");
   }
 }

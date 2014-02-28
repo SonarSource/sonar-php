@@ -34,8 +34,8 @@ public class LogicalAndExpressionTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$a");
-      matches("$a && $a");
-      matches("$a and $a");
+    matches("$a");
+    matches("$a && $a");
+    matches("$a and $a");
   }
 }

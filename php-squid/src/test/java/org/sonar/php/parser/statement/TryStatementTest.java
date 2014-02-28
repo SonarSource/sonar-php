@@ -33,9 +33,9 @@ public class TryStatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("try {}");
-      matches("try {} finally {}");
-      matches("try {} catch(Exception $e) {}");
-      matches("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}");
+    matches("try {}");
+    matches("try {} finally {}");
+    matches("try {} catch(Exception $e) {}");
+    matches("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}");
   }
 }

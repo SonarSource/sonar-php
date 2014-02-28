@@ -33,11 +33,11 @@ public class NamespaceStatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("namespace NS;");
-      matches("namespace NS {}");
-      matches("namespace {}");
+    matches("namespace NS;");
+    matches("namespace NS {}");
+    matches("namespace {}");
 
-      matches("namespace NS\\SubLevel;");
-      notMatches("namespace;");
+    matches("namespace NS\\SubLevel;");
+    notMatches("namespace;");
   }
 }

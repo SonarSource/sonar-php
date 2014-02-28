@@ -33,13 +33,13 @@ public class UnaryExprTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("$a");
-      matches("+ $a");
-      matches("- $a");
-      matches("~ $a");
-      matches("! $a");
-      matches("@ $a");
-      matches("(int) $a");
+    matches("$a");
+    matches("+ $a");
+    matches("- $a");
+    matches("~ $a");
+    matches("! $a");
+    matches("@ $a");
+    matches("(int) $a");
 
   }
 }

@@ -34,8 +34,8 @@ public class InterfaceDeclarationTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("interface I {}");
-      matches("interface I extends A {}");
-      matches("interface I extends A, B {}");
+    matches("interface I {}");
+    matches("interface I extends A {}");
+    matches("interface I extends A, B {}");
   }
 }

@@ -34,8 +34,8 @@ public class NewExprTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("new Foo");
-      matches("new Foo ()");
+    matches("new Foo");
+    matches("new Foo ()");
 
   }
 }

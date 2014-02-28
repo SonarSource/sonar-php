@@ -34,9 +34,9 @@ public class TraitAdaptationsTest extends RuleTest {
   @Test
   public void test() {
 
-      matches(";");
-      matches("{}");
-      matches("{Foo::Bar insteadof Toto;}");
-      matches("{Foo::Bar insteadof Toto; Foo as protected;}");
+    matches(";");
+    matches("{}");
+    matches("{Foo::Bar insteadof Toto;}");
+    matches("{Foo::Bar insteadof Toto; Foo as protected;}");
   }
 }

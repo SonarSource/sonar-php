@@ -34,7 +34,7 @@ public class LexicalVarsTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("use ($a)");
-      matches("use ($a, $b)");
+    matches("use ($a)");
+    matches("use ($a, $b)");
   }
 }

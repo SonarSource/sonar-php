@@ -34,7 +34,7 @@ public class BaseVariableTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$a");
-      matches("Foo::$a");
+    matches("$a");
+    matches("Foo::$a");
   }
 }

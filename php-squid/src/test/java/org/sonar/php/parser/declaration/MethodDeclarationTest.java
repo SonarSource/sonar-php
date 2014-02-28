@@ -34,10 +34,10 @@ public class MethodDeclarationTest extends RuleTest {
   @Test
   public void test() throws Exception {
 
-      matches("function f ();");
-      matches("function f () {}");
-      matches("function &f () {}");
-      matches("public function f () {}");
+    matches("function f ();");
+    matches("function f () {}");
+    matches("function &f () {}");
+    matches("public function f () {}");
   }
 
   @Test

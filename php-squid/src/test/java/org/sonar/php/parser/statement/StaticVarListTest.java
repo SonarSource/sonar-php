@@ -33,9 +33,8 @@ public class StaticVarListTest extends RuleTest {
 
   @Test
   public void test() {
-
-      matches("$a");
-      matches("$a = 0");
-      matches("$a, $b");
+    matches("$a");
+    matches("$a = 0");
+    matches("$a, $b");
   }
 }

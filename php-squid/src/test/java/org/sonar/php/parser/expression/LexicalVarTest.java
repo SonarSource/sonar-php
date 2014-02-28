@@ -34,7 +34,7 @@ public class LexicalVarTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$a");
-      matches("&$a");
+    matches("$a");
+    matches("&$a");
   }
 }

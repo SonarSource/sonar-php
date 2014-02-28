@@ -33,6 +33,6 @@ public class TraitUseStatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("use Foo,Bar;");
+    matches("use Foo,Bar;");
   }
 }

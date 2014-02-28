@@ -34,23 +34,23 @@ public class AssignmentExprTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$a");
-      matches("$a = $b");
-      matches("$a *= $b");
-      matches("$a /= $b");
-      matches("$a %= $b");
-      matches("$a += $b");
-      matches("$a -= $b");
-      matches("$a <<= $b");
-      matches("$a >>= $b");
-      matches("$a &= $b");
-      matches("$a ^= $b");
-      matches("$a |= $b");
-      matches("$a -= $b");
-      matches("$a -= $b");
+    matches("$a");
+    matches("$a = $b");
+    matches("$a *= $b");
+    matches("$a /= $b");
+    matches("$a %= $b");
+    matches("$a += $b");
+    matches("$a -= $b");
+    matches("$a <<= $b");
+    matches("$a >>= $b");
+    matches("$a &= $b");
+    matches("$a ^= $b");
+    matches("$a |= $b");
+    matches("$a -= $b");
+    matches("$a -= $b");
 
-      matches("$a = &$b");
-      matches("$a = &new Foo")
+    matches("$a = &$b");
+    matches("$a = &new Foo")
     ;
   }
 }

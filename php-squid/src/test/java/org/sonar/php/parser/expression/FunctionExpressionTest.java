@@ -34,8 +34,8 @@ public class FunctionExpressionTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("function () {}");
-      matches("function &() {}");
-      matches("function () use ($a) {}");
+    matches("function () {}");
+    matches("function &() {}");
+    matches("function () use ($a) {}");
   }
 }

@@ -34,7 +34,7 @@ public class ImplementsListTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("implements A");
-      matches("implements A, B");
+    matches("implements A");
+    matches("implements A, B");
   }
 }

@@ -34,8 +34,8 @@ public class FunctionDeclarationTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("function f() {}");
-      matches("function &f() {}");
+    matches("function f() {}");
+    matches("function &f() {}");
 
   }
 }

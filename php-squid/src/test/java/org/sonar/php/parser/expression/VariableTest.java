@@ -33,29 +33,29 @@ public class VariableTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("f()->$a");
+    matches("f()->$a");
 
-      matches("a");
-      matches("$a");
+    matches("a");
+    matches("$a");
 
-      matches("$a[]");
-      matches("$a()");
+    matches("$a[]");
+    matches("$a()");
 
-      matches("$a->b");
-      matches("$a->b()");
+    matches("$a->b");
+    matches("$a->b()");
 
-      matches("$a::b()");
-      matches("Foo::$a");
+    matches("$a::b()");
+    matches("Foo::$a");
 
-      matches("$a->$b[$c]{'d'}");
+    matches("$a->$b[$c]{'d'}");
 
-      matches("$$a");
-      matches("${'a'}");
-      matches("$a{'a'}");
-      matches("$a[$b]");
+    matches("$$a");
+    matches("${'a'}");
+    matches("$a{'a'}");
+    matches("$a[$b]");
 
-      matches("$a->{'b'}");
+    matches("$a->{'b'}");
 
-      matches("A::class");
+    matches("A::class");
   }
 }

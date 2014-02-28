@@ -34,7 +34,7 @@ public class DefaultClauseTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("default: break;");
-      matches("default: $a++; break;");
+    matches("default: break;");
+    matches("default: $a++; break;");
   }
 }

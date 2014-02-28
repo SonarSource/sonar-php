@@ -33,12 +33,12 @@ public class ParameterTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("callable $a");
-      matches("array $a");
-      matches("Foo $a");
+    matches("callable $a");
+    matches("array $a");
+    matches("Foo $a");
 
-      matches("&$a");
-      matches("...$a");
-      matches("$a = \"foo\"");
+    matches("&$a");
+    matches("...$a");
+    matches("$a = \"foo\"");
   }
 }

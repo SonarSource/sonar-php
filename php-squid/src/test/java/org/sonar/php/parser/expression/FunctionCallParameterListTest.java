@@ -34,7 +34,8 @@ public class FunctionCallParameterListTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("()");;
-      //matches("(yield $a;)"); // TODO: complete with non_empty_function_call_parameter_list
+    matches("()");
+    ;
+    //matches("(yield $a;)"); // TODO: complete with non_empty_function_call_parameter_list
   }
 }

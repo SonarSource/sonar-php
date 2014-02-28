@@ -34,6 +34,6 @@ public class ContinueStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("continue;"); // TODO: complete when expr complete
+    matches("continue;"); // TODO: complete when expr complete
   }
 }

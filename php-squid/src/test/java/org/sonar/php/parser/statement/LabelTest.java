@@ -34,6 +34,6 @@ public class LabelTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("myLabel :");
+    matches("myLabel :");
   }
 }

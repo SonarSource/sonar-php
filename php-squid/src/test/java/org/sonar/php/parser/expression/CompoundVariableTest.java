@@ -34,7 +34,7 @@ public class CompoundVariableTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$a");
-      matches("${\"foo\"}");
+    matches("$a");
+    matches("${\"foo\"}");
   }
 }

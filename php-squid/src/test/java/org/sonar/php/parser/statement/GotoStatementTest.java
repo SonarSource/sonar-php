@@ -34,6 +34,6 @@ public class GotoStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("goto label;");
+    matches("goto label;");
   }
 }

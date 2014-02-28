@@ -34,7 +34,7 @@ public class DimensionalOffsetTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("[]");
-      matches("[$a]");
+    matches("[]");
+    matches("[$a]");
   }
 }

@@ -33,9 +33,9 @@ public class QualifiedNameTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("Foo\\Bar");
-      matches("Foo\\Bar\\SubFoo");
-      notMatches("\\Foo");
-      notMatches("Foo\\");
+    matches("Foo\\Bar");
+    matches("Foo\\Bar\\SubFoo");
+    notMatches("\\Foo");
+    notMatches("Foo\\");
   }
 }

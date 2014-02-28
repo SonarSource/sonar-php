@@ -34,8 +34,8 @@ public class ForeachStatementTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("foreach ($a as $b) {}");
-      matches("foreach ($a as $b) ;");
-      matches("foreach ($a as $b => $c) {}");
+    matches("foreach ($a as $b) {}");
+    matches("foreach ($a as $b) ;");
+    matches("foreach ($a as $b => $c) {}");
   }
 }

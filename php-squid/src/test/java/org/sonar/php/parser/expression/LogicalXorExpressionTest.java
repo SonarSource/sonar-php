@@ -34,7 +34,8 @@ public class LogicalXorExpressionTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("$a");
-      matches("$a xor $a");;
+    matches("$a");
+    matches("$a xor $a");
+    ;
   }
 }

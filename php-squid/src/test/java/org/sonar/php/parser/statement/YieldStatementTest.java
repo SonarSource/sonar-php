@@ -33,6 +33,6 @@ public class YieldStatementTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("yield $a;");
+    matches("yield $a;");
   }
 }

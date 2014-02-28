@@ -33,7 +33,7 @@ public class VariableNameTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("foo");
-      matches("{\"foo\"}");
+    matches("foo");
+    matches("{\"foo\"}");
   }
 }

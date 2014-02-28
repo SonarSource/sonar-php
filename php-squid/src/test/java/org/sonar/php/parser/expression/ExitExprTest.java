@@ -34,7 +34,7 @@ public class ExitExprTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("exit (0)");
-      matches("die ('Error')");
+    matches("exit (0)");
+    matches("die ('Error')");
   }
 }

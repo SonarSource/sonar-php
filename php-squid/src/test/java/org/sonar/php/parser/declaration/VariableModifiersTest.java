@@ -33,8 +33,8 @@ public class VariableModifiersTest extends RuleTest {
 
   @Test
   public void test() {
-      matches("var");
-      matches("protected");
-      matches("protected final");
+    matches("var");
+    matches("protected");
+    matches("protected final");
   }
 }

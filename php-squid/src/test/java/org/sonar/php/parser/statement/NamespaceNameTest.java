@@ -34,8 +34,8 @@ public class NamespaceNameTest extends RuleTest {
   @Test
   public void test() {
 
-      matches("NS");
-      matches("NS\\Sub");
-      matches("\\NS");
+    matches("NS");
+    matches("NS\\Sub");
+    matches("\\NS");
   }
 }
