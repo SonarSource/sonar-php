@@ -39,7 +39,7 @@ public class PhpConfigurationModel extends AbstractConfigurationModel {
   }
 
   @Override
-  public Parser<? extends Grammar> doGetParser() {
+  public Parser doGetParser() {
     return PHPParser.create(new PHPConfiguration(Charsets.UTF_8));
   }
 

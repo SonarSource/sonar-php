@@ -451,8 +451,8 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(CAST_TYPE).is(LPARENTHESIS, SPACING, b.firstOf("INTEGER", "INT", "DOUBLE", "FLOAT", "STRING", ARRAY, "OBJECT", "BOOLEAN", "BOOL", "BINARY", UNSET), RPARENTHESIS);
 
-    b.rule(POSTFIX_EXPR).is(b.firstOf( // TODO: to complete
-      //YIELD, TODO: check
+    b.rule(POSTFIX_EXPR).is(b.firstOf( // TODO martin: to complete
+      //YIELD, TODO martin: check
       COMBINED_SCALAR_OFFSET,
       FUNCTION_EXPRESSION,
       COMMON_SCALAR,
@@ -497,7 +497,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       CLASS_NAME));
 
     // Unary expression
-    b.rule(UNARY_EXPR).is(b.firstOf(  // TODO: re-arrange & complete
+    b.rule(UNARY_EXPR).is(b.firstOf(  // TODO martin: re-arrange & complete
       b.sequence(b.firstOf(INC, DEC), POSTFIX_EXPR),
       b.sequence(b.firstOf(PLUS, MINUS, TILDA, BANG), UNARY_EXPR),
       b.sequence(PHPPunctuator.AT, POSTFIX_EXPR),
@@ -538,7 +538,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
   public static void declaration(LexerfulGrammarBuilder b) {
     b.rule(USE_CONST_DECLARATION_STATEMENT).is(USE, CONST, USE_FUNCTION_DECLARATIONS, EOS);
-    b.rule(USE_FUNCTION_DECLARATION_STATEMENT).is(USE, FUNCTION, USE_FUNCTION_DECLARATIONS, EOS); // TODO: to check
+    b.rule(USE_FUNCTION_DECLARATION_STATEMENT).is(USE, FUNCTION, USE_FUNCTION_DECLARATIONS, EOS); // TODO martin: to check
     b.rule(USE_FUNCTION_DECLARATIONS).is(USE_FUNCTION_DECLARATION, b.zeroOrMore(COMMA, USE_FUNCTION_DECLARATION));
     b.rule(USE_FUNCTION_DECLARATION).is(NAMESPACE_NAME, b.optional(AS, IDENTIFIER));
 
@@ -652,7 +652,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       TRY_STATEMENT,
       DECLARE_STATEMENT,
       GOTO_STATEMENT,
-      // TODO: INLINE_HTML ?
+      // TODO martin: INLINE_HTML ?
       UNSET_VARIABLE_STATEMENT,
       EXPRESSION_STATEMENT
     ));
