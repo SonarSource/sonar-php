@@ -42,6 +42,8 @@ public class CommonScalarTest extends RuleTest {
       matches("\"foo\"");
       matches("'foo'");
 
+    matches("`foo`");
+
       matches("true");
 
       matches("null");

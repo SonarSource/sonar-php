@@ -67,10 +67,13 @@ public class PHPLexer {
 
   // LITERALS
 
+  private static final String EXECUTION_OPERATOR = "`[^`]*+`";
+
   // String
   public static final String STRING_LITERAL = "(?:"
     + "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\""
     + "|'([^'\\\\]*+(\\\\[\\s\\S])?+)*+'"
+    + "|" + EXECUTION_OPERATOR
     + ")";
 
   // Integer
