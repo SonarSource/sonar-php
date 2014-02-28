@@ -39,4 +39,11 @@ public class MethodDeclarationTest extends RuleTest {
       matches("function &f () {}");
       matches("public function f () {}");
   }
+
+  @Test
+  public void optional_semicolon() {
+    matches("function fun() ?>");
+    notMatches("function fun() ?> <?php {}");
+  }
+
 }
