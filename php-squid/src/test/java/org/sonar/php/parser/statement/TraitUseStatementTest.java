@@ -28,7 +28,7 @@ public class TraitUseStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.TRAIT_USE_STATEMENT));
+    setRootRule(PHPGrammar.TRAIT_USE_STATEMENT);
   }
 
   @Test

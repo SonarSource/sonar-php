@@ -28,7 +28,7 @@ public class ConcatenationExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.CONCATENATION_EXPR));
+    setRootRule(PHPGrammar.CONCATENATION_EXPR);
   }
 
   @Test

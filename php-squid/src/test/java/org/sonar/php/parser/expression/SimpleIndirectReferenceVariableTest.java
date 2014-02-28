@@ -28,7 +28,7 @@ public class SimpleIndirectReferenceVariableTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.SIMPLE_INDIRECT_REFERENCE));
+    setRootRule(PHPGrammar.SIMPLE_INDIRECT_REFERENCE);
   }
 
   @Test

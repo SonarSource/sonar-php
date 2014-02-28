@@ -28,7 +28,7 @@ public class GlobalVarListTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.GLOBAL_VAR_LIST));
+    setRootRule(PHPGrammar.GLOBAL_VAR_LIST);
   }
 
   @Test

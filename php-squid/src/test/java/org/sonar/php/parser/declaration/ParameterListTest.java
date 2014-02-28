@@ -28,7 +28,7 @@ public class ParameterListTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.PARAMETER_LIST));
+    setRootRule(PHPGrammar.PARAMETER_LIST);
   }
 
   @Test

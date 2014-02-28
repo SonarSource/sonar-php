@@ -28,7 +28,7 @@ public class BreakStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BREAK_STATEMENT));
+    setRootRule(PHPGrammar.BREAK_STATEMENT);
   }
 
   @Test

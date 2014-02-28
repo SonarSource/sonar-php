@@ -28,7 +28,7 @@ public class RelationalExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.RELATIONAL_EXPR));
+    setRootRule(PHPGrammar.RELATIONAL_EXPR);
   }
 
   @Test

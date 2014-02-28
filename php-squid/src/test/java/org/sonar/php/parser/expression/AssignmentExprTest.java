@@ -28,7 +28,7 @@ public class AssignmentExprTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.ASSIGNMENT_EXPR));
+    setRootRule(PHPGrammar.ASSIGNMENT_EXPR);
   }
 
   @Test

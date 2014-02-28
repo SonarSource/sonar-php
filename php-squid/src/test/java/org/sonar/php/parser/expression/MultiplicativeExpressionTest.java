@@ -28,7 +28,7 @@ public class MultiplicativeExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.MULTIPLICATIVE_EXPR));
+    setRootRule(PHPGrammar.MULTIPLICATIVE_EXPR);
   }
 
   @Test

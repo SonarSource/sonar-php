@@ -28,7 +28,7 @@ public class GlobalStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.GLOBAL_STATEMENT));
+    setRootRule(PHPGrammar.GLOBAL_STATEMENT);
   }
 
   @Test

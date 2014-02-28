@@ -50,9 +50,12 @@ public class PHPLexer {
     + "|<<<([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
 
   // IDENTIFIERS
-  private static final String LABEL = "[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*";
+  private static final String IDENTIFIER_START = "[a-zA-Z_\\x7f-\\xff]";
+  private static final String IDENTIFIER_PART = "[" + IDENTIFIER_START + "[0-9]]";
+  private static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*";
+
   private static final String VAR_IDENTIFIER_START = "\\$";
-  private static final String VAR_IDENTIFIER = VAR_IDENTIFIER_START + LABEL;
+  private static final String VAR_IDENTIFIER = VAR_IDENTIFIER_START + IDENTIFIER;
 
   // COMMENTS
 
@@ -95,7 +98,6 @@ public class PHPLexer {
   // Numeric
   private static final String NUMERIC_LITERAL = EXPONENT_DNUM + "|" + DNUM + "|" + INTEGER_LITERAL;
 
-
   private PHPLexer() {
   }
 
@@ -113,7 +115,7 @@ public class PHPLexer {
       .withChannel(regexp(PHPTokenType.NUMERIC_LITERAL, NUMERIC_LITERAL))
       .withChannel(regexp(PHPTokenType.STRING_LITERAL, STRING_LITERAL))
 
-      .withChannel(new IdentifierAndKeywordChannel(LABEL, false, PHPKeyword.values()))
+      .withChannel(new IdentifierAndKeywordChannel(IDENTIFIER, false, PHPKeyword.values()))
       .withChannel(regexp(PHPTokenType.VAR_IDENTIFIER, VAR_IDENTIFIER))
 
       .withChannel(new PunctuatorChannel(PHPPunctuator.values()));

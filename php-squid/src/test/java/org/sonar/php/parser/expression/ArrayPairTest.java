@@ -28,7 +28,7 @@ public class ArrayPairTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.ARRAY_PAIR));
+    setRootRule(PHPGrammar.ARRAY_PAIR);
   }
 
   @Test

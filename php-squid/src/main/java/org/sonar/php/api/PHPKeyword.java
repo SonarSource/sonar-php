@@ -25,13 +25,6 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 
 public enum PHPKeyword implements TokenType, GrammarRuleKey {
 
-  // Reserved words
-//  NULL("null"),
-//  TRUE("true"),
-//  FALSE("false"),
-
-  // Keywords
-
   HALT_COMPILER("__halt_compiler"),
   ABSTRACT("abstract"),
   AND("and"),

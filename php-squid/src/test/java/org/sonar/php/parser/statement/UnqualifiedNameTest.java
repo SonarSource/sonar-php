@@ -28,7 +28,7 @@ public class UnqualifiedNameTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.UNQUALIFIED_NAME));
+    setRootRule(PHPGrammar.UNQUALIFIED_NAME);
   }
 
   @Test

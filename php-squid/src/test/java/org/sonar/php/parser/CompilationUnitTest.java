@@ -27,13 +27,11 @@ public class CompilationUnitTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BLOCK));
+    setRootRule(PHPGrammar.COMPILATION_UNIT);
   }
 
   @Test
   public void test() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.COMPILATION_UNIT));
-
     Assertions.assertThat(p)
       .matches("<?php")
 

@@ -28,7 +28,7 @@ public class ExitExprTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.EXIT_EXPR));
+    setRootRule(PHPGrammar.EXIT_EXPR);
   }
 
   @Test

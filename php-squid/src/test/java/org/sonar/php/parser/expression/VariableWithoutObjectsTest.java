@@ -28,7 +28,7 @@ public class VariableWithoutObjectsTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
+    setRootRule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
   }
 
   @Test

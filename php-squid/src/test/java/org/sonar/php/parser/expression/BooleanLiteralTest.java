@@ -28,7 +28,7 @@ public class BooleanLiteralTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BOOLEAN_LITERAL));
+    setRootRule(PHPGrammar.BOOLEAN_LITERAL);
   }
 
   @Test

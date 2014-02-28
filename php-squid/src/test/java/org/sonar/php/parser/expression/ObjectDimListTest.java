@@ -28,7 +28,7 @@ public class ObjectDimListTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.OBJECT_DIM_LIST));
+    setRootRule(PHPGrammar.OBJECT_DIM_LIST);
   }
 
   @Test

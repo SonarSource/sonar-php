@@ -28,7 +28,7 @@ public class InternalFunctionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.INTERNAL_FUNCTION));
+    setRootRule(PHPGrammar.INTERNAL_FUNCTION);
   }
 
   @Test

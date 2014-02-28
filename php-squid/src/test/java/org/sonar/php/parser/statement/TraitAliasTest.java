@@ -28,7 +28,7 @@ public class TraitAliasTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.TRAIT_ALIAS));
+    setRootRule(PHPGrammar.TRAIT_ALIAS);
   }
 
   @Test

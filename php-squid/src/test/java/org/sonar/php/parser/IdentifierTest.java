@@ -17,24 +17,30 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.parser;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
 
-public class GlobalVarTest extends RuleTest {
+public class IdentifierTest extends RuleTest {
 
-  @Before
-  public void setUp() {
-    setRootRule(PHPGrammar.GLOBAL_VAR);
+  @Test
+  public void identifier() {
+    setRootRule(PHPGrammar.IDENTIFIER);
+
+    matches("a");
+    matches("a1");
+
+    notMatches("1");
   }
 
   @Test
-  public void test() {
+  public void var_identifier() {
+    setRootRule(PHPGrammar.VAR_IDENTIFIER);
 
     matches("$a");
-    matches("$$a");
+    matches("$a1");
+
+    notMatches("$1");
   }
+
 }

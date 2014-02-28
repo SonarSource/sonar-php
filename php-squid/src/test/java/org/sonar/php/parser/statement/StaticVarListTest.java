@@ -28,7 +28,7 @@ public class StaticVarListTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.STATIC_VAR_LIST));
+    setRootRule(PHPGrammar.STATIC_VAR_LIST);
   }
 
   @Test

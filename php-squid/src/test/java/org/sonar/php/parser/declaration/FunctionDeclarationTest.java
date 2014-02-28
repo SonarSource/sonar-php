@@ -28,7 +28,7 @@ public class FunctionDeclarationTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.FUNCTION_DECLARATION));
+    setRootRule(PHPGrammar.FUNCTION_DECLARATION);
   }
 
   @Test

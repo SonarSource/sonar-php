@@ -28,7 +28,7 @@ public class BitewiseOrExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BITEWISE_OR_EXPR));
+    setRootRule(PHPGrammar.BITEWISE_OR_EXPR);
   }
 
   @Test

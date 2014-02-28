@@ -28,7 +28,7 @@ public class StaticStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.STATIC_STATEMENT));
+    setRootRule(PHPGrammar.STATIC_STATEMENT);
   }
 
   @Test

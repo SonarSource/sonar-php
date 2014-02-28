@@ -28,7 +28,7 @@ public class TraitMethodReferenceTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.TRAIT_METHOD_REFERENCE));
+    setRootRule(PHPGrammar.TRAIT_METHOD_REFERENCE);
   }
 
   @Test

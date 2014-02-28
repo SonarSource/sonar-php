@@ -28,7 +28,7 @@ public class ShiftExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.SHIFT_EXPR));
+    setRootRule(PHPGrammar.SHIFT_EXPR);
   }
 
   @Test

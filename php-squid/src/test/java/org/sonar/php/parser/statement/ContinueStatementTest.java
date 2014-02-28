@@ -28,7 +28,7 @@ public class ContinueStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.CONTINUE_STATEMENT));
+    setRootRule(PHPGrammar.CONTINUE_STATEMENT);
   }
 
   @Test

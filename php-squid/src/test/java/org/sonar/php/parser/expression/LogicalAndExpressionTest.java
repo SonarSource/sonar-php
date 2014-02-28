@@ -28,7 +28,7 @@ public class LogicalAndExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.LOGICAL_AND_EXPR));
+    setRootRule(PHPGrammar.LOGICAL_AND_EXPR);
   }
 
   @Test

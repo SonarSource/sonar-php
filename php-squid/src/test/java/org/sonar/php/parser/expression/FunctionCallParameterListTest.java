@@ -28,7 +28,7 @@ public class FunctionCallParameterListTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST));
+    setRootRule(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST);
   }
 
   @Test

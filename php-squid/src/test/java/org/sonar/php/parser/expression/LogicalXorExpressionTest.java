@@ -28,7 +28,7 @@ public class LogicalXorExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.LOGICAL_XOR_EXPR));
+    setRootRule(PHPGrammar.LOGICAL_XOR_EXPR);
   }
 
   @Test

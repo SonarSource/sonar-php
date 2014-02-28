@@ -28,7 +28,7 @@ public class FullyQualifiedNameTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.FULLY_QUALIFIED_NAME));
+    setRootRule(PHPGrammar.FULLY_QUALIFIED_NAME);
   }
 
   @Test

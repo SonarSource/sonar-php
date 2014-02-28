@@ -28,7 +28,7 @@ public class ConstantDeclarationTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.MEMBER_CONST_DECLARATION));
+    setRootRule(PHPGrammar.MEMBER_CONST_DECLARATION);
   }
 
   @Test

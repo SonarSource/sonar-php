@@ -28,7 +28,7 @@ public class TraitAdaptationsTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.TRAIT_ADAPTATIONS));
+    setRootRule(PHPGrammar.TRAIT_ADAPTATIONS);
   }
 
   @Test

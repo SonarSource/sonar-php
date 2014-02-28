@@ -28,7 +28,7 @@ public class BitewiseAndExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.BITEWISE_AND_EXPR));
+    setRootRule(PHPGrammar.BITEWISE_AND_EXPR);
   }
 
   @Test

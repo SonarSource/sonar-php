@@ -28,7 +28,7 @@ public class CompoundVariableTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.COMPOUND_VARIABLE));
+    setRootRule(PHPGrammar.COMPOUND_VARIABLE);
   }
 
   @Test

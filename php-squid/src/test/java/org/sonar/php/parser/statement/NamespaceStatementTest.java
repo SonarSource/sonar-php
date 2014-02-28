@@ -28,7 +28,7 @@ public class NamespaceStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.NAMESPACE_STATEMENT));
+    setRootRule(PHPGrammar.NAMESPACE_STATEMENT);
   }
 
   @Test

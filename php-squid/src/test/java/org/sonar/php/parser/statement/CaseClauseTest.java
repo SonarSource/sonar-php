@@ -28,7 +28,7 @@ public class CaseClauseTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.CASE_CLAUSE));
+    setRootRule(PHPGrammar.CASE_CLAUSE);
   }
 
   @Test

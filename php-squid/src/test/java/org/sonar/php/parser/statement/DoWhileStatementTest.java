@@ -28,7 +28,7 @@ public class DoWhileStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.DO_WHILE_STATEMENT));
+    setRootRule(PHPGrammar.DO_WHILE_STATEMENT);
   }
 
   @Test

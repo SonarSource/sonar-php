@@ -28,7 +28,7 @@ public class DefaultClauseTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.DEFAULT_CLAUSE));
+    setRootRule(PHPGrammar.DEFAULT_CLAUSE);
   }
 
   @Test

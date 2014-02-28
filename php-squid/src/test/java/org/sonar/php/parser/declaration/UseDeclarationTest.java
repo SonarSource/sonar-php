@@ -28,7 +28,7 @@ public class UseDeclarationTest extends RuleTest {
 
   @Before
   public void setUp() {
-    p.setRootRule(p.getGrammar().rule(PHPGrammar.USE_DECLARATION));
+    setRootRule(PHPGrammar.USE_DECLARATION);
   }
 
   @Test
