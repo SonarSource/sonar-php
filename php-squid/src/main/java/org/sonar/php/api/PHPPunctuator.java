@@ -21,7 +21,6 @@ package org.sonar.php.api;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
-import org.sonar.sslr.grammar.GrammarRuleKey;
 
 public enum PHPPunctuator implements TokenType {
 
@@ -92,6 +91,7 @@ public enum PHPPunctuator implements TokenType {
   private PHPPunctuator(String value) {
     this.value = value;
   }
+
   @Override
   public boolean hasToBeSkippedFromAst(AstNode astNode) {
     return false;
