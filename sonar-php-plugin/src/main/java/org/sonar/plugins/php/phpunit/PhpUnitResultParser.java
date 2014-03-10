@@ -70,7 +70,7 @@ public class PhpUnitResultParser implements BatchExtension {
    * The project.
    */
   private Project project;
-  private ModuleFileSystem fileSystem;
+  private ModuleFileSystem moduleFileSystem;
 
   /**
    * Instantiates a new php unit result parser.
@@ -78,11 +78,11 @@ public class PhpUnitResultParser implements BatchExtension {
    * @param project the project
    * @param context the context
    */
-  public PhpUnitResultParser(Project project, SensorContext context, ModuleFileSystem fileSystem) {
+  public PhpUnitResultParser(Project project, SensorContext context, ModuleFileSystem moduleFileSystem) {
     super();
     this.project = project;
     this.context = context;
-    this.fileSystem = fileSystem;
+    this.moduleFileSystem = moduleFileSystem;
   }
 
   /**
@@ -123,7 +123,15 @@ public class PhpUnitResultParser implements BatchExtension {
 
   @VisibleForTesting
   Resource getUnitTestResource(String filename) {
-    return org.sonar.api.resources.File.fromIOFile(new File(filename), project);
+    File testFile = new File(filename);
+
+    // In SonarQube version < 4.2 fromIOFile() returns null on test files
+    Resource resource = org.sonar.api.resources.File.fromIOFile(testFile, project);
+    if (resource == null) {
+      resource = org.sonar.api.resources.File.fromIOFile(testFile, moduleFileSystem.testDirs());
+    }
+
+    return resource;
   }
 
   /**
