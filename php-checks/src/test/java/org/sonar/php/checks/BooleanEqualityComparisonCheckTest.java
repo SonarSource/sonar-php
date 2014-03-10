@@ -33,9 +33,21 @@ public class BooleanEqualityComparisonCheckTest extends CheckTest {
 
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(3).withMessage("Remove the literal \"true\" boolean value.")
-      .next().atLine(6).withMessage("Remove the literal \"false\" boolean value.")
+      .next().atLine(4).withMessage("Remove the literal \"false\" boolean value.")
+      .next().atLine(5)
+      .next().atLine(6)
+      .next().atLine(7)
+      .next().atLine(8)
       .next().atLine(9)
+      .next().atLine(10)
       .next().atLine(11)
+      .next().atLine(12)
+      .next().atLine(13)
+      .next().atLine(14)
+      .next().atLine(15)
+      .next().atLine(16)
+      .next().atLine(17)
+      .next().atLine(18)
       .noMore();
   }
 }

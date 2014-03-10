@@ -1,24 +1,26 @@
 <?php
 
-if ($a == true) {  // NOK
-}
+!true;            // NOK
+!false;           // NOK
+a == false;       // NOK
+a == true;        // NOK
+a === false;      // NOK
+a === true;       // NOK
+a != false;       // NOK
+a != true;        // NOK
+a !== false;      // NOK
+a !== true;       // NOK
+false == a;       // NOK
+true == a;        // NOK
+false != a;       // NOK
+true != a;        // NOK
+false && foo();   // NOK
+foo() || true;    // NOK
 
-if ($a != false) {  // NOK
-}
-
-call(true == $a);  // NOK
-
-call(true != $a);  // NOK
-
-if ($a != x) {     // OK
-}
-
-if ($a) {          // OK
-}
-
-if (!$a) {         // OK
-}
-
-if ($a.call()) {   // OK
-}
-
+a == foo(true);   // OK
+true < 0;         // OK
+~true;            // OK
+++ true;          // OK
+!foo;             // OK
+foo() && bar();   // OK
+a == true == b;   // OK

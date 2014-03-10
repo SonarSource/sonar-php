@@ -25,6 +25,7 @@ import com.sonar.sslr.squid.checks.SquidCheck;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 
 @Rule(
@@ -35,7 +36,11 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<Grammar> {
 
   @Override
   public void init() {
-    subscribeTo(PHPGrammar.EQUALITY_EXPR);
+    subscribeTo(
+      PHPGrammar.UNARY_EXPR,
+      PHPGrammar.EQUALITY_EXPR,
+      PHPGrammar.LOGICAL_AND_EXPR,
+      PHPGrammar.LOGICAL_OR_EXPR);
   }
 
   @Override
@@ -47,9 +52,13 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<Grammar> {
     }
   }
 
-  private static AstNode getBooleanLiteralFromExpresion(AstNode equalityExpr) {
-    AstNode leftExpr = equalityExpr.getFirstChild(PHPGrammar.EQUALITY_OPERATOR).getPreviousAstNode();
-    AstNode rightExpr = equalityExpr.getFirstChild(PHPGrammar.EQUALITY_OPERATOR).getNextAstNode();
+  private static AstNode getBooleanLiteralFromExpresion(AstNode expression) {
+    if (expression.is(PHPGrammar.UNARY_EXPR)) {
+      return getBooleanLiteralFromUnaryExpression(expression);
+    }
+
+    AstNode leftExpr = expression.getFirstChild();
+    AstNode rightExpr = expression.getLastChild();
 
     if (isBooleanLiteral(leftExpr)) {
       return leftExpr;
@@ -58,6 +67,19 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<Grammar> {
     } else {
       return null;
     }
+  }
+
+  private static AstNode getBooleanLiteralFromUnaryExpression(AstNode unaryExpression) {
+    AstNode boolLiteral = null;
+
+    if (unaryExpression.getFirstChild().is(PHPPunctuator.BANG)) {
+      AstNode expr = unaryExpression.getLastChild();
+
+      if (isBooleanLiteral(expr)) {
+        boolLiteral = expr;
+      }
+    }
+    return boolLiteral;
   }
 
   private static boolean isBooleanLiteral(AstNode astNode) {
