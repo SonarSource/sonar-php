@@ -75,6 +75,19 @@ class A {
       endif;
     endif;
 
+    if (false) {        
+      if (false) {      // OK
+      } elseif (false) {
+      }
+    }
+
+    if (false) {
+      if (false) {       // OK
+      }
+     } elseif (true) {
+
+     }
+
     if (true) {         // OK
       __halt_compiler();
     }

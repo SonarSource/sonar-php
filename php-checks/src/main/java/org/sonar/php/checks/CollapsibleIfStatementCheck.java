@@ -43,7 +43,7 @@ public class CollapsibleIfStatementCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (!hasElseClause(astNode)) {
+    if (!hasElseOrElseifClause(astNode)) {
       AstNode singleChild = getSingleStatementChild(astNode);
 
       if (singleChild != null && isIfStatementWithoutElse(singleChild)) {
@@ -53,7 +53,7 @@ public class CollapsibleIfStatementCheck extends SquidCheck<Grammar> {
   }
 
   private static boolean isIfStatementWithoutElse(AstNode ifChild) {
-    return ifChild.is(PHPGrammar.STATEMENT) && ifChild.getFirstChild().is(IF_STATEMENTS) && !hasElseClause(ifChild.getFirstChild());
+    return ifChild.is(PHPGrammar.STATEMENT) && ifChild.getFirstChild().is(IF_STATEMENTS) && !hasElseOrElseifClause(ifChild.getFirstChild());
   }
 
   private static AstNode getSingleStatementChild(AstNode ifStatement) {
@@ -74,8 +74,12 @@ public class CollapsibleIfStatementCheck extends SquidCheck<Grammar> {
     return ifInnerStmtList != null && ifInnerStmtList.getNumberOfChildren() == 1 ? ifInnerStmtList.getFirstChild() : null;
   }
 
-  private static boolean hasElseClause(AstNode ifStatement) {
-    return ifStatement.hasDirectChildren(PHPGrammar.ELSE_CLAUSE, PHPGrammar.ALTERNATIVE_ELSE_CLAUSE);
+  private static boolean hasElseOrElseifClause(AstNode ifStatement) {
+    return ifStatement.hasDirectChildren(
+      PHPGrammar.ELSE_CLAUSE,
+      PHPGrammar.ALTERNATIVE_ELSE_CLAUSE,
+      PHPGrammar.ELSEIF_LIST,
+      PHPGrammar.ALTERNATIVE_ELSEIF_LIST);
   }
 
 
