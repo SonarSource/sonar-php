@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.Sets;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.api.Token;
 import com.sonar.sslr.squid.checks.SquidCheck;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -78,17 +79,17 @@ public class ForLoopCounterChangedCheck extends SquidCheck<Grammar> {
   }
 
   private void check(AstNode astNode) {
-    String label;
+    String varName;
 
     if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
-      label = astNode.getFirstChild().getTokenOriginalValue();
+      varName = getVarName(astNode.getFirstChild());
     } else {
-      label = astNode.getParent().is(PHPGrammar.UNARY_EXPR) ? astNode.getNextAstNode().getTokenOriginalValue() :
-        astNode.getPreviousAstNode().getTokenOriginalValue();
+      // Increment or decrement
+      varName = isPostUnaryExpr(astNode) ? getVarName(astNode.getNextAstNode()) : getVarName(astNode.getPreviousAstNode());
     }
 
-    if (counters.contains(label)) {
-      reportIssue(astNode, label);
+    if (counters.contains(varName)) {
+      reportIssue(astNode, varName);
     }
   }
 
@@ -104,5 +105,17 @@ public class ForLoopCounterChangedCheck extends SquidCheck<Grammar> {
       counterList.add(expr.getFirstChild().getTokenOriginalValue());
     }
     return counterList;
+  }
+
+  private boolean isPostUnaryExpr(AstNode unaryOperator) {
+    return unaryOperator.getParent().is(PHPGrammar.UNARY_EXPR);
+  }
+
+  private String getVarName(AstNode expr) {
+    StringBuilder builder = new StringBuilder();
+    for (Token token : expr.getTokens()) {
+      builder.append(token.getOriginalValue());
+    }
+    return builder.toString();
   }
 }
