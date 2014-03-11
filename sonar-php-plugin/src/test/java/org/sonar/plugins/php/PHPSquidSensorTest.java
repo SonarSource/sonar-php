@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.File;
@@ -50,7 +51,7 @@ public class PHPSquidSensorTest {
   @Before
   public void setUp() {
     project = mock(Project.class);
-    sensor = spy(new PHPSquidSensor(mock(RulesProfile.class), fileSystem));
+    sensor = spy(new PHPSquidSensor(mock(RulesProfile.class), mock(ResourcePerspectives.class), fileSystem));
   }
 
   @Test
