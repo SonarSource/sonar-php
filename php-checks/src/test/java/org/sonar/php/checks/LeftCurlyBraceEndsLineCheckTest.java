@@ -35,7 +35,6 @@ public class LeftCurlyBraceEndsLineCheckTest extends CheckTest {
       .next().atLine(4).withMessage("Move this left curly brace to the end of previous line of code.")
       .next().atLine(8)
       .next().atLine(11)
-      .next().atLine(28)
       .noMore();
   }
 }

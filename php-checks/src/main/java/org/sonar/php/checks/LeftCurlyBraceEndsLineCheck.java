@@ -26,6 +26,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.php.parser.PHPGrammar;
 
 @Rule(
@@ -47,10 +48,10 @@ public class LeftCurlyBraceEndsLineCheck extends SquidCheck<Grammar> {
   }
 
   private static boolean isLastOnLine(AstNode lcurly) {
-    return lcurly.getNextAstNode().getToken().getLine() != lcurly.getTokenLine();
+    return getNextNodeTokenLine(lcurly.getNextAstNode()) != lcurly.getTokenLine();
   }
 
-  private static boolean isFirstOnLine (AstNode lcurly) {
+  private static boolean isFirstOnLine(AstNode lcurly) {
     return lcurly.getPreviousAstNode().getLastToken().getLine() != lcurly.getTokenLine();
   }
 
@@ -75,4 +76,18 @@ public class LeftCurlyBraceEndsLineCheck extends SquidCheck<Grammar> {
     return lcurly.getParent().getFirstChild(PHPPunctuator.RCURLYBRACE).getTokenLine() == lcurly.getTokenLine();
   }
 
+  /**
+   * Returns line of next token's node skipping INLINE_HTML node.
+   */
+  private static int getNextNodeTokenLine(AstNode lcurlyNextAstNode) {
+    int nextTokenLine = lcurlyNextAstNode.getTokenLine();
+
+    if (lcurlyNextAstNode.is(PHPGrammar.INNER_STATEMENT_LIST)) {
+      AstNode firstStatement = lcurlyNextAstNode.getFirstChild();
+      if (firstStatement.is(PHPGrammar.STATEMENT) && firstStatement.getFirstChild().is(PHPTagsChannel.INLINE_HTML)) {
+        nextTokenLine = firstStatement.getNextAstNode().getTokenLine();
+      }
+    }
+    return nextTokenLine;
+  }
 }
