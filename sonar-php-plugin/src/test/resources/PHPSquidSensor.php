@@ -41,3 +41,10 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
         return true;
     }
 }
+
+function helper($param) {
+  if ($param != 0) {
+    return $param;
+  }
+  return $param / 2;
+}

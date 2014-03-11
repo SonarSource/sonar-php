@@ -41,6 +41,7 @@ import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squid.api.CheckMessage;
+import org.sonar.squid.api.SourceClass;
 import org.sonar.squid.api.SourceCode;
 import org.sonar.squid.api.SourceFile;
 import org.sonar.squid.api.SourceFunction;
@@ -95,6 +96,7 @@ public class PHPSquidSensor implements Sensor {
       SourceFile squidFile = (SourceFile) squidSourceFile;
       org.sonar.api.resources.File sonarFile = getSonarResource(new java.io.File(squidFile.getKey()));
 
+      saveClassComplexity(sonarFile, squidFile);
       saveFilesComplexityDistribution(sonarFile, squidFile);
       saveFunctionsComplexityDistribution(sonarFile, squidFile);
       saveFileMeasures(sonarFile, squidFile);
@@ -111,6 +113,16 @@ public class PHPSquidSensor implements Sensor {
     context.saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, squidFile.getDouble(PHPMetric.FUNCTIONS));
     context.saveMeasure(sonarFile, CoreMetrics.STATEMENTS, squidFile.getDouble(PHPMetric.STATEMENTS));
     context.saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, squidFile.getDouble(PHPMetric.COMPLEXITY));
+  }
+
+  private void saveClassComplexity(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
+    Collection<SourceCode> classes = scanner.getIndex().search(new QueryByParent(squidFile), new QueryByType(SourceClass.class));
+    double complexityInClasses = 0;
+    for (SourceCode squidClass : classes) {
+      double classComplexity = squidClass.getDouble(PHPMetric.COMPLEXITY);
+      complexityInClasses += classComplexity;
+    }
+    context.saveMeasure(sonarFile, CoreMetrics.COMPLEXITY_IN_CLASSES, complexityInClasses);
   }
 
   private void saveFunctionsComplexityDistribution(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
