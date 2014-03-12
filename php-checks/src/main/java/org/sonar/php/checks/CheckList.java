@@ -79,6 +79,7 @@ public class CheckList {
       CallParentConstructorCheck.class,
       TrailingWhitespaceCheck.class,
       MissingNewLineAtEOFCheck.class,
+      UnusedPrivateFieldCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
