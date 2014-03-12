@@ -32,6 +32,13 @@ import java.util.List;
 public final class TestSuites {
 
   /**
+   * Empty constructor is required by xstream in order to
+   * be compatible with Java 7.
+   * */
+  public TestSuites() {
+  }
+
+  /**
    * The test suites.
    */
   @XStreamImplicit(itemFieldName = "testsuite")

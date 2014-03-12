@@ -25,10 +25,15 @@ package org.sonar.plugins.php.phpunit.xml;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.both;
@@ -42,6 +47,7 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 public class TestSuitesTest {
 
   private TestSuites testSuites;
+  private static final Logger LOG = LoggerFactory.getLogger(TestSuitesTest.class);
 
   /**
    * @throws java.lang.Exception
@@ -88,8 +94,44 @@ public class TestSuitesTest {
     assertThat(testSuites.getTestSuites(), both(hasItem(suite1)).and(hasItem(suite2)));
   }
 
+  /**
+   * Empty constructors are required by xstream for TestSuite and TestSuite, in order to
+   * be compatible with Java 7.
+   */
+  @Test
+  public void test_compatible_java_7() {
+    Constructor[] constructors1 = getConstructorForClass("org.sonar.plugins.php.phpunit.xml.TestSuite");
+    assertThat(constructors1).isNotEmpty();
+    assertThat(getNbParamPerConstructor(constructors1).first()).isEqualTo(0);
+
+    Constructor[] constructors2 = getConstructorForClass("org.sonar.plugins.php.phpunit.xml.TestSuites");
+    assertThat(constructors2).isNotEmpty();
+    assertThat(getNbParamPerConstructor(constructors2).first()).isEqualTo(0);
+  }
+
+  private Constructor[] getConstructorForClass(String className) {
+    Constructor[] constructors = new Constructor[0];
+    try {
+      Class testSuites = Class.forName(className);
+      constructors = testSuites.getConstructors();
+    } catch (ClassNotFoundException e) {
+      LOG.error("If TestSuite and TestSuites class does not exist any more, this test might be useless.", e);
+    }
+    return constructors;
+  }
+
+  private TreeSet<Integer> getNbParamPerConstructor(Constructor[] constructors) {
+    TreeSet<Integer> nbParamPerConstructors = new TreeSet<Integer>();
+    for (Constructor c : constructors) {
+      nbParamPerConstructors.add(c.getParameterTypes().length);
+    }
+
+    return nbParamPerConstructors;
+  }
+
   private TestSuite getTestSuite(String name) {
     return new TestSuite(name, "file", "tests", "assertions", 0, null, null);
   }
+
 
 }

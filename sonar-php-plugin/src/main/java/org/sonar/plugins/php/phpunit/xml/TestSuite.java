@@ -74,6 +74,13 @@ public final class TestSuite {
   private List<TestCase> testCases;
 
   /**
+   * Empty constructor is required by xstream in order to
+   * be compatible with Java 7.
+   * */
+  public TestSuite() {
+  }
+
+  /**
    * Instantiates a new test suite.
    *
    * @param name       the name
