@@ -32,7 +32,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @Rule(
   key = "S1068",
@@ -40,7 +40,7 @@ import java.util.HashMap;
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class UnusedPrivateFieldCheck extends SquidCheck<Grammar> {
 
-  private HashMap<String, PrivateField> privateFields = Maps.newHashMap();
+  private Map<String, PrivateField> privateFields = Maps.newHashMap();
 
   private static class PrivateField {
     final AstNode declaration;
