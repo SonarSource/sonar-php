@@ -46,15 +46,15 @@ import java.util.List;
     global = true,
     project = true),
   @Property(key = PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY,
-    name = "Unit tests report file path",
+    name = "Unit Test Report",
     project = true,
     global = true,
     description = "Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory."),
   @Property(key = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
-    name = "Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.",
+    name = "Coverage report file path",
     project = true,
     global = true,
-    description = "Path of the coverage report file to analyse.")
+    description = "Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
 })
 public class PhpPlugin extends SonarPlugin {
 
