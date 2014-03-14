@@ -102,9 +102,23 @@ public class ForLoopCounterChangedCheck extends SquidCheck<Grammar> {
     AstNode forExpr = astNode.getFirstChild(PHPPunctuator.SEMICOLON).getPreviousAstNode();
 
     for (AstNode expr : forExpr.getChildren(PHPGrammar.EXPRESSION)) {
-      counterList.add(expr.getFirstChild().getTokenOriginalValue());
+      String counterName = getCounterName(expr);
+      if (counterName != null) {
+        counterList.add(counterName);
+      }
     }
     return counterList;
+  }
+
+  private String getCounterName(AstNode expression) {
+    AstNode exprChild = expression.getFirstChild();
+    AstNode variable = exprChild.is(PHPGrammar.POSTFIX_EXPR) ? exprChild.getFirstChild() : exprChild.getFirstChild().getFirstChild();
+
+    if (variable != null) {
+      return getVarName(variable);
+    }
+
+    return null;
   }
 
   private boolean isPostUnaryExpr(AstNode unaryOperator) {
