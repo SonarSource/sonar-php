@@ -80,6 +80,7 @@ public class CheckList {
       TrailingWhitespaceCheck.class,
       MissingNewLineAtEOFCheck.class,
       UnusedPrivateFieldCheck.class,
+      UnusedLocalVariableCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

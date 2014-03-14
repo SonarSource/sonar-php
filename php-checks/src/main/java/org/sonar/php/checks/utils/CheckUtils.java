@@ -20,12 +20,28 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.sslr.grammar.GrammarRuleKey;
 
 public class CheckUtils {
+
+  public static final ImmutableMap<String, String> PREDEFINED_VARIABLES = ImmutableMap.<String, String>builder()
+    .put("$HTTP_SERVER_VARS", "$_SERVER")
+    .put("$HTTP_GET_VARS", "$_GET")
+    .put("$HTTP_POST_VARS", "$_POST")
+    .put("$HTTP_POST_FILES", "$_FILES")
+    .put("$HTTP_SESSION_VARS", "$_SESSION")
+    .put("$HTTP_ENV_VARS", "$_ENV")
+    .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
+
+  public static final GrammarRuleKey[] FUNCTIONS = {
+    PHPGrammar.METHOD_DECLARATION,
+    PHPGrammar.FUNCTION_DECLARATION,
+    PHPGrammar.FUNCTION_EXPRESSION};
 
   private CheckUtils() {
   }

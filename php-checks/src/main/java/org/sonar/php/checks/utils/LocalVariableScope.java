@@ -1,0 +1,160 @@
+/*
+ * SonarQube PHP Plugin
+ * Copyright (C) 2010 SonarSource and Akram Ben Aissi
+ * dev@sonar.codehaus.org
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ */
+package org.sonar.php.checks.utils;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sonar.sslr.api.AstNode;
+import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.api.PHPTokenType;
+import org.sonar.php.parser.PHPGrammar;
+
+import java.util.List;
+import java.util.Map;
+
+public class LocalVariableScope {
+  List<String> exclusions = Lists.newArrayList();
+  Map<String, Variable> localVariables = Maps.newHashMap();
+
+  public Map<String, Variable> getLocalVariables() {
+    return localVariables;
+  }
+
+  public void increaseUsageFor(String varName) {
+    localVariables.get(varName).increaseUsage();
+  }
+
+  public void declareExclusion(String varName) {
+    exclusions.add(varName);
+  }
+
+  private void declareLocalVariable(String varName, AstNode declaration) {
+    localVariables.put(varName, new Variable(declaration));
+  }
+
+
+  private void declareLocalVariable(String varName, AstNode declaration, int usage) {
+    localVariables.put(varName, new Variable(declaration, usage));
+  }
+
+  public void declareGlobals(AstNode globalVarStmt) {
+    Preconditions.checkArgument(globalVarStmt.is(PHPGrammar.GLOBAL_STATEMENT));
+
+    for (AstNode globalVar : globalVarStmt.getFirstChild(PHPGrammar.GLOBAL_VAR_LIST).getChildren(PHPGrammar.GLOBAL_VAR)) {
+      AstNode var = globalVar.getFirstChild();
+
+      if (var.is(PHPTokenType.VAR_IDENTIFIER)) {
+        declareExclusion(var.getTokenOriginalValue());
+      }
+    }
+  }
+
+  public void declareParameters(AstNode functionDec) {
+    Preconditions.checkArgument(functionDec.is(CheckUtils.FUNCTIONS));
+
+    AstNode paramList = functionDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
+    if (paramList != null) {
+      for (AstNode parameter : paramList.getChildren(PHPGrammar.PARAMETER)) {
+        declareExclusion(parameter.getFirstChild(PHPTokenType.VAR_IDENTIFIER).getTokenOriginalValue());
+      }
+    }
+  }
+
+  public void declareStaticVariables(AstNode staticStmt) {
+    Preconditions.checkArgument(staticStmt.is(PHPGrammar.STATIC_STATEMENT));
+
+    for (AstNode staticVar : staticStmt.getFirstChild(PHPGrammar.STATIC_VAR_LIST).getChildren(PHPGrammar.STATIC_VAR)) {
+      AstNode varIdentifier = staticVar.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
+      declareLocalVariable(varIdentifier.getTokenOriginalValue(), varIdentifier, 1);
+    }
+  }
+
+  public void useVariable(AstNode variableWithoutObject) {
+    Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
+
+    String varName = getVariableName(variableWithoutObject);
+    if (localVariables.containsKey(varName)) {
+      increaseUsageFor(varName);
+    }
+  }
+
+  public void declareVariable(AstNode variableWithoutObject) {
+    Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
+
+    String varName = getVariableName(variableWithoutObject);
+    if (!isExcludedVariable(varName) && !localVariables.keySet().contains(varName)) {
+      declareLocalVariable(varName, variableWithoutObject);
+    }
+  }
+
+  private boolean isExcludedVariable(String varName) {
+    return "$this".equals(varName) || isSuperGlobal(varName) || exclusions.contains(varName);
+  }
+
+  private boolean isSuperGlobal(String varName) {
+    return "$GLOBALS".equals(varName) || CheckUtils.PREDEFINED_VARIABLES.values().contains(varName);
+  }
+
+  public static String getVariableName(AstNode variableWithoutObject) {
+    Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
+    return variableWithoutObject
+      .getFirstChild(PHPGrammar.REFERENCE_VARIABLE)
+      .getFirstChild(PHPGrammar.COMPOUND_VARIABLE).getTokenOriginalValue();
+  }
+
+  public void declareLexicalVariable(AstNode lexicalVarList, LocalVariableScope outerScope) {
+    Preconditions.checkArgument(lexicalVarList.is(PHPGrammar.LEXICAL_VAR_LIST));
+
+    for (AstNode lexicalVar : lexicalVarList.getChildren(PHPGrammar.LEXICAL_VAR)) {
+      AstNode varIdentifier = lexicalVar.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
+      String varName = varIdentifier.getTokenOriginalValue();
+      boolean isReference = lexicalVar.hasDirectChildren(PHPPunctuator.AND);
+      boolean isFromOuterScope = outerScope.localVariables.containsKey(varName);
+
+      if (isReference && !isFromOuterScope) {
+        this.declareLocalVariable(varName, varIdentifier, 1);
+        outerScope.declareLocalVariable(varName, varIdentifier, 1);
+      }
+
+      if (isFromOuterScope) {
+        this.declareLocalVariable(varName, varIdentifier, 1);
+        outerScope.increaseUsageFor(varName);
+      }
+
+      if (!isReference && !isFromOuterScope) {
+        this.declareExclusion(varName);
+      }
+    }
+  }
+
+  public void declareListVariable(AstNode listExpr) {
+    for (AstNode listElement : listExpr.getFirstChild(PHPGrammar.ASSIGNMENT_LIST).getChildren(PHPGrammar.ASSIGNMENT_LIST_ELEMENT)) {
+      AstNode child = listElement.getFirstChild();
+
+      if (child.is(PHPGrammar.VARIABLE) && child.getFirstChild().is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+        AstNode varWithoutObject = child.getFirstChild();
+        String varName = getVariableName(varWithoutObject);
+        declareLocalVariable(varName, varWithoutObject);
+      }
+    }
+  }
+}
+
