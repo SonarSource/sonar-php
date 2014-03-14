@@ -50,11 +50,15 @@ public class LocalVariableScope {
     localVariables.put(varName, new Variable(declaration));
   }
 
-
   private void declareLocalVariable(String varName, AstNode declaration, int usage) {
     localVariables.put(varName, new Variable(declaration, usage));
   }
 
+  /**
+   * Declare use globals variable in function as exclusions.
+   *
+   * @param globalVarStmt is GLOBAL_STATEMENT
+   * */
   public void declareGlobals(AstNode globalVarStmt) {
     Preconditions.checkArgument(globalVarStmt.is(PHPGrammar.GLOBAL_STATEMENT));
 
@@ -67,6 +71,11 @@ public class LocalVariableScope {
     }
   }
 
+  /**
+   * Declares function parameters as exclusions.
+   *
+   * @param functionDec is METHOD_DECLARATION, FUNCTION_DECLARATION or FUNCTION_EXPRESSION
+   * */
   public void declareParameters(AstNode functionDec) {
     Preconditions.checkArgument(functionDec.is(CheckUtils.FUNCTIONS));
 
@@ -78,6 +87,11 @@ public class LocalVariableScope {
     }
   }
 
+  /**
+   * Declares static local variable of the function.
+   *
+   * @param staticStmt is STATIC_STATEMENT
+   * */
   public void declareStaticVariables(AstNode staticStmt) {
     Preconditions.checkArgument(staticStmt.is(PHPGrammar.STATIC_STATEMENT));
 
@@ -87,6 +101,12 @@ public class LocalVariableScope {
     }
   }
 
+  /**
+   * Increases usage of the variable passed as parameter if this variable has
+   * been declare as a local variable.
+   *
+   * @param variableWithoutObject is VARIABLE_WITHOUT_OBJECTS
+   * */
   public void useVariable(AstNode variableWithoutObject) {
     Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
 
@@ -96,6 +116,11 @@ public class LocalVariableScope {
     }
   }
 
+  /**
+   * Declares variable as local variable of the function.
+   *
+   * @param variableWithoutObject is VARIABLE_WITHOUT_OBJECTS
+   * */
   public void declareVariable(AstNode variableWithoutObject) {
     Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
 
@@ -105,6 +130,13 @@ public class LocalVariableScope {
     }
   }
 
+  /**
+   * Check if the variable name correspond to variable that is not local variable,
+   * excluded variables are:
+   * <ul>
+   *   <li>$this
+   *   <li>super globals and predefined super globals: $GLOBALS, $_POST, etc.
+   * */
   private boolean isExcludedVariable(String varName) {
     return "$this".equals(varName) || isSuperGlobal(varName) || exclusions.contains(varName);
   }
@@ -113,6 +145,9 @@ public class LocalVariableScope {
     return "$GLOBALS".equals(varName) || CheckUtils.PREDEFINED_VARIABLES.values().contains(varName);
   }
 
+  /**
+   * Returns variable name from node VARIABLE_WITHOUT_OBJECTS.
+   * */
   public static String getVariableName(AstNode variableWithoutObject) {
     Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
     return variableWithoutObject
@@ -120,6 +155,14 @@ public class LocalVariableScope {
       .getFirstChild(PHPGrammar.COMPOUND_VARIABLE).getTokenOriginalValue();
   }
 
+  /**
+   * Declare lexical variables as local variables. Multiple cases are handled:
+   * <ul>
+   *   <li>if variable is declare in outer scope: increase usage for outer scope
+   *   and declares variable for current.
+   *   <li>if is reference variable: declare variable in outer and current scope.
+   *   <li>if variable not reference and not in outer scope: declared as an exclusion.
+   * */
   public void declareLexicalVariable(AstNode lexicalVarList, LocalVariableScope outerScope) {
     Preconditions.checkArgument(lexicalVarList.is(PHPGrammar.LEXICAL_VAR_LIST));
 
@@ -145,6 +188,12 @@ public class LocalVariableScope {
     }
   }
 
+  /**
+   * Declares variable from list assignment:
+   * <pre> list($a, $b) = array (1, 2);
+   *
+   * @param listExpr is LIST_EXPR
+   * */
   public void declareListVariable(AstNode listExpr) {
     for (AstNode listElement : listExpr.getFirstChild(PHPGrammar.ASSIGNMENT_LIST).getChildren(PHPGrammar.ASSIGNMENT_LIST_ELEMENT)) {
       AstNode child = listElement.getFirstChild();
@@ -156,5 +205,6 @@ public class LocalVariableScope {
       }
     }
   }
+
 }
 
