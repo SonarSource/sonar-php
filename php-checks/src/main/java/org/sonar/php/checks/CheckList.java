@@ -81,6 +81,7 @@ public class CheckList {
       MissingNewLineAtEOFCheck.class,
       UnusedPrivateFieldCheck.class,
       UnusedLocalVariableCheck.class,
+      OneStatementPerLineCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
