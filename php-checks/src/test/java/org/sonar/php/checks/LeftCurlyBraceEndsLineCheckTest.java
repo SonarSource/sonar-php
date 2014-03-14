@@ -32,7 +32,7 @@ public class LeftCurlyBraceEndsLineCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LeftCurlyBraceEndsLineCheck.php"), new LeftCurlyBraceEndsLineCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Move this left curly brace to the end of previous line of code.")
+      .next().atLine(4).withMessage("Move this open curly brace to the end of the previous line.")
       .next().atLine(8)
       .next().atLine(11)
       .noMore();

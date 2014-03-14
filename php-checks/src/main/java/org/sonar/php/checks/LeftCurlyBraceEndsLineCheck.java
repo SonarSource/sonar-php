@@ -43,7 +43,7 @@ public class LeftCurlyBraceEndsLineCheck extends SquidCheck<Grammar> {
   @Override
   public void visitNode(AstNode astNode) {
     if (!isExcluded(astNode) && (isFirstOnLine(astNode) || !isLastOnLine(astNode))) {
-      getContext().createLineViolation(this, "Move this left curly brace to the end of previous line of code.", astNode);
+      getContext().createLineViolation(this, "Move this open curly brace to the end of the previous line.", astNode);
     }
   }
 
