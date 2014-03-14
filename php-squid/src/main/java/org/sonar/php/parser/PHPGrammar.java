@@ -356,10 +356,6 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(YIELD_EXPRESSION).is(YIELD, EXPRESSION, b.optional(DOUBLEARROW, EXPRESSION));
 
-    b.rule(BASE_VARIABLE).is(b.firstOf(
-      VARIABLE_WITHOUT_OBJECTS,
-      VARIABLE));
-
     b.rule(SIMPLE_INDIRECT_REFERENCE).is(b.oneOrMore(DOLAR));
 
     b.rule(REFERENCE_VARIABLE).is(COMPOUND_VARIABLE, b.zeroOrMore(b.firstOf(
@@ -485,6 +481,10 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(CLASS_NAME_REFERENCE).is(b.firstOf(
       b.sequence(BASE_VARIABLE, b.zeroOrMore(OBJECT_MEMBER_ACCESS)),
       CLASS_NAME));
+
+    b.rule(BASE_VARIABLE).is(b.firstOf(
+      VARIABLE_WITHOUT_OBJECTS,
+      VARIABLE));
 
     // Unary expression
     b.rule(UNARY_EXPR).is(b.firstOf(  // TODO martin: re-arrange & complete

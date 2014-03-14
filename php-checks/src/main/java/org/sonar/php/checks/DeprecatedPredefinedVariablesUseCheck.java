@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableMap;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.squid.checks.SquidCheck;
@@ -28,6 +27,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.api.PHPTokenType;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 
 @Rule(
@@ -35,15 +35,6 @@ import org.sonar.php.parser.PHPGrammar;
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class DeprecatedPredefinedVariablesUseCheck extends SquidCheck<Grammar> {
-
-  private static ImmutableMap<String, String> predefinedVariables = ImmutableMap.<String, String>builder()
-    .put("$HTTP_SERVER_VARS", "$_SERVER")
-    .put("$HTTP_GET_VARS", "$_GET")
-    .put("$HTTP_POST_VARS", "$_POST")
-    .put("$HTTP_POST_FILES", "$_FILES")
-    .put("$HTTP_SESSION_VARS", "$_SESSION")
-    .put("$HTTP_ENV_VARS", "$_ENV")
-    .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
 
   @Override
   public void init() {
@@ -55,8 +46,8 @@ public class DeprecatedPredefinedVariablesUseCheck extends SquidCheck<Grammar> {
     if (isSimpleVariable(astNode)) {
       String varName = astNode.getFirstChild().getTokenOriginalValue();
 
-      if (predefinedVariables.containsKey(varName)) {
-        getContext().createLineViolation(this, "Replace this use of the deprecated \"{0}\" variable with \"{1}\".", astNode, varName, predefinedVariables.get(varName));
+      if (CheckUtils.PREDEFINED_VARIABLES.containsKey(varName)) {
+        getContext().createLineViolation(this, "Replace this use of the deprecated \"{0}\" variable with \"{1}\".", astNode, varName, CheckUtils.PREDEFINED_VARIABLES.get(varName));
       }
     }
   }
