@@ -41,7 +41,7 @@ import java.util.List;
   @Property(
     key = PhpPlugin.FILE_SUFFIXES_KEY,
     defaultValue = Php.DEFAULT_FILE_SUFFIXES,
-    name = "File suffixes",
+    name = "File Suffixes",
     description = "Comma-separated list of suffixes of PHP files to analyze.",
     global = true,
     project = true),
@@ -51,7 +51,7 @@ import java.util.List;
     global = true,
     description = "Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory."),
   @Property(key = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
-    name = "Coverage report file path",
+    name = "Coverage Report",
     project = true,
     global = true,
     description = "Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
