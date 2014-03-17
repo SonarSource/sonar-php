@@ -82,6 +82,7 @@ public class CheckList {
       UnusedPrivateFieldCheck.class,
       UnusedLocalVariableCheck.class,
       OneStatementPerLineCheck.class,
+      ClassCouplingCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
