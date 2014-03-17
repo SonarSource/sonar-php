@@ -79,18 +79,36 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
         getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
 
       } else if (astNode.is(PHPGrammar.VARIABLE, PHPGrammar.BASE_VARIABLE)) {
-        AstNode child = astNode.getFirstChild();
-        if (child.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
-          getCurrentScope().useVariable(astNode.getFirstChild());
-        }
+        useLocalVariable(astNode);
+
       } else if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
-        AstNode leftExpr = getLeftHandExpression(astNode);
-        if (leftExpr != null && leftExpr.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
-          getCurrentScope().declareVariable(leftExpr);
-        }
+        declareNewLocalVariable(astNode);
+
       } else if (astNode.is(PHPGrammar.LIST_EXPR)) {
         getCurrentScope().declareListVariable(astNode);
       }
+    }
+  }
+
+  @Override
+  public void leaveNode(AstNode astNode) {
+    if (astNode.is(CheckUtils.FUNCTIONS)) {
+      reportUnusedVariable();
+      scopes.pop();
+    }
+  }
+
+  private void useLocalVariable(AstNode astNode) {
+    AstNode child = astNode.getFirstChild();
+    if (child.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+      getCurrentScope().useVariable(astNode.getFirstChild());
+    }
+  }
+
+  private void declareNewLocalVariable(AstNode astNode) {
+    AstNode leftExpr = getLeftHandExpression(astNode);
+    if (leftExpr != null && leftExpr.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+      getCurrentScope().declareVariable(leftExpr);
     }
   }
 
@@ -103,14 +121,6 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
       return leftExpr.getFirstChild().getFirstChild();
     } else {
       return null;
-    }
-  }
-
-  @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.FUNCTIONS)) {
-      reportUnusedVariable();
-      scopes.pop();
     }
   }
 
