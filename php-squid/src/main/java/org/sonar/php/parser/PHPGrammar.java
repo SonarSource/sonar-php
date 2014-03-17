@@ -273,7 +273,6 @@ public enum PHPGrammar implements GrammarRuleKey {
   CLASS_MEMBER_ACCESS,
   OBJECT_MEMBER_ACCESS,
   SIMPLE_INDIRECT_REFERENCE,
-  BASE_VARIABLE,
   STATIC_MEMBER,
   COMPOUND_VARIABLE,
   CLASS_NAME,
@@ -322,7 +321,6 @@ public enum PHPGrammar implements GrammarRuleKey {
   CAST_TYPE,
   LOGICAL_ASSIGNMENT,
   INTERNAL_FUNCTION,
-  CLASS_NAME_REFERENCE,
   NEW_EXPR,
   COMBINED_SCALAR_OFFSET,
   ARRAY_PAIR_LIST,
@@ -451,7 +449,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.optional(b.firstOf(
         INC,
         DEC,
-        b.sequence(INSTANCEOF, CLASS_NAME_REFERENCE))));
+        b.sequence(INSTANCEOF, VARIABLE))));
 
     b.rule(FUNCTION_EXPRESSION).is(b.optional(STATIC), FUNCTION, b.optional(AND), LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS,
       b.optional(LEXICAL_VARS), BLOCK);
@@ -477,14 +475,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(CLONE, EXPRESSION),
       b.sequence(PRINT, EXPRESSION)));
 
-    b.rule(NEW_EXPR).is(NEW, CLASS_NAME_REFERENCE, b.optional(FUNCTION_CALL_PARAMETER_LIST));
-    b.rule(CLASS_NAME_REFERENCE).is(b.firstOf(
-      b.sequence(BASE_VARIABLE, b.zeroOrMore(OBJECT_MEMBER_ACCESS)),
-      CLASS_NAME));
-
-    b.rule(BASE_VARIABLE).is(b.firstOf(
-      VARIABLE_WITHOUT_OBJECTS,
-      VARIABLE));
+    b.rule(NEW_EXPR).is(NEW, VARIABLE, b.optional(FUNCTION_CALL_PARAMETER_LIST));
 
     // Unary expression
     b.rule(UNARY_EXPR).is(b.firstOf(  // TODO martin: re-arrange & complete

@@ -50,7 +50,6 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
       PHPGrammar.GLOBAL_STATEMENT,
       PHPGrammar.STATIC_STATEMENT,
       PHPGrammar.LEXICAL_VAR_LIST,
-      PHPGrammar.BASE_VARIABLE,
       PHPGrammar.VARIABLE,
 
       PHPGrammar.ASSIGNMENT_EXPR,
@@ -78,7 +77,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
       } else if (astNode.is(PHPGrammar.LEXICAL_VAR_LIST)) {
         getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
 
-      } else if (astNode.is(PHPGrammar.VARIABLE, PHPGrammar.BASE_VARIABLE)) {
+      } else if (astNode.is(PHPGrammar.VARIABLE)) {
         useLocalVariable(astNode);
 
       } else if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
