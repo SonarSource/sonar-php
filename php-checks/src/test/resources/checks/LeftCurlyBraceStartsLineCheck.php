@@ -1,14 +1,16 @@
 <?php
 
 function myMethod()
-{                        // OK
+{                                // OK
   if(something)
-  {                      // OK
+  {                              // OK
     executeTask();
-  } else {               // NOK
+  } else {                       // NOK
     doSomethingElse();
   }
 }
 
-$a = function () {       // NOK
+$a = function () {               // NOK
 doSomething;};
+
+$a = function () {doSomething;}; // OK
