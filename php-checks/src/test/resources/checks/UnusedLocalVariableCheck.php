@@ -124,6 +124,15 @@ function n(){
 }
 
 /**
+ * VARIABLE VARIABLES
+ */
+function o(){
+  global $a, $$a;  // OK variable variables are not supported
+
+  return $a;
+}
+
+/**
  * OUT OF EVERY SCOPE
  */
 $a = 1;
