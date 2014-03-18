@@ -45,7 +45,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
 
   @Override
   public void init() {
-    subscribeTo(CheckUtils.FUNCTIONS);
+    subscribeTo(CheckUtils.functions());
     subscribeTo(
       PHPGrammar.GLOBAL_STATEMENT,
       PHPGrammar.STATIC_STATEMENT,
@@ -63,7 +63,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.FUNCTIONS)) {
+    if (astNode.is(CheckUtils.functions())) {
       scopes.push(new LocalVariableScope());
       getCurrentScope().declareParameters(astNode);
     } else if (!scopes.isEmpty()) {
@@ -91,7 +91,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
 
   @Override
   public void leaveNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.FUNCTIONS)) {
+    if (astNode.is(CheckUtils.functions())) {
       reportUnusedVariable();
       scopes.pop();
     }

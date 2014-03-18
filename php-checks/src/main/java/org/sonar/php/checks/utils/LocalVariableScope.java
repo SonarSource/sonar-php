@@ -77,7 +77,7 @@ public class LocalVariableScope {
    * @param functionDec is METHOD_DECLARATION, FUNCTION_DECLARATION or FUNCTION_EXPRESSION
    * */
   public void declareParameters(AstNode functionDec) {
-    Preconditions.checkArgument(functionDec.is(CheckUtils.FUNCTIONS));
+    Preconditions.checkArgument(functionDec.is(CheckUtils.functions()));
 
     AstNode paramList = functionDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
     if (paramList != null) {

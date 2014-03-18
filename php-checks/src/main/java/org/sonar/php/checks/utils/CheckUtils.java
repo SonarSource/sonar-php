@@ -80,4 +80,7 @@ public class CheckUtils {
       && methodDec.getFirstChild(PHPGrammar.METHOD_BODY).getFirstChild().is(PHPPunctuator.SEMICOLON);
   }
 
+  public static GrammarRuleKey[] functions() {
+    return FUNCTIONS;
+  }
 }
