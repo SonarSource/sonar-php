@@ -83,6 +83,7 @@ public class CheckList {
       UnusedLocalVariableCheck.class,
       OneStatementPerLineCheck.class,
       ClassCouplingCheck.class,
+      LeftCurlyBraceStartsLineCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
