@@ -22,11 +22,9 @@ package org.sonar.php.checks;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.squid.checks.SquidCheck;
-import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
 
 @Rule(
   key = "S1106",
