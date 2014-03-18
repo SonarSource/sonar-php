@@ -75,6 +75,10 @@ for ( ; $i > 0; $i++) {
  $i = 1;                                  // OK
 }
 
+for (++$i ; $i > 0; $i++) {
+ $i = 1;                                  // NOK
+}
+
 foreach ($myArray as $i) {
   $i = 0;                                 // OK - not in scope
 }

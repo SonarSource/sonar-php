@@ -50,6 +50,7 @@ public class ForLoopCounterChangedCheckTest extends CheckTest {
       .next().atLine(58)
       .next().atLine(60)
       .next().atLine(66)
+      .next().atLine(79)
       .noMore();
   }
 }
