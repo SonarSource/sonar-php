@@ -84,6 +84,7 @@ public class CheckList {
       OneStatementPerLineCheck.class,
       ClassCouplingCheck.class,
       LeftCurlyBraceStartsLineCheck.class,
+      IncrementDecrementInSubExpressionCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

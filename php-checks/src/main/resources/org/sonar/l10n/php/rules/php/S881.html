@@ -1,0 +1,22 @@
+<p>
+  The use of increment and decrement operators in combination with other arithmetic operators is not recommended, because: <br/>
+  It can significantly impair the readability of the code.<br/>
+  It introduces additional side effects into a statement, with the potential for undefined behavior.<br/>
+  It is safer to use these operators in isolation from any other arithmetic operators.<br/>
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+$u8a = ++$u8b + $u8c--;
+$foo = $bar++ / 4;
+</pre>
+
+<h2>Compliant Solution</h2>
+<p>The following sequence is clearer and therefore safer:</p>
+<pre>
+++$u8b;
+$u8a = $u8b + $u8c;
+$u8c--;
+$foo = $bar / 4;
+$bar++;
+</pre>
