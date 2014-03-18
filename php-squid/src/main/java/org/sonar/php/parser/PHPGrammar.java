@@ -475,7 +475,9 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(CLONE, EXPRESSION),
       b.sequence(PRINT, EXPRESSION)));
 
-    b.rule(NEW_EXPR).is(NEW, VARIABLE, b.optional(FUNCTION_CALL_PARAMETER_LIST));
+    // FUNCTION_PARAMETERS_CALL_LIST after VARIABLE has been removed because PEG is greedy and VARIABLE will always consume
+    // FUNCTION_PARAMETERS_CALL_LIST.
+    b.rule(NEW_EXPR).is(NEW, VARIABLE);
 
     // Unary expression
     b.rule(UNARY_EXPR).is(b.firstOf(  // TODO martin: re-arrange & complete
