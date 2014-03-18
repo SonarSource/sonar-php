@@ -43,7 +43,7 @@ import java.util.Set;
 public class ClassCouplingCheck extends SquidCheck<Grammar> {
 
   public static final int DEFAULT = 20;
-  public Set<String> types = Sets.newHashSet();
+  private Set<String> types = Sets.newHashSet();
   private static final Set<String> DOC_TAGS = ImmutableSet.of(
     "@var", "@global", "@staticvar", "@throws", "@param", "@return");
 
@@ -88,7 +88,8 @@ public class ClassCouplingCheck extends SquidCheck<Grammar> {
       int nbType = types.size();
 
       if (nbType > max) {
-        getContext().createLineViolation(this, "Split this class into smaller and more specialized ones to reduce its dependencies on other classes from {0} to the maximum authorized {1} or less.",
+        getContext().createLineViolation(this,
+          "Split this class into smaller and more specialized ones to reduce its dependencies on other classes from {0} to the maximum authorized {1} or less.",
           astNode, nbType, max);
       }
       types.clear();
