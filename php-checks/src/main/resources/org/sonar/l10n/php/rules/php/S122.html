@@ -13,3 +13,10 @@ if(someCondition) {
   doSomething();
 }
 </pre>
+
+<h2>Exceptions</h2>
+<p>Anonymous functions containing a single statement ignored.</p>
+<pre>
+$max_comparator = function ($v) { return $v > 2; };           // Compliant
+$max_comparator = function ($v) { echo $v; return $v > 2; };  // Noncompliant
+</pre>

@@ -16,6 +16,8 @@ $a = function () { return 1; };                 // OK
 
 $a = call(function($a) { return 1; }, function($a) { return 1; });  // NOK
 
+$a = function () { doSomething(); return 1; };  // NOK - more than one statement nested in anonymous function.
+
 ?>
 
 html

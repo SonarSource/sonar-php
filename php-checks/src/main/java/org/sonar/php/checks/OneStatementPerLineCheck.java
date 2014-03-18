@@ -38,11 +38,12 @@ import java.util.Map;
 public class OneStatementPerLineCheck extends SquidCheck<Grammar> {
 
   private final Map<Integer, StatementCount> statementsPerLine = Maps.newHashMap();
-  private boolean skip = false;
+  private boolean inFunctionExpression = false;
 
   private static class StatementCount {
     int nbStatement = 0;
     int nbFunctionExpression = 0;
+    int nbNestedStatement = 0;
   }
 
   @Override
@@ -57,7 +58,7 @@ public class OneStatementPerLineCheck extends SquidCheck<Grammar> {
   @Override
   public void visitFile(AstNode astNode) {
     statementsPerLine.clear();
-    skip = false;
+    inFunctionExpression = false;
   }
 
   @Override
@@ -67,16 +68,20 @@ public class OneStatementPerLineCheck extends SquidCheck<Grammar> {
 
       if (statementsPerLine.containsKey(line)) {
         statementsPerLine.get(line).nbFunctionExpression++;
-        skip = true;
+        inFunctionExpression = true;
       }
-    } else if (!skip && !isExcluded(node)) {
+    } else if (!isExcluded(node)) {
       int line = node.getTokenLine();
 
       if (!statementsPerLine.containsKey(line)) {
         statementsPerLine.put(line, new StatementCount());
+      } else if (inFunctionExpression) {
+        statementsPerLine.get(line).nbNestedStatement++;
       }
 
-      statementsPerLine.get(line).nbStatement++;
+      if (!inFunctionExpression) {
+        statementsPerLine.get(line).nbStatement++;
+      }
     }
   }
 
@@ -85,25 +90,17 @@ public class OneStatementPerLineCheck extends SquidCheck<Grammar> {
     for (Map.Entry<Integer, StatementCount> statementsAtLine : statementsPerLine.entrySet()) {
       StatementCount stmtCount = statementsAtLine.getValue();
 
-      if (stmtCount.nbStatement > 1 || stmtCount.nbFunctionExpression > 1) {
-        getContext().createLineViolation(this, "{0} were found on this line. Reformat the code to have only one statement per line.", statementsAtLine.getKey(),
-          getMessagePrefix(stmtCount));
+      if (stmtCount.nbStatement > 1 || stmtCount.nbFunctionExpression > 1 || stmtCount.nbNestedStatement > 1) {
+        getContext().createLineViolation(this, "{0} statements were found on this line. Reformat the code to have only one statement per line.", statementsAtLine.getKey(),
+          stmtCount.nbStatement + stmtCount.nbNestedStatement);
       }
-    }
-  }
-
-  private String getMessagePrefix(StatementCount stmtCount) {
-    if (stmtCount.nbFunctionExpression > 1) {
-      return stmtCount.nbStatement + " statements and " + stmtCount.nbFunctionExpression + " anonymous functions";
-    } else {
-      return stmtCount.nbStatement + " statements";
     }
   }
 
   @Override
   public void leaveNode(AstNode astNode) {
     if (astNode.is(PHPGrammar.FUNCTION_EXPRESSION) && statementsPerLine.containsKey(astNode.getTokenLine())) {
-      skip = false;
+      inFunctionExpression = false;
     }
   }
 

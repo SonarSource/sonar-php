@@ -34,8 +34,9 @@ public class OneStatementPerLineCheckTest extends CheckTest {
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(3).withMessage("2 statements were found on this line. Reformat the code to have only one statement per line.")
       .next().atLine(5)
-      .next().atLine(17).withMessage("1 statements and 2 anonymous functions were found on this line. Reformat the code to have only one statement per line.")
-      .next().atLine(27)
+      .next().atLine(17).withMessage("3 statements were found on this line. Reformat the code to have only one statement per line.")
+      .next().atLine(19)
+      .next().atLine(29)
       .noMore();
   }
 }
