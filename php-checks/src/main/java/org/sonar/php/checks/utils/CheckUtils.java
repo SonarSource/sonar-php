@@ -20,9 +20,11 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
+import org.apache.commons.lang.ArrayUtils;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -38,10 +40,10 @@ public class CheckUtils {
     .put("$HTTP_ENV_VARS", "$_ENV")
     .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
 
-  public static final GrammarRuleKey[] FUNCTIONS = {
+  private static final ImmutableList<GrammarRuleKey> FUNCTIONS = ImmutableList.<GrammarRuleKey>of(
     PHPGrammar.METHOD_DECLARATION,
     PHPGrammar.FUNCTION_DECLARATION,
-    PHPGrammar.FUNCTION_EXPRESSION};
+    PHPGrammar.FUNCTION_EXPRESSION);
 
   private CheckUtils() {
   }
@@ -80,7 +82,11 @@ public class CheckUtils {
       && methodDec.getFirstChild(PHPGrammar.METHOD_BODY).getFirstChild().is(PHPPunctuator.SEMICOLON);
   }
 
+  /**
+   * Returns an array of GrammarRuleKey containing function grammar rule:
+   * METHOD_DECLARATION, FUNCTION_DECLARATION, FUNCTION_EXPRESSION.
+   */
   public static GrammarRuleKey[] functions() {
-    return FUNCTIONS;
+    return FUNCTIONS.toArray(new GrammarRuleKey[FUNCTIONS.size()]);
   }
 }
