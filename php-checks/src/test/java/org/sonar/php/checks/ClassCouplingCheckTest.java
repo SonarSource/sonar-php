@@ -42,7 +42,7 @@ public class ClassCouplingCheckTest extends CheckTest {
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassCouplingCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Split this class into smaller and more specialized ones to reduce its dependencies on other classes from 11 to the maximum authorized " + check.max + " or less.")
+      .next().atLine(3).withMessage("Split this class into smaller and more specialized ones to reduce its dependencies on other classes from 13 to the maximum authorized " + check.max + " or less.")
       .noMore();
   }
 }

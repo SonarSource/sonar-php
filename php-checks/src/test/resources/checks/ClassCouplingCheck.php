@@ -1,6 +1,8 @@
 <?php
 
-class Foo {                           // NOK - depends on 11 classes
+class Foo {                           // NOK - depends on 12 classes
+
+    use MyTrait;
 
     /**
      * @var T1
@@ -23,25 +25,30 @@ class Foo {                           // NOK - depends on 11 classes
      private $a3;
 
     /**
-     * @param T5
-     * @param T6
-     *
-     * @return T4
+     * @var T4
      */
-     public function  f(T5 $a, $b) {  // coupled to T4, T5, T6
-       $result = new T7();            // coupled to T7
-       $localVar = new T8();          // coupled to T8
+     const A4 = 1;
+
+    /**
+     * @param T6 $a
+     * @param T7
+     *
+     * @return T5
+     */
+     public function  f(T6 $a, $b) {  // coupled to T5, T6, T7
+       $result = new T8();            // coupled to T8
+       $localVar = new T9();          // coupled to T9
 
        return $result;
      }
 
     /**
-     * @throws T9
-     * @param T10
+     * @throws T10
+     * @param T11
      *
-     * @return T11|null
+     * @return T12|null
      */
-     public function g(T10 $p) {      // coupled to T9, T10, T11
+     public function g(T11 $p) {      // coupled to T10, T11, T12
        if ($p->a) {
          throw new T10();
        }
@@ -49,11 +56,33 @@ class Foo {                           // NOK - depends on 11 classes
      }
 
      /**
-      * @param T11[]
+      * @param T12[]
       */
      public function h($p) {
       return doSomething($p);
      }
+
+     /**
+      * No doc
+      */
+      public function i() {
+       return new static::Foo();      // Not supported
+      }
+
+     /**
+      * @return \T13
+      */
+      public function i() {
+       return new namespace\T13 ();    // coupled to T13
+      }
+
+     /**
+      * No doc
+      */
+      public function k() {
+        $class = "T14";
+        return new $class();          // Not supported
+      }
 }
 
 class Bar {       // OK - depends on 2 classes

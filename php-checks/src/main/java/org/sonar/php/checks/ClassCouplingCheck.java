@@ -32,6 +32,8 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.lexer.PHPLexer;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
@@ -47,13 +49,13 @@ public class ClassCouplingCheck extends SquidCheck<Grammar> {
   private static final Set<String> DOC_TAGS = ImmutableSet.of(
     "@var", "@global", "@staticvar", "@throws", "@param", "@return");
 
-  private static final Set<String> PRIMITIVE_TYPES = Sets.newTreeSet(String.CASE_INSENSITIVE_ORDER);
+  private static final Set<String> EXCLUDED_TYPES = Sets.newTreeSet(String.CASE_INSENSITIVE_ORDER);
 
   static {
-    PRIMITIVE_TYPES.addAll(ImmutableSet.of(
+    EXCLUDED_TYPES.addAll(ImmutableSet.of(
       "INTEGER", "INT", "DOUBLE", "FLOAT",
       "STRING", "ARRAY", "OBJECT", "BOOLEAN",
-      "BOOL", "BINARY", "NULL"));
+      "BOOL", "BINARY", "NULL", "MIXED"));
   }
 
   @RuleProperty(
@@ -78,7 +80,7 @@ public class ClassCouplingCheck extends SquidCheck<Grammar> {
     if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
       retrieveCoupledTypes(astNode);
     } else {
-      types.add(getInstantiatedClassName(astNode));
+      retrieveInstantiatedClassName(astNode);
     }
   }
 
@@ -100,12 +102,13 @@ public class ClassCouplingCheck extends SquidCheck<Grammar> {
     for (AstNode classStatement : classDeclaration.getChildren(PHPGrammar.CLASS_STATEMENT)) {
       AstNode stmt = classStatement.getFirstChild();
 
-      if (stmt.is(PHPGrammar.CLASS_VARIABLE_DECLARATION)) {
+      if (stmt.is(PHPGrammar.CLASS_VARIABLE_DECLARATION, PHPGrammar.CLASS_CONSTANT_DECLARATION)) {
         retrieveTypeFromDoc(stmt);
-
       } else if (stmt.is(PHPGrammar.METHOD_DECLARATION)) {
         retrieveTypeFromDoc(stmt);
         retrieveTypeFromParameter(stmt);
+      } else {
+        continue;
       }
     }
   }
@@ -117,7 +120,7 @@ public class ClassCouplingCheck extends SquidCheck<Grammar> {
       for (AstNode parameter : parameterList.getChildren(PHPGrammar.PARAMETER)) {
         AstNode classType = parameter.getFirstChild(PHPGrammar.OPTIONAL_CLASS_TYPE);
 
-        if (classType != null && classType.getFirstChild().is(PHPGrammar.FULLY_QUALIFIED_NAME)) {
+        if (classType != null && classType.getFirstChild().is(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME)) {
           types.add(getClassName(classType.getFirstChild()));
         }
       }
@@ -128,40 +131,53 @@ public class ClassCouplingCheck extends SquidCheck<Grammar> {
     Token varDecToken = varDeclaration.getToken();
 
     for (Trivia comment : varDecToken.getTrivia()) {
-      for (String line : comment.getToken().getValue().split("(?:\r)?\n|\r")) {
-        retrieveTypeFromCOmmentLine(line);
+      for (String line : comment.getToken().getValue().split("[" + PHPLexer.LINE_TERMINATOR + "]++")) {
+        retrieveTypeFromCommentLine(line);
       }
     }
   }
 
-  private void retrieveTypeFromCOmmentLine(String line) {
-    String[] commentLine = line.trim().split(" ");
+  private void retrieveTypeFromCommentLine(String line) {
+    String[] commentLine = line.trim().split("[" + PHPLexer.WHITESPACE + "]++");
 
     if (commentLine.length > 2 && DOC_TAGS.contains(commentLine[1])) {
       for (String type : commentLine[2].split("\\|")) {
         type = StringUtils.removeEnd(type, "[]");
 
-        if (!PRIMITIVE_TYPES.contains(type)) {
+        if (!EXCLUDED_TYPES.contains(type)) {
           types.add(type);
         }
       }
     }
   }
 
-  private String getInstantiatedClassName(AstNode newExpr) {
-    AstNode classNameNode = newExpr.getFirstChild(PHPGrammar.VARIABLE).getFirstChild();
-
-    if (classNameNode.is(PHPKeyword.NAMESPACE, PHPGrammar.CLASS_NAME, GenericTokenType.IDENTIFIER)
-      && classNameNode.getFirstChild().isNot(PHPKeyword.STATIC)) {
-      return getClassName(classNameNode);
+  private void retrieveInstantiatedClassName(AstNode astNode) {
+    String className = getInstantiatedClassName(astNode);
+    if (className != null) {
+      types.add(className);
     }
-    return null;
+  }
+
+  private String getInstantiatedClassName(AstNode newExpr) {
+    AstNode variable = newExpr.getFirstChild(PHPGrammar.VARIABLE);
+    AstNode classNameNode = variable.getFirstChild();
+
+    if (classNameNode.is(PHPKeyword.NAMESPACE)) {
+      return getClassName(variable);
+    } else if (classNameNode.is(PHPGrammar.CLASS_NAME, GenericTokenType.IDENTIFIER) && classNameNode.getFirstChild().isNot(PHPKeyword.STATIC)) {
+      return getClassName(classNameNode);
+    } else {
+      return null;
+    }
   }
 
   private String getClassName(AstNode expr) {
     StringBuilder builder = new StringBuilder();
 
     for (Token token : expr.getTokens()) {
+      if (token.getType() == PHPPunctuator.LPARENTHESIS) {
+        break;
+      }
       if (token.getType() != PHPKeyword.NAMESPACE) {
         builder.append(token.getOriginalValue());
       }
