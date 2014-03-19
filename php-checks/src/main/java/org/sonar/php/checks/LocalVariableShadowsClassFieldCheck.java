@@ -139,12 +139,13 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
 
   private boolean isExcluded(AstNode methodDec) {
     String methodName = methodDec.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
-    return (isStatic(methodDec) || isConstructor(methodDec, methodName) || isSetter(methodDec, methodName));
+    return isStatic(methodDec) || isConstructor(methodDec, methodName) || isSetter(methodDec, methodName);
   }
 
   private void checkLocalVariable(AstNode assignmentExpr) {
     AstNode varNode = assignmentExpr.getFirstChild();
-    String varName = getVarName(varNode);
+    String varName = CheckUtils.getExpressionAsString(varNode);
+
     if (classState.hasFieldNamed(varName) && !classState.hasAlreadyBeenChecked(varName)) {
       reportIssue(varNode, varName);
     }
@@ -206,13 +207,5 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
     } else if (astNode.is(PHPGrammar.METHOD_DECLARATION) && skip) {
       skip = false;
     }
-  }
-
-  private String getVarName(AstNode expr) {
-    StringBuilder builder = new StringBuilder();
-    for (Token token : expr.getTokens()) {
-      builder.append(token.getOriginalValue());
-    }
-    return builder.toString();
   }
 }

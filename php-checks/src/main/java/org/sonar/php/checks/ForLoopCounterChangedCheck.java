@@ -28,6 +28,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
@@ -79,14 +80,16 @@ public class ForLoopCounterChangedCheck extends SquidCheck<Grammar> {
   }
 
   private void check(AstNode astNode) {
-    String varName;
+    AstNode varNode;
 
     if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
-      varName = getVarName(astNode.getFirstChild());
+      varNode = astNode.getFirstChild();
     } else {
       // Increment or decrement
-      varName = isPostUnaryExpr(astNode) ? getVarName(astNode.getNextAstNode()) : getVarName(astNode.getPreviousAstNode());
+      varNode = isPostUnaryExpr(astNode) ? astNode.getNextAstNode() : astNode.getPreviousAstNode();
     }
+
+    String varName = CheckUtils.getExpressionAsString(varNode);
 
     if (counters.contains(varName)) {
       reportIssue(astNode, varName);
@@ -119,18 +122,11 @@ public class ForLoopCounterChangedCheck extends SquidCheck<Grammar> {
       variable = exprChild.getFirstChild().getFirstChild();
     }
 
-    return getVarName(variable);
+    return CheckUtils.getExpressionAsString(variable);
   }
 
   private boolean isPostUnaryExpr(AstNode unaryOperator) {
     return unaryOperator.getParent().is(PHPGrammar.UNARY_EXPR);
   }
 
-  private String getVarName(AstNode expr) {
-    StringBuilder builder = new StringBuilder();
-    for (Token token : expr.getTokens()) {
-      builder.append(token.getOriginalValue());
-    }
-    return builder.toString();
-  }
 }
