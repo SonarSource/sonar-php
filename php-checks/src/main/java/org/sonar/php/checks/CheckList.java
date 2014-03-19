@@ -86,6 +86,7 @@ public class CheckList {
       LeftCurlyBraceStartsLineCheck.class,
       IncrementDecrementInSubExpressionCheck.class,
       LocalVariableShadowsClassFieldCheck.class,
+      LocalVariableAndParameterNameCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

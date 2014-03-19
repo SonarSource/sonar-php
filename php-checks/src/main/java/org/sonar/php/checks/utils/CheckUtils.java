@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
+import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
@@ -111,6 +112,17 @@ public class CheckUtils {
       }
     }
     return parameters;
+  }
+
+  /**
+   * Return String representing the full expression given as parameter.
+   */
+  public static String getExpressionAsString(AstNode node) {
+    StringBuilder builder = new StringBuilder();
+    for (Token token : node.getTokens()) {
+      builder.append(token.getOriginalValue());
+    }
+    return builder.toString();
   }
 
 }
