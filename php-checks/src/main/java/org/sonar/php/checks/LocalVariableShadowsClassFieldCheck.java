@@ -161,7 +161,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
   }
 
   private void reportIssue(AstNode node, String varName) {
-    getContext().createLineViolation(this, "Rename \"{0}\" which hides the field declared at line {1}.",
+    getContext().createLineViolation(this, "Rename \"{0}\" which has the same name as the field declared at line {1}.",
       node, varName, classState.getLineOfFieldNamed(varName));
     classState.setAsCheckedVariable(varName);
   }

@@ -32,7 +32,7 @@ public class LocalVariableShadowsClassFieldCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LocalVariableShadowsClassFieldCheck.php"), new LocalVariableShadowsClassFieldCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(22).withMessage("Rename \"$field\" which hides the field declared at line 5.")
+      .next().atLine(22).withMessage("Rename \"$field\" which has the same name as the field declared at line 5.")
       .next().atLine(25)
       .next().atLine(28)
       .next().atLine(32)
