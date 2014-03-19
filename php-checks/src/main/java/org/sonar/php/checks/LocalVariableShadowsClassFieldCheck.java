@@ -30,6 +30,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPTokenType;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
@@ -150,16 +151,11 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
   }
 
   private void checkParameters(AstNode functionDec) {
-    AstNode parameterList = functionDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
+    for (AstNode parameter : CheckUtils.getFunctionParameters(functionDec)) {
+      String name = parameter.getTokenOriginalValue();
 
-    if (parameterList != null) {
-      for (AstNode parameter : parameterList.getChildren(PHPGrammar.PARAMETER)) {
-        AstNode paramIdentifier = parameter.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
-        String name = paramIdentifier.getTokenOriginalValue();
-
-        if (classState.hasFieldNamed(paramIdentifier.getTokenOriginalValue())) {
-          reportIssue(paramIdentifier, name);
-        }
+      if (classState.hasFieldNamed(name)) {
+        reportIssue(parameter, name);
       }
     }
   }

@@ -22,11 +22,15 @@ package org.sonar.php.checks.utils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.sslr.grammar.GrammarRuleKey;
+
+import java.util.List;
 
 public class CheckUtils {
 
@@ -88,4 +92,25 @@ public class CheckUtils {
   public static GrammarRuleKey[] functions() {
     return FUNCTIONS.toArray(new GrammarRuleKey[FUNCTIONS.size()]);
   }
+
+  /**
+   * Returns list of parameters for the given methods, function or anonymous function.
+   *
+   * @param functionDec is FUNCTION_DECLARATION, METHOD_DECLARATION or FUNCTION_EXPRESSION
+   * @return list of VAR_IDENTIFIER
+   */
+  public static List<AstNode> getFunctionParameters(AstNode functionDec) {
+    Preconditions.checkArgument(functionDec.is(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
+
+    List<AstNode> parameters = Lists.newArrayList();
+    AstNode parameterList = functionDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
+
+    if (parameterList != null) {
+      for (AstNode parameter : parameterList.getChildren(PHPGrammar.PARAMETER)) {
+        parameters.add(parameter.getFirstChild(PHPTokenType.VAR_IDENTIFIER));
+      }
+    }
+    return parameters;
+  }
+
 }
