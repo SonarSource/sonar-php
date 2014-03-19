@@ -1,0 +1,38 @@
+<p>
+  Shadowing fields with a local variable or with a [function|method] parameter is a bad practice reducing code readability: It makes it confusing to know whether the field or the variable is and should be accessed.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+class Foo {
+  public $myField;
+
+  public function doSomething() {
+    $myField = 0;
+    ...
+  }
+
+  public function doSomethingElse($myField) {
+    ...
+  }
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+class Foo {
+  public $myField;
+
+  public function Foo($myField) {
+    $this->myField = $myField;
+  }
+
+  public static function build($myField) {
+    ...
+  }
+
+  public function setMyField($myField){
+    $this->myField = $myField;
+  }
+}
+</pre>
