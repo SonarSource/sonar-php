@@ -120,20 +120,25 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
       classState.setClassName(astNode);
 
     } else if (astNode.is(PHPGrammar.METHOD_DECLARATION)) {
-      if (isStatic(astNode)) {
+      if (isExcluded(astNode)) {
         skip = true;
       } else {
         classState.newFunctionScope();
-        checkParametersForMethod(astNode);
+        checkParameters(astNode);
       }
 
     } else if (astNode.is(PHPGrammar.FUNCTION_EXPRESSION) && classState.isInClass() && !skip) {
       classState.newFunctionScope();
-      checkParameterForAnonymousFunction(astNode);
+      checkParameters(astNode);
 
     } else if (classState.isInClass() && !skip) {
       checkLocalVariable(astNode);
     }
+  }
+
+  private boolean isExcluded(AstNode methodDec) {
+    String methodName = methodDec.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
+    return (isStatic(methodDec) || isConstructor(methodDec, methodName) || isSetter(methodDec, methodName));
   }
 
   private void checkLocalVariable(AstNode assignmentExpr) {
@@ -144,29 +149,17 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
     }
   }
 
-  private void checkParameterForAnonymousFunction(AstNode functionExpr) {
-    AstNode parameterList = functionExpr.getFirstChild(PHPGrammar.PARAMETER_LIST);
+  private void checkParameters(AstNode functionDec) {
+    AstNode parameterList = functionDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
+
     if (parameterList != null) {
-      checkParameters(parameterList);
-    }
-  }
+      for (AstNode parameter : parameterList.getChildren(PHPGrammar.PARAMETER)) {
+        AstNode paramIdentifier = parameter.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
+        String name = paramIdentifier.getTokenOriginalValue();
 
-  private void checkParametersForMethod(AstNode methodDec) {
-    String methodName = methodDec.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
-    AstNode parameterList = methodDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
-
-    if (!isConstructor(methodDec, methodName) && !isSetter(methodDec, methodName) && parameterList != null) {
-      checkParameters(parameterList);
-    }
-  }
-
-  private void checkParameters(AstNode parameterList) {
-    for (AstNode parameter : parameterList.getChildren(PHPGrammar.PARAMETER)) {
-      AstNode paramIdentifier = parameter.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
-      String name = paramIdentifier.getTokenOriginalValue();
-
-      if (classState.hasFieldNamed(paramIdentifier.getTokenOriginalValue())) {
-        reportIssue(paramIdentifier, name);
+        if (classState.hasFieldNamed(paramIdentifier.getTokenOriginalValue())) {
+          reportIssue(paramIdentifier, name);
+        }
       }
     }
   }

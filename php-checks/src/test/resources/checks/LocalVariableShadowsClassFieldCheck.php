@@ -30,6 +30,7 @@ class A {
 
     $f2 = function () {
       $field = 1;                       // NOK
+      $field = 2;                       // OK
     };
   }
 }
