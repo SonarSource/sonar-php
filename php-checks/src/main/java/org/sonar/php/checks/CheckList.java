@@ -87,6 +87,7 @@ public class CheckList {
       IncrementDecrementInSubExpressionCheck.class,
       LocalVariableShadowsClassFieldCheck.class,
       LocalVariableAndParameterNameCheck.class,
+      ImmediatelyReturnedVariableCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
