@@ -88,6 +88,7 @@ public class CheckList {
       LocalVariableShadowsClassFieldCheck.class,
       LocalVariableAndParameterNameCheck.class,
       ImmediatelyReturnedVariableCheck.class,
+      CommentedOutCodeCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
