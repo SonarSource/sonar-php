@@ -26,12 +26,9 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.LocalVariableScope;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 @Rule(
   key = "S1488",
@@ -45,10 +42,6 @@ public class ImmediatelyReturnedVariableCheck extends SquidCheck<Grammar> {
   public void init() {
     subscribeTo(CheckUtils.functions());
     subscribeTo(PHPGrammar.EXPRESSION_STATEMENT);
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
   }
 
   @Override
@@ -124,7 +117,7 @@ public class ImmediatelyReturnedVariableCheck extends SquidCheck<Grammar> {
   /**
    * Returns left hand expression of the assignment only if it a simple variable,
    * returns null otherwise.
-   * <p>
+   * <p/>
    * Example:<br>
    * $a = 1 returns $a<br>
    * $a->property = 1 returns null
