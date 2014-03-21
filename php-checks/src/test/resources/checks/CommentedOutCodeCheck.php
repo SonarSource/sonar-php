@@ -21,8 +21,10 @@ function sayHello() {
   // ----
   // ++++
 
-//  function f () {
-//    echo "";
-//    dosomething();
-//  }
+  // Block of commented out code
+  //  function f () {
+  //    echo "";
+  //    dosomething();
+  //  }
+
 }

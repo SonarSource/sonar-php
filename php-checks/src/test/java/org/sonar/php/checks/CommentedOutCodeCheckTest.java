@@ -34,7 +34,7 @@ public class CommentedOutCodeCheckTest extends CheckTest {
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(9)
       .next().atLine(16).withMessage("Remove this commented out code.")
-      .next().atLine(24)
+      .next().atLine(25)
       .noMore();
   }
 }

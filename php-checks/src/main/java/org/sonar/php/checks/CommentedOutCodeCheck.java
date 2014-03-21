@@ -66,9 +66,7 @@ public class CommentedOutCodeCheck extends SquidCheck<Grammar> implements AstAnd
     Trivia previousTrivia = null;
 
     for (Trivia trivia : token.getTrivia()) {
-      if (trivia.isComment()) {
-        checkTrivia(previousTrivia, trivia);
-      }
+      checkTrivia(previousTrivia, trivia);
       previousTrivia = trivia;
     }
   }
