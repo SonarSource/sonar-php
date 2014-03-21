@@ -28,8 +28,6 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 
-import javax.annotation.Nullable;
-
 @Rule(
   key = "S1488",
   priority = Priority.MINOR)
