@@ -24,8 +24,8 @@ import com.sonar.sslr.api.TokenType;
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.RegexpChannel;
-import org.sonar.channel.Channel;
-import org.sonar.channel.CodeReader;
+import org.sonar.sslr.channel.Channel;
+import org.sonar.sslr.channel.CodeReader;
 
 public class PHPTagsChannel extends Channel<Lexer> {
 
