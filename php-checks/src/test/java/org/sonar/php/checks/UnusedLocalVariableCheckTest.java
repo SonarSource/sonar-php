@@ -41,6 +41,7 @@ public class UnusedLocalVariableCheckTest extends CheckTest {
       .next().atLine(61)
       .next().atLine(61)
       .next().atLine(120)
+      .next().atLine(122).withMessage("Remove this unused \"$c\" local variable.")
       .noMore();
   }
 }

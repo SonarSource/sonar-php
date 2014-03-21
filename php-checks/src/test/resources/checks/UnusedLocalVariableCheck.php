@@ -47,7 +47,7 @@ function j($p) {
   $a = 1;                      // OK - use in anonymous function
   $b = 1;                      // OK - use in anonymous function
 
-  call(function () use ($a, $b, $p) {  // NOK - $b ($c exlusion)
+  call(function () use ($a, $b, $p) {  // NOK - $b ($p exclusion)
     return $a;
   });
 }
@@ -117,10 +117,11 @@ function m($p){
  */
 function n(){
 
-  list($a, $b) = array();  // NOK - $a
-  list($c) = array();      // OK $d not supported
+  list($a, $b) = array();             // NOK - $a
+  list(static::$d) = array();         // OK
+  list(list($c) = array()) = array(); // NOK - $c
 
-  doSomething($b, $c);
+  doSomething($b);
 }
 
 /**
