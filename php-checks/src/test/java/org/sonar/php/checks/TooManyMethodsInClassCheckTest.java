@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squid.api.SourceFile;
+import org.sonar.squidbridge.api.SourceFile;
 
 public class TooManyMethodsInClassCheckTest extends CheckTest {
 

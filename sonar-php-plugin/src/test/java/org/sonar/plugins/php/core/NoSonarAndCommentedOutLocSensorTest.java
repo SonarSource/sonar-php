@@ -31,8 +31,8 @@ import org.sonar.api.resources.Resource;
 import org.sonar.api.scan.filesystem.FileQuery;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.squid.measures.Metric;
-import org.sonar.squid.text.Source;
+import org.sonar.squidbridge.measures.Metric;
+import org.sonar.squidbridge.text.Source;
 import org.sonar.test.TestUtils;
 
 import java.io.File;

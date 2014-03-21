@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifierRule;
+import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
 
 public class CheckTest {
 

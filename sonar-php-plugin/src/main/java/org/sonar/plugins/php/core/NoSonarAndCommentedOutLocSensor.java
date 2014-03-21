@@ -34,15 +34,15 @@ import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.squid.measures.Metric;
-import org.sonar.squid.recognizer.CamelCaseDetector;
-import org.sonar.squid.recognizer.CodeRecognizer;
-import org.sonar.squid.recognizer.ContainsDetector;
-import org.sonar.squid.recognizer.Detector;
-import org.sonar.squid.recognizer.EndWithDetector;
-import org.sonar.squid.recognizer.KeywordsDetector;
-import org.sonar.squid.recognizer.LanguageFootprint;
-import org.sonar.squid.text.Source;
+import org.sonar.squidbridge.measures.Metric;
+import org.sonar.squidbridge.recognizer.CamelCaseDetector;
+import org.sonar.squidbridge.recognizer.CodeRecognizer;
+import org.sonar.squidbridge.recognizer.ContainsDetector;
+import org.sonar.squidbridge.recognizer.Detector;
+import org.sonar.squidbridge.recognizer.EndWithDetector;
+import org.sonar.squidbridge.recognizer.KeywordsDetector;
+import org.sonar.squidbridge.recognizer.LanguageFootprint;
+import org.sonar.squidbridge.text.Source;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -140,7 +140,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     }
 
     /**
-     * @see org.sonar.squid.recognizer.LanguageFootprint#getDetectors()
+     * @see org.sonar.squidbridge.recognizer.LanguageFootprint#getDetectors()
      */
     public Set<Detector> getDetectors() {
       return detectors;

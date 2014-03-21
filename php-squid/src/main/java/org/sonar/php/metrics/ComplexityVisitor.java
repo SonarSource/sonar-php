@@ -21,7 +21,7 @@ package org.sonar.php.metrics;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
-import com.sonar.sslr.squid.SquidAstVisitor;
+import org.sonar.squidbridge.SquidAstVisitor;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;

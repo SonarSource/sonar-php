@@ -19,12 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 import org.junit.Test;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squid.api.SourceFile;
+import org.sonar.squidbridge.api.SourceFile;
 
 public class TodoTagPresenceCheckTest extends CheckTest {
 

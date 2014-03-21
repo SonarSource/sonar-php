@@ -22,12 +22,12 @@ package org.sonar.php;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.Grammar;
-import com.sonar.sslr.squid.AstScanner;
+import org.sonar.squidbridge.AstScanner;
 import org.junit.Test;
 import org.sonar.php.api.PHPMetric;
-import org.sonar.squid.api.SourceFile;
-import org.sonar.squid.api.SourceProject;
-import org.sonar.squid.indexer.QueryByType;
+import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.squidbridge.api.SourceProject;
+import org.sonar.squidbridge.indexer.QueryByType;
 
 import java.io.File;
 
