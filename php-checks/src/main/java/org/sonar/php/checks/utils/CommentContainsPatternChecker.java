@@ -22,8 +22,8 @@ package org.sonar.php.checks.utils;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
-import org.sonar.squidbridge.checks.SquidCheck;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.squidbridge.checks.SquidCheck;
 
 public class CommentContainsPatternChecker {
   private final SquidCheck<Grammar> check;

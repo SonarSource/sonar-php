@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.core;
 
 import com.google.common.collect.ImmutableList;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
@@ -30,7 +29,6 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.scan.filesystem.FileQuery;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
-import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.measures.Metric;
 import org.sonar.squidbridge.text.Source;
 import org.sonar.test.TestUtils;
@@ -38,7 +36,6 @@ import org.sonar.test.TestUtils;
 import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;

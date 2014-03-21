@@ -26,7 +26,6 @@ import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
-import org.sonar.squidbridge.checks.SquidCheck;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -35,6 +34,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.lexer.PHPLexer;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.checks.SquidCheck;
 
 import javax.annotation.Nullable;
 import java.util.Set;

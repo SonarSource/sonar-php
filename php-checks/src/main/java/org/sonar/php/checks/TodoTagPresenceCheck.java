@@ -23,11 +23,11 @@ package org.sonar.php.checks;
 import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
-import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CommentContainsPatternChecker;
+import org.sonar.squidbridge.checks.SquidCheck;
 
 @Rule(
   key = "S1135",

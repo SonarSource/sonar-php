@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;

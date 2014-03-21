@@ -30,7 +30,6 @@ import org.sonar.api.resources.File;
 import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.MockUtils;
 
 import java.util.Arrays;
 import java.util.List;

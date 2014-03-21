@@ -22,10 +22,10 @@ package org.sonar.php.checks;
 import com.google.common.io.Closeables;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
-import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.api.utils.SonarException;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.squidbridge.checks.SquidCheck;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
-import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -30,6 +29,7 @@ import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.api.SourceFunction;
+import org.sonar.squidbridge.checks.SquidCheck;
 
 @Rule(
   key = "S1541",

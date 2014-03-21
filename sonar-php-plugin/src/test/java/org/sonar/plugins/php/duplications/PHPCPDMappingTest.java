@@ -26,7 +26,6 @@ import net.sourceforge.pmd.cpd.Tokens;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.test.TestUtils;
 
