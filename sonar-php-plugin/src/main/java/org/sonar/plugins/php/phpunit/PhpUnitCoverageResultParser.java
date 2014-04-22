@@ -21,7 +21,6 @@ package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.io.IOUtils;
-import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
@@ -57,8 +56,8 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
   private static final Map<Resource<?>, Measure> MEASURES_BY_RESOURCE = new HashMap<Resource<?>, Measure>();
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
-  private Project project;
-  private SensorContext context;
+  private final Project project;
+  private final SensorContext context;
 
   /**
    * Instantiates a new php unit coverage result parser.
@@ -94,7 +93,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      Log.info("Project: " + projectNode.getName());
+      LOG.info("Project: " + projectNode.getName());
       parseFileNodes(projectNode.getFiles());
       parsePackagesNodes(projectNode.getPackages());
     }
