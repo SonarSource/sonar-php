@@ -3,3 +3,9 @@
 empty ( a () );
 
 empty ( $b );
+
+empty ( $b[a ()] );
+
+if ( empty ( $this->tables[strtolower ( $table )]['templaterows'] ) ) {
+
+}

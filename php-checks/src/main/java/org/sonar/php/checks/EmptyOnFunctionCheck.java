@@ -58,7 +58,9 @@ public class EmptyOnFunctionCheck extends SquidCheck<Grammar> {
 
   protected boolean containsFunction ( AstNode astNode ) {
     boolean rt = false;
-    if ( astNode.getType () == PHPGrammar.FUNCTION_CALL_PARAMETER_LIST ) {
+    if ( astNode.getType () == PHPGrammar.DIMENSIONAL_OFFSET ) {
+      // functions are allowed in array indexes
+    } else if ( astNode.getType () == PHPGrammar.FUNCTION_CALL_PARAMETER_LIST ) {
       rt = true;
     } else {
       for ( AstNode c : astNode.getChildren () ) {
