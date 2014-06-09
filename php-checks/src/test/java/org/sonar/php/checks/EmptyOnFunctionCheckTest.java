@@ -38,6 +38,8 @@ public class EmptyOnFunctionCheckTest extends CheckTest {
     checkMessagesVerifier.verify ( file.getCheckMessages () )
             .next ().atLine ( 3 ).withMessage (
                     "Called empty on function return" )
+            .next ().atLine ( 15 ).withMessage (
+                    "Called empty on function return" )
             .noMore ();
   }
 }

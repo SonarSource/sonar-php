@@ -60,7 +60,10 @@ public class EmptyOnFunctionCheck extends SquidCheck<Grammar> {
     boolean rt = false;
     if ( astNode.getType () == PHPGrammar.DIMENSIONAL_OFFSET ) {
       // functions are allowed in array indexes
-    } else if ( astNode.getType () == PHPGrammar.FUNCTION_CALL_PARAMETER_LIST ) {
+    } else if ( astNode.getType () == PHPGrammar.FUNCTION_CALL_PARAMETER_LIST
+                        && ( astNode.getNextSibling () == null || astNode
+                            .getNextSibling ().getType ()
+                                                                  != PHPGrammar.OBJECT_MEMBER_ACCESS ) ) {
       rt = true;
     } else {
       for ( AstNode c : astNode.getChildren () ) {
