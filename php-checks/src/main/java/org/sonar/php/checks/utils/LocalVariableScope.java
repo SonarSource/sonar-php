@@ -27,6 +27,7 @@ import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -162,22 +163,28 @@ public class LocalVariableScope {
    * and declares variable for current.
    * <li>if is reference variable: declare variable in outer and current scope.
    * <li>if variable not reference and not in outer scope: declared as an exclusion.
+   * <li>if outer scope is null, variable is assumed to come from outer scope and excluded
+   *
+   * @param lexicalVarList list of variables.
+   * @param outerScope     outer scope, if null means that outer scope is not a function
    */
-  public void declareLexicalVariable(AstNode lexicalVarList, LocalVariableScope outerScope) {
+  public void declareLexicalVariable(AstNode lexicalVarList, @Nullable LocalVariableScope outerScope) {
     Preconditions.checkArgument(lexicalVarList.is(PHPGrammar.LEXICAL_VAR_LIST));
 
     for (AstNode lexicalVar : lexicalVarList.getChildren(PHPGrammar.LEXICAL_VAR)) {
       AstNode varIdentifier = lexicalVar.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
       String varName = varIdentifier.getTokenOriginalValue();
       boolean isReference = lexicalVar.hasDirectChildren(PHPPunctuator.AND);
-      boolean isFromOuterScope = outerScope.localVariables.containsKey(varName);
+      boolean isFromOuterScope = outerScope == null || outerScope.localVariables.containsKey(varName);
 
       if (isReference && !isFromOuterScope) {
         this.declareLocalVariable(varName, varIdentifier, 1);
         outerScope.declareLocalVariable(varName, varIdentifier, 1);
       }
 
-      if (isFromOuterScope) {
+      if (outerScope == null) {
+        this.declareExclusion(varName);
+      } else if (isFromOuterScope) {
         this.declareLocalVariable(varName, varIdentifier, 1);
         outerScope.increaseUsageFor(varName);
       }

@@ -43,6 +43,10 @@ function i($p) {  // OK - not a local variable
 /*
  *  USE
  */
+$a = function($p) use ($u) {   // OK - $u exclusion
+	return $p;
+};
+
 function j($p) {
   $a = 1;                      // OK - use in anonymous function
   $b = 1;                      // OK - use in anonymous function

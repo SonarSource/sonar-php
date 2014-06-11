@@ -137,9 +137,10 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
     return scopes.peek();
   }
 
+  @Nullable
   private LocalVariableScope getOuterScope() {
     Iterator<LocalVariableScope> it = scopes.iterator();
     it.next(); // current
-    return it.next(); // previous
+    return it.hasNext() ? it.next() /*previous*/ : null;
   }
 }

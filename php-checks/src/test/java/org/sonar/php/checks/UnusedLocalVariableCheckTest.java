@@ -37,11 +37,11 @@ public class UnusedLocalVariableCheckTest extends CheckTest {
       .next().atLine(19)
       .next().atLine(29)
       .next().atLine(38)
-      .next().atLine(50)
-      .next().atLine(61)
-      .next().atLine(61)
-      .next().atLine(120)
-      .next().atLine(122).withMessage("Remove this unused \"$c\" local variable.")
+      .next().atLine(54)
+      .next().atLine(65)
+      .next().atLine(65)
+      .next().atLine(124)
+      .next().atLine(126).withMessage("Remove this unused \"$c\" local variable.")
       .noMore();
   }
 }
