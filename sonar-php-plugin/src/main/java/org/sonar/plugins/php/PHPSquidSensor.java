@@ -29,6 +29,7 @@ import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.profiles.RulesProfile;
@@ -41,6 +42,7 @@ import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.CheckList;
+import org.sonar.php.metrics.FileLinesVisitor;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.AstScanner;
 import org.sonar.squidbridge.SquidAstVisitor;
@@ -65,13 +67,15 @@ public class PHPSquidSensor implements Sensor {
   private final AnnotationCheckFactory annotationCheckFactory;
   private final ResourcePerspectives resourcePerspectives;
   private final ModuleFileSystem fileSystem;
+  private final FileLinesContextFactory fileLinesContextFactory;
   private AstScanner<Grammar> scanner;
   private SensorContext context;
   private Project project;
 
-  public PHPSquidSensor(RulesProfile profile, ResourcePerspectives resourcePerspectives, ModuleFileSystem filesystem) {
+  public PHPSquidSensor(RulesProfile profile, ResourcePerspectives resourcePerspectives, ModuleFileSystem filesystem, FileLinesContextFactory fileLinesContextFactory) {
     this.annotationCheckFactory = AnnotationCheckFactory.create(profile, CheckList.REPOSITORY_KEY, CheckList.getChecks());
     this.resourcePerspectives = resourcePerspectives;
+    this.fileLinesContextFactory = fileLinesContextFactory;
     this.fileSystem = filesystem;
   }
 
@@ -86,6 +90,7 @@ public class PHPSquidSensor implements Sensor {
     this.project = project;
 
     List<SquidAstVisitor<Grammar>> visitors = getCheckVisitors();
+    visitors.add(new FileLinesVisitor(project, fileLinesContextFactory));
     this.scanner = PHPAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
     scanner.scanFiles(getProjectMainFiles());
 
