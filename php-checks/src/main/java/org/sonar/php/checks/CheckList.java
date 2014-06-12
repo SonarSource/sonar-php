@@ -89,6 +89,7 @@ public class CheckList {
       LocalVariableAndParameterNameCheck.class,
       ImmediatelyReturnedVariableCheck.class,
       CommentedOutCodeCheck.class,
+      ElseIfSequenceKeywordUsageCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
