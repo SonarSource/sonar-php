@@ -32,8 +32,8 @@ public class ExitOrDieUsageCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ExitOrDieUsageCheck.php"), new ExitOrDieUsageCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(7).withMessage("Remove this \"exit()\" call or ensure it is really required")
-      .next().atLine(9).withMessage("Remove this \"die()\" call or ensure it is really required")
+      .next().atLine(10).withMessage("Remove this \"exit()\" call or ensure it is really required")
+      .next().atLine(12).withMessage("Remove this \"die()\" call or ensure it is really required")
       .noMore();
   }
 }
