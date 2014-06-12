@@ -83,7 +83,7 @@ public class PHPAstScanner {
   /**
    * Helper method for testing checks without having to deploy them on a Sonar instance.
    */
-  public static SourceFile scanSingleFile(File file, SquidCheck<Grammar>... visitors) {
+  public static SourceFile scanSingleFile(File file, SquidAstVisitor<Grammar>... visitors) {
     if (!file.isFile()) {
       throw new IllegalArgumentException("File '" + file + "' not found.");
     }
