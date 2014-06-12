@@ -91,6 +91,7 @@ public class CheckList {
       CommentedOutCodeCheck.class,
       ElseIfSequenceKeywordUsageCheck.class,
       ExitOrDieUsageCheck.class,
+      VarKeywordUsageCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
