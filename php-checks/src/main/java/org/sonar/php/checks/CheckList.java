@@ -90,6 +90,7 @@ public class CheckList {
       ImmediatelyReturnedVariableCheck.class,
       CommentedOutCodeCheck.class,
       ElseIfSequenceKeywordUsageCheck.class,
+      ExitOrDieUsageCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
