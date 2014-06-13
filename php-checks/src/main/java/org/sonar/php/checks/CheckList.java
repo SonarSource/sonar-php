@@ -94,6 +94,7 @@ public class CheckList {
       VarKeywordUsageCheck.class,
       MissingMethodVisibilityCheck.class,
       KeywordsAndConstantsNotLowerCaseCheck.class,
+      OnePropertyDeclarationPerStatementCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
