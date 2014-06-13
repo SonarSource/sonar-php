@@ -92,6 +92,7 @@ public class CheckList {
       ElseIfSequenceKeywordUsageCheck.class,
       ExitOrDieUsageCheck.class,
       VarKeywordUsageCheck.class,
+      MissingMethodVisibilityCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
