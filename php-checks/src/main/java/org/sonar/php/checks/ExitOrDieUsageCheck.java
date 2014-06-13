@@ -29,8 +29,8 @@ import org.sonar.squidbridge.checks.SquidCheck;
 
 @Rule(
   key = "S1799",
-  priority = Priority.BLOCKER)
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.BLOCKER)
+  priority = Priority.CRITICAL)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class ExitOrDieUsageCheck extends SquidCheck<Grammar> {
 
   @Override
