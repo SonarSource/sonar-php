@@ -93,6 +93,7 @@ public class CheckList {
       ExitOrDieUsageCheck.class,
       VarKeywordUsageCheck.class,
       MissingMethodVisibilityCheck.class,
+      KeywordsAndConstantsNotLowerCaseCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
