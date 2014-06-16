@@ -98,6 +98,7 @@ public class CheckList {
       ModifiersOrderCheck.class,
       ExtendsImplementsAndClassNameOnSameLineCheck.class,
       ClosingTagInFullPHPFileCheck.class,
+      NonLFCharAsEOLCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
