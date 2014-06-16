@@ -50,7 +50,7 @@ public class MissingMethodVisibilityCheck extends SquidCheck<Grammar> {
   @Override
   public void visitNode(AstNode astNode) {
     if (!hasVisibility(astNode)) {
-      getContext().createLineViolation(this, "Explicitly mentioned the visibility of this method \"{0}\".", astNode, getMethodName(astNode));
+      getContext().createLineViolation(this, "Explicitly mention the visibility of this {0}.", astNode, getMessageForMethodName(astNode));
     }
   }
 
@@ -63,8 +63,32 @@ public class MissingMethodVisibilityCheck extends SquidCheck<Grammar> {
     return false;
   }
 
-  private String getMethodName(AstNode methodNode) {
-    return methodNode.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
+  private String getMessageForMethodName(AstNode methodNode) {
+    StringBuilder builder = new StringBuilder();
+    String name = methodNode.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
+
+    if (isConstructor(methodNode, name)) {
+      builder.append("constructor ");
+    } else if ("__destruct".equals(name)) {
+      builder.append("destructor ");
+    } else {
+      builder.append("method ");
+    }
+
+    builder.append("\"" + name + "\"");
+
+    return builder.toString();
+  }
+
+  private boolean isConstructor(AstNode methodNode, String methodName) {
+    AstNode grandParent = methodNode.getParent().getParent();
+    boolean isConstructorBeforePHP5_3_3 = false;
+
+    if (grandParent.is(PHPGrammar.CLASS_DECLARATION)) {
+      isConstructorBeforePHP5_3_3 = methodName.equals(grandParent.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue());
+    }
+
+    return isConstructorBeforePHP5_3_3 || "__construct".equals(methodName);
   }
 
 }

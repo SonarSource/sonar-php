@@ -32,9 +32,12 @@ public class MissingMethodVisibilityCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("MissingMethodVisibilityCheck.php"), new MissingMethodVisibilityCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Explicitly mentioned the visibility of this method \"f\".")
-      .next().atLine(6).withMessage("Explicitly mentioned the visibility of this method \"g\".")
-      .next().atLine(7).withMessage("Explicitly mentioned the visibility of this method \"h\".")
+      .next().atLine(5).withMessage("Explicitly mention the visibility of this method \"f\".")
+      .next().atLine(6).withMessage("Explicitly mention the visibility of this method \"g\".")
+      .next().atLine(7).withMessage("Explicitly mention the visibility of this method \"h\".")
+      .next().atLine(16).withMessage("Explicitly mention the visibility of this constructor \"C2\".")
+      .next().atLine(17).withMessage("Explicitly mention the visibility of this destructor \"__destruct\".")
+      .next().atLine(21).withMessage("Explicitly mention the visibility of this constructor \"__construct\".")
       .noMore();
   }
 }
