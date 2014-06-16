@@ -97,6 +97,7 @@ public class CheckList {
       OnePropertyDeclarationPerStatementCheck.class,
       ModifiersOrderCheck.class,
       ExtendsImplementsAndClassNameOnSameLineCheck.class,
+      ClosingTagInFullPHPFileCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
