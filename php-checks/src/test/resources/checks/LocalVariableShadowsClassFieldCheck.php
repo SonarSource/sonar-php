@@ -1,5 +1,9 @@
 <?php
 
+interface I {
+  public function f();                  // Should not visit method delcaration
+}
+
 class A {
 
   public $field;

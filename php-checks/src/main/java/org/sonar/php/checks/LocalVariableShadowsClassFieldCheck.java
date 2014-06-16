@@ -119,7 +119,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
       declareClassField(astNode);
       classState.setClassName(astNode);
 
-    } else if (astNode.is(PHPGrammar.METHOD_DECLARATION)) {
+    } else if (classState.isInClass() && astNode.is(PHPGrammar.METHOD_DECLARATION)) {
       if (isExcluded(astNode)) {
         skip = true;
       } else {
