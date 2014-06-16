@@ -28,7 +28,7 @@ import org.sonar.squidbridge.checks.SquidCheck;
 
 @Rule(
   key = "S1766",
-  priority = Priority.MAJOR)
+  priority = Priority.MINOR)
 public class OnePropertyDeclarationPerStatementCheck extends SquidCheck<Grammar> {
 
   @Override
