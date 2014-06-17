@@ -19,30 +19,56 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.io.Files;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
-import org.sonar.plugins.php.TestUtils;
 import org.sonar.squidbridge.api.SourceFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 public class NonLFCharAsEOLCheckTest extends CheckTest {
 
+  @Rule
+  public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
   private NonLFCharAsEOLCheck check = new NonLFCharAsEOLCheck();
-  private final String TEST_DIR = "NonLFCharAsEOFCheck/";
+  private final String TEST_DIR = "NonLFCharAsEOFCheck";
+  private File ok_file;
+  private File ko_file;
+
+
+  @Before
+  public void setUp() throws Exception {
+    temporaryFolder.newFolder(TEST_DIR);
+
+    ok_file = temporaryFolder.newFile();
+    Files.write("<?php $foo = 1; \n", ok_file, Charset.defaultCharset());
+
+    ko_file = temporaryFolder.newFile();
+    Files.write("<?php $foo = 1; \r\n", ko_file, Charset.defaultCharset());
+  }
 
   @Test
-  public void ok() {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.php"), check);
+  public void ok() throws IOException {
+    SourceFile file = PHPAstScanner.scanSingleFile(ok_file, check);
+
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void ko() {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().withMessage("Replace all non line feed end of line characters in this file \"ko.php\" by LF.")
-      .noMore();
+  public void ko() throws IOException {
+    SourceFile file = PHPAstScanner.scanSingleFile(ko_file, check);
 
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().withMessage("Replace all non line feed end of line characters in this file \"" + ko_file.getName() + "\" by LF.")
+      .noMore();
   }
+
 }
