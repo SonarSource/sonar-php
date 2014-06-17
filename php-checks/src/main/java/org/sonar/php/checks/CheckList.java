@@ -99,6 +99,7 @@ public class CheckList {
       ExtendsImplementsAndClassNameOnSameLineCheck.class,
       ClosingTagInFullPHPFileCheck.class,
       NonLFCharAsEOLCheck.class,
+      ArgumentWithDefaultValueNotLastCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

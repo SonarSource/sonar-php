@@ -1,0 +1,16 @@
+<p>
+PHP is one of this powerful language allowing to define a default value for a method argument. But all method arguments with a default value should be declared after the method arguments without default value.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<p>In the following case, calling makeyogurt("raspberry") won't lead to the expected result :</p>
+<pre>
+function makeyogurt($type = "acidophilus", $flavour){...}
+</pre>
+<p>The following warning will be generated at runtime: <code>Missing argument 2 in call to makeyogurt()</code></p>
+
+<h2>Compliant Solution</h2>
+<pre>
+function makeyogurt($flavour, $type = "acidophilus", ){...}
+</pre>
+
