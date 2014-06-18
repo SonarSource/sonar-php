@@ -30,7 +30,6 @@ import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @Rule(
@@ -56,10 +55,9 @@ public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<Grammar> {
 
   /**
    * <p>Return list of parameter nodes that are not declared at the end.</p>
-   *
+   * <p/>
    * Example: $p2 will be returned.
    * <pre>function f($p1, $p2 = 1, $p3, $p4 = 4) {...}</pre>
-   *
    */
   private List<AstNode> getParamToReport(AstNode paramListNode) {
     List<AstNode> paramToReport = Lists.newArrayList();
