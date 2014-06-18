@@ -30,6 +30,7 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
+import org.sonar.api.scan.filesystem.FileQuery;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
@@ -40,6 +41,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
@@ -53,19 +55,22 @@ import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 public class PhpUnitCoverageResultParserTest {
 
   private static final org.sonar.api.resources.File monkeyResource = new org.sonar.api.resources.File("Monkey.php");
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
   private PhpUnitCoverageResultParser parser;
   private SensorContext context;
   private Project project;
+  private ModuleFileSystem moduleFileSystem;
 
   @Before
   public void setUp() throws Exception {
     context = mock(SensorContext.class);
     project = mock(Project.class);
-    mockProjectFileSystem(project);
+    moduleFileSystem = mock(ModuleFileSystem.class);
+    mockProjectFileSystem(project, moduleFileSystem);
 
-    parser = new PhpUnitCoverageResultParser(project, context, mock(ModuleFileSystem.class));
+    parser = new PhpUnitCoverageResultParser(project, context, moduleFileSystem);
   }
 
   @Test
@@ -111,31 +116,38 @@ public class PhpUnitCoverageResultParserTest {
   @Test
   public void shouldNotFailIfNoStatementCount() {
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-no-statements-covered.xml"));
-    verify(context).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
+    verify(context, atLeastOnce()).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
   }
 
   // https://jira.codehaus.org/browse/SONARPLUGINS-1675
   @Test
   public void shouldNotFailIfNoLineForFileNode() {
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-filenode-without-line.xml"));
+    verify(context, atLeastOnce()).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
+  }
+
+  @Test
+  public void should_save_measure_for_missing_file_in_report() throws Exception {
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-empty.xml"));
     verify(context).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
   }
 
-  private static void mockProjectFileSystem(Project project) {
+  private static void mockProjectFileSystem(Project project, ModuleFileSystem moduleFileSystem) {
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
 
     when(project.getFileSystem()).thenReturn(fs);
     when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/main")));
 
-    File f1 = new File("C:/projets/PHP/Monkey/Sources/main/Monkey2.php");
-    File f2 = new File("C:/projets/PHP/Monkey/Sources/main/Monkey.php");
-    File f3 = new File("C:/projets/PHP/Monkey/Sources/main/Banana1.php");
-    File f4 = new File("C:/projets/PHP/Monkey/Sources/test/Banana.php");
-    File f5 = new File("C:/projets/PHP/Monkey/Sources/main/Money.inc");
+    File f1 = new File("C:/projets/PHP/Monkey/sources/main/Monkey2.php");
+    File f2 = new File("C:/projets/PHP/Monkey/sources/main/Monkey.php");
+    File f3 = new File("C:/projets/PHP/Monkey/sources/main/Banana1.php");
+    File f4 = new File("C:/projets/PHP/Monkey/sources/test/Banana.php");
+    File f5 = new File("C:/projets/PHP/Monkey/sources/main/Money.inc");
     File f6 = new File("C:/projets/PHP/Monkey/sources/test/application/default/controllers/IndexControllerTest.php");
 
     List<File> sourceFiles = Arrays.asList(f1, f2, f3, f5);
     when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/main"), sourceFiles));
+    when(moduleFileSystem.files(any(FileQuery.class))).thenReturn(sourceFiles);
 
     List<File> testFiles = Arrays.asList(f4, f6);
     when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
