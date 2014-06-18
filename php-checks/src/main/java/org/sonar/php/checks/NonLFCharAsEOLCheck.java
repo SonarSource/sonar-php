@@ -22,6 +22,9 @@ package org.sonar.php.checks;
 import com.google.common.io.Files;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
@@ -35,6 +38,8 @@ import java.nio.charset.Charset;
   key = "S1779",
   priority = Priority.MINOR)
 public class NonLFCharAsEOLCheck extends SquidCheck<Grammar> implements CharsetAwareVisitor {
+
+  private static final Logger LOG = LoggerFactory.getLogger(NonLFCharAsEOLCheck.class);
   private Charset charset;
 
   public void setCharset(Charset charset) {
@@ -56,7 +61,7 @@ public class NonLFCharAsEOLCheck extends SquidCheck<Grammar> implements CharsetA
         }
       }
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      LOG.error("Unable to process check S1779 on file: {}", getContext().getFile().getName(), e);
     }
   }
 }
