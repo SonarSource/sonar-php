@@ -81,10 +81,8 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    * @param coverageReportFile the coverage report file
    */
   public void parse(File coverageReportFile) {
-    if (coverageReportFile != null) {
-      LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
-      parseFile(coverageReportFile);
-    }
+    LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
+    parseFile(coverageReportFile);
   }
 
   /**
