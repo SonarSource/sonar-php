@@ -21,7 +21,9 @@ package org.sonar.plugins.php.phpunit;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
@@ -46,7 +48,10 @@ import static org.mockito.Mockito.when;
 
 public class PhpUnitSensorTest {
 
-  private final ModuleFileSystem projectFileSystem = mock(ModuleFileSystem.class);
+  @Rule
+  public ExpectedException expected = ExpectedException.none();
+
+  private final ModuleFileSystem projectFileSystem = mockModuleFileSystem();
 
   @Mock
   private PhpUnitResultParser parser;
@@ -120,6 +125,19 @@ public class PhpUnitSensorTest {
     verify(parser, never()).parse(any(File.class));
   }
 
+  @Test
+  public void should_parse_relative_path_report() {
+    Settings settings = new Settings();
+    Properties props = new Properties();
+    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, "phpunit.xml");
+    settings.addProperties(props);
+    sensor = new PhpUnitSensor(projectFileSystem, settings, parser, coverageParser);
+
+    sensor.analyse(project, context);
+
+    verify(parser, times(1)).parse(TEST_REPORT_FILE);
+  }
+
   private static Settings newSettings() {
     Settings settings = new Settings();
     Properties props = new Properties();
@@ -130,5 +148,11 @@ public class PhpUnitSensorTest {
     settings.addProperties(props);
 
     return settings;
+  }
+
+  private ModuleFileSystem mockModuleFileSystem() {
+    ModuleFileSystem fs = mock(ModuleFileSystem.class);
+    when(fs.baseDir()).thenReturn(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
+    return fs;
   }
 }
