@@ -100,6 +100,7 @@ public class CheckList {
       ClosingTagInFullPHPFileCheck.class,
       NonLFCharAsEOLCheck.class,
       ArgumentWithDefaultValueNotLastCheck.class,
+      FormattingStandardCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
