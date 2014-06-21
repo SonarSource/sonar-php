@@ -26,9 +26,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
+import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.test.TestUtils;
@@ -46,7 +46,7 @@ import static org.mockito.Mockito.when;
 
 public class PhpUnitSensorTest {
 
-  private final ModuleFileSystem projectFileSystem = mock(ModuleFileSystem.class);
+  private final ProjectFileSystem projectFileSystem = mock(ProjectFileSystem.class);
 
   @Mock
   private PhpUnitResultParser parser;
@@ -79,16 +79,18 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldExecuteOnProject() {
-    when(projectFileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.<File>of());
+    when(projectFileSystem.mainFiles("php")).thenReturn(ImmutableList.<InputFile>of());
     assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
 
-    when(projectFileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.<File>of(mock(File.class)));
+    when(projectFileSystem.mainFiles("php")).thenReturn(ImmutableList.<InputFile>of(mock(InputFile.class)));
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
   @Test
   public void shouldParserReport() {
-    ModuleFileSystem fs = mock(ModuleFileSystem.class);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(fs.resolvePath(MockUtils.PHPUNIT_REPORT)).thenReturn(TEST_REPORT_FILE);
+    when(fs.resolvePath(MockUtils.PHPUNIT_COVERAGE_REPORT)).thenReturn(COVERAGE_REPORT_FILE);
     sensor = new PhpUnitSensor(fs, settings, parser, coverageParser);
 
     sensor.analyse(project, context);
@@ -99,7 +101,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void noReport() {
-    sensor = new PhpUnitSensor(mock(ModuleFileSystem.class), new Settings(), parser, coverageParser);
+    sensor = new PhpUnitSensor(mock(ProjectFileSystem.class), new Settings(), parser, coverageParser);
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -107,14 +109,17 @@ public class PhpUnitSensorTest {
 
   @Test
   public void badReport() {
-    String fakePath = "/fake/path.xml";
+    String fakePath = "fake/path.xml";
 
     Settings localSettings = new Settings();
     Properties props = new Properties();
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, fakePath);
     localSettings.addProperties(props);
 
-    sensor = new PhpUnitSensor(mock(ModuleFileSystem.class), localSettings, parser, coverageParser);
+    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+    when(fs.resolvePath(fakePath)).thenReturn(new File(fakePath));
+
+    sensor = new PhpUnitSensor(fs, localSettings, parser, coverageParser);
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -124,8 +129,8 @@ public class PhpUnitSensorTest {
     Settings settings = new Settings();
     Properties props = new Properties();
 
-    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpUnitSensorTest.TEST_REPORT_FILE.getAbsolutePath());
-    props.put(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpUnitSensorTest.COVERAGE_REPORT_FILE.getAbsolutePath());
+    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, MockUtils.PHPUNIT_REPORT);
+    props.put(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, MockUtils.PHPUNIT_COVERAGE_REPORT);
 
     settings.addProperties(props);
 

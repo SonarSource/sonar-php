@@ -26,8 +26,7 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
+import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
@@ -45,9 +44,9 @@ public class PhpUnitSensor implements Sensor {
 
   private final PhpUnitCoverageResultParser coverageParser;
   private final PhpUnitResultParser parser;
-  private final ModuleFileSystem fileSystem;
+  private final ProjectFileSystem fileSystem;
 
-  public PhpUnitSensor(ModuleFileSystem fileSystem, Settings settings, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
+  public PhpUnitSensor(ProjectFileSystem fileSystem, Settings settings, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
     this.fileSystem = fileSystem;
     this.settings = settings;
     this.parser = parser;
@@ -66,7 +65,7 @@ public class PhpUnitSensor implements Sensor {
     String reportPath = settings.getString(reportPathKey);
 
     if (reportPath != null) {
-      File xmlFile = getIOFile(reportPath);
+      File xmlFile = fileSystem.resolvePath(reportPath);
 
       if (xmlFile.exists()) {
         LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath);
@@ -90,23 +89,10 @@ public class PhpUnitSensor implements Sensor {
   }
 
   /**
-   * Returns a java.io.File for the given path.
-   * If path is not absolute, returns a File with module base directory as parent path.
-   */
-  private File getIOFile(String path) {
-    File file = new File(path);
-    if (!file.isAbsolute()) {
-      file = new File(fileSystem.baseDir(), path);
-    }
-
-    return file;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return !fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY)).isEmpty();
+    return !fileSystem.mainFiles(Php.KEY).isEmpty();
   }
 
   /**
