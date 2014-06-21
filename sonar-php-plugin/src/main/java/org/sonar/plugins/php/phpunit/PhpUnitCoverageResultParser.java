@@ -30,11 +30,8 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.PropertiesBuilder;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
 import org.sonar.plugins.php.phpunit.xml.LineNode;
@@ -61,18 +58,16 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
   private final Project project;
   private final SensorContext context;
-  private final ModuleFileSystem fileSystem;
 
   /**
    * Instantiates a new php unit coverage result parser.
    *
    * @param context the context
    */
-  public PhpUnitCoverageResultParser(Project project, SensorContext context, ModuleFileSystem fileSystem) {
+  public PhpUnitCoverageResultParser(Project project, SensorContext context) {
     super();
     this.project = project;
     this.context = context;
-    this.fileSystem = fileSystem;
   }
 
   /**
@@ -101,32 +96,6 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
       LOG.info("Project: " + projectNode.getName());
       parseFileNodes(projectNode.getFiles());
       parsePackagesNodes(projectNode.getPackages());
-      saveMeasureForMissingFiles();
-    }
-  }
-
-  /**
-   * Set default 0 value for files that do not have coverage metrics because they were not touched by any test,
-   * and thus not present in the coverage report file.
-   */
-  private void saveMeasureForMissingFiles() {
-    for (File phpFile : fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY))) {
-      org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(phpFile, project);
-
-      if (resource != null && context.getMeasure(resource, CoreMetrics.LINE_COVERAGE) == null) {
-        LOG.debug("Coverage metrics have not been set on '{}': default values will be inserted.", phpFile.getName());
-        context.saveMeasure(resource, CoreMetrics.LINE_COVERAGE, 0.0);
-        // for LINES_TO_COVER and UNCOVERED_LINES, we use NCLOC as an approximation
-        Measure ncloc = context.getMeasure(resource, CoreMetrics.NCLOC);
-
-        if (ncloc != null && context.getMeasure(CoreMetrics.LINES_TO_COVER) == null) {
-          context.saveMeasure(resource, CoreMetrics.LINES_TO_COVER, ncloc.getValue());
-        }
-
-        if (ncloc != null && context.getMeasure(CoreMetrics.UNCOVERED_LINES) == null) {
-          context.saveMeasure(resource, CoreMetrics.UNCOVERED_LINES, ncloc.getValue());
-        }
-      }
     }
   }
 

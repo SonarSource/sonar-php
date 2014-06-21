@@ -29,6 +29,7 @@ import org.sonar.plugins.php.core.PhpCommonRulesEngine;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.core.PhpSourceImporter;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
+import org.sonar.plugins.php.phpunit.PhpUnitCoverageDecorator;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitSensor;
@@ -90,6 +91,7 @@ public class PhpPlugin extends SonarPlugin {
       // PhpUnit
       PhpUnitSensor.class,
       PhpUnitResultParser.class,
-      PhpUnitCoverageResultParser.class);
+      PhpUnitCoverageResultParser.class,
+      PhpUnitCoverageDecorator.class);
   }
 }

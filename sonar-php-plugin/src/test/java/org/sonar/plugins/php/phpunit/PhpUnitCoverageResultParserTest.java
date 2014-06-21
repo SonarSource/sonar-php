@@ -30,7 +30,6 @@ import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
@@ -65,7 +64,7 @@ public class PhpUnitCoverageResultParserTest {
     project = mock(Project.class);
     mockProjectFileSystem(project);
 
-    parser = new PhpUnitCoverageResultParser(project, context, mock(ModuleFileSystem.class));
+    parser = new PhpUnitCoverageResultParser(project, context);
   }
 
   @Test
