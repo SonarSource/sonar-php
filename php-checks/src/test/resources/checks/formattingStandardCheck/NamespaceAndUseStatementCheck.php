@@ -9,9 +9,17 @@ namespace another\bar;      // NOK - no blank line after namespace
 
 use my\space\MyClass;       // NOK - no blank line after use
 {
-
 }
 
+use my\space\MyClass;       // NOK - no blank line after use
+// use
+{
+}
+
+namespace another\bar;      // NOK - no blank line after namespace
+// namespace
+{
+}
 
 namespace foo\bar;          // OK
 

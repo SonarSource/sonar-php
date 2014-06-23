@@ -36,6 +36,8 @@ public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTe
       .next().atLine(4).withMessage("Add a blank line after this \"use\" declaration.")
       .next().atLine(5).withMessage("Add a blank line after this \"namespace another\\bar\" declaration.")
       .next().atLine(10).withMessage("Add a blank line after this \"use\" declaration.")
+      .next().atLine(14)
+      .next().atLine(19)
       .noMore();
   }
 

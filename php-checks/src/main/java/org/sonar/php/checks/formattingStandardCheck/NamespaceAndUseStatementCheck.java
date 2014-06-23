@@ -23,6 +23,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
+import com.sonar.sslr.api.Trivia;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.parser.PHPGrammar;
 
@@ -53,7 +54,7 @@ public class NamespaceAndUseStatementCheck {
   }
 
   private void checkBlankLineAfterUses(FormattingStandardCheck formattingCheck, AstNode useStatement) {
-    if (formattingCheck.hasUseBlankLine && !isFollowedWithBlankLine(useStatement)) {
+    if (formattingCheck.hasUseBlankLine && isNotFollowedWithBlankLine(useStatement)) {
       formattingCheck.reportIssue("Add a blank line after this \"use\" declaration.", Iterables.getLast(useNodes));
     }
   }
@@ -65,14 +66,25 @@ public class NamespaceAndUseStatementCheck {
   }
 
   private void checkBlankLineAfterNamespace(FormattingStandardCheck formattingCheck, AstNode namespaceNode) {
-    if (formattingCheck.hasNamespaceBlankLine && !isFollowedWithBlankLine(namespaceNode)) {
+    if (formattingCheck.hasNamespaceBlankLine && isNotFollowedWithBlankLine(namespaceNode)) {
       formattingCheck.reportIssue("Add a blank line after this \"namespace " + getNamespaceName(namespaceNode) + "\" declaration.", namespaceNode);
     }
   }
 
-  private boolean isFollowedWithBlankLine(AstNode node) {
-    int minimumLine = node.getTokenLine() + 2;
-    return  node.getNextAstNode().getTokenLine() >= minimumLine;
+  /**
+   * Returns true when there is either token or comment on node's next line.
+   */
+  private boolean isNotFollowedWithBlankLine(AstNode node) {
+    int nextNodeLine = node.getTokenLine() + 1;
+    boolean isNotFollowedWithBlankLine = false;
+
+    // Checking for comment: is allowed on the same line as the node declaration or on next line + 1.
+    for (Trivia t : node.getNextAstNode().getToken().getTrivia()) {
+      int line = t.getToken().getLine();
+      isNotFollowedWithBlankLine |= line == nextNodeLine;
+    }
+
+    return isNotFollowedWithBlankLine || node.getNextAstNode().getTokenLine() == nextNodeLine;
   }
 
   private Object getNamespaceName(AstNode namespaceNode) {
