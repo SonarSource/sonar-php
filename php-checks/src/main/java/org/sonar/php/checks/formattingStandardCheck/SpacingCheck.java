@@ -28,18 +28,27 @@ public class SpacingCheck {
 
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
     if (formattingCheck.isOneSpaceBetweenRParentAndLCurly && node.is(PHPPunctuator.RPARENTHESIS)) {
-      AstNode nextNode = node.getNextAstNode();
-      int expectedColumn = node.getToken().getColumn() + 2;
+      checkSpaceBetweenRParentAndLCurly(formattingCheck, node);
+    }
+  }
 
-      if (nextNode.getToken().getType().equals(PHPPunctuator.LCURLYBRACE)) {
-        Token curlyBraceToken = nextNode.getToken();
+  private void checkSpaceBetweenRParentAndLCurly(FormattingStandardCheck formattingCheck, AstNode rParenthesis) {
+    Token nextToken = rParenthesis.getNextAstNode().getToken();
 
-       // Do not trigger issue when prenthesis and curly brace are not on the same line
-        if (curlyBraceToken.getLine() == node.getTokenLine() && curlyBraceToken.getColumn() != expectedColumn) {
-          formattingCheck.reportIssue("There should be exactly one space between closing parenthesis and opening curly braces.", node);
-        }
+    if (nextToken.getType().equals(PHPPunctuator.LCURLYBRACE)) {
+
+      // Do not trigger issue when prenthesis and curly brace are not on the same line
+      if (hasNotExactlyOneSpaceBetween(rParenthesis.getToken(), nextToken)) {
+        formattingCheck.reportIssue("There should be exactly one space between closing parenthesis and opening curly braces.", rParenthesis);
       }
     }
   }
 
+  /**
+   * Returns true if both tokens are on the same line and there is not exactly one space between them.
+   */
+  private boolean hasNotExactlyOneSpaceBetween(Token token1, Token token2) {
+    int expectedColumn = token1.getColumn() + 2;
+    return token1.getLine() == token2.getLine() && token2.getColumn() != expectedColumn;
+  }
 }
