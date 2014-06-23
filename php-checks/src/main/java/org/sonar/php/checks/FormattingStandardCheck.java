@@ -21,13 +21,14 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
-import org.sonar.api.PropertyType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.checks.formattingStandardCheck.CurlyBraceCheck;
 import org.sonar.php.checks.formattingStandardCheck.NamespaceAndUseStatementCheck;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import javax.annotation.Nullable;
 
@@ -36,9 +37,34 @@ import javax.annotation.Nullable;
   priority = Priority.MINOR)
 public class FormattingStandardCheck extends SquidCheck<Grammar> {
 
+  public static final GrammarRuleKey[] CLASS_AND_FUNCTION = {
+    PHPGrammar.CLASS_DECLARATION,
+    PHPGrammar.INTERFACE_DECLARATION,
+    PHPGrammar.TRAIT_ADAPTATIONS,
+    PHPGrammar.METHOD_DECLARATION,
+    PHPGrammar.FUNCTION_DECLARATION
+  };
 
-  private NamespaceAndUseStatementCheck namespaceAndUseStatementCheck = new NamespaceAndUseStatementCheck();
+  public static final GrammarRuleKey[] CONTROL_STRUCTURE = {
+    PHPGrammar.IF_STATEMENT,
+    PHPGrammar.ELSEIF_CLAUSE,
+    PHPGrammar.ELSE_CLAUSE,
+    PHPGrammar.DO_WHILE_STATEMENT,
+    PHPGrammar.WHILE_STATEMENT,
+    PHPGrammar.FOR_STATEMENT,
+    PHPGrammar.FOREACH_STATEMENT,
+    PHPGrammar.SWITCH_STATEMENT,
+    PHPGrammar.TRY_STATEMENT,
+    PHPGrammar.CATCH_STATEMENT,
+    PHPGrammar.FINALLY_STATEMENT
+  };
 
+  private final NamespaceAndUseStatementCheck namespaceAndUseStatementCheck = new NamespaceAndUseStatementCheck();
+  private final CurlyBraceCheck curlyBraceCheck = new CurlyBraceCheck();
+
+  /**
+   * Namespace and use statement
+   */
   @RuleProperty(
     key = "namespace_blank_line",
     defaultValue = "true",
@@ -57,16 +83,34 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean hasUseBlankLine = true;
 
+  /**
+   * Open curly brace
+   */
+  @RuleProperty(
+    key = "open_curly_brace_classes_functions",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isOpenCurlyBraceForClassAndFunction = true;
+
+  @RuleProperty(
+    key = "open_curly_brace_control_structures",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isOpenCurlyBraceForControlStructures = true;
+
   @Override
   public void init() {
     subscribeTo(
       PHPGrammar.NAMESPACE_STATEMENT,
       PHPGrammar.USE_STATEMENT);
+    subscribeTo(CLASS_AND_FUNCTION);
+    subscribeTo(CONTROL_STRUCTURE);
   }
 
   @Override
   public void visitNode(AstNode astNode) {
     namespaceAndUseStatementCheck.visitNode(this, astNode);
+    curlyBraceCheck.visitNode(this, astNode);
   }
 
   @Override
