@@ -29,10 +29,9 @@ public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
 
 
   @Test
-  public void defaultValue() {
-    check.hasNamespaceBlankLine = false;
-    check.isUseAfterNamespace = false;
-    check.hasUseBlankLine = false;
+  public void defaultValue() throws IllegalAccessException {
+    activeOnly("isOpenCurlyBraceForClassAndFunction", "isOpenCurlyBraceForControlStructures");
+
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(7).withMessage("Move this open curly brace to the beginning of the next line.")
@@ -53,9 +52,8 @@ public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
   }
 
   @Test
-  public void custom() {
-    check.isOpenCurlyBraceForClassAndFunction = false;
-    check.isOpenCurlyBraceForControlStructures = false;
+  public void custom() throws IllegalAccessException {
+    deactivateAll();
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())

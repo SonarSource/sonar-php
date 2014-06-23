@@ -29,7 +29,9 @@ public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTe
 
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws IllegalAccessException {
+    activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
+
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(3).withMessage("Move the use declarations after the namespace declarations.")
@@ -42,10 +44,8 @@ public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTe
   }
 
   @Test
-  public void custom() {
-    check.hasNamespaceBlankLine = false;
-    check.hasUseBlankLine = false;
-    check.isUseAfterNamespace = false;
+  public void custom() throws IllegalAccessException {
+    deactivateAll();
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
