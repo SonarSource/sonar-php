@@ -24,8 +24,10 @@ import com.sonar.sslr.api.Grammar;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.formattingStandardCheck.CurlyBraceCheck;
 import org.sonar.php.checks.formattingStandardCheck.NamespaceAndUseStatementCheck;
+import org.sonar.php.checks.formattingStandardCheck.SpacingCheck;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -61,6 +63,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
 
   private final NamespaceAndUseStatementCheck namespaceAndUseStatementCheck = new NamespaceAndUseStatementCheck();
   private final CurlyBraceCheck curlyBraceCheck = new CurlyBraceCheck();
+  private final SpacingCheck spacingCheck = new SpacingCheck();
 
   /**
    * Namespace and use statement
@@ -98,6 +101,15 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isOpenCurlyBraceForControlStructures = true;
 
+  /**
+   * Spacing
+   */
+  @RuleProperty(
+    key = "one_space_after",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isOneSpaceBetweenRParentAndLCurly = true;
+
   @Override
   public void init() {
     subscribeTo(
@@ -105,12 +117,14 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
       PHPGrammar.USE_STATEMENT);
     subscribeTo(CLASS_AND_FUNCTION);
     subscribeTo(CONTROL_STRUCTURE);
+    subscribeTo(PHPPunctuator.RPARENTHESIS);
   }
 
   @Override
   public void visitNode(AstNode astNode) {
     namespaceAndUseStatementCheck.visitNode(this, astNode);
     curlyBraceCheck.visitNode(this, astNode);
+    spacingCheck.visitNode(this, astNode);
   }
 
   @Override
