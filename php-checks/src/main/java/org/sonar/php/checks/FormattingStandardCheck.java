@@ -110,6 +110,12 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isOneSpaceBetweenRParentAndLCurly = true;
 
+  @RuleProperty(
+    key = "one_space_before",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isOneSpaceBetweenKeywordAndNextToken = true;
+
   @Override
   public void init() {
     subscribeTo(

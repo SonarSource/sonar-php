@@ -21,6 +21,7 @@ package org.sonar.php.checks.formattingStandardCheck;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
 
@@ -29,6 +30,33 @@ public class SpacingCheck {
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
     if (formattingCheck.isOneSpaceBetweenRParentAndLCurly && node.is(PHPPunctuator.RPARENTHESIS)) {
       checkSpaceBetweenRParentAndLCurly(formattingCheck, node);
+
+    } else if (formattingCheck.isOneSpaceBetweenKeywordAndNextToken && node.is(formattingCheck.CONTROL_STRUCTURE)) {
+      checkSpaceBetweenKeywordAndNextNode(formattingCheck, node);
+    }
+  }
+
+  private void checkSpaceBetweenKeywordAndNextNode(FormattingStandardCheck formattingCheck, AstNode controlStructure) {
+    AstNode keyword = controlStructure.getFirstChild(PHPKeyword.values());
+    Token nextToken = keyword.getNextAstNode().getToken();
+
+    if (isOpeningParenthesisOrCurlyBrace(nextToken) && nextToken.getLine() == keyword.getTokenLine()) {
+
+      // column of the end of the keyword
+      int keywordEndColumn = keyword.getToken().getColumn() + (keyword.getTokenValue().length() - 1);
+      int nbSpace = nextToken.getColumn() - keywordEndColumn - 1;
+
+      if (nbSpace != 1) {
+        String msg = (new StringBuilder())
+          .append("Put ")
+          .append((nbSpace > 1 ? "only " : ""))
+          .append("one space between this \"")
+          .append(keyword.getTokenOriginalValue())
+          .append("\" keyword and the opening ")
+          .append((nextToken.getType().equals(PHPPunctuator.LPARENTHESIS) ? "parenthesis." : "curly brace.")).toString();
+
+        formattingCheck.reportIssue(msg, keyword);
+      }
     }
   }
 
@@ -36,19 +64,30 @@ public class SpacingCheck {
     Token nextToken = rParenthesis.getNextAstNode().getToken();
 
     if (nextToken.getType().equals(PHPPunctuator.LCURLYBRACE)) {
+      int nbSpace = getNbSpaceBetween(rParenthesis.getToken(), nextToken);
 
-      // Do not trigger issue when prenthesis and curly brace are not on the same line
-      if (hasNotExactlyOneSpaceBetween(rParenthesis.getToken(), nextToken)) {
-        formattingCheck.reportIssue("There should be exactly one space between closing parenthesis and opening curly braces.", rParenthesis);
+      if (nbSpace != 1) {
+        String msg = (new StringBuilder())
+          .append("Put ")
+          .append((nbSpace > 1 ? "only " : ""))
+          .append("one space between the closing parenthesis and the opening curly brace.").toString();
+
+        formattingCheck.reportIssue(msg, rParenthesis);
       }
     }
   }
 
+  private boolean isOpeningParenthesisOrCurlyBrace(Token token) {
+    return token.getType().equals(PHPPunctuator.LPARENTHESIS) || token.getType().equals(PHPPunctuator.LCURLYBRACE);
+  }
+
   /**
-   * Returns true if both tokens are on the same line and there is not exactly one space between them.
+   * Returns number of space between the 2 tokens, 1 if there are on different line.
    */
-  private boolean hasNotExactlyOneSpaceBetween(Token token1, Token token2) {
-    int expectedColumn = token1.getColumn() + 2;
-    return token1.getLine() == token2.getLine() && token2.getColumn() != expectedColumn;
+  private int getNbSpaceBetween(Token token1, Token token2) {
+    if (token1.getLine() != token2.getLine()) {
+      return 1;
+    }
+    return token2.getColumn() - token1.getColumn() - 1;
   }
 }
