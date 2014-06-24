@@ -128,10 +128,17 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isOneSpaceAfterForLoopSemicolon = true;
 
+  @RuleProperty(
+    key = "space_comma",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isOneSpaceAfterComma = true;
+
   @Override
   public void init() {
     subscribeTo(
       PHPGrammar.NAMESPACE_STATEMENT,
+      PHPGrammar.PARAMETER_LIST,
       PHPGrammar.USE_STATEMENT);
     subscribeTo(CLASS_AND_FUNCTION);
     subscribeTo(CONTROL_STRUCTURE);

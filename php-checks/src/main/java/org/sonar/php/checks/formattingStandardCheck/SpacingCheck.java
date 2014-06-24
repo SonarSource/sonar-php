@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.formattingStandardCheck;
 
+import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPKeyword;
@@ -38,6 +39,44 @@ public class SpacingCheck {
     if (formattingCheck.isOneSpaceAfterForLoopSemicolon && node.is(PHPGrammar.FOR_STATEMENT)) {
       checkSpaceForStatement(formattingCheck, node);
     }
+    if (formattingCheck.isOneSpaceAfterComma && node.is(PHPGrammar.PARAMETER_LIST)) {
+      checkSpaceForComma(formattingCheck, node);
+
+    }
+  }
+
+  /**
+   * Check space around the arguments'
+   */
+  private void checkSpaceForComma(FormattingStandardCheck formattingCheck, AstNode node) {
+    int msgIndex = -1;
+    String[] msg = {
+      "Remove any space before comma separated arguments.",
+      "Put exactly one space after comma separated arguments.",
+      "Remove any space before comma separated arguments and put exactly one space after comma separated arguments."
+    };
+    for (AstNode comma : node.getChildren(PHPPunctuator.COMMA)) {
+      Token commaToken = comma.getToken();
+      Token nextToken = comma.getNextSibling().getToken();
+      Token previousToken = comma.getPreviousSibling().getLastToken();
+
+      if (isOnSameLine(previousToken, commaToken, nextToken)) {
+        boolean isSpaceBeforeOK = commaToken.getColumn() - (previousToken.getColumn() + previousToken.getValue().length()) == 0;
+        boolean isSpaceAfterOK = getNbSpaceBetween(commaToken, nextToken) == 1;
+
+        if (!isSpaceBeforeOK && isSpaceAfterOK && msgIndex < 0) {
+          msgIndex = 0;
+        } else if (isSpaceBeforeOK && !isSpaceAfterOK && msgIndex < 0) {
+          msgIndex = 1;
+        } else if (!isSpaceBeforeOK && !isSpaceAfterOK) {
+          msgIndex = 2;
+          break;
+        }
+      }
+    }
+    if (msgIndex > -1) {
+      formattingCheck.reportIssue(msg[msgIndex], node);
+    }
   }
 
   /**
@@ -51,7 +90,7 @@ public class SpacingCheck {
       Token nextToken = semicolon.getNextAstNode().getToken();
       int nbSpace = getNbSpaceBetween(semicolonToken, nextToken);
 
-      if (nbSpace != 1 && !isOnSameLine(semicolonToken, nextToken)) {
+      if (nbSpace != 1 && isOnSameLine(semicolonToken, nextToken)) {
         shouldReportIssue = true;
       }
     }
@@ -92,7 +131,7 @@ public class SpacingCheck {
     if (nextToken.getType().equals(PHPPunctuator.LCURLYBRACE)) {
       int nbSpace = getNbSpaceBetween(rParenToken, nextToken);
 
-      if (nbSpace != 1 && !isOnSameLine(rParenToken, nextToken)) {
+      if (nbSpace != 1 && isOnSameLine(rParenToken, nextToken)) {
         String msg = (new StringBuilder())
           .append("Put ")
           .append((nbSpace > 1 ? "only " : ""))
@@ -107,8 +146,16 @@ public class SpacingCheck {
     return token.getType().equals(PHPPunctuator.LPARENTHESIS) || token.getType().equals(PHPPunctuator.LCURLYBRACE);
   }
 
-  private boolean isOnSameLine(Token token1, Token token2) {
-    return token1.getLine() != token2.getLine();
+  private boolean isOnSameLine(Token... tokens) {
+    Preconditions.checkArgument(tokens.length > 0);
+
+    int lineRef = tokens[0].getLine();
+    for (Token token : tokens) {
+      if (token.getLine() != lineRef) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**

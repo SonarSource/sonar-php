@@ -48,3 +48,13 @@ for ($i = 0;$i < 3;  $i++) {  // NOK
 
 for ($i = 0; $i < 3; $i++) {  // OK
 }
+
+/**
+ * Space around arguments' comma
+ */
+
+function f($p1 , $p2, $p3, $p4) {}  // NOK - space before
+function g($p1,$p2, $p3, $p4) {}    // NOK - no space after
+function h($p1 ,$p2, $p3, $p4) {}   // NOK - space after & no space after
+function i($p1 ,$p2, $p3 ,$p4) {}   // NOK - space after & no space after x2
+function j($p1, $p2, $p3, $p4) {}   // OK

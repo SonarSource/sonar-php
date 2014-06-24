@@ -30,7 +30,7 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isOneSpaceBetweenRParentAndLCurly", "isOneSpaceBetweenKeywordAndNextToken", "isOneSpaceAfterForLoopSemicolon");
+    activeOnly("isOneSpaceBetweenRParentAndLCurly", "isOneSpaceBetweenKeywordAndNextToken", "isOneSpaceAfterForLoopSemicolon", "isOneSpaceAfterComma");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "SpacingCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -42,6 +42,11 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
       .next().atLine(27).withMessage("Put one space between this \"else\" keyword and the opening curly brace.")
 
       .next().atLine(46).withMessage("Put exactly one space after each \";\" character in the \"for\" statement.")
+
+      .next().atLine(56).withMessage("Remove any space before comma separated arguments.")
+      .next().atLine(57).withMessage("Put exactly one space after comma separated arguments.")
+      .next().atLine(58).withMessage("Remove any space before comma separated arguments and put exactly one space after comma separated arguments.")
+      .next().atLine(59).withMessage("Remove any space before comma separated arguments and put exactly one space after comma separated arguments.")
 
       .noMore();
   }
