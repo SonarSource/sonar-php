@@ -54,18 +54,23 @@ public class CurlyBraceCheck {
     }
   }
 
+  /**
+   * Check that control structure opening curly brace ends line.
+   */
   private void checkLCurlyForControlStructure(FormattingStandardCheck formattingCheck, @Nullable AstNode leftCurlyBrace) {
     if (leftCurlyBrace != null && !endsLine(leftCurlyBrace)) {
       formattingCheck.reportIssue("Move this open curly brace to the end of the previous line.", leftCurlyBrace);
     }
   }
 
+  /**
+   * Check that class and function opening curly brace starts line.
+   */
   private void checkLCurlyForClassAndFunction(FormattingStandardCheck formattingCheck, @Nullable AstNode leftCurlyBrace) {
     if (leftCurlyBrace != null && !isFirstOnline(leftCurlyBrace)) {
       formattingCheck.reportIssue("Move this open curly brace to the beginning of the next line.", leftCurlyBrace);
     }
   }
-
 
   private boolean isFirstOnline(AstNode curlyBrace) {
     Token previousToken = curlyBrace.getPreviousAstNode().getLastToken();
