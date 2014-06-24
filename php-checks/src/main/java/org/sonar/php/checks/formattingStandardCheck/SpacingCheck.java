@@ -40,7 +40,7 @@ public class SpacingCheck {
     if (formattingCheck.isOneSpaceAfterForLoopSemicolon && node.is(PHPGrammar.FOR_STATEMENT)) {
       checkSpaceForStatement(formattingCheck, node);
     }
-    if (formattingCheck.isOneSpaceAfterComma && node.is(PHPGrammar.PARAMETER_LIST)) {
+    if (formattingCheck.isOneSpaceAfterComma && node.is(PHPGrammar.PARAMETER_LIST, PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
       checkSpaceForComma(formattingCheck, node);
     }
     if (formattingCheck.isNoSpaceAfterMethodName && node.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
