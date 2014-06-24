@@ -47,8 +47,11 @@ public class SpacingCheck {
     boolean shouldReportIssue = false;
 
     for (AstNode semicolon : node.getChildren(PHPPunctuator.SEMICOLON)) {
-      int nbSpace = getNbSpaceBetween(semicolon.getToken(), semicolon.getNextAstNode().getToken());
-      if (nbSpace != 1) {
+      Token semicolonToken = semicolon.getToken();
+      Token nextToken = semicolon.getNextAstNode().getToken();
+      int nbSpace = getNbSpaceBetween(semicolonToken, nextToken);
+
+      if (nbSpace != 1 && !isOnSameLine(semicolonToken, nextToken)) {
         shouldReportIssue = true;
       }
     }
@@ -84,11 +87,12 @@ public class SpacingCheck {
 
   private void checkSpaceBetweenRParentAndLCurly(FormattingStandardCheck formattingCheck, AstNode rParenthesis) {
     Token nextToken = rParenthesis.getNextAstNode().getToken();
+    Token rParenToken = rParenthesis.getToken();
 
     if (nextToken.getType().equals(PHPPunctuator.LCURLYBRACE)) {
-      int nbSpace = getNbSpaceBetween(rParenthesis.getToken(), nextToken);
+      int nbSpace = getNbSpaceBetween(rParenToken, nextToken);
 
-      if (nbSpace != 1) {
+      if (nbSpace != 1 && !isOnSameLine(rParenToken, nextToken)) {
         String msg = (new StringBuilder())
           .append("Put ")
           .append((nbSpace > 1 ? "only " : ""))
@@ -103,13 +107,14 @@ public class SpacingCheck {
     return token.getType().equals(PHPPunctuator.LPARENTHESIS) || token.getType().equals(PHPPunctuator.LCURLYBRACE);
   }
 
+  private boolean isOnSameLine(Token token1, Token token2) {
+    return token1.getLine() != token2.getLine();
+  }
+
   /**
-   * Returns number of space between the 2 tokens, 1 if there are on different line.
+   * Returns number of space between the 2 tokens.
    */
   private int getNbSpaceBetween(Token token1, Token token2) {
-    if (token1.getLine() != token2.getLine()) {
-      return 1;
-    }
     return token2.getColumn() - token1.getColumn() - 1;
   }
 }
