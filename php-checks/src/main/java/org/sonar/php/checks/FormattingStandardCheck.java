@@ -116,6 +116,12 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isOneSpaceBetweenKeywordAndNextToken = true;
 
+  @RuleProperty(
+    key = "closing_curly_brace",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isClosingCurlyNextToKeyword = true;
+
   @Override
   public void init() {
     subscribeTo(

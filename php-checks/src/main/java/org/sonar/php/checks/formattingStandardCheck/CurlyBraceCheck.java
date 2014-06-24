@@ -21,6 +21,7 @@ package org.sonar.php.checks.formattingStandardCheck;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.parser.PHPGrammar;
@@ -35,6 +36,21 @@ public class CurlyBraceCheck {
     }
     if (node.is(FormattingStandardCheck.CONTROL_STRUCTURE) && formattingCheck.isOpenCurlyBraceForControlStructures) {
       checkLCurlyForControlStructure(formattingCheck, getLeftCurlyBraceNode(node));
+    }
+    if (node.is(PHPGrammar.ELSE_CLAUSE, PHPGrammar.CATCH_STATEMENT, PHPGrammar.FINALLY_STATEMENT) && formattingCheck.isClosingCurlyNextToKeyword) {
+      checkRCurlyBraceOnSameLine(formattingCheck, node);
+    }
+  }
+
+  /**
+   * Check that else, catch or finally keywords are on the same line as the previous closing curly brace.
+   */
+  private void checkRCurlyBraceOnSameLine(FormattingStandardCheck formattingCheck, AstNode node) {
+    Token previsouToken = node.getPreviousAstNode().getLastToken();
+    String keyword = node.getFirstChild(PHPKeyword.ELSE, PHPKeyword.CATCH, PHPKeyword.FINALLY).getTokenOriginalValue();
+
+    if (previsouToken.getType().equals(PHPPunctuator.RCURLYBRACE) && previsouToken.getLine() != node.getTokenLine()) {
+      formattingCheck.reportIssue("Move this \"" + keyword + "\" to the same line as the previous closing curly brace.", node);
     }
   }
 

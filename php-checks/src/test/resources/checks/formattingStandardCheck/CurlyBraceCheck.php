@@ -73,3 +73,22 @@ try {                     // OK
 if ($aVeryLongConditionalExpression
 ) {                       // OK
 }
+
+/*
+ * } and ELSE, CATCH, FINALLY
+ */
+if ($a) {
+}
+else {                  // NOK
+}
+
+try {
+}
+catch (Exception $e) {  // NOK
+}
+finally {               // NOK
+}
+
+if ($a) {
+} else {                // OK
+}

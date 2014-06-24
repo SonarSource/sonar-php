@@ -30,7 +30,7 @@ public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isOpenCurlyBraceForClassAndFunction", "isOpenCurlyBraceForControlStructures");
+    activeOnly("isOpenCurlyBraceForClassAndFunction", "isOpenCurlyBraceForControlStructures", "isClosingCurlyNextToKeyword");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -48,6 +48,11 @@ public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
       .next().atLine(60)
       .next().atLine(64)
       .next().atLine(66)
+
+      .next().atLine(82).withMessage("Move this \"else\" to the same line as the previous closing curly brace.")
+      .next().atLine(87)
+      .next().atLine(89)
+
       .noMore();
   }
 
