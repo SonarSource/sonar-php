@@ -134,11 +134,18 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isOneSpaceAfterComma = true;
 
+  @RuleProperty(
+    key = "no_space_method_name",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isNoSpaceAfterMethodName = true;
+
   @Override
   public void init() {
     subscribeTo(
       PHPGrammar.NAMESPACE_STATEMENT,
       PHPGrammar.PARAMETER_LIST,
+      PHPGrammar.FUNCTION_CALL_PARAMETER_LIST,
       PHPGrammar.USE_STATEMENT);
     subscribeTo(CLASS_AND_FUNCTION);
     subscribeTo(CONTROL_STRUCTURE);

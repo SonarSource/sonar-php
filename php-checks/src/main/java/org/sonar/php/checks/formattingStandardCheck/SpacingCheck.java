@@ -21,6 +21,7 @@ package org.sonar.php.checks.formattingStandardCheck;
 
 import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
@@ -41,7 +42,23 @@ public class SpacingCheck {
     }
     if (formattingCheck.isOneSpaceAfterComma && node.is(PHPGrammar.PARAMETER_LIST)) {
       checkSpaceForComma(formattingCheck, node);
+    }
+    if (formattingCheck.isNoSpaceAfterMethodName && node.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
+      checkSpaceAfterFunctionName(formattingCheck, node);
+    }
+  }
 
+  /**
+   * Check there is not space between a function's name and the opening parenthesis.
+   */
+  private void checkSpaceAfterFunctionName(FormattingStandardCheck formattingCheck, AstNode node) {
+    Token lParenToken = node.getFirstChild(PHPPunctuator.LPARENTHESIS).getToken();
+    Token funcNameToken = node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST) ?
+      node.getPreviousAstNode().getLastToken() : node.getFirstChild(GenericTokenType.IDENTIFIER).getToken();
+
+    int nbSpace = lParenToken.getColumn() - (funcNameToken.getColumn() + funcNameToken.getValue().length());
+    if (nbSpace != 0) {
+      formattingCheck.reportIssue("Remove all space between the method name \"" + funcNameToken.getOriginalValue() + "\" and the opening parenthesis.", node);
     }
   }
 
@@ -153,8 +170,8 @@ public class SpacingCheck {
   }
 
   /**
-  * Returns true if all the tokens given as parameters are on the same line.
-  */
+   * Returns true if all the tokens given as parameters are on the same line.
+   */
   private boolean isOnSameLine(Token... tokens) {
     Preconditions.checkArgument(tokens.length > 0);
 

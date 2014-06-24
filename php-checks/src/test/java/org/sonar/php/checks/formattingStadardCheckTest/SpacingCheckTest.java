@@ -30,7 +30,8 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isOneSpaceBetweenRParentAndLCurly", "isOneSpaceBetweenKeywordAndNextToken", "isOneSpaceAfterForLoopSemicolon", "isOneSpaceAfterComma");
+    activeOnly("isOneSpaceBetweenRParentAndLCurly", "isOneSpaceBetweenKeywordAndNextToken",
+      "isOneSpaceAfterForLoopSemicolon", "isOneSpaceAfterComma", "isNoSpaceAfterMethodName");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "SpacingCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -47,6 +48,9 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
       .next().atLine(57).withMessage("Put exactly one space after comma separated arguments.")
       .next().atLine(58).withMessage("Remove any space before comma separated arguments and put exactly one space after comma separated arguments.")
       .next().atLine(59).withMessage("Remove any space before comma separated arguments and put exactly one space after comma separated arguments.")
+
+      .next().atLine(66).withMessage("Remove all space between the method name \"f\" and the opening parenthesis.")
+      .next().atLine(67).withMessage("Remove all space between the method name \"doSomething\" and the opening parenthesis.")
 
       .noMore();
   }
