@@ -87,7 +87,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
   public boolean hasUseBlankLine = true;
 
   /**
-   * Open curly brace
+   * Curly brace
    */
   @RuleProperty(
     key = "open_curly_brace_classes_functions",
@@ -100,6 +100,12 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     defaultValue = "true",
     type = "BOOLEAN")
   public boolean isOpenCurlyBraceForControlStructures = true;
+
+  @RuleProperty(
+    key = "closing_curly_brace",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isClosingCurlyNextToKeyword = true;
 
   /**
    * Spacing
@@ -115,12 +121,6 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     defaultValue = "true",
     type = "BOOLEAN")
   public boolean isOneSpaceBetweenKeywordAndNextToken = true;
-
-  @RuleProperty(
-    key = "closing_curly_brace",
-    defaultValue = "true",
-    type = "BOOLEAN")
-  public boolean isClosingCurlyNextToKeyword = true;
 
   @Override
   public void init() {
