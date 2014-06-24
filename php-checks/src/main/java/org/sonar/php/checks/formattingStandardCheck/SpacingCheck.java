@@ -100,6 +100,9 @@ public class SpacingCheck {
     }
   }
 
+  /**
+   * Check that there is exactly one space between a control structure keyword and a opening parenthesis or curly brace.
+   */
   private void checkSpaceBetweenKeywordAndNextNode(FormattingStandardCheck formattingCheck, AstNode controlStructure) {
     AstNode keyword = controlStructure.getFirstChild(PHPKeyword.values());
     Token nextToken = keyword.getNextAstNode().getToken();
@@ -124,6 +127,9 @@ public class SpacingCheck {
     }
   }
 
+  /**
+   * Check that there is exactly one space between a closing parenthesis and a opening curly brace.
+   */
   private void checkSpaceBetweenRParentAndLCurly(FormattingStandardCheck formattingCheck, AstNode rParenthesis) {
     Token nextToken = rParenthesis.getNextAstNode().getToken();
     Token rParenToken = rParenthesis.getToken();
@@ -146,6 +152,9 @@ public class SpacingCheck {
     return token.getType().equals(PHPPunctuator.LPARENTHESIS) || token.getType().equals(PHPPunctuator.LCURLYBRACE);
   }
 
+  /**
+  * Returns true if all the tokens given as parameters are on the same line.
+  */
   private boolean isOnSameLine(Token... tokens) {
     Preconditions.checkArgument(tokens.length > 0);
 
