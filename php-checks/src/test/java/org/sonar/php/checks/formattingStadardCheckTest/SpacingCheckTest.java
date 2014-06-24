@@ -30,7 +30,7 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isOneSpaceBetweenRParentAndLCurly", "isOneSpaceBetweenKeywordAndNextToken");
+    activeOnly("isOneSpaceBetweenRParentAndLCurly", "isOneSpaceBetweenKeywordAndNextToken", "isOneSpaceAfterForLoopSemicolon");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "SpacingCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -40,6 +40,9 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
       .next().atLine(23).withMessage("Put one space between this \"if\" keyword and the opening parenthesis.")
       .next().atLine(25).withMessage("Put only one space between this \"if\" keyword and the opening parenthesis.")
       .next().atLine(27).withMessage("Put one space between this \"else\" keyword and the opening curly brace.")
+
+      .next().atLine(46).withMessage("Put exactly one space after each \";\" character in the \"for\" statement.")
+
       .noMore();
   }
 

@@ -38,3 +38,13 @@ try
 {                         // OK - on another line
 } catch (Exception $e) {
 }
+
+/**
+ * Space after ";" in for statement
+ */
+
+for ($i = 0;$i < 3;  $i++) {  // NOK
+}
+
+for ($i = 0; $i < 3; $i++) {  // OK
+}

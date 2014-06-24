@@ -24,15 +24,37 @@ import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
+import org.sonar.php.parser.PHPGrammar;
 
 public class SpacingCheck {
 
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
     if (formattingCheck.isOneSpaceBetweenRParentAndLCurly && node.is(PHPPunctuator.RPARENTHESIS)) {
       checkSpaceBetweenRParentAndLCurly(formattingCheck, node);
-
-    } else if (formattingCheck.isOneSpaceBetweenKeywordAndNextToken && node.is(formattingCheck.CONTROL_STRUCTURE)) {
+    }
+    if (formattingCheck.isOneSpaceBetweenKeywordAndNextToken && node.is(formattingCheck.CONTROL_STRUCTURE)) {
       checkSpaceBetweenKeywordAndNextNode(formattingCheck, node);
+    }
+    if (formattingCheck.isOneSpaceAfterForLoopSemicolon && node.is(PHPGrammar.FOR_STATEMENT)) {
+      checkSpaceForStatement(formattingCheck, node);
+    }
+  }
+
+  /**
+   * Check there is exactly one space after each ";" in for statement.
+   */
+  private void checkSpaceForStatement(FormattingStandardCheck formattingCheck, AstNode node) {
+    boolean shouldReportIssue = false;
+
+    for (AstNode semicolon : node.getChildren(PHPPunctuator.SEMICOLON)) {
+      int nbSpace = getNbSpaceBetween(semicolon.getToken(), semicolon.getNextAstNode().getToken());
+      if (nbSpace != 1) {
+        shouldReportIssue = true;
+      }
+    }
+
+    if (shouldReportIssue) {
+      formattingCheck.reportIssue("Put exactly one space after each \";\" character in the \"for\" statement.", node);
     }
   }
 
