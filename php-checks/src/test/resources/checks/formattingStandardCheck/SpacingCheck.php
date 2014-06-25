@@ -86,3 +86,10 @@ doSomething( $p1, $p2);   // NOK
 doSomething($p1, $p2 );   // NOK
 doSomething( $p1, $p2 );  // NOK
 doSomething($p1, $p2);    // OK
+doSomething(              // OK
+    $p1, $p2);
+doSomething($p1, $p2      // OK
+);
+doSomething(              // OK
+    $p1, $p2
+);

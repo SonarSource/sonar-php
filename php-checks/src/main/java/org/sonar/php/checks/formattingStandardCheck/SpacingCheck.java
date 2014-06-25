@@ -60,8 +60,10 @@ public class SpacingCheck {
     Token lcurlyNextToken = lcurly.getNextAstNode().getToken();
     Token rculyPreviousToken = rcurly.getPreviousAstNode().getLastToken();
 
-    boolean isLCurlyOK = isOnSameLine(lcurlyNextToken, lcurly.getToken()) && getNbSpaceBetween(lcurly.getToken(), lcurlyNextToken) == 0;
-    boolean isRCurlyOK = isOnSameLine(rculyPreviousToken, rcurly.getToken()) && getNbSpaceBetween(rculyPreviousToken, rcurly.getToken()) == 0;
+    boolean isLCurlyOK = !isOnSameLine(lcurlyNextToken, lcurly.getToken()) || getNbSpaceBetween(lcurly.getToken(), lcurlyNextToken) == 0;
+    boolean isRCurlyOK = !isOnSameLine(rculyPreviousToken, rcurly.getToken()) || getNbSpaceBetween(rculyPreviousToken, rcurly.getToken()) == 0;
+
+
 
     if (!isLCurlyOK && isRCurlyOK) {
       formattingCheck.reportIssue("Remove all space after the opening parenthesis.", lcurly);
