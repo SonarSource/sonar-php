@@ -47,6 +47,37 @@ public class SpacingCheck {
     if (formattingCheck.isNoSpaceAfterMethodName && node.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
       checkSpaceAfterFunctionName(formattingCheck, node);
     }
+    if (formattingCheck.isSpaceForeachStatement && node.is(PHPGrammar.FOREACH_STATEMENT)) {
+      checkForeachStatement(formattingCheck, node);
+    }
+  }
+
+  private void checkForeachStatement(FormattingStandardCheck formattingCheck, AstNode node) {
+    AstNode foreachExpr = node.getFirstChild(PHPGrammar.FOREACH_EXPR);
+    AstNode asKeyword = foreachExpr.getFirstChild(PHPKeyword.AS);
+    AstNode doubleArrow = foreachExpr.getFirstChild(PHPPunctuator.DOUBLEARROW);
+
+    boolean isSpaceCorrectAs = isExactlyOneSpaceAround(asKeyword);
+    boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isExactlyOneSpaceAround(doubleArrow);
+
+    String keyword = null;
+    if (!isSpaceCorrectAs && isSpaceCorrectDoubleArrow) {
+      keyword = "\"" + asKeyword.getTokenOriginalValue() + "\"";
+    } else if (isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
+      keyword = "\"" + doubleArrow.getTokenOriginalValue() + "\"";
+    } else if (!isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
+      keyword = "\"" + asKeyword.getTokenOriginalValue() + "\" and \"" + doubleArrow.getTokenOriginalValue() + "\"";
+    }
+
+    if (keyword != null) {
+      formattingCheck.reportIssue("Put exactly one space after and before " + keyword + " in \"foreach\" statement.", node);
+    }
+  }
+
+  private boolean isExactlyOneSpaceAround(AstNode node) {
+    int spaceBefore = getNbSpaceBetween(node.getPreviousAstNode().getLastToken(), node.getToken());
+    int spaceAfter = getNbSpaceBetween(node.getToken(), node.getNextAstNode().getToken());
+    return spaceBefore == 1 && spaceAfter == 1;
   }
 
   /**

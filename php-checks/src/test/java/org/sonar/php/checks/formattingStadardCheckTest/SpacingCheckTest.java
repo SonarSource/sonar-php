@@ -31,7 +31,7 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
   @Test
   public void defaultValue() throws IllegalAccessException {
     activeOnly("isOneSpaceBetweenRParentAndLCurly", "isOneSpaceBetweenKeywordAndNextToken",
-      "isOneSpaceAfterForLoopSemicolon", "isOneSpaceAfterComma", "isNoSpaceAfterMethodName");
+      "isOneSpaceAfterForLoopSemicolon", "isOneSpaceAfterComma", "isNoSpaceAfterMethodName", "isSpaceForeachStatement");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "SpacingCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -52,6 +52,10 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
 
       .next().atLine(67).withMessage("Remove all space between the method name \"f\" and the opening parenthesis.")
       .next().atLine(68).withMessage("Remove all space between the method name \"doSomething\" and the opening parenthesis.")
+
+      .next().atLine(76).withMessage("Put exactly one space after and before \"as\" in \"foreach\" statement.")
+      .next().atLine(77).withMessage("Put exactly one space after and before \"=>\" in \"foreach\" statement.")
+      .next().atLine(78).withMessage("Put exactly one space after and before \"as\" and \"=>\" in \"foreach\" statement.")
 
       .noMore();
   }

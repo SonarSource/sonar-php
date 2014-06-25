@@ -68,3 +68,12 @@ function f () {}     // NOK
 $a->doSomething ();  // NOK
 function g() {}      // OK
 doSomething();       // OK
+
+/**
+ * Foreach spacing
+ */
+
+foreach ($a as  $array) {}          // NOK
+foreach ($a as $map =>  $value) {}  // NOK
+foreach ($a as  $map  =>$value) {}  // NOK
+foreach ($a as $map => $value) {}   // OK
