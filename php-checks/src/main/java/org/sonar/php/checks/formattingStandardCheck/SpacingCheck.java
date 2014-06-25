@@ -56,8 +56,7 @@ public class SpacingCheck {
     Token funcNameToken = node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST) ?
       node.getPreviousAstNode().getLastToken() : node.getFirstChild(GenericTokenType.IDENTIFIER).getToken();
 
-    int nbSpace = lParenToken.getColumn() - (funcNameToken.getColumn() + funcNameToken.getValue().length());
-    if (nbSpace != 0) {
+    if (getNbSpaceBetween(funcNameToken, lParenToken) != 0) {
       formattingCheck.reportIssue("Remove all space between the method name \"" + funcNameToken.getOriginalValue() + "\" and the opening parenthesis.", node);
     }
   }
@@ -78,7 +77,7 @@ public class SpacingCheck {
       Token previousToken = comma.getPreviousSibling().getLastToken();
 
       if (isOnSameLine(previousToken, commaToken, nextToken)) {
-        boolean isSpaceBeforeOK = commaToken.getColumn() - (previousToken.getColumn() + previousToken.getValue().length()) == 0;
+        boolean isSpaceBeforeOK = getNbSpaceBetween(previousToken, commaToken) == 0;
         boolean isSpaceAfterOK = getNbSpaceBetween(commaToken, nextToken) == 1;
 
         if (!isSpaceBeforeOK && isSpaceAfterOK && msgIndex < 0) {
@@ -124,11 +123,8 @@ public class SpacingCheck {
     AstNode keyword = controlStructure.getFirstChild(PHPKeyword.values());
     Token nextToken = keyword.getNextAstNode().getToken();
 
-    if (isOpeningParenthesisOrCurlyBrace(nextToken) && nextToken.getLine() == keyword.getTokenLine()) {
-
-      // column of the end of the keyword
-      int keywordEndColumn = keyword.getToken().getColumn() + (keyword.getTokenValue().length() - 1);
-      int nbSpace = nextToken.getColumn() - keywordEndColumn - 1;
+    if (isOpeningParenthesisOrCurlyBrace(nextToken) && isOnSameLine(keyword.getToken(), nextToken)) {
+      int nbSpace = getNbSpaceBetween(keyword.getToken(), nextToken);
 
       if (nbSpace != 1) {
         String msg = (new StringBuilder())
@@ -188,6 +184,9 @@ public class SpacingCheck {
    * Returns number of space between the 2 tokens.
    */
   private int getNbSpaceBetween(Token token1, Token token2) {
-    return token2.getColumn() - token1.getColumn() - 1;
+    int token1EndColumn = token1.getColumn() + (token1.getValue().length() - 1);
+    int tok2StartColumn = token2.getColumn();
+
+    return tok2StartColumn - token1EndColumn - 1;
   }
 }
