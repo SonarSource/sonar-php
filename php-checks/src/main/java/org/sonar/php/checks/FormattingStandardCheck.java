@@ -146,6 +146,12 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isSpaceForeachStatement = true;
 
+  @RuleProperty(
+    key = "no_space",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isNoSpaceParenthesis = true;
+
   @Override
   public void init() {
     subscribeTo(

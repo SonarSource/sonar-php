@@ -50,6 +50,26 @@ public class SpacingCheck {
     if (formattingCheck.isSpaceForeachStatement && node.is(PHPGrammar.FOREACH_STATEMENT)) {
       checkForeachStatement(formattingCheck, node);
     }
+    if (formattingCheck.isNoSpaceParenthesis && node.is(PHPPunctuator.RPARENTHESIS)) {
+      checkSpaceInsideParenthesis(formattingCheck, node);
+    }
+  }
+
+  private void checkSpaceInsideParenthesis(FormattingStandardCheck formattingCheck, AstNode rcurly) {
+    AstNode lcurly = rcurly.getParent().getFirstChild(PHPPunctuator.LPARENTHESIS);
+    Token lcurlyNextToken = lcurly.getNextAstNode().getToken();
+    Token rculyPreviousToken = rcurly.getPreviousAstNode().getLastToken();
+
+    boolean isLCurlyOK = isOnSameLine(lcurlyNextToken, lcurly.getToken()) && getNbSpaceBetween(lcurly.getToken(), lcurlyNextToken) == 0;
+    boolean isRCurlyOK = isOnSameLine(rculyPreviousToken, rcurly.getToken()) && getNbSpaceBetween(rculyPreviousToken, rcurly.getToken()) == 0;
+
+    if (!isLCurlyOK && isRCurlyOK) {
+      formattingCheck.reportIssue("Remove all space after the opening parenthesis.", lcurly);
+    } else if (isLCurlyOK && !isRCurlyOK) {
+      formattingCheck.reportIssue("Remove all space before the closing parenthesis.", rcurly);
+    } else if (!isLCurlyOK && !isRCurlyOK) {
+      formattingCheck.reportIssue("Remove all space after the opening parenthesis and before the closing parenthesis.", lcurly);
+    }
   }
 
   private void checkForeachStatement(FormattingStandardCheck formattingCheck, AstNode node) {

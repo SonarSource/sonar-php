@@ -77,3 +77,12 @@ foreach ($a as  $array) {}          // NOK
 foreach ($a as $map =>  $value) {}  // NOK
 foreach ($a as  $map  =>$value) {}  // NOK
 foreach ($a as $map => $value) {}   // OK
+
+/**
+ * Spacing inside parenthesis
+ */
+
+doSomething( $p1, $p2);   // NOK
+doSomething($p1, $p2 );   // NOK
+doSomething( $p1, $p2 );  // NOK
+doSomething($p1, $p2);    // OK
