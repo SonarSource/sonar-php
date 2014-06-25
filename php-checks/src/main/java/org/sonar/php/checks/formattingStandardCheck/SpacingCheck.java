@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks.formattingStandardCheck;
+package org.sonar.php.checks.formattingstandardcheck;
 
 import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.AstNode;
@@ -133,11 +133,11 @@ public class SpacingCheck {
       if (nbSpace != 1) {
         String msg = (new StringBuilder())
           .append("Put ")
-          .append((nbSpace > 1 ? "only " : ""))
+          .append(nbSpace > 1 ? "only " : "")
           .append("one space between this \"")
           .append(keyword.getTokenOriginalValue())
           .append("\" keyword and the opening ")
-          .append((nextToken.getType().equals(PHPPunctuator.LPARENTHESIS) ? "parenthesis." : "curly brace.")).toString();
+          .append(nextToken.getType().equals(PHPPunctuator.LPARENTHESIS) ? "parenthesis." : "curly brace.").toString();
 
         formattingCheck.reportIssue(msg, keyword);
       }
@@ -157,7 +157,7 @@ public class SpacingCheck {
       if (nbSpace != 1 && isOnSameLine(rParenToken, nextToken)) {
         String msg = (new StringBuilder())
           .append("Put ")
-          .append((nbSpace > 1 ? "only " : ""))
+          .append(nbSpace > 1 ? "only " : "")
           .append("one space between the closing parenthesis and the opening curly brace.").toString();
 
         formattingCheck.reportIssue(msg, rParenthesis);
