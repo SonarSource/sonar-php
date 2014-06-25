@@ -35,20 +35,11 @@ public class SpacingCheck {
     if (formattingCheck.isOneSpaceBetweenRParentAndLCurly && node.is(PHPPunctuator.RPARENTHESIS)) {
       checkSpaceBetweenRParentAndLCurly(formattingCheck, node);
     }
-    if (formattingCheck.isOneSpaceBetweenKeywordAndNextToken && node.is(formattingCheck.CONTROL_STRUCTURE)) {
-      checkSpaceBetweenKeywordAndNextNode(formattingCheck, node);
-    }
-    if (formattingCheck.isOneSpaceAfterForLoopSemicolon && node.is(PHPGrammar.FOR_STATEMENT)) {
-      checkSpaceForStatement(formattingCheck, node);
-    }
     if (formattingCheck.isOneSpaceAfterComma && node.is(PHPGrammar.PARAMETER_LIST, PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
       checkSpaceForComma(formattingCheck, node);
     }
     if (formattingCheck.isNoSpaceAfterMethodName && node.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
       checkSpaceAfterFunctionName(formattingCheck, node);
-    }
-    if (formattingCheck.isSpaceForeachStatement && node.is(PHPGrammar.FOREACH_STATEMENT)) {
-      checkForeachStatement(formattingCheck, node);
     }
     if (formattingCheck.isNoSpaceParenthesis && node.is(PHPPunctuator.RPARENTHESIS)) {
       checkSpaceInsideParenthesis(formattingCheck, node);
@@ -72,34 +63,6 @@ public class SpacingCheck {
     } else if (!isLCurlyOK && !isRCurlyOK) {
       formattingCheck.reportIssue("Remove all space after the opening parenthesis and before the closing parenthesis.", lcurly);
     }
-  }
-
-  private void checkForeachStatement(FormattingStandardCheck formattingCheck, AstNode node) {
-    AstNode foreachExpr = node.getFirstChild(PHPGrammar.FOREACH_EXPR);
-    AstNode asKeyword = foreachExpr.getFirstChild(PHPKeyword.AS);
-    AstNode doubleArrow = foreachExpr.getFirstChild(PHPPunctuator.DOUBLEARROW);
-
-    boolean isSpaceCorrectAs = isExactlyOneSpaceAround(asKeyword);
-    boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isExactlyOneSpaceAround(doubleArrow);
-
-    String keyword = null;
-    if (!isSpaceCorrectAs && isSpaceCorrectDoubleArrow) {
-      keyword = "\"" + asKeyword.getTokenOriginalValue() + "\"";
-    } else if (isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
-      keyword = "\"" + doubleArrow.getTokenOriginalValue() + "\"";
-    } else if (!isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
-      keyword = "\"" + asKeyword.getTokenOriginalValue() + "\" and \"" + doubleArrow.getTokenOriginalValue() + "\"";
-    }
-
-    if (keyword != null) {
-      formattingCheck.reportIssue("Put exactly one space after and before " + keyword + " in \"foreach\" statement.", node);
-    }
-  }
-
-  private boolean isExactlyOneSpaceAround(AstNode node) {
-    int spaceBefore = getNbSpaceBetween(node.getPreviousAstNode().getLastToken(), node.getToken());
-    int spaceAfter = getNbSpaceBetween(node.getToken(), node.getNextAstNode().getToken());
-    return spaceBefore == 1 && spaceAfter == 1;
   }
 
   /**
@@ -150,45 +113,6 @@ public class SpacingCheck {
   }
 
   /**
-   * Check there is exactly one space after each ";" in for statement.
-   */
-  private void checkSpaceForStatement(FormattingStandardCheck formattingCheck, AstNode node) {
-    boolean shouldReportIssue = false;
-
-    for (AstNode semicolon : node.getChildren(PHPPunctuator.SEMICOLON)) {
-      Token semicolonToken = semicolon.getToken();
-      Token nextToken = semicolon.getNextAstNode().getToken();
-      int nbSpace = getNbSpaceBetween(semicolonToken, nextToken);
-
-      if (nbSpace != 1 && isOnSameLine(semicolonToken, nextToken)) {
-        shouldReportIssue = true;
-      }
-    }
-
-    if (shouldReportIssue) {
-      formattingCheck.reportIssue("Put exactly one space after each \";\" character in the \"for\" statement.", node);
-    }
-  }
-
-  /**
-   * Check that there is exactly one space between a control structure keyword and a opening parenthesis or curly brace.
-   */
-  private void checkSpaceBetweenKeywordAndNextNode(FormattingStandardCheck formattingCheck, AstNode controlStructure) {
-    AstNode keyword = controlStructure.getFirstChild(PHPKeyword.values());
-    Token nextToken = keyword.getNextAstNode().getToken();
-
-    if (isType(nextToken, PHPPunctuator.LCURLYBRACE, PHPPunctuator.LPARENTHESIS) && isOnSameLine(keyword.getToken(), nextToken)) {
-      int nbSpace = getNbSpaceBetween(keyword.getToken(), nextToken);
-
-      if (nbSpace != 1) {
-        String endMsg = "between this \"" + keyword.getTokenOriginalValue() + "\" keyword and the opening "
-          + (isType(nextToken, PHPPunctuator.LPARENTHESIS) ? "parenthesis." : "curly brace.");
-        formattingCheck.reportIssue(buildIssueMsg(nbSpace, endMsg), keyword);
-      }
-    }
-  }
-
-  /**
    * Check that there is exactly one space between a closing parenthesis and a opening curly brace.
    */
   private void checkSpaceBetweenRParentAndLCurly(FormattingStandardCheck formattingCheck, AstNode rParenthesis) {
@@ -204,14 +128,14 @@ public class SpacingCheck {
     }
   }
 
-  private String buildIssueMsg(int nbSpace, String end) {
+  protected String buildIssueMsg(int nbSpace, String end) {
     return (new StringBuilder()).append("Put ")
       .append(nbSpace > 1 ? "only " : "")
       .append("one space ")
       .append(end).toString();
   }
 
-  private boolean isType(Token token, TokenType... types) {
+  protected boolean isType(Token token, TokenType... types) {
     boolean isOneOfType = false;
     for (TokenType type : types) {
       isOneOfType |= token.getType().equals(type);
@@ -222,7 +146,7 @@ public class SpacingCheck {
   /**
    * Returns true if all the tokens given as parameters are on the same line.
    */
-  private boolean isOnSameLine(Token... tokens) {
+  protected boolean isOnSameLine(Token... tokens) {
     Preconditions.checkArgument(tokens.length > 0);
 
     int lineRef = tokens[0].getLine();
@@ -237,7 +161,7 @@ public class SpacingCheck {
   /**
    * Returns number of space between the 2 tokens.
    */
-  private int getNbSpaceBetween(Token token1, Token token2) {
+  protected int getNbSpaceBetween(Token token1, Token token2) {
     int token1EndColumn = token1.getColumn() + (token1.getValue().length() - 1);
     int tok2StartColumn = token2.getColumn();
 

@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.checks.formattingstandardcheck.ControlStructureSpacingCheck;
 import org.sonar.php.checks.formattingstandardcheck.CurlyBraceCheck;
 import org.sonar.php.checks.formattingstandardcheck.NamespaceAndUseStatementCheck;
 import org.sonar.php.checks.formattingstandardcheck.SpacingCheck;
@@ -64,6 +65,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
   private final NamespaceAndUseStatementCheck namespaceAndUseStatementCheck = new NamespaceAndUseStatementCheck();
   private final CurlyBraceCheck curlyBraceCheck = new CurlyBraceCheck();
   private final SpacingCheck spacingCheck = new SpacingCheck();
+  private final ControlStructureSpacingCheck controlStructureSpacingCheck = new ControlStructureSpacingCheck();
 
   /**
    * Namespace and use statement
@@ -169,6 +171,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     namespaceAndUseStatementCheck.visitNode(this, astNode);
     curlyBraceCheck.visitNode(this, astNode);
     spacingCheck.visitNode(this, astNode);
+    controlStructureSpacingCheck.visitNode(this, astNode);
   }
 
   @Override
