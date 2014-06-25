@@ -25,14 +25,17 @@ import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.squidbridge.api.SourceFile;
 
-public class SpacingCheckTest extends FormattingStandardCheckTest {
+import java.io.File;
 
+public class PunctuatorSpacingCheckTest extends FormattingStandardCheckTest {
+
+  private static final File TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "PunctuatorSpacingCheck.php");
 
   @Test
   public void defaultValue() throws IllegalAccessException {
     activeOnly("isOneSpaceBetweenRParentAndLCurly", "isOneSpaceAfterComma", "isNoSpaceAfterMethodName", "isNoSpaceParenthesis");
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "SpacingCheck.php"), check);
+    SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(6).withMessage("Put one space between the closing parenthesis and the opening curly brace.")
       .next().atLine(8).withMessage("Put only one space between the closing parenthesis and the opening curly brace.")
@@ -57,7 +60,7 @@ public class SpacingCheckTest extends FormattingStandardCheckTest {
   public void custom() throws IllegalAccessException {
     deactivateAll();
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "SpacingCheck.php"), check);
+    SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }

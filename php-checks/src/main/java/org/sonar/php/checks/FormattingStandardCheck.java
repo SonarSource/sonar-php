@@ -28,7 +28,7 @@ import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.formattingstandardcheck.ControlStructureSpacingCheck;
 import org.sonar.php.checks.formattingstandardcheck.CurlyBraceCheck;
 import org.sonar.php.checks.formattingstandardcheck.NamespaceAndUseStatementCheck;
-import org.sonar.php.checks.formattingstandardcheck.SpacingCheck;
+import org.sonar.php.checks.formattingstandardcheck.PunctuatorSpacingCheck;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -64,7 +64,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
 
   private final NamespaceAndUseStatementCheck namespaceAndUseStatementCheck = new NamespaceAndUseStatementCheck();
   private final CurlyBraceCheck curlyBraceCheck = new CurlyBraceCheck();
-  private final SpacingCheck spacingCheck = new SpacingCheck();
+  private final PunctuatorSpacingCheck punctuatorSpacingCheck = new PunctuatorSpacingCheck();
   private final ControlStructureSpacingCheck controlStructureSpacingCheck = new ControlStructureSpacingCheck();
 
   /**
@@ -170,7 +170,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
   public void visitNode(AstNode astNode) {
     namespaceAndUseStatementCheck.visitNode(this, astNode);
     curlyBraceCheck.visitNode(this, astNode);
-    spacingCheck.visitNode(this, astNode);
+    punctuatorSpacingCheck.visitNode(this, astNode);
     controlStructureSpacingCheck.visitNode(this, astNode);
   }
 
