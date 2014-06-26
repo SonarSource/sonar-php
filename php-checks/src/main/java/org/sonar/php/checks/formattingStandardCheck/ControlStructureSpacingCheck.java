@@ -48,8 +48,8 @@ public class ControlStructureSpacingCheck extends SpacingCheck {
     AstNode asKeyword = foreachExpr.getFirstChild(PHPKeyword.AS);
     AstNode doubleArrow = foreachExpr.getFirstChild(PHPPunctuator.DOUBLEARROW);
 
-    boolean isSpaceCorrectAs = isExactlyOneSpaceAround(asKeyword);
-    boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isExactlyOneSpaceAround(doubleArrow);
+    boolean isSpaceCorrectAs = isSpaceAround(asKeyword, 1 /* space before*/, 1/* space after */);
+    boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isSpaceAround(doubleArrow, 1/* space before*/, 1/* space after */);
 
     String keyword = null;
     if (!isSpaceCorrectAs && isSpaceCorrectDoubleArrow) {
@@ -63,12 +63,6 @@ public class ControlStructureSpacingCheck extends SpacingCheck {
     if (keyword != null) {
       formattingCheck.reportIssue("Put exactly one space after and before " + keyword + " in \"foreach\" statement.", node);
     }
-  }
-
-  private boolean isExactlyOneSpaceAround(AstNode node) {
-    int spaceBefore = getNbSpaceBetween(node.getPreviousAstNode().getLastToken(), node.getToken());
-    int spaceAfter = getNbSpaceBetween(node.getToken(), node.getNextAstNode().getToken());
-    return spaceBefore == 1 && spaceAfter == 1;
   }
 
   /**

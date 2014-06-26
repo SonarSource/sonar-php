@@ -72,4 +72,13 @@ public abstract class SpacingCheck {
     return tok2StartColumn - token1EndColumn - 1;
   }
 
+  /**
+   * Check the number of space before and after the given node.
+   */
+  protected boolean isSpaceAround(AstNode node, int before, int after) {
+    int spaceBefore = getNbSpaceBetween(node.getPreviousAstNode().getLastToken(), node.getToken());
+    int spaceAfter = getNbSpaceBetween(node.getToken(), node.getNextAstNode().getToken());
+    return spaceBefore == before && spaceAfter == after;
+  }
+
 }
