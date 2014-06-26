@@ -22,6 +22,7 @@ package org.sonar.php.checks.formattingstandardcheck;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.parser.PHPGrammar;
@@ -34,6 +35,23 @@ public class FunctionSpacingCheck extends SpacingCheck {
     }
     if (formattingCheck.isNoSpaceAfterMethodName && node.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
       checkSpaceAfterFunctionName(formattingCheck, node);
+    }
+    if (formattingCheck.isClosureSpacing && node.is(PHPGrammar.FUNCTION_EXPRESSION)) {
+      checkClosureSpacing(formattingCheck, node);
+    }
+  }
+
+  private void checkClosureSpacing(FormattingStandardCheck formattingCheck, AstNode node) {
+    Token lParenToken = node.getFirstChild(PHPPunctuator.LPARENTHESIS).getToken();
+    Token functionKeyword = node.getFirstChild(PHPKeyword.FUNCTION).getToken();
+
+    if (getNbSpaceBetween(functionKeyword, lParenToken) != 1) {
+      formattingCheck.reportIssue("Put exactly one space between the \"function\" keyword and the opening parenthesis.", node);
+    }
+
+    AstNode lexicalVars = node.getFirstChild(PHPGrammar.LEXICAL_VARS);
+    if (lexicalVars != null && !isSpaceAround(lexicalVars.getFirstChild(PHPKeyword.USE), 1 /* space before */, 1 /* space after */)) {
+      formattingCheck.reportIssue("Put exactly one space before and after the \"use\" keyword.", lexicalVars);
     }
   }
 

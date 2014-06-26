@@ -33,7 +33,7 @@ public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isOneSpaceAfterComma", "isNoSpaceAfterMethodName");
+    activeOnly("isOneSpaceAfterComma", "isNoSpaceAfterMethodName", "isClosureSpacing");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -45,6 +45,9 @@ public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
 
       .next().atLine(18).withMessage("Remove all space between the method name \"f\" and the opening parenthesis.")
       .next().atLine(19).withMessage("Remove all space between the method name \"doSomething\" and the opening parenthesis.")
+
+      .next().atLine(27).withMessage("Put exactly one space between the \"function\" keyword and the opening parenthesis.")
+      .next().atLine(28).withMessage("Put exactly one space before and after the \"use\" keyword.")
 
       .noMore();
   }

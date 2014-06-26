@@ -20,3 +20,10 @@ $a->doSomething ();  // NOK
 function g() {}      // OK
 doSomething();       // OK
 
+/**
+ * Closure spacing
+ */
+
+$f = function() {};           // NOK
+$g = function () use($a) {};  // NOK
+$h = function () use ($b) {}; // OK
