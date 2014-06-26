@@ -157,7 +157,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
   public boolean isNoSpaceParenthesis = true;
 
   @RuleProperty(
-    key = "no_space",
+    key = "closure_format",
     defaultValue = "true",
     type = "BOOLEAN")
   public boolean isClosureSpacing = true;
