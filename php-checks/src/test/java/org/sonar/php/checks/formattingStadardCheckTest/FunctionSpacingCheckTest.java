@@ -27,22 +27,24 @@ import org.sonar.squidbridge.api.SourceFile;
 
 import java.io.File;
 
-public class PunctuatorSpacingCheckTest extends FormattingStandardCheckTest {
+public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
 
-  private static final File TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "PunctuatorSpacingCheck.php");
+  private static final File TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "FunctionSpacingCheck.php");
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isOneSpaceBetweenRParentAndLCurly", "isNoSpaceParenthesis");
+    activeOnly("isOneSpaceAfterComma", "isNoSpaceAfterMethodName");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Put one space between the closing parenthesis and the opening curly brace.")
-      .next().atLine(8).withMessage("Put only one space between the closing parenthesis and the opening curly brace.")
+      .next().atLine(7).withMessage("Remove any space before comma separated arguments.")
+      .next().atLine(8).withMessage("Put exactly one space after comma separated arguments.")
+      .next().atLine(9).withMessage("Remove any space before comma separated arguments and put exactly one space after comma separated arguments.")
+      .next().atLine(10).withMessage("Remove any space before comma separated arguments and put exactly one space after comma separated arguments.")
+      .next().atLine(11)
 
-      .next().atLine(24).withMessage("Remove all space after the opening parenthesis.")
-      .next().atLine(25).withMessage("Remove all space before the closing parenthesis.")
-      .next().atLine(26).withMessage("Remove all space after the opening parenthesis and before the closing parenthesis.")
+      .next().atLine(18).withMessage("Remove all space between the method name \"f\" and the opening parenthesis.")
+      .next().atLine(19).withMessage("Remove all space between the method name \"doSomething\" and the opening parenthesis.")
 
       .noMore();
   }
