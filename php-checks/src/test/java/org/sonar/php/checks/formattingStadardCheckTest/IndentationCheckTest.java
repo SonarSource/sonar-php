@@ -33,7 +33,7 @@ public class IndentationCheckTest extends FormattingStandardCheckTest {
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isArgumentsIndentation");
+    activeOnly("isMethodArgumentsIndentation");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())

@@ -165,10 +165,10 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
   public boolean isClosureSpacing = true;
 
   @RuleProperty(
-    key = "arguments_indentation",
+    key = "method_arguments_indentation",
     defaultValue = "true",
     type = "BOOLEAN")
-  public boolean isArgumentsIndentation = true;
+  public boolean isMethodArgumentsIndentation = true;
 
   @Override
   public void init() {
