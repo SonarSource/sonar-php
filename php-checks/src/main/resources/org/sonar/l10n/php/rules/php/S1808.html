@@ -233,12 +233,12 @@ class ClassName extends ParentClass implements
 }
 </pre>
 
-<h1>Arguments in function calls should be correctly indented</h1>
+<h1>Method arguments should be correctly indented</h1>
 <blockquote>
     Argument lists may be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list should be on the next line, and there should be only one argument per line.
     
     When the argument list is split across multiple lines, the closing parenthesis and opening brace should be placed together on their own line with one space between them.
-    </blockquote>
+</blockquote>
 
 <h2>Noncompliant Code Example</h2>
 <pre>
@@ -259,27 +259,28 @@ class ClassName
 }
 </pre>
 
+<h1>Arguments in function calls should be correctly indented</h1>
+<blockquote>
+    Argument lists MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one argument per line.
+</blockquote>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+&lt?php
+$foo->bar($longArgument,    // Noncompliant
+    $longerArgument,
+    $muchLongerArgument);   // Noncompliant - closing parenthesis should be place on the next line
+</pre>
+
 
 <h2>Compliant Solution</h2>
 <pre>
-namespace Vendor\Package;
-
-class ClassName
-{
-    public function aVeryLongMethodName(
-        ClassTypeHint $arg1,
-        &$arg2,
-        array $arg3 = []
-    ) {
-        $noArgs_longVars = function () use (
-            $longVar1,
-            $longerVar2,
-            $muchLongerVar3
-          ) {
-              // body
-          };
-    }
-}
+&lt?php
+$foo->bar(
+    $longArgument,
+    $longerArgument,
+    $muchLongerArgument
+);
 </pre>
 
 <h1>Closures declaration should be correctly spaced</h1>
