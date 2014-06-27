@@ -41,26 +41,23 @@ public class IndentationCheck extends SpacingCheck {
 
   private void checkArgumentsIndentation(FormattingStandardCheck formattingCheck, AstNode node, AstNodeType parameterNodeType) {
     List<AstNode> arguments = node.getChildren(parameterNodeType);
+    Token last = Iterables.getLast(arguments).getLastToken();
+    AstNode caller = node.getPreviousAstNode();
 
-    if (arguments.size() > 1) {
+    if (arguments.size() > 1 && !isOnSameLine(caller.getToken(), last)) {
       AstNode first = arguments.get(0);
-      Token last = Iterables.getLast(arguments).getLastToken();
-      AstNode caller = node.getPreviousAstNode();
       int expectedIndentationColumn = getLineStartingColumn(node.getParent()) + PSR2_INDENTATION;
       int callingLine = caller.getTokenLine();
       AstNode rParenthesis = node.getFirstChild(PHPPunctuator.RPARENTHESIS);
 
-      if (!isOnSameLine(caller.getToken(), last)) {
-
-        if (!isCorrectlySplittedOnLines(callingLine, arguments)) {
-          formattingCheck.reportIssue("Either split this list into multiple lines and aligned at column \"" + expectedIndentationColumn + "\" or move it on the same line \"" + callingLine + "\".", first);
-        } else if (!isCorrectlyIndented(expectedIndentationColumn, arguments)) {
-          formattingCheck.reportIssue("Align all arguments in this list at column \"" + expectedIndentationColumn + "\".", first);
-        }
-        if (!last.getType().equals(PHPPunctuator.RPARENTHESIS) && isOnSameLine(last, rParenthesis.getToken())) {
-          if (node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-            formattingCheck.reportIssue("Move the closing parenthesis and opening brace on the next line.", rParenthesis);
-          }
+      if (!isCorrectlySplittedOnLines(callingLine, arguments)) {
+        formattingCheck.reportIssue("Either split this list into multiple lines and aligned at column \"" + expectedIndentationColumn + "\" or move it on the same line \"" + callingLine + "\".", first);
+      } else if (!isCorrectlyIndented(expectedIndentationColumn, arguments)) {
+        formattingCheck.reportIssue("Align all arguments in this list at column \"" + expectedIndentationColumn + "\".", first);
+      }
+      if (!last.getType().equals(PHPPunctuator.RPARENTHESIS) && isOnSameLine(last, rParenthesis.getToken())) {
+        if (node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
+          formattingCheck.reportIssue("Move the closing parenthesis and opening brace on the next line.", rParenthesis);
         }
       }
     }
