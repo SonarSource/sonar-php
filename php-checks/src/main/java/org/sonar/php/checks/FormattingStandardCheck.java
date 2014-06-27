@@ -30,6 +30,7 @@ import org.sonar.php.checks.formattingstandardcheck.CurlyBraceCheck;
 import org.sonar.php.checks.formattingstandardcheck.NamespaceAndUseStatementCheck;
 import org.sonar.php.checks.formattingstandardcheck.PunctuatorSpacingCheck;
 import org.sonar.php.checks.formattingstandardcheck.FunctionSpacingCheck;
+import org.sonar.php.checks.formattingstandardcheck.IndentationCheck;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -68,6 +69,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
   private final PunctuatorSpacingCheck punctuatorSpacingCheck = new PunctuatorSpacingCheck();
   private final FunctionSpacingCheck functionSpacingCheck = new FunctionSpacingCheck();
   private final ControlStructureSpacingCheck controlStructureSpacingCheck = new ControlStructureSpacingCheck();
+  private final IndentationCheck indentationCheck = new IndentationCheck();
 
   /**
    * Namespace and use statement
@@ -162,6 +164,12 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isClosureSpacing = true;
 
+  @RuleProperty(
+    key = "arguments_indentation",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isArgumentsIndentation = true;
+
   @Override
   public void init() {
     subscribeTo(
@@ -182,6 +190,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     punctuatorSpacingCheck.visitNode(this, astNode);
     functionSpacingCheck.visitNode(this, astNode);
     controlStructureSpacingCheck.visitNode(this, astNode);
+    indentationCheck.visitNode(this, astNode);
   }
 
   @Override
