@@ -57,7 +57,7 @@ public class IndentationCheck extends SpacingCheck {
       }
       if (!last.getType().equals(PHPPunctuator.RPARENTHESIS) && isOnSameLine(last, rParenthesis.getToken())) {
         if (node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-          formattingCheck.reportIssue("Move the closing parenthesis and opening brace on the next line.", rParenthesis);
+          formattingCheck.reportIssue("Move the closing parenthesis on the next line.", rParenthesis);
         }
       }
     }

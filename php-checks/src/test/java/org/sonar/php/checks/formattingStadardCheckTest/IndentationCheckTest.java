@@ -40,7 +40,7 @@ public class IndentationCheckTest extends FormattingStandardCheckTest {
       .next().atLine(6).withMessage("Either split this list into multiple lines and aligned at column \"4\" or move it on the same line \"6\".")
       .next().atLine(11).withMessage("Either split this list into multiple lines and aligned at column \"4\" or move it on the same line \"10\".")
       .next().atLine(15).withMessage("Align all arguments in this list at column \"4\".")
-      .next().atLine(16).withMessage("Move the closing parenthesis and opening brace on the next line.")
+      .next().atLine(16).withMessage("Move the closing parenthesis on the next line.")
       .next().atLine(18)
 
       .noMore();
