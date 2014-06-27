@@ -164,6 +164,9 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isClosureSpacing = true;
 
+  /**
+   * Indentation
+   */
   @RuleProperty(
     key = "method_arguments_indentation",
     defaultValue = "true",
@@ -175,6 +178,12 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     defaultValue = "true",
     type = "BOOLEAN")
   public boolean isFunctionCallsArgumentsIndentation = true;
+
+  @RuleProperty(
+    key = "interfaces_indentation",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isInterfacesIndentation = true;
 
   @Override
   public void init() {

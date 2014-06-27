@@ -73,3 +73,27 @@ function k(             // OK
 ) {
 }
 
+/**
+ * Implement list indentation
+ */
+
+class C1 implements A,    // NOK
+                    B
+{}
+
+class C2 implements
+        A, B              // NOK
+{}
+
+class C3 implements
+    A,                    // NOK
+     B
+{}
+
+class C4 implements A, B  // OK
+{}
+
+class C5 implements       // OK
+    A,
+    B
+{}

@@ -40,6 +40,29 @@ public class IndentationCheck extends SpacingCheck {
     if (formattingCheck.isFunctionCallsArgumentsIndentation && node.is(PHPGrammar.PARAMETER_LIST)) {
       checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER);
     }
+    if (formattingCheck.isInterfacesIndentation && node.is(PHPGrammar.CLASS_DECLARATION)) {
+      checkImplementListIndentation(formattingCheck, node);
+    }
+  }
+
+  private void checkImplementListIndentation(FormattingStandardCheck formattingCheck, AstNode node) {
+    AstNode implementList = node.getFirstChild(PHPGrammar.IMPLEMENTS_LIST);
+
+    if (implementList != null) {
+      List<AstNode> interfaceList = implementList.getFirstChild(PHPGrammar.INTERFACE_LIST).getChildren(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
+      int classDecLine = node.getTokenLine();
+      int expectedColumn = getLineStartingColumn(node) + PSR2_INDENTATION;
+
+      if (!isOnSameLine(node.getToken(), Iterables.getLast(interfaceList).getToken())) {
+
+        if (!isCorrectlySplittedOnLines(classDecLine, interfaceList)) {
+          formattingCheck.reportIssue("Either split this list into multiple lines or move it on the same line \"" + classDecLine + "\".",
+            interfaceList.get(0));
+        } else if (!isCorrectlyIndented(expectedColumn, interfaceList)) {
+          formattingCheck.reportIssue("Align all interfaces in this list at column \"" + expectedColumn + "\".", interfaceList.get(0));
+        }
+      }
+    }
   }
 
   private void checkArgumentsIndentation(FormattingStandardCheck formattingCheck, AstNode node, AstNodeType parameterNodeType) {
