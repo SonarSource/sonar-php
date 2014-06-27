@@ -37,31 +37,46 @@ public class IndentationCheck extends SpacingCheck {
     if (formattingCheck.isMethodArgumentsIndentation && node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
       checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER_LIST_FOR_CALL);
     }
+    if (formattingCheck.isFunctionCallsArgumentsIndentation && node.is(PHPGrammar.PARAMETER_LIST)) {
+      checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER);
+    }
   }
 
   private void checkArgumentsIndentation(FormattingStandardCheck formattingCheck, AstNode node, AstNodeType parameterNodeType) {
     List<AstNode> arguments = node.getChildren(parameterNodeType);
 
     if (arguments.size() > 1) {
-      Token last = Iterables.getLast(arguments).getLastToken();
-      AstNode caller = node.getPreviousAstNode();
-      AstNode first = arguments.get(0);
+      Token lastParam = Iterables.getLast(arguments).getLastToken();
+      AstNode methodName = node.getPreviousAstNode();
+      AstNode firstParam = arguments.get(0);
       int expectedIndentationColumn = getLineStartingColumn(node.getParent()) + PSR2_INDENTATION;
-      int callingLine = caller.getTokenLine();
-      AstNode rParenthesis = node.getFirstChild(PHPPunctuator.RPARENTHESIS);
+      int callingLine = methodName.getTokenLine();
 
-      if (!isOnSameLine(caller.getToken(), last)) {
+      if (!isOnSameLine(methodName.getToken(), lastParam)) {
+
         if (!isCorrectlySplittedOnLines(callingLine, arguments)) {
-          formattingCheck.reportIssue("Either split this list into multiple lines and aligned at column \"" + expectedIndentationColumn + "\" or move it on the same line \"" + callingLine + "\".", first);
+          formattingCheck.reportIssue("Either split this list into multiple lines and aligned at column \"" + expectedIndentationColumn + "\" or move it on the same line \"" + callingLine + "\".", firstParam);
         } else if (!isCorrectlyIndented(expectedIndentationColumn, arguments)) {
-          formattingCheck.reportIssue("Align all arguments in this list at column \"" + expectedIndentationColumn + "\".", first);
+          formattingCheck.reportIssue("Align all arguments in this list at column \"" + expectedIndentationColumn + "\".", firstParam);
         }
-        if (!last.getType().equals(PHPPunctuator.RPARENTHESIS) && isOnSameLine(last, rParenthesis.getToken())) {
-          if (node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-            formattingCheck.reportIssue("Move the closing parenthesis on the next line.", rParenthesis);
-          }
-        }
+        checkClosingParenthesisLocation(formattingCheck, node, lastParam);
       }
+    }
+  }
+
+  private void checkClosingParenthesisLocation(FormattingStandardCheck formattingCheck, AstNode paramList, Token lastParam) {
+    AstNode rParenthesis;
+    String msg;
+
+    if (paramList.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
+      rParenthesis = paramList.getFirstChild(PHPPunctuator.RPARENTHESIS);
+      msg = "Move the closing parenthesis on the next line.";
+    } else {
+      rParenthesis = paramList.getParent().getFirstChild(PHPPunctuator.RPARENTHESIS);
+      msg = "Move the closing parenthesis with the opening brace on the next line.";
+    }
+    if (!lastParam.getType().equals(PHPPunctuator.RPARENTHESIS) && isOnSameLine(lastParam, rParenthesis.getToken())) {
+      formattingCheck.reportIssue(msg, rParenthesis);
     }
   }
 

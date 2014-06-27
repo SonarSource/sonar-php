@@ -170,6 +170,12 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     type = "BOOLEAN")
   public boolean isMethodArgumentsIndentation = true;
 
+  @RuleProperty(
+    key = "function_calls_arguments_indentation",
+    defaultValue = "true",
+    type = "BOOLEAN")
+  public boolean isFunctionCallsArgumentsIndentation = true;
+
   @Override
   public void init() {
     subscribeTo(

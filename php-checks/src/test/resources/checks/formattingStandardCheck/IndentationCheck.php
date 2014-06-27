@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Arguments indentation
+ * Function calls arguments indentation
  */
 doSomething($p1,             // NOK
     $p2
@@ -34,4 +34,33 @@ doSomething(anotherThing(    // OK
     $p2,
     $p2
 ));
+
+/**
+ * Method declaration argument indentation
+ */
+function f($p1,         // NOK
+           $p2
+) {
+}
+
+function g(
+    $p1, $p2            // NOK
+) {
+}
+
+function h(
+   $p1,                 // NOK
+    $p2)                // NOK - closing parenthesis
+{
+}
+
+function j($p1, $p2)    // OK
+{
+}
+
+function k(             // OK
+    $p1,
+    $p2
+) {
+}
 

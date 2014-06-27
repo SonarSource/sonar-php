@@ -33,7 +33,7 @@ public class IndentationCheckTest extends FormattingStandardCheckTest {
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isMethodArgumentsIndentation");
+    activeOnly("isMethodArgumentsIndentation", "isFunctionCallsArgumentsIndentation");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -42,6 +42,11 @@ public class IndentationCheckTest extends FormattingStandardCheckTest {
       .next().atLine(15).withMessage("Align all arguments in this list at column \"4\".")
       .next().atLine(16).withMessage("Move the closing parenthesis on the next line.")
       .next().atLine(18)
+
+      .next().atLine(41).withMessage("Either split this list into multiple lines and aligned at column \"4\" or move it on the same line \"41\".")
+      .next().atLine(47).withMessage("Either split this list into multiple lines and aligned at column \"4\" or move it on the same line \"46\".")
+      .next().atLine(52).withMessage("Align all arguments in this list at column \"4\".")
+      .next().atLine(53).withMessage("Move the closing parenthesis with the opening brace on the next line.")
 
       .noMore();
   }
