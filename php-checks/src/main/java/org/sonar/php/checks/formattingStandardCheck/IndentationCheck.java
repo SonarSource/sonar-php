@@ -21,6 +21,7 @@ package org.sonar.php.checks.formattingstandardcheck;
 
 import com.google.common.collect.Iterables;
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.AstNodeType;
 import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
@@ -34,12 +35,12 @@ public class IndentationCheck extends SpacingCheck {
 
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
     if (formattingCheck.isMethodArgumentsIndentation && node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-      checkArgumentsIndentation(formattingCheck, node);
+      checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER_LIST_FOR_CALL);
     }
   }
 
-  private void checkArgumentsIndentation(FormattingStandardCheck formattingCheck, AstNode node) {
-    List<AstNode> arguments = node.getChildren(PHPGrammar.PARAMETER_LIST_FOR_CALL);
+  private void checkArgumentsIndentation(FormattingStandardCheck formattingCheck, AstNode node, AstNodeType parameterNodeType) {
+    List<AstNode> arguments = node.getChildren(parameterNodeType);
 
     if (arguments.size() > 1) {
       AstNode first = arguments.get(0);
@@ -57,7 +58,9 @@ public class IndentationCheck extends SpacingCheck {
           formattingCheck.reportIssue("Align all arguments in this list at column \"" + expectedIndentationColumn + "\".", first);
         }
         if (!last.getType().equals(PHPPunctuator.RPARENTHESIS) && isOnSameLine(last, rParenthesis.getToken())) {
-          formattingCheck.reportIssue("Move the closing parenthesis and opening brace on the next line.", rParenthesis);
+          if (node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
+            formattingCheck.reportIssue("Move the closing parenthesis and opening brace on the next line.", rParenthesis);
+          }
         }
       }
     }
