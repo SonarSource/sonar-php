@@ -22,6 +22,15 @@ doSomething($p1, something(  // NOK
     $p4
 ));
 
+doSomething(
+    $p1,                     // OK
+    array(
+        $p1,
+        $p2
+    ),
+    $p2
+);
+
 doSomething($p1, $p2);       // OK
 
 doSomething(                 // OK

@@ -37,16 +37,16 @@ public class IndentationCheckTest extends FormattingStandardCheckTest {
 
     SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Either split this list into multiple lines and aligned at column \"4\" or move it on the same line \"6\".")
-      .next().atLine(11).withMessage("Either split this list into multiple lines and aligned at column \"4\" or move it on the same line \"10\".")
+      .next().atLine(6).withMessage("Either split this list into multiple lines, aligned at column \"4\" or put all arguments on line \"6\".")
+      .next().atLine(11).withMessage("Either split this list into multiple lines, aligned at column \"4\" or put all arguments on line \"10\".")
       .next().atLine(15).withMessage("Align all arguments in this list at column \"4\".")
       .next().atLine(16).withMessage("Move the closing parenthesis on the next line.")
       .next().atLine(18)
 
-      .next().atLine(41).withMessage("Either split this list into multiple lines and aligned at column \"4\" or move it on the same line \"41\".")
-      .next().atLine(47).withMessage("Either split this list into multiple lines and aligned at column \"4\" or move it on the same line \"46\".")
-      .next().atLine(52).withMessage("Align all arguments in this list at column \"4\".")
-      .next().atLine(53).withMessage("Move the closing parenthesis with the opening brace on the next line.")
+      .next().atLine(50).withMessage("Either split this list into multiple lines, aligned at column \"4\" or put all arguments on line \"50\".")
+      .next().atLine(56).withMessage("Either split this list into multiple lines, aligned at column \"4\" or put all arguments on line \"55\".")
+      .next().atLine(61).withMessage("Align all arguments in this list at column \"4\".")
+      .next().atLine(62).withMessage("Move the closing parenthesis with the opening brace on the next line.")
 
       .noMore();
   }

@@ -55,7 +55,7 @@ public class IndentationCheck extends SpacingCheck {
       if (!isOnSameLine(methodName.getToken(), lastParam)) {
 
         if (!isCorrectlySplittedOnLines(callingLine, arguments)) {
-          formattingCheck.reportIssue("Either split this list into multiple lines and aligned at column \"" + expectedIndentationColumn + "\" or move it on the same line \"" + callingLine + "\".", firstParam);
+          formattingCheck.reportIssue("Either split this list into multiple lines, aligned at column \"" + expectedIndentationColumn + "\" or put all arguments on line \"" + callingLine + "\".", firstParam);
         } else if (!isCorrectlyIndented(expectedIndentationColumn, arguments)) {
           formattingCheck.reportIssue("Align all arguments in this list at column \"" + expectedIndentationColumn + "\".", firstParam);
         }
@@ -104,7 +104,7 @@ public class IndentationCheck extends SpacingCheck {
   private boolean isCorrectlySplittedOnLines(int referenceLine, List<AstNode> items) {
     int expectedLine = referenceLine + 1;
     for (AstNode item : items) {
-      if (item.getTokenLine() != expectedLine) {
+      if (item.getTokenLine() < expectedLine) {
         return false;
       }
       expectedLine++;
