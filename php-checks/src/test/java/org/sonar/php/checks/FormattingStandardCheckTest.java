@@ -27,7 +27,7 @@ import java.lang.reflect.Field;
 public class FormattingStandardCheckTest extends CheckTest {
 
   protected FormattingStandardCheck check = new FormattingStandardCheck();
-  protected static final String TEST_DIR = "formattingstandardcheck/";
+  protected static final String TEST_DIR = "formattingCheck/";
 
   protected void activeOnly(String... fieldNames) throws IllegalAccessException {
     for (Field f : check.getClass().getFields()) {
