@@ -78,7 +78,9 @@ public class IndentationCheck extends SpacingCheck {
       if (!isOnSameLine(methodName.getToken(), lastParam)) {
 
         if (!isCorrectlySplittedOnLines(callingLine, arguments)) {
-          formattingCheck.reportIssue("Either split this list into multiple lines, aligned at column \"" + expectedIndentationColumn + "\" or put all arguments on line \"" + callingLine + "\".", firstParam);
+          formattingCheck.reportIssue("Either split this list into multiple lines, aligned at column \""
+            + expectedIndentationColumn + "\" or put all arguments on line \""
+            + callingLine + "\".", firstParam);
         } else if (!isCorrectlyIndented(expectedIndentationColumn, arguments)) {
           formattingCheck.reportIssue("Align all arguments in this list at column \"" + expectedIndentationColumn + "\".", firstParam);
         }
