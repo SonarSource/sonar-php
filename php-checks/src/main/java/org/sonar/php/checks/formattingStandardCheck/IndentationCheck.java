@@ -34,10 +34,10 @@ public class IndentationCheck extends SpacingCheck {
   private static final int PSR2_INDENTATION = 4;
 
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
-    if (formattingCheck.isMethodArgumentsIndentation && node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
+    if (formattingCheck.isFunctionCallsArgumentsIndentation && node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
       checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER_LIST_FOR_CALL);
     }
-    if (formattingCheck.isFunctionCallsArgumentsIndentation && node.is(PHPGrammar.PARAMETER_LIST)) {
+    if (formattingCheck.isMethodArgumentsIndentation && node.is(PHPGrammar.PARAMETER_LIST)) {
       checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER);
     }
     if (formattingCheck.isInterfacesIndentation && node.is(PHPGrammar.CLASS_DECLARATION)) {
