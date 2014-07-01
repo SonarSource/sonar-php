@@ -146,7 +146,7 @@ public class PHPAstScanner {
     builder.withSquidAstVisitor(new LinesOfCodeVisitor<Grammar>(PHPMetric.LINES_OF_CODE) {
       @Override
       public void visitToken(Token token) {
-        if (token.getType() != PHPTagsChannel.INLINE_HTML) {
+        if (token.getType() != PHPTagsChannel.INLINE_HTML && token.getType() != PHPTagsChannel.FILE_OPENING_TAG) {
           super.visitToken(token);
         }
       }

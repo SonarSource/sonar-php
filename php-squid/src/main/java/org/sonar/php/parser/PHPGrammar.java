@@ -337,7 +337,7 @@ public enum PHPGrammar implements GrammarRuleKey {
   public static LexerfulGrammarBuilder create() {
     LexerfulGrammarBuilder b = LexerfulGrammarBuilder.create();
 
-    b.rule(COMPILATION_UNIT).is(b.optional(TOP_STATEMENT_LIST), GenericTokenType.EOF);
+    b.rule(COMPILATION_UNIT).is(PHPTagsChannel.FILE_OPENING_TAG, b.optional(TOP_STATEMENT_LIST), GenericTokenType.EOF);
 
     keywords(b);
     declaration(b);

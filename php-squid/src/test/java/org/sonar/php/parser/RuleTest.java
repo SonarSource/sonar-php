@@ -21,8 +21,12 @@ package org.sonar.php.parser;
 
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.api.Rule;
 import com.sonar.sslr.impl.Parser;
+import com.sonar.sslr.impl.matcher.GrammarFunctions;
+import com.sonar.sslr.impl.matcher.RuleDefinition;
 import org.sonar.php.PHPConfiguration;
+import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.tests.Assertions;
 
@@ -31,7 +35,11 @@ public class RuleTest {
   protected Parser<Grammar> p = PHPParser.create(new PHPConfiguration(Charsets.UTF_8));
 
   protected void setRootRule(GrammarRuleKey ruleKey) {
-    p.setRootRule(p.getGrammar().rule(ruleKey));
+    Rule rule = p.getGrammar().rule(ruleKey);
+    // Needs to override because of the introduction of FILE_OPENING_TAG token, corresponding to the first PHP opening tag encountered
+    // Needs optional because of recursive rule that will expect the opening tag token before each recursion otherwise.
+    rule.override(GrammarFunctions.Standard.opt(PHPTagsChannel.FILE_OPENING_TAG), ((RuleDefinition) rule).getExpression());
+    p.setRootRule(rule);
   }
 
   protected void matches(String input) {

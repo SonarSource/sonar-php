@@ -20,6 +20,7 @@
 package org.sonar.php.parser;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.sslr.tests.Assertions;
 
@@ -27,7 +28,7 @@ public class CompilationUnitTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.COMPILATION_UNIT);
+    p.setRootRule(p.getGrammar().rule(PHPGrammar.COMPILATION_UNIT));
   }
 
   @Test

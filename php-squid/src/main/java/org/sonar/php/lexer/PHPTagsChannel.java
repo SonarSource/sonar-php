@@ -20,12 +20,18 @@
 package org.sonar.php.lexer;
 
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.TokenType;
+import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.impl.Lexer;
+import com.sonar.sslr.impl.LexerException;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.RegexpChannel;
 import org.sonar.sslr.channel.Channel;
 import org.sonar.sslr.channel.CodeReader;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PHPTagsChannel extends Channel<Lexer> {
 
@@ -46,13 +52,30 @@ public class PHPTagsChannel extends Channel<Lexer> {
     }
   };
 
+  public static final TokenType FILE_OPENING_TAG = new TokenType() {
+    @Override
+    public String getName() {
+      return "FILE OPENING TAG";
+    }
+
+    @Override
+    public String getValue() {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasToBeSkippedFromAst(AstNode node) {
+      return false;
+    }
+  };
+
   public static final String OPENING = "<\\?(php|=|)";
   public static final String CLOSING = "\\?>";
 
   private static final String START = "(?:(?!" + OPENING + ")[\\s\\S])*+(" + OPENING + ")?+";
   private static final String END = CLOSING + START;
 
-  private final Channel<Lexer> start = new BlackHoleChannel(START);
+  private final Channel<Lexer> start = new RegexpChannel(FILE_OPENING_TAG, START);
   private final Channel<Lexer> end = new RegexpChannel(INLINE_HTML, END);
 
   @Override
