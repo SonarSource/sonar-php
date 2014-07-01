@@ -44,14 +44,14 @@ public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (!isLastCase(astNode) && !isEmpty(astNode) && (!isLastCaseStmtAnException(astNode) || hasNoBreakComment(astNode))) {
+    if (!isLastCase(astNode) && !isEmpty(astNode) && (!isLastCaseStmtAnException(astNode) && !hasNoBreakComment(astNode))) {
       getContext().createLineViolation(this, "End this switch case with an unconditional break, continue, return or throw statement.", astNode);
     }
   }
 
   private boolean hasNoBreakComment(AstNode astNode) {
-    for (Trivia trivia : astNode.getNextAstNode().getToken().getTrivia()) {
-      if (trivia.isComment() && "no break".equals(trivia.toString().trim())) {
+    for (Trivia trivia : astNode.getNextSibling().getToken().getTrivia()) {
+      if (trivia.isComment() && trivia.toString().trim().contains("no break")) {
         return true;
       }
     }
