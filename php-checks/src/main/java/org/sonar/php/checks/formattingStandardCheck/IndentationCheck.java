@@ -107,12 +107,12 @@ public class IndentationCheck extends SpacingCheck {
 
   private int getLineStartingColumn(AstNode node) {
     int line = node.getTokenLine();
-    AstNode parentNode = node;
-    int column = parentNode.getToken().getColumn();
+    AstNode previousNode = node.getPreviousAstNode();
+    int column = node.getToken().getColumn();
 
-    while (parentNode != null && parentNode.getTokenLine() == line) {
-      column = parentNode.getToken().getColumn();
-      parentNode = parentNode.getParent();
+    while (previousNode != null && previousNode.getToken().getLine() == line) {
+      column = previousNode.getToken().getColumn();
+      previousNode = previousNode.getParent();
     }
     return column;
   }
