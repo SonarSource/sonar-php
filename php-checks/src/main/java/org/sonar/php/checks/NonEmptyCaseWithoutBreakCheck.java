@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.api.Trivia;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -43,9 +44,18 @@ public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (!isLastCase(astNode) && !isEmpty(astNode) && !isLastCaseStmtAnException(astNode)) {
+    if (!isLastCase(astNode) && !isEmpty(astNode) && (!isLastCaseStmtAnException(astNode) || hasNoBreakComment(astNode))) {
       getContext().createLineViolation(this, "End this switch case with an unconditional break, continue, return or throw statement.", astNode);
     }
+  }
+
+  private boolean hasNoBreakComment(AstNode astNode) {
+    for (Trivia trivia : astNode.getNextAstNode().getToken().getTrivia()) {
+      if (trivia.isComment() && "no break".equals(trivia.toString().trim())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static boolean isLastCaseStmtAnException(AstNode casClause) {

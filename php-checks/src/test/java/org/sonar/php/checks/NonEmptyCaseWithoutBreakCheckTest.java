@@ -34,7 +34,7 @@ public class NonEmptyCaseWithoutBreakCheckTest extends CheckTest {
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(5).withMessage("End this switch case with an unconditional break, continue, return or throw statement.")
       .next().atLine(7)
-      .next().atLine(14)
+      .next().atLine(16)
       .noMore();
   }
 }

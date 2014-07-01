@@ -6,6 +6,8 @@ switch ($a) {
     doSomething();
   case 2:     // NOK
     __halt_compiler();
+  case 3:     // OK
+    // no break
   default:    // OK
     doSomethingElse();
 }

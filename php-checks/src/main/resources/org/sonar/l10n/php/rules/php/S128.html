@@ -47,6 +47,9 @@ switch ($myVariable) {
     continue;
   case 4:                  // Call exit
     exit(0);
+  case 5:
+    echo 'Second case, which falls through';
+    // no break        <- "no break" comment is used when fall-through is intentional in a non-empty case body
   default:                 // For the last case, use of break statement is optional
     doSomethingElse();
 }
