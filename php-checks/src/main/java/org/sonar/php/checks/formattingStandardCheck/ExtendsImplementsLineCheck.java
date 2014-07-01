@@ -17,35 +17,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks;
+package org.sonar.php.checks.formattingstandardcheck;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
-import org.sonar.check.Priority;
-import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.parser.PHPGrammar;
-import org.sonar.squidbridge.checks.SquidCheck;
 
 import javax.annotation.Nullable;
 
-@Rule(
-  key = "S1782",
-  priority = Priority.MINOR)
-public class ExtendsImplementsAndClassNameOnSameLineCheck extends SquidCheck<Grammar> {
+public class ExtendsImplementsLineCheck {
 
-  @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CLASS_DECLARATION);
+  public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
+    if (formattingCheck.isExtendsAndImplementsLine && node.is(PHPGrammar.CLASS_DECLARATION)) {
+      checkExtendsAndImplementsLine(formattingCheck, node);
+    }
   }
 
-  @Override
-  public void leaveNode(AstNode node) {
+  private void checkExtendsAndImplementsLine(FormattingStandardCheck formattingCheck, AstNode node) {
     AstNode identifier = node.getFirstChild(GenericTokenType.IDENTIFIER);
     String className = identifier.getTokenOriginalValue();
     int classNameLine = identifier.getTokenLine();
-
 
     boolean isExtendsOnClassNameLine = isExtendsOnClassNameLine(node, classNameLine);
     boolean isImplementsOnClassNameLine = isImplementsOnClassNameLine(node, classNameLine);
@@ -53,7 +46,7 @@ public class ExtendsImplementsAndClassNameOnSameLineCheck extends SquidCheck<Gra
     String msg = getIssueMessage(isExtendsOnClassNameLine, isImplementsOnClassNameLine);
 
     if (msg != null) {
-      getContext().createLineViolation(this, "Move {0} on line {1} where declaration of class name \"{2}\" begin.", node, msg, classNameLine, className);
+      formattingCheck.reportIssue("Move " + msg + " to the same line as the declaration of its class name, \"" + className + "\".", node);
     }
   }
 

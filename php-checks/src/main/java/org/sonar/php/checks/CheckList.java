@@ -96,7 +96,6 @@ public class CheckList {
       KeywordsAndConstantsNotLowerCaseCheck.class,
       OnePropertyDeclarationPerStatementCheck.class,
       ModifiersOrderCheck.class,
-      ExtendsImplementsAndClassNameOnSameLineCheck.class,
       ClosingTagInFullPHPFileCheck.class,
       NonLFCharAsEOLCheck.class,
       ArgumentWithDefaultValueNotLastCheck.class,

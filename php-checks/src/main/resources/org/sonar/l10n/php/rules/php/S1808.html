@@ -236,7 +236,7 @@ class ClassName extends ParentClass implements
 <h1>Method arguments should be correctly indented</h1>
 <blockquote>
     Argument lists may be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list should be on the next line, and there should be only one argument per line.
-    
+
     When the argument list is split across multiple lines, the closing parenthesis and opening brace should be placed together on their own line with one space between them.
 </blockquote>
 
@@ -300,4 +300,29 @@ $closureWithArgsAndVars = function($arg1, $arg2)use   ($var1, $var2) {
 $closureWithArgsAndVars = function ($arg1, $arg2) use ($var1, $var2) {
     // body
 };
+</pre>
+
+<h1>Class names, "extends" and "implements" keywords should be located on the same line</h1>
+<p>
+  The goal of this coding rule is to make it obvious at first look that a class extends some other classes and/or implements some interfaces. The names of extended classes or implemented interfaces can be located on next lines.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+&lt?php
+class ClassName
+extends ParentClass {...}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+&lt?php
+class ClassName extends ParentClass {...}
+</pre>
+
+<p>or</p>
+<pre>
+&lt?php
+class ClassName extends
+ParentClass {...}
 </pre>
