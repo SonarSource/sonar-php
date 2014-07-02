@@ -86,6 +86,7 @@ public class PhpPlugin extends SonarPlugin {
 
       PHPRuleRepository.class,
       PHPProfile.class,
+      PSR2Profile.class,
 
       // PhpUnit
       PhpUnitSensor.class,

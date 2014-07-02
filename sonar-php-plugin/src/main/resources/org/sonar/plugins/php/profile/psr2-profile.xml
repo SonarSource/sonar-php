@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+  <name>PSR-2</name>
+  <language>php</language>
+  <rules>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1808</key>  <!-- formatting rule -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1757</key>  <!-- opening PHP tag -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S101</key>  <!-- class name -->
+      <priority>MINOR</priority>
+      <parameters>
+        <parameter>
+          <key>format</key>
+          <value><![CDATA[^[A-Z][a-zA-Z]*$]]></value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S115</key>  <!-- constant name -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S100</key>  <!-- function name -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S105</key>  <!-- tabulation character -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S103</key>  <!-- line length -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1784</key>  <!-- method visibility presence -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1124</key>  <!-- property modifier order -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1779</key>  <!-- non LF character as EOL -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S113</key>  <!-- new line at EOF -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1780</key> <!-- closing tag in full PHP file-->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1131</key>  <!-- trailing whitespaces -->
+      <priority>MAJOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S122</key> <!-- one statement per line -->
+      <priority>MAJOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1781</key>  <!-- keywords and constants in lower case -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1765</key>  <!-- var keyword usage -->
+      <priority>MAJOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1766</key>  <!-- one property declaration per statement -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1793</key>  <!-- "else if" usage instead of "elseif" -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S128</key>  <!-- no "break" in non empty case -->
+      <priority>CRITICAL</priority>
+    </rule>
+  </rules>
+</profile>
