@@ -100,6 +100,7 @@ public class CheckList {
       NonLFCharAsEOLCheck.class,
       ArgumentWithDefaultValueNotLastCheck.class,
       FormattingStandardCheck.class,
+      OpeningPHPTagCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
