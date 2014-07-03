@@ -20,18 +20,11 @@
 package org.sonar.php.lexer;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.TokenType;
-import com.sonar.sslr.api.Trivia;
 import com.sonar.sslr.impl.Lexer;
-import com.sonar.sslr.impl.LexerException;
-import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.RegexpChannel;
 import org.sonar.sslr.channel.Channel;
 import org.sonar.sslr.channel.CodeReader;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PHPTagsChannel extends Channel<Lexer> {
 
