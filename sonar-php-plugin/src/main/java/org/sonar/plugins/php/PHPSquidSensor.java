@@ -26,6 +26,7 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.AnnotationCheckFactory;
 import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.config.Settings;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
 import org.sonar.api.measures.CoreMetrics;
@@ -42,6 +43,7 @@ import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.CheckList;
+import org.sonar.php.metrics.DependenciesVisitor;
 import org.sonar.php.metrics.FileLinesVisitor;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.AstScanner;
@@ -71,12 +73,16 @@ public class PHPSquidSensor implements Sensor {
   private AstScanner<Grammar> scanner;
   private SensorContext context;
   private Project project;
+  private Settings settings;
+  private RulesProfile profile;
 
-  public PHPSquidSensor(RulesProfile profile, ResourcePerspectives resourcePerspectives, ModuleFileSystem filesystem, FileLinesContextFactory fileLinesContextFactory) {
+  public PHPSquidSensor(RulesProfile profile, ResourcePerspectives resourcePerspectives, ModuleFileSystem filesystem, FileLinesContextFactory fileLinesContextFactory, Settings settings) {
+    this.profile = profile;
     this.annotationCheckFactory = AnnotationCheckFactory.create(profile, CheckList.REPOSITORY_KEY, CheckList.getChecks());
     this.resourcePerspectives = resourcePerspectives;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.fileSystem = filesystem;
+    this.settings = settings;
   }
 
   @Override
@@ -89,12 +95,15 @@ public class PHPSquidSensor implements Sensor {
     this.context = context;
     this.project = project;
 
+    PHPSquid squid = new PHPSquid();
     List<SquidAstVisitor<Grammar>> visitors = getCheckVisitors();
     visitors.add(new FileLinesVisitor(project, fileLinesContextFactory));
+    visitors.add(new DependenciesVisitor(squid.getGraph()));
     this.scanner = PHPAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
     scanner.scanFiles(getProjectMainFiles());
 
     save(scanner.getIndex().search(new QueryByType(SourceFile.class)));
+    new Bridges(squid, scanner.getIndex(), settings).save(context, project, annotationCheckFactory, profile);
   }
 
   @VisibleForTesting

@@ -23,12 +23,17 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.config.Settings;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
+import org.sonar.api.measures.Measure;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
@@ -37,7 +42,11 @@ import org.sonar.api.resources.Resource;
 import org.sonar.api.scan.filesystem.FileQuery;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -59,12 +68,14 @@ public class PHPSquidSensorTest {
     when(fileLinesContextFactory.createFor(any(Resource.class))).thenReturn(fileLinesContext);
 
     ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-    when(pfs.getSourceDirs()).thenReturn(ImmutableList.of(new java.io.File("src/test/resources/org/sonar/plugins/python/")));
+    when(pfs.getSourceDirs()).thenReturn(ImmutableList.of(
+      new java.io.File("src/test/resources/")
+    ));
 
     project = mock(Project.class);
     when(project.getFileSystem()).thenReturn(pfs);
 
-    sensor = spy(new PHPSquidSensor(mock(RulesProfile.class), mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory));
+    sensor = spy(new PHPSquidSensor(mock(RulesProfile.class), mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, mock(Settings.class)));
   }
 
   @Test
@@ -96,4 +107,66 @@ public class PHPSquidSensorTest {
     verify(context).saveMeasure(Mockito.any(File.class), Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(7.0));
     verify(context).saveMeasure(Mockito.any(File.class), Mockito.eq(CoreMetrics.FUNCTIONS), Mockito.eq(3.0));
   }
+
+  @Test
+  public void dependency() {
+    doReturn(new File("file")).when(sensor).getSonarResource(any(java.io.File.class));
+
+    SensorContext context = mock(SensorContext.class);
+    when(context.getResource(Mockito.any(Resource.class))).thenAnswer(new Answer<Resource>() {
+      @Override
+      public Resource answer(InvocationOnMock invocation) throws Throwable {
+        Object[] args = invocation.getArguments();
+        return (Resource) args[0];
+      }
+    });
+    when(fileSystem.sourceCharset()).thenReturn(Charsets.UTF_8);
+    when(fileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.of(
+      new java.io.File("src/test/resources/dependencies/Vendor/Package/UnitTest.php"),
+      new java.io.File("src/test/resources/dependencies/Vendor/Package/PackageInterface.php"),
+      new java.io.File("src/test/resources/dependencies/Vendor/Errors/RuntimeError.php"),
+      new java.io.File("src/test/resources/dependencies/Vendor/Errors/IAlias.php"),
+      new java.io.File("src/test/resources/dependencies/Vendor/Common/UnitTest.php"),
+      new java.io.File("src/test/resources/dependencies/RuntimeError.php"),
+      new java.io.File("src/test/resources/dependencies/IRoot.php")
+    ));
+
+    sensor.analyse(project, context);
+
+    HashMap<String, String> expectedMap = new HashMap<String, String>();
+    expectedMap.put(null, "[" +
+      "{\"i\":null,\"n\":\"dependencies/Vendor/Package\",\"q\":\"DIR\",\"v\":[{},{},{},{}]}," +
+      "{\"i\":null,\"n\":\"dependencies/Vendor/Errors\",\"q\":\"DIR\",\"v\":[{\"i\":null,\"w\":2},{},{},{}]}," +
+      "{\"i\":null,\"n\":\"dependencies\",\"q\":\"DIR\",\"v\":[{\"i\":null,\"w\":1},{\"i\":null,\"w\":2},{},{}]}," +
+      "{\"i\":null,\"n\":\"dependencies/Vendor/Common\",\"q\":\"DIR\",\"v\":[{\"i\":null,\"w\":1},{},{},{}]}" +
+      "]");
+    expectedMap.put("dependencies", "[" +
+      "{\"i\":null,\"n\":\"IRoot.php\",\"q\":\"FIL\",\"v\":[{},{}]}," +
+      "{\"i\":null,\"n\":\"RuntimeError.php\",\"q\":\"FIL\",\"v\":[{},{}]}]");
+    expectedMap.put("dependencies/Vendor/Common", "[" +
+      "{\"i\":null,\"n\":\"UnitTest.php\",\"q\":\"FIL\",\"v\":[{}]}]");
+    expectedMap.put("dependencies/Vendor/Package", "[" +
+      "{\"i\":null,\"n\":\"UnitTest.php\",\"q\":\"FIL\",\"v\":[{},{}]}," +
+      "{\"i\":null,\"n\":\"PackageInterface.php\",\"q\":\"FIL\",\"v\":[{\"i\":null,\"w\":1},{}]}]");
+    expectedMap.put("dependencies/Vendor/Errors", "[" +
+      "{\"i\":null,\"n\":\"IAlias.php\",\"q\":\"FIL\",\"v\":[{},{}]}," +
+      "{\"i\":null,\"n\":\"RuntimeError.php\",\"q\":\"FIL\",\"v\":[{},{}]}]");
+
+    ArgumentCaptor<Resource> resourceArgumentCaptor = ArgumentCaptor.forClass(Resource.class);
+    ArgumentCaptor<Measure> measureArgumentCaptor = ArgumentCaptor.forClass(Measure.class);
+    verify(context, Mockito.atLeastOnce()).saveMeasure(resourceArgumentCaptor.capture(), measureArgumentCaptor.capture());
+
+    Iterator<Resource> resourceIterator = resourceArgumentCaptor.getAllValues().iterator();
+    Iterator<Measure> measureIterator = measureArgumentCaptor.getAllValues().iterator();
+    while (resourceIterator.hasNext() && measureIterator.hasNext()) {
+      Resource resource = resourceIterator.next();
+      Measure measure = measureIterator.next();
+      if (measure.getMetric().equals(CoreMetrics.DEPENDENCY_MATRIX)) {
+        String key = resource.getKey();
+        String message = key == null ? "project" : "directory: " + key;
+        assertEquals(message, expectedMap.get(key), measure.getData());
+      }
+    }
+  }
+
 }
