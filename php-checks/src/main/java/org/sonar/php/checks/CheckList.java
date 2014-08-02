@@ -101,7 +101,8 @@ public class CheckList {
       ArgumentWithDefaultValueNotLastCheck.class,
       FormattingStandardCheck.class,
       OpeningPHPTagCheck.class,
-      TooManyFunctionParametersCheck.class
+      TooManyFunctionParametersCheck.class,
+      CycleBetweenPackagesCheck.class
     );
   }
 }

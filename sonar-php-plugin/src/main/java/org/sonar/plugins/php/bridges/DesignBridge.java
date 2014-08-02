@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.design.Dependency;
+import org.sonar.api.issue.Issue;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
@@ -33,6 +34,7 @@ import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Violation;
 import org.sonar.api.utils.TimeProfiler;
 import org.sonar.graph.*;
+import org.sonar.php.checks.CycleBetweenPackagesCheck;
 import org.sonar.plugins.php.PHPSquid;
 import org.sonar.squidbridge.api.*;
 
@@ -168,13 +170,8 @@ public class DesignBridge extends Bridge {
     }
   }
 
-  /**
-   * TODO sanya import "CycleBetweenPackagesCheck" from sonar-java
-   *
-   * @param feedbackEdges
-   */
   private void saveViolations(Set<Edge> feedbackEdges) {
-    ActiveRule rule = null;//CycleBetweenPackagesCheck.getActiveRule(checkFactory);
+    ActiveRule rule = CycleBetweenPackagesCheck.getActiveRule(checkFactory);
     if (rule == null) {
       // Rule inactive
       return;

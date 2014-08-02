@@ -68,11 +68,11 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
 
   @Override
   public void visitFile(AstNode astNode) {
-    namespace = null;
+    namespace = "";
     currentClass = null;
     uses = new HashMap<String, String>();
     SourceCode sourceFile = getContext().peekSourceCode();
-    //LOG.debug("Searching dependencies in "+sourceFile.getKey());
+    LOG.debug("Searching dependencies in "+sourceFile.getKey());
     if (!SourceFile.class.isInstance(sourceFile)) {
       throw new RuntimeException();
     }
@@ -171,6 +171,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     }
     if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
       currentClass = null;
+      LOG.debug("Current class: "+currentClass);
     }
   }
 
@@ -207,6 +208,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     }
 
     namespace = builder.toString();
+    LOG.debug("Namespace is: "+namespace);
   }
 
   private void addUse(AstNode expr) {
@@ -240,6 +242,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
         String alias = token.getOriginalValue();
         String className = getRealName(alias);
         currentClass = findSourceClass(className);
+        LOG.debug("Current class: "+currentClass);
         fixClassParent();
         return;
       }
@@ -334,6 +337,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
   }
 
   private void addLink(String realName, SourceCodeEdgeUsage link) {
+    LOG.debug("Create link to "+realName+" ("+link.toString()+")");
     if (currentClass != null) {
       SourceClass toClass = findSourceClass(realName);
       link(currentClass, toClass, link);
@@ -344,8 +348,10 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
        */
       SourcePackage from = findSourcePackage(namespace);
       SourcePackage to = findSourcePackage(getNamespace(realName));
-      SourceCodeEdge edge = new SourceCodeEdge(from, to, link);
-      graph.addEdge(edge);
+      if (canWeLinkNodes(from, to) && graph.getEdge(from, to) == null) {
+        SourceCodeEdge edge = new SourceCodeEdge(from, to, link);
+        graph.addEdge(edge);
+      }
     }
   }
 
@@ -388,7 +394,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
       }
     }
 
-    return (namespace == null ? "" : namespace + separator) + name;
+    return (namespace.equals("") ? "" : namespace + separator) + name;
   }
 
   private String getNamespace(String realName) {
