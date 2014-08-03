@@ -109,68 +109,27 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
         return;
       }
       if (astNode.is(PHPGrammar.NAMESPACE_STATEMENT)) {
-        setNamespace(astNode);
+        parseNamespace(astNode);
         return;
       }
       if (astNode.is(PHPGrammar.USE_STATEMENT)) {
-        addUse(astNode);
+        parseUse(astNode);
         return;
       }
-      if (astNode.is(PHPGrammar.INTERFACE_DECLARATION)) {
-        setClassName(astNode);
-        addExtends(astNode);
-        return;
-      }
-      if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
-        setClassName(astNode);
-        addExtends(astNode);
-        addImplements(astNode);
+      if (astNode.is(PHPGrammar.INTERFACE_DECLARATION) || astNode.is(PHPGrammar.CLASS_DECLARATION)) {
+        parseClass(astNode);
         return;
       }
       if (astNode.is(PHPGrammar.METHOD_DECLARATION) || astNode.is(PHPGrammar.FUNCTION_DECLARATION)) {
-        AstNode paramList = astNode.getFirstChild(PHPGrammar.PARAMETER_LIST);
-        if (paramList != null) {
-          for (AstNode param : paramList.getChildren()) {
-            AstNode typeNode = param.getFirstChild(PHPGrammar.OPTIONAL_CLASS_TYPE);
-            if (typeNode != null) {
-              AstNode classNode = typeNode.getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
-              if (classNode != null) {
-                String alias = getClassName(classNode);
-                String realName = getRealName(alias);
-                addLink(realName, SourceCodeEdgeUsage.USES);
-              }
-            }
-          }
-        }
+        parseMethodParamList(astNode);
         return;
       }
       if (astNode.is(PHPGrammar.CLASS_MEMBER_ACCESS)) {
-        AstNode className = astNode.getParent().getFirstChild(PHPGrammar.CLASS_NAME);
-        if (className == null) {
-          /**
-           * object access for static method
-           * "$className::staticMethod()"
-           */
-          return;
-        }
-        String alias = getClassName(className);
-        if (alias.equals("parent") || alias.equals("self") || alias.equals("static")) {
-          return;
-        }
-        addDependency(className);
-
+        parseClassMemberAccess(astNode);
         return;
       }
       if (astNode.is(PHPGrammar.NEW_EXPR)) {
-        AstNode className = astNode.getFirstChild(PHPGrammar.VARIABLE).getFirstChild(PHPGrammar.CLASS_NAME);
-        if (className == null) {
-          /**
-           * dynamic class name
-           * "new $className()"
-           */
-          return;
-        }
-        addDependency(className);
+        parseNewExpression(astNode);
         return;
       }
       LOG.warn("unsupported node: " + astNode.getType());
@@ -186,7 +145,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     }
     if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
       currentClass = null;
-      LOG.debug("Current class: "+currentClass);
+      LOG.debug("Current class: null");
     }
   }
 
@@ -209,7 +168,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     }
   }
 
-  private void setNamespace(AstNode expr) {
+  private void parseNamespace(AstNode expr) {
     StringBuilder builder = new StringBuilder();
 
     for (Token token : expr.getTokens()) {
@@ -226,7 +185,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     LOG.debug("Namespace is: "+namespace);
   }
 
-  private void addUse(AstNode expr) {
+  private void parseUse(AstNode expr) {
     StringBuilder ns = new StringBuilder();
     StringBuilder builder = ns;
     String alias = "";
@@ -249,6 +208,67 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     }
 
     uses.put(alias, ns.toString());
+  }
+
+  private void parseClass(AstNode astNode) {
+    setClassName(astNode);
+    addExtends(astNode);
+    addImplements(astNode);
+  }
+
+  private void parseMethodParamList(AstNode astNode) {
+    AstNode paramList = astNode.getFirstChild(PHPGrammar.PARAMETER_LIST);
+    if (paramList == null) {
+      return;
+    }
+    for (AstNode param : paramList.getChildren()) {
+      parseMethodParam(param);
+    }
+  }
+
+  private void parseMethodParam(AstNode param) {
+    AstNode typeNode = param.getFirstChild(PHPGrammar.OPTIONAL_CLASS_TYPE);
+    if (typeNode == null) {
+      return;
+    }
+    AstNode classNode = typeNode.getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
+    if (classNode == null) {
+      return;
+    }
+    String alias = getClassName(classNode);
+    String realName = getRealName(alias);
+    addLink(realName, SourceCodeEdgeUsage.USES);
+  }
+
+  private void parseClassMemberAccess(AstNode astNode) {
+    AstNode className = astNode.getParent().getFirstChild(PHPGrammar.CLASS_NAME);
+    if (className == null) {
+      /**
+       * object access for static method
+       * "$className::staticMethod()"
+       */
+      return;
+    }
+    AstNode classNode = className.getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
+    if (classNode == null) {
+      /**
+       * parent, static, self
+       */
+      return;
+    }
+    addDependency(classNode);
+  }
+
+  private void parseNewExpression(AstNode astNode) {
+    AstNode className = astNode.getFirstChild(PHPGrammar.VARIABLE).getFirstChild(PHPGrammar.CLASS_NAME);
+    if (className == null) {
+      /**
+       * dynamic class name
+       * "new $className()"
+       */
+      return;
+    }
+    addDependency(className);
   }
 
   private void setClassName(AstNode expr) {

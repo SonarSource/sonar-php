@@ -366,7 +366,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       VAR_IDENTIFIER,
       b.sequence(DOLAR_LCURLY, EXPRESSION, RCURLYBRACE)));
 
-    b.rule(CLASS_NAME).is(b.firstOf("self", "parent", STATIC, FULLY_QUALIFIED_CLASS_NAME));
+    b.rule(CLASS_NAME).is(b.firstOf("SELF", "PARENT", STATIC, FULLY_QUALIFIED_CLASS_NAME));
 
     b.rule(FUNCTION_CALL_PARAMETER_LIST).is(LPARENTHESIS, b.optional(PARAMETER_LIST_FOR_CALL, b.zeroOrMore(COMMA, PARAMETER_LIST_FOR_CALL)), RPARENTHESIS);
     b.rule(PARAMETER_LIST_FOR_CALL).is(b.firstOf(ALIAS_VARIABLE, b.sequence(b.optional(ELIPSIS), EXPRESSION), YIELD_EXPRESSION));
