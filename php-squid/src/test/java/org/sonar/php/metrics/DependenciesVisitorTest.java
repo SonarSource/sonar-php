@@ -74,6 +74,7 @@ public class DependenciesVisitorTest {
 
     scanFile("Vendor/Package/UserModel.php");
     assertDepends("Vendor\\Package\\UserModel",
+      "IRoot",
       "Vendor\\Common\\BaseModel",
       "Vendor\\Errors\\RuntimeError");
 
@@ -83,13 +84,14 @@ public class DependenciesVisitorTest {
     assertDepends("B\\Three");
     assertDepends("B\\Four");
     assertHasEdge(new SourcePackage("B"), new SourcePackage("A"));
+    assertHasEdge(new SourcePackage("C"), new SourcePackage("A"));
   }
 
   private void assertDepends(String from, String... to) {
+    assertDependenciesSize(from, to.length);
     for (String t : to) {
       assertHasEdge(from, t);
     }
-    assertDependenciesSize(from, to.length);
   }
 
   private void scanFile(String s) {

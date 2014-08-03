@@ -17,3 +17,9 @@ class Four { }
 function fn2() {
     return new \A\Two();
 }
+
+namespace C;
+
+function fn3(\A\One $one) {
+    return $one;
+}

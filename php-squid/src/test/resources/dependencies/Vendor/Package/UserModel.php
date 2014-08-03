@@ -2,6 +2,7 @@
 
 namespace Vendor\Package;
 
+use IRoot;
 use Vendor\Common\BaseModel;
 use Vendor\Errors\RuntimeError;
 
@@ -14,5 +15,13 @@ class UserModel extends BaseModel {
         }
         parent::__construct();
         $this->user = $user;
+    }
+
+    public function setInterface(IRoot $i) {
+        $user['name'] = $i->getName();
+    }
+
+    public function setInterface(\IRoot $i) {
+        $user['name'] = $i->getName();
     }
 }

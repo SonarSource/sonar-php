@@ -94,6 +94,8 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
 
       PHPGrammar.INTERFACE_DECLARATION,
       PHPGrammar.CLASS_DECLARATION,
+      PHPGrammar.METHOD_DECLARATION,
+      PHPGrammar.FUNCTION_DECLARATION,
 
       PHPGrammar.CLASS_MEMBER_ACCESS,
       PHPGrammar.NEW_EXPR
@@ -125,8 +127,21 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
         addImplements(astNode);
         return;
       }
-      if (astNode.is(PHPGrammar.CLASS_NAME)) {
-        addDependency(astNode);
+      if (astNode.is(PHPGrammar.METHOD_DECLARATION) || astNode.is(PHPGrammar.FUNCTION_DECLARATION)) {
+        AstNode paramList = astNode.getFirstChild(PHPGrammar.PARAMETER_LIST);
+        if (paramList != null) {
+          for (AstNode param : paramList.getChildren()) {
+            AstNode typeNode = param.getFirstChild(PHPGrammar.OPTIONAL_CLASS_TYPE);
+            if (typeNode != null) {
+              AstNode classNode = typeNode.getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
+              if (classNode != null) {
+                String alias = getClassName(classNode);
+                String realName = getRealName(alias);
+                addLink(realName, SourceCodeEdgeUsage.USES);
+              }
+            }
+          }
+        }
         return;
       }
       if (astNode.is(PHPGrammar.CLASS_MEMBER_ACCESS)) {
