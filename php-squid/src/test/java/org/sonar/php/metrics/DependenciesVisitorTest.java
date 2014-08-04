@@ -87,18 +87,6 @@ public class DependenciesVisitorTest {
     assertHasEdge(new SourcePackage("C"), new SourcePackage("A"));
   }
 
-  private void assertDepends(String from, String... to) {
-    assertDependenciesSize(from, to.length);
-    for (String t : to) {
-      assertHasEdge(from, t);
-    }
-  }
-
-  private void scanFile(String s) {
-    ImmutableList<File> files = ImmutableList.of(new File("src/test/resources/dependencies/" + s));
-    scanFiles(files);
-  }
-
   @Test
   public void testGraph() {
     ImmutableList<File> files = ImmutableList.of(
@@ -114,11 +102,11 @@ public class DependenciesVisitorTest {
     );
     scanFiles(files);
 
-    assertClass("IRoot");
-    assertClass("RuntimeError");
-    assertClass("Vendor\\Common\\UnitTest");
-    assertClass("Vendor\\Errors\\IAlias");
-    assertClass("Vendor\\Errors\\RuntimeError");
+    assertClassWithParents("IRoot");
+    assertClassWithParents("RuntimeError");
+    assertClassWithParents("Vendor\\Common\\UnitTest");
+    assertClassWithParents("Vendor\\Errors\\IAlias");
+    assertClassWithParents("Vendor\\Errors\\RuntimeError");
 
     String from = "Vendor\\Package\\UnitTest";
     assertDependenciesSize(from, 4);
@@ -137,6 +125,27 @@ public class DependenciesVisitorTest {
     assertThat(packages).hasSize(4);
   }
 
+  @Test
+  public void constant() {
+    scanFile("constant.php");
+    assertDepends("A");
+    assertDepends("B", "A");
+  }
+
+  private void assertDepends(String from, String... to) {
+    assertClass(from);
+    for (String t : to) {
+      assertClass(t);
+      assertHasEdge(from, t);
+    }
+    assertDependenciesSize(from, to.length);
+  }
+
+  private void scanFile(String s) {
+    ImmutableList<File> files = ImmutableList.of(new File("src/test/resources/dependencies/" + s));
+    scanFiles(files);
+  }
+
   private void scanFiles(ImmutableList<File> files) {
     graph = new DirectedGraph<SourceCode, SourceCodeEdge>();
     DependenciesVisitor visitor = new DependenciesVisitor(graph);
@@ -145,10 +154,15 @@ public class DependenciesVisitorTest {
     index = scanner.getIndex();
   }
 
-  private void assertClass(String from) {
+  private SourceCode assertClass(String from) {
     SourceCode sourceClass = index.search(from);
     assertThat(sourceClass).isInstanceOf(SourceClass.class);
     assertHasParent(sourceClass);
+    return sourceClass;
+  }
+
+  private void assertClassWithParents(String from) {
+    SourceCode sourceClass = assertClass(from);
 
     SourceCode sourceFile = sourceClass.getParent();
     assertThat(sourceFile).as(sourceClass.getKey() + " parent").isInstanceOf(SourceFile.class);
@@ -161,7 +175,6 @@ public class DependenciesVisitorTest {
     SourceCode sourceProject = sourcePackage.getParent();
     assertThat(sourceProject).as(sourcePackage.getKey() + " parent").isInstanceOf(SourceProject.class);
   }
-
 
   private void assertDependenciesSize(String from, int size) {
     SourceClass sourceCode = new SourceClass(from);
