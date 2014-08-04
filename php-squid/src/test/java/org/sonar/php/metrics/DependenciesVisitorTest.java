@@ -132,6 +132,13 @@ public class DependenciesVisitorTest {
     assertDepends("B", "A");
   }
 
+  @Test
+  public void tryCatch() {
+    scanFile("try-catch.php");
+    assertDepends("A", "RuntimeError");
+    assertDepends("RuntimeError");
+  }
+
   private void assertDepends(String from, String... to) {
     assertClass(from);
     for (String t : to) {

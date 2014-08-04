@@ -98,7 +98,8 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
       PHPGrammar.FUNCTION_DECLARATION,
 
       PHPGrammar.CLASS_MEMBER_ACCESS,
-      PHPGrammar.NEW_EXPR
+      PHPGrammar.NEW_EXPR,
+      PHPGrammar.CATCH_STATEMENT
     );
   }
 
@@ -130,6 +131,10 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
       }
       if (astNode.is(PHPGrammar.NEW_EXPR)) {
         parseNewExpression(astNode);
+        return;
+      }
+      if (astNode.is(PHPGrammar.CATCH_STATEMENT)) {
+        parseCatchStatement(astNode);
         return;
       }
       LOG.warn("unsupported node: " + astNode.getType());
@@ -266,6 +271,14 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
        * dynamic class name
        * "new $className()"
        */
+      return;
+    }
+    addDependency(className);
+  }
+
+  private void parseCatchStatement(AstNode astNode) {
+    AstNode className = astNode.getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
+    if (className == null) {
       return;
     }
     addDependency(className);
