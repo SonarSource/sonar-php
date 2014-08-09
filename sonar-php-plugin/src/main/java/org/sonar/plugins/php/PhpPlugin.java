@@ -29,9 +29,7 @@ import org.sonar.plugins.php.core.PhpCommonRulesEngine;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.core.PhpSourceImporter;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
-import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitSensor;
+import org.sonar.plugins.php.phpunit.*;
 
 import java.util.List;
 
@@ -57,6 +55,8 @@ import java.util.List;
 public class PhpPlugin extends SonarPlugin {
 
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
+  public static final String PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.overallReportPath";
+  public static final String PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.itReportPath";
   public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.reportPath";
   public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
 
@@ -91,6 +91,8 @@ public class PhpPlugin extends SonarPlugin {
       // PhpUnit
       PhpUnitSensor.class,
       PhpUnitResultParser.class,
-      PhpUnitCoverageResultParser.class);
+      PhpUnitCoverageResultParser.class,
+      PhpUnitItCoverageResultParser.class,
+      PhpUnitOverallCoverageResultParser.class);
   }
 }

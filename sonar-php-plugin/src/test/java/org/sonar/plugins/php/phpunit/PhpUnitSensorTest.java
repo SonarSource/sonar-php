@@ -60,6 +60,11 @@ public class PhpUnitSensorTest {
   private PhpUnitCoverageResultParser coverageParser;
 
   @Mock
+  private PhpUnitItCoverageResultParser itCoverageParser;
+  @Mock
+  private PhpUnitOverallCoverageResultParser overallCoverageParser;
+
+  @Mock
   private SensorContext context;
 
   private Project project;
@@ -74,7 +79,7 @@ public class PhpUnitSensorTest {
 
     settings = newSettings();
     project = mock(Project.class);
-    sensor = new PhpUnitSensor(projectFileSystem, settings, parser, coverageParser);
+    sensor = new PhpUnitSensor(projectFileSystem, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
   }
 
   @Test
@@ -94,17 +99,19 @@ public class PhpUnitSensorTest {
   @Test
   public void shouldParserReport() {
     ModuleFileSystem fs = mock(ModuleFileSystem.class);
-    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser);
+    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
 
     sensor.analyse(project, context);
 
     verify(parser, times(1)).parse(TEST_REPORT_FILE);
     verify(coverageParser, times(1)).parse(COVERAGE_REPORT_FILE);
+    verify(itCoverageParser, times(1)).parse(COVERAGE_REPORT_FILE);
+    verify(overallCoverageParser, times(1)).parse(COVERAGE_REPORT_FILE);
   }
 
   @Test
   public void noReport() {
-    sensor = new PhpUnitSensor(mock(ModuleFileSystem.class), new Settings(), parser, coverageParser);
+    sensor = new PhpUnitSensor(mock(ModuleFileSystem.class), new Settings(), parser, coverageParser, itCoverageParser, overallCoverageParser);
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -119,7 +126,7 @@ public class PhpUnitSensorTest {
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, fakePath);
     localSettings.addProperties(props);
 
-    sensor = new PhpUnitSensor(mock(ModuleFileSystem.class), localSettings, parser, coverageParser);
+    sensor = new PhpUnitSensor(mock(ModuleFileSystem.class), localSettings, parser, coverageParser, itCoverageParser, overallCoverageParser);
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -131,7 +138,7 @@ public class PhpUnitSensorTest {
     Properties props = new Properties();
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, "phpunit.xml");
     settings.addProperties(props);
-    sensor = new PhpUnitSensor(projectFileSystem, settings, parser, coverageParser);
+    sensor = new PhpUnitSensor(projectFileSystem, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
 
     sensor.analyse(project, context);
 
@@ -144,6 +151,8 @@ public class PhpUnitSensorTest {
 
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpUnitSensorTest.TEST_REPORT_FILE.getAbsolutePath());
     props.put(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpUnitSensorTest.COVERAGE_REPORT_FILE.getAbsolutePath());
+    props.put(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, PhpUnitSensorTest.COVERAGE_REPORT_FILE.getAbsolutePath());
+    props.put(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, PhpUnitSensorTest.COVERAGE_REPORT_FILE.getAbsolutePath());
 
     settings.addProperties(props);
 

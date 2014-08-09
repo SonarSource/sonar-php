@@ -48,7 +48,7 @@ import java.util.List;
 /**
  * The Class PhpUnitResultParser.
  */
-public class PhpUnitResultParser implements BatchExtension {
+public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
 
   private static final double PERCENT = 100d;
 
@@ -103,7 +103,7 @@ public class PhpUnitResultParser implements BatchExtension {
       xstream.processAnnotations(TestCase.class);
       inputStream = new FileInputStream(report);
       TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
-      LOG.debug("Tests suites: " + testSuites);
+      LOG.debug("Tests suites: " + testSuites.getTestSuites());
       return testSuites;
     } catch (IOException e) {
       throw new SonarException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
@@ -123,7 +123,13 @@ public class PhpUnitResultParser implements BatchExtension {
 
   @VisibleForTesting
   Resource getUnitTestResource(String filename) {
-    File testFile = new File(filename);
+    File testFile;
+    try {
+      testFile = new File(filename);
+    } catch (NullPointerException e) {
+      LOG.warn("Unit test resource not found: "+filename);
+      return null;
+    }
 
     // In SonarQube version < 4.2 fromIOFile() returns null on test files
     Resource resource = org.sonar.api.resources.File.fromIOFile(testFile, project);
@@ -146,7 +152,7 @@ public class PhpUnitResultParser implements BatchExtension {
    *
    * @param reportFile the reports directories to be scan
    */
-  protected void parse(File reportFile) {
+  public void parse(File reportFile) {
     if (reportFile == null) {
       insertZeroWhenNoReports();
     } else {
