@@ -44,17 +44,25 @@ public class PhpUnitSensor implements Sensor {
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitSensor.class);
   private final Settings settings;
 
+  private final PhpUnitOverallCoverageResultParser overallCoverageParser;
+  private final PhpUnitItCoverageResultParser itCoverageParser;
   private final PhpUnitCoverageResultParser coverageParser;
   private final PhpUnitResultParser parser;
   private final FileSystem fileSystem;
   private final FilePredicates filePredicates;
 
-  public PhpUnitSensor(FileSystem fileSystem, Settings settings, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
+  public PhpUnitSensor(FileSystem fileSystem, Settings settings, PhpUnitResultParser parser,
+                       PhpUnitCoverageResultParser coverageParser,
+                       PhpUnitItCoverageResultParser itCoverageParser,
+                       PhpUnitOverallCoverageResultParser overallCoverageParser) {
+
     this.fileSystem = fileSystem;
     this.filePredicates = fileSystem.predicates();
     this.settings = settings;
     this.parser = parser;
     this.coverageParser = coverageParser;
+    this.itCoverageParser = itCoverageParser;
+    this.overallCoverageParser = overallCoverageParser;
   }
 
   /**
@@ -62,26 +70,24 @@ public class PhpUnitSensor implements Sensor {
    */
   @Override
   public void analyse(Project project, SensorContext context) {
-    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, false, "tests");
-    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, true, "coverage");
+    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, parser, "test");
+    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageParser, "unit test coverage");
+    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageParser, "integration test coverage");
+    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage");
   }
 
-  private void parseReport(String reportPathKey, boolean isCoverage, String msg) {
+
+  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg) {
     String reportPath = settings.getString(reportPathKey);
 
     if (reportPath != null) {
       File xmlFile = getIOFile(reportPath);
 
       if (xmlFile.exists()) {
-        LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath);
+        LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath + " with " + parser.toString());
 
         try {
-          if (isCoverage) {
-            coverageParser.parse(xmlFile);
-          } else {
-            parser.parse(xmlFile);
-          }
-
+          parser.parse(xmlFile);
         } catch (XStreamException e) {
           throw new SonarException("Report file is invalid, plugin will stop.", e);
         }

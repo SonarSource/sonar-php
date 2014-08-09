@@ -48,7 +48,7 @@ import java.util.List;
 /**
  * The Class PhpUnitResultParser.
  */
-public class PhpUnitResultParser implements BatchExtension {
+public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
 
   private static final double PERCENT = 100d;
 
@@ -98,7 +98,7 @@ public class PhpUnitResultParser implements BatchExtension {
       xstream.processAnnotations(TestCase.class);
       inputStream = new FileInputStream(report);
       TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
-      LOG.debug("Tests suites: " + testSuites);
+      LOG.debug("Tests suites: " + testSuites.getTestSuites());
       return testSuites;
     } catch (IOException e) {
       throw new SonarException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
@@ -131,7 +131,7 @@ public class PhpUnitResultParser implements BatchExtension {
    *
    * @param reportFile the reports directories to be scan
    */
-  protected void parse(File reportFile) {
+  public void parse(File reportFile) {
     if (reportFile == null) {
       insertZeroWhenNoReports();
     } else {
