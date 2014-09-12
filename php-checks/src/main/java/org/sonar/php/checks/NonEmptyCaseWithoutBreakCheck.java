@@ -25,6 +25,7 @@ import com.sonar.sslr.api.Trivia;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
@@ -85,6 +86,6 @@ public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<Grammar> {
   }
 
   private static boolean isLastCase(AstNode caseClause) {
-    return caseClause.getNextAstNode().is(PHPPunctuator.RCURLYBRACE);
+    return caseClause.getNextAstNode().is(PHPPunctuator.RCURLYBRACE) || caseClause.getNextAstNode().is(PHPKeyword.ENDSWITCH);
   }
 }
