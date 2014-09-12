@@ -45,9 +45,9 @@ public class PHPLexer {
 
   // HEREDOC
   private static final String HEREDOC = "(?s)"
-    + "<<<\"([^\r\n'\"]++)\".*?(?:\\r\\n?+|\\n)\\1"
-    + "|<<<'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\2"
-    + "|<<<([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
+    + "<<<[" + WHITESPACE + "]*\"([^\r\n'\"]++)\".*?(?:\\r\\n?+|\\n)\\1"
+    + "|<<<[" + WHITESPACE + "]*'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\2"
+    + "|<<<[" + WHITESPACE + "]*([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
 
   // IDENTIFIERS
   private static final String IDENTIFIER_START = "[a-zA-Z_\\x7f-\\xff]";
