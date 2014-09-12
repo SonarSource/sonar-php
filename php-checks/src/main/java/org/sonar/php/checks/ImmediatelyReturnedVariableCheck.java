@@ -85,7 +85,7 @@ public class ImmediatelyReturnedVariableCheck extends SquidCheck<Grammar> {
     AstNode assignmentList = listAssignmentExpr.getFirstChild(PHPGrammar.LIST_EXPR).getFirstChild(PHPGrammar.ASSIGNMENT_LIST);
 
     for (AstNode element : assignmentList.getChildren(PHPGrammar.ASSIGNMENT_LIST_ELEMENT)) {
-      AstNode variable = element.getFirstChild(PHPGrammar.VARIABLE);
+      AstNode variable = element.getFirstChild(PHPGrammar.MEMBER_EXPRESSION);
 
       if (variable != null && variable.getNumberOfChildren() == 1 && isSimplyReturnedOrThrown(variable, nextStmt)) {
         reportIssue(variable, nextStmt);
@@ -124,7 +124,7 @@ public class ImmediatelyReturnedVariableCheck extends SquidCheck<Grammar> {
     AstNode leftExpr = assignmentExpr.getFirstChild();
     AstNode variableNode = null;
 
-    if (leftExpr.is(PHPGrammar.VARIABLE)) {
+    if (leftExpr.is(PHPGrammar.MEMBER_EXPRESSION)) {
       variableNode = leftExpr;
     } else if (leftExpr.is(PHPGrammar.POSTFIX_EXPR)) {
       variableNode = leftExpr.getFirstChild();

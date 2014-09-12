@@ -265,7 +265,7 @@ public enum PHPGrammar implements GrammarRuleKey {
   TRAIT_ADAPTATIONS,
 
   PRIMARY_EXPRESSION,
-  VARIABLE,
+  MEMBER_EXPRESSION,
   ALIAS_VARIABLE,
   VARIABLE_NAME,
   VARIABLE_WITHOUT_OBJECTS,
@@ -379,10 +379,9 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE)));
 
     b.rule(DIMENSIONAL_OFFSET).is(LBRACKET, b.optional(EXPRESSION), RBRACKET);
-    b.rule(ALIAS_VARIABLE).is(AND, VARIABLE);
+    b.rule(ALIAS_VARIABLE).is(AND, MEMBER_EXPRESSION);
 
-    // TODO rename
-    b.rule(VARIABLE).is(
+    b.rule(MEMBER_EXPRESSION).is(
       PRIMARY_EXPRESSION,
       b.zeroOrMore(b.firstOf(
         OBJECT_MEMBER_ACCESS,
@@ -445,7 +444,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       COMBINED_SCALAR_OFFSET,
       FUNCTION_EXPRESSION,
       COMMON_SCALAR,
-      VARIABLE,
+        MEMBER_EXPRESSION,
       NEW_EXPR,
       EXIT_EXPR,
       LIST_ASSIGNMENT_EXPR,
@@ -453,7 +452,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.optional(b.firstOf(
         INC,
         DEC,
-        b.sequence(INSTANCEOF, VARIABLE))));
+        b.sequence(INSTANCEOF, MEMBER_EXPRESSION))));
 
     b.rule(FUNCTION_EXPRESSION).is(b.optional(STATIC), FUNCTION, b.optional(AND), LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS,
       b.optional(LEXICAL_VARS), BLOCK);
@@ -466,7 +465,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(LIST_ASSIGNMENT_EXPR).is(LIST_EXPR, EQU, EXPRESSION);
     b.rule(LIST_EXPR).is(LIST, b.optional(LPARENTHESIS, ASSIGNMENT_LIST, RPARENTHESIS));
     b.rule(ASSIGNMENT_LIST).is(b.optional(ASSIGNMENT_LIST_ELEMENT), b.zeroOrMore(COMMA, b.optional(ASSIGNMENT_LIST_ELEMENT)));
-    b.rule(ASSIGNMENT_LIST_ELEMENT).is(b.firstOf(VARIABLE, LIST_ASSIGNMENT_EXPR));
+    b.rule(ASSIGNMENT_LIST_ELEMENT).is(b.firstOf(MEMBER_EXPRESSION, LIST_ASSIGNMENT_EXPR));
 
     b.rule(INTERNAL_FUNCTION).is(b.firstOf(
       b.sequence(ISSET, LPARENTHESIS, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), RPARENTHESIS),
@@ -479,9 +478,9 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(CLONE, EXPRESSION),
       b.sequence(PRINT, EXPRESSION)));
 
-    // FUNCTION_PARAMETERS_CALL_LIST after VARIABLE has been removed because PEG is greedy and VARIABLE will always consume
+    // FUNCTION_PARAMETERS_CALL_LIST after MEMBER_EXPRESSION has been removed because PEG is greedy and MEMBER_EXPRESSION will always consume
     // FUNCTION_PARAMETERS_CALL_LIST.
-    b.rule(NEW_EXPR).is(NEW, VARIABLE);
+    b.rule(NEW_EXPR).is(NEW, MEMBER_EXPRESSION);
 
     // Unary expression
     b.rule(UNARY_EXPR).is(b.firstOf(  // TODO martin: re-arrange & complete
@@ -513,7 +512,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(CONDITIONAL_EXPR).is(LOGICAL_OR_EXPR, b.optional(QUERY, b.optional(ASSIGNMENT_EXPR), COLON, ASSIGNMENT_EXPR)).skipIfOneChild();
 
     b.rule(ASSIGNMENT_EXPR).is(b.firstOf(
-      b.sequence(VARIABLE, EQU, AND, b.firstOf(VARIABLE, NEW_EXPR)),
+      b.sequence(MEMBER_EXPRESSION, EQU, AND, b.firstOf(MEMBER_EXPRESSION, NEW_EXPR)),
       b.sequence(CONDITIONAL_EXPR, ASSIGNMENT_OPERATOR, ASSIGNMENT_EXPR),
       CONDITIONAL_EXPR)).skipIfOneChild();
     b.rule(ASSIGNMENT_OPERATOR).is(b.firstOf(EQU, COMPOUND_ASSIGNMENT, LOGICAL_ASSIGNMENT));
@@ -691,7 +690,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(FOREACH_STATEMENT).is(FOREACH, LPARENTHESIS, FOREACH_EXPR, RPARENTHESIS, b.firstOf(ALTERNATIVE_FOREACH_STATEMENT, STATEMENT));
     b.rule(FOREACH_EXPR).is(EXPRESSION, AS, FOREACH_VARIABLE, b.optional(DOUBLEARROW, FOREACH_VARIABLE));
     b.rule(FOREACH_VARIABLE).is(b.firstOf(
-      b.sequence(b.optional(AND), VARIABLE),
+      b.sequence(b.optional(AND), MEMBER_EXPRESSION),
       b.sequence(LIST, LPARENTHESIS, ASSIGNMENT_LIST, RPARENTHESIS)));
     b.rule(ALTERNATIVE_FOREACH_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDFOREACH, EOS);
 
@@ -724,7 +723,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(ECHO_STATEMENT).is(ECHO, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), EOS);
 
     b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, UNSET_VARIABLES, RPARENTHESIS, EOS);
-    b.rule(UNSET_VARIABLES).is(VARIABLE, b.zeroOrMore(COMMA, VARIABLE));
+    b.rule(UNSET_VARIABLES).is(MEMBER_EXPRESSION, b.zeroOrMore(COMMA, MEMBER_EXPRESSION));
 
     b.rule(CLASS_STATEMENT).is(b.firstOf(
       METHOD_DECLARATION,

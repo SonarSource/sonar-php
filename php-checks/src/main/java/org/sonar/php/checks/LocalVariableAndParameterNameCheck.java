@@ -108,7 +108,7 @@ public class LocalVariableAndParameterNameCheck extends SquidCheck<Grammar> {
     AstNode leftExpr = assignmentExpr.getFirstChild();
     AstNode variableNode = null;
 
-    if (leftExpr.is(PHPGrammar.VARIABLE)) {
+    if (leftExpr.is(PHPGrammar.MEMBER_EXPRESSION)) {
       variableNode = leftExpr;
     } else if (leftExpr.is(PHPGrammar.POSTFIX_EXPR)) {
       variableNode = leftExpr.getFirstChild();

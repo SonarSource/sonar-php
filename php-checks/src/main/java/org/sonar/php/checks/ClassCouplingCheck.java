@@ -159,7 +159,7 @@ public class ClassCouplingCheck extends SquidCheck<Grammar> {
   }
 
   private String getInstantiatedClassName(AstNode newExpr) {
-    AstNode variable = newExpr.getFirstChild(PHPGrammar.VARIABLE);
+    AstNode variable = newExpr.getFirstChild(PHPGrammar.MEMBER_EXPRESSION);
     AstNode classNameNode = variable.getFirstChild();
 
     if (classNameNode.is(PHPKeyword.NAMESPACE)) {

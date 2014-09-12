@@ -205,7 +205,7 @@ public class LocalVariableScope {
     for (AstNode listElement : listExpr.getFirstChild(PHPGrammar.ASSIGNMENT_LIST).getChildren(PHPGrammar.ASSIGNMENT_LIST_ELEMENT)) {
       AstNode child = listElement.getFirstChild();
 
-      if (child.is(PHPGrammar.VARIABLE) && child.getFirstChild().is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+      if (child.is(PHPGrammar.MEMBER_EXPRESSION) && child.getFirstChild().is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
         AstNode varWithoutObject = child.getFirstChild();
         String varName = getVariableName(varWithoutObject);
         declareLocalVariable(varName, varWithoutObject);

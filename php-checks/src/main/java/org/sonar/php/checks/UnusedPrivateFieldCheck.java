@@ -55,7 +55,7 @@ public class UnusedPrivateFieldCheck extends SquidCheck<Grammar> {
   public void init() {
     subscribeTo(
       PHPGrammar.CLASS_DECLARATION,
-      PHPGrammar.VARIABLE);
+      PHPGrammar.MEMBER_EXPRESSION);
   }
 
   @Override

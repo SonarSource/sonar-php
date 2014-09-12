@@ -50,7 +50,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
       PHPGrammar.GLOBAL_STATEMENT,
       PHPGrammar.STATIC_STATEMENT,
       PHPGrammar.LEXICAL_VAR_LIST,
-      PHPGrammar.VARIABLE,
+      PHPGrammar.MEMBER_EXPRESSION,
 
       PHPGrammar.ASSIGNMENT_EXPR,
       PHPGrammar.LIST_EXPR);
@@ -77,7 +77,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
       } else if (astNode.is(PHPGrammar.LEXICAL_VAR_LIST)) {
         getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
 
-      } else if (astNode.is(PHPGrammar.VARIABLE)) {
+      } else if (astNode.is(PHPGrammar.MEMBER_EXPRESSION)) {
         useLocalVariable(astNode);
 
       } else if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
@@ -114,7 +114,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
   private AstNode getLeftHandExpression(AstNode assignmentExpr) {
     AstNode leftExpr = assignmentExpr.getFirstChild();
 
-    if (leftExpr.is(PHPGrammar.VARIABLE)) {
+    if (leftExpr.is(PHPGrammar.MEMBER_EXPRESSION)) {
       return leftExpr.getFirstChild();
     } else if (leftExpr.is(PHPGrammar.POSTFIX_EXPR)) {
       return leftExpr.getFirstChild().getFirstChild();
