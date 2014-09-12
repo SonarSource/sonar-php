@@ -24,36 +24,18 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-public class VariableTest extends RuleTest {
+public class PrimaryExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.VARIABLE);
+    setRootRule(PHPGrammar.PRIMARY_EXPRESSION);
   }
 
   @Test
   public void test() {
+    matches("a");
     matches("$a");
+    matches("($a)");
 
-    matches("$a[]");
-    matches("$a()");
-
-    matches("$a->b");
-    matches("$a->b()");
-
-    matches("$a::b()");
-    matches("Foo::$a");
-
-    matches("$a->$b[$c]{'d'}");
-
-    matches("$$a");
-    matches("${'a'}");
-    matches("$a{'a'}");
-    matches("$a[$b]");
-
-    matches("f()->$a");
-    matches("$a->{'b'}");
-
-    matches("A::class");
   }
 }

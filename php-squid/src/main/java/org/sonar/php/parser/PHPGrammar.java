@@ -264,7 +264,7 @@ public enum PHPGrammar implements GrammarRuleKey {
   TRAIT_ADAPTATION_STATEMENT,
   TRAIT_ADAPTATIONS,
 
-
+  PRIMARY_EXPRESSION,
   VARIABLE,
   ALIAS_VARIABLE,
   VARIABLE_NAME,
@@ -383,12 +383,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     // TODO rename
     b.rule(VARIABLE).is(
-      b.firstOf(
-        b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_NAME),
-        CLASS_NAME,
-        VARIABLE_WITHOUT_OBJECTS,
-        IDENTIFIER
-      ),
+      PRIMARY_EXPRESSION,
       b.zeroOrMore(b.firstOf(
         OBJECT_MEMBER_ACCESS,
         CLASS_MEMBER_ACCESS,
@@ -396,6 +391,14 @@ public enum PHPGrammar implements GrammarRuleKey {
         FUNCTION_CALL_PARAMETER_LIST
       ))
     );
+
+    b.rule(PRIMARY_EXPRESSION).is(
+      b.firstOf(
+        b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_NAME),
+        CLASS_NAME,
+        VARIABLE_WITHOUT_OBJECTS,
+        IDENTIFIER,
+        PARENTHESIS_EXPRESSION)).skip();
 
     b.rule(OBJECT_MEMBER_ACCESS).is(ARROW, b.firstOf(VARIABLE_WITHOUT_OBJECTS, OBJECT_DIM_LIST, IDENTIFIER));
     b.rule(CLASS_MEMBER_ACCESS).is(DOUBLECOLON, b.firstOf(VARIABLE_WITHOUT_OBJECTS, IDENTIFIER, PHPKeyword.CLASS));
@@ -446,7 +449,6 @@ public enum PHPGrammar implements GrammarRuleKey {
       NEW_EXPR,
       EXIT_EXPR,
       LIST_ASSIGNMENT_EXPR,
-      PARENTHESIS_EXPRESSION,
       INTERNAL_FUNCTION),
       b.optional(b.firstOf(
         INC,
