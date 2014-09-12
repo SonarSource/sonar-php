@@ -34,6 +34,8 @@ public class CompilationUnitTest extends RuleTest {
   @Test
   public void test() {
     Assertions.assertThat(p)
+      .matches("")
+
       .matches("<?php")
 
       .matches("html <?php")
