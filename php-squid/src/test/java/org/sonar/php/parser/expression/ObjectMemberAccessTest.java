@@ -28,7 +28,7 @@ public class ObjectMemberAccessTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.OBJECT_MEMBER_ACCESS);
+    setTestedRule(PHPGrammar.OBJECT_MEMBER_ACCESS);
   }
 
   @Test

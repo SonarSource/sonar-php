@@ -28,7 +28,7 @@ public class BitewiseXorExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.BITEWISE_XOR_EXPR);
+    setTestedRule(PHPGrammar.BITEWISE_XOR_EXPR);
   }
 
   @Test

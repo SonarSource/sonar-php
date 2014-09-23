@@ -28,7 +28,7 @@ public class UnsetVariableStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.UNSET_VARIABLE_STATEMENT);
+    setTestedRule(PHPGrammar.UNSET_VARIABLE_STATEMENT);
   }
 
   @Test

@@ -21,6 +21,8 @@ package org.sonar.php.parser.statement;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
@@ -28,7 +30,7 @@ public class WhileStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.WHILE_STATEMENT);
+    setTestedRule(PHPGrammar.WHILE_STATEMENT);
   }
 
   @Test

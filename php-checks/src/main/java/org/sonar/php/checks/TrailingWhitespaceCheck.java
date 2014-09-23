@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import com.google.common.io.Files;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.api.utils.SonarException;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.lexer.PHPLexer;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S1131",
   priority = Priority.MAJOR)
-public class TrailingWhitespaceCheck extends SquidCheck<Grammar> implements CharsetAwareVisitor {
+public class TrailingWhitespaceCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   private Charset charset;
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[" + PHPLexer.WHITESPACE + "]");

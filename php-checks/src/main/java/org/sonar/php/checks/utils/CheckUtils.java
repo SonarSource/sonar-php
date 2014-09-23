@@ -72,7 +72,7 @@ public class CheckUtils {
    */
   public static String getFunctionName(AstNode functionDec) {
     Preconditions.checkArgument(functionDec.is(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
-    return functionDec.is(PHPGrammar.FUNCTION_EXPRESSION) ? "expression" : "\"" + functionDec.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue() + "\"";
+    return functionDec.is(PHPGrammar.FUNCTION_EXPRESSION) ? "expression" : "\"" + functionDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue() + "\"";
   }
 
   /**
@@ -87,7 +87,7 @@ public class CheckUtils {
   }
 
   /**
-   * Returns an array of GrammarRuleKey containing function grammar rule:
+   * Returns an array of GrammarRuleKey containing function LexerlessGrammar rule:
    * METHOD_DECLARATION, FUNCTION_DECLARATION, FUNCTION_EXPRESSION.
    */
   public static GrammarRuleKey[] functions() {
@@ -108,7 +108,7 @@ public class CheckUtils {
 
     if (parameterList != null) {
       for (AstNode parameter : parameterList.getChildren(PHPGrammar.PARAMETER)) {
-        parameters.add(parameter.getFirstChild(PHPTokenType.VAR_IDENTIFIER));
+        parameters.add(parameter.getFirstChild(PHPGrammar.VAR_IDENTIFIER));
       }
     }
     return parameters;

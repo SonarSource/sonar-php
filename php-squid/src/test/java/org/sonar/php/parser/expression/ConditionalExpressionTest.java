@@ -28,7 +28,7 @@ public class ConditionalExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.CONDITIONAL_EXPR);
+    setTestedRule(PHPGrammar.CONDITIONAL_EXPR);
   }
 
   @Test

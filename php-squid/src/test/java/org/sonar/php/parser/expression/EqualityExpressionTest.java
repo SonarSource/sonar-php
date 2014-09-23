@@ -28,7 +28,7 @@ public class EqualityExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.EQUALITY_EXPR);
+    setTestedRule(PHPGrammar.EQUALITY_EXPR);
   }
 
   @Test

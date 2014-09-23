@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -28,13 +27,14 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.regex.Pattern;
 
 @Rule(
   key = "S116",
   priority = Priority.MAJOR)
-public class FieldNameCheck extends SquidCheck<Grammar> {
+public class FieldNameCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   private Pattern pattern = null;
@@ -54,7 +54,7 @@ public class FieldNameCheck extends SquidCheck<Grammar> {
   @Override
   public void visitNode(AstNode astNode) {
     for (AstNode varDec : astNode.getChildren(PHPGrammar.VARIABLE_DECLARATION)) {
-      String fieldName = varDec.getFirstChild(PHPTokenType.VAR_IDENTIFIER).getTokenOriginalValue();
+      String fieldName = varDec.getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue();
 
       if (!pattern.matcher(StringUtils.remove(fieldName, "$")).matches()) {
         getContext().createLineViolation(this, "Rename this field \"{0}\" to match the regular expression {1}.", astNode, fieldName, format);

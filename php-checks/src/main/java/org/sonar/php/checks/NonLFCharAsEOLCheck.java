@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import com.google.common.io.Files;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,7 +36,7 @@ import java.nio.charset.Charset;
 @Rule(
   key = "S1779",
   priority = Priority.MINOR)
-public class NonLFCharAsEOLCheck extends SquidCheck<Grammar> implements CharsetAwareVisitor {
+public class NonLFCharAsEOLCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   private static final Logger LOG = LoggerFactory.getLogger(NonLFCharAsEOLCheck.class);
   private Charset charset;

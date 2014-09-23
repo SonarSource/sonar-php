@@ -28,7 +28,7 @@ public class ForeachStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.FOREACH_STATEMENT);
+    setTestedRule(PHPGrammar.FOREACH_STATEMENT);
   }
 
   @Test

@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -30,11 +29,12 @@ import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.api.SourceClass;
 import org.sonar.squidbridge.checks.ChecksHelper;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1311",
   priority = Priority.MAJOR)
-public class ClassComplexityCheck extends SquidCheck<Grammar> {
+public class ClassComplexityCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final int DEFAULT = 200;
 
@@ -56,7 +56,7 @@ public class ClassComplexityCheck extends SquidCheck<Grammar> {
     if (complexity > max) {
       getContext().createLineViolation(this,
         "The Cyclomatic Complexity of this class \"{0}\" is {1} which is greater than {2} authorized, split this class.",
-        node, node.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue(), complexity, max);
+        node, node.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue(), complexity, max);
     }
   }
 

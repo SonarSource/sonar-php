@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.Map;
 
@@ -35,7 +35,7 @@ import java.util.Map;
   key = "S122",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class OneStatementPerLineCheck extends SquidCheck<Grammar> {
+public class OneStatementPerLineCheck extends SquidCheck<LexerlessGrammar> {
 
   private final Map<Integer, StatementCount> statementsPerLine = Maps.newHashMap();
   private boolean inFunctionExpression = false;

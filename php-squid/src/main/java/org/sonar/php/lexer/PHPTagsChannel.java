@@ -65,8 +65,8 @@ public class PHPTagsChannel extends Channel<Lexer> {
   public static final String OPENING = "(?i)<\\?(php|=|)";
   public static final String CLOSING = "\\?>";
 
-  private static final String START = "(?:(?!" + OPENING + ")[\\s\\S])*+(" + OPENING + ")?+";
-  private static final String END = CLOSING + START;
+  public static final String START = "(?:(?!" + OPENING + ")[\\s\\S])*+(" + OPENING + ")?+";
+  public static final String END = CLOSING + START;
 
   private final Channel<Lexer> start = new RegexpChannel(FILE_OPENING_TAG, START);
   private final Channel<Lexer> end = new RegexpChannel(INLINE_HTML, END);

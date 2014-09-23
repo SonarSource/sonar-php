@@ -21,6 +21,7 @@ package org.sonar.php.checks.formattingstandardcheck;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
+import com.sonar.sslr.impl.ast.AstXmlPrinter;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
 

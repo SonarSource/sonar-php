@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -29,6 +28,7 @@ import org.sonar.php.checks.utils.LocalVariableScope;
 import org.sonar.php.checks.utils.Variable;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 import java.util.ArrayDeque;
@@ -39,7 +39,7 @@ import java.util.Iterator;
   key = "S1481",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
+public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
   private Deque<LocalVariableScope> scopes = new ArrayDeque<LocalVariableScope>();
 

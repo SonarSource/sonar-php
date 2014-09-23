@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -29,6 +28,7 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
   key = "S117",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class LocalVariableAndParameterNameCheck extends SquidCheck<Grammar> {
+public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   private Deque<Set<String>> checkedVariables = new ArrayDeque<Set<String>>();

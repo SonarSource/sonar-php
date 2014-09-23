@@ -28,7 +28,7 @@ public class PostfixExprTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.POSTFIX_EXPR);
+    setTestedRule(PHPGrammar.POSTFIX_EXPR);
   }
 
   @Test

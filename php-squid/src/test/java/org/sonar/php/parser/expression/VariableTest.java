@@ -28,7 +28,7 @@ public class VariableTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.MEMBER_EXPRESSION);
+    setTestedRule(PHPGrammar.MEMBER_EXPRESSION);
   }
 
   @Test

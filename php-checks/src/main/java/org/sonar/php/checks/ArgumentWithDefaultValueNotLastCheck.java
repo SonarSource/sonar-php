@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -29,6 +28,7 @@ import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ import java.util.List;
   key = "S1788",
   priority = Priority.CRITICAL)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
-public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<Grammar> {
+public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<LexerlessGrammar> {
 
 
   @Override
@@ -82,9 +82,9 @@ public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<Grammar> {
     for (int i = 0; i < params.size(); i++) {
 
       if (i == (params.size() - 1)) {
-        build.append("\"" + params.get(i).getFirstChild(PHPTokenType.VAR_IDENTIFIER).getTokenOriginalValue() + "\"");
+        build.append("\"" + params.get(i).getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue() + "\"");
       } else {
-        build.append("\"" + params.get(i).getFirstChild(PHPTokenType.VAR_IDENTIFIER).getTokenOriginalValue() + "\", ");
+        build.append("\"" + params.get(i).getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue() + "\", ");
       }
     }
 

@@ -28,7 +28,7 @@ public class ForStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.FOR_STATEMENT);
+    setTestedRule(PHPGrammar.FOR_STATEMENT);
   }
 
   @Test
@@ -37,5 +37,6 @@ public class ForStatementTest extends RuleTest {
     matches("for ($i = 1; $i <= a; $i++) {}");
     matches("for ($i = 1; ; $i++) {}");
     matches("for (; ; ) {}");
+    matches("for (; ; ): endfor;");
   }
 }

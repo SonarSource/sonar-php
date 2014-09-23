@@ -28,7 +28,7 @@ public class CommonScalarTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.COMMON_SCALAR);
+    setTestedRule(PHPGrammar.COMMON_SCALAR);
   }
 
   @Test

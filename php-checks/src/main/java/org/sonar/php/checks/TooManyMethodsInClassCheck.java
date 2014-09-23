@@ -21,19 +21,19 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1448",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class TooManyMethodsInClassCheck extends SquidCheck<Grammar> {
+public class TooManyMethodsInClassCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final int DEFAULT = 20;
 
@@ -55,7 +55,7 @@ public class TooManyMethodsInClassCheck extends SquidCheck<Grammar> {
 
     if (nbMethod > maximumMethodThreshold) {
       getContext().createLineViolation(this, "Class \"{0}\" has {1} methods, which is greater than {2} authorized. Split it into smaller classes.",
-        astNode, astNode.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue(), nbMethod, maximumMethodThreshold);
+        astNode, astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue(), nbMethod, maximumMethodThreshold);
     }
   }
 

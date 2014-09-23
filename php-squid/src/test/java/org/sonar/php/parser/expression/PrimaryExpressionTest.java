@@ -28,7 +28,7 @@ public class PrimaryExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.PRIMARY_EXPRESSION);
+    setTestedRule(PHPGrammar.PRIMARY_EXPRESSION);
   }
 
   @Test
@@ -36,6 +36,5 @@ public class PrimaryExpressionTest extends RuleTest {
     matches("a");
     matches("$a");
     matches("($a)");
-
   }
 }

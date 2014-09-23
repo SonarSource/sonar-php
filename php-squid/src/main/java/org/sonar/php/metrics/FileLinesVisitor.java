@@ -23,7 +23,7 @@ import com.google.common.collect.Sets;
 import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
+import org.sonar.sslr.parser.LexerlessGrammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.sonar.api.measures.CoreMetrics;
@@ -41,7 +41,7 @@ import java.util.Set;
 /**
  * Visitor that computes {@link CoreMetrics#NCLOC_DATA_KEY} and {@link CoreMetrics#COMMENT_LINES_DATA_KEY} metrics used by the DevCockpit.
  */
-public class FileLinesVisitor extends SquidAstVisitor<Grammar> implements AstAndTokenVisitor {
+public class FileLinesVisitor extends SquidAstVisitor<LexerlessGrammar> implements AstAndTokenVisitor {
 
   private final Project project;
   private final FileLinesContextFactory fileLinesContextFactory;

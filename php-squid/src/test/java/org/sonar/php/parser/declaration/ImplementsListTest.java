@@ -28,7 +28,7 @@ public class ImplementsListTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.IMPLEMENTS_LIST);
+    setTestedRule(PHPGrammar.IMPLEMENTS_LIST);
   }
 
   @Test

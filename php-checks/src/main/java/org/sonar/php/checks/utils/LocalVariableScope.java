@@ -64,9 +64,9 @@ public class LocalVariableScope {
     Preconditions.checkArgument(globalVarStmt.is(PHPGrammar.GLOBAL_STATEMENT));
 
     for (AstNode globalVar : globalVarStmt.getFirstChild(PHPGrammar.GLOBAL_VAR_LIST).getChildren(PHPGrammar.GLOBAL_VAR)) {
-      AstNode var = globalVar.getFirstChild();
+      AstNode var = globalVar.getFirstChild(PHPGrammar.COMPOUND_VARIABLE).getFirstChild();
 
-      if (var.is(PHPTokenType.VAR_IDENTIFIER)) {
+      if (var.is(PHPGrammar.VAR_IDENTIFIER)) {
         declareExclusion(var.getTokenOriginalValue());
       }
     }
@@ -83,7 +83,7 @@ public class LocalVariableScope {
     AstNode paramList = functionDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
     if (paramList != null) {
       for (AstNode parameter : paramList.getChildren(PHPGrammar.PARAMETER)) {
-        declareExclusion(parameter.getFirstChild(PHPTokenType.VAR_IDENTIFIER).getTokenOriginalValue());
+        declareExclusion(parameter.getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue());
       }
     }
   }
@@ -97,7 +97,7 @@ public class LocalVariableScope {
     Preconditions.checkArgument(staticStmt.is(PHPGrammar.STATIC_STATEMENT));
 
     for (AstNode staticVar : staticStmt.getFirstChild(PHPGrammar.STATIC_VAR_LIST).getChildren(PHPGrammar.STATIC_VAR)) {
-      AstNode varIdentifier = staticVar.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
+      AstNode varIdentifier = staticVar.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
       declareLocalVariable(varIdentifier.getTokenOriginalValue(), varIdentifier, 1);
     }
   }
@@ -172,7 +172,7 @@ public class LocalVariableScope {
     Preconditions.checkArgument(lexicalVarList.is(PHPGrammar.LEXICAL_VAR_LIST));
 
     for (AstNode lexicalVar : lexicalVarList.getChildren(PHPGrammar.LEXICAL_VAR)) {
-      AstNode varIdentifier = lexicalVar.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
+      AstNode varIdentifier = lexicalVar.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
       String varName = varIdentifier.getTokenOriginalValue();
       boolean isReference = lexicalVar.hasDirectChildren(PHPPunctuator.AND);
       boolean isFromOuterScope = outerScope == null || outerScope.localVariables.containsKey(varName);

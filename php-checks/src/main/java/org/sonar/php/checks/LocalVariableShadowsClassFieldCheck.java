@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -31,6 +30,7 @@ import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 import java.util.ArrayDeque;
@@ -43,7 +43,7 @@ import java.util.Set;
   key = "S1117",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
+public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGrammar> {
 
 
   private ClassState classState = new ClassState();
@@ -60,7 +60,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
     }
 
     public void setClassName(AstNode classDeclaration) {
-      className = classDeclaration.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
+      className = classDeclaration.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
     }
 
     public boolean isInClass() {
@@ -137,7 +137,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
   }
 
   private boolean isExcluded(AstNode methodDec) {
-    String methodName = methodDec.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
+    String methodName = methodDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
     return isStatic(methodDec) || isConstructor(methodDec, methodName) || isSetter(methodDec, methodName);
   }
 
@@ -189,7 +189,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<Grammar> {
 
       if (stmt.is(PHPGrammar.CLASS_VARIABLE_DECLARATION)) {
         for (AstNode varDeclaration : stmt.getChildren(PHPGrammar.VARIABLE_DECLARATION)) {
-          classState.declareField(varDeclaration.getFirstChild(PHPTokenType.VAR_IDENTIFIER));
+          classState.declareField(varDeclaration.getFirstChild(PHPGrammar.VAR_IDENTIFIER));
         }
       }
     }

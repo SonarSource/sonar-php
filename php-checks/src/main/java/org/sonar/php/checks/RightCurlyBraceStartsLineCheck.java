@@ -20,18 +20,18 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1109",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
-public class RightCurlyBraceStartsLineCheck extends SquidCheck<Grammar> {
+public class RightCurlyBraceStartsLineCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void init() {

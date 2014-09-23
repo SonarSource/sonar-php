@@ -28,7 +28,7 @@ public class YieldStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.YIELD_STATEMENT);
+    setTestedRule(PHPGrammar.YIELD_STATEMENT);
   }
 
   @Test

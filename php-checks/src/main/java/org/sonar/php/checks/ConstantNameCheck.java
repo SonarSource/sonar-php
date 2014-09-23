@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -29,6 +28,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.regex.Pattern;
 
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
   key = "S115",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class ConstantNameCheck extends SquidCheck<Grammar> {
+public class ConstantNameCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final String DEFAULT = "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$";
   private Pattern pattern = null;
@@ -62,7 +62,7 @@ public class ConstantNameCheck extends SquidCheck<Grammar> {
       checkConstantName(astNode, getFirstParameter(astNode));
     } else if (astNode.is(PHPGrammar.CLASS_CONSTANT_DECLARATION, PHPGrammar.CONSTANT_DECLARATION)) {
       for (AstNode constDec : astNode.getChildren(PHPGrammar.MEMBER_CONST_DECLARATION, PHPGrammar.CONSTANT_VAR)) {
-        checkConstantName(constDec, constDec.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue());
+        checkConstantName(constDec, constDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue());
       }
     }
   }

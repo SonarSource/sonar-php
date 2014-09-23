@@ -44,18 +44,18 @@ public class PHPLexer {
   public static final String WHITESPACE = "\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}";
 
   // HEREDOC
-  private static final String HEREDOC = "(?s)"
+  public static final String HEREDOC = "(?s)"
     + "<<<[" + WHITESPACE + "]*\"([^\r\n'\"]++)\".*?(?:\\r\\n?+|\\n)\\1"
     + "|<<<[" + WHITESPACE + "]*'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\2"
     + "|<<<[" + WHITESPACE + "]*([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
 
   // IDENTIFIERS
   private static final String IDENTIFIER_START = "[a-zA-Z_\\x7f-\\xff]";
-  private static final String IDENTIFIER_PART = "[" + IDENTIFIER_START + "[0-9]]";
-  private static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*";
+  public static final String IDENTIFIER_PART = "[" + IDENTIFIER_START + "[0-9]]";
+  public static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*";
 
   private static final String VAR_IDENTIFIER_START = "\\$";
-  private static final String VAR_IDENTIFIER = VAR_IDENTIFIER_START + IDENTIFIER;
+  public static final String VAR_IDENTIFIER = VAR_IDENTIFIER_START + IDENTIFIER;
 
   // COMMENTS
 
@@ -66,7 +66,7 @@ public class PHPLexer {
   private static final String SINGLE_LINE_COMMENT1 = "//" + SINGLE_LINE_COMMENT_CONTENT;
   private static final String SINGLE_LINE_COMMENT2 = "#" + SINGLE_LINE_COMMENT_CONTENT;
   private static final String MULTI_LINE_COMMENT = "/\\*[\\s\\S]*?\\*/";
-  private static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT1 + "|" + SINGLE_LINE_COMMENT2 + "|" + MULTI_LINE_COMMENT + ")";
+  public static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT1 + "|" + SINGLE_LINE_COMMENT2 + "|" + MULTI_LINE_COMMENT + ")";
 
   // LITERALS
 
@@ -96,7 +96,7 @@ public class PHPLexer {
   private static final String EXPONENT_DNUM = "((" + LNUM + "|" + DNUM + ")[eE][+-]?" + LNUM + ")";
 
   // Numeric
-  private static final String NUMERIC_LITERAL = EXPONENT_DNUM + "|" + DNUM + "|" + INTEGER_LITERAL;
+  public static final String NUMERIC_LITERAL = EXPONENT_DNUM + "|" + DNUM + "|" + INTEGER_LITERAL;
 
   private PHPLexer() {
   }
@@ -107,18 +107,19 @@ public class PHPLexer {
       .withCharset(conf.getCharset())
 
       .withChannel(new PHPTagsChannel())
-      .withChannel(new BlackHoleChannel("[" + WHITESPACE + LINE_TERMINATOR + "]++"))
-      .withChannel(commentRegexp(COMMENT))
-      .withChannel(regexp(PHPTokenType.HEREDOC, HEREDOC))
+//      .withChannel(new BlackHoleChannel("[" + WHITESPACE + LINE_TERMINATOR + "]++"))
+//      .withChannel(commentRegexp(COMMENT))
+//      .withChannel(regexp(PHPTokenType.HEREDOC, HEREDOC))
 
         // String Literals
-      .withChannel(regexp(PHPTokenType.NUMERIC_LITERAL, NUMERIC_LITERAL))
-      .withChannel(regexp(PHPTokenType.STRING_LITERAL, STRING_LITERAL))
+//      .withChannel(regexp(PHPTokenType.NUMERIC_LITERAL, NUMERIC_LITERAL))
+//      .withChannel(regexp(PHPTokenType.STRING_LITERAL, STRING_LITERAL))
 
-      .withChannel(new IdentifierAndKeywordChannel(IDENTIFIER, false, PHPKeyword.values()))
-      .withChannel(regexp(PHPTokenType.VAR_IDENTIFIER, VAR_IDENTIFIER))
+//      .withChannel(new IdentifierAndKeywordChannel(IDENTIFIER, false, PHPKeyword.values()))
+//      .withChannel(regexp(PHPTokenType.VAR_IDENTIFIER, VAR_IDENTIFIER))
 
-      .withChannel(new PunctuatorChannel(PHPPunctuator.values()));
+//      .withChannel(new PunctuatorChannel(PHPPunctuator.values()))
+ ;
 
     return builder.build();
   }

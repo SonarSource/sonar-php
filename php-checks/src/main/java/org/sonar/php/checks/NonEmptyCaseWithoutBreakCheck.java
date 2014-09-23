@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Trivia;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -29,12 +28,13 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S128",
   priority = Priority.CRITICAL)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
-public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<Grammar> {
+public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void init() {

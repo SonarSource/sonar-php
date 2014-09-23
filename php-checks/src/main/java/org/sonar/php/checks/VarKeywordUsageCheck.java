@@ -20,16 +20,16 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1765",
   priority = Priority.MAJOR)
-public class VarKeywordUsageCheck extends SquidCheck<Grammar> {
+public class VarKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void init() {

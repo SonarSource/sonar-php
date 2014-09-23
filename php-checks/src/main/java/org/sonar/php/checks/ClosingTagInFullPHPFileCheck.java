@@ -20,18 +20,18 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 
 @Rule(
   key = "S1780",
   priority = Priority.MINOR)
-public class ClosingTagInFullPHPFileCheck extends SquidCheck<Grammar> {
+public class ClosingTagInFullPHPFileCheck extends SquidCheck<LexerlessGrammar> {
 
   private int inlineHTMLCounter = 0;
   private boolean isOnlyClosingTag = false;

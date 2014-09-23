@@ -28,7 +28,7 @@ public class NewExprTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.NEW_EXPR);
+    setTestedRule(PHPGrammar.NEW_EXPR);
   }
 
   @Test

@@ -36,7 +36,7 @@ public class ExtendsImplementsLineCheck {
   }
 
   private void checkExtendsAndImplementsLine(FormattingStandardCheck formattingCheck, AstNode node) {
-    AstNode identifier = node.getFirstChild(GenericTokenType.IDENTIFIER);
+    AstNode identifier = node.getFirstChild(PHPGrammar.IDENTIFIER);
     String className = identifier.getTokenOriginalValue();
     int classNameLine = identifier.getTokenLine();
 

@@ -28,7 +28,7 @@ public class UseConstDeclarationStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.USE_CONST_DECLARATION_STATEMENT);
+    setTestedRule(PHPGrammar.USE_CONST_DECLARATION_STATEMENT);
   }
 
   @Test

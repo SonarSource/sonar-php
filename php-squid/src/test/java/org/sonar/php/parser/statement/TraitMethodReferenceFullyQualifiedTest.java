@@ -28,7 +28,7 @@ public class TraitMethodReferenceFullyQualifiedTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED);
+    setTestedRule(PHPGrammar.TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED);
   }
 
   @Test

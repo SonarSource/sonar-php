@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import com.sonar.sslr.api.AstAndTokenVisitor;
-import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.sonar.check.BelongsToProfile;
@@ -35,6 +34,7 @@ import org.sonar.squidbridge.recognizer.Detector;
 import org.sonar.squidbridge.recognizer.EndWithDetector;
 import org.sonar.squidbridge.recognizer.KeywordsDetector;
 import org.sonar.squidbridge.recognizer.LanguageFootprint;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
   key = "S125",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class CommentedOutCodeCheck extends SquidCheck<Grammar> implements AstAndTokenVisitor {
+public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
 
   private static final double THRESHOLD = 0.9;
 
