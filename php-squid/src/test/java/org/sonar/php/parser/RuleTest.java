@@ -31,10 +31,6 @@ public class RuleTest {
 
   protected void setTestedRule(GrammarRuleKey ruleKey) {
     rule = g.rule(ruleKey);
-    // FIXME: below
-    // Needs to override because of the introduction of FILE_OPENING_TAG token, corresponding to the first PHP opening tag encountered
-    // Needs optional because of recursive rule that will expect the opening tag token before each recursion otherwise.
-    // rule.override(GrammarFunctions.Standard.opt(PHPTagsChannel.FILE_OPENING_TAG), ((RuleDefinition) rule).getExpression());
   }
 
   protected void matches(String input) {
