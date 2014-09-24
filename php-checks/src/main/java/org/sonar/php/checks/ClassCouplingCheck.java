@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;

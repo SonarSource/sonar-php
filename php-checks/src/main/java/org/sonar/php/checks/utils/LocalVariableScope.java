@@ -24,7 +24,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;

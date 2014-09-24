@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;

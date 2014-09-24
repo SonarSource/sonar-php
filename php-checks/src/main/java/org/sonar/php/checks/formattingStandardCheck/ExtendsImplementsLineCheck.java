@@ -20,7 +20,6 @@
 package org.sonar.php.checks.formattingstandardcheck;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.parser.PHPGrammar;

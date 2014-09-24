@@ -20,16 +20,7 @@
 package org.sonar.php.lexer;
 
 import com.sonar.sslr.impl.Lexer;
-import com.sonar.sslr.impl.channel.BlackHoleChannel;
-import com.sonar.sslr.impl.channel.IdentifierAndKeywordChannel;
-import com.sonar.sslr.impl.channel.PunctuatorChannel;
 import org.sonar.php.PHPConfiguration;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.api.PHPTokenType;
-
-import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.commentRegexp;
-import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
 
 public class PHPLexer {
 

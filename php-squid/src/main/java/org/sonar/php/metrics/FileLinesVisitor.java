@@ -23,7 +23,6 @@ import com.google.common.collect.Sets;
 import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
-import org.sonar.sslr.parser.LexerlessGrammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.sonar.api.measures.CoreMetrics;
@@ -34,6 +33,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.squidbridge.SquidAstVisitor;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.List;
 import java.util.Set;

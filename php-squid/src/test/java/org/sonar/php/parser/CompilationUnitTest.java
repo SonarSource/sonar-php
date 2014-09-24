@@ -20,7 +20,6 @@
 package org.sonar.php.parser;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.sslr.tests.Assertions;
 

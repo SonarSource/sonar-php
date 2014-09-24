@@ -20,7 +20,6 @@
 package org.sonar.php.metrics;
 
 import com.sonar.sslr.api.AstNode;
-import org.sonar.sslr.parser.LexerlessGrammar;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;

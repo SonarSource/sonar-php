@@ -24,10 +24,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 

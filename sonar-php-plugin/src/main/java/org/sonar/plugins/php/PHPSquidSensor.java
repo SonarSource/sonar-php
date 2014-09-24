@@ -21,7 +21,6 @@ package org.sonar.plugins.php;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import org.sonar.sslr.parser.LexerlessGrammar;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.AnnotationCheckFactory;
@@ -53,6 +52,7 @@ import org.sonar.squidbridge.api.SourceFile;
 import org.sonar.squidbridge.api.SourceFunction;
 import org.sonar.squidbridge.indexer.QueryByParent;
 import org.sonar.squidbridge.indexer.QueryByType;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.File;
 import java.util.Collection;
