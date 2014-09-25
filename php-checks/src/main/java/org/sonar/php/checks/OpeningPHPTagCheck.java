@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.lexer.PHPTagsChannel;
+import org.sonar.php.parser.PHPTokenType;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -36,7 +36,7 @@ public class OpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void init() {
-    subscribeTo(PHPTagsChannel.FILE_OPENING_TAG);
+    subscribeTo(PHPTokenType.FILE_OPENING_TAG);
   }
 
   @Override

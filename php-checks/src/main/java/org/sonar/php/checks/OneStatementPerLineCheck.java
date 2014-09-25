@@ -24,8 +24,8 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.parser.PHPTokenType;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -109,7 +109,7 @@ public class OneStatementPerLineCheck extends SquidCheck<LexerlessGrammar> {
     return child.is(
       PHPGrammar.BLOCK,
       PHPGrammar.LABEL,
-      PHPTagsChannel.INLINE_HTML,
+      PHPTokenType.INLINE_HTML,
       PHPGrammar.EMPTY_STATEMENT,
       PHPGrammar.STATEMENT);
   }

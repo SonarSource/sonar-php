@@ -25,7 +25,7 @@ import org.sonar.api.utils.SonarException;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
-import org.sonar.php.lexer.PHPLexer;
+import org.sonar.php.parser.LexicalConstant;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 public class TrailingWhitespaceCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   private Charset charset;
-  private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[" + PHPLexer.WHITESPACE + "]");
+  private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[" + LexicalConstant.WHITESPACE + "]");
 
   public void setCharset(Charset charset) {
     this.charset = charset;

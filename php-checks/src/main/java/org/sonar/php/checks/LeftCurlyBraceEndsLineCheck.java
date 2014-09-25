@@ -24,8 +24,8 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.parser.PHPTokenType;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -84,7 +84,7 @@ public class LeftCurlyBraceEndsLineCheck extends SquidCheck<LexerlessGrammar> {
 
     if (lcurlyNextAstNode.is(PHPGrammar.INNER_STATEMENT_LIST)) {
       AstNode firstStatement = lcurlyNextAstNode.getFirstChild();
-      if (firstStatement.is(PHPGrammar.STATEMENT) && firstStatement.getFirstChild().is(PHPTagsChannel.INLINE_HTML)) {
+      if (firstStatement.is(PHPGrammar.STATEMENT) && firstStatement.getFirstChild().is(PHPTokenType.INLINE_HTML)) {
         nextTokenLine = firstStatement.getNextAstNode().getTokenLine();
       }
     }

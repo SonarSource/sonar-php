@@ -26,7 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.CharsetAwareVisitor;
-import org.sonar.php.lexer.PHPTagsChannel;
+import org.sonar.php.parser.LexicalConstant;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 public class FileHeaderCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   private static final String DEFAULT_HEADER_FORMAT = "";
-  private static final Pattern PHP_OPEN_TAG = Pattern.compile(PHPTagsChannel.OPENING);
+  private static final Pattern PHP_OPEN_TAG = Pattern.compile(LexicalConstant.PHP_OPENING_TAG);
 
   @RuleProperty(
     key = "headerFormat",

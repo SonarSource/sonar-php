@@ -17,12 +17,22 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.lexer;
+package org.sonar.php.parser;
 
-import com.sonar.sslr.impl.Lexer;
-import org.sonar.php.PHPConfiguration;
+public class LexicalConstant {
 
-public class PHPLexer {
+  /**
+   * PHP TAGS & INLINE HTML
+   */
+  public static final String PHP_OPENING_TAG = "(?i)<\\?(php|=|)";
+  public static final String PHP_CLOSING_TAG = "\\?>";
+
+  public static final String PHP_START_TAG = "(?:(?!" + PHP_OPENING_TAG + ")[\\s\\S])*+(" + PHP_OPENING_TAG + ")?+";
+  public static final String PHP_END_TAG = PHP_CLOSING_TAG + PHP_START_TAG;
+
+  /**
+   * WHITESPACES
+   */
 
   /**
    * LF, CR, LS, PS
@@ -34,13 +44,9 @@ public class PHPLexer {
    */
   public static final String WHITESPACE = "\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}";
 
-  // HEREDOC
-  public static final String HEREDOC = "(?s)"
-    + "<<<[" + WHITESPACE + "]*\"([^\r\n'\"]++)\".*?(?:\\r\\n?+|\\n)\\1"
-    + "|<<<[" + WHITESPACE + "]*'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\2"
-    + "|<<<[" + WHITESPACE + "]*([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
-
-  // IDENTIFIERS
+  /**
+   * IDENTIFIERS
+   */
   private static final String IDENTIFIER_START = "[a-zA-Z_\\x7f-\\xff]";
   public static final String IDENTIFIER_PART = "[" + IDENTIFIER_START + "[0-9]]";
   public static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*";
@@ -48,29 +54,45 @@ public class PHPLexer {
   private static final String VAR_IDENTIFIER_START = "\\$";
   public static final String VAR_IDENTIFIER = VAR_IDENTIFIER_START + IDENTIFIER;
 
-  // COMMENTS
+  /**
+   * COMMENT
+   */
 
   /**
    * The "one-line" comment styles only comment to the end of the line or the current block of PHP code, whichever comes first.
    */
-  private static final String SINGLE_LINE_COMMENT_CONTENT = "(?:(?!" + PHPTagsChannel.CLOSING + ")[^\\n\\r])*+";
+  private static final String SINGLE_LINE_COMMENT_CONTENT = "(?:(?!" + PHP_CLOSING_TAG + ")[^\\n\\r])*+";
   private static final String SINGLE_LINE_COMMENT1 = "//" + SINGLE_LINE_COMMENT_CONTENT;
   private static final String SINGLE_LINE_COMMENT2 = "#" + SINGLE_LINE_COMMENT_CONTENT;
   private static final String MULTI_LINE_COMMENT = "/\\*[\\s\\S]*?\\*/";
   public static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT1 + "|" + SINGLE_LINE_COMMENT2 + "|" + MULTI_LINE_COMMENT + ")";
 
-  // LITERALS
+  /**
+   * LITERAL
+   */
 
   private static final String EXECUTION_OPERATOR = "`[^`]*+`";
 
-  // String
+  /**
+   * Heredoc
+   */
+  public static final String HEREDOC = "(?s)"
+    + "<<<[" + WHITESPACE + "]*\"([^\r\n'\"]++)\".*?(?:\\r\\n?+|\\n)\\1"
+    + "|<<<[" + WHITESPACE + "]*'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\2"
+    + "|<<<[" + WHITESPACE + "]*([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
+
+  /**
+   * String
+   */
   public static final String STRING_LITERAL = "(?:"
     + "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\""
     + "|'([^'\\\\]*+(\\\\[\\s\\S])?+)*+'"
     + "|" + EXECUTION_OPERATOR
     + ")";
 
-  // Integer
+  /**
+   * Integer
+   */
   private static final String DECIMAL = "[1-9][0-9]*+|0";
   private static final String HEXADECIMAL = "0[xX][0-9a-fA-F]++";
   private static final String OCTAL = "0[0-7]++";
@@ -80,39 +102,20 @@ public class PHPLexer {
     + "|" + BINARY
     + "|" + DECIMAL;
 
-  // Floating point
+  /**
+   * Floating point
+   */
   private static final String LNUM = "[0-9]+";
   private static final String DNUM = "([0-9]*[\\.]" + LNUM + ")"
     + "|(" + LNUM + "[\\.][0-9]*)";
   private static final String EXPONENT_DNUM = "((" + LNUM + "|" + DNUM + ")[eE][+-]?" + LNUM + ")";
 
-  // Numeric
+  /**
+   * Numeric Literal
+   */
   public static final String NUMERIC_LITERAL = EXPONENT_DNUM + "|" + DNUM + "|" + INTEGER_LITERAL;
 
-  private PHPLexer() {
-  }
-
-  public static Lexer create(PHPConfiguration conf) {
-    Lexer.Builder builder = Lexer.builder()
-      .withFailIfNoChannelToConsumeOneCharacter(true)
-      .withCharset(conf.getCharset())
-
-      .withChannel(new PHPTagsChannel())
-//      .withChannel(new BlackHoleChannel("[" + WHITESPACE + LINE_TERMINATOR + "]++"))
-//      .withChannel(commentRegexp(COMMENT))
-//      .withChannel(regexp(PHPTokenType.HEREDOC, HEREDOC))
-
-        // String Literals
-//      .withChannel(regexp(PHPTokenType.NUMERIC_LITERAL, NUMERIC_LITERAL))
-//      .withChannel(regexp(PHPTokenType.STRING_LITERAL, STRING_LITERAL))
-
-//      .withChannel(new IdentifierAndKeywordChannel(IDENTIFIER, false, PHPKeyword.values()))
-//      .withChannel(regexp(PHPTokenType.VAR_IDENTIFIER, VAR_IDENTIFIER))
-
-//      .withChannel(new PunctuatorChannel(PHPPunctuator.values()))
- ;
-
-    return builder.build();
+  private LexicalConstant() {
   }
 
 }

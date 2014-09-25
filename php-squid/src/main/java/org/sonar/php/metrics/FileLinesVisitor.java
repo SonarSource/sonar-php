@@ -31,7 +31,7 @@ import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
 import org.sonar.php.api.PHPMetric;
-import org.sonar.php.lexer.PHPTagsChannel;
+import org.sonar.php.parser.PHPTokenType;
 import org.sonar.squidbridge.SquidAstVisitor;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -55,7 +55,7 @@ public class FileLinesVisitor extends SquidAstVisitor<LexerlessGrammar> implemen
   }
 
   public void visitToken(Token token) {
-    if (token.getType().equals(GenericTokenType.EOF) || token.getType().equals(PHPTagsChannel.FILE_OPENING_TAG)) {
+    if (token.getType().equals(GenericTokenType.EOF) || token.getType().equals(PHPTokenType.FILE_OPENING_TAG)) {
       return;
     }
 

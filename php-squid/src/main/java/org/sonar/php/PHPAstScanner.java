@@ -25,10 +25,10 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.impl.Parser;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.api.PHPMetric;
-import org.sonar.php.lexer.PHPTagsChannel;
 import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPParser;
+import org.sonar.php.parser.PHPTokenType;
 import org.sonar.squidbridge.AstScanner;
 import org.sonar.squidbridge.CommentAnalyser;
 import org.sonar.squidbridge.SourceCodeBuilderCallback;
@@ -150,7 +150,7 @@ public class PHPAstScanner {
     builder.withSquidAstVisitor(new LinesOfCodeVisitor<LexerlessGrammar>(PHPMetric.LINES_OF_CODE) {
       @Override
       public void visitToken(Token token) {
-        if (!token.getType().equals(PHPTagsChannel.INLINE_HTML) && !token.getType().equals(PHPTagsChannel.FILE_OPENING_TAG)) {
+        if (!token.getType().equals(PHPTokenType.INLINE_HTML) && !token.getType().equals(PHPTokenType.FILE_OPENING_TAG)) {
           super.visitToken(token);
         }
       }

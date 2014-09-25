@@ -30,7 +30,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.lexer.PHPLexer;
+import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -130,14 +130,14 @@ public class ClassCouplingCheck extends SquidCheck<LexerlessGrammar> {
     Token varDecToken = varDeclaration.getToken();
 
     for (Trivia comment : varDecToken.getTrivia()) {
-      for (String line : comment.getToken().getValue().split("[" + PHPLexer.LINE_TERMINATOR + "]++")) {
+      for (String line : comment.getToken().getValue().split("[" + LexicalConstant.LINE_TERMINATOR + "]++")) {
         retrieveTypeFromCommentLine(line);
       }
     }
   }
 
   private void retrieveTypeFromCommentLine(String line) {
-    String[] commentLine = line.trim().split("[" + PHPLexer.WHITESPACE + "]++");
+    String[] commentLine = line.trim().split("[" + LexicalConstant.WHITESPACE + "]++");
 
     if (commentLine.length > 2 && DOC_TAGS.contains(commentLine[1])) {
       for (String type : commentLine[2].split("\\|")) {
