@@ -86,7 +86,10 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
   @Override
   public void init() {
     subscribeTo(FUNCTION_DECLARATIONS);
-    subscribeTo(PHPGrammar.PARAMETER_LIST, PHPGrammar.VAR_IDENTIFIER);
+    subscribeTo(
+      PHPGrammar.PARAMETER_LIST,
+      PHPGrammar.VAR_IDENTIFIER,
+      PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE);
   }
 
   @Override
@@ -94,15 +97,18 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
     if (astNode.is(FUNCTION_DECLARATIONS) && !CheckUtils.isAbstractMethod(astNode)) {
       // enter new scope
       currentScope = new Scope(currentScope, astNode);
-    } else if (currentScope != null && astNode.is(PHPGrammar.PARAMETER_LIST)) {
-      initParametersList(astNode);
-    } else if (isVarIdentifierInsideFunction(astNode)) {
-      currentScope.use(astNode);
+
+    } else if (currentScope != null) {
+      if (astNode.is(PHPGrammar.PARAMETER_LIST)) {
+        initParametersList(astNode);
+      } else if (isVarIdentifierInsideFunction(astNode)) {
+        currentScope.use(astNode);
+      }
     }
   }
 
   private boolean isVarIdentifierInsideFunction(AstNode node) {
-    return currentScope != null && node.getParent().isNot(PHPGrammar.PARAMETER) && node.is(PHPGrammar.VAR_IDENTIFIER);
+    return node.getParent().isNot(PHPGrammar.PARAMETER) && node.is(PHPGrammar.VAR_IDENTIFIER);
   }
 
   private void initParametersList(AstNode parameterListNode) {
