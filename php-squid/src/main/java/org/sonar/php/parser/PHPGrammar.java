@@ -398,7 +398,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(STRING_LITERAL).is(SPACING, b.firstOf(b.regexp(LexicalConstant.STRING_LITERAL), ENCAPS_STRING_LITERAL));
 
     b.rule(STRING_WITH_ENCAPS_VAR_CHARACTERS).is(b.regexp(LexicalConstant.STRING_WITH_ENCAPS_VAR_CHARACTERS));
-    b.rule(ENCAPS_STRING_LITERAL).is("\"", ENCAPS_LIST, "\"", SPACING);
+    b.rule(ENCAPS_STRING_LITERAL).is(SPACING, "\"", ENCAPS_LIST, "\"");
 
     // Identifier
     b.rule(VAR_IDENTIFIER).is(SPACING, b.regexp(LexicalConstant.VAR_IDENTIFIER));
@@ -501,8 +501,8 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(ENCAPS_LIST).is(
       b.oneOrMore(
         b.firstOf(
-          STRING_WITH_ENCAPS_VAR_CHARACTERS,
-          ENCAPS_VAR)
+          ENCAPS_VAR,
+          STRING_WITH_ENCAPS_VAR_CHARACTERS)
       )
     );
 

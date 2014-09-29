@@ -45,6 +45,7 @@ public class StringLiteralTest extends RuleTest {
     matches("\"non regexp $\""); // PHP is permissive
     matches("\"str \\$foo\"");
     matches("\"{'str'}\"");
+    matches("\"{$var[\"foo\"]}\"");
   }
 
 }
