@@ -66,19 +66,23 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
     }
 
     private void use(AstNode astNode) {
-      String identifier = astNode.getTokenValue();
+      use(astNode.getTokenValue());
+    }
+
+    private void use(String varName) {
       Scope scope = this;
 
       while (scope != null) {
-        Integer usage = scope.arguments.get(identifier);
+        Integer usage = scope.arguments.get(varName);
         if (usage != null) {
           usage++;
-          scope.arguments.put(identifier, usage);
+          scope.arguments.put(varName, usage);
           return;
         }
         scope = scope.outerScope;
       }
     }
+
   }
 
   private Scope currentScope;
@@ -99,10 +103,15 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
       currentScope = new Scope(currentScope, astNode);
 
     } else if (currentScope != null) {
+
       if (astNode.is(PHPGrammar.PARAMETER_LIST)) {
         initParametersList(astNode);
+
       } else if (isVarIdentifierInsideFunction(astNode)) {
         currentScope.use(astNode);
+
+      } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
+        currentScope.use("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION).getTokenOriginalValue());
       }
     }
   }
