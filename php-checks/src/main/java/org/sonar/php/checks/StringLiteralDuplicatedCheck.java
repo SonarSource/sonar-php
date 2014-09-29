@@ -26,6 +26,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -63,7 +64,7 @@ public class StringLiteralDuplicatedCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void visitNode(AstNode node) {
-    String literal = node.getTokenOriginalValue();
+    String literal = getStringLiteralValue(node);
     visitOccurrence(StringUtils.substring(literal, 1, literal.length() - 1), node.getTokenLine());
   }
 
@@ -90,6 +91,14 @@ public class StringLiteralDuplicatedCheck extends SquidCheck<LexerlessGrammar> {
         int occurrences = literalsOccurrences.get(literal);
         literalsOccurrences.put(literal, occurrences + 1);
       }
+    }
+  }
+
+  private static String getStringLiteralValue(AstNode stringLiteral) {
+    if (stringLiteral.getFirstChild().is(PHPGrammar.ENCAPS_STRING_LITERAL)) {
+      return CheckUtils.getExpressionAsString(stringLiteral);
+    } else {
+      return stringLiteral.getTokenOriginalValue();
     }
   }
 

@@ -11,6 +11,10 @@ echo "aaaaa";  // NOK
 echo "aaaaa";
 echo "aaaaa";
 
+echo "$toto";  // NOK
+echo "$toto";
+echo "$toto";
+
 $a["name1"];    // NOK
 $a["name1"];
 $a["name1"];
