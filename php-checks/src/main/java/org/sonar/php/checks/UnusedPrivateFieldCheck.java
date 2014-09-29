@@ -27,6 +27,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -54,7 +55,8 @@ public class UnusedPrivateFieldCheck extends SquidCheck<LexerlessGrammar> {
   public void init() {
     subscribeTo(
       PHPGrammar.CLASS_DECLARATION,
-      PHPGrammar.MEMBER_EXPRESSION);
+      PHPGrammar.MEMBER_EXPRESSION,
+      PHPGrammar.SIMPLE_ENCAPS_VARIABLE);
   }
 
   @Override
@@ -143,10 +145,15 @@ public class UnusedPrivateFieldCheck extends SquidCheck<LexerlessGrammar> {
    * <li>for "$this->myArray[0]", function returns "$this->myArray"
    * <li>for "static::$field", function returns "::$field"
    */
-  private String getVariableName(AstNode expr) {
+  private String getVariableName(AstNode var) {
     boolean exclude = false;
     StringBuilder builder = new StringBuilder();
-    for (Token token : expr.getTokens()) {
+
+    if (var.getPreviousAstNode().is(PHPPunctuator.DOLAR_LCURLY)) {
+      builder.append("$");
+    }
+
+    for (Token token : var.getTokens()) {
 
       if ("static".equals(token.getOriginalValue()) || "self".equals(token.getOriginalValue())) {
         continue;
