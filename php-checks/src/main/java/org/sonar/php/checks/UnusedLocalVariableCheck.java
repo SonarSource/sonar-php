@@ -51,6 +51,8 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
       PHPGrammar.STATIC_STATEMENT,
       PHPGrammar.LEXICAL_VAR_LIST,
       PHPGrammar.MEMBER_EXPRESSION,
+      PHPGrammar.SIMPLE_ENCAPS_VARIABLE,
+      PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE,
 
       PHPGrammar.ASSIGNMENT_EXPR,
       PHPGrammar.LIST_EXPR);
@@ -77,8 +79,11 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
       } else if (astNode.is(PHPGrammar.LEXICAL_VAR_LIST)) {
         getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
 
-      } else if (astNode.is(PHPGrammar.MEMBER_EXPRESSION)) {
-        useLocalVariable(astNode);
+      } else if (astNode.is(PHPGrammar.MEMBER_EXPRESSION, PHPGrammar.SIMPLE_ENCAPS_VARIABLE)) {
+        getCurrentScope().useVariable(astNode.getFirstChild());
+
+      } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
+        getCurrentScope().useVariale("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION).getTokenOriginalValue());
 
       } else if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
         declareNewLocalVariable(astNode);
@@ -94,13 +99,6 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
     if (astNode.is(CheckUtils.functions())) {
       reportUnusedVariable();
       scopes.pop();
-    }
-  }
-
-  private void useLocalVariable(AstNode astNode) {
-    AstNode child = astNode.getFirstChild();
-    if (child.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
-      getCurrentScope().useVariable(astNode.getFirstChild());
     }
   }
 

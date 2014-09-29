@@ -105,12 +105,33 @@ public class LocalVariableScope {
    * Increases usage of the variable passed as parameter if this variable has
    * been declare as a local variable.
    *
-   * @param variableWithoutObject is VARIABLE_WITHOUT_OBJECTS
+   * @param varNode is VARIABLE_WITHOUT_OBJECTS or VAR_IDENTIFIER, if others nothing will be done.
    */
-  public void useVariable(AstNode variableWithoutObject) {
-    Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
+  public void useVariable(AstNode varNode) {
+    String varName;
 
-    String varName = getVariableName(variableWithoutObject);
+    // Retrieve var name
+    if (varNode.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+      varName = getVariableName(varNode);
+    } else if (varNode.is(PHPGrammar.VAR_IDENTIFIER)) {
+      varName = varNode.getTokenOriginalValue();
+    } else {
+      return;
+    }
+
+    // Increase usage if variable declared
+    if (localVariables.containsKey(varName)) {
+      increaseUsageFor(varName);
+    }
+  }
+
+  /**
+   * Increases usage of the variable passed as parameter if this variable has
+   * been declare as a local variable.
+   *
+   * @param varName is the variable name to use
+   */
+  public void useVariale(String varName) {
     if (localVariables.containsKey(varName)) {
       increaseUsageFor(varName);
     }
