@@ -36,10 +36,6 @@ public class EncapsVarTest extends RuleTest {
     matches("$var");
     matches("${ foo }");
     matches("{ $var }");
-
-    // FIXME: should matches but if expression is able to consume keywords
-    // then for example, a statement list that will end with an expression statement
-    // will consume "endwhile" in an alternative while statement.
-    notMatches("${ var }");
   }
+
 }

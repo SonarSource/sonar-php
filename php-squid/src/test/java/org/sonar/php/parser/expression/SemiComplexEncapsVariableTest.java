@@ -39,6 +39,11 @@ public class SemiComplexEncapsVariableTest extends RuleTest {
   }
 
   @Test
+  public void test_recovery_expression() {
+    matches("${ var }");
+  }
+
+  @Test
   public void test_real_life() throws Exception {
     matches("${foo}");
     matches("${ ${expression} }");

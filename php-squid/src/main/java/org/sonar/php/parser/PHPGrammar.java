@@ -352,6 +352,7 @@ public enum PHPGrammar implements GrammarRuleKey {
   ENCAPS_STRING_LITERAL,
   COMPLEX_ENCAPS_VARIABLE,
   SEMI_COMPLEX_ENCAPS_VARIABLE,
+  SEMI_COMPLEX_RECOVERY_EXPRESSION,
   SIMPLE_ENCAPS_VARIABLE,
   ENCAPS_LIST,
   ENCAPS_VAR_OFFSET,
@@ -514,7 +515,15 @@ public enum PHPGrammar implements GrammarRuleKey {
     );
 
     b.rule(COMPLEX_ENCAPS_VARIABLE).is(LCURLYBRACE, b.next(DOLAR), EXPRESSION, RCURLYBRACE);
-    b.rule(SEMI_COMPLEX_ENCAPS_VARIABLE).is(DOLAR_LCURLY, EXPRESSION, RCURLYBRACE);
+    b.rule(SEMI_COMPLEX_ENCAPS_VARIABLE).is(
+      DOLAR_LCURLY,
+      b.firstOf(
+        EXPRESSION,
+        SEMI_COMPLEX_RECOVERY_EXPRESSION),
+      RCURLYBRACE);
+    // FIXME: this recovery is introduce in order to parse ${var}, as expression cannot match keywords.
+    b.rule(SEMI_COMPLEX_RECOVERY_EXPRESSION).is(b.regexp("[^}]++"));
+
     b.rule(SIMPLE_ENCAPS_VARIABLE).is(
       VAR_IDENTIFIER,
       b.optional(b.firstOf(
