@@ -24,18 +24,17 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-public class VariableWithoutObjectsTest extends RuleTest {
+public class EncapsDImensionalOffsetTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setTestedRule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    setTestedRule(PHPGrammar.ENCAPS_DIMENSIONAL_OFFSET);
   }
 
   @Test
   public void test() {
-    matches("$a");
-    matches("$$a");
-    matches("$$a");
-
+    matches("[ 0 ]");
+    matches("[ identifier ]");
+    matches("[ $variable ]");
   }
 }

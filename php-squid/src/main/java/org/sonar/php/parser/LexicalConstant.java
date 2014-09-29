@@ -71,6 +71,15 @@ public class LexicalConstant {
    * LITERAL
    */
 
+  /**
+   * '$' sign is allowed in double quoted string and heredoc only when it does not conflict with the
+   * encapsulated variable expression, i.e when it not followed with '{' or a starting identifier character.
+   */
+  private static final String PERMITTED_EMBEDDED_DOLAR = "(?:\\$(?!\\{|" + IDENTIFIER_START + "))";
+  private static final String NON_SPECIAL_CHARACTERS = "(?:[^\"\\\\$])";
+  private static final String ESCAPED_CHARACTERS = "(?:\\\\[\\s\\S])";
+
+  public static final String STRING_WITH_ENCAPS_VAR_CHARACTERS =  "(?:(?:" + NON_SPECIAL_CHARACTERS + "|" + PERMITTED_EMBEDDED_DOLAR + "|" + ESCAPED_CHARACTERS + ")++)";
   private static final String EXECUTION_OPERATOR = "`[^`]*+`";
 
   /**
@@ -85,7 +94,7 @@ public class LexicalConstant {
    * String
    */
   public static final String STRING_LITERAL = "(?:"
-    + "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\""
+    + "\"" + STRING_WITH_ENCAPS_VAR_CHARACTERS + "?+" + "\""
     + "|'([^'\\\\]*+(\\\\[\\s\\S])?+)*+'"
     + "|" + EXECUTION_OPERATOR
     + ")";

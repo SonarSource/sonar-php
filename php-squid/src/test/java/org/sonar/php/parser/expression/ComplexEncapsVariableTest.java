@@ -24,18 +24,33 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-public class VariableWithoutObjectsTest extends RuleTest {
+public class ComplexEncapsVariableTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setTestedRule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    setTestedRule(PHPGrammar.COMPLEX_ENCAPS_VARIABLE);
   }
 
   @Test
   public void test() {
-    matches("$a");
-    matches("$$a");
-    matches("$$a");
-
+    matches("{ $var }");
+    matches("{ ${expression} }");
   }
+
+  @Test
+  public void test_real_life() {
+    matches("{ $var }");
+    matches("{ ${$var} }");
+    matches("{ $var[/* ... */ 42 - 2*21] }");
+    matches("{ ${method()} }");
+    matches("{ ${'test'} }");
+    matches("{ $foo['}'] }");
+  }
+
+  @Test
+  public void nok() {
+    notMatches("{$'str'}");
+    notMatches("{$0}");
+  }
+
 }

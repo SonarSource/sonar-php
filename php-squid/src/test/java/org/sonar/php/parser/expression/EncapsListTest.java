@@ -24,18 +24,19 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-public class VariableWithoutObjectsTest extends RuleTest {
+public class EncapsListTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setTestedRule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    setTestedRule(PHPGrammar.ENCAPS_LIST);
   }
 
   @Test
   public void test() {
-    matches("$a");
-    matches("$$a");
-    matches("$$a");
-
+    matches("$var");
+    matches("str $var");
+    matches("$var $var");
+    matches("$var str");
+    matches("$var str $var");
   }
 }

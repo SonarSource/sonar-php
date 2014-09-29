@@ -188,6 +188,7 @@ public enum PHPGrammar implements GrammarRuleKey {
   HEREDOC,
   NUMERIC_LITERAL,
   STRING_LITERAL,
+  STRING_WITH_ENCAPS_VAR_CHARACTERS,
   VAR_IDENTIFIER,
   IDENTIFIER,
   FILE_OPENING_TAG,
@@ -348,6 +349,16 @@ public enum PHPGrammar implements GrammarRuleKey {
   ASSIGNMENT_LIST_ELEMENT,
   ASSIGNMENT_LIST,
   FUNCTION_EXPRESSION,
+  ENCAPS_STRING_LITERAL,
+  COMPLEX_ENCAPS_VARIABLE,
+  SEMI_COMPLEX_ENCAPS_VARIABLE,
+  SIMPLE_ENCAPS_VARIABLE,
+  ENCAPS_LIST,
+  ENCAPS_VAR_OFFSET,
+  ENCAPS_VAR,
+  ENCAPS_DIMENSIONAL_OFFSET,
+  ENCAPS_OBJECT_MEMBER_ACCESS,
+
   EXPRESSION;
 
 
@@ -384,7 +395,10 @@ public enum PHPGrammar implements GrammarRuleKey {
     // Literals
     b.rule(HEREDOC).is(SPACING, b.regexp(LexicalConstant.HEREDOC));
     b.rule(NUMERIC_LITERAL).is(SPACING, b.regexp(LexicalConstant.NUMERIC_LITERAL));
-    b.rule(STRING_LITERAL).is(SPACING, b.regexp(LexicalConstant.STRING_LITERAL));
+    b.rule(STRING_LITERAL).is(SPACING, b.firstOf(b.regexp(LexicalConstant.STRING_LITERAL), ENCAPS_STRING_LITERAL));
+
+    b.rule(STRING_WITH_ENCAPS_VAR_CHARACTERS).is(b.regexp(LexicalConstant.STRING_WITH_ENCAPS_VAR_CHARACTERS));
+    b.rule(ENCAPS_STRING_LITERAL).is("\"", ENCAPS_LIST, "\"", SPACING);
 
     // Identifier
     b.rule(VAR_IDENTIFIER).is(SPACING, b.regexp(LexicalConstant.VAR_IDENTIFIER));
@@ -483,6 +497,37 @@ public enum PHPGrammar implements GrammarRuleKey {
       word(b, "__TRAIT__")));
 
     b.rule(BOOLEAN_LITERAL).is(b.firstOf(word(b, "TRUE"), word(b, "FALSE")));
+
+    b.rule(ENCAPS_LIST).is(
+      b.oneOrMore(
+        b.firstOf(
+          STRING_WITH_ENCAPS_VAR_CHARACTERS,
+          ENCAPS_VAR)
+      )
+    );
+
+    b.rule(ENCAPS_VAR).is(
+      b.firstOf(
+        SEMI_COMPLEX_ENCAPS_VARIABLE,
+        SIMPLE_ENCAPS_VARIABLE,
+        COMPLEX_ENCAPS_VARIABLE)
+    );
+
+    b.rule(COMPLEX_ENCAPS_VARIABLE).is(LCURLYBRACE, b.next(DOLAR), EXPRESSION, RCURLYBRACE);
+    b.rule(SEMI_COMPLEX_ENCAPS_VARIABLE).is(DOLAR_LCURLY, EXPRESSION, RCURLYBRACE);
+    b.rule(SIMPLE_ENCAPS_VARIABLE).is(
+      VAR_IDENTIFIER,
+      b.optional(b.firstOf(
+        ENCAPS_DIMENSIONAL_OFFSET,
+        ENCAPS_OBJECT_MEMBER_ACCESS))
+    );
+
+    b.rule(ENCAPS_OBJECT_MEMBER_ACCESS).is(ARROW, IDENTIFIER);
+    b.rule(ENCAPS_DIMENSIONAL_OFFSET).is(LBRACKET, ENCAPS_VAR_OFFSET, RBRACKET);
+    b.rule(ENCAPS_VAR_OFFSET).is(b.firstOf(
+      IDENTIFIER,
+      NUMERIC_LITERAL,
+      VAR_IDENTIFIER));
 
     b.rule(CAST_TYPE).is(LPARENTHESIS, b.firstOf(word(b, "INTEGER"), word(b, "INT"), word(b, "DOUBLE"), word(b, "FLOAT"), word(b, "STRING"), ARRAY, word(b, "OBJECT"), word(b, "BOOLEAN"), word(b, "BOOL"), word(b, "BINARY"), UNSET), RPARENTHESIS);
 
@@ -810,7 +855,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       }
     }
 
-    b.rule(KEYWORDS).is(
+    b.rule(KEYWORDS).is(SPACING,
       b.firstOf(
         PHPKeyword.getKeywordValues()[0],
         PHPKeyword.getKeywordValues()[1],

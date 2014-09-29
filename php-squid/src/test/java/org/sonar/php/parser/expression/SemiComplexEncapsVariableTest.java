@@ -24,18 +24,35 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
 
-public class VariableWithoutObjectsTest extends RuleTest {
+public class SemiComplexEncapsVariableTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setTestedRule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    setTestedRule(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE);
   }
 
   @Test
   public void test() {
-    matches("$a");
-    matches("$$a");
-    matches("$$a");
-
+    matches("${ expression }");
+    matches("${ variable }");
+    matches("${ variable [ offset ] }");
   }
+
+  @Test
+  public void test_real_life() throws Exception {
+    matches("${foo}");
+    matches("${ ${expression} }");
+
+    matches("${ foo[index] }");
+    matches("${ foo[\"str\"] }");
+    matches("${ foo['str'] }");
+
+    matches("${ foo->prop }");
+    matches("${ foo->prop->prop }");
+
+    matches("${ foo->prop[index] }");
+
+    notMatches("${var}->bar");
+  }
+
 }

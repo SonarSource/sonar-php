@@ -33,7 +33,18 @@ public class StringLiteralTest extends RuleTest {
 
   @Test
   public void test() {
+    matches("\"\"");
     matches("\"str\"");
+    matches("\"$var\"");
     matches("'str'");
   }
+
+  @Test
+  public void test_real_life() {
+    matches("\"/regexp $/\"");
+    matches("\"non regexp $\""); // PHP is permissive
+    matches("\"str \\$foo\"");
+    matches("\"{'str'}\"");
+  }
+
 }
