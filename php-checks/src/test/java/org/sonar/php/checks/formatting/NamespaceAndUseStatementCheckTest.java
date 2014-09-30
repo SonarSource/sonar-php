@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks.formattingStadardCheckTest;
+package org.sonar.php.checks.formatting;
 
 import org.junit.Test;
 import org.sonar.php.PHPAstScanner;
@@ -25,25 +25,21 @@ import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.squidbridge.api.SourceFile;
 
-import java.io.File;
+public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTest {
 
-public class PunctuatorSpacingCheckTest extends FormattingStandardCheckTest {
-
-  private static final File TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "PunctuatorSpacingCheck.php");
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("isOneSpaceBetweenRParentAndLCurly", "isNoSpaceParenthesis");
+    activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Put one space between the closing parenthesis and the opening curly brace.")
-      .next().atLine(8).withMessage("Put only one space between the closing parenthesis and the opening curly brace.")
-
-      .next().atLine(24).withMessage("Remove all space after the opening parenthesis.")
-      .next().atLine(25).withMessage("Remove all space before the closing parenthesis.")
-      .next().atLine(26).withMessage("Remove all space after the opening parenthesis and before the closing parenthesis.")
-
+      .next().atLine(3).withMessage("Move the use declarations after the namespace declarations.")
+      .next().atLine(4).withMessage("Add a blank line after this \"use\" declaration.")
+      .next().atLine(5).withMessage("Add a blank line after this \"namespace another\\bar\" declaration.")
+      .next().atLine(10).withMessage("Add a blank line after this \"use\" declaration.")
+      .next().atLine(14)
+      .next().atLine(19)
       .noMore();
   }
 
@@ -51,7 +47,7 @@ public class PunctuatorSpacingCheckTest extends FormattingStandardCheckTest {
   public void custom() throws IllegalAccessException {
     deactivateAll();
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
