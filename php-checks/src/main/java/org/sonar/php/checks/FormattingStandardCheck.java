@@ -37,13 +37,14 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 @Rule(
   key = "S1808",
   priority = Priority.MINOR)
 public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
 
-  public static final GrammarRuleKey[] CLASS_AND_FUNCTION = {
+  private static final GrammarRuleKey[] CLASS_AND_FUNCTION = {
     PHPGrammar.CLASS_DECLARATION,
     PHPGrammar.INTERFACE_DECLARATION,
     PHPGrammar.TRAIT_ADAPTATIONS,
@@ -51,7 +52,7 @@ public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
     PHPGrammar.FUNCTION_DECLARATION
   };
 
-  public static final GrammarRuleKey[] CONTROL_STRUCTURE = {
+  private static final GrammarRuleKey[] CONTROL_STRUCTURE = {
     PHPGrammar.IF_STATEMENT,
     PHPGrammar.ELSEIF_CLAUSE,
     PHPGrammar.ELSE_CLAUSE,
@@ -229,4 +230,11 @@ public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
     getContext().createLineViolation(this, msg, node);
   }
 
+  public static GrammarRuleKey[] getClassAndFunctionNodes() {
+    return Arrays.copyOf(CLASS_AND_FUNCTION, CLASS_AND_FUNCTION.length);
+  }
+
+  public static GrammarRuleKey[] getControlStructureNodes() {
+    return Arrays.copyOf(CONTROL_STRUCTURE, CONTROL_STRUCTURE.length);
+  }
 }

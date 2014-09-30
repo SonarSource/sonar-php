@@ -31,10 +31,10 @@ import javax.annotation.Nullable;
 public class CurlyBraceCheck {
 
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
-    if (node.is(FormattingStandardCheck.CLASS_AND_FUNCTION) && formattingCheck.isOpenCurlyBraceForClassAndFunction) {
+    if (node.is(FormattingStandardCheck.getClassAndFunctionNodes()) && formattingCheck.isOpenCurlyBraceForClassAndFunction) {
       checkLCurlyForClassAndFunction(formattingCheck, getLeftCurlyBraceNode(node));
     }
-    if (node.is(FormattingStandardCheck.CONTROL_STRUCTURE) && formattingCheck.isOpenCurlyBraceForControlStructures) {
+    if (node.is(FormattingStandardCheck.getControlStructureNodes()) && formattingCheck.isOpenCurlyBraceForControlStructures) {
       checkLCurlyForControlStructure(formattingCheck, getLeftCurlyBraceNode(node));
     }
     if (node.is(PHPGrammar.ELSE_CLAUSE, PHPGrammar.CATCH_STATEMENT, PHPGrammar.FINALLY_STATEMENT) && formattingCheck.isClosingCurlyNextToKeyword) {
