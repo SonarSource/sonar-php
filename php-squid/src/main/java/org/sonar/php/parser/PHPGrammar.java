@@ -538,7 +538,21 @@ public enum PHPGrammar implements GrammarRuleKey {
       NUMERIC_LITERAL,
       VAR_IDENTIFIER));
 
-    b.rule(CAST_TYPE).is(LPARENTHESIS, b.firstOf(word(b, "INTEGER"), word(b, "INT"), word(b, "DOUBLE"), word(b, "FLOAT"), word(b, "STRING"), ARRAY, word(b, "OBJECT"), word(b, "BOOLEAN"), word(b, "BOOL"), word(b, "BINARY"), UNSET), RPARENTHESIS);
+    b.rule(CAST_TYPE).is(
+      LPARENTHESIS,
+      b.firstOf(
+        word(b, "INTEGER"),
+        word(b, "INT"),
+        word(b, "DOUBLE"),
+        word(b, "FLOAT"),
+        word(b, "STRING"),
+        ARRAY,
+        word(b, "OBJECT"),
+        word(b, "BOOLEAN"),
+        word(b, "BOOL"),
+        word(b, "BINARY"),
+        UNSET),
+      RPARENTHESIS);
 
     b.rule(POSTFIX_EXPR).is(b.firstOf( // TODO martin: to complete
         //YIELD, TODO martin: check

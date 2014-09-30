@@ -52,6 +52,26 @@ import java.util.Collection;
 
 public class PHPAstScanner {
 
+  /**
+   * Line Of Code
+   */
+  public static class PHPLinesOfCodeVisitor extends LinesOfCodeVisitor<LexerlessGrammar> {
+
+    public PHPLinesOfCodeVisitor() {
+      super(PHPMetric.LINES_OF_CODE);
+    }
+
+    @Override
+    public void visitToken(Token token) {
+      if (!token.getType().equals(PHPTokenType.INLINE_HTML) && !token.getType().equals(PHPTokenType.FILE_OPENING_TAG)) {
+        super.visitToken(token);
+      }
+    }
+  }
+
+  /**
+   * Comment
+   */
   private static class PHPCommentAnalyser extends CommentAnalyser {
     @Override
     public boolean isBlank(String line) {
@@ -73,6 +93,36 @@ public class PHPAstScanner {
       } else {
         return comment.substring(2, comment.length() - 2);
       }
+    }
+  }
+
+  /**
+   * Function
+   */
+  public static class FunctionSourceCodeBuilderCallback implements SourceCodeBuilderCallback {
+    private int seq = 0;
+
+    @Override
+    public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
+      seq++;
+      SourceFunction function = new SourceFunction("function:" + seq);
+      function.setStartAtLine(astNode.getTokenLine());
+      return function;
+    }
+  }
+
+  /**
+   * Class
+   */
+  public static class ClassSourceCodeBuilderCallback implements SourceCodeBuilderCallback {
+    private int seq = 0;
+
+    @Override
+    public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
+      seq++;
+      SourceClass cls = new SourceClass("class:" + seq);
+      cls.setStartAtLine(astNode.getTokenLine());
+      return cls;
     }
   }
 
@@ -110,17 +160,10 @@ public class PHPAstScanner {
     builder.setFilesMetric(PHPMetric.FILES);
 
     /* Classes */
-    builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<LexerlessGrammar>(new SourceCodeBuilderCallback() {
-      private int seq = 0;
-
-      @Override
-      public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
-        seq++;
-        SourceClass cls = new SourceClass("class:" + seq);
-        cls.setStartAtLine(astNode.getTokenLine());
-        return cls;
-      }
-    }, PHPGrammar.CLASS_DECLARATION, PHPGrammar.INTERFACE_DECLARATION));
+    builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<LexerlessGrammar>(
+      new ClassSourceCodeBuilderCallback(),
+      PHPGrammar.CLASS_DECLARATION,
+      PHPGrammar.INTERFACE_DECLARATION));
 
     builder.withSquidAstVisitor(CounterVisitor.<LexerlessGrammar>builder().setMetricDef(PHPMetric.CLASSES)
       .subscribeTo(PHPGrammar.CLASS_DECLARATION)
@@ -128,17 +171,11 @@ public class PHPAstScanner {
       .build());
 
     /* Functions */
-    builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<LexerlessGrammar>(new SourceCodeBuilderCallback() {
-      private int seq = 0;
-
-      @Override
-      public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
-        seq++;
-        SourceFunction function = new SourceFunction("function:" + seq);
-        function.setStartAtLine(astNode.getTokenLine());
-        return function;
-      }
-    }, PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
+    builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<LexerlessGrammar>(
+      new FunctionSourceCodeBuilderCallback(),
+      PHPGrammar.METHOD_DECLARATION,
+      PHPGrammar.FUNCTION_DECLARATION,
+      PHPGrammar.FUNCTION_EXPRESSION));
 
     builder.withSquidAstVisitor(CounterVisitor.<LexerlessGrammar>builder()
       .setMetricDef(PHPMetric.FUNCTIONS)
@@ -147,14 +184,7 @@ public class PHPAstScanner {
 
     /* Metrics */
     builder.withSquidAstVisitor(new LinesVisitor<LexerlessGrammar>(PHPMetric.LINES));
-    builder.withSquidAstVisitor(new LinesOfCodeVisitor<LexerlessGrammar>(PHPMetric.LINES_OF_CODE) {
-      @Override
-      public void visitToken(Token token) {
-        if (!token.getType().equals(PHPTokenType.INLINE_HTML) && !token.getType().equals(PHPTokenType.FILE_OPENING_TAG)) {
-          super.visitToken(token);
-        }
-      }
-    });
+    builder.withSquidAstVisitor(new PHPLinesOfCodeVisitor());
 
     builder.withSquidAstVisitor(new ComplexityVisitor());
     builder.withSquidAstVisitor(CommentsVisitor.<LexerlessGrammar>builder().withCommentMetric(PHPMetric.COMMENT_LINES)
