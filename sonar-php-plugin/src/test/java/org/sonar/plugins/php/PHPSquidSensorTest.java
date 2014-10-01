@@ -59,7 +59,7 @@ public class PHPSquidSensorTest {
     when(fileLinesContextFactory.createFor(any(Resource.class))).thenReturn(fileLinesContext);
 
     ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-    when(pfs.getSourceDirs()).thenReturn(ImmutableList.of(new java.io.File("src/test/resources/org/sonar/plugins/python/")));
+    when(pfs.getBasedir()).thenReturn(new java.io.File("src/test/resources/org/sonar/plugins/python/"));
 
     project = mock(Project.class);
     when(project.getFileSystem()).thenReturn(pfs);

@@ -50,11 +50,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
+import static org.sonar.api.measures.CoreMetrics.LINES_TO_COVER;
 import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
 public class PhpUnitCoverageResultParserTest {
 
-  private static final org.sonar.api.resources.File monkeyResource = new org.sonar.api.resources.File("Monkey.php");
+  private static final org.sonar.api.resources.File monkeyResource = org.sonar.api.resources.File.create("Monkey.php");
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -87,6 +88,7 @@ public class PhpUnitCoverageResultParserTest {
   @Test
   public void shouldParseEvenWithPackageNode() {
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-package.xml"));
+    verify(context).saveMeasure(monkeyResource, LINES_TO_COVER, 4.0);
     verify(context).saveMeasure(monkeyResource, UNCOVERED_LINES, 2.0);
   }
 
@@ -109,7 +111,7 @@ public class PhpUnitCoverageResultParserTest {
     org.sonar.api.resources.File file = new org.sonar.api.resources.File("IndexControllerTest.php");
 
     verify(context, never()).saveMeasure(eq(file), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
-    verify(context, never()).saveMeasure((Resource<?>) eq(null), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
+    verify(context, never()).saveMeasure((Resource) eq(null), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
   }
 
   // https://jira.codehaus.org/browse/SONARPLUGINS-1591
@@ -136,7 +138,7 @@ public class PhpUnitCoverageResultParserTest {
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
 
     when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/main")));
+    when(fs.getBasedir()).thenReturn(new File("C:/projets/PHP/Monkey/sources/main"));
 
     File f1 = new File("C:/projets/PHP/Monkey/sources/main/Monkey2.php");
     File f2 = new File("C:/projets/PHP/Monkey/sources/main/Monkey.php");

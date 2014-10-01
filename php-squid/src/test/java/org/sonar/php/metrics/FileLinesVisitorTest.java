@@ -19,7 +19,6 @@
  */
 package org.sonar.php.metrics;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.measures.CoreMetrics;
@@ -50,7 +49,7 @@ public class FileLinesVisitorTest {
     when(fileLinesContextFactory.createFor(any(Resource.class))).thenReturn(fileLinesContext);
 
     ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(fs.getSourceDirs()).thenReturn(ImmutableList.of(new File("src/test/resources/")));
+    when(fs.getBasedir()).thenReturn(new File("src/test/resources/"));
 
     Project project = new Project("key");
     project.setFileSystem(fs);

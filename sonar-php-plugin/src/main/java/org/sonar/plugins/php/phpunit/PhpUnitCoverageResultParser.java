@@ -56,7 +56,7 @@ import java.util.Map;
 public class PhpUnitCoverageResultParser implements BatchExtension {
 
   // Used for debugging purposes to store measure by resource
-  private static final Map<Resource<?>, Measure> MEASURES_BY_RESOURCE = new HashMap<Resource<?>, Measure>();
+  private static final Map<Resource, Measure> MEASURES_BY_RESOURCE = new HashMap<Resource, Measure>();
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
   private final Project project;

@@ -58,8 +58,8 @@ public class NoSonarAndCommentedOutLocSensorTest {
     fs = mock(ModuleFileSystem.class);
     project = mock(Project.class);
 
-    noSonarFilter = new NoSonarFilter();
     context = mock(SensorContext.class);
+    noSonarFilter = new NoSonarFilter(context);
     sensor = spy(new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter));
   }
 
