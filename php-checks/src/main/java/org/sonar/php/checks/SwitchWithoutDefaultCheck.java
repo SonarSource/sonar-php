@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S131",
+  name = "\"switch\" statements should end with a \"case default\" clause",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class SwitchWithoutDefaultCheck extends SquidCheck<LexerlessGrammar> {

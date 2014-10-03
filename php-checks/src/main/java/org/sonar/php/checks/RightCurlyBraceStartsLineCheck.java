@@ -29,6 +29,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1109",
+  name = "Right curly braces should be located at the beginning of lines of code",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class RightCurlyBraceStartsLineCheck extends SquidCheck<LexerlessGrammar> {

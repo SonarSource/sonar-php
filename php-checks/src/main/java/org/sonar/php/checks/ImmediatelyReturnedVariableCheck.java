@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1488",
+  name = "Local variables should not be declared and then immediately returned or thrown",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class ImmediatelyReturnedVariableCheck extends SquidCheck<LexerlessGrammar> {

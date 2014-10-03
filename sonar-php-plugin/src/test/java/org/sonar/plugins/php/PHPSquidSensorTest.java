@@ -22,13 +22,17 @@ package org.sonar.plugins.php;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
+import org.sonar.api.profiles.AnnotationProfileParser;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
@@ -36,6 +40,7 @@ import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.scan.filesystem.FileQuery;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
+import org.sonar.api.utils.ValidationMessages;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -47,6 +52,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PHPSquidSensorTest {
+
 
   private Project project;
   private final ModuleFileSystem fileSystem = mock(ModuleFileSystem.class);
@@ -64,7 +70,8 @@ public class PHPSquidSensorTest {
     project = mock(Project.class);
     when(project.getFileSystem()).thenReturn(pfs);
 
-    sensor = spy(new PHPSquidSensor(mock(RulesProfile.class), mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory));
+    CheckFactory checkFactory =  new CheckFactory(mock(ActiveRules.class));
+    sensor = spy(new PHPSquidSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory));
   }
 
   @Test

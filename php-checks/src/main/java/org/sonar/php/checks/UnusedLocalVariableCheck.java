@@ -37,6 +37,7 @@ import java.util.Iterator;
 
 @Rule(
   key = "S1481",
+  name = "Unused local variables should be removed",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {

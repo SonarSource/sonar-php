@@ -36,6 +36,7 @@ import java.util.List;
 
 @Rule(
   key = "S103",
+  name = "Lines should not be too long",
   priority = Priority.MAJOR)
 public class LineLengthCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 

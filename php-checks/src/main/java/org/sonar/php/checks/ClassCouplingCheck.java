@@ -40,6 +40,7 @@ import java.util.Set;
 
 @Rule(
   key = "S1200",
+  name = "Classes should not be coupled to too many other classes (Single Responsibility Principle)",
   priority = Priority.MAJOR)
 public class ClassCouplingCheck extends SquidCheck<LexerlessGrammar> {
 

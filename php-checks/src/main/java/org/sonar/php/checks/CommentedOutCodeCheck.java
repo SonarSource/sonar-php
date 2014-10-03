@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S125",
+  name = "Sections of code should not be \"commented out\"",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {

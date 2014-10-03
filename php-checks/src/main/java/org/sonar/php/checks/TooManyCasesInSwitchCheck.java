@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1479",
+  name = "Switch statements should not have too many case clauses",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyCasesInSwitchCheck extends SquidCheck<LexerlessGrammar> {

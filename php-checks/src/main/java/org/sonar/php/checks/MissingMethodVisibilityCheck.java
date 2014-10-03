@@ -32,6 +32,7 @@ import java.util.Set;
 
 @Rule(
   key = "S1784",
+  name = "Method visibility should be explicitly declared",
   priority = Priority.MINOR)
 public class MissingMethodVisibilityCheck extends SquidCheck<LexerlessGrammar> {
 

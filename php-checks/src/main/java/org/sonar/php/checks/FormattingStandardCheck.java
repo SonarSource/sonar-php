@@ -41,6 +41,7 @@ import java.util.Arrays;
 
 @Rule(
   key = "S1808",
+  name = "Source code should comply with formatting standards",
   priority = Priority.MINOR)
 public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
 

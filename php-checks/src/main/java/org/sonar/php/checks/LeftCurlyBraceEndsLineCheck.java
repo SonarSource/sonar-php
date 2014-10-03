@@ -31,6 +31,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1105",
+  name = "An open curly brace should be located at the end of a line",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class LeftCurlyBraceEndsLineCheck extends SquidCheck<LexerlessGrammar> {

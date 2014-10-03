@@ -33,6 +33,7 @@ import java.util.Map;
 
 @Rule(
   key = "S122",
+  name = "Statements should be on separate lines",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class OneStatementPerLineCheck extends SquidCheck<LexerlessGrammar> {

@@ -32,6 +32,7 @@ import java.io.RandomAccessFile;
 
 @Rule(
   key = "S113",
+  name = "Files should contain an empty new line at the end",
   priority = Priority.MINOR)
 public class MissingNewLineAtEOFCheck extends SquidCheck<LexerlessGrammar> {
 

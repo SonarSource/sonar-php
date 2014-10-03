@@ -28,6 +28,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1757",
+  name = "\"<?php\" and \"<?=\" tags should be used",
   priority = Priority.MINOR)
 public class OpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
 

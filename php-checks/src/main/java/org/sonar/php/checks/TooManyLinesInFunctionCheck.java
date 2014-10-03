@@ -32,6 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S138",
+  name = "Functions should not have too many lines",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyLinesInFunctionCheck extends SquidCheck<LexerlessGrammar> {

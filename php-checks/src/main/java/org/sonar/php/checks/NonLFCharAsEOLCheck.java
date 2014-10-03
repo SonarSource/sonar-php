@@ -35,6 +35,7 @@ import java.nio.charset.Charset;
 
 @Rule(
   key = "S1779",
+  name = "Only LF character (Unix-like) should be used to end lines",
   priority = Priority.MINOR)
 public class NonLFCharAsEOLCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 

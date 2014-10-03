@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S1131",
+  name = "Lines should not end with trailing whitespaces",
   priority = Priority.MAJOR)
 public class TrailingWhitespaceCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 

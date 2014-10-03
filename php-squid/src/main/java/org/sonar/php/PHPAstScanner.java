@@ -227,6 +227,7 @@ public class PHPAstScanner {
       .build());
 
     /* External visitors (typically Check ones) */
+
     for (SquidAstVisitor<LexerlessGrammar> visitor : visitors) {
       if (visitor instanceof CharsetAwareVisitor) {
         ((CharsetAwareVisitor) visitor).setCharset(conf.getCharset());

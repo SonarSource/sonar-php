@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S115",
+  name = "Constant names should comply with a naming convention",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ConstantNameCheck extends SquidCheck<LexerlessGrammar> {

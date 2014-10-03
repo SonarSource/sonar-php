@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1125",
+  name = "Literal boolean values should not be used in condition expressions",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar> {

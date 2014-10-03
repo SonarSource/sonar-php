@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S116",
+  name = "Field names should comply with a naming convention",
   priority = Priority.MAJOR)
 public class FieldNameCheck extends SquidCheck<LexerlessGrammar> {
 

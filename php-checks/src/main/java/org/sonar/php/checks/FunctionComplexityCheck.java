@@ -33,6 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1541",
+  name = "Functions should not be too complex",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class FunctionComplexityCheck extends SquidCheck<LexerlessGrammar> {

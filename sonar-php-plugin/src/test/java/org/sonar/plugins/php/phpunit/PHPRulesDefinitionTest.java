@@ -17,31 +17,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php;
+package org.sonar.plugins.php.phpunit;
 
+import org.junit.Test;
 import org.sonar.api.rules.AnnotationRuleParser;
 import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleRepository;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 import org.sonar.php.checks.CheckList;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.PHPRulesDefinition;
 
 import java.util.List;
 
-public class PHPRuleRepository extends RuleRepository {
+import static org.fest.assertions.Assertions.assertThat;
 
-  private static final String REPOSITORY_NAME = "SonarQube";
+public class PHPRulesDefinitionTest {
 
-  private final AnnotationRuleParser annotationRuleParser;
+  @Test
+  public void test() {
+    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition();
+    RulesDefinition.Context context = new RulesDefinition.Context();
+    rulesDefinition.define(context);
+    RulesDefinition.Repository repository = context.repository("php");
 
-  public PHPRuleRepository(AnnotationRuleParser annotationRuleParser) {
-    super(CheckList.REPOSITORY_KEY, Php.KEY);
-    setName(REPOSITORY_NAME);
-    this.annotationRuleParser = annotationRuleParser;
+    assertThat(repository.name()).isEqualTo("SonarQube");
+    assertThat(repository.language()).isEqualTo("php");
+    assertThat(repository.rules()).hasSize(CheckList.getChecks().size());
   }
-
-  @Override
-  public List<Rule> createRules() {
-    return annotationRuleParser.parse(CheckList.REPOSITORY_KEY, CheckList.getChecks());
-  }
-
 }

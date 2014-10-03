@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S100",
+  name = "Function names should comply with a naming convention",
   priority = Priority.MAJOR)
 public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
 

@@ -33,6 +33,7 @@ import java.util.List;
 
 @Rule(
   key = "S1124",
+  name = "Modifiers should be declared in the correct order",
   priority = Priority.MINOR)
 public class ModifiersOrderCheck extends SquidCheck<LexerlessGrammar> {
 

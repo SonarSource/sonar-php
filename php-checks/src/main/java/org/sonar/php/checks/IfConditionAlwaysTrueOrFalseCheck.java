@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1145",
+  name = "\"if\" statement conditions should not always evaluate to \"true\" or to \"false\"",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class IfConditionAlwaysTrueOrFalseCheck extends SquidCheck<LexerlessGrammar> {

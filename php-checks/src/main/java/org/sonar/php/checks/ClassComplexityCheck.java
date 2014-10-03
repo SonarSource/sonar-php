@@ -32,6 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1311",
+  name = "Classes should not be too complex",
   priority = Priority.MAJOR)
 public class ClassComplexityCheck extends SquidCheck<LexerlessGrammar> {
 

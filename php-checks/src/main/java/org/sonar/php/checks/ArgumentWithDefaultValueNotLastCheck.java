@@ -33,6 +33,7 @@ import java.util.List;
 
 @Rule(
   key = "S1788",
+  name = "Method arguments with default value should be last",
   priority = Priority.CRITICAL)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<LexerlessGrammar> {

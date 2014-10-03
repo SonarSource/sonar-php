@@ -38,6 +38,7 @@ import java.util.Map;
 
 @Rule(
   key = "S1172",
+  name = "Unused function parameters should be removed",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> {

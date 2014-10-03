@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1134",
+  name = "\"FIXME\" tags should be handled",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class FixmeTagPresenceCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {

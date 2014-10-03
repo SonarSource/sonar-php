@@ -35,6 +35,7 @@ import java.util.List;
 
 @Rule(
   key = "S105",
+  name = "Tabulation characters should not be used",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class TabCharacterCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
