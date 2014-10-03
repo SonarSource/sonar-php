@@ -20,10 +20,12 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.TokenType;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -36,12 +38,19 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyMethodsInClassCheck extends SquidCheck<LexerlessGrammar> {
 
-  private static final int DEFAULT = 20;
+  private static final int DEFAULT_THRESHOLD = 20;
+  private static final boolean DEFAULT_NON_PUBLIC = true;
 
   @RuleProperty(
     key = "maximumMethodThreshold",
-    defaultValue = "" + DEFAULT)
-  public int maximumMethodThreshold = DEFAULT;
+    defaultValue = "" + DEFAULT_THRESHOLD)
+  public int maximumMethodThreshold = DEFAULT_THRESHOLD;
+
+  @RuleProperty(
+    key = "countNonpublicMethods",
+    type = "BOOLEAN",
+    defaultValue = "" + DEFAULT_NON_PUBLIC)
+  public boolean countNonpublicMethods = DEFAULT_NON_PUBLIC;
 
   @Override
   public void init() {
@@ -60,15 +69,33 @@ public class TooManyMethodsInClassCheck extends SquidCheck<LexerlessGrammar> {
     }
   }
 
-  public static int getNumberOfMethods(AstNode classNode) {
+  public int getNumberOfMethods(AstNode classNode) {
     int nbMethod = 0;
 
     for (AstNode classStmt : classNode.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      if (classStmt.getFirstChild().is(PHPGrammar.METHOD_DECLARATION)) {
+      AstNode classMember = classStmt.getFirstChild();
+      if (classMember.is(PHPGrammar.METHOD_DECLARATION) && !isExcluded(classMember)) {
         nbMethod++;
+
       }
     }
     return nbMethod;
+  }
+
+  /**
+   * Return true if method is private or protected.
+   */
+  private boolean isExcluded(AstNode methodDec) {
+    if (!countNonpublicMethods) {
+
+      for (AstNode modifier : methodDec.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
+        TokenType modifierType = modifier.getFirstChild().getToken().getType();
+        if (PHPKeyword.PROTECTED.equals(modifierType) || PHPKeyword.PRIVATE.equals(modifierType)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }
