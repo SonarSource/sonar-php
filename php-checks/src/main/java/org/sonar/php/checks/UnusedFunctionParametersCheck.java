@@ -132,21 +132,11 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
   public void leaveNode(AstNode astNode) {
     if (astNode.is(FUNCTION_DECLARATIONS) && !FunctionUtils.isAbstractMethod(astNode)) {
       // leave scope
-      if (!isOverriding(astNode)) {
+      if (!FunctionUtils.isOverriding(astNode)) {
         reportUnusedArguments(astNode);
       }
       currentScope = currentScope.outerScope;
     }
-  }
-
-  private static boolean isOverriding(AstNode functionDec) {
-    Token functionToken = functionDec.getToken();
-    for (Trivia comment : functionToken.getTrivia()) {
-      if (StringUtils.containsIgnoreCase(comment.getToken().getValue(), "@inheritdoc")) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @Override

@@ -25,6 +25,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
+import com.sonar.sslr.api.Trivia;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -62,6 +64,22 @@ public class FunctionUtils {
   public static boolean isAbstractMethod(AstNode methodDec) {
     return methodDec.is(PHPGrammar.METHOD_DECLARATION)
       && methodDec.getFirstChild(PHPGrammar.METHOD_BODY).getFirstChild().is(PHPPunctuator.SEMICOLON);
+  }
+
+  /**
+   * Return wether the method is overriding a parent method or not.
+   *
+   * @param methodDec METHOD_DECLARATION
+   * @return true if method has tag "@inheritdoc" in it's doc comment.
+   */
+  public static boolean isOverriding(AstNode methodDec) {
+    Token functionToken = methodDec.getToken();
+    for (Trivia comment : functionToken.getTrivia()) {
+      if (StringUtils.containsIgnoreCase(comment.getToken().getValue(), "@inheritdoc")) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
