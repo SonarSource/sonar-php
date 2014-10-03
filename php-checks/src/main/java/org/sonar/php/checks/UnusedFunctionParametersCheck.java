@@ -133,7 +133,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
     if (astNode.is(FUNCTION_DECLARATIONS) && !FunctionUtils.isAbstractMethod(astNode)) {
       // leave scope
       if (!FunctionUtils.isOverriding(astNode)) {
-        reportUnusedArguments(astNode);
+        reportUnusedArguments();
       }
       currentScope = currentScope.outerScope;
     }
@@ -144,7 +144,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
     currentScope = null;
   }
 
-  public void reportUnusedArguments(AstNode functionNode) {
+  public void reportUnusedArguments() {
     int nbUnusedArgs = 0;
     StringBuilder builder = new StringBuilder();
 

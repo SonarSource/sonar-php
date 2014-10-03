@@ -139,7 +139,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
 
   private boolean isExcluded(AstNode methodDec) {
     String methodName = methodDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
-    return isStatic(methodDec) || isConstructor(methodDec, methodName) || isSetter(methodDec, methodName);
+    return isStatic(methodDec) || isConstructor(methodName) || isSetter(methodName);
   }
 
   private void checkLocalVariable(AstNode assignmentExpr) {
@@ -176,11 +176,11 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
     return false;
   }
 
-  private boolean isSetter(AstNode methodDeclaration, String methodName) {
+  private boolean isSetter(String methodName) {
     return methodName.length() > 2 && "set".equalsIgnoreCase(methodName.substring(0, 3));
   }
 
-  private boolean isConstructor(AstNode methodDeclaration, String methodName) {
+  private boolean isConstructor(String methodName) {
     return classState.className.equals(methodName) || "__construct".equals(methodName);
   }
 
