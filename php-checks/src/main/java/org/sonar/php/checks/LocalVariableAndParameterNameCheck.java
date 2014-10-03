@@ -26,6 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -57,13 +58,13 @@ public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGram
   @Override
   public void init() {
     pattern = Pattern.compile(format);
-    subscribeTo(CheckUtils.functions());
+    subscribeTo(FunctionUtils.functions());
     subscribeTo(PHPGrammar.ASSIGNMENT_EXPR);
   }
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.functions())) {
+    if (astNode.is(FunctionUtils.functions())) {
       enterScope();
       checkParameters(astNode);
     } else if (inScope()) {
@@ -73,7 +74,7 @@ public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGram
 
   @Override
   public void leaveNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.functions())) {
+    if (astNode.is(FunctionUtils.functions())) {
       leaveScope();
     }
   }
@@ -91,7 +92,7 @@ public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGram
   }
 
   private void checkParameters(AstNode functionDec) {
-    for (AstNode parameter : CheckUtils.getFunctionParameters(functionDec)) {
+    for (AstNode parameter : FunctionUtils.getFunctionParameters(functionDec)) {
       String paramName = parameter.getTokenOriginalValue();
 
       if (!isCompliant(paramName)) {

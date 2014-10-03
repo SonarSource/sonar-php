@@ -24,6 +24,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -39,13 +40,13 @@ public class ImmediatelyReturnedVariableCheck extends SquidCheck<LexerlessGramma
 
   @Override
   public void init() {
-    subscribeTo(CheckUtils.functions());
+    subscribeTo(FunctionUtils.functions());
     subscribeTo(PHPGrammar.EXPRESSION_STATEMENT);
   }
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.functions())) {
+    if (astNode.is(FunctionUtils.functions())) {
       inFunction = true;
     }
     if (inFunction && astNode.is(PHPGrammar.EXPRESSION_STATEMENT)) {
@@ -55,7 +56,7 @@ public class ImmediatelyReturnedVariableCheck extends SquidCheck<LexerlessGramma
 
   @Override
   public void leaveNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.functions())) {
+    if (astNode.is(FunctionUtils.functions())) {
       inFunction = false;
     }
   }

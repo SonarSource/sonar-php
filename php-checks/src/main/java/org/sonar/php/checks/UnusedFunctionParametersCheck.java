@@ -28,7 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -100,7 +100,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.is(FUNCTION_DECLARATIONS) && !CheckUtils.isAbstractMethod(astNode)) {
+    if (astNode.is(FUNCTION_DECLARATIONS) && !FunctionUtils.isAbstractMethod(astNode)) {
       // enter new scope
       currentScope = new Scope(currentScope, astNode);
 
@@ -130,7 +130,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
 
   @Override
   public void leaveNode(AstNode astNode) {
-    if (astNode.is(FUNCTION_DECLARATIONS) && !CheckUtils.isAbstractMethod(astNode)) {
+    if (astNode.is(FUNCTION_DECLARATIONS) && !FunctionUtils.isAbstractMethod(astNode)) {
       // leave scope
       if (!isOverriding(astNode)) {
         reportUnusedArguments(astNode);

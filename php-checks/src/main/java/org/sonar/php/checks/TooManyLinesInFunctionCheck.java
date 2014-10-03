@@ -25,7 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -59,12 +59,12 @@ public class TooManyLinesInFunctionCheck extends SquidCheck<LexerlessGrammar> {
 
     if (nbLines > max) {
       getContext().createLineViolation(this, "This function {0} has {1} lines, which is greater than the {2} lines authorized. Split it into smaller functions.",
-        astNode, CheckUtils.getFunctionName(astNode), nbLines, max);
+        astNode, FunctionUtils.getFunctionName(astNode), nbLines, max);
     }
   }
 
   public static int getNumberOfLine(AstNode functionNode) {
-    if (CheckUtils.isAbstractMethod(functionNode)) {
+    if (FunctionUtils.isAbstractMethod(functionNode)) {
       return 0;
     }
     AstNode functionBlock = getFunctionBlock(functionNode);

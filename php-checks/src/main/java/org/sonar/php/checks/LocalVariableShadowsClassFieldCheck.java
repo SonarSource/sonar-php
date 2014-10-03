@@ -26,6 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -151,7 +152,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
   }
 
   private void checkParameters(AstNode functionDec) {
-    for (AstNode parameter : CheckUtils.getFunctionParameters(functionDec)) {
+    for (AstNode parameter : FunctionUtils.getFunctionParameters(functionDec)) {
       String name = parameter.getTokenOriginalValue();
 
       if (classState.hasFieldNamed(name)) {
