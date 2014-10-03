@@ -33,7 +33,8 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S116",
   name = "Field names should comply with a naming convention",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION})
 public class FieldNameCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";

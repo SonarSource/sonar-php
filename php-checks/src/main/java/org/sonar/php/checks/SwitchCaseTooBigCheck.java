@@ -31,7 +31,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1151",
   name = "\"switch/case\" clauses should not have too many lines",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class SwitchCaseTooBigCheck extends SquidCheck<LexerlessGrammar> {
 

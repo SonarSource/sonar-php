@@ -31,7 +31,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1448",
   name = "Classes should not have too many methods",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyMethodsInClassCheck extends SquidCheck<LexerlessGrammar> {
 

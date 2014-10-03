@@ -29,7 +29,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1106",
   name = "An open curly brace should be located at the beginning of a line",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION})
 public class LeftCurlyBraceStartsLineCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

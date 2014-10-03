@@ -19,29 +19,17 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import org.sonar.check.Priority;
-import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+public interface PHPRuleTags {
 
-@Rule(
-  key = "S1765",
-  name = "The \"var\" keyword should not be used",
-  priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
-public class VarKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
-
-  @Override
-  public void init() {
-    subscribeTo(
-      PHPKeyword.VAR);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Replace the \"var\" keyword with the modifier \"public\".", astNode);
-  }
-
+  String CONVENTION = "convention";
+  String CWE = "cwe";
+  String BRAIN_OVERLOAD = "brain-overload";
+  String BUG = "bug";
+  String PSR2 = "psr2";
+  String PSR1 = "psr1";
+  String SECURITY = "security";
+  String CERT = "cert";
+  String UNUSED = "unused";
+  String PITFAIL = "pitfail";
+  String MISRA_C = "misra-c";
 }

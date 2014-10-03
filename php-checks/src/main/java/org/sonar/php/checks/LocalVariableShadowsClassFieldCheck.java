@@ -40,7 +40,8 @@ import java.util.Set;
 @Rule(
   key = "S1117",
   name = "Local variables should not have the same name as class fields",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.PITFAIL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGrammar> {
 

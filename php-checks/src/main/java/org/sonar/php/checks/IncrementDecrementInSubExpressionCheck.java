@@ -31,7 +31,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S881",
   name = "Increment (++) and decrement (--) operators should not be mixed with other operators in an expression",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CERT, PHPRuleTags.MISRA_C})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class IncrementDecrementInSubExpressionCheck extends SquidCheck<LexerlessGrammar> {
 

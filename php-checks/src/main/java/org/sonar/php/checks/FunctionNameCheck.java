@@ -32,7 +32,8 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S100",
   name = "Function names should comply with a naming convention",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION})
 public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";

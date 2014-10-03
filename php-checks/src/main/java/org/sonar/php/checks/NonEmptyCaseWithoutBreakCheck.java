@@ -33,7 +33,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S128",
   name = "Switch cases should end with an unconditional break statement",
-  priority = Priority.CRITICAL)
+  priority = Priority.CRITICAL,
+  tags = {PHPRuleTags.CERT, PHPRuleTags.CWE, PHPRuleTags.PITFAIL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<LexerlessGrammar> {
 

@@ -33,7 +33,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1311",
   name = "Classes should not be too complex",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 public class ClassComplexityCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final int DEFAULT = 200;

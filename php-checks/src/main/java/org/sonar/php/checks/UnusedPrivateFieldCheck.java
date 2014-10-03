@@ -37,7 +37,8 @@ import java.util.Map;
 @Rule(
   key = "S1068",
   name = "Unused private fields should be removed",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class UnusedPrivateFieldCheck extends SquidCheck<LexerlessGrammar> {
 

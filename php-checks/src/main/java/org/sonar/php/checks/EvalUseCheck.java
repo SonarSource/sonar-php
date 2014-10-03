@@ -30,7 +30,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1523",
   name = "\"eval\" function should not be used",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.SECURITY})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class EvalUseCheck extends SquidCheck<LexerlessGrammar> {
 
