@@ -25,7 +25,7 @@ package org.sonar.plugins.php;
 public class MockUtils {
 
   public static final String PHPUNIT_REPORT_DIR = "/org/sonar/plugins/php/phpunit/sensor/";
-  public static final String PHPUNIT_REPORT = PHPUNIT_REPORT_DIR + "phpunit.xml";
+  public static final String PHPUNIT_REPORT_NAME = PHPUNIT_REPORT_DIR + "phpunit.xml";
   public static final String PHPUNIT_COVERAGE_REPORT = PHPUNIT_REPORT_DIR + "phpunit.coverage.xml";
 
   private MockUtils() {

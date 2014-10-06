@@ -64,7 +64,7 @@ public class PhpPlugin extends SonarPlugin {
    * Gets the extensions.
    *
    * @return the extensions
-   * @see org.sonar.api.Plugin#getExtensions()
+   * @see org.sonar.api.SonarPlugin#getExtensions()
    */
   public List getExtensions() {
     return ImmutableList.of(

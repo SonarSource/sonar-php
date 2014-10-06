@@ -24,6 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.api.scan.filesystem.FileQuery;
@@ -45,10 +49,12 @@ public class PhpUnitSensor implements Sensor {
 
   private final PhpUnitCoverageResultParser coverageParser;
   private final PhpUnitResultParser parser;
-  private final ModuleFileSystem fileSystem;
+  private final FileSystem fileSystem;
+  private final FilePredicates filePredicates;
 
-  public PhpUnitSensor(ModuleFileSystem fileSystem, Settings settings, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
+  public PhpUnitSensor(FileSystem fileSystem, Settings settings, PhpUnitResultParser parser, PhpUnitCoverageResultParser coverageParser) {
     this.fileSystem = fileSystem;
+    this.filePredicates = fileSystem.predicates();
     this.settings = settings;
     this.parser = parser;
     this.coverageParser = coverageParser;
@@ -106,7 +112,8 @@ public class PhpUnitSensor implements Sensor {
    * {@inheritDoc}
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return !fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY)).isEmpty();
+    return fileSystem.hasFiles((filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN))));
+
   }
 
   /**
