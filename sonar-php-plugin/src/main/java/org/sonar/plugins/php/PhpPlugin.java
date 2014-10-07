@@ -27,7 +27,6 @@ import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.core.PhpCommonRulesEngine;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
-import org.sonar.plugins.php.core.PhpSourceImporter;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
@@ -72,7 +71,6 @@ public class PhpPlugin extends SonarPlugin {
       Php.class,
 
       // Core extensions
-      PhpSourceImporter.class,
       PhpSourceCodeColorizer.class,
       NoSonarAndCommentedOutLocSensor.class,
 
