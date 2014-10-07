@@ -28,7 +28,7 @@ public class CombinedScalarTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.COMBINED_SCALAR);
+    setTestedRule(PHPGrammar.COMBINED_SCALAR);
   }
 
   @Test

@@ -20,19 +20,18 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1603",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class ConstructorDeclarationCheck extends SquidCheck<Grammar> {
+public class ConstructorDeclarationCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void init() {
@@ -49,7 +48,7 @@ public class ConstructorDeclarationCheck extends SquidCheck<Grammar> {
   }
 
   private static AstNode getDeprecatedConstructor(AstNode astNode) {
-    String className = astNode.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
+    String className = astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
 
     for (AstNode classStmt : astNode.getChildren(PHPGrammar.CLASS_STATEMENT)) {
       AstNode stmt = classStmt.getFirstChild();
@@ -62,6 +61,6 @@ public class ConstructorDeclarationCheck extends SquidCheck<Grammar> {
   }
 
   private static String getMethodName(AstNode method) {
-    return method.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue();
+    return method.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
   }
 }

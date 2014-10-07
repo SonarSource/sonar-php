@@ -28,7 +28,7 @@ public class NewIfStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.ALTERNATIVE_IF_STATEMENT);
+    setTestedRule(PHPGrammar.ALTERNATIVE_IF_STATEMENT);
   }
 
   @Test

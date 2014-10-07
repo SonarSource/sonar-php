@@ -28,7 +28,7 @@ public class ReferenceVariableTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.REFERENCE_VARIABLE);
+    setTestedRule(PHPGrammar.REFERENCE_VARIABLE);
   }
 
   @Test

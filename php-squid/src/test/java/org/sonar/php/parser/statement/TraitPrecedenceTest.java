@@ -28,7 +28,7 @@ public class TraitPrecedenceTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.TRAIT_PRECEDENCE);
+    setTestedRule(PHPGrammar.TRAIT_PRECEDENCE);
   }
 
   @Test

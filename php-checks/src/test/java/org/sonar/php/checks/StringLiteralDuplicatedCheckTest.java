@@ -34,7 +34,8 @@ public class StringLiteralDuplicatedCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(10).withMessage("Define a constant instead of duplicating this literal \"aaaaa\" 3 times.")
-      .next().atLine(14).withMessage("Define a constant instead of duplicating this literal \"name1\" 4 times.")
+      .next().atLine(14).withMessage("Define a constant instead of duplicating this literal \"$toto\" 3 times.")
+      .next().atLine(18).withMessage("Define a constant instead of duplicating this literal \"name1\" 4 times.")
       .noMore();
   }
 
@@ -44,7 +45,7 @@ public class StringLiteralDuplicatedCheckTest extends CheckTest {
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(14)
+      .next().atLine(18)
       .noMore();
   }
 }

@@ -28,13 +28,12 @@ public class KeywordTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.KEYWORDS);
+    setTestedRule(PHPGrammar.KEYWORDS);
   }
 
   @Test
   public void test() {
     // Exact list of keywords from PHP reference manual
-    matches("__halt_compiler");
     matches("abstract");
     matches("and");
     matches("array");

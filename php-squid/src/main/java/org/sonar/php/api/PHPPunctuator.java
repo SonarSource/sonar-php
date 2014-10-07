@@ -21,8 +21,9 @@ package org.sonar.php.api;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
+import org.sonar.sslr.grammar.GrammarRuleKey;
 
-public enum PHPPunctuator implements TokenType {
+public enum PHPPunctuator implements TokenType, GrammarRuleKey {
 
   ANDEQUAL("&="),
   CONCATEQUAL(".="),
@@ -82,8 +83,8 @@ public enum PHPPunctuator implements TokenType {
   AT("@"),
   BANG("!"),
   QUERY("?"),
-  COLON(":"),
   DOUBLECOLON("::"),
+  COLON(":"),
   NS_SEPARATOR("\\");
 
   private final String value;
@@ -101,7 +102,6 @@ public enum PHPPunctuator implements TokenType {
   public String getName() {
     return name();
   }
-
 
   @Override
   public String getValue() {

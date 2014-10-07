@@ -17,10 +17,9 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks.formattingstandardcheck;
+package org.sonar.php.checks.formatting;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
@@ -61,7 +60,7 @@ public class FunctionSpacingCheck extends SpacingCheck {
   private void checkSpaceAfterFunctionName(FormattingStandardCheck formattingCheck, AstNode node) {
     Token lParenToken = node.getFirstChild(PHPPunctuator.LPARENTHESIS).getToken();
     Token funcNameToken = node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST) ?
-      node.getPreviousAstNode().getLastToken() : node.getFirstChild(GenericTokenType.IDENTIFIER).getToken();
+      node.getPreviousAstNode().getLastToken() : node.getFirstChild(PHPGrammar.IDENTIFIER).getToken();
 
     if (getNbSpaceBetween(funcNameToken, lParenToken) != 0) {
       formattingCheck.reportIssue("Remove all space between the method name \"" + funcNameToken.getOriginalValue() + "\" and the opening parenthesis.", node);

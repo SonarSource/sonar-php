@@ -28,7 +28,7 @@ public class ClassNameTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.CLASS_NAME);
+    setTestedRule(PHPGrammar.CLASS_NAME);
   }
 
   @Test

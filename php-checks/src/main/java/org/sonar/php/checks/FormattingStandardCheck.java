@@ -20,30 +20,31 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.checks.formattingstandardcheck.ControlStructureSpacingCheck;
-import org.sonar.php.checks.formattingstandardcheck.CurlyBraceCheck;
-import org.sonar.php.checks.formattingstandardcheck.ExtendsImplementsLineCheck;
-import org.sonar.php.checks.formattingstandardcheck.FunctionSpacingCheck;
-import org.sonar.php.checks.formattingstandardcheck.IndentationCheck;
-import org.sonar.php.checks.formattingstandardcheck.NamespaceAndUseStatementCheck;
-import org.sonar.php.checks.formattingstandardcheck.PunctuatorSpacingCheck;
+import org.sonar.php.checks.formatting.ControlStructureSpacingCheck;
+import org.sonar.php.checks.formatting.CurlyBraceCheck;
+import org.sonar.php.checks.formatting.ExtendsImplementsLineCheck;
+import org.sonar.php.checks.formatting.FunctionSpacingCheck;
+import org.sonar.php.checks.formatting.IndentationCheck;
+import org.sonar.php.checks.formatting.NamespaceAndUseStatementCheck;
+import org.sonar.php.checks.formatting.PunctuatorSpacingCheck;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 @Rule(
   key = "S1808",
   priority = Priority.MINOR)
-public class FormattingStandardCheck extends SquidCheck<Grammar> {
+public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
 
-  public static final GrammarRuleKey[] CLASS_AND_FUNCTION = {
+  private static final GrammarRuleKey[] CLASS_AND_FUNCTION = {
     PHPGrammar.CLASS_DECLARATION,
     PHPGrammar.INTERFACE_DECLARATION,
     PHPGrammar.TRAIT_ADAPTATIONS,
@@ -51,7 +52,7 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     PHPGrammar.FUNCTION_DECLARATION
   };
 
-  public static final GrammarRuleKey[] CONTROL_STRUCTURE = {
+  private static final GrammarRuleKey[] CONTROL_STRUCTURE = {
     PHPGrammar.IF_STATEMENT,
     PHPGrammar.ELSEIF_CLAUSE,
     PHPGrammar.ELSE_CLAUSE,
@@ -229,4 +230,11 @@ public class FormattingStandardCheck extends SquidCheck<Grammar> {
     getContext().createLineViolation(this, msg, node);
   }
 
+  public static GrammarRuleKey[] getClassAndFunctionNodes() {
+    return Arrays.copyOf(CLASS_AND_FUNCTION, CLASS_AND_FUNCTION.length);
+  }
+
+  public static GrammarRuleKey[] getControlStructureNodes() {
+    return Arrays.copyOf(CONTROL_STRUCTURE, CONTROL_STRUCTURE.length);
+  }
 }

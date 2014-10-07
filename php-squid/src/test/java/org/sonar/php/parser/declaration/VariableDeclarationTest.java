@@ -28,7 +28,7 @@ public class VariableDeclarationTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.VARIABLE_DECLARATION);
+    setTestedRule(PHPGrammar.VARIABLE_DECLARATION);
   }
 
   @Test

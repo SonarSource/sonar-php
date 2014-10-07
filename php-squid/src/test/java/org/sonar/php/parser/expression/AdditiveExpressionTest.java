@@ -28,7 +28,7 @@ public class AdditiveExpressionTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.ADDITIVE_EXPR);
+    setTestedRule(PHPGrammar.ADDITIVE_EXPR);
   }
 
   @Test

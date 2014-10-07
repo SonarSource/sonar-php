@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -29,6 +28,7 @@ import org.sonar.php.checks.utils.LocalVariableScope;
 import org.sonar.php.checks.utils.Variable;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 import java.util.ArrayDeque;
@@ -39,7 +39,7 @@ import java.util.Iterator;
   key = "S1481",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
+public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
   private Deque<LocalVariableScope> scopes = new ArrayDeque<LocalVariableScope>();
 
@@ -50,7 +50,9 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
       PHPGrammar.GLOBAL_STATEMENT,
       PHPGrammar.STATIC_STATEMENT,
       PHPGrammar.LEXICAL_VAR_LIST,
-      PHPGrammar.VARIABLE,
+      PHPGrammar.MEMBER_EXPRESSION,
+      PHPGrammar.SIMPLE_ENCAPS_VARIABLE,
+      PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE,
 
       PHPGrammar.ASSIGNMENT_EXPR,
       PHPGrammar.LIST_EXPR);
@@ -77,8 +79,11 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
       } else if (astNode.is(PHPGrammar.LEXICAL_VAR_LIST)) {
         getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
 
-      } else if (astNode.is(PHPGrammar.VARIABLE)) {
-        useLocalVariable(astNode);
+      } else if (astNode.is(PHPGrammar.MEMBER_EXPRESSION, PHPGrammar.SIMPLE_ENCAPS_VARIABLE)) {
+        getCurrentScope().useVariable(astNode.getFirstChild());
+
+      } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
+        getCurrentScope().useVariale("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION).getTokenOriginalValue());
 
       } else if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
         declareNewLocalVariable(astNode);
@@ -97,13 +102,6 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
     }
   }
 
-  private void useLocalVariable(AstNode astNode) {
-    AstNode child = astNode.getFirstChild();
-    if (child.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
-      getCurrentScope().useVariable(astNode.getFirstChild());
-    }
-  }
-
   private void declareNewLocalVariable(AstNode astNode) {
     AstNode leftExpr = getLeftHandExpression(astNode);
     if (leftExpr != null && leftExpr.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
@@ -114,7 +112,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<Grammar> {
   private AstNode getLeftHandExpression(AstNode assignmentExpr) {
     AstNode leftExpr = assignmentExpr.getFirstChild();
 
-    if (leftExpr.is(PHPGrammar.VARIABLE)) {
+    if (leftExpr.is(PHPGrammar.MEMBER_EXPRESSION)) {
       return leftExpr.getFirstChild();
     } else if (leftExpr.is(PHPGrammar.POSTFIX_EXPR)) {
       return leftExpr.getFirstChild().getFirstChild();

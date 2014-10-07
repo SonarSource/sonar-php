@@ -21,7 +21,6 @@ package org.sonar.plugins.php;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.checks.AnnotationCheckFactory;
@@ -55,6 +54,7 @@ import org.sonar.squidbridge.api.SourceFile;
 import org.sonar.squidbridge.api.SourceFunction;
 import org.sonar.squidbridge.indexer.QueryByParent;
 import org.sonar.squidbridge.indexer.QueryByType;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.File;
 import java.util.Collection;
@@ -70,7 +70,7 @@ public class PHPSquidSensor implements Sensor {
   private final ResourcePerspectives resourcePerspectives;
   private final ModuleFileSystem fileSystem;
   private final FileLinesContextFactory fileLinesContextFactory;
-  private AstScanner<Grammar> scanner;
+  private AstScanner<LexerlessGrammar> scanner;
   private SensorContext context;
   private Project project;
   private Settings settings;
@@ -96,7 +96,7 @@ public class PHPSquidSensor implements Sensor {
     this.project = project;
 
     PHPSquid squid = new PHPSquid();
-    List<SquidAstVisitor<Grammar>> visitors = getCheckVisitors();
+    List<SquidAstVisitor<LexerlessGrammar>> visitors = getCheckVisitors();
     visitors.add(new FileLinesVisitor(project, fileLinesContextFactory));
     visitors.add(new DependenciesVisitor(squid.getGraph()));
     this.scanner = PHPAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
@@ -188,7 +188,7 @@ public class PHPSquidSensor implements Sensor {
     return fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY));
   }
 
-  private List<SquidAstVisitor<Grammar>> getCheckVisitors() {
+  private List<SquidAstVisitor<LexerlessGrammar>> getCheckVisitors() {
     return Lists.newArrayList(annotationCheckFactory.getChecks());
   }
 }

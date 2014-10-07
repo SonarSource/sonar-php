@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks.formattingstandardcheck;
+package org.sonar.php.checks.formatting;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
@@ -29,7 +29,7 @@ import org.sonar.php.parser.PHPGrammar;
 public class ControlStructureSpacingCheck extends SpacingCheck {
 
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
-    if (formattingCheck.isOneSpaceBetweenKeywordAndNextToken && node.is(formattingCheck.CONTROL_STRUCTURE)) {
+    if (formattingCheck.isOneSpaceBetweenKeywordAndNextToken && node.is(FormattingStandardCheck.getControlStructureNodes())) {
       checkSpaceBetweenKeywordAndNextNode(formattingCheck, node);
     }
     if (formattingCheck.isOneSpaceAfterForLoopSemicolon && node.is(PHPGrammar.FOR_STATEMENT)) {

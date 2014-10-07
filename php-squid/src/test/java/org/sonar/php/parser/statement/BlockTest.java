@@ -28,7 +28,7 @@ public class BlockTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.BLOCK);
+    setTestedRule(PHPGrammar.BLOCK);
   }
 
   @Test

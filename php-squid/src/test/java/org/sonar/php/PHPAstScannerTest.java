@@ -21,13 +21,13 @@ package org.sonar.php;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.Grammar;
 import org.junit.Test;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.squidbridge.AstScanner;
 import org.sonar.squidbridge.api.SourceFile;
 import org.sonar.squidbridge.api.SourceProject;
 import org.sonar.squidbridge.indexer.QueryByType;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.File;
 
@@ -37,7 +37,7 @@ public class PHPAstScannerTest {
 
   @Test
   public void files() {
-    AstScanner<Grammar> scanner = PHPAstScanner.create(new PHPConfiguration(Charsets.UTF_8));
+    AstScanner<LexerlessGrammar> scanner = PHPAstScanner.create(new PHPConfiguration(Charsets.UTF_8));
     scanner.scanFiles(ImmutableList.of(new File("src/test/resources/metrics/lines.php"), new File("src/test/resources/metrics/lines_of_code.php")));
     SourceProject project = (SourceProject) scanner.getIndex().search(new QueryByType(SourceProject.class)).iterator().next();
     assertThat(project.getInt(PHPMetric.FILES)).isEqualTo(2);

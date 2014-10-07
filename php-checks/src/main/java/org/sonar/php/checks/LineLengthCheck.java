@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import com.google.common.io.Files;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.api.utils.SonarException;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.util.List;
 @Rule(
   key = "S103",
   priority = Priority.MAJOR)
-public class LineLengthCheck extends SquidCheck<Grammar> implements CharsetAwareVisitor {
+public class LineLengthCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   public static final int DEFAULT = 120;
   private Charset charset;

@@ -28,7 +28,7 @@ public class AssignmentExprTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.ASSIGNMENT_EXPR);
+    setTestedRule(PHPGrammar.ASSIGNMENT_EXPR);
   }
 
   @Test
@@ -50,7 +50,8 @@ public class AssignmentExprTest extends RuleTest {
     matches("$a -= $b");
 
     matches("$a = &$b");
-    matches("$a = &new Foo")
-    ;
+    matches("$a = &new Foo");
+
+    matches("$var = function () {}");
   }
 }

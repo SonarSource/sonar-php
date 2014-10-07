@@ -17,10 +17,9 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks.formattingstandardcheck;
+package org.sonar.php.checks.formatting;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.parser.PHPGrammar;
@@ -36,7 +35,7 @@ public class ExtendsImplementsLineCheck {
   }
 
   private void checkExtendsAndImplementsLine(FormattingStandardCheck formattingCheck, AstNode node) {
-    AstNode identifier = node.getFirstChild(GenericTokenType.IDENTIFIER);
+    AstNode identifier = node.getFirstChild(PHPGrammar.IDENTIFIER);
     String className = identifier.getTokenOriginalValue();
     int classNameLine = identifier.getTokenLine();
 

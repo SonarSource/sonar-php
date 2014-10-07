@@ -28,7 +28,7 @@ public class ThrowStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.THROW_STATEMENT);
+    setTestedRule(PHPGrammar.THROW_STATEMENT);
   }
 
   @Test

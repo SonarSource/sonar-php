@@ -36,3 +36,17 @@ switch ($a) {
     break;
 }
 
+//Support alternate switch syntax
+switch ($a):
+  case 0:
+  case 1:     // NOK
+    doSomething();
+  case 2:     // NOK
+    __halt_compiler();
+  case 3:     // OK
+    echo "";
+    // no break intentional
+  default:    // OK
+    doSomethingElse();
+endswitch;
+

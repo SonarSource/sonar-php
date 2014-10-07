@@ -28,7 +28,7 @@ public class InterfaceDeclarationTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.INTERFACE_DECLARATION);
+    setTestedRule(PHPGrammar.INTERFACE_DECLARATION);
   }
 
   @Test

@@ -28,7 +28,7 @@ public class StaticScalarTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.STATIC_SCALAR);
+    setTestedRule(PHPGrammar.STATIC_SCALAR);
   }
 
   @Test

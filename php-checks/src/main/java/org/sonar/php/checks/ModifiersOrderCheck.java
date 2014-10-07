@@ -22,19 +22,19 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.AstNodeType;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.List;
 
 @Rule(
   key = "S1124",
   priority = Priority.MINOR)
-public class ModifiersOrderCheck extends SquidCheck<Grammar> {
+public class ModifiersOrderCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final AstNodeType[] EXPECTED_ORDER = {
     PHPKeyword.FINAL,

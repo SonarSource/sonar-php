@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks.formattingStadardCheckTest;
+package org.sonar.php.checks.formatting;
 
 import org.junit.Test;
 import org.sonar.php.PHPAstScanner;
@@ -25,21 +25,28 @@ import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.squidbridge.api.SourceFile;
 
-public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTest {
+import java.io.File;
 
+public class ControlStructureSpacingTest extends FormattingStandardCheckTest {
+
+  private static final File TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "ControlStructureSpacingCheck.php");
 
   @Test
   public void defaultValue() throws IllegalAccessException {
-    activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
+    activeOnly("isOneSpaceBetweenKeywordAndNextToken", "isOneSpaceAfterForLoopSemicolon", "isSpaceForeachStatement");
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), check);
+    SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Move the use declarations after the namespace declarations.")
-      .next().atLine(4).withMessage("Add a blank line after this \"use\" declaration.")
-      .next().atLine(5).withMessage("Add a blank line after this \"namespace another\\bar\" declaration.")
-      .next().atLine(10).withMessage("Add a blank line after this \"use\" declaration.")
-      .next().atLine(14)
-      .next().atLine(19)
+      .next().atLine(6).withMessage("Put one space between this \"if\" keyword and the opening parenthesis.")
+      .next().atLine(8).withMessage("Put only one space between this \"if\" keyword and the opening parenthesis.")
+      .next().atLine(10).withMessage("Put one space between this \"else\" keyword and the opening curly brace.")
+
+      .next().atLine(29).withMessage("Put exactly one space after each \";\" character in the \"for\" statement.")
+
+      .next().atLine(39).withMessage("Put exactly one space after and before \"as\" in \"foreach\" statement.")
+      .next().atLine(40).withMessage("Put exactly one space after and before \"=>\" in \"foreach\" statement.")
+      .next().atLine(41).withMessage("Put exactly one space after and before \"as\" and \"=>\" in \"foreach\" statement.")
+
       .noMore();
   }
 
@@ -47,7 +54,7 @@ public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTe
   public void custom() throws IllegalAccessException {
     deactivateAll();
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), check);
+    SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }

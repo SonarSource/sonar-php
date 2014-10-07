@@ -28,7 +28,7 @@ public class LabelTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.LABEL);
+    setTestedRule(PHPGrammar.LABEL);
   }
 
   @Test

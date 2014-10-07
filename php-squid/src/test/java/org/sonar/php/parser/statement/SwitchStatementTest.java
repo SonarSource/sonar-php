@@ -28,7 +28,7 @@ public class SwitchStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.SWITCH_STATEMENT);
+    setTestedRule(PHPGrammar.SWITCH_STATEMENT);
   }
 
   @Test

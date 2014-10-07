@@ -28,7 +28,7 @@ public class DimensionalOffsetTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.DIMENSIONAL_OFFSET);
+    setTestedRule(PHPGrammar.DIMENSIONAL_OFFSET);
   }
 
   @Test

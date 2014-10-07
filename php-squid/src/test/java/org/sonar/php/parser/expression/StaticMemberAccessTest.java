@@ -28,7 +28,7 @@ public class StaticMemberAccessTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.CLASS_MEMBER_ACCESS);
+    setTestedRule(PHPGrammar.CLASS_MEMBER_ACCESS);
   }
 
   @Test

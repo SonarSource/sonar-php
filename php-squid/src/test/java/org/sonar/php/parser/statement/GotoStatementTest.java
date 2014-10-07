@@ -28,7 +28,7 @@ public class GotoStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.GOTO_STATEMENT);
+    setTestedRule(PHPGrammar.GOTO_STATEMENT);
   }
 
   @Test

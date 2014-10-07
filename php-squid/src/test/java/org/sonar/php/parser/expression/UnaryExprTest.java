@@ -28,7 +28,7 @@ public class UnaryExprTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.UNARY_EXPR);
+    setTestedRule(PHPGrammar.UNARY_EXPR);
   }
 
   @Test

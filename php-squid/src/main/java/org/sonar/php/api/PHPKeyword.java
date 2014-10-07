@@ -21,8 +21,9 @@ package org.sonar.php.api;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
+import org.sonar.sslr.grammar.GrammarRuleKey;
 
-public enum PHPKeyword implements TokenType {
+public enum PHPKeyword implements TokenType, GrammarRuleKey {
 
   HALT_COMPILER("__halt_compiler"),
   ABSTRACT("abstract"),
@@ -42,29 +43,29 @@ public enum PHPKeyword implements TokenType {
   DIE("die"),
   DO("do"),
   ECHO("echo"),
-  ELSE("else"),
   ELSEIF("elseif"),
+  ELSE("else"),
   EMPTY("empty"),
   ENDDECLARE("enddeclare"),
-  ENDFOR("endfor"),
   ENDFOREACH("endforeach"),
+  ENDFOR("endfor"),
   ENDIF("endif"),
   ENDSWITCH("endswitch"),
   ENDWHILE("endwhile"),
   EVAL("eval"),
   EXIT("exit"),
   EXTENDS("extends"),
-  FINAL("final"),
   FINALLY("finally"),
-  FOR("for"),
+  FINAL("final"),
   FOREACH("foreach"),
+  FOR("for"),
   FUNCTION("function"),
   GLOBAL("global"),
   GOTO("goto"),
   IF("if"),
   IMPLEMENTS("implements"),
-  INCLUDE("include"),
   INCLUDE_ONCE("include_once"),
+  INCLUDE("include"),
   INSTANCEOF("instanceof"),
   INSTEADOF("insteadof"),
   INTERFACE("interface"),
@@ -77,8 +78,8 @@ public enum PHPKeyword implements TokenType {
   PRIVATE("private"),
   PROTECTED("protected"),
   PUBLIC("public"),
-  REQUIRE("require"),
   REQUIRE_ONCE("require_once"),
+  REQUIRE("require"),
   RETURN("return"),
   STATIC("static"),
   SWITCH("switch"),
