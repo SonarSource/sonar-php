@@ -15,6 +15,13 @@
   <description>Enables analysis of PHP projects.</description>
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
 
+  <scm>
+    <connection>scm:git:git@github.com:SonarCommunity/sonar-php.git</connection>
+    <developerConnection>scm:git:git@github.com:SonarCommunity/sonar-php.git</developerConnection>
+    <url>https://github.com/SonarCommunity/sonar-php</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <properties>
     <sonar.pluginClass>org.sonar.plugins.php.PhpPlugin</sonar.pluginClass>
     <sonar.pluginName>PHP</sonar.pluginName>
