@@ -28,6 +28,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
 import org.sonar.php.PHPAstScanner;
+import org.sonar.test.TestUtils;
 
 import java.io.File;
 
@@ -48,14 +49,8 @@ public class FileLinesVisitorTest {
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     when(fileLinesContextFactory.createFor(any(Resource.class))).thenReturn(fileLinesContext);
 
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(fs.getBasedir()).thenReturn(new File("src/test/resources/"));
-
-    Project project = new Project("key");
-    project.setFileSystem(fs);
-
-    FileLinesVisitor visitor = new FileLinesVisitor(project, fileLinesContextFactory);
-    PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines.php"), visitor);
+    FileLinesVisitor visitor = new FileLinesVisitor(fileLinesContextFactory);
+    PHPAstScanner.scanSingleFile(TestUtils.getResource("/metrics/lines.php"), visitor);
 
     verify(fileLinesContext, times(4)).setIntValue(eq(CoreMetrics.NCLOC_DATA_KEY), anyInt(), eq(1));
     verify(fileLinesContext, times(6)).setIntValue(eq(CoreMetrics.COMMENT_LINES_DATA_KEY), anyInt(), eq(1));
