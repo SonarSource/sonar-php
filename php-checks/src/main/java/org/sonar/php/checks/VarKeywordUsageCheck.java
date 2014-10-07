@@ -28,7 +28,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1765",
-  priority = Priority.MAJOR)
+  name = "The \"var\" keyword should not be used",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class VarKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

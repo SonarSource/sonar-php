@@ -28,7 +28,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1793",
-  priority = Priority.MINOR)
+  name = "\"elseif\" keyword should be used in place of \"else if\" keywords",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class ElseIfSequenceKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

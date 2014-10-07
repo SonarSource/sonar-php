@@ -43,14 +43,12 @@ import java.util.Set;
  */
 public class FileLinesVisitor extends SquidAstVisitor<LexerlessGrammar> implements AstAndTokenVisitor {
 
-  private final Project project;
   private final FileLinesContextFactory fileLinesContextFactory;
 
   private final Set<Integer> linesOfCode = Sets.newHashSet();
   private final Set<Integer> linesOfComments = Sets.newHashSet();
 
-  public FileLinesVisitor(Project project, FileLinesContextFactory fileLinesContextFactory) {
-    this.project = project;
+  public FileLinesVisitor(FileLinesContextFactory fileLinesContextFactory) {
     this.fileLinesContextFactory = fileLinesContextFactory;
   }
 
@@ -70,7 +68,7 @@ public class FileLinesVisitor extends SquidAstVisitor<LexerlessGrammar> implemen
 
   @Override
   public void leaveFile(AstNode astNode) {
-    File sonarFile = File.fromIOFile(getContext().getFile(), project);
+    File sonarFile = File.create(getContext().getFile().getPath());
     FileLinesContext fileLinesContext = fileLinesContextFactory.createFor(sonarFile);
 
     int fileLength = getContext().peekSourceCode().getInt(PHPMetric.LINES);

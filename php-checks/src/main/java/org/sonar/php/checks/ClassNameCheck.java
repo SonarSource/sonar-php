@@ -32,7 +32,9 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S101",
-  priority = Priority.MAJOR)
+  name = "Class names should comply with a naming convention",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ClassNameCheck extends SquidCheck<LexerlessGrammar> {
 

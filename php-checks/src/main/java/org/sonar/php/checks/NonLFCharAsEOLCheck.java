@@ -35,7 +35,9 @@ import java.nio.charset.Charset;
 
 @Rule(
   key = "S1779",
-  priority = Priority.MINOR)
+  name = "Only LF character (Unix-like) should be used to end lines",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class NonLFCharAsEOLCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   private static final Logger LOG = LoggerFactory.getLogger(NonLFCharAsEOLCheck.class);

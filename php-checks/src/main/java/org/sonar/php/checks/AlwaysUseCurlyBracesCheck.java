@@ -29,7 +29,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S121",
-  priority = Priority.MAJOR)
+  name = "\"if/else/for/while/do\" statements should always use curly braces",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.CWE})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class AlwaysUseCurlyBracesCheck extends SquidCheck<LexerlessGrammar> {
 

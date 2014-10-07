@@ -36,7 +36,9 @@ import java.util.Set;
 
 @Rule(
   key = "S127",
-  priority = Priority.MAJOR)
+  name = "A loop's counter should not be assigned within the loop body",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.PITFAIL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ForLoopCounterChangedCheck extends SquidCheck<LexerlessGrammar> {
 

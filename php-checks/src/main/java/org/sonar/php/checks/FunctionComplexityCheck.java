@@ -25,7 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPMetric;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.api.SourceFunction;
 import org.sonar.squidbridge.checks.SquidCheck;
@@ -33,6 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1541",
+  name = "Functions should not be too complex",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class FunctionComplexityCheck extends SquidCheck<LexerlessGrammar> {
@@ -59,7 +60,7 @@ public class FunctionComplexityCheck extends SquidCheck<LexerlessGrammar> {
 
       getContext().createLineViolation(this,
         "The Cyclomatic Complexity of this function {0} is {1} which is greater than {2} authorized.", node,
-        CheckUtils.getFunctionName(node), function.getInt(PHPMetric.COMPLEXITY), threshold);
+        FunctionUtils.getFunctionName(node), function.getInt(PHPMetric.COMPLEXITY), threshold);
     }
   }
 

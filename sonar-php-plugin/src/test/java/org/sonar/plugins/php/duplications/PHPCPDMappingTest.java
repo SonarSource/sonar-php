@@ -25,6 +25,7 @@ import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Project;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.test.TestUtils;
@@ -42,8 +43,8 @@ public class PHPCPDMappingTest {
 
   @Before
   public void test() throws Exception {
-    ModuleFileSystem fs = mock(ModuleFileSystem.class);
-    when(fs.sourceCharset()).thenReturn(Charsets.UTF_8);
+    FileSystem fs = mock(FileSystem.class);
+    when(fs.encoding()).thenReturn(Charsets.UTF_8);
     Project project = mock(Project.class);
 
     PhpCPDMapping phpcpdMapping = new PhpCPDMapping(null, project, fs);

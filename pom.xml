@@ -95,7 +95,7 @@
     <license.title>SonarQube PHP Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-    <sonar.version>3.7</sonar.version>
+    <sonar.version>4.3</sonar.version>
     <sslr.version>1.20</sslr.version>
     <sonarCommonRules.version>1.2</sonarCommonRules.version>
   </properties>
@@ -114,11 +114,6 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.sonar</groupId>
-        <artifactId>sonar-channel</artifactId>
-        <version>${sonar.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.sonar</groupId>
         <artifactId>sonar-plugin-api</artifactId>
         <version>${sonar.version}</version>
         <exclusions>
@@ -131,7 +126,7 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.sonar</groupId>
-        <artifactId>sonar-squid</artifactId>
+        <artifactId>sonar-deprecated</artifactId>
         <version>${sonar.version}</version>
       </dependency>
       <dependency>

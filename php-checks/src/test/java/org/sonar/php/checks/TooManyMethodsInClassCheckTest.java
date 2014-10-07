@@ -29,15 +29,16 @@ public class TooManyMethodsInClassCheckTest extends CheckTest {
 
   private TooManyMethodsInClassCheck check = new TooManyMethodsInClassCheck();
 
+
   @Test
-  public void defaultValue() {
+  public void defaultValue()  {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyMethodsInClassCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void custom() {
+  public void custom_maximum_method_threshold() {
     check.maximumMethodThreshold = 2;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyMethodsInClassCheck.php"), check);
@@ -46,4 +47,16 @@ public class TooManyMethodsInClassCheckTest extends CheckTest {
       .next().atLine(12)
       .noMore();
   }
+
+  @Test
+  public void custom_count_non_public_method() {
+    check.maximumMethodThreshold = 2;
+    check.countNonpublicMethods = false;
+
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyMethodsInClassCheck.php"), check);
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(3)
+      .noMore();
+  }
+
 }

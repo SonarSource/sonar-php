@@ -41,7 +41,9 @@ import java.util.Arrays;
 
 @Rule(
   key = "S1808",
-  priority = Priority.MINOR)
+  name = "Source code should comply with formatting standards",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final GrammarRuleKey[] CLASS_AND_FUNCTION = {

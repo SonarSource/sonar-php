@@ -38,7 +38,9 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S1451",
-  priority = Priority.BLOCKER)
+  name = "Copyright and license headers should be defined",
+  priority = Priority.BLOCKER,
+  tags = {PHPRuleTags.CONVENTION})
 public class FileHeaderCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   private static final String DEFAULT_HEADER_FORMAT = "";

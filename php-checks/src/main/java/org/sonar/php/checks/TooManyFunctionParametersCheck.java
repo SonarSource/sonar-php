@@ -30,7 +30,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S107",
-  priority = Priority.MAJOR)
+  name = "Functions should not have too many parameters",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyFunctionParametersCheck extends SquidCheck<LexerlessGrammar> {
 

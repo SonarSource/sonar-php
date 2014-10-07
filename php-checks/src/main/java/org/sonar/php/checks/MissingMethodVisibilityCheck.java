@@ -32,7 +32,9 @@ import java.util.Set;
 
 @Rule(
   key = "S1784",
-  priority = Priority.MINOR)
+  name = "Method visibility should be explicitly declared",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION})
 public class MissingMethodVisibilityCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final Set<PHPKeyword> VISIBILITIES = ImmutableSet.of(

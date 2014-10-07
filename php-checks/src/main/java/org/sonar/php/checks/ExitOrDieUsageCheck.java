@@ -29,6 +29,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1799",
+  name = "\"exit(...)\" and \"die(...)\" statements should not be used",
   priority = Priority.CRITICAL)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class ExitOrDieUsageCheck extends SquidCheck<LexerlessGrammar> {

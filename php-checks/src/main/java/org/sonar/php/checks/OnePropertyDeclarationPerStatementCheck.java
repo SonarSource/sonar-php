@@ -28,7 +28,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1766",
-  priority = Priority.MINOR)
+  name = "More than one property should not be declared per statement",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class OnePropertyDeclarationPerStatementCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

@@ -34,7 +34,9 @@ import java.util.Deque;
 
 @Rule(
   key = "S1142",
-  priority = Priority.MAJOR)
+  name = "Functions should not contain too many return statements",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyReturnCheck extends SquidCheck<LexerlessGrammar> {
 

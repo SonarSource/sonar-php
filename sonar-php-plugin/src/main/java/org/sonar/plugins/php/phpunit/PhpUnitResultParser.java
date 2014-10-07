@@ -19,21 +19,22 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.thoughtworks.xstream.XStream;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
@@ -65,24 +66,19 @@ public class PhpUnitResultParser implements BatchExtension {
    * The context.
    */
   private SensorContext context;
-
-  /**
-   * The project.
-   */
-  private Project project;
-  private ModuleFileSystem moduleFileSystem;
+  private FileSystem fileSystem;
+  private FilePredicates filePredicates;
 
   /**
    * Instantiates a new php unit result parser.
    *
-   * @param project the project
    * @param context the context
    */
-  public PhpUnitResultParser(Project project, SensorContext context, ModuleFileSystem moduleFileSystem) {
+  public PhpUnitResultParser(SensorContext context, FileSystem fileSystem) {
     super();
-    this.project = project;
     this.context = context;
-    this.moduleFileSystem = moduleFileSystem;
+    this.fileSystem = fileSystem;
+    this.filePredicates = fileSystem.predicates();
   }
 
   /**
@@ -117,21 +113,11 @@ public class PhpUnitResultParser implements BatchExtension {
    *
    * @param report the unit test report
    */
-  private Resource getUnitTestResource(PhpUnitTestReport report) {
-    return getUnitTestResource(report.getFile());
-  }
-
-  @VisibleForTesting
-  Resource getUnitTestResource(String filename) {
-    File testFile = new File(filename);
-
-    // In SonarQube version < 4.2 fromIOFile() returns null on test files
-    Resource resource = org.sonar.api.resources.File.fromIOFile(testFile, project);
-    if (resource == null) {
-      resource = org.sonar.api.resources.File.fromIOFile(testFile, moduleFileSystem.testDirs());
-    }
-
-    return resource;
+  private InputFile getUnitTestInputFile(PhpUnitTestReport report) {
+    return fileSystem.inputFile(fileSystem.predicates().and(
+        filePredicates.hasPath(report.getFile()),
+        filePredicates.hasType(InputFile.Type.TEST),
+        filePredicates.hasLanguage(Php.KEY)));
   }
 
   /**
@@ -193,21 +179,21 @@ public class PhpUnitResultParser implements BatchExtension {
     if (!fileReport.isValid()) {
       return;
     }
-    Resource unitTestResource = getUnitTestResource(fileReport);
-    if (unitTestResource != null) {
+    InputFile unitTestFile = getUnitTestInputFile(fileReport);
+    if (unitTestFile != null) {
       double testsCount = fileReport.getTests() - fileReport.getSkipped();
       if (fileReport.getSkipped() > 0) {
-        context.saveMeasure(unitTestResource, CoreMetrics.SKIPPED_TESTS, (double) fileReport.getSkipped());
+        context.saveMeasure(unitTestFile, CoreMetrics.SKIPPED_TESTS, (double) fileReport.getSkipped());
       }
       double duration = Math.round(fileReport.getTime() * MILLISECONDS);
-      context.saveMeasure(unitTestResource, CoreMetrics.TEST_EXECUTION_TIME, duration);
-      context.saveMeasure(unitTestResource, CoreMetrics.TESTS, testsCount);
-      context.saveMeasure(unitTestResource, CoreMetrics.TEST_ERRORS, (double) fileReport.getErrors());
-      context.saveMeasure(unitTestResource, CoreMetrics.TEST_FAILURES, (double) fileReport.getFailures());
+      context.saveMeasure(unitTestFile, CoreMetrics.TEST_EXECUTION_TIME, duration);
+      context.saveMeasure(unitTestFile, CoreMetrics.TESTS, testsCount);
+      context.saveMeasure(unitTestFile, CoreMetrics.TEST_ERRORS, (double) fileReport.getErrors());
+      context.saveMeasure(unitTestFile, CoreMetrics.TEST_FAILURES, (double) fileReport.getFailures());
       if (testsCount > 0) {
         double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
         double percentage = passedTests * PERCENT / testsCount;
-        context.saveMeasure(unitTestResource, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
+        context.saveMeasure(unitTestFile, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
       }
       saveTestsDetails(fileReport);
     } else {
@@ -239,9 +225,9 @@ public class PhpUnitResultParser implements BatchExtension {
       }
     }
     details.append("</tests-details>");
-    Resource unitTestResource = getUnitTestResource(fileReport);
-    if (unitTestResource != null) {
-      context.saveMeasure(unitTestResource, new Measure(CoreMetrics.TEST_DATA, details.toString()));
+    InputFile unitTestFile = getUnitTestInputFile(fileReport);
+    if (unitTestFile != null) {
+      context.saveMeasure(unitTestFile, new Measure(CoreMetrics.TEST_DATA, details.toString()));
     }
   }
 }

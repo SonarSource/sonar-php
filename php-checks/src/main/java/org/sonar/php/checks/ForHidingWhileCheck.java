@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1264",
+  name = "A \"while\" loop should be used instead of a \"for\" loop",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class ForHidingWhileCheck extends SquidCheck<LexerlessGrammar> {

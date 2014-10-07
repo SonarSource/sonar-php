@@ -44,6 +44,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-deprecated</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.sonar.common-rules</groupId>
       <artifactId>sonar-common-rules</artifactId>
     </dependency>
@@ -91,8 +95,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>1700000</maxsize>
-                  <minsize>540000</minsize>
+                  <maxsize>3100000</maxsize>
+                  <minsize>1300000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>

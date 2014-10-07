@@ -19,11 +19,14 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.checks.AnnotationCheckFactory;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
@@ -31,12 +34,8 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
-import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.rules.ActiveRule;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
@@ -54,7 +53,7 @@ import org.sonar.squidbridge.indexer.QueryByParent;
 import org.sonar.squidbridge.indexer.QueryByType;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -64,48 +63,49 @@ public class PHPSquidSensor implements Sensor {
   private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
   private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
-  private final AnnotationCheckFactory annotationCheckFactory;
   private final ResourcePerspectives resourcePerspectives;
-  private final ModuleFileSystem fileSystem;
+  private final FileSystem fileSystem;
+  private final FilePredicate mainFilePredicate;
   private final FileLinesContextFactory fileLinesContextFactory;
+  private final Checks<Object> checks;
   private AstScanner<LexerlessGrammar> scanner;
   private SensorContext context;
-  private Project project;
 
-  public PHPSquidSensor(RulesProfile profile, ResourcePerspectives resourcePerspectives, ModuleFileSystem filesystem, FileLinesContextFactory fileLinesContextFactory) {
-    this.annotationCheckFactory = AnnotationCheckFactory.create(profile, CheckList.REPOSITORY_KEY, CheckList.getChecks());
+  public PHPSquidSensor(ResourcePerspectives resourcePerspectives, FileSystem filesystem,
+                        FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory) {
+    this.checks = checkFactory
+      .create(CheckList.REPOSITORY_KEY)
+      .addAnnotatedChecks(CheckList.getChecks());
     this.resourcePerspectives = resourcePerspectives;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.fileSystem = filesystem;
+    this.mainFilePredicate = fileSystem.predicates().and(
+      fileSystem.predicates().hasType(InputFile.Type.MAIN),
+      fileSystem.predicates().hasLanguage(Php.KEY));
   }
 
   @Override
   public boolean shouldExecuteOnProject(Project project) {
-    return !fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY)).isEmpty();
+    return fileSystem.hasFiles(mainFilePredicate);
   }
 
   @Override
   public void analyse(Project project, SensorContext context) {
     this.context = context;
-    this.project = project;
 
     List<SquidAstVisitor<LexerlessGrammar>> visitors = getCheckVisitors();
-    visitors.add(new FileLinesVisitor(project, fileLinesContextFactory));
+
+    visitors.add(new FileLinesVisitor(fileLinesContextFactory));
     this.scanner = PHPAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
-    scanner.scanFiles(getProjectMainFiles());
+    scanner.scanFiles(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
     save(scanner.getIndex().search(new QueryByType(SourceFile.class)));
-  }
-
-  @VisibleForTesting
-  org.sonar.api.resources.File getSonarResource(File file) {
-    return org.sonar.api.resources.File.fromIOFile(file, project);
   }
 
   private void save(Collection<SourceCode> squidSourceFiles) {
     for (SourceCode squidSourceFile : squidSourceFiles) {
       SourceFile squidFile = (SourceFile) squidSourceFile;
-      org.sonar.api.resources.File sonarFile = getSonarResource(new java.io.File(squidFile.getKey()));
+      org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.create(squidFile.getKey());
 
       saveClassComplexity(sonarFile, squidFile);
       saveFilesComplexityDistribution(sonarFile, squidFile);
@@ -156,12 +156,12 @@ public class PHPSquidSensor implements Sensor {
     if (messages != null) {
 
       for (CheckMessage message : messages) {
-        ActiveRule rule = annotationCheckFactory.getActiveRule(message.getCheck());
+        RuleKey ruleKey = checks.ruleKey(message.getCheck());
         Issuable issuable = resourcePerspectives.as(Issuable.class, sonarFile);
 
         if (issuable != null) {
           Issue issue = issuable.newIssueBuilder()
-            .ruleKey(RuleKey.of(rule.getRepositoryKey(), rule.getRuleKey()))
+            .ruleKey(ruleKey)
             .line(message.getLine())
             .message(message.getText(Locale.ENGLISH))
             .build();
@@ -172,14 +172,10 @@ public class PHPSquidSensor implements Sensor {
   }
 
   private PHPConfiguration createConfiguration() {
-    return new PHPConfiguration(fileSystem.sourceCharset());
-  }
-
-  private Collection<File> getProjectMainFiles() {
-    return fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY));
+    return new PHPConfiguration(fileSystem.encoding());
   }
 
   private List<SquidAstVisitor<LexerlessGrammar>> getCheckVisitors() {
-    return Lists.newArrayList(annotationCheckFactory.getChecks());
+    return new ArrayList<SquidAstVisitor<LexerlessGrammar>>((Collection) checks.all());
   }
 }

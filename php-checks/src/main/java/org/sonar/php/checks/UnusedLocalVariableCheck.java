@@ -24,6 +24,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.checks.utils.LocalVariableScope;
 import org.sonar.php.checks.utils.Variable;
 import org.sonar.php.parser.PHPGrammar;
@@ -37,7 +38,9 @@ import java.util.Iterator;
 
 @Rule(
   key = "S1481",
-  priority = Priority.MAJOR)
+  name = "Unused local variables should be removed",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
@@ -45,7 +48,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void init() {
-    subscribeTo(CheckUtils.functions());
+    subscribeTo(FunctionUtils.functions());
     subscribeTo(
       PHPGrammar.GLOBAL_STATEMENT,
       PHPGrammar.STATIC_STATEMENT,
@@ -65,7 +68,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.functions())) {
+    if (astNode.is(FunctionUtils.functions())) {
       scopes.push(new LocalVariableScope());
       getCurrentScope().declareParameters(astNode);
     } else if (!scopes.isEmpty()) {
@@ -96,7 +99,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void leaveNode(AstNode astNode) {
-    if (astNode.is(CheckUtils.functions())) {
+    if (astNode.is(FunctionUtils.functions())) {
       reportUnusedVariable();
       scopes.pop();
     }

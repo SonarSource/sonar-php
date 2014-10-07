@@ -17,41 +17,19 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.core;
+package org.sonar.php.checks;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.api.resources.Language;
-import org.sonar.plugins.php.api.Php;
+public interface PHPRuleTags {
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-
-/**
- * Tests the basic functionality of the PhpSourceImporter.
- *
- * @author juergen_kellerer, 2010-10-21
- * @version 1.0
- */
-public class PhpSourceImporterTest {
-
-  Php php;
-  private PhpSourceImporter importer;
-
-  @Before
-  public void setUp() {
-    php = new Php();
-    importer = new PhpSourceImporter(php);
-  }
-
-  @Test
-  public void testCreateImporter() throws Exception {
-    assertThat(importer.getLanguage(), is((Language) php));
-  }
-
-  @Test
-  public void testToString() throws Exception {
-    assertNotNull(importer.toString());
-  }
+  String CONVENTION = "convention";
+  String CWE = "cwe";
+  String BRAIN_OVERLOAD = "brain-overload";
+  String BUG = "bug";
+  String PSR2 = "psr2";
+  String PSR1 = "psr1";
+  String SECURITY = "security";
+  String CERT = "cert";
+  String UNUSED = "unused";
+  String PITFAIL = "pitfail";
+  String MISRA_C = "misra-c";
 }

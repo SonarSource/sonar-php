@@ -19,37 +19,36 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.test.TestUtils;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PHPSquidSensorTest {
 
-  private Project project;
-  private final ModuleFileSystem fileSystem = mock(ModuleFileSystem.class);
+
+  private final DefaultFileSystem fileSystem = new DefaultFileSystem();
   private PHPSquidSensor sensor;
 
   @Before
@@ -58,33 +57,31 @@ public class PHPSquidSensorTest {
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     when(fileLinesContextFactory.createFor(any(Resource.class))).thenReturn(fileLinesContext);
 
-    ProjectFileSystem pfs = mock(ProjectFileSystem.class);
-    when(pfs.getSourceDirs()).thenReturn(ImmutableList.of(new java.io.File("src/test/resources/org/sonar/plugins/python/")));
-
-    project = mock(Project.class);
-    when(project.getFileSystem()).thenReturn(pfs);
-
-    sensor = spy(new PHPSquidSensor(mock(RulesProfile.class), mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory));
+    CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
+    sensor = new PHPSquidSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory);
   }
 
   @Test
   public void shouldExecuteOnProject() {
-    when(fileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.<java.io.File>of());
-    assertThat(sensor.shouldExecuteOnProject(null), is(false));
+    DefaultFileSystem localFS = new DefaultFileSystem();
+    PHPSquidSensor localSensor = new PHPSquidSensor(mock(ResourcePerspectives.class), localFS, null, new CheckFactory(mock(ActiveRules.class)));
 
-    when(fileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.of(new java.io.File("file.php")));
-    assertThat(sensor.shouldExecuteOnProject(null), is(true));
+    // empty file system
+    assertThat(localSensor.shouldExecuteOnProject(null), is(false));
+
+    localFS.add(new DefaultInputFile("file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY));
+    assertThat(localSensor.shouldExecuteOnProject(null), is(true));
   }
 
   @Test
   public void analyse() {
-    doReturn(new File("file")).when(sensor).getSonarResource(any(java.io.File.class));
-
     SensorContext context = mock(SensorContext.class);
-    when(fileSystem.sourceCharset()).thenReturn(Charsets.UTF_8);
-    when(fileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.of(new java.io.File("src/test/resources/PHPSquidSensor.php")));
+    fileSystem.add(new DefaultInputFile("PHPSquidSensor.php")
+      .setAbsolutePath(TestUtils.getResource("PHPSquidSensor.php").getAbsolutePath())
+      .setType(InputFile.Type.MAIN)
+      .setLanguage(Php.KEY));
 
-    sensor.analyse(project, context);
+    sensor.analyse(new Project(""), context);
 
     verify(context).saveMeasure(Mockito.any(File.class), Mockito.eq(CoreMetrics.FILES), Mockito.eq(1.0));
     verify(context).saveMeasure(Mockito.any(File.class), Mockito.eq(CoreMetrics.LINES), Mockito.eq(51.0));

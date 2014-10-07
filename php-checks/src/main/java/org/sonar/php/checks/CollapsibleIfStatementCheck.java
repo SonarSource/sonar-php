@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1066",
+  name = "Collapsible \"if\" statements should be merged",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class CollapsibleIfStatementCheck extends SquidCheck<LexerlessGrammar> {

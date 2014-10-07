@@ -34,7 +34,9 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S139",
-  priority = Priority.INFO)
+  name = "Comments should not be located at the end of lines of code",
+  priority = Priority.INFO,
+  tags = {PHPRuleTags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.INFO)
 public class TrailingCommentCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
 

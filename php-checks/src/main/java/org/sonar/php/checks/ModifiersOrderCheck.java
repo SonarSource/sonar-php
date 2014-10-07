@@ -33,7 +33,9 @@ import java.util.List;
 
 @Rule(
   key = "S1124",
-  priority = Priority.MINOR)
+  name = "Modifiers should be declared in the correct order",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class ModifiersOrderCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final AstNodeType[] EXPECTED_ORDER = {

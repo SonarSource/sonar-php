@@ -30,7 +30,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S104",
-  priority = Priority.MAJOR)
+  name = "Files should not have too many lines",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyLinesInFileCheck extends SquidCheck<LexerlessGrammar> {
 
