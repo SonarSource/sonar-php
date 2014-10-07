@@ -25,13 +25,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.PropertiesBuilder;
-import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
@@ -59,18 +59,16 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
   private static final Map<Resource, Measure> MEASURES_BY_RESOURCE = new HashMap<Resource, Measure>();
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
-  private final Project project;
   private final SensorContext context;
-  private final ModuleFileSystem fileSystem;
+  private final FileSystem fileSystem;
 
   /**
    * Instantiates a new php unit coverage result parser.
    *
    * @param context the context
    */
-  public PhpUnitCoverageResultParser(Project project, SensorContext context, ModuleFileSystem fileSystem) {
+  public PhpUnitCoverageResultParser(SensorContext context, FileSystem fileSystem) {
     super();
-    this.project = project;
     this.context = context;
     this.fileSystem = fileSystem;
   }
@@ -108,10 +106,14 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    * and thus not present in the coverage report file.
    */
   private void saveMeasureForMissingFiles() {
-    for (File phpFile : fileSystem.files(FileQuery.onSource().onLanguage(Php.KEY))) {
-      org.sonar.api.resources.File resource = org.sonar.api.resources.File.fromIOFile(phpFile, project);
+    FilePredicate mainFilesPredicate = fileSystem.predicates().and(
+      fileSystem.predicates().hasType(InputFile.Type.MAIN),
+      fileSystem.predicates().hasLanguage(Php.KEY));
 
-      if (resource != null && context.getMeasure(resource, CoreMetrics.LINE_COVERAGE) == null) {
+    for (File phpFile : fileSystem.files(mainFilesPredicate)) {
+      org.sonar.api.resources.File resource = org.sonar.api.resources.File.create(phpFile.getPath());
+
+      if (context.getMeasure(resource, CoreMetrics.LINE_COVERAGE) == null) {
         LOG.debug("Coverage metrics have not been set on '{}': default values will be inserted.", phpFile.getName());
         context.saveMeasure(resource, CoreMetrics.LINE_COVERAGE, 0.0);
         // for LINES_TO_COVER and UNCOVERED_LINES, we use NCLOC as an approximation
@@ -150,7 +152,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    * @param fileNode the file
    */
   protected void saveCoverageMeasure(FileNode fileNode) {
-    org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.fromIOFile(new File(fileNode.getName()), project);
+    org.sonar.api.resources.File phpFile = context.getResource(org.sonar.api.resources.File.create(fileNode.getName()));
 
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
