@@ -28,7 +28,7 @@ public class CombinedScalarOffsetTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.COMBINED_SCALAR_OFFSET);
+    setTestedRule(PHPGrammar.COMBINED_SCALAR_OFFSET);
   }
 
   @Test

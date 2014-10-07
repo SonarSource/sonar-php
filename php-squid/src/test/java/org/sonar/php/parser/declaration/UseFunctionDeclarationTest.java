@@ -28,7 +28,7 @@ public class UseFunctionDeclarationTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.USE_FUNCTION_DECLARATION);
+    setTestedRule(PHPGrammar.USE_FUNCTION_DECLARATION);
   }
 
   @Test

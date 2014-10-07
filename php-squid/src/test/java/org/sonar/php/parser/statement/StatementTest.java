@@ -28,7 +28,7 @@ public class StatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.STATEMENT);
+    setTestedRule(PHPGrammar.STATEMENT);
   }
 
   @Test
@@ -47,6 +47,8 @@ public class StatementTest extends RuleTest {
     matches("global $a;");
     matches("echo \"Hi\";");
     matches("unset($a);");
+
+    matches("$var = function () {};");
   }
 
   @Test

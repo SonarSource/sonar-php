@@ -28,7 +28,7 @@ public class MemberModifierTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.MEMBER_MODIFIER);
+    setTestedRule(PHPGrammar.MEMBER_MODIFIER);
   }
 
   @Test

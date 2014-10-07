@@ -28,7 +28,7 @@ public class VariableModifiersTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.VARIABLE_MODIFIERS);
+    setTestedRule(PHPGrammar.VARIABLE_MODIFIERS);
   }
 
   @Test

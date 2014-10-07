@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstAndTokenVisitor;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.sonar.check.BelongsToProfile;
@@ -29,6 +28,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.regex.Pattern;
 
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
   key = "S139",
   priority = Priority.INFO)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.INFO)
-public class TrailingCommentCheck extends SquidCheck<Grammar> implements AstAndTokenVisitor {
+public class TrailingCommentCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
 
   public static final String DEFAULT_LEGAL_COMMENT_PATTERN = "^(//|#)\\s*+[^\\s]++$";
 

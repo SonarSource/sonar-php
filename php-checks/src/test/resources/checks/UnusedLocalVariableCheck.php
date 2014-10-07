@@ -138,6 +138,23 @@ function o(){
 }
 
 /**
+ * ENCAPSULATE VARIABLE
+ */
+function p(){
+  $a1 = 1; $a2 = 1; $a3 = 1;    // OK
+  $b1 = 2; $b2 = 2; $b3 = 2;    // OK
+  $c1 = 3;                      // OK
+
+  echo "Simple encaps  $a1";
+  echo "Semi-complex encaps  ${a2}";
+  echo "Complex encaps  {$a3}";
+
+  echo "Simple encaps  $b1->c";
+  echo "Semi-complex encaps  ${b2[0]}";
+  echo "Complex encaps  {$b3 + $c1}";
+}
+
+/**
  * OUT OF EVERY SCOPE
  */
 $a = 1;

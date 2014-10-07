@@ -28,14 +28,11 @@ public class VariableTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.VARIABLE);
+    setTestedRule(PHPGrammar.MEMBER_EXPRESSION);
   }
 
   @Test
   public void test() {
-    matches("f()->$a");
-
-    matches("a");
     matches("$a");
 
     matches("$a[]");
@@ -54,6 +51,7 @@ public class VariableTest extends RuleTest {
     matches("$a{'a'}");
     matches("$a[$b]");
 
+    matches("f()->$a");
     matches("$a->{'b'}");
 
     matches("A::class");

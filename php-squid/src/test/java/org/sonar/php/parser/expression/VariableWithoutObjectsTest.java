@@ -28,12 +28,13 @@ public class VariableWithoutObjectsTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    setTestedRule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
   }
 
   @Test
   public void test() {
     matches("$a");
+    matches("$$a");
     matches("$$a");
 
   }

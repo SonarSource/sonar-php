@@ -20,13 +20,12 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 import java.util.ArrayDeque;
@@ -36,7 +35,7 @@ import java.util.Deque;
   key = "S1605",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class CallParentConstructorCheck extends SquidCheck<Grammar> {
+public class CallParentConstructorCheck extends SquidCheck<LexerlessGrammar> {
 
   private Deque<String> scope = new ArrayDeque<String>();
   private boolean inConstructor = false;
@@ -93,7 +92,7 @@ public class CallParentConstructorCheck extends SquidCheck<Grammar> {
   }
 
   private boolean isNonDeprecatedConstructor(AstNode astNode) {
-    return "__construct".equals(astNode.getFirstChild(GenericTokenType.IDENTIFIER).getTokenOriginalValue());
+    return "__construct".equals(astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue());
   }
 
   private String getExtendsFrom(AstNode classDec) {

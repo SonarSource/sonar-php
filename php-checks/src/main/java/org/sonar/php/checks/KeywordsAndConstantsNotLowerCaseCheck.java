@@ -20,19 +20,19 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.regex.Pattern;
 
 @Rule(
   key = "S1781",
   priority = Priority.MINOR)
-public class KeywordsAndConstantsNotLowerCaseCheck extends SquidCheck<Grammar> {
+public class KeywordsAndConstantsNotLowerCaseCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final Pattern PATTERN = Pattern.compile("[a-z_]+");
 

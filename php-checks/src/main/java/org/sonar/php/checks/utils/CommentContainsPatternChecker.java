@@ -19,18 +19,18 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 public class CommentContainsPatternChecker {
-  private final SquidCheck<Grammar> check;
+  private final SquidCheck<LexerlessGrammar> check;
   private final String pattern;
   private final String message;
 
-  public CommentContainsPatternChecker(SquidCheck<Grammar> check, String pattern, String message) {
+  public CommentContainsPatternChecker(SquidCheck<LexerlessGrammar> check, String pattern, String message) {
     this.check = check;
     this.pattern = pattern;
     this.message = message;

@@ -21,14 +21,15 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPTokenType;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.Map;
 
@@ -36,7 +37,7 @@ import java.util.Map;
   key = "S1192",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
-public class StringLiteralDuplicatedCheck extends SquidCheck<Grammar> {
+public class StringLiteralDuplicatedCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final Integer MINIMAL_LITERAL_LENGTH = 5;
 
@@ -52,7 +53,7 @@ public class StringLiteralDuplicatedCheck extends SquidCheck<Grammar> {
 
   @Override
   public void init() {
-    subscribeTo(PHPTokenType.STRING_LITERAL);
+    subscribeTo(PHPGrammar.STRING_LITERAL);
   }
 
   @Override
@@ -63,7 +64,7 @@ public class StringLiteralDuplicatedCheck extends SquidCheck<Grammar> {
 
   @Override
   public void visitNode(AstNode node) {
-    String literal = node.getTokenOriginalValue();
+    String literal = getStringLiteralValue(node);
     visitOccurrence(StringUtils.substring(literal, 1, literal.length() - 1), node.getTokenLine());
   }
 
@@ -90,6 +91,14 @@ public class StringLiteralDuplicatedCheck extends SquidCheck<Grammar> {
         int occurrences = literalsOccurrences.get(literal);
         literalsOccurrences.put(literal, occurrences + 1);
       }
+    }
+  }
+
+  private static String getStringLiteralValue(AstNode stringLiteral) {
+    if (stringLiteral.getFirstChild().is(PHPGrammar.ENCAPS_STRING_LITERAL)) {
+      return CheckUtils.getExpressionAsString(stringLiteral);
+    } else {
+      return stringLiteral.getTokenOriginalValue();
     }
   }
 

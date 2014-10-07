@@ -28,7 +28,7 @@ public class QualifiedNameTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.QUALIFIED_NAME);
+    setTestedRule(PHPGrammar.QUALIFIED_NAME);
   }
 
   @Test

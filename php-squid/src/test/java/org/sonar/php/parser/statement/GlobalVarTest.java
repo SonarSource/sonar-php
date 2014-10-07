@@ -28,7 +28,7 @@ public class GlobalVarTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.GLOBAL_VAR);
+    setTestedRule(PHPGrammar.GLOBAL_VAR);
   }
 
   @Test

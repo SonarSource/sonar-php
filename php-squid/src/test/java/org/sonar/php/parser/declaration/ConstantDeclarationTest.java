@@ -28,7 +28,7 @@ public class ConstantDeclarationTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.MEMBER_CONST_DECLARATION);
+    setTestedRule(PHPGrammar.MEMBER_CONST_DECLARATION);
   }
 
   @Test

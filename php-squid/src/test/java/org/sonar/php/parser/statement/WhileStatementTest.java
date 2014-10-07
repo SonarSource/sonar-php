@@ -28,7 +28,7 @@ public class WhileStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.WHILE_STATEMENT);
+    setTestedRule(PHPGrammar.WHILE_STATEMENT);
   }
 
   @Test

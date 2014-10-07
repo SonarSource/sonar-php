@@ -26,3 +26,14 @@ class D {
   }
 
 }
+
+class E {
+  private $field1;  // OK
+  private $field2;  // OK
+  private $field3;  // OK
+
+  public function f() {
+    return "$this->field1 ${this->field2} {$this->field3}";
+  }
+
+}

@@ -28,7 +28,7 @@ public class CaseClauseTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.CASE_CLAUSE);
+    setTestedRule(PHPGrammar.CASE_CLAUSE);
   }
 
   @Test

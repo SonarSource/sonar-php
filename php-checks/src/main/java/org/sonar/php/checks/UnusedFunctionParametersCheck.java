@@ -22,18 +22,17 @@ package org.sonar.php.checks;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.Map;
 
@@ -41,7 +40,7 @@ import java.util.Map;
   key = "S1172",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
+public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final GrammarRuleKey[] FUNCTION_DECLARATIONS = {
     PHPGrammar.METHOD_DECLARATION,
@@ -60,26 +59,30 @@ public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
     }
 
     private void declare(AstNode astNode) {
-      Preconditions.checkState(astNode.is(PHPTokenType.VAR_IDENTIFIER));
+      Preconditions.checkState(astNode.is(PHPGrammar.VAR_IDENTIFIER));
 
       String identifier = astNode.getTokenValue();
       arguments.put(identifier, 0);
     }
 
     private void use(AstNode astNode) {
-      String identifier = astNode.getTokenValue();
+      use(astNode.getTokenValue());
+    }
+
+    private void use(String varName) {
       Scope scope = this;
 
       while (scope != null) {
-        Integer usage = scope.arguments.get(identifier);
+        Integer usage = scope.arguments.get(varName);
         if (usage != null) {
           usage++;
-          scope.arguments.put(identifier, usage);
+          scope.arguments.put(varName, usage);
           return;
         }
         scope = scope.outerScope;
       }
     }
+
   }
 
   private Scope currentScope;
@@ -87,7 +90,10 @@ public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
   @Override
   public void init() {
     subscribeTo(FUNCTION_DECLARATIONS);
-    subscribeTo(PHPGrammar.PARAMETER_LIST, PHPTokenType.VAR_IDENTIFIER);
+    subscribeTo(
+      PHPGrammar.PARAMETER_LIST,
+      PHPGrammar.VAR_IDENTIFIER,
+      PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE);
   }
 
   @Override
@@ -95,20 +101,28 @@ public class UnusedFunctionParametersCheck extends SquidCheck<Grammar> {
     if (astNode.is(FUNCTION_DECLARATIONS) && !CheckUtils.isAbstractMethod(astNode)) {
       // enter new scope
       currentScope = new Scope(currentScope, astNode);
-    } else if (currentScope != null && astNode.is(PHPGrammar.PARAMETER_LIST)) {
-      initParametersList(astNode);
-    } else if (isVarIdentifierInsideFunction(astNode)) {
-      currentScope.use(astNode);
+
+    } else if (currentScope != null) {
+
+      if (astNode.is(PHPGrammar.PARAMETER_LIST)) {
+        initParametersList(astNode);
+
+      } else if (isVarIdentifierInsideFunction(astNode)) {
+        currentScope.use(astNode);
+
+      } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
+        currentScope.use("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION).getTokenOriginalValue());
+      }
     }
   }
 
   private boolean isVarIdentifierInsideFunction(AstNode node) {
-    return currentScope != null && node.getParent().isNot(PHPGrammar.PARAMETER) && node.is(PHPTokenType.VAR_IDENTIFIER);
+    return node.getParent().isNot(PHPGrammar.PARAMETER) && node.is(PHPGrammar.VAR_IDENTIFIER);
   }
 
   private void initParametersList(AstNode parameterListNode) {
     for (AstNode parameterNode : parameterListNode.getChildren(PHPGrammar.PARAMETER)) {
-      currentScope.declare(parameterNode.getFirstChild(PHPTokenType.VAR_IDENTIFIER));
+      currentScope.declare(parameterNode.getFirstChild(PHPGrammar.VAR_IDENTIFIER));
     }
   }
 

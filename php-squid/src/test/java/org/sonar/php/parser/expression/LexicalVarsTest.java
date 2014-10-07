@@ -28,7 +28,7 @@ public class LexicalVarsTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.LEXICAL_VARS);
+    setTestedRule(PHPGrammar.LEXICAL_VARS);
   }
 
   @Test

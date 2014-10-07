@@ -24,7 +24,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.api.PHPTokenType;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
@@ -64,9 +63,9 @@ public class LocalVariableScope {
     Preconditions.checkArgument(globalVarStmt.is(PHPGrammar.GLOBAL_STATEMENT));
 
     for (AstNode globalVar : globalVarStmt.getFirstChild(PHPGrammar.GLOBAL_VAR_LIST).getChildren(PHPGrammar.GLOBAL_VAR)) {
-      AstNode var = globalVar.getFirstChild();
+      AstNode var = globalVar.getFirstChild(PHPGrammar.COMPOUND_VARIABLE).getFirstChild();
 
-      if (var.is(PHPTokenType.VAR_IDENTIFIER)) {
+      if (var.is(PHPGrammar.VAR_IDENTIFIER)) {
         declareExclusion(var.getTokenOriginalValue());
       }
     }
@@ -83,7 +82,7 @@ public class LocalVariableScope {
     AstNode paramList = functionDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
     if (paramList != null) {
       for (AstNode parameter : paramList.getChildren(PHPGrammar.PARAMETER)) {
-        declareExclusion(parameter.getFirstChild(PHPTokenType.VAR_IDENTIFIER).getTokenOriginalValue());
+        declareExclusion(parameter.getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue());
       }
     }
   }
@@ -97,7 +96,7 @@ public class LocalVariableScope {
     Preconditions.checkArgument(staticStmt.is(PHPGrammar.STATIC_STATEMENT));
 
     for (AstNode staticVar : staticStmt.getFirstChild(PHPGrammar.STATIC_VAR_LIST).getChildren(PHPGrammar.STATIC_VAR)) {
-      AstNode varIdentifier = staticVar.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
+      AstNode varIdentifier = staticVar.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
       declareLocalVariable(varIdentifier.getTokenOriginalValue(), varIdentifier, 1);
     }
   }
@@ -106,12 +105,33 @@ public class LocalVariableScope {
    * Increases usage of the variable passed as parameter if this variable has
    * been declare as a local variable.
    *
-   * @param variableWithoutObject is VARIABLE_WITHOUT_OBJECTS
+   * @param varNode is VARIABLE_WITHOUT_OBJECTS or VAR_IDENTIFIER, if others nothing will be done.
    */
-  public void useVariable(AstNode variableWithoutObject) {
-    Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
+  public void useVariable(AstNode varNode) {
+    String varName;
 
-    String varName = getVariableName(variableWithoutObject);
+    // Retrieve var name
+    if (varNode.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+      varName = getVariableName(varNode);
+    } else if (varNode.is(PHPGrammar.VAR_IDENTIFIER)) {
+      varName = varNode.getTokenOriginalValue();
+    } else {
+      return;
+    }
+
+    // Increase usage if variable declared
+    if (localVariables.containsKey(varName)) {
+      increaseUsageFor(varName);
+    }
+  }
+
+  /**
+   * Increases usage of the variable passed as parameter if this variable has
+   * been declare as a local variable.
+   *
+   * @param varName is the variable name to use
+   */
+  public void useVariale(String varName) {
     if (localVariables.containsKey(varName)) {
       increaseUsageFor(varName);
     }
@@ -172,7 +192,7 @@ public class LocalVariableScope {
     Preconditions.checkArgument(lexicalVarList.is(PHPGrammar.LEXICAL_VAR_LIST));
 
     for (AstNode lexicalVar : lexicalVarList.getChildren(PHPGrammar.LEXICAL_VAR)) {
-      AstNode varIdentifier = lexicalVar.getFirstChild(PHPTokenType.VAR_IDENTIFIER);
+      AstNode varIdentifier = lexicalVar.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
       String varName = varIdentifier.getTokenOriginalValue();
       boolean isReference = lexicalVar.hasDirectChildren(PHPPunctuator.AND);
       boolean isFromOuterScope = outerScope == null || outerScope.localVariables.containsKey(varName);
@@ -205,7 +225,7 @@ public class LocalVariableScope {
     for (AstNode listElement : listExpr.getFirstChild(PHPGrammar.ASSIGNMENT_LIST).getChildren(PHPGrammar.ASSIGNMENT_LIST_ELEMENT)) {
       AstNode child = listElement.getFirstChild();
 
-      if (child.is(PHPGrammar.VARIABLE) && child.getFirstChild().is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+      if (child.is(PHPGrammar.MEMBER_EXPRESSION) && child.getFirstChild().is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
         AstNode varWithoutObject = child.getFirstChild();
         String varName = getVariableName(varWithoutObject);
         declareLocalVariable(varName, varWithoutObject);

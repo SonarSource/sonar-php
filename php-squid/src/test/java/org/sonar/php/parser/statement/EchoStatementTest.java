@@ -28,7 +28,7 @@ public class EchoStatementTest extends RuleTest {
 
   @Before
   public void setUp() {
-    setRootRule(PHPGrammar.ECHO_STATEMENT);
+    setTestedRule(PHPGrammar.ECHO_STATEMENT);
   }
 
   @Test
