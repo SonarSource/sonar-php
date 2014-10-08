@@ -19,12 +19,13 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.fest.assertions.Assertions;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.ArgumentCaptor;
+import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -43,22 +44,24 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
 import static org.sonar.api.measures.CoreMetrics.LINES_TO_COVER;
-import static org.sonar.api.measures.CoreMetrics.LINE_COVERAGE;
-import static org.sonar.api.measures.CoreMetrics.NCLOC;
 import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
 public class PhpUnitCoverageResultParserTest {
 
   private static final String BASE_DIR = "/org/sonar/plugins/php/phpunit/sensor/src/";
   private static final String MONKEY_FILE_NAME = "Monkey.php";
+  private static final String BANANA_FILE_NAME = "Banana.php";
+  private static final File MONKEY_FILE = TestUtils.getResource(BASE_DIR + MONKEY_FILE_NAME);
+  private static final File BANANA_FILE = TestUtils.getResource(BASE_DIR + BANANA_FILE_NAME);
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
+  @Rule
+  public TemporaryFolder folder= new TemporaryFolder();
   private PhpUnitCoverageResultParser parser;
   private SensorContext context;
   private DefaultFileSystem fileSystem;
@@ -86,8 +89,8 @@ public class PhpUnitCoverageResultParserTest {
    * Should parse even when there's a package node.
    */
   @Test
-  public void shouldParseEvenWithPackageNode() {
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-package.xml"));
+  public void shouldParseEvenWithPackageNode() throws Exception {
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-package.xml"));
 
     verify(context).saveMeasure(any(Resource.class), eq(LINES_TO_COVER), eq(4.0));
     verify(context).saveMeasure(any(Resource.class), eq(UNCOVERED_LINES), eq(2.0));
@@ -97,8 +100,8 @@ public class PhpUnitCoverageResultParserTest {
    * Should generate coverage metrics.
    */
   @Test
-  public void shouldGenerateCoverageMeasures() {
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_COVERAGE_REPORT));
+  public void shouldGenerateCoverageMeasures() throws Exception {
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage.xml"));
 
     verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1")));
     verify(context).saveMeasure(any(Resource.class), eq(UNCOVERED_LINES), eq(2.0));
@@ -133,8 +136,8 @@ public class PhpUnitCoverageResultParserTest {
   private static void addFiles(DefaultFileSystem fs) {
     File baseDir = TestUtils.getResource(BASE_DIR);
 
-    InputFile monkeyFile = new DefaultInputFile("Monkey.php").setAbsolutePath((new File(baseDir, "Monkey.php").getAbsolutePath())).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
-    InputFile bananaFile = new DefaultInputFile("Banana.php").setAbsolutePath((new File(baseDir, "Banana.php").getAbsolutePath())).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
+    InputFile monkeyFile = new DefaultInputFile(MONKEY_FILE_NAME).setAbsolutePath(MONKEY_FILE.getAbsolutePath()).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
+    InputFile bananaFile = new DefaultInputFile(BANANA_FILE_NAME).setAbsolutePath(BANANA_FILE.getAbsolutePath()).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
 
     fs.setBaseDir(baseDir);
 
@@ -142,4 +145,21 @@ public class PhpUnitCoverageResultParserTest {
     fs.add(bananaFile);
   }
 
+  /**
+   * Replace file name with absolute path in coverage report.
+   *
+   * This hack allow to have this unit test, as only absolute path
+   * in report is supported.
+   * */
+  private File getReportsWithAbsolutePath(String reportName) throws Exception {
+    File fileWIthAbsolutePaths = folder.newFile("report_with_absolute_paths.xml");
+
+    Files.write(
+      Files.toString(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + reportName), Charsets.UTF_8)
+        .replace("/" + MONKEY_FILE_NAME, MONKEY_FILE.getAbsolutePath())
+        .replace("/" + BANANA_FILE_NAME, BANANA_FILE.getAbsolutePath()),
+      fileWIthAbsolutePaths, Charsets.UTF_8);
+
+    return fileWIthAbsolutePaths;
+  }
 }

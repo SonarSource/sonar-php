@@ -110,11 +110,11 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
       fileSystem.predicates().hasType(InputFile.Type.MAIN),
       fileSystem.predicates().hasLanguage(Php.KEY));
 
-    for (File phpFile : fileSystem.files(mainFilesPredicate)) {
-      org.sonar.api.resources.File resource = org.sonar.api.resources.File.create(phpFile.getPath());
+    for (InputFile phpFile : fileSystem.inputFiles(mainFilesPredicate)) {
+      org.sonar.api.resources.File resource = org.sonar.api.resources.File.create(phpFile.relativePath());
 
       if (context.getMeasure(resource, CoreMetrics.LINE_COVERAGE) == null) {
-        LOG.debug("Coverage metrics have not been set on '{}': default values will be inserted.", phpFile.getName());
+        LOG.debug("Coverage metrics have not been set on '{}': default values will be inserted.", phpFile.file().getName());
         context.saveMeasure(resource, CoreMetrics.LINE_COVERAGE, 0.0);
         // for LINES_TO_COVER and UNCOVERED_LINES, we use NCLOC as an approximation
         Measure ncloc = context.getMeasure(resource, CoreMetrics.NCLOC);
@@ -152,11 +152,13 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
    * @param fileNode the file
    */
   protected void saveCoverageMeasure(FileNode fileNode) {
-    org.sonar.api.resources.File phpFile = context.getResource(org.sonar.api.resources.File.create(fileNode.getName()));
+    //PHP supports only absolute paths
+    InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(fileNode.getName()));
 
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
-    if (phpFile != null) {
+    if (inputFile != null) {
+      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.create(inputFile.relativePath());
       // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
       // This should look like (lineNumner=Count) : 1=0;2=1;3=1....
       PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<Integer, Integer>(CoreMetrics.COVERAGE_LINE_HITS_DATA);
