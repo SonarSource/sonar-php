@@ -95,7 +95,7 @@ public class PHPSquidSensor implements Sensor {
 
     List<SquidAstVisitor<LexerlessGrammar>> visitors = getCheckVisitors();
 
-    visitors.add(new FileLinesVisitor(fileLinesContextFactory));
+    visitors.add(new FileLinesVisitor(fileSystem, fileLinesContextFactory));
     this.scanner = PHPAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
     scanner.scanFiles(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 

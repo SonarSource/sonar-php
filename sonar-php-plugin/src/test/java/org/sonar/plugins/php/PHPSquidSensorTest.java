@@ -34,7 +34,6 @@ import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
@@ -55,7 +54,7 @@ public class PHPSquidSensorTest {
   public void setUp() {
     FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    when(fileLinesContextFactory.createFor(any(Resource.class))).thenReturn(fileLinesContext);
+    when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
     sensor = new PHPSquidSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory);

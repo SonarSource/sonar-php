@@ -25,11 +25,11 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.resources.File;
-import org.sonar.api.resources.Project;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.parser.PHPTokenType;
 import org.sonar.squidbridge.SquidAstVisitor;
@@ -44,12 +44,14 @@ import java.util.Set;
 public class FileLinesVisitor extends SquidAstVisitor<LexerlessGrammar> implements AstAndTokenVisitor {
 
   private final FileLinesContextFactory fileLinesContextFactory;
+  private final FileSystem fileSystem;
 
   private final Set<Integer> linesOfCode = Sets.newHashSet();
   private final Set<Integer> linesOfComments = Sets.newHashSet();
 
-  public FileLinesVisitor(FileLinesContextFactory fileLinesContextFactory) {
+  public FileLinesVisitor(FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory) {
     this.fileLinesContextFactory = fileLinesContextFactory;
+    this.fileSystem = fileSystem;
   }
 
   public void visitToken(Token token) {
@@ -68,8 +70,8 @@ public class FileLinesVisitor extends SquidAstVisitor<LexerlessGrammar> implemen
 
   @Override
   public void leaveFile(AstNode astNode) {
-    File sonarFile = File.create(getContext().getFile().getPath());
-    FileLinesContext fileLinesContext = fileLinesContextFactory.createFor(sonarFile);
+    InputFile file = fileSystem.inputFile(fileSystem.predicates().is(getContext().getFile()));
+    FileLinesContext fileLinesContext = fileLinesContextFactory.createFor(file);
 
     int fileLength = getContext().peekSourceCode().getInt(PHPMetric.LINES);
     for (int line = 1; line <= fileLength; line++) {

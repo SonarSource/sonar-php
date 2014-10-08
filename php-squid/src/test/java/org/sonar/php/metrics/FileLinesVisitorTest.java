@@ -21,16 +21,13 @@ package org.sonar.php.metrics;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.resources.Resource;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.test.TestUtils;
-
-import java.io.File;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -45,11 +42,10 @@ public class FileLinesVisitorTest {
   @Test
   public void test() {
     FileLinesContextFactory fileLinesContextFactory = Mockito.mock(FileLinesContextFactory.class);
-
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    when(fileLinesContextFactory.createFor(any(Resource.class))).thenReturn(fileLinesContext);
+    when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
-    FileLinesVisitor visitor = new FileLinesVisitor(fileLinesContextFactory);
+    FileLinesVisitor visitor = new FileLinesVisitor(new DefaultFileSystem(), fileLinesContextFactory);
     PHPAstScanner.scanSingleFile(TestUtils.getResource("/metrics/lines.php"), visitor);
 
     verify(fileLinesContext, times(4)).setIntValue(eq(CoreMetrics.NCLOC_DATA_KEY), anyInt(), eq(1));
