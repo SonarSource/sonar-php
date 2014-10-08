@@ -34,6 +34,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
+import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.php.PHPAstScanner;
@@ -105,7 +106,7 @@ public class PHPSquidSensor implements Sensor {
   private void save(Collection<SourceCode> squidSourceFiles) {
     for (SourceCode squidSourceFile : squidSourceFiles) {
       SourceFile squidFile = (SourceFile) squidSourceFile;
-      org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.create(squidFile.getKey());
+      File sonarFile = File.create(fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(squidFile.getKey())).relativePath());
 
       saveClassComplexity(sonarFile, squidFile);
       saveFilesComplexityDistribution(sonarFile, squidFile);
