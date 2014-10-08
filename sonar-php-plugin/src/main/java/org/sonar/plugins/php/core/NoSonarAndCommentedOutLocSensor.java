@@ -115,7 +115,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
    */
   public boolean shouldExecuteOnProject(Project project) {
-    return filesystem.hasFiles((filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN))));
+    return filesystem.hasFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
   }
 
   /**

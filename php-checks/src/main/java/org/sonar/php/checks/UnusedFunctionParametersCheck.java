@@ -22,8 +22,6 @@ package org.sonar.php.checks;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;

@@ -25,7 +25,6 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;

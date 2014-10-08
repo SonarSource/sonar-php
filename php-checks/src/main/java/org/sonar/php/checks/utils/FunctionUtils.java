@@ -20,8 +20,6 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
