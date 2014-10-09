@@ -13,6 +13,8 @@ true != a;        // NOK
 false && foo();   // NOK
 foo() || true;    // NOK
 a == true == b;   // NOK
+a ? true : b;     // NOK
+a ? b : false;    // NOK
 a || true || b || true; // NOK
 
 a === false;      // OK - exception

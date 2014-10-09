@@ -45,6 +45,7 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar>
   public void init() {
     subscribeTo(
       PHPGrammar.UNARY_EXPR,
+      PHPGrammar.CONDITIONAL_EXPR,
       PHPGrammar.EQUALITY_OPERATOR,
       PHPGrammar.LOGICAL_AND_OPERATOR,
       PHPGrammar.LOGICAL_OR_OPERATOR);
@@ -74,11 +75,19 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar>
 
   private static AstNode getBooleanLiteralFromExpression(AstNode expression) {
     if (expression.is(PHPGrammar.UNARY_EXPR)) {
-      return getBooleanLiteralFromUnaryExpression(expression);
-    }
+      return getLiteralFromUnaryExpression(expression);
 
-    AstNode leftExpr = expression.getPreviousAstNode();
-    AstNode rightExpr = expression.getNextAstNode();
+    } else if (expression.is(PHPGrammar.CONDITIONAL_EXPR)) {
+      return getLiteralFromConditionalExpression(expression);
+
+    } else {
+      return getLiteralFromLogicalOrEqualityComparison(expression);
+    }
+  }
+
+  private static AstNode getLiteralFromLogicalOrEqualityComparison(AstNode operator) {
+    AstNode leftExpr = operator.getPreviousAstNode();
+    AstNode rightExpr = operator.getNextAstNode();
 
     if (isBooleanLiteral(leftExpr)) {
       return leftExpr;
@@ -89,7 +98,24 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar>
     }
   }
 
-  private static AstNode getBooleanLiteralFromUnaryExpression(AstNode unaryExpression) {
+  private static AstNode getLiteralFromConditionalExpression(AstNode conditionalExpr) {
+    AstNode booleanLiteral = null;
+
+    AstNode colonNode = conditionalExpr.getFirstChild(PHPPunctuator.COLON);
+    AstNode leftExpr = colonNode.getPreviousAstNode();
+    AstNode rightExpr = colonNode.getNextAstNode();
+
+
+    if (isBooleanLiteral(leftExpr)) {
+      booleanLiteral = leftExpr;
+    }
+    if (isBooleanLiteral(rightExpr)) {
+      booleanLiteral = rightExpr;
+    }
+    return booleanLiteral;
+  }
+
+  private static AstNode getLiteralFromUnaryExpression(AstNode unaryExpression) {
     AstNode boolLiteral = null;
 
     if (unaryExpression.getFirstChild().is(PHPPunctuator.BANG)) {
