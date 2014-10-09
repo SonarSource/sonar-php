@@ -16,6 +16,8 @@ false != a;       // NOK
 true != a;        // NOK
 false && foo();   // NOK
 foo() || true;    // NOK
+a == true == b;   // NOK
+a || true || b || true; // NOK
 
 a == foo(true);   // OK
 true < 0;         // OK
@@ -23,4 +25,3 @@ true < 0;         // OK
 ++ true;          // OK
 !foo;             // OK
 foo() && bar();   // OK
-a == true == b;   // OK
