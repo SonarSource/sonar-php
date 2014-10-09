@@ -544,6 +544,19 @@
           <txt>h</txt>
         </prop>
       </chc>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S2042</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>1.0</val>
+          <txt>h</txt>
+        </prop>
+      </chc>
     </chc>
     <chc>
       <key>DATA_CHANGEABILITY</key>

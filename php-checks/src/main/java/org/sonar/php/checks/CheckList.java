@@ -102,6 +102,7 @@ public class CheckList {
       FormattingStandardCheck.class,
       OpeningPHPTagCheck.class,
       PerlStyleCommentsUsageCheck.class,
+      TooManyLinesInClassCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
