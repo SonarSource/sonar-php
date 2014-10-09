@@ -32,7 +32,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1600",
   name = "Deprecated predefined variables should not be used",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.PITFAIL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class DeprecatedPredefinedVariablesUseCheck extends SquidCheck<LexerlessGrammar> {
 
