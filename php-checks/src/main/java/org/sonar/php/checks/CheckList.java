@@ -103,6 +103,7 @@ public class CheckList {
       OpeningPHPTagCheck.class,
       PerlStyleCommentsUsageCheck.class,
       TooManyLinesInClassCheck.class,
+      PhpSapiNameFunctionUsageCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

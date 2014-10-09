@@ -19,18 +19,21 @@
  */
 package org.sonar.php.checks;
 
-public interface PHPRuleTags {
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squidbridge.api.SourceFile;
 
-  String CONVENTION = "convention";
-  String CWE = "cwe";
-  String BRAIN_OVERLOAD = "brain-overload";
-  String BUG = "bug";
-  String PSR2 = "psr2";
-  String PSR1 = "psr1";
-  String SECURITY = "security";
-  String CERT = "cert";
-  String UNUSED = "unused";
-  String PITFAIL = "pitfail";
-  String MISRA_C = "misra-c";
-  String PERFORMANCE = "performance";
+public class PhpSapiNameFunctionUsageCheckTest extends CheckTest {
+
+  @Test
+  public void defaultValue() {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("PhpSapiNameFunctionUsageCheck.php"), new PhpSapiNameFunctionUsageCheck());
+
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(3).withMessage("Use the \"PHP_SAPI\" constant instead.")
+      .noMore();
+  }
+
 }
