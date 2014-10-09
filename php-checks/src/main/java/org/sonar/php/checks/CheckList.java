@@ -101,6 +101,7 @@ public class CheckList {
       ArgumentWithDefaultValueNotLastCheck.class,
       FormattingStandardCheck.class,
       OpeningPHPTagCheck.class,
+      PerlStyleCommentsUsageCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
