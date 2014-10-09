@@ -1,16 +1,40 @@
 <p>
   The following predefined variables are deprecated and should be replaced by the new versions:
 </p>
-<ul>
-  <li>$HTTP_SERVER_VARS -> $_SERVER</li>
-  <li>$HTTP_GET_VARS -> $_GET</li>
-  <li>$HTTP_POST_VARS -> $_POST</li>
-  <li>$HTTP_POST_FILES -> $_FILES</li>
-  <li>$HTTP_SESSION_VARS -> $_SESSION</li>
-  <li>$HTTP_ENV_VARS -> $_ENV</li>
-  <li>$HTTP_COOKIE_VARS -> $_COOKIE</li>
-</ul>
-
+<table>
+  <tr>
+    <th>Replace</th>
+    <th>With</th>
+  </tr>
+  <tr>
+    <td>$HTTP_SERVER_VARS</td>
+    <td>$_SERVER</td>
+  </tr>
+  <tr>
+    <td>$HTTP_GET_VARS</td>
+    <td>$_GET</td>
+  </tr>
+  <tr>
+    <td>$HTTP_POST_VARS</td>
+    <td>$_POST</td>
+  </tr>
+  <tr>
+    <td>$HTTP_POST_FILES</td>
+    <td>$_FILES</td>
+  </tr>
+  <tr>
+    <td>$HTTP_SESSION_VARS</td>
+    <td>$_SESSION</td>
+  </tr>
+  <tr>
+    <td>$HTTP_ENV_VARS</td>
+    <td>$_ENV</td>
+  </tr>
+  <tr>
+    <td>$HTTP_COOKIE_VARS</td>
+    <td>$_COOKIE</td>
+  </tr>
+</table>
 
 <h2>Noncompliant Code Example</h2>
 <pre>
