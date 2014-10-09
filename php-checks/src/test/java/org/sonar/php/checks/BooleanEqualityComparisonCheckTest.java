@@ -46,11 +46,7 @@ public class BooleanEqualityComparisonCheckTest extends CheckTest {
       .next().atLine(14)
       .next().atLine(15)
       .next().atLine(16)
-      .next().atLine(17)
-      .next().atLine(18)
-      .next().atLine(19)
-      .next().atLine(20)
-      .next().atLine(20)
+      .next().atLine(16)
       .noMore();
   }
 }

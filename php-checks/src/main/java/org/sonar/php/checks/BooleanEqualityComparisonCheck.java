@@ -52,12 +52,19 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar>
 
   @Override
   public void visitNode(AstNode astNode) {
-    AstNode boolLiteral = getBooleanLiteralFromExpression(astNode);
+    if (!isIdentityComparison(astNode)) {
+      AstNode boolLiteral = getBooleanLiteralFromExpression(astNode);
 
-    if (boolLiteral != null && !isAlreadyChecked(boolLiteral)) {
-      getContext().createLineViolation(this, "Remove the literal \"" + boolLiteral.getTokenOriginalValue() + "\" boolean value.", astNode);
-      alreadyChecked.put(boolLiteral.getTokenLine(), boolLiteral.getToken().getColumn());
+      if (boolLiteral != null && !isAlreadyChecked(boolLiteral)) {
+        getContext().createLineViolation(this, "Remove the literal \"" + boolLiteral.getTokenOriginalValue() + "\" boolean value.", astNode);
+        alreadyChecked.put(boolLiteral.getTokenLine(), boolLiteral.getToken().getColumn());
+      }
     }
+  }
+
+  private boolean isIdentityComparison(AstNode astNode) {
+    return astNode.is(PHPGrammar.EQUALITY_OPERATOR)
+      && astNode.getFirstChild().is(PHPPunctuator.EQUAL2, PHPPunctuator.NOTEQUAL2);
   }
 
   @Override
