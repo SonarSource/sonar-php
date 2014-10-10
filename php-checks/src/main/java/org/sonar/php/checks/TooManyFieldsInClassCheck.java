@@ -34,7 +34,8 @@ import java.util.List;
 @Rule(
   key = "S1820",
   name = "Classes should not have too many fields",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 public class TooManyFieldsInClassCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final int DEFAULT_MAX = 20;
