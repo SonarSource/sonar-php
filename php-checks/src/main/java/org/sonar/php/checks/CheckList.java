@@ -106,6 +106,7 @@ public class CheckList {
       PhpSapiNameFunctionUsageCheck.class,
       EchoWithParenthesisCheck.class,
       SilencedErrorsCheck.class,
+      TooManyFieldsInClassCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
