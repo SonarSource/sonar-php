@@ -104,6 +104,7 @@ public class CheckList {
       PerlStyleCommentsUsageCheck.class,
       TooManyLinesInClassCheck.class,
       PhpSapiNameFunctionUsageCheck.class,
+      EchoWithParenthesisCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
