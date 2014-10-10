@@ -1,0 +1,13 @@
+<p>
+  Just as pain is your body's way of telling you something is wrong, errors are PHP's way of telling you there's something you need to fix. Neither pain, nor PHP errors should be ignored.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+@doSomethingDangerous($password);  // Noncompliant; '@' silences errors from function call
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+doSomethingDangerous($password);
+</pre>
