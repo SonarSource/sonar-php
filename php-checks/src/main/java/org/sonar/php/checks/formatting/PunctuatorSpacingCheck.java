@@ -26,6 +26,7 @@ import org.sonar.php.checks.FormattingStandardCheck;
 
 public class PunctuatorSpacingCheck extends SpacingCheck {
 
+  @Override
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
     if (formattingCheck.isOneSpaceBetweenRParentAndLCurly && node.is(PHPPunctuator.RPARENTHESIS)) {
       checkSpaceBetweenRParentAndLCurly(formattingCheck, node);

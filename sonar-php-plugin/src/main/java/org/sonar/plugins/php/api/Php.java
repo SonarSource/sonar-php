@@ -58,6 +58,7 @@ public final class Php extends AbstractLanguage {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String[] getFileSuffixes() {
     String[] suffixes = filterEmptyStrings(settings.getStringArray(PhpPlugin.FILE_SUFFIXES_KEY));
     if (suffixes.length == 0) {

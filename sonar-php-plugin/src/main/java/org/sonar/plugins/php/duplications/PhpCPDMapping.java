@@ -64,6 +64,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
    *
    * @return the language
    */
+  @Override
   public Language getLanguage() {
     return php;
   }
@@ -73,6 +74,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
    *
    * @return the tokenizer
    */
+  @Override
   public Tokenizer getTokenizer() {
     return new PHPCPDTokenizer();
   }
@@ -93,6 +95,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
     /**
      * Cuts the given source into a list of tokens.
      */
+    @Override
     public final void tokenize(SourceCode source, Tokens cpdTokens) {
       String fileName = source.getFileName();
 

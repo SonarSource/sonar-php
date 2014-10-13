@@ -49,6 +49,7 @@ public class LineLengthCheck extends SquidCheck<LexerlessGrammar> implements Cha
     defaultValue = "" + DEFAULT)
   public int maximumLineLength = DEFAULT;
 
+  @Override
   public void setCharset(Charset charset) {
     this.charset = charset;
   }

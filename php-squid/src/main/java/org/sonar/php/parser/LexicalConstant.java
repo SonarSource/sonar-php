@@ -80,7 +80,12 @@ public class LexicalConstant {
   private static final String NON_SPECIAL_CHARACTERS = "(?:[^\"\\\\$\\{])";
   private static final String ESCAPED_CHARACTERS = "(?:\\\\[\\s\\S])";
 
-  public static final String STRING_WITH_ENCAPS_VAR_CHARACTERS =  "(?:(?:" + NON_SPECIAL_CHARACTERS + "|" + PERMITTED_EMBEDDED_DOLAR + "|" + PERMITTED_OPEN_CURLY_BRACE + "|" + ESCAPED_CHARACTERS + ")++)";
+  public static final String STRING_WITH_ENCAPS_VAR_CHARACTERS = "(?:(?:"
+    + NON_SPECIAL_CHARACTERS
+    + "|" + PERMITTED_EMBEDDED_DOLAR
+    + "|" + PERMITTED_OPEN_CURLY_BRACE
+    + "|" + ESCAPED_CHARACTERS
+    + ")++)";
   private static final String EXECUTION_OPERATOR = "`[^`]*+`";
 
   /**

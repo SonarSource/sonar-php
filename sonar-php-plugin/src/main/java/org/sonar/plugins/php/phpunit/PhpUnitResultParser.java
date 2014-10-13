@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStream;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -115,9 +114,9 @@ public class PhpUnitResultParser implements BatchExtension {
    */
   private InputFile getUnitTestInputFile(PhpUnitTestReport report) {
     return fileSystem.inputFile(fileSystem.predicates().and(
-        filePredicates.hasPath(report.getFile()),
-        filePredicates.hasType(InputFile.Type.TEST),
-        filePredicates.hasLanguage(Php.KEY)));
+      filePredicates.hasPath(report.getFile()),
+      filePredicates.hasType(InputFile.Type.TEST),
+      filePredicates.hasLanguage(Php.KEY)));
   }
 
   /**

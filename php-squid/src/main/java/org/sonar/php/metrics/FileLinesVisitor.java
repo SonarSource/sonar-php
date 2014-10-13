@@ -54,6 +54,7 @@ public class FileLinesVisitor extends SquidAstVisitor<LexerlessGrammar> implemen
     this.fileSystem = fileSystem;
   }
 
+  @Override
   public void visitToken(Token token) {
     if (token.getType().equals(GenericTokenType.EOF) || token.getType().equals(PHPTokenType.FILE_OPENING_TAG)) {
       return;

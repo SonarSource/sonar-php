@@ -33,6 +33,7 @@ public class IndentationCheck extends SpacingCheck {
 
   private static final int PSR2_INDENTATION = 4;
 
+  @Override
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
     if (formattingCheck.isFunctionCallsArgumentsIndentation && node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
       checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER_LIST_FOR_CALL);

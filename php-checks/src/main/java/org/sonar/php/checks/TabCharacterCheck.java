@@ -42,6 +42,7 @@ import java.util.List;
 public class TabCharacterCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
   private Charset charset;
 
+  @Override
   public void setCharset(Charset charset) {
     this.charset = charset;
   }

@@ -54,6 +54,7 @@ public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implemen
 
   private static class PHPRecognizer implements LanguageFootprint {
 
+    @Override
     public Set<Detector> getDetectors() {
       return ImmutableSet.of(
         new EndWithDetector(0.95, '}', ';', '{'),
@@ -64,6 +65,7 @@ public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implemen
 
   }
 
+  @Override
   public void visitToken(Token token) {
     Trivia previousTrivia = null;
 

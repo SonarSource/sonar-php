@@ -31,6 +31,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.Map;
 
 @Rule(
   key = "S1125",
@@ -39,7 +40,7 @@ import java.util.HashMap;
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar> {
 
-  private HashMap<Integer, Integer> alreadyChecked = Maps.newHashMap();
+  private Map<Integer, Integer> alreadyChecked = Maps.newHashMap();
 
   @Override
   public void init() {
@@ -136,7 +137,7 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar>
 
   private boolean isAlreadyChecked(AstNode boolLiteral) {
     Integer column = alreadyChecked.get(boolLiteral.getTokenLine());
-    return column != null && column == boolLiteral.getToken().getColumn();
+    return column != null && column.equals(boolLiteral.getToken().getColumn());
   }
 
 }

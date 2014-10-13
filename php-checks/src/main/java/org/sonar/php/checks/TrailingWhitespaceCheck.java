@@ -44,6 +44,7 @@ public class TrailingWhitespaceCheck extends SquidCheck<LexerlessGrammar> implem
   private Charset charset;
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[" + LexicalConstant.WHITESPACE + "]");
 
+  @Override
   public void setCharset(Charset charset) {
     this.charset = charset;
   }

@@ -43,6 +43,7 @@ public class NonLFCharAsEOLCheck extends SquidCheck<LexerlessGrammar> implements
   private static final Logger LOG = LoggerFactory.getLogger(NonLFCharAsEOLCheck.class);
   private Charset charset;
 
+  @Override
   public void setCharset(Charset charset) {
     this.charset = charset;
   }

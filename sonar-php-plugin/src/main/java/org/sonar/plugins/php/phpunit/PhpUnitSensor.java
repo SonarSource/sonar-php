@@ -24,14 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
@@ -63,6 +60,7 @@ public class PhpUnitSensor implements Sensor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public void analyse(Project project, SensorContext context) {
     parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, false, "tests");
     parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, true, "coverage");
@@ -111,8 +109,9 @@ public class PhpUnitSensor implements Sensor {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean shouldExecuteOnProject(Project project) {
-    return fileSystem.hasFiles((filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN))));
+    return fileSystem.hasFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
 
   }
 
