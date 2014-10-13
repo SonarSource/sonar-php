@@ -139,7 +139,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
 
   private boolean isExcluded(AstNode methodDec) {
     String methodName = methodDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
-    return isStatic(methodDec) || isConstructor(methodName) || isSetter(methodName);
+    return FunctionUtils.isStaticMethod(methodDec) || isConstructor(methodName) || isSetter(methodName);
   }
 
   private void checkLocalVariable(AstNode assignmentExpr) {
@@ -165,15 +165,6 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
     getContext().createLineViolation(this, "Rename \"{0}\" which has the same name as the field declared at line {1}.",
       node, varName, classState.getLineOfFieldNamed(varName));
     classState.setAsCheckedVariable(varName);
-  }
-
-  private boolean isStatic(AstNode methodDeclaration) {
-    for (AstNode modifier : methodDeclaration.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
-      if (modifier.getFirstChild().is(PHPKeyword.STATIC)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private boolean isSetter(String methodName) {

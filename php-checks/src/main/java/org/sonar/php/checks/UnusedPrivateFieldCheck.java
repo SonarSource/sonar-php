@@ -28,6 +28,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -97,20 +98,11 @@ public class UnusedPrivateFieldCheck extends SquidCheck<LexerlessGrammar> {
    * Returns "::$field" for static field and "$this->field" for others.
    */
   private String getCalledName(AstNode varIdentifier, AstNode varModifiers) {
-    if (isStatic(varModifiers)) {
+    if (FunctionUtils.isStaticMethod(varModifiers)) {
       return "::" + varIdentifier.getTokenOriginalValue();
     } else {
       return "$this->" + StringUtils.remove(varIdentifier.getTokenOriginalValue(), "$");
     }
-  }
-
-  private boolean isStatic(AstNode varModifiers) {
-    for (AstNode modifier : varModifiers.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
-      if (modifier.getFirstChild().is(PHPKeyword.STATIC)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private boolean isPrivate(AstNode classVarDeclaration) {

@@ -25,6 +25,7 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -51,6 +52,21 @@ public class FunctionUtils {
   public static String getFunctionName(AstNode functionDec) {
     Preconditions.checkArgument(functionDec.is(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
     return functionDec.is(PHPGrammar.FUNCTION_EXPRESSION) ? "expression" : "\"" + functionDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue() + "\"";
+  }
+
+  /**
+   * Returns whether a method declaration is static or not.
+   *
+   * @param methodDec METHOD_DECLARATION
+   * @return true if method is static, false otherwise
+   */
+  public static boolean isStaticMethod(AstNode methodDec) {
+    for (AstNode modifier : methodDec.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
+      if (modifier.getFirstChild().is(PHPKeyword.STATIC)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
