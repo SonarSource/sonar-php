@@ -107,6 +107,7 @@ public class CheckList {
       EchoWithParenthesisCheck.class,
       SilencedErrorsCheck.class,
       TooManyFieldsInClassCheck.class,
+      ThisVariableUsageInStaticContextCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
