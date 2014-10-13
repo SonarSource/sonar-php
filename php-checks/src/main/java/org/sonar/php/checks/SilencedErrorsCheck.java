@@ -29,7 +29,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S2002",
   name = "Errors should not be silenced",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.PITFAIL})
 public class SilencedErrorsCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
