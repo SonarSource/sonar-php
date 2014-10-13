@@ -24,6 +24,7 @@ import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -37,7 +38,8 @@ public class PHPRulesDefinition implements RulesDefinition {
   @Override
   public void define(Context context) {
     NewRepository repository = context.createRepository(CheckList.REPOSITORY_KEY, Php.KEY).setName(REPOSITORY_NAME);
-    (new RulesDefinitionAnnotationLoader()).load(repository, CheckList.getChecks().toArray(new Class[]{}));
+    List<Class> checks = CheckList.getChecks();
+    (new RulesDefinitionAnnotationLoader()).load(repository, checks.toArray(new Class[checks.size()]));
 
     setDescriptionAndParamTitle(repository);
 
