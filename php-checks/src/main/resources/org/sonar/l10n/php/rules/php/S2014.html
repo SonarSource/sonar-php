@@ -1,11 +1,29 @@
 <p>
-  // TODO
+  <code>$this</code> this refers to the current class instance. But static methods can be accessed without instantiating the class, and <code>$this</code> is not available to them. Using <code>$this</code> in a static context will result in runtime errors.
 </p>
 
 <h2>Noncompliant Code Example</h2>
 <pre>
+class Clazz {
+  $name=NULL;  // instance variable
+
+  public static function foo(){
+    if ($this->name != NULL) {
+      // ...
+    }
+  }
+}
 </pre>
 
 <h2>Compliant Solution</h2>
 <pre>
+class Clazz {
+  $name=NULL;  // instance variable
+
+  public static function foo($nameParam){
+    if ($nameParam != NULL) {
+      // ...
+    }
+  }
+}
 </pre>
