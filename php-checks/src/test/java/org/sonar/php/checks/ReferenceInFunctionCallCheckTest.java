@@ -19,19 +19,20 @@
  */
 package org.sonar.php.checks;
 
-public interface PHPRuleTags {
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squidbridge.api.SourceFile;
 
-  String CONVENTION = "convention";
-  String CWE = "cwe";
-  String BRAIN_OVERLOAD = "brain-overload";
-  String BUG = "bug";
-  String PSR2 = "psr2";
-  String PSR1 = "psr1";
-  String SECURITY = "security";
-  String CERT = "cert";
-  String UNUSED = "unused";
-  String PITFAIL = "pitfail";
-  String MISRA_C = "misra-c";
-  String PERFORMANCE = "performance";
-  String OBSOLETE = "obsolete";
+public class ReferenceInFunctionCallCheckTest extends CheckTest {
+
+  @Test
+  public void test() throws Exception {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ReferenceInFunctionCallCheck.php"), new ReferenceInFunctionCallCheck());
+
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(3).withMessage("Pass \"$p1\" by value.")
+      .noMore();
+  }
 }

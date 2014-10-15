@@ -108,6 +108,7 @@ public class CheckList {
       SilencedErrorsCheck.class,
       TooManyFieldsInClassCheck.class,
       ThisVariableUsageInStaticContextCheck.class,
+      ReferenceInFunctionCallCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
