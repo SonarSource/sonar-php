@@ -120,7 +120,7 @@ public class PHPSquidSensor implements Sensor {
         saveFileMeasures(sonarFile, squidFile);
         saveViolations(sonarFile, squidFile);
       } else {
-        LOG.warn("Cannot retrieve sonar resource associate to file: {}", squidFile.getKey());
+        LOG.warn("Cannot save analysis information for file {}. Unable to retrieve the associated sonar resource.", squidFile.getKey());
       }
     }
   }
