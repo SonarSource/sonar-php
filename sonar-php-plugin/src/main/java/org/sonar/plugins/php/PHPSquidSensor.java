@@ -20,6 +20,8 @@
 package org.sonar.plugins.php;
 
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -61,6 +63,7 @@ import java.util.Locale;
 
 public class PHPSquidSensor implements Sensor {
 
+  private static final Logger LOG = LoggerFactory.getLogger(PHPSquidSensor.class);
   private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
   private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
@@ -106,13 +109,19 @@ public class PHPSquidSensor implements Sensor {
   private void save(Collection<SourceCode> squidSourceFiles) {
     for (SourceCode squidSourceFile : squidSourceFiles) {
       SourceFile squidFile = (SourceFile) squidSourceFile;
-      File sonarFile = File.create(fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(squidFile.getKey())).relativePath());
+      InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(squidFile.getKey()));
 
-      saveClassComplexity(sonarFile, squidFile);
-      saveFilesComplexityDistribution(sonarFile, squidFile);
-      saveFunctionsComplexityDistribution(sonarFile, squidFile);
-      saveFileMeasures(sonarFile, squidFile);
-      saveViolations(sonarFile, squidFile);
+      if (inputFile != null) {
+        File sonarFile = File.create(inputFile.relativePath());
+
+        saveClassComplexity(sonarFile, squidFile);
+        saveFilesComplexityDistribution(sonarFile, squidFile);
+        saveFunctionsComplexityDistribution(sonarFile, squidFile);
+        saveFileMeasures(sonarFile, squidFile);
+        saveViolations(sonarFile, squidFile);
+      } else {
+        LOG.warn("Cannot retrieve sonar resource associate to file: {}", squidFile.getKey());
+      }
     }
   }
 
