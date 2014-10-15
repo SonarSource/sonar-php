@@ -30,7 +30,7 @@ public class FieldNameCheckTest extends CheckTest {
   private FieldNameCheck check = new FieldNameCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FieldNameCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -40,7 +40,7 @@ public class FieldNameCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FieldNameCheck.php"), check);
 

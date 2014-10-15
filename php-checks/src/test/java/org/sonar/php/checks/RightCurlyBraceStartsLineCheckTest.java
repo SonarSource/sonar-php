@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class RightCurlyBraceStartsLineCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("RightCurlyBraceStartsLineCheck.php"), new RightCurlyBraceStartsLineCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class UnusedPrivateFieldCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("UnusedPrivateFieldCheck.php"), new UnusedPrivateFieldCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

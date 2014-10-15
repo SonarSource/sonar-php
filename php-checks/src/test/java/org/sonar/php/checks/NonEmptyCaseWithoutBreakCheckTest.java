@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class NonEmptyCaseWithoutBreakCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NonEmptyCaseWithoutBreakCheck.php"), new NonEmptyCaseWithoutBreakCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

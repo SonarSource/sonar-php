@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.formatting;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.php.checks.FormattingStandardCheckTest;
@@ -29,7 +30,12 @@ import java.io.File;
 
 public class ControlStructureSpacingTest extends FormattingStandardCheckTest {
 
-  private static final File TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "ControlStructureSpacingCheck.php");
+  private static File TEST_FILE;
+
+  @Before
+  public void setUp() throws Exception {
+    TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "ControlStructureSpacingCheck.php");
+  }
 
   @Test
   public void defaultValue() throws IllegalAccessException {

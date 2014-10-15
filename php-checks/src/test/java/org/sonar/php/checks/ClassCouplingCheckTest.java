@@ -30,14 +30,14 @@ public class ClassCouplingCheckTest extends CheckTest {
   private ClassCouplingCheck check = new ClassCouplingCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassCouplingCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.max = 10;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassCouplingCheck.php"), check);

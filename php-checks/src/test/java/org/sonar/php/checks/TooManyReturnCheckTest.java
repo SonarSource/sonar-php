@@ -30,7 +30,7 @@ public class TooManyReturnCheckTest extends CheckTest {
   private TooManyReturnCheck check = new TooManyReturnCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyReturnCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -39,7 +39,7 @@ public class TooManyReturnCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.max = 2;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyReturnCheck.php"), check);

@@ -29,7 +29,7 @@ import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 public class TodoTagPresenceCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TodoTagPresenceCheck.php"), new TodoTagPresenceCheck());
     CheckMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(4).withMessage("Complete the task associated to this \"TODO\" comment.")

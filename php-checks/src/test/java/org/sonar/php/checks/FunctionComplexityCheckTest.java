@@ -30,7 +30,7 @@ public class FunctionComplexityCheckTest extends CheckTest {
   private FunctionComplexityCheck check = new FunctionComplexityCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionComplexityCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -39,7 +39,7 @@ public class FunctionComplexityCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.threshold = 2;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionComplexityCheck.php"), check);

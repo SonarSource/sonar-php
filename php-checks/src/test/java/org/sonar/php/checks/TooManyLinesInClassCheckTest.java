@@ -30,14 +30,14 @@ public class TooManyLinesInClassCheckTest extends CheckTest {
   private TooManyLinesInClassCheck check = new TooManyLinesInClassCheck();
 
   @Test
-  public void test_default() {
+  public void test_default() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyLinesInClassCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.maximumLinesThreshold = 7;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyLinesInClassCheck.php"), check);

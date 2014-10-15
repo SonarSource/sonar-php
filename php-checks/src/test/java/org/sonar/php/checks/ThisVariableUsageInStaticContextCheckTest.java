@@ -28,7 +28,7 @@ import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 public class ThisVariableUsageInStaticContextCheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ThisVariableUsageInStaticContextCheck.php"), new ThisVariableUsageInStaticContextCheck());
 
     CheckMessagesVerifier.verify(file.getCheckMessages())

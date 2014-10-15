@@ -29,7 +29,7 @@ public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTe
 
 
   @Test
-  public void defaultValue() throws IllegalAccessException {
+  public void defaultValue() throws Exception {
     activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), check);
@@ -44,7 +44,7 @@ public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTe
   }
 
   @Test
-  public void custom() throws IllegalAccessException {
+  public void custom() throws Exception {
     deactivateAll();
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), check);

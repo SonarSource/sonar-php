@@ -30,7 +30,7 @@ public class StringLiteralDuplicatedCheckTest extends CheckTest {
   private StringLiteralDuplicatedCheck check = new StringLiteralDuplicatedCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(10).withMessage("Define a constant instead of duplicating this literal \"aaaaa\" 3 times.")
@@ -40,7 +40,7 @@ public class StringLiteralDuplicatedCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.threshold = 4;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), check);

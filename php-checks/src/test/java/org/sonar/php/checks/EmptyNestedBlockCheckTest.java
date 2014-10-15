@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class EmptyNestedBlockCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("EmptyNestedBlockCheck.php"), new EmptyNestedBlockCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

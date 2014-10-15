@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class KeywordsAndConstantsNotLowerCaseCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("KeywordsAndConstantsNotLowerCaseCheck.php"), new KeywordsAndConstantsNotLowerCaseCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

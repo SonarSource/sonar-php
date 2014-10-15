@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class CallParentConstructorCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("CallParentConstructorCheck.php"), new CallParentConstructorCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

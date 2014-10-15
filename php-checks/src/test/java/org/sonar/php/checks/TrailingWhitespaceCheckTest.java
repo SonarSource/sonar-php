@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class TrailingWhitespaceCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TrailingWhitespaceCheck.php"), new TrailingWhitespaceCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

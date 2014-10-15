@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class OneStatementPerLineCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("OneStatementPerLineCheck.php"), new OneStatementPerLineCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

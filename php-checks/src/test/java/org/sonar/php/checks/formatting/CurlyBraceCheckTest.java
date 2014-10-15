@@ -29,7 +29,7 @@ public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
 
 
   @Test
-  public void defaultValue() throws IllegalAccessException {
+  public void defaultValue() throws Exception {
     activeOnly("isOpenCurlyBraceForClassAndFunction", "isOpenCurlyBraceForControlStructures", "isClosingCurlyNextToKeyword");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"), check);
@@ -57,7 +57,7 @@ public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
   }
 
   @Test
-  public void custom() throws IllegalAccessException {
+  public void custom() throws Exception {
     deactivateAll();
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"), check);

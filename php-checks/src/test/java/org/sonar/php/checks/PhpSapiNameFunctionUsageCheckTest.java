@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class PhpSapiNameFunctionUsageCheckTest extends CheckTest {
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("PhpSapiNameFunctionUsageCheck.php"), new PhpSapiNameFunctionUsageCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

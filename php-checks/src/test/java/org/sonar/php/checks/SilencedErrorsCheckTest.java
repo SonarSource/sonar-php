@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class SilencedErrorsCheckTest extends CheckTest {
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SilencedErrorsCheck.php"), new SilencedErrorsCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

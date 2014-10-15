@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class PerlStyleCommentsUsageCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php"), new PerlStyleCommentsUsageCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

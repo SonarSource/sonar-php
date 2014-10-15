@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class IfConditionAlwaysTrueOrFalseCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("IfConditionAlwaysTrueOrFalseCheck.php"), new IfConditionAlwaysTrueOrFalseCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

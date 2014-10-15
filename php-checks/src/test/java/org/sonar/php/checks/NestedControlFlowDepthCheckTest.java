@@ -30,7 +30,7 @@ public class NestedControlFlowDepthCheckTest extends CheckTest {
   private NestedControlFlowDepthCheck check = new NestedControlFlowDepthCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NestedControlFlowDepthCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(16).withMessage("Refactor this code to not nest more than " + check.DEFAULT + " \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.")
@@ -42,7 +42,7 @@ public class NestedControlFlowDepthCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.max = 4;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NestedControlFlowDepthCheck.php"), check);

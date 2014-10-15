@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class ElseIfSequenceKeywordUsageCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ElseIfSequenceKeywordUsageCheck.php"), new ElseIfSequenceKeywordUsageCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class UnusedFunctionParametersCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("UnusedFunctionParametersCheck.php"), new UnusedFunctionParametersCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

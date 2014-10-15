@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class TabCharacterCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TabCharacterCheck.php"), new TabCharacterCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

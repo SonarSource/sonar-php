@@ -30,14 +30,14 @@ public class TooManyFieldsInClassCheckTest extends CheckTest {
   private TooManyFieldsInClassCheck check = new TooManyFieldsInClassCheck();
 
   @Test
-  public void test_default() {
+  public void test_default() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFieldsInClassCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void custom_maximum_field_threshold() {
+  public void custom_maximum_field_threshold() throws Exception {
     check.maximumFieldThreshold = 4;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFieldsInClassCheck.php"), check);
@@ -47,7 +47,7 @@ public class TooManyFieldsInClassCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom_both_parameters() {
+  public void custom_both_parameters() throws Exception {
     check.maximumFieldThreshold = 2;
     check.countNonpublicFields = false;
 

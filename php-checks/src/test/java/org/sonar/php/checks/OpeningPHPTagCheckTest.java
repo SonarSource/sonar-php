@@ -31,21 +31,21 @@ public class OpeningPHPTagCheckTest extends CheckTest {
   private final String TEST_DIR = "OpeningPHPTagCheck/";
 
   @Test
-  public void ok_long_tag() {
+  public void ok_long_tag() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok_long_tag.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void ok_short_echo_tag() {
+  public void ok_short_echo_tag() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok_short_echo_tag.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void ko() {
+  public void ko() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(3).withMessage("Change this opening tag to either \"<?php\" or \"<?=\".")

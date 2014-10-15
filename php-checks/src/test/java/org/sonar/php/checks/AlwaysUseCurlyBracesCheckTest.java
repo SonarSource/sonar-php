@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class AlwaysUseCurlyBracesCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("AlwaysUseCurlyBracesCheck.php"), new AlwaysUseCurlyBracesCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
