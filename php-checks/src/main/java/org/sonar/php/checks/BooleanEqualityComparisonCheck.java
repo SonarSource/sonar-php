@@ -30,7 +30,6 @@ import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.Map;
 
 @Rule(
