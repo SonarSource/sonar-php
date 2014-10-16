@@ -775,6 +775,19 @@
           <txt>mn</txt>
         </prop>
       </chc>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S2010</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>5.0</val>
+          <txt>mn</txt>
+        </prop>
+      </chc>
     </chc>
     <chc>
       <key>RESOURCE_RELIABILITY</key>

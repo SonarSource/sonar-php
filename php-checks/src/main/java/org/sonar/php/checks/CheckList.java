@@ -109,6 +109,7 @@ public class CheckList {
       TooManyFieldsInClassCheck.class,
       ThisVariableUsageInStaticContextCheck.class,
       ReferenceInFunctionCallCheck.class,
+      LogicalWordOperatorUsageCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
