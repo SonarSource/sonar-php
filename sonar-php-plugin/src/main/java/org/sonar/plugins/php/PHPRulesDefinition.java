@@ -31,7 +31,8 @@ import java.util.ResourceBundle;
 public class PHPRulesDefinition implements RulesDefinition {
 
   private static final String RULES_DESCRIPTIONS_DIRECTORY = "/org/sonar/l10n/php/rules/php/";
-  private static final String RESOURCE_BUNDLE_BASE_NAME = "org.sonar.l10n.php";
+  private static final String PARAM_RESOURCE_BUNDLE_BASE_NAME = "org.sonar.l10n.php";
+  private static final String SQALE_RESOURCE_BUNDLE_BASE_NAME = "org.sonar.l10n.php-model";
 
   private static final String REPOSITORY_NAME = "SonarQube";
 
@@ -47,13 +48,19 @@ public class PHPRulesDefinition implements RulesDefinition {
   }
 
   private void setDescriptionAndParamTitle(NewRepository repository) {
-    ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, Locale.ENGLISH);
+    ResourceBundle paramResourceBundle = ResourceBundle.getBundle(PARAM_RESOURCE_BUNDLE_BASE_NAME, Locale.ENGLISH);
+    ResourceBundle sqaleResourceBundle = ResourceBundle.getBundle(SQALE_RESOURCE_BUNDLE_BASE_NAME, Locale.ENGLISH);
 
     for (NewRule newRule : repository.rules()) {
+
+      // FIXME: this should be replace with tag when rule API will be available
+      newRule.setDebtSubCharacteristic(sqaleResourceBundle.getString(newRule.key() + ".characteristic"));
+      newRule.setDebtRemediationFunction(newRule.debtRemediationFunctions().linear(sqaleResourceBundle.getString(newRule.key() + ".time")));
+
       newRule.setHtmlDescription(getClass().getResource(RULES_DESCRIPTIONS_DIRECTORY + newRule.key() + ".html"));
 
       for (NewParam newParam : newRule.params()) {
-        newParam.setDescription(resourceBundle.getString("rule.php." + newRule.key() + ".param." + newParam.key()));
+        newParam.setDescription(paramResourceBundle.getString("rule.php." + newRule.key() + ".param." + newParam.key()));
       }
     }
   }
