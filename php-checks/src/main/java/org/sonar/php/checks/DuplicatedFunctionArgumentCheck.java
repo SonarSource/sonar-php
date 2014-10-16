@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.Sets;
 import com.sonar.sslr.api.AstNode;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -28,6 +29,7 @@ import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
+import java.util.Iterator;
 import java.util.Set;
 
 @Rule(
@@ -39,6 +41,8 @@ import java.util.Set;
 public class DuplicatedFunctionArgumentCheck extends SquidCheck<LexerlessGrammar> {
 
   private Set<String> parameters = Sets.newHashSet();
+  private Set<String> duplicatedParams = Sets.newTreeSet();
+
 
   @Override
   public void init() {
@@ -47,22 +51,35 @@ public class DuplicatedFunctionArgumentCheck extends SquidCheck<LexerlessGrammar
 
   @Override
   public void visitNode(AstNode astNode) {
-    int ndDuplicated = 0;
-
     for (AstNode parameter : astNode.getChildren(PHPGrammar.PARAMETER)) {
       String paramName = parameter.getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue();
+
       if (parameters.contains(paramName)) {
-        ndDuplicated++;
+        duplicatedParams.add(paramName);
       } else {
         parameters.add(paramName);
       }
     }
 
-    if (ndDuplicated > 0) {
-      getContext().createLineViolation(this, "Rename duplicated parameters.", astNode);
+    if (!duplicatedParams.isEmpty()) {
+      getContext().createLineViolation(this, "Rename the duplicated function {0} \"{1}\".", astNode,
+        duplicatedParams.size() == 1 ? "parameter" : "parameters",
+        duplicatedParamsToString());
     }
 
     parameters.clear();
+    duplicatedParams.clear();
+  }
+
+  private String duplicatedParamsToString() {
+    StringBuilder builder = new StringBuilder();
+
+    Iterator<String> it = duplicatedParams.iterator();
+    while (it.hasNext()) {
+      builder.append(it.next() + ", ");
+    }
+
+    return StringUtils.removeEnd(builder.toString().trim(), ",");
   }
 
 }

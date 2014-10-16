@@ -31,8 +31,8 @@ public class DuplicatedFunctionArgumentCheckTest extends CheckTest {
   public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("DuplicatedFunctionArgumentCheck.php"), new DuplicatedFunctionArgumentCheck());
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3)
-      .next().atLine(6)
+      .next().atLine(3).withMessage("Rename the duplicated function parameter \"$a\".")
+      .next().atLine(6).withMessage("Rename the duplicated function parameters \"$a, $b\".")
       .noMore();
   }
 
