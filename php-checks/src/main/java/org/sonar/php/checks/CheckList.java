@@ -110,6 +110,7 @@ public class CheckList {
       ThisVariableUsageInStaticContextCheck.class,
       ReferenceInFunctionCallCheck.class,
       LogicalWordOperatorUsageCheck.class,
+      DuplicatedFunctionArgumentCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
