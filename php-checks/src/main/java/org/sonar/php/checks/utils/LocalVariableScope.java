@@ -194,7 +194,7 @@ public class LocalVariableScope {
     for (AstNode lexicalVar : lexicalVarList.getChildren(PHPGrammar.LEXICAL_VAR)) {
       AstNode varIdentifier = lexicalVar.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
       String varName = varIdentifier.getTokenOriginalValue();
-      boolean isReference = lexicalVar.hasDirectChildren(PHPPunctuator.AND);
+      boolean isReference = lexicalVar.hasDirectChildren(PHPPunctuator.AMPERSAND);
       boolean isFromOuterScope = outerScope == null || outerScope.localVariables.containsKey(varName);
 
       if (isReference && !isFromOuterScope) {

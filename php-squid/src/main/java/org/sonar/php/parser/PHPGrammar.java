@@ -86,7 +86,7 @@ import static org.sonar.php.api.PHPKeyword.VAR;
 import static org.sonar.php.api.PHPKeyword.WHILE;
 import static org.sonar.php.api.PHPKeyword.YIELD;
 import org.sonar.php.api.PHPPunctuator;
-import static org.sonar.php.api.PHPPunctuator.AND;
+import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
 import static org.sonar.php.api.PHPPunctuator.ANDAND;
 import static org.sonar.php.api.PHPPunctuator.ANDEQUAL;
 import static org.sonar.php.api.PHPPunctuator.ARROW;
@@ -440,7 +440,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE)));
 
     b.rule(DIMENSIONAL_OFFSET).is(LBRACKET, b.optional(EXPRESSION), RBRACKET);
-    b.rule(ALIAS_VARIABLE).is(AND, MEMBER_EXPRESSION);
+    b.rule(ALIAS_VARIABLE).is(AMPERSAND, MEMBER_EXPRESSION);
 
     b.rule(MEMBER_EXPRESSION).is(
       PRIMARY_EXPRESSION,
@@ -570,11 +570,11 @@ public enum PHPGrammar implements GrammarRuleKey {
         b.sequence(INSTANCEOF, MEMBER_EXPRESSION)))
     );
 
-    b.rule(FUNCTION_EXPRESSION).is(b.optional(STATIC), FUNCTION, b.optional(AND), LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS,
+    b.rule(FUNCTION_EXPRESSION).is(b.optional(STATIC), FUNCTION, b.optional(AMPERSAND), LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS,
       b.optional(LEXICAL_VARS), BLOCK);
     b.rule(LEXICAL_VARS).is(USE, LPARENTHESIS, LEXICAL_VAR_LIST, RPARENTHESIS);
     b.rule(LEXICAL_VAR_LIST).is(LEXICAL_VAR, b.zeroOrMore(COMMA, LEXICAL_VAR));
-    b.rule(LEXICAL_VAR).is(b.optional(AND), VAR_IDENTIFIER);
+    b.rule(LEXICAL_VAR).is(b.optional(AMPERSAND), VAR_IDENTIFIER);
 
     b.rule(EXIT_EXPR).is(b.firstOf(EXIT, DIE), b.optional(LPARENTHESIS, b.optional(EXPRESSION), RPARENTHESIS));
 
@@ -617,7 +617,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(RELATIONAL_OPERATOR).is(b.firstOf(LE, GE, LT, GT));
     b.rule(EQUALITY_EXPR).is(RELATIONAL_EXPR, b.zeroOrMore(EQUALITY_OPERATOR, RELATIONAL_EXPR)).skipIfOneChild();
     b.rule(EQUALITY_OPERATOR).is(b.firstOf(NOTEQUAL2, NOTEQUAL, EQUAL2, EQUAL, NOTEQUALBIS));
-    b.rule(BITEWISE_AND_EXPR).is(EQUALITY_EXPR, b.zeroOrMore(AND, EQUALITY_EXPR)).skipIfOneChild();
+    b.rule(BITEWISE_AND_EXPR).is(EQUALITY_EXPR, b.zeroOrMore(AMPERSAND, EQUALITY_EXPR)).skipIfOneChild();
     b.rule(BITEWISE_XOR_EXPR).is(BITEWISE_AND_EXPR, b.zeroOrMore(XOR, BITEWISE_AND_EXPR)).skipIfOneChild();
     b.rule(BITEWISE_OR_EXPR).is(BITEWISE_XOR_EXPR, b.zeroOrMore(OR, BITEWISE_XOR_EXPR)).skipIfOneChild();
     b.rule(LOGICAL_AND_EXPR).is(BITEWISE_OR_EXPR, b.zeroOrMore(LOGICAL_AND_OPERATOR, BITEWISE_OR_EXPR)).skipIfOneChild();
@@ -628,7 +628,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(CONDITIONAL_EXPR).is(LOGICAL_OR_EXPR, b.optional(QUERY, b.optional(ASSIGNMENT_EXPR), COLON, ASSIGNMENT_EXPR)).skipIfOneChild();
 
     b.rule(ASSIGNMENT_EXPR).is(b.firstOf(
-      b.sequence(MEMBER_EXPRESSION, EQU, AND, b.firstOf(NEW_EXPR, MEMBER_EXPRESSION)),
+      b.sequence(MEMBER_EXPRESSION, EQU, AMPERSAND, b.firstOf(NEW_EXPR, MEMBER_EXPRESSION)),
       b.sequence(CONDITIONAL_EXPR, ASSIGNMENT_OPERATOR, ASSIGNMENT_EXPR),
       CONDITIONAL_EXPR)).skipIfOneChild();
     b.rule(ASSIGNMENT_OPERATOR).is(b.firstOf(EQU, COMPOUND_ASSIGNMENT, LOGICAL_ASSIGNMENT));
@@ -677,7 +677,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(METHOD_BODY).is(b.firstOf(EOS, BLOCK));
 
     b.rule(PARAMETER_LIST).is(PARAMETER, b.zeroOrMore(COMMA, PARAMETER));
-    b.rule(PARAMETER).is(b.optional(OPTIONAL_CLASS_TYPE), b.optional(AND), b.optional(ELIPSIS), VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
+    b.rule(PARAMETER).is(b.optional(OPTIONAL_CLASS_TYPE), b.optional(AMPERSAND), b.optional(ELIPSIS), VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
     b.rule(OPTIONAL_CLASS_TYPE).is(b.firstOf(ARRAY, CALLABLE, FULLY_QUALIFIED_CLASS_NAME));
 
     b.rule(CLASS_VARIABLE_DECLARATION).is(VARIABLE_MODIFIERS, VARIABLE_DECLARATION, b.zeroOrMore(COMMA, VARIABLE_DECLARATION), EOS);
@@ -728,7 +728,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(HALT_COMPILER_STATEMENT).is(HALT_COMPILER, LPARENTHESIS, RPARENTHESIS, EOS);
 
-    b.rule(REFERENCE).is(AND);
+    b.rule(REFERENCE).is(AMPERSAND);
     b.rule(FUNCTION_DECLARATION).is(FUNCTION, b.optional(REFERENCE), IDENTIFIER,
       LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS, BLOCK);
 
@@ -806,7 +806,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(FOREACH_STATEMENT).is(FOREACH, LPARENTHESIS, FOREACH_EXPR, RPARENTHESIS, b.firstOf(ALTERNATIVE_FOREACH_STATEMENT, STATEMENT));
     b.rule(FOREACH_EXPR).is(EXPRESSION, AS, FOREACH_VARIABLE, b.optional(DOUBLEARROW, FOREACH_VARIABLE));
     b.rule(FOREACH_VARIABLE).is(b.firstOf(
-      b.sequence(b.optional(AND), MEMBER_EXPRESSION),
+      b.sequence(b.optional(AMPERSAND), MEMBER_EXPRESSION),
       b.sequence(LIST, LPARENTHESIS, ASSIGNMENT_LIST, RPARENTHESIS)));
     b.rule(ALTERNATIVE_FOREACH_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDFOREACH, EOS);
 
