@@ -47,7 +47,7 @@ public class PHPProfileTest {
 
     assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
     assertThat(profile.getName()).isEqualTo(CheckList.SONAR_WAY_PROFILE);
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(54);
+    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(55);
     assertThat(validation.hasErrors()).isFalse();
   }
 

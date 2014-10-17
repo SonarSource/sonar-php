@@ -32,6 +32,7 @@ public interface PHPRuleTags {
   String UNUSED = "unused";
   String PITFAIL = "pitfail";
   String MISRA_C = "misra-c";
+  String MISRA_CPP = "misra-c++";
   String PERFORMANCE = "performance";
   String OBSOLETE = "obsolete";
 }

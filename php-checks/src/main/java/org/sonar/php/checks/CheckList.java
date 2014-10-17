@@ -111,6 +111,7 @@ public class CheckList {
       ReferenceInFunctionCallCheck.class,
       LogicalWordOperatorUsageCheck.class,
       DuplicatedFunctionArgumentCheck.class,
+      CodeFollowingJumpStatementCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

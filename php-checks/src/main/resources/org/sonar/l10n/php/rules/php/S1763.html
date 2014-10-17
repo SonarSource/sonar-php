@@ -1,0 +1,45 @@
+<p>
+  Jump statements (<code>return</code>, <code>break</code>, <code>continue</code>, and <code>goto</code>) and <code>throw</code> expressions move control flow out of the current code block. Typically, any statements in a block that come after a jump or throw are simply wasted keystrokes lying in wait to confuse the unwary.
+</p>
+<p>
+  Rarely, as illustrated below, code after a jump or throw is reachable. However, such code is difficult to understand, and should be refactored.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+function fun($a) {
+  $i = 10;
+  return $i + $a;
+  $i++;             // this is never executed
+}
+
+function foo($a) {
+  if ($a == 5) {
+    goto error;
+  } else {
+    // do the job
+  }
+  return;
+
+  error:
+    printf("don't use 5"); // this is reachable but unreadable
+
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+function fun($a) {
+  $i = 10;
+  return $i + $a;
+}
+
+function foo($a) {
+  if ($a == 5) {
+    handleError();
+  } else {
+    // do the job
+  }
+  return;
+}
+</pre>
