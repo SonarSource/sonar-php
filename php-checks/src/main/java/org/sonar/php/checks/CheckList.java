@@ -112,6 +112,7 @@ public class CheckList {
       LogicalWordOperatorUsageCheck.class,
       DuplicatedFunctionArgumentCheck.class,
       CodeFollowingJumpStatementCheck.class,
+      RedundantFinalCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
