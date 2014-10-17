@@ -55,21 +55,6 @@ public class FunctionUtils {
   }
 
   /**
-   * Returns whether a method declaration is static or not.
-   *
-   * @param methodDec METHOD_DECLARATION
-   * @return true if method is static, false otherwise
-   */
-  public static boolean isStaticMethod(AstNode methodDec) {
-    for (AstNode modifier : methodDec.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
-      if (modifier.getFirstChild().is(PHPKeyword.STATIC)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
    * Returns whether a method declaration has an implementation or not.
    *
    * @param methodDec METHOD_DECLARATION

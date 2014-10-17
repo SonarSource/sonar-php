@@ -23,6 +23,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 
 public class CheckUtils {
@@ -37,6 +38,21 @@ public class CheckUtils {
     .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
 
   private CheckUtils() {
+  }
+
+  /**
+   * Returns whether a class member (method or variable) is static or not.
+   *
+   * @param classMember METHOD_DECLARATION, VARIABLE_MODIFIERS
+   * @return true if the class member is static, false otherwise
+   */
+  public static boolean isStaticClassMember(AstNode classMember) {
+    for (AstNode modifier : classMember.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
+      if (modifier.getFirstChild().is(PHPKeyword.STATIC)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public static boolean isExpressionABooleanLiteral(AstNode expression) {
