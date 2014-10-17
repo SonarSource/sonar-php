@@ -33,7 +33,7 @@ import java.util.List;
   key = "S2041",
   name = "Parentheses should not be used for calls to \"echo\"",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {PHPRuleTags.PITFAIL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class EchoWithParenthesisCheck extends SquidCheck<LexerlessGrammar> {
 

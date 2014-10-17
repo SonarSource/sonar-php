@@ -1,5 +1,5 @@
 <p>
-  echo can be called with or without parentheses, but it is best practice to leave parentheses off the call because using parentheses with multiple arguments will result in a parse error.
+  <code>echo</code> can be called with or without parentheses, but it is best practice to leave parentheses off the call because using parentheses with multiple arguments will result in a parse error.
 </p>
 
 <h2>Noncompliant Code Example</h2>
@@ -11,6 +11,6 @@ echo("Hello", "World"); // Noncompliant. Parse error
 <h2>Compliant Solution</h2>
 <pre>
 echo "Hello";
-echo "Hello World!";
+echo "Hello","World!";
 </pre>
 
