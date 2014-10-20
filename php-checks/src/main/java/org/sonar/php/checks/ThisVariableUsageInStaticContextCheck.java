@@ -48,7 +48,7 @@ public class ThisVariableUsageInStaticContextCheck extends SquidCheck<LexerlessG
   @Override
   public void visitNode(AstNode astNode) {
     if (astNode.is(PHPGrammar.METHOD_DECLARATION)) {
-      inStaticContext = CheckUtils.isStaticClassMember(astNode);
+      inStaticContext = CheckUtils.isStaticClassMember(astNode.getChildren(PHPGrammar.MEMBER_MODIFIER));
 
     } else if (inStaticContext && isThisVariable(astNode)) {
       getContext().createLineViolation(this, "Remove this use of \"$this\".", astNode);

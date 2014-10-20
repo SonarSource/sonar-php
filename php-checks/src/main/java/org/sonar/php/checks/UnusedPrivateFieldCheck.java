@@ -19,21 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.AbstractUnusedPrivateClassMemberCheck;
 import org.sonar.php.parser.PHPGrammar;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import java.util.Map;
+import java.util.List;
 
 @Rule(
   key = "S1068",
@@ -41,128 +34,30 @@ import java.util.Map;
   priority = Priority.MAJOR,
   tags = {PHPRuleTags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class UnusedPrivateFieldCheck extends SquidCheck<LexerlessGrammar> {
+public class UnusedPrivateFieldCheck extends AbstractUnusedPrivateClassMemberCheck {
 
-  private Map<String, PrivateField> privateFields = Maps.newHashMap();
-
-  private static class PrivateField {
-    final AstNode declaration;
-    int usage = 0;
-
-    private PrivateField(AstNode declaration) {
-      this.declaration = declaration;
-    }
+  @Override
+  protected String getIssueMessage() {
+    return "Remove this unused \"{0}\" private field.";
   }
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CLASS_DECLARATION,
-      PHPGrammar.MEMBER_EXPRESSION,
-      PHPGrammar.SIMPLE_ENCAPS_VARIABLE);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
-      retrievePrivateClassField(astNode);
-    } else {
-      check(astNode);
-    }
-  }
-
-  @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
-      reportUnusedPrivateField();
-      privateFields.clear();
-    }
-  }
-
-  private void retrievePrivateClassField(AstNode classDeclaration) {
+  protected void retrievePrivateClassMember(AstNode classDeclaration) {
     for (AstNode classStmt : classDeclaration.getChildren(PHPGrammar.CLASS_STATEMENT)) {
       AstNode stmtChild = classStmt.getFirstChild();
 
-      if (stmtChild.is(PHPGrammar.CLASS_VARIABLE_DECLARATION) && isPrivate(stmtChild)) {
-        for (AstNode varDeclaration : stmtChild.getChildren(PHPGrammar.VARIABLE_DECLARATION)) {
-          AstNode varIdentifier = varDeclaration.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
-          privateFields.put(getCalledName(varIdentifier, stmtChild.getFirstChild(PHPGrammar.VARIABLE_MODIFIERS)),
-            new PrivateField(varIdentifier));
+      if (stmtChild.is(PHPGrammar.CLASS_VARIABLE_DECLARATION)) {
+        List<AstNode> modifiers = stmtChild.getFirstChild(PHPGrammar.VARIABLE_MODIFIERS).getChildren(PHPGrammar.MEMBER_MODIFIER);
+
+        if (isPrivate(modifiers)) {
+          for (AstNode varDeclaration : stmtChild.getChildren(PHPGrammar.VARIABLE_DECLARATION)) {
+            AstNode varIdentifier = varDeclaration.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
+
+            addPrivateMember(getCalledName(varIdentifier, modifiers), varIdentifier);
+          }
         }
       }
     }
   }
 
-
-  /**
-   * Returns "::$field" for static field and "$this->field" for others.
-   */
-  private String getCalledName(AstNode varIdentifier, AstNode varModifiers) {
-    if (CheckUtils.isStaticClassMember(varModifiers)) {
-      return "::" + varIdentifier.getTokenOriginalValue();
-    } else {
-      return "$this->" + StringUtils.remove(varIdentifier.getTokenOriginalValue(), "$");
-    }
-  }
-
-  private boolean isPrivate(AstNode classVarDeclaration) {
-    for (AstNode modifier : classVarDeclaration.getFirstChild(PHPGrammar.VARIABLE_MODIFIERS).getChildren(PHPGrammar.MEMBER_MODIFIER)) {
-      if (modifier.getFirstChild().is(PHPKeyword.PRIVATE)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private void check(AstNode variable) {
-    String varName = getVariableName(variable);
-    PrivateField field = privateFields.get(varName);
-
-    if (field != null) {
-      field.usage++;
-    }
-  }
-
-  private void reportUnusedPrivateField() {
-    for (PrivateField field : privateFields.values()) {
-      if (field.usage == 0) {
-        getContext().createLineViolation(this, "Remove this unused \"{0}\" private field.", field.declaration, field.declaration.getTokenOriginalValue());
-      }
-    }
-  }
-
-  /**
-   * Return variable full name excluding array access and keyword "self" and "static".
-   * <p/>
-   * Example:
-   * <ol>
-   * <li>for "$this->myArray[0]", function returns "$this->myArray"
-   * <li>for "static::$field", function returns "::$field"
-   */
-  private String getVariableName(AstNode var) {
-    boolean exclude = false;
-    StringBuilder builder = new StringBuilder();
-
-    if (var.getPreviousAstNode().is(PHPPunctuator.DOLAR_LCURLY)) {
-      builder.append("$");
-    }
-
-    for (Token token : var.getTokens()) {
-
-      if ("static".equals(token.getOriginalValue()) || "self".equals(token.getOriginalValue())) {
-        continue;
-      }
-      if ("[".equals(token.getOriginalValue())) {
-        exclude = true;
-
-      } else if ("]".equals(token.getOriginalValue())) {
-        exclude = false;
-
-      } else if (!exclude) {
-        builder.append(token.getOriginalValue());
-      }
-    }
-
-    return builder.toString();
-  }
 }

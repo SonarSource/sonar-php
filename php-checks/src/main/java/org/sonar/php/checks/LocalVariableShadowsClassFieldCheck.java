@@ -138,7 +138,8 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
 
   private boolean isExcluded(AstNode methodDec) {
     String methodName = methodDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
-    return CheckUtils.isStaticClassMember(methodDec) || isConstructor(methodName) || isSetter(methodName);
+    return CheckUtils.isStaticClassMember(methodDec.getChildren(PHPGrammar.MEMBER_MODIFIER))
+      || isConstructor(methodName) || isSetter(methodName);
   }
 
   private void checkLocalVariable(AstNode assignmentExpr) {

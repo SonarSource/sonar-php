@@ -26,6 +26,8 @@ import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 
+import java.util.List;
+
 public class CheckUtils {
 
   public static final ImmutableMap<String, String> PREDEFINED_VARIABLES = ImmutableMap.<String, String>builder()
@@ -43,11 +45,11 @@ public class CheckUtils {
   /**
    * Returns whether a class member (method or variable) is static or not.
    *
-   * @param classMember METHOD_DECLARATION, VARIABLE_MODIFIERS
+   * @param modifiers List of MEMBER_MODIFIER
    * @return true if the class member is static, false otherwise
    */
-  public static boolean isStaticClassMember(AstNode classMember) {
-    for (AstNode modifier : classMember.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
+  public static boolean isStaticClassMember(List<AstNode> modifiers) {
+    for (AstNode modifier : modifiers) {
       if (modifier.getFirstChild().is(PHPKeyword.STATIC)) {
         return true;
       }
