@@ -113,6 +113,7 @@ public class CheckList {
       DuplicatedFunctionArgumentCheck.class,
       CodeFollowingJumpStatementCheck.class,
       RedundantFinalCheck.class,
+      UnusedPrivateMethodCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
