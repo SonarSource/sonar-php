@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -37,6 +38,10 @@ import java.util.regex.Pattern;
   tags = {PHPRuleTags.CONVENTION})
 public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
 
+  private static final ImmutableList<String> MAGIC_METHODS = ImmutableList.of(
+    "__construct", "__destruct", "__call", "__callStatic", "__callStatic", "__get",
+    "__set", "__isset", "__unset", "__sleep", "__wakeup", "__toString", "__invoke",
+    "__set_state", "__clone", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   private Pattern pattern = null;
 
@@ -64,6 +69,6 @@ public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
   }
 
   private static boolean isExcluded(AstNode funcDec, String functionName) {
-    return "__construct".equals(functionName) || "__destruct".equals(functionName)  || FunctionUtils.isOverriding(funcDec);
+    return MAGIC_METHODS.contains(functionName) || FunctionUtils.isOverriding(funcDec);
   }
 }
