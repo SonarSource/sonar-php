@@ -115,6 +115,7 @@ public class CheckList {
       RedundantFinalCheck.class,
       UnusedPrivateMethodCheck.class,
       FunctionDefineOutsideClassCheck.class,
+      SelfKeywordUsageCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
