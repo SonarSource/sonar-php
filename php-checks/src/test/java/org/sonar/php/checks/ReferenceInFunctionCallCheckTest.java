@@ -32,7 +32,7 @@ public class ReferenceInFunctionCallCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ReferenceInFunctionCallCheck.php"), new ReferenceInFunctionCallCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Pass \"$p1\" by value.")
+      .next().atLine(3).withMessage("Remove the '&' to pass \"$p1\" by value.")
       .noMore();
   }
 }

@@ -48,7 +48,7 @@ public class ReferenceInFunctionCallCheck extends SquidCheck<LexerlessGrammar> {
       AstNode param = paramList.getFirstChild();
 
       if (param.is(PHPGrammar.ALIAS_VARIABLE)) {
-        getContext().createLineViolation(this, "Pass \"{0}\" by value.", param,
+        getContext().createLineViolation(this, "Remove the ''&'' to pass \"{0}\" by value.", param,
           CheckUtils.getExpressionAsString(param.getFirstChild(PHPGrammar.MEMBER_EXPRESSION)));
       }
     }
