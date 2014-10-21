@@ -114,6 +114,7 @@ public class CheckList {
       CodeFollowingJumpStatementCheck.class,
       RedundantFinalCheck.class,
       UnusedPrivateMethodCheck.class,
+      FunctionDefineOutsideClassCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

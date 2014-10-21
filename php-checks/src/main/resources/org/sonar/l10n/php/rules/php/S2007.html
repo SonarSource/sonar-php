@@ -1,0 +1,26 @@
+<p>
+  TODO
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+&lt;?php
+
+public function doSomething($arg) {
+  //...
+}
+class MyClass {
+    //...
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+&lt;?php
+
+class MyClass {
+  public static function doSomething($arg) {
+    //...
+  }
+}
+</pre>
