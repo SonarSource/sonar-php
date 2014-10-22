@@ -1,0 +1,23 @@
+<p>
+  Global variables are a useful construct, but they should not be abused. Functions can access the global scope either through the <code>global</code> keyword or though the <code>$GLOBALS</code> array, but these practices considerably reduce the function's readability and reusability. Instead, the global variable should be passed as a parameter to the function.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+$myGlobalVariable;
+
+function foo()
+{
+  global $myGlobalVariable;     // Noncompliant
+  $GLOBALS['myGlobalVariable']; // Noncompliant
+  // ...
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+function foo($myStateVariable)
+{
+  // ...
+}
+</pre>

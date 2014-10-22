@@ -117,6 +117,7 @@ public class CheckList {
       FunctionDefineOutsideClassCheck.class,
       SelfKeywordUsageCheck.class,
       FileWithSymbolsAndSideEffectsCheck.class,
+      GlobalKeywordAndArrayUsageCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
