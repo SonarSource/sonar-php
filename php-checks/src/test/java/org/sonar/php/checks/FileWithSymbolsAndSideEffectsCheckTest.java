@@ -43,7 +43,7 @@ public class FileWithSymbolsAndSideEffectsCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(null)
+      .next().atLine(null).withMessage("Refactor this file to either declare symbols or cause side effects, but not both.")
       .noMore();
   }
 

@@ -92,7 +92,7 @@ public class FileWithSymbolsAndSideEffectsCheck extends SquidCheck<LexerlessGram
     }
 
     if (!currentFile.hasIssue && currentFile.hasSymbol && currentFile.hasSideEffects) {
-      getContext().createFileViolation(this, "Refactor this file so it either declare symbol or cause side effects, but not both.");
+      getContext().createFileViolation(this, "Refactor this file to either declare symbols or cause side effects, but not both.");
       currentFile.hasIssue = true;
     }
   }
