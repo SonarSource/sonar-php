@@ -116,6 +116,7 @@ public class CheckList {
       UnusedPrivateMethodCheck.class,
       FunctionDefineOutsideClassCheck.class,
       SelfKeywordUsageCheck.class,
+      FileWithSymbolsAndSideEffectsCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }

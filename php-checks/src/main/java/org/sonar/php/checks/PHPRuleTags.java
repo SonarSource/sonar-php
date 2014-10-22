@@ -35,4 +35,5 @@ public interface PHPRuleTags {
   String MISRA_CPP = "misra-c++";
   String PERFORMANCE = "performance";
   String OBSOLETE = "obsolete";
+  String USER_EXPERIENCE = "user-experience";
 }
