@@ -118,6 +118,7 @@ public class CheckList {
       SelfKeywordUsageCheck.class,
       FileWithSymbolsAndSideEffectsCheck.class,
       GlobalKeywordAndArrayUsageCheck.class,
+      MoreThanOneClassInFileCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
