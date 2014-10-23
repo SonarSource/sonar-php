@@ -61,7 +61,7 @@ public class MoreThanOneClassInFileCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko3.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(null).withCost(1.0).withMessage("There are 1 independent classes and 1 independent interfaces in this file; move all but one of them to other files.")
+      .next().atLine(null).withCost(2.0).withMessage("There are 1 independent classes and 2 independent interfaces in this file; move all but one of them to other files.")
       .noMore();
   }
 
