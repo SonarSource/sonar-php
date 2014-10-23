@@ -119,6 +119,7 @@ public class CheckList {
       FileWithSymbolsAndSideEffectsCheck.class,
       GlobalKeywordAndArrayUsageCheck.class,
       MoreThanOneClassInFileCheck.class,
+      LowerCaseColorCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
