@@ -28,7 +28,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S2007",
-  name = "Functions should not be define outside of class",
+  name = "Functions should not be define outside of classes",
   priority = Priority.MAJOR,
   tags = {PHPRuleTags.CONVENTION})
 public class FunctionDefineOutsideClassCheck extends SquidCheck<LexerlessGrammar> {
