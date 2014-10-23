@@ -122,6 +122,7 @@ public class CheckList {
       LowerCaseColorCheck.class,
       DirectlyAccessingSuperGlobalCheck.class,
       RequireInsteadOfRequireOnceCheck.class,
+      InlineHTMLInFileCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
