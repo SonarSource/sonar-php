@@ -121,6 +121,7 @@ public class CheckList {
       MoreThanOneClassInFileCheck.class,
       LowerCaseColorCheck.class,
       DirectlyAccessingSuperGlobalCheck.class,
+      RequireInsteadOfRequireOnceCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
