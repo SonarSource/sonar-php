@@ -1,0 +1,13 @@
+<p>
+  Superglobal variables are predefined variables available in all scopes throughout a script. However, accessing them directly is considered bad practice. Instead, they should be accessed through an object or framework that handles sanitation and validation.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+$name = $_POST['name'];
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+$name = $this->params()->fromPost('name');
+</pre>
