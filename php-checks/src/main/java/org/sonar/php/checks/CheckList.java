@@ -123,6 +123,7 @@ public class CheckList {
       DirectlyAccessingSuperGlobalCheck.class,
       RequireInsteadOfRequireOnceCheck.class,
       InlineHTMLInFileCheck.class,
+      ConcatenatedStringLiteralCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
