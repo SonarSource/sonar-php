@@ -1,0 +1,15 @@
+<p>
+  Nesting functions can quickly turn your code into "spaghetti code". Such code is hard to read, refactor and therefore to maintain.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+function f () {
+  function f_inner () {
+    function f_inner_inner() {
+      function f_inner_inner_inner() { // Noncompliant
+      }
+    }
+  }
+}
+</pre>

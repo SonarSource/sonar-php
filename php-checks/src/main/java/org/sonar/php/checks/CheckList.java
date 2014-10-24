@@ -124,6 +124,7 @@ public class CheckList {
       RequireInsteadOfRequireOnceCheck.class,
       InlineHTMLInFileCheck.class,
       ConcatenatedStringLiteralCheck.class,
+      NestedFunctionDepthCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
