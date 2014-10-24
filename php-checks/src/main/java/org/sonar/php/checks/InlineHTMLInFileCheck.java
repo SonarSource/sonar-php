@@ -26,6 +26,8 @@ import org.sonar.php.parser.PHPTokenType;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
+import javax.annotation.Nullable;
+
 @Rule(
   key = "S1997",
   name = "Files should not contain inline HTML",
@@ -33,6 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   tags = {PHPRuleTags.CONVENTION, PHPRuleTags.BRAIN_OVERLOAD})
 public class InlineHTMLInFileCheck extends SquidCheck<LexerlessGrammar> {
 
+  private boolean fileHasIssue = false;
 
   @Override
   public void init() {
@@ -40,9 +43,15 @@ public class InlineHTMLInFileCheck extends SquidCheck<LexerlessGrammar> {
   }
 
   @Override
+  public void visitFile(@Nullable AstNode astNode) {
+    fileHasIssue = false;
+  }
+
+  @Override
   public void visitNode(AstNode astNode) {
-    if (!"?>".equals(astNode.getTokenOriginalValue().trim())) {
+    if (!"?>".equals(astNode.getTokenOriginalValue().trim()) && !fileHasIssue) {
       getContext().createFileViolation(this, "Remove the inline HTML in this file.");
+      fileHasIssue = true;
     }
   }
 
