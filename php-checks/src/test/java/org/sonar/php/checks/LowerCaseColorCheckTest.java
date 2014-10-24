@@ -34,6 +34,7 @@ public class LowerCaseColorCheckTest extends CheckTest {
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(3).withMessage("Replace \"#fffffF\" with \"#FFFFFF\".")
       .next().atLine(5)
+      .next().atLine(6).withMessage("Replace \"#0ff\" with \"#0FF\".")
       .noMore();
   }
 

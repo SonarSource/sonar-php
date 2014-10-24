@@ -35,8 +35,8 @@ import java.util.regex.Pattern;
   tags = {PHPRuleTags.CONVENTION})
 public class LowerCaseColorCheck extends SquidCheck<LexerlessGrammar> {
 
-  private static final Pattern COLOR_REGEXP = Pattern.compile("#[A-Fa-f0-9]{6,6}");
-  private static final Pattern COLOR_REGEXP_UPPER_CASE = Pattern.compile("#[A-F0-9]{6,6}");
+  private static final Pattern COLOR_REGEXP = Pattern.compile("#[A-Fa-f0-9]{3,6}");
+  private static final Pattern COLOR_REGEXP_UPPER_CASE = Pattern.compile("#[A-F0-9]{3,6}");
 
 
   @Override
