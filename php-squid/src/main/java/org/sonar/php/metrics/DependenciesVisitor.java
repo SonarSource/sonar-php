@@ -20,8 +20,6 @@
 package org.sonar.php.metrics;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +29,13 @@ import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.SquidAstVisitor;
 import org.sonar.squidbridge.api.*;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
+public class DependenciesVisitor extends SquidAstVisitor<LexerlessGrammar> {
 
   private static final Logger LOG = LoggerFactory.getLogger(DependenciesVisitor.class);
 
@@ -52,20 +51,6 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     this.graph = graph;
   }
 
-  private static String getAstNodeValue(AstNode astNode) {
-    StringBuilder sb = new StringBuilder();
-    for (Token token : astNode.getTokens()) {
-      if (token.getType() == PHPPunctuator.SEMICOLON) {
-        break;
-      }
-      if (token.getType() == PHPKeyword.NAMESPACE) {
-        continue;
-      }
-      sb.append(token.getOriginalValue());
-    }
-    return sb.toString();
-  }
-
   @Override
   public void visitFile(AstNode astNode) {
     namespace = "";
@@ -73,16 +58,9 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     uses = new HashMap<String, String>();
     SourceCode sourceFile = getContext().peekSourceCode();
     LOG.debug("Searching dependencies in "+sourceFile.getKey());
-    if (!SourceFile.class.isInstance(sourceFile)) {
+    if (!(sourceFile instanceof SourceFile)) {
       throw new RuntimeException();
     }
-    SourceProject sourceProject = peekSourceProject();
-    SourcePackage sourcePackage = findSourcePackage(getPackageKey(astNode));
-    getContext().popSourceCode();
-    sourceProject.getChildren().remove(sourceFile);
-    getContext().addSourceCode(sourcePackage);
-    getContext().addSourceCode(sourceFile);
-
   }
 
   @Override
@@ -155,26 +133,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     }
     if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
       currentClass = null;
-      LOG.debug("Current class: null");
-    }
-  }
-
-  private String getPackageKey(AstNode astNode) {
-    AstNode nsSt = getNamespaceNode(astNode);
-    if (nsSt != null) {
-      AstNode packageNameNode = nsSt.getFirstChild(PHPGrammar.NAMESPACE_NAME);
-      return getAstNodeValue(packageNameNode).replace('.', '/');
-    } else {
-      // unnamed package
-      return "";
-    }
-  }
-
-  private AstNode getNamespaceNode(AstNode astNode) {
-    try {
-      return astNode.getFirstChild(PHPGrammar.TOP_STATEMENT_LIST).getFirstChild().getFirstChild(PHPGrammar.NAMESPACE_STATEMENT);
-    } catch (NullPointerException e) {
-      return null;
+      LOG.debug("leave class");
     }
   }
 
@@ -270,7 +229,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
   }
 
   private void parseNewExpression(AstNode astNode) {
-    AstNode className = astNode.getFirstChild(PHPGrammar.VARIABLE).getFirstChild(PHPGrammar.CLASS_NAME);
+    AstNode className = astNode.getFirstChild(PHPGrammar.MEMBER_EXPRESSION).getFirstChild(PHPGrammar.CLASS_NAME);
     if (className == null) {
       /**
        * dynamic class name
@@ -283,9 +242,6 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
 
   private void parseCatchStatement(AstNode astNode) {
     AstNode className = astNode.getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
-    if (className == null) {
-      return;
-    }
     addDependency(className);
   }
 
@@ -300,23 +256,26 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
   }
 
   private void setClassName(AstNode expr) {
-    for (Token token : expr.getTokens()) {
-      if (token.getType() == GenericTokenType.IDENTIFIER) {
-        String alias = token.getOriginalValue();
-        String className = getRealName(alias);
-        currentClass = findSourceClass(className);
-        LOG.debug("Current class: "+currentClass);
-        fixClassParent();
-        return;
-      }
+    if (currentClass != null) {
+      throw new RuntimeException("Class name already set");
     }
+    AstNode id = expr.getFirstChild(PHPGrammar.IDENTIFIER);
+    if (id == null) {
+      throw new RuntimeException("No class name in class statement");
+    }
+    String alias = getClassName(id);
+    String className = getRealName(alias);
+    currentClass = findSourceClass(className);
+    LOG.debug("Current class: "+currentClass);
+    fixClassParent();
   }
 
   private void fixClassParent() {
     SourceFile sourceFile = peekSourceFile();
     SourceCode parent = currentClass.getParent();
-    if (!sourceFile.equals(parent)) {
+    if (!sourceFile.equals(parent) && parent instanceof SourcePackage) {
       parent.getChildren().remove(currentClass);
+      parent.addChild(sourceFile);
       sourceFile.addChild(currentClass);
       fixParentLinks(currentClass);
     }
@@ -339,56 +298,26 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
   }
 
   private void addExtends(AstNode expr) {
-    StringBuilder builder = new StringBuilder();
-    boolean isExtends = false;
-
-    for (Token token : expr.getTokens()) {
-      if (token.getType() == PHPPunctuator.LCURLYBRACE) {
-        break;
-      }
-      if (token.getType() == PHPKeyword.EXTENDS) {
-        isExtends = true;
-      }
-      if (token.getType() == PHPKeyword.IMPLEMENTS) {
-        isExtends = false;
-      }
-      if (!isExtends) {
-        continue;
-      }
-      if (token.getType() == GenericTokenType.IDENTIFIER || token.getType() == PHPPunctuator.NS_SEPARATOR) {
-        builder.append(token.getOriginalValue());
-      }
-    }
-
-    String alias = builder.toString();
-    if (alias.length() > 0) {
+    AstNode extendsFrom = expr.getFirstChild(PHPGrammar.EXTENDS_FROM);
+    if (extendsFrom != null) {
+      AstNode className = extendsFrom.getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
+      String alias = getClassName(className);
       String realName = getRealName(alias);
       addLink(realName, SourceCodeEdgeUsage.EXTENDS);
     }
   }
 
   private void addImplements(AstNode expr) {
-    StringBuilder builder = new StringBuilder();
-    boolean isImplements = false;
-
-    for (Token token : expr.getTokens()) {
-      if (token.getType() == PHPKeyword.IMPLEMENTS) {
-        isImplements = true;
-      }
-      if (!isImplements) {
-        continue;
-      }
-      if (token.getType() == GenericTokenType.IDENTIFIER || token.getType() == PHPPunctuator.NS_SEPARATOR) {
-        builder.append(token.getOriginalValue());
-      }
-      if (token.getType() == PHPPunctuator.COMMA || token.getType() == PHPPunctuator.LCURLYBRACE) {
-        String alias = builder.toString();
+    AstNode implementsList = expr.getFirstChild(PHPGrammar.IMPLEMENTS_LIST);
+    if (implementsList == null) {
+      implementsList = expr.getFirstChild(PHPGrammar.INTERFACE_EXTENDS_LIST);
+    }
+    if (implementsList != null) {
+      AstNode interfaceList = implementsList.getLastChild();
+      for (AstNode className : interfaceList.getChildren(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME)) {
+        String alias = getClassName(className);
         String realName = getRealName(alias);
         addLink(realName, SourceCodeEdgeUsage.IMPLEMENTS);
-        builder = new StringBuilder();
-      }
-      if (token.getType() == PHPPunctuator.LCURLYBRACE) {
-        break;
       }
     }
   }
@@ -477,6 +406,10 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
         }
       }
     }
+    if (packageKey.equals("")) {
+      //packageKey = "--root--";
+    }
+    LOG.debug("Create package: " + packageKey);
     SourcePackage sourcePackage = new SourcePackage(packageKey);
     sourceProject.addChild(sourcePackage);
     return sourcePackage;
@@ -489,6 +422,7 @@ public class DependenciesVisitor extends SquidAstVisitor<Grammar> {
     if (sourceClass != null) {
       return sourceClass;
     }
+    LOG.debug("Create class: " + className);
     sourceClass = new SourceClass(className);
     sourcePackage.addChild(sourceClass);
     return sourceClass;

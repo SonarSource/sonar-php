@@ -21,6 +21,7 @@ package org.sonar.php;
 
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.impl.Parser;
 import org.sonar.php.api.CharsetAwareVisitor;
@@ -29,17 +30,8 @@ import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPParser;
 import org.sonar.php.parser.PHPTokenType;
-import org.sonar.squidbridge.AstScanner;
-import org.sonar.squidbridge.CommentAnalyser;
-import org.sonar.squidbridge.SourceCodeBuilderCallback;
-import org.sonar.squidbridge.SourceCodeBuilderVisitor;
-import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.SquidAstVisitorContextImpl;
-import org.sonar.squidbridge.api.SourceClass;
-import org.sonar.squidbridge.api.SourceCode;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.api.SourceFunction;
-import org.sonar.squidbridge.api.SourceProject;
+import org.sonar.squidbridge.*;
+import org.sonar.squidbridge.api.*;
 import org.sonar.squidbridge.indexer.QueryByType;
 import org.sonar.squidbridge.metrics.CommentsVisitor;
 import org.sonar.squidbridge.metrics.CounterVisitor;
@@ -47,6 +39,7 @@ import org.sonar.squidbridge.metrics.LinesOfCodeVisitor;
 import org.sonar.squidbridge.metrics.LinesVisitor;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Collection;
 
@@ -115,14 +108,68 @@ public class PHPAstScanner {
    * Class
    */
   public static class ClassSourceCodeBuilderCallback implements SourceCodeBuilderCallback {
-    private int seq = 0;
 
     @Override
     public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
-      seq++;
-      SourceClass cls = new SourceClass("class:" + seq);
+      AstNode id = astNode.getFirstChild(PHPGrammar.IDENTIFIER);
+      SourceClass cls = new SourceClass(id.getTokenOriginalValue());
       cls.setStartAtLine(astNode.getTokenLine());
       return cls;
+    }
+  }
+
+  /**
+   * Package
+   */
+  public static class PackageVisitor<G extends Grammar> extends SquidAstVisitor<G> {
+
+    @Override
+    public void visitFile(@Nullable AstNode astNode) {
+      SquidAstVisitorContext<G> context = getContext();
+      SourceFile sourceFile = (SourceFile) context.peekSourceCode();
+      SourceProject sourceProject = sourceFile.getParent(SourceProject.class);
+      SourcePackage sourcePackage = findOrCreateSourcePackage(sourceProject, getPackageKey(astNode));
+      if (sourcePackage != null) {
+        sourceProject.getChildren().remove(sourceFile);
+        context.popSourceCode();
+        context.addSourceCode(sourcePackage);
+        context.addSourceCode(sourceFile);
+      }
+    }
+
+    private SourcePackage findOrCreateSourcePackage(SourceProject sourceProject, String packageKey) {
+      for (SourceCode sourceCode : sourceProject.getChildren()) {
+        if (sourceCode instanceof SourcePackage && sourceCode.getKey() == packageKey) {
+          return (SourcePackage)sourceCode;
+        }
+      }
+      SourcePackage sourcePackage = new SourcePackage(packageKey);
+      sourceProject.addChild(sourcePackage);
+      return sourcePackage;
+    }
+
+    private String getPackageKey(AstNode astNode) {
+      try {
+        AstNode id = astNode.getFirstChild(PHPGrammar.SCRIPT).getFirstChild(PHPGrammar.TOP_STATEMENT_LIST);
+        for (AstNode node : id.getChildren()) {
+          AstNode nsNode = node.getFirstChild(PHPGrammar.NAMESPACE_STATEMENT);
+          if (nsNode != null) {
+            return getPackageName(nsNode.getFirstChild(PHPGrammar.NAMESPACE_NAME));
+          }
+        }
+      } catch (NullPointerException ignored) {
+      }
+      return "";
+    }
+
+    private String getPackageName(AstNode expr) {
+      StringBuilder builder = new StringBuilder();
+
+      for (Token token : expr.getTokens()) {
+        builder.append(token.getOriginalValue());
+      }
+
+      return builder.toString();
     }
   }
 
@@ -158,6 +205,9 @@ public class PHPAstScanner {
 
     /* Files */
     builder.setFilesMetric(PHPMetric.FILES);
+
+    /* Packages */
+    builder.withSquidAstVisitor(new PackageVisitor<LexerlessGrammar>());
 
     /* Classes */
     builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<LexerlessGrammar>(

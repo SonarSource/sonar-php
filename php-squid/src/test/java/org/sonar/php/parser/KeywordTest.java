@@ -82,6 +82,7 @@ public class KeywordTest extends RuleTest {
     matches("namespace");
     matches("new");
     matches("or");
+    matches("parent");
     matches("print");
     matches("private");
     matches("protected");
@@ -89,6 +90,7 @@ public class KeywordTest extends RuleTest {
     matches("require");
     matches("require_once");
     matches("return");
+    matches("self");
     matches("static");
     matches("switch");
     matches("throw");
@@ -104,7 +106,7 @@ public class KeywordTest extends RuleTest {
 
   @Test
   public void getKeywordValues() {
-    Assertions.assertThat(PHPKeyword.getKeywordValues().length).isEqualTo(67);
+    Assertions.assertThat(PHPKeyword.getKeywordValues().length).isEqualTo(69);
   }
 
 }

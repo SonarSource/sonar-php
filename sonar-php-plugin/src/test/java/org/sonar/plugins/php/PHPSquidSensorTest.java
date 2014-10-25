@@ -135,10 +135,9 @@ public class PHPSquidSensorTest {
 
     HashMap<String, String> expectedMap = new HashMap<String, String>();
     expectedMap.put(null, "[" +
-      "{\"i\":null,\"n\":\"dependencies/Vendor/Package\",\"q\":\"DIR\",\"v\":[{},{},{},{}]}," +
-      "{\"i\":null,\"n\":\"dependencies/Vendor/Errors\",\"q\":\"DIR\",\"v\":[{\"i\":null,\"w\":2},{},{},{}]}," +
-      "{\"i\":null,\"n\":\"dependencies\",\"q\":\"DIR\",\"v\":[{\"i\":null,\"w\":1},{\"i\":null,\"w\":2},{},{}]}," +
-      "{\"i\":null,\"n\":\"dependencies/Vendor/Common\",\"q\":\"DIR\",\"v\":[{\"i\":null,\"w\":1},{},{},{}]}" +
+      "{\"i\":null,\"n\":\"dependencies/Vendor/Package\",\"q\":\"DIR\",\"v\":[{},{},{}]}," +
+      "{\"i\":null,\"n\":\"dependencies/Vendor/Common\",\"q\":\"DIR\",\"v\":[{\"i\":null,\"w\":1},{},{}]}," +
+      "{\"i\":null,\"n\":\"dependencies/Vendor/Errors\",\"q\":\"DIR\",\"v\":[{\"i\":null,\"w\":2},{},{}]}" +
       "]");
     expectedMap.put("dependencies", "[" +
       "{\"i\":null,\"n\":\"IRoot.php\",\"q\":\"FIL\",\"v\":[{},{}]}," +

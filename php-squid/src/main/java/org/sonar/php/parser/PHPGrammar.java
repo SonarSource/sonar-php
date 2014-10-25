@@ -68,6 +68,7 @@ import static org.sonar.php.api.PHPKeyword.ISSET;
 import static org.sonar.php.api.PHPKeyword.LIST;
 import static org.sonar.php.api.PHPKeyword.NAMESPACE;
 import static org.sonar.php.api.PHPKeyword.NEW;
+import static org.sonar.php.api.PHPKeyword.PARENT;
 import static org.sonar.php.api.PHPKeyword.PRINT;
 import static org.sonar.php.api.PHPKeyword.PRIVATE;
 import static org.sonar.php.api.PHPKeyword.PROTECTED;
@@ -75,6 +76,7 @@ import static org.sonar.php.api.PHPKeyword.PUBLIC;
 import static org.sonar.php.api.PHPKeyword.REQUIRE;
 import static org.sonar.php.api.PHPKeyword.REQUIRE_ONCE;
 import static org.sonar.php.api.PHPKeyword.RETURN;
+import static org.sonar.php.api.PHPKeyword.SELF;
 import static org.sonar.php.api.PHPKeyword.STATIC;
 import static org.sonar.php.api.PHPKeyword.SWITCH;
 import static org.sonar.php.api.PHPKeyword.THROW;
@@ -429,7 +431,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       VAR_IDENTIFIER,
       b.sequence(DOLAR_LCURLY, EXPRESSION, RCURLYBRACE)));
 
-    b.rule(CLASS_NAME).is(b.firstOf("SELF", "PARENT", STATIC, FULLY_QUALIFIED_CLASS_NAME));
+    b.rule(CLASS_NAME).is(b.firstOf(SELF, PARENT, STATIC, FULLY_QUALIFIED_CLASS_NAME));
 
     b.rule(FUNCTION_CALL_PARAMETER_LIST).is(LPARENTHESIS, b.optional(PARAMETER_LIST_FOR_CALL, b.zeroOrMore(COMMA, PARAMETER_LIST_FOR_CALL)), RPARENTHESIS);
     b.rule(PARAMETER_LIST_FOR_CALL).is(b.firstOf(ALIAS_VARIABLE, b.sequence(b.optional(ELIPSIS), EXPRESSION), YIELD_EXPRESSION));

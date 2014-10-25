@@ -21,7 +21,6 @@ package org.sonar.php.metrics;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.Grammar;
 import org.junit.Test;
 import org.sonar.graph.DirectedGraph;
 import org.sonar.php.PHPAstScanner;
@@ -29,6 +28,7 @@ import org.sonar.php.PHPConfiguration;
 import org.sonar.squidbridge.AstScanner;
 import org.sonar.squidbridge.api.*;
 import org.sonar.squidbridge.indexer.QueryByType;
+import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.File;
 import java.util.Collection;
@@ -115,14 +115,13 @@ public class DependenciesVisitorTest {
     assertHasEdge(from, "Vendor\\Package\\PackageInterface");
     assertHasEdge(from, "Vendor\\Errors\\RuntimeError");
 
-    SourcePackage sp = new SourcePackage("Vendor\\Package");
-    assertDependenciesSize(sp, 3);
-    assertHasEdge(sp, new SourcePackage(""));
-    assertHasEdge(sp, new SourcePackage("Vendor\\Common"));
-    assertHasEdge(sp, new SourcePackage("Vendor\\Errors"));
-
     Collection<SourceCode> packages = index.search(new QueryByType(SourcePackage.class));
     assertThat(packages).hasSize(4);
+
+    SourcePackage sp = new SourcePackage("Vendor\\Package");
+    assertHasEdge(sp, new SourcePackage("Vendor\\Common"));
+    assertHasEdge(sp, new SourcePackage("Vendor\\Errors"));
+    assertDependenciesSize(sp, 2);
   }
 
   @Test
@@ -136,7 +135,7 @@ public class DependenciesVisitorTest {
   public void tryCatch() {
     scanFile("try-catch.php");
     assertDepends("A", "RuntimeError");
-    assertDepends("RuntimeError");
+    assertDependenciesSize("RuntimeError", 0);
   }
 
   @Test
@@ -147,7 +146,7 @@ public class DependenciesVisitorTest {
   }
 
   private void assertDepends(String from, String... to) {
-    assertClass(from);
+    assertClassWithParents(from);
     for (String t : to) {
       assertClass(t);
       assertHasEdge(from, t);
@@ -163,7 +162,7 @@ public class DependenciesVisitorTest {
   private void scanFiles(ImmutableList<File> files) {
     graph = new DirectedGraph<SourceCode, SourceCodeEdge>();
     DependenciesVisitor visitor = new DependenciesVisitor(graph);
-    AstScanner<Grammar> scanner = PHPAstScanner.create(new PHPConfiguration(Charsets.UTF_8), visitor);
+    AstScanner<LexerlessGrammar> scanner = PHPAstScanner.create(new PHPConfiguration(Charsets.UTF_8), visitor);
     scanner.scanFiles(files);
     index = scanner.getIndex();
   }

@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.design.Dependency;
-import org.sonar.api.issue.Issue;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
@@ -86,6 +85,10 @@ public class DesignBridge extends Bridge {
   private Set<SourceCode> getSourcePackages(SourceProject squidProject) {
     Set<SourceCode> squidPackages = new TreeSet<SourceCode>();
     for (SourceCode squidPackage : squidProject.getChildren()) {
+      if (squidPackage.getKey().equals("")) {
+        LOG.info("Root package skipped from design analysis");
+        continue;
+      }
       if (resourceIndex.get(squidPackage) == null) {
         LOG.info("Package skipped from design analysis: {} (resource not found)", squidPackage.getKey());
         continue;
