@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class VariableVariablesCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("VariableVariablesCheck.php"), new VariableVariablesCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

@@ -31,7 +31,7 @@ public class MissingNewLineAtEOFCheckTest extends CheckTest {
   private static final String TEST_FILE_DIR = "MissingNewLineAtEOF/";
 
   @Test
-  public void noeNewLine() {
+  public void noeNewLine() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_FILE_DIR + "MissingNewLineAtEOF.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().withMessage("Add a new line at the end of this file.")
@@ -39,7 +39,7 @@ public class MissingNewLineAtEOFCheckTest extends CheckTest {
   }
 
   @Test
-  public void emptyFile() {
+  public void emptyFile() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_FILE_DIR + "EmptyFile.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next()
@@ -47,7 +47,7 @@ public class MissingNewLineAtEOFCheckTest extends CheckTest {
   }
 
   @Test
-  public void newLine() {
+  public void newLine() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_FILE_DIR + "NewLineAtEOF.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();

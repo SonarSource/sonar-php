@@ -18,13 +18,14 @@ package org.sonar.plugins.php;/*
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 import java.io.File;
+import java.net.URISyntaxException;
 
 public class TestUtils {
 
   private TestUtils() {
   }
 
-  public static File getCheckFile(String filename) {
-    return new File("src/test/resources/checks/" + filename);
+  public static File getCheckFile(String filename) throws URISyntaxException {
+    return new File(TestUtils.class.getResource("/checks/" + filename).toURI());
   }
 }

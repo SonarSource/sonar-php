@@ -29,7 +29,7 @@ import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 public class ExtendsImplementsLineCheckTest extends FormattingStandardCheckTest {
 
   @Test
-  public void test() throws IllegalAccessException {
+  public void test() throws Exception {
     activeOnly("isExtendsAndImplementsLine");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"), check);
@@ -40,7 +40,7 @@ public class ExtendsImplementsLineCheckTest extends FormattingStandardCheckTest 
   }
 
   @Test
-  public void custom() throws IllegalAccessException {
+  public void custom() throws Exception {
     deactivateAll();
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"), check);

@@ -36,12 +36,15 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S1131",
-  priority = Priority.MAJOR)
+  name = "Lines should not end with trailing whitespaces",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class TrailingWhitespaceCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   private Charset charset;
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[" + LexicalConstant.WHITESPACE + "]");
 
+  @Override
   public void setCharset(Charset charset) {
     this.charset = charset;
   }

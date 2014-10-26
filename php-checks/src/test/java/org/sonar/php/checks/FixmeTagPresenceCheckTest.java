@@ -28,7 +28,7 @@ import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 public class FixmeTagPresenceCheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FixmeTagPresenceCheck.php"), new FixmeTagPresenceCheck());
 
     CheckMessagesVerifier.verify(file.getCheckMessages())

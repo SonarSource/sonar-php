@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class ForLoopCounterChangedCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ForLoopCounterChangedCheck.php"), new ForLoopCounterChangedCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

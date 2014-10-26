@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.formatting;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.php.checks.FormattingStandardCheckTest;
@@ -29,10 +30,15 @@ import java.io.File;
 
 public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
 
-  private static final File TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "FunctionSpacingCheck.php");
+  private static File TEST_FILE;
+
+  @Before
+  public void setUp() throws Exception {
+    TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "FunctionSpacingCheck.php");
+  }
 
   @Test
-  public void defaultValue() throws IllegalAccessException {
+  public void defaultValue() throws Exception {
     activeOnly("isOneSpaceAfterComma", "isNoSpaceAfterMethodName", "isClosureSpacing");
 
     SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
@@ -53,7 +59,7 @@ public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
   }
 
   @Test
-  public void custom() throws IllegalAccessException {
+  public void custom() throws Exception {
     deactivateAll();
 
     SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);

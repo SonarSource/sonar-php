@@ -24,8 +24,8 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -39,7 +39,9 @@ import java.util.Set;
 
 @Rule(
   key = "S1117",
-  priority = Priority.MAJOR)
+  name = "Local variables should not have the same name as class fields",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.PITFAIL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGrammar> {
 
@@ -136,7 +138,8 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
 
   private boolean isExcluded(AstNode methodDec) {
     String methodName = methodDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
-    return isStatic(methodDec) || isConstructor(methodDec, methodName) || isSetter(methodDec, methodName);
+    return CheckUtils.isStaticClassMember(methodDec.getChildren(PHPGrammar.MEMBER_MODIFIER))
+      || isConstructor(methodName) || isSetter(methodName);
   }
 
   private void checkLocalVariable(AstNode assignmentExpr) {
@@ -149,7 +152,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
   }
 
   private void checkParameters(AstNode functionDec) {
-    for (AstNode parameter : CheckUtils.getFunctionParameters(functionDec)) {
+    for (AstNode parameter : FunctionUtils.getFunctionParameters(functionDec)) {
       String name = parameter.getTokenOriginalValue();
 
       if (classState.hasFieldNamed(name)) {
@@ -164,20 +167,11 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
     classState.setAsCheckedVariable(varName);
   }
 
-  private boolean isStatic(AstNode methodDeclaration) {
-    for (AstNode modifier : methodDeclaration.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
-      if (modifier.getFirstChild().is(PHPKeyword.STATIC)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private boolean isSetter(AstNode methodDeclaration, String methodName) {
+  private boolean isSetter(String methodName) {
     return methodName.length() > 2 && "set".equalsIgnoreCase(methodName.substring(0, 3));
   }
 
-  private boolean isConstructor(AstNode methodDeclaration, String methodName) {
+  private boolean isConstructor(String methodName) {
     return classState.className.equals(methodName) || "__construct".equals(methodName);
   }
 

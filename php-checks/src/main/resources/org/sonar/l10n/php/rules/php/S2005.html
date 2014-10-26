@@ -1,0 +1,13 @@
+<p>
+  There is no reason to concatenate literal strings. Doing so is an exercise is reducing code readability. Instead, the strings should be combined.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+$msg = "Hello " . "${name}" . "!";  // Noncompliant
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+$msg = "Hello ${name}!";
+</pre>

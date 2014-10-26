@@ -35,6 +35,7 @@ import java.util.Map;
 
 @Rule(
   key = "S1192",
+  name = "String literals should not be duplicated",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class StringLiteralDuplicatedCheck extends SquidCheck<LexerlessGrammar> {

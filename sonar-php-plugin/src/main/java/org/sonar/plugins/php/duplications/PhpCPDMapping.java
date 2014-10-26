@@ -25,9 +25,9 @@ import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
 import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.AbstractCpdMapping;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.duplications.token.Token;
 import org.sonar.duplications.token.TokenChunker;
@@ -46,7 +46,7 @@ import java.util.Iterator;
 public class PhpCPDMapping extends AbstractCpdMapping {
 
   private Php php;
-  private ModuleFileSystem fileSystem;
+  private FileSystem fileSystem;
 
   /**
    * Creates a {@link PhpCPDMapping} object
@@ -54,7 +54,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
    * @param php
    * @param project
    */
-  public PhpCPDMapping(Php php, Project project, ModuleFileSystem fileSystem) {
+  public PhpCPDMapping(Php php, Project project, FileSystem fileSystem) {
     this.php = php;
     this.fileSystem = fileSystem;
   }
@@ -64,6 +64,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
    *
    * @return the language
    */
+  @Override
   public Language getLanguage() {
     return php;
   }
@@ -73,6 +74,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
    *
    * @return the tokenizer
    */
+  @Override
   public Tokenizer getTokenizer() {
     return new PHPCPDTokenizer();
   }
@@ -93,12 +95,13 @@ public class PhpCPDMapping extends AbstractCpdMapping {
     /**
      * Cuts the given source into a list of tokens.
      */
+    @Override
     public final void tokenize(SourceCode source, Tokens cpdTokens) {
       String fileName = source.getFileName();
 
       Reader reader = null;
       try {
-        reader = new InputStreamReader(new FileInputStream(fileName), fileSystem.sourceCharset());
+        reader = new InputStreamReader(new FileInputStream(fileName), fileSystem.encoding());
         TokenQueue queue = tokenChunker.chunk(reader);
 
         Iterator<Token> iterator = queue.iterator();
@@ -125,7 +128,6 @@ public class PhpCPDMapping extends AbstractCpdMapping {
 
       cpdTokens.add(TokenEntry.getEOF());
     }
-
   }
 
 }

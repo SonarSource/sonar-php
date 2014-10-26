@@ -31,14 +31,14 @@ public class ClosingTagInFullPHPFileCheckTest extends CheckTest {
   private final String TEST_DIR = "ClosingTagInFullPHPFileCheck/";
 
   @Test
-  public void ok() {
+  public void ok() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void ko() {
+  public void ko() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(11).withMessage("Remove this closing tag \"?>\".")

@@ -30,7 +30,9 @@ import javax.annotation.Nullable;
 
 @Rule(
   key = "S1780",
-  priority = Priority.MINOR)
+  name = "Closing tag \"?>\" should be omitted on files containing only PHP",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class ClosingTagInFullPHPFileCheck extends SquidCheck<LexerlessGrammar> {
 
   private int inlineHTMLCounter = 0;

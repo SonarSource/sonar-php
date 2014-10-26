@@ -33,7 +33,9 @@ import java.util.List;
 
 @Rule(
   key = "S1788",
-  priority = Priority.CRITICAL)
+  name = "Method arguments with default value should be last",
+  priority = Priority.CRITICAL,
+  tags = {PHPRuleTags.BUG, PHPRuleTags.PSR2})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<LexerlessGrammar> {
 

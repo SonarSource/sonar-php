@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class ArgumentWithDefaultValueNotLastCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ArgumentWithDefaultValueNotLastCheck.php"), new ArgumentWithDefaultValueNotLastCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

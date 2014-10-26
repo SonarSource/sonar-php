@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class ConstructorDeclarationCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ConstructorDeclarationCheck.php"), new ConstructorDeclarationCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

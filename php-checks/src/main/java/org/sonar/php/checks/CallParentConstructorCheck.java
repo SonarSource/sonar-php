@@ -33,7 +33,9 @@ import java.util.Deque;
 
 @Rule(
   key = "S1605",
-  priority = Priority.MAJOR)
+  name = "PHP 4 style calls to parent constructors should not be used in PHP5 \"__construct\" functions",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class CallParentConstructorCheck extends SquidCheck<LexerlessGrammar> {
 

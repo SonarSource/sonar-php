@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class MissingMethodVisibilityCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("MissingMethodVisibilityCheck.php"), new MissingMethodVisibilityCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

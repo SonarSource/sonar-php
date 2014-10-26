@@ -1,0 +1,31 @@
+<p>
+  Shared coding conventions allow teams to collaborate efficiently. Defining and using global functions, when the convention dictates OOP can be very confusing and difficult to use properly for three reasons. First, you run the risk of name clashes. Second, global functions must be stateless, or they can cause difficult-to-track bugs. Finally, it is difficult to properly test classes that use global functions.
+</p>
+<p>
+  Instead of being declared globally, such functions should be moved into a class, potentially as static functions, so they can be used without a class instance.
+</p>
+<p>
+  This rule checks that only Object Oriented Programming is used and that no functions or procedures are declared outside of a class.
+</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+&lt;?php
+
+public function doSomething($arg) {
+  //...
+}
+class MyClass {
+    //...
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+&lt;?php
+
+class MyClass {
+  public static function doSomething($arg) {
+    //...
+  }
+}
+</pre>

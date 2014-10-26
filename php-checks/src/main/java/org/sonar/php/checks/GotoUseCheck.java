@@ -29,7 +29,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S907",
-  priority = Priority.MAJOR)
+  name = "\"goto\" statement should not be used",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class GotoUseCheck extends SquidCheck<LexerlessGrammar> {
 

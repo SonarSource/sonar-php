@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class UnusedLocalVariableCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("UnusedLocalVariableCheck.php"), new UnusedLocalVariableCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

@@ -22,13 +22,11 @@ package org.sonar.php.checks;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -38,7 +36,9 @@ import java.util.Map;
 
 @Rule(
   key = "S1172",
-  priority = Priority.MAJOR)
+  name = "Unused function parameters should be removed",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> {
 
@@ -98,7 +98,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.is(FUNCTION_DECLARATIONS) && !CheckUtils.isAbstractMethod(astNode)) {
+    if (astNode.is(FUNCTION_DECLARATIONS) && !FunctionUtils.isAbstractMethod(astNode)) {
       // enter new scope
       currentScope = new Scope(currentScope, astNode);
 
@@ -128,23 +128,13 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
 
   @Override
   public void leaveNode(AstNode astNode) {
-    if (astNode.is(FUNCTION_DECLARATIONS) && !CheckUtils.isAbstractMethod(astNode)) {
+    if (astNode.is(FUNCTION_DECLARATIONS) && !FunctionUtils.isAbstractMethod(astNode)) {
       // leave scope
-      if (!isOverriding(astNode)) {
-        reportUnusedArguments(astNode);
+      if (!FunctionUtils.isOverriding(astNode)) {
+        reportUnusedArguments();
       }
       currentScope = currentScope.outerScope;
     }
-  }
-
-  private static boolean isOverriding(AstNode functionDec) {
-    Token functionToken = functionDec.getToken();
-    for (Trivia comment : functionToken.getTrivia()) {
-      if (StringUtils.containsIgnoreCase(comment.getToken().getValue(), "@inheritdoc")) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @Override
@@ -152,7 +142,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
     currentScope = null;
   }
 
-  public void reportUnusedArguments(AstNode functionNode) {
+  public void reportUnusedArguments() {
     int nbUnusedArgs = 0;
     StringBuilder builder = new StringBuilder();
 

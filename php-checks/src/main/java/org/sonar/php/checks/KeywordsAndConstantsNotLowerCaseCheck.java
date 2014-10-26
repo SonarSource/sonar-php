@@ -31,7 +31,9 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S1781",
-  priority = Priority.MINOR)
+  name = "PHP keywords and constants \"true\", \"false\", \"null\" should be in lower case",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 public class KeywordsAndConstantsNotLowerCaseCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final Pattern PATTERN = Pattern.compile("[a-z_]+");

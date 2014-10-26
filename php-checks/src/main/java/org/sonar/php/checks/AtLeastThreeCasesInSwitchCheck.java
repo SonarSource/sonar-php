@@ -29,6 +29,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1301",
+  name = "\"switch\" statements should have at least 3 \"case\" clauses",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class AtLeastThreeCasesInSwitchCheck extends SquidCheck<LexerlessGrammar> {

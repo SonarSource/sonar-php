@@ -1,0 +1,18 @@
+<p>
+  Shared coding conventions allow teams to collaborate efficiently. To avoid the confusion that can be caused by tangling two coding languages in the same file, inline HTML should be avoided.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+class MyClass {
+  $my_field;
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+&lt;php
+$name = "George";
+?>
+&lt;p&gt; Hello &lt;?php $name ?>&lt;/p&gt;
+</pre>

@@ -1,0 +1,34 @@
+<p>
+  Files that define symbols such as classes and variables may be included into many files. Simply performing that inclusion should have no effect on those files other than declaring new symbols. For instance, a file containing a class definition should not also contain side-effects such as <code>print</code> statements that will be evaluated automatically on inclusion. Logic should be segregated into symbol-only files and side-effect-only files. The type of operation which is not allowed in a symbol-definition file includes but is not limited to:
+</p>
+<ul>
+  <li>generating output</li>
+  <li>modifying <code>ini</code> settings</li>
+  <li>emitting errors or exceptions</li>
+  <li>modifying global or static variables</li>
+  <li>reading/writing files</li>
+</ul>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+&lt;?php
+
+print "Include worked!";
+
+class foo {
+  // ...
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+&lt;?php
+
+class foo {
+
+  public function log() {
+    print "Include worked!";
+  }
+
+}
+</pre>

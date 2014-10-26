@@ -30,7 +30,7 @@ public class FunctionNameCheckTest extends CheckTest {
   private FunctionNameCheck check = new FunctionNameCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionNameCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -39,7 +39,7 @@ public class FunctionNameCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.format =  "^[a-zA-Z][a-zA-Z0-9]*$";
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionNameCheck.php"), check);
 

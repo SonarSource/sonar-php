@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S108",
+  name = "Nested blocks of code should not be left empty",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class EmptyNestedBlockCheck extends SquidCheck<LexerlessGrammar> {

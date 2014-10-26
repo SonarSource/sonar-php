@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class DeprecatedPredefinedVariablesUseCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("DeprecatedPredefinedVariablesUseCheck.php"), new DeprecatedPredefinedVariablesUseCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

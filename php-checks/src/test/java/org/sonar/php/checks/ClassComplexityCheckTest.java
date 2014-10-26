@@ -30,14 +30,14 @@ public class ClassComplexityCheckTest extends CheckTest {
   private ClassComplexityCheck check = new ClassComplexityCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassComplexityCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.max = 5;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassComplexityCheck.php"), check);

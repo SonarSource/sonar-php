@@ -19,10 +19,12 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -31,9 +33,15 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S100",
-  priority = Priority.MAJOR)
+  name = "Function names should comply with a naming convention",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION})
 public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
 
+  private static final ImmutableList<String> MAGIC_METHODS = ImmutableList.of(
+    "__construct", "__destruct", "__call", "__callStatic", "__callStatic", "__get",
+    "__set", "__isset", "__unset", "__sleep", "__wakeup", "__toString", "__invoke",
+    "__set_state", "__clone", "__clone", "__debugInfo");
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   private Pattern pattern = null;
 
@@ -55,12 +63,12 @@ public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
   public void visitNode(AstNode astNode) {
     String functionName = astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
 
-    if (!pattern.matcher(functionName).matches() && !isExcluded(functionName)) {
+    if (!pattern.matcher(functionName).matches() && !isExcluded(astNode, functionName)) {
       getContext().createLineViolation(this, "Rename function \"{0}\" to match the regular expression {1}.", astNode, functionName, format);
     }
   }
 
-  private static boolean isExcluded(String functionName) {
-    return "__construct".equals(functionName) || "__destruct".equals(functionName);
+  private static boolean isExcluded(AstNode funcDec, String functionName) {
+    return MAGIC_METHODS.contains(functionName) || FunctionUtils.isOverriding(funcDec);
   }
 }

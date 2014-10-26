@@ -17,31 +17,24 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php;
+package org.sonar.php.checks;
 
-import org.sonar.api.rules.AnnotationRuleParser;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleRepository;
-import org.sonar.php.checks.CheckList;
-import org.sonar.plugins.php.api.Php;
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squidbridge.api.SourceFile;
 
-import java.util.List;
+public class SelfKeywordUsageCheckTest extends CheckTest {
 
-public class PHPRuleRepository extends RuleRepository {
 
-  private static final String REPOSITORY_NAME = "SonarQube";
+  @Test
+  public void test() throws Exception {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SelfKeywordUsageCheck.php"), new SelfKeywordUsageCheck());
 
-  private final AnnotationRuleParser annotationRuleParser;
-
-  public PHPRuleRepository(AnnotationRuleParser annotationRuleParser) {
-    super(CheckList.REPOSITORY_KEY, Php.KEY);
-    setName(REPOSITORY_NAME);
-    this.annotationRuleParser = annotationRuleParser;
-  }
-
-  @Override
-  public List<Rule> createRules() {
-    return annotationRuleParser.parse(CheckList.REPOSITORY_KEY, CheckList.getChecks());
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(8).withMessage("Use \"static\" keyword instead of \"self\".")
+      .noMore();
   }
 
 }

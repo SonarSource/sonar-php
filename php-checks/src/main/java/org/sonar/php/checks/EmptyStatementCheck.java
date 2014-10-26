@@ -29,7 +29,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1116",
-  priority = Priority.MAJOR)
+  name = "Empty statements should be removed",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CERT, PHPRuleTags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class EmptyStatementCheck extends SquidCheck<LexerlessGrammar> {
 

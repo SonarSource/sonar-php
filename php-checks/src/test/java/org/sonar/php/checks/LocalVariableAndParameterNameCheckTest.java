@@ -30,7 +30,7 @@ public class LocalVariableAndParameterNameCheckTest extends CheckTest {
   private LocalVariableAndParameterNameCheck check = new LocalVariableAndParameterNameCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LocalVariableAndParameterNameCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -43,7 +43,7 @@ public class LocalVariableAndParameterNameCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.format = "^[A-Z_]*$";
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LocalVariableAndParameterNameCheck.php"), check);

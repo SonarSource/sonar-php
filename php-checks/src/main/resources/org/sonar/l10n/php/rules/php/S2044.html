@@ -1,0 +1,13 @@
+<p>
+  Both <code>php_sapi_name()</code> and the <code>PHP_SAPI</code> constant give the same value. But calling the method is less efficient that simply referencing the constant.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+if (php_sapi_name() == 'test') { ... }
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+if (PHP_SAPI == 'test') { ... }
+</pre>

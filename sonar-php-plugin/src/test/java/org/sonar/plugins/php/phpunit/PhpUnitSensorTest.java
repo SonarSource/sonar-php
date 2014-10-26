@@ -19,39 +19,39 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.google.common.collect.ImmutableList;
+import static org.fest.assertions.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
-import org.sonar.plugins.php.MockUtils;
-import org.sonar.plugins.php.PhpPlugin;
-import org.sonar.test.TestUtils;
-
-import java.io.File;
-import java.util.Properties;
-
-import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.config.Settings;
+import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.MockUtils;
+import org.sonar.plugins.php.PhpPlugin;
+import org.sonar.plugins.php.api.Php;
+import org.sonar.test.TestUtils;
+
+import java.io.File;
+import java.util.Properties;
 
 public class PhpUnitSensorTest {
 
   @Rule
   public ExpectedException expected = ExpectedException.none();
 
-  private final ModuleFileSystem projectFileSystem = mockModuleFileSystem();
+  private final DefaultFileSystem fs = new DefaultFileSystem();
 
   @Mock
   private PhpUnitResultParser parser;
@@ -70,7 +70,7 @@ public class PhpUnitSensorTest {
   private Project project;
   private Settings settings;
   private PhpUnitSensor sensor;
-  private static final File TEST_REPORT_FILE = TestUtils.getResource(MockUtils.PHPUNIT_REPORT);
+  private static final File TEST_REPORT_FILE = TestUtils.getResource(MockUtils.PHPUNIT_REPORT_NAME);
   private static final File COVERAGE_REPORT_FILE = TestUtils.getResource(MockUtils.PHPUNIT_COVERAGE_REPORT);
 
   @Before
@@ -79,7 +79,8 @@ public class PhpUnitSensorTest {
 
     settings = newSettings();
     project = mock(Project.class);
-    sensor = new PhpUnitSensor(projectFileSystem, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+    fs.setBaseDir(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
   }
 
   @Test
@@ -89,17 +90,20 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldExecuteOnProject() {
-    when(projectFileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.<File>of());
-    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
+    DefaultFileSystem localFS = new DefaultFileSystem();
+    PhpUnitSensor localSensor = new PhpUnitSensor(localFS, null, null, null);
 
-    when(projectFileSystem.files(any(FileQuery.class))).thenReturn(ImmutableList.<File>of(mock(File.class)));
-    assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
+    // Empty file system
+    assertThat(localSensor.shouldExecuteOnProject(project)).isFalse();
+
+    localFS.add((new DefaultInputFile("file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY)));
+    assertThat(localSensor.shouldExecuteOnProject(project)).isTrue();
   }
 
   @Test
   public void shouldParserReport() {
-    ModuleFileSystem fs = mock(ModuleFileSystem.class);
-    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+    FileSystem locaFS = new DefaultFileSystem();
+    sensor = new PhpUnitSensor(locaFS, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
 
     sensor.analyse(project, context);
 
@@ -111,7 +115,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void noReport() {
-    sensor = new PhpUnitSensor(mock(ModuleFileSystem.class), new Settings(), parser, coverageParser, itCoverageParser, overallCoverageParser);
+    sensor = new PhpUnitSensor(new DefaultFileSystem(), new Settings(), parser, coverageParser);
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -126,7 +130,7 @@ public class PhpUnitSensorTest {
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, fakePath);
     localSettings.addProperties(props);
 
-    sensor = new PhpUnitSensor(mock(ModuleFileSystem.class), localSettings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+    sensor = new PhpUnitSensor(new DefaultFileSystem(), localSettings, parser, coverageParser);
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -138,7 +142,7 @@ public class PhpUnitSensorTest {
     Properties props = new Properties();
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, "phpunit.xml");
     settings.addProperties(props);
-    sensor = new PhpUnitSensor(projectFileSystem, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser);
 
     sensor.analyse(project, context);
 
@@ -159,9 +163,4 @@ public class PhpUnitSensorTest {
     return settings;
   }
 
-  private ModuleFileSystem mockModuleFileSystem() {
-    ModuleFileSystem fs = mock(ModuleFileSystem.class);
-    when(fs.baseDir()).thenReturn(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
-    return fs;
-  }
 }

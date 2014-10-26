@@ -17,26 +17,24 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.phpunit;
+package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.api.rules.AnnotationRuleParser;
-import org.sonar.api.rules.Rule;
-import org.sonar.php.checks.CheckList;
-import org.sonar.plugins.php.PHPRuleRepository;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squidbridge.api.SourceFile;
 
-import java.util.List;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-public class PHPRuleRepositoryTest {
+public class RequireInsteadOfRequireOnceCheckTest extends CheckTest {
 
   @Test
-  public void test() {
-    PHPRuleRepository ruleRepository = new PHPRuleRepository(new AnnotationRuleParser());
-    assertThat(ruleRepository.getKey()).isEqualTo("php");
-    assertThat(ruleRepository.getName()).isEqualTo("SonarQube");
-    List<Rule> rules = ruleRepository.createRules();
-    assertThat(rules.size()).isEqualTo(CheckList.getChecks().size());
+  public void test() throws Exception {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("RequireInsteadOfRequireOnceCheck.php"), new RequireInsteadOfRequireOnceCheck());
+
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(3).withMessage("Replace \"include\" with \"include_once\".")
+      .next().atLine(4).withMessage("Replace \"require\" with \"require_once\".")
+      .noMore();
   }
+
 }

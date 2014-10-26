@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class BooleanEqualityComparisonCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("BooleanEqualityComparisonCheck.php"), new BooleanEqualityComparisonCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -47,6 +47,7 @@ public class BooleanEqualityComparisonCheckTest extends CheckTest {
       .next().atLine(15)
       .next().atLine(16)
       .next().atLine(17)
+      .next().atLine(18)
       .next().atLine(18)
       .noMore();
   }

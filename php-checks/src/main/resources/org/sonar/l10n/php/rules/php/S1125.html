@@ -8,6 +8,11 @@ if ($booleanVariable == true) { /* ... */ }
 if ($booleanVariable != true) { /* ... */ }
 if ($booleanVariable || false) { /* ... */ }
 doSomething(!false);
+
+$booleanVariable = condition ? true : exp;
+$booleanVariable = condition ? false : exp;
+$booleanVariable = condition ?  exp : true;
+$booleanVariable = condition ?  exp : false;
 </pre>
 
 <h2>Compliant Solution</h2>
@@ -16,4 +21,12 @@ if ($booleanVariable) { /* ... */ }
 if (!$booleanVariable) { /* ... */ }
 if ($booleanVariable) { /* ... */ }
 doSomething(true);
+
+$booleanVariable = condition || exp;
+$booleanVariable = !condition && exp;
+$booleanVariable = !condition ||  exp;
+$booleanVariable = condition && exp;
 </pre>
+
+<h2>Exceptions</h2>
+<p>The use of literal booleans in comparisons which use identity operators (<code>===</code> and <code>!==</code>) are ignored.</p>

@@ -30,7 +30,7 @@ public class ExpressionComplexityCheckTest extends CheckTest {
   private ExpressionComplexityCheck check = new ExpressionComplexityCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ExpressionComplexityCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(3).withMessage("Reduce the number of conditional operators (4) used in the expression (maximum allowed " + check.DEFAULT + ").")
@@ -44,7 +44,7 @@ public class ExpressionComplexityCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.max = 5;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ExpressionComplexityCheck.php"), check);

@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class VarKeywordUsageCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("VarKeywordUsageCheck.php"), new VarKeywordUsageCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

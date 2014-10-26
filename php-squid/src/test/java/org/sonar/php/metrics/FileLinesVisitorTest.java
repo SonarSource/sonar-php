@@ -19,16 +19,17 @@
  */
 package org.sonar.php.metrics;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.resources.Resource;
 import org.sonar.php.PHPAstScanner;
+import org.sonar.test.TestUtils;
 
 import java.io.File;
 
@@ -45,21 +46,25 @@ public class FileLinesVisitorTest {
   @Test
   public void test() {
     FileLinesContextFactory fileLinesContextFactory = Mockito.mock(FileLinesContextFactory.class);
-
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    when(fileLinesContextFactory.createFor(any(Resource.class))).thenReturn(fileLinesContext);
+    when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
-    when(fs.getSourceDirs()).thenReturn(ImmutableList.of(new File("src/test/resources/")));
-
-    Project project = new Project("key");
-    project.setFileSystem(fs);
-
-    FileLinesVisitor visitor = new FileLinesVisitor(project, fileLinesContextFactory);
-    PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines.php"), visitor);
+    File file = TestUtils.getResource("/metrics/lines.php");
+    FileLinesVisitor visitor = new FileLinesVisitor(newFileSystem(file), fileLinesContextFactory);
+    PHPAstScanner.scanSingleFile(file, visitor);
 
     verify(fileLinesContext, times(4)).setIntValue(eq(CoreMetrics.NCLOC_DATA_KEY), anyInt(), eq(1));
     verify(fileLinesContext, times(6)).setIntValue(eq(CoreMetrics.COMMENT_LINES_DATA_KEY), anyInt(), eq(1));
+  }
+
+  private FileSystem newFileSystem(File file) {
+    DefaultFileSystem fs = new DefaultFileSystem();
+
+    fs.add(new DefaultInputFile(file.getName())
+      .setAbsolutePath(file.getAbsolutePath())
+      .setType(InputFile.Type.MAIN));
+
+    return fs;
   }
 
 }

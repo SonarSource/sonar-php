@@ -28,6 +28,7 @@ import org.sonar.php.parser.PHPGrammar;
 
 public class ControlStructureSpacingCheck extends SpacingCheck {
 
+  @Override
   public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
     if (formattingCheck.isOneSpaceBetweenKeywordAndNextToken && node.is(FormattingStandardCheck.getControlStructureNodes())) {
       checkSpaceBetweenKeywordAndNextNode(formattingCheck, node);

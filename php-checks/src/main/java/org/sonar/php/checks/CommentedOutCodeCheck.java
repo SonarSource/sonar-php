@@ -41,7 +41,9 @@ import java.util.regex.Pattern;
 
 @Rule(
   key = "S125",
-  priority = Priority.MAJOR)
+  name = "Sections of code should not be \"commented out\"",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
 
@@ -52,6 +54,7 @@ public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implemen
 
   private static class PHPRecognizer implements LanguageFootprint {
 
+    @Override
     public Set<Detector> getDetectors() {
       return ImmutableSet.of(
         new EndWithDetector(0.95, '}', ';', '{'),
@@ -62,6 +65,7 @@ public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implemen
 
   }
 
+  @Override
   public void visitToken(Token token) {
     Trivia previousTrivia = null;
 

@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class ReturnOfBooleanExpressionCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ReturnOfBooleanExpressionCheck.php"), new ReturnOfBooleanExpressionCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

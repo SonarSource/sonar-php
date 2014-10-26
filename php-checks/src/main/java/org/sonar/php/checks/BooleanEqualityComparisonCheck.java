@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -28,37 +29,65 @@ import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
+import javax.annotation.Nullable;
+import java.util.Map;
+
 @Rule(
   key = "S1125",
+  name = "Literal boolean values should not be used in condition expressions",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar> {
+
+  private Map<Integer, Integer> alreadyChecked = Maps.newHashMap();
 
   @Override
   public void init() {
     subscribeTo(
       PHPGrammar.UNARY_EXPR,
-      PHPGrammar.EQUALITY_EXPR,
-      PHPGrammar.LOGICAL_AND_EXPR,
-      PHPGrammar.LOGICAL_OR_EXPR);
+      PHPGrammar.CONDITIONAL_EXPR,
+      PHPGrammar.EQUALITY_OPERATOR,
+      PHPGrammar.LOGICAL_AND_OPERATOR,
+      PHPGrammar.LOGICAL_OR_OPERATOR);
   }
 
   @Override
   public void visitNode(AstNode astNode) {
-    AstNode boolLiteral = getBooleanLiteralFromExpresion(astNode);
+    if (!isIdentityComparison(astNode)) {
+      AstNode boolLiteral = getBooleanLiteralFromExpression(astNode);
 
-    if (boolLiteral != null) {
-      getContext().createLineViolation(this, "Remove the literal \"" + boolLiteral.getTokenOriginalValue() + "\" boolean value.", astNode);
+      if (boolLiteral != null && !isAlreadyChecked(boolLiteral)) {
+        getContext().createLineViolation(this, "Remove the literal \"" + boolLiteral.getTokenOriginalValue() + "\" boolean value.", astNode);
+        alreadyChecked.put(boolLiteral.getTokenLine(), boolLiteral.getToken().getColumn());
+      }
     }
   }
 
-  private static AstNode getBooleanLiteralFromExpresion(AstNode expression) {
-    if (expression.is(PHPGrammar.UNARY_EXPR)) {
-      return getBooleanLiteralFromUnaryExpression(expression);
-    }
+  private boolean isIdentityComparison(AstNode astNode) {
+    return astNode.is(PHPGrammar.EQUALITY_OPERATOR)
+      && astNode.getFirstChild().is(PHPPunctuator.EQUAL2, PHPPunctuator.NOTEQUAL2);
+  }
 
-    AstNode leftExpr = expression.getFirstChild();
-    AstNode rightExpr = expression.getLastChild();
+  @Override
+  public void visitFile(@Nullable AstNode astNode) {
+    alreadyChecked.clear();
+  }
+
+  private static AstNode getBooleanLiteralFromExpression(AstNode expression) {
+    if (expression.is(PHPGrammar.UNARY_EXPR)) {
+      return getLiteralFromUnaryExpression(expression);
+
+    } else if (expression.is(PHPGrammar.CONDITIONAL_EXPR)) {
+      return getLiteralFromConditionalExpression(expression);
+
+    } else {
+      return getLiteralFromLogicalOrEqualityComparison(expression);
+    }
+  }
+
+  private static AstNode getLiteralFromLogicalOrEqualityComparison(AstNode operator) {
+    AstNode leftExpr = operator.getPreviousAstNode();
+    AstNode rightExpr = operator.getNextAstNode();
 
     if (isBooleanLiteral(leftExpr)) {
       return leftExpr;
@@ -69,7 +98,24 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar>
     }
   }
 
-  private static AstNode getBooleanLiteralFromUnaryExpression(AstNode unaryExpression) {
+  private static AstNode getLiteralFromConditionalExpression(AstNode conditionalExpr) {
+    AstNode booleanLiteral = null;
+
+    AstNode colonNode = conditionalExpr.getFirstChild(PHPPunctuator.COLON);
+    AstNode leftExpr = colonNode.getPreviousAstNode();
+    AstNode rightExpr = colonNode.getNextAstNode();
+
+
+    if (isBooleanLiteral(leftExpr)) {
+      booleanLiteral = leftExpr;
+    }
+    if (isBooleanLiteral(rightExpr)) {
+      booleanLiteral = rightExpr;
+    }
+    return booleanLiteral;
+  }
+
+  private static AstNode getLiteralFromUnaryExpression(AstNode unaryExpression) {
     AstNode boolLiteral = null;
 
     if (unaryExpression.getFirstChild().is(PHPPunctuator.BANG)) {
@@ -87,4 +133,10 @@ public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar>
       && astNode.getFirstChild().is(PHPGrammar.COMMON_SCALAR)
       && astNode.getFirstChild().getFirstChild().is(PHPGrammar.BOOLEAN_LITERAL);
   }
+
+  private boolean isAlreadyChecked(AstNode boolLiteral) {
+    Integer column = alreadyChecked.get(boolLiteral.getTokenLine());
+    return column != null && column.equals(boolLiteral.getToken().getColumn());
+  }
+
 }

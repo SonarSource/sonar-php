@@ -17,41 +17,32 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.core;
+package org.sonar.php.checks;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.resources.Language;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squidbridge.api.SourceFile;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+public class InlineHTMLInFileCheckTest extends CheckTest {
 
-/**
- * Tests the basic functionality of the PhpSourceImporter.
- *
- * @author juergen_kellerer, 2010-10-21
- * @version 1.0
- */
-public class PhpSourceImporterTest {
+  private InlineHTMLInFileCheck check = new InlineHTMLInFileCheck();
+  private final String TEST_DIR = "InlineHTMLInFileCheck/";
 
-  Php php;
-  private PhpSourceImporter importer;
-
-  @Before
-  public void setUp() {
-    php = new Php();
-    importer = new PhpSourceImporter(php);
+  @Test
+  public void ok() throws Exception {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.php"), check);
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .noMore();
   }
 
   @Test
-  public void testCreateImporter() throws Exception {
-    assertThat(importer.getLanguage(), is((Language) php));
-  }
+  public void ko() throws Exception {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(null).withMessage("Remove the inline HTML in this file.")
+      .noMore();
 
-  @Test
-  public void testToString() throws Exception {
-    assertNotNull(importer.toString());
   }
 }

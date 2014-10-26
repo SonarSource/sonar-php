@@ -33,7 +33,9 @@ import java.util.Map;
 
 @Rule(
   key = "S122",
-  priority = Priority.MAJOR)
+  name = "Statements should be on separate lines",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class OneStatementPerLineCheck extends SquidCheck<LexerlessGrammar> {
 

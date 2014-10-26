@@ -30,7 +30,7 @@ public class TooManyFunctionParametersCheckTest extends CheckTest {
   private TooManyFunctionParametersCheck check = new TooManyFunctionParametersCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFunctionParametersCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(3).withMessage("This function has 8 parameters, which is greater than the " + check.DEFAULT + " authorized.")
@@ -38,7 +38,7 @@ public class TooManyFunctionParametersCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.max = 2;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFunctionParametersCheck.php"), check);

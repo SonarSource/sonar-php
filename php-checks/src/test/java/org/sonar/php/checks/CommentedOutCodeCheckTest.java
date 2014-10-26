@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class CommentedOutCodeCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("CommentedOutCodeCheck.php"), new CommentedOutCodeCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

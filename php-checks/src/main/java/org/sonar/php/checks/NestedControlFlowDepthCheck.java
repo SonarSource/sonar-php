@@ -33,7 +33,9 @@ import javax.annotation.Nullable;
 
 @Rule(
   key = "S134",
-  priority = Priority.MAJOR)
+  name = "Control flow statements \"if\", \"for\", \"while\", \"switch\" and \"try\" should not be nested too deeply",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class NestedControlFlowDepthCheck extends SquidCheck<LexerlessGrammar> {
 

@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class IncrementDecrementInSubExpressionCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("IncrementDecrementInSubExpressionCheck.php"), new IncrementDecrementInSubExpressionCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

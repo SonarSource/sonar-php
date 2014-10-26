@@ -30,7 +30,7 @@ public class ClassNameCheckTest extends CheckTest {
   private ClassNameCheck check = new ClassNameCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassNameCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -39,7 +39,7 @@ public class ClassNameCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.format = "^[a-z][a-zA-Z0-9]*$";
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassNameCheck.php"), check);
 

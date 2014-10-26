@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class AtLeastThreeCasesInSwitchCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("AtLeastThreeCasesInSwitchCheck.php"), new AtLeastThreeCasesInSwitchCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

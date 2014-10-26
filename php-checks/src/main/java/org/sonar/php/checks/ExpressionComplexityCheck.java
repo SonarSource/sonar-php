@@ -36,7 +36,9 @@ import java.util.Deque;
 
 @Rule(
   key = "S1067",
-  priority = Priority.MAJOR)
+  name = "Expressions should not be too complex",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ExpressionComplexityCheck extends SquidCheck<LexerlessGrammar> {
 

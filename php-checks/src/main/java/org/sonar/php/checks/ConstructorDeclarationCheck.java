@@ -29,7 +29,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1603",
-  priority = Priority.MAJOR)
+  name = "PHP 4 constructor declarations should not be used",
+  priority = Priority.MAJOR,
+  tags = {PHPRuleTags.PITFAIL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ConstructorDeclarationCheck extends SquidCheck<LexerlessGrammar> {
 

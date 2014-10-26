@@ -344,6 +344,32 @@
           <txt>mn</txt>
         </prop>
       </chc>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S2046</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>2.0</val>
+          <txt>mn</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S2041</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>2.0</val>
+          <txt>mn</txt>
+        </prop>
+      </chc>
     </chc>
     <chc>
       <key>UNDERSTANDABILITY</key>
@@ -531,6 +557,32 @@
           <txt>h</txt>
         </prop>
       </chc>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S2042</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>1.0</val>
+          <txt>h</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S1820</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>1.0</val>
+          <txt>h</txt>
+        </prop>
+      </chc>
     </chc>
     <chc>
       <key>DATA_CHANGEABILITY</key>
@@ -607,6 +659,19 @@
     <chc>
       <key>EXCEPTION_HANDLING</key>
       <name>Exception handling</name>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S2002</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>30.0</val>
+          <txt>mn</txt>
+        </prop>
+      </chc>
     </chc>
     <chc>
       <key>FAULT_TOLERANCE</key>
@@ -687,6 +752,32 @@
       <chc>
         <rule-repo>php</rule-repo>
         <rule-key>S108</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>5.0</val>
+          <txt>mn</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S1998</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>linear</txt>
+        </prop>
+        <prop>
+          <key>remediationFactor</key>
+          <val>15.0</val>
+          <txt>mn</txt>
+        </prop>
+      </chc>
+      <chc>
+        <rule-repo>php</rule-repo>
+        <rule-key>S2010</rule-key>
         <prop>
           <key>remediationFunction</key>
           <txt>linear</txt>

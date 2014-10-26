@@ -30,7 +30,7 @@ public class TrailingCommentCheckTest extends CheckTest {
   private TrailingCommentCheck check = new TrailingCommentCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TrailingCommentCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(4).withMessage("Move this trailing comment on the previous empty line.")
@@ -39,7 +39,7 @@ public class TrailingCommentCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.legalCommentPattern = "";
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TrailingCommentCheck.php"), check);

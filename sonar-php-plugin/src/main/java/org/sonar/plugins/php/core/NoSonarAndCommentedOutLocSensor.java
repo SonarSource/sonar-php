@@ -26,11 +26,12 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Phase;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.checks.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.Php;
@@ -48,7 +49,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Phase(name = Phase.Name.PRE)
@@ -60,22 +60,26 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
   private static final Logger LOG = LoggerFactory.getLogger(NoSonarAndCommentedOutLocSensor.class);
 
   private final NoSonarFilter filter;
-  private final ModuleFileSystem filesystem;
+  private final FileSystem filesystem;
+  private final FilePredicates filePredicates;
 
-  public NoSonarAndCommentedOutLocSensor(ModuleFileSystem filesystem, NoSonarFilter noSonarFilter) {
+  public NoSonarAndCommentedOutLocSensor(FileSystem filesystem, NoSonarFilter noSonarFilter) {
     this.filter = noSonarFilter;
     this.filesystem = filesystem;
+    this.filePredicates = filesystem.predicates();
+
   }
 
   /**
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
   public void analyse(Project project, SensorContext context) {
-    List<File> sourceFiles = filesystem.files(FileQuery.onSource().onLanguage(Php.KEY));
-    for (File file : sourceFiles) {
-      org.sonar.api.resources.File phpFile = getSonarResource(project, file);
+    Iterable<InputFile> sourceFiles = filesystem.inputFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
+    for (InputFile file : sourceFiles) {
+      // TODO: remove when deprecated NoSonarFilter will be replaced.
+      org.sonar.api.resources.File phpFile = getSonarResource(project, file.file());
       if (phpFile != null) {
-        Source source = analyseSourceCode(file);
+        Source source = analyseSourceCode(file.file());
         if (source != null) {
           filter.addResource(phpFile, source.getNoSonarTagLines());
           double measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
@@ -110,8 +114,9 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
   /**
    * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
    */
+  @Override
   public boolean shouldExecuteOnProject(Project project) {
-    return !filesystem.files(FileQuery.onSource().onLanguage(Php.KEY)).isEmpty();
+    return filesystem.hasFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
   }
 
   /**

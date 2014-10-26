@@ -19,58 +19,62 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
-import org.sonar.api.resources.InputFileUtils;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
+import static org.sonar.api.measures.CoreMetrics.LINES_TO_COVER;
 import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
 public class PhpUnitCoverageResultParserTest {
 
-  private static final org.sonar.api.resources.File monkeyResource = new org.sonar.api.resources.File("Monkey.php");
+  private static final String BASE_DIR = "/org/sonar/plugins/php/phpunit/sensor/src/";
+  private static final String MONKEY_FILE_NAME = "Monkey.php";
+  private static final String BANANA_FILE_NAME = "Banana.php";
+  private static final File MONKEY_FILE = TestUtils.getResource(BASE_DIR + MONKEY_FILE_NAME);
+  private static final File BANANA_FILE = TestUtils.getResource(BASE_DIR + BANANA_FILE_NAME);
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
+  @Rule
+  public TemporaryFolder folder= new TemporaryFolder();
   private PhpUnitCoverageResultParser parser;
   private SensorContext context;
-  private Project project;
-  private ModuleFileSystem moduleFileSystem;
+  private DefaultFileSystem fileSystem;
 
   @Before
   public void setUp() throws Exception {
     context = mock(SensorContext.class);
-    project = mock(Project.class);
-    moduleFileSystem = mock(ModuleFileSystem.class);
-    mockProjectFileSystem(project, moduleFileSystem);
+    when(context.getResource(any(Resource.class))).thenReturn(org.sonar.api.resources.File.create(MONKEY_FILE_NAME));
 
-    parser = new PhpUnitCoverageResultParser(project, context, moduleFileSystem);
+    fileSystem = new DefaultFileSystem();
+    addFiles(fileSystem);
+
+    parser = new PhpUnitCoverageResultParser(context, fileSystem);
   }
 
   @Test
@@ -85,73 +89,77 @@ public class PhpUnitCoverageResultParserTest {
    * Should parse even when there's a package node.
    */
   @Test
-  public void shouldParseEvenWithPackageNode() {
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-package.xml"));
-    verify(context).saveMeasure(monkeyResource, UNCOVERED_LINES, 2.0);
+  public void shouldParseEvenWithPackageNode() throws Exception {
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-package.xml"));
+
+    verify(context).saveMeasure(any(Resource.class), eq(LINES_TO_COVER), eq(4.0));
+    verify(context).saveMeasure(any(Resource.class), eq(UNCOVERED_LINES), eq(2.0));
   }
 
   /**
    * Should generate coverage metrics.
    */
   @Test
-  public void shouldGenerateCoverageMeasures() {
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_COVERAGE_REPORT));
+  public void shouldGenerateCoverageMeasures() throws Exception {
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage.xml"));
 
-    verify(context, atLeastOnce()).saveMeasure(monkeyResource, new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1"));
-    verify(context).saveMeasure(monkeyResource, UNCOVERED_LINES, 2.0);
-    verifyNoMeasureForFileOutOfSourcesDirs();
+    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1")));
+    verify(context).saveMeasure(any(Resource.class), eq(UNCOVERED_LINES), eq(2.0));
   }
 
   /**
-   * Should not generate coverage metrics for files that are not under project sources dirs.
+   * SONARPLUGINS-1591
    */
-  public void verifyNoMeasureForFileOutOfSourcesDirs() {
-    org.sonar.api.resources.File file = new org.sonar.api.resources.File("IndexControllerTest.php");
-
-    verify(context, never()).saveMeasure(eq(file), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
-    verify(context, never()).saveMeasure((Resource<?>) eq(null), eq(CoreMetrics.LINES_TO_COVER), anyDouble());
-  }
-
-  // https://jira.codehaus.org/browse/SONARPLUGINS-1591
   @Test
   public void shouldNotFailIfNoStatementCount() {
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-no-statements-covered.xml"));
-    verify(context, atLeastOnce()).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
+    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINE_COVERAGE), eq(0.0d));
   }
 
-  // https://jira.codehaus.org/browse/SONARPLUGINS-1675
+  /**
+   * SONARPLUGINS-1675
+   */
   @Test
   public void shouldNotFailIfNoLineForFileNode() {
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-filenode-without-line.xml"));
-    verify(context, atLeastOnce()).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
+    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINE_COVERAGE), eq(0.0d));
   }
 
   @Test
   public void should_save_measure_for_missing_file_in_report() throws Exception {
+    when(context.getResource(any(Resource.class))).thenReturn(org.sonar.api.resources.File.create("Banana.php"));
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-empty.xml"));
-    verify(context).saveMeasure(monkeyResource, CoreMetrics.LINE_COVERAGE, 0.0d);
+
+    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINE_COVERAGE), eq(0.0d));
   }
 
-  private static void mockProjectFileSystem(Project project, ModuleFileSystem moduleFileSystem) {
-    ProjectFileSystem fs = mock(ProjectFileSystem.class);
+  private static void addFiles(DefaultFileSystem fs) {
+    File baseDir = TestUtils.getResource(BASE_DIR);
 
-    when(project.getFileSystem()).thenReturn(fs);
-    when(fs.getSourceDirs()).thenReturn(Arrays.asList(new File("C:/projets/PHP/Monkey/sources/main")));
+    InputFile monkeyFile = new DefaultInputFile(MONKEY_FILE_NAME).setAbsolutePath(MONKEY_FILE.getAbsolutePath()).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
+    InputFile bananaFile = new DefaultInputFile(BANANA_FILE_NAME).setAbsolutePath(BANANA_FILE.getAbsolutePath()).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
 
-    File f1 = new File("C:/projets/PHP/Monkey/sources/main/Monkey2.php");
-    File f2 = new File("C:/projets/PHP/Monkey/sources/main/Monkey.php");
-    File f3 = new File("C:/projets/PHP/Monkey/sources/main/Banana1.php");
-    File f4 = new File("C:/projets/PHP/Monkey/sources/test/Banana.php");
-    File f5 = new File("C:/projets/PHP/Monkey/sources/main/Money.inc");
-    File f6 = new File("C:/projets/PHP/Monkey/sources/test/application/default/controllers/IndexControllerTest.php");
+    fs.setBaseDir(baseDir);
 
-    List<File> sourceFiles = Arrays.asList(f1, f2, f3, f5);
-    when(fs.mainFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/main"), sourceFiles));
-    when(moduleFileSystem.files(any(FileQuery.class))).thenReturn(sourceFiles);
-
-    List<File> testFiles = Arrays.asList(f4, f6);
-    when(fs.testFiles(Php.KEY)).thenReturn(InputFileUtils.create(new File("C:/projets/PHP/Money/Sources/test"), testFiles));
-
+    fs.add(monkeyFile);
+    fs.add(bananaFile);
   }
 
+  /**
+   * Replace file name with absolute path in coverage report.
+   *
+   * This hack allow to have this unit test, as only absolute path
+   * in report is supported.
+   * */
+  private File getReportsWithAbsolutePath(String reportName) throws Exception {
+    File fileWIthAbsolutePaths = folder.newFile("report_with_absolute_paths.xml");
+
+    Files.write(
+      Files.toString(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + reportName), Charsets.UTF_8)
+        .replace("/" + MONKEY_FILE_NAME, MONKEY_FILE.getAbsolutePath())
+        .replace("/" + BANANA_FILE_NAME, BANANA_FILE.getAbsolutePath()),
+      fileWIthAbsolutePaths, Charsets.UTF_8);
+
+    return fileWIthAbsolutePaths;
+  }
 }

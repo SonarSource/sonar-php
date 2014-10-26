@@ -77,7 +77,7 @@ public class LocalVariableScope {
    * @param functionDec is METHOD_DECLARATION, FUNCTION_DECLARATION or FUNCTION_EXPRESSION
    */
   public void declareParameters(AstNode functionDec) {
-    Preconditions.checkArgument(functionDec.is(CheckUtils.functions()));
+    Preconditions.checkArgument(functionDec.is(FunctionUtils.functions()));
 
     AstNode paramList = functionDec.getFirstChild(PHPGrammar.PARAMETER_LIST);
     if (paramList != null) {
@@ -194,7 +194,7 @@ public class LocalVariableScope {
     for (AstNode lexicalVar : lexicalVarList.getChildren(PHPGrammar.LEXICAL_VAR)) {
       AstNode varIdentifier = lexicalVar.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
       String varName = varIdentifier.getTokenOriginalValue();
-      boolean isReference = lexicalVar.hasDirectChildren(PHPPunctuator.AND);
+      boolean isReference = lexicalVar.hasDirectChildren(PHPPunctuator.AMPERSAND);
       boolean isFromOuterScope = outerScope == null || outerScope.localVariables.containsKey(varName);
 
       if (isReference && !isFromOuterScope) {

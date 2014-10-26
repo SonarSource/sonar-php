@@ -30,7 +30,7 @@ public class ConstantNameCheckTest extends CheckTest {
   private ConstantNameCheck check = new ConstantNameCheck();
 
   @Test
-  public void defaultValue() {
+  public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ConstantNameCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
@@ -41,7 +41,7 @@ public class ConstantNameCheckTest extends CheckTest {
   }
 
   @Test
-  public void custom() {
+  public void custom() throws Exception {
     check.format = "^[A-Z][a-z]*$";
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ConstantNameCheck.php"), check);
 

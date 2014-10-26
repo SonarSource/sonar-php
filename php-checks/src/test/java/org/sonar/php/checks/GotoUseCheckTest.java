@@ -28,7 +28,7 @@ import org.sonar.squidbridge.api.SourceFile;
 public class GotoUseCheckTest extends CheckTest {
 
   @Test
-  public void test() {
+  public void test() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("GotoUseCheck.php"), new GotoUseCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())

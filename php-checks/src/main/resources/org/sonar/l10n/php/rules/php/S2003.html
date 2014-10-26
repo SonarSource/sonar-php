@@ -1,0 +1,34 @@
+<p>
+  At root,  <code>require</code>, <code>require_once</code>, <code>include</code>, and <code>include_once</code> all perform the same task of including one file in another. However, the way they perform that task differs, and they should not be used interchangeably.
+</p>
+<p>
+  <code>require</code> includes a file but generates a fatal error if an error occurs in the process.
+</p>
+<p>
+  <code>include</code> also includes a file, but generates only a warning if an error occurs.
+</p>
+<p>
+  Predictably, the difference between <code>require</code> and <code>require_once</code> is the same as the difference between <code>include</code> and <code>include_once</code> - the "_once" versions ensure that the specified file is only included once.
+</p>
+<p>
+  Because including the same file multiple times could have unpredictable results, the "once" versions are preferred.
+</p>
+<p>
+  Because <code>include_once</code> generates only warnings, it should be used only when the file is being included conditionally, i.e. when all possible error conditions have been checked beforehand.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+include 'code.php';  //Noncompliant; not a "_once" usage and not conditional
+include $user.'_history.php'; // Noncompliant
+require 'more_code.php';  // Noncompliant; not a "_once" usage
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+require_once 'code.php';
+if (is_member($user)) {
+  include_once $user.'_history.php';
+}
+require_once 'more_code.php';
+</pre>

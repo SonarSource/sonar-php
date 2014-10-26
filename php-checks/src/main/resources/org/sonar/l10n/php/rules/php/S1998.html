@@ -1,0 +1,23 @@
+<p>
+  Passing a reference to a function parameter means that any modifications the method makes to the parameter will be made to the original value as well, since references have the effect of pointing two variables at the same memory space. This feature can be difficult to use correctly, particularly if the callee is not expecting a reference, and the improper use of references in function calls can make code less efficient rather than more efficient.
+</p>
+<p>
+  Further, according to the PHP manual:
+</p>
+<blockquote>
+  As of PHP 5.3.0, you will get a warning saying that "call-time pass-by-reference" is deprecated... And as of PHP 5.4.0, call-time pass-by-reference was removed, so using it will raise a fatal error.
+</blockquote>
+<h2>Noncompliant Code Example</h2>
+<pre>
+myfun(&$name);  // Noncompliant
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+myfun($name);
+</pre>
+
+<h2>See</h2>
+<ul>
+  <li><a href="http://cwe.mitre.org/data/definitions/374">MITRE, CWE-374</a> - Weakness Base Passing Mutable Objects to an Untrusted Method</li>
+</ul>

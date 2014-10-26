@@ -60,7 +60,7 @@ public enum PHPPunctuator implements TokenType, GrammarRuleKey {
   INC("++"),
   DEC("--"),
   ANDAND("&&"),
-  AND("&"),
+  AMPERSAND("&"),
   OROR("||"),
   OR("|"),
 

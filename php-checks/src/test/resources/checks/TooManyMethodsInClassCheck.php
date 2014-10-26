@@ -17,7 +17,7 @@ abstract class C1 {       // NOK
   public function f2() {
   }
 
-  public function f3();
+  private function f3();
 }
 
 abstract class C1 {       // OK

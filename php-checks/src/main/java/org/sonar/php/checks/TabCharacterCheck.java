@@ -35,11 +35,14 @@ import java.util.List;
 
 @Rule(
   key = "S105",
-  priority = Priority.MINOR)
+  name = "Tabulation characters should not be used",
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class TabCharacterCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
   private Charset charset;
 
+  @Override
   public void setCharset(Charset charset) {
     this.charset = charset;
   }

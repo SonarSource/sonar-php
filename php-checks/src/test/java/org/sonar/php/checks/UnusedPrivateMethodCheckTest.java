@@ -17,30 +17,23 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.core;
+package org.sonar.php.checks;
 
-import org.sonar.api.batch.AbstractSourceImporter;
-import org.sonar.api.batch.Phase;
-import org.sonar.plugins.php.api.Php;
+import org.junit.Test;
+import org.sonar.php.PHPAstScanner;
+import org.sonar.plugins.php.CheckTest;
+import org.sonar.plugins.php.TestUtils;
+import org.sonar.squidbridge.api.SourceFile;
 
-/**
- * Simple source code importer for PHP projects.
- */
-@Phase(name = Phase.Name.PRE)
-public class PhpSourceImporter extends AbstractSourceImporter {
+public class UnusedPrivateMethodCheckTest extends CheckTest {
 
-  /**
-   * Instantiates a new php source importer.
-   */
-  public PhpSourceImporter(Php php) {
-    super(php);
+  @Test
+  public void test() throws Exception {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("UnusedPrivateMethodCheck.php"), new UnusedPrivateMethodCheck());
+
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .next().atLine(8).withMessage("Remove this unused private \"f\" method.")
+      .noMore();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    return "PHP Source Importer";
-  }
 }

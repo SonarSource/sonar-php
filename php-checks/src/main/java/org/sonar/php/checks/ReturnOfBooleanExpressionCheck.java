@@ -30,6 +30,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1126",
+  name = "Return of boolean expressions should not be wrapped into an \"if-then-else\" statement",
   priority = Priority.MINOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 
