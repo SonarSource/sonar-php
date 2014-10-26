@@ -91,7 +91,7 @@ public class PhpUnitSensorTest {
   @Test
   public void shouldExecuteOnProject() {
     DefaultFileSystem localFS = new DefaultFileSystem();
-    PhpUnitSensor localSensor = new PhpUnitSensor(localFS, null, null, null);
+    PhpUnitSensor localSensor = new PhpUnitSensor(localFS, null, null, null, null, null);
 
     // Empty file system
     assertThat(localSensor.shouldExecuteOnProject(project)).isFalse();
@@ -115,7 +115,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void noReport() {
-    sensor = new PhpUnitSensor(new DefaultFileSystem(), new Settings(), parser, coverageParser);
+    sensor = new PhpUnitSensor(new DefaultFileSystem(), new Settings(), parser, coverageParser, itCoverageParser, overallCoverageParser);
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -130,7 +130,7 @@ public class PhpUnitSensorTest {
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, fakePath);
     localSettings.addProperties(props);
 
-    sensor = new PhpUnitSensor(new DefaultFileSystem(), localSettings, parser, coverageParser);
+    sensor = new PhpUnitSensor(new DefaultFileSystem(), localSettings, parser, coverageParser, itCoverageParser, overallCoverageParser);
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -142,7 +142,7 @@ public class PhpUnitSensorTest {
     Properties props = new Properties();
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, "phpunit.xml");
     settings.addProperties(props);
-    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser);
+    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
 
     sensor.analyse(project, context);
 

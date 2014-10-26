@@ -20,9 +20,8 @@
 package org.sonar.plugins.php.phpunit;
 
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 
 /**
  * The Class PhpUnitItCoverageResultParser.
@@ -34,8 +33,8 @@ public class PhpUnitItCoverageResultParser extends PhpUnitCoverageResultParser {
    *
    * @param context    the context
    */
-  public PhpUnitItCoverageResultParser(Project project, SensorContext context, ModuleFileSystem fileSystem) {
-    super(project, context, fileSystem);
+  public PhpUnitItCoverageResultParser(SensorContext context, FileSystem fileSystem) {
+    super(context, fileSystem);
     LINE_COVERAGE = CoreMetrics.IT_LINE_COVERAGE;
     LINES_TO_COVER = CoreMetrics.IT_LINES_TO_COVER;
     UNCOVERED_LINES = CoreMetrics.IT_UNCOVERED_LINES;

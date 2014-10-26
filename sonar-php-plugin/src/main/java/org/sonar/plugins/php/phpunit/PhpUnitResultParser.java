@@ -131,7 +131,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    *
    * @param reportFile the reports directories to be scan
    */
-  protected void parse(File reportFile) {
+  public void parse(File reportFile) {
     if (reportFile == null) {
       insertZeroWhenNoReports();
     } else {

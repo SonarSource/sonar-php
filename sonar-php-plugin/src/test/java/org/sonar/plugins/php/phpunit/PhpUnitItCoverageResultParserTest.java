@@ -25,9 +25,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -39,13 +39,11 @@ public class PhpUnitItCoverageResultParserTest {
   private Project project;
   @Mock
   private SensorContext context;
-  @Mock
-  private ModuleFileSystem moduleFileSystem;
   private PhpUnitCoverageResultParser parser;
 
   @Before
   public void setUp() throws Exception {
-    parser = new PhpUnitItCoverageResultParser(project, context, moduleFileSystem);
+    parser = new PhpUnitItCoverageResultParser(context, new DefaultFileSystem());
   }
 
   @Test

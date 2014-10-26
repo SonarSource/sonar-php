@@ -51,7 +51,7 @@ public class PhpUnitSensor implements Sensor {
   private final FileSystem fileSystem;
   private final FilePredicates filePredicates;
 
-  public PhpUnitSensor(FileSystem fileSystem, Settings settings,
+  public PhpUnitSensor(FileSystem fileSystem, Settings settings, PhpUnitResultParser parser,
                        PhpUnitCoverageResultParser coverageParser,
                        PhpUnitItCoverageResultParser itCoverageParser,
                        PhpUnitOverallCoverageResultParser overallCoverageParser) {
