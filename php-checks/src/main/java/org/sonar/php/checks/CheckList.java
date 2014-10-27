@@ -125,6 +125,7 @@ public class CheckList {
       InlineHTMLInFileCheck.class,
       ConcatenatedStringLiteralCheck.class,
       NestedFunctionDepthCheck.class,
+      CharacterBeforeOpeningPHPTagCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
