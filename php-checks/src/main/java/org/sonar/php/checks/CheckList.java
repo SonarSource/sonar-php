@@ -127,6 +127,7 @@ public class CheckList {
       NestedFunctionDepthCheck.class,
       CharacterBeforeOpeningPHPTagCheck.class,
       MethodNameReturningBooleanCheck.class,
+      FileNameCheck.class,
       TooManyFunctionParametersCheck.class
     );
   }
