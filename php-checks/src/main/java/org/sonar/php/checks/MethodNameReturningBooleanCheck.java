@@ -33,7 +33,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S2047",
   name = "The names of methods with boolean return values should start with \"is\" or \"has\"",
-  priority = Priority.MINOR)
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.CONVENTION})
 public class MethodNameReturningBooleanCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final String RETURN_TAG = "@return";
