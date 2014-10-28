@@ -1,0 +1,84 @@
+<p>
+  Deprecated language features are those that have been retained temporarily for backward compatibility, but which will eventually be removed from the language. In effect, deprecation announces a grace period to allow the smooth transition from the old features to the new ones. In that period, no use of the deprecated features should be added to the code, and all existing uses should be gradually removed.
+</p>
+<p>
+  The following functions were deprecated in PHP 5:
+</p>
+<table>
+  <tr>
+    <th>Deprecated</th>
+    <th>Use Instead</th>
+  </tr>
+  <tr>
+    <td>call_user_method()</td>
+    <td>call_user_func()</td>
+  </tr>
+  <tr>
+    <td>call_user_method_array()</td>
+    <td>call_user_func_array()</td>
+  </tr>
+  <tr>
+    <td>define_syslog_variables()</td>
+  </tr>
+  <tr>
+    <td>dl()</td>
+  </tr>
+  <tr>
+    <td>ereg()</td>
+    <td>preg_match()</td>
+  </tr>
+  <tr>
+    <td>ereg_replace()</td>
+    <td>preg_replace()</td>
+  </tr>
+  <tr>
+    <td>eregi()</td>
+    <td>preg_match() with 'i' modifier</td>
+  </tr>
+  <tr>
+    <td>eregi_replace()</td>
+    <td>preg_replace() with 'i' modifier</td>
+  </tr>
+  <tr>
+    <td>set_magic_quotes_runtime() and its alias, magic_quotes_runtime()</td>
+  </tr>
+  <tr>
+    <td>session_register()</td>
+    <td>$_SESSION superglobal</td>
+  </tr>
+  <tr>
+    <td>session_unregister()</td>
+    <td>$_SESSION superglobal</td>
+  </tr>
+  <tr>
+    <td>session_is_registered()</td>
+    <td>$_SESSION superglobal</td>
+  </tr>
+  <tr>
+    <td>set_socket_blocking()</td>
+    <td>stream_set_blocking()</td>
+  </tr>
+  <tr>
+    <td>split()</td>
+    <td>preg_split()</td>
+  </tr>
+  <tr>
+    <td>spliti()</td>
+    <td>preg_split() with 'i' modifier</td>
+  </tr>
+  <tr>
+    <td>sql_regcase()</td>
+  </tr>
+  <tr>
+    <td>mysql_db_query()</td>
+    <td>mysql_select_db() and mysql_query()</td>
+  </tr>
+  <tr>
+    <td>mysql_escape_string()</td>
+    <td>mysql_real_escape_string()</td>
+  </tr>
+  <tr>
+    <td>Passing locale category names as strings</td>
+    <td>Use the LC_* family of constants</td>
+  </tr>
+</table>
