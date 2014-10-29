@@ -1,0 +1,48 @@
+<p>
+  Overriding a method just to call the same method from the super class without performing any other actions is useless and misleading.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+class Child extends Parent {
+
+  public function func($n,$m) {
+    parent::func($n$m);  // Noncompliant
+  }
+}
+
+class Parent {
+  public function func($n, $m) {
+    // do something
+  }
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+class Child extends Parent {
+
+  public function func($n,$m) {
+    parent::func($n$m);
+    // do additional things...
+  }
+}
+
+class Parent {
+  public function func($n, $m) {
+    // do something
+  }
+}
+</pre>
+<p>or</p>
+<pre>
+class Child extends Parent {
+  // function eliminated
+}
+
+class Parent {
+  public function func($n, $m) {
+    // do something
+  }
+}
+</pre>
