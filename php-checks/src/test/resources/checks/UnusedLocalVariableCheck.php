@@ -5,8 +5,10 @@
  */
 function f() {
   $a = 1;    // OK
-  $b = 1;    // NOK
-  $c =& $a;  // NOK
+  $b = 1;    // OK
+  $c = 1;    // NOK
+  $d =& $a;  // NOK
+  $a[$b];
 }
 
 /**
@@ -135,6 +137,12 @@ function o(){
   global $a, $$a;  // OK variable variables are not supported
 
   return $a;
+}
+
+function m($p){
+  $a = "property";  // OK
+
+  return $p->$a;
 }
 
 /**

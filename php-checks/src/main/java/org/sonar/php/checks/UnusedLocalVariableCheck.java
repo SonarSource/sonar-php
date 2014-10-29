@@ -52,7 +52,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
       PHPGrammar.GLOBAL_STATEMENT,
       PHPGrammar.STATIC_STATEMENT,
       PHPGrammar.LEXICAL_VAR_LIST,
-      PHPGrammar.MEMBER_EXPRESSION,
+      PHPGrammar.VAR_IDENTIFIER,
       PHPGrammar.SIMPLE_ENCAPS_VARIABLE,
       PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE,
 
@@ -81,8 +81,8 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
       } else if (astNode.is(PHPGrammar.LEXICAL_VAR_LIST)) {
         getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
 
-      } else if (astNode.is(PHPGrammar.MEMBER_EXPRESSION, PHPGrammar.SIMPLE_ENCAPS_VARIABLE)) {
-        getCurrentScope().useVariable(astNode.getFirstChild());
+      } else if (astNode.is(PHPGrammar.VAR_IDENTIFIER) && !isDeclaration(astNode)) {
+        getCurrentScope().useVariable(astNode);
 
       } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
         getCurrentScope().useVariale("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION).getTokenOriginalValue());
@@ -94,6 +94,11 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
         getCurrentScope().declareListVariable(astNode);
       }
     }
+  }
+
+  private boolean isDeclaration(AstNode varIdentifier) {
+    AstNode parent = varIdentifier.getParent();
+    return parent.getParent().is(PHPGrammar.GLOBAL_VAR) || parent.is(PHPGrammar.STATIC_VAR, PHPGrammar.LEXICAL_VAR);
   }
 
   @Override

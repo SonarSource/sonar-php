@@ -32,16 +32,16 @@ public class UnusedLocalVariableCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("UnusedLocalVariableCheck.php"), new UnusedLocalVariableCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(8).withMessage("Remove this unused \"$b\" local variable.")
       .next().atLine(9).withMessage("Remove this unused \"$c\" local variable.")
-      .next().atLine(19)
-      .next().atLine(29)
-      .next().atLine(38)
-      .next().atLine(54)
-      .next().atLine(65)
-      .next().atLine(65)
-      .next().atLine(124)
-      .next().atLine(126).withMessage("Remove this unused \"$c\" local variable.")
+      .next().atLine(10).withMessage("Remove this unused \"$d\" local variable.")
+      .next().atLine(21)
+      .next().atLine(31)
+      .next().atLine(40)
+      .next().atLine(56)
+      .next().atLine(67)
+      .next().atLine(67)
+      .next().atLine(126)
+      .next().atLine(128).withMessage("Remove this unused \"$c\" local variable.")
       .noMore();
   }
 }
