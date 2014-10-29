@@ -71,11 +71,7 @@ public class ConcatenatedStringLiteralCheck extends SquidCheck<LexerlessGrammar>
     while (childIt.hasNext()) {
       AstNode currentNode = childIt.next();
 
-      if (currentNode.is(PHPPunctuator.DOT)) {
-        // skip dot in expression
-        continue;
-
-      } else {
+      if (!currentNode.is(PHPPunctuator.DOT)) {
         Expression currentExpr = new Expression(currentNode);
 
         if (previousExpr.isStringLiteral && currentExpr.isStringLiteral) {

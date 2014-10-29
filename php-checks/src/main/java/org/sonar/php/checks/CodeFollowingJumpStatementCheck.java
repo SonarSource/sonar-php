@@ -46,9 +46,9 @@ public class CodeFollowingJumpStatementCheck extends SquidCheck<LexerlessGrammar
 
   @Override
   public void visitNode(AstNode node) {
-    node = node.getParent();
+    AstNode statementNode = node.getParent();
 
-    AstNode nextStatement = node.getNextSibling();
+    AstNode nextStatement = statementNode.getNextSibling();
     if (isUnReachableCode(nextStatement)) {
       getContext().createLineViolation(this, "Remove the code after this \"{0}\".", nextStatement,
         node.getFirstChild().getTokenOriginalValue());

@@ -80,7 +80,7 @@ public class MethodNameReturningBooleanCheck extends SquidCheck<LexerlessGrammar
         isPreviousReturnTag = true;
 
       } else if (isPreviousReturnTag) {
-        return s.equalsIgnoreCase("bool") || s.equalsIgnoreCase("boolean");
+        return "bool".equalsIgnoreCase(s) || "boolean".equalsIgnoreCase(s);
       }
     }
     return false;
