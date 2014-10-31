@@ -32,21 +32,21 @@ public final class MetricsNode {
    */
   @XStreamAsAttribute
   @XStreamAlias("coveredstatements")
-  private double coveredStatements;
+  private int coveredStatements;
 
   /**
    * The total statements count.
    */
   @XStreamAsAttribute
   @XStreamAlias("statements")
-  private double totalStatementsCount;
+  private int totalStatementsCount;
 
   /**
    * Gets the coveredstatements.
    *
    * @return the coveredstatements
    */
-  public double getCoveredStatements() {
+  public int getCoveredStatements() {
     return coveredStatements;
   }
 
@@ -55,7 +55,7 @@ public final class MetricsNode {
    *
    * @return the total statements count
    */
-  public double getTotalStatementsCount() {
+  public int getTotalStatementsCount() {
     return totalStatementsCount;
   }
 }
