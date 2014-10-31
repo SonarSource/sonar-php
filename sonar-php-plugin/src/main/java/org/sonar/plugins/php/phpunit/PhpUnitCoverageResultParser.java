@@ -176,7 +176,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
       double totalStatementsCount = metrics.getTotalStatementsCount();
       double uncoveredLines = totalStatementsCount - metrics.getCoveredStatements();
       double lineCoverage = 0;
-      if (metrics.getCoveredStatements() != 0) {
+      if (metrics.getCoveredStatements() != 0d) {
         lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
       }
 

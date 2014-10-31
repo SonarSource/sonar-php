@@ -30,9 +30,6 @@ import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
-import javax.annotation.Nullable;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.List;
 import java.util.regex.Pattern;
 

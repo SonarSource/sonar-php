@@ -130,7 +130,6 @@ public class CheckList {
       FileNameCheck.class,
       PHP5DeprecatedFunctionUsageCheck.class,
       OverridingMethodSimplyCallParentCheck.class,
-      TooManyFunctionParametersCheck.class
-    );
+      TooManyFunctionParametersCheck.class);
   }
 }

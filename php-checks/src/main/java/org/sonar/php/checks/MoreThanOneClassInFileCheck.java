@@ -64,7 +64,7 @@ public class MoreThanOneClassInFileCheck extends SquidCheck<LexerlessGrammar> {
   public void leaveFile(@Nullable AstNode astNode) {
     if ((nbClass + nbInterface) > 1) {
 
-      CheckMessage msg = new CheckMessage(this, "There are {0}{1}{2}in this file; move all but one of them to other files.",
+      CheckMessage msg = new CheckMessage((Object) this, "There are {0}{1}{2}in this file; move all but one of them to other files.",
         nbClass > 0 ? nbClass + " independent classes " : "",
         nbClass > 0 && nbInterface > 0 ? "and " : "",
         nbInterface > 0 ? nbInterface + " independent interfaces " : "");
