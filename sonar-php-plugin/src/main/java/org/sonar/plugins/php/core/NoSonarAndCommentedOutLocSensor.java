@@ -29,7 +29,7 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.checks.NoSonarFilter;
+import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
 import org.sonar.api.utils.SonarException;
@@ -77,11 +77,11 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     Iterable<InputFile> sourceFiles = filesystem.inputFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
     for (InputFile file : sourceFiles) {
       // TODO: remove when deprecated NoSonarFilter will be replaced.
-      org.sonar.api.resources.File phpFile = getSonarResource(project, file.file());
+      org.sonar.api.resources.File phpFile = context.getResource(org.sonar.api.resources.File.create(file.relativePath()));
       if (phpFile != null) {
         Source source = analyseSourceCode(file.file());
         if (source != null) {
-          filter.addResource(phpFile, source.getNoSonarTagLines());
+          filter.addComponent(phpFile.getEffectiveKey(), source.getNoSonarTagLines());
           double measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
           context.saveMeasure(phpFile, CoreMetrics.COMMENTED_OUT_CODE_LINES, measure);
         }

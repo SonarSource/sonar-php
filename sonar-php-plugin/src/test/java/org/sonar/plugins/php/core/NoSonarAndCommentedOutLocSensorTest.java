@@ -30,11 +30,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.checks.NoSonarFilter;
+import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
@@ -59,7 +61,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
     project = mock(Project.class);
 
     context = mock(SensorContext.class);
-    noSonarFilter = new NoSonarFilter(context);
+    noSonarFilter = new NoSonarFilter();
     sensor = spy(new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter));
   }
 
@@ -69,8 +71,8 @@ public class NoSonarAndCommentedOutLocSensorTest {
     fs.add(mainFile);
 
     // TODO: remove when deprecated NoSonarFilter will be replaced.
-    org.sonar.api.resources.File sonarFile = new org.sonar.api.resources.File("Mail.php");
-    doReturn(sonarFile).when(sensor).getSonarResource(any(Project.class), any(File.class));
+    org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.create("Mail.php");
+    when(context.getResource(any(Resource.class))).thenReturn(sonarFile);
 
     sensor.analyse(project, context);
     // Mail.php contains 9 commented oud code lines.
@@ -89,8 +91,6 @@ public class NoSonarAndCommentedOutLocSensorTest {
     assertThat(localSensor.shouldExecuteOnProject(null)).isTrue();
   }
 
-
-  @Ignore // TODO: remove when deprecated NoSonarFilter will be replaced.
   @Test
   public void testAnalyseEmptySourceFiles() {
     DefaultFileSystem localFS = new DefaultFileSystem();
