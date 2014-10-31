@@ -1,6 +1,6 @@
 <?php
 
-class B extends A {
+abstract class B extends A {
 
   public function f() {      // NOK
     parent::f();
@@ -22,9 +22,30 @@ class B extends A {
     A::h();
   }
 
+  public function h() {      // OK
+    return;
+  }
+
+  public function i() {      // OK
+    parent::i();
+    doSomethingElse();
+  }
+
+  public function j() {      // OK
+  }
+
+  public function k() {      // OK
+    function f() {
+      parent::i();
+    }
+  }
+
+   abstract public function l(); // OK
+
 }
 
 class D extends C {
+  public $field;
 
   public function f() {     // OK
     parent::g();
@@ -41,4 +62,12 @@ class D extends C {
   public function i() {     // OK
     return parent::f() + 1;
   }
+}
+
+class E {
+
+  public static function f() {
+    return E::f();           // OK
+  }
+
 }
