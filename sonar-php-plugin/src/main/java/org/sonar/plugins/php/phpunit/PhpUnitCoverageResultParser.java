@@ -173,11 +173,11 @@ public class PhpUnitCoverageResultParser implements BatchExtension {
       context.saveMeasure(phpFile, measure);
 
       // Save uncovered statements (lines)
-      double totalStatementsCount = Double.valueOf(metrics.getTotalStatementsCount());
-      double uncoveredLines = totalStatementsCount - Double.valueOf(metrics.getCoveredStatements());
+      double totalStatementsCount = metrics.getTotalStatementsCount();
+      double uncoveredLines = totalStatementsCount - metrics.getCoveredStatements();
       double lineCoverage = 0;
-      if (metrics.getCoveredStatements() != 0) {
-        lineCoverage = Double.valueOf(metrics.getCoveredStatements()) / totalStatementsCount;
+      if (Double.doubleToRawLongBits(totalStatementsCount) != 0) {
+        lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
       }
 
       context.saveMeasure(phpFile, CoreMetrics.LINES_TO_COVER, totalStatementsCount);
