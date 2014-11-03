@@ -20,9 +20,11 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -30,7 +32,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S2001",
   name = "Functions deprecated in PHP 5 should not be used",
-  priority = Priority.MINOR)
+  priority = Priority.MINOR,
+  tags = {PHPRuleTags.OBSOLETE})
 public class PHP5DeprecatedFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final ImmutableMap<String, String> NEW_BY_DEPRECATED_FUNCTIONS = ImmutableMap.<String, String>builder()
@@ -40,7 +43,7 @@ public class PHP5DeprecatedFunctionUsageCheck extends SquidCheck<LexerlessGramma
     .put("dl", "")
     .put("ereg", "preg_match()")
     .put("ereg_replace", "preg_replace()")
-    .put("eregi)", "preg_match() with 'i' modifier")
+    .put("eregi", "preg_match() with 'i' modifier")
     .put("eregi_replace", "preg_replace() with 'i' modifier")
     .put("set_magic_quotes_runtime", "")
     .put("magic_quotes_runtime", "")
@@ -55,6 +58,9 @@ public class PHP5DeprecatedFunctionUsageCheck extends SquidCheck<LexerlessGramma
     .put("mysql_escape_string", "mysql_real_escape_string")
     .build();
 
+  private static final ImmutableSet<String> LOCALE_CATEGORY_CONSTANTS = ImmutableSet.of(
+    "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
+
   @Override
   public void init() {
     subscribeTo(PHPGrammar.MEMBER_EXPRESSION);
@@ -63,12 +69,37 @@ public class PHP5DeprecatedFunctionUsageCheck extends SquidCheck<LexerlessGramma
   @Override
   public void visitNode(AstNode astNode) {
     AstNode memberExpr = astNode.getFirstChild();
+    AstNode nextNode = memberExpr.getNextAstNode();
     String calledFunctionName = memberExpr.getTokenOriginalValue();
     String replacement = NEW_BY_DEPRECATED_FUNCTIONS.get(calledFunctionName);
 
-    if (replacement != null && memberExpr.getNextAstNode().is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-      getContext().createLineViolation(this, buildMessage(calledFunctionName, replacement), astNode);
+
+    if (nextNode != null && nextNode.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
+
+      if ("setlocale".equals(calledFunctionName)) {
+        String category = getCategoryFromStringLiteralParameter(nextNode);
+
+        if (category != null) {
+          getContext().createLineViolation(this, "Use the \"{0}\" constant instead of a string literal.", astNode, category);
+        }
+
+      } else if (replacement != null) {
+        getContext().createLineViolation(this, buildMessage(calledFunctionName, replacement), astNode);
+      }
     }
+  }
+
+  private String getCategoryFromStringLiteralParameter(AstNode parameterList) {
+    String firstParam = parameterList.getFirstChild(PHPPunctuator.LPARENTHESIS).getNextAstNode().getTokenOriginalValue();
+
+    if (firstParam.startsWith("\"") && firstParam.endsWith("\"") || firstParam.startsWith("'") && firstParam.endsWith("'")) {
+      String category = firstParam.substring(1, firstParam.length() - 1);
+
+      if (LOCALE_CATEGORY_CONSTANTS.contains(category)) {
+        return category;
+      }
+    }
+    return null;
   }
 
   private String buildMessage(String calledFunctionName, String replacement) {

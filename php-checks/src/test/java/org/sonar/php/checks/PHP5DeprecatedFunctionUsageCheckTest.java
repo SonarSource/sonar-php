@@ -35,6 +35,8 @@ public class PHP5DeprecatedFunctionUsageCheckTest extends CheckTest {
       .next().atLine(3).withMessage("Replace this \"call_user_method()\" call with a call to \"call_user_func()\".")
       .next().atLine(4).withMessage("Remove this \"define_syslog_variables()\" call.")
       .next().atLine(6)
+      .next().atLine(8).withMessage("Use the \"LC_ALL\" constant instead of a string literal.")
+      .next().atLine(9)
       .noMore();
   }
 
