@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.sonar-plugins.php</groupId>
     <artifactId>parent</artifactId>
-    <version>2.4-SNAPSHOT</version>
+    <version>2.4</version>
   </parent>
 
   <artifactId>sonar-php-plugin</artifactId>
@@ -19,7 +19,7 @@
     <connection>scm:git:git@github.com:SonarCommunity/sonar-php.git</connection>
     <developerConnection>scm:git:git@github.com:SonarCommunity/sonar-php.git</developerConnection>
     <url>https://github.com/SonarCommunity/sonar-php</url>
-    <tag>HEAD</tag>
+    <tag>2.4</tag>
   </scm>
 
   <properties>
