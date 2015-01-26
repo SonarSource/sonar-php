@@ -42,6 +42,21 @@ public class UnusedLocalVariableCheckTest extends CheckTest {
       .next().atLine(67)
       .next().atLine(126)
       .next().atLine(128).withMessage("Remove this unused \"$c\" local variable.")
+      //redefine tests
+      .next().atLine(180).withMessage("Remove this unused \"$j\" local variable.")
+      .next().atLine(183).withMessage("Remove this unused \"$a\" local variable.")
+      .next().atLine(186).withMessage("Remove this unused \"$b\" local variable.")
+      //foreach tests
+      .next().atLine(211).withMessage("Remove this unused \"$v5\" local variable.")
+      .next().atLine(215).withMessage("Remove this unused \"$v6\" local variable.")
+      .next().atLine(218).withMessage("Remove this unused \"$v7\" local variable.")
+      .next().atLine(221).withMessage("Remove this unused \"$v8\" local variable.")
+      .next().atLine(225).withMessage("Remove this unused \"$k9\" local variable.")
+      .next().atLine(231).withMessage("Remove this unused \"$v10\" local variable.")
+      .next().atLine(235).withMessage("Remove this unused \"$k11\" local variable.")
+      .next().atLine(239).withMessage("Remove this unused \"$v12\" local variable.")
+      .next().atLine(243).withMessage("Remove this unused \"$k13\" local variable.")
+      .next().atLine(248).withMessage("Remove this unused \"$k14\" local variable.")
       .noMore();
   }
 }

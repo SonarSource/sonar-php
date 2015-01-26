@@ -23,6 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.checks.utils.LocalVariableScope;
 import org.sonar.php.checks.utils.Variable;
@@ -57,7 +58,11 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
       PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE,
 
       PHPGrammar.ASSIGNMENT_EXPR,
-      PHPGrammar.LIST_EXPR);
+      PHPGrammar.LIST_EXPR,
+      PHPGrammar.POSTFIX_EXPR,
+      PHPGrammar.FOREACH_STATEMENT,
+      PHPGrammar.WHILE_STATEMENT,
+      PHPGrammar.FOR_STATEMENT);
   }
 
   @Override
@@ -81,7 +86,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
       } else if (astNode.is(PHPGrammar.LEXICAL_VAR_LIST)) {
         getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
 
-      } else if (astNode.is(PHPGrammar.VAR_IDENTIFIER) && !isDeclaration(astNode)) {
+      } else if (astNode.is(PHPGrammar.VAR_IDENTIFIER) && !isDeclaration(astNode) && !isAssignmentRightUsage(astNode)) {
         getCurrentScope().useVariable(astNode);
 
       } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
@@ -92,13 +97,41 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
       } else if (astNode.is(PHPGrammar.LIST_EXPR)) {
         getCurrentScope().declareListVariable(astNode);
+
+      } else if (astNode.is(PHPGrammar.POSTFIX_EXPR) && isIncOrDec(astNode)) {
+        getCurrentScope().declareVariable(astNode.getFirstDescendant(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
+
+      } else if (astNode.is(PHPGrammar.FOREACH_STATEMENT)) {
+        getCurrentScope().declareForeachVariables(astNode);
+
+      }
+      if (astNode.is(PHPGrammar.WHILE_STATEMENT, PHPGrammar.FOR_STATEMENT, PHPGrammar.FOREACH_STATEMENT)) {
+        getCurrentScope().startLoop();
+
       }
     }
   }
 
+  private boolean isAssignmentRightUsage(AstNode varIdentifier) {
+    AstNode assignmentExpr = varIdentifier.getFirstAncestor(PHPGrammar.ASSIGNMENT_EXPR);
+    AstNode variable = varIdentifier.getFirstAncestor(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    if (assignmentExpr == null || variable == null) {
+      return false;
+    }
+    AstNode leftHandExpression = getLeftHandExpression(assignmentExpr);
+    return leftHandExpression != null && leftHandExpression != variable &&
+            leftHandExpression.getTokenOriginalValue().equals(variable.getTokenOriginalValue());
+  }
+
+  private boolean isIncOrDec(AstNode astNode) {
+    return astNode.getLastChild().is(PHPPunctuator.INC, PHPPunctuator.DEC);
+  }
+
   private boolean isDeclaration(AstNode varIdentifier) {
     AstNode parent = varIdentifier.getParent();
-    return parent.getParent().is(PHPGrammar.GLOBAL_VAR) || parent.is(PHPGrammar.STATIC_VAR, PHPGrammar.LEXICAL_VAR);
+    return parent.getFirstAncestor(PHPGrammar.FOREACH_VARIABLE) != null ||
+            parent.getParent().is(PHPGrammar.GLOBAL_VAR) ||
+            parent.is(PHPGrammar.STATIC_VAR, PHPGrammar.LEXICAL_VAR);
   }
 
   @Override
@@ -106,6 +139,10 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
     if (astNode.is(FunctionUtils.functions())) {
       reportUnusedVariable();
       scopes.pop();
+    } else if (!scopes.isEmpty()) {
+      if (astNode.is(PHPGrammar.WHILE_STATEMENT, PHPGrammar.FOR_STATEMENT, PHPGrammar.FOREACH_STATEMENT)) {
+        getCurrentScope().endLoop();
+      }
     }
   }
 

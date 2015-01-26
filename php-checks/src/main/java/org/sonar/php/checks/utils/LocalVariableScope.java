@@ -27,11 +27,15 @@ import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 
 public class LocalVariableScope {
   List<String> exclusions = Lists.newArrayList();
+  List<String> references = Lists.newArrayList();
+  Deque<List<String>> loopScope = new ArrayDeque<List<String>>();
   Map<String, Variable> localVariables = Maps.newHashMap();
 
   public Map<String, Variable> getLocalVariables() {
@@ -46,12 +50,24 @@ public class LocalVariableScope {
     exclusions.add(varName);
   }
 
+  public void declareReference(AstNode declaration, int usage) {
+    String varName = declaration.getTokenOriginalValue();
+    references.add(varName);
+    declareLocalVariable(varName, declaration, usage);
+  }
+
   private void declareLocalVariable(String varName, AstNode declaration) {
     localVariables.put(varName, new Variable(declaration));
+    if (getLastLoopScope().contains(varName)) {
+      increaseUsageFor(varName);
+    }
   }
 
   private void declareLocalVariable(String varName, AstNode declaration, int usage) {
-    localVariables.put(varName, new Variable(declaration, usage));
+    localVariables.put(varName, new Variable(declaration));
+    if (usage > 0) {
+      increaseUsageFor(varName);
+    }
   }
 
   /**
@@ -66,7 +82,7 @@ public class LocalVariableScope {
       AstNode var = globalVar.getFirstChild(PHPGrammar.COMPOUND_VARIABLE).getFirstChild();
 
       if (var.is(PHPGrammar.VAR_IDENTIFIER)) {
-        declareExclusion(var.getTokenOriginalValue());
+        declareReference(var, 1);
       }
     }
   }
@@ -123,6 +139,9 @@ public class LocalVariableScope {
     if (localVariables.containsKey(varName)) {
       increaseUsageFor(varName);
     }
+    if (!getLastLoopScope().contains(varName)) {
+      getLastLoopScope().add(varName);
+    }
   }
 
   /**
@@ -146,7 +165,11 @@ public class LocalVariableScope {
     Preconditions.checkArgument(variableWithoutObject.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
 
     String varName = getVariableName(variableWithoutObject);
-    if (!isExcludedVariable(varName) && !localVariables.keySet().contains(varName)) {
+    if (getLastLoopScope().contains(varName)) {
+      useVariale(varName);
+    } else if (references.contains(varName)) {
+      useVariale(varName);
+    } else if (!isExcludedVariable(varName)) {
       declareLocalVariable(varName, variableWithoutObject);
     }
   }
@@ -198,7 +221,7 @@ public class LocalVariableScope {
       boolean isFromOuterScope = outerScope == null || outerScope.localVariables.containsKey(varName);
 
       if (isReference && !isFromOuterScope) {
-        this.declareLocalVariable(varName, varIdentifier, 1);
+        this.declareExclusion(varName);
         outerScope.declareLocalVariable(varName, varIdentifier, 1);
       }
 
@@ -233,5 +256,43 @@ public class LocalVariableScope {
     }
   }
 
+  public void declareForeachVariables(AstNode foreachStatement) {
+    Preconditions.checkArgument(foreachStatement.is(PHPGrammar.FOREACH_STATEMENT));
+
+    AstNode foreachExpr = foreachStatement.getFirstChild(PHPGrammar.FOREACH_EXPR);
+    for (AstNode var : foreachExpr.getChildren(PHPGrammar.FOREACH_VARIABLE)) {
+      boolean isReference = var.hasDirectChildren(PHPPunctuator.AMPERSAND);
+      if (isReference) {
+        AstNode varIdentifier = var.getFirstDescendant(PHPGrammar.VAR_IDENTIFIER);
+        declareReference(varIdentifier, 1);
+      } else {
+        AstNode varWithoutObject = var.getFirstDescendant(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+        String varName = getVariableName(varWithoutObject);
+        declareLocalVariable(varName, varWithoutObject, 1);
+      }
+    }
+  }
+
+  public void startLoop() {
+    List<String> loopUsage;
+    if (loopScope.size() == 0) {
+      loopUsage = Lists.newArrayList();
+    } else {
+      List<String> last = getLastLoopScope();
+      loopUsage = Lists.newArrayList(last);
+    }
+    loopScope.push(loopUsage);
+  }
+
+  public void endLoop() {
+    loopScope.pop();
+  }
+
+  private List<String> getLastLoopScope() {
+    if (loopScope.size() > 0) {
+      return loopScope.getLast();
+    }
+    return Lists.newArrayList();
+  }
 }
 
