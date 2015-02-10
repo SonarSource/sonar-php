@@ -57,6 +57,8 @@ public class UnusedLocalVariableCheckTest extends CheckTest {
       .next().atLine(239).withMessage("Remove this unused \"$v12\" local variable.")
       .next().atLine(243).withMessage("Remove this unused \"$k13\" local variable.")
       .next().atLine(248).withMessage("Remove this unused \"$k14\" local variable.")
+      .next().atLine(265).withMessage("Remove this unused \"$c\" local variable.")
+      .next().atLine(301).withMessage("Remove this unused \"$object2\" local variable.")
       .noMore();
   }
 }

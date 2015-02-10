@@ -110,10 +110,10 @@ function m($p){
 
   $a = $p;                                            // OK - use in anonymous function
   $b = function () use ($a) {                         // OK - use in anonymous function
-          return function (FormView $view) use ($a) { // OK used
-          $a->do();
-        };
-     };
+    return function (FormView $view) use ($a) {       // OK used
+      $a->do();
+    };
+  };
 
   doSomething($b);
 }
@@ -257,8 +257,12 @@ function r() {
  */
 function s() {
   $a = true;
+  $b = 0;
+  $c = 0;
   while ($a) {
     $a = false;                     // OK
+    echo $b++;                      // OK
+    $c++;                           // NOK
   }
 
   for ($i = 0; $i < 10; $i++) {
@@ -278,5 +282,22 @@ function s() {
     echo $v;
     $done = true;                   // OK
   }
+
+}
+
+/**
+ *  objects
+ */
+function r() {
+
+  $object1 = new stdClass();
+  $object2 = new stdClass();
+
+  foreach ($list as $item) {
+    $item->field = true;            // OK
+    $object1->field = 1;            // OK
+  }
+
+  $object2 = 2;                     // NOK
 
 }

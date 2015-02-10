@@ -99,7 +99,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
         getCurrentScope().declareListVariable(astNode);
 
       } else if (astNode.is(PHPGrammar.POSTFIX_EXPR) && isIncOrDec(astNode)) {
-        getCurrentScope().declareVariable(astNode.getFirstDescendant(PHPGrammar.VARIABLE_WITHOUT_OBJECTS));
+        handleIncOrDec(astNode);
 
       } else if (astNode.is(PHPGrammar.FOREACH_STATEMENT)) {
         getCurrentScope().declareForeachVariables(astNode);
@@ -110,6 +110,18 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
       }
     }
+  }
+
+  private void handleIncOrDec(AstNode astNode) {
+    AstNode variable = astNode.getFirstDescendant(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    if (isPostfixUsing(astNode)) {
+      getCurrentScope().useVariable(variable);
+    }
+    getCurrentScope().declareVariable(variable);
+  }
+
+  private boolean isPostfixUsing(AstNode astNode) {
+    return astNode.getParent().getParent().isNot(PHPGrammar.EXPRESSION_STATEMENT);
   }
 
   private boolean isAssignmentRightUsage(AstNode varIdentifier) {
@@ -148,9 +160,13 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
   private void declareNewLocalVariable(AstNode astNode) {
     AstNode leftExpr = getLeftHandExpression(astNode);
-    if (leftExpr != null && leftExpr.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+    if (leftExpr != null && leftExpr.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS) && !isObjectAccess(leftExpr)) {
       getCurrentScope().declareVariable(leftExpr);
     }
+  }
+
+  private boolean isObjectAccess(AstNode variableWithoutObjects) {
+    return variableWithoutObjects.getParent().getFirstChild(PHPGrammar.OBJECT_MEMBER_ACCESS) != null;
   }
 
   private AstNode getLeftHandExpression(AstNode assignmentExpr) {
