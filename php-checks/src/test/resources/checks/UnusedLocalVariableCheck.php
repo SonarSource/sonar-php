@@ -301,3 +301,12 @@ function r() {
   $object2 = 2;                     // NOK
 
 }
+
+class C {
+
+  private static $a;
+
+  function f1() {
+    self::$a++;                     // OK
+  }
+}

@@ -113,7 +113,10 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
   }
 
   private void handleIncOrDec(AstNode astNode) {
-    AstNode variable = astNode.getFirstDescendant(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    AstNode variable = getVariableNode(astNode);
+    if (variable == null) {
+      return;
+    }
     if (isPostfixUsing(astNode)) {
       getCurrentScope().useVariable(variable);
     }
@@ -171,14 +174,17 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
   private AstNode getLeftHandExpression(AstNode assignmentExpr) {
     AstNode leftExpr = assignmentExpr.getFirstChild();
+    return getVariableNode(leftExpr);
+  }
 
-    if (leftExpr.is(PHPGrammar.MEMBER_EXPRESSION)) {
-      return leftExpr.getFirstChild();
-    } else if (leftExpr.is(PHPGrammar.POSTFIX_EXPR)) {
-      return leftExpr.getFirstChild().getFirstChild();
-    } else {
-      return null;
+  private AstNode getVariableNode(AstNode astNode) {
+    if (astNode.is(PHPGrammar.POSTFIX_EXPR)) {
+      astNode = astNode.getFirstChild();
     }
+    if (astNode!= null && astNode.is(PHPGrammar.MEMBER_EXPRESSION)) {
+      return astNode.getFirstChild(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
+    }
+    return null;
   }
 
   private void reportUnusedVariable() {
