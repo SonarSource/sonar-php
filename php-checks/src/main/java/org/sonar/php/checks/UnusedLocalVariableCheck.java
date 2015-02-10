@@ -166,7 +166,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
   }
 
   private boolean isObjectAccess(AstNode variableWithoutObjects) {
-    return variableWithoutObjects.getParent().getFirstChild(PHPGrammar.OBJECT_MEMBER_ACCESS) != null;
+    return variableWithoutObjects.getNextAstNode().is(PHPGrammar.OBJECT_MEMBER_ACCESS);
   }
 
   private AstNode getLeftHandExpression(AstNode assignmentExpr) {
