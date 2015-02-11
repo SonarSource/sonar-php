@@ -26,6 +26,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -33,7 +34,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1600",
   name = "Deprecated predefined variables should not be used",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.PITFAIL})
+  tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class DeprecatedPredefinedVariablesUseCheck extends SquidCheck<LexerlessGrammar> {
 

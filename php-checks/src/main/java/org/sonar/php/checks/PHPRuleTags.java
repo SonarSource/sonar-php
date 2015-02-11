@@ -30,7 +30,6 @@ public interface PHPRuleTags {
   String SECURITY = "security";
   String CERT = "cert";
   String UNUSED = "unused";
-  String PITFAIL = "pitfail";
   String MISRA_C = "misra-c";
   String MISRA_CPP = "misra-c++";
   String PERFORMANCE = "performance";
