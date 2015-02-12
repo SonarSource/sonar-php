@@ -24,6 +24,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,7 +36,7 @@ import java.util.Deque;
   key = "S1605",
   name = "PHP 4 style calls to parent constructors should not be used in PHP5 \"__construct\" functions",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class CallParentConstructorCheck extends SquidCheck<LexerlessGrammar> {
 

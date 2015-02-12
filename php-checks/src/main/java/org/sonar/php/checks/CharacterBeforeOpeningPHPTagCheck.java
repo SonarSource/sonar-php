@@ -26,6 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.parser.PHPTokenType;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
   key = "S2000",
   name = "Files should not contain characters before \"<?php\"",
   priority = Priority.CRITICAL,
-  tags = {PHPRuleTags.USER_EXPERIENCE})
+  tags = {Tags.USER_EXPERIENCE})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class CharacterBeforeOpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
 

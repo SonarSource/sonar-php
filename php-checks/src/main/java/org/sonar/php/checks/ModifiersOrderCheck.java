@@ -26,6 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,7 +36,7 @@ import java.util.List;
   key = "S1124",
   name = "Modifiers should be declared in the correct order",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
+  tags = {Tags.CONVENTION, Tags.PSR2})
 public class ModifiersOrderCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final AstNodeType[] EXPECTED_ORDER = {

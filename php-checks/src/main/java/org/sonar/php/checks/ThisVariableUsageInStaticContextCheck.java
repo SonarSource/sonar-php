@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S2014",
   name = "\"$this\" should not be used in a static context",
   priority = Priority.BLOCKER,
-  tags = {PHPRuleTags.BUG})
+  tags = {Tags.BUG})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.BLOCKER)
 public class ThisVariableUsageInStaticContextCheck extends SquidCheck<LexerlessGrammar> {
 

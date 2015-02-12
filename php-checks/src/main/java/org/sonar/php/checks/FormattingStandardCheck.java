@@ -32,6 +32,7 @@ import org.sonar.php.checks.formatting.IndentationCheck;
 import org.sonar.php.checks.formatting.NamespaceAndUseStatementCheck;
 import org.sonar.php.checks.formatting.PunctuatorSpacingCheck;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -43,7 +44,7 @@ import java.util.Arrays;
   key = "S1808",
   name = "Source code should comply with formatting standards",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
+  tags = {Tags.CONVENTION, Tags.PSR2})
 public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final GrammarRuleKey[] CLASS_AND_FUNCTION = {

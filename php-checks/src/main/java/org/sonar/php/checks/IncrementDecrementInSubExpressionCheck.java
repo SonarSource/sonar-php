@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S881",
   name = "Increment (++) and decrement (--) operators should not be mixed with other operators in an expression",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CERT, PHPRuleTags.MISRA_C})
+  tags = {Tags.CERT, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class IncrementDecrementInSubExpressionCheck extends SquidCheck<LexerlessGrammar> {
 

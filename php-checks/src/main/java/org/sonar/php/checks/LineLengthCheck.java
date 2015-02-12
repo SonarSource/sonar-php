@@ -26,6 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -38,7 +39,7 @@ import java.util.List;
   key = "S103",
   name = "Lines should not be too long",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {Tags.CONVENTION})
 public class LineLengthCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   public static final int DEFAULT = 120;

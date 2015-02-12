@@ -24,6 +24,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -31,7 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1109",
   name = "A close curly brace should be located at the beginning of a line",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 public class RightCurlyBraceStartsLineCheck extends SquidCheck<LexerlessGrammar> {
 

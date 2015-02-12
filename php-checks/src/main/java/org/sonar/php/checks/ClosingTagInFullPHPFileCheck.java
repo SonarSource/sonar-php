@@ -23,6 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPTokenType;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import javax.annotation.Nullable;
   key = "S1780",
   name = "Closing tag \"?>\" should be omitted on files containing only PHP",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
+  tags = {Tags.CONVENTION, Tags.PSR2})
 public class ClosingTagInFullPHPFileCheck extends SquidCheck<LexerlessGrammar> {
 
   private int inlineHTMLCounter = 0;

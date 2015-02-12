@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S131",
   name = "\"switch\" statements should end with a \"case default\" clause",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CERT, PHPRuleTags.CWE})
+  tags = {Tags.CERT, Tags.CWE})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class SwitchWithoutDefaultCheck extends SquidCheck<LexerlessGrammar> {
 

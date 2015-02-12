@@ -27,6 +27,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -34,7 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1448",
   name = "Classes should not have too many methods",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyMethodsInClassCheck extends SquidCheck<LexerlessGrammar> {
 

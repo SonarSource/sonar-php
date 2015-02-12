@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -36,7 +37,7 @@ import java.util.Deque;
   key = "S1142",
   name = "Functions should not contain too many return statements",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyReturnCheck extends SquidCheck<LexerlessGrammar> {
 
