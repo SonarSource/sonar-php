@@ -149,10 +149,15 @@ public class PHPSquidSensor implements Sensor {
   private void saveFunctionsComplexityDistribution(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
     Collection<SourceCode> squidFunctionsInFile = scanner.getIndex().search(new QueryByParent(squidFile), new QueryByType(SourceFunction.class));
     RangeDistributionBuilder complexityDistribution = new RangeDistributionBuilder(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
+    double complexityInFunction = 0;
+
     for (SourceCode squidFunction : squidFunctionsInFile) {
-      complexityDistribution.add(squidFunction.getDouble(PHPMetric.COMPLEXITY));
+      double functionComplexity = squidFunction.getDouble(PHPMetric.COMPLEXITY);
+      complexityDistribution.add(functionComplexity);
+      complexityInFunction += functionComplexity;
     }
     context.saveMeasure(sonarFile, complexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
+    context.saveMeasure(sonarFile, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, complexityInFunction);
   }
 
   private void saveFilesComplexityDistribution(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {

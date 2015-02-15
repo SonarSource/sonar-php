@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -37,7 +38,7 @@ import java.nio.charset.Charset;
   key = "S1779",
   name = "Only LF character (Unix-like) should be used to end lines",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
+  tags = {Tags.CONVENTION, Tags.PSR2})
 public class NonLFCharAsEOLCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
 
   private static final Logger LOG = LoggerFactory.getLogger(NonLFCharAsEOLCheck.class);

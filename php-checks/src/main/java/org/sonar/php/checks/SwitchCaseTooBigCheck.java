@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1151",
   name = "\"switch/case\" clauses should not have too many lines",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class SwitchCaseTooBigCheck extends SquidCheck<LexerlessGrammar> {
 

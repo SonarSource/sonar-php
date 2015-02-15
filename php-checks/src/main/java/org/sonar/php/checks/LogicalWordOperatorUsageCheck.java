@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S2010",
   name = "\"&&\" and \"||\" should be used",
   priority = Priority.CRITICAL,
-  tags = {PHPRuleTags.PITFAIL})
+  tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class LogicalWordOperatorUsageCheck extends SquidCheck<LexerlessGrammar> {
   @Override

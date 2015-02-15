@@ -26,6 +26,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,7 +36,7 @@ import java.util.List;
   key = "S1820",
   name = "Classes should not have too many fields",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 public class TooManyFieldsInClassCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final int DEFAULT_MAX = 20;

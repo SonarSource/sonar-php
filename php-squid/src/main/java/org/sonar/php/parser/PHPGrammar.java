@@ -602,7 +602,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(UNARY_EXPR).is(b.firstOf(  // TODO martin: re-arrange & complete
       b.sequence(b.firstOf(INC, DEC), POSTFIX_EXPR),
       b.sequence(b.firstOf(PLUS, MINUS, TILDA, BANG), UNARY_EXPR),
-      b.sequence(PHPPunctuator.AT, POSTFIX_EXPR),
+      b.sequence(PHPPunctuator.AT, UNARY_EXPR),
       b.sequence(CAST_TYPE, EXPRESSION),
       POSTFIX_EXPR)).skipIfOneChild();
     // Binary expressions

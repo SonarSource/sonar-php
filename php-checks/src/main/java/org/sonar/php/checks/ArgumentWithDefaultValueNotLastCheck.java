@@ -26,6 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,7 +36,7 @@ import java.util.List;
   key = "S1788",
   name = "Method arguments with default value should be last",
   priority = Priority.CRITICAL,
-  tags = {PHPRuleTags.BUG, PHPRuleTags.PSR2})
+  tags = {Tags.BUG, Tags.PSR2})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<LexerlessGrammar> {
 

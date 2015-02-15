@@ -17,23 +17,17 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.checks;
+package org.sonar.plugins.php.core;
 
-public interface PHPRuleTags {
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.commonrules.api.CommonRulesDecorator;
+import org.sonar.plugins.php.api.Php;
 
-  String CONVENTION = "convention";
-  String CWE = "cwe";
-  String BRAIN_OVERLOAD = "brain-overload";
-  String BUG = "bug";
-  String PSR2 = "psr2";
-  String PSR1 = "psr1";
-  String SECURITY = "security";
-  String CERT = "cert";
-  String UNUSED = "unused";
-  String PITFAIL = "pitfail";
-  String MISRA_C = "misra-c";
-  String MISRA_CPP = "misra-c++";
-  String PERFORMANCE = "performance";
-  String OBSOLETE = "obsolete";
-  String USER_EXPERIENCE = "user-experience";
+public class PhpCommonRulesDecorator extends CommonRulesDecorator {
+
+  public PhpCommonRulesDecorator(ProjectFileSystem fs, RulesProfile qProfile) {
+    super(Php.KEY, fs, qProfile);
+  }
+
 }

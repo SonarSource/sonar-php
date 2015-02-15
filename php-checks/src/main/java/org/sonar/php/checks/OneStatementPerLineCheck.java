@@ -26,6 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPTokenType;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,7 +36,7 @@ import java.util.Map;
   key = "S122",
   name = "Statements should be on separate lines",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
+  tags = {Tags.CONVENTION, Tags.PSR2})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class OneStatementPerLineCheck extends SquidCheck<LexerlessGrammar> {
 

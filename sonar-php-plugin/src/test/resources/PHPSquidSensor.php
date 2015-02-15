@@ -48,3 +48,7 @@ function helper($param) {
   }
   return $param / 2;
 }
+
+if (true) {
+  return;
+}

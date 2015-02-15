@@ -13,7 +13,7 @@
 
   <name>PHP :: Sonar Plugin</name>
   <description>Enables analysis of PHP projects.</description>
-  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
+  <url>http://redirect.sonarsource.com/plugins/php.html</url>
 
   <scm>
     <connection>scm:git:git@github.com:SonarCommunity/sonar-php.git</connection>

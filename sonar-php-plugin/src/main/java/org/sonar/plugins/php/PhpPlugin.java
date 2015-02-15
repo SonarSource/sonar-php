@@ -25,6 +25,7 @@ import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
+import org.sonar.plugins.php.core.PhpCommonRulesDecorator;
 import org.sonar.plugins.php.core.PhpCommonRulesEngine;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
@@ -80,6 +81,7 @@ public class PhpPlugin extends SonarPlugin {
 
       // Common rules
       PhpCommonRulesEngine.class,
+      PhpCommonRulesDecorator.class,
 
       PHPSquidSensor.class,
 

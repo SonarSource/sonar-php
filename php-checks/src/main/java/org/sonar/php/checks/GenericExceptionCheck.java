@@ -27,6 +27,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -38,7 +39,7 @@ import java.util.Set;
   key = "S2201",
   name = "Generic exceptions ErrorException, RuntimeException and Exception should never be thrown",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.PITFAIL})
+  tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class GenericExceptionCheck extends SquidCheck<LexerlessGrammar> {
 

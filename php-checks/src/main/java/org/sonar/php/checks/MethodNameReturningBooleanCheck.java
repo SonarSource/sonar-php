@@ -27,6 +27,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -34,7 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S2047",
   name = "The names of methods with boolean return values should start with \"is\" or \"has\"",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {Tags.CONVENTION})
 public class MethodNameReturningBooleanCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final String RETURN_TAG = "@return";

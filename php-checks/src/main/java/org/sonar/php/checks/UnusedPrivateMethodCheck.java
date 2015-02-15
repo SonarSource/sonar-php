@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractUnusedPrivateClassMemberCheck;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ import java.util.List;
   key = "S1144",
   name = "Unused private method should be removed",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.UNUSED})
+  tags = {Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class UnusedPrivateMethodCheck extends AbstractUnusedPrivateClassMemberCheck {
 
