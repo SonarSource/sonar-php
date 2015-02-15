@@ -43,6 +43,10 @@ public class SelfKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
+    if (astNode.getFirstAncestor(PHPGrammar.CLASS_VARIABLE_DECLARATION) != null) {
+      return;
+    }
+
     AstNode caller = astNode.getPreviousAstNode();
 
     if ("self".equals(caller.getTokenOriginalValue())) {
