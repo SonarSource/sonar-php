@@ -27,6 +27,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -41,7 +42,7 @@ import java.util.Set;
   key = "S1117",
   name = "Local variables should not have the same name as class fields",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.PITFAIL})
+  tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGrammar> {
 

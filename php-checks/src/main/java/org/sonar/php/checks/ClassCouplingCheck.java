@@ -32,6 +32,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -42,7 +43,7 @@ import java.util.Set;
   key = "S1200",
   name = "Classes should not be coupled to too many other classes (Single Responsibility Principle)",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 public class ClassCouplingCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final int DEFAULT = 20;

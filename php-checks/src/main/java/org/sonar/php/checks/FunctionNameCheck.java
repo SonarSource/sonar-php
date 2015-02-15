@@ -26,6 +26,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
   key = "S100",
   name = "Function names should comply with a naming convention",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {Tags.CONVENTION})
 public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final ImmutableList<String> MAGIC_METHODS = ImmutableList.of(

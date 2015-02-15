@@ -24,6 +24,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -31,7 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S2044",
   name = "\"php_sapi_name()\" should not be used",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.PERFORMANCE})
+  tags = {Tags.PERFORMANCE})
 public class PhpSapiNameFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

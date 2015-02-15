@@ -24,6 +24,7 @@ import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -31,7 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S2046",
   name = "Perl-style comments should not be used",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {Tags.CONVENTION})
 public class PerlStyleCommentsUsageCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
 
   @Override

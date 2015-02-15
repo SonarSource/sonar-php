@@ -27,6 +27,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.squidbridge.recognizer.CodeRecognizer;
 import org.sonar.squidbridge.recognizer.ContainsDetector;
@@ -43,7 +44,7 @@ import java.util.regex.Pattern;
   key = "S125",
   name = "Sections of code should not be \"commented out\"",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.UNUSED})
+  tags = {Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
 

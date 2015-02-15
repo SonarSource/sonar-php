@@ -27,6 +27,7 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.api.SourceFunction;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -35,7 +36,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1541",
   name = "Functions should not be too complex",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class FunctionComplexityCheck extends SquidCheck<LexerlessGrammar> {
 

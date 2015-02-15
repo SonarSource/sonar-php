@@ -24,6 +24,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -31,7 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1603",
   name = "PHP 4 constructor declarations should not be used",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.PITFAIL})
+  tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ConstructorDeclarationCheck extends SquidCheck<LexerlessGrammar> {
 

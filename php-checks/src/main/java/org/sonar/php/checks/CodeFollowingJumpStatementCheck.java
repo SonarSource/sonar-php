@@ -24,6 +24,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -31,7 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1763",
   name = "Jump statements should not be followed by other statements",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.MISRA_C, PHPRuleTags.MISRA_CPP, PHPRuleTags.UNUSED})
+  tags = {Tags.MISRA, Tags.MISRA, Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class CodeFollowingJumpStatementCheck extends SquidCheck<LexerlessGrammar> {
 

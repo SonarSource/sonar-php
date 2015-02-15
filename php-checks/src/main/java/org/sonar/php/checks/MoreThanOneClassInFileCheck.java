@@ -23,6 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.api.CheckMessage;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
@@ -33,7 +34,7 @@ import javax.annotation.Nullable;
   key = "S1996",
   name = "Files should contain only one class or interface each",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 public class MoreThanOneClassInFileCheck extends SquidCheck<LexerlessGrammar> {
 
   private int nbClass = 0;

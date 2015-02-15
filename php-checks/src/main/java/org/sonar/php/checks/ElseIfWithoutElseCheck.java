@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S126",
   name = "\"if ... else if\" constructs shall be terminated with an \"else\" clause",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CERT})
+  tags = {Tags.CERT})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ElseIfWithoutElseCheck extends SquidCheck<LexerlessGrammar> {
 

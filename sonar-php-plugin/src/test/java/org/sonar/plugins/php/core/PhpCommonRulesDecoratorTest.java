@@ -17,30 +17,21 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.plugins.php.core;
 
-import org.junit.Before;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.plugins.php.api.Php;
 
-public class UnaryExprTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.UNARY_EXPR);
-  }
-
+public class PhpCommonRulesDecoratorTest {
   @Test
-  public void test() {
-    matches("$a");
-    matches("+ $a");
-    matches("- $a");
-    matches("~ $a");
-    matches("! $a");
-    matches("@ $a");
-    matches("@ ! $a");
-    matches("(int) $a");
-
+  public void test_declaration() throws Exception {
+    PhpCommonRulesDecorator decorator = new PhpCommonRulesDecorator(mock(ProjectFileSystem.class), mock(RulesProfile.class));
+    assertThat(decorator.language()).isEqualTo(Php.KEY);
   }
+
 }

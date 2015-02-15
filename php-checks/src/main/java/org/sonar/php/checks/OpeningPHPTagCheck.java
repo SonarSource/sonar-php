@@ -23,6 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPTokenType;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -30,7 +31,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1757",
   name = "\"<?php\" and \"<?=\" tags should be used",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR1})
+  tags = {Tags.CONVENTION, Tags.PSR1})
 public class OpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final String LONG_TAG = "<?php";

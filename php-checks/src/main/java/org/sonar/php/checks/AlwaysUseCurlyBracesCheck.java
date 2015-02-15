@@ -24,6 +24,7 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -31,7 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S121",
   name = "\"if/else/for/while/do\" statements should always use curly braces",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.CWE})
+  tags = {Tags.CONVENTION, Tags.CWE})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class AlwaysUseCurlyBracesCheck extends SquidCheck<LexerlessGrammar> {
 

@@ -26,6 +26,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -33,7 +34,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S2001",
   name = "Functions deprecated in PHP 5 should not be used",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.OBSOLETE})
+  tags = {Tags.OBSOLETE})
 public class PHP5DeprecatedFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final ImmutableMap<String, String> NEW_BY_DEPRECATED_FUNCTIONS = ImmutableMap.<String, String>builder()

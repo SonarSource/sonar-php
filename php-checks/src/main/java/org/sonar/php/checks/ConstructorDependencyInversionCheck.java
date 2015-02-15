@@ -32,8 +32,7 @@ import java.util.List;
 @Rule(
   key = "S2202",
   name = "Classes should not create objects in constructor (Dependency Inversion Principle)",
-  priority = Priority.MAJOR,
-  tags = {PHPRuleTags.PITFAIL})
+  priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class ConstructorDependencyInversionCheck extends SquidCheck<LexerlessGrammar> {
 

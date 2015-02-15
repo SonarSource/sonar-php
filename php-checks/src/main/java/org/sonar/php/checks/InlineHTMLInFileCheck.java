@@ -23,6 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPTokenType;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import javax.annotation.Nullable;
   key = "S1997",
   name = "Files should not contain inline HTML",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.CONVENTION, Tags.BRAIN_OVERLOAD})
 public class InlineHTMLInFileCheck extends SquidCheck<LexerlessGrammar> {
 
   private boolean fileHasIssue = false;
