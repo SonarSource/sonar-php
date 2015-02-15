@@ -25,6 +25,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.api.SourceClass;
 import org.sonar.squidbridge.checks.ChecksHelper;
 import org.sonar.squidbridge.checks.SquidCheck;
@@ -34,7 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1311",
   name = "Classes should not be too complex",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 public class ClassComplexityCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final int DEFAULT = 200;

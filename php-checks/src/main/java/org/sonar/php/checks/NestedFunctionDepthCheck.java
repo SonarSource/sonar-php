@@ -24,6 +24,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -33,7 +34,7 @@ import javax.annotation.Nullable;
   key = "S2004",
   name = "Functions should not be nested too deeply",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 public class NestedFunctionDepthCheck extends SquidCheck<LexerlessGrammar> {
 
   private int nestedLevel = 0;

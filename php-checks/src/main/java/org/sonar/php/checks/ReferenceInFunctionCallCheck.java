@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1998",
   name = "References should not be passed to function calls",
   priority = Priority.CRITICAL,
-  tags = {PHPRuleTags.OBSOLETE, PHPRuleTags.PERFORMANCE})
+  tags = {Tags.OBSOLETE, Tags.PERFORMANCE})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class ReferenceInFunctionCallCheck extends SquidCheck<LexerlessGrammar> {
 

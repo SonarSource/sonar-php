@@ -23,6 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -30,7 +31,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1793",
   name = "\"elseif\" keyword should be used in place of \"else if\" keywords",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
+  tags = {Tags.CONVENTION, Tags.PSR2})
 public class ElseIfSequenceKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

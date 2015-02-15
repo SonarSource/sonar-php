@@ -24,6 +24,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.api.utils.SonarException;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -34,7 +35,7 @@ import java.io.RandomAccessFile;
   key = "S113",
   name = "Files should contain an empty new line at the end",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {Tags.CONVENTION})
 public class MissingNewLineAtEOFCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

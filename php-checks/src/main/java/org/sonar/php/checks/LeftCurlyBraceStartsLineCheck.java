@@ -23,6 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -30,7 +31,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1106",
   name = "An open curly brace should be located at the beginning of a line",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.CONVENTION})
+  tags = {Tags.CONVENTION})
 public class LeftCurlyBraceStartsLineCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

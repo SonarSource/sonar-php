@@ -27,6 +27,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -34,7 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S128",
   name = "Switch cases should end with an unconditional break statement",
   priority = Priority.CRITICAL,
-  tags = {PHPRuleTags.CERT, PHPRuleTags.CWE, PHPRuleTags.PITFAIL})
+  tags = {Tags.CERT, Tags.CWE, Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<LexerlessGrammar> {
 

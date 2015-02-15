@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1145",
   name = "\"if\" statement conditions should not always evaluate to \"true\" or to \"false\"",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BUG, PHPRuleTags.CWE, PHPRuleTags.SECURITY})
+  tags = {Tags.BUG, Tags.CWE, Tags.SECURITY})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class IfConditionAlwaysTrueOrFalseCheck extends SquidCheck<LexerlessGrammar> {
 

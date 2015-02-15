@@ -24,6 +24,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -33,7 +34,7 @@ import java.util.regex.Pattern;
   key = "S1781",
   name = "PHP keywords and constants \"true\", \"false\", \"null\" should be in lower case",
   priority = Priority.MINOR,
-  tags = {PHPRuleTags.CONVENTION, PHPRuleTags.PSR2})
+  tags = {Tags.CONVENTION, Tags.PSR2})
 public class KeywordsAndConstantsNotLowerCaseCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final Pattern PATTERN = Pattern.compile("[a-z_]+");

@@ -27,6 +27,7 @@ import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -34,7 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S138",
   name = "Functions should not have too many lines",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class TooManyLinesInFunctionCheck extends SquidCheck<LexerlessGrammar> {
 

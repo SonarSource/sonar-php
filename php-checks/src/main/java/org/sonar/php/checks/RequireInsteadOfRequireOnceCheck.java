@@ -23,6 +23,7 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -30,7 +31,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S2003",
   name = "\"require_once\" and \"include_once\" should be used instead of \"require\" and \"include\"",
   priority = Priority.CRITICAL,
-  tags = {PHPRuleTags.BUG})
+  tags = {Tags.BUG})
 public class RequireInsteadOfRequireOnceCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

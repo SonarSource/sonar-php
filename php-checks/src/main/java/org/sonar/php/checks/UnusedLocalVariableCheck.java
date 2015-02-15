@@ -28,6 +28,7 @@ import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.checks.utils.LocalVariableScope;
 import org.sonar.php.checks.utils.Variable;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -40,7 +41,7 @@ import java.util.Iterator;
   key = "S1481",
   name = "Unused local variables should be removed",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.UNUSED})
+  tags = {Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 

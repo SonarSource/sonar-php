@@ -217,6 +217,7 @@ public class PhpUnitResultParser implements BatchExtension {
       if (isError || TestCase.STATUS_FAILURE.equals(detail.getStatus())) {
         details.append(">").append(isError ? "<error message=\"" : "<failure message=\"");
         details.append(StringEscapeUtils.escapeXml(detail.getErrorMessage())).append("\"><![CDATA[");
+
         details.append(StringEscapeUtils.escapeXml(detail.getStackTrace())).append("]]>");
         details.append(isError ? "</error>" : "</failure>").append("</testcase>");
       } else {

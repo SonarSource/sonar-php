@@ -24,6 +24,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -31,7 +32,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S2043",
   name = "Superglobals should not be accessed directly",
   priority = Priority.MAJOR,
-  tags = {PHPRuleTags.SECURITY})
+  tags = {Tags.SECURITY})
 public class DirectlyAccessingSuperGlobalCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
