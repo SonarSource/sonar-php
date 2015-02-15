@@ -33,7 +33,7 @@ public class SelfKeywordUsageCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SelfKeywordUsageCheck.php"), new SelfKeywordUsageCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(8).withMessage("Use \"static\" keyword instead of \"self\".")
+      .next().atLine(14).withMessage("Use \"static\" keyword instead of \"self\".")
       .noMore();
   }
 
