@@ -128,6 +128,7 @@ public class CheckList {
       CharacterBeforeOpeningPHPTagCheck.class,
       MethodNameReturningBooleanCheck.class,
       FileNameCheck.class,
+      ConstructorDependencyInversionCheck.class,
       PHP5DeprecatedFunctionUsageCheck.class,
       OverridingMethodSimplyCallParentCheck.class,
       TooManyFunctionParametersCheck.class);

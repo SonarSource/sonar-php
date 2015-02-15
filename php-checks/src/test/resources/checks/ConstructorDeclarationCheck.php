@@ -14,7 +14,7 @@ class C {
 
   const C = 1;
 
-  public function __constructor() { // OK
+  public function __construct() {   // OK
   }
 
   public function f() {
