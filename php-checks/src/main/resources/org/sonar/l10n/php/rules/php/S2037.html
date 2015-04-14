@@ -53,3 +53,17 @@ class Ball extends Toy {
 $myBall = new Ball();
 $myBall::status();             // Will print "Balls are fun!"
 </pre>
+
+<h2>Exception</h2>
+<p>
+  No issue is raised when <code>self</code> is used in a class field declaration
+</p>
+<pre>
+class A {
+   const CONSTANT;
+
+   public $arr = array(
+        self::CONSTANT         // Compliant
+   );
+}
+</pre>

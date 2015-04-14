@@ -19,14 +19,18 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import javax.annotation.Nullable;
+
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.annotations.Tags;
 import org.sonar.squidbridge.checks.SquidCheck;
+import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.parser.LexerlessGrammar;
+
+import com.sonar.sslr.api.AstNode;
 
 @Rule(
   key = "S2037",
@@ -36,21 +40,40 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class SelfKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
 
+  private boolean inFieldDeclaration = false;
+  private GrammarRuleKey[] FIELDS_DECLARATION = {
+    PHPGrammar.CLASS_VARIABLE_DECLARATION,
+    PHPGrammar.CLASS_CONSTANT_DECLARATION
+  };
+
   @Override
   public void init() {
     subscribeTo(PHPGrammar.CLASS_MEMBER_ACCESS);
+    subscribeTo(FIELDS_DECLARATION);
+  }
+
+  @Override
+  public void visitFile(@Nullable AstNode astNode) {
+    inFieldDeclaration = false;
   }
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.getFirstAncestor(PHPGrammar.CLASS_VARIABLE_DECLARATION) != null) {
-      return;
+    if (astNode.is(FIELDS_DECLARATION)) {
+      inFieldDeclaration = true;
     }
 
     AstNode caller = astNode.getPreviousAstNode();
 
-    if ("self".equals(caller.getTokenOriginalValue())) {
+    if (!inFieldDeclaration && "self".equals(caller.getTokenOriginalValue())) {
       getContext().createLineViolation(this, "Use \"static\" keyword instead of \"self\".", caller);
+    }
+  }
+
+  @Override
+  public void leaveNode(AstNode astNode) {
+    if (astNode.is(FIELDS_DECLARATION)) {
+      inFieldDeclaration = false;
     }
   }
 
