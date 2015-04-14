@@ -65,7 +65,7 @@ function j() {
   $a = 1;                                 // OK - use in anonymous function
 
   call(function () use (&$a, &$b, &$c) {  // NOK - $a, $c (not use in outer, reference not needed )
-    $b = 1 ;
+    $b = 1;
     $c = 1;
   });
 
@@ -110,10 +110,10 @@ function m($p){
 
   $a = $p;                                            // OK - use in anonymous function
   $b = function () use ($a) {                         // OK - use in anonymous function
-          return function (FormView $view) use ($a) { // OK used
-          $a->do();
-        };
-     };
+    return function (FormView $view) use ($a) {       // OK used
+      $a->do();
+    };
+  };
 
   doSomething($b);
 }
@@ -166,3 +166,147 @@ function p(){
  * OUT OF EVERY SCOPE
  */
 $a = 1;
+
+/**
+ *  redefine
+ */
+function q() {
+  $i = 0;
+  echo ++$i;
+  echo ++$i;        // OK
+
+  $j = 1;
+  echo $j++;
+  echo $j++;        // NOK
+
+  $a = 'a';
+  $a .= 'a';        // NOK
+
+  $b = 'b';
+  $b = $b.'b';      // NOK
+}
+
+/**
+ *  FOREACH
+ */
+function r() {
+  $arr = array(0, 0);               // OK
+
+  foreach ($arr as $v1) {           // OK
+    echo $v1;
+  }
+
+  foreach ($arr as $k2 => $v2) {    // OK
+    echo $k2.': '.$v2;
+  }
+
+  foreach ($arr as &$v3) {          // OK
+    $v3 = 3;
+  }
+  foreach ($arr as $k4 => &$v4) {   // OK
+    echo $k4;
+    $v4 = 4;
+  }
+
+  foreach ($arr as $v5) {           // NOK $v5
+  }
+
+  foreach ($arr as $v6) {
+    $v6 = 6;                        // NOK $v6
+  }
+
+  foreach ($arr as &$v7) {          // NOK $v7
+  }
+
+  foreach ($arr as $k8 => $v8) {    // NOK $v8
+    echo $k8;
+  }
+
+  foreach ($arr as $k9 => $v9) {    // NOK $k9
+    echo $v9;
+  }
+
+  foreach ($arr as $k10 => $v10) {
+    echo $k10;
+    $v10 = 10;                      // NOK $v10
+  }
+
+  foreach ($arr as $k11 => $v11) {
+    $k11 = 11;                      // NOK $k11
+    echo $v11;
+  }
+
+  foreach ($arr as $k12 => &$v12) { // NOK $v12
+    echo $k12;
+  }
+
+  foreach ($arr as $k13 => &$v13) { // NOK $k13
+    echo $v13;
+  }
+
+  foreach ($arr as $k14 => &$v14) {
+    $k14 = 14;                      // NOK $k14
+    echo $v14;
+  }
+
+  return $arr;
+}
+
+/**
+ *  loops
+ */
+function s() {
+  $a = true;
+  $b = 0;
+  $c = 0;
+  while ($a) {
+    $a = false;                     // OK
+    echo $b++;                      // OK
+    $c++;                           // NOK
+  }
+
+  for ($i = 0; $i < 10; $i++) {
+    $i = 12;                        // OK
+  }
+
+  for ($j = 0; $j < 10; ) {
+    $j++;                           // OK
+  }
+
+  $arr = array(0, 1);
+  $done = false;
+  foreach ($arr as $v) {
+    if ($done) {
+      return;
+    }
+    echo $v;
+    $done = true;                   // OK
+  }
+
+}
+
+/**
+ *  objects
+ */
+function r() {
+
+  $object1 = new stdClass();
+  $object2 = new stdClass();
+
+  foreach ($list as $item) {
+    $item->field = true;            // OK
+    $object1->field = 1;            // OK
+  }
+
+  $object2 = 2;                     // NOK
+
+}
+
+class C {
+
+  private static $a;
+
+  function f1() {
+    self::$a++;                     // OK
+  }
+}
