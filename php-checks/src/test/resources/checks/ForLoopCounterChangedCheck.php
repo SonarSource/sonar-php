@@ -82,3 +82,7 @@ for (++$i ; $i > 0; $i++) {
 foreach ($myArray as $i) {
   $i = 0;                                 // OK - not in scope
 }
+
+for ($a = 0; $a < 42; $a++) {
+  $a =& $b;                                // NOK
+}

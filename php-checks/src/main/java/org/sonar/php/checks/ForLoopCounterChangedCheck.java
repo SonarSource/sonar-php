@@ -32,8 +32,12 @@ import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.Set;
+
+import static org.sonar.php.parser.PHPGrammar.ASSIGNMENT_BY_REFERENCE;
+import static org.sonar.php.parser.PHPGrammar.ASSIGNMENT_EXPR;
 
 @Rule(
   key = "S127",
@@ -58,6 +62,7 @@ public class ForLoopCounterChangedCheck extends SquidCheck<LexerlessGrammar> {
       PHPGrammar.STATEMENT,
 
       PHPGrammar.ASSIGNMENT_EXPR,
+      PHPGrammar.ASSIGNMENT_BY_REFERENCE,
       PHPPunctuator.INC,
       PHPPunctuator.DEC);
   }
@@ -69,7 +74,7 @@ public class ForLoopCounterChangedCheck extends SquidCheck<LexerlessGrammar> {
     } else if (astNode.is(PHPGrammar.STATEMENT)) {
       counters.addAll(pendingCounters);
       pendingCounters = Collections.emptySet();
-    } else if (!counters.isEmpty() && astNode.is(PHPGrammar.ASSIGNMENT_EXPR, PHPPunctuator.INC, PHPPunctuator.DEC)) {
+    } else if (!counters.isEmpty() && astNode.is(ASSIGNMENT_EXPR, ASSIGNMENT_BY_REFERENCE, PHPPunctuator.INC, PHPPunctuator.DEC)) {
       check(astNode);
     }
   }
@@ -84,7 +89,7 @@ public class ForLoopCounterChangedCheck extends SquidCheck<LexerlessGrammar> {
   private void check(AstNode astNode) {
     AstNode varNode;
 
-    if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
+    if (astNode.is(ASSIGNMENT_EXPR, ASSIGNMENT_BY_REFERENCE)) {
       varNode = astNode.getFirstChild();
     } else {
       // Increment or decrement

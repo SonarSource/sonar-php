@@ -37,6 +37,10 @@ class A {
       $field = 2;                       // OK
     };
   }
+
+  public function f5($param) {
+    $field =& $param;
+  }
 }
 
 class B {

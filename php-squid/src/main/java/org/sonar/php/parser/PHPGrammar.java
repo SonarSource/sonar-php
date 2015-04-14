@@ -334,6 +334,7 @@ public enum PHPGrammar implements GrammarRuleKey {
   CONCATENATION_EXPR,
   POSTFIX_EXPR,
   UNARY_EXPR,
+  ASSIGNMENT_BY_REFERENCE,
   ASSIGNMENT_OPERATOR,
   COMPOUND_ASSIGNMENT,
   CAST_TYPE,
@@ -598,12 +599,15 @@ public enum PHPGrammar implements GrammarRuleKey {
     // FUNCTION_PARAMETERS_CALL_LIST.
     b.rule(NEW_EXPR).is(NEW, MEMBER_EXPRESSION);
 
+    b.rule(ASSIGNMENT_BY_REFERENCE).is(MEMBER_EXPRESSION, EQU, AMPERSAND, b.firstOf(NEW_EXPR, MEMBER_EXPRESSION));
+
     // Unary expression
     b.rule(UNARY_EXPR).is(b.firstOf(  // TODO martin: re-arrange & complete
       b.sequence(b.firstOf(INC, DEC), POSTFIX_EXPR),
       b.sequence(b.firstOf(PLUS, MINUS, TILDA, BANG), UNARY_EXPR),
       b.sequence(PHPPunctuator.AT, UNARY_EXPR),
       b.sequence(CAST_TYPE, EXPRESSION),
+      ASSIGNMENT_BY_REFERENCE,
       POSTFIX_EXPR)).skipIfOneChild();
     // Binary expressions
     b.rule(CONCATENATION_EXPR).is(UNARY_EXPR, b.zeroOrMore(DOT, UNARY_EXPR)).skipIfOneChild();
@@ -628,7 +632,6 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(CONDITIONAL_EXPR).is(LOGICAL_OR_EXPR, b.optional(QUERY, b.optional(ASSIGNMENT_EXPR), COLON, ASSIGNMENT_EXPR)).skipIfOneChild();
 
     b.rule(ASSIGNMENT_EXPR).is(b.firstOf(
-      b.sequence(MEMBER_EXPRESSION, EQU, AMPERSAND, b.firstOf(NEW_EXPR, MEMBER_EXPRESSION)),
       b.sequence(CONDITIONAL_EXPR, ASSIGNMENT_OPERATOR, ASSIGNMENT_EXPR),
       CONDITIONAL_EXPR)).skipIfOneChild();
     b.rule(ASSIGNMENT_OPERATOR).is(b.firstOf(EQU, COMPOUND_ASSIGNMENT, LOGICAL_ASSIGNMENT));

@@ -41,6 +41,7 @@ public class UnaryExprTest extends RuleTest {
     matches("@ $a");
     matches("@ ! $a");
     matches("(int) $a");
+    matches("$a =& $b");
 
   }
 }

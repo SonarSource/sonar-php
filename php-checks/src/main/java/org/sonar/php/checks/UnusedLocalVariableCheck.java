@@ -32,6 +32,7 @@ import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
@@ -58,6 +59,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
       PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE,
 
       PHPGrammar.ASSIGNMENT_EXPR,
+      PHPGrammar.ASSIGNMENT_BY_REFERENCE,
       PHPGrammar.LIST_EXPR);
   }
 
@@ -88,7 +90,7 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
       } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
         getCurrentScope().useVariale("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION).getTokenOriginalValue());
 
-      } else if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR)) {
+      } else if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR, PHPGrammar.ASSIGNMENT_BY_REFERENCE)) {
         declareNewLocalVariable(astNode);
 
       } else if (astNode.is(PHPGrammar.LIST_EXPR)) {

@@ -69,7 +69,7 @@ public class ImmediatelyReturnedVariableCheck extends SquidCheck<LexerlessGramma
 
     AstNode expression = exprStmt.getFirstChild(PHPGrammar.EXPRESSION).getFirstChild();
 
-    if (expression.is(PHPGrammar.ASSIGNMENT_EXPR)) {
+    if (expression.is(PHPGrammar.ASSIGNMENT_EXPR, PHPGrammar.ASSIGNMENT_BY_REFERENCE)) {
       checkAssignedVariable(expression, nextStmt);
     } else {
       AstNode exprChild = expression.getFirstChild();

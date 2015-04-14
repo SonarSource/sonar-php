@@ -59,7 +59,7 @@ public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGram
   public void init() {
     pattern = Pattern.compile(format);
     subscribeTo(FunctionUtils.functions());
-    subscribeTo(PHPGrammar.ASSIGNMENT_EXPR);
+    subscribeTo(PHPGrammar.ASSIGNMENT_EXPR, PHPGrammar.ASSIGNMENT_BY_REFERENCE);
   }
 
   @Override

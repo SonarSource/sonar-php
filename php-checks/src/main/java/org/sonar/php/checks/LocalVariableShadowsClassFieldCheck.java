@@ -32,6 +32,7 @@ import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
@@ -105,7 +106,8 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
       PHPGrammar.CLASS_DECLARATION,
       PHPGrammar.METHOD_DECLARATION,
       PHPGrammar.FUNCTION_EXPRESSION,
-      PHPGrammar.ASSIGNMENT_EXPR);
+      PHPGrammar.ASSIGNMENT_EXPR,
+      PHPGrammar.ASSIGNMENT_BY_REFERENCE);
   }
 
   @Override
