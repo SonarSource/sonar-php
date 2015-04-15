@@ -48,7 +48,7 @@ import java.util.List;
 /**
  * The Class PhpUnitResultParser.
  */
-public class PhpUnitResultParser implements BatchExtension {
+public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
 
   private static final double PERCENT = 100d;
 
@@ -131,7 +131,7 @@ public class PhpUnitResultParser implements BatchExtension {
    *
    * @param reportFile the reports directories to be scan
    */
-  protected void parse(File reportFile) {
+  public void parse(File reportFile) {
     if (reportFile == null) {
       insertZeroWhenNoReports();
     } else {
