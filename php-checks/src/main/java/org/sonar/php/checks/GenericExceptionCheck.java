@@ -38,9 +38,9 @@ import java.util.Set;
 
 @Rule(
   key = "S112",
-  name = "Generic exceptions should never be thrown",
+  name = "Generic exceptions ErrorException, RuntimeException and Exception should not be thrown",
   priority = Priority.MAJOR,
-  tags = {Tags.PITFALL})
+  tags = {Tags.CWE, Tags.ERROR_HANDLING, Tags.SECURITY})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 public class GenericExceptionCheck extends SquidCheck<LexerlessGrammar> {
 

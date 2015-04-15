@@ -1,26 +1,18 @@
 <p>
-  Using such generic exceptions as <code>Error</code>, <code>RuntimeException</code>, <code>Throwable</code>, and <code>Exception</code> prevents calling methods from handling true, system-generated exceptions differently than application-generated errors.
+  If you throw a general exception type, such as ErrorException, RuntimeException, or Exception in a library or framework, it forces consumers to catch all exceptions, including unknown exceptions that they do not know how to handle.
 </p>
 <p>
-  Instead, either throw a more derived type that already exists in the language (SPL exceptions), or create your own type that derives from Exception.
+  Instead, either throw a subtype that already exists in the Standard PHP Library, or create your own type that derives from Exception.
 </p>
 
 <h2>Noncompliant Code Example</h2>
 <pre>
-public void foo(String bar) throws Throwable {  // Non-Compliant
-  throw new RuntimeException("My Message");     // Non-Compliant
-}
+throw new Exception();  // Noncompliant
 </pre>
 
 <h2>Compliant Solution</h2>
 <pre>
-public void foo(String bar) {
-  if (true) {
-    throw new MyOwnRuntimeException("My Message");
-
-  // or
-  } else {
-    throw new UnexpectedValueException();
-  }
-}
+throw new InvalidArgumentException();
+// or
+throw new UnexpectedValueException();
 </pre>
