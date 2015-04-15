@@ -55,7 +55,8 @@ public class PHPRulesDefinition implements RulesDefinition {
 
       // FIXME: this should be replace with tag when rule API will be available
       newRule.setDebtSubCharacteristic(sqaleResourceBundle.getString(newRule.key() + ".characteristic"));
-      newRule.setDebtRemediationFunction(newRule.debtRemediationFunctions().linear(sqaleResourceBundle.getString(newRule.key() + ".time")));
+      newRule.setDebtRemediationFunction(newRule.debtRemediationFunctions().constantPerIssue(
+        sqaleResourceBundle.getString(newRule.key() + ".time")));
 
       newRule.setHtmlDescription(getClass().getResource(RULES_DESCRIPTIONS_DIRECTORY + newRule.key() + ".html"));
 
