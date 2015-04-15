@@ -129,6 +129,7 @@ public class CheckList {
       MethodNameReturningBooleanCheck.class,
       FileNameCheck.class,
       GenericExceptionCheck.class,
+      ConstructorDependencyInversionCheck.class,
       PHP5DeprecatedFunctionUsageCheck.class,
       OverridingMethodSimplyCallParentCheck.class,
       TooManyFunctionParametersCheck.class);
