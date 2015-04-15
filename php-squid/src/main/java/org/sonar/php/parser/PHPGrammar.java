@@ -189,6 +189,8 @@ public enum PHPGrammar implements GrammarRuleKey {
   NUMERIC_LITERAL,
   STRING_LITERAL,
   STRING_WITH_ENCAPS_VAR_CHARACTERS,
+  ENCAPS_VAR_IDENTIFIER,
+  REGULAR_VAR_IDENTIFIER,
   VAR_IDENTIFIER,
   IDENTIFIER,
   FILE_OPENING_TAG,
@@ -403,7 +405,11 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(ENCAPS_STRING_LITERAL).is(SPACING, "\"", ENCAPS_LIST, "\"");
 
     // Identifier
-    b.rule(VAR_IDENTIFIER).is(SPACING, b.regexp(LexicalConstant.VAR_IDENTIFIER));
+    b.rule(ENCAPS_VAR_IDENTIFIER).is(
+      b.regexp("[" + LexicalConstant.WHITESPACE + "]*+"),
+      VAR_IDENTIFIER).skip();
+    b.rule(REGULAR_VAR_IDENTIFIER).is(SPACING, VAR_IDENTIFIER).skip();
+    b.rule(VAR_IDENTIFIER).is(b.regexp(LexicalConstant.VAR_IDENTIFIER));
     b.rule(IDENTIFIER).is(SPACING, b.nextNot(KEYWORDS), b.regexp(LexicalConstant.IDENTIFIER));
 
     // Tags & Inline HTML
@@ -427,7 +433,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(VARIABLE_WITHOUT_OBJECTS).is(b.optional(SIMPLE_INDIRECT_REFERENCE), REFERENCE_VARIABLE);
 
     b.rule(COMPOUND_VARIABLE).is(b.firstOf(
-      VAR_IDENTIFIER,
+      REGULAR_VAR_IDENTIFIER,
       b.sequence(DOLAR_LCURLY, EXPRESSION, RCURLYBRACE)));
 
     b.rule(CLASS_NAME).is(b.firstOf(STATIC, FULLY_QUALIFIED_CLASS_NAME));
@@ -526,7 +532,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(SEMI_COMPLEX_RECOVERY_EXPRESSION).is(b.regexp("[^}]++"));
 
     b.rule(SIMPLE_ENCAPS_VARIABLE).is(
-      VAR_IDENTIFIER,
+      ENCAPS_VAR_IDENTIFIER,
       b.optional(b.firstOf(
         ENCAPS_DIMENSIONAL_OFFSET,
         ENCAPS_OBJECT_MEMBER_ACCESS))
@@ -537,7 +543,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(ENCAPS_VAR_OFFSET).is(b.firstOf(
       IDENTIFIER,
       NUMERIC_LITERAL,
-      VAR_IDENTIFIER));
+      ENCAPS_VAR_IDENTIFIER));
 
     b.rule(CAST_TYPE).is(
       LPARENTHESIS,
@@ -575,7 +581,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       b.optional(LEXICAL_VARS), BLOCK);
     b.rule(LEXICAL_VARS).is(USE, LPARENTHESIS, LEXICAL_VAR_LIST, RPARENTHESIS);
     b.rule(LEXICAL_VAR_LIST).is(LEXICAL_VAR, b.zeroOrMore(COMMA, LEXICAL_VAR));
-    b.rule(LEXICAL_VAR).is(b.optional(AMPERSAND), VAR_IDENTIFIER);
+    b.rule(LEXICAL_VAR).is(b.optional(AMPERSAND), REGULAR_VAR_IDENTIFIER);
 
     b.rule(EXIT_EXPR).is(b.firstOf(EXIT, DIE), b.optional(LPARENTHESIS, b.optional(EXPRESSION), RPARENTHESIS));
 
@@ -680,11 +686,11 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(METHOD_BODY).is(b.firstOf(EOS, BLOCK));
 
     b.rule(PARAMETER_LIST).is(PARAMETER, b.zeroOrMore(COMMA, PARAMETER));
-    b.rule(PARAMETER).is(b.optional(OPTIONAL_CLASS_TYPE), b.optional(AMPERSAND), b.optional(ELIPSIS), VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
+    b.rule(PARAMETER).is(b.optional(OPTIONAL_CLASS_TYPE), b.optional(AMPERSAND), b.optional(ELIPSIS), REGULAR_VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
     b.rule(OPTIONAL_CLASS_TYPE).is(b.firstOf(ARRAY, CALLABLE, FULLY_QUALIFIED_CLASS_NAME));
 
     b.rule(CLASS_VARIABLE_DECLARATION).is(VARIABLE_MODIFIERS, VARIABLE_DECLARATION, b.zeroOrMore(COMMA, VARIABLE_DECLARATION), EOS);
-    b.rule(VARIABLE_DECLARATION).is(VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
+    b.rule(VARIABLE_DECLARATION).is(REGULAR_VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
     b.rule(VARIABLE_MODIFIERS).is(b.firstOf(VAR, b.oneOrMore(MEMBER_MODIFIER)));
 
     b.rule(CLASS_CONSTANT_DECLARATION).is(CONST, MEMBER_CONST_DECLARATION, b.zeroOrMore(COMMA, MEMBER_CONST_DECLARATION), EOS);
@@ -821,7 +827,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(ALTERNATIVE_DECLARE_STATEMENT).is(COLON, b.optional(INNER_STATEMENT_LIST), ENDDECLARE, EOS);
 
     b.rule(TRY_STATEMENT).is(TRY, BLOCK, b.zeroOrMore(CATCH_STATEMENT), b.optional(FINALLY_STATEMENT));
-    b.rule(CATCH_STATEMENT).is(CATCH, LPARENTHESIS, FULLY_QUALIFIED_CLASS_NAME, VAR_IDENTIFIER, RPARENTHESIS, BLOCK);
+    b.rule(CATCH_STATEMENT).is(CATCH, LPARENTHESIS, FULLY_QUALIFIED_CLASS_NAME, REGULAR_VAR_IDENTIFIER, RPARENTHESIS, BLOCK);
     b.rule(FINALLY_STATEMENT).is(FINALLY, BLOCK);
 
     b.rule(THROW_STATEMENT).is(THROW, EXPRESSION, EOS);
@@ -835,7 +841,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(STATIC_STATEMENT).is(STATIC, STATIC_VAR_LIST, EOS);
     b.rule(STATIC_VAR_LIST).is(STATIC_VAR, b.zeroOrMore(COMMA, STATIC_VAR));
-    b.rule(STATIC_VAR).is(VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
+    b.rule(STATIC_VAR).is(REGULAR_VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
 
     b.rule(ECHO_STATEMENT).is(ECHO, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), EOS);
 

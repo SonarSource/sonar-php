@@ -40,4 +40,9 @@ public class IfStatementTest extends RuleTest {
     matches("if ($a) {} else {}");
     matches("if ($a) ; else ;");
   }
+
+  @Test
+  public void realLife() throws Exception {
+    matches("if (\"#$a\") {\n $x = ''; }");
+  }
 }

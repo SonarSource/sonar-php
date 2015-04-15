@@ -34,6 +34,7 @@ public class EncapsStringLiteralTest extends RuleTest {
   @Test
   public void test() {
     matches("\"$var\"");
+    matches("\"$var\n\"");
   }
 
   @Test
