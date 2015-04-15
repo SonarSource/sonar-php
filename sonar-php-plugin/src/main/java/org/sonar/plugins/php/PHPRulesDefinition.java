@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php;
 
+import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 import org.sonar.php.checks.CheckList;
@@ -55,8 +56,13 @@ public class PHPRulesDefinition implements RulesDefinition {
 
       // FIXME: this should be replace with tag when rule API will be available
       newRule.setDebtSubCharacteristic(sqaleResourceBundle.getString(newRule.key() + ".characteristic"));
-      newRule.setDebtRemediationFunction(newRule.debtRemediationFunctions().constantPerIssue(
-        sqaleResourceBundle.getString(newRule.key() + ".time")));
+      String time = sqaleResourceBundle.getString(newRule.key() + ".time");
+      DebtRemediationFunction remediationFunction = newRule.debtRemediationFunctions().constantPerIssue(time);
+      // FIXME: Use SQALE annotations in rule classes
+      if ("S1996".equals(newRule.key())) {
+        remediationFunction = newRule.debtRemediationFunctions().linear(time);
+      }
+      newRule.setDebtRemediationFunction(remediationFunction);
 
       newRule.setHtmlDescription(getClass().getResource(RULES_DESCRIPTIONS_DIRECTORY + newRule.key() + ".html"));
 
