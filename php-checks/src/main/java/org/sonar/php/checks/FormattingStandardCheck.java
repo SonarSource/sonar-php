@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -32,12 +33,14 @@ import org.sonar.php.checks.formatting.IndentationCheck;
 import org.sonar.php.checks.formatting.NamespaceAndUseStatementCheck;
 import org.sonar.php.checks.formatting.PunctuatorSpacingCheck;
 import org.sonar.php.parser.PHPGrammar;
-import org.sonar.squidbridge.annotations.Tags;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
+
 import java.util.Arrays;
 
 @Rule(
@@ -45,6 +48,8 @@ import java.util.Arrays;
   name = "Source code should comply with formatting standards",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
+@SqaleConstantRemediation("1min")
 public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final GrammarRuleKey[] CLASS_AND_FUNCTION = {

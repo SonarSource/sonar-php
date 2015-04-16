@@ -20,10 +20,12 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
-import org.sonar.squidbridge.annotations.Tags;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,6 +34,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   name = "\"require_once\" and \"include_once\" should be used instead of \"require\" and \"include\"",
   priority = Priority.CRITICAL,
   tags = {Tags.BUG})
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
+@SqaleConstantRemediation("5min")
 public class RequireInsteadOfRequireOnceCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

@@ -20,12 +20,14 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPTokenType;
-import org.sonar.squidbridge.annotations.Tags;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -34,6 +36,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   name = "An open curly brace should be located at the end of a line",
   priority = Priority.MAJOR,
   tags = {Tags.CONVENTION})
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
+@SqaleConstantRemediation("1min")
 public class LeftCurlyBraceEndsLineCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

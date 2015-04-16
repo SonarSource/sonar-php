@@ -27,6 +27,7 @@ import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
+
 import java.util.List;
 import java.util.Map;
 

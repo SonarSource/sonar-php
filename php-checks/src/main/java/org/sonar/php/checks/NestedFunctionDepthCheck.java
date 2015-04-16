@@ -20,11 +20,13 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.PHPGrammar;
-import org.sonar.squidbridge.annotations.Tags;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,6 +37,8 @@ import javax.annotation.Nullable;
   name = "Functions should not be nested too deeply",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_CHANGEABILITY)
+@SqaleConstantRemediation("20min")
 public class NestedFunctionDepthCheck extends SquidCheck<LexerlessGrammar> {
 
   private int nestedLevel = 0;

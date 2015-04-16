@@ -19,58 +19,20 @@
  */
 package org.sonar.plugins.php;
 
-import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
 public class PHPRulesDefinition implements RulesDefinition {
-
-  private static final String RULES_DESCRIPTIONS_DIRECTORY = "/org/sonar/l10n/php/rules/php/";
-  private static final String PARAM_RESOURCE_BUNDLE_BASE_NAME = "org.sonar.l10n.php";
-  private static final String SQALE_RESOURCE_BUNDLE_BASE_NAME = "org.sonar.l10n.php-model";
 
   private static final String REPOSITORY_NAME = "SonarQube";
 
   @Override
   public void define(Context context) {
     NewRepository repository = context.createRepository(CheckList.REPOSITORY_KEY, Php.KEY).setName(REPOSITORY_NAME);
-    List<Class> checks = CheckList.getChecks();
-    (new RulesDefinitionAnnotationLoader()).load(repository, checks.toArray(new Class[checks.size()]));
-
-    setDescriptionAndParamTitle(repository);
-
+    AnnotationBasedRulesDefinition.load(repository, Php.KEY, CheckList.getChecks());
     repository.done();
   }
-
-  private void setDescriptionAndParamTitle(NewRepository repository) {
-    ResourceBundle paramResourceBundle = ResourceBundle.getBundle(PARAM_RESOURCE_BUNDLE_BASE_NAME, Locale.ENGLISH);
-    ResourceBundle sqaleResourceBundle = ResourceBundle.getBundle(SQALE_RESOURCE_BUNDLE_BASE_NAME, Locale.ENGLISH);
-
-    for (NewRule newRule : repository.rules()) {
-
-      // FIXME: this should be replace with tag when rule API will be available
-      newRule.setDebtSubCharacteristic(sqaleResourceBundle.getString(newRule.key() + ".characteristic"));
-      String time = sqaleResourceBundle.getString(newRule.key() + ".time");
-      DebtRemediationFunction remediationFunction = newRule.debtRemediationFunctions().constantPerIssue(time);
-      // FIXME: Use SQALE annotations in rule classes
-      if ("S1996".equals(newRule.key())) {
-        remediationFunction = newRule.debtRemediationFunctions().linear(time);
-      }
-      newRule.setDebtRemediationFunction(remediationFunction);
-
-      newRule.setHtmlDescription(getClass().getResource(RULES_DESCRIPTIONS_DIRECTORY + newRule.key() + ".html"));
-
-      for (NewParam newParam : newRule.params()) {
-        newParam.setDescription(paramResourceBundle.getString("rule.php." + newRule.key() + ".param." + newParam.key()));
-      }
-    }
-  }
-
 
 }

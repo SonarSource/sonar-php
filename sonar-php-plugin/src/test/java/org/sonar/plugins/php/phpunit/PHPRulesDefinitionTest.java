@@ -20,14 +20,9 @@
 package org.sonar.plugins.php.phpunit;
 
 import org.junit.Test;
-import org.sonar.api.rules.AnnotationRuleParser;
-import org.sonar.api.rules.Rule;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.PHPRulesDefinition;
-
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 

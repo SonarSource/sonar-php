@@ -26,8 +26,6 @@ import org.sonar.plugins.php.TestUtils;
 import org.sonar.squidbridge.api.SourceFile;
 import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import java.io.File;
-
 public class FileHeaderCheckTest extends CheckTest {
 
   private FileHeaderCheck check = new FileHeaderCheck();

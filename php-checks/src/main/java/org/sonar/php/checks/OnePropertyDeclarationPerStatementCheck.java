@@ -20,10 +20,12 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
-import org.sonar.squidbridge.annotations.Tags;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,6 +34,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   name = "More than one property should not be declared per statement",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
+@SqaleConstantRemediation("2min")
 public class OnePropertyDeclarationPerStatementCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override

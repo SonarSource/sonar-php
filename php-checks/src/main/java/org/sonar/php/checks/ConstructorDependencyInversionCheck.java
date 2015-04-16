@@ -19,21 +19,25 @@
  */
 package org.sonar.php.checks;
 
-import javax.annotation.Nullable;
-
+import com.sonar.sslr.api.AstNode;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
+import javax.annotation.Nullable;
 
 @Rule(
   key = "S2830",
   name = "Classes should not create objects in constructor (Dependency Inversion Principle)",
   priority = Priority.MAJOR,
   tags = {"design"})
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNIT_TESTABILITY)
+@SqaleConstantRemediation("30min")
 public class ConstructorDependencyInversionCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final String MESSAGE = "Remove this creation of object in constructor. Use dependency injection instead.";

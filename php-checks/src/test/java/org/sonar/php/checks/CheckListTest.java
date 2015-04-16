@@ -21,14 +21,9 @@ package org.sonar.php.checks;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-import org.sonar.api.rules.AnnotationRuleParser;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleParam;
 
 import java.io.File;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import static org.fest.assertions.Assertions.assertThat;
 

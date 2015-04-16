@@ -21,10 +21,12 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.AstNodeType;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
-import org.sonar.squidbridge.annotations.Tags;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -35,6 +37,8 @@ import javax.annotation.Nullable;
   name = "Files that define symbols should not cause side-effects",
   priority = Priority.CRITICAL,
   tags = {Tags.PSR1, Tags.USER_EXPERIENCE})
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SOFTWARE_RELATED_PORTABILITY)
+@SqaleConstantRemediation("5min")
 public class FileWithSymbolsAndSideEffectsCheck extends SquidCheck<LexerlessGrammar> {
 
   private static class File {

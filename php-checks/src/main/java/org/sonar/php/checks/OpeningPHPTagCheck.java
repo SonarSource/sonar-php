@@ -20,10 +20,12 @@
 package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPTokenType;
-import org.sonar.squidbridge.annotations.Tags;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -32,6 +34,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   name = "\"<?php\" and \"<?=\" tags should be used",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR1})
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
+@SqaleConstantRemediation("2min")
 public class OpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final String LONG_TAG = "<?php";
