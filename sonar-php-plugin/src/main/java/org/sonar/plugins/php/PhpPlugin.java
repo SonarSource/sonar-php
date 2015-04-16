@@ -19,9 +19,8 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.collect.ImmutableList;
-import org.sonar.api.Properties;
-import org.sonar.api.Property;
+import java.util.List;
+
 import org.sonar.api.SonarPlugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
@@ -31,9 +30,13 @@ import org.sonar.plugins.php.core.PhpCommonRulesDecorator;
 import org.sonar.plugins.php.core.PhpCommonRulesEngine;
 import org.sonar.plugins.php.core.PhpSourceCodeColorizer;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
-import org.sonar.plugins.php.phpunit.*;
+import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitSensor;
 
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 public class PhpPlugin extends SonarPlugin {
 
@@ -42,6 +45,10 @@ public class PhpPlugin extends SonarPlugin {
   public static final String PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.itReportPath";
   public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.reportPath";
   public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
+
+  public static final String PHP_CATEGORY = "PHP";
+  public static final String GENERAL_SUBCATEGORY = "General";
+  public static final String PHPUNIT_SUBCATEGORY = "PHPUnit";
 
   /**
    * Gets the extensions.
@@ -85,31 +92,41 @@ public class PhpPlugin extends SonarPlugin {
         .name("File Suffixes")
         .description("Comma-separated list of suffixes of PHP files to analyze.")
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(GENERAL_SUBCATEGORY)
         .build(),
 
       PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
         .name("Unit Test Report")
         .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(PHPUNIT_SUBCATEGORY)
         .build(),
 
       PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATH_KEY)
         .name("Coverage Report")
         .description("Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(PHPUNIT_SUBCATEGORY)
         .build(),
 
       PropertyDefinition.builder(PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY)
         .name("IT Coverage Report")
         .description("Path to the PHPUnit integration test code coverage report file. The path may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(PHPUNIT_SUBCATEGORY)
         .build(),
 
       PropertyDefinition.builder(PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY)
         .name("Overall Coverage Report")
         .description("Path to the PHPUnit overall code coverage report file. The path may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(PHPUNIT_SUBCATEGORY)
         .build()
-      );
+    );
   }
 }
