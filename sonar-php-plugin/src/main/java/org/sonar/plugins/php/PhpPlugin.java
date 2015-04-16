@@ -97,6 +97,18 @@ public class PhpPlugin extends SonarPlugin {
         .name("Coverage Report")
         .description("Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .build(),
+
+      PropertyDefinition.builder(PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY)
+        .name("IT Coverage Report")
+        .description("Path to the PHPUnit integration test code coverage report file. The path may be either absolute or relative to the project base directory.")
+        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .build(),
+
+      PropertyDefinition.builder(PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY)
+        .name("Overall Coverage Report")
+        .description("Path to the PHPUnit overall code coverage report file. The path may be either absolute or relative to the project base directory.")
+        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
         .build()
       );
   }
