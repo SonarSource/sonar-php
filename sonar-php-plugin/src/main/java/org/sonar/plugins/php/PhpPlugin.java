@@ -23,6 +23,8 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.core.PhpCommonRulesDecorator;
@@ -33,25 +35,6 @@ import org.sonar.plugins.php.phpunit.*;
 
 import java.util.List;
 
-@Properties({
-  @Property(
-    key = PhpPlugin.FILE_SUFFIXES_KEY,
-    defaultValue = Php.DEFAULT_FILE_SUFFIXES,
-    name = "File Suffixes",
-    description = "Comma-separated list of suffixes of PHP files to analyze.",
-    global = true,
-    project = true),
-  @Property(key = PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY,
-    name = "Unit Test Report",
-    project = true,
-    global = true,
-    description = "Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory."),
-  @Property(key = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
-    name = "Coverage Report",
-    project = true,
-    global = true,
-    description = "Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
-})
 public class PhpPlugin extends SonarPlugin {
 
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
@@ -94,6 +77,27 @@ public class PhpPlugin extends SonarPlugin {
       PhpUnitResultParser.class,
       PhpUnitCoverageResultParser.class,
       PhpUnitItCoverageResultParser.class,
-      PhpUnitOverallCoverageResultParser.class);
+      PhpUnitOverallCoverageResultParser.class,
+
+      // Properties
+      PropertyDefinition.builder(FILE_SUFFIXES_KEY)
+        .defaultValue(Php.DEFAULT_FILE_SUFFIXES)
+        .name("File Suffixes")
+        .description("Comma-separated list of suffixes of PHP files to analyze.")
+        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .build(),
+
+      PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
+        .name("Unit Test Report")
+        .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
+        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .build(),
+
+      PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATH_KEY)
+        .name("Coverage Report")
+        .description("Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
+        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .build()
+      );
   }
 }
