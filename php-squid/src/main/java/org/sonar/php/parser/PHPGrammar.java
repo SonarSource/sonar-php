@@ -469,7 +469,11 @@ public enum PHPGrammar implements GrammarRuleKey {
     ).skip();
 
     b.rule(OBJECT_MEMBER_ACCESS).is(ARROW, b.firstOf(VARIABLE_WITHOUT_OBJECTS, OBJECT_DIM_LIST, IDENTIFIER));
-    b.rule(CLASS_MEMBER_ACCESS).is(DOUBLECOLON, b.firstOf(VARIABLE_WITHOUT_OBJECTS, IDENTIFIER, PHPKeyword.CLASS));
+    b.rule(CLASS_MEMBER_ACCESS).is(DOUBLECOLON, b.firstOf(
+      VARIABLE_WITHOUT_OBJECTS,
+      IDENTIFIER,
+      PHPKeyword.CLASS,
+      b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE)));
 
     b.rule(OBJECT_DIM_LIST).is(VARIABLE_NAME, b.zeroOrMore(b.firstOf(
       b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE),

@@ -35,6 +35,7 @@ public class StaticMemberAccessTest extends RuleTest {
   public void test() {
     matches("::b");
     matches("::$b");
+    matches("::{$x['y']}");
   }
 
 }
