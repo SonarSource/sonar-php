@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -31,10 +30,13 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
+import com.sonar.sslr.api.AstNode;
+
 @Rule(
   key = "S108",
   name = "Nested blocks of code should not be left empty",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = Tags.BUG)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
