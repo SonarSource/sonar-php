@@ -27,6 +27,7 @@ public class Tags {
   public static final String CLUMSY = "clumsy";
   public static final String CONVENTION = "convention";
   public static final String CWE = "cwe";
+  public static final String DESIGN = "design";
   public static final String ERROR_HANDLING = "error-handling";
   public static final String MISRA = "misra";
   public static final String OBSOLETE = "obsolete";
