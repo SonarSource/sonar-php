@@ -19,15 +19,16 @@
  */
 package org.sonar.plugins.php.core;
 
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.commonrules.api.CommonRulesDecorator;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.squidbridge.commonrules.api.CommonRulesDecorator;
 
 public class PhpCommonRulesDecorator extends CommonRulesDecorator {
 
-  public PhpCommonRulesDecorator(ProjectFileSystem fs, RulesProfile qProfile) {
-    super(Php.KEY, fs, qProfile);
+  public PhpCommonRulesDecorator(FileSystem fs, CheckFactory checkFactory, ResourcePerspectives perspectives) {
+    super(Php.KEY, fs, checkFactory, perspectives);
   }
 
 }

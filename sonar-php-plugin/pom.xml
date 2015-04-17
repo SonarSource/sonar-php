@@ -47,10 +47,6 @@
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-deprecated</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar.common-rules</groupId>
-      <artifactId>sonar-common-rules</artifactId>
-    </dependency>
     <!-- unit tests -->
     <dependency>
       <groupId>org.codehaus.sonar</groupId>

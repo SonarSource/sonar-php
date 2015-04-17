@@ -19,18 +19,20 @@
  */
 package org.sonar.plugins.php.core;
 
+import org.junit.Test;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.plugins.php.api.Php;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-
-import org.junit.Test;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.php.api.Php;
 
 public class PhpCommonRulesDecoratorTest {
   @Test
   public void test_declaration() throws Exception {
-    PhpCommonRulesDecorator decorator = new PhpCommonRulesDecorator(mock(ProjectFileSystem.class), mock(RulesProfile.class));
+    PhpCommonRulesDecorator decorator =
+      new PhpCommonRulesDecorator(mock(FileSystem.class), mock(CheckFactory.class), mock(ResourcePerspectives.class));
     assertThat(decorator.language()).isEqualTo(Php.KEY);
   }
 

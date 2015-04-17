@@ -97,7 +97,6 @@
 
     <sonar.version>4.5.2</sonar.version>
     <sslr.version>1.20</sslr.version>
-    <sonarCommonRules.version>1.2</sonarCommonRules.version>
   </properties>
 
   <dependencyManagement>
@@ -153,11 +152,6 @@
         <groupId>org.codehaus.sonar.sslr</groupId>
         <artifactId>sslr-testing-harness</artifactId>
         <version>${sslr.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.sonar.common-rules</groupId>
-        <artifactId>sonar-common-rules</artifactId>
-        <version>${sonarCommonRules.version}</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>

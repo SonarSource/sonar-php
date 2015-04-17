@@ -19,9 +19,9 @@
  */
 package org.sonar.plugins.php.core;
 
-import org.sonar.commonrules.api.CommonRulesEngine;
-import org.sonar.commonrules.api.CommonRulesRepository;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.squidbridge.commonrules.api.CommonRulesEngine;
+import org.sonar.squidbridge.commonrules.api.CommonRulesRepository;
 
 public class PhpCommonRulesEngine extends CommonRulesEngine {
 
