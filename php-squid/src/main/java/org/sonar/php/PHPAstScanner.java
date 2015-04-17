@@ -19,6 +19,8 @@
  */
 package org.sonar.php;
 
+import org.sonar.squidbridge.ProgressAstScanner;
+
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
@@ -149,7 +151,7 @@ public class PHPAstScanner {
     final SquidAstVisitorContextImpl<LexerlessGrammar> context = new SquidAstVisitorContextImpl<LexerlessGrammar>(new SourceProject("PHP Project"));
     final Parser<LexerlessGrammar> parser = PHPParser.create(conf);
 
-    AstScanner.Builder<LexerlessGrammar> builder = new AstScanner.Builder(context).setBaseParser(parser);
+    AstScanner.Builder<LexerlessGrammar> builder = new ProgressAstScanner.Builder<LexerlessGrammar>(context).setBaseParser(parser);
 
     builder.withMetrics(PHPMetric.values());
 
