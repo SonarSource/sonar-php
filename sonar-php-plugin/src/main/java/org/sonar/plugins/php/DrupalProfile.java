@@ -19,27 +19,21 @@
  */
 package org.sonar.plugins.php;
 
-import org.junit.Test;
+import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.php.checks.CheckList;
-import org.sonar.plugins.php.api.Php;
 
-import static org.fest.assertions.Assertions.assertThat;
+public final class DrupalProfile extends ProfileDefinition {
 
-public class PSR2ProfileTest {
+  private final XMLProfileParser xmlProfileParser;
 
-  @Test
-  public void should_create_sonar_way_profile() {
-    ValidationMessages validation = ValidationMessages.create();
-
-    PSR2Profile definition = new PSR2Profile(new FakeProfileParser());
-    RulesProfile profile = definition.createProfile(validation);
-
-    assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
-    assertThat(profile.getName()).isEqualTo("PSR-2");
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(19);
-    assertThat(validation.hasErrors()).isFalse();
+  public DrupalProfile(XMLProfileParser xmlProfileParser) {
+    this.xmlProfileParser = xmlProfileParser;
   }
 
+  @Override
+  public RulesProfile createProfile(ValidationMessages validation) {
+    return xmlProfileParser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/profile/drupal-profile.xml", validation);
+  }
 }

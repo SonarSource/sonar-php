@@ -27,18 +27,18 @@ import org.sonar.plugins.php.api.Php;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class PSR2ProfileTest {
+public class DrupalProfileTest {
 
   @Test
-  public void should_create_sonar_way_profile() {
+  public void profile_creation() {
     ValidationMessages validation = ValidationMessages.create();
 
-    PSR2Profile definition = new PSR2Profile(new FakeProfileParser());
+    DrupalProfile definition = new DrupalProfile(new FakeProfileParser());
     RulesProfile profile = definition.createProfile(validation);
 
     assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
-    assertThat(profile.getName()).isEqualTo("PSR-2");
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(19);
+    assertThat(profile.getName()).isEqualTo("Drupal");
+    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(20);
     assertThat(validation.hasErrors()).isFalse();
   }
 

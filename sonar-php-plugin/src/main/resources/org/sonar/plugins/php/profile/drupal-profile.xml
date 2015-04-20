@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+  <name>Drupal</name>
+  <language>php</language>
+  <rules>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1808</key>  <!-- formatting rule -->
+      <priority>MINOR</priority>
+      <parameters>
+        <parameter>
+          <key>closing_curly_brace</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>closure_format</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>extends_implements_line</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>foreach_space</key>
+          <value>true</value>
+        </parameter>
+        <parameter>
+          <key>function_calls_arguments_indentation</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>function_declaration_arguments_indentation</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>interfaces_indentation</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>namespace_blank_line</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>no_space</key>
+          <value>true</value>
+        </parameter>
+        <parameter>
+          <key>no_space_method_name</key>
+          <value>true</value>
+        </parameter>
+        <parameter>
+          <key>one_space_after</key>
+          <value>true</value>
+        </parameter>
+        <parameter>
+          <key>one_space_before</key>
+          <value>true</value>
+        </parameter>
+        <parameter>
+          <key>one_space_for</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>open_curly_brace_classes_functions</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>open_curly_brace_control_structures</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>space_comma</key>
+          <value>true</value>
+        </parameter>
+        <parameter>
+          <key>use_after_namespace</key>
+          <value>false</value>
+        </parameter>
+        <parameter>
+          <key>use_blank_line</key>
+          <value>false</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S101</key>  <!-- class name -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S103</key>  <!-- line length; Drupal has a soft limit of 80 chars -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>maximumLineLength</key>
+          <value>140</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S105</key>  <!-- tabulation character -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S113</key>  <!-- new line at EOF -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S115</key>  <!-- constant name -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S116</key>  <!-- field name -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S117</key>  <!-- local variable and function parameter name -->
+      <priority>MAJOR</priority>
+      <parameters>
+        <parameter>
+          <key>format</key>
+          <value><![CDATA[^[a-z0-9_]*$]]></value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S121</key>  <!-- always use curly braces -->
+      <priority>MAJOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1105</key>  <!-- An open curly brace should be located at the end of a line -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1109</key>  <!-- A close curly brace should be located at the beginning of a line -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1131</key>  <!-- trailing whitespaces -->
+      <priority>MAJOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1757</key>  <!-- opening PHP tag -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1765</key>  <!-- var keyword usage -->
+      <priority>MAJOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1779</key>  <!-- non LF character as EOL -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1780</key> <!-- closing tag in full PHP file -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1784</key>  <!-- method visibility presence -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1788</key>  <!-- Method arguments with default value should be last -->
+      <priority>CRITICAL</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1793</key>  <!-- "else if" usage instead of "elseif" -->
+      <priority>MINOR</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2003</key>  <!-- "require_once" and "include_once" should be used instead of "require" and "include" -->
+      <priority>CRITICAL</priority>
+    </rule>
+  </rules>
+</profile>

@@ -19,8 +19,7 @@
  */
 package org.sonar.plugins.php;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.SonarPlugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
@@ -36,7 +35,7 @@ import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitSensor;
 
-import com.google.common.collect.ImmutableList;
+import java.util.List;
 
 public class PhpPlugin extends SonarPlugin {
 
@@ -78,6 +77,7 @@ public class PhpPlugin extends SonarPlugin {
       PHPRulesDefinition.class,
       PHPProfile.class,
       PSR2Profile.class,
+      DrupalProfile.class,
 
       // PhpUnit
       PhpUnitSensor.class,

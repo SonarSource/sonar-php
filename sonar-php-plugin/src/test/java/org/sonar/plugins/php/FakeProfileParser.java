@@ -19,27 +19,29 @@
  */
 package org.sonar.plugins.php;
 
-import org.junit.Test;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
-import org.sonar.php.checks.CheckList;
-import org.sonar.plugins.php.api.Php;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.sonar.api.profiles.XMLProfileParser;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleFinder;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class PSR2ProfileTest {
+public class FakeProfileParser extends XMLProfileParser {
 
-  @Test
-  public void should_create_sonar_way_profile() {
-    ValidationMessages validation = ValidationMessages.create();
+  public FakeProfileParser() {
+    super(ruleFinder());
+  }
 
-    PSR2Profile definition = new PSR2Profile(new FakeProfileParser());
-    RulesProfile profile = definition.createProfile(validation);
-
-    assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
-    assertThat(profile.getName()).isEqualTo("PSR-2");
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(19);
-    assertThat(validation.hasErrors()).isFalse();
+  private static RuleFinder ruleFinder() {
+    return when(mock(RuleFinder.class).findByKey(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
+      public Rule answer(InvocationOnMock invocation) {
+        Object[] arguments = invocation.getArguments();
+        return Rule.create((String) arguments[0], (String) arguments[1], (String) arguments[1]);
+      }
+    }).getMock();
   }
 
 }
