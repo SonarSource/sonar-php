@@ -132,6 +132,7 @@ public class CheckList {
       ConstructorDependencyInversionCheck.class,
       PHP5DeprecatedFunctionUsageCheck.class,
       OverridingMethodSimplyCallParentCheck.class,
-      TooManyFunctionParametersCheck.class);
+      TooManyFunctionParametersCheck.class,
+      IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }

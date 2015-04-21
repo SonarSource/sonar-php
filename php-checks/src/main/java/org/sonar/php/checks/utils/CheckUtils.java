@@ -80,4 +80,23 @@ public class CheckUtils {
     return builder.toString();
   }
 
+  public static boolean areSyntacticallyEquivalent(AstNode node1, AstNode node2) {
+    if (!node1.getType().equals(node2.getType())) {
+      return false;
+    }
+    List<Token> tokens1 = node1.getTokens();
+    List<Token> tokens2 = node2.getTokens();
+    if (tokens1.size() != tokens2.size()) {
+      return false;
+    }
+    for (int i = 0; i < tokens1.size(); i++) {
+      Token token1 = tokens1.get(i);
+      Token token2 = tokens2.get(i);
+      if (!token1.getValue().equals(token2.getValue())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
 }
