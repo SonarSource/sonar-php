@@ -134,6 +134,7 @@ public class CheckList {
       OverridingMethodSimplyCallParentCheck.class,
       TooManyFunctionParametersCheck.class,
       SelfAssignmentCheck.class,
+      UselessObjectCreationCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }

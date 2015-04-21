@@ -1,0 +1,17 @@
+<p>There is no good reason to create a new object to not do anything with it. Most of the time, this is due to a missing piece of code and so could lead to an unexpected behavior in production.</p>
+<h2>Noncompliant Code Example</h2>
+
+<pre>
+if ($x &lt; 0) {
+  new foo;  // Noncompliant
+}
+</pre>
+<h2>Compliant Solution</h2>
+
+<pre>
+$var = NULL;
+if ($x &lt; 0) {
+  $var = new foo;
+}
+</pre>
+
