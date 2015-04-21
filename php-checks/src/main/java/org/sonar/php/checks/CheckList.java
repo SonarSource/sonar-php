@@ -133,6 +133,7 @@ public class CheckList {
       PHP5DeprecatedFunctionUsageCheck.class,
       OverridingMethodSimplyCallParentCheck.class,
       TooManyFunctionParametersCheck.class,
+      SelfAssignmentCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }
