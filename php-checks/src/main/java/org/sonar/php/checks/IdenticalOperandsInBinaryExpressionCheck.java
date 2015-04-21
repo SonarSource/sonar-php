@@ -71,15 +71,15 @@ public class IdenticalOperandsInBinaryExpressionCheck extends SquidCheck<Lexerle
     AstNodeType expressionType = expression.getType();
     AstNodeType operatorType = OPERATOR_TYPE_BY_EXPRESSION_TYPE.get(expressionType);
     AstNode operator = expression.getFirstChild(operatorType);
-    if (!operator.getFirstChild().is(EXCLUDED_OPERATOR_TYPES)) {
-      if (CheckUtils.areSyntacticallyEquivalent(operator.getPreviousSibling(), operator.getNextSibling())) {
-        if (!isLeftShiftBy1(operator)) {
-          String operatorValue = operator.getTokenOriginalValue();
-          String message = "Identical sub-expressions on both sides of operator \"{0}\"";
-          getContext().createLineViolation(this, message, expression, operatorValue);
-        }
-      }
+    if (!operator.getFirstChild().is(EXCLUDED_OPERATOR_TYPES) && hasIdenticalOperands(operator) && !isLeftShiftBy1(operator)) {
+      String operatorValue = operator.getTokenOriginalValue();
+      String message = "Identical sub-expressions on both sides of operator \"{0}\"";
+      getContext().createLineViolation(this, message, expression, operatorValue);
     }
+  }
+
+  private boolean hasIdenticalOperands(AstNode operator) {
+    return CheckUtils.areSyntacticallyEquivalent(operator.getPreviousSibling(), operator.getNextSibling());
   }
 
   private boolean isLeftShiftBy1(AstNode operator) {
