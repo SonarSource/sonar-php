@@ -33,9 +33,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1145",
-  name = "\"if\" statement conditions should not always evaluate to \"true\" or to \"false\"",
+  name = "Useless \"if(true) {...}\" and \"if(false){...}\" blocks should be removed",
   priority = Priority.MAJOR,
-  tags = {Tags.BUG, Tags.CWE, Tags.SECURITY})
+  tags = {Tags.BUG, Tags.CWE, Tags.SECURITY, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
