@@ -41,7 +41,7 @@ import java.util.List;
 @Rule(
   key = "S103",
   name = "Lines should not be too long",
-  priority = Priority.MAJOR,
+  priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
