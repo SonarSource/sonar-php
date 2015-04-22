@@ -34,7 +34,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S907",
   name = "\"goto\" statement should not be used",
   priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
+  tags = {Tags.BRAIN_OVERLOAD, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("10min")
