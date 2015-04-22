@@ -39,7 +39,8 @@ import java.util.Map;
 @Rule(
   key = "S1125",
   name = "Literal boolean values should not be used in condition expressions",
-  priority = Priority.MINOR)
+  priority = Priority.MINOR,
+  tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
