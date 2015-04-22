@@ -16,3 +16,13 @@ throw new InvalidArgumentException();
 // or
 throw new UnexpectedValueException();
 </pre>
+
+
+<h2>Exceptions</h2>
+<p>
+  Generic exceptions in the signatures of overriding methods are ignored.
+</p>
+<pre>
+@Override
+public void myMethod() throws Exception {...}
+</pre>
