@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S101",
   name = "Class names should comply with a naming convention",
-  priority = Priority.MAJOR,
+  priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)

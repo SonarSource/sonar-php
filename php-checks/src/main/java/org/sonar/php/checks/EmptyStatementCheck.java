@@ -33,8 +33,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1116",
   name = "Empty statements should be removed",
-  priority = Priority.MAJOR,
-  tags = {Tags.CERT, Tags.UNUSED})
+  priority = Priority.MINOR,
+  tags = {Tags.CERT, Tags.UNUSED, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("2min")

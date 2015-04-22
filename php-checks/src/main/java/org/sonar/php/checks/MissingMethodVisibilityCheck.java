@@ -37,7 +37,7 @@ import java.util.Set;
   key = "S1784",
   name = "Method visibility should be explicitly declared",
   priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
+  tags = {Tags.CONVENTION, Tags.PSR2})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("2min")
 public class MissingMethodVisibilityCheck extends SquidCheck<LexerlessGrammar> {

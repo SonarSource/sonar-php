@@ -37,10 +37,10 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S100",
   name = "Function names should comply with a naming convention",
-  priority = Priority.MAJOR,
+  priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
-@SqaleConstantRemediation("10min")
+@SqaleConstantRemediation("5min")
 public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final ImmutableList<String> MAGIC_METHODS = ImmutableList.of(

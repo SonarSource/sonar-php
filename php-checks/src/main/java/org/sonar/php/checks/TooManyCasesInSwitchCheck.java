@@ -33,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1479",
-  name = "Switch statements should not have too many case clauses",
+  name = "\"switch\" statements should not have too many \"case\" clauses",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
@@ -41,7 +41,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @SqaleConstantRemediation("30min")
 public class TooManyCasesInSwitchCheck extends SquidCheck<LexerlessGrammar> {
 
-  public static final int DEFAULT = 100;
+  public static final int DEFAULT = 30;
 
   @RuleProperty(
     key = "max",

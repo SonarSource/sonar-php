@@ -35,7 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S2001",
   name = "Functions deprecated in PHP 5 should not be used",
-  priority = Priority.MINOR,
+  priority = Priority.MAJOR,
   tags = {Tags.OBSOLETE})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LANGUAGE_RELATED_PORTABILITY)
 @SqaleConstantRemediation("15min")

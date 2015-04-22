@@ -17,7 +17,7 @@ function doSomething($b) {
 </pre>
 
 <h2>Exceptions</h2>
-<p>Methods overriding or implementing another one should be excluded</p>
+<p>Functions overriding or implementing another one should be excluded</p>
 <pre>
 /*
  * @inheritdoc
@@ -26,3 +26,9 @@ function doSomething($a, $b) {     // no issue reported on $b
   compute($a);
 }
 </pre>
+
+<h2>See</h2>
+<ul>
+  <li>MISRA C++:2008, 0-1-11</li>
+  <li>MISRA C:2012, 2.7</li>
+</ul>

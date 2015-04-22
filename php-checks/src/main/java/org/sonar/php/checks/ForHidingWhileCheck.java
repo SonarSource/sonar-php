@@ -34,7 +34,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1264",
   name = "A \"while\" loop should be used instead of a \"for\" loop",
-  priority = Priority.MINOR)
+  priority = Priority.MINOR,
+  tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")

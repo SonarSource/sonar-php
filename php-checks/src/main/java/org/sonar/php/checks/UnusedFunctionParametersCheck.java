@@ -41,10 +41,10 @@ import java.util.Map;
   key = "S1172",
   name = "Unused function parameters should be removed",
   priority = Priority.MAJOR,
-  tags = {Tags.UNUSED})
+  tags = {Tags.UNUSED, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
-@SqaleConstantRemediation("2min")
+@SqaleConstantRemediation("5min")
 public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final GrammarRuleKey[] FUNCTION_DECLARATIONS = {

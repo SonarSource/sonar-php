@@ -39,7 +39,8 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S1185",
   name = "Overriding methods should do more than simply call the same method in the super class",
-  priority = Priority.MINOR)
+  priority = Priority.MINOR,
+  tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("5min")

@@ -48,7 +48,7 @@ import java.util.Set;
   tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
-@SqaleConstantRemediation("2min")
+@SqaleConstantRemediation("5min")
 public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGrammar> {
 
 

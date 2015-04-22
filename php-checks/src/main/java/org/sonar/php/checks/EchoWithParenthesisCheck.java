@@ -35,7 +35,7 @@ import java.util.List;
 @Rule(
   key = "S2041",
   name = "Parentheses should not be used for calls to \"echo\"",
-  priority = Priority.MINOR,
+  priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)

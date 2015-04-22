@@ -33,7 +33,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S881",
-  name = "Increment (++) and decrement (--) operators should not be mixed with other operators in an expression",
+  name = "Increment (++) and decrement (--) operators should not be used in a method call or mixed with other operators in an expression",
   priority = Priority.MAJOR,
   tags = {Tags.CERT, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)

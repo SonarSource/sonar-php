@@ -32,9 +32,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1523",
-  name = "\"eval\" function should not be used",
-  priority = Priority.MAJOR,
-  tags = {Tags.SECURITY})
+  name = "Code should not be dynamically injected and executed to prevent Eval Injection vulnerability",
+  priority = Priority.CRITICAL,
+  tags = {Tags.SECURITY, Tags.CWE, Tags.OWASP_A3})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INPUT_VALIDATION_AND_REPRESENTATION)
 @SqaleConstantRemediation("30min")

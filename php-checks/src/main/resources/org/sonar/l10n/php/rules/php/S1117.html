@@ -1,5 +1,5 @@
 <p>
-  Shadowing fields with a local variable or with a function parameter is a bad practice reducing code readability.
+  Shadowing fields with a local variable or with a [function|method] parameter is a bad practice that reduces code readability: It makes it confusing to know whether the field or the variable is being used.
 </p>
 
 <h2>Noncompliant Code Example</h2>
@@ -18,7 +18,8 @@ class Foo {
 }
 </pre>
 
-<h2>Compliant Solution</h2>
+<h2>Exceptions</h2>
+<p>Constructors and setters are exceptions; it is common practice to name arguments for the fields the values will be assigned to. Static methods are also excepted.</p>
 <pre>
 class Foo {
   public $myField;

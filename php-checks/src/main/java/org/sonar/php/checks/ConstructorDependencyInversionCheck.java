@@ -33,11 +33,11 @@ import javax.annotation.Nullable;
 
 @Rule(
   key = "S2830",
-  name = "Classes should not create objects in constructor (Dependency Inversion Principle)",
+  name = "Class constructors should not create other objects",
   priority = Priority.MAJOR,
   tags = {"design"})
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNIT_TESTABILITY)
-@SqaleConstantRemediation("30min")
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.ARCHITECTURE_CHANGEABILITY)
+@SqaleConstantRemediation("10min")
 public class ConstructorDependencyInversionCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final String MESSAGE = "Remove this creation of object in constructor. Use dependency injection instead.";

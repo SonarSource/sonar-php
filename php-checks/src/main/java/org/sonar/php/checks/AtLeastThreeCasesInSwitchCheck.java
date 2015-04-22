@@ -33,7 +33,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S1301",
   name = "\"switch\" statements should have at least 3 \"case\" clauses",
-  priority = Priority.MINOR)
+  priority = Priority.MINOR,
+  tags = {Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")

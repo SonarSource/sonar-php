@@ -38,6 +38,7 @@ public class Tags {
   public static final String SECURITY = "security";
   public static final String UNUSED = "unused";
   public static final String USER_EXPERIENCE = "user-experience";
+  public static final String OWASP_A3 = "owasp-a3";
 
   private Tags() {
     // This class only defines constants

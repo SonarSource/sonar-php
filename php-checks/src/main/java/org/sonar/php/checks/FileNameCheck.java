@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
-@SqaleConstantRemediation("30min")
+@SqaleConstantRemediation("10min")
 public class FileNameCheck extends SquidCheck<LexerlessGrammar> {
 
   public static final String DEFAULT = "[a-z][A-Za-z0-9]+.php";
