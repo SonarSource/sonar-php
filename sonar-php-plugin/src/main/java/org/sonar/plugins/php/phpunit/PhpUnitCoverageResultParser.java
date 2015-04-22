@@ -198,7 +198,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
       if (alreadySaved == null) {
         MEASURES_BY_RESOURCE.put(resource, measure);
       } else {
-        LOG.debug("Measure {} already saved for resoruce {}", measure, resource);
+        LOG.debug("Measure {} already saved for resource {}", measure, resource);
       }
     }
   }
