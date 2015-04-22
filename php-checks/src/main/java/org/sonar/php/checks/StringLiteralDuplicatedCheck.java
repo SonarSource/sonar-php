@@ -44,7 +44,7 @@ import com.sonar.sslr.api.AstNode;
   tags = {Tags.DESIGN})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
-@SqaleLinearWithOffsetRemediation(coeff = "2min", offset = "2min", effortToFixDescription = "number of duplicate instances")
+@SqaleLinearWithOffsetRemediation(coeff = "2min", offset = "2min", effortToFixDescription = "per duplicate instance")
 public class StringLiteralDuplicatedCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final Integer MINIMAL_LITERAL_LENGTH = 5;
