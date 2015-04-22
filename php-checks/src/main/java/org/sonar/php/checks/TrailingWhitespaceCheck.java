@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S1131",
   name = "Lines should not end with trailing whitespaces",
-  priority = Priority.MAJOR,
+  priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
