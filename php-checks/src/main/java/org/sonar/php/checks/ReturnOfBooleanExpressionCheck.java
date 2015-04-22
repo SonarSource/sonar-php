@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -31,10 +30,13 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
+import com.sonar.sslr.api.AstNode;
+
 @Rule(
   key = "S1126",
   name = "Return of boolean expressions should not be wrapped into an \"if-then-else\" statement",
-  priority = Priority.MINOR)
+  priority = Priority.MINOR,
+  tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
