@@ -15,7 +15,7 @@ if(someCondition) {
 </pre>
 
 <h2>Exceptions</h2>
-<p>Anonymous functions containing a single statement ignored.</p>
+<p>Anonymous functions containing a single statement are ignored.</p>
 <pre>
 $max_comparator = function ($v) { return $v > 2; };           // Compliant
 $max_comparator = function ($v) { echo $v; return $v > 2; };  // Noncompliant
