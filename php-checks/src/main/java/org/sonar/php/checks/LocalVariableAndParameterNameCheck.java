@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S117",
   name = "Local variable and function parameter names should comply with a naming convention",
-  priority = Priority.MAJOR,
+  priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
