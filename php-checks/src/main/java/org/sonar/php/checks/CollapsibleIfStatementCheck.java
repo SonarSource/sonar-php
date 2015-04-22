@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -31,13 +30,16 @@ import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
+import com.sonar.sslr.api.AstNode;
+
 @Rule(
   key = "S1066",
   name = "Collapsible \"if\" statements should be merged",
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
-@SqaleConstantRemediation("6min")
+@SqaleConstantRemediation("5min")
 public class CollapsibleIfStatementCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final GrammarRuleKey[] IF_STATEMENTS = {PHPGrammar.IF_STATEMENT, PHPGrammar.ALTERNATIVE_IF_STATEMENT};
