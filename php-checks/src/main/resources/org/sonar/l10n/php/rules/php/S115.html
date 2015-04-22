@@ -1,5 +1,5 @@
 <p>
-Sharing some naming conventions is a key point to make it possible for a team to efficiently collaborate. This rule allows to check that all constant names match a provided regular expression.
+  Shared coding conventions allow teams to collaborate efficiently. This rule checks that all constant names match a provided regular expression.
 </p>
 
 <h2>Noncompliant Code Example</h2>
@@ -7,7 +7,7 @@ Sharing some naming conventions is a key point to make it possible for a team to
 define("const1", true);
 
 class Foo {
-    const const2 = "";
+    const const2 = "bar";
 }
 </pre>
 
@@ -16,6 +16,6 @@ class Foo {
 define("CONST1", true);
 
 class Foo {
-    const CONST2 = "";
+    const CONST2 = "bar";
 }
 </pre>
