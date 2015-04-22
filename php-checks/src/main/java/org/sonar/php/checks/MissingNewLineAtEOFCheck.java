@@ -39,7 +39,7 @@ import java.io.RandomAccessFile;
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
-@SqaleConstantRemediation("2min")
+@SqaleConstantRemediation("1min")
 public class MissingNewLineAtEOFCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
