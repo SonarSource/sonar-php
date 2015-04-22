@@ -32,9 +32,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S121",
-  name = "\"if/else/for/while/do\" statements should always use curly braces",
+  name = "Control structures should always use curly braces",
   priority = Priority.MAJOR,
-  tags = {Tags.CONVENTION, Tags.CWE})
+  tags = {Tags.CERT, Tags.CWE, Tags.MISRA, Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")

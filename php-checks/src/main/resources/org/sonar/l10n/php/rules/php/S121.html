@@ -1,10 +1,10 @@
 <p>
-  Not using curly braces could be error-prone in some cases.
+  While not technically incorrect, the omission of curly braces can be misleading, and may lead to the introduction of errors during maintenance.
 </p>
 
 <h2>Noncompliant Code Example</h2>
 <pre>
-// the two statements seems to be attached to the if statement whereas this is the case only for the first one:
+// the two statements seems to be attached to the if statement, but that is only true for the first one:
 if (condition)
   executeSomething();
   checkSomething();
@@ -17,3 +17,14 @@ if (condition) {
   checkSomething();
 }
 </pre>
+
+<h2>See</h2>
+<ul>
+  <li>MISRA C:2004, 14.8 - The statement forming the body of a switch, while, do ... while or for statement shall be a compound statement</li>
+  <li>MISRA C:2004, 14.9 - An if (expression) construct shall be followed by a compound statement. The else keyword shall be followed by either a compound statement, or another if statement</li>
+  <li>MISRA C++:2008, 6-3-1 - The statement forming the body of a switch, while, do ... while or for statement shall be a compound statement</li>
+  <li>MISRA C++:2008, 6-4-1 - An if (condition) construct shall be followed by a compound statement. The else keyword shall be followed by either a compound statement, or another if statement</li>
+  <li>MISRA C:2012, 15.6 - The body of an iteration-statement or a selection-statement shall be a compound-statement</li>
+  <li><a href="https://www.securecoding.cert.org/confluence/display/c/EXP19-C.+Use+braces+for+the+body+of+an+if%2C+for%2C+or+while+statement;jsessionid=9AF407C12FC0A7FA88781DAF46A3073A">CERT, EXP19-C</a> - Use braces for the body of an if, for, or while statement</li>
+  <li><a href="http://cwe.mitre.org/data/definitions/483.html">MITRE, CWE-483</a> - Incorrect Block Delimitation</li>
+</ul>
