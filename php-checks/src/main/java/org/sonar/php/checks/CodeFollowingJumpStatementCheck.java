@@ -34,7 +34,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1763",
   name = "Jump statements should not be followed by other statements",
   priority = Priority.MAJOR,
-  tags = {Tags.MISRA, Tags.MISRA, Tags.UNUSED})
+  tags = {Tags.MISRA, Tags.CERT, Tags.CWE, Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")

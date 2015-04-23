@@ -35,7 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S131",
   name = "\"switch\" statements should end with a \"case default\" clause",
   priority = Priority.MAJOR,
-  tags = {Tags.CERT, Tags.CWE})
+  tags = {Tags.CERT, Tags.CWE, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")

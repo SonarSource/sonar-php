@@ -43,9 +43,9 @@ import static org.sonar.php.parser.PHPGrammar.ASSIGNMENT_EXPR;
 
 @Rule(
   key = "S127",
-  name = "A loop's counter should not be assigned within the loop body",
+  name = "\"for\" loop stop conditions should be invariant",
   priority = Priority.MAJOR,
-  tags = {Tags.PITFALL})
+  tags = {Tags.PITFALL, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("10min")

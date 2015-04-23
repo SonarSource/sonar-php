@@ -1,6 +1,5 @@
 <p>
-  The requirement for a final <code>default</code> clause is defensive programming.</br>
-  This clause should either take appropriate action or contain a suitable comment as to why no action is taken.
+  The requirement for a final <code>[default|OTHERS]</code> clause is defensive programming. The clause should either take appropriate action, or contain a suitable comment as to why no action is taken. Even when the <code>switch</code> covers all current values of an <code>enum</code>, a <code>default</code> case should still be used because there is no guarantee that the <code>enum</code> won't be extended.
 </p>
 
 <h2>Noncompliant Code Example</h2>
@@ -41,3 +40,17 @@ switch ($param) {
     break;
 }
 </pre>
+
+<h2>See</h2>
+<ul>
+  <li>MISRA C:2004, 15.0 - The MISRA C switch syntax shall be used.</li>
+  <li>MISRA C:2004, 15.3 - The final clause of a switch statement shall be the default clause</li>
+  <li>MISRA C++:2008, 6-4-3 - A switch statement shall be a well-formed switch statement.</li>
+  <li>MISRA C++:2008, 6-4-6 - The final clause of a switch statement shall be the default-clause</li>
+  <li>MISRA C:2012, 16.1 - All switch statements shall be well-formed</li>
+  <li>MISRA C:2012, 16.4 - Every switch statement shall have a default label</li>
+  <li>MISRA C:2012, 16.5 - A default label shall appear as either the first or the last switch label of a switch statement</li>
+  <li><a href="http://cwe.mitre.org/data/definitions/478.html">MITRE, CWE-478</a> - Missing Default Case in Switch Statement</li>
+  <li><a href="https://www.securecoding.cert.org/confluence/display/c/MSC01-C.+Strive+for+logical+completeness">CERT, MSC01-C</a>  - Strive for logical completeness</li>
+  <li><a href="https://www.securecoding.cert.org/confluence/display/cplusplus/MSC01-CPP.+Strive+for+logical+completeness">CERT, MSC01-CPP</a> - Strive for logical completeness</li>
+</ul>

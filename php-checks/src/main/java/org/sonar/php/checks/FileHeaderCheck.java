@@ -42,8 +42,7 @@ import java.util.regex.Pattern;
 @Rule(
   key = "S1451",
   name = "Copyright and license headers should be defined",
-  priority = Priority.BLOCKER,
-  tags = {Tags.CONVENTION})
+  priority = Priority.BLOCKER)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SECURITY_FEATURES)
 @SqaleConstantRemediation("5min")
 public class FileHeaderCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {

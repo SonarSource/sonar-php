@@ -2,7 +2,7 @@
   Jump statements (<code>return</code>, <code>break</code>, <code>continue</code>, and <code>goto</code>) and <code>throw</code> expressions move control flow out of the current code block. Typically, any statements in a block that come after a jump or throw are simply wasted keystrokes lying in wait to confuse the unwary.
 </p>
 <p>
-  Rarely, as illustrated below, code after a jump or throw is reachable. However, such code is difficult to understand, and should be refactored.
+  Rarely, as illustrated below, code after a jump or <code>throw</code> is reachable. However, such code is difficult to understand, and should be refactored.
 </p>
 
 <h2>Noncompliant Code Example</h2>
@@ -43,3 +43,12 @@ function foo($a) {
   return;
 }
 </pre>
+
+<h2>See</h2>
+<ul>
+  <li>MISRA C++:2008, 0-1-9 - There shall be no dead code</li>
+  <li>MISRA C:2012, 2.2 - There shall be no dead code</li>
+  <li><a href="http://cwe.mitre.org/data/definitions/561.html">MITRE, CWE-561</a> - Dead Code</li>
+  <li><a href="https://www.securecoding.cert.org/confluence/display/c/MSC12-C.+Detect+and+remove+code+that+has+no+effect+or+is+never+executed">CERT, MSC12-C</a> - Detect and remove code that has no effect or is never executed</li>
+  <li><a href="https://www.securecoding.cert.org/confluence/display/cplusplus/MSC12-CPP.+Detect+and+remove+code+that+has+no+effect">CERT, MSC12-CPP</a> - Detect and remove code that has no effect</li>
+</ul>

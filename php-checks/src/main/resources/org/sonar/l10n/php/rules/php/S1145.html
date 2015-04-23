@@ -18,11 +18,11 @@ In any of these cases, unconditional <code>if</code> statements should be remove
 
 <h2>Noncompliant Code Example</h2>
 <pre>
-if (true) {
+if (true) {  // Noncompliant
   doSomething();
 }
-
-if (false) {
+...
+if (false) {  // Noncompliant
   doSomethingElse();
 }
 </pre>
@@ -31,3 +31,12 @@ if (false) {
 <pre>
 doSomething();
 </pre>
+
+<h2>See</h2>
+<ul>
+  <li><a href="http://cwe.mitre.org/data/definitions/489.html">MITRE, CWE-489</a> - Leftover Debug Code</li>
+  <li><a href="http://cwe.mitre.org/data/definitions/570.html">MITRE, CWE-570</a> - Expression is Always False</li>
+  <li><a href="http://cwe.mitre.org/data/definitions/571.html">MITRE, CWE-571</a> - Expression is Always True</li>
+  <li>MISRA C:2004, 13.7</li>
+  <li>MISRA C:2012, 14.3</li>
+</ul>

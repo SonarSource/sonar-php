@@ -46,10 +46,10 @@ import java.util.regex.Pattern;
   key = "S125",
   name = "Sections of code should not be \"commented out\"",
   priority = Priority.MAJOR,
-  tags = {Tags.UNUSED})
+  tags = {Tags.UNUSED, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
-@SqaleConstantRemediation("20min")
+@SqaleConstantRemediation("5min")
 public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
 
   private static final double THRESHOLD = 0.9;

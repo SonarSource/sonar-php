@@ -1,5 +1,5 @@
 <p>
-  References in a class to static members (field or method) in that class can be made using either <code>self::$var</code> or <code>static::$var</code> (introduced in 5.3). The difference between the two is one of scope. Confusingly, in subclasses, the use of <code>self::</code> references the original definition of the member, i.e. the superclass version, rather than any override at the subclass level. <code>static::</code>, on the other hand, references the class that was called at runtime.
+  References in a class to static class members (fields or methods) can be made using either <code>self::$var</code> or <code>static::$var</code> (introduced in 5.3). The difference between the two is one of scope. Confusingly, in subclasses, the use of <code>self::</code> references the original definition of the member, i.e. the superclass version, rather than any override at the subclass level. <code>static::</code>, on the other hand, references the class that was called at runtime.
 </p>
 
 <h2>Noncompliant Code Example</h2>

@@ -35,7 +35,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   key = "S1998",
   name = "References should not be passed to function calls",
   priority = Priority.CRITICAL,
-  tags = {Tags.OBSOLETE, Tags.PERFORMANCE})
+  tags = {Tags.OBSOLETE, Tags.PERFORMANCE, Tags.CWE})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("15min")
