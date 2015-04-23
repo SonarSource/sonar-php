@@ -135,6 +135,7 @@ public class CheckList {
       TooManyFunctionParametersCheck.class,
       SelfAssignmentCheck.class,
       UselessObjectCreationCheck.class,
+      DuplicateConditionCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }
