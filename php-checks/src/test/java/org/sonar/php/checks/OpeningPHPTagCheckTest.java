@@ -45,6 +45,14 @@ public class OpeningPHPTagCheckTest extends CheckTest {
   }
 
   @Test
+  // SONARPHP-436
+  public void ok_just_html() throws Exception {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok_just_html.php"), check);
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .noMore();
+  }
+
+  @Test
   public void ko() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())

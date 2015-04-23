@@ -40,6 +40,7 @@ public class OpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
 
   private static final String LONG_TAG = "<?php";
   private static final String SHORT_ECHO_TAG = "<?=";
+  private static final String SHORT_TAG = "<?";
 
   @Override
   public void init() {
@@ -71,7 +72,7 @@ public class OpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
       openingTag = openingTag.substring(offset);
     }
 
-    return !openingTag.contains(LONG_TAG) && !openingTag.contains(SHORT_ECHO_TAG);
+    return !openingTag.contains(LONG_TAG) && !openingTag.contains(SHORT_ECHO_TAG) && openingTag.contains(SHORT_TAG);
   }
 
 }
