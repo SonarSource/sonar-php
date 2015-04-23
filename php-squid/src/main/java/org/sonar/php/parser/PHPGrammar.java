@@ -291,6 +291,7 @@ public enum PHPGrammar implements GrammarRuleKey {
   MEMBER_EXPRESSION,
   ALIAS_VARIABLE,
   VARIABLE_NAME,
+  COMPUTED_VARIABLE_NAME,
   VARIABLE_WITHOUT_OBJECTS,
   EXPRESSION_STATEMENT,
   REFERENCE_VARIABLE,
@@ -426,9 +427,10 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(SIMPLE_INDIRECT_REFERENCE).is(b.oneOrMore(DOLAR, b.nextNot(b.firstOf(IDENTIFIER, KEYWORDS, LCURLYBRACE))));
 
+    b.rule(COMPUTED_VARIABLE_NAME).is(LCURLYBRACE, EXPRESSION, RCURLYBRACE);
     b.rule(REFERENCE_VARIABLE).is(COMPOUND_VARIABLE, b.zeroOrMore(b.firstOf(
       DIMENSIONAL_OFFSET,
-      b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE))));
+      COMPUTED_VARIABLE_NAME)));
 
     b.rule(VARIABLE_WITHOUT_OBJECTS).is(b.optional(SIMPLE_INDIRECT_REFERENCE), REFERENCE_VARIABLE);
 
@@ -444,7 +446,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(VARIABLE_NAME).is(b.firstOf(
       IDENTIFIER,
       KEYWORDS,
-      b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE)));
+      COMPUTED_VARIABLE_NAME));
 
     b.rule(DIMENSIONAL_OFFSET).is(LBRACKET, b.optional(EXPRESSION), RBRACKET);
     b.rule(ALIAS_VARIABLE).is(AMPERSAND, MEMBER_EXPRESSION);
@@ -473,10 +475,10 @@ public enum PHPGrammar implements GrammarRuleKey {
       VARIABLE_WITHOUT_OBJECTS,
       IDENTIFIER,
       PHPKeyword.CLASS,
-      b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE)));
+      COMPUTED_VARIABLE_NAME));
 
     b.rule(OBJECT_DIM_LIST).is(VARIABLE_NAME, b.zeroOrMore(b.firstOf(
-      b.sequence(LCURLYBRACE, EXPRESSION, RCURLYBRACE),
+      COMPUTED_VARIABLE_NAME,
       DIMENSIONAL_OFFSET
     )));
 
