@@ -31,28 +31,29 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 @Rule(
-  key = "S1862",
-  name = "Related \"if/else if\" statements and \"cases\" in a \"switch\" should not have the same condition",
-  tags = {Tags.BUG, Tags.CERT, Tags.PITFALL, Tags.UNUSED},
-  priority = Priority.CRITICAL)
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
+  key = "S1871",
+  name = "Two branches in the same conditional structure should not have exactly the same implementation",
+  tags = {Tags.BUG},
+  priority = Priority.MAJOR)
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("10min")
-public class DuplicateConditionCheck extends AbstractDuplicateBranchCheck {
+public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchCheck {
 
   @Override
   protected AstNodeType ifBranchNodeType() {
-    return PHPGrammar.PARENTHESIS_EXPRESSION;
+    return PHPGrammar.STATEMENT;
   }
 
   @Override
   protected AstNodeType caseClauseChildType() {
-    return PHPGrammar.EXPRESSION;
+    return PHPGrammar.INNER_STATEMENT_LIST;
   }
 
   @Override
   protected void addIssue(String type, AstNode duplicate, AstNode duplicated) {
-    String message = "This {0} duplicates the one on line {1}.";
+    String message = "Either merge this {0} with the identical one on line {1} or change one of the implementations.";
     getContext().createLineViolation(this, message, duplicate, type, duplicated.getTokenLine());
   }
+
 }

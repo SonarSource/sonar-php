@@ -136,6 +136,7 @@ public class CheckList {
       SelfAssignmentCheck.class,
       UselessObjectCreationCheck.class,
       DuplicateConditionCheck.class,
+      DuplicateBranchImplementationCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }
