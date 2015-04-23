@@ -194,4 +194,9 @@ public class PHPSquidSensor implements Sensor {
   private List<SquidAstVisitor<LexerlessGrammar>> getCheckVisitors() {
     return new ArrayList<SquidAstVisitor<LexerlessGrammar>>((Collection) checks.all());
   }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }
