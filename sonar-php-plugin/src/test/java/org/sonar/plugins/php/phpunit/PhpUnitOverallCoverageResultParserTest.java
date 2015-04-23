@@ -48,9 +48,9 @@ public class PhpUnitOverallCoverageResultParserTest {
 
   @Test
   public void shouldSetMetrics() {
-    assertThat(parser.LINE_COVERAGE).isEqualTo(CoreMetrics.OVERALL_LINE_COVERAGE);
-    assertThat(parser.LINES_TO_COVER).isEqualTo(CoreMetrics.OVERALL_LINES_TO_COVER);
-    assertThat(parser.UNCOVERED_LINES).isEqualTo(CoreMetrics.OVERALL_UNCOVERED_LINES);
-    assertThat(parser.COVERAGE_LINE_HITS_DATA).isEqualTo(CoreMetrics.OVERALL_COVERAGE_LINE_HITS_DATA);
+    assertThat(parser.lineCoverage).isEqualTo(CoreMetrics.OVERALL_LINE_COVERAGE);
+    assertThat(parser.linesToCover).isEqualTo(CoreMetrics.OVERALL_LINES_TO_COVER);
+    assertThat(parser.uncoveredLines).isEqualTo(CoreMetrics.OVERALL_UNCOVERED_LINES);
+    assertThat(parser.coverageLineHitsData).isEqualTo(CoreMetrics.OVERALL_COVERAGE_LINE_HITS_DATA);
   }
 }

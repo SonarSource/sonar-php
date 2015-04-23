@@ -19,10 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -34,10 +35,10 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
-import javax.annotation.Nullable;
-
-import java.util.List;
-import java.util.Set;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Token;
 
 @Rule(
   key = "S112",
@@ -56,14 +57,12 @@ public class GenericExceptionCheck extends SquidCheck<LexerlessGrammar> {
   private String namespace;
   private List<String> uses = Lists.newArrayList();
 
-
   @Override
   public void init() {
     subscribeTo(
       PHPGrammar.NAMESPACE_STATEMENT,
       PHPGrammar.USE_DECLARATION,
-      PHPGrammar.THROW_STATEMENT
-    );
+      PHPGrammar.THROW_STATEMENT);
   }
 
   @Override
@@ -131,6 +130,5 @@ public class GenericExceptionCheck extends SquidCheck<LexerlessGrammar> {
     }
     return builder.toString();
   }
-
 
 }
