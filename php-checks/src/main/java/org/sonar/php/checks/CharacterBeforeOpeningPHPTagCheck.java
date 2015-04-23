@@ -39,7 +39,6 @@ import java.util.regex.Pattern;
   name = "Files should not contain characters before \"<?php\"",
   priority = Priority.CRITICAL,
   tags = {Tags.USER_EXPERIENCE})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("2min")
 public class CharacterBeforeOpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
