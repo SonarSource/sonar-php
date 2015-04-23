@@ -69,7 +69,8 @@ public class ConstructorDependencyInversionCheck extends SquidCheck<LexerlessGra
     } else if (inConstructor && !inThrow) {
       getContext().createLineViolation(this, MESSAGE, astNode);
 
-    } // else do nothing
+    }
+    // else do nothing
   }
 
   @Override

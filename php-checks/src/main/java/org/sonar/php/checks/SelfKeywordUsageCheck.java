@@ -44,7 +44,7 @@ import javax.annotation.Nullable;
 public class SelfKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
 
   private boolean inFieldDeclaration = false;
-  private GrammarRuleKey[] FIELDS_DECLARATION = {
+  private static final GrammarRuleKey[] FIELDS_DECLARATION = {
     PHPGrammar.CLASS_VARIABLE_DECLARATION,
     PHPGrammar.CLASS_CONSTANT_DECLARATION
   };

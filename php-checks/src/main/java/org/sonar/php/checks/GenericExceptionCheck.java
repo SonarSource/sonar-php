@@ -37,6 +37,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 import javax.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Rule(
@@ -54,7 +55,7 @@ public class GenericExceptionCheck extends SquidCheck<LexerlessGrammar> {
   private static final Set<String> RAW_EXCEPTIONS = ImmutableSet.of("ErrorException", "RuntimeException", "Exception");
   private static final String SEPARATOR = PHPPunctuator.NS_SEPARATOR.getValue();
   private String namespace;
-  private ArrayList<String> uses = Lists.newArrayList();
+  private List<String> uses = Lists.newArrayList();
 
 
   @Override
@@ -94,11 +95,11 @@ public class GenericExceptionCheck extends SquidCheck<LexerlessGrammar> {
 
   private void parseUse(AstNode astNode) {
     AstNode namespaceNode = astNode.getFirstChild(PHPGrammar.NAMESPACE_NAME);
-    String namespace = getStringValue(namespaceNode);
+    String namespaceValue = getStringValue(namespaceNode);
     for (String exc : RAW_EXCEPTIONS) {
-      if (namespace.equals(exc)) {
+      if (namespaceValue.equals(exc)) {
         AstNode idNode = astNode.getFirstChild(PHPGrammar.IDENTIFIER);
-        String alias = idNode != null ? getStringValue(idNode) : namespace;
+        String alias = idNode != null ? getStringValue(idNode) : namespaceValue;
         uses.add(alias);
       }
     }
