@@ -35,10 +35,10 @@ public class PhpUnitItCoverageResultParser extends PhpUnitCoverageResultParser {
    */
   public PhpUnitItCoverageResultParser(SensorContext context, FileSystem fileSystem) {
     super(context, fileSystem);
-    lineCoverage = CoreMetrics.IT_LINE_COVERAGE;
-    linesToCover = CoreMetrics.IT_LINES_TO_COVER;
-    uncoveredLines = CoreMetrics.IT_UNCOVERED_LINES;
-    coverageLineHitsData = CoreMetrics.IT_COVERAGE_LINE_HITS_DATA;
+    lineCoverageMetric = CoreMetrics.IT_LINE_COVERAGE;
+    linesToCoverMetric = CoreMetrics.IT_LINES_TO_COVER;
+    uncoveredLinesMetric = CoreMetrics.IT_UNCOVERED_LINES;
+    coverageLineHitsDataMetric = CoreMetrics.IT_COVERAGE_LINE_HITS_DATA;
   }
 
   @Override

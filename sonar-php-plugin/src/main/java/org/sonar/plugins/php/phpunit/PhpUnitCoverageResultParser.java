@@ -63,10 +63,10 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
   private final SensorContext context;
   private final FileSystem fileSystem;
 
-  protected Metric lineCoverage = CoreMetrics.LINE_COVERAGE;
-  protected Metric linesToCover = CoreMetrics.LINES_TO_COVER;
-  protected Metric uncoveredLines = CoreMetrics.UNCOVERED_LINES;
-  protected Metric coverageLineHitsData = CoreMetrics.COVERAGE_LINE_HITS_DATA;
+  protected Metric lineCoverageMetric = CoreMetrics.LINE_COVERAGE;
+  protected Metric linesToCoverMetric = CoreMetrics.LINES_TO_COVER;
+  protected Metric uncoveredLinesMetric = CoreMetrics.UNCOVERED_LINES;
+  protected Metric coverageLineHitsDataMetric = CoreMetrics.COVERAGE_LINE_HITS_DATA;
 
   /**
    * Instantiates a new php unit coverage result parser.
@@ -120,18 +120,18 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
     for (InputFile phpFile : fileSystem.inputFiles(mainFilesPredicate)) {
       org.sonar.api.resources.File resource = org.sonar.api.resources.File.create(phpFile.relativePath());
 
-      if (context.getMeasure(resource, lineCoverage) == null) {
+      if (context.getMeasure(resource, lineCoverageMetric) == null) {
         LOG.debug("Coverage metrics have not been set on '{}': default values will be inserted.", phpFile.file().getName());
-        context.saveMeasure(resource, lineCoverage, 0.0);
+        context.saveMeasure(resource, lineCoverageMetric, 0.0);
         // for LINES_TO_COVER and UNCOVERED_LINES, we use NCLOC as an approximation
         Measure ncloc = context.getMeasure(resource, CoreMetrics.NCLOC);
 
-        if (ncloc != null && context.getMeasure(linesToCover) == null) {
-          context.saveMeasure(resource, linesToCover, ncloc.getValue());
+        if (ncloc != null && context.getMeasure(linesToCoverMetric) == null) {
+          context.saveMeasure(resource, linesToCoverMetric, ncloc.getValue());
         }
 
-        if (ncloc != null && context.getMeasure(uncoveredLines) == null) {
-          context.saveMeasure(resource, uncoveredLines, ncloc.getValue());
+        if (ncloc != null && context.getMeasure(uncoveredLinesMetric) == null) {
+          context.saveMeasure(resource, uncoveredLinesMetric, ncloc.getValue());
         }
       }
     }
@@ -168,7 +168,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
       org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.create(inputFile.relativePath());
       // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
       // This should look like (lineNumner=Count) : 1=0;2=1;3=1....
-      PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<Integer, Integer>(coverageLineHitsData);
+      PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<Integer, Integer>(coverageLineHitsDataMetric);
       if (fileNode.getLines() != null) {
         for (LineNode line : fileNode.getLines()) {
           saveLineMeasure(line, lineHits);
@@ -187,9 +187,9 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
         lineCoverage = metrics.getCoveredStatements() / totalStatementsCount;
       }
 
-      context.saveMeasure(phpFile, linesToCover, totalStatementsCount);
-      context.saveMeasure(phpFile, this.uncoveredLines, uncoveredLines);
-      context.saveMeasure(phpFile, this.lineCoverage, ParsingUtils.scaleValue(lineCoverage * 100.0));
+      context.saveMeasure(phpFile, linesToCoverMetric, totalStatementsCount);
+      context.saveMeasure(phpFile, this.uncoveredLinesMetric, uncoveredLines);
+      context.saveMeasure(phpFile, this.lineCoverageMetric, ParsingUtils.scaleValue(lineCoverage * 100.0));
     }
   }
 
