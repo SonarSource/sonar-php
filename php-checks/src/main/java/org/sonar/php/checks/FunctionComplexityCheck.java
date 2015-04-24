@@ -45,7 +45,7 @@ import com.sonar.sslr.api.AstNode;
 @SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "10min", effortToFixDescription = "per complexity point above the threshold")
 public class FunctionComplexityCheck extends SquidCheck<LexerlessGrammar> {
 
-  public static final int DEFAULT = 10;
+  public static final int DEFAULT = 20;
 
   @RuleProperty(
     key = "threshold",

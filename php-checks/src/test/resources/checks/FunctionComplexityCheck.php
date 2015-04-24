@@ -14,6 +14,12 @@ function ko() // +1
   }
 
   if (true) { // +1
+    return $a && $b || $c && $d || $e && $f || $g && $h || $i && $j || $k && $l || $m && $n || $o; // +15
+  } else {
+    return $a && $b || $c && $d || $e; // +5
+  }
+
+  if (true) { // +1
     return 1; // +1
   }
 

@@ -34,7 +34,7 @@ public class FunctionComplexityCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionComplexityCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("The Cyclomatic Complexity of this function \"ko\" is 11 which is greater than " + check.threshold + " authorized.")
+      .next().atLine(3).withMessage("The Cyclomatic Complexity of this function \"ko\" is 32 which is greater than " + check.threshold + " authorized.")
       .noMore();
   }
 
@@ -44,10 +44,10 @@ public class FunctionComplexityCheckTest extends CheckTest {
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionComplexityCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("The Cyclomatic Complexity of this function \"ko\" is 11 which is greater than " + check.threshold + " authorized.")
-      .next().atLine(28)
-      .next().atLine(44)
-      .next().atLine(59)
+      .next().atLine(3).withMessage("The Cyclomatic Complexity of this function \"ko\" is 32 which is greater than " + check.threshold + " authorized.")
+      .next().atLine(34)
+      .next().atLine(50)
+      .next().atLine(65)
       .noMore();
   }
 
