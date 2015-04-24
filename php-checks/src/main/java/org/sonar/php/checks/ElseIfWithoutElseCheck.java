@@ -36,7 +36,6 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   name = "\"if ... else if\" constructs shall be terminated with an \"else\" clause",
   priority = Priority.MAJOR,
   tags = {Tags.CERT, Tags.MISRA})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
 public class ElseIfWithoutElseCheck extends SquidCheck<LexerlessGrammar> {
