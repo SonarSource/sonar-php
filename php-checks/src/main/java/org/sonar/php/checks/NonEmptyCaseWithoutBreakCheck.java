@@ -38,7 +38,6 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   name = "Switch cases should end with an unconditional \"break\" statement",
   priority = Priority.CRITICAL,
   tags = {Tags.CERT, Tags.CWE, Tags.PITFALL, Tags.MISRA})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("10min")
 public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<LexerlessGrammar> {
