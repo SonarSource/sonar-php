@@ -19,10 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -33,11 +37,7 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
+import com.sonar.sslr.api.AstNode;
 
 @Rule(
   key = "S117",
@@ -56,7 +56,6 @@ public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGram
     key = "format",
     defaultValue = DEFAULT)
   String format = DEFAULT;
-
 
   @Override
   public void init() {
