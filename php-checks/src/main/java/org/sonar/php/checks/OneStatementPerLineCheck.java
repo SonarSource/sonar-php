@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
@@ -33,6 +34,7 @@ import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.Map;
+import java.util.Set;
 
 @Rule(
   key = "S122",
@@ -45,6 +47,7 @@ import java.util.Map;
 public class OneStatementPerLineCheck extends SquidCheck<LexerlessGrammar> {
 
   private final Map<Integer, StatementCount> statementsPerLine = Maps.newHashMap();
+  private final Set<Integer> linesWithHtml = Sets.newHashSet();
   private boolean inFunctionExpression = false;
 
   private static class StatementCount {
@@ -58,19 +61,23 @@ public class OneStatementPerLineCheck extends SquidCheck<LexerlessGrammar> {
     subscribeTo(
       PHPGrammar.TOP_STATEMENT,
       PHPGrammar.STATEMENT,
-      PHPGrammar.FUNCTION_EXPRESSION);
+      PHPGrammar.FUNCTION_EXPRESSION,
+      PHPTokenType.INLINE_HTML);
   }
 
 
   @Override
   public void visitFile(AstNode astNode) {
     statementsPerLine.clear();
+    linesWithHtml.clear();
     inFunctionExpression = false;
   }
 
   @Override
   public void visitNode(AstNode node) {
-    if (node.is(PHPGrammar.FUNCTION_EXPRESSION)) {
+    if (node.is(PHPTokenType.INLINE_HTML)) {
+      linesWithHtml.add(node.getTokenLine());
+    } else if (node.is(PHPGrammar.FUNCTION_EXPRESSION)) {
       int line = node.getTokenLine();
 
       if (statementsPerLine.containsKey(line)) {
@@ -95,10 +102,15 @@ public class OneStatementPerLineCheck extends SquidCheck<LexerlessGrammar> {
   @Override
   public void leaveFile(AstNode astNode) {
     for (Map.Entry<Integer, StatementCount> statementsAtLine : statementsPerLine.entrySet()) {
+      Integer line = statementsAtLine.getKey();
+      if (linesWithHtml.contains(line)) {
+        continue;
+      }
+
       StatementCount stmtCount = statementsAtLine.getValue();
 
       if (stmtCount.nbStatement > 1 || stmtCount.nbFunctionExpression > 1 || stmtCount.nbNestedStatement > 1) {
-        getContext().createLineViolation(this, "{0} statements were found on this line. Reformat the code to have only one statement per line.", statementsAtLine.getKey(),
+        getContext().createLineViolation(this, "{0} statements were found on this line. Reformat the code to have only one statement per line.", line,
           stmtCount.nbStatement + stmtCount.nbNestedStatement);
       }
     }

@@ -36,7 +36,6 @@ public class OneStatementPerLineCheckTest extends CheckTest {
       .next().atLine(5)
       .next().atLine(17).withMessage("3 statements were found on this line. Reformat the code to have only one statement per line.")
       .next().atLine(19)
-      .next().atLine(29)
       .noMore();
   }
 }

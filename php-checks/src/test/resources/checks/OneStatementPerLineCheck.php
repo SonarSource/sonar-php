@@ -26,4 +26,4 @@ html
 
 html
 
-<h1 a="<?php echo $a;?>" b="<?php echo $b;?>">  // NOK
+<h1 a="<?php echo $a;?>" b="<?php echo $b;?>">  // OK
