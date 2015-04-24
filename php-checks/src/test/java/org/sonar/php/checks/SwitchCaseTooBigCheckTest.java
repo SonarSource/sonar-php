@@ -34,7 +34,7 @@ public class SwitchCaseTooBigCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SwitchCaseTooBigCheck.php"), check);
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(10).withMessage("Reduce this \"switch/case\" number of lines from 6 to at most " + check.DEFAULT + ", for example by extracting code into function.")
+      .next().atLine(10).withMessage("Reduce this \"switch/case\" number of lines from 11 to at most " + check.DEFAULT + ", for example by extracting code into function.")
       .noMore();
   }
 

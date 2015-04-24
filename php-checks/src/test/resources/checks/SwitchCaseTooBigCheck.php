@@ -12,5 +12,10 @@ switch ($a) {
     echo "";
     echo "";
     echo "";
+    echo "";
+    echo "";
+    echo "";
+    echo "";
+    echo "";
     break;
 }
