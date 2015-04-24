@@ -41,6 +41,6 @@ public class DuplicateBranchImplementationCheckTest extends CheckTest {
       .next().atLine(6).withMessage("Either merge this branch with the identical one on line 2 or change one of the implementations.")
       .next().atLine(8).withMessage("Either merge this branch with the identical one on line 2 or change one of the implementations.")
       .next().atLine(16).withMessage("Either merge this branch with the identical one on line 14 or change one of the implementations.")
-      .next().atLine(28).withMessage("Either merge this case with the identical one on line 22 or change one of the implementations.");
+      .next().atLine(27).withMessage("Either merge this case with the identical one on line 21 or change one of the implementations.");
   }
 }

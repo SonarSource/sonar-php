@@ -53,7 +53,7 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
   @Override
   protected void addIssue(String type, AstNode duplicate, AstNode duplicated) {
     String message = "Either merge this {0} with the identical one on line {1} or change one of the implementations.";
-    getContext().createLineViolation(this, message, duplicate, type, duplicated.getTokenLine());
+    getContext().createLineViolation(this, message, duplicate.getParent(), type, duplicated.getParent().getTokenLine());
   }
 
 }
