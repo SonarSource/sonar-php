@@ -46,7 +46,6 @@ import java.util.Set;
   name = "Local variables should not have the same name as class fields",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
 @SqaleConstantRemediation("5min")
 public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGrammar> {
