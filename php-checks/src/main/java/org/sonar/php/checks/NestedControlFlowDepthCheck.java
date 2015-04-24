@@ -46,7 +46,7 @@ public class NestedControlFlowDepthCheck extends SquidCheck<LexerlessGrammar> {
 
   private int nestingLevel;
 
-  public static final int DEFAULT = 3;
+  public static final int DEFAULT = 4;
 
   @RuleProperty(
     key = "max",

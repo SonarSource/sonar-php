@@ -33,21 +33,21 @@ public class NestedControlFlowDepthCheckTest extends CheckTest {
   public void defaultValue() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NestedControlFlowDepthCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(16).withMessage("Refactor this code to not nest more than " + check.DEFAULT + " \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.")
-      .next().atLine(19)
-      .next().atLine(22)
-      .next().atLine(25)
-      .next().atLine(28)
+      .next().atLine(17).withMessage("Refactor this code to not nest more than " + check.DEFAULT + " \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.")
+      .next().atLine(20)
+      .next().atLine(23)
+      .next().atLine(26)
+      .next().atLine(29)
       .noMore();
   }
 
   @Test
   public void custom() throws Exception {
-    check.max = 4;
+    check.max = 5;
 
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NestedControlFlowDepthCheck.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(30).withMessage("Refactor this code to not nest more than " + check.max + " \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.")
+      .next().atLine(31).withMessage("Refactor this code to not nest more than " + check.max + " \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.")
       .noMore();
   }
 }
