@@ -39,3 +39,11 @@ function f($p1, $p2) {                   // OK
   $p1 = $p2;
 }
 
+class D extends A {
+  public function f1($p1) {} // OK
+  private function f2($p1) {} // NOK
+}
+
+class E implements B {
+  public function f1($p1) {} // OK
+}

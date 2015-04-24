@@ -25,6 +25,7 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -78,6 +79,27 @@ public class FunctionUtils {
       }
     }
     return false;
+  }
+
+  /**
+   * Test whether a non-private method is owned by a class declared with "extends" or "implements".
+   * 
+   * @param methodDec METHOD_DECLARATION
+   * @return true if the node is a non-private method declaration inside a class declared with "extends" or "implements"
+   */
+  public static boolean mayOverrideAnotherMethod(AstNode methodDec) {
+    if (methodDec.is(PHPGrammar.METHOD_DECLARATION) && !hasModifier(methodDec, PHPKeyword.PRIVATE)) {
+      AstNode classDec = methodDec.getParent().getParent();
+      return classDec.hasDirectChildren(PHPGrammar.EXTENDS_FROM, PHPGrammar.IMPLEMENTS_LIST);
+    }
+    return false;
+  }
+
+  private static boolean hasModifier(AstNode methodDec, PHPKeyword modifier) {
+    return methodDec.select()
+      .children(PHPGrammar.MEMBER_MODIFIER)
+      .children(modifier)
+      .isNotEmpty();
   }
 
   /**
