@@ -43,7 +43,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @SqaleConstantRemediation("20min")
 public class TooManyLinesInFunctionCheck extends SquidCheck<LexerlessGrammar> {
 
-  private static final int DEFAULT = 100;
+  private static final int DEFAULT = 150;
 
   @RuleProperty(
     key = "max",
