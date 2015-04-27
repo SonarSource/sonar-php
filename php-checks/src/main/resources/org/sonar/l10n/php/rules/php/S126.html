@@ -4,7 +4,7 @@
 
 <p>
   The requirement for a final <code>else</code> statement is defensive programming.
-  The <code>else</code> statement should either take appropriate action or contain a suitable comment as to why no action is taken. This is consistent with the requirement to have a final default clause in a <code>switch</code> statement.
+  The <code>else</code> statement should either take appropriate action or contain a suitable comment as to why no action is taken. This is consistent with the requirement to have a final <code>default</code> clause in a <code>switch</code> statement.
 </p>
 
 <h2>Noncompliant Code Example</h2>
@@ -29,6 +29,9 @@ if (condition1) {
 
 <h2>See</h2>
 <ul>
+  <li>MISRA C:2004, 14.10 - All if...else if constructs shall be terminated with an else clause.</li>
+  <li>MISRA C++:2008, 6-4-2 - All if...else if constructs shall be terminated with an else clause.</li>
+  <li>MISRA C:2012, 15.7 - All if...else if constructs shall be terminated with an else statement</li>
   <li><a href="https://www.securecoding.cert.org/confluence/display/seccode/MSC01-C.+Strive+for+logical+completeness">CERT, MSC01-C</a> - Strive for logical completeness</li>
   <li><a href="https://www.securecoding.cert.org/confluence/display/cplusplus/MSC01-CPP.+Strive+for+logical+completeness">CERT, MSC01-CPP</a> - Strive for logical completeness</li>
   <li><a href="https://www.securecoding.cert.org/confluence/display/jg/64.+Strive+for+logical+completeness">CERT, MSC64-Java</a> - Strive for locical completeness</li>

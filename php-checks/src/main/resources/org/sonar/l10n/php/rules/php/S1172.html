@@ -17,13 +17,14 @@ function doSomething($b) {
 </pre>
 
 <h2>Exceptions</h2>
-<p>Functions overriding or implementing another one should be excluded</p>
+<p>Functions in classes that override a class or implement interfaces are ignored.</p>
 <pre>
-/*
- * @inheritdoc
- */
-function doSomething($a, $b) {     // no issue reported on $b
-  compute($a);
+class C extends B {
+
+  function doSomething($a, $b) {     // no issue reported on $b
+    compute($a);
+  }
+
 }
 </pre>
 

@@ -39,17 +39,13 @@ switch ($myVariable) {
   case 1:
     do_something();
     break;
-  case 2:                  // Use of return statement
-    return;
-  case 3:                  // Use of throw statement
-    throw new IllegalStateException();
-  case 4:                  // Use of continue statement
+  case 2:                  // Use of continue statement
     continue;
-  case 4:                  // Call exit
+  case 3:                  // Case includes a jump statement (exit, return, break &etc)
     exit(0);
-  case 5:
+  case 4:
     echo 'Second case, which falls through';
-    // no break        <- "no break" comment is used when fall-through is intentional in a non-empty case body
+    // no break        <- comment is used when fall-through is intentional in a non-empty case body
   default:                 // For the last case, use of break statement is optional
     doSomethingElse();
 }
@@ -64,6 +60,6 @@ switch ($myVariable) {
   <li>MISRA C:2012, 16.1 - All switch statements shall be well-formed</li>
   <li>MISRA C:2012, 16.3 - An unconditional break statement shall terminate every switch-clause</li>
   <li><a href="http://cwe.mitre.org/data/definitions/484.html">MITRE, CWE-484</a> - Omitted Break Statement in Switch</li>
-  <li><a href="https://www.securecoding.cert.org/confluence/display/c/MSC17-C.+Finish+every+set+of+statements+associated+with+a+case+label+with+a+break+statement">CERT, MSC17-C</a> - Finish every set of statements associated with a case label with a break statement</li>
-  <li><a href="https://www.securecoding.cert.org/confluence/display/cplusplus/MSC18-CPP.+Finish+every+set+of+statements+associated+with+a+case+label+with+a+break+statement"></a> - Finish every set of statements associated with a case label with a break statement</li>
+  <li><a href="https://www.securecoding.cert.org/confluence/x/YIFLAQ">CERT, MSC17-C</a> - Finish every set of statements associated with a case label with a break statement</li>
+  <li><a href="https://www.securecoding.cert.org/confluence/x/ZoFLAQ">CERT, MSC18-CPP</a> - Finish every set of statements associated with a case label with a break statement</li>
 </ul>
