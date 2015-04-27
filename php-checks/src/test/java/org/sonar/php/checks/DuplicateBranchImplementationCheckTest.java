@@ -38,9 +38,9 @@ public class DuplicateBranchImplementationCheckTest extends CheckTest {
       TestUtils.getCheckFile("DuplicateBranchImplementationCheck.php"), new DuplicateBranchImplementationCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Either merge this branch with the identical one on line 2 or change one of the implementations.")
-      .next().atLine(8).withMessage("Either merge this branch with the identical one on line 2 or change one of the implementations.")
-      .next().atLine(16).withMessage("Either merge this branch with the identical one on line 14 or change one of the implementations.")
-      .next().atLine(27).withMessage("Either merge this case with the identical one on line 21 or change one of the implementations.");
+      .next().atLine(6).withMessage("This branch's code block is the same as the block for the branch on line 2.")
+      .next().atLine(8).withMessage("This branch's code block is the same as the block for the branch on line 2.")
+      .next().atLine(16).withMessage("This branch's code block is the same as the block for the branch on line 14.")
+      .next().atLine(27).withMessage("This case's code block is the same as the block for the case on line 21.");
   }
 }
