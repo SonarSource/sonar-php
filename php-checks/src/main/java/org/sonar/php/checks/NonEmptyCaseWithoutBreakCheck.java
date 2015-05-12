@@ -19,6 +19,8 @@
  */
 package org.sonar.php.checks;
 
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Trivia;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -29,9 +31,6 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
-
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Trivia;
 
 @Rule(
   key = "S128",
@@ -51,40 +50,33 @@ public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<LexerlessGrammar> 
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (!isLastCase(astNode) && !isEmpty(astNode) && (!isLastCaseStmtAnException(astNode) && !hasNoBreakComment(astNode))) {
+    if (!isLastCase(astNode) && !isEmpty(astNode) && (!hasJumpStatement(astNode) && !hasNoBreakComment(astNode))) {
       getContext().createLineViolation(this, "End this switch case with an unconditional break, continue, return or throw statement.", astNode);
     }
   }
 
   private boolean hasNoBreakComment(AstNode astNode) {
     for (Trivia trivia : astNode.getNextSibling().getToken().getTrivia()) {
-      if (trivia.isComment() && trivia.toString().trim().contains("no break")) {
+      if (trivia.isComment()) {
         return true;
       }
     }
     return false;
   }
 
-  private static boolean isLastCaseStmtAnException(AstNode casClause) {
+  private static boolean hasJumpStatement(AstNode casClause) {
+
     AstNode lastStmt = casClause.getFirstChild(PHPGrammar.INNER_STATEMENT_LIST).getLastChild();
-    if (!lastStmt.is(PHPGrammar.STATEMENT)) {
-      return false;
+    if (lastStmt.is(PHPGrammar.STATEMENT) && lastStmt.getFirstChild().is(PHPGrammar.BREAK_STATEMENT)) {
+      return true;
     }
-    return isExitCall(lastStmt) || lastStmt.getFirstChild().is(
+    return casClause.hasDescendant(
+      PHPGrammar.EXIT_EXPR,
       PHPGrammar.CONTINUE_STATEMENT,
       PHPGrammar.THROW_STATEMENT,
       PHPGrammar.RETURN_STATEMENT,
-      PHPGrammar.BREAK_STATEMENT);
-  }
-
-  private static boolean isExitCall(AstNode lastStmt) {
-    AstNode stmt = lastStmt.getFirstChild();
-    if (stmt.isNot(PHPGrammar.EXPRESSION_STATEMENT)) {
-      return false;
-    }
-
-    AstNode exprChild = stmt.getFirstChild(PHPGrammar.EXPRESSION).getFirstChild();
-    return exprChild.is(PHPGrammar.POSTFIX_EXPR) && exprChild.getFirstChild().is(PHPGrammar.EXIT_EXPR);
+      PHPGrammar.BREAK_STATEMENT,
+      PHPGrammar.GOTO_STATEMENT);
   }
 
   private static boolean isEmpty(AstNode caseClause) {
