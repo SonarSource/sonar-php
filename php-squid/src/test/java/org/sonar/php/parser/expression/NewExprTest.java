@@ -36,6 +36,7 @@ public class NewExprTest extends RuleTest {
 
     matches("new Foo");
     matches("new Foo ()");
+    matches("new Foo ($x, 42)");
 
   }
 }

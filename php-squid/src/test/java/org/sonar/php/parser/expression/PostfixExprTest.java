@@ -34,5 +34,6 @@ public class PostfixExprTest extends RuleTest {
   @Test
   public void test() {
     matches("$a");
+    matches("$a instanceof class1");
   }
 }

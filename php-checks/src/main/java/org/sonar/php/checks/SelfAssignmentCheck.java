@@ -49,10 +49,16 @@ public class SelfAssignmentCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void visitNode(AstNode node) {
-    if (node.is(PHPGrammar.ASSIGNMENT_EXPR) && isCompoundAssignment(node)) {
-      return;
+    AstNode assignedValue = node.getLastChild();
+    if (node.is(PHPGrammar.ASSIGNMENT_EXPR)) {
+      if (isCompoundAssignment(node)) {
+        return;
+      }
+      if (assignedValue.getFirstChild().getNumberOfChildren() == 1) {
+        assignedValue = assignedValue.getFirstChild().getFirstChild();
+      }
     }
-    if (CheckUtils.areSyntacticallyEquivalent(node.getFirstChild(), node.getLastChild())) {
+    if (CheckUtils.areSyntacticallyEquivalent(node.getFirstChild(), assignedValue)) {
       getContext().createLineViolation(this, "Remove or correct this useless self-assignment", node);
     }
   }

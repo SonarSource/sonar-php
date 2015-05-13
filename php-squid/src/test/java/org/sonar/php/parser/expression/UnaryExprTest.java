@@ -43,5 +43,10 @@ public class UnaryExprTest extends RuleTest {
     matches("(int) $a");
     matches("$a =& $b");
 
+    matches("!$a = $b");
+    matches("++$a = $b");
+    matches("(int) $a = $b");
+
+    notMatches("(int) $a + $b");
   }
 }

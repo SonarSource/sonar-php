@@ -34,7 +34,6 @@ public class AssignmentExprTest extends RuleTest {
   @Test
   public void test() {
 
-    matches("$a");
     matches("$a = $b");
     matches("$a *= $b");
     matches("$a /= $b");
@@ -48,9 +47,6 @@ public class AssignmentExprTest extends RuleTest {
     matches("$a |= $b");
     matches("$a -= $b");
     matches("$a -= $b");
-
-    matches("$a = &$b");
-    matches("$a = &new Foo");
 
     matches("$var = function () {}");
   }
