@@ -612,6 +612,10 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(NEW_EXPR).is(NEW, MEMBER_EXPRESSION);
 
     b.rule(ASSIGNMENT_BY_REFERENCE).is(MEMBER_EXPRESSION, EQU, AMPERSAND, b.firstOf(NEW_EXPR, MEMBER_EXPRESSION));
+    b.rule(ASSIGNMENT_EXPR).is(b.sequence(MEMBER_EXPRESSION, ASSIGNMENT_OPERATOR, EXPRESSION));
+    b.rule(ASSIGNMENT_OPERATOR).is(b.firstOf(EQU, COMPOUND_ASSIGNMENT, LOGICAL_ASSIGNMENT));
+    b.rule(COMPOUND_ASSIGNMENT).is(b.firstOf(STAR_EQU, DIVEQUAL, MOD_EQU, PLUS_EQU, MINUS_EQU, SL_EQU, SR_EQU, CONCATEQUAL));
+    b.rule(LOGICAL_ASSIGNMENT).is(b.firstOf(ANDEQUAL, XOR_EQU, OR_EQU));
 
     // Unary expression
     b.rule(UNARY_EXPR).is(b.firstOf(  // TODO martin: re-arrange & complete
@@ -643,13 +647,6 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(LOGICAL_OR_EXPR).is(LOGICAL_XOR_EXPR, b.zeroOrMore(LOGICAL_OR_OPERATOR, LOGICAL_XOR_EXPR)).skipIfOneChild();
     b.rule(LOGICAL_OR_OPERATOR).is(b.firstOf(OROR, PHPKeyword.OR));
     b.rule(CONDITIONAL_EXPR).is(LOGICAL_OR_EXPR, b.optional(QUERY, b.optional(CONDITIONAL_EXPR), COLON, CONDITIONAL_EXPR)).skipIfOneChild();
-
-    b.rule(ASSIGNMENT_EXPR).is(
-      b.sequence(MEMBER_EXPRESSION, ASSIGNMENT_OPERATOR, EXPRESSION));
-    b.rule(ASSIGNMENT_OPERATOR).is(b.firstOf(EQU, COMPOUND_ASSIGNMENT, LOGICAL_ASSIGNMENT));
-    b.rule(COMPOUND_ASSIGNMENT).is(b.firstOf(STAR_EQU, DIVEQUAL, MOD_EQU, PLUS_EQU, MINUS_EQU, SL_EQU, SR_EQU, CONCATEQUAL));
-    b.rule(LOGICAL_ASSIGNMENT).is(b.firstOf(ANDEQUAL, XOR_EQU, OR_EQU));
-
     b.rule(EXPRESSION).is(CONDITIONAL_EXPR);
   }
 
