@@ -159,7 +159,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    * @param fileNode the file
    */
   protected void saveCoverageMeasure(FileNode fileNode) {
-    //PHP supports only absolute paths
+    // PHP supports only absolute paths
     InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(fileNode.getName()));
 
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
@@ -190,6 +190,8 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
       context.saveMeasure(phpFile, linesToCoverMetric, totalStatementsCount);
       context.saveMeasure(phpFile, this.uncoveredLinesMetric, uncoveredLines);
       context.saveMeasure(phpFile, this.lineCoverageMetric, ParsingUtils.scaleValue(lineCoverage * 100.0));
+    } else {
+      LOG.info("File's path: {} must be given using absolute path, related coverage data ignored", fileNode.getName());
     }
   }
 
