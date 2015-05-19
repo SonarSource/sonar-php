@@ -38,6 +38,13 @@ public class InlineHTMLInFileCheckTest extends CheckTest {
   }
 
   @Test
+  public void ok_excluded_file() throws Exception {
+    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.phtml"), check);
+    checkMessagesVerifier.verify(file.getCheckMessages())
+      .noMore();
+  }
+
+  @Test
   public void ko() throws Exception {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
     checkMessagesVerifier.verify(file.getCheckMessages())

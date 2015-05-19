@@ -54,10 +54,14 @@ public class InlineHTMLInFileCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (!"?>".equals(astNode.getTokenOriginalValue().trim()) && !fileHasIssue) {
+    if (!"?>".equals(astNode.getTokenOriginalValue().trim()) && !fileHasIssue && !isExcludedFile()) {
       getContext().createFileViolation(this, "Remove the inline HTML in this file.");
       fileHasIssue = true;
     }
+  }
+
+  private boolean isExcludedFile() {
+    return getContext().getFile().getName().endsWith(".phtml");
   }
 
 }
