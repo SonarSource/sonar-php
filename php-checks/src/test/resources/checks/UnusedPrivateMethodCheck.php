@@ -29,6 +29,8 @@ class A {
   public function k() {             // OK - public
   }
 
+  public function __i() {           // OK - magic method
+  }
 }
 
 class B {

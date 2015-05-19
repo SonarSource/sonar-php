@@ -54,8 +54,9 @@ public class UnusedPrivateMethodCheck extends AbstractUnusedPrivateClassMemberCh
       if (stmtChild.is(PHPGrammar.METHOD_DECLARATION)) {
         List<AstNode> modifiers = stmtChild.getChildren(PHPGrammar.MEMBER_MODIFIER);
         AstNode identifier = stmtChild.getFirstChild(PHPGrammar.IDENTIFIER);
+        String methodName = identifier.getTokenOriginalValue();
 
-        if (isPrivate(modifiers) && !isConstructor(identifier.getTokenOriginalValue(), classDec)) {
+        if (isPrivate(modifiers) && !isConstructor(methodName, classDec) && !isMagicMethod(methodName)) {
           // Parenthesis specifies that member is a method
           addPrivateMember(getCalledName(identifier, modifiers) + "()", identifier);
         }
@@ -67,4 +68,7 @@ public class UnusedPrivateMethodCheck extends AbstractUnusedPrivateClassMemberCh
     return "__construct".equals(methodName) || classDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue().equals(methodName);
   }
 
+  private static boolean isMagicMethod(String methodName) {
+    return methodName.startsWith("__");
+  }
 }
