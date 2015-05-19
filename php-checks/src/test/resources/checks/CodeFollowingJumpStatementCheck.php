@@ -78,3 +78,11 @@ function f() {
 
 }
 
+function f2() {
+  return;;       // OK
+}
+
+function f3() {
+  return;;
+  $x;            // NOK
+}

@@ -38,6 +38,7 @@ public class CodeFollowingJumpStatementCheckTest extends CheckTest {
       .next().atLine(19).withMessage("Remove the code after this \"continue\".")
       .next().atLine(40)
       .next().atLine(53).withMessage("Remove the code after this \"throw\".")
+      .next().atLine(87).withMessage("Remove the code after this \"return\".")
       .noMore();
   }
 
