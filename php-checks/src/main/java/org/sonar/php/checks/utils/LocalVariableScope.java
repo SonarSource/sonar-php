@@ -27,7 +27,6 @@ import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 
 import javax.annotation.Nullable;
-
 import java.util.List;
 import java.util.Map;
 
@@ -234,5 +233,44 @@ public class LocalVariableScope {
     }
   }
 
+  /**
+   * Declares variable from for each statement:
+   * <pre>
+   * // declare $v
+   * foreach ($arr as &$v) {
+   * }
+   * </pre>
+   *
+   * When both key and value variables are define, value is declare with usage of 1
+   * because the key cannot be retrieved without defining the value, e.g
+   * <pre>
+   * // $key declare with usage = 0 - $value with usage = 1
+   * foreach($arr as $key => $value) {
+   * }
+   * </pre>
+   *
+   * @param foreachExpr is FOREACH_EXPR
+   */
+  public void declareForeachVariable(AstNode foreachExpr) {
+    Preconditions.checkArgument(foreachExpr.is(PHPGrammar.FOREACH_EXPR));
+
+    declareForeachVariable(foreachExpr.getFirstChild(PHPGrammar.FOREACH_VARIABLE), 0);
+
+    if (foreachExpr.hasDirectChildren(PHPPunctuator.DOUBLEARROW)) {
+      declareForeachVariable(foreachExpr.getLastChild(PHPGrammar.FOREACH_VARIABLE), 1);
+    }
+
+  }
+
+  private void declareForeachVariable(AstNode foreachVar, int usage) {
+    Preconditions.checkArgument(foreachVar.is(PHPGrammar.FOREACH_VARIABLE));
+
+    AstNode memberExpr = foreachVar.getFirstChild(PHPGrammar.MEMBER_EXPRESSION);
+
+    if (memberExpr.getNumberOfChildren() == 1 && memberExpr.getFirstChild().is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+      AstNode varWithoutObject = memberExpr.getFirstChild();
+      declareLocalVariable(getVariableName(varWithoutObject), varWithoutObject, usage);
+    }
+  }
 }
 

@@ -64,7 +64,8 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
       PHPGrammar.ASSIGNMENT_EXPR,
       PHPGrammar.ASSIGNMENT_BY_REFERENCE,
-      PHPGrammar.LIST_EXPR);
+      PHPGrammar.LIST_EXPR,
+      PHPGrammar.FOREACH_EXPR);
   }
 
   @Override
@@ -87,6 +88,9 @@ public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
 
       } else if (astNode.is(PHPGrammar.LEXICAL_VAR_LIST)) {
         getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
+
+      } else if (astNode.is(PHPGrammar.FOREACH_EXPR)) {
+        getCurrentScope().declareForeachVariable(astNode);
 
       } else if (astNode.is(PHPGrammar.VAR_IDENTIFIER) && !isDeclaration(astNode)) {
         getCurrentScope().useVariable(astNode);

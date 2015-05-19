@@ -146,6 +146,19 @@ function m($p){
 }
 
 /**
+ *  VARIABLE VARIABLES
+ */
+function o(){
+  foreach ($arr as &$v) {
+    $v = 3;
+  }
+
+  foreach ($arr as $key => $value) { // OK - cannot have the key without defining the value
+      $key = 3;
+  }
+}
+
+/**
  * ENCAPSULATE VARIABLE
  */
 function p(){
