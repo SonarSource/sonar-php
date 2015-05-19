@@ -137,6 +137,7 @@ public class CheckList {
       UselessObjectCreationCheck.class,
       DuplicateConditionCheck.class,
       DuplicateBranchImplementationCheck.class,
+      InterfaceNameCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }
