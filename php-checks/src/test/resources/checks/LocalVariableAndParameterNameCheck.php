@@ -31,3 +31,7 @@ class C {
 }
 
 $GLOBAL_VAR = 1;          // OK
+
+function f2() {
+  $_GET = array();        // OK
+}

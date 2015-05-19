@@ -19,12 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
-
+import com.google.common.collect.ImmutableSet;
+import com.sonar.sslr.api.AstNode;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
@@ -37,7 +33,11 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 @Rule(
   key = "S117",
@@ -47,6 +47,9 @@ import com.sonar.sslr.api.AstNode;
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
 public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGrammar> {
+
+  private static final ImmutableSet<String> SUPERGLOBALS = ImmutableSet.of(
+    "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   private Deque<Set<String>> checkedVariables = new ArrayDeque<Set<String>>();
@@ -127,7 +130,11 @@ public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGram
   }
 
   private boolean isCompliant(String varName) {
-    return pattern.matcher(StringUtils.remove(varName, "$")).matches();
+    return pattern.matcher(StringUtils.remove(varName, "$")).matches() || isSuperGlobal(varName);
+  }
+
+  private boolean isSuperGlobal(String varName) {
+    return SUPERGLOBALS.contains(varName);
   }
 
   private void setAsCheckedVariable(String varName) {
