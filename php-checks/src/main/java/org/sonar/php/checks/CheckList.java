@@ -138,6 +138,7 @@ public class CheckList {
       DuplicateConditionCheck.class,
       DuplicateBranchImplementationCheck.class,
       InterfaceNameCheck.class,
+      CallToIniSetCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }
