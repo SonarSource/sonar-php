@@ -139,6 +139,7 @@ public class CheckList {
       DuplicateBranchImplementationCheck.class,
       InterfaceNameCheck.class,
       CallToIniSetCheck.class,
+      SleepFunctionUsageCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }

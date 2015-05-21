@@ -1,0 +1,9 @@
+<code>sleep</code> is sometimes used to try to prevent Deny of Service attacks but most of time it's counterproductive.
+
+
+<h2> Noncompliant Code Example </h2>
+<pre>
+if ($a) {
+  sleep(5);
+}
+</pre>
