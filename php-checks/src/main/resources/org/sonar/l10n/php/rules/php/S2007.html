@@ -1,15 +1,18 @@
-<p>
-  Shared coding conventions allow teams to collaborate efficiently. Defining and using global functions, when the convention dictates OOP can be very confusing and difficult to use properly for three reasons. First, you run the risk of name clashes. Second, global functions must be stateless, or they can cause difficult-to-track bugs. Finally, it is difficult to properly test classes that use global functions.
-</p>
-<p>
-  Instead of being declared globally, such functions should be moved into a class, potentially as <code>static</code> functions, so they can be used without a class instance.
-</p>
-<p>
-  This rule checks that only Object Oriented Programming is used and that no functions or procedures are declared outside of a class.
-</p>
+<p>Shared coding conventions allow teams to collaborate efficiently. Defining and using global variables and global functions, when the convention dictates OOP can be confusing and difficult to use properly for multiple reasons:</p>
+<ul>
+<li> You run the risk of name clashes. </li>
+<li> Global functions must be stateless, or they can cause difficult-to-track bugs. </li>
+<li> Global variables can be updated from anywhere and may no longer hold the value you expect.</li>
+<li> It is difficult to properly test classes that use global functions. </li>
+</ul>
+<p>Instead of being declared globally, such variables and functions should be moved into a class, potentially marked <code>static</code>, so they can be used without a class instance. </p>
+<p>This rule  checks that only Object Oriented Programming is used and that no functions or procedures are declared outside of a class.</p>
 <h2>Noncompliant Code Example</h2>
+
 <pre>
 &lt;?php
+
+$name = "Bob"; // Noncompliant
 
 function doSomething($arg) {   // Noncompliant
   //...
@@ -19,16 +22,18 @@ class MyClass {
     //...
 }
 </pre>
-
 <h2>Compliant Solution</h2>
-<pre>
-&lt;?php
 
+<pre>
+&lt;?php 
 class MyClass {
 
-  public static function doSomething($arg) {   // Compliant
+  public static $name = "Bob"; // Compliant
+
+  public static function doSomething($arg) {              // Compliant
     //...
   }
   //...
 }
 </pre>
+

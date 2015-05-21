@@ -42,6 +42,10 @@ public class CheckUtils {
   private CheckUtils() {
   }
 
+  public static boolean isSuperGlobal(String varName) {
+    return "$GLOBALS".equals(varName) || PREDEFINED_VARIABLES.values().contains(varName);
+  }
+
   /**
    * Returns whether a class member (method or variable) is static or not.
    *

@@ -33,6 +33,7 @@ public class FunctionDefineOutsideClassCheckTest extends CheckTest {
 
     checkMessagesVerifier.verify(file.getCheckMessages())
       .next().atLine(3).withMessage("Move this function into a class.")
+      .next().atLine(17).withMessage("Move this variable into a class.")
       .noMore();
   }
 

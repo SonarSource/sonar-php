@@ -23,29 +23,65 @@ import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 @Rule(
   key = "S2007",
-  name = "Functions should not be defined outside of classes",
+  name = "Functions and variables should not be defined outside of classes",
   priority = Priority.MAJOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNIT_TESTABILITY)
 @SqaleConstantRemediation("15min")
 public class FunctionDefineOutsideClassCheck extends SquidCheck<LexerlessGrammar> {
 
+  private final Deque<AstNode> scopeDeclarations = new ArrayDeque<>();
+
   @Override
   public void init() {
-    subscribeTo(PHPGrammar.FUNCTION_DECLARATION);
+    subscribeTo(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION, PHPGrammar.ASSIGNMENT_EXPR);
+  }
+
+  @Override
+  public void visitFile(AstNode astNode) {
+    scopeDeclarations.clear();
   }
 
   @Override
   public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Move this function into a class.", astNode);
+    if (astNode.is(PHPGrammar.FUNCTION_DECLARATION)) {
+      getContext().createLineViolation(this, "Move this function into a class.", astNode);
+    } else if (scopeDeclarations.isEmpty()) {
+      checkAssignment(astNode);
+    }
+    if (astNode.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION)) {
+      scopeDeclarations.push(astNode);
+    }
+  }
+
+  @Override
+  public void leaveNode(AstNode astNode) {
+    if (astNode.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION)) {
+      scopeDeclarations.pop();
+    }
+  }
+
+  private void checkAssignment(AstNode astNode) {
+    AstNode memberExpr = astNode.getFirstChild();
+    AstNode variable = memberExpr.getFirstChild();
+    if (memberExpr.getNumberOfChildren() == 1 && variable.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
+      String varName = variable.getTokenOriginalValue();
+      if (memberExpr.getTokens().size() == 1 && !CheckUtils.isSuperGlobal(varName)) {
+        getContext().createLineViolation(this, "Move this variable into a class.", astNode);
+      }
+    }
   }
 
 }
