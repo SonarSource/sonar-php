@@ -37,7 +37,7 @@ public class UnusedFunctionParametersCheckTest extends CheckTest {
       .next().atLine(11).withMessage("Remove the unused function parameter \"$p1\".")
       .next().atLine(12).withMessage("Remove the unused function parameter \"$p2\".")
       .next().atLine(20).withMessage("Remove the unused function parameters \"$p2, $p3\".")
-      .next().atLine(44).withMessage("Remove the unused function parameter \"$p1\".")
+      .next().atLine(46).withMessage("Remove the unused function parameter \"$p1\".")
       .noMore();
   }
 }

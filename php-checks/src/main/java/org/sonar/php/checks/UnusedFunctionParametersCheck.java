@@ -116,7 +116,7 @@ public class UnusedFunctionParametersCheck extends SquidCheck<LexerlessGrammar> 
         currentScope.use(astNode);
 
       } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
-        currentScope.use("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION).getTokenOriginalValue());
+        currentScope.use("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION, PHPGrammar.SEMI_COMPLEX_RECOVERY_EXPRESSION).getTokenOriginalValue());
       }
     }
   }

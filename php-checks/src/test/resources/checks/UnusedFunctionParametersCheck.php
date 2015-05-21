@@ -21,7 +21,9 @@ abstract class C {
       return $p1;
   }
 
-  public function f1($p1, $p2, $p3) {    // OK
+  public function f1($p1, $p2, $p3, $var) {    // OK
+      // FIXME: tests "SEMI_COMPLEX_RECOVERY_EXPRESSION"
+      doSomething("${var}");
       return "$p1 ${p2} {$p3}";
   }
 
