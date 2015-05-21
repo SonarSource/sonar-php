@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.PHPGrammar;
@@ -35,7 +34,6 @@ import org.sonar.sslr.parser.LexerlessGrammar;
   name = "Configuration should not be changed dynamically",
   priority = Priority.CRITICAL,
   tags = {Tags.PITFALL})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("5min")
 public class CallToIniSetCheck extends SquidCheck<LexerlessGrammar> {
