@@ -140,6 +140,7 @@ public class CheckList {
       InterfaceNameCheck.class,
       CallToIniSetCheck.class,
       SleepFunctionUsageCheck.class,
+      HardCodedCredentialsCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }

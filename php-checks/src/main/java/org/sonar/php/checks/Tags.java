@@ -35,9 +35,11 @@ public class Tags {
   public static final String PITFALL = "pitfall";
   public static final String PSR1 = "psr1";
   public static final String PSR2 = "psr2";
+  public static final String SANS_TOP25_POROUS = "sans-top25-porous";
   public static final String SECURITY = "security";
   public static final String UNUSED = "unused";
   public static final String USER_EXPERIENCE = "user-experience";
+  public static final String OWASP_A2 = "owasp-a2";
   public static final String OWASP_A3 = "owasp-a3";
 
   private Tags() {
