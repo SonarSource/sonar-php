@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -98,13 +99,19 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
   private void parseFile(File coverageReportFile) {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
+    List<String> unresolvedPaths = Lists.newArrayList();
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      LOG.info("Project: " + projectNode.getName());
-      parseFileNodes(projectNode.getFiles());
-      parsePackagesNodes(projectNode.getPackages());
+      parseFileNodes(projectNode.getFiles(), unresolvedPaths);
+      parsePackagesNodes(projectNode.getPackages(), unresolvedPaths);
       saveMeasureForMissingFiles();
+    }
+    if (!unresolvedPaths.isEmpty()) {
+      LOG.warn(
+        String.format(
+          "Could not resolve %d file paths in %s, first unresolved path: %s",
+          unresolvedPaths.size(), coverageReportFile.getName(), unresolvedPaths.get(0)));
     }
   }
 
@@ -137,18 +144,18 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
     }
   }
 
-  private void parsePackagesNodes(List<PackageNode> packages) {
+  private void parsePackagesNodes(List<PackageNode> packages, List<String> unresolvedPaths) {
     if (packages != null) {
       for (PackageNode packageNode : packages) {
-        parseFileNodes(packageNode.getFiles());
+        parseFileNodes(packageNode.getFiles(), unresolvedPaths);
       }
     }
   }
 
-  private void parseFileNodes(List<FileNode> fileNodes) {
+  private void parseFileNodes(List<FileNode> fileNodes, List<String> unresolvedPaths) {
     if (fileNodes != null) {
       for (FileNode file : fileNodes) {
-        saveCoverageMeasure(file);
+        saveCoverageMeasure(file, unresolvedPaths);
       }
     }
   }
@@ -157,10 +164,12 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    * Saves the required metrics found on the fileNode
    *
    * @param fileNode the file
+   * @param unmappedPaths list of paths which cannot be mapped to imported files
    */
-  protected void saveCoverageMeasure(FileNode fileNode) {
+  protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths) {
+    String path = fileNode.getName();
     //PHP supports only absolute paths
-    InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(fileNode.getName()));
+    InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(path));
 
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
@@ -190,6 +199,8 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
       context.saveMeasure(phpFile, linesToCoverMetric, totalStatementsCount);
       context.saveMeasure(phpFile, this.uncoveredLinesMetric, uncoveredLines);
       context.saveMeasure(phpFile, this.lineCoverageMetric, ParsingUtils.scaleValue(lineCoverage * 100.0));
+    } else {
+      unresolvedPaths.add(path);
     }
   }
 
