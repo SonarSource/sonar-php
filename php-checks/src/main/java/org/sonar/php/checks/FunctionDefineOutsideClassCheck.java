@@ -19,11 +19,13 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.Sets;
 import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -32,6 +34,7 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Set;
 
 @Rule(
   key = "S2007",
@@ -42,34 +45,37 @@ import java.util.Deque;
 @SqaleConstantRemediation("15min")
 public class FunctionDefineOutsideClassCheck extends SquidCheck<LexerlessGrammar> {
 
-  private final Deque<AstNode> scopeDeclarations = new ArrayDeque<>();
+  private final Deque<AstNode> scopes = new ArrayDeque<>();
+  private final Set<String> globalVariableNames = Sets.newHashSet();
 
   @Override
   public void init() {
-    subscribeTo(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION, PHPGrammar.ASSIGNMENT_EXPR);
+    subscribeTo(FunctionUtils.functions());
+    subscribeTo(PHPGrammar.ASSIGNMENT_EXPR);
   }
 
   @Override
-  public void visitFile(AstNode astNode) {
-    scopeDeclarations.clear();
+  public void leaveFile(AstNode astNode) {
+    scopes.clear();
+    globalVariableNames.clear();
   }
 
   @Override
   public void visitNode(AstNode astNode) {
     if (astNode.is(PHPGrammar.FUNCTION_DECLARATION)) {
       getContext().createLineViolation(this, "Move this function into a class.", astNode);
-    } else if (scopeDeclarations.isEmpty()) {
+    } else if (scopes.isEmpty()) {
       checkAssignment(astNode);
     }
-    if (astNode.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION)) {
-      scopeDeclarations.push(astNode);
+    if (astNode.is(FunctionUtils.functions())) {
+      scopes.push(astNode);
     }
   }
 
   @Override
   public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.METHOD_DECLARATION)) {
-      scopeDeclarations.pop();
+    if (astNode.is(FunctionUtils.functions())) {
+      scopes.pop();
     }
   }
 
@@ -78,8 +84,9 @@ public class FunctionDefineOutsideClassCheck extends SquidCheck<LexerlessGrammar
     AstNode variable = memberExpr.getFirstChild();
     if (memberExpr.getNumberOfChildren() == 1 && variable.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
       String varName = variable.getTokenOriginalValue();
-      if (memberExpr.getTokens().size() == 1 && !CheckUtils.isSuperGlobal(varName)) {
+      if (memberExpr.getTokens().size() == 1 && !CheckUtils.isSuperGlobal(varName) && !globalVariableNames.contains(varName)) {
         getContext().createLineViolation(this, "Move this variable into a class.", astNode);
+        globalVariableNames.add(varName);
       }
     }
   }
