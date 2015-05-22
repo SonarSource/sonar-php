@@ -78,7 +78,7 @@ public class FileHeaderCheck extends SquidCheck<LexerlessGrammar> implements Cha
       throw new SonarException(e);
     }
 
-    if (!matches(expectedLines, lines)) {
+    if (!lines.isEmpty() && !matches(expectedLines, lines)) {
       getContext().createFileViolation(this, "Add or update the header of this file.");
     }
   }

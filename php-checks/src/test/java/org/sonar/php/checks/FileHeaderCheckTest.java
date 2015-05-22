@@ -107,6 +107,12 @@ public class FileHeaderCheckTest extends CheckTest {
     file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FileHeaderCheck/file3.php"), check);
     CheckMessagesVerifier.verify(file.getCheckMessages())
       .noMore();
+
+    check = new FileHeaderCheck();
+
+    file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FileHeaderCheck/empty.php"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages())
+      .noMore();
   }
 
 }
