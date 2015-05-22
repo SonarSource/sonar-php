@@ -21,11 +21,14 @@ namespace another\bar;      // NOK - no blank line after namespace
 {
 }
 
+namespace                   // OK
+{
+  use x;                    // OK  
+}
+
 namespace foo\bar;          // OK
 
 use my\space\MyClass;       // OK
 
 {
 }
-
-

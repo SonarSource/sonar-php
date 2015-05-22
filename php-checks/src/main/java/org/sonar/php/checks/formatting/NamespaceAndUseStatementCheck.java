@@ -41,7 +41,7 @@ public class NamespaceAndUseStatementCheck {
       useNodes.add(node);
       AstNode nextNode = node.getNextAstNode().getFirstChild();
 
-      if (nextNode.isNot(PHPGrammar.USE_STATEMENT)) {
+      if (nextNode == null || nextNode.isNot(PHPGrammar.USE_STATEMENT)) {
         checkUsesAreBeforeNamespace(formattingCheck, nextNode);
         checkBlankLineAfterUses(formattingCheck, node);
         useNodes.clear();
@@ -54,13 +54,13 @@ public class NamespaceAndUseStatementCheck {
   }
 
   private void checkBlankLineAfterUses(FormattingStandardCheck formattingCheck, AstNode useStatement) {
-    if (formattingCheck.hasUseBlankLine && isNotFollowedWithBlankLine(useStatement)) {
+    if (formattingCheck.hasUseBlankLine && isNotFollowedWithBlankLine(useStatement) && useStatement.getParent().getNextSibling() != null) {
       formattingCheck.reportIssue("Add a blank line after this \"use\" declaration.", Iterables.getLast(useNodes));
     }
   }
 
   private void checkUsesAreBeforeNamespace(FormattingStandardCheck formattingCheck, AstNode nextNode) {
-    if (formattingCheck.isUseAfterNamespace && nextNode.is(PHPGrammar.NAMESPACE_STATEMENT)) {
+    if (formattingCheck.isUseAfterNamespace && nextNode != null && nextNode.is(PHPGrammar.NAMESPACE_STATEMENT)) {
       formattingCheck.reportIssue("Move the use declarations after the namespace declarations.", useNodes.get(0));
     }
   }
