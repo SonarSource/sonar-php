@@ -33,7 +33,8 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @Rule(
   key = "S2964",
   name = "\"sleep\" should not be called",
-  priority = Priority.CRITICAL)
+  priority = Priority.CRITICAL,
+  tags = {Tags.SECURITY})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SECURITY_FEATURES)
 @SqaleConstantRemediation("15min")
 public class SleepFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
