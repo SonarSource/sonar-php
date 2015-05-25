@@ -32,9 +32,9 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S2964",
-  name = "\"sleep\" function should not be used",
-  priority = Priority.MAJOR)
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INPUT_VALIDATION_AND_REPRESENTATION)
+  name = "\"sleep\" should not be called",
+  priority = Priority.CRITICAL)
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SECURITY_FEATURES)
 @SqaleConstantRemediation("15min")
 public class SleepFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
 
@@ -46,7 +46,7 @@ public class SleepFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
   @Override
   public void visitNode(AstNode astNode) {
     if (isSleepFunctionCall(astNode)) {
-      getContext().createLineViolation(this, "Remove the usage of this \"sleep\".", astNode);
+      getContext().createLineViolation(this, "Remove this call to \"sleep\".", astNode);
     }
   }
 

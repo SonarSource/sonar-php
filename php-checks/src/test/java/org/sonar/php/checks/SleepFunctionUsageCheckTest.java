@@ -32,7 +32,7 @@ public class SleepFunctionUsageCheckTest extends CheckTest {
     SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SleepFunctionUsageCheck.php"), new SleepFunctionUsageCheck());
 
     checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Remove the usage of this \"sleep\".")
+      .next().atLine(4).withMessage("Remove this call to \"sleep\".")
       .noMore();
   }
 }

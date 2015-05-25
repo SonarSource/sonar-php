@@ -1,9 +1,9 @@
-<code>sleep</code> is sometimes used to try to prevent Deny of Service attacks but most of time it's counterproductive.
+<code>sleep</code> is sometimes used in a mistaken attempt to prevent Denial of Service (DoS) attacks by throttling response rate. But because it ties up a thread, each request takes longer to serve that it otherwise would, making the application more vulnerable to DoS attacks, rather than less.
 
 
 <h2> Noncompliant Code Example </h2>
 <pre>
-if ($a) {
-  sleep(5);
+if (is_bad_ip($requester)) {
+  sleep(5);  // Noncompliant
 }
 </pre>
