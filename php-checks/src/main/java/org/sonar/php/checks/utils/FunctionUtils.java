@@ -51,7 +51,7 @@ public class FunctionUtils {
    */
   public static String getFunctionName(AstNode functionDec) {
     Preconditions.checkArgument(functionDec.is(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
-    return functionDec.is(PHPGrammar.FUNCTION_EXPRESSION) ? "expression" : "\"" + (functionDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue() + "\"");
+    return functionDec.is(PHPGrammar.FUNCTION_EXPRESSION) ? "expression" : ("\"" + functionDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue() + "\"");
   }
 
   /**
