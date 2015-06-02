@@ -24,7 +24,7 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.parser.LexerlessGrammar;
 import org.sonar.sslr.tests.Assertions;
 
-public class RuleTest {
+abstract public class RuleTest {
 
   protected final LexerlessGrammar g = PHPGrammar.createGrammar();
   protected Rule rule;

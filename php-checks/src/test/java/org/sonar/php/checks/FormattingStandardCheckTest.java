@@ -24,7 +24,7 @@ import org.sonar.plugins.php.CheckTest;
 
 import java.lang.reflect.Field;
 
-public class FormattingStandardCheckTest extends CheckTest {
+abstract public class FormattingStandardCheckTest extends CheckTest {
 
   protected FormattingStandardCheck check = new FormattingStandardCheck();
   protected static final String TEST_DIR = "formattingCheck/";

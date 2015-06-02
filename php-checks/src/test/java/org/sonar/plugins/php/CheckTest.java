@@ -21,7 +21,7 @@ package org.sonar.plugins.php;
 
 import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
 
-public class CheckTest {
+abstract public class CheckTest {
 
   protected CheckMessagesVerifierRule checkMessagesVerifier = new CheckMessagesVerifierRule();
 }

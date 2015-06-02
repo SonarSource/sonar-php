@@ -70,9 +70,9 @@ public class MoreThanOneClassInFileCheck extends SquidCheck<LexerlessGrammar> {
     if ((nbClass + nbInterface) > 1) {
 
       CheckMessage msg = new CheckMessage((Object) this, "There are {0}{1}{2}in this file; move all but one of them to other files.",
-        nbClass > 0 ? nbClass + " independent classes " : "",
+        nbClass > 0 ? (nbClass + " independent classes ") : "",
         nbClass > 0 && nbInterface > 0 ? "and " : "",
-        nbInterface > 0 ? nbInterface + " independent interfaces " : "");
+        nbInterface > 0 ? (nbInterface + " independent interfaces ") : "");
       int cost = nbClass + nbInterface - 1;
       msg.setCost(cost);
       getContext().log(msg);
