@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Test Suite" tests="12" assertions="11" failures="7" errors="0" time="8.036518">
+    <testsuite name="Example_MathTest" file="SomeTest.php" fullPackage="Example" package="Example" tests="12" assertions="11" failures="7" errors="0" time="8.036518">
+      <testcase name="testAddSuccess" class="Example_MathTest" file="SomeTest.php" line="20" assertions="1" time="2.006604"/>
+      <testcase name="testSubSuccess" class="Example_MathTest" file="SomeTest.php" line="29" assertions="1" time="0.000842"/>
+      <testcase name="testSubFail" class="Example_MathTest" file="SomeTest.php" line="37" assertions="1" time="2.006533">
+        <failure type="PHPUnit_Framework_ExpectationFailedException">PhpUnderControl_Example_MathTest::testSubFail
+Failed asserting that 1 matches expected 0.
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/Constraint/IsEqual.php:170
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/Assert.php:2134
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/Assert.php:475
+C:\git\sonar-examples\projects\languages\php\php-sonar-runner-unit-tests\tests\SomeTest.php:92
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/TestCase.php:976
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/TestCase.php:831
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/TestResult.php:648
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/TestCase.php:776
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/TestSuite.php:775
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/TestSuite.php:745
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/Framework/TestSuite.php:705
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/TextUI/TestRunner.php:349
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/TextUI/Command.php:176
+phar://C:/git/sonar-examples/projects/languages/php/php-sonar-runner-unit-tests/.sonar/phpunit-3.7.20.phar/PHPUnit/TextUI/Command.php:129
+</failure>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>
+

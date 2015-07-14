@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1394164581">
+  <project timestamp="1394164581">
+    <file name="Math.php">
+      <class name="Example_Math" namespace="global" fullPackage="Example" package="Example">
+        <metrics methods="4" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="6" coveredelements="4"/>
+      </class>
+      <line num="6" type="method" name="add" crap="1" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="11" type="method" name="sub" crap="1" count="10"/>
+      <line num="13" type="stmt" count="10"/>
+      <line num="16" type="method" name="div" crap="132" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <metrics loc="1" ncloc="1" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="6" coveredelements="4"/>
+    </file>
+    <metrics files="1" loc="1" ncloc="1" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="6" coveredelements="4"/>
+  </project>
+</coverage>
