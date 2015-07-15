@@ -40,8 +40,8 @@ public class PHPIntegrationTest {
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
 
-  public final static String PROJECT_KEY = "com.sonarsource.it.php:metrics";
-  public final static String FILE_KEY = PROJECT_KEY + ":file1.php";
+  public final static String PROJECT_KEY = "com.sonarsource.it.php:symfony-lite";
+  public final static String FILE_KEY = PROJECT_KEY + ":Components/Console/Application.php";
   private static Sonar sonar;
 
   @BeforeClass
@@ -50,11 +50,11 @@ public class PHPIntegrationTest {
     sonar = orchestrator.getServer().getWsClient();
 
     SonarRunner build = SonarRunner.create()
-      .setProjectDir(new File("projects/metrics/"))
+      .setProjectDir(new File("projects/symfony-lite/"))
       .setProjectKey(PROJECT_KEY)
       .setProjectName(PROJECT_KEY)
       .setProjectVersion("1.0")
-      .setSourceDirs(".")
+      .setSourceDirs("Components")
       .setProfile("it-profile");
 
     orchestrator.executeBuild(build);
@@ -63,52 +63,52 @@ public class PHPIntegrationTest {
   @Test
   public void projectMetric() {
     // Size
-    assertThat(getProjectMeasure("ncloc").getIntValue()).isEqualTo(40);
-    assertThat(getProjectMeasure("lines").getIntValue()).isEqualTo(67);
-    assertThat(getProjectMeasure("files").getIntValue()).isEqualTo(2);
-    assertThat(getProjectMeasure("classes").getIntValue()).isEqualTo(1);
-    assertThat(getProjectMeasure("functions").getIntValue()).isEqualTo(4);
+    assertThat(getProjectMeasure("ncloc").getIntValue()).isEqualTo(2346);
+    assertThat(getProjectMeasure("lines").getIntValue()).isEqualTo(5322);
+    assertThat(getProjectMeasure("files").getIntValue()).isEqualTo(30);
+    assertThat(getProjectMeasure("classes").getIntValue()).isEqualTo(31);
+    assertThat(getProjectMeasure("functions").getIntValue()).isEqualTo(256);
 
     // Comments
-    assertThat(getProjectMeasure("comment_lines_density").getValue()).isEqualTo(16.7);
-    assertThat(getProjectMeasure("comment_lines").getIntValue()).isEqualTo(8);
+    assertThat(getProjectMeasure("comment_lines_density").getValue()).isEqualTo(31.5);
+    assertThat(getProjectMeasure("comment_lines").getIntValue()).isEqualTo(1078);
     assertThat(getProjectMeasure("public_documented_api_density")).isNull();
     assertThat(getProjectMeasure("public_undocumented_api")).isNull();
-    assertThat(getProjectMeasure("commented_out_code_lines").getIntValue()).isEqualTo(2);
+    assertThat(getProjectMeasure("commented_out_code_lines").getIntValue()).isEqualTo(0);
     assertThat(getProjectMeasure("public_api")).isNull();
 
     // Complexity
-    assertThat(getProjectMeasure("function_complexity").getValue()).isEqualTo(1.8);
-    assertThat(getProjectMeasure("class_complexity").getValue()).isEqualTo(2);
-    assertThat(getProjectMeasure("file_complexity").getValue()).isEqualTo(5.5);
-    assertThat(getProjectMeasure("complexity").getValue()).isEqualTo(11.0);
-    assertThat(getProjectMeasure("function_complexity_distribution").getData()).isEqualTo("1=2;2=2;4=0;6=0;8=0;10=0;12=0");
-    assertThat(getProjectMeasure("file_complexity_distribution").getData()).isEqualTo("0=1;5=0;10=1;20=0;30=0;60=0;90=0");
+    assertThat(getProjectMeasure("function_complexity").getValue()).isEqualTo(2.7);
+    assertThat(getProjectMeasure("class_complexity").getValue()).isEqualTo(22.2);
+    assertThat(getProjectMeasure("file_complexity").getValue()).isEqualTo(23);
+    assertThat(getProjectMeasure("complexity").getValue()).isEqualTo(689);
+    assertThat(getProjectMeasure("function_complexity_distribution").getData()).isEqualTo("1=146;2=47;4=35;6=11;8=6;10=4;12=7");
+    assertThat(getProjectMeasure("file_complexity_distribution").getData()).isEqualTo("0=5;5=8;10=6;20=6;30=3;60=0;90=2");
     assertThat(getProjectMeasure("class_complexity_distribution")).isNull();
   }
 
   @Test
   public void fileMetrics() {
     // Size
-    assertThat(getFileMeasure("ncloc").getIntValue()).isEqualTo(37);
-    assertThat(getFileMeasure("lines").getIntValue()).isEqualTo(58);
+    assertThat(getFileMeasure("ncloc").getIntValue()).isEqualTo(507);
+    assertThat(getFileMeasure("lines").getIntValue()).isEqualTo(926);
     assertThat(getFileMeasure("files").getIntValue()).isEqualTo(1);
-    assertThat(getFileMeasure("classes").getIntValue()).isEqualTo(1);
-    assertThat(getFileMeasure("functions").getIntValue()).isEqualTo(3);
+    assertThat(getFileMeasure("classes").getIntValue()).isEqualTo(2);
+    assertThat(getFileMeasure("functions").getIntValue()).isEqualTo(38);
 
     // Comments
-    assertThat(getFileMeasure("comment_lines_density").getValue()).isEqualTo(17.8);
-    assertThat(getFileMeasure("comment_lines").getIntValue()).isEqualTo(8);
+    assertThat(getFileMeasure("comment_lines_density").getValue()).isEqualTo(21.3);
+    assertThat(getFileMeasure("comment_lines").getIntValue()).isEqualTo(137);
     assertThat(getFileMeasure("public_documented_api_density")).isNull();
     assertThat(getFileMeasure("public_undocumented_api")).isNull();
-    assertThat(getFileMeasure("commented_out_code_lines").getIntValue()).isEqualTo(2);
+    assertThat(getFileMeasure("commented_out_code_lines")).isNull();
     assertThat(getFileMeasure("public_api")).isNull();
 
     // Complexity
-    assertThat(getFileMeasure("function_complexity").getValue()).isEqualTo(2.0);
-    assertThat(getFileMeasure("class_complexity").getValue()).isEqualTo(2.0);
-    assertThat(getFileMeasure("file_complexity").getValue()).isEqualTo(10.0);
-    assertThat(getFileMeasure("complexity").getValue()).isEqualTo(10.0);
+    assertThat(getFileMeasure("function_complexity").getValue()).isEqualTo(4.3);
+    assertThat(getFileMeasure("class_complexity").getValue()).isEqualTo(76.5);
+    assertThat(getFileMeasure("file_complexity").getValue()).isEqualTo(153);
+    assertThat(getFileMeasure("complexity").getValue()).isEqualTo(153);
   }
 
   /**
@@ -116,10 +116,10 @@ public class PHPIntegrationTest {
    */
   @Test
   public void testFileDuplicationResults() throws Exception {
-    assertThat(getFileMeasure("duplicated_lines").getIntValue()).isEqualTo(22);
+    assertThat(getFileMeasure("duplicated_lines").getIntValue()).isEqualTo(27);
     assertThat(getFileMeasure("duplicated_blocks").getIntValue()).isEqualTo(2);
     assertThat(getFileMeasure("duplicated_files").getIntValue()).isEqualTo(1);
-    assertThat(getFileMeasure("duplicated_lines_density").getValue()).isEqualTo(37.9);
+    assertThat(getFileMeasure("duplicated_lines_density").getValue()).isEqualTo(2.9);
   }
 
   /**
