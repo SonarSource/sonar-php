@@ -6,7 +6,15 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn verify -B -e -V
+  - ./travis.sh
+
+env:
+  - TESTS=CI
+  - TESTS=IT-DEV
+  - TESTS=IT-LATEST
+
+matrix:
+  fast_finish: true
 
 cache:
   directories:
