@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+  <name>it-profile</name>
+  <language>php</language>
+  <rules>
+    <rule>
+      <repositoryKey>common-php</repositoryKey>
+      <key>DuplicatedBlocks</key>
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>common-php</repositoryKey>
+      <key>InsufficientCommentDensity</key>
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>common-php</repositoryKey>
+      <key>InsufficientLineCoverage</key>
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>common-php</repositoryKey>
+      <key>FailedUnitTests</key>
+      <priority>INFO</priority>
+    </rule>
+  </rules>
+</profile>
