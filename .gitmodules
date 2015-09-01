@@ -1,0 +1,3 @@
+[submodule "its/sources"]
+	path = its/sources
+	url = git@github.com:SonarCommunity/php-test-sources.git
