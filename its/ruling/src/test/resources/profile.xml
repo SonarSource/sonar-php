@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+  <name>rules</name>
+  <language>php</language>
+  <rules>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1523</key> <!-- eval use -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S107</key> <!-- too many function parameters -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1479</key> <!-- too cases in switch -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>max</key>
+          <value>100</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1116</key> <!-- empty statement -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1145</key> <!-- if condition always true or false -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1066</key> <!-- collapsible if statement -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1151</key> <!-- switch/case too big -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1142</key> <!-- too many return -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S100</key> <!-- function name -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1126</key> <!-- return of boolean expression -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1125</key> <!-- boolean equality comparison -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1599</key> <!-- variable variables -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S131</key> <!-- switch without default -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1301</key> <!-- at least three cases in switch -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1264</key> <!-- for hiding while -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S139</key> <!-- trailing comment -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S126</key> <!-- else if without else -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S104</key> <!-- too many lines in file -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S103</key> <!-- line length -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>maximumLineLength</key>
+          <value>140</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S108</key> <!-- empty nested block -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S128</key> <!-- non empty case statement -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1600</key> <!-- deprecated predefined variable -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S134</key> <!-- nested control flow depth -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>max</key>
+          <value>4</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1192</key> <!-- string literal duplication -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>threshold</key>
+          <value>10</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1541</key> <!-- function complexity -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>threshold</key>
+          <value>10</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S105</key> <!-- tab character -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1451</key> <!-- file header -->
+      <priority>INFO</priority>
+      <parameters>
+        <prameter>
+          <![CDATA[/*
+          * This file is part of the Symfony package.
+          *
+          * (c) Fabien Potencier <fabien@symfony.com>
+          *
+          * For the full copyright and license information, please view the LICENSE
+          * file that was distributed with this source code.
+          */]]>
+        </prameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1105</key> <!-- left curly brace ends line -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S121</key> <!-- always use curly braces -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1109</key> <!-- right curly brace ends line -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S907</key> <!-- goto use -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S101</key> <!-- class name -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S116</key> <!-- field name -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1172</key> <!-- unused parameter -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1067</key> <!-- expression complexity -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S127</key> <!-- for loop counter changed -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S115</key> <!-- const name -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S138</key> <!-- too many lines in function -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>max</key>
+          <value>100</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1448</key> <!-- too many methods in class -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1311</key> <!-- class complexity -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1135</key> <!-- todo tag presence -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1134</key> <!-- fixme tag presence -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1603</key> <!-- deprecated constructor -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1605</key> <!-- call parent constructor -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1131</key> <!-- trailing whitespace -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S113</key> <!-- missing new line at EOF -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1068</key> <!-- unused private field -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1481</key> <!-- unused local variable -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S122</key> <!-- one statement per line -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1200</key> <!-- class coupling -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1106</key> <!-- left curly brace starts line -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S881</key> <!-- increment decrement in sub expression -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1117</key> <!-- local variable shadows class field -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S117</key> <!-- local variable and parameter name -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1488</key> <!-- immediately returned or thrown variable -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S125</key> <!-- commented out code -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1793</key> <!-- "else if" usage instead of "elseif" -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1799</key> <!-- exit or die usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1765</key> <!-- var keyword usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1784</key> <!-- missing method visibility-->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1781</key> <!-- keywords and constant not lower case -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1766</key> <!-- one property per statement-->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1124</key> <!-- modifiers order -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1780</key> <!-- closing tag in full php file -->
+      <priority>INFO</priority>
+    </rule>
+    <!--<rule>--> <!-- deactivated because it is plateform dependent -->
+      <!--<repositoryKey>php</repositoryKey>-->
+      <!--<key>S1779</key> &lt;!&ndash; non LF as EOL &ndash;&gt;-->
+      <!--<priority>INFO</priority>-->
+    <!--</rule>-->
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1788</key> <!-- argument with default value not last -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1808</key> <!-- formatting standard -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1757</key> <!-- opening tag -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2046</key> <!-- perl style comments -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2042</key> <!-- too many lines in class -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>maximumLinesThreshold</key>
+          <value>500</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2044</key> <!-- php_sapi_name function usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2041</key> <!-- echo with parenthesis -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2002</key> <!-- silenced errors with @ -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1820</key> <!-- class with too many fields -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2014</key> <!-- this variable usage in static context -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1998</key> <!-- reference in function call -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2010</key> <!-- logical word operator usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1536</key> <!-- code duplicated function argument -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1763</key> <!-- unreachable code -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1990</key> <!-- redundant final -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1144</key> <!-- unused private method -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2007</key> <!-- define function outside of class -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2037</key> <!-- self keyword usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2036</key> <!-- file with symbols & side effects -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2011</key> <!-- global keyword and array usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1996</key> <!-- more than 1 class in file -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2038</key> <!-- lower case color -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2043</key> <!-- directly accessing super global -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2003</key> <!-- require instead of require_once -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1997</key> <!-- inline HTML in file -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2005</key> <!-- concatenated string literal -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2004</key> <!-- function nested level -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>max</key>
+          <value>2</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2000</key> <!-- character before opening PHP tag -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2047</key> <!-- method name returning boolean -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1578</key> <!-- file name -->
+      <priority>INFO</priority>
+      <parameters>
+        <parameter>
+          <key>format</key>
+          <value>[A-Z][A-Za-z0-9]+.php</value>
+        </parameter>
+      </parameters>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2001</key> <!-- PHP5 deprecated functions usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1185</key> <!-- overriding method simply call parent -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S112</key> <!-- generic exception usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2830</key> <!-- constructor dependency inversion -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1764</key> <!-- identical operands in binary expression -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1656</key> <!-- self assignment -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1848</key> <!-- useless object creation -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1862</key> <!-- duplicate condition -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1871</key> <!-- duplicate branch implementation -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S114</key> <!-- interface name convention -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2068</key> <!-- hardcoded credentials -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S2918</key> <!-- call to ini_set -->
+      <priority>INFO</priority>
+    </rule>
+  </rules>
+</profile>

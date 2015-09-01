@@ -8,30 +8,28 @@ function installTravisTools {
   source ~/.local/bin/install
 }
 
-case "$TESTS" in
+case "$TEST" in
 
-CI)
+ci)
   mvn verify -B -e -V
   ;;
 
-IT-DEV)
+plugin|ruling)
   installTravisTools
 
-  mvn install -T2 -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
+  mvn package -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
 
-  build_snapshot "SonarSource/sonarqube"
+  if [ "$SQ_VERSION" = "DEV" ] ; then
+    build_snapshot "SonarSource/sonarqube"
+  fi
 
-  cd its/plugin
-  mvn -DphpVersion="DEV" -Dsonar.runtimeVersion="DEV" -Dmaven.test.redirectTestOutputToFile=false install
+  cd its/$TEST
+  mvn -DphpVersion="DEV" -Dsonar.runtimeVersion="$SQ_VERSION" -Dmaven.test.redirectTestOutputToFile=false install
   ;;
 
-IT-LTS)
-  installTravisTools
-
-  mvn install -T2 -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
-
-  cd its/plugin
-  mvn -DphpVersion="DEV" -Dsonar.runtimeVersion="LTS_OR_OLDEST_COMPATIBLE" -Dmaven.test.redirectTestOutputToFile=false install
+*)
+  echo "Unexpected TEST mode: $TEST"
+  exit 1
   ;;
 
 esac

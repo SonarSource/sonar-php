@@ -1,0 +1,8 @@
+{
+'project:symfony/Symfony/Component/HttpFoundation/Tests/BinaryFileResponseTest.php':[
+146,
+],
+'project:symfony/Symfony/Component/HttpKernel/Tests/HttpCache/HttpCacheTest.php':[
+617,
+],
+}
