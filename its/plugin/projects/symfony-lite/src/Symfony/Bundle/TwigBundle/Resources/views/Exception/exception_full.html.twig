@@ -1,9 +1,0 @@
-{% extends 'TwigBundle::layout.html.twig' %}
-
-{% block title %}
-    {{ exception.message }} ({{ status_code }} {{ status_text }})
-{% endblock %}
-
-{% block body %}
-    {% include 'TwigBundle:Exception:exception.html.twig' %}
-{% endblock %}
