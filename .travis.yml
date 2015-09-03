@@ -16,7 +16,7 @@ env:
     SQ_VERSION=DEV
 
   - TEST=plugin
-    SQ_VERSION=LTS_OR_OLDEST_COMPATIBLE
+    SQ_VERSION=LTS
 
 matrix:
   fast_finish: true
