@@ -1,6 +1,10 @@
 Sonar PHP plugin
 =========================
 
+### Build status
+
+[![Build Status](https://travis-ci.org/SonarCommunity/sonar-php.svg?branch=master)](https://travis-ci.org/SonarCommunity/sonar-php)
+
 This is the Sonar PHP plugin
 
 Project homepage:
