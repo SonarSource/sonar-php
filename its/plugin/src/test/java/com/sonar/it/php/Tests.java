@@ -29,8 +29,7 @@ public class Tests {
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
-      .addPlugin(PLUGIN_KEY)
-      .setMainPluginKey(PLUGIN_KEY)
+      .addPlugin(FileLocation.of("../../sonar-php-plugin/target/sonar-php-plugin.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/com/sonar/it/php/profile.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
   }

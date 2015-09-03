@@ -9,16 +9,13 @@ import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarRunner;
 import com.sonar.orchestrator.locator.FileLocation;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class PHPRulingTest {
 
@@ -27,8 +24,7 @@ public class PHPRulingTest {
 
   @ClassRule
   public static Orchestrator ORCHESTRATOR = Orchestrator.builderEnv()
-    .addPlugin(PLUGIN_KEY)
-    .setMainPluginKey(PLUGIN_KEY)
+    .addPlugin(FileLocation.of("../../sonar-php-plugin/target/sonar-php-plugin.jar"))
     .setOrchestratorProperty("litsVersion", "0.5")
     .addPlugin("lits")
     .restoreProfileAtStartup(FileLocation.of("src/test/resources/profile.xml"))
