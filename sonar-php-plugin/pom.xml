@@ -32,7 +32,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>php-squid</artifactId>
+      <artifactId>php-frontend</artifactId>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

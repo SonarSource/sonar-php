@@ -72,7 +72,7 @@ public class PhpPlugin extends SonarPlugin {
       PhpCommonRulesEngine.class,
       PhpCommonRulesDecorator.class,
 
-      PHPSquidSensor.class,
+      PHPSensor.class,
 
       PHPRulesDefinition.class,
       PHPProfile.class,

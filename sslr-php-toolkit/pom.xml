@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>php-squid</artifactId>
+      <artifactId>php-frontend</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -61,7 +61,7 @@
             </goals>
             <configuration>
               <includes>
-                <include>${project.groupId}:php-squid</include>
+                <include>${project.groupId}:php-frontend</include>
                 <include>org.codehaus.sonar.sslr:sslr-core</include>
                 <include>org.codehaus.sonar.sslr:sslr-xpath</include>
                 <include>jaxen:jaxen</include>
