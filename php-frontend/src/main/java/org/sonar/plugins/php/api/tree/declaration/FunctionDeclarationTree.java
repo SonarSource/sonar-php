@@ -27,15 +27,16 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import javax.annotation.Nullable;
 
 @Beta
-public interface FunctionDeclarationTree extends DeclarationTree {
+public interface FunctionDeclarationTree extends FunctionTree {
 
   SyntaxToken functionToken();
 
-  @Nullable
+  @Override @Nullable
   SyntaxToken referenceToken();
 
   IdentifierTree name();
 
+  @Override
   ParameterListTree parameters();
 
   BlockTree body();

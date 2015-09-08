@@ -20,36 +20,20 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
 @Beta
-public interface ParameterTree extends DeclarationTree {
+public interface FunctionTree extends DeclarationTree {
 
-  /**
-   * Either {@link PHPKeyword#ARRAY array}, {@link PHPKeyword#CALLABLE callable}
-   * or FULLY_QUALIFIED_CLASS_NAME
-   */
-  @Nullable
-  Tree type();
+  SyntaxToken functionToken();
 
   @Nullable
   SyntaxToken referenceToken();
 
-  @Nullable
-  SyntaxToken ellipsisToken();
+  ParameterListTree parameters();
 
-  VariableIdentifierTree variableIdentifier();
-
-  @Nullable
-  SyntaxToken equalToken();
-
-  @Nullable
-  ExpressionTree initValue();
-
+  Tree body();
 }

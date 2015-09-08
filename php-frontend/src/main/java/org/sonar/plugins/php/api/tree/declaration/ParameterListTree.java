@@ -26,10 +26,10 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 @Beta
 public interface ParameterListTree extends DeclarationTree {
 
-  SyntaxToken openParenthesis();
+  SyntaxToken openParenthesisToken();
 
   SeparatedList<ParameterTree> parameters();
 
-  SyntaxToken closeParenthesis();
+  SyntaxToken closeParenthesisToken();
 
 }

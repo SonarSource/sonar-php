@@ -26,7 +26,6 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @Beta
@@ -45,17 +44,11 @@ public interface MethodDeclarationTree extends ClassMemberTree {
    */
   List<SyntaxToken> modifiersToken();
 
-  SyntaxToken functionToken();
-
-  @Nullable
-  SyntaxToken referenceToken();
-
   IdentifierTree name();
-
-  ParameterListTree parameters();
 
   /**
    * Either {@link PHPPunctuator#SEMICOLON ;} or {@link Tree.Kind#BLOCK block}
    */
   Tree body();
+
 }

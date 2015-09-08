@@ -17,39 +17,35 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.expression;
+import org.sonar.php.api.PHPKeyword;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
-
 @Beta
-public interface ParameterTree extends DeclarationTree {
+public interface CastExpressionTree extends ExpressionTree {
+
+  SyntaxToken openParenthesisToken();
 
   /**
-   * Either {@link PHPKeyword#ARRAY array}, {@link PHPKeyword#CALLABLE callable}
-   * or FULLY_QUALIFIED_CLASS_NAME
+   * Can be:
+   * <ul>
+   *   <li>{@link PHPKeyword#ARRAY array},
+   *   <li>{@link PHPKeyword#UNSET unset}
+   *   <li>integer
+   *   <li>int
+   *   <li>float
+   *   <li>string
+   *   <li>object
+   *   <li>boolean
+   *   <li>bool
+   *   <li>binary
    */
-  @Nullable
-  Tree type();
+  SyntaxToken castType();
 
-  @Nullable
-  SyntaxToken referenceToken();
+  SyntaxToken closeParenthesisToken();
 
-  @Nullable
-  SyntaxToken ellipsisToken();
-
-  VariableIdentifierTree variableIdentifier();
-
-  @Nullable
-  SyntaxToken equalToken();
-
-  @Nullable
-  ExpressionTree initValue();
-
+  ExpressionTree expression();
 }

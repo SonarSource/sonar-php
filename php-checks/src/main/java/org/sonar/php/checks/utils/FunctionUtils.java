@@ -83,7 +83,7 @@ public class FunctionUtils {
 
   /**
    * Test whether a non-private method is owned by a class declared with "extends" or "implements".
-   * 
+   *
    * @param methodDec METHOD_DECLARATION
    * @return true if the node is a non-private method declaration inside a class declared with "extends" or "implements"
    */
@@ -114,7 +114,7 @@ public class FunctionUtils {
    * Returns list of parameters for the given methods, function or anonymous function.
    *
    * @param functionDec is FUNCTION_DECLARATION, METHOD_DECLARATION or FUNCTION_EXPRESSION
-   * @return list of VAR_IDENTIFIER
+   * @return list of VARIABLE_IDENTIFIER
    */
   public static List<AstNode> getFunctionParameters(AstNode functionDec) {
     Preconditions.checkArgument(functionDec.is(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));

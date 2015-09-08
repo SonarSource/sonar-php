@@ -106,7 +106,7 @@ public class LocalVariableScope {
    * Increases usage of the variable passed as parameter if this variable has
    * been declare as a local variable.
    *
-   * @param varNode is VARIABLE_WITHOUT_OBJECTS or VAR_IDENTIFIER, if others nothing will be done.
+   * @param varNode is VARIABLE_WITHOUT_OBJECTS or VARIABLE_IDENTIFIER, if others nothing will be done.
    */
   public void useVariable(AstNode varNode) {
     String varName;

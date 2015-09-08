@@ -19,12 +19,14 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import com.google.common.annotations.Beta;
-import org.sonar.php.tree.impl.SeparatedList;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import java.util.List;
 
 import javax.annotation.Nullable;
-import java.util.List;
+
+import org.sonar.php.tree.impl.SeparatedList;
+
+import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 @Beta
 public interface ClassFieldDeclarationTree extends ClassMemberTree {

@@ -17,39 +17,23 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
+import com.google.common.annotations.Beta;
 
 @Beta
-public interface ParameterTree extends DeclarationTree {
+public interface ArrayInitialiserFunctionTree extends ArrayInitialiserTree {
 
-  /**
-   * Either {@link PHPKeyword#ARRAY array}, {@link PHPKeyword#CALLABLE callable}
-   * or FULLY_QUALIFIED_CLASS_NAME
-   */
-  @Nullable
-  Tree type();
+  SyntaxToken arrayToken();
 
-  @Nullable
-  SyntaxToken referenceToken();
+  SyntaxToken openParenthesisToken();
 
-  @Nullable
-  SyntaxToken ellipsisToken();
+  @Override
+  SeparatedList<ArrayPairTree> arrayPairs();
 
-  VariableIdentifierTree variableIdentifier();
-
-  @Nullable
-  SyntaxToken equalToken();
-
-  @Nullable
-  ExpressionTree initValue();
+  SyntaxToken closeParenthesisToken();
 
 }

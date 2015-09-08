@@ -19,10 +19,11 @@
  */
 package org.sonar.plugins.php.api.tree.lexical;
 
-import com.google.common.annotations.Beta;
+import java.util.List;
+
 import org.sonar.plugins.php.api.tree.Tree;
 
-import java.util.List;
+import com.google.common.annotations.Beta;
 
 /**
  * Represents a token in the syntax tree.

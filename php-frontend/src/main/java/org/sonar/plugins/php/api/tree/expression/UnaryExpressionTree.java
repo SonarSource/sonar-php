@@ -17,39 +17,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
-
+/**
+ * <pre>
+ *   {@link #expression()} {@link Tree.Kind#POSTFIX_INCREMENT ++}
+ *   {@link #expression()} {@link Tree.Kind#POSTFIX_DECREMENT --}
+ *   {@link Tree.Kind++} {@link #expression()}
+ *   {@link Tree.Kind#ERROR_CONTROL @} {@link #expression()}
+ *   {@link Tree.Kind#PREFIX_DECREMENT --} {@link #expression()}
+ *   {@link Tree.Kind#PREFIX_INCREMENT ++} {@link #expression()}
+ *   {@link Tree.Kind#UNARY_PLUS +} {@link #expression()}
+ *   {@link Tree.Kind#UNARY_MINUS -} {@link #expression()}
+ *   {@link Tree.Kind#BITWISE_COMPLEMENT ~} {@link #expression()}
+ *   {@link Tree.Kind#LOGICAL_COMPLEMENT !} {@link #expression()}
+ * </pre>
+ */
 @Beta
-public interface ParameterTree extends DeclarationTree {
+public interface UnaryExpressionTree extends ExpressionTree {
 
-  /**
-   * Either {@link PHPKeyword#ARRAY array}, {@link PHPKeyword#CALLABLE callable}
-   * or FULLY_QUALIFIED_CLASS_NAME
-   */
-  @Nullable
-  Tree type();
+  SyntaxToken operator();
 
-  @Nullable
-  SyntaxToken referenceToken();
-
-  @Nullable
-  SyntaxToken ellipsisToken();
-
-  VariableIdentifierTree variableIdentifier();
-
-  @Nullable
-  SyntaxToken equalToken();
-
-  @Nullable
-  ExpressionTree initValue();
+  ExpressionTree expression();
 
 }
