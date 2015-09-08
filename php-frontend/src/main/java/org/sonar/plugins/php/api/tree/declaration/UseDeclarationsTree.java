@@ -17,29 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-public class UseFunctionDeclarationsTest extends RuleTest {
+import javax.annotation.Nullable;
+import java.util.List;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.USE_FUNCTION_DECLARATIONS);
-  }
+@Beta
+public interface UseDeclarationsTree extends DeclarationTree {
 
-  @Test
-  public void test() {
-    matches("foo");
-    matches("foo, bar");
+  SyntaxToken useToken();
 
+  /**
+   * Either {@link org.sonar.php.api.PHPKeyword#CONST const} or {@link org.sonar.php.api.PHPKeyword#FUNCTION function}
+   */
+  @Nullable
+  SyntaxToken useTypeToken();
 
-    // use const separatedList<useDeclaration> EOS
-    // use function separatedList<useDeclaration> EOS
-    // use separatedLis<useDeclaration> EOS
+  List<UseDeclarationTree> declarations();
 
-  }
+  @Nullable
+  SyntaxToken semicolonToken();
 }

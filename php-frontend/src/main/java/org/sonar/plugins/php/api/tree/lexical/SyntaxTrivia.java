@@ -17,29 +17,14 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.lexical;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import com.google.common.annotations.Beta;
 
-public class UseFunctionDeclarationsTest extends RuleTest {
+/**
+ * Represents a Trivia in the SyntaxTree.
+ */
+@Beta
+public interface SyntaxTrivia extends SyntaxToken {
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.USE_FUNCTION_DECLARATIONS);
-  }
-
-  @Test
-  public void test() {
-    matches("foo");
-    matches("foo, bar");
-
-
-    // use const separatedList<useDeclaration> EOS
-    // use function separatedList<useDeclaration> EOS
-    // use separatedLis<useDeclaration> EOS
-
-  }
 }

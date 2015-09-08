@@ -17,29 +17,18 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import com.google.common.annotations.Beta;
 
-public class UseFunctionDeclarationsTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.USE_FUNCTION_DECLARATIONS);
-  }
-
-  @Test
-  public void test() {
-    matches("foo");
-    matches("foo, bar");
-
-
-    // use const separatedList<useDeclaration> EOS
-    // use function separatedList<useDeclaration> EOS
-    // use separatedLis<useDeclaration> EOS
-
-  }
+/**
+ * This interface represents class statement, which can be:
+ * <ul>
+ *   <li>{@link Kind#METHOD_DECLARATION Method declaration}
+ *   <li>{@link Kind#CLASS_FIELD_DECLARATION Class variable declaration}
+ *   <li>{@link Kind#TRAIT_USE_STATEMENT Trait use statement}
+ * <ul/>
+ */
+@Beta
+public interface ClassMemberTree extends DeclarationTree {
 }

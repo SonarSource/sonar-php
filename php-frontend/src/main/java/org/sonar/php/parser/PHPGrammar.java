@@ -651,6 +651,8 @@ public enum PHPGrammar implements GrammarRuleKey {
   }
 
   public static void declaration(LexerlessGrammarBuilder b) {
+    // TODO: use declaration should be simplified and merged with use_statement
+    // FIXME: also USE_CONST_DECLARATION_STATEMENT is never used...
     b.rule(USE_CONST_DECLARATION_STATEMENT).is(USE, CONST, USE_FUNCTION_DECLARATIONS, EOS);
     b.rule(USE_FUNCTION_DECLARATION_STATEMENT).is(USE, FUNCTION, USE_FUNCTION_DECLARATIONS, EOS); // TODO martin: to check
     b.rule(USE_FUNCTION_DECLARATIONS).is(USE_FUNCTION_DECLARATION, b.zeroOrMore(COMMA, USE_FUNCTION_DECLARATION));
@@ -706,6 +708,11 @@ public enum PHPGrammar implements GrammarRuleKey {
       STATIC,
       ABSTRACT,
       FINAL));
+
+    b.rule(REFERENCE).is(AMPERSAND);
+    b.rule(FUNCTION_DECLARATION).is(FUNCTION, b.optional(REFERENCE), IDENTIFIER,
+      LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS, BLOCK);
+
   }
 
   public static void statement(LexerlessGrammarBuilder b) {
@@ -739,10 +746,6 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(USE_STATEMENT).is(USE, USE_DECLARATIONS, EOS);
 
     b.rule(HALT_COMPILER_STATEMENT).is(HALT_COMPILER, LPARENTHESIS, RPARENTHESIS, EOS);
-
-    b.rule(REFERENCE).is(AMPERSAND);
-    b.rule(FUNCTION_DECLARATION).is(FUNCTION, b.optional(REFERENCE), IDENTIFIER,
-      LPARENTHESIS, b.optional(PARAMETER_LIST), RPARENTHESIS, BLOCK);
 
     b.rule(STATEMENT).is(b.firstOf(
       BLOCK,
