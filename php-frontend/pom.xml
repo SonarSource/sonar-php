@@ -8,9 +8,9 @@
     <artifactId>parent</artifactId>
   </parent>
 
-  <artifactId>php-squid</artifactId>
+  <artifactId>php-frontend</artifactId>
 
-  <name>PHP :: Squid</name>
+  <name>PHP :: Frontend</name>
 
   <dependencies>
     <dependency>

@@ -61,9 +61,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-public class PHPSquidSensor implements Sensor {
+public class PHPSensor implements Sensor {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PHPSquidSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
   private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
   private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
@@ -75,8 +75,8 @@ public class PHPSquidSensor implements Sensor {
   private AstScanner<LexerlessGrammar> scanner;
   private SensorContext context;
 
-  public PHPSquidSensor(ResourcePerspectives resourcePerspectives, FileSystem filesystem,
-                        FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory) {
+  public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem filesystem,
+                   FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory) {
     this.checks = checkFactory
       .create(CheckList.REPOSITORY_KEY)
       .addAnnotatedChecks(CheckList.getChecks());

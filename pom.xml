@@ -32,7 +32,7 @@
 
   <modules>
     <module>sonar-php-plugin</module>
-    <module>php-squid</module>
+    <module>php-frontend</module>
     <module>sslr-php-toolkit</module>
     <module>php-checks</module>
   </modules>
@@ -103,7 +103,7 @@
     <dependencies>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>php-squid</artifactId>
+        <artifactId>php-frontend</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

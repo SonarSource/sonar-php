@@ -44,11 +44,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class PHPSquidSensorTest {
+public class PHPSensorTest {
 
 
   private final DefaultFileSystem fileSystem = new DefaultFileSystem();
-  private PHPSquidSensor sensor;
+  private PHPSensor sensor;
 
   @Before
   public void setUp() {
@@ -57,13 +57,13 @@ public class PHPSquidSensorTest {
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-    sensor = new PHPSquidSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory);
+    sensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory);
   }
 
   @Test
   public void shouldExecuteOnProject() {
     DefaultFileSystem localFS = new DefaultFileSystem();
-    PHPSquidSensor localSensor = new PHPSquidSensor(mock(ResourcePerspectives.class), localFS, null, new CheckFactory(mock(ActiveRules.class)));
+    PHPSensor localSensor = new PHPSensor(mock(ResourcePerspectives.class), localFS, null, new CheckFactory(mock(ActiveRules.class)));
 
     // empty file system
     assertThat(localSensor.shouldExecuteOnProject(null), is(false));
