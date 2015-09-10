@@ -19,13 +19,11 @@
  */
 package org.sonar.plugins.php.api.tree;
 
-import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import com.google.common.annotations.Beta;
-import com.sonar.sslr.api.AstNodeType;
 import org.sonar.plugins.php.api.tree.declaration.ClassFieldDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespacedNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
@@ -34,7 +32,6 @@ import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentListTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -45,9 +42,9 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
+import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessExpressionTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespacedNameTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
@@ -57,14 +54,38 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
+import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EchoStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
+import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
+import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
+import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
-import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import com.google.common.annotations.Beta;
 import com.sonar.sslr.api.AstNodeType;
-
-import org.sonar.sslr.grammar.GrammarRuleKey;
 
 /**
  * Common interface for all nodes in an abstract syntax tree.
@@ -86,9 +107,9 @@ public interface Tree {
      */
     INTERFACE_DECLARATION(ClassTree.class),
 
-     /**
-     * {@link ClassTree}
-     */
+    /**
+    * {@link ClassTree}
+    */
     TRAIT_DECLARATION(ClassTree.class),
 
     /**
@@ -125,16 +146,6 @@ public interface Tree {
      * {@link UseDeclarationTree}
      */
     USE_DECLARATION(UseDeclarationTree.class),
-
-    /**
-     * {@link TraitUseStatementTree}
-     */
-    TRAIT_USE_STATEMENT(TraitUseStatementTree.class),
-
-    /**
-     * {@link BlockTree}
-     */
-    BLOCK(BlockTree.class),
 
     /**
      * {@link ParenthesisedExpressionTree}
@@ -234,9 +245,9 @@ public interface Tree {
     EXIT_EXPRESSION(ExitTree.class),
 
     /**
-     * {@link AssignmentListTree}
+     * {@link ListExpressionTree}
      */
-    ASSIGNMENT_LIST(AssignmentListTree.class),
+    LIST_EXPRESSION(ListExpressionTree.class),
 
     /**
      * {@link NewExpressionTree}
@@ -572,10 +583,204 @@ public interface Tree {
     MAGIC_CONSTANT(LiteralTree.class),
 
     /**
+     * {@link TraitUseStatementTree}
+     */
+    TRAIT_USE_STATEMENT(TraitUseStatementTree.class),
+
+    /**
+     * {@link BlockTree}
+     */
+    BLOCK(BlockTree.class),
+
+    /**
+     * {@link LabelTree}
+     */
+    LABEL(LabelTree.class),
+
+    /**
+     * {@link IfStatementTree}
+     */
+    IF_STATEMENT(IfStatementTree.class),
+
+    /**
+     * {@link IfStatementTree}
+     */
+    ALTRNATIVE_IF_STATEMENT(IfStatementTree.class),
+
+    /**
+     * {@link ElseifClauseTree}
+     */
+    ELSEIF_CLAUSE(ElseifClauseTree.class),
+
+    /**
+     * {@link ElseifClauseTree}
+     */
+    ALTERNATIVE_ELSEIF_CLAUSE(ElseifClauseTree.class),
+
+    /**
+     * {@link ElseClauseTree}
+     */
+    ELSE_CLAUSE(ElseClauseTree.class),
+
+    /**
+     * {@link ElseClauseTree}
+     */
+    ALTERNATIVE_ELSE_CLAUSE(ElseClauseTree.class),
+
+    /**
+     * {@link WhileStatementTree}
+     */
+    WHILE_STATEMENT(WhileStatementTree.class),
+
+    /**
+     * {@link WhileStatementTree}
+     */
+    ALTERNATIVE_WHILE_STATEMENT(WhileStatementTree.class),
+
+    /**
+     * {@link DoWhileStatementTree}
+     */
+    DO_WHILE_STATEMENT(DoWhileStatementTree.class),
+
+    /**
+     * {@link ForStatementTree}
+     */
+    FOR_STATEMENT(ForStatementTree.class),
+
+    /**
+     * {@link ForStatementTree}
+     */
+    ALTERNATIVE_FOR_STATEMENT(ForStatementTree.class),
+
+    /**
+     * {@link SwitchStatementTree}
+     */
+    SWITCH_STATEMENT(SwitchStatementTree.class),
+
+    /**
+     * {@link SwitchStatementTree}
+     */
+    ALTERNATIVE_SWITCH_STATEMENT(SwitchStatementTree.class),
+
+    /**
+     * {@link CaseClauseTree}
+     */
+    CASE_CLAUSE(CaseClauseTree.class),
+
+    /**
+     * {@link DefaultClauseTree}
+     */
+    DEFAULT_CLAUSE(DefaultClauseTree.class),
+
+    /**
+     * {@link BreakStatementTree}
+     */
+    BREAK_STATEMENT(BreakStatementTree.class),
+
+    /**
+     * {@link ContinueStatementTree}
+     */
+    CONTINUE_STATEMENT(ContinueStatementTree.class),
+
+    /**
+     * {@link ReturnStatementTree}
+     */
+    RETURN_STATEMENT(ReturnStatementTree.class),
+
+    /**
+     * {@link ExpressionStatementTree}
+     */
+    EXPRESSION_STATEMENT(ExpressionStatementTree.class),
+
+    /**
+     * {@link ForEachStatementTree}
+     */
+    FOREACH_STATEMENT(ForEachStatementTree.class),
+
+    /**
+     * {@link ForEachStatementTree}
+     */
+    ALTERNATIVE_FOREACH_STATEMENT(ForEachStatementTree.class),
+
+    /**
+     * {@link DeclareStatementTree}
+     */
+    DECLARE_STATEMENT(DeclareStatementTree.class),
+
+    /**
+     * {@link DeclareStatementTree}
+     */
+    ALTERNATIVE_DECLARE_STATEMENT(DeclareStatementTree.class),
+
+    /**
+     * {@link TryStatementTree}
+     */
+    TRY_STATEMENT(TryStatementTree.class),
+
+    /**
+     * {@link CatchBlockTree}
+     */
+    CATCH_BLOCK(CatchBlockTree.class),
+
+    /**
+     * {@link ThrowStatementTree}
+     */
+    THROW_STATEMENT(ThrowStatementTree.class),
+
+    /**
+     * {@link GotoStatementTree}
+     */
+    GOTO_STATEMENT(GotoStatementTree.class),
+
+    /**
+     * {@link YieldStatementTree}
+     */
+    YIELD_STATEMENT(YieldStatementTree.class),
+
+    /**
+     * {@link GlobalStatementTree}
+     */
+    GLOBAL_STATEMENT(GlobalStatementTree.class),
+
+    /**
+     * {@link EchoStatementTree}
+     */
+    ECHO_STATEMENT(EchoStatementTree.class),
+
+    /**
+     * {@link EchoStatementTree}
+     */
+    UNSET_VARIABLE_STATEMENT(EchoStatementTree.class),
+
+    /**
+     * {@link TraitAdaptationStatementTree}
+     */
+    TRAIT_ADAPTATION_STATEMENT(TraitAdaptationStatementTree.class),
+
+    /**
+     * {@link TraitPrecedenceTree}
+     */
+    TRAIT_PRECEDENCE(TraitPrecedenceTree.class),
+
+    /**
+     * {@link TraitMethodReferenceTree}
+     */
+    TRAIT_METHOD_REFERENCE(TraitMethodReferenceTree.class),
+
+    /**
+     * {@link TraitAliasTree}
+     */
+    TRAIT_ALIAS(TraitAliasTree.class),
+
+    /**
+     * {@link SyntaxToken}
+     */
+    INLINE_HTML(SyntaxToken.class),
+
+    /**
      * {@link SyntaxToken}
      */
     TOKEN(SyntaxToken.class);
-
 
     final Class<? extends Tree> associatedInterface;
 

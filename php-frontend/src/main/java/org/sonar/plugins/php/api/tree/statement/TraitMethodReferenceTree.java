@@ -17,27 +17,21 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.statement;
 
-import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespacedNameTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import com.google.common.annotations.Beta;
 
 @Beta
-public interface UseDeclarationsTree extends DeclarationTree {
+public interface TraitMethodReferenceTree extends Tree {
 
-  SyntaxToken useToken();
+  NamespacedNameTree trait();
 
-  /**
-   * Either {@link org.sonar.php.api.PHPKeyword#CONST const} or {@link org.sonar.php.api.PHPKeyword#FUNCTION function}
-   */
-  @Nullable
-  SyntaxToken useTypeToken();
+  SyntaxToken doubleColonToken();
 
-  List<UseDeclarationTree> declarations();
-
-  @Nullable
-  SyntaxToken eosToken();
+  IdentifierTree method();
 }

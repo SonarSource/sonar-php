@@ -17,58 +17,64 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.php.api.PHPKeyword;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * Represents foreach statement and alternative foreach statement syntax as well.
+ */
 @Beta
-public interface ClassTree extends DeclarationTree {
+public interface ForEachStatementTree extends StatementTree {
+
+  SyntaxToken foreachToken();
+
+  SyntaxToken openParenthesisToken();
+
+  ExpressionTree expression();
+
+  SyntaxToken asToken();
 
   /**
-   * Either {@link PHPKeyword#CLASS class}, {@link PHPKeyword#TRAIT trait}
-   * or {@link PHPKeyword#INTERFACE interface}
-   */
-  SyntaxToken classEntryTypeToken();
-
-  /**
-   * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}
-   */
-  @Nullable
-  SyntaxToken classTypeToken();
-
-  IdentifierTree name();
-
-  @Nullable
-  SyntaxToken extendsToken();
-
-  @Nullable
-  ExpressionTree superClass();
-
-  @Nullable
-  SyntaxToken implementsToken();
-
-  List<Tree> superInterfaces();
-
-  SyntaxToken openCurlyBraceToken();
-
-  /**
-   * Members can be:
+   * value can be:
    * <ul>
-   *   <li>{@link Kind#METHOD_DECLARATION Method declaration}
-   *   <li>{@link Kind#CLASS_FIELD_DECLARATION Class variable declaration}
-   *   <li>{@link Kind#TRAIT_USE_STATEMENT Trait use statement}
+   *   <li>{@link Kind#REFERENCE_VARIABLE reference variable}
+   *   <li>{@link Kind#LIST_EXPRESSION assignment list }
+   *   <li> or other expressions.
    * <ul/>
    */
-  List<Tree> members();
+  @Nullable
+  ExpressionTree key();
 
-  SyntaxToken closeCurlyBraceToken();
+  @Nullable
+  SyntaxToken doubleArrowToken();
+
+  /**
+   * value can be:
+   * <ul>
+   *   <li>{@link Kind#REFERENCE_VARIABLE reference variable}
+   *   <li>{@link Kind#LIST_EXPRESSION list expression}
+   *   <li> or other expressions.
+   * <ul/>
+   */
+  ExpressionTree value();
+
+  SyntaxToken closeParenthesisToken();
+
+  @Nullable
+  SyntaxToken colonToken();
+
+  List<StatementTree> statement();
+
+  @Nullable
+  SyntaxToken endforeachToken();
+
+  @Nullable
+  SyntaxToken eosToken();
 
 }

@@ -17,24 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.expression;
+package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.php.api.PHPPunctuator;
 
+import java.util.List;
+
+/**
+ * Represents switch statement and alternative while statement syntax as well.
+ */
 @Beta
-public interface AssignmentListTree extends ExpressionTree {
+public interface SwitchCaseClauseTree extends StatementTree {
 
-  SyntaxToken listToken();
+  SyntaxToken caseToken();
 
-  SyntaxToken openParenthesisToken();
+  /**
+   * Either {@link PHPPunctuator#COLON :} or {@link PHPPunctuator#SEMICOLON ;}
+   */
+  SyntaxToken caseSeparatorToken();
 
-  SeparatedList<ExpressionTree> parameters();
+  List<StatementTree> statements();
 
-  SyntaxToken closeParenthesisToken();
-
-  SyntaxToken equalToken();
-
-  ExpressionTree initialisation();
 }

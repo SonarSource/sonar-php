@@ -17,27 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 @Beta
-public interface UseDeclarationsTree extends DeclarationTree {
+public interface ElseifClauseTree extends StatementTree {
 
-  SyntaxToken useToken();
+  SyntaxToken elseifToken();
 
-  /**
-   * Either {@link org.sonar.php.api.PHPKeyword#CONST const} or {@link org.sonar.php.api.PHPKeyword#FUNCTION function}
-   */
-  @Nullable
-  SyntaxToken useTypeToken();
-
-  List<UseDeclarationTree> declarations();
+  ParenthesisedExpressionTree condition();
 
   @Nullable
-  SyntaxToken eosToken();
+  SyntaxToken colonToken();
+
+  List<StatementTree> statements();
+
 }
+

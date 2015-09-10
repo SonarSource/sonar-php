@@ -18,11 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 package org.sonar.plugins.php.api.tree.expression;
+
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.declaration.DeclarationTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 @Beta
 public interface CastExpressionTree extends ExpressionTree {
