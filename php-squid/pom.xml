@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.sonar-plugins.php</groupId>
     <version>2.7-SNAPSHOT</version>
-    <artifactId>parent</artifactId>
+    <artifactId>php</artifactId>
   </parent>
 
   <artifactId>php-squid</artifactId>
