@@ -17,27 +17,47 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * Represents for statement and alternative for statement syntax as well.
+ */
 @Beta
-public interface UseDeclarationsTree extends DeclarationTree {
+public interface ForStatementTree extends StatementTree {
 
-  SyntaxToken useToken();
+  SyntaxToken forToken();
 
-  /**
-   * Either {@link org.sonar.php.api.PHPKeyword#CONST const} or {@link org.sonar.php.api.PHPKeyword#FUNCTION function}
-   */
+  SyntaxToken openParenthesis();
+
+  SeparatedList<ExpressionTree> init();
+
+  SyntaxToken firstSemicolon();
+
+  SeparatedList<ExpressionTree> condition();
+
+  SyntaxToken secondSemicolon();
+
+  SeparatedList<ExpressionTree> update();
+
+  SyntaxToken closeParenthesis();
+
   @Nullable
-  SyntaxToken useTypeToken();
+  SyntaxToken colonToken();
 
-  List<UseDeclarationTree> declarations();
+  List<StatementTree> statement();
+
+  @Nullable
+  SyntaxToken endForToken();
 
   @Nullable
   SyntaxToken eosToken();
+
 }

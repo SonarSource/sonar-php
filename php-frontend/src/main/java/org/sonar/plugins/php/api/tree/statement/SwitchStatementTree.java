@@ -17,26 +17,38 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 @Beta
-public interface UseDeclarationsTree extends DeclarationTree {
+public interface SwitchStatementTree extends StatementTree {
 
-  SyntaxToken useToken();
+  SyntaxToken switchToken();
 
-  /**
-   * Either {@link org.sonar.php.api.PHPKeyword#CONST const} or {@link org.sonar.php.api.PHPKeyword#FUNCTION function}
-   */
+  ParenthesisedExpressionTree expression();
+
   @Nullable
-  SyntaxToken useTypeToken();
+  SyntaxToken openCurlyBraceToken();
 
-  List<UseDeclarationTree> declarations();
+  @Nullable
+  SyntaxToken colonToken();
+
+  @Nullable
+  SyntaxToken semicolonToken();
+
+  List<SwitchCaseClauseTree> cases();
+
+  @Nullable
+  SyntaxToken closeCurlyBraceToken();
+
+  @Nullable
+  SyntaxToken endSwitchToken();
 
   @Nullable
   SyntaxToken eosToken();

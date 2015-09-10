@@ -17,41 +17,23 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.statement;
 
-import java.util.List;
+import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
-import org.sonar.php.tree.impl.SeparatedList;
-
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
 @Beta
-public interface ClassFieldDeclarationTree extends ClassMemberTree {
+public interface BreakStatementTree extends StatementTree {
 
-  /**
-   * Members can be only:
-   * <ul>
-   *   <li>{@link org.sonar.php.api.PHPKeyword#CONST const}
-   *  <p>
-   * or only:
-   *   <li>{@link org.sonar.php.api.PHPKeyword#VAR var}
-   *  <p>
-   * or a combination of:
-   *   <li>{@link org.sonar.php.api.PHPKeyword#PUBLIC public}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#PROTECTED protected}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#PRIVATE private}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#STATIC static}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#ABSTRACT abstract}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#FINAL final}
-   *
-   */
-  List<SyntaxToken> modifierTokens();
+  SyntaxToken breakToken();
 
-  SeparatedList<VariableDeclarationTree> declarations();
+  @Nullable
+  ExpressionTree argument();
 
+  @Nullable
   SyntaxToken eosToken();
 
 }

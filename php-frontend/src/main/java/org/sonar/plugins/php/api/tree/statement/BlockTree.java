@@ -27,9 +27,9 @@ import java.util.List;
 @Beta
 public interface BlockTree extends StatementTree {
 
-  SyntaxToken openCurlyBrace();
+  SyntaxToken openCurlyBraceToken();
 
   List<StatementTree> statements();
 
-  SyntaxToken closeCurlyBrace();
+  SyntaxToken closeCurlyBraceToken();
 }

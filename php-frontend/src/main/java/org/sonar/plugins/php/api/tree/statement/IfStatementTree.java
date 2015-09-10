@@ -17,27 +17,42 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * Represents if statement and alternative if statement syntax as well.
+ */
 @Beta
-public interface UseDeclarationsTree extends DeclarationTree {
+public interface IfStatementTree extends StatementTree {
 
-  SyntaxToken useToken();
+  SyntaxToken ifToken();
 
-  /**
-   * Either {@link org.sonar.php.api.PHPKeyword#CONST const} or {@link org.sonar.php.api.PHPKeyword#FUNCTION function}
-   */
+  ParenthesisedExpressionTree condition();
+
   @Nullable
-  SyntaxToken useTypeToken();
+  SyntaxToken colonToken();
 
-  List<UseDeclarationTree> declarations();
+  List<Tree> statements();
+
+  @Nullable
+  List<ElseifClauseTree> elseifClauses();
+
+  @Nullable
+  ElseClauseTree elseClause();
+
+  @Nullable
+  SyntaxToken endIfToken();
 
   @Nullable
   SyntaxToken eosToken();
+
 }
+
