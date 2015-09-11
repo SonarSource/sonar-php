@@ -19,51 +19,41 @@
  */
 package org.sonar.php.tree.impl.lexical;
 
-import com.sonar.sslr.api.TokenType;
+
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
+public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
 
-  private List<SyntaxTrivia> trivias;
-  private int startIndex;
-  private final int line;
+  private final String comment;
   private final int column;
-  private final String value;
-  private final boolean isEOF;
+  private int startLine;
 
-  public InternalSyntaxToken(int line, int column, String value, List<SyntaxTrivia> trivias, int startIndex, boolean isEOF) {
-    this.value = value;
-    this.line = line;
+  public InternalSyntaxTrivia(String comment, int startLine, int column) {
+    this.comment = comment;
+    this.startLine = startLine;
     this.column = column;
-    this.trivias = trivias;
-    this.startIndex = startIndex;
-    this.isEOF = isEOF;
-  }
-
-  public int toIndex() {
-    return startIndex + value.length();
   }
 
   @Override
   public String text() {
-    return value;
+    return comment;
   }
 
   @Override
   public List<SyntaxTrivia> trivias() {
-    return trivias;
+    return Collections.emptyList();
   }
 
   @Override
   public int line() {
-    return line;
+    return startLine;
   }
 
   @Override
@@ -71,26 +61,9 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
     return column;
   }
 
-  public int startIndex() {
-    return startIndex;
-  }
-
-  public boolean isEOF(){
-    return isEOF;
-  }
-
-  public boolean is(TokenType type) {
-    return this.text().equals(type.getValue());
-  }
-
   @Override
   public Kind getKind() {
-    return Kind.TOKEN;
-  }
-
-  @Override
-  public Iterator<Tree> childrenIterator() {
-    throw new UnsupportedOperationException();
+    return Kind.TRIVIA;
   }
 
   @Override
@@ -99,8 +72,22 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
-    // FIXME do nothing at the moment
+  public Iterator<Tree> childrenIterator() {
+    throw new UnsupportedOperationException();
   }
 
+  public static SyntaxTrivia create(String comment, int startLine, int column) {
+    return new InternalSyntaxTrivia(comment, startLine, column);
+  }
+
+  @Override
+  public int getLine() {
+    return startLine;
+  }
+
+  @Override
+  public void accept(TreeVisitor visitor) {
+    //FIXME do nothing
+  }
 }
+

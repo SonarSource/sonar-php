@@ -19,8 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree;
 
+import com.google.common.annotations.Beta;
+import com.sonar.sslr.api.AstNodeType;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassFieldDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespacedNameTree;
@@ -41,6 +43,7 @@ import org.sonar.plugins.php.api.tree.expression.ExitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -53,6 +56,7 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
@@ -82,10 +86,8 @@ import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
+import org.sonar.plugins.php.api.visitors.TreeVisitor;
 import org.sonar.sslr.grammar.GrammarRuleKey;
-
-import com.google.common.annotations.Beta;
-import com.sonar.sslr.api.AstNodeType;
 
 /**
  * Common interface for all nodes in an abstract syntax tree.
@@ -95,22 +97,24 @@ public interface Tree {
 
   boolean is(Kind... kind);
 
+  void accept(TreeVisitor visitor);
+
   public enum Kind implements AstNodeType, GrammarRuleKey {
 
     /**
-     * {@link ClassTree}
+     * {@link ClassDeclarationTree}
      */
-    CLASS_DECLARATION(ClassTree.class),
+    CLASS_DECLARATION(ClassDeclarationTree.class),
 
     /**
-     * {@link ClassTree}
+     * {@link ClassDeclarationTree}
      */
-    INTERFACE_DECLARATION(ClassTree.class),
+    INTERFACE_DECLARATION(ClassDeclarationTree.class),
 
     /**
-    * {@link ClassTree}
+    * {@link ClassDeclarationTree}
     */
-    TRAIT_DECLARATION(ClassTree.class),
+    TRAIT_DECLARATION(ClassDeclarationTree.class),
 
     /**
      * {@link MethodDeclarationTree}
@@ -181,6 +185,11 @@ public interface Tree {
      * {@link VariableIdentifierTree}
      */
     VARIABLE_IDENTIFIER(VariableIdentifierTree.class),
+
+    /**
+     * {@link IdentifierTree}
+     */
+    IDENTIFIER(IdentifierTree.class),
 
     /**
      * {@link ReferenceVariableTree}
@@ -771,6 +780,11 @@ public interface Tree {
      * {@link TraitAliasTree}
      */
     TRAIT_ALIAS(TraitAliasTree.class),
+
+    /**
+     * {@link SyntaxToken}
+     */
+    TRIVIA(SyntaxTrivia.class),
 
     /**
      * {@link SyntaxToken}
