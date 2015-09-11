@@ -54,7 +54,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.sonar.sslr</groupId>
+      <groupId>org.sonarsource.sslr</groupId>
       <artifactId>sslr-testing-harness</artifactId>
       <scope>test</scope>
     </dependency>
@@ -92,8 +92,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>3200000</maxsize>
-                  <minsize>3000000</minsize>
+                  <maxsize>3700000</maxsize>
+                  <minsize>3500000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>

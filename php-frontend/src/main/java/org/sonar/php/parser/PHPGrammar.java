@@ -21,6 +21,11 @@ package org.sonar.php.parser;
 
 import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.api.PHPPunctuator;
+import org.sonar.sslr.grammar.GrammarRuleKey;
+import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
+import org.sonar.sslr.parser.LexerlessGrammar;
+
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
 import static org.sonar.php.api.PHPKeyword.AS;
@@ -85,7 +90,6 @@ import static org.sonar.php.api.PHPKeyword.USE;
 import static org.sonar.php.api.PHPKeyword.VAR;
 import static org.sonar.php.api.PHPKeyword.WHILE;
 import static org.sonar.php.api.PHPKeyword.YIELD;
-import org.sonar.php.api.PHPPunctuator;
 import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
 import static org.sonar.php.api.PHPPunctuator.ANDAND;
 import static org.sonar.php.api.PHPPunctuator.ANDEQUAL;
@@ -141,9 +145,6 @@ import static org.sonar.php.api.PHPPunctuator.STAR_EQU;
 import static org.sonar.php.api.PHPPunctuator.TILDA;
 import static org.sonar.php.api.PHPPunctuator.XOR;
 import static org.sonar.php.api.PHPPunctuator.XOR_EQU;
-import org.sonar.sslr.grammar.GrammarRuleKey;
-import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 public enum PHPGrammar implements GrammarRuleKey {
 
