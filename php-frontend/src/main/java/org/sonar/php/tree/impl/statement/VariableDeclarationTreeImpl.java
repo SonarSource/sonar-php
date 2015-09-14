@@ -69,7 +69,7 @@ public class VariableDeclarationTreeImpl extends PHPTree implements VariableDecl
 
   @Nullable
   @Override
-  public ExpressionTree initialisation() {
+  public ExpressionTree initValue() {
     return initialisation;
   }
 

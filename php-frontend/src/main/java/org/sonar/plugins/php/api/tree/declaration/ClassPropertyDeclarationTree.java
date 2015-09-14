@@ -28,26 +28,26 @@ import org.sonar.php.tree.impl.SeparatedList;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <p>Class <a href="http://php.net/manual/en/language.oop5.properties.php">Properties</a>
+ * <pre>
+ *  var {@link #declarations()} ;
+ *
+ *  public {@link #declarations()} ;
+ *  protected {@link #declarations()} ;
+ *  private {@link #declarations()} ;
+ *
+ *  public static {@link #declarations()} ;
+ * </pre>
+ *
+ * <p>Class <a href="http://php.net/manual/en/language.oop5.constants.php">Constants</a>
+ * <pre>
+ *  const {@link #declarations()} ;
+ * </pre>
+ */
 @Beta
-public interface ClassFieldDeclarationTree extends ClassMemberTree {
+public interface ClassPropertyDeclarationTree extends ClassMemberTree {
 
-  /**
-   * Members can be only:
-   * <ul>
-   *   <li>{@link org.sonar.php.api.PHPKeyword#CONST const}
-   *  <p>
-   * or only:
-   *   <li>{@link org.sonar.php.api.PHPKeyword#VAR var}
-   *  <p>
-   * or a combination of:
-   *   <li>{@link org.sonar.php.api.PHPKeyword#PUBLIC public}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#PROTECTED protected}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#PRIVATE private}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#STATIC static}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#ABSTRACT abstract}
-   *   <li>{@link org.sonar.php.api.PHPKeyword#FINAL final}
-   *
-   */
   List<SyntaxToken> modifierTokens();
 
   SeparatedList<VariableDeclarationTree> declarations();

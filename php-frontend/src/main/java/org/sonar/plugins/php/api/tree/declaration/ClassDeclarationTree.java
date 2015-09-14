@@ -29,6 +29,25 @@ import org.sonar.php.api.PHPKeyword;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * <p><a href="http://php.net/manual/en/language.oop5.php">Class</a> and <a href="http://php.net/manual/en/language.oop5.traits.php">Trait</a>
+ * <pre>
+ *  class {@link #name()} { {@link #members()} }
+ *  trait {@link #name()} { {@link #members()} }
+ *
+ *  abstract class {@link #name()} { {@link #members()} }
+ *  final class {@link #name()} { {@link #members()} }
+ *
+ *  class {@link #name()} extends {@link #superClass()} { {@link #members()} }
+ *  class {@link #name()} extends {@link #superClass()} implements {@link #superInterfaces()} { {@link #members()} }
+ * </pre>
+ *
+ * <p><a href="http://php.net/manual/en/language.oop5.interfaces.php">Interface</a>
+ * <pre>
+ *  interface {@link #name()} { {@link #members()} }
+ *  interface {@link #name()} implements {@link #superInterfaces()} { {@link #members()} }
+ * </pre>
+ */
 @Beta
 public interface ClassDeclarationTree extends DeclarationTree {
 

@@ -26,6 +26,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * Variable Declaration
+ * <pre>
+ *   {@link #variableIdentifier()}
+ *   {@link #variableIdentifier()} {@link #equalToken()} {@link #initValue()}
+ * </pre>
+ */
 @Beta
 public interface VariableDeclarationTree extends DeclarationTree {
 
@@ -35,6 +42,6 @@ public interface VariableDeclarationTree extends DeclarationTree {
   SyntaxToken equalToken();
 
   @Nullable
-  ExpressionTree initialisation();
+  ExpressionTree initValue();
 
 }

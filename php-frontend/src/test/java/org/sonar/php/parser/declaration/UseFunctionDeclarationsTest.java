@@ -37,9 +37,9 @@ public class UseFunctionDeclarationsTest extends RuleTest {
     matches("foo, bar");
 
 
-    // use const separatedList<useDeclaration> EOS
-    // use function separatedList<useDeclaration> EOS
-    // use separatedLis<useDeclaration> EOS
+    // use const separatedList<useClause> EOS
+    // use function separatedList<useClause> EOS
+    // use separatedLis<useClause> EOS
 
   }
 }

@@ -20,13 +20,22 @@
 package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 
 import javax.annotation.Nullable;
 
+/**
+ * <p><a href="http://php.net/manual/en/functions.anonymous.php">Anonymous Function</a>
+ * <pre>
+ *  function {@link #parameters()} {@link #body()}
+ *  function {@link #parameters()} {@link #lexicalVars()} {@link #body()}
+ *  function & {@link #parameters()} {@link #body()}
+ *  static function {@link #parameters()} {@link #body()}
+ * </pre>
+ */
 @Beta
 public interface FunctionExpressionTree extends FunctionTree, ExpressionTree {
 

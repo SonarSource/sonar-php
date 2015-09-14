@@ -27,6 +27,13 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import javax.annotation.Nullable;
 
+/**
+ * <p><a href="http://php.net/manual/en/functions.user-defined.php">Function Declaration</a>
+ * <pre>
+ *  function {@link #name()} {@link #parameters()} {@link #body()}
+ *  function & {@link #name()} {@link #parameters()} {@link #body()}
+ * </pre>
+ */
 @Beta
 public interface FunctionDeclarationTree extends FunctionTree, StatementTree, DeclarationTree {
 

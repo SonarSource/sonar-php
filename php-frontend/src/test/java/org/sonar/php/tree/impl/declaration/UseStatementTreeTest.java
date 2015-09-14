@@ -34,7 +34,7 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
     UseStatementTree tree = parse("use \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_STATEMENT);
     assertThat(tree.is(Kind.USE_STATEMENT)).isTrue();
     assertThat(tree.useTypeToken()).isNull();
-    assertThat(tree.declarations()).hasSize(1);
+    assertThat(tree.clauses()).hasSize(1);
   }
 
   @Test
@@ -42,7 +42,7 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
     UseStatementTree tree = parse("use \\ns1\\ns2\\name, \\ns1\\ns2\\name2;", PHPLexicalGrammar.USE_STATEMENT);
     assertThat(tree.is(Kind.USE_STATEMENT)).isTrue();
     assertThat(tree.useTypeToken()).isNull();
-    assertThat(tree.declarations()).hasSize(2);
+    assertThat(tree.clauses()).hasSize(2);
   }
   
   @Test
