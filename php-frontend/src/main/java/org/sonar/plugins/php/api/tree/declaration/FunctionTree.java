@@ -26,7 +26,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import javax.annotation.Nullable;
 
 @Beta
-public interface FunctionTree extends DeclarationTree {
+public interface FunctionTree extends Tree {
 
   SyntaxToken functionToken();
 

@@ -28,7 +28,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import javax.annotation.Nullable;
 
 @Beta
-public interface FunctionExpressionTree extends FunctionTree {
+public interface FunctionExpressionTree extends FunctionTree, ExpressionTree {
 
   @Nullable
   SyntaxToken staticToken();

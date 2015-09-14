@@ -28,7 +28,7 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import javax.annotation.Nullable;
 
 @Beta
-public interface FunctionDeclarationTree extends FunctionTree, StatementTree {
+public interface FunctionDeclarationTree extends FunctionTree, StatementTree, DeclarationTree {
 
   SyntaxToken functionToken();
 
