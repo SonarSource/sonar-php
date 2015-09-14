@@ -19,20 +19,20 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class UseDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
   public void without_alias() throws Exception {
-    UseDeclarationTree tree = parse("\\ns1\\ns2\\name", PHPLexicalGrammar.USE_DECLARATION);
-    assertThat(tree.is(Kind.USE_DECLARATION)).isTrue();
+    UseClauseTree tree = parse("\\ns1\\ns2\\name", PHPLexicalGrammar.USE_DECLARATION);
+    assertThat(tree.is(Kind.USE_CLAUSE)).isTrue();
     assertThat(tree.namespaceName().is(Kind.NAMESPACED_NAME)).isTrue();
     assertThat(tree.asToken()).isNull();
     assertThat(tree.alias()).isNull();
@@ -40,8 +40,8 @@ public class UseDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
   public void with_alias() throws Exception {
-    UseDeclarationTree tree = parse("\\ns1\\ns2\\name as alias1", PHPLexicalGrammar.USE_DECLARATION);
-    assertThat(tree.is(Kind.USE_DECLARATION)).isTrue();
+    UseClauseTree tree = parse("\\ns1\\ns2\\name as alias1", PHPLexicalGrammar.USE_DECLARATION);
+    assertThat(tree.is(Kind.USE_CLAUSE)).isTrue();
     assertThat(tree.namespaceName().is(Kind.NAMESPACED_NAME)).isTrue();
     assertThat(tree.asToken().text()).isEqualTo("as");
     assertThat(tree.alias().name()).isEqualTo("alias1");

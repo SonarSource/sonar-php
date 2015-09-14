@@ -22,6 +22,9 @@ package org.sonar.plugins.php.api.tree.declaration;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 
+/**
+ * Common interface for all types <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-declarations-and-the-variable-statement">Declaration</a>.
+ */
 @Beta
 public interface DeclarationTree extends Tree {
 }

@@ -21,10 +21,17 @@ package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/functions.arguments.php">Function parameters</a> List
+ * <pre>
+ *   ( {@link #parameters()} )
+ * </pre>
+ */
 @Beta
-public interface ParameterListTree extends DeclarationTree {
+public interface ParameterListTree extends Tree {
 
   SyntaxToken openParenthesisToken();
 

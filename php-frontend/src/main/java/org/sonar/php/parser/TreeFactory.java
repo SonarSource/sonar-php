@@ -29,7 +29,7 @@ import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
-import org.sonar.php.tree.impl.declaration.UseDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
@@ -88,7 +88,6 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -138,6 +137,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
@@ -199,12 +199,12 @@ public class TreeFactory {
     return variableDeclaration(identifierToken, optionalEqual);
   }
 
-  public UseDeclarationTree useDeclaration(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
+  public UseClauseTree useClause(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
     if (alias.isPresent()) {
       IdentifierTreeImpl aliasName = new IdentifierTreeImpl(alias.get().second());
-      return new UseDeclarationTreeImpl(namespaceName, alias.get().first(), aliasName);
+      return new UseClauseTreeImpl(namespaceName, alias.get().first(), aliasName);
     }
-    return new UseDeclarationTreeImpl(namespaceName);
+    return new UseClauseTreeImpl(namespaceName);
   }
 
   public MethodDeclarationTree methodDeclaration(
@@ -280,11 +280,11 @@ public class TreeFactory {
   public UseStatementTree useStatement(
       InternalSyntaxToken useToken,
       Optional<InternalSyntaxToken> useTypeToken,
-      UseDeclarationTree firstDeclaration,
-      Optional<List<Tuple<InternalSyntaxToken, UseDeclarationTree>>> additionalDeclarations,
+      UseClauseTree firstDeclaration,
+      Optional<List<Tuple<InternalSyntaxToken, UseClauseTree>>> additionalDeclarations,
       InternalSyntaxToken eosToken
   ) {
-    SeparatedList<UseDeclarationTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
+    SeparatedList<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
     return new UseStatementTreeImpl(useToken, useTypeToken.orNull(), declarations, eosToken);
   }
 

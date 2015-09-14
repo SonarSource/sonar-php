@@ -28,6 +28,19 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.List;
 
+/**
+ * <p>Class <a href="http://php.net/manual/en/language.oop5.basic.php">Methods</a>
+ * <pre>
+ *  public {@link #name()} {@link Tree.Kind#BLOCK {}}
+ *  protected {@link #name()} {@link Tree.Kind#BLOCK {}}
+ *  private {@link #name()} {@link Tree.Kind#BLOCK {}}
+ *
+ *  public static {@link #name()} {@link Tree.Kind#BLOCK {}}
+ *  public final {@link #name()} {@link Tree.Kind#BLOCK {}}
+ *
+ *  abstract public {@link #name()} ;
+ * </pre>
+ */
 @Beta
 public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
 

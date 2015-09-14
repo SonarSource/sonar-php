@@ -28,8 +28,20 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * <a href="http://php.net/manual/en/functions.arguments.php">Function Argument</a>
+ * <pre>
+ *   {@link #variableIdentifier()}
+ *
+ *   {@link #variableIdentifier()} = {@link #initValue()}
+ *   ... {@link #variableIdentifier()}
+ *   & {@link #variableIdentifier()}
+ *   {@link #type()} {@link #variableIdentifier()}
+ * </pre>
+ *
+ */
 @Beta
-public interface ParameterTree extends DeclarationTree {
+public interface ParameterTree extends Tree {
 
   /**
    * Either {@link PHPKeyword#ARRAY array}, {@link PHPKeyword#CALLABLE callable}

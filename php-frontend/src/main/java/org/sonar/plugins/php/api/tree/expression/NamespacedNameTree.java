@@ -17,18 +17,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+
+import javax.annotation.Nullable;
 
 /**
- * This interface represents class statement, which can be:
- * <ul>
- *   <li>{@link Kind#METHOD_DECLARATION Method declaration}
- *   <li>{@link Kind#CLASS_PROPERTY_DECLARATION Class variable declaration}
- *   <li>{@link Kind#TRAIT_USE_STATEMENT Trait use statement}
- * <ul/>
+ * <p><a href="http://php.net/manual/en/language.namespaces.rules.php">Namespace name definitions</a>
+ * todo (Lena) : finish documentation
  */
 @Beta
-public interface ClassMemberTree extends DeclarationTree {
+public interface NamespacedNameTree extends ExpressionTree {
+
+  @Nullable
+  SyntaxToken namespaceToken();
+
+  SeparatedList<IdentifierTree> qualifiedName();
+
+  String name();
+
 }

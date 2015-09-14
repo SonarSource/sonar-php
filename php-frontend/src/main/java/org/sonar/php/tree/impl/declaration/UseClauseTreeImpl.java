@@ -19,36 +19,34 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.collect.Iterators;
+import javax.annotation.Nullable;
+import java.util.Iterator;
 
-public class UseDeclarationTreeImpl extends PHPTree implements UseDeclarationTree {
+public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
 
-  private static final Kind KIND = Kind.USE_DECLARATION;
+  private static final Kind KIND = Kind.USE_CLAUSE;
   private final NamespaceNameTree namespaceName;
   private final InternalSyntaxToken asToken;
   private final IdentifierTree alias;
 
-  public UseDeclarationTreeImpl(NamespaceNameTree namespaceName, InternalSyntaxToken asToken, IdentifierTree alias) {
+  public UseClauseTreeImpl(NamespaceNameTree namespaceName, InternalSyntaxToken asToken, IdentifierTree alias) {
     this.namespaceName = namespaceName;
     this.asToken = asToken;
     this.alias = alias;
   }
 
-  public UseDeclarationTreeImpl(NamespaceNameTree namespaceName) {
+  public UseClauseTreeImpl(NamespaceNameTree namespaceName) {
     this.namespaceName = namespaceName;
     this.asToken = null;
     this.alias = null;
@@ -83,7 +81,7 @@ public class UseDeclarationTreeImpl extends PHPTree implements UseDeclarationTre
   
   @Override
   public void accept(TreeVisitor visitor) {
-    visitor.visitUseDeclaration(this);
+    visitor.visitUseClause(this);
   }
 
 }

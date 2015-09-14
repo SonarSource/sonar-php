@@ -26,8 +26,8 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
@@ -39,13 +39,13 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
   private final Kind KIND;
   private InternalSyntaxToken useToken;
   private InternalSyntaxToken useTypeToken;
-  private SeparatedList<UseDeclarationTree> declarations;
+  private SeparatedList<UseClauseTree> declarations;
   private InternalSyntaxToken eosToken;
   
   public UseStatementTreeImpl(
       InternalSyntaxToken useToken,
       @Nullable InternalSyntaxToken useTypeToken,
-      SeparatedList<UseDeclarationTree> declarations,
+      SeparatedList<UseClauseTree> declarations,
       InternalSyntaxToken eosToken
   ) {
     this.useToken = useToken;
@@ -73,7 +73,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
   }
 
   @Override
-  public SeparatedList<UseDeclarationTree> declarations() {
+  public SeparatedList<UseClauseTree> clauses() {
     return declarations;
   }
 
@@ -91,7 +91,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.forArray(useToken, useTypeToken),
-      declarations.elementsAndSeparators(Functions.<UseDeclarationTree>identity()),
+      declarations.elementsAndSeparators(Functions.<UseClauseTree>identity()),
       Iterators.singletonIterator(eosToken)
       );
   }

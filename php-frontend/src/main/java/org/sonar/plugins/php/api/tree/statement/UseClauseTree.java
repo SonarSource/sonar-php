@@ -17,17 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * <a href="http://php.net/manual/en/language.namespaces.importing.php">Use namespaces</a> declaration clause
+ * <pre>
+ *   {@link #namespaceName()}
+ *   {@link #namespaceName()} as {@link #alias()}
+ * </pre>
+ */
 @Beta
-public interface UseDeclarationTree extends DeclarationTree {
+public interface UseClauseTree extends Tree {
 
   ExpressionTree namespaceName();
 

@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import com.google.common.annotations.Beta;
 
 @Beta
 public interface TraitPrecedenceTree extends TraitAdaptationStatementTree {

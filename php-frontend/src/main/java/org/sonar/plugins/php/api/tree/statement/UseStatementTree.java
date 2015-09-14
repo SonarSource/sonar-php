@@ -20,12 +20,27 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.tree.impl.SeparatedList;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/language.namespaces.importing.php">Use namespaces</a> declaration
+ * <pre>
+ *   use {@link #clauses()} ;
+ * </pre>
+ *
+ * <p><a href="http://php.net/manual/en/language.oop5.properties.php">Use Function</a> declaration
+ * <pre>
+ *   use function {@link #clauses()} ;
+ * </pre>
+ *
+ * <p><a href="http://php.net/manual/en/language.oop5.constants.php">Use Constant</a> declaration
+ * <pre>
+ *   use const {@link #clauses()} ;
+ * </pre>
+ */
 @Beta
 public interface UseStatementTree extends StatementTree {
 
@@ -37,7 +52,8 @@ public interface UseStatementTree extends StatementTree {
   @Nullable
   SyntaxToken useTypeToken();
 
-  SeparatedList<UseDeclarationTree> declarations();
+  List<UseClauseTree> clauses();
 
+  @Nullable
   SyntaxToken eosToken();
 }

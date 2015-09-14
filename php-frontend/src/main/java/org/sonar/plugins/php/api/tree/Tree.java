@@ -21,14 +21,13 @@ package org.sonar.plugins.php.api.tree;
 
 import com.google.common.annotations.Beta;
 import com.sonar.sslr.api.AstNodeType;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassFieldDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
-import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
@@ -90,6 +89,7 @@ import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
@@ -134,14 +134,24 @@ public interface Tree {
     FUNCTION_DECLARATION(FunctionDeclarationTree.class),
 
     /**
-     * {@link ClassFieldDeclarationTree}
+     * {@link ParameterListTree}
      */
-    CLASS_FIELD_DECLARATION(ClassFieldDeclarationTree.class),
+    PARAMETER_LIST(ParameterListTree.class),
 
     /**
-     * {@link ClassFieldDeclarationTree}
+     * {@link ParameterTree}
      */
-    CLASS_CONSTANT_FIELD_DECLARATION(ClassFieldDeclarationTree.class),
+    PARAMETER(ParameterTree.class),
+
+    /**
+     * {@link ClassPropertyDeclarationTree}
+     */
+    CLASS_PROPERTY_DECLARATION(ClassPropertyDeclarationTree.class),
+
+    /**
+     * {@link ClassPropertyDeclarationTree}
+     */
+    CLASS_CONSTANT_PROPERTY_DECLARATION(ClassPropertyDeclarationTree.class),
 
     /**
      * {@link VariableDeclarationTree}
@@ -149,19 +159,9 @@ public interface Tree {
     VARIABLE_DECLARATION(VariableDeclarationTree.class),
 
     /**
-     * {@link UseDeclarationTree}
+     * {@link UseClauseTree}
      */
-    USE_DECLARATION(UseDeclarationTree.class),
-    
-    /**
-     * {@link ParameterTree}
-     */
-    PARAMETER(ParameterTree.class),
-
-    /**
-     * {@link ParameterListTree}
-     */
-    PARAMETER_LIST(ParameterListTree.class),
+    USE_CLAUSE(UseClauseTree.class),
 
     /**
      * {@link ParenthesisedExpressionTree}

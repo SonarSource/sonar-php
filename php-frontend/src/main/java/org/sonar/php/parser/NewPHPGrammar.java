@@ -33,7 +33,6 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -80,6 +79,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
@@ -148,14 +148,14 @@ public class NewPHPGrammar {
     );
   }
   
-  public UseDeclarationTree USE_DECLARATION() {
-    return b.<UseDeclarationTree>nonterminal(PHPLexicalGrammar.USE_DECLARATION).is(
-      f.useDeclaration(
-        NAMESPACE_NAME(),
-        b.optional(
-          f.newTuple91(
-            b.token(PHPKeyword.AS), 
-            b.token(PHPLexicalGrammar.IDENTIFIER)))));
+  public UseClauseTree USE_CLAUSE() {
+    return b.<UseClauseTree>nonterminal(PHPLexicalGrammar.USE_DECLARATION).is(
+      f.useClause(
+          NAMESPACE_NAME(),
+          b.optional(
+              f.newTuple91(
+                  b.token(PHPKeyword.AS),
+                  b.token(PHPLexicalGrammar.IDENTIFIER)))));
   }
   
   public SyntaxToken MEMBER_MODIFIER() {
@@ -273,8 +273,8 @@ public class NewPHPGrammar {
                 b.firstOf(
                     b.token(PHPKeyword.CONST),
                     b.token(PHPKeyword.FUNCTION))),
-            USE_DECLARATION(),
-            b.zeroOrMore(f.newTuple90(b.token(PHPPunctuator.COMMA), USE_DECLARATION())),
+            USE_CLAUSE(),
+            b.zeroOrMore(f.newTuple90(b.token(PHPPunctuator.COMMA), USE_CLAUSE())),
             EOS())
     );
   }
