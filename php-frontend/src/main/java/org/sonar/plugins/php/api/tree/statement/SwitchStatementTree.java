@@ -26,6 +26,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/control-structures.switch.php">Switch statement</a>
+ * <pre>
+ *   switch {@link #expression()} { {@link #cases()} } }
+ *   switch {@link #expression()} : {@link #cases()} endswitch ;
+ * </pre>
+ */
 @Beta
 public interface SwitchStatementTree extends StatementTree {
 

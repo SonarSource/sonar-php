@@ -25,6 +25,14 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/control-structures.continue.php">Continue statement</a>
+ *
+ * <pre>
+ *   continue;
+ *   continue {@link #argument()};
+ * </pre>
+ */
 @Beta
 public interface ContinueStatementTree extends StatementTree {
 

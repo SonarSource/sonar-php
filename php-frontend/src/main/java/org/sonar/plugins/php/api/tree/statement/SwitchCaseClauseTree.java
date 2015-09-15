@@ -26,7 +26,8 @@ import org.sonar.php.api.PHPPunctuator;
 import java.util.List;
 
 /**
- * Represents switch statement and alternative while statement syntax as well.
+ * General interface for <a href="http://php.net/manual/en/control-structures.switch.php">switch</a> clauses.
+ * Parent interface for {@link CaseClauseTree} and {@link DefaultClauseTree}.
  */
 @Beta
 public interface SwitchCaseClauseTree extends StatementTree {

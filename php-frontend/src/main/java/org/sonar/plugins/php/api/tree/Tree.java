@@ -66,7 +66,6 @@ import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
-import org.sonar.plugins.php.api.tree.statement.EchoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
@@ -89,6 +88,7 @@ import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
@@ -117,6 +117,11 @@ public interface Tree {
      * {@link ClassDeclarationTree}
      */
     INTERFACE_DECLARATION(ClassDeclarationTree.class),
+
+    /**
+     * {@link GlobalStatementTree}
+     */
+    GLOBAL_STATEMENT(GlobalStatementTree.class),
 
     /**
     * {@link ClassDeclarationTree}
@@ -795,21 +800,6 @@ public interface Tree {
     YIELD_STATEMENT(YieldStatementTree.class),
 
     /**
-     * {@link GlobalStatementTree}
-     */
-    GLOBAL_STATEMENT(GlobalStatementTree.class),
-
-    /**
-     * {@link EchoStatementTree}
-     */
-    ECHO_STATEMENT(EchoStatementTree.class),
-
-    /**
-     * {@link EchoStatementTree}
-     */
-    UNSET_VARIABLE_STATEMENT(EchoStatementTree.class),
-
-    /**
      * {@link TraitAdaptationStatementTree}
      */
     TRAIT_ADAPTATION_STATEMENT(TraitAdaptationStatementTree.class),
@@ -852,7 +842,12 @@ public interface Tree {
     /**
      * {@link SyntaxToken}
      */
-    TOKEN(SyntaxToken.class);
+    TOKEN(SyntaxToken.class),
+
+    /**
+     * {@link UnsetVariableStatementTree}
+     */
+    UNSET_VARIABLE_STATEMENT(UnsetVariableStatementTree.class);
 
     final Class<? extends Tree> associatedInterface;
 

@@ -27,6 +27,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/control-structures.declare.php">Declare statement</a>
+ * <pre>
+ *   declare ( {@link #directives()} ) {@link #statement()}   // here list {@link #statement()} should contain only one element
+ *   declare ( {@link #directives()} ) : {@link #statement()} enddeclare ; // here list {@link #statement()} can contain any number of elements
+ * </pre>
+ */
 @Beta
 public interface DeclareStatementTree extends StatementTree {
 

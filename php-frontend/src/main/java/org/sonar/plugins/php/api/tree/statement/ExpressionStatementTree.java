@@ -24,6 +24,17 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import com.google.common.annotations.Beta;
 
+/**
+ * Expression statement is used for processing <a href="http://php.net/manual/en/language.expressions.php">expressions</a>, e.g. function call or assignment operations.
+ * <pre>
+ *   {@link #expression()} ;
+ * </pre>
+ * Examples:
+ * <pre>
+ *   foo() ;
+ *   $a = 1 ;
+ * </pre>
+ */
 @Beta
 public interface ExpressionStatementTree extends StatementTree {
 

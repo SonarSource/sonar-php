@@ -23,6 +23,12 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/language.exceptions.php">Throw statement</a>
+ * <pre>
+ *   throw {@link #expression()} ;
+ * </pre>
+ */
 @Beta
 public interface ThrowStatementTree extends StatementTree {
 

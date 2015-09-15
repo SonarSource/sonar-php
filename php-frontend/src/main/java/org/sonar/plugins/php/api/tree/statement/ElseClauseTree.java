@@ -20,13 +20,22 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/control-structures.else.php">Else clause</a>
+ * of <a href="http://php.net/manual/en/control-structures.if.php">if statement</a> (see {@link IfStatementTree}).
+ * <pre>
+ *   else : {@link #statements()}   // here {@link #statements()} can contain any number of elements
+ *   else {@link #statements()}   // here {@link #statements()} should contain one element
+ * </pre>
+ */
 @Beta
-public interface ElseClauseTree extends StatementTree {
+public interface ElseClauseTree extends Tree {
 
   SyntaxToken elseToken();
 

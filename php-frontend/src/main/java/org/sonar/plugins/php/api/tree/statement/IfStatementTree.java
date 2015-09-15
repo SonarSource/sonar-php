@@ -27,7 +27,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Represents if statement and alternative if statement syntax as well.
+ * Represents <a href="http://php.net/manual/en/control-structures.if.php">if statement</a> and alternative if statement syntax as well.
+ * <pre>
+ *   if {@link #condition()} {@link #statements()}
+ *   if {@link #condition()} : {@link #statements()} endif ;    // alternative syntax
+ *   if {@link #condition()} {@link #statements()} {@link #elseifClauses()} {@link #elseClause()}
+ * </pre>
  */
 @Beta
 public interface IfStatementTree extends StatementTree {

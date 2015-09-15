@@ -23,6 +23,13 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * Label which is used by <a href="http://php.net/manual/en/control-structures.goto.php">goto statement</a>.
+ *
+ * <pre>
+ *   {@link #label()} :
+ * </pre>
+ */
 @Beta
 public interface LabelTree extends StatementTree {
 

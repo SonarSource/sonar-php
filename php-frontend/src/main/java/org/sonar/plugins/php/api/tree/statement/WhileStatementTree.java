@@ -27,7 +27,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Represents while statement and alternative while statement syntax as well.
+ * Represents <a href="http://php.net/manual/en/control-structures.while.php">while statement</a> and alternative while statement syntax as well.
+ * <pre>
+ *   while {@link #condition()} {@link #statement()}
+ *   while {@link #condition()} : {@link #statement()} endwhile ;    // alternative syntax
+ * </pre>
  */
 @Beta
 public interface WhileStatementTree extends StatementTree {

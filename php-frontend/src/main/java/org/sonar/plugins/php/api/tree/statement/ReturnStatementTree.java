@@ -25,6 +25,13 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/function.return.php">Return statement</a>
+ * <pre>
+ *   return ;
+ *   return {@link #expression()} ;
+ * </pre>
+ */
 @Beta
 public interface ReturnStatementTree extends StatementTree {
 
