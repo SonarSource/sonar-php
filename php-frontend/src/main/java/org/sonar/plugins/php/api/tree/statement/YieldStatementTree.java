@@ -23,6 +23,12 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/ru/language.generators.syntax.php">Yield statement</a>
+ * <pre>
+ *  {@link #yieldExpression()} ;
+ * </pre>
+ */
 @Beta
 public interface YieldStatementTree extends StatementTree {
 

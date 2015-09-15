@@ -27,7 +27,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Represents foreach statement and alternative foreach statement syntax as well.
+ * Represents <a href="http://php.net/manual/en/control-structures.foreach.php">foreach statement</a> and alternative foreach statement syntax as well.
+ *
+ * <pre>
+ *   foreach ( {@link #expression()} as {@link #key()} => {@link #value()} ) {@link #statement()}
+ *   foreach ( {@link #expression()} as {@link #key()} ) {@link #statement()}
+ *   foreach ( {@link #expression()} as {@link #key()} ) : {@link #statement()} endforeach ;    // alternative syntax
+ * </pre>
  */
 @Beta
 public interface ForEachStatementTree extends StatementTree {

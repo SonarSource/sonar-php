@@ -25,6 +25,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * <a href="http://php.net/manual/en/control-structures.break.php">Break statement</a>
+ * <pre>
+ *   break;
+ *   break {@link #argument()};
+ * </pre>
+ */
 @Beta
 public interface BreakStatementTree extends StatementTree {
 

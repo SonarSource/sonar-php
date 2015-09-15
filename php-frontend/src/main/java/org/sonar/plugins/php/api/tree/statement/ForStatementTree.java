@@ -28,7 +28,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Represents for statement and alternative for statement syntax as well.
+ * Represents <a href="">for statement</a> and alternative for statement syntax as well.
+ * <pre>
+ *   for ( {@link #init()} ; {@link #condition()} ; {@link #update()} ) {@link #statement()}
+ *   for ( {@link #init()} ; {@link #condition()} ; {@link #update()} ) : {@link #statement()} endfor ;
+ * </pre>
  */
 @Beta
 public interface ForStatementTree extends StatementTree {

@@ -22,6 +22,9 @@ package org.sonar.plugins.php.api.tree.statement;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 
+/**
+ * Parent interface for all the trees representing statements (e.g. {@link IfStatementTree} or {@link ExpressionStatementTree})
+ */
 @Beta
 public interface StatementTree extends Tree {
 }

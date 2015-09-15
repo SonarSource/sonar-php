@@ -25,6 +25,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/language.exceptions.php">Try statement</a>
+ * <pre>
+ *   try {@link #block()} {@link #catchBlocks()} finally {@link #finallyBlock()}
+ *   try {@link #block()} {@link #catchBlocks()}
+ * </pre>
+ */
 @Beta
 public interface TryStatementTree extends StatementTree {
 

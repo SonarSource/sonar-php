@@ -23,6 +23,12 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/control-structures.do.while.php">Do-while loop statement</a>
+ * <pre>
+ *   do {@link #statement()} while {@link #condition()} ;
+ * </pre>
+ */
 @Beta
 public interface DoWhileStatementTree extends StatementTree {
 

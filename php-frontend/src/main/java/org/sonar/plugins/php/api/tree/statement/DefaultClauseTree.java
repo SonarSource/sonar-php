@@ -20,8 +20,31 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import org.sonar.php.api.PHPPunctuator;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+import java.util.List;
+
+/**
+ * Default case clause in <a href="http://php.net/manual/en/control-structures.switch.php">switch statement</a> (see {@link SwitchStatementTree}).
+ * <pre>
+ *   default : {@link #statements()}
+ *   default ;
+ * </pre>
+ */
 @Beta
 public interface DefaultClauseTree extends SwitchCaseClauseTree {
+
+  @Override
+  SyntaxToken caseToken();
+
+  /**
+   * Either {@link PHPPunctuator#COLON :} or {@link PHPPunctuator#SEMICOLON ;}
+   */
+  @Override
+  SyntaxToken caseSeparatorToken();
+
+  @Override
+  List<StatementTree> statements();
 
 }

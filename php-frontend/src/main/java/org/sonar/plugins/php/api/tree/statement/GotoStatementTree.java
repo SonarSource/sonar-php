@@ -24,6 +24,12 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import com.google.common.annotations.Beta;
 
+/**
+ * <a href="http://php.net/manual/en/control-structures.goto.php">Goto statement</a>
+ * <pre>
+ *   goto {@link #identifier()} ;
+ * </pre>
+ */
 @Beta
 public interface GotoStatementTree extends StatementTree {
 

@@ -19,12 +19,17 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import org.sonar.php.tree.impl.SeparatedList;
-
 import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/language.variables.scope.php#language.variables.scope.global">Global</a> variable declaration
+ * <pre>
+ *   global {@link #variables()} ;
+ * </pre>
+ */
 @Beta
 public interface GlobalStatementTree extends StatementTree {
 

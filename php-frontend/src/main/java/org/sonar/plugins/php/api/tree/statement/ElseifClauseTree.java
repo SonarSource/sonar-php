@@ -26,6 +26,14 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/control-structures.elseif.php">Else-if clause</a>
+ * of <a href="http://php.net/manual/en/control-structures.if.php">if statement</a> (see {@link IfStatementTree}).
+ * <pre>
+ *   elseif {@link #condition()} : {@link #statements()}   // here {@link #statements()} can contain any number of elements
+ *   elseif {@link #condition()} {@link #statements()}   // here {@link #statements()} should contain one element
+ * </pre>
+ */
 @Beta
 public interface ElseifClauseTree extends StatementTree {
 

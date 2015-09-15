@@ -24,6 +24,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.List;
 
+/**
+ * A BlockTree is a list of zero or more {@link #statements()} between braces which can be used anywhere a single statement is allowed.
+ *
+ * <pre>
+ * { {@link #statements()} }
+ * </pre>
+ */
 @Beta
 public interface BlockTree extends StatementTree {
 
