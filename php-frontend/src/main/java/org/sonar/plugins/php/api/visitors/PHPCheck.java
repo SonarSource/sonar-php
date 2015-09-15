@@ -26,7 +26,7 @@ import org.sonar.squidbridge.api.CodeVisitor;
  * Marker interface for all JavaScript checks.
  */
 @Beta
-public interface PHPCheck extends CodeVisitor {
+public interface PHPCheck {
 
   TreeVisitorContext getContext();
 
