@@ -26,7 +26,24 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
 public class TreeFactory {
 
+  /**
+   * [ START ] Statement
+   */
+
+  /**
+   * [ END ] Statement
+   */
+
   public ExpressionTree expression(InternalSyntaxToken token) {
     return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(token));
   }
+
+  /**
+   * [ START ] Expression
+   */
+
+  /**
+   * [ END ] Expression
+   */
+
 }
