@@ -17,18 +17,24 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class GotoStatementTest {
+public class GotoStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.GOTO_STATEMENT)
-      .matches("goto label;");
+  public void test() throws Exception {
+    GotoStatementTree tree = parse(" goto a ;", PHPLexicalGrammar.GOTO_STATEMENT);
+
+    assertThat(tree.is(Kind.GOTO_STATEMENT)).isTrue();
+    assertThat(tree.identifier().name()).isEqualTo("a");
   }
+
 }

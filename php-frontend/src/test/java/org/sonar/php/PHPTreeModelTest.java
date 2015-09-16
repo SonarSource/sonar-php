@@ -22,22 +22,10 @@ package org.sonar.php;
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
-import com.sonar.sslr.impl.ast.AstXmlPrinter;
-import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.sslr.grammar.GrammarRuleKey;
-import org.sonar.sslr.internal.matchers.InputBuffer;
-import org.sonar.sslr.parser.ParseError;
-import org.sonar.sslr.parser.ParseErrorFormatter;
-
-import java.util.Iterator;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 public class PHPTreeModelTest {
   protected ActionParser<Tree> p;
@@ -52,7 +40,7 @@ public class PHPTreeModelTest {
   protected <T extends Tree> T parse(String s, GrammarRuleKey rootRule) throws Exception {
     p = PHPParserBuilder.createParser(rootRule, Charsets.UTF_8);
     Tree node = p.parse(s);
-    checkFullFidelity(node, s);
+    checkFullFidelity(node, s.trim());
     return (T) node;
   }
 
