@@ -17,21 +17,24 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.LabelTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class LabelTest {
+public class LabelTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.LABEL)
-        .matches("a :")
-        .matches("a:")
-        .matches(" abc:")
-        .notMatches("$a :");
+  public void test() throws Exception {
+    LabelTree tree = parse("a:", PHPLexicalGrammar.STATEMENT);
+
+    assertThat(tree.is(Kind.LABEL)).isTrue();
+    assertThat(tree.label().name()).isEqualTo("a");
   }
+
 }
