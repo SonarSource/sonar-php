@@ -30,6 +30,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.internal.matchers.InputBuffer;
 import org.sonar.sslr.parser.ParseError;
 import org.sonar.sslr.parser.ParseErrorFormatter;
@@ -48,7 +49,7 @@ public class PHPTreeModelTest {
    * @param rootRule the rule to start parsing from
    * @return the node found for the given kind, null if not found.
    */
-  protected <T extends Tree> T parse(String s, PHPLexicalGrammar rootRule) throws Exception {
+  protected <T extends Tree> T parse(String s, GrammarRuleKey rootRule) throws Exception {
     p = PHPParserBuilder.createParser(rootRule, Charsets.UTF_8);
     Tree node = p.parse(s);
     checkFullFidelity(node, s);
