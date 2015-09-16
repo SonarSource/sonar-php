@@ -24,8 +24,10 @@ import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 
 import java.util.Collections;
@@ -44,6 +46,10 @@ public class TreeFactory {
   /**
    * [ START ] Statement
    */
+
+  public ExpressionStatementTree expressionStatement(ExpressionTree expression, InternalSyntaxToken eos) {
+    return new ExpressionStatementTreeImpl(expression, eos);
+  }
 
   public LabelTree label(InternalSyntaxToken identifier, InternalSyntaxToken colon) {
     return new LabelTreeImpl(new IdentifierTreeImpl(identifier), colon);
