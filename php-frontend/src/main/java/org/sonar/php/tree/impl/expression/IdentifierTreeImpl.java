@@ -57,7 +57,7 @@ public class IdentifierTreeImpl extends PHPTree implements IdentifierTree {
 
   @Override
   public String toString() {
-    return name();
+    return "[IdentifierTree] \"" + name() + "\"";
   }
 
   @Override
