@@ -43,7 +43,7 @@ public class NewPHPGrammar {
 
   public ExpressionTree EXPRESSION() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EXPRESSION)
-        .is(f.expression(b.token(PHPLexicalGrammar.VARIABLE_IDENTIFIER)));
+        .is(f.expression(b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER)));
   }
 
   /**
