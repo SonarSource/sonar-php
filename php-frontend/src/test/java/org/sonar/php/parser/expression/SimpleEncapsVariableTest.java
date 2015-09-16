@@ -19,41 +19,36 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class SimpleEncapsVariableTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.SIMPLE_ENCAPS_VARIABLE);
-  }
+public class SimpleEncapsVariableTest {
 
   @Test
   public void test() {
-    matches("$variable");
-    matches("$variable [ offset ]");
-    matches("$variable -> identifier");
-
+    assertThat(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
+      .matches("$variable")
+      .matches("$variable [ offset ]")
+      .matches("$variable -> identifier");
   }
 
   @Test
   public void test_real_life() {
-    matches("$foo[0]");
-    matches("$foo[0]");
-    matches("$foo[identifier]");
-    matches("$foo[$variable]");
-
+    assertThat(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
+      .matches("$foo[0]")
+      .matches("$foo[identifier]")
+      .matches("$foo[$variable]");
 
   }
 
   @Test
   public void nok() throws Exception {
-    notMatches("$var[test()]");
-    notMatches("$var[{$test}]");
-    notMatches("$var[$$test]");
+    assertThat(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
+      .notMatches("$var[test()]")
+      .notMatches("$var[{$test}]")
+      .notMatches("$var[$$test]");
   }
 
 }

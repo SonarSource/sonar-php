@@ -25,6 +25,9 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 /**
  * <pre>
  *   { $foo[1] }
+ *
+ *   // Real life example:
+ *   $bar->{$foo[1]}
  * </pre>
  */
 @Beta

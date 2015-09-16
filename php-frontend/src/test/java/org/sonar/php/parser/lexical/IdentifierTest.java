@@ -19,23 +19,21 @@
  */
 package org.sonar.php.parser.lexical;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class IdentifierTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.VAR_IDENTIFIER);
-  }
+public class IdentifierTest {
 
   @Test
   public void test() {
-    matches("$var");
-    matches("$_var");
-    matches("$var1");
+    assertThat(Kind.IDENTIFIER)
+      .matches("identifier")
+      .matches("_identifier")
+      .matches("identifier1")
+
+      .notMatches("var");
   }
 
 }

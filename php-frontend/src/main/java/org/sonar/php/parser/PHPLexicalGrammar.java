@@ -232,7 +232,6 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   ASSIGNMENT_LIST_ELEMENT,
   ASSIGNMENT_LIST,
   FUNCTION_EXPRESSION,
-  ENCAPS_STRING_LITERAL,
   COMPLEX_ENCAPS_VARIABLE,
   SEMI_COMPLEX_ENCAPS_VARIABLE,
   SEMI_COMPLEX_RECOVERY_EXPRESSION,
@@ -254,6 +253,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   TRAIT_CONSTANT,
   NEXT_IS_DOLLAR,
   DOUBLE_QUOTE,
+  REGULAR_STRING_LITERAL,
 
   WHITESPACES,
   EXPRESSION;
@@ -292,6 +292,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(HEREDOC).is(SPACING, b.regexp(LexicalConstant.HEREDOC));
     b.rule(NUMERIC_LITERAL).is(SPACING, b.regexp(LexicalConstant.NUMERIC_LITERAL));
 //    b.rule(STRING_LITERAL).is(SPACING, b.firstOf(b.regexp(LexicalConstant.STRING_LITERAL), ENCAPS_STRING_LITERAL));
+    b.rule(REGULAR_STRING_LITERAL).is(SPACING, b.regexp(LexicalConstant.STRING_LITERAL));
 
     b.rule(STRING_WITH_ENCAPS_VAR_CHARACTERS).is(b.regexp(LexicalConstant.STRING_WITH_ENCAPS_VAR_CHARACTERS));
 //    b.rule(ENCAPS_STRING_LITERAL).is(SPACING, "\"", ENCAPS_LIST, "\"");

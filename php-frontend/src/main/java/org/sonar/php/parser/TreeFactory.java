@@ -24,7 +24,14 @@ import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
+import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
+import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
+import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
+import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
+import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.BlockTreeImpl;
 import org.sonar.php.tree.impl.statement.BreakStatementTreeImpl;
@@ -67,9 +74,18 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+
+
+import java.util.List;
+
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 
 public class TreeFactory {
 
@@ -351,6 +367,84 @@ public class TreeFactory {
   /**
    * [ START ] Expression
    */
+
+  public LiteralTree numericLiteral(InternalSyntaxToken token) {
+    return new LiteralTreeImpl(Tree.Kind.NUMERIC_LITERAL, token);
+  }
+
+  public LiteralTree regularStringLiteral(InternalSyntaxToken token) {
+    return new LiteralTreeImpl(Tree.Kind.REGULAR_STRING_LITERAL, token);
+  }
+
+  public LiteralTree booleanLiteral(InternalSyntaxToken token) {
+    return new LiteralTreeImpl(Tree.Kind.BOOLEAN_LITERAL, token);
+  }
+
+  public LiteralTree nullLiteral(InternalSyntaxToken token) {
+   return new LiteralTreeImpl(Tree.Kind.NULL_LITERAL, token);
+  }
+
+  public LiteralTree magicConstantLiteral(InternalSyntaxToken token) {
+    return new LiteralTreeImpl(Tree.Kind.MAGIC_CONSTANT, token);
+  }
+
+  public LiteralTree heredocLiteral(InternalSyntaxToken token) {
+    return new LiteralTreeImpl(Tree.Kind.HEREDOC_LITERAL, token);
+  }
+
+  public ExpandableStringCharactersTree expandableStringCharacters(InternalSyntaxToken token) {
+    return new ExpandableStringCharactersTreeImpl(token);
+  }
+
+  public VariableIdentifierTree expandableStringVariableIdentifier(InternalSyntaxToken token) {
+    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(token));
+  }
+
+  public IdentifierTree identifier(InternalSyntaxToken token) {
+    return new IdentifierTreeImpl(token);
+  }
+
+  public ArrayAccessTree expandableArrayAccess(InternalSyntaxToken openBracket, ExpressionTree offset, InternalSyntaxToken closeBracket) {
+    return new ArrayAccessTreeImpl(openBracket, offset, closeBracket);
+  }
+
+  public MemberAccessTree expandableObjectMemberAccess(InternalSyntaxToken arrow, IdentifierTree property) {
+    return new MemberAccessTreeImpl(arrow, property);
+  }
+
+  public ExpressionTree encapsulatedSimpleVar(VariableIdentifierTree variableIdentifier, Optional<ExpressionTree> partial) {
+    if (partial.isPresent()) {
+
+      if (partial.get() instanceof ArrayAccessTree) {
+        ((ArrayAccessTreeImpl) partial.get()).complete(variableIdentifier);
+      } else {
+        ((MemberAccessTreeImpl) partial.get()).complete(variableIdentifier);
+      }
+      return partial.get();
+    }
+
+    return variableIdentifier;
+  }
+
+  public ExpressionTree expressionRecovery(InternalSyntaxToken token) {
+    return new IdentifierTreeImpl(token);
+  }
+
+  public ExpressionTree encapsulatedSemiComplexVariable(InternalSyntaxToken openDollarCurly, ExpressionTree expressionTree, InternalSyntaxToken closeCurly) {
+    return new CompoundVariableTreeImpl(openDollarCurly, expressionTree, closeCurly);
+  }
+
+  public VariableIdentifierTree encapsulatedVariableIdentifier(InternalSyntaxToken spaces, InternalSyntaxToken variableIdentifier) {
+    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(variableIdentifier));
+  }
+
+  public ExpressionTree encapsulatedComplexVariable(InternalSyntaxToken openCurly, Tree lookahead, ExpressionTree expression, InternalSyntaxToken closeCurly) {
+    return new ComputedVariableTreeImpl(openCurly, expression, closeCurly);
+  }
+
+  public ExpandableStringLiteralTree expandableStringLiteral(Tree spacing, InternalSyntaxToken openDoubleQuote, List<ExpressionTree> expressions, InternalSyntaxToken closeDoubleQuote) {
+    return new ExpandableStringLiteralTreeImpl(openDoubleQuote, expressions, closeDoubleQuote);
+  }
 
   /**
    * [ END ] Expression
