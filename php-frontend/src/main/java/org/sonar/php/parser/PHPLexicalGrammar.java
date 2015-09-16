@@ -245,7 +245,21 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   ENCAPS_DIMENSIONAL_OFFSET,
   ENCAPS_OBJECT_MEMBER_ACCESS,
 
+  NULL,
+  CLASS_CONSTANT,
+  FILE_CONSTANT,
+  DIR_CONSTANT,
+  FUNCTION_CONSTANT,
+  LINE_CONSTANT,
+  METHOD_CONSTANT,
+  NAMESPACE_CONSTANT,
+  TRAIT_CONSTANT,
+  NEXT_IS_DOLLAR,
+  DOUBLE_QUOTE,
+
+  WHITESPACES,
   EXPRESSION;
+
 
 
   public static LexerlessGrammar createGrammar() {
@@ -283,11 +297,13 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
     b.rule(STRING_WITH_ENCAPS_VAR_CHARACTERS).is(b.regexp(LexicalConstant.STRING_WITH_ENCAPS_VAR_CHARACTERS));
 //    b.rule(ENCAPS_STRING_LITERAL).is(SPACING, "\"", ENCAPS_LIST, "\"");
+    b.rule(DOUBLE_QUOTE).is("\"");
+    // FIXME: this recovery is introduce in order to parse ${var}, as expression cannot match keywords.
+    b.rule(SEMI_COMPLEX_RECOVERY_EXPRESSION).is(b.regexp("[^}]++"));
 
     // Identifier
-    b.rule(ENCAPS_VAR_IDENTIFIER).is(
-      b.regexp("[" + LexicalConstant.WHITESPACE + "]*+"),
-        VARIABLE_IDENTIFIER).skip();
+    b.rule(WHITESPACES).is(b.regexp("[" + LexicalConstant.WHITESPACE + "]*+"));
+//    b.rule(ENCAPS_VAR_IDENTIFIER).is(WHITESPACES, VARIABLE_IDENTIFIER).skip();
     b.rule(REGULAR_VAR_IDENTIFIER).is(SPACING, VARIABLE_IDENTIFIER).skip();
     b.rule(VARIABLE_IDENTIFIER).is(b.regexp(LexicalConstant.VAR_IDENTIFIER));
     b.rule(IDENTIFIER).is(SPACING, b.nextNot(KEYWORDS), b.regexp(LexicalConstant.IDENTIFIER));
@@ -297,6 +313,20 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(INLINE_HTML).is(SPACING, b.token(PHPTokenType.INLINE_HTML, b.regexp(LexicalConstant.PHP_END_TAG))).skip();
 
     b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
+
+    b.rule(NULL).is(word(b, "NULL")).skip();
+    b.rule(CLASS_CONSTANT).is(word(b, "__CLASS__")).skip();
+    b.rule(FILE_CONSTANT).is(word(b, "__FILE__")).skip();
+    b.rule(DIR_CONSTANT).is(word(b, "__DIR__")).skip();
+    b.rule(FUNCTION_CONSTANT).is(word(b, "__FUNCTION__")).skip();
+    b.rule(LINE_CONSTANT).is(word(b, "__LINE__")).skip();
+    b.rule(METHOD_CONSTANT).is(word(b, "__METHOD__")).skip();
+    b.rule(NAMESPACE_CONSTANT).is(word(b, "__NAMESPACE__")).skip();
+    b.rule(TRAIT_CONSTANT).is(word(b, "__TRAIT__")).skip();
+
+    b.rule(BOOLEAN_LITERAL).is(b.firstOf(word(b, "TRUE"), word(b, "FALSE")));
+
+    b.rule(NEXT_IS_DOLLAR).is(b.next(PHPPunctuator.DOLLAR));
   }
 
   private static void keywords(LexerlessGrammarBuilder b) {
@@ -325,6 +355,10 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     for (PHPPunctuator p : PHPPunctuator.values()) {
       b.rule(p).is(SPACING, b.token(p, p.getValue())).skip();
     }
+  }
+
+  private static Object word(LexerlessGrammarBuilder b, String word) {
+    return b.sequence(SPACING, b.regexp("(?i)" + word), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART)));
   }
 
 }

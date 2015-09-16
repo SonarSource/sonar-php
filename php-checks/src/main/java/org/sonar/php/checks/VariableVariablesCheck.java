@@ -49,7 +49,7 @@ public class VariableVariablesCheck extends SquidCheck<LexerlessGrammar> {
 
   @Override
   public void visitNode(AstNode astNode) {
-    String varName = StringUtils.repeat(PHPPunctuator.DOLAR.getValue(), astNode.getNumberOfChildren()) + astNode.getNextAstNode().getTokenOriginalValue();
+    String varName = StringUtils.repeat(PHPPunctuator.DOLLAR.getValue(), astNode.getNumberOfChildren()) + astNode.getNextAstNode().getTokenOriginalValue();
     getContext().createLineViolation(this, "Remove the use of this variable variable \"{0}\".", astNode, varName);
   }
 }

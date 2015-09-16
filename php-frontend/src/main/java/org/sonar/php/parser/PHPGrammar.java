@@ -101,8 +101,8 @@ import static org.sonar.php.api.PHPPunctuator.CONCATEQUAL;
 import static org.sonar.php.api.PHPPunctuator.DEC;
 import static org.sonar.php.api.PHPPunctuator.DIV;
 import static org.sonar.php.api.PHPPunctuator.DIVEQUAL;
-import static org.sonar.php.api.PHPPunctuator.DOLAR;
-import static org.sonar.php.api.PHPPunctuator.DOLAR_LCURLY;
+import static org.sonar.php.api.PHPPunctuator.DOLLAR;
+import static org.sonar.php.api.PHPPunctuator.DOLLAR_LCURLY;
 import static org.sonar.php.api.PHPPunctuator.DOT;
 import static org.sonar.php.api.PHPPunctuator.DOUBLEARROW;
 import static org.sonar.php.api.PHPPunctuator.DOUBLECOLON;
@@ -426,7 +426,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(YIELD_EXPRESSION).is(YIELD, EXPRESSION, b.optional(DOUBLEARROW, EXPRESSION));
 
-    b.rule(SIMPLE_INDIRECT_REFERENCE).is(b.oneOrMore(DOLAR, b.nextNot(b.firstOf(IDENTIFIER, KEYWORDS, LCURLYBRACE))));
+    b.rule(SIMPLE_INDIRECT_REFERENCE).is(b.oneOrMore(DOLLAR, b.nextNot(b.firstOf(IDENTIFIER, KEYWORDS, LCURLYBRACE))));
 
     b.rule(COMPUTED_VARIABLE_NAME).is(LCURLYBRACE, EXPRESSION, RCURLYBRACE);
     b.rule(REFERENCE_VARIABLE).is(COMPOUND_VARIABLE, b.zeroOrMore(b.firstOf(
@@ -437,7 +437,7 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(COMPOUND_VARIABLE).is(b.firstOf(
       REGULAR_VAR_IDENTIFIER,
-      b.sequence(DOLAR_LCURLY, EXPRESSION, RCURLYBRACE)));
+      b.sequence(DOLLAR_LCURLY, EXPRESSION, RCURLYBRACE)));
 
     b.rule(CLASS_NAME).is(b.firstOf(STATIC, FULLY_QUALIFIED_CLASS_NAME));
 
@@ -528,9 +528,9 @@ public enum PHPGrammar implements GrammarRuleKey {
         COMPLEX_ENCAPS_VARIABLE)
     );
 
-    b.rule(COMPLEX_ENCAPS_VARIABLE).is(LCURLYBRACE, b.next(DOLAR), EXPRESSION, RCURLYBRACE);
+    b.rule(COMPLEX_ENCAPS_VARIABLE).is(LCURLYBRACE, b.next(DOLLAR), EXPRESSION, RCURLYBRACE);
     b.rule(SEMI_COMPLEX_ENCAPS_VARIABLE).is(
-      DOLAR_LCURLY,
+      DOLLAR_LCURLY,
       b.firstOf(
         EXPRESSION,
         SEMI_COMPLEX_RECOVERY_EXPRESSION),

@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespacedNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayAccessExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
@@ -40,6 +40,7 @@ import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExitTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
@@ -47,7 +48,7 @@ import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
@@ -177,9 +178,9 @@ public interface Tree {
     COMPOUND_VARIABLE_NAME(CompoundVariableTree.class),
 
     /**
-     * {@link ArrayAccessExpressionTree}
+     * {@link org.sonar.plugins.php.api.tree.expression.ArrayAccessTree}
      */
-    ARRAY_ACCESS(ArrayAccessExpressionTree.class),
+    ARRAY_ACCESS(ArrayAccessTree.class),
 
     /**
      * {@link VariableIdentifierTree}
@@ -197,16 +198,16 @@ public interface Tree {
     REFERENCE_VARIABLE(ReferenceVariableTree.class),
 
     /**
-     * {@link MemberAccessExpressionTree}
+     * {@link org.sonar.plugins.php.api.tree.expression.MemberAccessTree}
      * {@code =>}
      */
-    OBJECT_MEMBER_ACCESS(MemberAccessExpressionTree.class),
+    OBJECT_MEMBER_ACCESS(MemberAccessTree.class),
 
     /**
-     * {@link MemberAccessExpressionTree}
+     * {@link org.sonar.plugins.php.api.tree.expression.MemberAccessTree}
      * {@code ::}
      */
-    CLASS_MEMBER_ACCESS(MemberAccessExpressionTree.class),
+    CLASS_MEMBER_ACCESS(MemberAccessTree.class),
 
     /**
      * {@link FunctionCallTree}
@@ -574,9 +575,20 @@ public interface Tree {
     STRING_LITERAL(LiteralTree.class),
 
     /**
+     * {@link LiteralTree}
+     * {@code heredoc}
+     */
+    HEREDOC_LITERAL(LiteralTree.class),
+
+    /**
      * {@link ExpandableStringLiteralTree}
      */
     EXPANDABLE_STRING_LITERAL(ExpandableStringLiteralTree.class),
+
+    /**
+     * {@link ExpandableStringCharactersTree}
+     */
+    EXPANDABLE_STRING_CHARACTERS(ExpandableStringCharactersTree.class),
 
     /**
      * {@link LiteralTree}

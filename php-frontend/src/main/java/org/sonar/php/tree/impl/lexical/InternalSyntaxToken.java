@@ -103,4 +103,14 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
     // FIXME do nothing at the moment
   }
 
+  @Override
+  public SyntaxToken getFirstToken() {
+    return this;
+  }
+
+  @Override
+  public SyntaxToken getLastToken() {
+    return this;
+  }
+
 }

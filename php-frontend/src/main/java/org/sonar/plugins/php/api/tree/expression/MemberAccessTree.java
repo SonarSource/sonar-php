@@ -22,18 +22,22 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
-
+/**
+ * <a href="http://php.net/manual/en/language.oop5.properties.php">Object/Class Member</a> Access
+ * <pre>
+ *   {@link #object()} -> {@link #member()}
+ *   {@link #object()} :: {@link #member()}
+ * </pre>
+ */
 @Beta
-public interface ArrayAccessExpressionTree extends ExpressionTree {
+public interface MemberAccessTree extends ExpressionTree {
 
   ExpressionTree object();
 
-  SyntaxToken openBracketToken();
+  SyntaxToken accessToken();
 
-  @Nullable // FIXME martin: to check
-  ExpressionTree expression();
+  ExpressionTree member();
 
-  SyntaxToken closeBracketToken();
+  boolean isStatic();
 
 }

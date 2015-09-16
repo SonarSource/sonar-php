@@ -67,8 +67,8 @@ public enum PHPPunctuator implements TokenType, GrammarRuleKey {
   ARROW("->"),
   DOUBLEARROW("=>"),
 
-  DOLAR("$"),
-  DOLAR_LCURLY("${"),
+  DOLLAR("$"),
+  DOLLAR_LCURLY("${"),
   LCURLYBRACE("{"),
   RCURLYBRACE("}"),
   LPARENTHESIS("("),
