@@ -23,6 +23,7 @@ import com.sonar.sslr.api.typed.GrammarBuilder;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
@@ -45,14 +46,24 @@ public class NewPHPGrammar {
         .is(b.firstOf(
 //            BLOCK_STATEMENT(),
 //             ...
-//            EXPRESSION_STATEMENT(),
+            EXPRESSION_STATEMENT(),
             LABEL()
         ));
+  }
+
+  public ExpressionStatementTree EXPRESSION_STATEMENT() {
+    return b.<ExpressionStatementTree>nonterminal(PHPLexicalGrammar.EXPRESSION_STATEMENT)
+        .is(f.expressionStatement(EXPRESSION(), EOS()));
   }
 
   public LabelTree LABEL() {
     return b.<LabelTree>nonterminal(PHPLexicalGrammar.LABEL)
         .is(f.label(b.token(PHPLexicalGrammar.IDENTIFIER), b.token(PHPPunctuator.COLON)));
+  }
+
+  public InternalSyntaxToken EOS() {
+    return b.<InternalSyntaxToken>nonterminal(PHPLexicalGrammar.EOS)
+        .is(b.firstOf(b.token(PHPPunctuator.SEMICOLON), b.token(PHPLexicalGrammar.INLINE_HTML)));
   }
 
   /**

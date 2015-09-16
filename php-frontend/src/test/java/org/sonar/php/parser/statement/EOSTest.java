@@ -17,32 +17,21 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.visitors;
+package org.sonar.php.parser.statement;
 
-import com.google.common.annotations.Beta;
-import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
-import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.junit.Test;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-@Beta
-public interface TreeVisitor {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  /**
-   * [ START ] Statement
-   */
+public class EOSTest {
 
-  void visitExpressionStatement(ExpressionStatementTree tree);
-
-  void visitLabel(LabelTree tree);
-
-  /**
-   * [ END ] Statement
-   */
-
-  void visitVariableIdentifier(VariableIdentifierTree tree);
-
-  void visitIdentifier(IdentifierTreeImpl identifierTree);
-
+  @Test
+  public void test() {
+    assertThat(PHPLexicalGrammar.EOS)
+        .matches(";")
+        .matches("?><a>Link</a>")
+        .matches("?>")
+        .notMatches("<?php");
+  }
 }
-
