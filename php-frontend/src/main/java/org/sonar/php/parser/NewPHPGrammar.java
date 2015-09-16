@@ -33,9 +33,25 @@ public class NewPHPGrammar {
     this.f = f;
   }
 
+  /**
+   * [ START ] Statement
+   */
+
+  /**
+   * [ END ] Statement
+   */
+
   public ExpressionTree EXPRESSION() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EXPRESSION)
         .is(f.expression(b.token(PHPLexicalGrammar.VARIABLE_IDENTIFIER)));
   }
+
+  /**
+   * [ START ] Expression
+   */
+
+  /**
+   * [ END ] Expression
+   */
 
 }
