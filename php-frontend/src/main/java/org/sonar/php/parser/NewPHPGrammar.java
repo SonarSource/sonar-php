@@ -20,10 +20,12 @@
 package org.sonar.php.parser;
 
 import com.sonar.sslr.api.typed.GrammarBuilder;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
@@ -46,9 +48,17 @@ public class NewPHPGrammar {
         .is(b.firstOf(
 //            BLOCK_STATEMENT(),
 //             ...
+            GOTO_STATEMENT(),
+//            INLINE_HTML,   // ???
+//            UNSET_VARIABLE_STATEMENT(),
             EXPRESSION_STATEMENT(),
             LABEL()
         ));
+  }
+
+  public GotoStatementTree GOTO_STATEMENT() {
+    return b.<GotoStatementTree>nonterminal(PHPLexicalGrammar.GOTO_STATEMENT)
+        .is(f.gotoStatement(b.token(PHPKeyword.GOTO), b.token(PHPLexicalGrammar.IDENTIFIER), EOS()));
   }
 
   public ExpressionStatementTree EXPRESSION_STATEMENT() {

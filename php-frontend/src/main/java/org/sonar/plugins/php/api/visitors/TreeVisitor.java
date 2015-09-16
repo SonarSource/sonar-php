@@ -23,6 +23,7 @@ import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 
 @Beta
@@ -31,6 +32,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitGotoStatement(GotoStatementTree tree);
 
   void visitExpressionStatement(ExpressionStatementTree tree);
 
