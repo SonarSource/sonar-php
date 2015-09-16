@@ -21,14 +21,25 @@ package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.statement.LabelTree;
 
 @Beta
 public interface TreeVisitor {
 
+  /**
+   * [ START ] Statement
+   */
+
+  void visitLabel(LabelTree tree);
+
+  /**
+   * [ END ] Statement
+   */
+
   void visitVariableIdentifier(VariableIdentifierTree tree);
 
   void visitIdentifier(IdentifierTreeImpl identifierTree);
+
 }
 

@@ -20,8 +20,11 @@
 package org.sonar.php.parser;
 
 import com.sonar.sslr.api.typed.GrammarBuilder;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 public class NewPHPGrammar {
 
@@ -36,6 +39,21 @@ public class NewPHPGrammar {
   /**
    * [ START ] Statement
    */
+
+  public StatementTree STATEMENT() {
+    return b.<StatementTree>nonterminal(PHPLexicalGrammar.STATEMENT)
+        .is(b.firstOf(
+//            BLOCK_STATEMENT(),
+//             ...
+//            EXPRESSION_STATEMENT(),
+            LABEL()
+        ));
+  }
+
+  public LabelTree LABEL() {
+    return b.<LabelTree>nonterminal(PHPLexicalGrammar.LABEL)
+        .is(f.label(b.token(PHPLexicalGrammar.IDENTIFIER), b.token(PHPPunctuator.COLON)));
+  }
 
   /**
    * [ END ] Statement
