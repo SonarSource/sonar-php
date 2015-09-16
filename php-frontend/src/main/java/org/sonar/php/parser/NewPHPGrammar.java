@@ -24,10 +24,12 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 public class NewPHPGrammar {
 
@@ -46,14 +48,21 @@ public class NewPHPGrammar {
   public StatementTree STATEMENT() {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.STATEMENT)
         .is(b.firstOf(
-//            BLOCK_STATEMENT(),
+            BLOCK_STATEMENT(),
+            LABEL(),
 //             ...
+//            TRY_STATEMENT(),
+//            DECLARE_STATEMENT(),
             GOTO_STATEMENT(),
 //            INLINE_HTML,   // ???
 //            UNSET_VARIABLE_STATEMENT(),
-            EXPRESSION_STATEMENT(),
-            LABEL()
+            EXPRESSION_STATEMENT()
         ));
+  }
+
+  public BlockTree BLOCK_STATEMENT() {
+    return b.<BlockTree>nonterminal(PHPLexicalGrammar.BLOCK)
+        .is(f.block(b.token(PHPPunctuator.LCURLYBRACE), b.zeroOrMore(STATEMENT()), b.token(PHPPunctuator.RCURLYBRACE)));
   }
 
   public GotoStatementTree GOTO_STATEMENT() {

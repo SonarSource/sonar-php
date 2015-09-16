@@ -23,14 +23,17 @@ import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.php.tree.impl.statement.BlockTreeImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +51,9 @@ public class TreeFactory {
   /**
    * [ START ] Statement
    */
+  public BlockTree block(InternalSyntaxToken lbrace, Optional<List<StatementTree>> statements, InternalSyntaxToken rbrace) {
+    return new BlockTreeImpl(lbrace, optionalList(statements), rbrace);
+  }
 
   public GotoStatementTree gotoStatement(InternalSyntaxToken gotoToken, InternalSyntaxToken identifier, InternalSyntaxToken eos) {
     return new GotoStatementTreeImpl(gotoToken, new IdentifierTreeImpl(identifier), eos);
@@ -68,6 +74,8 @@ public class TreeFactory {
   public ExpressionTree expression(InternalSyntaxToken token) {
     return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(token));
   }
+
+
 
   /**
    * [ START ] Expression
