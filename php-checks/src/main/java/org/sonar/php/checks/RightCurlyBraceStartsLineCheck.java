@@ -57,7 +57,7 @@ public class RightCurlyBraceStartsLineCheck extends SquidCheck<LexerlessGrammar>
   }
 
   private static boolean isOnSameLineThanLeftCurlyBrace(AstNode rcurly) {
-    return rcurly.getParent().getFirstChild(PHPPunctuator.LCURLYBRACE, PHPPunctuator.DOLAR_LCURLY).getTokenLine() == rcurly.getTokenLine();
+    return rcurly.getParent().getFirstChild(PHPPunctuator.LCURLYBRACE, PHPPunctuator.DOLLAR_LCURLY).getTokenLine() == rcurly.getTokenLine();
   }
 
 }

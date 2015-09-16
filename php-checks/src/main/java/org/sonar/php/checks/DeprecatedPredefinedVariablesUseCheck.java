@@ -64,7 +64,7 @@ public class DeprecatedPredefinedVariablesUseCheck extends SquidCheck<LexerlessG
       return false;
     }
 
-    return isNotVariableVariables(compoundNode) && compoundChild.getPreviousAstNode().isNot(PHPPunctuator.ARROW, PHPPunctuator.DOUBLECOLON, PHPPunctuator.DOLAR_LCURLY);
+    return isNotVariableVariables(compoundNode) && compoundChild.getPreviousAstNode().isNot(PHPPunctuator.ARROW, PHPPunctuator.DOUBLECOLON, PHPPunctuator.DOLLAR_LCURLY);
   }
 
   private static boolean isNotVariableVariables(AstNode compoundNode) {

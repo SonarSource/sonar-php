@@ -22,15 +22,18 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+import javax.annotation.Nullable;
+
 @Beta
-public interface MemberAccessExpressionTree extends ExpressionTree {
+public interface ArrayAccessTree extends ExpressionTree {
 
   ExpressionTree object();
 
-  SyntaxToken accessToken();
+  SyntaxToken openBracketToken();
 
-  ExpressionTree member();
+  @Nullable // FIXME martin: to check
+  ExpressionTree offset();
 
-  boolean isStatic();
+  SyntaxToken closeBracketToken();
 
 }
