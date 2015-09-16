@@ -17,20 +17,33 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class BlockTest {
+public class BlockTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.BLOCK)
-      .matches("{ $a ; }")
-      .matches("{ $a ; $b; }")
-      .matches("{}");
+  public void empty() throws Exception {
+    BlockTree tree = parse("{}", PHPLexicalGrammar.BLOCK);
+
+    assertThat(tree.is(Kind.BLOCK)).isTrue();
+    assertThat(tree.statements()).isEmpty();
   }
+
+  @Test
+  public void not_empty() throws Exception {
+    BlockTree tree = parse("{ $a; }", PHPLexicalGrammar.BLOCK);
+    assertThat(tree.statements()).hasSize(1);
+
+    tree = parse("{ $a; $b; }", PHPLexicalGrammar.BLOCK);
+    assertThat(tree.statements()).hasSize(2);
+  }
+
 }
