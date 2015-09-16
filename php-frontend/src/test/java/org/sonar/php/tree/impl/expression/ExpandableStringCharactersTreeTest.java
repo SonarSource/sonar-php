@@ -17,22 +17,22 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.lexical;
+package org.sonar.php.tree.impl.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.PHPTreeModelTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class VarIdentifierTest extends RuleTest {
+public class ExpandableStringCharactersTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.VARIABLE_IDENTIFIER)
-      .matches("$var")
-      .matches("$_var")
-      .matches("$var1");
+  public void test() throws Exception {
+    ExpandableStringCharactersTreeImpl tree = parse("characters with spaces", Kind.EXPANDABLE_STRING_CHARACTERS);
+
+    assertThat(tree.is(Kind.EXPANDABLE_STRING_CHARACTERS)).isTrue();
+    assertThat(tree.value()).isEqualTo("characters with spaces");
   }
 
 }

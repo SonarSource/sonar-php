@@ -573,7 +573,7 @@ public interface Tree {
      * {@link LiteralTree}
      * {@code string}
      */
-    STRING_LITERAL(LiteralTree.class),
+    REGULAR_STRING_LITERAL(LiteralTree.class),
 
     /**
      * {@link LiteralTree}

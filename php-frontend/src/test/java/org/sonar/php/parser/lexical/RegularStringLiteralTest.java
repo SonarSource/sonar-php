@@ -23,16 +23,24 @@ import static org.sonar.php.utils.Assertions.assertThat;
 
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
 
-public class VarIdentifierTest extends RuleTest {
+public class RegularStringLiteralTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.VARIABLE_IDENTIFIER)
-      .matches("$var")
-      .matches("$_var")
-      .matches("$var1");
+    assertThat(PHPLexicalGrammar.REGULAR_STRING_LITERAL)
+    .matches("\"\"")
+    .matches("\"str\"")
+    .matches("'str'");
+  }
+
+  @Test
+  public void test_real_life() {
+    assertThat(PHPLexicalGrammar.REGULAR_STRING_LITERAL)
+    .matches("\"/regexp $/\"")
+    .matches("\"non regexp $\"") // PHP is permissive
+    .matches("\"str \\$foo\"")
+    .matches("\"{'str'}\"");
   }
 
 }

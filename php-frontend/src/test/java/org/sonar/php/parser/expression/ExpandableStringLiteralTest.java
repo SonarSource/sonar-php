@@ -17,35 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.lexical;
+package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
+import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class StringLiteralTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.STRING_LITERAL);
-  }
+public class ExpandableStringLiteralTest {
 
   @Test
   public void test() {
-    matches("\"\"");
-    matches("\"str\"");
-    matches("\"$var\"");
-    matches("'str'");
+    assertThat(Kind.EXPANDABLE_STRING_LITERAL)
+    .matches("\"$var\"");
   }
 
+  @Ignore // FIXME when EXPRESSION is completed.
   @Test
   public void test_real_life() {
-    matches("\"/regexp $/\"");
-    matches("\"non regexp $\""); // PHP is permissive
-    matches("\"str \\$foo\"");
-    matches("\"{'str'}\"");
-    matches("\"{$var[\"foo\"]}\"");
+    assertThat(Kind.EXPANDABLE_STRING_LITERAL)
+      .matches("\"{$var[\"foo\"]}\"");
   }
 
 }

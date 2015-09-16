@@ -19,26 +19,19 @@
  */
 package org.sonar.php.parser.lexical;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 public class EncapsStringLiteralTest extends RuleTest {
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.ENCAPS_STRING_LITERAL);
-  }
-
   @Test
   public void test() {
-    matches("\"$var\"");
-    matches("\"$var\n\"");
+    assertThat(Kind.EXPANDABLE_STRING_LITERAL)
+      .matches("\"$var\"")
+      .matches("\"$var\n\"");
   }
 
-  @Test
-  public void test_real_life() {
-
-  }
 }

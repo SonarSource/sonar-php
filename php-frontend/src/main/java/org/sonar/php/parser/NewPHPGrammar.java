@@ -45,6 +45,12 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 
 public class NewPHPGrammar {
 
@@ -343,6 +349,113 @@ public class NewPHPGrammar {
   /**
    * [ START ] Expression
    */
+
+  public ExpressionTree COMMON_SCALAR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.COMMON_SCALAR)
+      .is(b.firstOf(
+        f.heredocLiteral(b.token(PHPLexicalGrammar.HEREDOC)),
+        NUMERIC_LITERAL(),
+        STRING_LITERAL(),
+        f.booleanLiteral(b.token(PHPLexicalGrammar.BOOLEAN_LITERAL)),
+        f.nullLiteral(b.token(PHPLexicalGrammar.NULL)),
+        f.magicConstantLiteral(b.firstOf(
+          b.token(PHPLexicalGrammar.CLASS_CONSTANT),
+          b.token(PHPLexicalGrammar.FILE_CONSTANT),
+          b.token(PHPLexicalGrammar.DIR_CONSTANT),
+          b.token(PHPLexicalGrammar.FUNCTION_CONSTANT),
+          b.token(PHPLexicalGrammar.LINE_CONSTANT),
+          b.token(PHPLexicalGrammar.METHOD_CONSTANT),
+          b.token(PHPLexicalGrammar.NAMESPACE_CONSTANT),
+          b.token(PHPLexicalGrammar.TRAIT_CONSTANT)))));
+  }
+
+  public LiteralTree NUMERIC_LITERAL() {
+    return b.<LiteralTree>nonterminal(Kind.NUMERIC_LITERAL)
+      .is(f.numericLiteral(b.token(PHPLexicalGrammar.NUMERIC_LITERAL)));
+  }
+
+  public ExpressionTree STRING_LITERAL() {
+    return b.<ExpressionTree>nonterminal()
+    .is(b.firstOf(
+      f.regularStringLiteral(b.token(PHPLexicalGrammar.REGULAR_STRING_LITERAL)),
+      EXPANDABLE_STRING_LITERAL()
+    ));
+  }
+
+  public ExpandableStringLiteralTree EXPANDABLE_STRING_LITERAL() {
+    return b.<ExpandableStringLiteralTree>nonterminal(Kind.EXPANDABLE_STRING_LITERAL)
+      .is(f.expandableStringLiteral(
+        b.token(PHPLexicalGrammar.SPACING),
+        b.token(PHPLexicalGrammar.DOUBLE_QUOTE),
+        b.oneOrMore(
+          b.firstOf(
+            ENCAPSULATED_STRING_VARIABLE(),
+            EXPANDABLE_STRING_CHARACTERS()
+          )
+        ),
+        b.token(PHPLexicalGrammar.DOUBLE_QUOTE)
+      ));
+  }
+
+  public ExpressionTree ENCAPSULATED_STRING_VARIABLE() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.ENCAPS_VAR)
+      .is(b.firstOf(
+          ENCAPSULATED_SEMI_COMPLEX_VARIABLE(),
+          ENCAPSULATED_SIMPLE_VARIABLE(),
+          ENCAPSULATED_COMPLEX_VARIABLE()
+        )
+      );
+  }
+
+  public ExpressionTree ENCAPSULATED_COMPLEX_VARIABLE() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.COMPLEX_ENCAPS_VARIABLE)
+      .is(f.encapsulatedComplexVariable(
+        b.token(PHPPunctuator.LCURLYBRACE),
+        b.token(PHPLexicalGrammar.NEXT_IS_DOLLAR),
+        EXPRESSION(),
+        b.token(PHPPunctuator.RCURLYBRACE)
+      ));
+  }
+
+  public ExpressionTree ENCAPSULATED_SEMI_COMPLEX_VARIABLE() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)
+      .is(f.encapsulatedSemiComplexVariable(
+        b.token(PHPPunctuator.DOLLAR_LCURLY),
+        b.firstOf(
+          EXPRESSION(),
+          f.expressionRecovery(b.token(PHPLexicalGrammar.SEMI_COMPLEX_RECOVERY_EXPRESSION))),
+        b.token(PHPPunctuator.RCURLYBRACE)));
+  }
+
+  public ExpressionTree ENCAPSULATED_SIMPLE_VARIABLE() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
+    .is(
+      f.encapsulatedSimpleVar(ENCAPSULATED_VARIABLE_IDENTIFIER(),
+        b.optional(b.firstOf(
+          f.expandableArrayAccess(
+            b.token(PHPPunctuator.LBRACKET),
+            b.firstOf(IDENTIFIER(), NUMERIC_LITERAL(), ENCAPSULATED_VARIABLE_IDENTIFIER()),
+            b.token(PHPPunctuator.RBRACKET)),
+          f.expandableObjectMemberAccess(b.token(PHPPunctuator.ARROW), IDENTIFIER()))))
+    );
+  }
+
+  public IdentifierTree IDENTIFIER() {
+    return b.<IdentifierTree>nonterminal(Kind.IDENTIFIER)
+      .is(f.identifier(b.token(PHPLexicalGrammar.IDENTIFIER)));
+  }
+
+  public VariableIdentifierTree ENCAPSULATED_VARIABLE_IDENTIFIER() {
+    return b.<VariableIdentifierTree>nonterminal(PHPLexicalGrammar.ENCAPS_VAR_IDENTIFIER)
+      // variable identifiers encapsulated into strings literal does not allowed line terminator spacing,
+      // so here using "WHITESPACE" instead of SPACING.
+      .is(f.encapsulatedVariableIdentifier(b.token(PHPLexicalGrammar.WHITESPACES), b.token(PHPLexicalGrammar.VARIABLE_IDENTIFIER)));
+  }
+
+  public ExpressionTree EXPANDABLE_STRING_CHARACTERS() {
+    return b.<ExpandableStringCharactersTree>nonterminal(Kind.EXPANDABLE_STRING_CHARACTERS)
+      .is(f.expandableStringCharacters(b.token(PHPLexicalGrammar.STRING_WITH_ENCAPS_VAR_CHARACTERS)));
+  }
 
   /**
    * [ END ] Expression

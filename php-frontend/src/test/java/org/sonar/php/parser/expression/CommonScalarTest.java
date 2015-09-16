@@ -19,43 +19,37 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class CommonScalarTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.COMMON_SCALAR);
-  }
+public class CommonScalarTest {
 
   @Test
   public void test() {
+    assertThat(PHPLexicalGrammar.COMMON_SCALAR)
+      .matches("<<<EOF\n $a\nEOF")
 
-    matches("<<<EOF\n $a\nEOF");
+      .matches("1")
+      .matches("1.2")
 
-    matches("1");
-    matches("1.2");
+      .matches("\"foo\"")
+      .matches("'foo'")
+      .matches("`foo`")
 
-    matches("\"foo\"");
-    matches("'foo'");
+      .matches("true")
 
-    matches("`foo`");
+      .matches("null")
+      .matches("NULL")
 
-    matches("true");
-
-    matches("null");
-    matches("NULL");
-
-    matches("__LINE__");
-    matches("__FILE__");
-    matches("__DIR__");
-    matches("__FUNCTION__");
-    matches("__CLASS__");
-    matches("__TRAIT__");
-    matches("__METHOD__");
-    matches("__NAMESPACE__");
+      .matches("__LINE__")
+      .matches("__FILE__")
+      .matches("__DIR__")
+      .matches("__FUNCTION__")
+      .matches("__CLASS__")
+      .matches("__TRAIT__")
+      .matches("__METHOD__")
+      .matches("__NAMESPACE__");
   }
 }

@@ -33,13 +33,16 @@ public interface ExpandableStringLiteralTree extends ExpressionTree {
 
   /**
    * Expressions can be:
-   * <ul>
+   * <ul
+   *   <li>{@link Kind#EXPANDABLE_STRING_CHARACTERS expandable string characters}
    *   <li>{@link Kind#VARIABLE_IDENTIFIER variable identifier}
    *   <li>{@link Kind#COMPUTED_VARIABLE_NAME computed variable name}
    *   <li>{@link Kind#COMPOUND_VARIABLE_NAME compound variable name}
+   *   <li>{@link Kind#ARRAY_ACCESS array access}
+   *   <li>{@link Kind#COMPOUND_VARIABLE_NAME member access}
    * <ul/>
    */
-  List<VariableTree> expressions();
+  List<ExpressionTree> expressions();
 
   SyntaxToken closeDoubleQuoteToken();
 

@@ -19,26 +19,23 @@
  */
 package org.sonar.php.parser.lexical;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class NumericLiteralTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.NUMERIC_LITERAL);
-  }
+public class NumericLiteralTest {
 
   @Test
   public void test() {
-    matches("7E-10");
-    matches("1.2e3");
-    matches("1.234");
-    matches("0b11111111");
-    matches("0x1A");
-    matches("0123");
-    matches("1");
+    assertThat(Kind.NUMERIC_LITERAL)
+      .matches("7E-10")
+      .matches("1.2e3")
+      .matches("1.234")
+      .matches("0b11111111")
+      .matches("0x1A")
+      .matches("0123")
+      .matches("1");
   }
 }

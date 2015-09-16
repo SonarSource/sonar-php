@@ -20,8 +20,15 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
@@ -96,6 +103,20 @@ public interface TreeVisitor {
 
   void visitVariableIdentifier(VariableIdentifierTree tree);
 
-  void visitIdentifier(IdentifierTreeImpl identifierTree);
+  void visitIdentifier(IdentifierTree identifierTree);
+
+  void visitLiteral(LiteralTree literalTree);
+
+  void visitExpandableStringCharacters(ExpandableStringCharactersTree expandableStringCharactersTree);
+
+  void visitArrayAccess(ArrayAccessTree arrayAccessTree);
+
+  void visitMemberAccess(MemberAccessTree memberAccessTree);
+
+  void visitCompoundVariable(CompoundVariableTree compoundVariableTree);
+
+  void visitComputedVariable(ComputedVariableTree computedVariableTree);
+
+  void visitExpandableStringLiteral(ExpandableStringLiteralTree expandableStringLiteralTree);
 }
 
