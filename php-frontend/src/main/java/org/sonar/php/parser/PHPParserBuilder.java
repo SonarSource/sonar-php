@@ -19,10 +19,12 @@
  */
 package org.sonar.php.parser;
 
-import com.sonar.sslr.api.typed.ActionParser;
-import org.sonar.plugins.php.api.tree.Tree;
-
 import java.nio.charset.Charset;
+
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.sslr.grammar.GrammarRuleKey;
+
+import com.sonar.sslr.api.typed.ActionParser;
 
 public class PHPParserBuilder {
 
@@ -45,7 +47,7 @@ public class PHPParserBuilder {
    * @param rootRule rule from which parsing starts
    * @param charset
    */
-  public static ActionParser<Tree> createParser(PHPLexicalGrammar rootRule, Charset charset) {
+  public static ActionParser<Tree> createParser(GrammarRuleKey rootRule, Charset charset) {
     return new ActionParser<>(
         charset,
         PHPLexicalGrammar.createGrammarBuilder(),
