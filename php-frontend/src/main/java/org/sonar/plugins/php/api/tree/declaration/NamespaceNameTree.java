@@ -17,26 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-public class FullyQualifiedNameTest extends RuleTest {
+import javax.annotation.Nullable;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FULLY_QUALIFIED_NAME);
-  }
+@Beta
+public interface NamespaceNameTree extends ExpressionTree {
 
-  @Test
-  public void test() {
-    matches("\\Foor");
-    matches("\\Foo\\Bar");
+  @Nullable
+  SyntaxToken absoluteSeparator();
 
-    notMatches("Foo\\Bar");
-    notMatches("\\Foo\\");
-  }
+  SeparatedList<IdentifierTree> namespaces();
+
+  IdentifierTree name();
+
+  String fullName();
+
 }

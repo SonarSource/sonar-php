@@ -17,25 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.PHPTreeModelTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 
-public class FullyQualifiedClassNameTest extends RuleTest {
+import static org.fest.assertions.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
-  }
+public class CatchBlockTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    matches("namespace\\NS");
-    matches("NS");
+  public void test() throws Exception {
+    CatchBlockTree tree = parse("catch (ExceptionType $e) {}", PHPLexicalGrammar.CATCH_BLOCK);
 
-    notMatches("namespace\\\\NS");
+    assertThat(tree.is(Kind.CATCH_BLOCK)).isTrue();
+    assertThat(tree.exceptionType().fullName()).isEqualTo("ExceptionType");
+    assertThat(tree.variable().variableExpression().name()).isEqualTo("$e");
   }
+
 }
