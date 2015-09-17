@@ -594,9 +594,9 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(LIST_ASSIGNMENT_EXPR).is(LIST_EXPR, EQU, EXPRESSION);
     // FIXME: looks like only assignment list is optional not the parenthesis to be checked
-    b.rule(LIST_EXPR).is(LIST, b.optional(LPARENTHESIS, ASSIGNMENT_LIST, RPARENTHESIS));
+    b.rule(LIST_EXPR).is(LIST, LPARENTHESIS, b.optional(ASSIGNMENT_LIST), RPARENTHESIS);
     b.rule(ASSIGNMENT_LIST).is(b.optional(ASSIGNMENT_LIST_ELEMENT), b.zeroOrMore(COMMA, b.optional(ASSIGNMENT_LIST_ELEMENT)));
-    b.rule(ASSIGNMENT_LIST_ELEMENT).is(b.firstOf(MEMBER_EXPRESSION, LIST_ASSIGNMENT_EXPR));
+    b.rule(ASSIGNMENT_LIST_ELEMENT).is(b.firstOf(MEMBER_EXPRESSION, LIST_EXPR));
 
     b.rule(INTERNAL_FUNCTION).is(b.firstOf(
       b.sequence(ISSET, LPARENTHESIS, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), RPARENTHESIS),

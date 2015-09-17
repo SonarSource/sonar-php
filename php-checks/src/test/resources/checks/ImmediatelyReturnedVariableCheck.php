@@ -33,7 +33,7 @@ function l() {
 }
 
 function l() {
-  list(list($a) = array(1)) = array(1, 2);  // OK - not covered
+  list(list($a)) = array(1, 2);  // OK - not covered
   return $a;
 }
 

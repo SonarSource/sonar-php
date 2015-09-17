@@ -125,7 +125,7 @@ function n(){
 
   list($a, $b) = array();             // NOK - $a
   list(static::$d) = array();         // OK
-  list(list($c) = array()) = array(); // NOK - $c
+  list(list($c)) = array(); // NOK - $c
 
   doSomething($b);
 }
