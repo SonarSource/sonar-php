@@ -50,6 +50,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
@@ -467,6 +468,17 @@ public class NewPHPGrammar {
       ));
   }
 
+  public ParenthesisedExpressionTree PARENTHESIZED_EXPRESSION() {
+    return b.<ParenthesisedExpressionTree>nonterminal(Kind.PARENTHESISED_EXPRESSION)
+      .is(f.parenthesizedExpression(
+        b.token(PHPPunctuator.LPARENTHESIS),
+        b.firstOf(
+          YIELD_EXPRESSION(),
+          EXPRESSION()),
+        b.token(PHPPunctuator.RPARENTHESIS)
+      ));
+
+  }
   /**
    * [ END ] Expression
    */

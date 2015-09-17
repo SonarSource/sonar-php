@@ -32,6 +32,7 @@ import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.BlockTreeImpl;
@@ -81,6 +82,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 
 
@@ -453,6 +455,10 @@ public class TreeFactory {
       return new YieldExpressionTreeImpl(yieldToken, expr1, expr2.get().first(), expr2.get().second());
     }
     return new YieldExpressionTreeImpl(yieldToken, expr1);
+  }
+
+  public ParenthesisedExpressionTree parenthesizedExpression(InternalSyntaxToken openParenthesis, ExpressionTree expression, InternalSyntaxToken closeParenthesis) {
+   return new ParenthesizedExpressionTreeImpl(openParenthesis, expression, closeParenthesis);
   }
 
   /**
