@@ -32,6 +32,7 @@ import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.BlockTreeImpl;
 import org.sonar.php.tree.impl.statement.BreakStatementTreeImpl;
@@ -72,6 +73,7 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -444,6 +446,13 @@ public class TreeFactory {
 
   public ExpandableStringLiteralTree expandableStringLiteral(Tree spacing, InternalSyntaxToken openDoubleQuote, List<ExpressionTree> expressions, InternalSyntaxToken closeDoubleQuote) {
     return new ExpandableStringLiteralTreeImpl(openDoubleQuote, expressions, closeDoubleQuote);
+  }
+
+  public YieldExpressionTree yieldExpression(InternalSyntaxToken yieldToken, ExpressionTree expr1, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> expr2) {
+    if (expr2.isPresent()) {
+      return new YieldExpressionTreeImpl(yieldToken, expr1, expr2.get().first(), expr2.get().second());
+    }
+    return new YieldExpressionTreeImpl(yieldToken, expr1);
   }
 
   /**

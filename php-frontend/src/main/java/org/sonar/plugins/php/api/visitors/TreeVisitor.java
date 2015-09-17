@@ -46,6 +46,7 @@ import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
 @Beta
 public interface TreeVisitor {
@@ -118,5 +119,8 @@ public interface TreeVisitor {
   void visitComputedVariable(ComputedVariableTree computedVariableTree);
 
   void visitExpandableStringLiteral(ExpandableStringLiteralTree expandableStringLiteralTree);
+
+  void visitYieldExpression(YieldExpressionTree yieldExpressionTree);
+
 }
 

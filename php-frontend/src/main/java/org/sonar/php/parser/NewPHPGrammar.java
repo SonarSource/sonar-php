@@ -51,6 +51,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
 public class NewPHPGrammar {
 
@@ -455,6 +456,15 @@ public class NewPHPGrammar {
   public ExpressionTree EXPANDABLE_STRING_CHARACTERS() {
     return b.<ExpandableStringCharactersTree>nonterminal(Kind.EXPANDABLE_STRING_CHARACTERS)
       .is(f.expandableStringCharacters(b.token(PHPLexicalGrammar.STRING_WITH_ENCAPS_VAR_CHARACTERS)));
+  }
+
+  public YieldExpressionTree YIELD_EXPRESSION() {
+    return b.<YieldExpressionTree>nonterminal(Kind.YIELD_EXPRESSION)
+      .is(f.yieldExpression(
+        b.token(PHPKeyword.YIELD),
+        EXPRESSION(),
+        b.optional(f.newTuple1(b.token(PHPPunctuator.DOUBLEARROW), EXPRESSION()))
+      ));
   }
 
   /**

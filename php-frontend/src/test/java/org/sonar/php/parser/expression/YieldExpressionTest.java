@@ -19,21 +19,18 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class YieldExpressionTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.YIELD_EXPRESSION);
-  }
+public class YieldExpressionTest {
 
   @Test
   public void test() {
-    matches("yield $a");
-    matches("yield $a=>$b");
+    assertThat(Kind.YIELD_EXPRESSION)
+      .matches("yield $a")
+      .matches("yield $a=>$b");
+
   }
 }
