@@ -46,4 +46,57 @@ public class TreeFactory {
    * [ END ] Expression
    */
 
+  public static class Tuple<T, U> {
+
+    private final T first;
+    private final U second;
+
+    public Tuple(T first, U second) {
+      super();
+
+      this.first = first;
+      this.second = second;
+    }
+
+    public T first() {
+      return first;
+    }
+
+    public U second() {
+      return second;
+    }
+  }
+
+  private <T, U> Tuple<T, U> newTuple(T first, U second) {
+    return new Tuple<T, U>(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple1(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple2(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple3(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple4(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple5(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple6(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple7(T first, U second) {
+    return newTuple(first, second);
+  }
+
 }
