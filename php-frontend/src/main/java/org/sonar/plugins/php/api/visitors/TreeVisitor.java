@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
@@ -122,5 +123,6 @@ public interface TreeVisitor {
 
   void visitYieldExpression(YieldExpressionTree yieldExpressionTree);
 
+  void visitParenthesisedExpression(ParenthesisedExpressionTree parenthesizedExpressionTree);
 }
 
