@@ -26,10 +26,13 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
@@ -73,6 +76,9 @@ public class NewPHPGrammar {
             BLOCK_STATEMENT(),
             LABEL(),
 //             ...
+            RETURN_STATEMENT(),
+            CONTINUE_STATEMENT(),
+            BREAK_STATEMENT(),
             TRY_STATEMENT(),
 //            DECLARE_STATEMENT(),
             GOTO_STATEMENT(),
@@ -80,6 +86,21 @@ public class NewPHPGrammar {
 //            UNSET_VARIABLE_STATEMENT(),
             EXPRESSION_STATEMENT()
         ));
+  }
+
+  public ReturnStatementTree RETURN_STATEMENT() {
+    return b.<ReturnStatementTree>nonterminal(PHPLexicalGrammar.RETURN_STATEMENT)
+        .is(f.returnStatement(b.token(PHPKeyword.RETURN), b.optional(EXPRESSION()), EOS()));
+  }
+
+  public ContinueStatementTree CONTINUE_STATEMENT() {
+    return b.<ContinueStatementTree>nonterminal(PHPLexicalGrammar.CONTINUE_STATEMENT)
+        .is(f.continueStatement(b.token(PHPKeyword.CONTINUE), b.optional(EXPRESSION()), EOS()));
+  }
+
+  public BreakStatementTree BREAK_STATEMENT() {
+    return b.<BreakStatementTree>nonterminal(PHPLexicalGrammar.BREAK_STATEMENT)
+        .is(f.breakStatement(b.token(PHPKeyword.BREAK), b.optional(EXPRESSION()), EOS()));
   }
 
   public TryStatementTree TRY_STATEMENT() {

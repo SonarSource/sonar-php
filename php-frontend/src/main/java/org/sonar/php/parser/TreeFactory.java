@@ -27,20 +27,26 @@ import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.BlockTreeImpl;
+import org.sonar.php.tree.impl.statement.BreakStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.CatchBlockTreeImpl;
+import org.sonar.php.tree.impl.statement.ContinueStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
+import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
@@ -60,6 +66,18 @@ public class TreeFactory {
   /**
    * [ START ] Statement
    */
+  public ReturnStatementTree returnStatement(InternalSyntaxToken returnToken, Optional<ExpressionTree> expression, InternalSyntaxToken eos) {
+    return new ReturnStatementTreeImpl(returnToken, expression.orNull(), eos);
+  }
+
+  public ContinueStatementTree continueStatement(InternalSyntaxToken continueToken, Optional<ExpressionTree> expression, InternalSyntaxToken eos) {
+    return new ContinueStatementTreeImpl(continueToken, expression.orNull(), eos);
+  }
+
+  public BreakStatementTree breakStatement(InternalSyntaxToken breakToken, Optional<ExpressionTree> expression, InternalSyntaxToken eos) {
+    return new BreakStatementTreeImpl(breakToken, expression.orNull(), eos);
+  }
+
   public BlockTree block(InternalSyntaxToken lbrace, Optional<List<StatementTree>> statements, InternalSyntaxToken rbrace) {
     return new BlockTreeImpl(lbrace, optionalList(statements), rbrace);
   }
