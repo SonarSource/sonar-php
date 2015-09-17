@@ -19,12 +19,25 @@
  */
 package org.sonar.php.parser;
 
+import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 
+import java.util.Collections;
+import java.util.List;
+
 public class TreeFactory {
+
+  private <T extends Tree> List<T> optionalList(Optional<List<T>> list) {
+    if (list.isPresent()) {
+      return list.get();
+    } else {
+      return Collections.emptyList();
+    }
+  }
 
   /**
    * [ START ] Statement
