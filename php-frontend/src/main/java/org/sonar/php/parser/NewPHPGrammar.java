@@ -52,13 +52,23 @@ public class NewPHPGrammar {
 
   public NamespaceNameTree NAMESPACE_NAME() {
     return b.<NamespaceNameTree>nonterminal(PHPLexicalGrammar.NAMESPACE_NAME)
-        .is(f.namespaceName(
+        .is(b.firstOf(
+          f.namespaceName(
             b.optional(b.token(PHPPunctuator.NS_SEPARATOR)),
             b.zeroOrMore(f.newTuple4(
-              b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER), b.token(PHPKeyword.NAMESPACE)),
+              b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER)),
               b.token(PHPPunctuator.NS_SEPARATOR)
             )),
-            b.token(PHPLexicalGrammar.IDENTIFIER)));
+            b.token(PHPLexicalGrammar.IDENTIFIER)),
+          f.namespaceName(
+              b.token(PHPKeyword.NAMESPACE),
+              b.token(PHPPunctuator.NS_SEPARATOR),
+              b.zeroOrMore(f.newTuple6(
+                  b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER)),
+                  b.token(PHPPunctuator.NS_SEPARATOR)
+              )),
+              b.token(PHPLexicalGrammar.IDENTIFIER)))
+    );
   }
 
   /**
