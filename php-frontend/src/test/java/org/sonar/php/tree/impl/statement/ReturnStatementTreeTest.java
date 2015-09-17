@@ -17,18 +17,32 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class ContinueStatementTest{
+public class ReturnStatementTreeTest extends PHPTreeModelTest {
+
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.CONTINUE_STATEMENT)
-      .matches("continue $a ;")
-      .matches("continue ;");
+  public void empty() throws Exception {
+    ReturnStatementTree tree = parse("return ;", PHPLexicalGrammar.RETURN_STATEMENT);
+
+    assertThat(tree.is(Kind.RETURN_STATEMENT)).isTrue();
+    assertThat(tree.expression()).isNull();
   }
+
+  @Test
+  public void not_empty() throws Exception {
+    ReturnStatementTree tree = parse("return $a;", PHPLexicalGrammar.RETURN_STATEMENT);
+
+    assertThat(tree.expression()).isNotNull();
+    assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+  }
+
 }

@@ -24,11 +24,11 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ContinueStatementTest{
+public class ReturnStatementTest {
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.CONTINUE_STATEMENT)
-      .matches("continue $a ;")
-      .matches("continue ;");
+    assertThat(PHPLexicalGrammar.RETURN_STATEMENT)
+      .matches("return $a ;")
+      .matches("return ;");
   }
 }
