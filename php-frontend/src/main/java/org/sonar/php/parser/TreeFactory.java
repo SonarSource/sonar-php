@@ -50,6 +50,7 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -118,9 +119,34 @@ public class TreeFactory {
       Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional,
       InternalSyntaxToken name
   ) {
+    return namespaceName(separator.orNull(), null, null, listOptional, name);
+  }
+
+
+  public NamespaceNameTree namespaceName(
+      InternalSyntaxToken namespaceToken,
+      InternalSyntaxToken separator,
+      Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional,
+      InternalSyntaxToken name
+  ) {
+    return namespaceName(null, namespaceToken, separator, listOptional, name);
+  }
+
+  private NamespaceNameTree namespaceName(
+      @Nullable InternalSyntaxToken absoluteSeparator,
+      @Nullable InternalSyntaxToken namespaceToken,
+      @Nullable InternalSyntaxToken separator,
+      Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional,
+      InternalSyntaxToken name
+  ) {
 
     ImmutableList.Builder<IdentifierTree> elements = ImmutableList.builder();
     ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+
+    if (namespaceToken != null && separator != null) {
+      elements.add(new IdentifierTreeImpl(namespaceToken));
+      separators.add(separator);
+    }
 
     if (listOptional.isPresent()) {
       for (Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple : listOptional.get()) {
@@ -129,7 +155,7 @@ public class TreeFactory {
       }
     }
 
-    return new NamespaceNameTreeImpl(separator.orNull(), new SeparatedList(elements.build(), separators.build()), new IdentifierTreeImpl(name));
+    return new NamespaceNameTreeImpl(absoluteSeparator, new SeparatedList(elements.build(), separators.build()), new IdentifierTreeImpl(name));
 
   }
 
