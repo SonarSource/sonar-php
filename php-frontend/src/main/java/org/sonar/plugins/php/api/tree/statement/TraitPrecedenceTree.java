@@ -20,7 +20,7 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import org.sonar.php.tree.impl.SeparatedList;
-import org.sonar.plugins.php.api.tree.declaration.NamespacedNameTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import com.google.common.annotations.Beta;
@@ -32,6 +32,6 @@ public interface TraitPrecedenceTree extends TraitAdaptationStatementTree {
 
   SyntaxToken insteadOfToken();
 
-  SeparatedList<NamespacedNameTree> traits();
+  SeparatedList<NamespaceNameTree> traits();
 
 }

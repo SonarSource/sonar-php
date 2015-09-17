@@ -19,23 +19,25 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class NamespaceNameTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
-  }
+public class NamespaceNameTest {
 
   @Test
   public void test() {
+    assertThat(PHPLexicalGrammar.NAMESPACE_NAME)
+      .matches("NS")
+      .matches("NS\\Sub")
+      .matches("\\Foo\\Bar")
+      .matches("\\NS")
+      .matches("namespace\\NS")
+      .matches("namespace\\NS1\\NS2\\Name")
 
-    matches("NS");
-    matches("NS\\Sub");
-    matches("\\NS");
+      .notMatches("\\Foo\\")
+      .notMatches("namespace\\\\NS");
   }
+
 }

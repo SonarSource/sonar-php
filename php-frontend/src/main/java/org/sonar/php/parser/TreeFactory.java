@@ -19,21 +19,30 @@
  */
 package org.sonar.php.parser;
 
+import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.Optional;
+import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.BlockTreeImpl;
+import org.sonar.php.tree.impl.statement.CatchBlockTreeImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
+import org.sonar.php.tree.impl.statement.TryStatementImpl;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 import java.util.Collections;
 import java.util.List;
@@ -67,6 +76,56 @@ public class TreeFactory {
     return new LabelTreeImpl(new IdentifierTreeImpl(identifier), colon);
   }
 
+
+  public TryStatementTree tryStatement(InternalSyntaxToken tryToken, BlockTree blockTree, Optional<List<CatchBlockTree>> catchBlocks, Optional<Tuple<InternalSyntaxToken, BlockTree>> finallyBlock) {
+    if (finallyBlock.isPresent()) {
+      return new TryStatementImpl(
+          tryToken,
+          blockTree,
+          optionalList(catchBlocks),
+          finallyBlock.get().first(),
+          finallyBlock.get().second()
+      );
+    } else {
+      return new TryStatementImpl(
+          tryToken,
+          blockTree,
+          optionalList(catchBlocks)
+      );
+    }
+  }
+
+  public NamespaceNameTree namespaceName(
+      Optional<InternalSyntaxToken> separator,
+      Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional,
+      InternalSyntaxToken name
+  ) {
+
+    ImmutableList.Builder<IdentifierTree> elements = ImmutableList.builder();
+    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+
+    if (listOptional.isPresent()) {
+      for (Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple : listOptional.get()) {
+        elements.add(new IdentifierTreeImpl(tuple.first()));
+        separators.add(tuple.second());
+      }
+    }
+
+    return new NamespaceNameTreeImpl(separator.orNull(), new SeparatedList(elements.build(), separators.build()), new IdentifierTreeImpl(name));
+
+  }
+
+  public CatchBlockTree catchBlock(InternalSyntaxToken catchToken, InternalSyntaxToken lParenthesis, NamespaceNameTree exceptionType, InternalSyntaxToken variable, InternalSyntaxToken rParenthsis, BlockTree block) {
+    return new CatchBlockTreeImpl(
+        catchToken,
+        lParenthesis,
+        exceptionType,
+        new VariableIdentifierTreeImpl(new IdentifierTreeImpl(variable)),
+        rParenthsis,
+        block
+    );
+  }
+
   /**
    * [ END ] Statement
    */
@@ -74,8 +133,6 @@ public class TreeFactory {
   public ExpressionTree expression(InternalSyntaxToken token) {
     return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(token));
   }
-
-
 
   /**
    * [ START ] Expression

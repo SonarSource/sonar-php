@@ -20,7 +20,7 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.NamespacedNameTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -29,7 +29,7 @@ import com.google.common.annotations.Beta;
 @Beta
 public interface TraitMethodReferenceTree extends Tree {
 
-  NamespacedNameTree trait();
+  NamespaceNameTree trait();
 
   SyntaxToken doubleColonToken();
 

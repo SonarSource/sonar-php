@@ -25,7 +25,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassFieldDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespacedNameTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
@@ -220,9 +220,9 @@ public interface Tree {
     SPREAD_ARGUMENT(SpreadArgumentTree.class),
 
     /**
-     * {@link NamespacedNameTree}
+     * {@link NamespaceNameTree}
      */
-    NAMESPACED_NAME(NamespacedNameTree.class),
+    NAMESPACED_NAME(NamespaceNameTree.class),
 
     /**
      * {@link ArrayPairTree}

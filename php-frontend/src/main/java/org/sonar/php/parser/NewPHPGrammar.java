@@ -23,8 +23,10 @@ import com.sonar.sslr.api.typed.GrammarBuilder;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
@@ -42,6 +44,26 @@ public class NewPHPGrammar {
   }
 
   /**
+   * [ START ] Declaration
+   */
+
+  public NamespaceNameTree NAMESPACE_NAME() {
+    return b.<NamespaceNameTree>nonterminal(PHPLexicalGrammar.NAMESPACE_NAME)
+        .is(f.namespaceName(
+            b.optional(b.token(PHPPunctuator.NS_SEPARATOR)),
+            b.zeroOrMore(f.newTuple4(
+              b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER), b.token(PHPKeyword.NAMESPACE)),
+              b.token(PHPPunctuator.NS_SEPARATOR)
+            )),
+            b.token(PHPLexicalGrammar.IDENTIFIER)));
+  }
+
+  /**
+   * [ END ] Declaration
+   */
+
+
+  /**
    * [ START ] Statement
    */
 
@@ -51,13 +73,35 @@ public class NewPHPGrammar {
             BLOCK_STATEMENT(),
             LABEL(),
 //             ...
-//            TRY_STATEMENT(),
+            TRY_STATEMENT(),
 //            DECLARE_STATEMENT(),
             GOTO_STATEMENT(),
 //            INLINE_HTML,   // ???
 //            UNSET_VARIABLE_STATEMENT(),
             EXPRESSION_STATEMENT()
         ));
+  }
+
+  public TryStatementTree TRY_STATEMENT() {
+    return b.<TryStatementTree>nonterminal(PHPLexicalGrammar.TRY_STATEMENT)
+        .is(f.tryStatement(
+            b.token(PHPKeyword.TRY),
+            BLOCK_STATEMENT(),
+            b.zeroOrMore(CATCH_BLOCK()),
+            b.optional(f.newTuple2(b.token(PHPKeyword.FINALLY), BLOCK_STATEMENT()))));
+  }
+
+  public CatchBlockTree CATCH_BLOCK() {
+    return b.<CatchBlockTree>nonterminal(PHPLexicalGrammar.CATCH_BLOCK)
+        .is(f.catchBlock(
+            b.token(PHPKeyword.CATCH),
+            b.token(PHPPunctuator.LPARENTHESIS),
+            NAMESPACE_NAME(),
+            b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
+            b.token(PHPPunctuator.RPARENTHESIS),
+            BLOCK_STATEMENT()
+        ));
+
   }
 
   public BlockTree BLOCK_STATEMENT() {

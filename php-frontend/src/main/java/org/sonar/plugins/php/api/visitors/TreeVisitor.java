@@ -21,17 +21,35 @@ package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 @Beta
 public interface TreeVisitor {
 
   /**
+   * [ START ] Declaration
+   */
+
+  void visitNamespaceName(NamespaceNameTree tree);
+
+  /**
+   * [ END ] Declaration
+   */
+
+
+  /**
    * [ START ] Statement
    */
+
+  void visitCatchBlock(CatchBlockTree tree);
+
+  void visitTryStatement(TryStatementTree tree);
 
   void visitGotoStatement(GotoStatementTree tree);
 
@@ -46,6 +64,5 @@ public interface TreeVisitor {
   void visitVariableIdentifier(VariableIdentifierTree tree);
 
   void visitIdentifier(IdentifierTreeImpl identifierTree);
-
 }
 

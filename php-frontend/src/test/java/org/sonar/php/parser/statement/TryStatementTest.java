@@ -19,23 +19,19 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class TryStatementTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.TRY_STATEMENT);
-  }
+public class TryStatementTest {
 
   @Test
   public void test() {
-    matches("try {}");
-    matches("try {} finally {}");
-    matches("try {} catch(Exception $e) {}");
-    matches("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}");
+    assertThat(PHPLexicalGrammar.TRY_STATEMENT)
+      .matches("try {}")
+      .matches("try {} finally {}")
+      .matches("try {} catch(Exception $e) {}")
+      .matches("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}");
   }
 }
