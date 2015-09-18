@@ -464,7 +464,6 @@ public enum PHPGrammar implements GrammarRuleKey {
 
     b.rule(PRIMARY_EXPRESSION).is(
       b.firstOf(
-        b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_NAME),
         CLASS_NAME,
         VARIABLE_WITHOUT_OBJECTS,
         IDENTIFIER,
