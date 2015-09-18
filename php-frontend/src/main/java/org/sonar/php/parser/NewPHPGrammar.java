@@ -61,6 +61,7 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -68,6 +69,7 @@ import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
 public class NewPHPGrammar {
@@ -361,7 +363,7 @@ public class NewPHPGrammar {
 
   public ExpressionTree EXPRESSION() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EXPRESSION)
-        .is(f.expression(b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER)));
+      .is(f.expression(b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER)));
   }
 
   /**
@@ -394,10 +396,10 @@ public class NewPHPGrammar {
 
   public ExpressionTree STRING_LITERAL() {
     return b.<ExpressionTree>nonterminal()
-    .is(b.firstOf(
-      f.regularStringLiteral(b.token(PHPLexicalGrammar.REGULAR_STRING_LITERAL)),
-      EXPANDABLE_STRING_LITERAL()
-    ));
+      .is(b.firstOf(
+        f.regularStringLiteral(b.token(PHPLexicalGrammar.REGULAR_STRING_LITERAL)),
+        EXPANDABLE_STRING_LITERAL()
+        ));
   }
 
   public ExpandableStringLiteralTree EXPANDABLE_STRING_LITERAL() {
@@ -409,18 +411,18 @@ public class NewPHPGrammar {
           b.firstOf(
             ENCAPSULATED_STRING_VARIABLE(),
             EXPANDABLE_STRING_CHARACTERS()
-          )
-        ),
+            )
+          ),
         b.token(PHPLexicalGrammar.DOUBLE_QUOTE)
-      ));
+        ));
   }
 
   public ExpressionTree ENCAPSULATED_STRING_VARIABLE() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.ENCAPS_VAR)
       .is(b.firstOf(
-          ENCAPSULATED_SEMI_COMPLEX_VARIABLE(),
-          ENCAPSULATED_SIMPLE_VARIABLE(),
-          ENCAPSULATED_COMPLEX_VARIABLE()
+        ENCAPSULATED_SEMI_COMPLEX_VARIABLE(),
+        ENCAPSULATED_SIMPLE_VARIABLE(),
+        ENCAPSULATED_COMPLEX_VARIABLE()
         )
       );
   }
@@ -432,7 +434,7 @@ public class NewPHPGrammar {
         b.token(PHPLexicalGrammar.NEXT_IS_DOLLAR),
         EXPRESSION(),
         b.token(RCURLYBRACE)
-      ));
+        ));
   }
 
   public ExpressionTree ENCAPSULATED_SEMI_COMPLEX_VARIABLE() {
@@ -447,15 +449,15 @@ public class NewPHPGrammar {
 
   public ExpressionTree ENCAPSULATED_SIMPLE_VARIABLE() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SIMPLE_ENCAPS_VARIABLE)
-    .is(
-      f.encapsulatedSimpleVar(ENCAPSULATED_VARIABLE_IDENTIFIER(),
-        b.optional(b.firstOf(
-          f.expandableArrayAccess(
+      .is(
+        f.encapsulatedSimpleVar(ENCAPSULATED_VARIABLE_IDENTIFIER(),
+          b.optional(b.firstOf(
+            f.expandableArrayAccess(
               b.token(LBRACKET),
-            b.firstOf(IDENTIFIER(), NUMERIC_LITERAL(), ENCAPSULATED_VARIABLE_IDENTIFIER()),
+              b.firstOf(IDENTIFIER(), NUMERIC_LITERAL(), ENCAPSULATED_VARIABLE_IDENTIFIER()),
               b.token(RBRACKET)),
             f.expandableObjectMemberAccess(b.token(ARROW), IDENTIFIER()))))
-    );
+      );
   }
 
   public IdentifierTree IDENTIFIER() {
@@ -481,7 +483,7 @@ public class NewPHPGrammar {
         b.token(YIELD),
         EXPRESSION(),
         b.optional(f.newTuple1(b.token(DOUBLEARROW), EXPRESSION()))
-      ));
+        ));
   }
 
   public ParenthesisedExpressionTree PARENTHESIZED_EXPRESSION() {
@@ -492,7 +494,7 @@ public class NewPHPGrammar {
           YIELD_EXPRESSION(),
           EXPRESSION()),
         b.token(RPARENTHESIS)
-      ));
+        ));
   }
 
   public AssignmentExpressionTree LIST_EXPRESSION_ASSIGNMENT() {
@@ -517,6 +519,28 @@ public class NewPHPGrammar {
       .is(b.firstOf(
         EXPRESSION(), // FIXME => /!\ replace with MEMBER_EXPRESSION
         LIST_EXPRESSION()));
+  }
+
+  public ComputedVariableTree COMPUTED_VARIABLE_NAME() {
+    return b.<ComputedVariableTree>nonterminal(Kind.COMPUTED_VARIABLE_NAME)
+      .is(f.computedVariableName(
+        b.token(LCURLYBRACE),
+        EXPRESSION(),
+        b.token(RCURLYBRACE)));
+
+  }
+
+  public VariableIdentifierTree VARIABLE_IDENTIFIER() {
+    return b.<VariableIdentifierTree>nonterminal(Kind.VARIABLE_IDENTIFIER)
+      .is(f.variableIdentifier(b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER)));
+  }
+
+  public VariableTree COMPOUND_VARIABLE() {
+    return b.<VariableTree>nonterminal(Kind.COMPOUND_VARIABLE_NAME)
+      .is(
+        b.firstOf(
+          VARIABLE_IDENTIFIER(),
+          f.compoundVariable(b.token(DOLLAR_LCURLY), EXPRESSION(), b.token(RCURLYBRACE))));
   }
 
   /**

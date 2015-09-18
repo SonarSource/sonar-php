@@ -17,21 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.php.PHPTreeModelTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 
-public class CompoundVariableTest {
+public class CompoundVariableTreeTest extends PHPTreeModelTest {
 
-  @Ignore // FIXME: when EXPRESSION is completed
   @Test
-  public void test() {
-    assertThat(Tree.Kind.COMPOUND_VARIABLE_NAME)
-      .matches("$a")
-      .matches("${\"foo\"}");
+  public void test() throws Exception {
+    CompoundVariableTree tree = parse("${$a}", Kind.COMPOUND_VARIABLE_NAME);
+
+    assertThat(tree.is(Kind.COMPOUND_VARIABLE_NAME)).isTrue();
+    assertThat(tree.openDolarCurlyBraceToken().text()).isEqualTo("${");
+    assertThat(expressionToString(tree.variableExpression())).isEqualTo("$a");
+    assertThat(tree.variableExpression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.closeCurlyBraceToken().text()).isEqualTo("}");
   }
+
 }

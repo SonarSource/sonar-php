@@ -85,10 +85,10 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -96,14 +96,9 @@ import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 
 
-import java.util.List;
-
-import java.util.Collections;
 import java.util.LinkedList;
-import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
 import com.google.common.collect.Lists;
-import com.sonar.sslr.api.typed.Optional;
 
 public class TreeFactory {
 
@@ -497,6 +492,19 @@ public class TreeFactory {
   public AssignmentExpressionTree listExpressionAssignment(ExpressionTree listExpression, InternalSyntaxToken equalToken, ExpressionTree expression) {
     return new AssignmentExpressionTreeImpl(Kind.ASSIGNMENT, listExpression, equalToken, expression);
   }
+
+  public ComputedVariableTree computedVariableName(InternalSyntaxToken openCurly, ExpressionTree expression, InternalSyntaxToken closeCurly) {
+    return new ComputedVariableTreeImpl(openCurly, expression, closeCurly);
+  }
+
+  public VariableIdentifierTree variableIdentifier(InternalSyntaxToken variableIdentifier) {
+    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(variableIdentifier));
+  }
+
+  public CompoundVariableTree compoundVariable(InternalSyntaxToken openDollarCurly, ExpressionTree expression, InternalSyntaxToken closeDollarCurly) {
+    return new CompoundVariableTreeImpl(openDollarCurly, expression, closeDollarCurly);
+  }
+
 
   /**
    * [ END ] Expression
