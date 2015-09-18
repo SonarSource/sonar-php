@@ -24,6 +24,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedList;
 import static org.sonar.php.api.PHPKeyword.LIST;
+import static org.sonar.php.api.PHPKeyword.STATIC;
 import static org.sonar.php.api.PHPKeyword.YIELD;
 import static org.sonar.php.api.PHPPunctuator.ARROW;
 import static org.sonar.php.api.PHPPunctuator.COMMA;
@@ -570,6 +571,18 @@ public class NewPHPGrammar {
         b.token(LBRACKET),
         b.optional(EXPRESSION()),
         b.token(RBRACKET)
+      ));
+  }
+
+  public ExpressionTree PRIMARY_EXPRESSION() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.PRIMARY_EXPRESSION)
+      .is(
+        b.firstOf(
+          f.newStaticIdentifier(b.token(STATIC)),
+          // FIXME: add b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_CLASS_NAME)
+          VARIABLE_WITHOUT_OBJECTS(),
+          IDENTIFIER(),
+          PARENTHESIZED_EXPRESSION()
       ));
   }
 

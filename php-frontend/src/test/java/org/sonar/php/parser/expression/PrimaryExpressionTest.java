@@ -19,22 +19,18 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class PrimaryExpressionTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.PRIMARY_EXPRESSION);
-  }
+public class PrimaryExpressionTest {
 
   @Test
   public void test() {
-    matches("a");
-    matches("$a");
-    matches("($a)");
+    assertThat(PHPLexicalGrammar.PRIMARY_EXPRESSION)
+      .matches("a")
+      .matches("$a")
+      .matches("($a)");
   }
 }
