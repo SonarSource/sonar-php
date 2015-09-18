@@ -19,23 +19,25 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class ForeachStatementTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FOREACH_STATEMENT);
-  }
+public class ForeachStatementTest {
 
   @Test
   public void test() {
+    assertThat(PHPLexicalGrammar.FOREACH_STATEMENT)
+      .matches("foreach ($a as $b) {}")
+      .matches("foreach ($a as $b) : {} endforeach ;")
+      .matches("foreach ($a as $b) : {} {} endforeach ;")
+      .matches("foreach ($a as $b) ;")
+      .matches("foreach ($a as $b => $c) {}")
+      .matches("foreach ($a as $b => $c) : {} endforeach ;")
 
-    matches("foreach ($a as $b) {}");
-    matches("foreach ($a as $b) ;");
-    matches("foreach ($a as $b => $c) {}");
+      .notMatches("foreach ($a as $b) : {} endfor ;")
+      .notMatches("foreach ($a as $b) : {} endforeach")
+      .notMatches("foreach ($a as $b) {} {}");
   }
 }

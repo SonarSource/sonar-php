@@ -31,6 +31,7 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -91,7 +92,7 @@ public class NewPHPGrammar {
 //            IF_STATEMENT(),
 //            WHILE_STATEMENT(),
 //            DO_WHILE_STATEMENT(),
-//            FOREACH_STATEMENT(),
+            FOREACH_STATEMENT(),
 //            FOR_STATEMENT(),
 //            SWITCH_STATEMENT(),
             BREAK_STATEMENT(),
@@ -110,6 +111,28 @@ public class NewPHPGrammar {
             EXPRESSION_STATEMENT(),
             LABEL()
         ));
+  }
+
+  public ForEachStatementTree FOREACH_STATEMENT() {
+    return b.<ForEachStatementTree>nonterminal(PHPLexicalGrammar.FOREACH_STATEMENT)
+        .is(b.firstOf(
+            f.forEachStatement(
+                b.token(PHPKeyword.FOREACH), b.token(PHPPunctuator.LPARENTHESIS),
+                  EXPRESSION(), b.token(PHPKeyword.AS), b.optional(f.newTuple8(EXPRESSION(), b.token(PHPPunctuator.DOUBLEARROW))), EXPRESSION(),
+                b.token(PHPPunctuator.RPARENTHESIS),
+                STATEMENT()
+                ),
+            f.forEachStatementAlternative(
+                b.token(PHPKeyword.FOREACH), b.token(PHPPunctuator.LPARENTHESIS),
+                EXPRESSION(), b.token(PHPKeyword.AS), b.optional(f.newTuple10(EXPRESSION(), b.token(PHPPunctuator.DOUBLEARROW))), EXPRESSION(),
+                b.token(PHPPunctuator.RPARENTHESIS),
+                b.token(PHPPunctuator.COLON),
+                //fixme (Lena) : should be INNER_STATEMENT_LIST
+                b.zeroOrMore(STATEMENT()),
+                b.token(PHPKeyword.ENDFOREACH),
+                EOS()
+            ))
+        );
   }
 
   public ThrowStatementTree THROW_STATEMENT() {
