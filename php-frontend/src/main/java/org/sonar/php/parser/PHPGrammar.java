@@ -723,6 +723,7 @@ public enum PHPGrammar implements GrammarRuleKey {
       CLASS_DECLARATION,
       FUNCTION_DECLARATION,
       INTERFACE_DECLARATION,
+      //fixme (Lena) : NAMESPACE_STATEMENT requires interface
       NAMESPACE_STATEMENT,
       USE_STATEMENT,
       USE_FUNCTION_DECLARATION_STATEMENT,

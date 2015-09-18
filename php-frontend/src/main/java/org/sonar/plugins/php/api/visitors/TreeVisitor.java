@@ -31,6 +31,7 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 @Beta
@@ -50,7 +51,9 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
-  
+
+  void visitThrowStatement(ThrowStatementTree tree);
+
   void visitEmptyStatement(EmptyStatementTree tree);
 
   void visitReturnStatement(ReturnStatementTree tree);
