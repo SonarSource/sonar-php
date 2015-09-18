@@ -83,18 +83,30 @@ public class NewPHPGrammar {
   public StatementTree STATEMENT() {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.STATEMENT)
         .is(b.firstOf(
-            BLOCK_STATEMENT(),
-            LABEL(),
-//             ...
-            RETURN_STATEMENT(),
-            CONTINUE_STATEMENT(),
+            BLOCK(),
+//            ALTERNATIVE_IF_STATEMENT(),
+//            THROW_STATEMENT(),
+//            IF_STATEMENT(),
+//            WHILE_STATEMENT(),
+//            DO_WHILE_STATEMENT(),
+//            FOREACH_STATEMENT(),
+//            FOR_STATEMENT(),
+//            SWITCH_STATEMENT(),
             BREAK_STATEMENT(),
+            CONTINUE_STATEMENT(),
+            RETURN_STATEMENT(),
+//            EMPTY_STATEMENT(),
+//            YIELD_STATEMENT(),
+//            GLOBAL_STATEMENT(),
+//            STATIC_STATEMENT(),
+//            ECHO_STATEMENT // is represented by function call
             TRY_STATEMENT(),
 //            DECLARE_STATEMENT(),
             GOTO_STATEMENT(),
 //            INLINE_HTML,   // ???
 //            UNSET_VARIABLE_STATEMENT(),
-            EXPRESSION_STATEMENT()
+            EXPRESSION_STATEMENT(),
+            LABEL()
         ));
   }
 
@@ -117,9 +129,9 @@ public class NewPHPGrammar {
     return b.<TryStatementTree>nonterminal(PHPLexicalGrammar.TRY_STATEMENT)
         .is(f.tryStatement(
             b.token(PHPKeyword.TRY),
-            BLOCK_STATEMENT(),
+            BLOCK(),
             b.zeroOrMore(CATCH_BLOCK()),
-            b.optional(f.newTuple2(b.token(PHPKeyword.FINALLY), BLOCK_STATEMENT()))));
+            b.optional(f.newTuple2(b.token(PHPKeyword.FINALLY), BLOCK()))));
   }
 
   public CatchBlockTree CATCH_BLOCK() {
@@ -130,12 +142,12 @@ public class NewPHPGrammar {
             NAMESPACE_NAME(),
             b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
             b.token(PHPPunctuator.RPARENTHESIS),
-            BLOCK_STATEMENT()
+            BLOCK()
         ));
 
   }
 
-  public BlockTree BLOCK_STATEMENT() {
+  public BlockTree BLOCK() {
     return b.<BlockTree>nonterminal(PHPLexicalGrammar.BLOCK)
         .is(f.block(b.token(PHPPunctuator.LCURLYBRACE), b.zeroOrMore(STATEMENT()), b.token(PHPPunctuator.RCURLYBRACE)));
   }
