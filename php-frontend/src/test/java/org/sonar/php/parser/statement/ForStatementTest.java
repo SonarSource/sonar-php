@@ -19,24 +19,24 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.RuleTest;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class ForStatementTest extends RuleTest {
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FOR_STATEMENT);
-  }
-
   @Test
   public void test() {
-
-    matches("for ($i = 1; $i <= a; $i++) {}");
-    matches("for ($i = 1; ; $i++) {}");
-    matches("for (; ; ) {}");
-    matches("for (; ; ): endfor;");
+    assertThat(PHPLexicalGrammar.FOR_STATEMENT)
+        //todo (Lena) improve these tests with more adequate expressions
+      .matches("for ($a; $b; $c) {}")
+      .matches("for ($a1, $a2;  $b1, $b2;  $c1, $c2) {}")
+      .matches("for ($a; ; $c) {}")
+      .matches("for (; ; ) {}")
+      .matches("for (; ; ): {} {} endfor;")
+      .matches("for (; ; ): {} endfor;")
+      .matches("for (; ; ): endfor;");
   }
 }

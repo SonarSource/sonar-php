@@ -33,6 +33,8 @@ import org.sonar.php.tree.impl.statement.ContinueStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.ForStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
@@ -49,6 +51,7 @@ import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -58,6 +61,7 @@ import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TreeFactory {
@@ -67,6 +71,14 @@ public class TreeFactory {
       return list.get();
     } else {
       return Collections.emptyList();
+    }
+  }
+
+  private <T extends Tree> SeparatedList<T> optionalSeparatedList(Optional<SeparatedList<T>> list) {
+    if (list.isPresent()) {
+      return list.get();
+    } else {
+      return new SeparatedList<>(new LinkedList<T>(), new LinkedList<InternalSyntaxToken>());
     }
   }
 
@@ -226,6 +238,50 @@ public class TreeFactory {
     } else {
       return null;
     }
+  }
+
+  public ForStatementHeader forStatementHeader(
+      InternalSyntaxToken forToken, InternalSyntaxToken lParenthesis,
+      Optional<SeparatedList<ExpressionTree>> init, InternalSyntaxToken semicolon1,
+      Optional<SeparatedList<ExpressionTree>> condition, InternalSyntaxToken semicolon2,
+      Optional<SeparatedList<ExpressionTree>> update, InternalSyntaxToken rParenthesis
+  ) {
+    return new ForStatementHeader(
+        forToken, lParenthesis,
+        optionalSeparatedList(init),
+        semicolon1,
+        optionalSeparatedList(condition),
+        semicolon2,
+        optionalSeparatedList(update),
+        rParenthesis
+    );
+  }
+
+  public ForStatementTree forStatement(ForStatementHeader forStatementHeader, StatementTree statement) {
+    return new ForStatementTreeImpl(forStatementHeader, statement);
+  }
+
+  public ForStatementTree forStatementAlternative(
+      ForStatementHeader forStatementHeader, InternalSyntaxToken colonToken,
+      Optional<List<StatementTree>> statements, InternalSyntaxToken endForToken, InternalSyntaxToken eos
+  ) {
+    return new ForStatementTreeImpl(forStatementHeader, colonToken, optionalList(statements), endForToken, eos);
+  }
+
+  public SeparatedList<ExpressionTree> forExpr(ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> listOptional) {
+    ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
+    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+
+    elements.add(expression);
+
+    if (listOptional.isPresent()) {
+      for (Tuple<InternalSyntaxToken, ExpressionTree> tuple : listOptional.get()) {
+        separators.add(tuple.first());
+        elements.add(tuple.second());
+      }
+    }
+
+    return new SeparatedList(elements.build(), separators.build());
   }
 
   /**

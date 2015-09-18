@@ -35,19 +35,19 @@ public interface ForStatementTree extends StatementTree {
 
   SyntaxToken forToken();
 
-  SyntaxToken openParenthesis();
+  SyntaxToken openParenthesisToken();
 
   SeparatedList<ExpressionTree> init();
 
-  SyntaxToken firstSemicolon();
+  SyntaxToken firstSemicolonToken();
 
   SeparatedList<ExpressionTree> condition();
 
-  SyntaxToken secondSemicolon();
+  SyntaxToken secondSemicolonToken();
 
   SeparatedList<ExpressionTree> update();
 
-  SyntaxToken closeParenthesis();
+  SyntaxToken closeParenthesisToken();
 
   @Nullable
   SyntaxToken colonToken();
@@ -55,7 +55,7 @@ public interface ForStatementTree extends StatementTree {
   List<StatementTree> statement();
 
   @Nullable
-  SyntaxToken endForToken();
+  SyntaxToken endforToken();
 
   @Nullable
   SyntaxToken eosToken();
