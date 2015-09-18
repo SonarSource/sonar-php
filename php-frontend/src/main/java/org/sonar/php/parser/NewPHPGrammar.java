@@ -60,6 +60,7 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
@@ -541,6 +542,35 @@ public class NewPHPGrammar {
         b.firstOf(
           VARIABLE_IDENTIFIER(),
           f.compoundVariable(b.token(DOLLAR_LCURLY), EXPRESSION(), b.token(RCURLYBRACE))));
+  }
+
+  public ExpressionTree VARIABLE_WITHOUT_OBJECTS() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS)
+      .is(f.variableWithoutObjects(
+        b.zeroOrMore(b.token(PHPLexicalGrammar.VARIABLE_VARIABLE_DOLLAR)),
+        COMPOUND_VARIABLE(),
+        b.zeroOrMore(b.firstOf(
+          DIMENSIONAL_OFFSET(),
+          ALTERNATIVE_DIMENSIONAL_OFFSET()
+        ))));
+  }
+
+  public ArrayAccessTree ALTERNATIVE_DIMENSIONAL_OFFSET() {
+    return b.<ArrayAccessTree>nonterminal()
+      .is(f.alternativeDimensionalOffset(
+        b.token(LCURLYBRACE),
+        b.optional(EXPRESSION()),
+        b.token(RCURLYBRACE)
+      ));
+  }
+
+  public ArrayAccessTree DIMENSIONAL_OFFSET() {
+    return b.<ArrayAccessTree>nonterminal()
+      .is(f.dimensionalOffset(
+        b.token(LBRACKET),
+        b.optional(EXPRESSION()),
+        b.token(RBRACKET)
+      ));
   }
 
   /**

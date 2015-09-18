@@ -24,16 +24,24 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * <a href="http://php.net/manual/en/language.types.array.php">Array</a> Access
+ *
+ * <pre>
+ *   {@link #object()} [ {@link #offset()} ]
+ *   {@link #object()} { {@link #offset()} }
+ * </pre>
+ */
 @Beta
 public interface ArrayAccessTree extends ExpressionTree {
 
   ExpressionTree object();
 
-  SyntaxToken openBracketToken();
+  SyntaxToken openBraceToken();
 
   @Nullable // FIXME martin: to check
   ExpressionTree offset();
 
-  SyntaxToken closeBracketToken();
+  SyntaxToken closeBraceToken();
 
 }

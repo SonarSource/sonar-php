@@ -19,23 +19,26 @@
  */
 package org.sonar.php.parser.expression;
 
+import static org.sonar.php.utils.Assertions.assertThat;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.RuleTest;
 
-public class VariableWithoutObjectsTest extends RuleTest {
+public class VariableWithoutObjectsTest {
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.VARIABLE_WITHOUT_OBJECTS);
-  }
-
+  @Ignore // FIXME when EXPRESSION complete.
   @Test
   public void test() {
-    matches("$a");
-    matches("$$a");
-    matches("$$a");
+    assertThat(PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS)
+    .matches("$a")
+    .matches("$$$a")
+    .matches("$a[$b]")
+    .matches("$a{\"foo\"}")
+    .matches("$a{\"foo\"}[$a]")
+    .matches("$a{\"foo\"}{\"foo\"}");
 
   }
 }

@@ -253,6 +253,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   NEXT_IS_DOLLAR,
   DOUBLE_QUOTE,
   REGULAR_STRING_LITERAL,
+  VARIABLE_VARIABLE_DOLLAR,
 
   WHITESPACES,
   EXPRESSION;
@@ -325,6 +326,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(BOOLEAN_LITERAL).is(b.firstOf(word(b, "TRUE"), word(b, "FALSE")));
 
     b.rule(NEXT_IS_DOLLAR).is(b.next(PHPPunctuator.DOLLAR));
+    b.rule(VARIABLE_VARIABLE_DOLLAR).is(PHPPunctuator.DOLLAR, b.nextNot(b.firstOf(IDENTIFIER, KEYWORDS, PHPPunctuator.LCURLYBRACE)));
   }
 
   private static void keywords(LexerlessGrammarBuilder b) {
