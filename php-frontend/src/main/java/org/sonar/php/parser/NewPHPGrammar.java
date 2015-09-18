@@ -24,6 +24,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -158,16 +159,9 @@ public class NewPHPGrammar {
   public ForEachStatementTree FOREACH_STATEMENT() {
     return b.<ForEachStatementTree>nonterminal(PHPLexicalGrammar.FOREACH_STATEMENT)
         .is(b.firstOf(
-            f.forEachStatement(
-                b.token(PHPKeyword.FOREACH), b.token(PHPPunctuator.LPARENTHESIS),
-                  EXPRESSION(), b.token(PHPKeyword.AS), b.optional(f.newTuple8(EXPRESSION(), b.token(PHPPunctuator.DOUBLEARROW))), EXPRESSION(),
-                b.token(PHPPunctuator.RPARENTHESIS),
-                STATEMENT()
-                ),
+            f.forEachStatement(FOREACH_STATEMENT_HEADER(), STATEMENT()),
             f.forEachStatementAlternative(
-                b.token(PHPKeyword.FOREACH), b.token(PHPPunctuator.LPARENTHESIS),
-                EXPRESSION(), b.token(PHPKeyword.AS), b.optional(f.newTuple10(EXPRESSION(), b.token(PHPPunctuator.DOUBLEARROW))), EXPRESSION(),
-                b.token(PHPPunctuator.RPARENTHESIS),
+                FOREACH_STATEMENT_HEADER(),
                 b.token(PHPPunctuator.COLON),
                 //fixme (Lena) : should be INNER_STATEMENT_LIST
                 b.zeroOrMore(STATEMENT()),
@@ -175,6 +169,17 @@ public class NewPHPGrammar {
                 EOS()
             ))
         );
+  }
+
+  public ForEachStatementHeader FOREACH_STATEMENT_HEADER() {
+    return b.<ForEachStatementHeader>nonterminal()
+        .is(f.forEachStatementHeader(
+            b.token(PHPKeyword.FOREACH), b.token(PHPPunctuator.LPARENTHESIS),
+            EXPRESSION(), b.token(PHPKeyword.AS),
+            // fixme (Lena) : both EXPRESSION() should be FOREACH_VARIABLE
+            b.optional(f.newTuple10(EXPRESSION(), b.token(PHPPunctuator.DOUBLEARROW))), EXPRESSION(),
+            b.token(PHPPunctuator.RPARENTHESIS)
+        ));
   }
 
   public ThrowStatementTree THROW_STATEMENT() {

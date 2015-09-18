@@ -38,64 +38,29 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
 
   private final Kind KIND;
 
-  private final InternalSyntaxToken forEachToken;
-  private final InternalSyntaxToken openParenthesisToken;
-  private final ExpressionTree expression;
-  private final InternalSyntaxToken asToken;
-  private final ExpressionTree key;
-  private final InternalSyntaxToken doubleArrowToken;
-  private final ExpressionTree value;
-  private final InternalSyntaxToken closeParenthesisToken;
+  private final ForEachStatementHeader header;
   private final InternalSyntaxToken colonToken;
   private final List<StatementTree> statement;
   private final InternalSyntaxToken endforeachToken;
   private final InternalSyntaxToken eosToken;
 
-  public ForEachStatementTreeImpl(
-      InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
-      ExpressionTree expression, InternalSyntaxToken asToken, @Nullable ExpressionTree key, @Nullable InternalSyntaxToken doubleArrowToken, ExpressionTree value,
-      InternalSyntaxToken closeParenthesisToken, StatementTree statement
-  ) {
-    this(
-        Kind.FOREACH_STATEMENT,
-        forEachToken, openParenthesisToken,
-        expression, asToken, key, doubleArrowToken, value,
-        closeParenthesisToken,
-        null, Collections.singletonList(statement), null, null
-    );
+  public ForEachStatementTreeImpl(ForEachStatementHeader header, StatementTree statement) {
+    this(Kind.FOREACH_STATEMENT, header, null, Collections.singletonList(statement), null, null);
   }
 
   public ForEachStatementTreeImpl(
-      InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
-      ExpressionTree expression, InternalSyntaxToken asToken, @Nullable ExpressionTree key, @Nullable InternalSyntaxToken doubleArrowToken, ExpressionTree value,
-      InternalSyntaxToken closeParenthesisToken,
-      InternalSyntaxToken colonToken, List<StatementTree> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken
+      ForEachStatementHeader header, InternalSyntaxToken colonToken,
+      List<StatementTree> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken
   ) {
-    this(
-        Kind.ALTERNATIVE_FOREACH_STATEMENT,
-        forEachToken, openParenthesisToken,
-        expression, asToken, key, doubleArrowToken, value,
-        closeParenthesisToken,
-        colonToken, statements, endForEachToken, eosToken
-    );
+    this(Kind.ALTERNATIVE_FOREACH_STATEMENT, header, colonToken, statements, endForEachToken, eosToken);
   }
 
   private ForEachStatementTreeImpl(
       Kind kind,
-      InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
-      ExpressionTree expression, InternalSyntaxToken asToken, @Nullable ExpressionTree key, @Nullable InternalSyntaxToken doubleArrowToken, ExpressionTree value,
-      InternalSyntaxToken closeParenthesisToken, @Nullable InternalSyntaxToken colonToken,
+      ForEachStatementHeader header, @Nullable InternalSyntaxToken colonToken,
       List<StatementTree> statements, @Nullable InternalSyntaxToken endForEachToken, @Nullable InternalSyntaxToken eosToken
   ) {
-    this.forEachToken = forEachToken;
-    this.openParenthesisToken = openParenthesisToken;
-    this.expression = expression;
-    this.asToken = asToken;
-    this.key = key;
-    this.doubleArrowToken = doubleArrowToken;
-    this.value = value;
-    this.closeParenthesisToken = closeParenthesisToken;
-
+    this.header = header;
     this.colonToken = colonToken;
     this.statement = statements;
     this.endforeachToken = endForEachToken;
@@ -106,44 +71,44 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
 
   @Override
   public SyntaxToken foreachToken() {
-    return forEachToken;
+    return header.foreachToken();
   }
 
   @Override
   public SyntaxToken openParenthesisToken() {
-    return openParenthesisToken;
+    return header.openParenthesisToken();
   }
 
   @Override
   public ExpressionTree expression() {
-    return expression;
+    return header.expression();
   }
 
   @Override
   public SyntaxToken asToken() {
-    return asToken;
+    return header.asToken();
   }
 
   @Nullable
   @Override
   public ExpressionTree key() {
-    return key;
+    return header.key();
   }
 
   @Nullable
   @Override
   public SyntaxToken doubleArrowToken() {
-    return doubleArrowToken;
+    return header.doubleArrowToken();
   }
 
   @Override
   public ExpressionTree value() {
-    return value;
+    return header.value();
   }
 
   @Override
   public SyntaxToken closeParenthesisToken() {
-    return closeParenthesisToken;
+    return header.closeParenthesisToken();
   }
 
   @Nullable
@@ -177,7 +142,7 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
-        Iterators.forArray(forEachToken, openParenthesisToken, expression, asToken, key, doubleArrowToken, value, closeParenthesisToken, colonToken),
+        Iterators.forArray(foreachToken(), openParenthesisToken(), expression(), asToken(), key(), doubleArrowToken(), value(), closeParenthesisToken(), colonToken),
         statement.iterator(),
         Iterators.forArray(endforeachToken, eosToken));
   }
@@ -185,5 +150,79 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
   @Override
   public void accept(TreeVisitor visitor) {
     visitor.visitForEachStatement(this);
+  }
+
+  /**
+   * Utility class hidden from API (it's mainly created to avoid duplication in grammar)
+   */
+  public static class ForEachStatementHeader implements Tree {
+
+    private final InternalSyntaxToken foreachToken;
+    private final InternalSyntaxToken openParenthesisToken;
+    private final ExpressionTree expression;
+    private final InternalSyntaxToken asToken;
+    private final ExpressionTree key;
+    private final InternalSyntaxToken doubleArrowToken;
+    private final ExpressionTree value;
+    private final InternalSyntaxToken closeParenthesisToken;
+
+    public ForEachStatementHeader(
+        InternalSyntaxToken foreachToken, InternalSyntaxToken openParenthesisToken,
+        ExpressionTree expression, InternalSyntaxToken asToken, ExpressionTree key, InternalSyntaxToken doubleArrowToken, ExpressionTree value,
+        InternalSyntaxToken closeParenthesisToken
+    ) {
+      this.foreachToken = foreachToken;
+      this.openParenthesisToken = openParenthesisToken;
+      this.expression = expression;
+      this.asToken = asToken;
+      this.key = key;
+      this.doubleArrowToken = doubleArrowToken;
+      this.value = value;
+      this.closeParenthesisToken = closeParenthesisToken;
+    }
+
+    @Override
+    public boolean is(Kind... kind) {
+      return false;
+    }
+
+    @Override
+    public void accept(TreeVisitor visitor) {
+      throw new IllegalStateException("class ForEachStatementHeader is used only internally for building the tree and should not be used to tree visiting.");
+    }
+
+    public InternalSyntaxToken foreachToken() {
+      return foreachToken;
+    }
+
+    public InternalSyntaxToken openParenthesisToken() {
+      return openParenthesisToken;
+    }
+
+    public ExpressionTree expression() {
+      return expression;
+    }
+
+    public InternalSyntaxToken asToken() {
+      return asToken;
+    }
+
+    @Nullable
+    public ExpressionTree key() {
+      return key;
+    }
+
+    @Nullable
+    public InternalSyntaxToken doubleArrowToken() {
+      return doubleArrowToken;
+    }
+
+    public ExpressionTree value() {
+      return value;
+    }
+
+    public InternalSyntaxToken closeParenthesisToken() {
+      return closeParenthesisToken;
+    }
   }
 }
