@@ -20,8 +20,7 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
@@ -35,21 +34,21 @@ public interface IfStatementTree extends StatementTree {
 
   SyntaxToken ifToken();
 
-  ParenthesisedExpressionTree condition();
+  // fixme (Lena) : should be ParenthesisedExpressionTree
+  ExpressionTree condition();
 
   @Nullable
   SyntaxToken colonToken();
 
-  List<Tree> statements();
+  List<StatementTree> statement();
 
-  @Nullable
   List<ElseifClauseTree> elseifClauses();
 
   @Nullable
   ElseClauseTree elseClause();
 
   @Nullable
-  SyntaxToken endIfToken();
+  SyntaxToken endifToken();
 
   @Nullable
   SyntaxToken eosToken();

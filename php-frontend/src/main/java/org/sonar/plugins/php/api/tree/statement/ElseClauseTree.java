@@ -28,12 +28,12 @@ import java.util.List;
 @Beta
 public interface ElseClauseTree extends StatementTree {
 
-  SyntaxToken elseKeyword();
+  SyntaxToken elseToken();
 
   @Nullable
   SyntaxToken colonToken();
 
-  List<StatementTree> statements();
+  List<StatementTree> statement();
 
 }
 

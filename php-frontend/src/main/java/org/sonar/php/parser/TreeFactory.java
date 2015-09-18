@@ -30,6 +30,8 @@ import org.sonar.php.tree.impl.statement.BlockTreeImpl;
 import org.sonar.php.tree.impl.statement.BreakStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.CatchBlockTreeImpl;
 import org.sonar.php.tree.impl.statement.ContinueStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.ElseClauseTreeImpl;
+import org.sonar.php.tree.impl.statement.ElseifClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl;
@@ -37,6 +39,7 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.IfStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
@@ -49,11 +52,14 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -280,6 +286,58 @@ public class TreeFactory {
     }
 
     return new SeparatedList(elements.build(), separators.build());
+  }
+
+  public ElseClauseTree elseClause(InternalSyntaxToken elseToken, StatementTree statement) {
+    return new ElseClauseTreeImpl(elseToken, statement);
+  }
+
+  public IfStatementTree ifStatement(
+      InternalSyntaxToken ifToken, ExpressionTree expression, StatementTree statement,
+      Optional<List<ElseifClauseTree>> elseIfClauses, Optional<ElseClauseTree> elseClause
+  ) {
+    return new IfStatementTreeImpl(ifToken, expression, statement, optionalList(elseIfClauses), elseClause.orNull());
+  }
+
+  public ElseifClauseTree elseifClause(InternalSyntaxToken elseifToken, ExpressionTree condition, StatementTree statement) {
+    return new ElseifClauseTreeImpl(elseifToken, condition, statement);
+  }
+
+  public IfStatementTree alternativeIfStatement(
+      InternalSyntaxToken ifToken, ExpressionTree condition, InternalSyntaxToken colonToken,
+      Optional<List<StatementTree>> statements, Optional<List<ElseifClauseTree>> elseifClauses, Optional<ElseClauseTree> elseClause,
+      InternalSyntaxToken endIfToken, InternalSyntaxToken eosToken
+  ) {
+    return new IfStatementTreeImpl(
+        ifToken,
+        condition,
+        colonToken,
+        optionalList(statements),
+        optionalList(elseifClauses),
+        elseClause.orNull(),
+        endIfToken,
+        eosToken
+    );
+  }
+
+  public ElseClauseTree alternativeElseClause(InternalSyntaxToken elseToken, InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements) {
+    return new ElseClauseTreeImpl(
+        elseToken,
+        colonToken,
+        optionalList(statements)
+    );
+  }
+
+  public ElseifClauseTree alternativeElseifClause(
+      InternalSyntaxToken elseifToken, ExpressionTree condition, InternalSyntaxToken colonToken,
+      Optional<List<StatementTree>> statements
+  ) {
+    return new ElseifClauseTreeImpl(
+        elseifToken,
+        condition,
+        colonToken,
+        optionalList(statements)
+    );
   }
 
   /**

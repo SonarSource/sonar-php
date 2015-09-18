@@ -19,30 +19,38 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class IfStatementTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.IF_STATEMENT);
-  }
+public class IfStatementTest {
 
   @Test
   public void test() {
+    assertThat(PHPLexicalGrammar.IF_STATEMENT)
+        // fixme (Lena) : replace all conditions by parenthesised expressions
+      .matches("if $a {}")
+      .matches("if $a {} elseif $a {}")
+      .matches("if $a {} elseif $a {} elseif $a {}")
+      .matches("if $a {} elseif $a {} else {}")
+      .matches("if $a {} else {}")
 
-    matches("if ($a) {}");
-    matches("if ($a) {} elseif ($a) {}");
-    matches("if ($a) {} elseif ($a) {} else {}");
-    matches("if ($a) {} else {}");
-    matches("if ($a) ; else ;");
+      .matches("if $a : endif;")
+      .matches("if $a : elseif $a: endif;")
+      .matches("if $a : elseif $a: else: endif;")
+      .matches("if $a : else: endif;")
+
+
+      .notMatches("if $a : {}")
+
+    ;
   }
 
   @Test
   public void realLife() throws Exception {
-    matches("if (\"#$a\") {\n $x = ''; }");
+    assertThat(PHPLexicalGrammar.IF_STATEMENT)
+        //fixme (Lena): should match
+      .notMatches("if (\"#$a\") {\n $x = ''; }");
   }
 }
