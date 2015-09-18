@@ -35,6 +35,7 @@ import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 public class NewPHPGrammar {
@@ -86,7 +87,7 @@ public class NewPHPGrammar {
         .is(b.firstOf(
             BLOCK(),
 //            ALTERNATIVE_IF_STATEMENT(),
-//            THROW_STATEMENT(),
+            THROW_STATEMENT(),
 //            IF_STATEMENT(),
 //            WHILE_STATEMENT(),
 //            DO_WHILE_STATEMENT(),
@@ -102,13 +103,18 @@ public class NewPHPGrammar {
 //            STATIC_STATEMENT(),
 //            ECHO_STATEMENT // is represented by function call
             TRY_STATEMENT(),
-//            DECLARE_STATEMENT(),
+//            DECLARE_STATEMENT(),  // requires variable_declaration
             GOTO_STATEMENT(),
 //            INLINE_HTML,   // ???
-//            UNSET_VARIABLE_STATEMENT(),
+//            UNSET_VARIABLE_STATEMENT(),  // requires MEMBER_EXPRESSION
             EXPRESSION_STATEMENT(),
             LABEL()
         ));
+  }
+
+  public ThrowStatementTree THROW_STATEMENT() {
+    return b.<ThrowStatementTree>nonterminal(PHPLexicalGrammar.THROW_STATEMENT)
+        .is(f.throwStatement(b.token(PHPKeyword.THROW), EXPRESSION(), EOS()));
   }
 
   public EmptyStatementTree EMPTY_STATEMENT() {

@@ -35,6 +35,7 @@ import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -50,6 +51,7 @@ import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 
 import javax.annotation.Nullable;
@@ -174,6 +176,10 @@ public class TreeFactory {
 
   public EmptyStatementTree emptyStatement(InternalSyntaxToken semicolonToken) {
     return new EmptyStatementImpl(semicolonToken);
+  }
+
+  public ThrowStatementTree throwStatement(InternalSyntaxToken throwToken, ExpressionTree expression, InternalSyntaxToken eosToken) {
+    return new ThrowStatementTreeImpl(throwToken, expression, eosToken);
   }
 
   /**
