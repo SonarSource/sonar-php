@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
@@ -95,7 +96,7 @@ public class NewPHPGrammar {
             BREAK_STATEMENT(),
             CONTINUE_STATEMENT(),
             RETURN_STATEMENT(),
-//            EMPTY_STATEMENT(),
+            EMPTY_STATEMENT(),
 //            YIELD_STATEMENT(),
 //            GLOBAL_STATEMENT(),
 //            STATIC_STATEMENT(),
@@ -108,6 +109,11 @@ public class NewPHPGrammar {
             EXPRESSION_STATEMENT(),
             LABEL()
         ));
+  }
+
+  public EmptyStatementTree EMPTY_STATEMENT() {
+    return b.<EmptyStatementTree>nonterminal(PHPLexicalGrammar.EMPTY_STATEMENT)
+        .is(f.emptyStatement(b.token(PHPPunctuator.SEMICOLON)));
   }
 
   public ReturnStatementTree RETURN_STATEMENT() {
