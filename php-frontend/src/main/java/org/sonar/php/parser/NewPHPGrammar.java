@@ -22,7 +22,9 @@ package org.sonar.php.parser;
 import com.sonar.sslr.api.typed.GrammarBuilder;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -32,6 +34,7 @@ import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -93,7 +96,7 @@ public class NewPHPGrammar {
 //            WHILE_STATEMENT(),
 //            DO_WHILE_STATEMENT(),
             FOREACH_STATEMENT(),
-//            FOR_STATEMENT(),
+            FOR_STATEMENT(),
 //            SWITCH_STATEMENT(),
             BREAK_STATEMENT(),
             CONTINUE_STATEMENT(),
@@ -110,6 +113,45 @@ public class NewPHPGrammar {
 //            UNSET_VARIABLE_STATEMENT(),  // requires MEMBER_EXPRESSION
             EXPRESSION_STATEMENT(),
             LABEL()
+        ));
+  }
+
+  public ForStatementTree FOR_STATEMENT() {
+    return b.<ForStatementTree>nonterminal(PHPLexicalGrammar.FOR_STATEMENT)
+        .is(b.firstOf(
+            f.forStatement(
+                FOR_STATEMENT_HEADER(),
+                STATEMENT()
+            ),
+            f.forStatementAlternative(
+                FOR_STATEMENT_HEADER(),
+                b.token(PHPPunctuator.COLON),
+                //fixme (Lena) : should be INNER_STATEMENT_LIST
+                b.zeroOrMore(STATEMENT()),
+                b.token(PHPKeyword.ENDFOR),
+                EOS()
+            ))
+        );
+  }
+
+  public ForStatementHeader FOR_STATEMENT_HEADER() {
+    return b.<ForStatementHeader>nonterminal()
+        .is(f.forStatementHeader(
+            b.token(PHPKeyword.FOR), b.token(PHPPunctuator.LPARENTHESIS),
+            b.optional(FOR_EXPR()),
+            b.token(PHPPunctuator.SEMICOLON),
+            b.optional(FOR_EXPR()),
+            b.token(PHPPunctuator.SEMICOLON),
+            b.optional(FOR_EXPR()),
+            b.token(PHPPunctuator.RPARENTHESIS)
+        ));
+  }
+
+  public SeparatedList<ExpressionTree> FOR_EXPR() {
+    return b.<SeparatedList<ExpressionTree>>nonterminal(PHPLexicalGrammar.FOR_EXRR)
+        .is(f.forExpr(
+            EXPRESSION(),
+            b.zeroOrMore(f.newTuple12(b.token(PHPPunctuator.COMMA), EXPRESSION()))
         ));
   }
 
