@@ -38,6 +38,7 @@ import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.BlockTreeImpl;
@@ -62,6 +63,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
@@ -505,6 +507,32 @@ public class TreeFactory {
     return new CompoundVariableTreeImpl(openDollarCurly, expression, closeDollarCurly);
   }
 
+  public ArrayAccessTree dimensionalOffset(InternalSyntaxToken openCurly, Optional<ExpressionTree> expression, InternalSyntaxToken closeCurly) {
+    if (expression.isPresent()) {
+      return new ArrayAccessTreeImpl(openCurly, expression.get(), closeCurly);
+    }
+    return new ArrayAccessTreeImpl(openCurly, closeCurly);
+  }
+
+  public ExpressionTree variableWithoutObjects(Optional<List<InternalSyntaxToken>> dollars, VariableTree compoundVariable, Optional<List<ArrayAccessTree>> offsets) {
+    ExpressionTree result = compoundVariable;
+    for (ExpressionTree partialArrayAccess : optionalList(offsets)) {
+      result = ((ArrayAccessTreeImpl) partialArrayAccess).complete(result);
+    }
+
+    if (dollars.isPresent()) {
+      result = new VariableVariableTreeImpl(dollars.get(), result);
+    }
+
+    return result;
+  }
+
+  public ArrayAccessTree alternativeDimensionalOffset(InternalSyntaxToken openBrace, Optional<ExpressionTree> offset, InternalSyntaxToken closeBrace) {
+    if (offset.isPresent()) {
+      return new ArrayAccessTreeImpl(openBrace, offset.get(), closeBrace);
+    }
+    return new ArrayAccessTreeImpl(openBrace, closeBrace);
+  }
 
   /**
    * [ END ] Expression
