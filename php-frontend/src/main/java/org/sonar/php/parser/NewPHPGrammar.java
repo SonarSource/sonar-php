@@ -32,11 +32,14 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -91,9 +94,8 @@ public class NewPHPGrammar {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.STATEMENT)
         .is(b.firstOf(
             BLOCK(),
-//            ALTERNATIVE_IF_STATEMENT(),
             THROW_STATEMENT(),
-//            IF_STATEMENT(),
+            IF_STATEMENT(),
 //            WHILE_STATEMENT(),
 //            DO_WHILE_STATEMENT(),
             FOREACH_STATEMENT(),
@@ -114,6 +116,76 @@ public class NewPHPGrammar {
 //            UNSET_VARIABLE_STATEMENT(),  // requires MEMBER_EXPRESSION
             EXPRESSION_STATEMENT(),
             LABEL()
+        ));
+  }
+
+  public IfStatementTree IF_STATEMENT() {
+    return b.<IfStatementTree>nonterminal(PHPLexicalGrammar.IF_STATEMENT)
+        .is(b.firstOf(STANDARD_IF_STATEMENT(), ALTERNATIVE_IF_STATEMENT()));
+  }
+
+  public IfStatementTree STANDARD_IF_STATEMENT() {
+    return b.<IfStatementTree>nonterminal(PHPLexicalGrammar.STANDARD_IF_STATEMENT)
+        .is(f.ifStatement(
+            b.token(PHPKeyword.IF),
+            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
+            EXPRESSION(),
+            STATEMENT(),
+            b.zeroOrMore(ELSEIF_CLAUSE()),
+            b.optional(ELSE_CLAUSE())
+        ));
+  }
+
+  public IfStatementTree ALTERNATIVE_IF_STATEMENT() {
+    return b.<IfStatementTree>nonterminal(PHPLexicalGrammar.ALTERNATIVE_IF_STATEMENT)
+        .is(f.alternativeIfStatement(
+            b.token(PHPKeyword.IF),
+            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
+            EXPRESSION(),
+            b.token(PHPPunctuator.COLON),
+            //fixme (Lena) : should be INNER_STATEMENT_LIST
+            b.zeroOrMore(STATEMENT()),
+            b.zeroOrMore(ALTERNATIVE_ELSEIF_CLAUSE()),
+            b.optional(ALTERNATIVE_ELSE_CLAUSE()),
+            b.token(PHPKeyword.ENDIF),
+            EOS()
+        ));
+  }
+
+  public ElseClauseTree ELSE_CLAUSE() {
+    return b.<ElseClauseTree>nonterminal(PHPLexicalGrammar.ELSE_CLAUSE)
+        .is(f.elseClause(b.token(PHPKeyword.ELSE), STATEMENT()));
+  }
+
+  public ElseifClauseTree ELSEIF_CLAUSE() {
+    return b.<ElseifClauseTree>nonterminal(PHPLexicalGrammar.ELSEIF_CLAUSE)
+        .is(f.elseifClause(
+            b.token(PHPKeyword.ELSEIF),
+            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
+            EXPRESSION(),
+            STATEMENT()
+        ));
+  }
+
+  public ElseClauseTree ALTERNATIVE_ELSE_CLAUSE() {
+    return b.<ElseClauseTree>nonterminal(PHPLexicalGrammar.ALTERNATIVE_ELSE_CLAUSE)
+        .is(f.alternativeElseClause(
+            b.token(PHPKeyword.ELSE),
+            b.token(PHPPunctuator.COLON),
+            //fixme (Lena) : should be INNER_STATEMENT_LIST
+            b.zeroOrMore(STATEMENT())
+        ));
+  }
+
+  public ElseifClauseTree ALTERNATIVE_ELSEIF_CLAUSE() {
+    return b.<ElseifClauseTree>nonterminal(PHPLexicalGrammar.ALTERNATIVE_ELSEIF_CLAUSE)
+        .is(f.alternativeElseifClause(
+            b.token(PHPKeyword.ELSEIF),
+            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
+            EXPRESSION(),
+            b.token(PHPPunctuator.COLON),
+            //fixme (Lena) : should be INNER_STATEMENT_LIST
+            b.zeroOrMore(STATEMENT())
         ));
   }
 
