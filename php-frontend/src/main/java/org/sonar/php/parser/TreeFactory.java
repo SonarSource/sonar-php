@@ -32,6 +32,7 @@ import org.sonar.php.tree.impl.statement.CatchBlockTreeImpl;
 import org.sonar.php.tree.impl.statement.ContinueStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
@@ -47,6 +48,7 @@ import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -180,6 +182,50 @@ public class TreeFactory {
 
   public ThrowStatementTree throwStatement(InternalSyntaxToken throwToken, ExpressionTree expression, InternalSyntaxToken eosToken) {
     return new ThrowStatementTreeImpl(throwToken, expression, eosToken);
+  }
+
+  public ForEachStatementTree forEachStatement(
+      InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
+      ExpressionTree expression, InternalSyntaxToken asToken, Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey, ExpressionTree value,
+      InternalSyntaxToken closeParenthesisToken, StatementTree statement
+  ) {
+    return new ForEachStatementTreeImpl(
+        forEachToken, openParenthesisToken,
+        expression, asToken, getForEachKey(optionalKey), getForEachArrow(optionalKey), value,
+        closeParenthesisToken, statement
+    );
+  }
+
+  public ForEachStatementTree forEachStatementAlternative(
+      InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
+      ExpressionTree expression, InternalSyntaxToken asToken, Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey, ExpressionTree value,
+      InternalSyntaxToken closeParenthesisToken,
+      InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken
+  ) {
+    return new ForEachStatementTreeImpl(
+        forEachToken, openParenthesisToken,
+        expression, asToken, getForEachKey(optionalKey), getForEachArrow(optionalKey), value,
+        closeParenthesisToken,
+        colonToken, optionalList(statements), endForEachToken, eosToken
+    );
+  }
+
+  @Nullable
+  private ExpressionTree getForEachKey(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey) {
+    if (optionalKey.isPresent()) {
+      return optionalKey.get().first();
+    } else {
+      return null;
+    }
+  }
+
+  @Nullable
+  private InternalSyntaxToken getForEachArrow(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey) {
+    if (optionalKey.isPresent()) {
+      return optionalKey.get().second();
+    } else {
+      return null;
+    }
   }
 
   /**
