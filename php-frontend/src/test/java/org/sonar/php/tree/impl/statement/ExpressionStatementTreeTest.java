@@ -22,12 +22,20 @@ package org.sonar.php.tree.impl.statement;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class ExpressionStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void test() throws Exception {
-    parse("$a;", PHPLexicalGrammar.EXPRESSION_STATEMENT);
+    ExpressionStatementTree tree = parse("$a;", PHPLexicalGrammar.EXPRESSION_STATEMENT);
+
+    assertThat(tree.is(Kind.EXPRESSION_STATEMENT)).isTrue();
+    assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 }

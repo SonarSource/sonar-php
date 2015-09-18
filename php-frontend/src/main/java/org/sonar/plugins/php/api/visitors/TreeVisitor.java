@@ -23,6 +23,7 @@ import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
@@ -53,6 +54,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitBlock(BlockTree tree);
 
   void visitForStatement(ForStatementTree tree);
 

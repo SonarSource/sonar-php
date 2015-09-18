@@ -75,6 +75,6 @@ public class BlockTreeImpl extends PHPTree implements BlockTree {
 
   @Override
   public void accept(TreeVisitor visitor) {
-
+    visitor.visitBlock(this);
   }
 }

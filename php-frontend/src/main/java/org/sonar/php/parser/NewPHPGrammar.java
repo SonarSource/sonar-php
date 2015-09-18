@@ -226,7 +226,12 @@ public class NewPHPGrammar {
 
   public BlockTree BLOCK() {
     return b.<BlockTree>nonterminal(PHPLexicalGrammar.BLOCK)
-        .is(f.block(b.token(PHPPunctuator.LCURLYBRACE), b.zeroOrMore(STATEMENT()), b.token(PHPPunctuator.RCURLYBRACE)));
+        .is(f.block(
+            b.token(PHPPunctuator.LCURLYBRACE),
+            //fixme (Lena) : should be INNER_STATEMENT_LIST
+            b.zeroOrMore(STATEMENT()),
+            b.token(PHPPunctuator.RCURLYBRACE)
+        ));
   }
 
   public GotoStatementTree GOTO_STATEMENT() {
