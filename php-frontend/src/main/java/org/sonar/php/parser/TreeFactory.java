@@ -33,6 +33,7 @@ import org.sonar.php.tree.impl.statement.ContinueStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
@@ -196,29 +197,26 @@ public class TreeFactory {
     return new ThrowStatementTreeImpl(throwToken, expression, eosToken);
   }
 
-  public ForEachStatementTree forEachStatement(
-      InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
-      ExpressionTree expression, InternalSyntaxToken asToken, Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey, ExpressionTree value,
-      InternalSyntaxToken closeParenthesisToken, StatementTree statement
-  ) {
-    return new ForEachStatementTreeImpl(
-        forEachToken, openParenthesisToken,
-        expression, asToken, getForEachKey(optionalKey), getForEachArrow(optionalKey), value,
-        closeParenthesisToken, statement
-    );
+  public ForEachStatementTree forEachStatement(ForEachStatementHeader header, StatementTree statement) {
+    return new ForEachStatementTreeImpl(header, statement);
   }
 
   public ForEachStatementTree forEachStatementAlternative(
-      InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
-      ExpressionTree expression, InternalSyntaxToken asToken, Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey, ExpressionTree value,
-      InternalSyntaxToken closeParenthesisToken,
+      ForEachStatementHeader header,
       InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken
   ) {
-    return new ForEachStatementTreeImpl(
+    return new ForEachStatementTreeImpl(header, colonToken, optionalList(statements), endForEachToken, eosToken);
+  }
+
+  public ForEachStatementHeader forEachStatementHeader(
+      InternalSyntaxToken forEachToken, InternalSyntaxToken openParenthesisToken,
+      ExpressionTree expression, InternalSyntaxToken asToken, Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey, ExpressionTree value,
+      InternalSyntaxToken closeParenthesisToken
+  ) {
+    return new ForEachStatementHeader(
         forEachToken, openParenthesisToken,
         expression, asToken, getForEachKey(optionalKey), getForEachArrow(optionalKey), value,
-        closeParenthesisToken,
-        colonToken, optionalList(statements), endForEachToken, eosToken
+        closeParenthesisToken
     );
   }
 
