@@ -22,11 +22,13 @@ package org.sonar.plugins.php.api.visitors;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
@@ -124,5 +126,9 @@ public interface TreeVisitor {
   void visitYieldExpression(YieldExpressionTree yieldExpressionTree);
 
   void visitParenthesisedExpression(ParenthesisedExpressionTree parenthesizedExpressionTree);
+
+  void visitListExpression(ListExpressionTree listExpressionTree);
+
+  void visitAssignmentExpression(AssignmentExpressionTree assignmentExpressionTree);
 }
 

@@ -21,15 +21,20 @@ package org.sonar.php.parser;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.Optional;
+import java.util.Collections;
+import java.util.List;
+
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
+import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
@@ -77,9 +82,14 @@ import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
@@ -90,6 +100,10 @@ import java.util.List;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
+
+import com.google.common.collect.Lists;
+import com.sonar.sslr.api.typed.Optional;
 
 public class TreeFactory {
 
@@ -459,6 +473,29 @@ public class TreeFactory {
 
   public ParenthesisedExpressionTree parenthesizedExpression(InternalSyntaxToken openParenthesis, ExpressionTree expression, InternalSyntaxToken closeParenthesis) {
    return new ParenthesizedExpressionTreeImpl(openParenthesis, expression, closeParenthesis);
+  }
+
+  public ListExpressionTree listExpression(InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis, Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> elements, InternalSyntaxToken closeParenthesis) {
+    List<ExpressionTree> expressions = Lists.newArrayList();
+    List<InternalSyntaxToken> commas = Lists.newArrayList();
+
+    if (elements.isPresent()) {
+      // First element
+      expressions.add(elements.get().first());
+
+      // Rest of elements
+      if (elements.get().second().isPresent()) {
+        for (Tuple<InternalSyntaxToken, ExpressionTree> commaElement : elements.get().second().get()) {
+          commas.add(commaElement.first());
+          expressions.add(commaElement.second());
+        }
+      }
+    }
+    return new ListExpressionTreeImpl(listToken, openParenthesis, new SeparatedList(expressions, commas), closeParenthesis);
+  }
+
+  public AssignmentExpressionTree listExpressionAssignment(ExpressionTree listExpression, InternalSyntaxToken equalToken, ExpressionTree expression) {
+    return new AssignmentExpressionTreeImpl(Kind.ASSIGNMENT, listExpression, equalToken, expression);
   }
 
   /**
