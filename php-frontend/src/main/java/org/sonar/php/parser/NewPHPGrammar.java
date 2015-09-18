@@ -23,6 +23,20 @@ import com.sonar.sslr.api.typed.GrammarBuilder;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedList;
+import static org.sonar.php.api.PHPKeyword.LIST;
+import static org.sonar.php.api.PHPKeyword.YIELD;
+import static org.sonar.php.api.PHPPunctuator.ARROW;
+import static org.sonar.php.api.PHPPunctuator.COMMA;
+import static org.sonar.php.api.PHPPunctuator.DOLLAR_LCURLY;
+import static org.sonar.php.api.PHPPunctuator.DOUBLEARROW;
+import static org.sonar.php.api.PHPPunctuator.EQU;
+import static org.sonar.php.api.PHPPunctuator.LBRACKET;
+import static org.sonar.php.api.PHPPunctuator.LCURLYBRACE;
+import static org.sonar.php.api.PHPPunctuator.LPARENTHESIS;
+import static org.sonar.php.api.PHPPunctuator.RBRACKET;
+import static org.sonar.php.api.PHPPunctuator.RCURLYBRACE;
+import static org.sonar.php.api.PHPPunctuator.RPARENTHESIS;
+
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
@@ -46,9 +60,11 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -412,21 +428,21 @@ public class NewPHPGrammar {
   public ExpressionTree ENCAPSULATED_COMPLEX_VARIABLE() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.COMPLEX_ENCAPS_VARIABLE)
       .is(f.encapsulatedComplexVariable(
-        b.token(PHPPunctuator.LCURLYBRACE),
+        b.token(LCURLYBRACE),
         b.token(PHPLexicalGrammar.NEXT_IS_DOLLAR),
         EXPRESSION(),
-        b.token(PHPPunctuator.RCURLYBRACE)
+        b.token(RCURLYBRACE)
       ));
   }
 
   public ExpressionTree ENCAPSULATED_SEMI_COMPLEX_VARIABLE() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)
       .is(f.encapsulatedSemiComplexVariable(
-        b.token(PHPPunctuator.DOLLAR_LCURLY),
+        b.token(DOLLAR_LCURLY),
         b.firstOf(
           EXPRESSION(),
           f.expressionRecovery(b.token(PHPLexicalGrammar.SEMI_COMPLEX_RECOVERY_EXPRESSION))),
-        b.token(PHPPunctuator.RCURLYBRACE)));
+        b.token(RCURLYBRACE)));
   }
 
   public ExpressionTree ENCAPSULATED_SIMPLE_VARIABLE() {
@@ -435,10 +451,10 @@ public class NewPHPGrammar {
       f.encapsulatedSimpleVar(ENCAPSULATED_VARIABLE_IDENTIFIER(),
         b.optional(b.firstOf(
           f.expandableArrayAccess(
-            b.token(PHPPunctuator.LBRACKET),
+              b.token(LBRACKET),
             b.firstOf(IDENTIFIER(), NUMERIC_LITERAL(), ENCAPSULATED_VARIABLE_IDENTIFIER()),
-            b.token(PHPPunctuator.RBRACKET)),
-          f.expandableObjectMemberAccess(b.token(PHPPunctuator.ARROW), IDENTIFIER()))))
+              b.token(RBRACKET)),
+            f.expandableObjectMemberAccess(b.token(ARROW), IDENTIFIER()))))
     );
   }
 
@@ -462,23 +478,47 @@ public class NewPHPGrammar {
   public YieldExpressionTree YIELD_EXPRESSION() {
     return b.<YieldExpressionTree>nonterminal(Kind.YIELD_EXPRESSION)
       .is(f.yieldExpression(
-        b.token(PHPKeyword.YIELD),
+        b.token(YIELD),
         EXPRESSION(),
-        b.optional(f.newTuple1(b.token(PHPPunctuator.DOUBLEARROW), EXPRESSION()))
+        b.optional(f.newTuple1(b.token(DOUBLEARROW), EXPRESSION()))
       ));
   }
 
   public ParenthesisedExpressionTree PARENTHESIZED_EXPRESSION() {
     return b.<ParenthesisedExpressionTree>nonterminal(Kind.PARENTHESISED_EXPRESSION)
       .is(f.parenthesizedExpression(
-        b.token(PHPPunctuator.LPARENTHESIS),
+        b.token(LPARENTHESIS),
         b.firstOf(
           YIELD_EXPRESSION(),
           EXPRESSION()),
-        b.token(PHPPunctuator.RPARENTHESIS)
+        b.token(RPARENTHESIS)
       ));
-
   }
+
+  public AssignmentExpressionTree LIST_EXPRESSION_ASSIGNMENT() {
+    return b.<AssignmentExpressionTree>nonterminal()
+      .is(f.listExpressionAssignment(LIST_EXPRESSION(), b.token(EQU), EXPRESSION()));
+  }
+
+  public ListExpressionTree LIST_EXPRESSION() {
+    return b.<ListExpressionTree>nonterminal(Kind.LIST_EXPRESSION)
+      .is(f.listExpression(
+        b.token(LIST),
+        b.token(LPARENTHESIS),
+        b.optional(f.newTuple7(
+          LIST_ELEMENT(),
+          b.zeroOrMore(f.newTuple3(b.token(COMMA), LIST_ELEMENT())))),
+        b.token(RPARENTHESIS))
+      );
+  }
+
+  public ExpressionTree LIST_ELEMENT() {
+    return b.<ExpressionTree>nonterminal()
+      .is(b.firstOf(
+        EXPRESSION(), // FIXME => /!\ replace with MEMBER_EXPRESSION
+        LIST_EXPRESSION()));
+  }
+
   /**
    * [ END ] Expression
    */

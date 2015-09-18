@@ -32,7 +32,7 @@ public interface ListExpressionTree extends ExpressionTree {
 
   SyntaxToken openParenthesisToken();
 
-  SeparatedList<ExpressionTree> parameters();
+  SeparatedList<ExpressionTree> elements();
 
   SyntaxToken closeParenthesisToken();
 
