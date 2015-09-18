@@ -534,6 +534,10 @@ public class TreeFactory {
     return new ArrayAccessTreeImpl(openBrace, closeBrace);
   }
 
+  public IdentifierTree newStaticIdentifier(InternalSyntaxToken staticToken) {
+    return new IdentifierTreeImpl(staticToken);
+  }
+
   /**
    * [ END ] Expression
    */
