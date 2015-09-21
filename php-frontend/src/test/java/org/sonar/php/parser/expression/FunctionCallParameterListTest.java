@@ -19,23 +19,22 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class FunctionCallParameterListTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST);
-  }
+public class FunctionCallParameterListTest {
 
   @Test
   public void test() {
-
-    matches("()");
-    ;
-    //matches("(yield $a;)"); // TODO: complete with non_empty_function_call_parameter_list
+    assertThat(PHPLexicalGrammar.FUNCTION_CALL_PARAMETER_LIST)
+      .matches("()")
+      .matches("($p)")
+      .matches("(& $p)")
+      .matches("(...$p)")
+      .matches("(yield $a)")
+      .matches("($p1, & $p2, ...$p3, yield $p4)");
   }
+
 }

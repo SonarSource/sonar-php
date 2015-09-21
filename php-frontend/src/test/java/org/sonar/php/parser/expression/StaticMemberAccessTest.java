@@ -19,23 +19,21 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
+import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class StaticMemberAccessTest extends RuleTest {
+public class StaticMemberAccessTest {
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.CLASS_MEMBER_ACCESS);
-  }
-
+  @Ignore // FIXME when EXPRESSION is completed
   @Test
   public void test() {
-    matches("::b");
-    matches("::$b");
-    matches("::{$x['y']}");
+    assertThat(PHPLexicalGrammar.CLASS_MEMBER_ACCESS)
+      .matches("::b")
+      .matches("::$b")
+      .matches("::{$x['y']}");
   }
 
 }

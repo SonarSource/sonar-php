@@ -17,20 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
+import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 
-public class DimensionalOffsetTest {
+public class ReferenceVariableTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.DIMENSIONAL_OFFSET)
-      .matches("[]")
-      .matches("[$a]");
+  public void single() throws Exception {
+    ReferenceVariableTree tree = parse("& $a", Kind.REFERENCE_VARIABLE);
+
+    assertThat(tree.is(Kind.REFERENCE_VARIABLE)).isTrue();
+    assertThat(tree.ampersandToken().text()).isEqualTo("&");
+    assertThat(tree.variableExpression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.variableExpression())).isEqualTo("$a");
   }
 
 }

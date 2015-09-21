@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import javax.annotation.Nullable;
 
 @Beta
-public interface FunctionCallTree extends DeclarationTree {
+public interface FunctionCallTree extends ExpressionTree {
 
   ExpressionTree callee();
 
@@ -35,7 +35,7 @@ public interface FunctionCallTree extends DeclarationTree {
    * Nullable in case of internal function call with no parenthesis
    */
   @Nullable
-  SyntaxToken openParenthesis();
+  SyntaxToken openParenthesisToken();
 
   SeparatedList<ExpressionTree> arguments();
 
@@ -43,6 +43,6 @@ public interface FunctionCallTree extends DeclarationTree {
    * Nullable in case of internal function call with no parenthesis
    */
   @Nullable
-  SyntaxToken closeParenthesis();
+  SyntaxToken closeParenthesisToken();
 
 }
