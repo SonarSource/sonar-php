@@ -248,7 +248,7 @@ public interface Tree {
     /**
      * {@link LexicalVariablesTree}
      */
-    LEXICAL_VARS(LexicalVariablesTree.class),
+    LEXICAL_VARIABLES(LexicalVariablesTree.class),
 
     /**
      * {@link ExitTree}

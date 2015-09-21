@@ -24,8 +24,10 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedList;
 import static org.sonar.php.api.PHPKeyword.CLASS;
+import static org.sonar.php.api.PHPKeyword.FUNCTION;
 import static org.sonar.php.api.PHPKeyword.LIST;
 import static org.sonar.php.api.PHPKeyword.STATIC;
+import static org.sonar.php.api.PHPKeyword.USE;
 import static org.sonar.php.api.PHPKeyword.YIELD;
 import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
 import static org.sonar.php.api.PHPPunctuator.ARROW;
@@ -47,6 +49,8 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
@@ -672,6 +676,25 @@ public class NewPHPGrammar {
           IDENTIFIER(),
           b.token(CLASS),
           COMPUTED_VARIABLE_NAME())));
+  }
+
+  public LexicalVariablesTree LEXICAL_VARIABLES() {
+    return b.<LexicalVariablesTree>nonterminal(Kind.LEXICAL_VARIABLES)
+    .is(f.lexicalVariables(
+      b.token(USE),
+      b.token(LPARENTHESIS),
+      LEXICAL_VARIABLE(),
+      b.zeroOrMore(f.newTuple11(b.token(COMMA), LEXICAL_VARIABLE())),
+      b.token(RPARENTHESIS)
+    ));
+  }
+
+  public VariableTree LEXICAL_VARIABLE() {
+    return b.<VariableTree>nonterminal(PHPLexicalGrammar.LEXICAL_VAR)
+     .is(f.lexicalVariable(
+       b.optional(b.token(AMPERSAND)),
+       VARIABLE_IDENTIFIER()
+     ));
   }
 
   /**

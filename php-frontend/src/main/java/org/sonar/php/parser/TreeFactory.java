@@ -19,10 +19,11 @@
  */
 package org.sonar.php.parser;
 
-import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.typed.Optional;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
@@ -35,13 +36,14 @@ import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
+import org.sonar.php.tree.impl.expression.LexicalVariablesTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
 import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
-import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.BlockTreeImpl;
@@ -63,10 +65,27 @@ import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
+import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
+import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
@@ -84,29 +103,10 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
-import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 
-import javax.annotation.Nullable;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
-import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
-import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
-import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
-import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
-import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
-
-
-import java.util.LinkedList;
-
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.sonar.sslr.api.typed.Optional;
 
 public class TreeFactory {
 
@@ -609,6 +609,30 @@ public class TreeFactory {
     }
 
     return result;
+  }
+
+  public VariableTree lexicalVariable(Optional<InternalSyntaxToken> ampersandToken, VariableIdentifierTree variableIdentifier) {
+    return ampersandToken.isPresent()
+      ? new ReferenceVariableTreeImpl(ampersandToken.get(), variableIdentifier)
+      : variableIdentifier;
+  }
+
+  public LexicalVariablesTree lexicalVariables(InternalSyntaxToken useToken, InternalSyntaxToken openParenthesis, VariableTree variable, Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest, InternalSyntaxToken closeParenthesis) {
+    List<VariableTree> variables = Lists.newArrayList();
+    List<InternalSyntaxToken> commas = Lists.newArrayList();
+
+      // First element
+      variables.add(variable);
+
+      // Rest of elements
+      if (variableRest.isPresent()) {
+        for (Tuple<InternalSyntaxToken, VariableTree> argumentRest : variableRest.get()) {
+          commas.add(argumentRest.first());
+          variables.add(argumentRest.second());
+        }
+      }
+
+    return new LexicalVariablesTreeImpl(useToken, openParenthesis, new SeparatedList(variables, commas), closeParenthesis);
   }
 
 
