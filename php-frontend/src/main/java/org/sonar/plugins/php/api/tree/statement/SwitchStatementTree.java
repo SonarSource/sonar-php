@@ -48,7 +48,7 @@ public interface SwitchStatementTree extends StatementTree {
   SyntaxToken closeCurlyBraceToken();
 
   @Nullable
-  SyntaxToken endSwitchToken();
+  SyntaxToken endswitchToken();
 
   @Nullable
   SyntaxToken eosToken();
