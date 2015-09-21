@@ -20,70 +20,54 @@
 package org.sonar.php.tree.impl.expression;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
+import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 
-public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
+public class ReferenceVariableTreeImpl extends PHPTree implements ReferenceVariableTree {
 
-  private final Kind kind;
+  private static final Kind KIND = Kind.REFERENCE_VARIABLE;
+  private final InternalSyntaxToken ampersandToken;
+  private final ExpressionTree variableExpression;
 
-  private ExpressionTree object;
-  private final InternalSyntaxToken accessToken;
-  private final Tree member;
-
-  public MemberAccessTreeImpl(Kind kind, InternalSyntaxToken accessToken, Tree member) {
-    this.kind = kind;
-    this.accessToken = accessToken;
-    this.member = member;
+  public ReferenceVariableTreeImpl(InternalSyntaxToken ampersandToken, ExpressionTree variableExpression) {
+    this.ampersandToken = ampersandToken;
+    this.variableExpression = variableExpression;
   }
 
-  public MemberAccessTree complete(ExpressionTree object) {
-    this.object = object;
+  @Override
+  public SyntaxToken ampersandToken() {
+    return ampersandToken;
+  }
 
-    return this;
+  @Override
+  public ExpressionTree variableExpression() {
+    return variableExpression;
   }
 
   @Override
   public Kind getKind() {
-    return kind;
-  }
-
-  @Override
-  public ExpressionTree object() {
-    return object;
-  }
-
-  @Override
-  public SyntaxToken accessToken() {
-    return accessToken;
-  }
-
-  @Override
-  public Tree member() {
-    return member;
-  }
-
-  @Override
-  public boolean isStatic() {
-    return false;
+    return KIND;
   }
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(object, accessToken, member);
+    return Iterators.forArray(ampersandToken, variableExpression);
   }
 
   @Override
   public void accept(TreeVisitor visitor) {
-    visitor.visitMemberAccess(this);
+    visitor.visitReferenceVariable(this);
   }
 
 }

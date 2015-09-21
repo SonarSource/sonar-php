@@ -27,11 +27,14 @@ import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
+import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
@@ -133,5 +136,11 @@ public interface TreeVisitor {
   void visitAssignmentExpression(AssignmentExpressionTree assignmentExpressionTree);
 
   void visitVariableVariable(VariableVariableTree variableVariableTree);
+
+  void visitReferenceVariable(ReferenceVariableTree refereneVariableTree);
+
+  void visitSpreadArgument(SpreadArgumentTree spreadArgumentTree);
+
+  void visitFunctionCall(FunctionCallTree functionCallTree);
 }
 

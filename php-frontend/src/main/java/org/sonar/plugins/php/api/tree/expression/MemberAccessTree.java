@@ -19,8 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+
+import com.google.common.annotations.Beta;
 
 /**
  * <a href="http://php.net/manual/en/language.oop5.properties.php">Object/Class Member</a> Access
@@ -36,7 +38,7 @@ public interface MemberAccessTree extends ExpressionTree {
 
   SyntaxToken accessToken();
 
-  ExpressionTree member();
+  Tree member();
 
   boolean isStatic();
 

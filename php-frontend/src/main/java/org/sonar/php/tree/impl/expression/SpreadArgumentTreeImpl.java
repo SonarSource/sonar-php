@@ -25,65 +25,46 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
 import com.google.common.collect.Iterators;
 
-public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
+public class SpreadArgumentTreeImpl extends PHPTree implements SpreadArgumentTree {
 
-  private final Kind kind;
+  private static final Kind KIND = Kind.SPREAD_ARGUMENT;
+  private final InternalSyntaxToken ellipsisToken;
+  private final ExpressionTree argument;
 
-  private ExpressionTree object;
-  private final InternalSyntaxToken accessToken;
-  private final Tree member;
-
-  public MemberAccessTreeImpl(Kind kind, InternalSyntaxToken accessToken, Tree member) {
-    this.kind = kind;
-    this.accessToken = accessToken;
-    this.member = member;
+  public SpreadArgumentTreeImpl(InternalSyntaxToken ellipsisToken, ExpressionTree argument) {
+    this.ellipsisToken = ellipsisToken;
+    this.argument = argument;
   }
 
-  public MemberAccessTree complete(ExpressionTree object) {
-    this.object = object;
+  @Override
+  public SyntaxToken ellipsisToken() {
+    return ellipsisToken;
+  }
 
-    return this;
+  @Override
+  public ExpressionTree argument() {
+    return argument;
   }
 
   @Override
   public Kind getKind() {
-    return kind;
-  }
-
-  @Override
-  public ExpressionTree object() {
-    return object;
-  }
-
-  @Override
-  public SyntaxToken accessToken() {
-    return accessToken;
-  }
-
-  @Override
-  public Tree member() {
-    return member;
-  }
-
-  @Override
-  public boolean isStatic() {
-    return false;
+    return KIND;
   }
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(object, accessToken, member);
+    return Iterators.forArray(ellipsisToken, argument);
   }
 
   @Override
   public void accept(TreeVisitor visitor) {
-    visitor.visitMemberAccess(this);
+    visitor.visitSpreadArgument(this);
   }
 
 }

@@ -33,12 +33,15 @@ import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
+import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
 import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
+import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.BlockTreeImpl;
@@ -91,10 +94,13 @@ import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
+import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 
 
@@ -424,7 +430,7 @@ public class TreeFactory {
   }
 
   public MemberAccessTree expandableObjectMemberAccess(InternalSyntaxToken arrow, IdentifierTree property) {
-    return new MemberAccessTreeImpl(arrow, property);
+    return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, arrow, property);
   }
 
   public ExpressionTree encapsulatedSimpleVar(VariableIdentifierTree variableIdentifier, Optional<ExpressionTree> partial) {
@@ -537,6 +543,74 @@ public class TreeFactory {
   public IdentifierTree newStaticIdentifier(InternalSyntaxToken staticToken) {
     return new IdentifierTreeImpl(staticToken);
   }
+
+  public ReferenceVariableTree referenceVariable(InternalSyntaxToken ampersand, ExpressionTree variable) {
+    return new ReferenceVariableTreeImpl(ampersand, variable);
+  }
+
+  public SpreadArgumentTree spreadArgument(InternalSyntaxToken ellipsis, ExpressionTree expression) {
+    return new SpreadArgumentTreeImpl(ellipsis, expression);
+  }
+
+  public FunctionCallTree functionCallParameterList(InternalSyntaxToken openParenthesis, Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> arguments, InternalSyntaxToken closeParenthesis) {
+    List<ExpressionTree> expressions = Lists.newArrayList();
+    List<InternalSyntaxToken> commas = Lists.newArrayList();
+
+    if (arguments.isPresent()) {
+      // First element
+      expressions.add(arguments.get().first());
+
+      // Rest of elements
+      if (arguments.get().second().isPresent()) {
+        for (Tuple<InternalSyntaxToken, ExpressionTree> argumentRest : arguments.get().second().get()) {
+          commas.add(argumentRest.first());
+          expressions.add(argumentRest.second());
+        }
+      }
+    }
+    return new FunctionCallTreeImpl(openParenthesis, new SeparatedList(expressions, commas), closeParenthesis);
+  }
+
+  public MemberAccessTree classMemberAccess(InternalSyntaxToken token, Tree member) {
+    return new MemberAccessTreeImpl(Kind.CLASS_MEMBER_ACCESS, token, member);
+  }
+
+  public ExpressionTree objectDimensionalList(ExpressionTree variableName, Optional<List<ArrayAccessTree>> dimensionalOffsets) {
+    ExpressionTree result = variableName;
+
+    for(ArrayAccessTree arrayAccess : optionalList(dimensionalOffsets)) {
+       result = ((ArrayAccessTreeImpl) arrayAccess).complete(result);
+    }
+
+    return result;
+  }
+
+  public IdentifierTree variableName(InternalSyntaxToken token) {
+    return new IdentifierTreeImpl(token);
+  }
+
+  public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, ExpressionTree member) {
+    return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, accessToken, member);
+  }
+
+  public ExpressionTree memberExpression(ExpressionTree object, Optional<List<ExpressionTree>> memberAccesses) {
+    ExpressionTree result = object;
+
+    for (ExpressionTree memberAccess : optionalList(memberAccesses)) {
+      if (memberAccess.is(Kind.OBJECT_MEMBER_ACCESS, Kind.CLASS_MEMBER_ACCESS)) {
+        result = ((MemberAccessTreeImpl) memberAccess).complete(result);
+
+      } else if (memberAccess.is(Kind.ARRAY_ACCESS)) {
+        result = ((ArrayAccessTreeImpl) memberAccess).complete(result);
+
+      } else if (memberAccess.is(Kind.FUNCTION_CALL)) {
+        result = ((FunctionCallTreeImpl) memberAccess).complete(result);
+      }
+    }
+
+    return result;
+  }
+
 
   /**
    * [ END ] Expression
