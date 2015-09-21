@@ -55,6 +55,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
@@ -137,7 +138,7 @@ public class NewPHPGrammar {
             THROW_STATEMENT(),
             IF_STATEMENT(),
 //            WHILE_STATEMENT(),
-//            DO_WHILE_STATEMENT(),
+            DO_WHILE_STATEMENT(),
             FOREACH_STATEMENT(),
             FOR_STATEMENT(),
 //            SWITCH_STATEMENT(),
@@ -156,6 +157,18 @@ public class NewPHPGrammar {
 //            UNSET_VARIABLE_STATEMENT(),  // requires MEMBER_EXPRESSION
             EXPRESSION_STATEMENT(),
             LABEL()
+        ));
+  }
+
+  public DoWhileStatementTree DO_WHILE_STATEMENT() {
+    return b.<DoWhileStatementTree>nonterminal(PHPLexicalGrammar.DO_WHILE_STATEMENT)
+        .is(f.doWhileStatement(
+            b.token(PHPKeyword.DO),
+            STATEMENT(),
+            b.token(PHPKeyword.WHILE),
+            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
+            EXPRESSION(),
+            EOS()
         ));
   }
 

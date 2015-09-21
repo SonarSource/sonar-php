@@ -42,6 +42,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
@@ -74,6 +75,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitDoWhileStatement(DoWhileStatementTree tree);
 
   void visitElseifClause(ElseifClauseTree tree);
 
@@ -144,7 +147,7 @@ public interface TreeVisitor {
   void visitSpreadArgument(SpreadArgumentTree spreadArgumentTree);
 
   void visitFunctionCall(FunctionCallTree functionCallTree);
-
+  
   void visitLexicalVariables(LexicalVariablesTree lexicalVariablesTree);
 }
 
