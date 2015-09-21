@@ -17,24 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class DoWhileStatementTest extends RuleTest {
+public class DoWhileStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.DO_WHILE_STATEMENT)
-      .matches("do ; while $a ;")
-      .matches("do {} while $a ;")
+  public void test() throws Exception {
+    DoWhileStatementTree tree = parse("do {} while $a ;", PHPLexicalGrammar.DO_WHILE_STATEMENT);
 
-      .notMatches("do {} while $a ")
-      .notMatches("while {} do $a ;")
-    ;
+    assertThat(tree.is(Kind.DO_WHILE_STATEMENT)).isTrue();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
+    // fixme : shoule be parenthesised expression
+    assertThat(tree.condition().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.statement().is(Kind.BLOCK)).isTrue();
   }
+
 }

@@ -50,6 +50,7 @@ import org.sonar.php.tree.impl.statement.BlockTreeImpl;
 import org.sonar.php.tree.impl.statement.BreakStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.CatchBlockTreeImpl;
 import org.sonar.php.tree.impl.statement.ContinueStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.DoWhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseifClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
@@ -90,6 +91,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
@@ -377,6 +379,16 @@ public class TreeFactory {
     );
   }
 
+  public DoWhileStatementTree doWhileStatement(InternalSyntaxToken doToken, StatementTree statement, InternalSyntaxToken whileToken, ExpressionTree condition, InternalSyntaxToken eosToken) {
+    return new DoWhileStatementTreeImpl(
+        doToken,
+        statement,
+        whileToken,
+        condition,
+        eosToken
+    );
+  }
+  
   /**
    * [ END ] Statement
    */
