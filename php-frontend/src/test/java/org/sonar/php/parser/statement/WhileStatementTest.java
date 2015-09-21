@@ -22,7 +22,10 @@ package org.sonar.php.parser.statement;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.RuleTest;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class WhileStatementTest extends RuleTest {
 
@@ -33,7 +36,12 @@ public class WhileStatementTest extends RuleTest {
 
   @Test
   public void test() {
-    matches("while ($a) {}");
-    matches("while ($a): endwhile;");
+    assertThat(PHPLexicalGrammar.WHILE_STATEMENT)
+      .matches("while $a {}")
+      .matches("while $a : endwhile;")
+      .matches("while $a : {} {} endwhile;")
+
+      .notMatches("while $a : {}")
+    ;
   }
 }

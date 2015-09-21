@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
+import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -55,8 +56,7 @@ import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
-
-import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 @Beta
 public interface TreeVisitor {
@@ -75,6 +75,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitWhileStatement(WhileStatementTree tree);
 
   void visitDoWhileStatement(DoWhileStatementTree tree);
 
