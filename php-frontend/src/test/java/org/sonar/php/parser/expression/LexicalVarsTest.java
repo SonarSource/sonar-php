@@ -19,22 +19,19 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree;
 
-public class LexicalVarsTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.LEXICAL_VARS);
-  }
+public class LexicalVarsTest {
 
   @Test
   public void test() {
-
-    matches("use ($a)");
-    matches("use ($a, $b)");
+    assertThat(Tree.Kind.LEXICAL_VARIABLES)
+      .matches("use ($a)")
+      .matches("use ($a, $b)")
+      .notMatches("use ()");
   }
+
 }
