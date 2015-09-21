@@ -19,22 +19,23 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.RuleTest;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class SwitchStatementTest extends RuleTest {
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.SWITCH_STATEMENT);
-  }
-
   @Test
   public void test() {
-    matches("switch ($a) {}");
-    matches("switch ($a): endswitch;");
-    matches("switch ($a): ; endswitch;"); // TODO: complete when cas_list complete
+    assertThat(PHPLexicalGrammar.SWITCH_STATEMENT)
+      .matches("switch ($a) {}")
+      .matches("switch ($a) {; }")
+      .matches("switch ($a): endswitch;")
+      .matches("switch ($a): ; endswitch;")
+
+      .matches("switch ($a) { case $a : default : }")
+    ;
   }
 }

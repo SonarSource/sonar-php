@@ -62,6 +62,8 @@ import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
@@ -140,7 +142,7 @@ public class NewPHPGrammar {
             DO_WHILE_STATEMENT(),
             FOREACH_STATEMENT(),
             FOR_STATEMENT(),
-//            SWITCH_STATEMENT(),
+            SWITCH_STATEMENT(),
             BREAK_STATEMENT(),
             CONTINUE_STATEMENT(),
             RETURN_STATEMENT(),
@@ -156,6 +158,48 @@ public class NewPHPGrammar {
 //            UNSET_VARIABLE_STATEMENT(),  // requires MEMBER_EXPRESSION
             EXPRESSION_STATEMENT(),
             LABEL()
+        ));
+  }
+
+  public SwitchStatementTree SWITCH_STATEMENT() {
+    return b.<SwitchStatementTree>nonterminal(PHPLexicalGrammar.SWITCH_STATEMENT)
+        .is(b.firstOf(
+            f.switchStatement(
+                b.token(PHPKeyword.SWITCH),
+                PARENTHESIZED_EXPRESSION(),
+                b.token(PHPPunctuator.LCURLYBRACE),
+                b.optional(b.token(PHPPunctuator.SEMICOLON)),
+                b.zeroOrMore(SWITCH_CASE_CLAUSE()),
+                b.token(PHPPunctuator.RCURLYBRACE)
+            ),
+            f.alternativeSwitchStatement(
+                b.token(PHPKeyword.SWITCH),
+                PARENTHESIZED_EXPRESSION(),
+                b.token(PHPPunctuator.COLON),
+                b.optional(b.token(PHPPunctuator.SEMICOLON)),
+                b.zeroOrMore(SWITCH_CASE_CLAUSE()),
+                b.token(PHPKeyword.ENDSWITCH),
+                EOS()
+            )
+        ));
+  }
+
+  public SwitchCaseClauseTree SWITCH_CASE_CLAUSE() {
+    return b.<SwitchCaseClauseTree>nonterminal(PHPLexicalGrammar.SWITCH_CASE_CLAUSE)
+        .is(b.firstOf(
+            f.caseClause(
+                b.token(PHPKeyword.CASE),
+                EXPRESSION(),
+                b.firstOf(b.token(PHPPunctuator.COLON), b.token(PHPPunctuator.SEMICOLON)),
+                //fixme (Lena) : should be INNER_STATEMENT_LIST
+                b.zeroOrMore(STATEMENT())
+            ),
+            f.defaultClause(
+                b.token(PHPKeyword.DEFAULT),
+                b.firstOf(b.token(PHPPunctuator.COLON), b.token(PHPPunctuator.SEMICOLON)),
+                //fixme (Lena) : should be INNER_STATEMENT_LIST
+                b.zeroOrMore(STATEMENT())
+            )
         ));
   }
 

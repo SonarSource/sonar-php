@@ -19,23 +19,21 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class CaseClauseTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.CASE_CLAUSE);
-  }
+public class SwitchCaseClauseTest {
 
   @Test
   public void test() {
+    assertThat(PHPLexicalGrammar.SWITCH_CASE_CLAUSE)
+      .matches("case $a:")
+      .matches("case $a;")
+      .matches("case $a: $b;")
 
-    matches("case $a:");
-    matches("case $a;");
-    matches("case $a: exit;");
+      .matches("default: break;")
+      .matches("default: $b; break;");
   }
 }
