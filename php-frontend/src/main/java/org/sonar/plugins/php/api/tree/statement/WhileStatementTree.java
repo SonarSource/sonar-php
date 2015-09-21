@@ -20,7 +20,7 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
@@ -34,7 +34,8 @@ public interface WhileStatementTree extends StatementTree {
 
   SyntaxToken whileToken();
 
-  ParenthesisedExpressionTree condition();
+  // fixme : should be ParenthesisedExpressionTree
+  ExpressionTree condition();
 
   @Nullable
   SyntaxToken colonToken();

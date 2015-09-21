@@ -19,12 +19,10 @@
  */
 package org.sonar.php.parser;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
-import javax.annotation.Nullable;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
@@ -65,6 +63,7 @@ import org.sonar.php.tree.impl.statement.LabelTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
+import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -105,10 +104,13 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.sonar.sslr.api.typed.Optional;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 
 public class TreeFactory {
 
@@ -388,7 +390,24 @@ public class TreeFactory {
         eosToken
     );
   }
-  
+
+  public WhileStatementTree whileStatement(InternalSyntaxToken whileToken, ExpressionTree condition, StatementTree statement) {
+    return new WhileStatementTreeImpl(whileToken, condition, statement);
+  }
+
+  public WhileStatementTree alternativeWhileStatement(
+      InternalSyntaxToken whileToken, ExpressionTree condition, InternalSyntaxToken colonToken,
+      Optional<List<StatementTree>> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken) {
+    return new WhileStatementTreeImpl(
+        whileToken,
+        condition,
+        colonToken,
+        optionalList(statements),
+        endwhileToken,
+        eosToken
+    );
+  }
+
   /**
    * [ END ] Statement
    */
