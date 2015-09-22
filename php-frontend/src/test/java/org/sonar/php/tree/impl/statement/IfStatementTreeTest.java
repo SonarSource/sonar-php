@@ -33,7 +33,7 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void standard_syntax() throws Exception {
-    IfStatementTree tree = parse("if $a {} else {}", PHPLexicalGrammar.IF_STATEMENT);
+    IfStatementTree tree = parse("if ($a) {} else {}", PHPLexicalGrammar.IF_STATEMENT);
 
     assertThat(tree.is(Kind.IF_STATEMENT)).isTrue();
     assertThat(tree.ifToken().text()).isEqualTo("if");
@@ -51,7 +51,7 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void alternative_syntax() throws Exception {
-    IfStatementTree tree = parse("if $a : elseif $a : else : {} {} endif;", PHPLexicalGrammar.IF_STATEMENT);
+    IfStatementTree tree = parse("if ($a) : elseif ($a) : else : {} {} endif;", PHPLexicalGrammar.IF_STATEMENT);
 
     assertThat(tree.is(Kind.ALTRNATIVE_IF_STATEMENT)).isTrue();
     assertThat(tree.colonToken()).isNotNull();
@@ -71,7 +71,7 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void standard_syntax_without_else() throws Exception {
-    IfStatementTree tree = parse("if $a {}", PHPLexicalGrammar.IF_STATEMENT);
+    IfStatementTree tree = parse("if ($a) {}", PHPLexicalGrammar.IF_STATEMENT);
 
     assertThat(tree.statement()).hasSize(1);
     assertThat(tree.elseClause()).isNull();
@@ -80,7 +80,7 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void elseif_syntax() throws Exception {
-    IfStatementTree tree = parse("if $a {} elseif $b {} elseif $c {} else {}", PHPLexicalGrammar.IF_STATEMENT);
+    IfStatementTree tree = parse("if ($a) {} elseif ($b) {} elseif ($c) {} else {}", PHPLexicalGrammar.IF_STATEMENT);
 
     assertThat(tree.statement()).hasSize(1);
     assertThat(tree.elseClause()).isNotNull();

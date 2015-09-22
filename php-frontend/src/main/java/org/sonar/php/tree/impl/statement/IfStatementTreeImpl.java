@@ -23,7 +23,7 @@ import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
@@ -41,7 +41,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   private final Kind KIND;
 
   private final InternalSyntaxToken ifToken;
-  private final ExpressionTree condition;
+  private final ParenthesisedExpressionTree condition;
   private final InternalSyntaxToken colonToken;
   private final List<StatementTree> statement;
   private final List<ElseifClauseTree> elseifClauses;
@@ -50,7 +50,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   private final InternalSyntaxToken eosToken;
 
   public IfStatementTreeImpl(
-      InternalSyntaxToken ifToken, ExpressionTree condition, StatementTree statement,
+      InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, StatementTree statement,
       List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause
   ) {
     KIND = Kind.IF_STATEMENT;
@@ -67,7 +67,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   }
 
   public IfStatementTreeImpl(
-      InternalSyntaxToken ifToken, ExpressionTree condition, InternalSyntaxToken colonToken,
+      InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
       List<StatementTree> statements, List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause,
       InternalSyntaxToken endifToken, InternalSyntaxToken eosToken
   ) {
@@ -90,7 +90,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   }
 
   @Override
-  public ExpressionTree condition() {
+  public ParenthesisedExpressionTree condition() {
     return condition;
   }
 

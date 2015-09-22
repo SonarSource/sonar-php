@@ -341,18 +341,18 @@ public class TreeFactory {
   }
 
   public IfStatementTree ifStatement(
-      InternalSyntaxToken ifToken, ExpressionTree expression, StatementTree statement,
+      InternalSyntaxToken ifToken, ParenthesisedExpressionTree expression, StatementTree statement,
       Optional<List<ElseifClauseTree>> elseIfClauses, Optional<ElseClauseTree> elseClause
   ) {
     return new IfStatementTreeImpl(ifToken, expression, statement, optionalList(elseIfClauses), elseClause.orNull());
   }
 
-  public ElseifClauseTree elseifClause(InternalSyntaxToken elseifToken, ExpressionTree condition, StatementTree statement) {
+  public ElseifClauseTree elseifClause(InternalSyntaxToken elseifToken, ParenthesisedExpressionTree condition, StatementTree statement) {
     return new ElseifClauseTreeImpl(elseifToken, condition, statement);
   }
 
   public IfStatementTree alternativeIfStatement(
-      InternalSyntaxToken ifToken, ExpressionTree condition, InternalSyntaxToken colonToken,
+      InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
       Optional<List<StatementTree>> statements, Optional<List<ElseifClauseTree>> elseifClauses, Optional<ElseClauseTree> elseClause,
       InternalSyntaxToken endIfToken, InternalSyntaxToken eosToken
   ) {
@@ -377,7 +377,7 @@ public class TreeFactory {
   }
 
   public ElseifClauseTree alternativeElseifClause(
-      InternalSyntaxToken elseifToken, ExpressionTree condition, InternalSyntaxToken colonToken,
+      InternalSyntaxToken elseifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
       Optional<List<StatementTree>> statements
   ) {
     return new ElseifClauseTreeImpl(
@@ -388,7 +388,7 @@ public class TreeFactory {
     );
   }
 
-  public DoWhileStatementTree doWhileStatement(InternalSyntaxToken doToken, StatementTree statement, InternalSyntaxToken whileToken, ExpressionTree condition, InternalSyntaxToken eosToken) {
+  public DoWhileStatementTree doWhileStatement(InternalSyntaxToken doToken, StatementTree statement, InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, InternalSyntaxToken eosToken) {
     return new DoWhileStatementTreeImpl(
         doToken,
         statement,
@@ -398,12 +398,12 @@ public class TreeFactory {
     );
   }
 
-  public WhileStatementTree whileStatement(InternalSyntaxToken whileToken, ExpressionTree condition, StatementTree statement) {
+  public WhileStatementTree whileStatement(InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, StatementTree statement) {
     return new WhileStatementTreeImpl(whileToken, condition, statement);
   }
 
   public WhileStatementTree alternativeWhileStatement(
-      InternalSyntaxToken whileToken, ExpressionTree condition, InternalSyntaxToken colonToken,
+      InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
       Optional<List<StatementTree>> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken) {
     return new WhileStatementTreeImpl(
         whileToken,

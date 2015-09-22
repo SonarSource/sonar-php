@@ -208,14 +208,12 @@ public class NewPHPGrammar {
         .is(b.firstOf(
             f.whileStatement(
                 b.token(PHPKeyword.WHILE),
-                //fixme (Lena) : should be PARENTHESIS_EXPRESSION
-                EXPRESSION(),
+                PARENTHESIZED_EXPRESSION(),
                 STATEMENT()
             ),
             f.alternativeWhileStatement(
                 b.token(PHPKeyword.WHILE),
-                //fixme (Lena) : should be PARENTHESIS_EXPRESSION
-                EXPRESSION(),
+                PARENTHESIZED_EXPRESSION(),
                 b.token(PHPPunctuator.COLON),
                 //fixme (Lena) : should be INNER_STATEMENT_LIST
                 b.zeroOrMore(STATEMENT()),
@@ -231,8 +229,7 @@ public class NewPHPGrammar {
             b.token(PHPKeyword.DO),
             STATEMENT(),
             b.token(PHPKeyword.WHILE),
-            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
-            EXPRESSION(),
+            PARENTHESIZED_EXPRESSION(),
             EOS()
         ));
   }
@@ -246,8 +243,7 @@ public class NewPHPGrammar {
     return b.<IfStatementTree>nonterminal(PHPLexicalGrammar.STANDARD_IF_STATEMENT)
         .is(f.ifStatement(
             b.token(PHPKeyword.IF),
-            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
-            EXPRESSION(),
+            PARENTHESIZED_EXPRESSION(),
             STATEMENT(),
             b.zeroOrMore(ELSEIF_CLAUSE()),
             b.optional(ELSE_CLAUSE())
@@ -258,8 +254,7 @@ public class NewPHPGrammar {
     return b.<IfStatementTree>nonterminal(PHPLexicalGrammar.ALTERNATIVE_IF_STATEMENT)
         .is(f.alternativeIfStatement(
             b.token(PHPKeyword.IF),
-            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
-            EXPRESSION(),
+            PARENTHESIZED_EXPRESSION(),
             b.token(PHPPunctuator.COLON),
             //fixme (Lena) : should be INNER_STATEMENT_LIST
             b.zeroOrMore(STATEMENT()),
@@ -279,8 +274,7 @@ public class NewPHPGrammar {
     return b.<ElseifClauseTree>nonterminal(PHPLexicalGrammar.ELSEIF_CLAUSE)
         .is(f.elseifClause(
             b.token(PHPKeyword.ELSEIF),
-            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
-            EXPRESSION(),
+            PARENTHESIZED_EXPRESSION(),
             STATEMENT()
         ));
   }
@@ -299,8 +293,7 @@ public class NewPHPGrammar {
     return b.<ElseifClauseTree>nonterminal(PHPLexicalGrammar.ALTERNATIVE_ELSEIF_CLAUSE)
         .is(f.alternativeElseifClause(
             b.token(PHPKeyword.ELSEIF),
-            //fixme (Lena) : should be PARENTHESIS_EXPRESSION
-            EXPRESSION(),
+            PARENTHESIZED_EXPRESSION(),
             b.token(PHPPunctuator.COLON),
             //fixme (Lena) : should be INNER_STATEMENT_LIST
             b.zeroOrMore(STATEMENT())

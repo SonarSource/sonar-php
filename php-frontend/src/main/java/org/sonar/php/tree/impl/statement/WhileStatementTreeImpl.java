@@ -23,7 +23,7 @@ import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
@@ -39,13 +39,13 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
   private final Kind KIND;
 
   private final InternalSyntaxToken whileToken;
-  private final ExpressionTree condition;
+  private final ParenthesisedExpressionTree condition;
   private final InternalSyntaxToken colonToken;
   private final List<StatementTree> statement;
   private final InternalSyntaxToken endwhileToken;
   private final InternalSyntaxToken eosToken;
 
-  public WhileStatementTreeImpl(InternalSyntaxToken whileToken, ExpressionTree condition, StatementTree statement) {
+  public WhileStatementTreeImpl(InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, StatementTree statement) {
     this.KIND = Kind.WHILE_STATEMENT;
 
     this.whileToken = whileToken;
@@ -58,7 +58,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
   }
 
   public WhileStatementTreeImpl(
-      InternalSyntaxToken whileToken, ExpressionTree condition, InternalSyntaxToken colonToken,
+      InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
       List<StatementTree> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken
   ) {
     this.KIND = Kind.ALTERNATIVE_WHILE_STATEMENT;
@@ -92,7 +92,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
   }
 
   @Override
-  public ExpressionTree condition() {
+  public ParenthesisedExpressionTree condition() {
     return condition;
   }
 

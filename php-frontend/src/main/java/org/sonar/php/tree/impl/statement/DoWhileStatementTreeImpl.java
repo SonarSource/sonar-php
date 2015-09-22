@@ -23,7 +23,7 @@ import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -38,12 +38,12 @@ public class DoWhileStatementTreeImpl extends PHPTree implements DoWhileStatemen
   private final InternalSyntaxToken doToken;
   private final StatementTree statement;
   private final InternalSyntaxToken whileToken;
-  private final ExpressionTree condition;
+  private final ParenthesisedExpressionTree condition;
   private final InternalSyntaxToken eosToken;
 
   public DoWhileStatementTreeImpl(
       InternalSyntaxToken doToken, StatementTree statement,
-      InternalSyntaxToken whileToken, ExpressionTree condition,
+      InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition,
       InternalSyntaxToken eosToken
   ) {
     this.doToken = doToken;
@@ -69,7 +69,7 @@ public class DoWhileStatementTreeImpl extends PHPTree implements DoWhileStatemen
   }
 
   @Override
-  public ExpressionTree condition() {
+  public ParenthesisedExpressionTree condition() {
     return condition;
   }
 

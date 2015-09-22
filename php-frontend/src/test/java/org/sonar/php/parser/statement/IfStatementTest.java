@@ -29,20 +29,19 @@ public class IfStatementTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.IF_STATEMENT)
-        // fixme (Lena) : replace all conditions by parenthesised expressions
-      .matches("if $a {}")
-      .matches("if $a {} elseif $a {}")
-      .matches("if $a {} elseif $a {} elseif $a {}")
-      .matches("if $a {} elseif $a {} else {}")
-      .matches("if $a {} else {}")
+      .matches("if ($a) {}")
+      .matches("if ($a) {} elseif ($a) {}")
+      .matches("if ($a) {} elseif ($a) {} elseif ($a) {}")
+      .matches("if ($a) {} elseif ($a) {} else {}")
+      .matches("if ($a) {} else {}")
 
-      .matches("if $a : endif;")
-      .matches("if $a : elseif $a: endif;")
-      .matches("if $a : elseif $a: else: endif;")
-      .matches("if $a : else: endif;")
+      .matches("if ($a) : endif;")
+      .matches("if ($a) : elseif ($a): endif;")
+      .matches("if ($a) : elseif ($a): else: endif;")
+      .matches("if ($a) : else: endif;")
 
 
-      .notMatches("if $a : {}")
+      .notMatches("if ($a) : {}")
 
     ;
   }

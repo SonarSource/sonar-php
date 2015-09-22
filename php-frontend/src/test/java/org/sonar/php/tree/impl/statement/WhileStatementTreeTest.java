@@ -31,12 +31,11 @@ public class WhileStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void standard_syntax() throws Exception {
-    WhileStatementTree tree = parse("while $a {}", PHPLexicalGrammar.WHILE_STATEMENT);
+    WhileStatementTree tree = parse("while ($a) {}", PHPLexicalGrammar.WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.WHILE_STATEMENT)).isTrue();
     assertThat(tree.statement().get(0).is(Kind.BLOCK)).isTrue();
-    //fixme
-    assertThat(tree.condition().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.condition().is(Kind.PARENTHESISED_EXPRESSION)).isTrue();
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endWhileToken()).isNull();
     assertThat(tree.eosToken()).isNull();
@@ -44,7 +43,7 @@ public class WhileStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void alternative_syntax() throws Exception {
-    WhileStatementTree tree = parse("while $a : endwhile ;", PHPLexicalGrammar.WHILE_STATEMENT);
+    WhileStatementTree tree = parse("while ($a) : endwhile ;", PHPLexicalGrammar.WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_WHILE_STATEMENT)).isTrue();
     assertThat(tree.statement()).hasSize(0);
