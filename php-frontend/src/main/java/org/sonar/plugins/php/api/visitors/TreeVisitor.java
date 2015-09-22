@@ -21,6 +21,8 @@ package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -36,8 +38,6 @@ import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
@@ -61,6 +61,7 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
@@ -85,6 +86,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitUnsetVariableStatement(UnsetVariableStatementTree tree);
 
   void visitYieldStatement(YieldStatementTree tree);
 

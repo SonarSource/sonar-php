@@ -23,11 +23,11 @@ package org.sonar.php.parser;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
-
-import org.sonar.php.parser.TreeFactory.Tuple;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.declaration.UseDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.UseDeclarationsTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
@@ -35,8 +35,6 @@ import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
-import org.sonar.php.tree.impl.declaration.UseDeclarationTreeImpl;
-import org.sonar.php.tree.impl.declaration.UseDeclarationsTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LexicalVariablesTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
@@ -70,19 +68,20 @@ import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.SwitchStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
+import org.sonar.php.tree.impl.statement.UnsetVariableStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -118,6 +117,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
@@ -502,6 +502,31 @@ public class TreeFactory {
 
   public YieldStatementTree yieldStatement(YieldExpressionTree yieldExpression, InternalSyntaxToken eosToken) {
     return new YieldStatementTreeImpl(yieldExpression, eosToken);
+  }
+
+  public UnsetVariableStatementTree unsetVariableStatement(
+      InternalSyntaxToken unsetToken, InternalSyntaxToken openParenthesisToken,
+      ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> list,
+      InternalSyntaxToken closeParenthesisToken, InternalSyntaxToken eosToken
+  ) {
+
+    ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
+    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+    elements.add(expression);
+    if (list.isPresent()) {
+      for (Tuple<InternalSyntaxToken, ExpressionTree> tuple : list.get()) {
+        separators.add(tuple.first());
+        elements.add(tuple.second());
+      }
+    }
+
+    return new UnsetVariableStatementTreeImpl(
+        unsetToken,
+        openParenthesisToken,
+        new SeparatedList<>(elements.build(), separators.build()),
+        closeParenthesisToken,
+        eosToken
+    );
   }
 
   /**
