@@ -71,6 +71,7 @@ import org.sonar.php.tree.impl.statement.SwitchStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -118,6 +119,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -496,6 +498,10 @@ public class TreeFactory {
         caseSeparatorToken,
         optionalList(statements)
     );
+  }
+
+  public YieldStatementTree yieldStatement(YieldExpressionTree yieldExpression, InternalSyntaxToken eosToken) {
+    return new YieldStatementTreeImpl(yieldExpression, eosToken);
   }
 
   /**

@@ -62,6 +62,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 @Beta
 public interface TreeVisitor {
@@ -84,6 +85,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitYieldStatement(YieldStatementTree tree);
 
   void visitDefaultClause(DefaultClauseTree tree);
 

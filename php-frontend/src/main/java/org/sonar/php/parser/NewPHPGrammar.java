@@ -69,6 +69,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 import static org.sonar.php.api.PHPKeyword.CLASS;
 import static org.sonar.php.api.PHPKeyword.LIST;
@@ -172,10 +173,9 @@ public class NewPHPGrammar {
             CONTINUE_STATEMENT(),
             RETURN_STATEMENT(),
             EMPTY_STATEMENT(),
-//            YIELD_STATEMENT(),
+            YIELD_STATEMENT(),
 //            GLOBAL_STATEMENT(),
 //            STATIC_STATEMENT(),
-//            ECHO_STATEMENT // is represented by function call
             TRY_STATEMENT(),
 //            DECLARE_STATEMENT(),  // requires variable_declaration
             GOTO_STATEMENT(),
@@ -184,6 +184,11 @@ public class NewPHPGrammar {
             EXPRESSION_STATEMENT(),
             LABEL()
         ));
+  }
+
+  public YieldStatementTree YIELD_STATEMENT() {
+    return b.<YieldStatementTree>nonterminal(PHPLexicalGrammar.YIELD_STATEMENT)
+        .is(f.yieldStatement(YIELD_EXPRESSION(), EOS()));
   }
 
   public SwitchStatementTree SWITCH_STATEMENT() {

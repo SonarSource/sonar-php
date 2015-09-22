@@ -19,14 +19,12 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
-
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 @Beta
-public interface YieldStatementTree extends ExpressionTree {
+public interface YieldStatementTree extends StatementTree {
 
   YieldExpressionTree yieldExpression();
 
