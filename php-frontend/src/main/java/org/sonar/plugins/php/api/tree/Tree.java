@@ -27,7 +27,6 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
@@ -86,6 +85,7 @@ import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
@@ -142,11 +142,6 @@ public interface Tree {
      * {@link VariableDeclarationTree}
      */
     VARIABLE_DECLARATION(VariableDeclarationTree.class),
-
-    /**
-     * {@link UseDeclarationsTree}
-     */
-    USE_DECLARATIONS(UseDeclarationsTree.class),
 
     /**
      * {@link UseDeclarationTree}
@@ -603,6 +598,21 @@ public interface Tree {
      * {@code __TRAIT__}
      */
     MAGIC_CONSTANT(LiteralTree.class),
+
+    /**
+     * {@link UseStatementTree}
+     */
+    USE_STATEMENT(UseStatementTree.class),
+
+    /**
+     * {@link UseStatementTree}
+     */
+    USE_CONST_STATEMENT(UseStatementTree.class),
+
+    /**
+     * {@link UseStatementTree}
+     */
+    USE_FUNCTION_STATEMENT(UseStatementTree.class),
 
     /**
      * {@link TraitUseStatementTree}

@@ -19,14 +19,12 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import javax.annotation.Nullable;
-
+import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import javax.annotation.Nullable;
 
 @Beta
 public interface UseStatementTree extends StatementTree {
@@ -41,6 +39,5 @@ public interface UseStatementTree extends StatementTree {
 
   SeparatedList<UseDeclarationTree> declarations();
 
-  @Nullable
-  SyntaxToken semicolonToken();
+  SyntaxToken eosToken();
 }

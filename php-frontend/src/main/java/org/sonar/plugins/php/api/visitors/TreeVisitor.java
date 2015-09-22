@@ -22,7 +22,6 @@ package org.sonar.plugins.php.api.visitors;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -62,6 +61,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
@@ -73,8 +73,6 @@ public interface TreeVisitor {
    */
 
   void visitNamespaceName(NamespaceNameTree tree);
-  
-  void visitUseDeclarations(UseDeclarationsTree tree);
 
   void visitUseDeclaration(UseDeclarationTree tree);
 
@@ -86,6 +84,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitUseStatement(UseStatementTree tree);
 
   void visitUnsetVariableStatement(UnsetVariableStatementTree tree);
 

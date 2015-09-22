@@ -19,37 +19,46 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
+import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 
-public class UseDeclarationsTreeTest extends PHPTreeModelTest {
+import static org.fest.assertions.Assertions.assertThat;
+
+public class UseStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void single_declaration() throws Exception {
-    UseDeclarationsTree tree = parse("use \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_DECLARATIONS);
-    assertThat(tree.is(Kind.USE_DECLARATIONS)).isTrue();
+    UseStatementTree tree = parse("use \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_STATEMENT);
+    assertThat(tree.is(Kind.USE_STATEMENT)).isTrue();
     assertThat(tree.useTypeToken()).isNull();
     assertThat(tree.declarations()).hasSize(1);
   }
 
   @Test
   public void multiple_declarations() throws Exception {
-    UseDeclarationsTree tree = parse("use \\ns1\\ns2\\name, \\ns1\\ns2\\name2;", PHPLexicalGrammar.USE_DECLARATIONS);
-    assertThat(tree.is(Kind.USE_DECLARATIONS)).isTrue();
+    UseStatementTree tree = parse("use \\ns1\\ns2\\name, \\ns1\\ns2\\name2;", PHPLexicalGrammar.USE_STATEMENT);
+    assertThat(tree.is(Kind.USE_STATEMENT)).isTrue();
     assertThat(tree.useTypeToken()).isNull();
     assertThat(tree.declarations()).hasSize(2);
   }
   
   @Test
   public void const_token() throws Exception {
-    UseDeclarationsTree tree = parse("use const \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_DECLARATIONS);
+    UseStatementTree tree = parse("use const \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_STATEMENT);
+
+    assertThat(tree.is(Kind.USE_CONST_STATEMENT)).isTrue();
     assertThat(tree.useTypeToken().text()).isEqualTo("const");
+  }
+
+  @Test
+  public void function_token() throws Exception {
+    UseStatementTree tree = parse("use function \\ns1\\ns2\\name;", PHPLexicalGrammar.USE_STATEMENT);
+
+    assertThat(tree.is(Kind.USE_FUNCTION_STATEMENT)).isTrue();
+    assertThat(tree.useTypeToken().text()).isEqualTo("function");
   }
 
 }

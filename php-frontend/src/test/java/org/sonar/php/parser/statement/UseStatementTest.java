@@ -19,20 +19,20 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class UseStatementTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.USE_STATEMENT);
-  }
+public class UseStatementTest {
 
   @Test
   public void test() {
-    matches("use NS;");
+    assertThat(PHPLexicalGrammar.USE_STATEMENT)
+      .matches("use My\\Full\\Name as alias;")
+      .matches("use const My\\Full\\Name as alias;")
+      .matches("use function My\\Full\\Name as alias;")
+      .matches("use My\\Full\\Name1, My\\Full\\Name2;")
+      .notMatches("use function My\\Full\\Name1 as func, const My\\Full\\Name2;");
   }
 }
