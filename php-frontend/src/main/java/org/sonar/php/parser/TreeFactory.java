@@ -63,6 +63,7 @@ import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.IfStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
+import org.sonar.php.tree.impl.statement.NamespaceStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.SwitchStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
@@ -110,6 +111,7 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
@@ -527,6 +529,27 @@ public class TreeFactory {
         new SeparatedList<>(elements.build(), separators.build()),
         closeParenthesisToken,
         eosToken
+    );
+  }
+
+  public NamespaceStatementTree namespaceStatement(InternalSyntaxToken namespaceToken, NamespaceNameTree namespaceName, InternalSyntaxToken eosToken) {
+    return new NamespaceStatementTreeImpl(
+        namespaceToken,
+        namespaceName,
+        eosToken
+    );
+  }
+
+  public NamespaceStatementTree blockNamespaceStatement(
+      InternalSyntaxToken namespaceToken, Optional<NamespaceNameTree> namespaceName,
+      InternalSyntaxToken openCurlyBrace, Optional<List<StatementTree>> statements, InternalSyntaxToken closeCurlyBrace
+  ) {
+    return new NamespaceStatementTreeImpl(
+        namespaceToken,
+        namespaceName.orNull(),
+        openCurlyBrace,
+        optionalList(statements),
+        closeCurlyBrace
     );
   }
 

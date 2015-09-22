@@ -26,7 +26,6 @@ import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
@@ -62,6 +61,7 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
@@ -146,18 +146,36 @@ public class NewPHPGrammar {
    * [ START ] Statement
    */
 
-  // fixme (Lena) : should return type be StatementTree?
-  public Tree TOP_STATEMENT() {
-    return b.<Tree>nonterminal(PHPLexicalGrammar.TOP_STATEMENT)
+  // fixme (Lena) : should return type be StatementTree or Tree?
+  public StatementTree TOP_STATEMENT() {
+    return b.<StatementTree>nonterminal(PHPLexicalGrammar.TOP_STATEMENT)
         .is(b.firstOf(
 //            CLASS_DECLARATION(),
 //            FUNCTION_DECLARATION(),
 //            INTERFACE_DECLARATION(),
-//            NAMESPACE_STATEMENT(),
+            NAMESPACE_STATEMENT(),
             USE_STATEMENT(),
 //            CONSTANT_DECLARATION(),
 //            HALT_COMPILER_STATEMENT(),
             STATEMENT()
+        ));
+  }
+
+  public NamespaceStatementTree NAMESPACE_STATEMENT() {
+    return b.<NamespaceStatementTree>nonterminal(PHPLexicalGrammar.NAMESPACE_STATEMENT)
+        .is(b.firstOf(
+           f.namespaceStatement(
+               b.token(PHPKeyword.NAMESPACE),
+               NAMESPACE_NAME(),
+               EOS()
+           ),
+           f.blockNamespaceStatement(
+               b.token(PHPKeyword.NAMESPACE),
+               b.optional(NAMESPACE_NAME()),
+               b.token(LCURLYBRACE),
+               b.zeroOrMore(TOP_STATEMENT()),
+               b.token(RCURLYBRACE)
+           )
         ));
   }
 

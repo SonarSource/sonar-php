@@ -17,23 +17,30 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.plugins.php.api.tree.statement;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import javax.annotation.Nullable;
+import java.util.List;
 
-public class NamespaceStatementTest {
+public interface NamespaceStatementTree extends StatementTree {
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.NAMESPACE_STATEMENT)
-      .matches("namespace NS;")
-      .matches("namespace NS {}")
-      .matches("namespace {}")
-      .matches("namespace NS\\SubLevel;")
+  InternalSyntaxToken namespaceToken();
 
-      .notMatches("namespace;");
-  }
+  @Nullable
+  NamespaceNameTree namespaceName();
+
+  @Nullable
+  InternalSyntaxToken openCurlyBrace();
+
+  List<StatementTree> statements();
+
+  @Nullable
+  InternalSyntaxToken closeCurlyBrace();
+
+  @Nullable
+  InternalSyntaxToken eosToken();
+
 }

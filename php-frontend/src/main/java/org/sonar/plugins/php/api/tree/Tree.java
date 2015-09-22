@@ -76,6 +76,7 @@ import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
@@ -598,6 +599,11 @@ public interface Tree {
      * {@code __TRAIT__}
      */
     MAGIC_CONSTANT(LiteralTree.class),
+
+    /**
+     * {@link NamespaceStatementTree}
+     */
+    NAMESPACE_STATEMENT(NamespaceStatementTree.class),
 
     /**
      * {@link UseStatementTree}
