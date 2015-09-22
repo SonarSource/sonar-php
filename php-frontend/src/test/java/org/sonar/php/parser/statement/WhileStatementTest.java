@@ -37,11 +37,11 @@ public class WhileStatementTest extends RuleTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.WHILE_STATEMENT)
-      .matches("while $a {}")
-      .matches("while $a : endwhile;")
-      .matches("while $a : {} {} endwhile;")
+      .matches("while ($a) {}")
+      .matches("while ($a) : endwhile;")
+      .matches("while ($a) : {} {} endwhile;")
 
-      .notMatches("while $a : {}")
+      .notMatches("while ($a) : {}")
     ;
   }
 }

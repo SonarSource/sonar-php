@@ -30,11 +30,11 @@ public class DoWhileStatementTest extends RuleTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.DO_WHILE_STATEMENT)
-      .matches("do ; while $a ;")
-      .matches("do {} while $a ;")
+      .matches("do ; while ($a) ;")
+      .matches("do {} while ($a) ;")
 
-      .notMatches("do {} while $a ")
-      .notMatches("while {} do $a ;")
+      .notMatches("do {} while ($a) ")
+      .notMatches("while {} do ($a) ;")
     ;
   }
 }

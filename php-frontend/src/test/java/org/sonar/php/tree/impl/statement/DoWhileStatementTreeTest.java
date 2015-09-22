@@ -31,12 +31,11 @@ public class DoWhileStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void test() throws Exception {
-    DoWhileStatementTree tree = parse("do {} while $a ;", PHPLexicalGrammar.DO_WHILE_STATEMENT);
+    DoWhileStatementTree tree = parse("do {} while ($a) ;", PHPLexicalGrammar.DO_WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.DO_WHILE_STATEMENT)).isTrue();
     assertThat(tree.eosToken().text()).isEqualTo(";");
-    // fixme : shoule be parenthesised expression
-    assertThat(tree.condition().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.condition().is(Kind.PARENTHESISED_EXPRESSION)).isTrue();
     assertThat(tree.statement().is(Kind.BLOCK)).isTrue();
   }
 
