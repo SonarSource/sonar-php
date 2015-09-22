@@ -17,19 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class UnsetVariableStatementTest {
+public class UnsetVariableStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.UNSET_VARIABLE_STATEMENT)
-      .matches("unset($a);")
-      .matches("unset($a, $b, $c);");
+  public void test() throws Exception {
+    UnsetVariableStatementTree tree = parse("unset($a, $b);", PHPLexicalGrammar.UNSET_VARIABLE_STATEMENT);
+
+    assertThat(tree.is(Kind.UNSET_VARIABLE_STATEMENT)).isTrue();
+    assertThat(tree.unsetToken().text()).isEqualTo("unset");
+    assertThat(tree.variables()).hasSize(2);
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
+
 }

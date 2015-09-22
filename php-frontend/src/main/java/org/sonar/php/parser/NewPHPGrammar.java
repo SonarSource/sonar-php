@@ -68,6 +68,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
@@ -180,9 +181,21 @@ public class NewPHPGrammar {
 //            DECLARE_STATEMENT(),  // requires variable_declaration
             GOTO_STATEMENT(),
 //            INLINE_HTML,   // ???
-//            UNSET_VARIABLE_STATEMENT(),  // requires MEMBER_EXPRESSION
+            UNSET_VARIABLE_STATEMENT(),
             EXPRESSION_STATEMENT(),
             LABEL()
+        ));
+  }
+
+  public UnsetVariableStatementTree UNSET_VARIABLE_STATEMENT() {
+    return b.<UnsetVariableStatementTree>nonterminal(PHPLexicalGrammar.UNSET_VARIABLE_STATEMENT)
+        .is(f.unsetVariableStatement(
+            b.token(PHPKeyword.UNSET),
+            b.token(LPARENTHESIS),
+            MEMBER_EXPRESSION(),
+            b.zeroOrMore(f.newTuple14(b.token(COMMA), MEMBER_EXPRESSION())),
+            b.token(RPARENTHESIS),
+            EOS()
         ));
   }
 
