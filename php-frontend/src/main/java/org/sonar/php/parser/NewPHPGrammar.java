@@ -26,15 +26,15 @@ import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -69,14 +69,15 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 import static org.sonar.php.api.PHPKeyword.CLASS;
 import static org.sonar.php.api.PHPKeyword.LIST;
 import static org.sonar.php.api.PHPKeyword.STATIC;
-import static org.sonar.php.api.PHPKeyword.YIELD;
 import static org.sonar.php.api.PHPKeyword.USE;
+import static org.sonar.php.api.PHPKeyword.YIELD;
 import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
 import static org.sonar.php.api.PHPPunctuator.ARROW;
 import static org.sonar.php.api.PHPPunctuator.COMMA;
@@ -127,20 +128,6 @@ public class NewPHPGrammar {
     );
   }
   
-  public UseDeclarationsTree USE_DECLARATIONS() {
-    return b.<UseDeclarationsTree>nonterminal(PHPLexicalGrammar.USE_DECLARATIONS).is(
-      f.useDeclarations(
-        b.token(PHPKeyword.USE),
-        b.optional(
-          b.firstOf(
-            b.token(PHPKeyword.CONST),
-            b.token(PHPKeyword.FUNCTION))),
-        USE_DECLARATION(),
-        b.zeroOrMore(f.newTuple90(b.token(PHPPunctuator.COMMA), USE_DECLARATION())),
-        EOS())
-      );
-  }
-  
   public UseDeclarationTree USE_DECLARATION() {
     return b.<UseDeclarationTree>nonterminal(PHPLexicalGrammar.USE_DECLARATION).is(
       f.useDeclaration(
@@ -159,6 +146,35 @@ public class NewPHPGrammar {
    * [ START ] Statement
    */
 
+  // fixme (Lena) : should return type be StatementTree?
+  public Tree TOP_STATEMENT() {
+    return b.<Tree>nonterminal(PHPLexicalGrammar.TOP_STATEMENT)
+        .is(b.firstOf(
+//            CLASS_DECLARATION(),
+//            FUNCTION_DECLARATION(),
+//            INTERFACE_DECLARATION(),
+//            NAMESPACE_STATEMENT(),
+            USE_STATEMENT(),
+//            CONSTANT_DECLARATION(),
+//            HALT_COMPILER_STATEMENT(),
+            STATEMENT()
+        ));
+  }
+
+  public UseStatementTree USE_STATEMENT() {
+    return b.<UseStatementTree>nonterminal(PHPLexicalGrammar.USE_STATEMENT).is(
+        f.useStatement(
+            b.token(PHPKeyword.USE),
+            b.optional(
+                b.firstOf(
+                    b.token(PHPKeyword.CONST),
+                    b.token(PHPKeyword.FUNCTION))),
+            USE_DECLARATION(),
+            b.zeroOrMore(f.newTuple90(b.token(PHPPunctuator.COMMA), USE_DECLARATION())),
+            EOS())
+    );
+  }
+
   public StatementTree STATEMENT() {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.STATEMENT)
         .is(b.firstOf(
@@ -175,8 +191,8 @@ public class NewPHPGrammar {
             RETURN_STATEMENT(),
             EMPTY_STATEMENT(),
             YIELD_STATEMENT(),
-//            GLOBAL_STATEMENT(),
-//            STATIC_STATEMENT(),
+//            GLOBAL_STATEMENT(), // requires SIMPLE_INDIRECT_REFERENCE
+//            STATIC_STATEMENT(), // requires STATIC_SCALAR
             TRY_STATEMENT(),
 //            DECLARE_STATEMENT(),  // requires variable_declaration
             GOTO_STATEMENT(),

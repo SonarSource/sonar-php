@@ -30,17 +30,11 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
   COMPILATION_UNIT,
   SCRIPT,
-  TOP_STATEMENT_LIST,
 
   /**
    * Declaration
    */
-  USE_DECLARATIONS,
   USE_DECLARATION,
-  USE_FUNCTION_DECLARATION_STATEMENT,
-  USE_CONST_DECLARATION_STATEMENT,
-  USE_FUNCTION_DECLARATIONS,
-  USE_FUNCTION_DECLARATION,
   HALT_COMPILER_STATEMENT,
 
   NAMESPACE_NAME,
@@ -261,10 +255,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     LexerlessGrammarBuilder b = LexerlessGrammarBuilder.create();
 
     b.rule(COMPILATION_UNIT).is(b.optional(SCRIPT), SPACING, EOF);
-    b.rule(SCRIPT).is(FILE_OPENING_TAG, b.optional(TOP_STATEMENT_LIST));
-
-    // FIXME
-    b.rule(TOP_STATEMENT_LIST).is(SPACING);
+    // FIXME should be TOP_STATEMENT_LIST
+    b.rule(SCRIPT).is(FILE_OPENING_TAG, b.optional(SPACING));
 
     lexical(b);
     punctuators(b);

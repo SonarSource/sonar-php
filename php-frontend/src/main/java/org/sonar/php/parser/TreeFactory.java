@@ -27,7 +27,6 @@ import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseDeclarationTreeImpl;
-import org.sonar.php.tree.impl.declaration.UseDeclarationsTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
@@ -69,13 +68,13 @@ import org.sonar.php.tree.impl.statement.SwitchStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
 import org.sonar.php.tree.impl.statement.UnsetVariableStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.UseStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -118,6 +117,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
@@ -148,26 +148,6 @@ public class TreeFactory {
   /**
    * [ START ] Declarations
    */
-
-  public UseDeclarationsTree useDeclarations(
-    InternalSyntaxToken useToken, 
-    Optional<InternalSyntaxToken> useTypeToken, 
-    UseDeclarationTree firstDeclaration,
-    Optional<List<Tuple<InternalSyntaxToken, UseDeclarationTree>>> additionalDeclarations, 
-    InternalSyntaxToken eosToken
-    ) {
-    ImmutableList.Builder<UseDeclarationTree> allDeclarations = ImmutableList.builder();
-    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
-    allDeclarations.add(firstDeclaration);
-    if (additionalDeclarations.isPresent()) {
-      for (Tuple<InternalSyntaxToken, UseDeclarationTree> tuple : additionalDeclarations.get()) {
-        separators.add(tuple.first());
-        allDeclarations.add(tuple.second());
-      }
-    }
-    SeparatedList<UseDeclarationTree> declarations = new SeparatedList<>(allDeclarations.build(), separators.build());
-    return new UseDeclarationsTreeImpl(useToken, useTypeToken.orNull(), declarations, eosToken);
-  }
   
   public UseDeclarationTree useDeclaration(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
     if (alias.isPresent()) {
@@ -185,6 +165,27 @@ public class TreeFactory {
   /**
    * [ START ] Statement
    */
+
+  public UseStatementTree useStatement(
+      InternalSyntaxToken useToken,
+      Optional<InternalSyntaxToken> useTypeToken,
+      UseDeclarationTree firstDeclaration,
+      Optional<List<Tuple<InternalSyntaxToken, UseDeclarationTree>>> additionalDeclarations,
+      InternalSyntaxToken eosToken
+  ) {
+    ImmutableList.Builder<UseDeclarationTree> allDeclarations = ImmutableList.builder();
+    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+    allDeclarations.add(firstDeclaration);
+    if (additionalDeclarations.isPresent()) {
+      for (Tuple<InternalSyntaxToken, UseDeclarationTree> tuple : additionalDeclarations.get()) {
+        separators.add(tuple.first());
+        allDeclarations.add(tuple.second());
+      }
+    }
+    SeparatedList<UseDeclarationTree> declarations = new SeparatedList<>(allDeclarations.build(), separators.build());
+    return new UseStatementTreeImpl(useToken, useTypeToken.orNull(), declarations, eosToken);
+  }
+
   public ReturnStatementTree returnStatement(InternalSyntaxToken returnToken, Optional<ExpressionTree> expression, InternalSyntaxToken eos) {
     return new ReturnStatementTreeImpl(returnToken, expression.orNull(), eos);
   }

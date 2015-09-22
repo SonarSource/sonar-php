@@ -17,42 +17,49 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.tree.impl.declaration;
+package org.sonar.php.tree.impl.statement;
 
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
+import com.google.common.base.Functions;
+import com.google.common.collect.Iterators;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.base.Functions;
-import com.google.common.collect.Iterators;
+import javax.annotation.Nullable;
+import java.util.Iterator;
 
-public class UseDeclarationsTreeImpl extends PHPTree implements UseDeclarationsTree {
+public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
 
-  private static final Kind KIND = Kind.USE_DECLARATIONS;
+  private final Kind KIND;
   private InternalSyntaxToken useToken;
   private InternalSyntaxToken useTypeToken;
   private SeparatedList<UseDeclarationTree> declarations;
   private InternalSyntaxToken eosToken;
   
-  public UseDeclarationsTreeImpl(
-    InternalSyntaxToken useToken, 
-    @Nullable InternalSyntaxToken useTypeToken, 
-    SeparatedList<UseDeclarationTree> declarations, 
-    InternalSyntaxToken eosToken
-    ) {
+  public UseStatementTreeImpl(
+      InternalSyntaxToken useToken,
+      @Nullable InternalSyntaxToken useTypeToken,
+      SeparatedList<UseDeclarationTree> declarations,
+      InternalSyntaxToken eosToken
+  ) {
     this.useToken = useToken;
     this.useTypeToken = useTypeToken;
     this.declarations = declarations;
     this.eosToken = eosToken;
+
+    if (useTypeToken == null) {
+      this.KIND = Kind.USE_STATEMENT;
+    } else if (useTypeToken().text().equals(PHPKeyword.CONST.getValue())) {
+      this.KIND = Kind.USE_CONST_STATEMENT;
+    } else {
+      this.KIND = Kind.USE_FUNCTION_STATEMENT;
+    }
   }
 
   @Override
@@ -91,7 +98,7 @@ public class UseDeclarationsTreeImpl extends PHPTree implements UseDeclarationsT
 
   @Override
   public void accept(TreeVisitor visitor) {
-    visitor.visitUseDeclarations(this);
+    visitor.visitUseStatement(this);
   }
 }
 
