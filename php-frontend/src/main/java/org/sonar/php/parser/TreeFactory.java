@@ -23,6 +23,8 @@ package org.sonar.php.parser;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
+
+import org.sonar.php.parser.TreeFactory.Tuple;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
@@ -33,6 +35,8 @@ import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
+import org.sonar.php.tree.impl.declaration.UseDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.UseDeclarationsTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LexicalVariablesTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
@@ -76,6 +80,8 @@ import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -137,6 +143,43 @@ public class TreeFactory {
     }
   }
 
+  /**
+   * [ START ] Declarations
+   */
+
+  public UseDeclarationsTree useDeclarations(
+    InternalSyntaxToken useToken, 
+    Optional<InternalSyntaxToken> useTypeToken, 
+    UseDeclarationTree firstDeclaration,
+    Optional<List<Tuple<InternalSyntaxToken, UseDeclarationTree>>> additionalDeclarations, 
+    InternalSyntaxToken eosToken
+    ) {
+    ImmutableList.Builder<UseDeclarationTree> allDeclarations = ImmutableList.builder();
+    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+    allDeclarations.add(firstDeclaration);
+    if (additionalDeclarations.isPresent()) {
+      for (Tuple<InternalSyntaxToken, UseDeclarationTree> tuple : additionalDeclarations.get()) {
+        separators.add(tuple.first());
+        allDeclarations.add(tuple.second());
+      }
+    }
+    SeparatedList<UseDeclarationTree> declarations = new SeparatedList<>(allDeclarations.build(), separators.build());
+    return new UseDeclarationsTreeImpl(useToken, useTypeToken.orNull(), declarations, eosToken);
+  }
+  
+  public UseDeclarationTree useDeclaration(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
+    if (alias.isPresent()) {
+      IdentifierTreeImpl aliasName = new IdentifierTreeImpl(alias.get().second());
+      return new UseDeclarationTreeImpl(namespaceName, alias.get().first(), aliasName);
+    }
+    return new UseDeclarationTreeImpl(namespaceName);
+  }
+
+  /**
+   * [ END ] Declarations
+   */
+
+  
   /**
    * [ START ] Statement
    */
@@ -883,6 +926,14 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple55(T first, U second) {
+    return newTuple(first, second);
+  }
+  
+  public <T, U> Tuple<T, U> newTuple90(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple91(T first, U second) {
     return newTuple(first, second);
   }
 

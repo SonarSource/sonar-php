@@ -36,6 +36,8 @@ import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
@@ -69,6 +71,10 @@ public interface TreeVisitor {
    */
 
   void visitNamespaceName(NamespaceNameTree tree);
+  
+  void visitUseDeclarations(UseDeclarationsTree tree);
+
+  void visitUseDeclaration(UseDeclarationTree tree);
 
   /**
    * [ END ] Declaration

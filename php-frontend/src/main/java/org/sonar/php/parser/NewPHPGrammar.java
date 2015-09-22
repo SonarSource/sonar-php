@@ -33,6 +33,8 @@ import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.UseDeclarationsTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -122,11 +124,34 @@ public class NewPHPGrammar {
               b.token(PHPLexicalGrammar.IDENTIFIER)))
     );
   }
+  
+  public UseDeclarationsTree USE_DECLARATIONS() {
+    return b.<UseDeclarationsTree>nonterminal(PHPLexicalGrammar.USE_DECLARATIONS).is(
+      f.useDeclarations(
+        b.token(PHPKeyword.USE),
+        b.optional(
+          b.firstOf(
+            b.token(PHPKeyword.CONST),
+            b.token(PHPKeyword.FUNCTION))),
+        USE_DECLARATION(),
+        b.zeroOrMore(f.newTuple90(b.token(PHPPunctuator.COMMA), USE_DECLARATION())),
+        EOS())
+      );
+  }
+  
+  public UseDeclarationTree USE_DECLARATION() {
+    return b.<UseDeclarationTree>nonterminal(PHPLexicalGrammar.USE_DECLARATION).is(
+      f.useDeclaration(
+        NAMESPACE_NAME(),
+        b.optional(
+          f.newTuple91(
+            b.token(PHPKeyword.AS), 
+            b.token(PHPLexicalGrammar.IDENTIFIER)))));
+  }
 
   /**
    * [ END ] Declaration
    */
-
 
   /**
    * [ START ] Statement

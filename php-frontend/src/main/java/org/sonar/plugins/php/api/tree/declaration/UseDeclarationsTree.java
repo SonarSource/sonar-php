@@ -20,10 +20,11 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
+
+import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 @Beta
 public interface UseDeclarationsTree extends DeclarationTree {
@@ -36,7 +37,7 @@ public interface UseDeclarationsTree extends DeclarationTree {
   @Nullable
   SyntaxToken useTypeToken();
 
-  List<UseDeclarationTree> declarations();
+  SeparatedList<UseDeclarationTree> declarations();
 
   @Nullable
   SyntaxToken eosToken();
