@@ -17,30 +17,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.lexical;
+package org.sonar.plugins.php.api.tree.statement;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-public class InlineHtmlTest extends RuleTest {
-
-  @Test
-  public void statement() {
-    assertThat(PHPLexicalGrammar.INLINE_HTML_STATEMENT)
-      .matches("?>")
-      .matches("?> <html>")
-      .matches("?> <html> <?php");
-  }
-
-  @Test
-  public void token() {
-    assertThat(PHPLexicalGrammar.INLINE_HTML)
-      .matches("?>")
-      .matches("?> <html>")
-      .matches("?> <html> <?php");
-  }
-
+public interface InlineHTMLTree extends StatementTree {
+  SyntaxToken inlineHTMLToken();
 }

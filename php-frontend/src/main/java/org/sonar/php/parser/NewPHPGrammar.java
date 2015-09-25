@@ -61,6 +61,7 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -214,11 +215,16 @@ public class NewPHPGrammar {
             TRY_STATEMENT(),
 //            DECLARE_STATEMENT(),  // requires variable_declaration
             GOTO_STATEMENT(),
-//            INLINE_HTML,   // ???
+            INLINE_HTML(),
             UNSET_VARIABLE_STATEMENT(),
             EXPRESSION_STATEMENT(),
             LABEL()
         ));
+  }
+
+  public InlineHTMLTree INLINE_HTML() {
+    return b.<InlineHTMLTree>nonterminal(PHPLexicalGrammar.INLINE_HTML_STATEMENT)
+        .is(f.inlineHTML(b.token(PHPLexicalGrammar.INLINE_HTML)));
   }
 
   public StatementTree INNER_STATEMENT() {

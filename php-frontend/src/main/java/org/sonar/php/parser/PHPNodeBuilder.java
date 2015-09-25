@@ -60,7 +60,8 @@ public class PHPNodeBuilder implements NodeBuilder {
         lineColumnValue.value,
         createTrivias(trivias),
         startIndex,
-        isEof
+        isEof,
+        type
     );
   }
 

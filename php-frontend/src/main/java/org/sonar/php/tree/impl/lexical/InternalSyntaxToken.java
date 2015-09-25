@@ -20,6 +20,7 @@
 package org.sonar.php.tree.impl.lexical;
 
 import com.sonar.sslr.api.TokenType;
+import org.sonar.php.parser.PHPTokenType;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -31,6 +32,8 @@ import java.util.List;
 
 public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
+  private final Kind KIND;
+
   private List<SyntaxTrivia> trivias;
   private int startIndex;
   private final int line;
@@ -38,13 +41,19 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
   private final String value;
   private final boolean isEOF;
 
-  public InternalSyntaxToken(int line, int column, String value, List<SyntaxTrivia> trivias, int startIndex, boolean isEOF) {
+  public InternalSyntaxToken(int line, int column, String value, List<SyntaxTrivia> trivias, int startIndex, boolean isEOF, TokenType type) {
     this.value = value;
     this.line = line;
     this.column = column;
     this.trivias = trivias;
     this.startIndex = startIndex;
     this.isEOF = isEOF;
+
+    if (type == PHPTokenType.INLINE_HTML) {
+      KIND = Kind.INLINE_HTML_TOKEN;
+    } else {
+      KIND = Kind.TOKEN;
+    }
   }
 
   public int toIndex() {
@@ -85,7 +94,7 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
   @Override
   public Kind getKind() {
-    return Kind.TOKEN;
+    return KIND;
   }
 
   @Override

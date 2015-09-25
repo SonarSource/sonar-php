@@ -75,6 +75,7 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -816,6 +817,11 @@ public interface Tree {
     TRAIT_ALIAS(TraitAliasTree.class),
 
     /**
+     * {@link InlineHTMLTree}
+     */
+    INLINE_HTML(InlineHTMLTree.class),
+
+    /**
      * {@link SyntaxToken}
      */
     TRIVIA(SyntaxTrivia.class),
@@ -823,7 +829,7 @@ public interface Tree {
     /**
      * {@link SyntaxToken}
      */
-    INLINE_HTML(SyntaxToken.class),
+    INLINE_HTML_TOKEN(SyntaxToken.class),
 
     /**
      * {@link SyntaxToken}

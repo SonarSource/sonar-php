@@ -41,7 +41,7 @@ public class SourceBuilder extends SubscriptionAstTreeVisitor {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Tree.Kind.TOKEN);
+    return ImmutableList.of(Kind.TOKEN, Kind.INLINE_HTML_TOKEN);
   }
 
   @Override
