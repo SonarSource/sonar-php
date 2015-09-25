@@ -233,7 +233,6 @@ public class NewPHPGrammar {
    * [ START ] Statement
    */
 
-  // fixme (Lena) : should return type be StatementTree or Tree?
   public StatementTree TOP_STATEMENT() {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.TOP_STATEMENT)
         .is(b.firstOf(
