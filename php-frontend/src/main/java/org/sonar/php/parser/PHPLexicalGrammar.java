@@ -35,7 +35,6 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
    * Declaration
    */
   USE_DECLARATION,
-  HALT_COMPILER_STATEMENT,
 
   NAMESPACE_NAME,
   UNQUALIFIED_NAME,

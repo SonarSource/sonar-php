@@ -156,7 +156,6 @@ public class NewPHPGrammar {
             NAMESPACE_STATEMENT(),
             USE_STATEMENT(),
 //            CONSTANT_DECLARATION(),
-//            HALT_COMPILER_STATEMENT(),
             STATEMENT()
         ));
   }
