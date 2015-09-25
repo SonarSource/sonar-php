@@ -27,6 +27,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -50,6 +51,7 @@ import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
@@ -79,6 +81,8 @@ public interface TreeVisitor {
    * [ START ] Declaration
    */
 
+  void visitVariableDeclaration(VariableDeclarationTree tree);
+
   void visitNamespaceName(NamespaceNameTree tree);
 
   void visitUseDeclaration(UseDeclarationTree tree);
@@ -99,6 +103,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitDeclareStatement(DeclareStatementTree tree);
 
   void visitInlineHTML(InlineHTMLTree tree);
 
