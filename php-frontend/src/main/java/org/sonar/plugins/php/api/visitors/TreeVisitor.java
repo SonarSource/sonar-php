@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -78,6 +79,8 @@ public interface TreeVisitor {
   void visitNamespaceName(NamespaceNameTree tree);
 
   void visitUseDeclaration(UseDeclarationTree tree);
+  
+  void visitParameterList(ParameterListTree tree);
   
   void visitParameter(ParameterTree tree);
 

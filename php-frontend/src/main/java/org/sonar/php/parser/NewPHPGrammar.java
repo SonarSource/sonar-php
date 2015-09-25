@@ -28,6 +28,7 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -139,6 +140,20 @@ public class NewPHPGrammar {
           f.newTuple91(
             b.token(PHPKeyword.AS), 
             b.token(PHPLexicalGrammar.IDENTIFIER)))));
+  }
+  
+  public ParameterListTree PARAMETER_LIST() {
+    return b.<ParameterListTree>nonterminal(PHPLexicalGrammar.PARAMETER_LIST).is(
+      f.parameterList(
+        b.token(PHPPunctuator.LPARENTHESIS),
+        b.optional(
+          f.newTuple94(
+            PARAMETER(), 
+            b.zeroOrMore(
+              f.newTuple93(
+                b.token(PHPPunctuator.COMMA), 
+                PARAMETER())))),
+        b.token(PHPPunctuator.RPARENTHESIS)));
   }
   
   public ParameterTree PARAMETER() {

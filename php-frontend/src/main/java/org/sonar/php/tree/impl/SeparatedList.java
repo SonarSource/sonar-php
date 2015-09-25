@@ -21,6 +21,7 @@ package org.sonar.php.tree.impl;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.UnmodifiableIterator;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class SeparatedList<T> implements List<T> {
-
+  
   private final List<T> list;
   private final List<InternalSyntaxToken> separators;
 
@@ -42,6 +43,10 @@ public class SeparatedList<T> implements List<T> {
       list.size(), separators.size());
     this.list = list;
     this.separators = separators;
+  }
+  
+  public static <T> SeparatedList<T> empty() {
+    return new SeparatedList<>(ImmutableList.<T>of(), ImmutableList.<InternalSyntaxToken>of());
   }
 
   public InternalSyntaxToken getSeparator(int i) {

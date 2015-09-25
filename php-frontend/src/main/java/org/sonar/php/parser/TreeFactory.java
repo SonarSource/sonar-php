@@ -27,6 +27,7 @@ import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
@@ -79,6 +80,7 @@ import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -153,6 +155,19 @@ public class TreeFactory {
       return new SeparatedList<>(new LinkedList<T>(), new LinkedList<InternalSyntaxToken>());
     }
   }
+  
+  private <T extends Tree> SeparatedList<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples) {
+    ImmutableList.Builder<T> elements = ImmutableList.builder();
+    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+    elements.add(firstElement);
+    if (tuples.isPresent()) {
+      for (Tuple<InternalSyntaxToken, T> tuple : tuples.get()) {
+        separators.add(tuple.first());
+        elements.add(tuple.second());
+      }
+    }
+    return new SeparatedList<>(elements.build(), separators.build());
+  }
 
   /**
    * [ START ] Declarations
@@ -164,6 +179,18 @@ public class TreeFactory {
       return new UseDeclarationTreeImpl(namespaceName, alias.get().first(), aliasName);
     }
     return new UseDeclarationTreeImpl(namespaceName);
+  }
+  
+  public ParameterListTree parameterList(
+    InternalSyntaxToken leftParenthesis, 
+    Optional<Tuple<ParameterTree, Optional<List<Tuple<InternalSyntaxToken, ParameterTree>>>>> parameters,
+    InternalSyntaxToken rightParenthesis
+    ) {
+    SeparatedList<ParameterTree> separatedList = SeparatedList.empty();
+    if (parameters.isPresent()) {
+      separatedList = separatedList(parameters.get().first(), parameters.get().second());
+    }
+    return new ParameterListTreeImpl(leftParenthesis, separatedList, rightParenthesis);
   }
   
   public ParameterTree parameter(
@@ -221,16 +248,7 @@ public class TreeFactory {
       Optional<List<Tuple<InternalSyntaxToken, UseDeclarationTree>>> additionalDeclarations,
       InternalSyntaxToken eosToken
   ) {
-    ImmutableList.Builder<UseDeclarationTree> allDeclarations = ImmutableList.builder();
-    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
-    allDeclarations.add(firstDeclaration);
-    if (additionalDeclarations.isPresent()) {
-      for (Tuple<InternalSyntaxToken, UseDeclarationTree> tuple : additionalDeclarations.get()) {
-        separators.add(tuple.first());
-        allDeclarations.add(tuple.second());
-      }
-    }
-    SeparatedList<UseDeclarationTree> declarations = new SeparatedList<>(allDeclarations.build(), separators.build());
+    SeparatedList<UseDeclarationTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
     return new UseStatementTreeImpl(useToken, useTypeToken.orNull(), declarations, eosToken);
   }
 
@@ -1043,6 +1061,14 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple92(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple93(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple94(T first, U second) {
     return newTuple(first, second);
   }
 
