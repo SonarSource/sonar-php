@@ -19,21 +19,27 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class VariableDeclarationTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.VARIABLE_DECLARATION);
+public class VariableDeclarationTest {
+
+  @Test
+  public void member_const_declaration() {
+    assertThat(PHPLexicalGrammar.MEMBER_CONST_DECLARATION)
+      .matches("a")
+      .matches("a = $a");
   }
 
   @Test
-  public void test() {
-    matches("$a");
-    matches("$a = 1");
+  public void variable_declaration() {
+    // todo (Lena) : uncomment when VARIABLE_DECLARATION is defined
+//    assertThat(PHPLexicalGrammar.VARIABLE_DECLARATION)
+//        .matches("$a")
+//        .matches("$a = 1");
   }
+
+
 }

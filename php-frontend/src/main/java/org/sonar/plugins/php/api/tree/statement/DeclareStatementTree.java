@@ -19,12 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.SeparatedList;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import com.google.common.annotations.Beta;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -43,7 +41,7 @@ public interface DeclareStatementTree extends StatementTree {
   @Nullable
   SyntaxToken colonToken();
 
-  List<Tree> statement();
+  List<StatementTree> statement();
 
   @Nullable
   SyntaxToken endDeclareToken();

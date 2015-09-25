@@ -24,6 +24,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStatementHead;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -33,6 +34,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
@@ -56,6 +58,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
@@ -87,6 +90,7 @@ import static org.sonar.php.api.PHPKeyword.USE;
 import static org.sonar.php.api.PHPKeyword.YIELD;
 import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
 import static org.sonar.php.api.PHPPunctuator.ARROW;
+import static org.sonar.php.api.PHPPunctuator.COLON;
 import static org.sonar.php.api.PHPPunctuator.COMMA;
 import static org.sonar.php.api.PHPPunctuator.DOLLAR_LCURLY;
 import static org.sonar.php.api.PHPPunctuator.DOUBLEARROW;
@@ -113,6 +117,14 @@ public class NewPHPGrammar {
   /**
    * [ START ] Declaration
    */
+
+  public VariableDeclarationTree MEMBER_CONST_DECLARATION() {
+    return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.MEMBER_CONST_DECLARATION)
+        .is(f.memberConstDeclaration(
+            b.token(PHPLexicalGrammar.IDENTIFIER),
+            b.optional(f.newTuple18(b.token(EQU), STATIC_SCALAR()))
+        ));
+  }
 
   public NamespaceNameTree NAMESPACE_NAME() {
     return b.<NamespaceNameTree>nonterminal(PHPLexicalGrammar.NAMESPACE_NAME)
@@ -286,12 +298,44 @@ public class NewPHPGrammar {
             GLOBAL_STATEMENT(),
 //            STATIC_STATEMENT(), // requires STATIC_SCALAR
             TRY_STATEMENT(),
-//            DECLARE_STATEMENT(),  // requires variable_declaration
+            DECLARE_STATEMENT(),
             GOTO_STATEMENT(),
             INLINE_HTML(),
             UNSET_VARIABLE_STATEMENT(),
             EXPRESSION_STATEMENT(),
             LABEL()
+        ));
+  }
+
+  public DeclareStatementTree DECLARE_STATEMENT() {
+    return b.<DeclareStatementTree>nonterminal(PHPLexicalGrammar.DECLARE_STATEMENT)
+        .is(b.firstOf(
+            f.shortDeclareStatement(
+                DECLARE_STATEMENT_HEAD(),
+                EOS()
+            ),
+            f.declareStatementWithOneStatement(
+                DECLARE_STATEMENT_HEAD(),
+                STATEMENT()
+            ),
+            f.alternativeDeclareStatement(
+                DECLARE_STATEMENT_HEAD(),
+                b.token(COLON),
+                b.zeroOrMore(INNER_STATEMENT()),
+                b.token(PHPKeyword.ENDDECLARE),
+                EOS()
+            )
+        ));
+  }
+
+  public DeclareStatementHead DECLARE_STATEMENT_HEAD() {
+    return b.<DeclareStatementHead>nonterminal()
+        .is(f.declareStatementHead(
+            b.token(PHPKeyword.DECLARE),
+            b.token(LPARENTHESIS),
+            MEMBER_CONST_DECLARATION(),
+            b.zeroOrMore(f.newTuple20(b.token(COMMA), MEMBER_CONST_DECLARATION())),
+            b.token(RPARENTHESIS)
         ));
   }
 
@@ -938,7 +982,7 @@ public class NewPHPGrammar {
   }
   
   public ExpressionTree STATIC_SCALAR() {
-    // FIXME Can also be a "COMBINED_SCALAR" in the old grammar
+    // FIXME (PY) : Can also be a "COMBINED_SCALAR" in the old grammar
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(EXPRESSION());
   }
 

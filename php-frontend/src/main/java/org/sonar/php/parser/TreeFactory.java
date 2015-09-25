@@ -23,7 +23,6 @@ package org.sonar.php.parser;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
-
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
@@ -55,6 +54,8 @@ import org.sonar.php.tree.impl.statement.BreakStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.CaseClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.CatchBlockTreeImpl;
 import org.sonar.php.tree.impl.statement.ContinueStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStatementHead;
 import org.sonar.php.tree.impl.statement.DefaultClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.DoWhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseClauseTreeImpl;
@@ -77,6 +78,7 @@ import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
 import org.sonar.php.tree.impl.statement.UnsetVariableStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.UseStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.VariableDeclarationTreeImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -87,6 +89,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -112,6 +115,7 @@ import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
@@ -177,7 +181,15 @@ public class TreeFactory {
   /**
    * [ START ] Declarations
    */
-  
+
+  public VariableDeclarationTree memberConstDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
+    if (optionalEqual.isPresent()) {
+      return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), optionalEqual.get().first(), optionalEqual.get().second());
+    } else {
+      return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), null, null);
+    }
+  }
+
   public UseDeclarationTree useDeclaration(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
     if (alias.isPresent()) {
       IdentifierTreeImpl aliasName = new IdentifierTreeImpl(alias.get().second());
@@ -645,6 +657,49 @@ public class TreeFactory {
 
   public InlineHTMLTree inlineHTML(InternalSyntaxToken inlineHTMLToken) {
     return new InlineHTMLTreeImpl(inlineHTMLToken);
+  }
+
+  public DeclareStatementTree shortDeclareStatement(DeclareStatementHead declareStatementHead, InternalSyntaxToken eosToken) {
+    return new DeclareStatementTreeImpl(declareStatementHead, eosToken);
+  }
+
+  public DeclareStatementHead declareStatementHead(
+      InternalSyntaxToken declareToken, InternalSyntaxToken openParenthesisToken,
+      VariableDeclarationTree firstDirective, Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> optionalDirectives,
+      InternalSyntaxToken closeParenthesisToken
+  ) {
+    List<VariableDeclarationTree> directives = Lists.newArrayList();
+    List<InternalSyntaxToken> commas = Lists.newArrayList();
+
+    // First element
+    directives.add(firstDirective);
+
+    // Rest of elements
+    if (optionalDirectives.isPresent()) {
+      for (Tuple<InternalSyntaxToken, VariableDeclarationTree> directive : optionalDirectives.get()) {
+        commas.add(directive.first());
+        directives.add(directive.second());
+      }
+    }
+
+    return new DeclareStatementHead(
+        declareToken,
+        openParenthesisToken,
+        new SeparatedList<>(directives, commas),
+        closeParenthesisToken
+    );
+  }
+
+  public DeclareStatementTree declareStatementWithOneStatement(DeclareStatementHead declareStatementHead, StatementTree statement) {
+    return new DeclareStatementTreeImpl(declareStatementHead, statement);
+  }
+
+  public DeclareStatementTree alternativeDeclareStatement(
+      DeclareStatementHead declareStatementHead, InternalSyntaxToken colonToken,
+      Optional<List<StatementTree>> statements,
+      InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken
+  ) {
+    return new DeclareStatementTreeImpl(declareStatementHead, colonToken, optionalList(statements), enddeclareToken, eosToken);
   }
 
   /**
