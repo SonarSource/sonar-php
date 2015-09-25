@@ -39,7 +39,7 @@ public class DeclareStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endDeclareToken()).isNull();
     assertThat(tree.eosToken()).isNotNull();
-    assertThat(tree.statement()).hasSize(0);
+    assertThat(tree.statements()).hasSize(0);
   }
 
   @Test
@@ -51,7 +51,7 @@ public class DeclareStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endDeclareToken()).isNull();
     assertThat(tree.eosToken()).isNull();
-    assertThat(tree.statement()).hasSize(1);
+    assertThat(tree.statements()).hasSize(1);
   }
 
   @Test
@@ -63,7 +63,7 @@ public class DeclareStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.colonToken()).isNotNull();
     assertThat(tree.endDeclareToken()).isNotNull();
     assertThat(tree.eosToken()).isNotNull();
-    assertThat(tree.statement()).hasSize(2);
+    assertThat(tree.statements()).hasSize(2);
   }
 
 }

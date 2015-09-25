@@ -41,7 +41,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
   private final InternalSyntaxToken whileToken;
   private final ParenthesisedExpressionTree condition;
   private final InternalSyntaxToken colonToken;
-  private final List<StatementTree> statement;
+  private final List<StatementTree> statements;
   private final InternalSyntaxToken endwhileToken;
   private final InternalSyntaxToken eosToken;
 
@@ -50,7 +50,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
 
     this.whileToken = whileToken;
     this.condition = condition;
-    this.statement = Collections.singletonList(statement);
+    this.statements = Collections.singletonList(statement);
 
     this.colonToken = null;
     this.endwhileToken = null;
@@ -65,7 +65,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
 
     this.whileToken = whileToken;
     this.condition = condition;
-    this.statement = statements;
+    this.statements = statements;
 
     this.colonToken = colonToken;
     this.endwhileToken = endwhileToken;
@@ -80,9 +80,9 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
-      Iterators.forArray(whileToken, condition, colonToken),
-      statement.iterator(),
-      Iterators.forArray(endwhileToken, eosToken)
+        Iterators.forArray(whileToken, condition, colonToken),
+        statements.iterator(),
+        Iterators.forArray(endwhileToken, eosToken)
     );
   }
 
@@ -103,8 +103,8 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
   }
 
   @Override
-  public List<StatementTree> statement() {
-    return statement;
+  public List<StatementTree> statements() {
+    return statements;
   }
 
   @Nullable

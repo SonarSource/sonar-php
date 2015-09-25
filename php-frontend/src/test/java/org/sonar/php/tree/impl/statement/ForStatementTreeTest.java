@@ -40,8 +40,8 @@ public class ForStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endforToken()).isNull();
     assertThat(tree.eosToken()).isNull();
-    assertThat(tree.statement()).hasSize(1);
-    assertThat(tree.statement().get(0).is(Kind.BLOCK)).isTrue();
+    assertThat(tree.statements()).hasSize(1);
+    assertThat(tree.statements().get(0).is(Kind.BLOCK)).isTrue();
   }
 
   @Test
@@ -55,6 +55,6 @@ public class ForStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.colonToken()).isNotNull();
     assertThat(tree.endforToken()).isNotNull();
     assertThat(tree.eosToken()).isNotNull();
-    assertThat(tree.statement()).hasSize(0);
+    assertThat(tree.statements()).hasSize(0);
   }
 }

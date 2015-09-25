@@ -33,7 +33,7 @@ public interface ElseClauseTree extends StatementTree {
   @Nullable
   SyntaxToken colonToken();
 
-  List<StatementTree> statement();
+  List<StatementTree> statements();
 
 }
 

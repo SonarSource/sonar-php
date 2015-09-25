@@ -41,14 +41,14 @@ public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
   private final InternalSyntaxToken elseifToken;
   private final ParenthesisedExpressionTree condition;
   private final InternalSyntaxToken colonToken;
-  private final List<StatementTree> statement;
+  private final List<StatementTree> statements;
 
   public ElseifClauseTreeImpl(InternalSyntaxToken elseifToken, ParenthesisedExpressionTree condition, StatementTree statement) {
     this.KIND = Kind.ELSEIF_CLAUSE;
 
     this.elseifToken = elseifToken;
     this.condition = condition;
-    this.statement = Collections.singletonList(statement);
+    this.statements = Collections.singletonList(statement);
 
     this.colonToken = null;
   }
@@ -58,7 +58,7 @@ public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
 
     this.elseifToken = elseifToken;
     this.condition = condition;
-    this.statement = statements;
+    this.statements = statements;
 
     this.colonToken = colonToken;
   }
@@ -80,8 +80,8 @@ public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
   }
 
   @Override
-  public List<StatementTree> statement() {
-    return statement;
+  public List<StatementTree> statements() {
+    return statements;
   }
 
   @Override
@@ -93,7 +93,7 @@ public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.forArray(elseifToken, condition, colonToken),
-        statement.iterator()
+        statements.iterator()
     );
   }
 

@@ -43,7 +43,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   private final InternalSyntaxToken ifToken;
   private final ParenthesisedExpressionTree condition;
   private final InternalSyntaxToken colonToken;
-  private final List<StatementTree> statement;
+  private final List<StatementTree> statements;
   private final List<ElseifClauseTree> elseifClauses;
   private final ElseClauseTree elseClause;
   private final InternalSyntaxToken endifToken;
@@ -57,7 +57,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
 
     this.ifToken = ifToken;
     this.condition = condition;
-    this.statement = Collections.singletonList(statement);
+    this.statements = Collections.singletonList(statement);
     this.elseifClauses = elseifClauses;
     this.elseClause = elseClause;
 
@@ -75,7 +75,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
 
     this.ifToken = ifToken;
     this.condition = condition;
-    this.statement = statements;
+    this.statements = statements;
     this.elseifClauses = elseifClauses;
     this.elseClause = elseClause;
 
@@ -101,8 +101,8 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   }
 
   @Override
-  public List<StatementTree> statement() {
-    return statement;
+  public List<StatementTree> statements() {
+    return statements;
   }
 
   @Override
@@ -137,7 +137,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.forArray(ifToken, condition, colonToken),
-        statement.iterator(),
+        statements.iterator(),
         elseifClauses.iterator(),
         Iterators.forArray(elseClause, endifToken, eosToken)
     );

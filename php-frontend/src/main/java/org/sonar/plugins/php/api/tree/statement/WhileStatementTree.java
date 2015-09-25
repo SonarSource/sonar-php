@@ -39,7 +39,7 @@ public interface WhileStatementTree extends StatementTree {
   @Nullable
   SyntaxToken colonToken();
 
-  List<StatementTree> statement();
+  List<StatementTree> statements();
 
   @Nullable
   SyntaxToken endWhileToken();

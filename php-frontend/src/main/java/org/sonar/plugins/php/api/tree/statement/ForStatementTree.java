@@ -52,7 +52,7 @@ public interface ForStatementTree extends StatementTree {
   @Nullable
   SyntaxToken colonToken();
 
-  List<StatementTree> statement();
+  List<StatementTree> statements();
 
   @Nullable
   SyntaxToken endforToken();

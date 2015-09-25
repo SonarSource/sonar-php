@@ -38,11 +38,11 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.IF_STATEMENT)).isTrue();
     assertThat(tree.ifToken().text()).isEqualTo("if");
     assertThat(tree.condition()).isNotNull();
-    assertThat(tree.statement()).hasSize(1);
+    assertThat(tree.statements()).hasSize(1);
     ElseClauseTree elseClause = tree.elseClause();
     assertThat(elseClause).isNotNull();
     assertThat(elseClause.is(Kind.ELSE_CLAUSE)).isTrue();
-    assertThat(elseClause.statement()).hasSize(1);
+    assertThat(elseClause.statements()).hasSize(1);
     assertThat(tree.elseifClauses()).hasSize(0);
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endifToken()).isNull();
@@ -55,12 +55,12 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.ALTRNATIVE_IF_STATEMENT)).isTrue();
     assertThat(tree.colonToken()).isNotNull();
-    assertThat(tree.statement()).hasSize(0);
+    assertThat(tree.statements()).hasSize(0);
 
     ElseClauseTree elseClause = tree.elseClause();
     assertThat(elseClause).isNotNull();
     assertThat(elseClause.is(Kind.ALTERNATIVE_ELSE_CLAUSE)).isTrue();
-    assertThat(elseClause.statement()).hasSize(2);
+    assertThat(elseClause.statements()).hasSize(2);
 
     assertThat(tree.elseifClauses()).hasSize(1);
     assertThat(tree.elseifClauses().get(0).is(Kind.ALTERNATIVE_ELSEIF_CLAUSE)).isTrue();
@@ -73,7 +73,7 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
   public void standard_syntax_without_else() throws Exception {
     IfStatementTree tree = parse("if ($a) {}", PHPLexicalGrammar.IF_STATEMENT);
 
-    assertThat(tree.statement()).hasSize(1);
+    assertThat(tree.statements()).hasSize(1);
     assertThat(tree.elseClause()).isNull();
     assertThat(tree.elseifClauses()).hasSize(0);
   }
@@ -82,17 +82,17 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
   public void elseif_syntax() throws Exception {
     IfStatementTree tree = parse("if ($a) {} elseif ($b) {} elseif ($c) {} else {}", PHPLexicalGrammar.IF_STATEMENT);
 
-    assertThat(tree.statement()).hasSize(1);
+    assertThat(tree.statements()).hasSize(1);
     assertThat(tree.elseClause()).isNotNull();
     assertThat(tree.elseifClauses()).hasSize(2);
 
     ElseifClauseTree elseifClause = tree.elseifClauses().get(0);
     assertThat(elseifClause.is(Kind.ELSEIF_CLAUSE)).isTrue();
-    assertThat(elseifClause.statement()).hasSize(1);
+    assertThat(elseifClause.statements()).hasSize(1);
     assertThat(elseifClause.condition()).isNotNull();
     assertThat(elseifClause.colonToken()).isNull();
 
-    assertThat(tree.elseifClauses().get(1).statement()).hasSize(1);
+    assertThat(tree.elseifClauses().get(1).statements()).hasSize(1);
   }
 
 }

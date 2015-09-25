@@ -39,19 +39,19 @@ public class ElseClauseTreeImpl extends PHPTree implements ElseClauseTree {
 
   private final InternalSyntaxToken elseToken;
   private final InternalSyntaxToken colonToken;
-  private final List<StatementTree> statement;
+  private final List<StatementTree> statements;
 
   public ElseClauseTreeImpl(InternalSyntaxToken elseToken, StatementTree statement) {
     this.KIND = Kind.ELSE_CLAUSE;
     this.elseToken = elseToken;
-    this.statement = Collections.singletonList(statement);
+    this.statements = Collections.singletonList(statement);
     this.colonToken = null;
   }
 
   public ElseClauseTreeImpl(InternalSyntaxToken elseToken, InternalSyntaxToken colonToken, List<StatementTree> statements) {
     this.KIND = Kind.ALTERNATIVE_ELSE_CLAUSE;
     this.elseToken = elseToken;
-    this.statement = statements;
+    this.statements = statements;
     this.colonToken = colonToken;
   }
 
@@ -67,8 +67,8 @@ public class ElseClauseTreeImpl extends PHPTree implements ElseClauseTree {
   }
 
   @Override
-  public List<StatementTree> statement() {
-    return statement;
+  public List<StatementTree> statements() {
+    return statements;
   }
 
   @Override
@@ -80,7 +80,7 @@ public class ElseClauseTreeImpl extends PHPTree implements ElseClauseTree {
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.forArray(elseToken, colonToken),
-        statement.iterator()
+        statements.iterator()
     );
   }
 
