@@ -58,6 +58,7 @@ import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
@@ -208,7 +209,7 @@ public class NewPHPGrammar {
             RETURN_STATEMENT(),
             EMPTY_STATEMENT(),
             YIELD_STATEMENT(),
-//            GLOBAL_STATEMENT(), // requires SIMPLE_INDIRECT_REFERENCE
+            GLOBAL_STATEMENT(),
 //            STATIC_STATEMENT(), // requires STATIC_SCALAR
             TRY_STATEMENT(),
 //            DECLARE_STATEMENT(),  // requires variable_declaration
@@ -217,6 +218,17 @@ public class NewPHPGrammar {
             UNSET_VARIABLE_STATEMENT(),
             EXPRESSION_STATEMENT(),
             LABEL()
+        ));
+  }
+
+  public GlobalStatementTree GLOBAL_STATEMENT() {
+    return b.<GlobalStatementTree>nonterminal(PHPLexicalGrammar.GLOBAL_STATEMENT)
+        .is(f.globalStatement(
+            b.token(PHPKeyword.GLOBAL),
+            // fixme (Lena) : should be GLOBAL_VAR instead of COMPOUND_VARIABLE
+            COMPOUND_VARIABLE(),
+            b.zeroOrMore(f.newTuple16(b.token(COMMA), COMPOUND_VARIABLE())),
+            EOS()
         ));
   }
 
