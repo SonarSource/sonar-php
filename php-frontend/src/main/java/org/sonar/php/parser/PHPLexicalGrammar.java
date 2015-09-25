@@ -91,7 +91,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   EMPTY_STATEMENT,
   LABEL,
   BLOCK,
-  INNER_STATEMENT_LIST,
+  INNER_STATEMENT,
   CLASS_STATEMENT,
   IF_STATEMENT,
   ELSEIF_LIST,

@@ -221,6 +221,17 @@ public class NewPHPGrammar {
         ));
   }
 
+  public StatementTree INNER_STATEMENT() {
+    return b.<StatementTree>nonterminal(PHPLexicalGrammar.INNER_STATEMENT)
+        .is(b.firstOf(
+//            FUNCTION_DECLARATION(),
+//            CLASS_DECLARATION(),
+//            INTERFACE_DECLARATION(),
+            STATEMENT()
+        ));
+  }
+
+
   public GlobalStatementTree GLOBAL_STATEMENT() {
     return b.<GlobalStatementTree>nonterminal(PHPLexicalGrammar.GLOBAL_STATEMENT)
         .is(f.globalStatement(
@@ -279,14 +290,12 @@ public class NewPHPGrammar {
                 b.token(PHPKeyword.CASE),
                 EXPRESSION(),
                 b.firstOf(b.token(PHPPunctuator.COLON), b.token(PHPPunctuator.SEMICOLON)),
-                //fixme (Lena) : should be INNER_STATEMENT_LIST
-                b.zeroOrMore(STATEMENT())
+                b.zeroOrMore(INNER_STATEMENT())
             ),
             f.defaultClause(
                 b.token(PHPKeyword.DEFAULT),
                 b.firstOf(b.token(PHPPunctuator.COLON), b.token(PHPPunctuator.SEMICOLON)),
-                //fixme (Lena) : should be INNER_STATEMENT_LIST
-                b.zeroOrMore(STATEMENT())
+                b.zeroOrMore(INNER_STATEMENT())
             )
         ));
   }
@@ -303,8 +312,7 @@ public class NewPHPGrammar {
                 b.token(PHPKeyword.WHILE),
                 PARENTHESIZED_EXPRESSION(),
                 b.token(PHPPunctuator.COLON),
-                //fixme (Lena) : should be INNER_STATEMENT_LIST
-                b.zeroOrMore(STATEMENT()),
+                b.zeroOrMore(INNER_STATEMENT()),
                 b.token(PHPKeyword.ENDWHILE),
                 EOS()
             )
@@ -344,8 +352,7 @@ public class NewPHPGrammar {
             b.token(PHPKeyword.IF),
             PARENTHESIZED_EXPRESSION(),
             b.token(PHPPunctuator.COLON),
-            //fixme (Lena) : should be INNER_STATEMENT_LIST
-            b.zeroOrMore(STATEMENT()),
+            b.zeroOrMore(INNER_STATEMENT()),
             b.zeroOrMore(ALTERNATIVE_ELSEIF_CLAUSE()),
             b.optional(ALTERNATIVE_ELSE_CLAUSE()),
             b.token(PHPKeyword.ENDIF),
@@ -372,8 +379,7 @@ public class NewPHPGrammar {
         .is(f.alternativeElseClause(
             b.token(PHPKeyword.ELSE),
             b.token(PHPPunctuator.COLON),
-            //fixme (Lena) : should be INNER_STATEMENT_LIST
-            b.zeroOrMore(STATEMENT())
+            b.zeroOrMore(INNER_STATEMENT())
         ));
   }
 
@@ -383,8 +389,7 @@ public class NewPHPGrammar {
             b.token(PHPKeyword.ELSEIF),
             PARENTHESIZED_EXPRESSION(),
             b.token(PHPPunctuator.COLON),
-            //fixme (Lena) : should be INNER_STATEMENT_LIST
-            b.zeroOrMore(STATEMENT())
+            b.zeroOrMore(INNER_STATEMENT())
         ));
   }
 
@@ -398,8 +403,7 @@ public class NewPHPGrammar {
                 f.forStatementAlternative(
                     FOR_STATEMENT_HEADER(),
                     b.token(PHPPunctuator.COLON),
-                    //fixme (Lena) : should be INNER_STATEMENT_LIST
-                    b.zeroOrMore(STATEMENT()),
+                    b.zeroOrMore(INNER_STATEMENT()),
                     b.token(PHPKeyword.ENDFOR),
                     EOS()
                 ))
@@ -434,8 +438,7 @@ public class NewPHPGrammar {
                 f.forEachStatementAlternative(
                     FOREACH_STATEMENT_HEADER(),
                     b.token(PHPPunctuator.COLON),
-                    //fixme (Lena) : should be INNER_STATEMENT_LIST
-                    b.zeroOrMore(STATEMENT()),
+                    b.zeroOrMore(INNER_STATEMENT()),
                     b.token(PHPKeyword.ENDFOREACH),
                     EOS()
                 ))
@@ -504,8 +507,7 @@ public class NewPHPGrammar {
     return b.<BlockTree>nonterminal(PHPLexicalGrammar.BLOCK)
         .is(f.block(
             b.token(PHPPunctuator.LCURLYBRACE),
-            //fixme (Lena) : should be INNER_STATEMENT_LIST
-            b.zeroOrMore(STATEMENT()),
+            b.zeroOrMore(INNER_STATEMENT()),
             b.token(PHPPunctuator.RCURLYBRACE)
         ));
   }
