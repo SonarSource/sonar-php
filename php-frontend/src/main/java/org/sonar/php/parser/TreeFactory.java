@@ -26,6 +26,7 @@ import com.sonar.sslr.api.typed.Optional;
 
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
@@ -79,6 +80,7 @@ import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
@@ -179,6 +181,16 @@ public class TreeFactory {
       return new UseDeclarationTreeImpl(namespaceName, alias.get().first(), aliasName);
     }
     return new UseDeclarationTreeImpl(namespaceName);
+  }
+  
+  public FunctionDeclarationTree functionDeclaration(
+    InternalSyntaxToken functionToken, 
+    Optional<InternalSyntaxToken> referenceToken, 
+    IdentifierTree name, 
+    ParameterListTree parameters,
+    BlockTree body
+    ) {
+    return new FunctionDeclarationTreeImpl(functionToken, referenceToken.orNull(), name, parameters, body);
   }
   
   public ParameterListTree parameterList(

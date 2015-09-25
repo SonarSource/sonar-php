@@ -20,6 +20,8 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
+
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
@@ -79,6 +81,8 @@ public interface TreeVisitor {
   void visitNamespaceName(NamespaceNameTree tree);
 
   void visitUseDeclaration(UseDeclarationTree tree);
+
+  void visitFunctionDeclaration(FunctionDeclarationTree tree);
   
   void visitParameterList(ParameterListTree tree);
   
