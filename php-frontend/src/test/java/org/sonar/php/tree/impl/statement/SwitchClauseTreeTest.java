@@ -23,26 +23,31 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class SwitchClauseTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void empty() throws Exception {
-    BlockTree tree = parse("{}", PHPLexicalGrammar.BLOCK);
+  public void case_clause() throws Exception {
+    CaseClauseTree tree = parse("case $a: $b;", PHPLexicalGrammar.SWITCH_CASE_CLAUSE);
 
-    assertThat(tree.is(Kind.BLOCK)).isTrue();
-    assertThat(tree.statements()).isEmpty();
+    assertThat(tree.is(Kind.CASE_CLAUSE)).isTrue();
+    assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.caseToken().text()).isEqualTo("case");
+    assertThat(tree.caseSeparatorToken().text()).isEqualTo(":");
+    assertThat(tree.statements()).hasSize(1);
   }
 
   @Test
-  public void not_empty() throws Exception {
-    BlockTree tree = parse("{ $a; }", PHPLexicalGrammar.BLOCK);
-    assertThat(tree.statements()).hasSize(1);
+  public void default_clause() throws Exception {
+    DefaultClauseTree tree = parse("default: $b; break;", PHPLexicalGrammar.SWITCH_CASE_CLAUSE);
 
-    tree = parse("{ $a; $b; }", PHPLexicalGrammar.BLOCK);
+    assertThat(tree.is(Kind.DEFAULT_CLAUSE)).isTrue();
+    assertThat(tree.caseToken().text()).isEqualTo("default");
+    assertThat(tree.caseSeparatorToken().text()).isEqualTo(":");
     assertThat(tree.statements()).hasSize(2);
   }
 
