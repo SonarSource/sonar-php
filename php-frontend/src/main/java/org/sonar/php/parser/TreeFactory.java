@@ -60,6 +60,7 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
+import org.sonar.php.tree.impl.statement.GlobalStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.IfStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
@@ -108,6 +109,7 @@ import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
@@ -167,6 +169,28 @@ public class TreeFactory {
   /**
    * [ START ] Statement
    */
+
+  public GlobalStatementTree globalStatement(InternalSyntaxToken globalToken, VariableTree variable, Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest, InternalSyntaxToken eosToken) {
+    List<VariableTree> variables = Lists.newArrayList();
+    List<InternalSyntaxToken> commas = Lists.newArrayList();
+
+    // First element
+    variables.add(variable);
+
+    // Rest of elements
+    if (variableRest.isPresent()) {
+      for (Tuple<InternalSyntaxToken, VariableTree> argumentRest : variableRest.get()) {
+        commas.add(argumentRest.first());
+        variables.add(argumentRest.second());
+      }
+    }
+
+    return new GlobalStatementTreeImpl(
+        globalToken,
+        new SeparatedList<>(variables, commas),
+        eosToken
+    );
+  }
 
   public UseStatementTree useStatement(
       InternalSyntaxToken useToken,

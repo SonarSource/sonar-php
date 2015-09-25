@@ -53,6 +53,7 @@ import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
@@ -84,6 +85,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitGlobalStatement(GlobalStatementTree tree);
 
   void visitUseStatement(UseStatementTree tree);
 

@@ -17,20 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class GlobalStatementTest  {
+public class GlobalStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.GLOBAL_STATEMENT)
-      .matches("global $a;")
-      .matches("global ${$a};")
-      .matches("global $a, $b;");
+  public void test() throws Exception {
+    GlobalStatementTree tree = parse("global $a, $b;", PHPLexicalGrammar.GLOBAL_STATEMENT);
+
+    assertThat(tree.is(Kind.GLOBAL_STATEMENT)).isTrue();
+    assertThat(tree.globalToken().text()).isEqualTo("global");
+    assertThat(tree.variables()).hasSize(2);
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
+
 }
