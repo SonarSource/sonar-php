@@ -21,7 +21,6 @@ package org.sonar.php.parser;
 
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
@@ -220,7 +219,7 @@ public class TreeFactory {
   }
   
   public ParameterListTree parameterList(
-    InternalSyntaxToken leftParenthesis, 
+    InternalSyntaxToken leftParenthesis,
     Optional<Tuple<ParameterTree, Optional<List<Tuple<InternalSyntaxToken, ParameterTree>>>>> parameters,
     InternalSyntaxToken rightParenthesis
     ) {
@@ -257,24 +256,13 @@ public class TreeFactory {
    * [ START ] Statement
    */
 
-  public GlobalStatementTree globalStatement(InternalSyntaxToken globalToken, VariableTree variable, Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest, InternalSyntaxToken eosToken) {
-    List<VariableTree> variables = Lists.newArrayList();
-    List<InternalSyntaxToken> commas = Lists.newArrayList();
-
-    // First element
-    variables.add(variable);
-
-    // Rest of elements
-    if (variableRest.isPresent()) {
-      for (Tuple<InternalSyntaxToken, VariableTree> argumentRest : variableRest.get()) {
-        commas.add(argumentRest.first());
-        variables.add(argumentRest.second());
-      }
-    }
-
+  public GlobalStatementTree globalStatement(
+      InternalSyntaxToken globalToken, VariableTree variable,
+      Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest, InternalSyntaxToken eosToken
+  ) {
     return new GlobalStatementTreeImpl(
         globalToken,
-        new SeparatedList<>(variables, commas),
+        separatedList(variable, variableRest),
         eosToken
     );
   }
@@ -378,7 +366,7 @@ public class TreeFactory {
       }
     }
 
-    return new NamespaceNameTreeImpl(absoluteSeparator, new SeparatedList(elements.build(), separators.build()), new IdentifierTreeImpl(name));
+    return new NamespaceNameTreeImpl(absoluteSeparator, new SeparatedList<>(elements.build(), separators.build()), new IdentifierTreeImpl(name));
 
   }
 
@@ -471,19 +459,7 @@ public class TreeFactory {
   }
 
   public SeparatedList<ExpressionTree> forExpr(ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> listOptional) {
-    ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
-    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
-
-    elements.add(expression);
-
-    if (listOptional.isPresent()) {
-      for (Tuple<InternalSyntaxToken, ExpressionTree> tuple : listOptional.get()) {
-        separators.add(tuple.first());
-        elements.add(tuple.second());
-      }
-    }
-
-    return new SeparatedList(elements.build(), separators.build());
+    return separatedList(expression, listOptional);
   }
 
   public ElseClauseTree elseClause(InternalSyntaxToken elseToken, StatementTree statement) {
@@ -614,21 +590,10 @@ public class TreeFactory {
       ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> list,
       InternalSyntaxToken closeParenthesisToken, InternalSyntaxToken eosToken
   ) {
-
-    ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
-    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
-    elements.add(expression);
-    if (list.isPresent()) {
-      for (Tuple<InternalSyntaxToken, ExpressionTree> tuple : list.get()) {
-        separators.add(tuple.first());
-        elements.add(tuple.second());
-      }
-    }
-
     return new UnsetVariableStatementTreeImpl(
         unsetToken,
         openParenthesisToken,
-        new SeparatedList<>(elements.build(), separators.build()),
+        separatedList(expression, list),
         closeParenthesisToken,
         eosToken
     );
@@ -668,24 +633,10 @@ public class TreeFactory {
       VariableDeclarationTree firstDirective, Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> optionalDirectives,
       InternalSyntaxToken closeParenthesisToken
   ) {
-    List<VariableDeclarationTree> directives = Lists.newArrayList();
-    List<InternalSyntaxToken> commas = Lists.newArrayList();
-
-    // First element
-    directives.add(firstDirective);
-
-    // Rest of elements
-    if (optionalDirectives.isPresent()) {
-      for (Tuple<InternalSyntaxToken, VariableDeclarationTree> directive : optionalDirectives.get()) {
-        commas.add(directive.first());
-        directives.add(directive.second());
-      }
-    }
-
     return new DeclareStatementHead(
         declareToken,
         openParenthesisToken,
-        new SeparatedList<>(directives, commas),
+        separatedList(firstDirective, optionalDirectives),
         closeParenthesisToken
     );
   }
@@ -803,23 +754,20 @@ public class TreeFactory {
    return new ParenthesizedExpressionTreeImpl(openParenthesis, expression, closeParenthesis);
   }
 
-  public ListExpressionTree listExpression(InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis, Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> elements, InternalSyntaxToken closeParenthesis) {
-    List<ExpressionTree> expressions = Lists.newArrayList();
-    List<InternalSyntaxToken> commas = Lists.newArrayList();
+  public ListExpressionTree listExpression(
+      InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
+      Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> elements,
+      InternalSyntaxToken closeParenthesis
+  ) {
+    SeparatedList<ExpressionTree> list;
 
     if (elements.isPresent()) {
-      // First element
-      expressions.add(elements.get().first());
-
-      // Rest of elements
-      if (elements.get().second().isPresent()) {
-        for (Tuple<InternalSyntaxToken, ExpressionTree> commaElement : elements.get().second().get()) {
-          commas.add(commaElement.first());
-          expressions.add(commaElement.second());
-        }
-      }
+      list = separatedList(elements.get().first(), elements.get().second());
+    } else {
+      list = SeparatedList.empty();
     }
-    return new ListExpressionTreeImpl(listToken, openParenthesis, new SeparatedList(expressions, commas), closeParenthesis);
+
+    return new ListExpressionTreeImpl(listToken, openParenthesis, list, closeParenthesis);
   }
 
   public AssignmentExpressionTree listExpressionAssignment(ExpressionTree listExpression, InternalSyntaxToken equalToken, ExpressionTree expression) {
@@ -878,22 +826,14 @@ public class TreeFactory {
   }
 
   public FunctionCallTree functionCallParameterList(InternalSyntaxToken openParenthesis, Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> arguments, InternalSyntaxToken closeParenthesis) {
-    List<ExpressionTree> expressions = Lists.newArrayList();
-    List<InternalSyntaxToken> commas = Lists.newArrayList();
-
+    SeparatedList<ExpressionTree> list;
     if (arguments.isPresent()) {
-      // First element
-      expressions.add(arguments.get().first());
-
-      // Rest of elements
-      if (arguments.get().second().isPresent()) {
-        for (Tuple<InternalSyntaxToken, ExpressionTree> argumentRest : arguments.get().second().get()) {
-          commas.add(argumentRest.first());
-          expressions.add(argumentRest.second());
-        }
-      }
+      list = separatedList(arguments.get().first(), arguments.get().second());
+    } else {
+      list = SeparatedList.empty();
     }
-    return new FunctionCallTreeImpl(openParenthesis, new SeparatedList(expressions, commas), closeParenthesis);
+
+    return new FunctionCallTreeImpl(openParenthesis, list, closeParenthesis);
   }
 
   public MemberAccessTree classMemberAccess(InternalSyntaxToken token, Tree member) {
@@ -942,22 +882,12 @@ public class TreeFactory {
       : variableIdentifier;
   }
 
-  public LexicalVariablesTree lexicalVariables(InternalSyntaxToken useToken, InternalSyntaxToken openParenthesis, VariableTree variable, Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest, InternalSyntaxToken closeParenthesis) {
-    List<VariableTree> variables = Lists.newArrayList();
-    List<InternalSyntaxToken> commas = Lists.newArrayList();
-
-      // First element
-      variables.add(variable);
-
-      // Rest of elements
-      if (variableRest.isPresent()) {
-        for (Tuple<InternalSyntaxToken, VariableTree> argumentRest : variableRest.get()) {
-          commas.add(argumentRest.first());
-          variables.add(argumentRest.second());
-        }
-      }
-
-    return new LexicalVariablesTreeImpl(useToken, openParenthesis, new SeparatedList(variables, commas), closeParenthesis);
+  public LexicalVariablesTree lexicalVariables(
+      InternalSyntaxToken useToken, InternalSyntaxToken openParenthesis,
+      VariableTree variable, Optional<List<Tuple<InternalSyntaxToken, VariableTree>>> variableRest,
+      InternalSyntaxToken closeParenthesis
+  ) {
+    return new LexicalVariablesTreeImpl(useToken, openParenthesis, separatedList(variable, variableRest), closeParenthesis);
   }
 
   /**
