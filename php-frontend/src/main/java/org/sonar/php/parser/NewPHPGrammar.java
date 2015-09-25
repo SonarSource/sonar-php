@@ -238,7 +238,7 @@ public class NewPHPGrammar {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.TOP_STATEMENT)
         .is(b.firstOf(
 //            CLASS_DECLARATION(),
-//            FUNCTION_DECLARATION(),
+            FUNCTION_DECLARATION(),
 //            INTERFACE_DECLARATION(),
             NAMESPACE_STATEMENT(),
             USE_STATEMENT(),
@@ -347,7 +347,7 @@ public class NewPHPGrammar {
   public StatementTree INNER_STATEMENT() {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.INNER_STATEMENT)
         .is(b.firstOf(
-//            FUNCTION_DECLARATION(),
+            FUNCTION_DECLARATION(),
 //            CLASS_DECLARATION(),
 //            INTERFACE_DECLARATION(),
             STATEMENT()
