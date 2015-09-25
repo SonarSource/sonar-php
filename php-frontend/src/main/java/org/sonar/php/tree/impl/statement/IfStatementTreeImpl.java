@@ -71,7 +71,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
       List<StatementTree> statements, List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause,
       InternalSyntaxToken endifToken, InternalSyntaxToken eosToken
   ) {
-    KIND = Kind.ALTRNATIVE_IF_STATEMENT;
+    KIND = Kind.ALTRENATIVE_IF_STATEMENT;
 
     this.ifToken = ifToken;
     this.condition = condition;

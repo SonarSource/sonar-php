@@ -53,7 +53,7 @@ public class IfStatementTreeTest extends PHPTreeModelTest {
   public void alternative_syntax() throws Exception {
     IfStatementTree tree = parse("if ($a) : elseif ($a) : else : {} {} endif;", PHPLexicalGrammar.IF_STATEMENT);
 
-    assertThat(tree.is(Kind.ALTRNATIVE_IF_STATEMENT)).isTrue();
+    assertThat(tree.is(Kind.ALTRENATIVE_IF_STATEMENT)).isTrue();
     assertThat(tree.colonToken()).isNotNull();
     assertThat(tree.statements()).hasSize(0);
 
