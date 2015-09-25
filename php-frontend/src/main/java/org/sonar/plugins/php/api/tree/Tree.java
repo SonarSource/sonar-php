@@ -81,6 +81,7 @@ import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
@@ -832,6 +833,11 @@ public interface Tree {
      * {@link InlineHTMLTree}
      */
     INLINE_HTML(InlineHTMLTree.class),
+
+    /**
+     * {@link StaticStatementTree}
+     */
+    STATIC_STATEMENT(StaticStatementTree.class),
 
     /**
      * {@link SyntaxToken}

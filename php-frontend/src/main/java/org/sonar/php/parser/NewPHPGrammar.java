@@ -74,6 +74,7 @@ import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
@@ -295,7 +296,7 @@ public class NewPHPGrammar {
             EMPTY_STATEMENT(),
             YIELD_STATEMENT(),
             GLOBAL_STATEMENT(),
-//            STATIC_STATEMENT(), // requires STATIC_SCALAR
+            STATIC_STATEMENT(),
             TRY_STATEMENT(),
             DECLARE_STATEMENT(),
             GOTO_STATEMENT(),
@@ -303,6 +304,24 @@ public class NewPHPGrammar {
             UNSET_VARIABLE_STATEMENT(),
             EXPRESSION_STATEMENT(),
             LABEL()
+        ));
+  }
+
+  public StaticStatementTree STATIC_STATEMENT() {
+    return b.<StaticStatementTree>nonterminal(PHPLexicalGrammar.STATIC_STATEMENT)
+        .is(f.staticStatement(
+            b.token(STATIC),
+            STATIC_VAR(),
+            b.zeroOrMore(f.newTuple22(b.token(COMMA), STATIC_VAR())),
+            EOS()
+        ));
+  }
+
+  public VariableDeclarationTree STATIC_VAR() {
+    return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.STATIC_VAR)
+        .is(f.staticVar(
+            b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
+            b.optional(f.newTuple24(b.token(EQU), STATIC_SCALAR()))
         ));
   }
 

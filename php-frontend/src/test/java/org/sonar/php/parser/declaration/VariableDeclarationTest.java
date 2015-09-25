@@ -24,6 +24,7 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
+// fixme (Lena) : this test should be refactored (it tests different grammar rules but one Tree interface)
 public class VariableDeclarationTest {
 
   @Test
@@ -31,6 +32,13 @@ public class VariableDeclarationTest {
     assertThat(PHPLexicalGrammar.MEMBER_CONST_DECLARATION)
       .matches("a")
       .matches("a = $a");
+  }
+
+  @Test
+  public void static_var() {
+    assertThat(PHPLexicalGrammar.STATIC_VAR)
+      .matches("$a")
+      .matches("$a = $a");
   }
 
   @Test

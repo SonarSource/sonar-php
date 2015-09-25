@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
-
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -66,6 +65,7 @@ import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
@@ -103,6 +103,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitStaticStatement(StaticStatementTree tree);
 
   void visitDeclareStatement(DeclareStatementTree tree);
 

@@ -72,6 +72,7 @@ import org.sonar.php.tree.impl.statement.InlineHTMLTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
 import org.sonar.php.tree.impl.statement.NamespaceStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.StaticStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.SwitchStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.TryStatementImpl;
@@ -131,6 +132,7 @@ import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
@@ -181,12 +183,20 @@ public class TreeFactory {
    * [ START ] Declarations
    */
 
-  public VariableDeclarationTree memberConstDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
+  private VariableDeclarationTree variableDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
     if (optionalEqual.isPresent()) {
       return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), optionalEqual.get().first(), optionalEqual.get().second());
     } else {
       return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), null, null);
     }
+  }
+
+  public VariableDeclarationTree staticVar(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
+    return variableDeclaration(identifierToken, optionalEqual);
+  }
+
+  public VariableDeclarationTree memberConstDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
+    return variableDeclaration(identifierToken, optionalEqual);
   }
 
   public UseDeclarationTree useDeclaration(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
@@ -651,6 +661,10 @@ public class TreeFactory {
       InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken
   ) {
     return new DeclareStatementTreeImpl(declareStatementHead, colonToken, optionalList(statements), enddeclareToken, eosToken);
+  }
+
+  public StaticStatementTree staticStatement(InternalSyntaxToken staticToken, VariableDeclarationTree variable, Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> listOptional, InternalSyntaxToken eosToken) {
+    return new StaticStatementTreeImpl(staticToken, separatedList(variable, listOptional), eosToken);
   }
 
   /**
