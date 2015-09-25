@@ -23,9 +23,11 @@ package org.sonar.php.parser;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
+
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
+import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
@@ -77,6 +79,7 @@ import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -161,6 +164,23 @@ public class TreeFactory {
       return new UseDeclarationTreeImpl(namespaceName, alias.get().first(), aliasName);
     }
     return new UseDeclarationTreeImpl(namespaceName);
+  }
+  
+  public ParameterTree parameter(
+    Optional<Tree> classType, 
+    Optional<InternalSyntaxToken> ampersand, 
+    Optional<InternalSyntaxToken> ellipsis, 
+    InternalSyntaxToken identifier,
+    Optional<Tuple<InternalSyntaxToken, ExpressionTree>> eqAndInitValue
+    ){
+    InternalSyntaxToken eqToken = null;
+    ExpressionTree initValue = null;
+    if (eqAndInitValue.isPresent()) {
+      eqToken = eqAndInitValue.get().first();
+      initValue = eqAndInitValue.get().second();
+    }
+    VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(new IdentifierTreeImpl(identifier));
+    return new ParameterTreeImpl(classType.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
   }
 
   /**
@@ -1019,6 +1039,10 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple91(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple92(T first, U second) {
     return newTuple(first, second);
   }
 

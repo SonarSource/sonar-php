@@ -28,6 +28,7 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -138,6 +139,24 @@ public class NewPHPGrammar {
           f.newTuple91(
             b.token(PHPKeyword.AS), 
             b.token(PHPLexicalGrammar.IDENTIFIER)))));
+  }
+  
+  public ParameterTree PARAMETER() {
+    return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
+      f.parameter(
+        b.optional(
+          b.firstOf(
+            b.token(PHPKeyword.ARRAY),
+            b.token(PHPKeyword.CALLABLE),
+            NAMESPACE_NAME())),
+        b.optional(b.token(PHPPunctuator.AMPERSAND)),
+        b.optional(b.token(PHPPunctuator.ELIPSIS)),
+        b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
+        b.optional(
+          f.newTuple92(
+            b.token(PHPPunctuator.EQU), 
+            STATIC_SCALAR())))
+      );      
   }
 
   /**
@@ -862,6 +881,11 @@ public class NewPHPGrammar {
          b.optional(b.token(AMPERSAND)),
          VARIABLE_IDENTIFIER()
      ));
+  }
+  
+  public ExpressionTree STATIC_SCALAR() {
+    // FIXME Can also be a "COMBINED_SCALAR" in the old grammar
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(EXPRESSION());
   }
 
   /**
