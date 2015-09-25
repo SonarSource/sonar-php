@@ -17,20 +17,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class StaticStatementTest {
+public class StaticStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.STATIC_STATEMENT)
-      .matches("static $a, $b;")
-      .matches("static $a, $b = $c;")
-      .matches("static $a;");
+  public void test() throws Exception {
+    StaticStatementTree tree = parse("static $a, $b = $c;", PHPLexicalGrammar.STATIC_STATEMENT);
+
+    assertThat(tree.is(Kind.STATIC_STATEMENT)).isTrue();
+    assertThat(tree.staticToken().text()).isEqualTo("static");
+    assertThat(tree.eosToken().text()).isEqualTo(";");
+    assertThat(tree.variables()).hasSize(2);
+    assertThat(tree.variables().get(0).equalToken()).isNull();
+    assertThat(tree.variables().get(1).equalToken()).isNotNull();
   }
+
 }
