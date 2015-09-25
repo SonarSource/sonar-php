@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import java.util.List;
 
 @Beta
-public interface MethodDeclarationTree extends ClassMemberTree {
+public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
 
   /**
    * Members can be:
@@ -49,6 +49,7 @@ public interface MethodDeclarationTree extends ClassMemberTree {
   /**
    * Either {@link PHPPunctuator#SEMICOLON ;} or {@link Tree.Kind#BLOCK block}
    */
+  @Override
   Tree body();
 
 }

@@ -28,6 +28,7 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
@@ -50,6 +51,7 @@ import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
@@ -143,6 +145,32 @@ public class NewPHPGrammar {
             b.token(PHPLexicalGrammar.IDENTIFIER)))));
   }
   
+  public InternalSyntaxToken MEMBER_MODIFIER() {
+    return b.<InternalSyntaxToken>nonterminal().is(
+      b.firstOf(
+        b.token(PHPKeyword.PUBLIC),
+        b.token(PHPKeyword.PROTECTED),
+        b.token(PHPKeyword.PRIVATE),
+        b.token(PHPKeyword.STATIC),
+        b.token(PHPKeyword.ABSTRACT),
+        b.token(PHPKeyword.FINAL)
+      ));
+  }
+
+  public MethodDeclarationTree METHOD_DECLARATION() {
+    return b.<MethodDeclarationTree>nonterminal(PHPLexicalGrammar.METHOD_DECLARATION).is(
+      f.methodDeclaration(
+        b.<SyntaxToken>zeroOrMore(MEMBER_MODIFIER()),
+        b.token(PHPKeyword.FUNCTION),
+        b.optional(b.token(PHPPunctuator.AMPERSAND)),
+        IDENTIFIER(),
+        PARAMETER_LIST(),
+        b.firstOf(
+          EOS(),
+          BLOCK())
+      ));
+  }
+
   public FunctionDeclarationTree FUNCTION_DECLARATION() {
     return b.<FunctionDeclarationTree>nonterminal(PHPLexicalGrammar.FUNCTION_DECLARATION).is(
       f.functionDeclaration(

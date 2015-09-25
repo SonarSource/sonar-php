@@ -17,32 +17,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.php.tree.impl.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 
-public class MethodDeclarationTest {
-
-  @Test
-  public void test() throws Exception {
-    assertThat(PHPLexicalGrammar.METHOD_DECLARATION)
-      .matches("function f ();")
-      .matches("function f () {}")
-      .matches("function &f () {}")
-      .matches("private function f () {}")
-      .matches("protected abstract function f () {}")
-      .matches("public static function f () {}")
-      .matches("final function f () {}");
-  }
+public class MethodDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void optional_semicolon() {
-    assertThat(PHPLexicalGrammar.METHOD_DECLARATION)
-      .matches("function fun() ?>")
-      .notMatches("function fun() ?> <?php {}");
+  public void method_declaration() throws Exception {
+    MethodDeclarationTree tree = parse("public final function &f($p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.is(Kind.METHOD_DECLARATION)).isTrue();
+    assertThat(tree.modifiersToken()).hasSize(2);
+    assertThat(tree.functionToken().text()).isEqualTo("function");
+    assertThat(tree.referenceToken()).isNotNull();
+    assertThat(tree.name().name()).isEqualTo("f");
+    assertThat(tree.parameters().parameters()).hasSize(1);
+    assertThat(tree.body().is(Kind.BLOCK)).isTrue();
   }
 
 }
