@@ -149,6 +149,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   TRAIT_PRECEDENCE,
   TRAIT_ADAPTATION_STATEMENT,
   TRAIT_ADAPTATIONS,
+  INLINE_HTML_STATEMENT,
 
   /**
    * Expression

@@ -17,30 +17,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.lexical;
+package org.sonar.php.tree.impl.lexical;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class InlineHtmlTest extends RuleTest {
+public class InternalSyntaxTokenTest extends PHPTreeModelTest {
 
   @Test
-  public void statement() {
-    assertThat(PHPLexicalGrammar.INLINE_HTML_STATEMENT)
-      .matches("?>")
-      .matches("?> <html>")
-      .matches("?> <html> <?php");
+  public void inline_html() throws Exception {
+    InternalSyntaxToken tree = parse("?>", PHPLexicalGrammar.INLINE_HTML);
+
+    assertThat(tree.is(Kind.INLINE_HTML_TOKEN)).isTrue();
+    assertThat(tree.text()).isEqualTo("?>");
   }
 
   @Test
-  public void token() {
-    assertThat(PHPLexicalGrammar.INLINE_HTML)
-      .matches("?>")
-      .matches("?> <html>")
-      .matches("?> <html> <?php");
+  public void token() throws Exception {
+    InternalSyntaxToken tree = parse("foo", PHPLexicalGrammar.IDENTIFIER);
+
+    assertThat(tree.is(Kind.TOKEN)).isTrue();
+    assertThat(tree.text()).isEqualTo("foo");
   }
 
 }

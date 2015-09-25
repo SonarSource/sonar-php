@@ -63,6 +63,7 @@ import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader
 import org.sonar.php.tree.impl.statement.GlobalStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.GotoStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.IfStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.InlineHTMLTreeImpl;
 import org.sonar.php.tree.impl.statement.LabelTreeImpl;
 import org.sonar.php.tree.impl.statement.NamespaceStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
@@ -112,6 +113,7 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -575,6 +577,10 @@ public class TreeFactory {
         optionalList(statements),
         closeCurlyBrace
     );
+  }
+
+  public InlineHTMLTree inlineHTML(InternalSyntaxToken inlineHTMLToken) {
+    return new InlineHTMLTreeImpl(inlineHTMLToken);
   }
 
   /**

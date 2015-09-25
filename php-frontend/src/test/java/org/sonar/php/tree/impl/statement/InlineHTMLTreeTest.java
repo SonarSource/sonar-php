@@ -17,30 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.lexical;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class InlineHtmlTest extends RuleTest {
-
-  @Test
-  public void statement() {
-    assertThat(PHPLexicalGrammar.INLINE_HTML_STATEMENT)
-      .matches("?>")
-      .matches("?> <html>")
-      .matches("?> <html> <?php");
-  }
+public class InlineHTMLTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void token() {
-    assertThat(PHPLexicalGrammar.INLINE_HTML)
-      .matches("?>")
-      .matches("?> <html>")
-      .matches("?> <html> <?php");
+  public void test() throws Exception {
+    InlineHTMLTree tree = parse("?>", PHPLexicalGrammar.INLINE_HTML_STATEMENT);
+
+    assertThat(tree.is(Kind.INLINE_HTML)).isTrue();
+    assertThat(tree.inlineHTMLToken().is(Kind.INLINE_HTML_TOKEN)).isTrue();
+    assertThat(tree.inlineHTMLToken().text()).isEqualTo("?>");
   }
 
 }
