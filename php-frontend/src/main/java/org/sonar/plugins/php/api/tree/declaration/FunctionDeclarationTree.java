@@ -23,11 +23,12 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import javax.annotation.Nullable;
 
 @Beta
-public interface FunctionDeclarationTree extends FunctionTree {
+public interface FunctionDeclarationTree extends FunctionTree, StatementTree {
 
   SyntaxToken functionToken();
 
