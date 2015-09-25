@@ -43,7 +43,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
   private final DeclareStatementHead declareStatementHead;
 
   private final SyntaxToken colonToken;
-  private final List<StatementTree> statement;
+  private final List<StatementTree> statements;
   private final SyntaxToken endDeclareToken;
   private final SyntaxToken eosToken;
 
@@ -51,7 +51,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
     this.declareStatementHead = declareStatementHead;
 
     this.colonToken = null;
-    this.statement = ImmutableList.of();
+    this.statements = ImmutableList.of();
     this.endDeclareToken = null;
 
     this.eosToken = eosToken;
@@ -59,7 +59,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
 
   public DeclareStatementTreeImpl(DeclareStatementHead declareStatementHead, StatementTree statement) {
     this.declareStatementHead = declareStatementHead;
-    this.statement = ImmutableList.of(statement);
+    this.statements = ImmutableList.of(statement);
 
     this.colonToken = null;
     this.endDeclareToken = null;
@@ -69,7 +69,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
   public DeclareStatementTreeImpl(DeclareStatementHead declareStatementHead, InternalSyntaxToken colonToken, List<StatementTree> statements, InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken) {
     this.declareStatementHead = declareStatementHead;
     this.colonToken = colonToken;
-    this.statement = statements;
+    this.statements = statements;
     this.endDeclareToken = enddeclareToken;
     this.eosToken = eosToken;
   }
@@ -101,8 +101,8 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
   }
 
   @Override
-  public List<StatementTree> statement() {
-    return statement;
+  public List<StatementTree> statements() {
+    return statements;
   }
 
   @Nullable
@@ -128,7 +128,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
         Iterators.forArray(declareStatementHead.declareToken(), declareStatementHead.openParenthesisToken()),
         declareStatementHead.directives().elementsAndSeparators(Functions.<VariableDeclarationTree>identity()),
         Iterators.forArray(declareStatementHead.closeParenthesisToken(), colonToken),
-        statement.iterator(),
+        statements.iterator(),
         Iterators.forArray(endDeclareToken, eosToken)
     );
   }

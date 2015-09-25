@@ -39,7 +39,7 @@ public interface IfStatementTree extends StatementTree {
   @Nullable
   SyntaxToken colonToken();
 
-  List<StatementTree> statement();
+  List<StatementTree> statements();
 
   List<ElseifClauseTree> elseifClauses();
 

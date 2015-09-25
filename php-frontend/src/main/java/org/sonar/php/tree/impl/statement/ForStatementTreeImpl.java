@@ -42,27 +42,27 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
 
   private final ForStatementHeader header;
   private final InternalSyntaxToken colonToken;
-  private final List<StatementTree> statement;
+  private final List<StatementTree> statements;
   private final InternalSyntaxToken endForToken;
   private final InternalSyntaxToken eosToken;
 
   private ForStatementTreeImpl(
       Kind kind,
       ForStatementHeader header,
-      @Nullable InternalSyntaxToken colonToken, List<StatementTree> statement,
+      @Nullable InternalSyntaxToken colonToken, List<StatementTree> statements,
       @Nullable InternalSyntaxToken endForToken, @Nullable InternalSyntaxToken eosToken
   ) {
     this.header = header;
     this.colonToken = colonToken;
     this.endForToken = endForToken;
-    this.statement = statement;
+    this.statements = statements;
     this.eosToken = eosToken;
 
     this.KIND = kind;
   }
 
-  public ForStatementTreeImpl(ForStatementHeader header, InternalSyntaxToken colonToken, List<StatementTree> statement, InternalSyntaxToken endForToken, InternalSyntaxToken eosToken) {
-    this(Kind.ALTERNATIVE_FOR_STATEMENT, header, colonToken, statement, endForToken, eosToken);
+  public ForStatementTreeImpl(ForStatementHeader header, InternalSyntaxToken colonToken, List<StatementTree> statements, InternalSyntaxToken endForToken, InternalSyntaxToken eosToken) {
+    this(Kind.ALTERNATIVE_FOR_STATEMENT, header, colonToken, statements, endForToken, eosToken);
   }
 
   public ForStatementTreeImpl(ForStatementHeader header, StatementTree statement) {
@@ -116,8 +116,8 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
   }
 
   @Override
-  public List<StatementTree> statement() {
-    return statement;
+  public List<StatementTree> statements() {
+    return statements;
   }
 
   @Nullable
@@ -147,7 +147,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
         Iterators.singletonIterator(secondSemicolonToken()),
         update().elementsAndSeparators(Functions.<ExpressionTree>identity()),
         Iterators.forArray(closeParenthesisToken(), colonToken),
-        statement.iterator(),
+        statements.iterator(),
         Iterators.forArray(endForToken, eosToken));
   }
 

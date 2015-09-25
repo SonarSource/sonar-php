@@ -40,7 +40,7 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
 
   private final ForEachStatementHeader header;
   private final InternalSyntaxToken colonToken;
-  private final List<StatementTree> statement;
+  private final List<StatementTree> statements;
   private final InternalSyntaxToken endforeachToken;
   private final InternalSyntaxToken eosToken;
 
@@ -62,7 +62,7 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
   ) {
     this.header = header;
     this.colonToken = colonToken;
-    this.statement = statements;
+    this.statements = statements;
     this.endforeachToken = endForEachToken;
     this.eosToken = eosToken;
 
@@ -118,8 +118,8 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
   }
 
   @Override
-  public List<StatementTree> statement() {
-    return statement;
+  public List<StatementTree> statements() {
+    return statements;
   }
 
   @Nullable
@@ -143,7 +143,7 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.forArray(foreachToken(), openParenthesisToken(), expression(), asToken(), key(), doubleArrowToken(), value(), closeParenthesisToken(), colonToken),
-        statement.iterator(),
+        statements.iterator(),
         Iterators.forArray(endforeachToken, eosToken));
   }
 

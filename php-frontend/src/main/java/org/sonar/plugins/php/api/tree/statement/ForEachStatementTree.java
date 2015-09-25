@@ -69,7 +69,7 @@ public interface ForEachStatementTree extends StatementTree {
   @Nullable
   SyntaxToken colonToken();
 
-  List<StatementTree> statement();
+  List<StatementTree> statements();
 
   @Nullable
   SyntaxToken endforeachToken();

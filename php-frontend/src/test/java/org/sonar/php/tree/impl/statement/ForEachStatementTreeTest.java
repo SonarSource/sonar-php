@@ -41,8 +41,8 @@ public class ForEachStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endforeachToken()).isNull();
     assertThat(tree.eosToken()).isNull();
-    assertThat(tree.statement()).hasSize(1);
-    assertThat(tree.statement().get(0).is(Kind.BLOCK)).isTrue();
+    assertThat(tree.statements()).hasSize(1);
+    assertThat(tree.statements().get(0).is(Kind.BLOCK)).isTrue();
   }
 
   @Test
@@ -57,7 +57,7 @@ public class ForEachStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.colonToken().text()).isEqualTo(":");
     assertThat(tree.endforeachToken().text()).isEqualTo("endforeach");
     assertThat(tree.eosToken().text()).isEqualTo(";");
-    assertThat(tree.statement()).hasSize(2);
+    assertThat(tree.statements()).hasSize(2);
   }
 
   @Test
