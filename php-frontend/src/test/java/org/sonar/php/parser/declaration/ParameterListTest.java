@@ -19,21 +19,18 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class ParameterListTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.PARAMETER_LIST);
-  }
+public class ParameterListTest {
 
   @Test
   public void test() {
-    matches("$a");
-    matches("$a, $b");
+    assertThat(PHPLexicalGrammar.PARAMETER_LIST)
+      .matches("()")
+      .matches("($a)")
+      .matches("($a, $b)");
   }
 }

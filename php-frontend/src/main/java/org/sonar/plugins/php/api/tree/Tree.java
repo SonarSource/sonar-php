@@ -26,6 +26,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassFieldDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.UseDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
@@ -155,6 +156,11 @@ public interface Tree {
      * {@link ParameterTree}
      */
     PARAMETER(ParameterTree.class),
+
+    /**
+     * {@link ParameterListTree}
+     */
+    PARAMETER_LIST(ParameterListTree.class),
 
     /**
      * {@link ParenthesisedExpressionTree}
