@@ -21,11 +21,10 @@ package org.sonar.php.parser.statement;
 
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class SwitchStatementTest extends RuleTest {
+public class SwitchStatementTest {
 
   @Test
   public void test() {

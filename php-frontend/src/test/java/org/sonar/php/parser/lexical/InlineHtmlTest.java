@@ -21,11 +21,10 @@ package org.sonar.php.parser.lexical;
 
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class InlineHtmlTest extends RuleTest {
+public class InlineHtmlTest {
 
   @Test
   public void statement() {

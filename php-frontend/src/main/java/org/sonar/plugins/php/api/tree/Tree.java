@@ -662,7 +662,7 @@ public interface Tree {
     /**
      * {@link IfStatementTree}
      */
-    ALTRNATIVE_IF_STATEMENT(IfStatementTree.class),
+    ALTRENATIVE_IF_STATEMENT(IfStatementTree.class),
 
     /**
      * {@link ElseifClauseTree}
