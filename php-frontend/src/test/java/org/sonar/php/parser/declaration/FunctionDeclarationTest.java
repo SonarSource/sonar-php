@@ -19,23 +19,17 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class FunctionDeclarationTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FUNCTION_DECLARATION);
-  }
+public class FunctionDeclarationTest {
 
   @Test
   public void test() {
-
-    matches("function f() {}");
-    matches("function &f() {}");
-
+    assertThat(PHPLexicalGrammar.FUNCTION_DECLARATION)
+      .matches("function f() {}")
+      .matches("function &f() {}");
   }
 }
