@@ -17,19 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.tree.impl.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 
-public class TraitPrecedenceTest {
+public class TraitPrecedenceTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.TRAIT_PRECEDENCE)
-      .matches("Foo::Bar insteadof Toto;")
-      .matches("Foo::Bar insteadof Toto, Tata;");
+  public void test() throws Exception {
+    TraitPrecedenceTree tree = parse("NS1\\Class1::method1 insteadof Class2, Class3;", PHPLexicalGrammar.TRAIT_PRECEDENCE);
+    assertThat(tree.is(Kind.TRAIT_PRECEDENCE)).isTrue();
+    assertThat(tree.methodReference().method().name()).isEqualTo("method1");
+    assertThat(tree.insteadOfToken().text()).isEqualTo("insteadof");
+    assertThat(tree.traits()).hasSize(2);
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
+  
 }

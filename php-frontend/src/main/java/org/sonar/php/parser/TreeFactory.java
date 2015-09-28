@@ -32,6 +32,7 @@ import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
+import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
@@ -140,6 +141,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
+import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
@@ -278,6 +280,19 @@ public class TreeFactory {
     }
     VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(new IdentifierTreeImpl(identifier));
     return new ParameterTreeImpl(classType.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
+  }
+  
+  public SeparatedList<NamespaceNameTree> interfaceList(NamespaceNameTree first, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> others) {
+    return separatedList(first, others);
+  }
+  
+  public TraitPrecedenceTree traitPrecedence(
+    TraitMethodReferenceTree methodReference, 
+    InternalSyntaxToken insteadOfToken,
+    SeparatedList<NamespaceNameTree> traits,
+    InternalSyntaxToken eosToken
+    ) {
+    return new TraitPrecedenceTreeImpl(methodReference, insteadOfToken, traits, eosToken);
   }
   
   public TraitMethodReferenceTree traitMethodReference(InternalSyntaxToken identifier) {
@@ -1171,6 +1186,10 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple97(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple98(T first, U second) {
     return newTuple(first, second);
   }
 
