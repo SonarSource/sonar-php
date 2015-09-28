@@ -18,4 +18,4 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 @javax.annotation.ParametersAreNonnullByDefault
-package org.sonar.php.parser;
+package org.sonar.php.api;
