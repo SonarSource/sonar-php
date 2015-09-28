@@ -81,6 +81,7 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
+import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
@@ -263,6 +264,24 @@ public class NewPHPGrammar {
       f.interfaceList(
         NAMESPACE_NAME(),
         b.zeroOrMore(f.newTuple98(b.token(COMMA), NAMESPACE_NAME()))));
+  }
+  
+  public TraitUseStatementTree TRAIT_USE_STATEMENT() {
+    return b.<TraitUseStatementTree>nonterminal(PHPLexicalGrammar.TRAIT_USE_STATEMENT).is(
+      b.firstOf(
+        f.traitUseStatement(
+          b.token(PHPKeyword.USE),
+          INTERFACE_LIST(),
+          EOS()),
+        f.traitUseStatement(
+          b.token(PHPKeyword.USE),
+          INTERFACE_LIST(),
+          b.token(LCURLYBRACE),
+          b.zeroOrMore(
+            b.firstOf(
+              TRAIT_PRECEDENCE(),
+              TRAIT_ALIAS())),
+          b.token(RCURLYBRACE))));
   }
   
   public TraitPrecedenceTree TRAIT_PRECEDENCE() {

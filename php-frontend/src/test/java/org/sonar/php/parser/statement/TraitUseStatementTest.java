@@ -19,20 +19,17 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class TraitUseStatementTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.TRAIT_USE_STATEMENT);
-  }
+public class TraitUseStatementTest {
 
   @Test
   public void test() {
-    matches("use Foo,Bar;");
+    assertThat(PHPLexicalGrammar.TRAIT_USE_STATEMENT)
+      .matches("use Foo,Bar;")
+      .matches("use Foo,Bar { method1 as method2; A::x insteadof B; }");
   }
 }

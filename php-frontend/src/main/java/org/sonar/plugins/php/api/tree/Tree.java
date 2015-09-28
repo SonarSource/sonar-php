@@ -800,11 +800,6 @@ public interface Tree {
     YIELD_STATEMENT(YieldStatementTree.class),
 
     /**
-     * {@link TraitAdaptationStatementTree}
-     */
-    TRAIT_ADAPTATION_STATEMENT(TraitAdaptationStatementTree.class),
-
-    /**
      * {@link TraitPrecedenceTree}
      */
     TRAIT_PRECEDENCE(TraitPrecedenceTree.class),
