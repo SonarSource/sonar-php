@@ -19,21 +19,17 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class TraitMethodReferenceTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.TRAIT_METHOD_REFERENCE);
-  }
+public class TraitMethodReferenceTest {
 
   @Test
   public void test() {
-    matches("Foo");
-    matches("Foo::bar");
+    assertThat(PHPLexicalGrammar.TRAIT_METHOD_REFERENCE)
+      .matches("Foo")
+      .matches("Foo::bar");
   }
 }

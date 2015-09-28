@@ -31,6 +31,7 @@ import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
+import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
@@ -138,6 +139,7 @@ import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
@@ -276,6 +278,14 @@ public class TreeFactory {
     }
     VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(new IdentifierTreeImpl(identifier));
     return new ParameterTreeImpl(classType.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
+  }
+  
+  public TraitMethodReferenceTree traitMethodReference(InternalSyntaxToken identifier) {
+    return new TraitMethodReferenceTreeImpl(new IdentifierTreeImpl(identifier));
+  }
+  
+  public TraitMethodReferenceTree traitMethodReference(NamespaceNameTree trait, InternalSyntaxToken doubleColonToken, InternalSyntaxToken identifier) {
+    return new TraitMethodReferenceTreeImpl(trait, doubleColonToken, new IdentifierTreeImpl(identifier));  
   }
 
   /**
