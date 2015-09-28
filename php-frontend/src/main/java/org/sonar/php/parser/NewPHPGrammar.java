@@ -28,6 +28,7 @@ import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStateme
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -126,6 +127,14 @@ public class NewPHPGrammar {
             b.optional(f.newTuple18(b.token(EQU), STATIC_SCALAR()))
         ));
   }
+  
+  public VariableDeclarationTree VARIABLE_DECLARATION() {
+    return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.VARIABLE_DECLARATION)
+        .is(f.variableDeclaration(
+            b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
+            b.optional(f.newTuple96(b.token(EQU), STATIC_SCALAR()))
+        ));
+  }
 
   public NamespaceNameTree NAMESPACE_NAME() {
     return b.<NamespaceNameTree>nonterminal(PHPLexicalGrammar.NAMESPACE_NAME)
@@ -156,6 +165,26 @@ public class NewPHPGrammar {
               f.newTuple91(
                   b.token(PHPKeyword.AS),
                   b.token(PHPLexicalGrammar.IDENTIFIER)))));
+  }
+  
+  public ClassPropertyDeclarationTree CLASS_CONSTANT_DECLARATION() {
+    return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION).is(
+      f.classConstantDeclaration(
+        b.token(PHPKeyword.CONST),
+        MEMBER_CONST_DECLARATION(),
+        b.zeroOrMore(f.newTuple97(b.token(COMMA), MEMBER_CONST_DECLARATION())),
+        EOS()));
+  }
+  
+  public ClassPropertyDeclarationTree CLASS_VARIABLE_DECLARATION() {
+    return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION).is(
+      f.classVariableDeclaration(
+        b.firstOf(
+          f.singleToken(b.token(PHPKeyword.VAR)),
+          b.oneOrMore(MEMBER_MODIFIER())),
+        VARIABLE_DECLARATION(),
+        b.zeroOrMore(f.newTuple95(b.token(COMMA), VARIABLE_DECLARATION())),
+        EOS()));
   }
   
   public SyntaxToken MEMBER_MODIFIER() {
@@ -1002,8 +1031,11 @@ public class NewPHPGrammar {
   }
   
   public ExpressionTree STATIC_SCALAR() {
-    // FIXME (PY) : Can also be a "COMBINED_SCALAR" in the old grammar
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(EXPRESSION());
+    // FIXME (PY) : In the old grammar: b.firstOf(COMBINED_SCALAR, CONDITIONAL_EXPR)
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(
+      b.firstOf(
+        COMMON_SCALAR(),
+        EXPRESSION()));
   }
 
   /**

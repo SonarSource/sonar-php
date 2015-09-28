@@ -19,22 +19,20 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class ClassVariableDeclarationTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.CLASS_VARIABLE_DECLARATION);
-  }
+public class ClassVariableDeclarationTest {
 
   @Test
   public void test() {
-
-    matches("var $a;");
-    matches("var $a, $b;");
+    assertThat(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION)
+      .matches("var $a;")
+      .matches("var $a, $b;")
+      .matches("public static $a;")
+      .notMatches("public static var $a;")
+      .notMatches("const $a;");
   }
 }

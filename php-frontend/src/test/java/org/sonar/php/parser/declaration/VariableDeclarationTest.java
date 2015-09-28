@@ -43,10 +43,9 @@ public class VariableDeclarationTest {
 
   @Test
   public void variable_declaration() {
-    // todo (Lena) : uncomment when VARIABLE_DECLARATION is defined
-//    assertThat(PHPLexicalGrammar.VARIABLE_DECLARATION)
-//        .matches("$a")
-//        .matches("$a = 1");
+    assertThat(PHPLexicalGrammar.VARIABLE_DECLARATION)
+      .matches("$a")
+      .matches("$a = 1");
   }
 
 

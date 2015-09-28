@@ -22,8 +22,10 @@ package org.sonar.php.parser;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.Optional;
+
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
@@ -83,6 +85,7 @@ import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -183,7 +186,7 @@ public class TreeFactory {
    * [ START ] Declarations
    */
 
-  private VariableDeclarationTree variableDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
+  public VariableDeclarationTree variableDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
     if (optionalEqual.isPresent()) {
       return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), optionalEqual.get().first(), optionalEqual.get().second());
     } else {
@@ -205,6 +208,24 @@ public class TreeFactory {
       return new UseClauseTreeImpl(namespaceName, alias.get().first(), aliasName);
     }
     return new UseClauseTreeImpl(namespaceName);
+  }
+  
+  public ClassPropertyDeclarationTree classConstantDeclaration(
+    InternalSyntaxToken constToken,
+    VariableDeclarationTree firstDeclaration,
+    Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
+    InternalSyntaxToken eosToken
+    ) {
+    return ClassPropertyDeclarationTreeImpl.constant(constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
+  }
+  
+  public ClassPropertyDeclarationTree classVariableDeclaration(
+    List<SyntaxToken> modifierTokens, 
+    VariableDeclarationTree firstVariable,
+    Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalVariables, 
+    InternalSyntaxToken eosToken
+    ) {
+    return ClassPropertyDeclarationTreeImpl.variable(modifierTokens, separatedList(firstVariable, additionalVariables), eosToken);
   }
 
   public MethodDeclarationTree methodDeclaration(
@@ -1131,4 +1152,19 @@ public class TreeFactory {
     return newTuple(first, second);
   }
 
+  public <T, U> Tuple<T, U> newTuple95(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple96(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple97(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public List<SyntaxToken> singleToken(SyntaxToken token) {
+    return ImmutableList.of(token);
+  }
 }

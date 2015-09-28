@@ -19,22 +19,17 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class ClassConstDeclarationTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.CLASS_CONSTANT_DECLARATION);
-  }
+public class ClassConstDeclarationTest {
 
   @Test
   public void test() {
-
-    matches("const A;");
-    matches("const A, B;");
+    assertThat(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION)
+      .matches("const A;")
+      .matches("const A, B;");
   }
 }
