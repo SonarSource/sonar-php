@@ -30,8 +30,9 @@ import java.util.List;
 /**
  * <a href="http://php.net/manual/en/control-structures.declare.php">Declare statement</a>
  * <pre>
- *   declare ( {@link #directives()} ) {@link #statement()}   // here list {@link #statement()} should contain only one element
- *   declare ( {@link #directives()} ) : {@link #statement()} enddeclare ; // here list {@link #statement()} can contain any number of elements
+ *   declare ( {@link #directives()} ) {@link #statements()}   // here list {@link #statements()} should contain only one element
+ *   declare ( {@link #directives()} ) : {@link #statements()} enddeclare ; // here list {@link #statements()} can contain any number of elements
+ *   declare ( {@link #directives()} ) ;
  * </pre>
  */
 @Beta

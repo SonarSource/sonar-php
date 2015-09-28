@@ -22,8 +22,6 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.SeparatedList;
 
-import java.util.List;
-
 @Beta
 public interface ArrayInitialiserTree extends ExpressionTree {
 

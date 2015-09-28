@@ -23,8 +23,6 @@ import com.google.common.annotations.Beta;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
-
 @Beta
 public interface ListExpressionTree extends ExpressionTree {
 

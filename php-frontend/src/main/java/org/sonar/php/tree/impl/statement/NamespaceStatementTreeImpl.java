@@ -117,6 +117,6 @@ public class NamespaceStatementTreeImpl extends PHPTree implements NamespaceStat
 
   @Override
   public void accept(TreeVisitor visitor) {
-
+    visitor.visitNamespaceStatement(this);
   }
 }

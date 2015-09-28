@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 @Beta
 public interface VariableIdentifierTree extends VariableTree {

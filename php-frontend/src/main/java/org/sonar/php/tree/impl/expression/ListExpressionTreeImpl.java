@@ -19,20 +19,18 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import java.util.Iterator;
-
 import com.google.common.base.Functions;
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 
 public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTree {
 

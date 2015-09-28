@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
-import org.sonar.squidbridge.api.CodeVisitor;
 
 /**
  * Marker interface for all JavaScript checks.

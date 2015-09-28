@@ -19,20 +19,17 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.collect.Iterators;
+import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionTree {
 

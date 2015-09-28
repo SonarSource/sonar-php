@@ -63,6 +63,7 @@ import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
@@ -159,6 +160,8 @@ public interface TreeVisitor {
   void visitExpressionStatement(ExpressionStatementTree tree);
 
   void visitLabel(LabelTree tree);
+
+  void visitNamespaceStatement(NamespaceStatementTree tree);
 
   /**
    * [ END ] Statement

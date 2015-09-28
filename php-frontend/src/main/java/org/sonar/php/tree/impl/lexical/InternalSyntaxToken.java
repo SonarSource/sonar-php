@@ -49,7 +49,7 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
     this.startIndex = startIndex;
     this.isEOF = isEOF;
 
-    if (type == PHPTokenType.INLINE_HTML) {
+    if (PHPTokenType.INLINE_HTML.equals(type)) {
       KIND = Kind.INLINE_HTML_TOKEN;
     } else {
       KIND = Kind.TOKEN;

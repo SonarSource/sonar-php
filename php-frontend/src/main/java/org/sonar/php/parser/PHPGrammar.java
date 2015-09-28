@@ -652,10 +652,10 @@ public enum PHPGrammar implements GrammarRuleKey {
   }
 
   public static void declaration(LexerlessGrammarBuilder b) {
-    // TODO: use declaration should be simplified and merged with use_statement
-    // FIXME: also USE_CONST_DECLARATION_STATEMENT is never used...
+    // FIXME (Linda): USE_CONST_DECLARATION_STATEMENT is never used...
     b.rule(USE_CONST_DECLARATION_STATEMENT).is(USE, CONST, USE_FUNCTION_DECLARATIONS, EOS);
-    b.rule(USE_FUNCTION_DECLARATION_STATEMENT).is(USE, FUNCTION, USE_FUNCTION_DECLARATIONS, EOS); // TODO martin: to check
+    // TODO martin: to check
+    b.rule(USE_FUNCTION_DECLARATION_STATEMENT).is(USE, FUNCTION, USE_FUNCTION_DECLARATIONS, EOS);
     b.rule(USE_FUNCTION_DECLARATIONS).is(USE_FUNCTION_DECLARATION, b.zeroOrMore(COMMA, USE_FUNCTION_DECLARATION));
     b.rule(USE_FUNCTION_DECLARATION).is(NAMESPACE_NAME, b.optional(AS, IDENTIFIER));
 
@@ -849,8 +849,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(STATIC_STATEMENT).is(STATIC, STATIC_VAR_LIST, EOS);
     b.rule(STATIC_VAR_LIST).is(STATIC_VAR, b.zeroOrMore(COMMA, STATIC_VAR));
     b.rule(STATIC_VAR).is(REGULAR_VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
-
-    //todo (@Lena) this should be replaced by FunctionCallTree
+    
     b.rule(ECHO_STATEMENT).is(ECHO, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), EOS);
 
     b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, UNSET_VARIABLES, RPARENTHESIS, EOS);

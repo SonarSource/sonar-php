@@ -61,7 +61,11 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
     this.KIND = kind;
   }
 
-  public ForStatementTreeImpl(ForStatementHeader header, InternalSyntaxToken colonToken, List<StatementTree> statements, InternalSyntaxToken endForToken, InternalSyntaxToken eosToken) {
+  public ForStatementTreeImpl(
+      ForStatementHeader header, InternalSyntaxToken colonToken,
+      List<StatementTree> statements,
+      InternalSyntaxToken endForToken, InternalSyntaxToken eosToken
+  ) {
     this(Kind.ALTERNATIVE_FOR_STATEMENT, header, colonToken, statements, endForToken, eosToken);
   }
 

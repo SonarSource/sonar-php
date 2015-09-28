@@ -825,7 +825,8 @@ public class NewPHPGrammar {
               b.token(LPARENTHESIS),
               b.optional(f.newTuple7(
                   LIST_ELEMENT(),
-                  b.zeroOrMore(f.newTuple3(b.token(COMMA), LIST_ELEMENT())))), // FIXME: LIST_ELEMENT IS OPTIONAL!!
+                  // FIXME (Linda): LIST_ELEMENT IS OPTIONAL!!
+                  b.zeroOrMore(f.newTuple3(b.token(COMMA), LIST_ELEMENT())))),
               b.token(RPARENTHESIS))
       );
   }
@@ -833,7 +834,8 @@ public class NewPHPGrammar {
   public ExpressionTree LIST_ELEMENT() {
     return b.<ExpressionTree>nonterminal()
       .is(b.firstOf(
-          EXPRESSION(), // FIXME => /!\ replace with MEMBER_EXPRESSION
+          // FIXME (Linda) => /!\ replace with MEMBER_EXPRESSION
+          EXPRESSION(),
           LIST_EXPRESSION()));
   }
 
@@ -893,7 +895,7 @@ public class NewPHPGrammar {
       .is(
         b.firstOf(
             f.newStaticIdentifier(b.token(STATIC)),
-            // FIXME: add b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_CLASS_NAME)
+            // FIXME (Linda): add b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_CLASS_NAME)
             VARIABLE_WITHOUT_OBJECTS(),
             IDENTIFIER(),
             PARENTHESIZED_EXPRESSION()

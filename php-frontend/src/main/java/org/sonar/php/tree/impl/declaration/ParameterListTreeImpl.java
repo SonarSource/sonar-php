@@ -19,8 +19,8 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import java.util.Iterator;
-
+import com.google.common.base.Functions;
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -30,8 +30,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.base.Functions;
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 
 public class ParameterListTreeImpl extends PHPTree implements ParameterListTree {
 
@@ -44,10 +43,10 @@ public class ParameterListTreeImpl extends PHPTree implements ParameterListTree 
     InternalSyntaxToken openParenthesis, 
     SeparatedList<ParameterTree> parameters, 
     InternalSyntaxToken closeParenthesis
-    ) {
-      this.openParenthesis = openParenthesis;
-      this.parameters = parameters;
-      this.closeParenthesis = closeParenthesis;
+  ) {
+    this.openParenthesis = openParenthesis;
+    this.parameters = parameters;
+    this.closeParenthesis = closeParenthesis;
   }
 
   @Override

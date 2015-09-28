@@ -19,14 +19,11 @@
  */
 package org.sonar.plugins.php.api.tree.declaration;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.sonar.php.tree.impl.SeparatedList;
-
 import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+
+import java.util.List;
 
 /**
  * <p>Class <a href="http://php.net/manual/en/language.oop5.properties.php">Properties</a>

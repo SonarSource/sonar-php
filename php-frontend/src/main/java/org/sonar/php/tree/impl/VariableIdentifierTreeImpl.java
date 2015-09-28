@@ -21,11 +21,9 @@ package org.sonar.php.tree.impl;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
-import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
 import java.util.Iterator;

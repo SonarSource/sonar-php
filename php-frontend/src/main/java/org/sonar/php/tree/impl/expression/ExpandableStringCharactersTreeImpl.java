@@ -19,16 +19,14 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import java.util.Iterator;
-
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 
 public class ExpandableStringCharactersTreeImpl extends PHPTree implements ExpandableStringCharactersTree {
 

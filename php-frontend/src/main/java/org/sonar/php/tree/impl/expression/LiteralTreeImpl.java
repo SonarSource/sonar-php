@@ -19,8 +19,6 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import java.util.Iterator;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
@@ -28,6 +26,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
+
+import java.util.Iterator;
 
 public class LiteralTreeImpl extends PHPTree implements LiteralTree {
 
@@ -49,6 +49,7 @@ public class LiteralTreeImpl extends PHPTree implements LiteralTree {
     return token.text();
   }
 
+  @Override
   public SyntaxToken token() {
     return token;
   }

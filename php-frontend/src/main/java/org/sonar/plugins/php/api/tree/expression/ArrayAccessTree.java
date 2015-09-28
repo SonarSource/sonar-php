@@ -19,12 +19,10 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import javax.annotation.Nullable;
-
-import org.sonar.plugins.php.api.tree.Tree;
+import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
 
 /**
  * <a href="http://php.net/manual/en/language.types.array.php">Array</a> Access

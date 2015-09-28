@@ -38,7 +38,7 @@ import java.util.List;
 
 public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatementTree {
 
-  private final static Kind KIND = Kind.DECLARE_STATEMENT;
+  private static final Kind KIND = Kind.DECLARE_STATEMENT;
 
   private final DeclareStatementHead declareStatementHead;
 
@@ -66,7 +66,11 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
     this.eosToken = null;
   }
 
-  public DeclareStatementTreeImpl(DeclareStatementHead declareStatementHead, InternalSyntaxToken colonToken, List<StatementTree> statements, InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken) {
+  public DeclareStatementTreeImpl(
+      DeclareStatementHead declareStatementHead, InternalSyntaxToken colonToken,
+      List<StatementTree> statements,
+      InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken
+  ) {
     this.declareStatementHead = declareStatementHead;
     this.colonToken = colonToken;
     this.statements = statements;

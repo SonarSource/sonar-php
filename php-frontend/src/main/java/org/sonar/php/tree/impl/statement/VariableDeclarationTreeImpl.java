@@ -34,7 +34,7 @@ import java.util.Iterator;
 
 public class VariableDeclarationTreeImpl extends PHPTree implements VariableDeclarationTree {
 
-  private final static Kind KIND = Kind.VARIABLE_DECLARATION;
+  private static final Kind KIND = Kind.VARIABLE_DECLARATION;
 
   private final IdentifierTree variableIdentifier;
   private final InternalSyntaxToken equalToken;

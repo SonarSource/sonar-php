@@ -19,10 +19,8 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
+import com.google.common.base.Functions;
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -33,8 +31,7 @@ import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.base.Functions;
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 
 public class LexicalVariablesTreeImpl extends PHPTree implements LexicalVariablesTree {
 
