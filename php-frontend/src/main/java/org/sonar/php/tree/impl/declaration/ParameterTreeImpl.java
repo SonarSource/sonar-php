@@ -21,6 +21,8 @@ package org.sonar.php.tree.impl.declaration;
 
 import java.util.Iterator;
 
+import javax.annotation.Nullable;
+
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -44,12 +46,12 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private final ExpressionTree initValue;
 
   public ParameterTreeImpl(
-    Tree type,
-    InternalSyntaxToken referenceToken,
-    InternalSyntaxToken ellipsisToken,
+    @Nullable Tree type,
+    @Nullable InternalSyntaxToken referenceToken,
+    @Nullable InternalSyntaxToken ellipsisToken,
     VariableIdentifierTree variableIdentifier,
-    InternalSyntaxToken equalToken,
-    ExpressionTree initValue
+    @Nullable InternalSyntaxToken equalToken,
+    @Nullable ExpressionTree initValue
    ) {
     this.type = type;
     this.referenceToken = referenceToken;
@@ -59,16 +61,19 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     this.initValue = initValue;
   }
 
+  @Nullable
   @Override
   public Tree type() {
     return type;
   }
 
+  @Nullable
   @Override
   public SyntaxToken referenceToken() {
     return referenceToken;
   }
 
+  @Nullable
   @Override
   public SyntaxToken ellipsisToken() {
     return ellipsisToken;
@@ -79,11 +84,13 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     return variableIdentifier;
   }
 
+  @Nullable
   @Override
   public SyntaxToken equalToken() {
     return equalToken;
   }
 
+  @Nullable
   @Override
   public ExpressionTree initValue() {
     return initValue;

@@ -72,6 +72,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     return functionToken;
   }
 
+  @Nullable
   @Override
   public SyntaxToken referenceToken() {
     return referenceToken;
