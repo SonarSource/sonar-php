@@ -64,6 +64,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
     return functionToken;
   }
 
+  @Nullable
   @Override
   public SyntaxToken referenceToken() {
     return referenceToken;
