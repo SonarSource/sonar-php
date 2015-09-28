@@ -70,6 +70,7 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
@@ -103,6 +104,8 @@ public interface TreeVisitor {
   void visitParameter(ParameterTree tree);
   
   void visitTraitPrecedence(TraitPrecedenceTree tree);
+
+  void visitTraitAlias(TraitAliasTree tree);
 
   void visitTraitMethodReference(TraitMethodReferenceTree tree);
 

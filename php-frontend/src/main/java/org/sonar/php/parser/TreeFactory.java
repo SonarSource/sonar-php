@@ -31,6 +31,7 @@ import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
+import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
@@ -140,6 +141,7 @@ import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
@@ -293,6 +295,25 @@ public class TreeFactory {
     InternalSyntaxToken eosToken
     ) {
     return new TraitPrecedenceTreeImpl(methodReference, insteadOfToken, traits, eosToken);
+  }
+  
+  public TraitAliasTree traitAlias(
+    TraitMethodReferenceTree methodReference, 
+    InternalSyntaxToken asToken, 
+    Optional<SyntaxToken> modifier, 
+    IdentifierTree alias,
+    InternalSyntaxToken eos
+    ) {
+    return new TraitAliasTreeImpl(methodReference, asToken, modifier.orNull(), alias, eos);
+  }
+  
+  public TraitAliasTree traitAlias(
+    TraitMethodReferenceTree methodReference, 
+    InternalSyntaxToken asToken, 
+    SyntaxToken modifier,
+    InternalSyntaxToken eos
+    ) {
+    return new TraitAliasTreeImpl(methodReference, asToken, modifier, null, eos);
   }
   
   public TraitMethodReferenceTree traitMethodReference(InternalSyntaxToken identifier) {

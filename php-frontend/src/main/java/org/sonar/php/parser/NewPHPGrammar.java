@@ -78,6 +78,7 @@ import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
@@ -272,6 +273,23 @@ public class NewPHPGrammar {
         INTERFACE_LIST(),
         EOS()));
   }
+  
+  public TraitAliasTree TRAIT_ALIAS() {
+    return b.<TraitAliasTree>nonterminal(PHPLexicalGrammar.TRAIT_ALIAS).is(
+      b.firstOf(
+        f.traitAlias(
+          TRAIT_METHOD_REFERENCE(),
+          b.token(PHPKeyword.AS),
+          b.optional(MEMBER_MODIFIER()),
+          IDENTIFIER(),
+          EOS()),
+        f.traitAlias(
+          TRAIT_METHOD_REFERENCE(),
+          b.token(PHPKeyword.AS),
+          MEMBER_MODIFIER(),
+          EOS())
+        ));
+  }  
 
   public TraitMethodReferenceTree TRAIT_METHOD_REFERENCE() {
     return b.<TraitMethodReferenceTree>nonterminal(PHPLexicalGrammar.TRAIT_METHOD_REFERENCE).is(
