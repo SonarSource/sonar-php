@@ -849,8 +849,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(STATIC_STATEMENT).is(STATIC, STATIC_VAR_LIST, EOS);
     b.rule(STATIC_VAR_LIST).is(STATIC_VAR, b.zeroOrMore(COMMA, STATIC_VAR));
     b.rule(STATIC_VAR).is(REGULAR_VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
-
-    //todo (@Lena) this should be replaced by FunctionCallTree
+    
     b.rule(ECHO_STATEMENT).is(ECHO, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), EOS);
 
     b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, UNSET_VARIABLES, RPARENTHESIS, EOS);

@@ -37,9 +37,11 @@ import javax.annotation.Nullable;
 @Beta
 public interface FunctionDeclarationTree extends FunctionTree, StatementTree, DeclarationTree {
 
+  @Override
   SyntaxToken functionToken();
 
-  @Override @Nullable
+  @Nullable
+  @Override
   SyntaxToken referenceToken();
 
   IdentifierTree name();
@@ -47,6 +49,7 @@ public interface FunctionDeclarationTree extends FunctionTree, StatementTree, De
   @Override
   ParameterListTree parameters();
 
+  @Override
   BlockTree body();
 
 }

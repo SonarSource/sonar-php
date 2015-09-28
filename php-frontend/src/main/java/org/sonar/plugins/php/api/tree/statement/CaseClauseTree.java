@@ -31,6 +31,7 @@ import java.util.List;
  * <pre>
  *   case {@link #expression()} : {@link #statements()}
  *   case {@link #expression()} ;
+ *   case {@link #expression()} ; {@link #statements()}
  * </pre>
  */
 @Beta

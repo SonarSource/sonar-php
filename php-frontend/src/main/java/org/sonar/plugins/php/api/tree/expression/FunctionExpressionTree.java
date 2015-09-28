@@ -45,9 +45,11 @@ public interface FunctionExpressionTree extends FunctionTree, ExpressionTree {
   @Override
   SyntaxToken functionToken();
 
-  @Override @Nullable
+  @Nullable
+  @Override
   SyntaxToken referenceToken();
 
+  @Override
   ParameterListTree parameters();
 
   @Nullable
