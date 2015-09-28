@@ -158,8 +158,8 @@ public class NewPHPGrammar {
             b.token(PHPLexicalGrammar.IDENTIFIER)))));
   }
   
-  public InternalSyntaxToken MEMBER_MODIFIER() {
-    return b.<InternalSyntaxToken>nonterminal().is(
+  public SyntaxToken MEMBER_MODIFIER() {
+    return b.<SyntaxToken>nonterminal().is(
       b.firstOf(
         b.token(PHPKeyword.PUBLIC),
         b.token(PHPKeyword.PROTECTED),
@@ -173,7 +173,7 @@ public class NewPHPGrammar {
   public MethodDeclarationTree METHOD_DECLARATION() {
     return b.<MethodDeclarationTree>nonterminal(PHPLexicalGrammar.METHOD_DECLARATION).is(
       f.methodDeclaration(
-        b.<SyntaxToken>zeroOrMore(MEMBER_MODIFIER()),
+        b.zeroOrMore(MEMBER_MODIFIER()),
         b.token(PHPKeyword.FUNCTION),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         IDENTIFIER(),
