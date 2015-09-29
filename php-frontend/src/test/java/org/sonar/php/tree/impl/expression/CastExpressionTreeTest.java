@@ -17,33 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 
-public class UnaryExprTest {
+public class CastExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.UNARY_EXPR)
-      .matches("$a")
-      .matches("+ $a")
-      .matches("- $a")
-      .matches("~ $a")
-      .matches("! $a")
-      .matches("@ $a")
-      .matches("@ ! $a")
-      .matches("(int) $a")
-      
-      // FIXME (PY) Re-enable the following assertions
-      //.matches("$a =& $b")
-      //.matches("!$a = $b")
-      //.matches("++$a = $b")
-      //.matches("(int) $a = $b")
-      
-      .notMatches("(int) $a + $b");
+  public void test() throws Exception {
+    CastExpressionTree tree = parse("(int)$a", PHPLexicalGrammar.CAST_TYPE);
+    assertThat(tree.is(Kind.CAST_EXPRESSION)).isTrue();
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
+    assertThat(tree.castType().text()).isEqualTo("int");
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
+    assertThat(expressionToString(tree.expression())).isEqualTo("$a");
   }
+
 }

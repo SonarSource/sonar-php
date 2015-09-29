@@ -20,6 +20,7 @@
 package org.sonar.php.parser;
 
 import com.sonar.sslr.api.GenericTokenType;
+
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -251,8 +252,17 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   REQUIRE_ONCE,
   REQUIRE,
   CLONE,
-  PRINT;
-
+  PRINT,
+  
+  INTEGER,
+  INT,
+  DOUBLE,
+  FLOAT,
+  STRING,
+  OBJECT,
+  BOOLEAN,
+  BOOL,
+  BINARY;
 
 
   public static LexerlessGrammar createGrammar() {
@@ -326,6 +336,17 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(REQUIRE).is(word(b, "REQUIRE")).skip();
     b.rule(CLONE).is(word(b, "CLONE")).skip();
     b.rule(PRINT).is(word(b, "PRINT")).skip();
+    
+    b.rule(INTEGER).is(word(b, "INTEGER")).skip();
+    b.rule(INT).is(word(b, "INT")).skip();
+    b.rule(DOUBLE).is(word(b, "DOUBLE")).skip();
+    b.rule(FLOAT).is(word(b, "FLOAT")).skip();
+    b.rule(STRING).is(word(b, "STRING")).skip();
+    b.rule(OBJECT).is(word(b, "OBJECT")).skip();
+    b.rule(BOOLEAN).is(word(b, "BOOLEAN")).skip();
+    b.rule(BOOL).is(word(b, "BOOL")).skip();
+    b.rule(BINARY).is(word(b, "BINARY")).skip();
+
   }
 
   private static void keywords(LexerlessGrammarBuilder b) {

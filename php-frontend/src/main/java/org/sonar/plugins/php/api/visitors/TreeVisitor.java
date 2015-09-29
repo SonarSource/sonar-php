@@ -37,6 +37,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
@@ -50,6 +51,7 @@ import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
@@ -194,6 +196,10 @@ public interface TreeVisitor {
    * [ END ] Statement
    */
 
+  void visitCastExpression(CastExpressionTree tree);
+
+  void visitUnaryExpression(UnaryExpressionTree tree);
+
   void visitBinaryExpression(BinaryExpressionTree tree);
 
   void visitVariableIdentifier(VariableIdentifierTree tree);
@@ -241,6 +247,5 @@ public interface TreeVisitor {
   void visitScript(ScriptTree tree);
 
   void visitCompilationUnit(CompilationUnitTree tree);
-
 }
 

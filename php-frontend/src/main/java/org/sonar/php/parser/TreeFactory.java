@@ -48,6 +48,7 @@ import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayPairTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.BinaryExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.CastExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
@@ -61,6 +62,7 @@ import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
+import org.sonar.php.tree.impl.expression.UnaryExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -115,6 +117,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
@@ -206,6 +209,16 @@ public class TreeFactory {
     .put(PHPKeyword.AND.getValue(), Kind.ALTERNATIVE_CONDITIONAL_AND)
     .put(PHPKeyword.XOR.getValue(), Kind.ALTERNATIVE_CONDITIONAL_XOR)
     .put(PHPKeyword.OR.getValue(), Kind.ALTERNATIVE_CONDITIONAL_OR)
+    .build();
+
+  private static final Map<String, Kind> UNARY_EXPRESSION_KINDS_BY_OPERATOR = ImmutableMap.<String, Kind>builder()
+    .put(PHPPunctuator.INC.getValue(), Kind.PREFIX_INCREMENT)
+    .put(PHPPunctuator.DEC.getValue(), Kind.PREFIX_DECREMENT)
+    .put(PHPPunctuator.PLUS.getValue(), Kind.UNARY_PLUS)
+    .put(PHPPunctuator.MINUS.getValue(), Kind.UNARY_MINUS)
+    .put(PHPPunctuator.TILDA.getValue(), Kind.BITWISE_COMPLEMENT)
+    .put(PHPPunctuator.BANG.getValue(), Kind.LOGICAL_COMPLEMENT)
+    .put(PHPPunctuator.AT.getValue(), Kind.ERROR_CONTROL)
     .build();
 
   private static <T extends Tree> List<T> optionalList(Optional<List<T>> list) {
@@ -940,6 +953,18 @@ public class TreeFactory {
    * [ START ] Expression
    */
 
+  public ExpressionTree castExpression(InternalSyntaxToken leftParenthesis, InternalSyntaxToken type, InternalSyntaxToken rightParenthesis, ExpressionTree expression) {
+    return new CastExpressionTreeImpl(leftParenthesis, type, rightParenthesis, expression);
+  }
+
+  public ExpressionTree unaryExpr(InternalSyntaxToken operator, ExpressionTree expression) {
+    Kind kind = UNARY_EXPRESSION_KINDS_BY_OPERATOR.get(operator.text());
+    if (kind == null) {
+      throw new IllegalArgumentException("Mapping not found for unary operator " + operator.text());
+    }
+    return new UnaryExpressionTreeImpl(kind, operator, expression);
+  }
+  
   public ExpressionTree concatenationExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
     return binaryExpression(exp1, operatorsAndOperands);
   }

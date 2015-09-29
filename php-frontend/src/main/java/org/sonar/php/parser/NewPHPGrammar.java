@@ -907,11 +907,46 @@ public class NewPHPGrammar {
   /**
    * [ START ] Expression
    */
+  
+  public ExpressionTree CAST_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.CAST_TYPE).is(
+      f.castExpression(
+        b.token(PHPPunctuator.LPARENTHESIS),
+        b.firstOf(
+          b.token(PHPKeyword.ARRAY),
+          b.token(PHPKeyword.UNSET),
+          b.token(PHPLexicalGrammar.INTEGER),
+          b.token(PHPLexicalGrammar.INT),
+          b.token(PHPLexicalGrammar.DOUBLE),
+          b.token(PHPLexicalGrammar.FLOAT),
+          b.token(PHPLexicalGrammar.STRING),
+          b.token(PHPLexicalGrammar.OBJECT),
+          b.token(PHPLexicalGrammar.BOOLEAN),
+          b.token(PHPLexicalGrammar.BOOL),
+          b.token(PHPLexicalGrammar.BINARY)),
+        b.token(PHPPunctuator.RPARENTHESIS),
+        UNARY_EXPR()));
+  }
 
-  // FIXME Fake implementation
   public ExpressionTree UNARY_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.UNARY_EXPR).is(
       b.firstOf(
+        f.unaryExpr(
+          b.firstOf(
+            b.token(PHPPunctuator.INC),
+            b.token(PHPPunctuator.DEC),
+            b.token(PHPPunctuator.PLUS),
+            b.token(PHPPunctuator.MINUS),
+            b.token(PHPPunctuator.TILDA),
+            b.token(PHPPunctuator.BANG),
+            b.token(PHPPunctuator.AT)),
+          UNARY_EXPR()),
+        CAST_EXPR(),
+        // FIXME (PY) Uncomment the following lines
+        // ASSIGNMENT_EXPR(),
+        // ASSIGNMENT_BY_REFERENCE(),
+        // POSTFIX_EXPR(),
+        // FIXME (PY) Remove the following lines
         COMMON_SCALAR(),
         EXPRESSION()));
   }
