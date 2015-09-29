@@ -109,6 +109,16 @@ public interface Tree {
   public enum Kind implements AstNodeType, GrammarRuleKey {
 
     /**
+     * {@link CompilationUnitTree}
+     */
+    COMPILATION_UNIT(CompilationUnitTree.class),
+
+    /**
+     * {@link ScriptTree}
+     */
+    SCRIPT(ScriptTree.class),
+
+    /**
      * {@link ClassDeclarationTree}
      */
     CLASS_DECLARATION(ClassDeclarationTree.class),

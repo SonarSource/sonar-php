@@ -22,6 +22,8 @@ package org.sonar.php.parser;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.Optional;
+import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
+import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
@@ -91,6 +93,8 @@ import org.sonar.php.tree.impl.statement.UseStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.VariableDeclarationTreeImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -208,6 +212,15 @@ public class TreeFactory {
     }
 
     return new SeparatedList<>(elements.build(), separators.build());
+  }
+
+
+  public ScriptTree script(InternalSyntaxToken fileOpeningTagToken, Optional<List<StatementTree>> statements) {
+    return new ScriptTreeImpl(fileOpeningTagToken, optionalList(statements));
+  }
+
+  public CompilationUnitTree compilationUnit(Optional<ScriptTree> script, InternalSyntaxToken eofToken) {
+    return new CompilationUnitTreeImpl(script.orNull(), eofToken);
   }
 
   /**

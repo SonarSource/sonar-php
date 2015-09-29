@@ -261,10 +261,6 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   public static LexerlessGrammarBuilder createGrammarBuilder() {
     LexerlessGrammarBuilder b = LexerlessGrammarBuilder.create();
 
-    b.rule(COMPILATION_UNIT).is(b.optional(SCRIPT), SPACING, EOF);
-    // FIXME should be TOP_STATEMENT_LIST
-    b.rule(SCRIPT).is(FILE_OPENING_TAG, b.optional(SPACING));
-
     lexical(b);
     punctuators(b);
     keywords(b);

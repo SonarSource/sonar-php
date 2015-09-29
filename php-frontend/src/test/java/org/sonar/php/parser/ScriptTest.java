@@ -23,25 +23,13 @@ import org.junit.Test;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class CompilationUnitTest {
+public class ScriptTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.COMPILATION_UNIT)
-      .matches("")
-
+    assertThat(PHPLexicalGrammar.SCRIPT)
       .matches("<?php")
-
-      .matches("html <?php")
-      .matches("html <?")
-      .matches("html <?=")
-
-      .matches("<?php ?> html")
-      .matches("<?php ?> html <?php")
-      .matches("<?php ?> html <?php ?> html")
-
-      // PHP closing tag ends comment
-      .matches("<?php { // comment ?> <?php } ?>");
+      .matches("<?php const A = 1; function foo(){}");
   }
 
 }

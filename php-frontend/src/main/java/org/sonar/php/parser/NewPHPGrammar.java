@@ -27,6 +27,8 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStatementHead;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -130,6 +132,18 @@ public class NewPHPGrammar {
   public NewPHPGrammar(GrammarBuilder<InternalSyntaxToken> b, TreeFactory f) {
     this.b = b;
     this.f = f;
+  }
+
+  public CompilationUnitTree COMPILATION_UNIT() {
+    return b.<CompilationUnitTree>nonterminal(PHPLexicalGrammar.COMPILATION_UNIT).is(
+      f.compilationUnit(b.optional(SCRIPT()), b.token(PHPLexicalGrammar.EOF))
+    );
+  }
+
+  public ScriptTree SCRIPT() {
+    return b.<ScriptTree>nonterminal(PHPLexicalGrammar.SCRIPT).is(
+      f.script(b.token(PHPLexicalGrammar.FILE_OPENING_TAG), b.zeroOrMore(TOP_STATEMENT()))
+    );
   }
 
   /**

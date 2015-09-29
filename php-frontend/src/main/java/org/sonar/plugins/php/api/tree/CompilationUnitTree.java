@@ -17,31 +17,15 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser;
+package org.sonar.plugins.php.api.tree;
 
-import org.junit.Test;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import javax.annotation.Nullable;
 
-public class CompilationUnitTest {
+public interface CompilationUnitTree extends Tree {
+  @Nullable
+  ScriptTree script();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.COMPILATION_UNIT)
-      .matches("")
-
-      .matches("<?php")
-
-      .matches("html <?php")
-      .matches("html <?")
-      .matches("html <?=")
-
-      .matches("<?php ?> html")
-      .matches("<?php ?> html <?php")
-      .matches("<?php ?> html <?php ?> html")
-
-      // PHP closing tag ends comment
-      .matches("<?php { // comment ?> <?php } ?>");
-  }
-
+  SyntaxToken eofToken();
 }
