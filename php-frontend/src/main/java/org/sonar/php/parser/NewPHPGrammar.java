@@ -28,6 +28,8 @@ import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStateme
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -89,9 +91,15 @@ import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
+import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.CLASS;
+import static org.sonar.php.api.PHPKeyword.EXTENDS;
+import static org.sonar.php.api.PHPKeyword.FINAL;
+import static org.sonar.php.api.PHPKeyword.IMPLEMENTS;
+import static org.sonar.php.api.PHPKeyword.INTERFACE;
 import static org.sonar.php.api.PHPKeyword.LIST;
 import static org.sonar.php.api.PHPKeyword.STATIC;
+import static org.sonar.php.api.PHPKeyword.TRAIT;
 import static org.sonar.php.api.PHPKeyword.USE;
 import static org.sonar.php.api.PHPKeyword.YIELD;
 import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
@@ -169,6 +177,54 @@ public class NewPHPGrammar {
               f.newTuple91(
                   b.token(PHPKeyword.AS),
                   b.token(PHPLexicalGrammar.IDENTIFIER)))));
+  }
+
+  public ClassDeclarationTree CLASS_DECLARATION() {
+    return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_DECLARATION)
+        .is(f.classDeclaration(
+              b.optional(b.firstOf(b.token(ABSTRACT), b.token(FINAL))),
+              b.token(CLASS),
+              IDENTIFIER(),
+              b.optional(f.newTuple50(b.token(EXTENDS), NAMESPACE_NAME())),
+              b.optional(f.newTuple30(b.token(IMPLEMENTS), INTERFACE_LIST())),
+              b.token(LCURLYBRACE),
+              b.zeroOrMore(CLASS_MEMBER()),
+              b.token(RCURLYBRACE)
+            ));
+  }
+
+  public ClassDeclarationTree TRAIT_DECLARATION() {
+    return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.TRAIT_DECLARATION)
+        .is(f.traitDeclaration(
+            b.token(TRAIT),
+            IDENTIFIER(),
+            b.token(LCURLYBRACE),
+            b.zeroOrMore(CLASS_MEMBER()),
+            b.token(RCURLYBRACE)
+        ));
+  }
+
+  public ClassDeclarationTree INTERFACE_DECLARATION() {
+    return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.INTERFACE_DECLARATION)
+        .is(f.interfaceDeclaration(
+            b.token(INTERFACE),
+            IDENTIFIER(),
+            b.optional(f.newTuple26(b.token(EXTENDS), INTERFACE_LIST())),
+            b.token(LCURLYBRACE),
+            b.zeroOrMore(CLASS_MEMBER()),
+            b.token(RCURLYBRACE)
+        ));
+  }
+
+
+  public ClassMemberTree CLASS_MEMBER() {
+    return b.<ClassMemberTree>nonterminal(PHPLexicalGrammar.CLASS_MEMBER)
+        .is(b.firstOf(
+            METHOD_DECLARATION(),
+            CLASS_VARIABLE_DECLARATION(),
+            CLASS_CONSTANT_DECLARATION(),
+            TRAIT_USE_STATEMENT()
+        ));
   }
   
   public ClassPropertyDeclarationTree CLASS_CONSTANT_DECLARATION() {
@@ -337,9 +393,10 @@ public class NewPHPGrammar {
   public StatementTree TOP_STATEMENT() {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.TOP_STATEMENT)
         .is(b.firstOf(
-//            CLASS_DECLARATION(),
+            CLASS_DECLARATION(),
+            TRAIT_DECLARATION(),
             FUNCTION_DECLARATION(),
-//            INTERFACE_DECLARATION(),
+            INTERFACE_DECLARATION(),
             NAMESPACE_STATEMENT(),
             USE_STATEMENT(),
 //            CONSTANT_DECLARATION(),
@@ -466,8 +523,9 @@ public class NewPHPGrammar {
     return b.<StatementTree>nonterminal(PHPLexicalGrammar.INNER_STATEMENT)
         .is(b.firstOf(
             FUNCTION_DECLARATION(),
-//            CLASS_DECLARATION(),
-//            INTERFACE_DECLARATION(),
+            CLASS_DECLARATION(),
+            TRAIT_DECLARATION(),
+            INTERFACE_DECLARATION(),
             STATEMENT()
         ));
   }

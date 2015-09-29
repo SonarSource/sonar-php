@@ -19,23 +19,20 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class InterfaceDeclarationTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.INTERFACE_DECLARATION);
-  }
+public class InterfaceDeclarationTest {
 
   @Test
   public void test() {
+    assertThat(PHPLexicalGrammar.INTERFACE_DECLARATION)
+      .matches("interface I {}")
+      .matches("interface I extends A {}")
+      .matches("interface I extends A, B {}")
 
-    matches("interface I {}");
-    matches("interface I extends A {}");
-    matches("interface I extends A, B {}");
+      .notMatches("interface I implements A {}");
   }
 }

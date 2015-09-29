@@ -92,7 +92,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   LABEL,
   BLOCK,
   INNER_STATEMENT,
-  CLASS_STATEMENT,
+  CLASS_MEMBER,
   IF_STATEMENT,
   ELSEIF_LIST,
   ELSEIF_CLAUSE,
@@ -241,7 +241,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   VARIABLE_VARIABLE_DOLLAR,
 
   WHITESPACES,
-  EXPRESSION;
+  EXPRESSION, TRAIT_DECLARATION;
 
 
 

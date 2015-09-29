@@ -20,11 +20,11 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.php.api.PHPKeyword;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -49,13 +49,7 @@ import java.util.List;
  * </pre>
  */
 @Beta
-public interface ClassDeclarationTree extends DeclarationTree {
-
-  /**
-   * Either {@link PHPKeyword#CLASS class}, {@link PHPKeyword#TRAIT trait}
-   * or {@link PHPKeyword#INTERFACE interface}
-   */
-  SyntaxToken classEntryTypeToken();
+public interface ClassDeclarationTree extends DeclarationTree, StatementTree {
 
   /**
    * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}
@@ -63,18 +57,24 @@ public interface ClassDeclarationTree extends DeclarationTree {
   @Nullable
   SyntaxToken modifierToken();
 
+  /**
+   * Either {@link PHPKeyword#CLASS class}, {@link PHPKeyword#TRAIT trait}
+   * or {@link PHPKeyword#INTERFACE interface}
+   */
+  SyntaxToken classEntryTypeToken();
+
   IdentifierTree name();
 
   @Nullable
   SyntaxToken extendsToken();
 
   @Nullable
-  ExpressionTree superClass();
+  NamespaceNameTree superClass();
 
   @Nullable
   SyntaxToken implementsToken();
 
-  List<Tree> superInterfaces();
+  SeparatedList<NamespaceNameTree> superInterfaces();
 
   SyntaxToken openCurlyBraceToken();
 

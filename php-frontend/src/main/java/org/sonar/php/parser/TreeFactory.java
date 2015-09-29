@@ -22,9 +22,9 @@ package org.sonar.php.parser;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.Optional;
-
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
@@ -89,6 +89,8 @@ import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -340,6 +342,71 @@ public class TreeFactory {
   
   public TraitMethodReferenceTree traitMethodReference(NamespaceNameTree trait, InternalSyntaxToken doubleColonToken, InternalSyntaxToken identifier) {
     return new TraitMethodReferenceTreeImpl(trait, doubleColonToken, new IdentifierTreeImpl(identifier));  
+  }
+
+  public ClassDeclarationTree interfaceDeclaration(
+      InternalSyntaxToken interfaceToken, IdentifierTree name,
+      Optional<Tuple<InternalSyntaxToken, SeparatedList<NamespaceNameTree>>> extendsClause,
+      InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
+  ) {
+    InternalSyntaxToken extendsToken = null;
+    SeparatedList<NamespaceNameTree> interfaceList = SeparatedList.empty();
+    if (extendsClause.isPresent()) {
+      extendsToken = extendsClause.get().first();
+      interfaceList = extendsClause.get().second();
+    }
+    return ClassDeclarationTreeImpl.createInterface(
+        interfaceToken,
+        name,
+        extendsToken,
+        interfaceList,
+        openCurlyBraceToken,
+        optionalList(members),
+        closeCurlyBraceToken
+    );
+  }
+
+  public ClassDeclarationTree traitDeclaration(
+      InternalSyntaxToken traitToken, IdentifierTree name,
+      InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
+  ) {
+    return ClassDeclarationTreeImpl.createTrait(
+        traitToken,
+        name,
+        openCurlyBraceToken,
+        optionalList(members),
+        closeCurlyBraceToken
+    );
+  }
+
+  public ClassDeclarationTree classDeclaration(
+      Optional<InternalSyntaxToken> modifier, InternalSyntaxToken classToken, IdentifierTree name,
+      Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
+      Optional<Tuple<InternalSyntaxToken, SeparatedList<NamespaceNameTree>>> implementsClause,
+      InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace
+  ) {
+    InternalSyntaxToken extendsToken = null;
+    NamespaceNameTree superClass = null;
+
+    InternalSyntaxToken implementsToken = null;
+    SeparatedList<NamespaceNameTree> superInterfaces = SeparatedList.empty();
+
+    if (extendsClause.isPresent()) {
+      extendsToken = extendsClause.get().first();
+      superClass = extendsClause.get().second();
+    }
+
+    if (implementsClause.isPresent()) {
+      implementsToken = implementsClause.get().first();
+      superInterfaces = implementsClause.get().second();
+    }
+
+    return ClassDeclarationTreeImpl.createClass(
+        modifier.orNull(), classToken, name,
+        extendsToken, superClass,
+        implementsToken, superInterfaces,
+        openCurlyBrace, optionalList(members), closeCurlyBrace
+    );
   }
 
   /**

@@ -20,7 +20,7 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
-
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -111,6 +111,8 @@ public interface TreeVisitor {
   void visitTraitAlias(TraitAliasTree tree);
 
   void visitTraitMethodReference(TraitMethodReferenceTree tree);
+
+  void visitClassDeclaration(ClassDeclarationTree tree);
 
   /**
    * [ END ] Declaration

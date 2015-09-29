@@ -24,19 +24,13 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ClassDeclarationTest {
+public class TraitDeclarationTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.CLASS_DECLARATION)
-      .matches("class C {}")
-      .matches("abstract class C {}")
-      .matches("final class C {}")
-
-      .matches("class C extends A {}")
-      .matches("class C implements B {}")
-      .matches("class C extends A implements B {}")
-
-      .notMatches("class A extends B, C {}");
+    assertThat(PHPLexicalGrammar.TRAIT_DECLARATION)
+      .matches("trait T {}")
+      .notMatches("trait T extends C {}")
+      .notMatches("trait T implement I {}");
   }
 }
