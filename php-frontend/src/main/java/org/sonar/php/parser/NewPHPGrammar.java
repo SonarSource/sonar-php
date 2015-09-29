@@ -774,10 +774,15 @@ public class NewPHPGrammar {
         .is(f.forEachStatementHeader(
             b.token(PHPKeyword.FOREACH), b.token(PHPPunctuator.LPARENTHESIS),
             EXPRESSION(), b.token(PHPKeyword.AS),
-            // fixme (Lena) : both EXPRESSION() should be FOREACH_VARIABLE
-            b.optional(f.newTuple10(EXPRESSION(), b.token(PHPPunctuator.DOUBLEARROW))), EXPRESSION(),
+            b.optional(f.newTuple10(FOREACH_VARIABLE(), b.token(PHPPunctuator.DOUBLEARROW))), FOREACH_VARIABLE(),
             b.token(PHPPunctuator.RPARENTHESIS)
         ));
+  }
+
+  public ExpressionTree FOREACH_VARIABLE() {
+    return b.<ExpressionTree>nonterminal().is(
+      b.firstOf(REFERENCE_VARIABLE(), MEMBER_EXPRESSION(), LIST_EXPRESSION())
+    );
   }
 
   public ThrowStatementTree THROW_STATEMENT() {
@@ -1017,8 +1022,7 @@ public class NewPHPGrammar {
   public ExpressionTree LIST_ELEMENT() {
     return b.<ExpressionTree>nonterminal()
       .is(b.firstOf(
-          // FIXME (Linda) => /!\ replace with MEMBER_EXPRESSION
-          EXPRESSION(),
+          MEMBER_EXPRESSION(),
           LIST_EXPRESSION()));
   }
 
