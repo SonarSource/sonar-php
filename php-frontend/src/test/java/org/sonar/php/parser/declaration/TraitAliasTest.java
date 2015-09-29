@@ -19,22 +19,18 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class ImplementsListTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.IMPLEMENTS_LIST);
-  }
+public class TraitAliasTest {
 
   @Test
   public void test() {
-
-    matches("implements A");
-    matches("implements A, B");
+    assertThat(PHPLexicalGrammar.TRAIT_ALIAS)
+      .matches("Foo as bar;")
+      .matches("Foo as protected bar;")
+      .matches("Foo as private;");
   }
 }

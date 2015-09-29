@@ -21,11 +21,10 @@ package org.sonar.php.parser.statement;
 
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class DoWhileStatementTest extends RuleTest {
+public class DoWhileStatementTest {
 
   @Test
   public void test() {
@@ -34,7 +33,6 @@ public class DoWhileStatementTest extends RuleTest {
       .matches("do {} while ($a) ;")
 
       .notMatches("do {} while ($a) ")
-      .notMatches("while {} do ($a) ;")
-    ;
+      .notMatches("while {} do ($a) ;");
   }
 }

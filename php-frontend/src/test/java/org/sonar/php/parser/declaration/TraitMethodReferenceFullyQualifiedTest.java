@@ -19,20 +19,16 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class UseConstDeclarationStatementTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.USE_CONST_DECLARATION_STATEMENT);
-  }
+public class TraitMethodReferenceFullyQualifiedTest {
 
   @Test
   public void test() {
-    matches("use const FOO;");
+    assertThat(PHPLexicalGrammar.TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED)
+      .matches("Foo::bar");
   }
 }

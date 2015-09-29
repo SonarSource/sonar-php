@@ -17,26 +17,20 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class TraitAdaptationsTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.TRAIT_ADAPTATIONS);
-  }
+public class ClassMemberTest {
 
   @Test
   public void test() {
-
-    matches(";");
-    matches("{}");
-    matches("{Foo::Bar insteadof Toto;}");
-    matches("{Foo::Bar insteadof Toto; Foo as protected;}");
+    assertThat(PHPLexicalGrammar.CLASS_MEMBER)
+      .matches("var $a;")
+      .matches("const A;")
+      .matches("private function f() {}");
   }
 }

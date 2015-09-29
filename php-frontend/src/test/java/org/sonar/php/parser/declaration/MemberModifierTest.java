@@ -19,27 +19,24 @@
  */
 package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class MemberModifierTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.MEMBER_MODIFIER);
-  }
+public class MemberModifierTest {
 
   @Test
   public void test() {
+    assertThat(PHPLexicalGrammar.MEMBER_MODIFIER)
+    .matches("public")
+    .matches("protected")
+    .matches("private")
+    .matches("static")
+    .matches("abstract")
+    .matches("final")
 
-    matches("public");
-    matches("protected");
-    matches("private");
-    matches("static");
-    matches("abstract");
-    matches("final");
+    .notMatches("const");
 
   }
 }

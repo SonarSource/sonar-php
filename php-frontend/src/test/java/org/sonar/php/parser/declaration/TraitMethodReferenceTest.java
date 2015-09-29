@@ -17,24 +17,19 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.parser.declaration;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class StaticVarListTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.STATIC_VAR_LIST);
-  }
+public class TraitMethodReferenceTest {
 
   @Test
   public void test() {
-    matches("$a");
-    matches("$a = 0");
-    matches("$a, $b");
+    assertThat(PHPLexicalGrammar.TRAIT_METHOD_REFERENCE)
+      .matches("Foo")
+      .matches("Foo::bar");
   }
 }

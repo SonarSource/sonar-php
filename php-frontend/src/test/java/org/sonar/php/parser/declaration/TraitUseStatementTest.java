@@ -17,20 +17,19 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.parser.declaration;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class TraitAliasTest {
+public class TraitUseStatementTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.TRAIT_ALIAS)
-      .matches("Foo as bar;")
-      .matches("Foo as protected bar;")
-      .matches("Foo as private;");
+    assertThat(PHPLexicalGrammar.TRAIT_USE_STATEMENT)
+      .matches("use Foo,Bar;")
+      .matches("use Foo,Bar { method1 as method2; A::x insteadof B; }");
   }
 }

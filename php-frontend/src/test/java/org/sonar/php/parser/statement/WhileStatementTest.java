@@ -19,20 +19,12 @@
  */
 package org.sonar.php.parser.statement;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class WhileStatementTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.WHILE_STATEMENT);
-  }
+public class WhileStatementTest {
 
   @Test
   public void test() {

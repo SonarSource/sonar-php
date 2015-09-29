@@ -19,19 +19,17 @@
  */
 package org.sonar.php.parser.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class UseDeclarationTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+public class TraitPrecedenceTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.USE_DECLARATION)
-      .matches("ArrayObject")
-      .matches("My\\Full\\functionName")
-      .matches("My\\Full\\functionName as func")
-      .notMatches("My\\Full\\functionName as");
+    assertThat(PHPLexicalGrammar.TRAIT_PRECEDENCE)
+      .matches("Foo::Bar insteadof Toto;")
+      .matches("Foo::Bar insteadof Toto, Tata;");
   }
 }

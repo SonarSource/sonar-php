@@ -33,6 +33,7 @@ public class UseStatementTest {
       .matches("use const My\\Full\\Name as alias;")
       .matches("use function My\\Full\\Name as alias;")
       .matches("use My\\Full\\Name1, My\\Full\\Name2;")
+      .matches("use function foo;")
       .notMatches("use function My\\Full\\Name1 as func, const My\\Full\\Name2;");
   }
 }

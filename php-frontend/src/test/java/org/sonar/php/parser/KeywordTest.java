@@ -20,86 +20,83 @@
 package org.sonar.php.parser;
 
 import org.fest.assertions.Assertions;
-import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.api.PHPKeyword;
 
-public class KeywordTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.KEYWORDS);
-  }
+public class KeywordTest {
 
   @Test
   public void test() {
     // Exact list of keywords from PHP reference manual
-    matches("abstract");
-    matches("and");
-    matches("array");
-    matches("as");
-    matches("break");
-    matches("callable");
-    matches("case");
-    matches("catch");
-    matches("class");
-    matches("clone");
-    matches("const");
-    matches("continue");
-    matches("declare");
-    matches("default");
-    matches("die");
-    matches("do");
-    matches("echo");
-    matches("else");
-    matches("elseif");
-    matches("empty");
-    matches("enddeclare");
-    matches("endfor");
-    matches("endforeach");
-    matches("endif");
-    matches("endswitch");
-    matches("endwhile");
-    matches("eval");
-    matches("exit");
-    matches("extends");
-    matches("final");
-    matches("finally");
-    matches("for");
-    matches("foreach");
-    matches("function");
-    matches("global");
-    matches("goto");
-    matches("if");
-    matches("implements");
-    matches("include");
-    matches("include_once");
-    matches("instanceof");
-    matches("insteadof");
-    matches("interface");
-    matches("isset");
-    matches("list");
-    matches("namespace");
-    matches("new");
-    matches("or");
-    matches("print");
-    matches("private");
-    matches("protected");
-    matches("public");
-    matches("require");
-    matches("require_once");
-    matches("return");
-    matches("static");
-    matches("switch");
-    matches("throw");
-    matches("trait");
-    matches("try");
-    matches("unset");
-    matches("use");
-    matches("var");
-    matches("while");
-    matches("xor");
-    matches("yield");
+    assertThat(PHPLexicalGrammar.KEYWORDS)
+      .matches("abstract")
+      .matches("and")
+      .matches("array")
+      .matches("as")
+      .matches("break")
+      .matches("callable")
+      .matches("case")
+      .matches("catch")
+      .matches("class")
+      .matches("clone")
+      .matches("const")
+      .matches("continue")
+      .matches("declare")
+      .matches("default")
+      .matches("die")
+      .matches("do")
+      .matches("echo")
+      .matches("else")
+      .matches("elseif")
+      .matches("empty")
+      .matches("enddeclare")
+      .matches("endfor")
+      .matches("endforeach")
+      .matches("endif")
+      .matches("endswitch")
+      .matches("endwhile")
+      .matches("eval")
+      .matches("exit")
+      .matches("extends")
+      .matches("final")
+      .matches("finally")
+      .matches("for")
+      .matches("foreach")
+      .matches("function")
+      .matches("global")
+      .matches("goto")
+      .matches("if")
+      .matches("implements")
+      .matches("include")
+      .matches("include_once")
+      .matches("instanceof")
+      .matches("insteadof")
+      .matches("interface")
+      .matches("isset")
+      .matches("list")
+      .matches("namespace")
+      .matches("new")
+      .matches("or")
+      .matches("print")
+      .matches("private")
+      .matches("protected")
+      .matches("public")
+      .matches("require")
+      .matches("require_once")
+      .matches("return")
+      .matches("static")
+      .matches("switch")
+      .matches("throw")
+      .matches("trait")
+      .matches("try")
+      .matches("unset")
+      .matches("use")
+      .matches("var")
+      .matches("while")
+      .matches("xor")
+      .matches("yield");
   }
 
   @Test

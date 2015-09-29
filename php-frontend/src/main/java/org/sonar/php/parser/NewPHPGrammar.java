@@ -180,7 +180,7 @@ public class NewPHPGrammar {
   }
 
   public UseClauseTree USE_CLAUSE() {
-    return b.<UseClauseTree>nonterminal(PHPLexicalGrammar.USE_DECLARATION).is(
+    return b.<UseClauseTree>nonterminal(PHPLexicalGrammar.USE_CLAUSE).is(
       f.useClause(
           NAMESPACE_NAME(),
           b.optional(
@@ -267,7 +267,7 @@ public class NewPHPGrammar {
   }
 
   public SyntaxToken MEMBER_MODIFIER() {
-    return b.<SyntaxToken>nonterminal().is(
+    return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.MEMBER_MODIFIER).is(
       b.firstOf(
         b.token(PHPKeyword.PUBLIC),
         b.token(PHPKeyword.PROTECTED),
