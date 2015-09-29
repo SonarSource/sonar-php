@@ -751,7 +751,7 @@ public class NewPHPGrammar {
   }
 
   public SeparatedList<ExpressionTree> FOR_EXPR() {
-    return b.<SeparatedList<ExpressionTree>>nonterminal(PHPLexicalGrammar.FOR_EXRR)
+    return b.<SeparatedList<ExpressionTree>>nonterminal(PHPLexicalGrammar.FOR_EXPR)
         .is(f.forExpr(
             EXPRESSION(),
             b.zeroOrMore(f.newTuple12(b.token(PHPPunctuator.COMMA), EXPRESSION()))
