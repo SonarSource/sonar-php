@@ -25,7 +25,6 @@ import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;

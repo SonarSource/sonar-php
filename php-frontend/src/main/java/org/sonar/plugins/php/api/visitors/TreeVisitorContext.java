@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import java.io.File;
@@ -30,8 +31,7 @@ public interface TreeVisitorContext {
   /**
    * @return the top tree node of the current file AST representation.
    */
-  //fixme ScriptTree
-  Tree getTopTree();
+  CompilationUnitTree getTopTree();
 
   /**
    * Creates an issue.

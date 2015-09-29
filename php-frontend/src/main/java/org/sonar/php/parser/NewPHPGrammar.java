@@ -186,13 +186,13 @@ public class NewPHPGrammar {
             )),
             b.token(PHPLexicalGrammar.IDENTIFIER)),
           f.namespaceName(
-              b.token(PHPKeyword.NAMESPACE),
-              b.token(PHPPunctuator.NS_SEPARATOR),
-              b.zeroOrMore(f.newTuple6(
-                  b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER)),
-                  b.token(PHPPunctuator.NS_SEPARATOR)
-              )),
-              b.token(PHPLexicalGrammar.IDENTIFIER)))
+            b.token(PHPKeyword.NAMESPACE),
+            b.token(PHPPunctuator.NS_SEPARATOR),
+            b.zeroOrMore(f.newTuple6(
+                b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER)),
+                b.token(PHPPunctuator.NS_SEPARATOR)
+            )),
+            b.token(PHPLexicalGrammar.IDENTIFIER)))
     );
   }
 

@@ -920,7 +920,7 @@ public class TreeFactory {
   }
 
   public LiteralTree nullLiteral(InternalSyntaxToken token) {
-   return new LiteralTreeImpl(Tree.Kind.NULL_LITERAL, token);
+    return new LiteralTreeImpl(Tree.Kind.NULL_LITERAL, token);
   }
 
   public LiteralTree magicConstantLiteral(InternalSyntaxToken token) {
@@ -1140,7 +1140,11 @@ public class TreeFactory {
     return new LexicalVariablesTreeImpl(useToken, openParenthesis, separatedList(variable, variableRest), closeParenthesis);
   }
 
-  public FunctionCallTree internalFunction1(InternalSyntaxToken issetToken, InternalSyntaxToken openParenthesis, ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressionRest, InternalSyntaxToken closeParenthesis) {
+  public FunctionCallTree internalFunction1(
+    InternalSyntaxToken issetToken, InternalSyntaxToken openParenthesis,
+    ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressionRest,
+    InternalSyntaxToken closeParenthesis
+  ) {
     return new FunctionCallTreeImpl(
       new IdentifierTreeImpl(issetToken),
       openParenthesis,
@@ -1148,7 +1152,11 @@ public class TreeFactory {
       closeParenthesis);
   }
 
-  public FunctionCallTree internalFunction2(InternalSyntaxToken functionNameToken, InternalSyntaxToken openParenthesis, ExpressionTree expression, InternalSyntaxToken closeParenthesis) {
+  public FunctionCallTree internalFunction2(
+    InternalSyntaxToken functionNameToken, InternalSyntaxToken openParenthesis,
+    ExpressionTree expression,
+    InternalSyntaxToken closeParenthesis
+  ) {
     return new FunctionCallTreeImpl(
       new IdentifierTreeImpl(functionNameToken),
       openParenthesis,
@@ -1173,11 +1181,19 @@ public class TreeFactory {
     return new ArrayPairTreeImpl(referenceVariableTree);
   }
 
-  public SeparatedList<ArrayPairTree> arrayInitialiserList(ArrayPairTree firstElement, Optional<List<Tuple<InternalSyntaxToken, ArrayPairTree>>> restElements, Optional<InternalSyntaxToken> trailingComma) {
+  public SeparatedList<ArrayPairTree> arrayInitialiserList(
+    ArrayPairTree firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, ArrayPairTree>>> restElements,
+    Optional<InternalSyntaxToken> trailingComma
+  ) {
     return separatedList(firstElement, restElements, trailingComma.orNull());
   }
 
-  public ArrayInitialiserTree newArrayInitFunction(InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis, Optional<SeparatedList<ArrayPairTree>> elements, InternalSyntaxToken closeParenthesis) {
+  public ArrayInitialiserTree newArrayInitFunction(
+    InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis,
+    Optional<SeparatedList<ArrayPairTree>> elements,
+    InternalSyntaxToken closeParenthesis
+  ) {
     return new ArrayInitialiserFunctionTreeImpl(
       arrayToken,
       openParenthesis,

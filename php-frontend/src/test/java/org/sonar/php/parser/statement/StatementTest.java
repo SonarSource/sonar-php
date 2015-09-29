@@ -47,6 +47,8 @@ public class StatementTest {
     .matches("unset($a);");
     // fixme (Lena) : should match (as assignment expression)
 //    .matches("$var = function () {};");
+    // fixme (Lena) : should match (as function call expression)
+//    .matches("__halt_compiler();");
   }
 
   @Test
