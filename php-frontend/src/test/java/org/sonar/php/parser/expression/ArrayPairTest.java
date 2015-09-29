@@ -19,23 +19,19 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree;
 
-public class ArrayPairTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.ARRAY_PAIR);
-  }
+public class ArrayPairTest {
 
   @Test
   public void test() {
-
-    matches("&$a");
-    matches("$a=>$b");
-    matches("$a=>&$b");
+    assertThat(Tree.Kind.ARRAY_PAIR)
+      .matches("&$a")
+      .matches("$a=>$b")
+      .matches("$a=>&$b");
   }
+
 }

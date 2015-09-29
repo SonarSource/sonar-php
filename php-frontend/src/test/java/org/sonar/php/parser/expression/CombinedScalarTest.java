@@ -19,22 +19,18 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class CombinedScalarTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.COMBINED_SCALAR);
-  }
+public class CombinedScalarTest {
 
   @Test
   public void test() {
-
-    matches("array()");
-    matches("[]");
+    assertThat(PHPLexicalGrammar.COMBINED_SCALAR)
+      .matches("array()")
+      .matches("[]");
   }
+
 }

@@ -39,6 +39,8 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
@@ -93,6 +95,7 @@ import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
+import static org.sonar.php.api.PHPKeyword.ARRAY;
 import static org.sonar.php.api.PHPKeyword.CLASS;
 import static org.sonar.php.api.PHPKeyword.EXTENDS;
 import static org.sonar.php.api.PHPKeyword.FINAL;
@@ -1216,6 +1219,32 @@ public class NewPHPGrammar {
             b.token(PHPLexicalGrammar.CLONE),
             b.token(PHPLexicalGrammar.PRINT)),
           EXPRESSION())
+      ));
+  }
+
+  public ArrayInitialiserTree ARRAY_INITIALISER() {
+    return b.<ArrayInitialiserTree>nonterminal(PHPLexicalGrammar.COMBINED_SCALAR)
+      .is(b.firstOf(
+        f.newArrayInitFunction(b.token(ARRAY), b.token(LPARENTHESIS), b.optional(ARRAY_PAIR_LIST()), b.token(RPARENTHESIS)),
+        f.newArrayInitBracket(b.token(LBRACKET), b.optional(ARRAY_PAIR_LIST()), b.token(RBRACKET))
+      ));
+
+  }
+
+  public SeparatedList<ArrayPairTree> ARRAY_PAIR_LIST() {
+    return b.<SeparatedList>nonterminal(PHPLexicalGrammar.ARRAY_PAIR_LIST)
+      .is(f.arrayInitialiserList(
+        ARRAY_PAIR(),
+        b.zeroOrMore(f.newTuple17(b.token(COMMA), ARRAY_PAIR())),
+        b.optional(b.token(COMMA))
+      ));
+  }
+
+  public ArrayPairTree ARRAY_PAIR() {
+    return b.<ArrayPairTree>nonterminal(Kind.ARRAY_PAIR)
+      .is(b.firstOf(
+        f.arrayPair1(EXPRESSION(), b.optional(f.newTuple13(b.token(DOUBLEARROW), b.firstOf(REFERENCE_VARIABLE(), EXPRESSION())))),
+        f.arrayPair2(REFERENCE_VARIABLE())
       ));
   }
 

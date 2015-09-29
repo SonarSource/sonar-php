@@ -38,6 +38,9 @@ import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitUseStatementTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayInitialiserBracketTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayInitialiserFunctionTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayPairTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
@@ -101,6 +104,8 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
@@ -181,10 +186,15 @@ public class TreeFactory {
       return new SeparatedList<>(new LinkedList<T>(), new LinkedList<InternalSyntaxToken>());
     }
   }
-  
+
   private <T extends Tree> SeparatedList<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples) {
+    return separatedList(firstElement, tuples, null);
+  }
+
+  private <T extends Tree> SeparatedList<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples, InternalSyntaxToken trailingSeparator) {
     ImmutableList.Builder<T> elements = ImmutableList.builder();
     ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+
     elements.add(firstElement);
     if (tuples.isPresent()) {
       for (Tuple<InternalSyntaxToken, T> tuple : tuples.get()) {
@@ -192,6 +202,11 @@ public class TreeFactory {
         elements.add(tuple.second());
       }
     }
+
+    if (trailingSeparator != null) {
+      separators.add(trailingSeparator);
+    }
+
     return new SeparatedList<>(elements.build(), separators.build());
   }
 
@@ -1132,6 +1147,36 @@ public class TreeFactory {
     return new FunctionCallTreeImpl(
       new IdentifierTreeImpl(includeOnceToken),
       new SeparatedList(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()));
+  }
+
+  public ArrayPairTree arrayPair1(ExpressionTree expression, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> pairExpression) {
+    if (pairExpression.isPresent()) {
+      return new ArrayPairTreeImpl(expression, pairExpression.get().first(), pairExpression.get().second());
+    }
+    return new ArrayPairTreeImpl(expression);
+  }
+
+  public ArrayPairTree arrayPair2(ReferenceVariableTree referenceVariableTree) {
+    return new ArrayPairTreeImpl(referenceVariableTree);
+  }
+
+  public SeparatedList<ArrayPairTree> arrayInitialiserList(ArrayPairTree firstElement, Optional<List<Tuple<InternalSyntaxToken, ArrayPairTree>>> restElements, Optional<InternalSyntaxToken> trailingComma) {
+    return separatedList(firstElement, restElements, trailingComma.orNull());
+  }
+
+  public ArrayInitialiserTree newArrayInitFunction(InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis, Optional<SeparatedList<ArrayPairTree>> elements, InternalSyntaxToken closeParenthesis) {
+    return new ArrayInitialiserFunctionTreeImpl(
+      arrayToken,
+      openParenthesis,
+      elements.isPresent() ? elements.get() : new SeparatedList<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
+      closeParenthesis);
+  }
+
+  public ArrayInitialiserTree newArrayInitBracket(InternalSyntaxToken openBracket, Optional<SeparatedList<ArrayPairTree>> elements, InternalSyntaxToken closeBracket) {
+    return new ArrayInitialiserBracketTreeImpl(
+      openBracket,
+      elements.isPresent() ? elements.get() : new SeparatedList<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
+      closeBracket);
   }
 
   /**
