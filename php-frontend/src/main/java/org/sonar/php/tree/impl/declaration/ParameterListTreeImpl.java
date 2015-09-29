@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
@@ -73,7 +72,7 @@ public class ParameterListTreeImpl extends PHPTree implements ParameterListTree 
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.singletonIterator(openParenthesis),
-      parameters.elementsAndSeparators(Functions.<ParameterTree>identity()),
+      parameters.elementsAndSeparators(),
       Iterators.singletonIterator(closeParenthesis));
   }
 

@@ -31,7 +31,6 @@ import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 
 public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceTree {
@@ -84,7 +83,7 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.forArray(methodReference, insteadOfToken),
-      traits.elementsAndSeparators(Functions.<NamespaceNameTree>identity()),
+      traits.elementsAndSeparators(),
       Iterators.singletonIterator(eosToken));
   }
 

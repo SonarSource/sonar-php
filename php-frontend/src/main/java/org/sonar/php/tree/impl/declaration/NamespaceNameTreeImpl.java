@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.PHPTree;
@@ -80,7 +79,7 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
       result.append(separator);
     }
 
-    Iterator<Tree> iterator = this.namespaces.elementsAndSeparators(Functions.<IdentifierTree>identity());
+    Iterator<Tree> iterator = this.namespaces.elementsAndSeparators();
     while (iterator.hasNext()) {
       Tree next = iterator.next();
       if (next.is(Kind.IDENTIFIER)) {
@@ -102,7 +101,7 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.singletonIterator(absoluteSeparator),
-        namespaces.elementsAndSeparators(Functions.<IdentifierTree>identity()),
+        namespaces.elementsAndSeparators(),
         Iterators.singletonIterator(name)
     );
   }

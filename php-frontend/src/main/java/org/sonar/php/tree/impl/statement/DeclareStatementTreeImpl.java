@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
@@ -130,7 +129,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.forArray(declareStatementHead.declareToken(), declareStatementHead.openParenthesisToken()),
-        declareStatementHead.directives().elementsAndSeparators(Functions.<VariableDeclarationTree>identity()),
+        declareStatementHead.directives().elementsAndSeparators(),
         Iterators.forArray(declareStatementHead.closeParenthesisToken(), colonToken),
         statements.iterator(),
         Iterators.forArray(endDeclareToken, eosToken)

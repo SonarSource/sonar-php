@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
@@ -55,7 +54,7 @@ public class StaticStatementTreeImpl extends PHPTree implements StaticStatementT
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.singletonIterator(staticToken),
-        variables.elementsAndSeparators(Functions.<VariableDeclarationTree>identity()),
+        variables.elementsAndSeparators(),
         Iterators.singletonIterator(eosToken)
     );
   }

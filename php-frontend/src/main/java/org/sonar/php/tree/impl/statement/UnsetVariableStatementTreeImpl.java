@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
@@ -63,7 +62,7 @@ public class UnsetVariableStatementTreeImpl extends PHPTree implements UnsetVari
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.forArray(unsetToken, openParenthesisToken),
-        variables.elementsAndSeparators(Functions.<ExpressionTree>identity()),
+        variables.elementsAndSeparators(),
         Iterators.forArray(closeParenthesisToken, eosToken)
     );
   }

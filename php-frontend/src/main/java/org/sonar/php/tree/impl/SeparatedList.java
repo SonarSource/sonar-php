@@ -20,6 +20,7 @@
 package org.sonar.php.tree.impl;
 
 import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.UnmodifiableIterator;
@@ -31,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class SeparatedList<T> implements List<T> {
+public class SeparatedList<T extends Tree> implements List<T> {
   
   private final List<T> list;
   private final List<InternalSyntaxToken> separators;
@@ -45,7 +46,7 @@ public class SeparatedList<T> implements List<T> {
     this.separators = separators;
   }
   
-  public static <T> SeparatedList<T> empty() {
+  public static <T extends Tree> SeparatedList<T> empty() {
     return new SeparatedList<>(ImmutableList.<T>of(), ImmutableList.<InternalSyntaxToken>of());
   }
 
@@ -175,6 +176,10 @@ public class SeparatedList<T> implements List<T> {
 
   public Iterator<Tree> elementsAndSeparators(final Function<T, ? extends Tree> elementTransformer) {
     return new ElementAndSeparatorIterator(elementTransformer);
+  }
+
+  public Iterator<Tree> elementsAndSeparators() {
+    return elementsAndSeparators(Functions.<T>identity());
   }
 
   private final class ElementAndSeparatorIterator extends UnmodifiableIterator<Tree> {

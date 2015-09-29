@@ -31,7 +31,6 @@ import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 
@@ -86,7 +85,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       modifierTokens.iterator(),
-      declarations.elementsAndSeparators(Functions.<VariableDeclarationTree>identity()),
+      declarations.elementsAndSeparators(),
       Iterators.singletonIterator(eosToken));
   }
 

@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
@@ -91,7 +90,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.forArray(useToken, useTypeToken),
-      declarations.elementsAndSeparators(Functions.<UseClauseTree>identity()),
+      declarations.elementsAndSeparators(),
       Iterators.singletonIterator(eosToken)
       );
   }

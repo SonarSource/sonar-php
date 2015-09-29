@@ -30,7 +30,6 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 
 import javax.annotation.Nullable;
@@ -87,7 +86,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
     return Iterators.concat(
       Iterators.singletonIterator(callee),
       Iterators.singletonIterator(openParenthesisToken),
-      arguments.elementsAndSeparators(Functions.<ExpressionTree>identity()),
+      arguments.elementsAndSeparators(),
       Iterators.singletonIterator(closeParenthesisToken));
   }
 

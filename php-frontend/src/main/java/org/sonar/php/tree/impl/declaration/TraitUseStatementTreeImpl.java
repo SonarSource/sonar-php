@@ -34,7 +34,6 @@ import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 
@@ -120,7 +119,7 @@ public class TraitUseStatementTreeImpl extends PHPTree implements TraitUseStatem
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.singletonIterator(useToken),
-      traits.elementsAndSeparators(Functions.<NamespaceNameTree>identity()),
+      traits.elementsAndSeparators(),
       Iterators.singletonIterator(openCurlyBraceToken),
       adaptations.iterator(),
       Iterators.forArray(closeCurlyBraceToken, eosToken));

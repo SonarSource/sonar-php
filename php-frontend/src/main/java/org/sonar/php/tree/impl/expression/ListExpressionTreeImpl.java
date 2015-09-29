@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
@@ -77,7 +76,7 @@ public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTre
     return Iterators.concat(
       Iterators.singletonIterator(listToken),
       Iterators.singletonIterator(openParenthesis),
-      elements.elementsAndSeparators(Functions.<ExpressionTree>identity()),
+      elements.elementsAndSeparators(),
       Iterators.singletonIterator(closeParenthesis));
   }
 

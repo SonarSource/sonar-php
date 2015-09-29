@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
@@ -70,7 +69,7 @@ public class GlobalStatementTreeImpl extends PHPTree implements GlobalStatementT
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.singletonIterator(globalToken),
-        variables.elementsAndSeparators(Functions.<VariableTree>identity()),
+        variables.elementsAndSeparators(),
         Iterators.singletonIterator(eosToken)
     );
   }

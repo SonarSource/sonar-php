@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.statement;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
@@ -145,11 +144,11 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.forArray(forToken(), openParenthesisToken()),
-        init().elementsAndSeparators(Functions.<ExpressionTree>identity()),
+        init().elementsAndSeparators(),
         Iterators.singletonIterator(firstSemicolonToken()),
-        condition().elementsAndSeparators(Functions.<ExpressionTree>identity()),
+        condition().elementsAndSeparators(),
         Iterators.singletonIterator(secondSemicolonToken()),
-        update().elementsAndSeparators(Functions.<ExpressionTree>identity()),
+        update().elementsAndSeparators(),
         Iterators.forArray(closeParenthesisToken(), colonToken),
         statements.iterator(),
         Iterators.forArray(endForToken, eosToken));

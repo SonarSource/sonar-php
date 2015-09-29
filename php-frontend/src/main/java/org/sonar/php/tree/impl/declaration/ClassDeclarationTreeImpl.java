@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
@@ -134,7 +133,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
         Iterators.forArray(modifierToken, classEntryTypeToken, name, extendsToken, superClass, implementsToken),
-        superInterfaces.elementsAndSeparators(Functions.<NamespaceNameTree>identity()),
+        superInterfaces.elementsAndSeparators(),
         Iterators.singletonIterator(openCurlyBraceToken),
         members.iterator(),
         Iterators.singletonIterator(closeCurlyBraceToken)
