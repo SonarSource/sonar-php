@@ -30,6 +30,7 @@ public class GlobalStatementTest  {
   public void test() {
     assertThat(PHPLexicalGrammar.GLOBAL_STATEMENT)
       .matches("global $a;")
+      .matches("global $$a, $$b;")
       .matches("global ${$a};")
       .matches("global $a, $b;");
   }

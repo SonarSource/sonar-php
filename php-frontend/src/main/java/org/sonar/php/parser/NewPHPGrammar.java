@@ -554,11 +554,17 @@ public class NewPHPGrammar {
     return b.<GlobalStatementTree>nonterminal(PHPLexicalGrammar.GLOBAL_STATEMENT)
         .is(f.globalStatement(
             b.token(PHPKeyword.GLOBAL),
-            // fixme (Lena) : should be GLOBAL_VAR instead of COMPOUND_VARIABLE
-            COMPOUND_VARIABLE(),
-            b.zeroOrMore(f.newTuple16(b.token(COMMA), COMPOUND_VARIABLE())),
+            GLOBAL_VAR(),
+            b.zeroOrMore(f.newTuple16(b.token(COMMA), GLOBAL_VAR())),
             EOS()
         ));
+  }
+
+  public VariableTree GLOBAL_VAR() {
+    return b.<VariableTree>nonterminal(PHPLexicalGrammar.GLOBAL_VAR).is(
+      f.globalVar(
+        b.zeroOrMore(b.token(PHPLexicalGrammar.VARIABLE_VARIABLE_DOLLAR)),
+        COMPOUND_VARIABLE()));
   }
 
   public UnsetVariableStatementTree UNSET_VARIABLE_STATEMENT() {

@@ -444,6 +444,13 @@ public class TreeFactory {
     );
   }
 
+  public VariableTree globalVar(Optional<List<InternalSyntaxToken>> dollars, VariableTree variableTree) {
+    if (dollars.isPresent()) {
+      return new VariableVariableTreeImpl(dollars.get(), variableTree);
+    }
+    return variableTree;
+  }
+
   public UseStatementTree useStatement(
       InternalSyntaxToken useToken,
       Optional<InternalSyntaxToken> useTypeToken,

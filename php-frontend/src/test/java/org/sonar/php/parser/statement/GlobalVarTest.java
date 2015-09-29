@@ -20,14 +20,17 @@
 package org.sonar.php.parser.statement;
 
 import org.junit.Test;
+import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class GlobalVarTest {
 
   @Test
   public void test() {
-    // fixme (Lena): define GLOBAL_VAR
-//    assertThat(PHPLexicalGrammar.GLOBAL_VAR)
-//      .matches("$a")
-//      .matches("$$a");
+    assertThat(PHPLexicalGrammar.GLOBAL_VAR)
+      .matches("$a")
+      .matches("$$a")
+      .matches("$$$a");
   }
 }
