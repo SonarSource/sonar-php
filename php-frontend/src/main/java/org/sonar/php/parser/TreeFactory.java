@@ -43,8 +43,8 @@ import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitUseStatementTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
-import org.sonar.php.tree.impl.expression.ArrayInitialiserBracketTreeImpl;
-import org.sonar.php.tree.impl.expression.ArrayInitialiserFunctionTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayPairTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.BinaryExpressionTreeImpl;
@@ -112,7 +112,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -1282,7 +1282,7 @@ public class TreeFactory {
     return new ArrayPairTreeImpl(referenceVariableTree);
   }
 
-  public SeparatedList<ArrayPairTree> arrayInitialiserList(
+  public SeparatedList<ArrayPairTree> arrayInitializerList(
     ArrayPairTree firstElement,
     Optional<List<Tuple<InternalSyntaxToken, ArrayPairTree>>> restElements,
     Optional<InternalSyntaxToken> trailingComma
@@ -1290,20 +1290,20 @@ public class TreeFactory {
     return separatedList(firstElement, restElements, trailingComma.orNull());
   }
 
-  public ArrayInitialiserTree newArrayInitFunction(
+  public ArrayInitializerTree newArrayInitFunction(
     InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis,
     Optional<SeparatedList<ArrayPairTree>> elements,
     InternalSyntaxToken closeParenthesis
   ) {
-    return new ArrayInitialiserFunctionTreeImpl(
+    return new ArrayInitializerFunctionTreeImpl(
       arrayToken,
       openParenthesis,
       elements.isPresent() ? elements.get() : new SeparatedList<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
       closeParenthesis);
   }
 
-  public ArrayInitialiserTree newArrayInitBracket(InternalSyntaxToken openBracket, Optional<SeparatedList<ArrayPairTree>> elements, InternalSyntaxToken closeBracket) {
-    return new ArrayInitialiserBracketTreeImpl(
+  public ArrayInitializerTree newArrayInitBracket(InternalSyntaxToken openBracket, Optional<SeparatedList<ArrayPairTree>> elements, InternalSyntaxToken closeBracket) {
+    return new ArrayInitializerBracketTreeImpl(
       openBracket,
       elements.isPresent() ? elements.get() : new SeparatedList<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
       closeBracket);

@@ -23,18 +23,17 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserFunctionTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class ArrayInitialiserFunctionTreeTest extends PHPTreeModelTest {
+public class ArrayInitializerFunctionTreeTest extends PHPTreeModelTest {
 
   @Test
   public void empty() throws Exception {
-    ArrayInitialiserFunctionTree tree = parse("array()", PHPLexicalGrammar.COMBINED_SCALAR);
+    ArrayInitializerFunctionTree tree = parse("array()", PHPLexicalGrammar.COMBINED_SCALAR);
 
-    assertThat(tree.is(Kind.ARRAY_INITIALISER_FUNCTION)).isTrue();
+    assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();
 
     assertThat(tree.arrayToken().text()).isEqualTo("array");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
@@ -44,9 +43,9 @@ public class ArrayInitialiserFunctionTreeTest extends PHPTreeModelTest {
 
   @Test
   public void non_empty() throws Exception {
-    ArrayInitialiserFunctionTree tree = parse("array($a, $b, $c)", PHPLexicalGrammar.COMBINED_SCALAR);
+    ArrayInitializerFunctionTree tree = parse("array($a, $b, $c)", PHPLexicalGrammar.COMBINED_SCALAR);
 
-    assertThat(tree.is(Kind.ARRAY_INITIALISER_FUNCTION)).isTrue();
+    assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();
 
     assertThat(tree.arrayToken().text()).isEqualTo("array");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
@@ -60,9 +59,9 @@ public class ArrayInitialiserFunctionTreeTest extends PHPTreeModelTest {
 
   @Test
   public void with_trailing_comma() throws Exception {
-    ArrayInitialiserFunctionTree tree = parse("array($a,)", PHPLexicalGrammar.COMBINED_SCALAR);
+    ArrayInitializerFunctionTree tree = parse("array($a,)", PHPLexicalGrammar.COMBINED_SCALAR);
 
-    assertThat(tree.is(Kind.ARRAY_INITIALISER_FUNCTION)).isTrue();
+    assertThat(tree.is(Kind.ARRAY_INITIALIZER_FUNCTION)).isTrue();
 
     assertThat(tree.arrayToken().text()).isEqualTo("array");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");

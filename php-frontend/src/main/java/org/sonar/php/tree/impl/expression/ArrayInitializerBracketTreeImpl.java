@@ -24,21 +24,21 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
 import java.util.Iterator;
 
-public class ArrayInitialiserBracketTreeImpl extends PHPTree implements ArrayInitialiserBracketTree {
+public class ArrayInitializerBracketTreeImpl extends PHPTree implements ArrayInitializerBracketTree {
 
-  private static final Kind KIND = Kind.ARRAY_INITIALISER_BRACKET;
+  private static final Kind KIND = Kind.ARRAY_INITIALIZER_BRACKET;
   private final InternalSyntaxToken openBracket;
   private final SeparatedList<ArrayPairTree> arrayPairs;
   private final InternalSyntaxToken closeBracket;
 
-  public ArrayInitialiserBracketTreeImpl(InternalSyntaxToken openBracket, SeparatedList<ArrayPairTree> arrayPairs, InternalSyntaxToken closeBracket) {
+  public ArrayInitializerBracketTreeImpl(InternalSyntaxToken openBracket, SeparatedList<ArrayPairTree> arrayPairs, InternalSyntaxToken closeBracket) {
     this.openBracket = openBracket;
     this.arrayPairs = arrayPairs;
     this.closeBracket = closeBracket;
@@ -74,7 +74,7 @@ public class ArrayInitialiserBracketTreeImpl extends PHPTree implements ArrayIni
 
   @Override
   public void accept(TreeVisitor visitor) {
-    visitor.visitArrayInitialiserBracket(this);
+    visitor.visitArrayInitializerBracket(this);
   }
 
 }

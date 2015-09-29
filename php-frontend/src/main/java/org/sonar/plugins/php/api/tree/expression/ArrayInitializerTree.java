@@ -19,21 +19,12 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import org.sonar.php.tree.impl.SeparatedList;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
 import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.SeparatedList;
 
 @Beta
-public interface ArrayInitialiserFunctionTree extends ArrayInitialiserTree {
+public interface ArrayInitializerTree extends ExpressionTree {
 
-  SyntaxToken arrayToken();
-
-  SyntaxToken openParenthesisToken();
-
-  @Override
   SeparatedList<ArrayPairTree> arrayPairs();
-
-  SyntaxToken closeParenthesisToken();
 
 }

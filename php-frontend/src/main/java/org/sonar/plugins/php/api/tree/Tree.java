@@ -31,8 +31,8 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserFunctionTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -256,14 +256,14 @@ public interface Tree {
     ARRAY_PAIR(ArrayPairTree.class),
 
     /**
-     * {@link ArrayInitialiserFunctionTree}
+     * {@link ArrayInitializerFunctionTree}
      */
-    ARRAY_INITIALISER_FUNCTION(ArrayInitialiserFunctionTree.class),
+    ARRAY_INITIALIZER_FUNCTION(ArrayInitializerFunctionTree.class),
 
     /**
-     * {@link ArrayInitialiserBracketTree}
+     * {@link ArrayInitializerBracketTree}
      */
-    ARRAY_INITIALISER_BRACKET(ArrayInitialiserBracketTree.class),
+    ARRAY_INITIALIZER_BRACKET(ArrayInitializerBracketTree.class),
 
     /**
      * {@link FunctionExpressionTree}

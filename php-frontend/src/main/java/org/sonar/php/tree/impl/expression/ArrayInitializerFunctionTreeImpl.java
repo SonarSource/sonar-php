@@ -24,22 +24,22 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserFunctionTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
 import java.util.Iterator;
 
-public class ArrayInitialiserFunctionTreeImpl extends PHPTree implements ArrayInitialiserFunctionTree {
+public class ArrayInitializerFunctionTreeImpl extends PHPTree implements ArrayInitializerFunctionTree {
 
-  private static final Kind KIND = Kind.ARRAY_INITIALISER_FUNCTION;
+  private static final Kind KIND = Kind.ARRAY_INITIALIZER_FUNCTION;
   private final InternalSyntaxToken arrayToken;
   private final InternalSyntaxToken openParenthesis;
   private final SeparatedList<ArrayPairTree> arrayPairs;
   private final InternalSyntaxToken closeParenthesis;
 
-  public ArrayInitialiserFunctionTreeImpl(InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis, SeparatedList<ArrayPairTree> arrayPairs, InternalSyntaxToken closeParenthesis) {
+  public ArrayInitializerFunctionTreeImpl(InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis, SeparatedList<ArrayPairTree> arrayPairs, InternalSyntaxToken closeParenthesis) {
     this.arrayToken = arrayToken;
     this.openParenthesis = openParenthesis;
     this.arrayPairs = arrayPairs;
@@ -82,7 +82,7 @@ public class ArrayInitialiserFunctionTreeImpl extends PHPTree implements ArrayIn
 
   @Override
   public void accept(TreeVisitor visitor) {
-    visitor.visitArrayInitialiserFunction(this);
+    visitor.visitArrayInitializerFunction(this);
   }
 
 }

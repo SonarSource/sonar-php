@@ -32,8 +32,8 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserFunctionTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -224,7 +224,7 @@ public interface TreeVisitor {
 
   void visitVariableVariable(VariableVariableTree variableVariableTree);
 
-  void visitReferenceVariable(ReferenceVariableTree refereneVariableTree);
+  void visitReferenceVariable(ReferenceVariableTree referenceVariableTree);
 
   void visitSpreadArgument(SpreadArgumentTree spreadArgumentTree);
 
@@ -234,9 +234,9 @@ public interface TreeVisitor {
 
   void visitArrayPair(ArrayPairTree arrayPairTree);
 
-  void visitArrayInitialiserFunction(ArrayInitialiserFunctionTree arrayInitialiserFunctionTree);
+  void visitArrayInitializerFunction(ArrayInitializerFunctionTree arrayInitializerFunctionTree);
 
-  void visitArrayInitialiserBracket(ArrayInitialiserBracketTree arrayInitialiserBracketTree);
+  void visitArrayInitializerBracket(ArrayInitializerBracketTree arrayInitializerBracketTree);
 
   void visitScript(ScriptTree tree);
 

@@ -41,7 +41,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
@@ -1369,8 +1369,8 @@ public class NewPHPGrammar {
       ));
   }
 
-  public ArrayInitialiserTree ARRAY_INITIALISER() {
-    return b.<ArrayInitialiserTree>nonterminal(PHPLexicalGrammar.COMBINED_SCALAR)
+  public ArrayInitializerTree ARRAY_INITIALIZER() {
+    return b.<ArrayInitializerTree>nonterminal(PHPLexicalGrammar.COMBINED_SCALAR)
       .is(b.firstOf(
         f.newArrayInitFunction(b.token(ARRAY), b.token(LPARENTHESIS), b.optional(ARRAY_PAIR_LIST()), b.token(RPARENTHESIS)),
         f.newArrayInitBracket(b.token(LBRACKET), b.optional(ARRAY_PAIR_LIST()), b.token(RBRACKET))
@@ -1379,8 +1379,8 @@ public class NewPHPGrammar {
   }
 
   public SeparatedList<ArrayPairTree> ARRAY_PAIR_LIST() {
-    return b.<SeparatedList>nonterminal(PHPLexicalGrammar.ARRAY_PAIR_LIST)
-      .is(f.arrayInitialiserList(
+    return b.<SeparatedList<ArrayPairTree>>nonterminal(PHPLexicalGrammar.ARRAY_PAIR_LIST)
+      .is(f.arrayInitializerList(
         ARRAY_PAIR(),
         b.zeroOrMore(f.newTuple17(b.token(COMMA), ARRAY_PAIR())),
         b.optional(b.token(COMMA))

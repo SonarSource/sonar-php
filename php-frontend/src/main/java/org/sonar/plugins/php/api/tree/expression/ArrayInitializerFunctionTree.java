@@ -25,13 +25,15 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import com.google.common.annotations.Beta;
 
 @Beta
-public interface ArrayInitialiserBracketTree extends ArrayInitialiserTree {
+public interface ArrayInitializerFunctionTree extends ArrayInitializerTree {
 
-  SyntaxToken openBracketToken();
+  SyntaxToken arrayToken();
+
+  SyntaxToken openParenthesisToken();
 
   @Override
   SeparatedList<ArrayPairTree> arrayPairs();
 
-  SyntaxToken closeBracketToken();
+  SyntaxToken closeParenthesisToken();
 
 }
