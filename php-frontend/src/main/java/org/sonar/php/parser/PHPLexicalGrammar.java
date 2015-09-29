@@ -240,8 +240,18 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   REGULAR_STRING_LITERAL,
   VARIABLE_VARIABLE_DOLLAR,
 
+  ISSET,
+  EMPTY,
   WHITESPACES,
-  EXPRESSION, TRAIT_DECLARATION;
+  TRAIT_DECLARATION,
+  EXPRESSION,
+  INCLUDE_ONCE,
+  INCLUDE,
+  EVAL,
+  REQUIRE_ONCE,
+  REQUIRE,
+  CLONE,
+  PRINT;
 
 
 
@@ -310,6 +320,16 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
 
     b.rule(NEXT_IS_DOLLAR).is(b.next(PHPPunctuator.DOLLAR));
     b.rule(VARIABLE_VARIABLE_DOLLAR).is(PHPPunctuator.DOLLAR, b.nextNot(b.firstOf(IDENTIFIER, KEYWORDS, PHPPunctuator.LCURLYBRACE)));
+
+    b.rule(ISSET).is(word(b, "ISSET")).skip();
+    b.rule(EMPTY).is(word(b, "EMPTY")).skip();
+    b.rule(INCLUDE_ONCE).is(word(b, "INCLUDE_ONCE")).skip();
+    b.rule(INCLUDE).is(word(b, "INCLUDE")).skip();
+    b.rule(EVAL).is(word(b, "EVAL")).skip();
+    b.rule(REQUIRE_ONCE).is(word(b, "REQUIRE_ONCE")).skip();
+    b.rule(REQUIRE).is(word(b, "REQUIRE")).skip();
+    b.rule(CLONE).is(word(b, "CLONE")).skip();
+    b.rule(PRINT).is(word(b, "PRINT")).skip();
   }
 
   private static void keywords(LexerlessGrammarBuilder b) {

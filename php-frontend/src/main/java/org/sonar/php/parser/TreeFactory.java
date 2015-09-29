@@ -1105,6 +1105,28 @@ public class TreeFactory {
     return new LexicalVariablesTreeImpl(useToken, openParenthesis, separatedList(variable, variableRest), closeParenthesis);
   }
 
+  public FunctionCallTree internalFunction1(InternalSyntaxToken issetToken, InternalSyntaxToken openParenthesis, ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressionRest, InternalSyntaxToken closeParenthesis) {
+    return new FunctionCallTreeImpl(
+      new IdentifierTreeImpl(issetToken),
+      openParenthesis,
+      separatedList(expression, expressionRest),
+      closeParenthesis);
+  }
+
+  public FunctionCallTree internalFunction2(InternalSyntaxToken functionNameToken, InternalSyntaxToken openParenthesis, ExpressionTree expression, InternalSyntaxToken closeParenthesis) {
+    return new FunctionCallTreeImpl(
+      new IdentifierTreeImpl(functionNameToken),
+      openParenthesis,
+      new SeparatedList(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()),
+      closeParenthesis);
+  }
+
+  public FunctionCallTree internalFunction3(InternalSyntaxToken includeOnceToken, ExpressionTree expression) {
+    return new FunctionCallTreeImpl(
+      new IdentifierTreeImpl(includeOnceToken),
+      new SeparatedList(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()));
+  }
+
   /**
    * [ END ] Expression
    */

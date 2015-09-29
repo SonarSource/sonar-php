@@ -19,8 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import java.util.Iterator;
-
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -30,9 +29,8 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.collect.Iterators;
-
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
 
@@ -41,6 +39,20 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   private final InternalSyntaxToken openParenthesisToken;
   private final SeparatedList arguments;
   private final InternalSyntaxToken closeParenthesisToken;
+
+  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedList arguments, InternalSyntaxToken closeParenthesisToken) {
+    this.callee = callee;
+    this.openParenthesisToken = openParenthesisToken;
+    this.arguments = arguments;
+    this.closeParenthesisToken = closeParenthesisToken;
+  }
+
+  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedList arguments) {
+    this.callee = callee;
+    this.openParenthesisToken = null;
+    this.arguments = arguments;
+    this.closeParenthesisToken = null;
+  }
 
   public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedList arguments, InternalSyntaxToken closeParenthesisToken) {
     this.openParenthesisToken = openParenthesisToken;

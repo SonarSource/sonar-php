@@ -1186,6 +1186,29 @@ public class NewPHPGrammar {
         EXPRESSION()));
   }
 
+  public FunctionCallTree INTERNAL_FUNCTION() {
+    return b.<FunctionCallTree>nonterminal(PHPLexicalGrammar.INTERNAL_FUNCTION)
+      .is(b.firstOf(
+        f.internalFunction1(b.token(PHPLexicalGrammar.ISSET), b.token(LPARENTHESIS), EXPRESSION(), b.zeroOrMore(f.newTuple15(b.token(COMMA), EXPRESSION())), b.token(RPARENTHESIS)),
+
+        f.internalFunction2(
+          b.firstOf(
+            b.token(PHPLexicalGrammar.EMPTY),
+            b.token(PHPLexicalGrammar.EVAL)),
+          b.token(LPARENTHESIS), EXPRESSION(), b.token(RPARENTHESIS)),
+
+        f.internalFunction3(
+          b.firstOf(
+            b.token(PHPLexicalGrammar.INCLUDE_ONCE),
+            b.token(PHPLexicalGrammar.INCLUDE),
+            b.token(PHPLexicalGrammar.REQUIRE_ONCE),
+            b.token(PHPLexicalGrammar.REQUIRE),
+            b.token(PHPLexicalGrammar.CLONE),
+            b.token(PHPLexicalGrammar.PRINT)),
+          EXPRESSION())
+      ));
+  }
+
   /**
    * [ END ] Expression
    */
