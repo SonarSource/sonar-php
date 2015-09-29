@@ -364,6 +364,12 @@ public interface Tree {
 
     /**
      * {@link BinaryExpressionTree}
+     * {@code .}
+     */
+    CONCATENATION(BinaryExpressionTree.class),
+
+    /**
+     * {@link BinaryExpressionTree}
      * {@code *}
      */
     MULTIPLY(BinaryExpressionTree.class),
@@ -510,6 +516,12 @@ public interface Tree {
      * {@code or}
      */
     ALTERNATIVE_CONDITIONAL_OR(BinaryExpressionTree.class),
+
+    /**
+     * {@link BinaryExpressionTree}
+     * {@code xor}
+     */
+    ALTERNATIVE_CONDITIONAL_XOR(BinaryExpressionTree.class),
 
     /**
      * {@link ConditionalExpressionTree}

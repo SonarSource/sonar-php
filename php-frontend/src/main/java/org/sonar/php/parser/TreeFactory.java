@@ -21,9 +21,12 @@ package org.sonar.php.parser;
 
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
 import org.sonar.php.tree.impl.ScriptTreeImpl;
+import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
@@ -44,6 +47,7 @@ import org.sonar.php.tree.impl.expression.ArrayInitialiserBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitialiserFunctionTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayPairTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.BinaryExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
@@ -171,9 +175,38 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 public class TreeFactory {
+
+  private static final Map<String, Kind> BINARY_EXPRESSION_KINDS_BY_OPERATOR = ImmutableMap.<String, Kind>builder()
+    .put(PHPPunctuator.DOT.getValue(), Kind.CONCATENATION)
+    .put(PHPPunctuator.STAR.getValue(), Kind.MULTIPLY)
+    .put(PHPPunctuator.DIV.getValue(), Kind.DIVIDE)
+    .put(PHPPunctuator.MOD.getValue(), Kind.REMAINDER)
+    .put(PHPPunctuator.PLUS.getValue(), Kind.PLUS)
+    .put(PHPPunctuator.MINUS.getValue(), Kind.MINUS)
+    .put(PHPPunctuator.SL.getValue(), Kind.LEFT_SHIFT)
+    .put(PHPPunctuator.SR.getValue(), Kind.RIGHT_SHIFT)
+    .put(PHPPunctuator.LT.getValue(), Kind.LESS_THAN)
+    .put(PHPPunctuator.GT.getValue(), Kind.GREATER_THAN)
+    .put(PHPPunctuator.LE.getValue(), Kind.LESS_THAN_OR_EQUAL_TO)
+    .put(PHPPunctuator.GE.getValue(), Kind.GREATER_THAN_OR_EQUAL_TO)
+    .put(PHPPunctuator.EQUAL.getValue(), Kind.EQUAL_TO)
+    .put(PHPPunctuator.EQUAL2.getValue(), Kind.STRICT_EQUAL_TO)
+    .put(PHPPunctuator.NOTEQUAL.getValue(), Kind.NOT_EQUAL_TO)
+    .put(PHPPunctuator.NOTEQUAL2.getValue(), Kind.STRICT_NOT_EQUAL_TO)
+    .put(PHPPunctuator.NOTEQUALBIS.getValue(), Kind.ALTERNATIVE_NOT_EQUAL_TO)
+    .put(PHPPunctuator.AMPERSAND.getValue(), Kind.BITWISE_AND)
+    .put(PHPPunctuator.XOR.getValue(), Kind.BITWISE_XOR)
+    .put(PHPPunctuator.OR.getValue(), Kind.BITWISE_OR)
+    .put(PHPPunctuator.ANDAND.getValue(), Kind.CONDITIONAL_AND)
+    .put(PHPPunctuator.OROR.getValue(), Kind.CONDITIONAL_OR)
+    .put(PHPKeyword.AND.getValue(), Kind.ALTERNATIVE_CONDITIONAL_AND)
+    .put(PHPKeyword.XOR.getValue(), Kind.ALTERNATIVE_CONDITIONAL_XOR)
+    .put(PHPKeyword.OR.getValue(), Kind.ALTERNATIVE_CONDITIONAL_OR)
+    .build();
 
   private static <T extends Tree> List<T> optionalList(Optional<List<T>> list) {
     if (list.isPresent()) {
@@ -907,6 +940,74 @@ public class TreeFactory {
    * [ START ] Expression
    */
 
+  public ExpressionTree concatenationExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree multiplicativeExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree additiveExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree shiftExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree relationalExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree equalityExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree bitwiseAndExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree bitwiseXorExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree bitwiseOrExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree logicalAndExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree logicalXorExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  public ExpressionTree logicalOrExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return binaryExpression(exp1, operatorsAndOperands);
+  }
+
+  private ExpressionTree binaryExpression(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    if (!operatorsAndOperands.isPresent()) {
+      return exp1;
+    }
+
+    ExpressionTree result = exp1;
+    for (Tuple<InternalSyntaxToken, ExpressionTree> t : operatorsAndOperands.get()) {
+      result = new BinaryExpressionTreeImpl(binaryKind(t.first()), result, t.first(), t.second());
+    }
+    return result;
+  }
+
+  private static Kind binaryKind(InternalSyntaxToken token) {
+    Kind kind = BINARY_EXPRESSION_KINDS_BY_OPERATOR.get(token.text());
+    if (kind == null) {
+      throw new IllegalArgumentException("Mapping not found for binary operator " + token.text());
+    }
+    return kind;
+  }
+
   public LiteralTree numericLiteral(InternalSyntaxToken token) {
     return new LiteralTreeImpl(Tree.Kind.NUMERIC_LITERAL, token);
   }
@@ -1378,6 +1479,54 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple55(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple60(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple61(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple62(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple63(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple64(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple65(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple66(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple67(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple68(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple69(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple70(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple71(T first, U second) {
     return newTuple(first, second);
   }
   

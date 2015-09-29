@@ -17,23 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 
-public class EqualityExpressionTest {
+public class BinaryExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.EQUALITY_EXPR)
-      .matches("$a")
-      .matches("$a <> $a")
-      .matches("$a == $a")
-      .matches("$a === $a")
-      .matches("$a != $a")
-      .matches("$a !== $a");
+  public void concatenation() throws Exception {
+    BinaryExpressionTree tree = parse("$a . $b", PHPLexicalGrammar.CONCATENATION_EXPR);
+    assertThat(tree.is(Kind.CONCATENATION)).isTrue();
+    assertThat(tree.leftOperand().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.leftOperand())).isEqualTo("$a");
+    assertThat(tree.operator().text()).isEqualTo(".");
+    assertThat(tree.rightOperand().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.rightOperand())).isEqualTo("$b");
   }
+
 }

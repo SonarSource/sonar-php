@@ -112,17 +112,34 @@ import static org.sonar.php.api.PHPPunctuator.AMPERSAND;
 import static org.sonar.php.api.PHPPunctuator.ARROW;
 import static org.sonar.php.api.PHPPunctuator.COLON;
 import static org.sonar.php.api.PHPPunctuator.COMMA;
+import static org.sonar.php.api.PHPPunctuator.DIV;
 import static org.sonar.php.api.PHPPunctuator.DOLLAR_LCURLY;
+import static org.sonar.php.api.PHPPunctuator.DOT;
 import static org.sonar.php.api.PHPPunctuator.DOUBLEARROW;
 import static org.sonar.php.api.PHPPunctuator.DOUBLECOLON;
 import static org.sonar.php.api.PHPPunctuator.ELIPSIS;
 import static org.sonar.php.api.PHPPunctuator.EQU;
+import static org.sonar.php.api.PHPPunctuator.EQUAL;
+import static org.sonar.php.api.PHPPunctuator.EQUAL2;
+import static org.sonar.php.api.PHPPunctuator.GE;
+import static org.sonar.php.api.PHPPunctuator.GT;
 import static org.sonar.php.api.PHPPunctuator.LBRACKET;
 import static org.sonar.php.api.PHPPunctuator.LCURLYBRACE;
+import static org.sonar.php.api.PHPPunctuator.LE;
 import static org.sonar.php.api.PHPPunctuator.LPARENTHESIS;
+import static org.sonar.php.api.PHPPunctuator.LT;
+import static org.sonar.php.api.PHPPunctuator.MINUS;
+import static org.sonar.php.api.PHPPunctuator.MOD;
+import static org.sonar.php.api.PHPPunctuator.NOTEQUAL;
+import static org.sonar.php.api.PHPPunctuator.NOTEQUAL2;
+import static org.sonar.php.api.PHPPunctuator.NOTEQUALBIS;
+import static org.sonar.php.api.PHPPunctuator.PLUS;
 import static org.sonar.php.api.PHPPunctuator.RBRACKET;
 import static org.sonar.php.api.PHPPunctuator.RCURLYBRACE;
 import static org.sonar.php.api.PHPPunctuator.RPARENTHESIS;
+import static org.sonar.php.api.PHPPunctuator.SL;
+import static org.sonar.php.api.PHPPunctuator.SR;
+import static org.sonar.php.api.PHPPunctuator.STAR;
 
 public class NewPHPGrammar {
 
@@ -890,6 +907,122 @@ public class NewPHPGrammar {
   /**
    * [ START ] Expression
    */
+
+  // FIXME Fake implementation
+  public ExpressionTree UNARY_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.UNARY_EXPR).is(
+      b.firstOf(
+        COMMON_SCALAR(),
+        EXPRESSION()));
+  }
+
+  public ExpressionTree CONCATENATION_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.CONCATENATION_EXPR).is(
+      f.concatenationExpr(
+        UNARY_EXPR(),
+        b.zeroOrMore(f.newTuple60(
+          b.token(DOT),
+          UNARY_EXPR()))));
+  }
+
+  public ExpressionTree MULTIPLICATIVE_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MULTIPLICATIVE_EXPR).is(
+      f.multiplicativeExpr(
+        CONCATENATION_EXPR(),
+        b.zeroOrMore(f.newTuple61(
+          b.firstOf(b.token(STAR), b.token(DIV), b.token(MOD)),
+          CONCATENATION_EXPR()))));
+  }
+
+  public ExpressionTree ADDITIVE_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.ADDITIVE_EXPR).is(
+      f.additiveExpr(
+        MULTIPLICATIVE_EXPR(),
+        b.zeroOrMore(f.newTuple62(
+          b.firstOf(b.token(PLUS), b.token(MINUS)),
+          MULTIPLICATIVE_EXPR()))));
+  }
+
+  public ExpressionTree SHIFT_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SHIFT_EXPR).is(
+      f.shiftExpr(
+        ADDITIVE_EXPR(),
+        b.zeroOrMore(f.newTuple63(
+          b.firstOf(b.token(SL), b.token(SR)),
+          ADDITIVE_EXPR()))));
+  }
+
+  public ExpressionTree RELATIONAL_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.RELATIONAL_EXPR).is(
+      f.relationalExpr(
+        SHIFT_EXPR(),
+        b.zeroOrMore(f.newTuple64(
+          b.firstOf(b.token(LE), b.token(GE), b.token(LT), b.token(GT)),
+          SHIFT_EXPR()))));
+  }
+
+  public ExpressionTree EQUALITY_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EQUALITY_EXPR).is(
+      f.equalityExpr(
+        RELATIONAL_EXPR(),
+        b.zeroOrMore(f.newTuple65(
+          b.firstOf(b.token(NOTEQUAL2), b.token(NOTEQUAL), b.token(EQUAL2), b.token(EQUAL), b.token(NOTEQUALBIS)),
+          RELATIONAL_EXPR()))));
+  }
+
+  public ExpressionTree BITEWISE_AND_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.BITEWISE_AND_EXPR).is(
+      f.bitwiseAndExpr(
+        EQUALITY_EXPR(),
+        b.zeroOrMore(f.newTuple66(
+          b.token(PHPPunctuator.AMPERSAND),
+          EQUALITY_EXPR()))));
+  }
+
+  public ExpressionTree BITEWISE_XOR_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.BITEWISE_XOR_EXPR).is(
+      f.bitwiseXorExpr(
+        BITEWISE_AND_EXPR(),
+        b.zeroOrMore(f.newTuple67(
+          b.token(PHPPunctuator.XOR),
+          BITEWISE_AND_EXPR()))));
+  }
+
+  public ExpressionTree BITEWISE_OR_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.BITEWISE_OR_EXPR).is(
+      f.bitwiseOrExpr(
+        BITEWISE_XOR_EXPR(),
+        b.zeroOrMore(f.newTuple68(
+          b.token(PHPPunctuator.OR),
+          BITEWISE_XOR_EXPR()))));
+  }
+
+  public ExpressionTree LOGICAL_AND_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.LOGICAL_AND_EXPR).is(
+      f.logicalAndExpr(
+        BITEWISE_OR_EXPR(),
+        b.zeroOrMore(f.newTuple69(
+          b.firstOf(b.token(PHPPunctuator.ANDAND), b.token(PHPKeyword.AND)),
+          BITEWISE_OR_EXPR()))));
+  }
+
+  public ExpressionTree LOGICAL_XOR_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.LOGICAL_XOR_EXPR).is(
+      f.logicalXorExpr(
+        LOGICAL_AND_EXPR(),
+        b.zeroOrMore(f.newTuple70(
+          b.token(PHPKeyword.XOR),
+          LOGICAL_AND_EXPR()))));
+  }
+
+  public ExpressionTree LOGICAL_OR_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.LOGICAL_OR_EXPR).is(
+      f.logicalOrExpr(
+        LOGICAL_XOR_EXPR(),
+        b.zeroOrMore(f.newTuple71(
+          b.firstOf(b.token(PHPPunctuator.OROR), b.token(PHPKeyword.OR)),
+          LOGICAL_XOR_EXPR()))));
+  }
 
   public ExpressionTree COMMON_SCALAR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.COMMON_SCALAR)

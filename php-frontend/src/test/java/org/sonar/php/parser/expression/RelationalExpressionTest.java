@@ -19,24 +19,20 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class RelationalExpressionTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.RELATIONAL_EXPR);
-  }
+public class RelationalExpressionTest {
 
   @Test
   public void test() {
-    matches("$a");
-    matches("$a < $a");
-    matches("$a > $a");
-    matches("$a >= $a");
-    matches("$a <= $a");
+    assertThat(PHPLexicalGrammar.RELATIONAL_EXPR)
+      .matches("$a")
+      .matches("$a < $a")
+      .matches("$a > $a")
+      .matches("$a >= $a")
+      .matches("$a <= $a");
   }
 }

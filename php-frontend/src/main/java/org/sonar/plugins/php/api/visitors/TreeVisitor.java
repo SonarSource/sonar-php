@@ -36,6 +36,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
@@ -192,6 +193,8 @@ public interface TreeVisitor {
   /**
    * [ END ] Statement
    */
+
+  void visitBinaryExpression(BinaryExpressionTree tree);
 
   void visitVariableIdentifier(VariableIdentifierTree tree);
 

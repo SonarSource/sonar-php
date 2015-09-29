@@ -19,23 +19,18 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
+import static org.sonar.php.utils.Assertions.assertThat;
+
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class LogicalOrExpressionTest extends RuleTest {
-
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.LOGICAL_OR_EXPR);
-  }
+public class LogicalOrExpressionTest {
 
   @Test
   public void test() {
-
-    matches("$a");
-    matches("$a || $a");
-    matches("$a or $a");
+    assertThat(PHPLexicalGrammar.LOGICAL_OR_EXPR)
+      .matches("$a")
+      .matches("$a || $a")
+      .matches("$a or $a");
   }
 }
