@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -122,6 +123,8 @@ public interface TreeVisitor {
   /**
    * [ START ] Statement
    */
+
+  void visitConstDeclaration(ConstantDeclarationTree tree);
 
   void visitStaticStatement(StaticStatementTree tree);
 

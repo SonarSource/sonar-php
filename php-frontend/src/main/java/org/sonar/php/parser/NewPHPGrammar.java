@@ -31,6 +31,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -139,7 +140,16 @@ public class NewPHPGrammar {
             b.optional(f.newTuple18(b.token(EQU), STATIC_SCALAR()))
         ));
   }
-  
+
+  public VariableDeclarationTree CONST_VAR() {
+    return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.CONSTANT_VAR)
+        .is(f.constDeclaration(
+            b.token(PHPLexicalGrammar.IDENTIFIER),
+            b.token(EQU),
+            STATIC_SCALAR()
+        ));
+  }
+
   public VariableDeclarationTree VARIABLE_DECLARATION() {
     return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.VARIABLE_DECLARATION)
         .is(f.variableDeclaration(
@@ -168,7 +178,7 @@ public class NewPHPGrammar {
               b.token(PHPLexicalGrammar.IDENTIFIER)))
     );
   }
-  
+
   public UseClauseTree USE_CLAUSE() {
     return b.<UseClauseTree>nonterminal(PHPLexicalGrammar.USE_DECLARATION).is(
       f.useClause(
@@ -226,7 +236,7 @@ public class NewPHPGrammar {
             TRAIT_USE_STATEMENT()
         ));
   }
-  
+
   public ClassPropertyDeclarationTree CLASS_CONSTANT_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION).is(
       f.classConstantDeclaration(
@@ -235,7 +245,16 @@ public class NewPHPGrammar {
         b.zeroOrMore(f.newTuple97(b.token(COMMA), MEMBER_CONST_DECLARATION())),
         EOS()));
   }
-  
+
+  public ConstantDeclarationTree CONSTANT_DECLARATION() {
+    return b.<ConstantDeclarationTree>nonterminal(PHPLexicalGrammar.CONSTANT_DECLARATION).is(
+      f.constantDeclaration(
+        b.token(PHPKeyword.CONST),
+        CONST_VAR(),
+        b.zeroOrMore(f.newTuple28(b.token(COMMA), CONST_VAR())),
+        EOS()));
+  }
+
   public ClassPropertyDeclarationTree CLASS_VARIABLE_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION).is(
       f.classVariableDeclaration(
@@ -246,7 +265,7 @@ public class NewPHPGrammar {
         b.zeroOrMore(f.newTuple95(b.token(COMMA), VARIABLE_DECLARATION())),
         EOS()));
   }
-  
+
   public SyntaxToken MEMBER_MODIFIER() {
     return b.<SyntaxToken>nonterminal().is(
       b.firstOf(
@@ -282,21 +301,21 @@ public class NewPHPGrammar {
         PARAMETER_LIST(),
         BLOCK()));
   }
-  
+
   public ParameterListTree PARAMETER_LIST() {
     return b.<ParameterListTree>nonterminal(PHPLexicalGrammar.PARAMETER_LIST).is(
       f.parameterList(
         b.token(PHPPunctuator.LPARENTHESIS),
         b.optional(
           f.newTuple94(
-            PARAMETER(), 
+            PARAMETER(),
             b.zeroOrMore(
               f.newTuple93(
-                b.token(PHPPunctuator.COMMA), 
+                b.token(PHPPunctuator.COMMA),
                 PARAMETER())))),
         b.token(PHPPunctuator.RPARENTHESIS)));
   }
-  
+
   public ParameterTree PARAMETER() {
     return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
       f.parameter(
@@ -310,18 +329,18 @@ public class NewPHPGrammar {
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
         b.optional(
           f.newTuple92(
-            b.token(PHPPunctuator.EQU), 
+            b.token(PHPPunctuator.EQU),
             STATIC_SCALAR())))
-      );      
+      );
   }
-  
+
   public SeparatedList<NamespaceNameTree> INTERFACE_LIST() {
     return b.<SeparatedList<NamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
       f.interfaceList(
         NAMESPACE_NAME(),
         b.zeroOrMore(f.newTuple98(b.token(COMMA), NAMESPACE_NAME()))));
   }
-  
+
   public TraitUseStatementTree TRAIT_USE_STATEMENT() {
     return b.<TraitUseStatementTree>nonterminal(PHPLexicalGrammar.TRAIT_USE_STATEMENT).is(
       b.firstOf(
@@ -339,7 +358,7 @@ public class NewPHPGrammar {
               TRAIT_ALIAS())),
           b.token(RCURLYBRACE))));
   }
-  
+
   public TraitPrecedenceTree TRAIT_PRECEDENCE() {
     return b.<TraitPrecedenceTree>nonterminal(PHPLexicalGrammar.TRAIT_PRECEDENCE).is(
       f.traitPrecedence(
@@ -348,7 +367,7 @@ public class NewPHPGrammar {
         INTERFACE_LIST(),
         EOS()));
   }
-  
+
   public TraitAliasTree TRAIT_ALIAS() {
     return b.<TraitAliasTree>nonterminal(PHPLexicalGrammar.TRAIT_ALIAS).is(
       b.firstOf(
@@ -364,7 +383,7 @@ public class NewPHPGrammar {
           MEMBER_MODIFIER(),
           EOS())
         ));
-  }  
+  }
 
   public TraitMethodReferenceTree TRAIT_METHOD_REFERENCE() {
     return b.<TraitMethodReferenceTree>nonterminal(PHPLexicalGrammar.TRAIT_METHOD_REFERENCE).is(
@@ -381,7 +400,7 @@ public class NewPHPGrammar {
         b.token(PHPPunctuator.DOUBLECOLON),
         b.token(PHPLexicalGrammar.IDENTIFIER)));
   }
-  
+
   /**
    * [ END ] Declaration
    */
@@ -399,7 +418,7 @@ public class NewPHPGrammar {
             INTERFACE_DECLARATION(),
             NAMESPACE_STATEMENT(),
             USE_STATEMENT(),
-//            CONSTANT_DECLARATION(),
+            CONSTANT_DECLARATION(),
             STATEMENT()
         ));
   }

@@ -17,21 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.php.tree.impl.declaration;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class ClassConstDeclarationTest {
+public class ConstantDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION)
-      .matches("const A = 1 ;")
-      .matches("const A = 1, B = 2 ;")
-      .matches("const A;")
-      .matches("const A, B;");
+  public void test() throws Exception {
+    ConstantDeclarationTree tree = parse("const A = 1, B = 2;", PHPLexicalGrammar.CONSTANT_DECLARATION);
+    assertThat(tree.is(Kind.CONSTANT_DECLARATION)).isTrue();
+    assertThat(tree.constToken().text()).isEqualTo("const");
+    assertThat(tree.declarations()).hasSize(2);
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
+
 }

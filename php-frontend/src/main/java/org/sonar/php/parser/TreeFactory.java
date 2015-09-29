@@ -26,6 +26,7 @@ import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
+import org.sonar.php.tree.impl.declaration.ConstantDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.FunctionDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
@@ -92,6 +93,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -213,6 +215,10 @@ public class TreeFactory {
     return variableDeclaration(identifierToken, optionalEqual);
   }
 
+  public VariableDeclarationTree constDeclaration(InternalSyntaxToken identifierToken, InternalSyntaxToken equToken, ExpressionTree expression) {
+    return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), equToken, expression);
+  }
+
   public UseClauseTree useClause(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
     if (alias.isPresent()) {
       IdentifierTreeImpl aliasName = new IdentifierTreeImpl(alias.get().second());
@@ -228,6 +234,15 @@ public class TreeFactory {
     InternalSyntaxToken eosToken
     ) {
     return ClassPropertyDeclarationTreeImpl.constant(constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
+  }
+
+  public ConstantDeclarationTree constantDeclaration(
+    InternalSyntaxToken constToken,
+    VariableDeclarationTree firstDeclaration,
+    Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
+    InternalSyntaxToken eosToken
+    ) {
+    return new ConstantDeclarationTreeImpl(constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
   }
   
   public ClassPropertyDeclarationTree classVariableDeclaration(

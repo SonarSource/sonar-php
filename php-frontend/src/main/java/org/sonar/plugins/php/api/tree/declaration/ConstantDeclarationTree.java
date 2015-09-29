@@ -17,21 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+/** *
+ * <a href="http://php.net/manual/en/language.constants.php">Constants</a> declaration
+ * <pre>
+ *  const {@link #declarations()} ;
+ * </pre>
+ */
+@Beta
+public interface ConstantDeclarationTree extends StatementTree {
 
-public class ClassConstDeclarationTest {
+  SyntaxToken constToken();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION)
-      .matches("const A = 1 ;")
-      .matches("const A = 1, B = 2 ;")
-      .matches("const A;")
-      .matches("const A, B;");
-  }
+  SeparatedList<VariableDeclarationTree> declarations();
+
+  SyntaxToken eosToken();
+
 }

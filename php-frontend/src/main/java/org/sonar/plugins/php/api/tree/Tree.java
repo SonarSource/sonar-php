@@ -21,13 +21,14 @@ package org.sonar.plugins.php.api.tree;
 
 import com.google.common.annotations.Beta;
 import com.sonar.sslr.api.AstNodeType;
-import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
-import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitialiserBracketTree;
@@ -82,7 +83,6 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
-import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
@@ -623,6 +623,11 @@ public interface Tree {
      * {@link NamespaceStatementTree}
      */
     NAMESPACE_STATEMENT(NamespaceStatementTree.class),
+
+    /**
+     * {@link ConstantDeclarationTree}
+     */
+    CONSTANT_DECLARATION(ConstantDeclarationTree.class),
 
     /**
      * {@link UseStatementTree}
