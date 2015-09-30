@@ -43,6 +43,7 @@ import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExitTree;
@@ -1282,6 +1283,39 @@ public class NewPHPGrammar {
           IDENTIFIER(),
           PARENTHESIZED_EXPRESSION()
         ));
+  }
+
+  public AssignmentByReferenceTree ASSIGNMENT_BY_REFERENCE() {
+    return b.<AssignmentByReferenceTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_BY_REFERENCE).is(
+      f.assignmentByReference(
+        MEMBER_EXPRESSION(),
+        b.token(PHPPunctuator.EQU), b.token(AMPERSAND),
+        b.firstOf(NEW_EXPRESSION(), MEMBER_EXPRESSION())));
+  }
+
+  public AssignmentExpressionTree ASSIGNMENT_EXPRESSION() {
+    return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION).is(
+      f.assignmentExpression(MEMBER_EXPRESSION(), ASSIGNMENT_OPERATOR(), EXPRESSION()));
+  }
+
+  public InternalSyntaxToken ASSIGNMENT_OPERATOR() {
+    return b.<InternalSyntaxToken>nonterminal(PHPLexicalGrammar.ASSIGNMENT_OPERATOR).is(
+      b.firstOf(
+        b.token(PHPPunctuator.EQU),
+
+        b.token(PHPPunctuator.STAR_EQU),
+        b.token(PHPPunctuator.DIVEQUAL),
+        b.token(PHPPunctuator.MOD_EQU),
+        b.token(PHPPunctuator.PLUS_EQU),
+        b.token(PHPPunctuator.MINUS_EQU),
+        b.token(PHPPunctuator.SL_EQU),
+        b.token(PHPPunctuator.SR_EQU),
+        b.token(PHPPunctuator.CONCATEQUAL),
+
+        b.token(PHPPunctuator.ANDEQUAL),
+        b.token(PHPPunctuator.XOR_EQU),
+        b.token(PHPPunctuator.OR_EQU)
+      ));
   }
 
   public ReferenceVariableTree REFERENCE_VARIABLE() {

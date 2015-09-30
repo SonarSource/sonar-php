@@ -24,16 +24,26 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class AssignmentByReferenceTest {
+public class AssignmentExpressionTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.ASSIGNMENT_BY_REFERENCE)
-      .matches("$a =& $b")
-      .matches("$a =& new X")
-      .matches("$a =& myFunction()")
+    assertThat(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION)
+      .matches("$a = $b")
+      .matches("$a *= $b")
+      .matches("$a /= $b")
+      .matches("$a %= $b")
+      .matches("$a += $b")
+      .matches("$a -= $b")
+      .matches("$a <<= $b")
+      .matches("$a >>= $b")
+      .matches("$a &= $b")
+      .matches("$a ^= $b")
+      .matches("$a |= $b")
+      .matches("$a -= $b")
+      .matches("$a -= $b");
 
-      .notMatches("$a =& $b * $c");
+      // fixme (Lena) : when EXPRESSION is ready
+//      .matches("$var = function () {}");
   }
-
 }

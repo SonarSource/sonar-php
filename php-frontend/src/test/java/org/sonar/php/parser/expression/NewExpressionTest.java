@@ -19,35 +19,19 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree;
 
-public class AssignmentExprTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.ASSIGNMENT_EXPR);
-  }
+public class NewExpressionTest {
 
   @Test
   public void test() {
-
-    matches("$a = $b");
-    matches("$a *= $b");
-    matches("$a /= $b");
-    matches("$a %= $b");
-    matches("$a += $b");
-    matches("$a -= $b");
-    matches("$a <<= $b");
-    matches("$a >>= $b");
-    matches("$a &= $b");
-    matches("$a ^= $b");
-    matches("$a |= $b");
-    matches("$a -= $b");
-    matches("$a -= $b");
-
-    matches("$var = function () {}");
+    assertThat(Tree.Kind.NEW_EXPRESSION)
+    .matches("new Foo")
+    .matches("new Foo ()")
+    .matches("new Foo ($x, $y)");
   }
+
 }

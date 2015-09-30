@@ -17,21 +17,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.plugins.php.api.tree.expression;
 
-import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree;
+import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+/**
+ * <a href="http://php.net/manual/en/language.references.php">Assignment by Reference Expression</a>
+ * <p/>
+ *
+ * <pre>
+ *   {@link #variable()} =& {@link #value()}
+ * </pre>
+ */
+@Beta
+public interface AssignmentByReferenceTree extends ExpressionTree {
 
-public class NewExprTest {
+  ExpressionTree variable();
 
-  @Test
-  public void test() {
-    assertThat(Tree.Kind.NEW_EXPRESSION)
-    .matches("new Foo")
-    .matches("new Foo ()")
-    .matches("new Foo ($x, $y)");
-  }
+  SyntaxToken equalToken();
+
+  SyntaxToken ampersandToken();
+
+  ExpressionTree value();
 
 }

@@ -17,23 +17,27 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.expression;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class AssignmentByReferenceTest {
+public class AssignmentExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.ASSIGNMENT_BY_REFERENCE)
-      .matches("$a =& $b")
-      .matches("$a =& new X")
-      .matches("$a =& myFunction()")
-
-      .notMatches("$a =& $b * $c");
+  public void test() throws Exception {
+    AssignmentExpressionTree tree = parse("$a %= $b", PHPLexicalGrammar.ASSIGNMENT_EXPRESSION);
+    assertThat(tree.is(Kind.REMAINDER_ASSIGNMENT)).isTrue();
+    assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.variable())).isEqualTo("$a");
+    assertThat(tree.equalToken().text()).isEqualTo("%=");
+    assertThat(tree.value().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.value())).isEqualTo("$b");
   }
 
 }

@@ -46,6 +46,7 @@ import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayPairTreeImpl;
+import org.sonar.php.tree.impl.expression.AssignmentByReferenceTreeImpl;
 import org.sonar.php.tree.impl.expression.AssignmentExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.BinaryExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CastExpressionTreeImpl;
@@ -120,6 +121,7 @@ import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
@@ -1393,6 +1395,40 @@ public class TreeFactory {
     return expression;
   }
 
+  public AssignmentExpressionTree assignmentExpression(ExpressionTree lhs, InternalSyntaxToken operatorToken, ExpressionTree rhs) {
+    String operator = operatorToken.text();
+    Kind kind = Kind.ASSIGNMENT;
+
+    if ("*=".equals(operator)) {
+      kind = Kind.MULTIPLY_ASSIGNMENT;
+    } else if ("/=".equals(operator)) {
+      kind = Kind.DIVIDE_ASSIGNMENT;
+    } else if ("%=".equals(operator)) {
+      kind = Kind.REMAINDER_ASSIGNMENT;
+    } else if ("+=".equals(operator)) {
+      kind = Kind.PLUS_ASSIGNMENT;
+    } else if ("-=".equals(operator)) {
+      kind = Kind.MINUS_ASSIGNMENT;
+    } else if ("<<=".equals(operator)) {
+      kind = Kind.LEFT_SHIFT_ASSIGNMENT;
+    } else if (">>=".equals(operator)) {
+      kind = Kind.RIGHT_SHIFT_ASSIGNMENT;
+    } else if ("&=".equals(operator)) {
+      kind = Kind.AND_ASSIGNMENT;
+    } else if ("^=".equals(operator)) {
+      kind = Kind.XOR_ASSIGNMENT;
+    } else if ("|=".equals(operator)) {
+      kind = Kind.OR_ASSIGNMENT;
+    } else if (".=".equals(operator)) {
+      kind = Kind.CONCATENATION_ASSIGNMENT;
+    }
+
+    return new AssignmentExpressionTreeImpl(kind, lhs, operatorToken, rhs);
+  }
+
+  public AssignmentByReferenceTree assignmentByReference(ExpressionTree lhs, InternalSyntaxToken equToken, InternalSyntaxToken ampersandToken, ExpressionTree rhs) {
+    return new AssignmentByReferenceTreeImpl(lhs, equToken, ampersandToken, rhs);
+  }
 
   /**
    * [ END ] Expression
