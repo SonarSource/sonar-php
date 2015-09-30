@@ -19,15 +19,14 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.fest.assertions.Assertions.assertThat;
-
+import com.google.common.collect.Iterables;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class ListExpressionTreeTest extends PHPTreeModelTest {
 
@@ -44,6 +43,15 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
 
     assertListExpression(tree, 2, 1);
     assertFirstElement(tree, Kind.VARIABLE_IDENTIFIER, "$a");
+  }
+
+  @Test
+  public void ellided_element() throws Exception {
+    ListExpressionTree tree = parse("list ($a, , ,$b)", Kind.LIST_EXPRESSION);
+
+    assertListExpression(tree, 4, 3);
+    assertFirstElement(tree, Kind.VARIABLE_IDENTIFIER, "$a");
+    assertThat(expressionToString(Iterables.getLast(tree.elements()))).isEqualTo("$b");
   }
 
   @Test

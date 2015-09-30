@@ -1175,15 +1175,15 @@ public class NewPHPGrammar {
   }
 
   public ListExpressionTree LIST_EXPRESSION() {
-    return b.<ListExpressionTree>nonterminal(Kind.LIST_EXPRESSION).is(
-      f.listExpression(
-        b.token(LIST),
-        b.token(LPARENTHESIS),
-        b.optional(f.newTuple7(
-          LIST_ELEMENT(),
-          // FIXME (Linda): LIST_ELEMENT IS OPTIONAL!!
-          b.zeroOrMore(f.newTuple3(b.token(COMMA), LIST_ELEMENT())))),
-        b.token(RPARENTHESIS)));
+    return b.<ListExpressionTree>nonterminal(Kind.LIST_EXPRESSION)
+      .is(f.listExpression(
+          b.token(LIST),
+          b.token(LPARENTHESIS),
+          b.optional(f.newTuple7(
+            LIST_ELEMENT(),
+            b.zeroOrMore(f.newTuple3(b.token(COMMA), b.optional(LIST_ELEMENT()))))),
+          b.token(RPARENTHESIS))
+      );
   }
 
   public ExpressionTree LIST_ELEMENT() {

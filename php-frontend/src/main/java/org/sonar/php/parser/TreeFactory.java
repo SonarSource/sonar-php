@@ -66,9 +66,10 @@ import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.NewExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.PostfixExpressionTreeImpl;
-import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
-import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
 import org.sonar.php.tree.impl.expression.PrefixExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
+import org.sonar.php.tree.impl.expression.SkippedListElementTreeImpl;
+import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
 import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -1160,13 +1161,24 @@ public class TreeFactory {
 
   public ListExpressionTree listExpression(
     InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
-    Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> elements,
+    Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>>>> elements,
     InternalSyntaxToken closeParenthesis
   ) {
     SeparatedList<ExpressionTree> list;
 
     if (elements.isPresent()) {
-      list = separatedList(elements.get().first(), elements.get().second());
+      ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+      ImmutableList.Builder<ExpressionTree> listElements = ImmutableList.builder();
+
+      listElements.add(elements.get().first());
+      if (elements.get().second().isPresent()) {
+        for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> rest : elements.get().second().get()) {
+          commas.add(rest.first());
+          listElements.add(rest.second().isPresent() ? rest.second().get() : new SkippedListElementTreeImpl());
+        }
+      }
+      list = new SeparatedList<>(listElements.build(), commas.build());
+
     } else {
       list = SeparatedList.empty();
     }

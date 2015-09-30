@@ -45,6 +45,7 @@ import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -264,5 +265,7 @@ public interface TreeVisitor {
   void visitPostfixExpression(UnaryExpressionTree postfixExpressionTree);
 
   void visitConditionalExpression(ConditionalExpressionTree conditionalExpressionTree);
+
+  void visitSkippedListElement(ExpressionTree skippedListElementTree);
 }
 

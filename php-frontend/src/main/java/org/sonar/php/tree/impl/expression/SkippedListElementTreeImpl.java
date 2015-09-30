@@ -17,22 +17,33 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.expression;
 
-import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
+import com.google.common.collect.Iterators;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import java.util.Iterator;
 
-public class ListExpressionTest {
+public class SkippedListElementTreeImpl extends PHPTree implements ExpressionTree {
 
-  @Test
-  public void test() {
-    assertThat(Kind.LIST_EXPRESSION)
-      .matches("list ()")
-      .matches("list ($a)")
-      .matches("list ($a, $b)")
-      .matches("list ($a, ,)")
-      .matches("list (list($a), $b)");
+  private static final Kind KIND = Kind.SKIPPED_LIST_ELEMENT;
+
+  @Override
+  public Kind getKind() {
+    return KIND;
   }
+
+  @Override
+  public Iterator<Tree> childrenIterator() {
+    return Iterators.emptyIterator();
+  }
+
+  @Override
+  public void accept(TreeVisitor visitor) {
+    visitor.visitSkippedListElement(this);
+  }
+
 }
