@@ -23,10 +23,10 @@ package org.sonar.php.parser;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.sonar.sslr.api.typed.Optional;
-import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
-import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
+import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
@@ -51,15 +51,19 @@ import org.sonar.php.tree.impl.expression.BinaryExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CastExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
+import org.sonar.php.tree.impl.expression.ExitTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
+import org.sonar.php.tree.impl.expression.FunctionExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LexicalVariablesTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.NewExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.PostfixExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
 import org.sonar.php.tree.impl.expression.UnaryExpressionTreeImpl;
@@ -117,18 +121,20 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
@@ -1333,6 +1339,60 @@ public class TreeFactory {
       elements.isPresent() ? elements.get() : new SeparatedList<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
       closeBracket);
   }
+
+  public FunctionExpressionTree functionExpression(Optional<InternalSyntaxToken> staticToken, InternalSyntaxToken functionToken, Optional<InternalSyntaxToken> ampersandToken,
+    ParameterListTree parameters, Optional<LexicalVariablesTree> lexicalVariables, BlockTree block) {
+
+    return new FunctionExpressionTreeImpl(
+      staticToken.orNull(),
+      functionToken,
+      ampersandToken.orNull(),
+      parameters,
+      lexicalVariables.orNull(),
+      block);
+  }
+
+  public NewExpressionTree newExpression(InternalSyntaxToken newToken, ExpressionTree expression) {
+    return new NewExpressionTreeImpl(newToken, expression);
+  }
+
+  public ExitTreeImpl newExitExpression(InternalSyntaxToken openParenthesis, Optional<ExpressionTree> expressionTreeOptional, InternalSyntaxToken closeParenthesis) {
+    return new ExitTreeImpl(openParenthesis, expressionTreeOptional.orNull(), closeParenthesis);
+  }
+
+  public ExitTree completeExitExpression(InternalSyntaxToken exitOrDie, Optional<ExitTreeImpl> partial) {
+    return partial.isPresent() ? partial.get().complete(exitOrDie) : new ExitTreeImpl(exitOrDie);
+  }
+
+  public ExpressionTree combinedScalarOffset(ArrayInitializerTree arrayInitialiser, Optional<List<ArrayAccessTree>> offsets) {
+    ExpressionTree result = arrayInitialiser;
+    for (ArrayAccessTree offset : optionalList(offsets)) {
+     result = ((ArrayAccessTreeImpl) offset).complete(result);
+    }
+
+    return result;
+  }
+
+  public ExpressionTree postfixExpression(ExpressionTree expression, Optional<Object> optional) {
+    if (optional.isPresent()) {
+
+      if (optional.get() instanceof SyntaxToken) {
+        SyntaxToken operator = ((SyntaxToken) optional.get());
+
+        return new PostfixExpressionTreeImpl(
+          operator.text().equals(PHPPunctuator.INC.getValue()) ? Kind.POSTFIX_INCREMENT : Kind.POSTFIX_DECREMENT,
+          expression,
+          operator);
+
+      } else {
+        Tuple<InternalSyntaxToken, ExpressionTree> tuple = ((Tuple) optional.get());
+        return new BinaryExpressionTreeImpl(Kind.INSTANCE_OF, expression, tuple.first(), tuple.second);
+      }
+    }
+
+    return expression;
+  }
+
 
   /**
    * [ END ] Expression

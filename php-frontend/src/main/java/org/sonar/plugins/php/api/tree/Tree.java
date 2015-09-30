@@ -418,6 +418,7 @@ public interface Tree {
 
     /**
      * {@link BinaryExpressionTree}
+     * {@code instanceof}
      */
     INSTANCE_OF(BinaryExpressionTree.class),
 

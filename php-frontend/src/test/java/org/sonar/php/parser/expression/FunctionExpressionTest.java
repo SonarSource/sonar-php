@@ -19,23 +19,19 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree;
 
-public class FunctionExpressionTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FUNCTION_EXPRESSION);
-  }
+public class FunctionExpressionTest {
 
   @Test
   public void test() {
-
-    matches("function () {}");
-    matches("function &() {}");
-    matches("function () use ($a) {}");
+    assertThat(Tree.Kind.FUNCTION_EXPRESSION)
+      .matches("function () {}")
+      .matches("function &() {}")
+      .matches("function () use ($a) {}");
   }
+
 }

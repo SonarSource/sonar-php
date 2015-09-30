@@ -45,15 +45,18 @@ import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
@@ -99,11 +102,16 @@ import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
 import static org.sonar.php.api.PHPKeyword.CLASS;
+import static org.sonar.php.api.PHPKeyword.DIE;
+import static org.sonar.php.api.PHPKeyword.EXIT;
 import static org.sonar.php.api.PHPKeyword.EXTENDS;
 import static org.sonar.php.api.PHPKeyword.FINAL;
+import static org.sonar.php.api.PHPKeyword.FUNCTION;
 import static org.sonar.php.api.PHPKeyword.IMPLEMENTS;
+import static org.sonar.php.api.PHPKeyword.INSTANCEOF;
 import static org.sonar.php.api.PHPKeyword.INTERFACE;
 import static org.sonar.php.api.PHPKeyword.LIST;
+import static org.sonar.php.api.PHPKeyword.NEW;
 import static org.sonar.php.api.PHPKeyword.STATIC;
 import static org.sonar.php.api.PHPKeyword.TRAIT;
 import static org.sonar.php.api.PHPKeyword.USE;
@@ -113,6 +121,7 @@ import static org.sonar.php.api.PHPPunctuator.ARROW;
 import static org.sonar.php.api.PHPPunctuator.COLON;
 import static org.sonar.php.api.PHPPunctuator.COMMA;
 import static org.sonar.php.api.PHPPunctuator.DIV;
+import static org.sonar.php.api.PHPPunctuator.DEC;
 import static org.sonar.php.api.PHPPunctuator.DOLLAR_LCURLY;
 import static org.sonar.php.api.PHPPunctuator.DOT;
 import static org.sonar.php.api.PHPPunctuator.DOUBLEARROW;
@@ -123,6 +132,7 @@ import static org.sonar.php.api.PHPPunctuator.EQUAL;
 import static org.sonar.php.api.PHPPunctuator.EQUAL2;
 import static org.sonar.php.api.PHPPunctuator.GE;
 import static org.sonar.php.api.PHPPunctuator.GT;
+import static org.sonar.php.api.PHPPunctuator.INC;
 import static org.sonar.php.api.PHPPunctuator.LBRACKET;
 import static org.sonar.php.api.PHPPunctuator.LCURLYBRACE;
 import static org.sonar.php.api.PHPPunctuator.LE;
@@ -1427,6 +1437,57 @@ public class NewPHPGrammar {
       .is(b.firstOf(
         f.arrayPair1(EXPRESSION(), b.optional(f.newTuple13(b.token(DOUBLEARROW), b.firstOf(REFERENCE_VARIABLE(), EXPRESSION())))),
         f.arrayPair2(REFERENCE_VARIABLE())
+      ));
+  }
+
+  public FunctionExpressionTree FUNCTION_EXPRESSION() {
+    return b.<FunctionExpressionTree>nonterminal(Kind.FUNCTION_EXPRESSION)
+      .is(f.functionExpression(
+        b.optional(b.token(STATIC)),
+        b.token(FUNCTION),
+        b.optional(b.token(AMPERSAND)),
+        PARAMETER_LIST(),
+        b.optional(LEXICAL_VARIABLES()),
+        BLOCK()
+      ));
+
+  }
+
+  public NewExpressionTree NEW_EXPRESSION() {
+    return b.<NewExpressionTree>nonterminal(Kind.NEW_EXPRESSION)
+      .is(f.newExpression(b.token(NEW), MEMBER_EXPRESSION()));
+  }
+
+  public ExitTree EXIT_EXPRESSION() {
+    return b.<ExitTree>nonterminal(Kind.EXIT_EXPRESSION)
+      .is(f.completeExitExpression(
+        b.firstOf(
+          b.token(EXIT),
+          b.token(DIE)),
+        b.optional(f.newExitExpression(
+          b.token(LPARENTHESIS),
+          b.optional(EXPRESSION()),
+          b.token(RPARENTHESIS)
+        ))
+      ));
+  }
+
+  public ExpressionTree POSTFIX_EXPRESSION() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POSTFIX_EXPR)
+      .is(f.postfixExpression(b.firstOf(
+        f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
+        FUNCTION_EXPRESSION(),
+        COMMON_SCALAR(),
+        MEMBER_EXPRESSION(),
+        NEW_EXPRESSION(),
+        EXIT_EXPRESSION(),
+        LIST_EXPRESSION_ASSIGNMENT(),
+        INTERNAL_FUNCTION()),
+        b.optional(b.firstOf(
+          b.token(INC),
+          b.token(DEC),
+          f.newTuple19(b.token(INSTANCEOF), MEMBER_EXPRESSION())
+        ))
       ));
   }
 

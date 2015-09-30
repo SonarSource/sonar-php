@@ -17,22 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.expression;
 
-import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.php.PHPTreeModelTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class ExitExprTest {
+public class NewExpressionTreeTest extends PHPTreeModelTest {
 
-  @Ignore // FIXME when expression is completed.
   @Test
-  public void test() {
-    assertThat(Tree.Kind.EXIT_EXPRESSION)
-      .matches("exit (0)")
-      .matches("die ('Error')");
+  public void test() throws Exception {
+    NewExpressionTree tree = parse("new Foo", Kind.NEW_EXPRESSION);
+
+    assertThat(tree.is(Kind.NEW_EXPRESSION)).isTrue();
+
+    assertThat(tree.newToken().text()).isEqualTo("new");
+    assertThat(expressionToString(tree.expression())).isEqualTo("Foo");
   }
 
 }

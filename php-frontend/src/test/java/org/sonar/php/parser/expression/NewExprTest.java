@@ -19,24 +19,19 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree;
 
-public class NewExprTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.NEW_EXPR);
-  }
+public class NewExprTest {
 
   @Test
   public void test() {
-
-    matches("new Foo");
-    matches("new Foo ()");
-    matches("new Foo ($x, 42)");
-
+    assertThat(Tree.Kind.NEW_EXPRESSION)
+    .matches("new Foo")
+    .matches("new Foo ()")
+    .matches("new Foo ($x, $y)");
   }
+
 }

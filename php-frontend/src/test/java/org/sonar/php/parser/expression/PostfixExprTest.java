@@ -19,21 +19,17 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class PostfixExprTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.POSTFIX_EXPR);
-  }
+public class PostfixExprTest {
 
   @Test
   public void test() {
-    matches("$a");
-    matches("$a instanceof class1");
+    assertThat(PHPLexicalGrammar.POSTFIX_EXPR)
+      .matches("$a")
+      .matches("$a instanceof class1");
   }
 }
