@@ -104,10 +104,12 @@ import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
 import static org.sonar.php.api.PHPKeyword.CLASS;
 import static org.sonar.php.api.PHPKeyword.DIE;
+import static org.sonar.php.api.PHPKeyword.ECHO;
 import static org.sonar.php.api.PHPKeyword.EXIT;
 import static org.sonar.php.api.PHPKeyword.EXTENDS;
 import static org.sonar.php.api.PHPKeyword.FINAL;
 import static org.sonar.php.api.PHPKeyword.FUNCTION;
+import static org.sonar.php.api.PHPKeyword.HALT_COMPILER;
 import static org.sonar.php.api.PHPKeyword.IMPLEMENTS;
 import static org.sonar.php.api.PHPKeyword.INSTANCEOF;
 import static org.sonar.php.api.PHPKeyword.INTERFACE;
@@ -451,7 +453,17 @@ public class NewPHPGrammar {
         NAMESPACE_STATEMENT(),
         USE_STATEMENT(),
         CONSTANT_DECLARATION(),
+        HALT_COMPILER_STATEMENT(),
         STATEMENT()));
+  }
+
+  public ExpressionStatementTree HALT_COMPILER_STATEMENT() {
+    return b.<ExpressionStatementTree>nonterminal().is(
+      f.haltCompilerStatement(
+        b.token(HALT_COMPILER),
+        b.token(LPARENTHESIS),
+        b.token(RPARENTHESIS),
+        EOS()));
   }
 
   public NamespaceStatementTree NAMESPACE_STATEMENT() {
@@ -501,6 +513,7 @@ public class NewPHPGrammar {
         YIELD_STATEMENT(),
         GLOBAL_STATEMENT(),
         STATIC_STATEMENT(),
+        ECHO_STATEMENT(),
         TRY_STATEMENT(),
         DECLARE_STATEMENT(),
         GOTO_STATEMENT(),
@@ -508,6 +521,17 @@ public class NewPHPGrammar {
         UNSET_VARIABLE_STATEMENT(),
         EXPRESSION_STATEMENT(),
         LABEL()));
+  }
+
+  public ExpressionStatementTree ECHO_STATEMENT() {
+    return b.<ExpressionStatementTree>nonterminal().is(
+      f.echoStatement(
+        b.token(ECHO),
+        EXPRESSION(),
+        b.zeroOrMore(f.newTuple54(b.token(COMMA), EXPRESSION())),
+        EOS()
+      )
+    );
   }
 
   public StaticStatementTree STATIC_STATEMENT() {

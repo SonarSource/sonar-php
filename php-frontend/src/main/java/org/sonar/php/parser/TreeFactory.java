@@ -949,6 +949,34 @@ public class TreeFactory {
     return new StaticStatementTreeImpl(staticToken, separatedList(variable, listOptional), eosToken);
   }
 
+  public ExpressionStatementTree haltCompilerStatement(
+    InternalSyntaxToken haltCompilerToken,
+    InternalSyntaxToken openParenthesisToken,
+    InternalSyntaxToken closeParenthesisToken,
+    InternalSyntaxToken eosToken
+  ) {
+    return new ExpressionStatementTreeImpl(
+      new FunctionCallTreeImpl(
+        new IdentifierTreeImpl(haltCompilerToken),
+        openParenthesisToken,
+        SeparatedList.empty(),
+        closeParenthesisToken),
+      eosToken);
+  }
+
+  public ExpressionStatementTree echoStatement(
+    InternalSyntaxToken echoToken,
+    ExpressionTree expression,
+    Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> list,
+    InternalSyntaxToken eosToken
+  ) {
+    return new ExpressionStatementTreeImpl(
+      new FunctionCallTreeImpl(
+        new IdentifierTreeImpl(echoToken),
+        separatedList(expression, list)),
+      eosToken);
+  }
+
   /**
    * [ END ] Statement
    */

@@ -41,18 +41,21 @@ public class StatementTest {
     .matches(";")
     .matches("yield $a;")
     .matches("global $a;")
-      // fixme (Lena) : should match (as function call expression)
-    .notMatches("echo \"Hi\";")
+    .matches("echo \"Hi\";")
     .matches("unset($a);")
-    .matches("$var = function () {};")
-    // fixme (Lena) : should match (as function call expression)
-    .notMatches("__halt_compiler();");
+    .matches("$var = function () {};");
   }
 
   @Test
   public void optional_semicolon() {
     assertThat(PHPLexicalGrammar.STATEMENT)
       .matches("continue ?>");
+  }
+
+  @Test
+  public void top_statement() {
+    assertThat(PHPLexicalGrammar.TOP_STATEMENT)
+      .matches("__halt_compiler();");
   }
 
 }
