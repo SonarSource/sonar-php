@@ -27,7 +27,6 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 public class CompoundVariableTest {
 
-  @Ignore // FIXME: when EXPRESSION is completed
   @Test
   public void test() {
     assertThat(Tree.Kind.COMPOUND_VARIABLE_NAME)

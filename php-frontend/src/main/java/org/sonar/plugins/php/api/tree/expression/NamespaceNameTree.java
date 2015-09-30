@@ -17,30 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser;
+package org.sonar.plugins.php.api.tree.expression;
 
-import com.sonar.sslr.api.Rule;
-import org.sonar.sslr.grammar.GrammarRuleKey;
-import org.sonar.sslr.parser.LexerlessGrammar;
-import org.sonar.sslr.tests.Assertions;
+import com.google.common.annotations.Beta;
+import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-abstract public class RuleTest {
+import javax.annotation.Nullable;
 
-  protected final LexerlessGrammar g = PHPGrammar.createGrammar();
-  protected Rule rule;
+/**
+ * <p><a href="http://php.net/manual/en/language.namespaces.rules.php">Namespace name definitions</a>
+ * todo (Lena) : finish documentation
+ */
+@Beta
+public interface NamespaceNameTree extends ExpressionTree {
 
-  protected void setTestedRule(GrammarRuleKey ruleKey) {
-    rule = g.rule(ruleKey);
-  }
+  @Nullable
+  SyntaxToken namespaceToken();
 
-  protected void matches(String input) {
-    Assertions.assertThat(rule)
-      .matches(input);
-  }
+  SeparatedList<IdentifierTree> qualifiedName();
 
-  protected void notMatches(String input) {
-    Assertions.assertThat(rule)
-      .notMatches(input);
-  }
+  String name();
 
 }

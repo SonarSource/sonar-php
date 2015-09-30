@@ -19,21 +19,24 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class ExpandableStringLiteralTest {
 
   @Test
   public void test() {
     assertThat(Kind.EXPANDABLE_STRING_LITERAL)
-    .matches("\"$var\"");
+      .matches("\"$var\"")
+      .matches("\"str $var\"")
+      .matches("\"$var $var\"")
+      .matches("\"$var str\"")
+      .matches("\"$var str $var\"")
+      .matches("\"$var\"");
   }
 
-  @Ignore // FIXME when EXPRESSION is completed.
   @Test
   public void test_real_life() {
     assertThat(Kind.EXPANDABLE_STRING_LITERAL)

@@ -41,9 +41,8 @@ public class AssignmentExpressionTest {
       .matches("$a ^= $b")
       .matches("$a |= $b")
       .matches("$a -= $b")
-      .matches("$a -= $b");
+      .matches("$a -= $b")
 
-      // fixme (Lena) : when EXPRESSION is ready
-//      .matches("$var = function () {}");
+      .matches("$var = function () {}");
   }
 }

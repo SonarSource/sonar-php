@@ -19,27 +19,24 @@
  */
 package org.sonar.php.parser.lexical;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class FileOpeningTagTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.FILE_OPENING_TAG);
-  }
+
+public class FileOpeningTagTest {
 
   @Test
   public void test() {
-    matches("<?php");
-    matches("<?=");
-    matches("<?");
+    assertThat(PHPLexicalGrammar.FILE_OPENING_TAG)
+      .matches("<?php")
+      .matches("<?=")
+      .matches("<?")
 
-    matches("<?PHP");
+      .matches("<?PHP")
 
-    matches("<html> <?php");
+      .matches("<html> <?php");
   }
 
 }

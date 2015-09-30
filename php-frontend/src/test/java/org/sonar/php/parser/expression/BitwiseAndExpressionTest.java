@@ -19,21 +19,17 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class VariableNameTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.VARIABLE_NAME);
-  }
+public class BitwiseAndExpressionTest {
 
   @Test
   public void test() {
-    matches("foo");
-    matches("{\"foo\"}");
+    assertThat(Kind.BITWISE_AND)
+      .matches("$a")
+      .matches("$a & $a");
   }
 }

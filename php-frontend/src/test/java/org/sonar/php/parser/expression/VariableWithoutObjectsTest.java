@@ -19,17 +19,13 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class VariableWithoutObjectsTest {
 
-  @Ignore // FIXME when EXPRESSION complete.
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.VARIABLE_WITHOUT_OBJECTS)

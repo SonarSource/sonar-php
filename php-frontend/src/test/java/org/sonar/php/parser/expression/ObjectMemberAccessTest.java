@@ -19,15 +19,13 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
+import static org.sonar.php.utils.Assertions.assertThat;
+
 public class ObjectMemberAccessTest {
 
-  @Ignore // FIXME when EXPRESSION is completed
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.OBJECT_MEMBER_ACCESS)

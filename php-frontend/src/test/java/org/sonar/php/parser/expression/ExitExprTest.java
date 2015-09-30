@@ -27,7 +27,6 @@ import static org.sonar.php.utils.Assertions.assertThat;
 
 public class ExitExprTest {
 
-  @Ignore // FIXME when expression is completed.
   @Test
   public void test() {
     assertThat(Tree.Kind.EXIT_EXPRESSION)

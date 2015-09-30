@@ -19,13 +19,12 @@
  */
 package org.sonar.php.parser.lexical;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
-import org.sonar.php.parser.RuleTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class EncapsStringLiteralTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+public class EncapsStringLiteralTest {
 
   @Test
   public void test() {

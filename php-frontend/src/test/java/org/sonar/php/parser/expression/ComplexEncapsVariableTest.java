@@ -19,16 +19,11 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
-/**
- * FIXME when EXPRESSION will be rewritten.
- */
-@Ignore
+import static org.sonar.php.utils.Assertions.assertThat;
+
 public class ComplexEncapsVariableTest {
 
   @Test

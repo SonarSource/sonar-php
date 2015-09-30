@@ -19,13 +19,12 @@
  */
 package org.sonar.php.parser.lexical;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.RuleTest;
 
-public class VarIdentifierTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
+
+public class VarIdentifierTest {
 
   @Test
   public void test() {

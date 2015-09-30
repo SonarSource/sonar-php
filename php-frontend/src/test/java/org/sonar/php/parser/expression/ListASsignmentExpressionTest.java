@@ -19,20 +19,16 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class ListASsignmentExpressionTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.LIST_ASSIGNMENT_EXPR);
-  }
+public class ListAssignmentExpressionTest {
 
   @Test
   public void test() {
-    matches("list ($a) = array(1)");
+    assertThat(PHPLexicalGrammar.LIST_EXPRESSION_ASSIGNMENT)
+      .matches("list ($a) = array(1)");
   }
 }

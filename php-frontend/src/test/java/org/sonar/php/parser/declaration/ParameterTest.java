@@ -19,10 +19,10 @@
  */
 package org.sonar.php.parser.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class ParameterTest {
 
@@ -34,8 +34,6 @@ public class ParameterTest {
       .matches("Foo $a")
       .matches("&$a")
       .matches("...$a")
-      // FIXME should match when expressions are complete  
-      //.matches("$a = \"foo\"")
-      ;
+      .matches("$a = \"foo\"");
   }
 }

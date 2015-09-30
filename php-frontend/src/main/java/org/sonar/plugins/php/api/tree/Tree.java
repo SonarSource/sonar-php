@@ -87,7 +87,7 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
-import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
@@ -669,9 +669,9 @@ public interface Tree {
     USE_FUNCTION_STATEMENT(UseStatementTree.class),
 
     /**
-     * {@link TraitUseStatementTree}
+     * {@link UseTraitStatementTree}
      */
-    TRAIT_USE_STATEMENT(TraitUseStatementTree.class),
+    TRAIT_USE_STATEMENT(UseTraitStatementTree.class),
 
     /**
      * {@link BlockTree}

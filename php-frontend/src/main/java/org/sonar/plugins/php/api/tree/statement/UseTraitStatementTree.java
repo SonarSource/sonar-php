@@ -17,24 +17,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.expression;
+package org.sonar.plugins.php.api.tree.statement;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-public class EncapsDImensionalOffsetTest extends RuleTest {
+import javax.annotation.Nullable;
+import java.util.List;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.ENCAPS_DIMENSIONAL_OFFSET);
-  }
+public interface UseTraitStatementTree extends ClassMemberTree {
+  
+  SyntaxToken useToken();
+  
+  SeparatedList<NamespaceNameTree> traits();
+  
+  @Nullable
+  SyntaxToken openCurlyBraceToken();
 
-  @Test
-  public void test() {
-    matches("[ 0 ]");
-    matches("[ identifier ]");
-    matches("[ $variable ]");
-  }
+  List<TraitAdaptationStatementTree> adaptations();
+
+  @Nullable
+  SyntaxToken closeCurlyBraceToken();
+  
+  @Nullable
+  SyntaxToken eosToken();
+
 }

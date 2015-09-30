@@ -19,24 +19,20 @@
  */
 package org.sonar.php.parser.lexical;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class HeredocTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.HEREDOC);
-  }
+public class HeredocTest {
 
   @Test
   public void test() {
-    matches("<<<EOF\n" +
-      "<html> content </html>\n" +
-      "\n" +
-      "<p> content </p>\n" +
-      "EOF");
+    assertThat(PHPLexicalGrammar.HEREDOC)
+      .matches("<<<EOF\n" +
+        "<html> content </html>\n" +
+        "\n" +
+        "<p> content </p>\n" +
+        "EOF");
   }
 }

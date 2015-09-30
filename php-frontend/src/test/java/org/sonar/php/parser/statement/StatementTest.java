@@ -33,8 +33,7 @@ public class StatementTest {
     .matches("label:")
     .matches("if ($a): endif;")
     .matches("while($a) {}")
-      // fixme (Lena) : should match
-//    .notMatches("for ($i = 1; $i <= 10; $i++) {}")
+    .matches("for ($i = 1; $i <= 10; $i++) {}")
     .matches("switch ($a) {}")
     .matches("break;")
     .matches("continue;")
@@ -43,12 +42,11 @@ public class StatementTest {
     .matches("yield $a;")
     .matches("global $a;")
       // fixme (Lena) : should match (as function call expression)
-//    .matches("echo \"Hi\";")
-    .matches("unset($a);");
-    // fixme (Lena) : should match (as assignment expression)
-//    .matches("$var = function () {};");
+    .notMatches("echo \"Hi\";")
+    .matches("unset($a);")
+    .matches("$var = function () {};")
     // fixme (Lena) : should match (as function call expression)
-//    .matches("__halt_compiler();");
+    .notMatches("__halt_compiler();");
   }
 
   @Test

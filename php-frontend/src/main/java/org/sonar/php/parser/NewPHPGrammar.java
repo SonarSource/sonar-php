@@ -92,7 +92,7 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
-import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
@@ -387,8 +387,8 @@ public class NewPHPGrammar {
         b.zeroOrMore(f.newTuple98(b.token(COMMA), NAMESPACE_NAME()))));
   }
 
-  public TraitUseStatementTree TRAIT_USE_STATEMENT() {
-    return b.<TraitUseStatementTree>nonterminal(PHPLexicalGrammar.TRAIT_USE_STATEMENT).is(
+  public UseTraitStatementTree TRAIT_USE_STATEMENT() {
+    return b.<UseTraitStatementTree>nonterminal(PHPLexicalGrammar.TRAIT_USE_STATEMENT).is(
       b.firstOf(
         f.traitUseStatement(
           b.token(PHPKeyword.USE),
@@ -1204,7 +1204,7 @@ public class NewPHPGrammar {
   }
 
   public AssignmentExpressionTree LIST_EXPRESSION_ASSIGNMENT() {
-    return b.<AssignmentExpressionTree>nonterminal()
+    return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.LIST_EXPRESSION_ASSIGNMENT)
       .is(f.listExpressionAssignment(LIST_EXPRESSION(), b.token(EQU), EXPRESSION()));
   }
 
@@ -1416,7 +1416,7 @@ public class NewPHPGrammar {
   }
 
   public VariableTree LEXICAL_VARIABLE() {
-    return b.<VariableTree>nonterminal(PHPLexicalGrammar.LEXICAL_VAR)
+    return b.<VariableTree>nonterminal(PHPLexicalGrammar.LEXICAL_VARIABLE)
       .is(f.lexicalVariable(
         b.optional(b.token(AMPERSAND)),
         VARIABLE_IDENTIFIER()
@@ -1424,10 +1424,9 @@ public class NewPHPGrammar {
   }
 
   public ExpressionTree STATIC_SCALAR() {
-    // FIXME (PY) : In the old grammar: b.firstOf(COMBINED_SCALAR, CONDITIONAL_EXPR)
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(
       b.firstOf(
-        COMMON_SCALAR(),
+        ARRAY_INITIALIZER(),
         CONDITIONAL_EXPR()));
   }
 
@@ -1455,7 +1454,7 @@ public class NewPHPGrammar {
   }
 
   public ArrayInitializerTree ARRAY_INITIALIZER() {
-    return b.<ArrayInitializerTree>nonterminal(PHPLexicalGrammar.COMBINED_SCALAR)
+    return b.<ArrayInitializerTree>nonterminal(PHPLexicalGrammar.ARRAY_INIALIZER)
       .is(b.firstOf(
         f.newArrayInitFunction(b.token(ARRAY), b.token(LPARENTHESIS), b.optional(ARRAY_PAIR_LIST()), b.token(RPARENTHESIS)),
         f.newArrayInitBracket(b.token(LBRACKET), b.optional(ARRAY_PAIR_LIST()), b.token(RBRACKET))

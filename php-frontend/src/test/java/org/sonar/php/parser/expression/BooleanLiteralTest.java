@@ -19,24 +19,19 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class BooleanLiteralTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.BOOLEAN_LITERAL);
-  }
+public class BooleanLiteralTest {
 
   @Test
   public void test() {
-
-    matches("true");
-    matches("TRUE");
-    matches("false");
-    matches("FALSE");
+    assertThat(PHPLexicalGrammar.BOOLEAN_LITERAL)
+      .matches("true")
+      .matches("TRUE")
+      .matches("false")
+      .matches("FALSE");
   }
 }

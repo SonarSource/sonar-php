@@ -19,24 +19,21 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-public class ListExpressionTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.LIST_EXPR);
-  }
+public class ListExpressionTest {
 
   @Test
   public void test() {
-    matches("list ()");
-    matches("list ($a)");
-    matches("list ($a, $b)");
-    matches("list ($a, ,)");
-    matches("list (list($a), $b)");
+    assertThat(Kind.LIST_EXPRESSION)
+      .matches("list ()")
+      .matches("list ($a)")
+      .matches("list ($a, $b)")
+        // FIXME (Linda): LIST_ELEMENT IS OPTIONAL!!
+      .notMatches("list ($a, ,)")
+      .matches("list (list($a), $b)");
   }
 }

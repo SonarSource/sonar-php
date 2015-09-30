@@ -28,7 +28,7 @@ public class LexicalVarTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.LEXICAL_VAR)
+    assertThat(PHPLexicalGrammar.LEXICAL_VARIABLE)
       .matches("$a")
       .matches("&$a");
   }

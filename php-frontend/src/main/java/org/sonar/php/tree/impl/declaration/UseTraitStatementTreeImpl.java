@@ -31,13 +31,13 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
-import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitStatementTree;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 
-public class TraitUseStatementTreeImpl extends PHPTree implements TraitUseStatementTree {
+public class UseTraitStatementTreeImpl extends PHPTree implements UseTraitStatementTree {
 
   private static final Kind KIND = Kind.TRAIT_USE_STATEMENT;
 
@@ -48,11 +48,11 @@ public class TraitUseStatementTreeImpl extends PHPTree implements TraitUseStatem
   private final InternalSyntaxToken closeCurlyBraceToken;
   private final InternalSyntaxToken eosToken;
 
-  public TraitUseStatementTreeImpl(
+  public UseTraitStatementTreeImpl(
     InternalSyntaxToken useToken,
     SeparatedList<NamespaceNameTree> traits,
     InternalSyntaxToken eosToken
-    ) {
+  ) {
     this.useToken = useToken;
     this.traits = traits;
     this.openCurlyBraceToken = null;
@@ -61,13 +61,13 @@ public class TraitUseStatementTreeImpl extends PHPTree implements TraitUseStatem
     this.eosToken = eosToken;
   }
 
-  public TraitUseStatementTreeImpl(
+  public UseTraitStatementTreeImpl(
     InternalSyntaxToken useToken,
     SeparatedList<NamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,
     List<TraitAdaptationStatementTree> adaptations,
     InternalSyntaxToken closeCurlyBrace
-    ) {
+  ) {
     this.useToken = useToken;
     this.traits = traits;
     this.openCurlyBraceToken = openCurlyBrace;

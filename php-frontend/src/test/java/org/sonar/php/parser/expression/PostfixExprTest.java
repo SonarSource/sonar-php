@@ -30,6 +30,8 @@ public class PostfixExprTest {
   public void test() {
     assertThat(PHPLexicalGrammar.POSTFIX_EXPR)
       .matches("$a")
+      .matches("array()[]")
+      .matches("[][]")
       .matches("$a instanceof class1");
   }
 }

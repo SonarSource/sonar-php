@@ -25,13 +25,13 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.TraitUseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitStatementTree;
 
-public class TraitUseStatementTreeTest extends PHPTreeModelTest {
+public class UseTraitStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void without_adaptations() throws Exception {
-    TraitUseStatementTree tree = parse("use A,B,C;", PHPLexicalGrammar.TRAIT_USE_STATEMENT);
+    UseTraitStatementTree tree = parse("use A,B,C;", PHPLexicalGrammar.TRAIT_USE_STATEMENT);
     assertThat(tree.is(Kind.TRAIT_USE_STATEMENT)).isTrue();
     assertThat(tree.traits()).hasSize(3);
     assertThat(tree.openCurlyBraceToken()).isNull();
@@ -42,7 +42,7 @@ public class TraitUseStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void with_adaptations() throws Exception {
-    TraitUseStatementTree tree = parse("use A,B,C { m1 as m2; }", PHPLexicalGrammar.TRAIT_USE_STATEMENT);
+    UseTraitStatementTree tree = parse("use A,B,C { m1 as m2; }", PHPLexicalGrammar.TRAIT_USE_STATEMENT);
     assertThat(tree.is(Kind.TRAIT_USE_STATEMENT)).isTrue();
     assertThat(tree.traits()).hasSize(3);
     assertThat(tree.openCurlyBraceToken().text()).isEqualTo("{");

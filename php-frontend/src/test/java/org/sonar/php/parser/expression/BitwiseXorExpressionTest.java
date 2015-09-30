@@ -17,32 +17,19 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.statement;
+package org.sonar.php.parser.expression;
 
-import java.util.List;
+import org.junit.Test;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-import javax.annotation.Nullable;
+import static org.sonar.php.utils.Assertions.assertThat;
 
-import org.sonar.php.tree.impl.SeparatedList;
-import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+public class BitwiseXorExpressionTest {
 
-public interface TraitUseStatementTree extends ClassMemberTree {
-  
-  SyntaxToken useToken();
-  
-  SeparatedList<NamespaceNameTree> traits();
-  
-  @Nullable
-  SyntaxToken openCurlyBraceToken();
-
-  List<TraitAdaptationStatementTree> adaptations();
-
-  @Nullable
-  SyntaxToken closeCurlyBraceToken();
-  
-  @Nullable
-  SyntaxToken eosToken();
-
+  @Test
+  public void test() {
+    assertThat(Kind.BITWISE_XOR)
+      .matches("$a")
+      .matches("$a ^ $a");
+  }
 }

@@ -19,24 +19,17 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class EncapsListTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.ENCAPS_LIST);
-  }
+public class StaticScalarTest {
 
   @Test
   public void test() {
-    matches("$var");
-    matches("str $var");
-    matches("$var $var");
-    matches("$var str");
-    matches("$var str $var");
+    assertThat(PHPLexicalGrammar.STATIC_SCALAR)
+      .matches("Foo")
+      .matches("array()");
   }
 }
