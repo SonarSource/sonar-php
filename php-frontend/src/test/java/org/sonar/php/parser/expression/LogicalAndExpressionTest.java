@@ -31,6 +31,7 @@ public class LogicalAndExpressionTest {
     assertThat(Kind.CONDITIONAL_AND)
       .matches("$a")
       .matches("$a && $a")
+      .matches("$a AND $a")
       .matches("$a and $a");
   }
 }

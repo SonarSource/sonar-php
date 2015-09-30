@@ -167,7 +167,7 @@ public class NewPHPGrammar {
 
   public CompilationUnitTree COMPILATION_UNIT() {
     return b.<CompilationUnitTree>nonterminal(PHPLexicalGrammar.COMPILATION_UNIT).is(
-      f.compilationUnit(b.optional(SCRIPT()), b.token(PHPLexicalGrammar.EOF)));
+      f.compilationUnit(b.optional(SCRIPT()), b.optional(b.token(PHPLexicalGrammar.SPACING)), b.token(PHPLexicalGrammar.EOF)));
   }
 
   public ScriptTree SCRIPT() {
@@ -1179,9 +1179,8 @@ public class NewPHPGrammar {
       .is(f.listExpression(
           b.token(LIST),
           b.token(LPARENTHESIS),
-          b.optional(f.newTuple7(
-            LIST_ELEMENT(),
-            b.zeroOrMore(f.newTuple3(b.token(COMMA), b.optional(LIST_ELEMENT()))))),
+          b.optional(LIST_ELEMENT()),
+          b.zeroOrMore(f.newTuple3(b.token(COMMA), b.optional(LIST_ELEMENT()))),
           b.token(RPARENTHESIS))
       );
   }
@@ -1243,7 +1242,7 @@ public class NewPHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.PRIMARY_EXPRESSION).is(
       b.firstOf(
         f.newStaticIdentifier(b.token(STATIC)),
-        // FIXME (Linda): add b.sequence(PHPKeyword.NAMESPACE, FULLY_QUALIFIED_CLASS_NAME)
+        NAMESPACE_NAME(),
         VARIABLE_WITHOUT_OBJECTS(),
         IDENTIFIER(),
         PARENTHESIZED_EXPRESSION()));

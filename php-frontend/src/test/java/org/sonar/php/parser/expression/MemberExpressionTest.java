@@ -61,8 +61,7 @@ public class MemberExpressionTest {
     .matches("static::a")
     .matches("class1::a")
     .matches("class1::$a")
-      // fixme (Lena) should parse
-    .notMatches("namespace1\\class1::a")
+    .matches("namespace1\\class1::a")
     // static_member -> dereferencable :: simple_variable
     .matches("$a::$b")
 

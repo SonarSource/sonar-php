@@ -31,6 +31,7 @@ public class LogicalOrExpressionTest {
     assertThat(Kind.CONDITIONAL_OR)
       .matches("$a")
       .matches("$a || $a")
+      .matches("$a OR $a")
       .matches("$a or $a");
   }
 }

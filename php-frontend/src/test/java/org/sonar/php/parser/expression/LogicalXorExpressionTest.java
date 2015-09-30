@@ -30,6 +30,7 @@ public class LogicalXorExpressionTest {
   public void test() {
     assertThat(Kind.ALTERNATIVE_CONDITIONAL_XOR)
     .matches("$a")
+    .matches("$a XOR $a")
     .matches("$a xor $a");
   }
 }

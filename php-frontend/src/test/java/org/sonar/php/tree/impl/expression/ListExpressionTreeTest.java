@@ -46,11 +46,11 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void ellided_element() throws Exception {
-    ListExpressionTree tree = parse("list ($a, , ,$b)", Kind.LIST_EXPRESSION);
+  public void omitted_element() throws Exception {
+    ListExpressionTree tree = parse("list (, $a, , ,$b)", Kind.LIST_EXPRESSION);
 
-    assertListExpression(tree, 4, 3);
-    assertFirstElement(tree, Kind.VARIABLE_IDENTIFIER, "$a");
+    assertListExpression(tree, 5, 4);
+    assertFirstElement(tree, Kind.SKIPPED_LIST_ELEMENT, "");
     assertThat(expressionToString(Iterables.getLast(tree.elements()))).isEqualTo("$b");
   }
 

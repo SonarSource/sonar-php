@@ -19,16 +19,17 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class PrimaryExpressionTest {
 
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.PRIMARY_EXPRESSION)
+      .matches("static")
       .matches("a")
       .matches("$a")
       .matches("($a)");

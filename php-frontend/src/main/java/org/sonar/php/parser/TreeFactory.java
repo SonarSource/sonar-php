@@ -40,8 +40,8 @@ import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
-import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
+import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
@@ -176,11 +176,11 @@ import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
-import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
@@ -275,7 +275,7 @@ public class TreeFactory {
     return new ScriptTreeImpl(fileOpeningTagToken, optionalList(statements));
   }
 
-  public CompilationUnitTree compilationUnit(Optional<ScriptTree> script, InternalSyntaxToken eofToken) {
+  public CompilationUnitTree compilationUnit(Optional<ScriptTree> script, Optional<InternalSyntaxToken> spacing, InternalSyntaxToken eofToken) {
     return new CompilationUnitTreeImpl(script.orNull(), eofToken);
   }
 
@@ -1059,7 +1059,7 @@ public class TreeFactory {
   }
 
   private static Kind binaryKind(InternalSyntaxToken token) {
-    Kind kind = BINARY_EXPRESSION_KINDS_BY_OPERATOR.get(token.text());
+    Kind kind = BINARY_EXPRESSION_KINDS_BY_OPERATOR.get(token.text().toLowerCase());
     if (kind == null) {
       throw new IllegalArgumentException("Mapping not found for binary operator " + token.text());
     }
@@ -1161,29 +1161,34 @@ public class TreeFactory {
 
   public ListExpressionTree listExpression(
     InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
-    Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>>>> elements,
+    Optional<ExpressionTree> firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> restElements,
     InternalSyntaxToken closeParenthesis
   ) {
-    SeparatedList<ExpressionTree> list;
+    ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+    ImmutableList.Builder<ExpressionTree> listElements = ImmutableList.builder();
 
-    if (elements.isPresent()) {
-      ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
-      ImmutableList.Builder<ExpressionTree> listElements = ImmutableList.builder();
+    if (firstElement.isPresent()) {
+      listElements.add(firstElement.get());
 
-      listElements.add(elements.get().first());
-      if (elements.get().second().isPresent()) {
-        for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> rest : elements.get().second().get()) {
-          commas.add(rest.first());
-          listElements.add(rest.second().isPresent() ? rest.second().get() : new SkippedListElementTreeImpl());
-        }
-      }
-      list = new SeparatedList<>(listElements.build(), commas.build());
-
-    } else {
-      list = SeparatedList.empty();
+      // if omitted element at the beginning
+    } else if (restElements.isPresent()) {
+      listElements.add(new SkippedListElementTreeImpl());
     }
 
-    return new ListExpressionTreeImpl(listToken, openParenthesis, list, closeParenthesis);
+      // Remaining elements
+    if (restElements.isPresent()) {
+      for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> rest : restElements.get()) {
+          commas.add(rest.first());
+          listElements.add(rest.second().isPresent() ? rest.second().get() : new SkippedListElementTreeImpl());
+      }
+    }
+
+    return new ListExpressionTreeImpl(
+      listToken,
+      openParenthesis,
+      new SeparatedList<>(listElements.build(), commas.build()),
+      closeParenthesis);
   }
 
   public AssignmentExpressionTree listExpressionAssignment(ExpressionTree listExpression, InternalSyntaxToken equalToken, ExpressionTree expression) {

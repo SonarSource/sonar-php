@@ -592,7 +592,6 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(EXIT_EXPR).is(b.firstOf(EXIT, DIE), b.optional(LPARENTHESIS, b.optional(EXPRESSION), RPARENTHESIS));
 
     b.rule(LIST_ASSIGNMENT_EXPR).is(LIST_EXPR, EQU, EXPRESSION);
-    // FIXME: looks like only assignment list is optional not the parenthesis to be checked
     b.rule(LIST_EXPR).is(LIST, LPARENTHESIS, b.optional(ASSIGNMENT_LIST), RPARENTHESIS);
     b.rule(ASSIGNMENT_LIST).is(b.optional(ASSIGNMENT_LIST_ELEMENT), b.zeroOrMore(COMMA, b.optional(ASSIGNMENT_LIST_ELEMENT)));
     b.rule(ASSIGNMENT_LIST_ELEMENT).is(b.firstOf(MEMBER_EXPRESSION, LIST_EXPR));
@@ -652,7 +651,6 @@ public enum PHPGrammar implements GrammarRuleKey {
   }
 
   public static void declaration(LexerlessGrammarBuilder b) {
-    // FIXME (Linda): USE_CONST_DECLARATION_STATEMENT is never used...
     b.rule(USE_CONST_DECLARATION_STATEMENT).is(USE, CONST, USE_FUNCTION_DECLARATIONS, EOS);
     // TODO martin: to check
     b.rule(USE_FUNCTION_DECLARATION_STATEMENT).is(USE, FUNCTION, USE_FUNCTION_DECLARATIONS, EOS);
@@ -849,7 +847,7 @@ public enum PHPGrammar implements GrammarRuleKey {
     b.rule(STATIC_STATEMENT).is(STATIC, STATIC_VAR_LIST, EOS);
     b.rule(STATIC_VAR_LIST).is(STATIC_VAR, b.zeroOrMore(COMMA, STATIC_VAR));
     b.rule(STATIC_VAR).is(REGULAR_VAR_IDENTIFIER, b.optional(EQU, STATIC_SCALAR));
-    
+
     b.rule(ECHO_STATEMENT).is(ECHO, EXPRESSION, b.zeroOrMore(COMMA, EXPRESSION), EOS);
 
     b.rule(UNSET_VARIABLE_STATEMENT).is(UNSET, LPARENTHESIS, UNSET_VARIABLES, RPARENTHESIS, EOS);
