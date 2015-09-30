@@ -17,21 +17,20 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.php.parser.statement;
 
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class UseClauseTest {
+public class StaticVariableTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.USE_CLAUSE)
-      .matches("ArrayObject")
-      .matches("My\\Full\\functionName")
-      .matches("My\\Full\\functionName as func")
-      .notMatches("My\\Full\\functionName as");
+  public void static_var() {
+    assertThat(PHPLexicalGrammar.STATIC_VAR)
+      .matches("$a")
+      .matches("$a = $a");
   }
+
 }

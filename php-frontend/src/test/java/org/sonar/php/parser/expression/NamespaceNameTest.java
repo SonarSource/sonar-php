@@ -17,25 +17,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.expression;
+package org.sonar.php.parser.expression;
 
-import com.google.common.annotations.Beta;
-import org.sonar.php.tree.impl.SeparatedList;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.junit.Test;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-import javax.annotation.Nullable;
+import static org.sonar.php.utils.Assertions.assertThat;
 
-/**
- * <p><a href="http://php.net/manual/en/language.namespaces.rules.php">Namespace name definitions</a>
- */
-@Beta
-public interface NamespaceNameTree extends ExpressionTree {
+public class NamespaceNameTest {
 
-  @Nullable
-  SyntaxToken namespaceToken();
+  @Test
+  public void test() {
+    assertThat(PHPLexicalGrammar.NAMESPACE_NAME)
+      .matches("NS")
+      .matches("NS\\Sub")
+      .matches("\\Foo\\Bar")
+      .matches("\\NS")
+      .matches("namespace\\NS")
+      .matches("namespace\\NS1\\NS2\\Name")
 
-  SeparatedList<IdentifierTree> qualifiedName();
-
-  String name();
+      .notMatches("\\Foo\\")
+      .notMatches("namespace\\namespace\\Name")
+      .notMatches("namespace\\\\NS");
+  }
 
 }

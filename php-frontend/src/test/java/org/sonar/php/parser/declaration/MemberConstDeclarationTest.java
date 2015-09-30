@@ -17,25 +17,20 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.expression;
+package org.sonar.php.parser.declaration;
 
-import com.google.common.annotations.Beta;
-import org.sonar.php.tree.impl.SeparatedList;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.junit.Test;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-import javax.annotation.Nullable;
+import static org.sonar.php.utils.Assertions.assertThat;
 
-/**
- * <p><a href="http://php.net/manual/en/language.namespaces.rules.php">Namespace name definitions</a>
- */
-@Beta
-public interface NamespaceNameTree extends ExpressionTree {
+public class MemberConstDeclarationTest {
 
-  @Nullable
-  SyntaxToken namespaceToken();
-
-  SeparatedList<IdentifierTree> qualifiedName();
-
-  String name();
+  @Test
+  public void member_const_declaration() {
+    assertThat(PHPLexicalGrammar.MEMBER_CONST_DECLARATION)
+      .matches("a")
+      .matches("a = $a");
+  }
 
 }

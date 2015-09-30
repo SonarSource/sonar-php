@@ -24,21 +24,14 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class NamespaceNameTest {
+public class UseClauseTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.NAMESPACE_NAME)
-      .matches("NS")
-      .matches("NS\\Sub")
-      .matches("\\Foo\\Bar")
-      .matches("\\NS")
-      .matches("namespace\\NS")
-      .matches("namespace\\NS1\\NS2\\Name")
-
-      .notMatches("\\Foo\\")
-      .notMatches("namespace\\namespace\\Name")
-      .notMatches("namespace\\\\NS");
+    assertThat(PHPLexicalGrammar.USE_CLAUSE)
+      .matches("ArrayObject")
+      .matches("My\\Full\\functionName")
+      .matches("My\\Full\\functionName as func")
+      .notMatches("My\\Full\\functionName as");
   }
-
 }

@@ -29,9 +29,8 @@ public class ForStatementTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.FOR_STATEMENT)
-        //todo (Lena) improve these tests with more adequate expressions
-      .matches("for ($a; $b; $c) {}")
-      .matches("for ($a1, $a2;  $b1, $b2;  $c1, $c2) {}")
+      .matches("for ($i = 1; $i <= 10; $i++) {}")
+      .matches("for ($a1 = 1, $a2 = 2;  $b1 <= 10, $b2 > 5;  $c1++, $c2--) {}")
       .matches("for ($a; ; $c) {}")
       .matches("for (; ; ) {}")
       .matches("for (; ; ): {} {} endfor;")

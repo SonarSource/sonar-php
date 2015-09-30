@@ -25,7 +25,6 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 
 public enum PHPKeyword implements TokenType, GrammarRuleKey {
 
-  // todo (Lena) : should be removed as HALT_COMPILER_STATEMENT is represented by function call statement
   HALT_COMPILER("__halt_compiler"),
   ABSTRACT("abstract"),
   AND("and"),
