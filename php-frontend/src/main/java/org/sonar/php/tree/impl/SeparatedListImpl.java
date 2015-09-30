@@ -25,6 +25,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.UnmodifiableIterator;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import java.util.Collection;
@@ -32,12 +33,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class SeparatedList<T extends Tree> implements List<T> {
-  
+public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
+
   private final List<T> list;
   private final List<InternalSyntaxToken> separators;
 
-  public SeparatedList(List<T> list, List<InternalSyntaxToken> separators) {
+  public SeparatedListImpl(List<T> list, List<InternalSyntaxToken> separators) {
     Preconditions.checkArgument(
       list.size() == separators.size() + 1 || list.size() == separators.size(),
       "Instanciating a SeparatedList with inconsistent number of elements (%s) and separators (%s)",
@@ -45,9 +46,9 @@ public class SeparatedList<T extends Tree> implements List<T> {
     this.list = list;
     this.separators = separators;
   }
-  
-  public static <T extends Tree> SeparatedList<T> empty() {
-    return new SeparatedList<>(ImmutableList.<T>of(), ImmutableList.<InternalSyntaxToken>of());
+
+  public static <T extends Tree> SeparatedListImpl<T> empty() {
+    return new SeparatedListImpl<>(ImmutableList.<T>of(), ImmutableList.<InternalSyntaxToken>of());
   }
 
   public InternalSyntaxToken getSeparator(int i) {

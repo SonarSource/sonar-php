@@ -22,7 +22,7 @@ package org.sonar.php.tree.impl.declaration;
 import java.util.Iterator;
 
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -36,16 +36,16 @@ import com.google.common.collect.Iterators;
 public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceTree {
 
   private static final Kind KIND = Kind.TRAIT_PRECEDENCE;
-  
+
   private final TraitMethodReferenceTree methodReference;
   private final InternalSyntaxToken insteadOfToken;
-  private final SeparatedList<NamespaceNameTree> traits;
+  private final SeparatedListImpl<NamespaceNameTree> traits;
   private final InternalSyntaxToken eosToken;
 
   public TraitPrecedenceTreeImpl(
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken insteadOfToken,
-    SeparatedList<NamespaceNameTree> traits,
+    SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken eosToken
     ) {
     this.methodReference = methodReference;
@@ -65,7 +65,7 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
   }
 
   @Override
-  public SeparatedList<NamespaceNameTree> traits() {
+  public SeparatedListImpl<NamespaceNameTree> traits() {
     return traits;
   }
 

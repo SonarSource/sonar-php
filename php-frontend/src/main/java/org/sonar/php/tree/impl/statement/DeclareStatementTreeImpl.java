@@ -22,7 +22,7 @@ package org.sonar.php.tree.impl.statement;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
@@ -88,7 +88,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
   }
 
   @Override
-  public SeparatedList<VariableDeclarationTree> directives() {
+  public SeparatedListImpl<VariableDeclarationTree> directives() {
     return declareStatementHead.directives();
   }
 
@@ -145,13 +145,13 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
 
     private final SyntaxToken declareToken;
     private final SyntaxToken openParenthesisToken;
-    private final SeparatedList<VariableDeclarationTree> directives;
+    private final SeparatedListImpl<VariableDeclarationTree> directives;
     private final SyntaxToken closeParenthesisToken;
 
     public DeclareStatementHead(
         SyntaxToken declareToken,
         SyntaxToken openParenthesisToken,
-        SeparatedList<VariableDeclarationTree> directives,
+        SeparatedListImpl<VariableDeclarationTree> directives,
         SyntaxToken closeParenthesisToken
     ) {
       this.declareToken = declareToken;
@@ -168,7 +168,7 @@ public class DeclareStatementTreeImpl extends PHPTree implements DeclareStatemen
       return openParenthesisToken;
     }
 
-    public SeparatedList<VariableDeclarationTree> directives() {
+    public SeparatedListImpl<VariableDeclarationTree> directives() {
       return directives;
     }
 

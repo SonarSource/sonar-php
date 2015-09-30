@@ -22,7 +22,7 @@ package org.sonar.php.tree.impl.declaration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -40,7 +40,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
   private static final Kind KIND = Kind.USE_TRAIT_DECLARATION;
 
   private final InternalSyntaxToken useToken;
-  private final SeparatedList<NamespaceNameTree> traits;
+  private final SeparatedListImpl<NamespaceNameTree> traits;
   private final InternalSyntaxToken openCurlyBraceToken;
   private final List<TraitAdaptationStatementTree> adaptations;
   private final InternalSyntaxToken closeCurlyBraceToken;
@@ -48,7 +48,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
 
   public UseTraitDeclarationTreeImpl(
     InternalSyntaxToken useToken,
-    SeparatedList<NamespaceNameTree> traits,
+    SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken eosToken
   ) {
     this.useToken = useToken;
@@ -61,7 +61,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
 
   public UseTraitDeclarationTreeImpl(
     InternalSyntaxToken useToken,
-    SeparatedList<NamespaceNameTree> traits,
+    SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,
     List<TraitAdaptationStatementTree> adaptations,
     InternalSyntaxToken closeCurlyBrace
@@ -80,7 +80,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
   }
 
   @Override
-  public SeparatedList<NamespaceNameTree> traits() {
+  public SeparatedListImpl<NamespaceNameTree> traits() {
     return traits;
   }
 

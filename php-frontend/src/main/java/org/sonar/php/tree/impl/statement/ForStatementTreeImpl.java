@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -83,7 +83,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
   }
 
   @Override
-  public SeparatedList<ExpressionTree> init() {
+  public SeparatedListImpl<ExpressionTree> init() {
     return header.init();
   }
 
@@ -93,7 +93,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
   }
 
   @Override
-  public SeparatedList<ExpressionTree> condition() {
+  public SeparatedListImpl<ExpressionTree> condition() {
     return header.condition();
   }
 
@@ -103,7 +103,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
   }
 
   @Override
-  public SeparatedList<ExpressionTree> update() {
+  public SeparatedListImpl<ExpressionTree> update() {
     return header.update();
   }
 
@@ -166,18 +166,18 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
 
     private final InternalSyntaxToken forToken;
     private final InternalSyntaxToken openParenthesisToken;
-    private final SeparatedList<ExpressionTree> init;
+    private final SeparatedListImpl<ExpressionTree> init;
     private final InternalSyntaxToken firstSemicolonToken;
-    private final SeparatedList<ExpressionTree> condition;
+    private final SeparatedListImpl<ExpressionTree> condition;
     private final InternalSyntaxToken secondSemicolonToken;
-    private final SeparatedList<ExpressionTree> update;
+    private final SeparatedListImpl<ExpressionTree> update;
     private final InternalSyntaxToken closeParenthesisToken;
 
     public ForStatementHeader(
         InternalSyntaxToken forToken, InternalSyntaxToken openParenthesisToken,
-        SeparatedList<ExpressionTree> init, InternalSyntaxToken firstSemicolonToken,
-        SeparatedList<ExpressionTree> condition, InternalSyntaxToken secondSemicolonToken,
-        SeparatedList<ExpressionTree> update, InternalSyntaxToken closeParenthesisToken
+        SeparatedListImpl<ExpressionTree> init, InternalSyntaxToken firstSemicolonToken,
+        SeparatedListImpl<ExpressionTree> condition, InternalSyntaxToken secondSemicolonToken,
+        SeparatedListImpl<ExpressionTree> update, InternalSyntaxToken closeParenthesisToken
     ) {
       this.forToken = forToken;
       this.openParenthesisToken = openParenthesisToken;
@@ -207,7 +207,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
       return openParenthesisToken;
     }
 
-    public SeparatedList<ExpressionTree> init() {
+    public SeparatedListImpl<ExpressionTree> init() {
       return init;
     }
 
@@ -215,7 +215,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
       return firstSemicolonToken;
     }
 
-    public SeparatedList<ExpressionTree> condition() {
+    public SeparatedListImpl<ExpressionTree> condition() {
       return condition;
     }
 
@@ -223,7 +223,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
       return secondSemicolonToken;
     }
 
-    public SeparatedList<ExpressionTree> update() {
+    public SeparatedListImpl<ExpressionTree> update() {
       return update;
     }
 

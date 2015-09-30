@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -37,24 +37,24 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   private static final Kind KIND = Kind.FUNCTION_CALL;
   private ExpressionTree callee;
   private final InternalSyntaxToken openParenthesisToken;
-  private final SeparatedList arguments;
+  private final SeparatedListImpl arguments;
   private final InternalSyntaxToken closeParenthesisToken;
 
-  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedList arguments, InternalSyntaxToken closeParenthesisToken) {
+  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl arguments, InternalSyntaxToken closeParenthesisToken) {
     this.callee = callee;
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = arguments;
     this.closeParenthesisToken = closeParenthesisToken;
   }
 
-  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedList arguments) {
+  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedListImpl arguments) {
     this.callee = callee;
     this.openParenthesisToken = null;
     this.arguments = arguments;
     this.closeParenthesisToken = null;
   }
 
-  public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedList arguments, InternalSyntaxToken closeParenthesisToken) {
+  public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedListImpl arguments, InternalSyntaxToken closeParenthesisToken) {
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = arguments;
     this.closeParenthesisToken = closeParenthesisToken;
@@ -78,7 +78,7 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   }
 
   @Override
-  public SeparatedList<ExpressionTree> arguments() {
+  public SeparatedListImpl<ExpressionTree> arguments() {
     return arguments;
   }
 

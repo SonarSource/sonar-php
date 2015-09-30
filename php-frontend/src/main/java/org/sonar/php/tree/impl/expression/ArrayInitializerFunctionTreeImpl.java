@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
@@ -36,10 +36,10 @@ public class ArrayInitializerFunctionTreeImpl extends PHPTree implements ArrayIn
   private static final Kind KIND = Kind.ARRAY_INITIALIZER_FUNCTION;
   private final InternalSyntaxToken arrayToken;
   private final InternalSyntaxToken openParenthesis;
-  private final SeparatedList<ArrayPairTree> arrayPairs;
+  private final SeparatedListImpl<ArrayPairTree> arrayPairs;
   private final InternalSyntaxToken closeParenthesis;
 
-  public ArrayInitializerFunctionTreeImpl(InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis, SeparatedList<ArrayPairTree> arrayPairs, InternalSyntaxToken closeParenthesis) {
+  public ArrayInitializerFunctionTreeImpl(InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis, SeparatedListImpl<ArrayPairTree> arrayPairs, InternalSyntaxToken closeParenthesis) {
     this.arrayToken = arrayToken;
     this.openParenthesis = openParenthesis;
     this.arrayPairs = arrayPairs;
@@ -57,7 +57,7 @@ public class ArrayInitializerFunctionTreeImpl extends PHPTree implements ArrayIn
   }
 
   @Override
-  public SeparatedList<ArrayPairTree> arrayPairs() {
+  public SeparatedListImpl<ArrayPairTree> arrayPairs() {
     return arrayPairs;
   }
 

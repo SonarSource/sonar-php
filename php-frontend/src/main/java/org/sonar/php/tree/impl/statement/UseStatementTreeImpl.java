@@ -22,7 +22,7 @@ package org.sonar.php.tree.impl.statement;
 import com.google.common.collect.Iterators;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -38,13 +38,13 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
   private final Kind KIND;
   private InternalSyntaxToken useToken;
   private InternalSyntaxToken useTypeToken;
-  private SeparatedList<UseClauseTree> declarations;
+  private SeparatedListImpl<UseClauseTree> declarations;
   private InternalSyntaxToken eosToken;
-  
+
   public UseStatementTreeImpl(
       InternalSyntaxToken useToken,
       @Nullable InternalSyntaxToken useTypeToken,
-      SeparatedList<UseClauseTree> declarations,
+      SeparatedListImpl<UseClauseTree> declarations,
       InternalSyntaxToken eosToken
   ) {
     this.useToken = useToken;
@@ -72,7 +72,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
   }
 
   @Override
-  public SeparatedList<UseClauseTree> clauses() {
+  public SeparatedListImpl<UseClauseTree> clauses() {
     return declarations;
   }
 

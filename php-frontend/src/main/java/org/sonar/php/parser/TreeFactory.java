@@ -27,7 +27,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
 import org.sonar.php.tree.impl.ScriptTreeImpl;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
@@ -239,19 +239,19 @@ public class TreeFactory {
     }
   }
 
-  private static <T extends Tree> SeparatedList<T> optionalSeparatedList(Optional<SeparatedList<T>> list) {
+  private static <T extends Tree> SeparatedListImpl<T> optionalSeparatedList(Optional<SeparatedListImpl<T>> list) {
     if (list.isPresent()) {
       return list.get();
     } else {
-      return new SeparatedList<>(new LinkedList<T>(), new LinkedList<InternalSyntaxToken>());
+      return new SeparatedListImpl<>(new LinkedList<T>(), new LinkedList<InternalSyntaxToken>());
     }
   }
 
-  private <T extends Tree> SeparatedList<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples) {
+  private <T extends Tree> SeparatedListImpl<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples) {
     return separatedList(firstElement, tuples, null);
   }
 
-  private <T extends Tree> SeparatedList<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples, InternalSyntaxToken trailingSeparator) {
+  private <T extends Tree> SeparatedListImpl<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples, InternalSyntaxToken trailingSeparator) {
     ImmutableList.Builder<T> elements = ImmutableList.builder();
     ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
 
@@ -267,7 +267,7 @@ public class TreeFactory {
       separators.add(trailingSeparator);
     }
 
-    return new SeparatedList<>(elements.build(), separators.build());
+    return new SeparatedListImpl<>(elements.build(), separators.build());
   }
 
 
@@ -364,7 +364,7 @@ public class TreeFactory {
     Optional<Tuple<ParameterTree, Optional<List<Tuple<InternalSyntaxToken, ParameterTree>>>>> parameters,
     InternalSyntaxToken rightParenthesis
   ) {
-    SeparatedList<ParameterTree> separatedList = SeparatedList.empty();
+    SeparatedListImpl<ParameterTree> separatedList = SeparatedListImpl.empty();
     if (parameters.isPresent()) {
       separatedList = separatedList(parameters.get().first(), parameters.get().second());
     }
@@ -388,17 +388,17 @@ public class TreeFactory {
     return new ParameterTreeImpl(classType.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
   }
 
-  public SeparatedList<NamespaceNameTree> interfaceList(NamespaceNameTree first, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> others) {
+  public SeparatedListImpl<NamespaceNameTree> interfaceList(NamespaceNameTree first, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> others) {
     return separatedList(first, others);
   }
 
-  public UseTraitDeclarationTree useTraitDeclaration(InternalSyntaxToken useToken, SeparatedList<NamespaceNameTree> traits, InternalSyntaxToken eosToken) {
+  public UseTraitDeclarationTree useTraitDeclaration(InternalSyntaxToken useToken, SeparatedListImpl<NamespaceNameTree> traits, InternalSyntaxToken eosToken) {
     return new UseTraitDeclarationTreeImpl(useToken, traits, eosToken);
   }
 
   public UseTraitDeclarationTree useTraitDeclaration(
     InternalSyntaxToken useToken,
-    SeparatedList<NamespaceNameTree> traits,
+    SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,
     Optional<List<TraitAdaptationStatementTree>> adaptations,
     InternalSyntaxToken closeCurlyBrace
@@ -409,7 +409,7 @@ public class TreeFactory {
   public TraitPrecedenceTree traitPrecedence(
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken insteadOfToken,
-    SeparatedList<NamespaceNameTree> traits,
+    SeparatedListImpl<NamespaceNameTree> traits,
     InternalSyntaxToken eosToken
   ) {
     return new TraitPrecedenceTreeImpl(methodReference, insteadOfToken, traits, eosToken);
@@ -444,11 +444,11 @@ public class TreeFactory {
 
   public ClassDeclarationTree interfaceDeclaration(
     InternalSyntaxToken interfaceToken, IdentifierTree name,
-    Optional<Tuple<InternalSyntaxToken, SeparatedList<NamespaceNameTree>>> extendsClause,
+    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> extendsClause,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     InternalSyntaxToken extendsToken = null;
-    SeparatedList<NamespaceNameTree> interfaceList = SeparatedList.empty();
+    SeparatedListImpl<NamespaceNameTree> interfaceList = SeparatedListImpl.empty();
     if (extendsClause.isPresent()) {
       extendsToken = extendsClause.get().first();
       interfaceList = extendsClause.get().second();
@@ -480,14 +480,14 @@ public class TreeFactory {
   public ClassDeclarationTree classDeclaration(
     Optional<InternalSyntaxToken> modifier, InternalSyntaxToken classToken, IdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
-    Optional<Tuple<InternalSyntaxToken, SeparatedList<NamespaceNameTree>>> implementsClause,
+    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace
   ) {
     InternalSyntaxToken extendsToken = null;
     NamespaceNameTree superClass = null;
 
     InternalSyntaxToken implementsToken = null;
-    SeparatedList<NamespaceNameTree> superInterfaces = SeparatedList.empty();
+    SeparatedListImpl<NamespaceNameTree> superInterfaces = SeparatedListImpl.empty();
 
     if (extendsClause.isPresent()) {
       extendsToken = extendsClause.get().first();
@@ -541,7 +541,7 @@ public class TreeFactory {
     Optional<List<Tuple<InternalSyntaxToken, UseClauseTree>>> additionalDeclarations,
     InternalSyntaxToken eosToken
   ) {
-    SeparatedList<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
+    SeparatedListImpl<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
     return new UseStatementTreeImpl(useToken, useTypeToken.orNull(), declarations, eosToken);
   }
 
@@ -637,7 +637,7 @@ public class TreeFactory {
       }
     }
 
-    return new NamespaceNameTreeImpl(absoluteSeparator, new SeparatedList<>(elements.build(), separators.build()), new IdentifierTreeImpl(name));
+    return new NamespaceNameTreeImpl(absoluteSeparator, new SeparatedListImpl<>(elements.build(), separators.build()), new IdentifierTreeImpl(name));
 
   }
 
@@ -707,9 +707,9 @@ public class TreeFactory {
 
   public ForStatementHeader forStatementHeader(
     InternalSyntaxToken forToken, InternalSyntaxToken lParenthesis,
-    Optional<SeparatedList<ExpressionTree>> init, InternalSyntaxToken semicolon1,
-    Optional<SeparatedList<ExpressionTree>> condition, InternalSyntaxToken semicolon2,
-    Optional<SeparatedList<ExpressionTree>> update, InternalSyntaxToken rParenthesis
+    Optional<SeparatedListImpl<ExpressionTree>> init, InternalSyntaxToken semicolon1,
+    Optional<SeparatedListImpl<ExpressionTree>> condition, InternalSyntaxToken semicolon2,
+    Optional<SeparatedListImpl<ExpressionTree>> update, InternalSyntaxToken rParenthesis
   ) {
     return new ForStatementHeader(
       forToken, lParenthesis,
@@ -733,7 +733,7 @@ public class TreeFactory {
     return new ForStatementTreeImpl(forStatementHeader, colonToken, optionalList(statements), endForToken, eos);
   }
 
-  public SeparatedList<ExpressionTree> forExpr(ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> listOptional) {
+  public SeparatedListImpl<ExpressionTree> forExpr(ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> listOptional) {
     return separatedList(expression, listOptional);
   }
 
@@ -960,7 +960,7 @@ public class TreeFactory {
       new FunctionCallTreeImpl(
         new IdentifierTreeImpl(haltCompilerToken),
         openParenthesisToken,
-        SeparatedList.empty(),
+        SeparatedListImpl.empty(),
         closeParenthesisToken),
       eosToken);
   }
@@ -1187,7 +1187,7 @@ public class TreeFactory {
     return new ListExpressionTreeImpl(
       listToken,
       openParenthesis,
-      new SeparatedList<>(listElements.build(), commas.build()),
+      new SeparatedListImpl<>(listElements.build(), commas.build()),
       closeParenthesis);
   }
 
@@ -1251,11 +1251,11 @@ public class TreeFactory {
     Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> arguments,
     InternalSyntaxToken closeParenthesis
   ) {
-    SeparatedList<ExpressionTree> list;
+    SeparatedListImpl<ExpressionTree> list;
     if (arguments.isPresent()) {
       list = separatedList(arguments.get().first(), arguments.get().second());
     } else {
-      list = SeparatedList.empty();
+      list = SeparatedListImpl.empty();
     }
 
     return new FunctionCallTreeImpl(openParenthesis, list, closeParenthesis);
@@ -1335,14 +1335,14 @@ public class TreeFactory {
     return new FunctionCallTreeImpl(
       new IdentifierTreeImpl(functionNameToken),
       openParenthesis,
-      new SeparatedList(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()),
+      new SeparatedListImpl(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()),
       closeParenthesis);
   }
 
   public FunctionCallTree internalFunction3(InternalSyntaxToken includeOnceToken, ExpressionTree expression) {
     return new FunctionCallTreeImpl(
       new IdentifierTreeImpl(includeOnceToken),
-      new SeparatedList(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()));
+      new SeparatedListImpl(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()));
   }
 
   public ArrayPairTree arrayPair1(ExpressionTree expression, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> pairExpression) {
@@ -1356,7 +1356,7 @@ public class TreeFactory {
     return new ArrayPairTreeImpl(referenceVariableTree);
   }
 
-  public SeparatedList<ArrayPairTree> arrayInitializerList(
+  public SeparatedListImpl<ArrayPairTree> arrayInitializerList(
     ArrayPairTree firstElement,
     Optional<List<Tuple<InternalSyntaxToken, ArrayPairTree>>> restElements,
     Optional<InternalSyntaxToken> trailingComma
@@ -1366,20 +1366,20 @@ public class TreeFactory {
 
   public ArrayInitializerTree newArrayInitFunction(
     InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis,
-    Optional<SeparatedList<ArrayPairTree>> elements,
+    Optional<SeparatedListImpl<ArrayPairTree>> elements,
     InternalSyntaxToken closeParenthesis
   ) {
     return new ArrayInitializerFunctionTreeImpl(
       arrayToken,
       openParenthesis,
-      elements.isPresent() ? elements.get() : new SeparatedList<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
+      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
       closeParenthesis);
   }
 
-  public ArrayInitializerTree newArrayInitBracket(InternalSyntaxToken openBracket, Optional<SeparatedList<ArrayPairTree>> elements, InternalSyntaxToken closeBracket) {
+  public ArrayInitializerTree newArrayInitBracket(InternalSyntaxToken openBracket, Optional<SeparatedListImpl<ArrayPairTree>> elements, InternalSyntaxToken closeBracket) {
     return new ArrayInitializerBracketTreeImpl(
       openBracket,
-      elements.isPresent() ? elements.get() : new SeparatedList<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
+      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
       closeBracket);
   }
 

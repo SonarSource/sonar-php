@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 

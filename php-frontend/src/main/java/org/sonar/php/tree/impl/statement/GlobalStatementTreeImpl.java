@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
@@ -36,10 +36,10 @@ public class GlobalStatementTreeImpl extends PHPTree implements GlobalStatementT
   private static final Kind KIND = Kind.GLOBAL_STATEMENT;
 
   private final InternalSyntaxToken globalToken;
-  private final SeparatedList<VariableTree> variables;
+  private final SeparatedListImpl<VariableTree> variables;
   private final InternalSyntaxToken eosToken;
 
-  public GlobalStatementTreeImpl(InternalSyntaxToken globalToken, SeparatedList<VariableTree> variables, InternalSyntaxToken eosToken) {
+  public GlobalStatementTreeImpl(InternalSyntaxToken globalToken, SeparatedListImpl<VariableTree> variables, InternalSyntaxToken eosToken) {
     this.globalToken = globalToken;
     this.variables = variables;
     this.eosToken = eosToken;
@@ -51,7 +51,7 @@ public class GlobalStatementTreeImpl extends PHPTree implements GlobalStatementT
   }
 
   @Override
-  public SeparatedList<VariableTree> variables() {
+  public SeparatedListImpl<VariableTree> variables() {
     return variables;
   }
 

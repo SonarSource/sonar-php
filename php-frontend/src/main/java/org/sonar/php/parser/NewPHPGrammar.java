@@ -22,7 +22,7 @@ package org.sonar.php.parser;
 import com.sonar.sslr.api.typed.GrammarBuilder;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStatementHead;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
@@ -369,8 +369,8 @@ public class NewPHPGrammar {
             STATIC_SCALAR()))));
   }
 
-  public SeparatedList<NamespaceNameTree> INTERFACE_LIST() {
-    return b.<SeparatedList<NamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
+  public SeparatedListImpl<NamespaceNameTree> INTERFACE_LIST() {
+    return b.<SeparatedListImpl<NamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
       f.interfaceList(
         NAMESPACE_NAME(),
         b.zeroOrMore(f.newTuple98(b.token(COMMA), NAMESPACE_NAME()))));
@@ -774,8 +774,8 @@ public class NewPHPGrammar {
         b.token(PHPPunctuator.RPARENTHESIS)));
   }
 
-  public SeparatedList<ExpressionTree> FOR_EXPR() {
-    return b.<SeparatedList<ExpressionTree>>nonterminal(PHPLexicalGrammar.FOR_EXPR).is(
+  public SeparatedListImpl<ExpressionTree> FOR_EXPR() {
+    return b.<SeparatedListImpl<ExpressionTree>>nonterminal(PHPLexicalGrammar.FOR_EXPR).is(
       f.forExpr(
         EXPRESSION(),
         b.zeroOrMore(f.newTuple12(
@@ -1411,8 +1411,8 @@ public class NewPHPGrammar {
         f.newArrayInitBracket(b.token(LBRACKET), b.optional(ARRAY_PAIR_LIST()), b.token(RBRACKET))));
   }
 
-  public SeparatedList<ArrayPairTree> ARRAY_PAIR_LIST() {
-    return b.<SeparatedList<ArrayPairTree>>nonterminal(PHPLexicalGrammar.ARRAY_PAIR_LIST).is(
+  public SeparatedListImpl<ArrayPairTree> ARRAY_PAIR_LIST() {
+    return b.<SeparatedListImpl<ArrayPairTree>>nonterminal(PHPLexicalGrammar.ARRAY_PAIR_LIST).is(
       f.arrayInitializerList(
         ARRAY_PAIR(),
         b.zeroOrMore(f.newTuple17(b.token(COMMA), ARRAY_PAIR())),

@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -28,11 +28,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public interface UseTraitDeclarationTree extends ClassMemberTree {
-  
+
   SyntaxToken useToken();
-  
+
   SeparatedList<NamespaceNameTree> traits();
-  
+
   @Nullable
   SyntaxToken openCurlyBraceToken();
 
@@ -40,7 +40,7 @@ public interface UseTraitDeclarationTree extends ClassMemberTree {
 
   @Nullable
   SyntaxToken closeCurlyBraceToken();
-  
+
   @Nullable
   SyntaxToken eosToken();
 

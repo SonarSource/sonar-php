@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -35,12 +35,12 @@ public class ParameterListTreeImpl extends PHPTree implements ParameterListTree 
 
   private static final Kind KIND = Kind.PARAMETER_LIST;
   private InternalSyntaxToken openParenthesis;
-  private SeparatedList<ParameterTree> parameters;
+  private SeparatedListImpl<ParameterTree> parameters;
   private InternalSyntaxToken closeParenthesis;
 
   public ParameterListTreeImpl(
-    InternalSyntaxToken openParenthesis, 
-    SeparatedList<ParameterTree> parameters, 
+    InternalSyntaxToken openParenthesis,
+    SeparatedListImpl<ParameterTree> parameters,
     InternalSyntaxToken closeParenthesis
   ) {
     this.openParenthesis = openParenthesis;
@@ -57,17 +57,17 @@ public class ParameterListTreeImpl extends PHPTree implements ParameterListTree 
   public SyntaxToken openParenthesisToken() {
     return openParenthesis;
   }
-  
+
   @Override
-  public SeparatedList<ParameterTree> parameters() {
+  public SeparatedListImpl<ParameterTree> parameters() {
     return parameters;
   }
-  
+
   @Override
   public SyntaxToken closeParenthesisToken() {
     return closeParenthesis;
   }
-  
+
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(

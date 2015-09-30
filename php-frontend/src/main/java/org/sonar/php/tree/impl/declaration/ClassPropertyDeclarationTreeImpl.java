@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -38,13 +38,13 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
 
   private final Kind kind;
   private final List<SyntaxToken> modifierTokens;
-  private final SeparatedList<VariableDeclarationTree> declarations;
+  private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;
 
   private ClassPropertyDeclarationTreeImpl(
     Kind kind,
-    List<SyntaxToken> modifierTokens, 
-    SeparatedList<VariableDeclarationTree> declarations, 
+    List<SyntaxToken> modifierTokens,
+    SeparatedListImpl<VariableDeclarationTree> declarations,
     InternalSyntaxToken eosToken
     ) {
     this.kind = kind;
@@ -52,12 +52,12 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     this.declarations = declarations;
     this.eosToken = eosToken;
   }
-  
-  public static ClassPropertyDeclarationTree variable(List<SyntaxToken> modifierTokens, SeparatedList<VariableDeclarationTree> declarations, InternalSyntaxToken eosToken) {
+
+  public static ClassPropertyDeclarationTree variable(List<SyntaxToken> modifierTokens, SeparatedListImpl<VariableDeclarationTree> declarations, InternalSyntaxToken eosToken) {
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION, modifierTokens, declarations, eosToken);
   }
 
-  public static ClassPropertyDeclarationTree constant(SyntaxToken constToken, SeparatedList<VariableDeclarationTree> declarations, InternalSyntaxToken eosToken) {
+  public static ClassPropertyDeclarationTree constant(SyntaxToken constToken, SeparatedListImpl<VariableDeclarationTree> declarations, InternalSyntaxToken eosToken) {
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, ImmutableList.of(constToken), declarations, eosToken);
   }
 
@@ -67,7 +67,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   }
 
   @Override
-  public SeparatedList<VariableDeclarationTree> declarations() {
+  public SeparatedListImpl<VariableDeclarationTree> declarations() {
     return declarations;
   }
 

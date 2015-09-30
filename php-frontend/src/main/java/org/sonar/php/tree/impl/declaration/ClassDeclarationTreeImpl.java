@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -45,7 +45,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   private final SyntaxToken extendsToken;
   private final NamespaceNameTree superClass;
   private final SyntaxToken implementsToken;
-  private final SeparatedList<NamespaceNameTree> superInterfaces;
+  private final SeparatedListImpl<NamespaceNameTree> superInterfaces;
   private final SyntaxToken openCurlyBraceToken;
   private final List<ClassMemberTree> members;
   private final SyntaxToken closeCurlyBraceToken;
@@ -54,7 +54,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
       Kind kind,
       @Nullable SyntaxToken modifierToken, SyntaxToken classEntryTypeToken, IdentifierTree name,
       @Nullable SyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
-      @Nullable SyntaxToken implementsToken, SeparatedList<NamespaceNameTree> superInterfaces,
+      @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken
   ) {
     this.KIND = kind;
@@ -105,7 +105,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   @Override
-  public SeparatedList<NamespaceNameTree> superInterfaces() {
+  public SeparatedListImpl<NamespaceNameTree> superInterfaces() {
     return superInterfaces;
   }
 
@@ -147,7 +147,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   public static ClassDeclarationTree createInterface(
       InternalSyntaxToken interfaceToken, IdentifierTree name,
-      @Nullable InternalSyntaxToken extendsToken, SeparatedList<NamespaceNameTree> interfaceList,
+      @Nullable InternalSyntaxToken extendsToken, SeparatedListImpl<NamespaceNameTree> interfaceList,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return new ClassDeclarationTreeImpl(
@@ -177,7 +177,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
         null,
         null,
         null,
-        SeparatedList.<NamespaceNameTree>empty(),
+        SeparatedListImpl.<NamespaceNameTree>empty(),
         openCurlyBraceToken,
         members,
         closeCurlyBraceToken
@@ -187,7 +187,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   public static ClassDeclarationTree createClass(
       @Nullable InternalSyntaxToken modifierToken, InternalSyntaxToken classToken, IdentifierTree name,
       @Nullable InternalSyntaxToken extendsToken, @Nullable NamespaceNameTree superClass,
-      @Nullable InternalSyntaxToken implementsToken, SeparatedList<NamespaceNameTree> superInterfaces,
+      @Nullable InternalSyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       InternalSyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, InternalSyntaxToken closeCurlyBraceToken) {
     return new ClassDeclarationTreeImpl(
         Kind.CLASS_DECLARATION,

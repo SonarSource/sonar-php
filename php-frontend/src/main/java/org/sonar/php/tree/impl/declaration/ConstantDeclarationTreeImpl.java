@@ -22,7 +22,7 @@ package org.sonar.php.tree.impl.declaration;
 import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -36,12 +36,12 @@ public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDecl
 
   private final Kind KIND = Kind.CONSTANT_DECLARATION;
   private final SyntaxToken constToken;
-  private final SeparatedList<VariableDeclarationTree> declarations;
+  private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;
 
   public ConstantDeclarationTreeImpl(
       SyntaxToken constToken,
-      SeparatedList<VariableDeclarationTree> declarations,
+      SeparatedListImpl<VariableDeclarationTree> declarations,
       InternalSyntaxToken eosToken
   ) {
     this.constToken = constToken;
@@ -55,7 +55,7 @@ public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDecl
   }
 
   @Override
-  public SeparatedList<VariableDeclarationTree> declarations() {
+  public SeparatedListImpl<VariableDeclarationTree> declarations() {
     return declarations;
   }
 

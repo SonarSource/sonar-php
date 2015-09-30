@@ -17,38 +17,22 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.declaration;
+package org.sonar.plugins.php.api.tree;
 
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.SeparatedList;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import com.google.common.base.Function;
+import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 
+import java.util.Iterator;
 import java.util.List;
 
-/**
- * <p>Class <a href="http://php.net/manual/en/language.oop5.properties.php">Properties</a>
- * <pre>
- *  var {@link #declarations()} ;
- *
- *  public {@link #declarations()} ;
- *  protected {@link #declarations()} ;
- *  private {@link #declarations()} ;
- *
- *  public static {@link #declarations()} ;
- * </pre>
- *
- * <p>Class <a href="http://php.net/manual/en/language.oop5.constants.php">Constants</a>
- * <pre>
- *  const {@link #declarations()} ;
- * </pre>
- */
-@Beta
-public interface ClassPropertyDeclarationTree extends ClassMemberTree {
+public interface SeparatedList<T extends Tree> extends List<T> {
 
-  List<SyntaxToken> modifierTokens();
+  InternalSyntaxToken getSeparator(int i);
 
-  SeparatedList<VariableDeclarationTree> declarations();
+  List<InternalSyntaxToken> getSeparators();
 
-  SyntaxToken eosToken();
+  Iterator<Tree> elementsAndSeparators(final Function<T, ? extends Tree> elementTransformer);
+
+  Iterator<Tree> elementsAndSeparators();
 
 }

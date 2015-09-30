@@ -22,7 +22,7 @@ package org.sonar.php.tree.impl.declaration;
 import com.google.common.collect.Iterators;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -38,12 +38,12 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   private static final Kind KIND = Kind.NAMESPACED_NAME;
 
   private final SyntaxToken absoluteSeparator;
-  private final SeparatedList<IdentifierTree> namespaces;
+  private final SeparatedListImpl<IdentifierTree> namespaces;
   private final IdentifierTree name;
 
   private final String fullName;
 
-  public NamespaceNameTreeImpl(@Nullable InternalSyntaxToken absoluteSeparator, SeparatedList<IdentifierTree> namespaces, IdentifierTree name) {
+  public NamespaceNameTreeImpl(@Nullable InternalSyntaxToken absoluteSeparator, SeparatedListImpl<IdentifierTree> namespaces, IdentifierTree name) {
     this.absoluteSeparator = absoluteSeparator;
     this.namespaces = namespaces;
     this.name = name;
@@ -57,7 +57,7 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   }
 
   @Override
-  public SeparatedList<IdentifierTree> namespaces() {
+  public SeparatedListImpl<IdentifierTree> namespaces() {
     return namespaces;
   }
 

@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
@@ -35,10 +35,10 @@ public class ArrayInitializerBracketTreeImpl extends PHPTree implements ArrayIni
 
   private static final Kind KIND = Kind.ARRAY_INITIALIZER_BRACKET;
   private final InternalSyntaxToken openBracket;
-  private final SeparatedList<ArrayPairTree> arrayPairs;
+  private final SeparatedListImpl<ArrayPairTree> arrayPairs;
   private final InternalSyntaxToken closeBracket;
 
-  public ArrayInitializerBracketTreeImpl(InternalSyntaxToken openBracket, SeparatedList<ArrayPairTree> arrayPairs, InternalSyntaxToken closeBracket) {
+  public ArrayInitializerBracketTreeImpl(InternalSyntaxToken openBracket, SeparatedListImpl<ArrayPairTree> arrayPairs, InternalSyntaxToken closeBracket) {
     this.openBracket = openBracket;
     this.arrayPairs = arrayPairs;
     this.closeBracket = closeBracket;
@@ -50,7 +50,7 @@ public class ArrayInitializerBracketTreeImpl extends PHPTree implements ArrayIni
   }
 
   @Override
-  public SeparatedList<ArrayPairTree> arrayPairs() {
+  public SeparatedListImpl<ArrayPairTree> arrayPairs() {
     return arrayPairs;
   }
 

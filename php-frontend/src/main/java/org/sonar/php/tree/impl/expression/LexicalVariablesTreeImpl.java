@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
@@ -37,10 +37,10 @@ public class LexicalVariablesTreeImpl extends PHPTree implements LexicalVariable
 
   private final InternalSyntaxToken useToken;
   private final InternalSyntaxToken openParenthesisToken;
-  private final SeparatedList variables;
+  private final SeparatedListImpl variables;
   private final InternalSyntaxToken closeParenthesisToken;
 
-  public LexicalVariablesTreeImpl(InternalSyntaxToken useToken, InternalSyntaxToken openParenthesisToken, SeparatedList variables, InternalSyntaxToken closeParenthesisToken) {
+  public LexicalVariablesTreeImpl(InternalSyntaxToken useToken, InternalSyntaxToken openParenthesisToken, SeparatedListImpl variables, InternalSyntaxToken closeParenthesisToken) {
     this.useToken = useToken;
     this.openParenthesisToken = openParenthesisToken;
     this.variables = variables;
@@ -58,7 +58,7 @@ public class LexicalVariablesTreeImpl extends PHPTree implements LexicalVariable
   }
 
   @Override
-  public SeparatedList<VariableTree> variables() {
+  public SeparatedListImpl<VariableTree> variables() {
     return variables;
   }
 

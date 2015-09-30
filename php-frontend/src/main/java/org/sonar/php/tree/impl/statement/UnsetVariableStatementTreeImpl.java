@@ -21,7 +21,7 @@ package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedList;
+import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -37,13 +37,13 @@ public class UnsetVariableStatementTreeImpl extends PHPTree implements UnsetVari
 
   private final InternalSyntaxToken unsetToken;
   private final InternalSyntaxToken openParenthesisToken;
-  private final SeparatedList<ExpressionTree> variables;
+  private final SeparatedListImpl<ExpressionTree> variables;
   private final InternalSyntaxToken closeParenthesisToken;
   private final InternalSyntaxToken eosToken;
 
   public UnsetVariableStatementTreeImpl(
       InternalSyntaxToken unsetToken, InternalSyntaxToken openParenthesisToken,
-      SeparatedList<ExpressionTree> variables,
+      SeparatedListImpl<ExpressionTree> variables,
       InternalSyntaxToken closeParenthesisToken, InternalSyntaxToken eosToken
   ) {
     this.unsetToken = unsetToken;
@@ -78,7 +78,7 @@ public class UnsetVariableStatementTreeImpl extends PHPTree implements UnsetVari
   }
 
   @Override
-  public SeparatedList<ExpressionTree> variables() {
+  public SeparatedListImpl<ExpressionTree> variables() {
     return variables;
   }
 
