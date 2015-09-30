@@ -32,7 +32,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   {@link #leftOperand()} {@link Tree.Kind#MINUS -} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#LEFT_SHIFT <<} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#RIGHT_SHIFT >>} {@link #rightOperand()}
- *   {@link #leftOperand()} {@link Tree.Kind#UNSIGNED_RIGHT_SHIFT >>>} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#LESS_THAN <} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#GREATER_THAN >} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#LESS_THAN_OR_EQUAL_TO <=} {@link #rightOperand()}
@@ -49,6 +48,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   {@link #leftOperand()} {@link Tree.Kind#ALTERNATIVE_CONDITIONAL_AND and} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#CONDITIONAL_OR ||} {@link #rightOperand()}
  *   {@link #leftOperand()} {@link Tree.Kind#ALTERNATIVE_CONDITIONAL_OR or} {@link #rightOperand()}
+ *   {@link #leftOperand()} {@link Tree.Kind#INSTANCE_OF instanceof} {@link #rightOperand()}
  * </pre>
  */
 @Beta

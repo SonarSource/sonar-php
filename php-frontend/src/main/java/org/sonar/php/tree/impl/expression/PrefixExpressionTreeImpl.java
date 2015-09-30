@@ -19,8 +19,7 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import java.util.Iterator;
-
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -29,15 +28,15 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 
-public class UnaryExpressionTreeImpl extends PHPTree implements UnaryExpressionTree {
+public class PrefixExpressionTreeImpl extends PHPTree implements UnaryExpressionTree {
 
   private final Kind kind;
   private final InternalSyntaxToken operator;
   private final ExpressionTree expression;
-  
-  public UnaryExpressionTreeImpl(Kind kind, InternalSyntaxToken operator, ExpressionTree expression) {
+
+  public PrefixExpressionTreeImpl(Kind kind, InternalSyntaxToken operator, ExpressionTree expression) {
     this.kind = kind;
     this.operator = operator;
     this.expression = expression;
@@ -62,7 +61,7 @@ public class UnaryExpressionTreeImpl extends PHPTree implements UnaryExpressionT
   public Iterator<Tree> childrenIterator() {
     return Iterators.forArray(operator, expression);
   }
-  
+
   @Override
   public void accept(TreeVisitor visitor) {
     visitor.visitUnaryExpression(this);

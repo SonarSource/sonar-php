@@ -68,7 +68,7 @@ import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.PostfixExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
-import org.sonar.php.tree.impl.expression.UnaryExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.PrefixExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -962,12 +962,12 @@ public class TreeFactory {
     return new CastExpressionTreeImpl(leftParenthesis, type, rightParenthesis, expression);
   }
 
-  public ExpressionTree unaryExpr(InternalSyntaxToken operator, ExpressionTree expression) {
+  public ExpressionTree prefixExpr(InternalSyntaxToken operator, ExpressionTree expression) {
     Kind kind = UNARY_EXPRESSION_KINDS_BY_OPERATOR.get(operator.text());
     if (kind == null) {
       throw new IllegalArgumentException("Mapping not found for unary operator " + operator.text());
     }
-    return new UnaryExpressionTreeImpl(kind, operator, expression);
+    return new PrefixExpressionTreeImpl(kind, operator, expression);
   }
 
   public ExpressionTree concatenationExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {

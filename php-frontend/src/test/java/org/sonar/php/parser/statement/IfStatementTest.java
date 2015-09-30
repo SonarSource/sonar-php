@@ -40,16 +40,13 @@ public class IfStatementTest {
       .matches("if ($a) : elseif ($a): else: endif;")
       .matches("if ($a) : else: endif;")
 
-
-      .notMatches("if ($a) : {}")
-
-    ;
+      .notMatches("if ($a) : {}");
   }
 
   @Test
   public void realLife() throws Exception {
     assertThat(PHPLexicalGrammar.IF_STATEMENT)
-        //fixme (Lena): should match
-      .notMatches("if (\"#$a\") {\n $x = ''; }");
+      .matches("if (\"#$a\") {\n $x = ''; }");
   }
+
 }

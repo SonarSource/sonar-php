@@ -419,12 +419,6 @@ public interface Tree {
 
     /**
      * {@link BinaryExpressionTree}
-     * {@code >>>}
-     */
-    UNSIGNED_RIGHT_SHIFT(BinaryExpressionTree.class),
-
-    /**
-     * {@link BinaryExpressionTree}
      * {@code instanceof}
      */
     INSTANCE_OF(BinaryExpressionTree.class),

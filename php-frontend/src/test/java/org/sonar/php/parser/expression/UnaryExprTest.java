@@ -19,10 +19,10 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class UnaryExprTest {
 
@@ -37,13 +37,12 @@ public class UnaryExprTest {
       .matches("@ $a")
       .matches("@ ! $a")
       .matches("(int) $a")
-      
-      // FIXME (PY) Re-enable the following assertions
-      //.matches("$a =& $b")
-      //.matches("!$a = $b")
-      //.matches("++$a = $b")
-      //.matches("(int) $a = $b")
-      
+
+      .matches("$a =& $b")
+      .matches("!$a = $b")
+      .matches("++$a = $b")
+      .matches("(int) $a = $b")
+
       .notMatches("(int) $a + $b");
   }
 }

@@ -19,23 +19,113 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.sslr.grammar.GrammarRuleKey;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class BinaryExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
+  public void conditional_or() throws Exception {
+    testBinary(Kind.CONDITIONAL_OR, "||");
+    testBinary(Kind.ALTERNATIVE_CONDITIONAL_OR, "or", Kind.CONDITIONAL_OR);
+  }
+
+  @Test
+  public void conditional_xor() throws Exception {
+    testBinary(Kind.ALTERNATIVE_CONDITIONAL_XOR, "xor");
+  }
+
+  @Test
+  public void conditional_and() throws Exception {
+    testBinary(Kind.CONDITIONAL_AND, "&&");
+    testBinary(Kind.ALTERNATIVE_CONDITIONAL_AND, "and", Kind.CONDITIONAL_AND);
+  }
+
+  @Test
+  public void bitwise_or() throws Exception {
+    testBinary(Kind.BITWISE_OR, "|");
+  }
+
+  @Test
+  public void bitwise_xor() throws Exception {
+    testBinary(Kind.BITWISE_XOR, "^");
+  }
+
+  @Test
+  public void bitwise_and() throws Exception {
+    testBinary(Kind.BITWISE_AND, "&");
+  }
+
+  @Test
+  public void equality() throws Exception {
+    testBinary(Kind.STRICT_NOT_EQUAL_TO, "!==", PHPLexicalGrammar.EQUALITY_EXPR);
+    testBinary(Kind.NOT_EQUAL_TO, "!=", PHPLexicalGrammar.EQUALITY_EXPR);
+    testBinary(Kind.STRICT_EQUAL_TO, "===", PHPLexicalGrammar.EQUALITY_EXPR);
+    testBinary(Kind.EQUAL_TO, "==", PHPLexicalGrammar.EQUALITY_EXPR);
+    testBinary(Kind.ALTERNATIVE_NOT_EQUAL_TO, "<>", PHPLexicalGrammar.EQUALITY_EXPR);
+  }
+
+  @Test
+  public void relational() throws Exception {
+    testBinary(Kind.LESS_THAN_OR_EQUAL_TO, "<=", PHPLexicalGrammar.RELATIONAL_EXPR);
+    testBinary(Kind.GREATER_THAN_OR_EQUAL_TO, ">=", PHPLexicalGrammar.RELATIONAL_EXPR);
+    testBinary(Kind.LESS_THAN, "<", PHPLexicalGrammar.RELATIONAL_EXPR);
+    testBinary(Kind.GREATER_THAN, ">", PHPLexicalGrammar.RELATIONAL_EXPR);
+  }
+
+  @Test
+  public void shift() throws Exception {
+    testBinary(Kind.LEFT_SHIFT, "<<", PHPLexicalGrammar.SHIFT_EXPR);
+    testBinary(Kind.RIGHT_SHIFT, ">>", PHPLexicalGrammar.SHIFT_EXPR);
+  }
+
+  @Test
+  public void additive() throws Exception {
+    testBinary(Kind.PLUS, "+", PHPLexicalGrammar.ADDITIVE_EXPR);
+    testBinary(Kind.MINUS, "-", PHPLexicalGrammar.ADDITIVE_EXPR);
+  }
+
+  @Test
+  public void multiplicative() throws Exception {
+    testBinary(Kind.MULTIPLY, "*", PHPLexicalGrammar.MULTIPLICATIVE_EXPR);
+    testBinary(Kind.DIVIDE, "/", PHPLexicalGrammar.MULTIPLICATIVE_EXPR);
+    testBinary(Kind.REMAINDER, "%", PHPLexicalGrammar.MULTIPLICATIVE_EXPR);
+  }
+
+  @Test
   public void concatenation() throws Exception {
-    BinaryExpressionTree tree = parse("$a . $b", PHPLexicalGrammar.CONCATENATION_EXPR);
-    assertThat(tree.is(Kind.CONCATENATION)).isTrue();
+    testBinary(Kind.CONCATENATION, ".");
+  }
+
+  @Test
+  public void instanceof_expr() throws Exception {
+    testBinary(Kind.INSTANCE_OF, "instanceof", PHPLexicalGrammar.POSTFIX_EXPR);
+  }
+
+  private void testBinary(Kind kind, String operator) throws Exception {
+    BinaryExpressionTree tree = parse("$a " + operator + " $b", kind);
+
+    assertThat(tree.is(kind)).isTrue();
     assertThat(tree.leftOperand().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(expressionToString(tree.leftOperand())).isEqualTo("$a");
-    assertThat(tree.operator().text()).isEqualTo(".");
+    assertThat(tree.operator().text()).isEqualTo(operator);
+    assertThat(tree.rightOperand().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.rightOperand())).isEqualTo("$b");
+  }
+
+  private void testBinary(Kind kind, String operator, GrammarRuleKey ruleKey) throws Exception {
+    BinaryExpressionTree tree = parse("$a " + operator + " $b", ruleKey);
+
+    assertThat(tree.is(kind)).isTrue();
+    assertThat(tree.leftOperand().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.leftOperand())).isEqualTo("$a");
+    assertThat(tree.operator().text()).isEqualTo(operator);
     assertThat(tree.rightOperand().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(expressionToString(tree.rightOperand())).isEqualTo("$b");
   }

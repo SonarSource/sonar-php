@@ -938,7 +938,7 @@ public class NewPHPGrammar {
   public ExpressionTree UNARY_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.UNARY_EXPR).is(
       b.firstOf(
-        f.unaryExpr(
+        f.prefixExpr(
           b.firstOf(
             b.token(PHPPunctuator.INC),
             b.token(PHPPunctuator.DEC),
@@ -949,14 +949,13 @@ public class NewPHPGrammar {
             b.token(PHPPunctuator.AT)),
           UNARY_EXPR()),
         CAST_EXPR(),
-        // FIXME (PY) Uncomment the following lines
-        // ASSIGNMENT_EXPR(),
-        // ASSIGNMENT_BY_REFERENCE(),
+        ASSIGNMENT_EXPRESSION(),
+        ASSIGNMENT_BY_REFERENCE(),
         POSTFIX_EXPRESSION()));
   }
 
   public ExpressionTree CONCATENATION_EXPR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.CONCATENATION_EXPR).is(
+    return b.<ExpressionTree>nonterminal(Kind.CONCATENATION).is(
       f.concatenationExpr(
         UNARY_EXPR(),
         b.zeroOrMore(f.newTuple60(
@@ -1009,8 +1008,8 @@ public class NewPHPGrammar {
           RELATIONAL_EXPR()))));
   }
 
-  public ExpressionTree BITEWISE_AND_EXPR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.BITEWISE_AND_EXPR).is(
+  public ExpressionTree BITWISE_AND_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.BITWISE_AND).is(
       f.bitwiseAndExpr(
         EQUALITY_EXPR(),
         b.zeroOrMore(f.newTuple66(
@@ -1018,55 +1017,55 @@ public class NewPHPGrammar {
           EQUALITY_EXPR()))));
   }
 
-  public ExpressionTree BITEWISE_XOR_EXPR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.BITEWISE_XOR_EXPR).is(
+  public ExpressionTree BITWISE_XOR_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.BITWISE_XOR).is(
       f.bitwiseXorExpr(
-        BITEWISE_AND_EXPR(),
+        BITWISE_AND_EXPR(),
         b.zeroOrMore(f.newTuple67(
           b.token(PHPPunctuator.XOR),
-          BITEWISE_AND_EXPR()))));
+          BITWISE_AND_EXPR()))));
   }
 
-  public ExpressionTree BITEWISE_OR_EXPR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.BITEWISE_OR_EXPR).is(
+  public ExpressionTree BITWISE_OR_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.BITWISE_OR).is(
       f.bitwiseOrExpr(
-        BITEWISE_XOR_EXPR(),
+        BITWISE_XOR_EXPR(),
         b.zeroOrMore(f.newTuple68(
           b.token(PHPPunctuator.OR),
-          BITEWISE_XOR_EXPR()))));
+          BITWISE_XOR_EXPR()))));
   }
 
-  public ExpressionTree LOGICAL_AND_EXPR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.LOGICAL_AND_EXPR).is(
+  public ExpressionTree CONDITIONAL_AND_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_AND).is(
       f.logicalAndExpr(
-        BITEWISE_OR_EXPR(),
+        BITWISE_OR_EXPR(),
         b.zeroOrMore(f.newTuple69(
           b.firstOf(b.token(PHPPunctuator.ANDAND), b.token(PHPKeyword.AND)),
-          BITEWISE_OR_EXPR()))));
+          BITWISE_OR_EXPR()))));
   }
 
-  public ExpressionTree LOGICAL_XOR_EXPR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.LOGICAL_XOR_EXPR).is(
+  public ExpressionTree CONDITIONAL_XOR_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.ALTERNATIVE_CONDITIONAL_XOR).is(
       f.logicalXorExpr(
-        LOGICAL_AND_EXPR(),
+        CONDITIONAL_AND_EXPR(),
         b.zeroOrMore(f.newTuple70(
           b.token(PHPKeyword.XOR),
-          LOGICAL_AND_EXPR()))));
+          CONDITIONAL_AND_EXPR()))));
   }
 
-  public ExpressionTree LOGICAL_OR_EXPR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.LOGICAL_OR_EXPR).is(
+  public ExpressionTree CONDITIONAL_OR_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_OR).is(
       f.logicalOrExpr(
-        LOGICAL_XOR_EXPR(),
+        CONDITIONAL_XOR_EXPR(),
         b.zeroOrMore(f.newTuple71(
           b.firstOf(b.token(PHPPunctuator.OROR), b.token(PHPKeyword.OR)),
-          LOGICAL_XOR_EXPR()))));
+          CONDITIONAL_XOR_EXPR()))));
   }
 
   public ExpressionTree CONDITIONAL_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.CONDITIONAL_EXPR).is(
       f.completeConditionalExpr(
-        LOGICAL_OR_EXPR(),
+        CONDITIONAL_OR_EXPR(),
         b.optional(
           f.newConditionalExpr(b.token(QUERY), b.optional(CONDITIONAL_EXPR()), b.token(COLON), CONDITIONAL_EXPR())
         )));

@@ -19,16 +19,16 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class LogicalXorExpressionTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.LOGICAL_XOR_EXPR)
+    assertThat(Kind.ALTERNATIVE_CONDITIONAL_XOR)
     .matches("$a")
     .matches("$a xor $a");
   }
