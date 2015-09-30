@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.tree.impl.expression.PostfixExpressionTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -42,6 +41,7 @@ import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
@@ -263,5 +263,6 @@ public interface TreeVisitor {
 
   void visitPostfixExpression(UnaryExpressionTree postfixExpressionTree);
 
+  void visitConditionalExpression(ConditionalExpressionTree conditionalExpressionTree);
 }
 

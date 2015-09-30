@@ -19,23 +19,19 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.RuleTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-public class ConditionalExpressionTest extends RuleTest {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  @Before
-  public void setUp() {
-    setTestedRule(PHPGrammar.CONDITIONAL_EXPR);
-  }
+public class ConditionalExpressionTest {
 
   @Test
   public void test() {
-
-    matches("true ? 1 : 0");
-    matches("true ? : 0");
-    matches("false ? 0 : false ? 1 : 0");
+    assertThat(PHPLexicalGrammar.CONDITIONAL_EXPR)
+      .matches("true ? 1 : 0")
+      .matches("true ? : 0")
+      .matches("false ? 0 : false ? 1 : 0");
   }
+
 }

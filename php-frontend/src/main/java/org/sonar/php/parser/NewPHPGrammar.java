@@ -145,6 +145,7 @@ import static org.sonar.php.api.PHPPunctuator.NOTEQUAL;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUAL2;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUALBIS;
 import static org.sonar.php.api.PHPPunctuator.PLUS;
+import static org.sonar.php.api.PHPPunctuator.QUERY;
 import static org.sonar.php.api.PHPPunctuator.RBRACKET;
 import static org.sonar.php.api.PHPPunctuator.RCURLYBRACE;
 import static org.sonar.php.api.PHPPunctuator.RPARENTHESIS;
@@ -910,11 +911,6 @@ public class NewPHPGrammar {
    * [ END ] Statement
    */
 
-  public ExpressionTree EXPRESSION() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EXPRESSION)
-      .is(f.expression(b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER)));
-  }
-
   /**
    * [ START ] Expression
    */
@@ -956,10 +952,7 @@ public class NewPHPGrammar {
         // FIXME (PY) Uncomment the following lines
         // ASSIGNMENT_EXPR(),
         // ASSIGNMENT_BY_REFERENCE(),
-        // POSTFIX_EXPR(),
-        // FIXME (PY) Remove the following lines
-        COMMON_SCALAR(),
-        EXPRESSION()));
+        POSTFIX_EXPRESSION()));
   }
 
   public ExpressionTree CONCATENATION_EXPR() {
@@ -1068,6 +1061,20 @@ public class NewPHPGrammar {
         b.zeroOrMore(f.newTuple71(
           b.firstOf(b.token(PHPPunctuator.OROR), b.token(PHPKeyword.OR)),
           LOGICAL_XOR_EXPR()))));
+  }
+
+  public ExpressionTree CONDITIONAL_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.CONDITIONAL_EXPR).is(
+      f.completeConditionalExpr(
+        LOGICAL_OR_EXPR(),
+        b.optional(
+          f.newConditionalExpr(b.token(QUERY), b.optional(CONDITIONAL_EXPR()), b.token(COLON), CONDITIONAL_EXPR())
+        )));
+  }
+
+  public ExpressionTree EXPRESSION() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EXPRESSION)
+      .is(CONDITIONAL_EXPR());
   }
 
   public ExpressionTree COMMON_SCALAR() {
@@ -1422,7 +1429,7 @@ public class NewPHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(
       b.firstOf(
         COMMON_SCALAR(),
-        EXPRESSION()));
+        CONDITIONAL_EXPR()));
   }
 
   public FunctionCallTree INTERNAL_FUNCTION() {

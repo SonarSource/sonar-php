@@ -52,6 +52,7 @@ import org.sonar.php.tree.impl.expression.BinaryExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CastExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
+import org.sonar.php.tree.impl.expression.ConditionalExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ExitTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
@@ -953,10 +954,6 @@ public class TreeFactory {
    * [ END ] Statement
    */
 
-  public ExpressionTree expression(InternalSyntaxToken token) {
-    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(token));
-  }
-
   /**
    * [ START ] Expression
    */
@@ -1428,6 +1425,18 @@ public class TreeFactory {
 
   public AssignmentByReferenceTree assignmentByReference(ExpressionTree lhs, InternalSyntaxToken equToken, InternalSyntaxToken ampersandToken, ExpressionTree rhs) {
     return new AssignmentByReferenceTreeImpl(lhs, equToken, ampersandToken, rhs);
+  }
+
+  public ConditionalExpressionTreeImpl newConditionalExpr(InternalSyntaxToken queryToken, Optional<ExpressionTree> trueExpression, InternalSyntaxToken colonToken, ExpressionTree falseExpression) {
+    return new ConditionalExpressionTreeImpl(queryToken, trueExpression.orNull(), colonToken, falseExpression);
+  }
+
+  public ExpressionTree completeConditionalExpr(ExpressionTree expression, Optional<ConditionalExpressionTreeImpl> partial) {
+    return partial.isPresent() ? partial.get().complete(expression) : expression;
+  }
+
+  public ExpressionTree expression(InternalSyntaxToken token) {
+    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(token));
   }
 
   /**
