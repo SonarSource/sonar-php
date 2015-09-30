@@ -20,15 +20,16 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.Tree;
 
 /**
  * This interface represents class statement, which can be:
  * <ul>
  *   <li>{@link Kind#METHOD_DECLARATION Method declaration}
  *   <li>{@link Kind#CLASS_PROPERTY_DECLARATION Class variable declaration}
- *   <li>{@link Kind#TRAIT_USE_STATEMENT Trait use statement}
+ *   <li>{@link Kind#USE_TRAIT_DECLARATION Trait use statement}
  * <ul/>
  */
 @Beta
-public interface ClassMemberTree extends DeclarationTree {
+public interface ClassMemberTree extends Tree {
 }

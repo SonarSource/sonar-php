@@ -19,11 +19,8 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedList;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -31,15 +28,16 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
-import org.sonar.plugins.php.api.tree.statement.UseTraitStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.visitors.TreeVisitor;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
 
-public class UseTraitStatementTreeImpl extends PHPTree implements UseTraitStatementTree {
+public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDeclarationTree {
 
-  private static final Kind KIND = Kind.TRAIT_USE_STATEMENT;
+  private static final Kind KIND = Kind.USE_TRAIT_DECLARATION;
 
   private final InternalSyntaxToken useToken;
   private final SeparatedList<NamespaceNameTree> traits;
@@ -48,7 +46,7 @@ public class UseTraitStatementTreeImpl extends PHPTree implements UseTraitStatem
   private final InternalSyntaxToken closeCurlyBraceToken;
   private final InternalSyntaxToken eosToken;
 
-  public UseTraitStatementTreeImpl(
+  public UseTraitDeclarationTreeImpl(
     InternalSyntaxToken useToken,
     SeparatedList<NamespaceNameTree> traits,
     InternalSyntaxToken eosToken
@@ -61,7 +59,7 @@ public class UseTraitStatementTreeImpl extends PHPTree implements UseTraitStatem
     this.eosToken = eosToken;
   }
 
-  public UseTraitStatementTreeImpl(
+  public UseTraitDeclarationTreeImpl(
     InternalSyntaxToken useToken,
     SeparatedList<NamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,

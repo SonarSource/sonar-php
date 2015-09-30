@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -34,7 +35,7 @@ import javax.annotation.Nullable;
  * </pre>
  */
 @Beta
-public interface VariableDeclarationTree extends DeclarationTree {
+public interface VariableDeclarationTree extends Tree {
 
   IdentifierTree variableIdentifier();
 

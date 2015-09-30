@@ -49,7 +49,7 @@ import java.util.List;
  * </pre>
  */
 @Beta
-public interface ClassDeclarationTree extends DeclarationTree, StatementTree {
+public interface ClassDeclarationTree extends StatementTree {
 
   /**
    * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}

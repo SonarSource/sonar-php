@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public interface UseTraitStatementTree extends ClassMemberTree {
+public interface UseTraitDeclarationTree extends ClassMemberTree {
   
   SyntaxToken useToken();
   

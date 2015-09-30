@@ -92,7 +92,7 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
-import org.sonar.plugins.php.api.tree.statement.UseTraitStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
@@ -270,7 +270,7 @@ public class NewPHPGrammar {
         METHOD_DECLARATION(),
         CLASS_VARIABLE_DECLARATION(),
         CLASS_CONSTANT_DECLARATION(),
-        TRAIT_USE_STATEMENT()));
+        USE_TRAIT_DECLARATION()));
   }
 
   public ClassPropertyDeclarationTree CLASS_CONSTANT_DECLARATION() {
@@ -374,14 +374,14 @@ public class NewPHPGrammar {
         b.zeroOrMore(f.newTuple98(b.token(COMMA), NAMESPACE_NAME()))));
   }
 
-  public UseTraitStatementTree TRAIT_USE_STATEMENT() {
-    return b.<UseTraitStatementTree>nonterminal(PHPLexicalGrammar.TRAIT_USE_STATEMENT).is(
+  public UseTraitDeclarationTree USE_TRAIT_DECLARATION() {
+    return b.<UseTraitDeclarationTree>nonterminal(Kind.USE_TRAIT_DECLARATION).is(
       b.firstOf(
-        f.traitUseStatement(
+        f.useTraitDeclaration(
           b.token(PHPKeyword.USE),
           INTERFACE_LIST(),
           EOS()),
-        f.traitUseStatement(
+        f.useTraitDeclaration(
           b.token(PHPKeyword.USE),
           INTERFACE_LIST(),
           b.token(LCURLYBRACE),

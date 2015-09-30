@@ -19,20 +19,19 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
-import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.UseTraitStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 
-public class UseTraitStatementTreeTest extends PHPTreeModelTest {
+import static org.fest.assertions.Assertions.assertThat;
+
+public class UseTraitDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
   public void without_adaptations() throws Exception {
-    UseTraitStatementTree tree = parse("use A,B,C;", PHPLexicalGrammar.TRAIT_USE_STATEMENT);
-    assertThat(tree.is(Kind.TRAIT_USE_STATEMENT)).isTrue();
+    UseTraitDeclarationTree tree = parse("use A,B,C;", Kind.USE_TRAIT_DECLARATION);
+    assertThat(tree.is(Kind.USE_TRAIT_DECLARATION)).isTrue();
     assertThat(tree.traits()).hasSize(3);
     assertThat(tree.openCurlyBraceToken()).isNull();
     assertThat(tree.adaptations()).isEmpty();
@@ -42,8 +41,8 @@ public class UseTraitStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void with_adaptations() throws Exception {
-    UseTraitStatementTree tree = parse("use A,B,C { m1 as m2; }", PHPLexicalGrammar.TRAIT_USE_STATEMENT);
-    assertThat(tree.is(Kind.TRAIT_USE_STATEMENT)).isTrue();
+    UseTraitDeclarationTree tree = parse("use A,B,C { m1 as m2; }", Kind.USE_TRAIT_DECLARATION);
+    assertThat(tree.is(Kind.USE_TRAIT_DECLARATION)).isTrue();
     assertThat(tree.traits()).hasSize(3);
     assertThat(tree.openCurlyBraceToken().text()).isEqualTo("{");
     assertThat(tree.adaptations()).hasSize(1);

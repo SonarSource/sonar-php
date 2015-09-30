@@ -40,7 +40,7 @@ import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
-import org.sonar.php.tree.impl.declaration.UseTraitStatementTreeImpl;
+import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
@@ -175,7 +175,7 @@ import org.sonar.plugins.php.api.tree.statement.TraitAdaptationStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
-import org.sonar.plugins.php.api.tree.statement.UseTraitStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
@@ -391,19 +391,18 @@ public class TreeFactory {
     return separatedList(first, others);
   }
 
-  // FIXME (PY) Do Traits belong to statements or declarations?
-  public UseTraitStatementTree traitUseStatement(InternalSyntaxToken useToken, SeparatedList<NamespaceNameTree> traits, InternalSyntaxToken eosToken) {
-    return new UseTraitStatementTreeImpl(useToken, traits, eosToken);
+  public UseTraitDeclarationTree useTraitDeclaration(InternalSyntaxToken useToken, SeparatedList<NamespaceNameTree> traits, InternalSyntaxToken eosToken) {
+    return new UseTraitDeclarationTreeImpl(useToken, traits, eosToken);
   }
 
-  public UseTraitStatementTree traitUseStatement(
+  public UseTraitDeclarationTree useTraitDeclaration(
     InternalSyntaxToken useToken,
     SeparatedList<NamespaceNameTree> traits,
     InternalSyntaxToken openCurlyBrace,
     Optional<List<TraitAdaptationStatementTree>> adaptations,
     InternalSyntaxToken closeCurlyBrace
   ) {
-    return new UseTraitStatementTreeImpl(useToken, traits, openCurlyBrace, optionalList(adaptations), closeCurlyBrace);
+    return new UseTraitDeclarationTreeImpl(useToken, traits, openCurlyBrace, optionalList(adaptations), closeCurlyBrace);
   }
 
   public TraitPrecedenceTree traitPrecedence(

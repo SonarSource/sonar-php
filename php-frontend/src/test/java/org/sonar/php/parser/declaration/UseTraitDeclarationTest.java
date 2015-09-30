@@ -19,16 +19,16 @@
  */
 package org.sonar.php.parser.declaration;
 
+import org.junit.Test;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+
 import static org.sonar.php.utils.Assertions.assertThat;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
-
-public class TraitUseStatementTest {
+public class UseTraitDeclarationTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.TRAIT_USE_STATEMENT)
+    assertThat(Kind.USE_TRAIT_DECLARATION)
       .matches("use Foo,Bar;")
       .matches("use Foo,Bar { method1 as method2; A::x insteadof B; }");
   }
