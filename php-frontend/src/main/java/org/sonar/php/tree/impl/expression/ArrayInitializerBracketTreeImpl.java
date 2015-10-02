@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Iterator;
 
@@ -73,7 +73,7 @@ public class ArrayInitializerBracketTreeImpl extends PHPTree implements ArrayIni
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitArrayInitializerBracket(this);
   }
 

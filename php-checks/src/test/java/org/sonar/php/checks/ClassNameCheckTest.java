@@ -20,32 +20,30 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ClassNameCheckTest extends CheckTest {
 
   private ClassNameCheck check = new ClassNameCheck();
+  private String fileName = "ClassNameCheck.php";
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassNameCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Rename class \"myClass\" to match the regular expression " + check.DEFAULT + ".")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
   public void custom() throws Exception {
     check.format = "^[a-z][a-zA-Z0-9]*$";
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassNameCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Rename class \"MyClass\" to match the regular expression " + check.format + ".")
-      .noMore();
-
+    List<Issue> expectedIssues = new LinkedList<>();
+    expectedIssues.add(new PHPIssue("test", "Rename class \"MyClass\" to match the regular expression " + check.format + ".").line(6));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), expectedIssues);
   }
 }

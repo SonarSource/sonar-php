@@ -35,7 +35,7 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.FUNCTION_DECLARATION)).isTrue();
     assertThat(tree.functionToken().text()).isEqualTo("function");
     assertThat(tree.referenceToken()).isNull();
-    assertThat(tree.name().name()).isEqualTo("f");
+    assertThat(tree.name().text()).isEqualTo("f");
     assertThat(tree.parameters().parameters()).hasSize(1);
     assertThat(tree.body().statements()).isEmpty();
   }

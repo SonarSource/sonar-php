@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import com.google.common.collect.Iterators;
 
@@ -88,7 +88,7 @@ public class TraitPrecedenceTreeImpl extends PHPTree implements TraitPrecedenceT
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitTraitPrecedence(this);
   }
 

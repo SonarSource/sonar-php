@@ -35,7 +35,7 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.NAMESPACED_NAME)).isTrue();
     assertThat(tree.absoluteSeparator()).isNotNull();
-    assertThat(tree.name().name()).isEqualTo("name");
+    assertThat(tree.name().text()).isEqualTo("name");
     assertThat(tree.namespaces()).hasSize(2);
     assertThat(tree.fullName()).isEqualTo("\\ns1\\ns2\\name");
   }
@@ -46,7 +46,7 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.NAMESPACED_NAME)).isTrue();
     assertThat(tree.absoluteSeparator()).isNull();
-    assertThat(tree.name().name()).isEqualTo("name");
+    assertThat(tree.name().text()).isEqualTo("name");
     assertThat(tree.namespaces()).hasSize(2);
     assertThat(tree.fullName()).isEqualTo("ns1\\ns2\\name");
   }
@@ -54,7 +54,7 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
   @Test
   public void with_namespace_keyword() throws Exception {
     NamespaceNameTree tree = parse("namespace\\subNS\\name", PHPLexicalGrammar.NAMESPACE_NAME);
-    assertThat(tree.namespaces().get(0).name()).isEqualTo("namespace");
+    assertThat(tree.namespaces().get(0).text()).isEqualTo("namespace");
   }
 
 }

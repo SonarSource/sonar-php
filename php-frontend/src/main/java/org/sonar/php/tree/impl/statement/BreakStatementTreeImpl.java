@@ -26,7 +26,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -73,7 +73,7 @@ public class BreakStatementTreeImpl extends PHPTree implements BreakStatementTre
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitBreakStatement(this);
   }
 }

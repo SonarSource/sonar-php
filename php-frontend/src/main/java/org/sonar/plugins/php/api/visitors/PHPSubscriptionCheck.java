@@ -17,29 +17,33 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.tree.visitors;
+package org.sonar.plugins.php.api.visitors;
 
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.tree.visitors.PHPCheckContext;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonar.plugins.php.api.visitors.TreeVisitorContext;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class SubscriptionAstTreeVisitor implements PHPCheck {
+public abstract class PHPSubscriptionCheck implements PHPCheck {
 
-  private TreeVisitorContext context;
+  private CheckContext context;
   private Collection<Tree.Kind> nodesToVisit;
 
   public abstract List<Tree.Kind> nodesToVisit();
 
   @Override
-  public TreeVisitorContext getContext() {
+  public CheckContext context() {
     return context;
+  }
+
+  @Override
+  public void init() {
+    // Default behavior : do nothing.
   }
 
   public void visitNode(Tree tree) {
@@ -50,23 +54,12 @@ public abstract class SubscriptionAstTreeVisitor implements PHPCheck {
     // Default behavior : do nothing.
   }
 
-  public void visitToken(SyntaxToken syntaxToken) {
-    // default behaviour is to do nothing
-  }
-
-  public void visitTrivia(SyntaxTrivia syntaxTrivia) {
-    // default behaviour is to do nothing
-  }
-
-  public void visitFile(Tree scriptTree) {
-    // default behaviour is to do nothing
-  }
-
   @Override
-  public void scanFile(TreeVisitorContext context) {
-    this.context = context;
-    visitFile(context.getTopTree());
-    scanTree(context.getTopTree());
+  public final List<Issue> analyze(File file, CompilationUnitTree tree) {
+    this.context = new PHPCheckContext(file, tree);
+    scanTree(context.tree());
+
+    return context().getIssues();
   }
 
   protected void scanTree(Tree tree) {
@@ -86,14 +79,14 @@ public abstract class SubscriptionAstTreeVisitor implements PHPCheck {
   }
 
   protected boolean isSubscribed(Tree tree) {
-    return nodesToVisit.contains(((PHPTree) tree).getKind());
+    return nodesToVisit.contains(tree.getKind());
   }
 
   private void visitChildren(Tree tree) {
     PHPTree javaTree = (PHPTree) tree;
 
     if (!javaTree.isLeaf()) {
-      for (Iterator<Tree> iter = javaTree.childrenIterator(); iter.hasNext();) {
+      for (Iterator<Tree> iter = javaTree.childrenIterator(); iter.hasNext(); ) {
         Tree next = iter.next();
 
         if (next != null) {

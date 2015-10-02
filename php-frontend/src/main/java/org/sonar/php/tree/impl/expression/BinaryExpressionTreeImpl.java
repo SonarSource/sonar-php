@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import com.google.common.collect.Iterators;
 
@@ -37,7 +37,7 @@ public class BinaryExpressionTreeImpl extends PHPTree implements BinaryExpressio
   private final ExpressionTree leftOperand;
   private final InternalSyntaxToken operator;
   private final ExpressionTree rightOperand;
-  
+
   public BinaryExpressionTreeImpl(Kind kind, ExpressionTree leftOperand, InternalSyntaxToken operator, ExpressionTree rightOperand) {
     this.kind = kind;
     this.leftOperand = leftOperand;
@@ -69,9 +69,9 @@ public class BinaryExpressionTreeImpl extends PHPTree implements BinaryExpressio
   public Iterator<Tree> childrenIterator() {
     return Iterators.forArray(leftOperand, operator, rightOperand);
   }
-  
+
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitBinaryExpression(this);
   }
 

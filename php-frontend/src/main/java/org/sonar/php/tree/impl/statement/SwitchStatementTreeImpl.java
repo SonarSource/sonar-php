@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -153,7 +153,7 @@ public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementT
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitSwitchStatement(this);
   }
 }

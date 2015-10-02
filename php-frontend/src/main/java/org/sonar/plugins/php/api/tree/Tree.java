@@ -95,7 +95,7 @@ import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 /**
@@ -106,7 +106,9 @@ public interface Tree {
 
   boolean is(Kind... kind);
 
-  void accept(TreeVisitor visitor);
+  void accept(VisitorCheck visitor);
+
+  Kind getKind();
 
   public enum Kind implements AstNodeType, GrammarRuleKey {
 

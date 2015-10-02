@@ -26,25 +26,24 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import com.google.common.collect.Iterators;
 
 public class CastExpressionTreeImpl extends PHPTree implements CastExpressionTree {
 
   private static final Kind KIND = Kind.CAST_EXPRESSION;
-  
+
   private final InternalSyntaxToken openParenthesisToken;
   private final InternalSyntaxToken castType;
   private final InternalSyntaxToken closeParenthesisToken;
   private final ExpressionTree expression;
 
   public CastExpressionTreeImpl(
-    InternalSyntaxToken openParenthesisToken, 
-    InternalSyntaxToken castType, 
-    InternalSyntaxToken closeParenthesisToken, 
+    InternalSyntaxToken openParenthesisToken,
+    InternalSyntaxToken castType,
+    InternalSyntaxToken closeParenthesisToken,
     ExpressionTree expression
   ) {
     this.openParenthesisToken = openParenthesisToken;
@@ -84,7 +83,7 @@ public class CastExpressionTreeImpl extends PHPTree implements CastExpressionTre
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitCastExpression(this);
   }
 

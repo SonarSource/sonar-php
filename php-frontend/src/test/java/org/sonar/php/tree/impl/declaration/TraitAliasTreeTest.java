@@ -32,25 +32,25 @@ public class TraitAliasTreeTest extends PHPTreeModelTest {
   @Test
   public void with_alias() throws Exception {
     TraitAliasTree tree = alias("method1 as method2;");
-    assertThat(tree.methodReference().method().name()).isEqualTo("method1");
+    assertThat(tree.methodReference().method().text()).isEqualTo("method1");
     assertThat(tree.modifierToken()).isNull();
-    assertThat(tree.alias().name()).isEqualTo("method2");
+    assertThat(tree.alias().text()).isEqualTo("method2");
   }
-  
+
   @Test
   public void with_modifier() throws Exception {
     TraitAliasTree tree = alias("method1 as public;");
-    assertThat(tree.methodReference().method().name()).isEqualTo("method1");
+    assertThat(tree.methodReference().method().text()).isEqualTo("method1");
     assertThat(tree.modifierToken().text()).isEqualTo("public");
     assertThat(tree.alias()).isNull();
   }
-  
+
   @Test
   public void with_alias_and_modifier() throws Exception {
     TraitAliasTree tree = alias("method1 as public method2;");
-    assertThat(tree.methodReference().method().name()).isEqualTo("method1");
+    assertThat(tree.methodReference().method().text()).isEqualTo("method1");
     assertThat(tree.modifierToken().text()).isEqualTo("public");
-    assertThat(tree.alias().name()).isEqualTo("method2");
+    assertThat(tree.alias().text()).isEqualTo("method2");
   }
 
   private TraitAliasTree alias(String toParse) throws Exception {
@@ -59,6 +59,6 @@ public class TraitAliasTreeTest extends PHPTreeModelTest {
     assertThat(tree.asToken().text()).isEqualTo("as");
     assertThat(tree.eosToken().text()).isEqualTo(";");
     return tree;
-  }  
-  
+  }
+
 }

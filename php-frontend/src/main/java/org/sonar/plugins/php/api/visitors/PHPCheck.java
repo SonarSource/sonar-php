@@ -20,14 +20,26 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.squidbridge.api.CodeVisitor;
+
+import java.io.File;
+import java.util.List;
 
 /**
- * Marker interface for all JavaScript checks.
+ * Marker interface for all PHP checks.
+ *
+ * To implement a check you should extend {@link PHPVisitorCheck} or {@link PHPSubscriptionCheck}.
  */
 @Beta
-public interface PHPCheck {
+public interface PHPCheck extends CodeVisitor {
 
-  TreeVisitorContext getContext();
+  CheckContext context();
 
-  void scanFile(TreeVisitorContext context);
+  /**
+   * Initialize the check, this method is called once.
+   */
+  void init();
+
+  List<Issue> analyze(File file, CompilationUnitTree tree);
 }

@@ -61,6 +61,8 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
@@ -88,16 +90,20 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
-import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 @Beta
-public interface TreeVisitor {
+public interface VisitorCheck extends PHPCheck {
+
+  void visitToken(SyntaxToken token);
+
+  void visitTrivia(SyntaxTrivia trivia);
 
   /**
    * [ START ] Declaration
@@ -210,45 +216,45 @@ public interface TreeVisitor {
 
   void visitVariableIdentifier(VariableIdentifierTree tree);
 
-  void visitIdentifier(IdentifierTree identifierTree);
+  void visitIdentifier(IdentifierTree tree);
 
-  void visitLiteral(LiteralTree literalTree);
+  void visitLiteral(LiteralTree tree);
 
-  void visitExpandableStringCharacters(ExpandableStringCharactersTree expandableStringCharactersTree);
+  void visitExpandableStringCharacters(ExpandableStringCharactersTree tree);
 
-  void visitArrayAccess(ArrayAccessTree arrayAccessTree);
+  void visitArrayAccess(ArrayAccessTree tree);
 
-  void visitMemberAccess(MemberAccessTree memberAccessTree);
+  void visitMemberAccess(MemberAccessTree tree);
 
-  void visitCompoundVariable(CompoundVariableTree compoundVariableTree);
+  void visitCompoundVariable(CompoundVariableTree tree);
 
-  void visitComputedVariable(ComputedVariableTree computedVariableTree);
+  void visitComputedVariable(ComputedVariableTree tree);
 
-  void visitExpandableStringLiteral(ExpandableStringLiteralTree expandableStringLiteralTree);
+  void visitExpandableStringLiteral(ExpandableStringLiteralTree tree);
 
-  void visitYieldExpression(YieldExpressionTree yieldExpressionTree);
+  void visitYieldExpression(YieldExpressionTree tree);
 
-  void visitParenthesisedExpression(ParenthesisedExpressionTree parenthesizedExpressionTree);
+  void visitParenthesisedExpression(ParenthesisedExpressionTree tree);
 
-  void visitListExpression(ListExpressionTree listExpressionTree);
+  void visitListExpression(ListExpressionTree tree);
 
-  void visitAssignmentExpression(AssignmentExpressionTree assignmentExpressionTree);
+  void visitAssignmentExpression(AssignmentExpressionTree tree);
 
-  void visitVariableVariable(VariableVariableTree variableVariableTree);
+  void visitVariableVariable(VariableVariableTree tree);
 
-  void visitReferenceVariable(ReferenceVariableTree referenceVariableTree);
+  void visitReferenceVariable(ReferenceVariableTree tree);
 
-  void visitSpreadArgument(SpreadArgumentTree spreadArgumentTree);
+  void visitSpreadArgument(SpreadArgumentTree tree);
 
-  void visitFunctionCall(FunctionCallTree functionCallTree);
+  void visitFunctionCall(FunctionCallTree tree);
 
-  void visitLexicalVariables(LexicalVariablesTree lexicalVariablesTree);
+  void visitLexicalVariables(LexicalVariablesTree tree);
 
-  void visitArrayPair(ArrayPairTree arrayPairTree);
+  void visitArrayPair(ArrayPairTree tree);
 
-  void visitArrayInitializerFunction(ArrayInitializerFunctionTree arrayInitializerFunctionTree);
+  void visitArrayInitializerFunction(ArrayInitializerFunctionTree tree);
 
-  void visitArrayInitializerBracket(ArrayInitializerBracketTree arrayInitializerBracketTree);
+  void visitArrayInitializerBracket(ArrayInitializerBracketTree tree);
 
   void visitAssignmentByReference(AssignmentByReferenceTree tree);
 
@@ -256,16 +262,16 @@ public interface TreeVisitor {
 
   void visitCompilationUnit(CompilationUnitTree tree);
 
-  void visitFunctionExpression(FunctionExpressionTree functionExpressionTree);
+  void visitFunctionExpression(FunctionExpressionTree tree);
 
-  void visitNewExpression(NewExpressionTree newExpressionTree);
+  void visitNewExpression(NewExpressionTree tree);
 
-  void visitExit(ExitTree exitTree);
+  void visitExit(ExitTree tree);
 
-  void visitPostfixExpression(UnaryExpressionTree postfixExpressionTree);
+  void visitPostfixExpression(UnaryExpressionTree tree);
 
-  void visitConditionalExpression(ConditionalExpressionTree conditionalExpressionTree);
+  void visitConditionalExpression(ConditionalExpressionTree tree);
 
-  void visitSkippedListElement(ExpressionTree skippedListElementTree);
+  void visitSkippedListElement(ExpressionTree tree);
 }
 

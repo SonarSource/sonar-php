@@ -42,8 +42,6 @@ public abstract class PHPTree implements Tree {
     return false;
   }
 
-  public abstract Kind getKind();
-
   /**
    * Creates iterator for children of this node.
    * Note that iterator may contain {@code null} elements.

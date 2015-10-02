@@ -31,14 +31,14 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import com.google.common.collect.Iterators;
 
 public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDeclarationTree {
 
   private static final Kind KIND = Kind.FUNCTION_DECLARATION;
-  
+
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
   private final IdentifierTree name;
@@ -46,9 +46,9 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
   private final BlockTree body;
 
   public FunctionDeclarationTreeImpl(
-    InternalSyntaxToken functionToken, 
-    @Nullable InternalSyntaxToken referenceToken, 
-    IdentifierTree name, 
+    InternalSyntaxToken functionToken,
+    @Nullable InternalSyntaxToken referenceToken,
+    IdentifierTree name,
     ParameterListTree parameters,
     BlockTree body
     ) {
@@ -56,7 +56,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
     this.referenceToken = referenceToken;
     this.name = name;
     this.parameters = parameters;
-    this.body = body;    
+    this.body = body;
   }
 
   @Override
@@ -96,7 +96,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitFunctionDeclaration(this);
   }
 

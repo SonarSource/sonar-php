@@ -44,7 +44,7 @@ public class UseDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.USE_CLAUSE)).isTrue();
     assertThat(tree.namespaceName().is(Kind.NAMESPACED_NAME)).isTrue();
     assertThat(tree.asToken().text()).isEqualTo("as");
-    assertThat(tree.alias().name()).isEqualTo("alias1");
+    assertThat(tree.alias().text()).isEqualTo("alias1");
   }
 
 }

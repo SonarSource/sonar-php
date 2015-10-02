@@ -19,13 +19,14 @@
  */
 package org.sonar.php.tree.impl.lexical;
 
+import com.google.common.collect.Iterators;
 import com.sonar.sslr.api.TokenType;
 import org.sonar.php.parser.PHPTokenType;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Iterator;
 import java.util.List;
@@ -99,7 +100,7 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    throw new UnsupportedOperationException();
+    return Iterators.<Tree>concat(trivias().iterator());
   }
 
   @Override
@@ -108,8 +109,8 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
-    // FIXME do nothing at the moment
+  public void accept(VisitorCheck visitor) {
+    visitor.visitToken(this);
   }
 
   @Override

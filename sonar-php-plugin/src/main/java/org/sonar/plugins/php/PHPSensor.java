@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,18 +37,20 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
-import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.metrics.FileLinesVisitor;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.squidbridge.AstScanner;
 import org.sonar.squidbridge.SquidAstVisitor;
 import org.sonar.squidbridge.api.CheckMessage;
+import org.sonar.squidbridge.api.CodeVisitor;
 import org.sonar.squidbridge.api.SourceClass;
 import org.sonar.squidbridge.api.SourceCode;
 import org.sonar.squidbridge.api.SourceFile;
@@ -71,14 +74,14 @@ public class PHPSensor implements Sensor {
   private final FileSystem fileSystem;
   private final FilePredicate mainFilePredicate;
   private final FileLinesContextFactory fileLinesContextFactory;
-  private final Checks<Object> checks;
+  private final Checks<CodeVisitor> checks;
   private AstScanner<LexerlessGrammar> scanner;
   private SensorContext context;
 
   public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem filesystem,
                    FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory) {
     this.checks = checkFactory
-      .create(CheckList.REPOSITORY_KEY)
+      .<CodeVisitor>create(CheckList.REPOSITORY_KEY)
       .addAnnotatedChecks(CheckList.getChecks());
     this.resourcePerspectives = resourcePerspectives;
     this.fileLinesContextFactory = fileLinesContextFactory;
@@ -97,13 +100,35 @@ public class PHPSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     this.context = context;
 
-    List<SquidAstVisitor<LexerlessGrammar>> visitors = getCheckVisitors();
+    List<CodeVisitor> visitors = getCheckVisitors();
 
     visitors.add(new FileLinesVisitor(fileSystem, fileLinesContextFactory));
-    this.scanner = PHPAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
-    scanner.scanFiles(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
+    ImmutableList.Builder<PHPCheck> phpCheckBuilder = ImmutableList.builder();
 
+    // fixme : Remove this after migration of all checks
+    // --------------
+    List<CodeVisitor> oldChecks = new ArrayList<>();
+
+    for (CodeVisitor codeVisitor : visitors) {
+      if (codeVisitor instanceof PHPCheck) {
+        phpCheckBuilder.add((PHPCheck) codeVisitor);
+      } else {
+        oldChecks.add(codeVisitor);
+      }
+    }
+
+    this.scanner = PHPAstScanner.create(createConfiguration(), oldChecks.toArray(new SquidAstVisitor[oldChecks.size()]));
+    scanner.scanFiles(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
     save(scanner.getIndex().search(new QueryByType(SourceFile.class)));
+    // --------------
+
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), phpCheckBuilder.build());
+    ArrayList<InputFile> inputFiles = Lists.newArrayList(fileSystem.inputFiles(mainFilePredicate));
+
+    for (InputFile inputFile : inputFiles) {
+      saveIssues(phpAnalyzer.analyze(inputFile.file()), inputFile);
+    }
+
   }
 
   private void save(Collection<SourceCode> squidSourceFiles) {
@@ -112,13 +137,13 @@ public class PHPSensor implements Sensor {
       InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(squidFile.getKey()));
 
       if (inputFile != null) {
-        File sonarFile = File.create(inputFile.relativePath());
+        org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.create(inputFile.relativePath());
 
         saveClassComplexity(sonarFile, squidFile);
         saveFilesComplexityDistribution(sonarFile, squidFile);
         saveFunctionsComplexityDistribution(sonarFile, squidFile);
         saveFileMeasures(sonarFile, squidFile);
-        saveViolations(sonarFile, squidFile);
+        saveOldIssues(sonarFile, squidFile);
       } else {
         LOG.warn("Cannot save analysis information for file {}. Unable to retrieve the associated sonar resource.", squidFile.getKey());
       }
@@ -166,12 +191,16 @@ public class PHPSensor implements Sensor {
     context.saveMeasure(sonarFile, complexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
   }
 
-  private void saveViolations(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
+
+  /**
+   * To remove after migration of all checks.
+   */
+  private void saveOldIssues(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
     Collection<CheckMessage> messages = squidFile.getCheckMessages();
     if (messages != null) {
 
       for (CheckMessage message : messages) {
-        RuleKey ruleKey = checks.ruleKey(message.getCheck());
+        RuleKey ruleKey = checks.ruleKey((CodeVisitor) message.getCheck());
         Issuable issuable = resourcePerspectives.as(Issuable.class, sonarFile);
 
         if (issuable != null) {
@@ -187,12 +216,32 @@ public class PHPSensor implements Sensor {
     }
   }
 
+  private void saveIssues(List<org.sonar.plugins.php.api.visitors.Issue> issues, InputFile inputFile) {
+    for (org.sonar.plugins.php.api.visitors.Issue phpIssue : issues) {
+      RuleKey ruleKey = RuleKey.of(CheckList.REPOSITORY_KEY, phpIssue.ruleKey());
+      Issuable issuable = resourcePerspectives.as(Issuable.class, inputFile);
+
+      if (issuable != null) {
+        Issuable.IssueBuilder issueBuilder = issuable.newIssueBuilder()
+          .ruleKey(ruleKey)
+          .message(phpIssue.message())
+          .effortToFix(phpIssue.cost());
+
+        if (phpIssue.line() > 0) {
+          issueBuilder.line(phpIssue.line());
+        }
+
+        issuable.addIssue(issueBuilder.build());
+      }
+    }
+  }
+
   private PHPConfiguration createConfiguration() {
     return new PHPConfiguration(fileSystem.encoding());
   }
 
-  private List<SquidAstVisitor<LexerlessGrammar>> getCheckVisitors() {
-    return new ArrayList<SquidAstVisitor<LexerlessGrammar>>((Collection) checks.all());
+  private List<CodeVisitor> getCheckVisitors() {
+    return new ArrayList<>(checks.all());
   }
 
   @Override

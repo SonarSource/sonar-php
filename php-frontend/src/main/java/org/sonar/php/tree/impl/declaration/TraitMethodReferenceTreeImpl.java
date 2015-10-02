@@ -29,14 +29,14 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import com.google.common.collect.Iterators;
 
 public class TraitMethodReferenceTreeImpl extends PHPTree implements TraitMethodReferenceTree {
 
   private static final Kind KIND = Kind.TRAIT_METHOD_REFERENCE;
-  
+
   private final NamespaceNameTree trait;
   private final SyntaxToken doubleColonToken;
   private final IdentifierTree method;
@@ -52,7 +52,7 @@ public class TraitMethodReferenceTreeImpl extends PHPTree implements TraitMethod
     this.doubleColonToken = doubleColonToken;
     this.method = method;
   }
-  
+
   @Nullable
   @Override
   public NamespaceNameTree trait() {
@@ -69,7 +69,7 @@ public class TraitMethodReferenceTreeImpl extends PHPTree implements TraitMethod
   public IdentifierTree method() {
     return method;
   }
-  
+
   @Override
   public Kind getKind() {
     return KIND;
@@ -81,7 +81,7 @@ public class TraitMethodReferenceTreeImpl extends PHPTree implements TraitMethod
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitTraitMethodReference(this);
   }
 

@@ -30,14 +30,14 @@ import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import com.google.common.collect.Iterators;
 
 public class TraitAliasTreeImpl extends PHPTree implements TraitAliasTree {
 
   private static final Kind KIND = Kind.TRAIT_ALIAS;
-  
+
   private final TraitMethodReferenceTree methodReference;
   private final InternalSyntaxToken asToken;
   private final SyntaxToken modifier;
@@ -45,10 +45,10 @@ public class TraitAliasTreeImpl extends PHPTree implements TraitAliasTree {
   private final InternalSyntaxToken eosToken;
 
   public TraitAliasTreeImpl(
-    TraitMethodReferenceTree methodReference, 
-    InternalSyntaxToken asToken, 
-    @Nullable SyntaxToken modifier, 
-    @Nullable IdentifierTree alias, 
+    TraitMethodReferenceTree methodReference,
+    InternalSyntaxToken asToken,
+    @Nullable SyntaxToken modifier,
+    @Nullable IdentifierTree alias,
     InternalSyntaxToken eos
     ) {
     this.methodReference = methodReference;
@@ -79,7 +79,7 @@ public class TraitAliasTreeImpl extends PHPTree implements TraitAliasTree {
   public IdentifierTree alias() {
     return alias;
   }
-  
+
   @Override
   public SyntaxToken eosToken() {
     return eosToken;
@@ -96,7 +96,7 @@ public class TraitAliasTreeImpl extends PHPTree implements TraitAliasTree {
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitTraitAlias(this);
   }
 

@@ -36,18 +36,18 @@ public class ParameterTreeTest extends PHPTreeModelTest {
     assertThat(tree.type()).isNull();
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.ellipsisToken()).isNull();
-    assertThat(tree.variableIdentifier().variableExpression().name()).isEqualTo("$param1");
+    assertThat(tree.variableIdentifier().variableExpression().text()).isEqualTo("$param1");
     assertThat(tree.equalToken()).isNull();
     assertThat(tree.initValue()).isNull();
   }
-  
+
   @Test
   public void full() throws Exception {
     ParameterTree tree = parse("Class1&...$param1=$value1", PHPLexicalGrammar.PARAMETER);
     assertThat(tree.type().is(Kind.NAMESPACED_NAME)).isTrue();
     assertThat(tree.referenceToken().text()).isEqualTo("&");
     assertThat(tree.ellipsisToken().text()).isEqualTo("...");
-    assertThat(tree.variableIdentifier().variableExpression().name()).isEqualTo("$param1");
+    assertThat(tree.variableIdentifier().variableExpression().text()).isEqualTo("$param1");
     assertThat(tree.equalToken().text()).isEqualTo("=");
     assertThat(tree.initValue().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
   }

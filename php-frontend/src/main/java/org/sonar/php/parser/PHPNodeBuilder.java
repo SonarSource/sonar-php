@@ -32,7 +32,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxTrivia;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import java.util.Iterator;
@@ -95,7 +95,7 @@ public class PHPNodeBuilder implements NodeBuilder {
   private static class InternalSyntaxSpacing extends PHPTree {
 
     @Override
-    public void accept(TreeVisitor visitor) {
+    public void accept(VisitorCheck visitor) {
       // nothing to do
     }
 

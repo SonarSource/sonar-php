@@ -23,7 +23,7 @@ package org.sonar.php.tree.impl.lexical;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -86,8 +86,8 @@ public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
-    //FIXME do nothing
+  public void accept(VisitorCheck visitor) {
+    visitor.visitTrivia(this);
   }
 }
 

@@ -19,11 +19,7 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -31,14 +27,16 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import com.google.common.collect.Iterators;
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
 
 public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarationTree {
 
   private static final Kind KIND = Kind.METHOD_DECLARATION;
-  
+
   private final List<SyntaxToken> modifiersToken;
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
@@ -48,9 +46,9 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
 
   public MethodDeclarationTreeImpl(
     List<SyntaxToken> modifiersToken,
-    InternalSyntaxToken functionToken, 
-    @Nullable InternalSyntaxToken referenceToken, 
-    IdentifierTree name, 
+    InternalSyntaxToken functionToken,
+    @Nullable InternalSyntaxToken referenceToken,
+    IdentifierTree name,
     ParameterListTree parameters,
     Tree body
     ) {
@@ -59,9 +57,9 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     this.referenceToken = referenceToken;
     this.name = name;
     this.parameters = parameters;
-    this.body = body;    
+    this.body = body;
   }
-  
+
   @Override
   public List<SyntaxToken> modifiersToken() {
     return modifiersToken;
@@ -106,7 +104,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitMethodDeclaration(this);
   }
 

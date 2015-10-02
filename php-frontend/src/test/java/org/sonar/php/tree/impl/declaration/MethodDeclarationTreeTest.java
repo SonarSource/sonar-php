@@ -36,7 +36,7 @@ public class MethodDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.modifiersToken()).hasSize(2);
     assertThat(tree.functionToken().text()).isEqualTo("function");
     assertThat(tree.referenceToken()).isNotNull();
-    assertThat(tree.name().name()).isEqualTo("f");
+    assertThat(tree.name().text()).isEqualTo("f");
     assertThat(tree.parameters().parameters()).hasSize(1);
     assertThat(tree.body().is(Kind.BLOCK)).isTrue();
   }

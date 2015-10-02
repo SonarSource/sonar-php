@@ -19,29 +19,33 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S101",
+  key = ClassNameCheck.KEY,
   name = "Class names should comply with a naming convention",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")
-public class ClassNameCheck extends SquidCheck<LexerlessGrammar> {
+public class ClassNameCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S101";
+  private static final String MESSAGE = "Rename class \"%s\" to match the regular expression %s.";
 
   public static final String DEFAULT = "^[A-Z][a-zA-Z0-9]*$";
   private Pattern pattern = null;
@@ -53,17 +57,23 @@ public class ClassNameCheck extends SquidCheck<LexerlessGrammar> {
 
 
   @Override
-  public void init() {
-    pattern = Pattern.compile(format);
-    subscribeTo(PHPGrammar.CLASS_DECLARATION);
+  public List<Tree.Kind> nodesToVisit() {
+    return ImmutableList.of(Tree.Kind.CLASS_DECLARATION);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    String className = astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
+  public void init() {
+    pattern = Pattern.compile(format);
+  }
+
+  @Override
+  public void visitNode(Tree tree) {
+    String className = ((ClassDeclarationTree) tree).name().text();
 
     if (!pattern.matcher(className).matches()) {
-      getContext().createLineViolation(this, "Rename class \"{0}\" to match the regular expression {1}.", astNode, className, format);
+      String message = String.format(MESSAGE, className, this.format);
+      context().newIssue(this.KEY, message)
+        .tree(tree);
     }
   }
 

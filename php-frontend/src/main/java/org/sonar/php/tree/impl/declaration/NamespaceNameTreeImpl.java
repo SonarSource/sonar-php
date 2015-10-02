@@ -28,7 +28,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -83,12 +83,12 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
     while (iterator.hasNext()) {
       Tree next = iterator.next();
       if (next.is(Kind.IDENTIFIER)) {
-        result.append(((IdentifierTree) next).name());
+        result.append(((IdentifierTree) next).text());
       } else {
         result.append(separator);
       }
     }
-    result.append(name().name());
+    result.append(name().text());
     return result.toString();
   }
 
@@ -107,7 +107,7 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitNamespaceName(this);
   }
 }

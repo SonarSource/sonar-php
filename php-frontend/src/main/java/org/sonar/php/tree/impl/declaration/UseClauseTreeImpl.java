@@ -28,7 +28,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -78,9 +78,9 @@ public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
   public Iterator<Tree> childrenIterator() {
     return Iterators.forArray(namespaceName, asToken, alias);
   }
-  
+
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitUseClause(this);
   }
 

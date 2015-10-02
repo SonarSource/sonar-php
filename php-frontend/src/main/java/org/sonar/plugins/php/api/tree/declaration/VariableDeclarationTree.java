@@ -37,6 +37,7 @@ import javax.annotation.Nullable;
 @Beta
 public interface VariableDeclarationTree extends Tree {
 
+  // fixme (Lena) replace with VariableIdentifierTree
   IdentifierTree variableIdentifier();
 
   @Nullable

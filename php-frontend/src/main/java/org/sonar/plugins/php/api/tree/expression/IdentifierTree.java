@@ -27,6 +27,6 @@ public interface IdentifierTree extends ExpressionTree {
 
   SyntaxToken token();
 
-  String name();
+  String text();
 
 }

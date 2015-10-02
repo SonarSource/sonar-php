@@ -33,10 +33,10 @@ public class TraitPrecedenceTreeTest extends PHPTreeModelTest {
   public void test() throws Exception {
     TraitPrecedenceTree tree = parse("NS1\\Class1::method1 insteadof Class2, Class3;", PHPLexicalGrammar.TRAIT_PRECEDENCE);
     assertThat(tree.is(Kind.TRAIT_PRECEDENCE)).isTrue();
-    assertThat(tree.methodReference().method().name()).isEqualTo("method1");
+    assertThat(tree.methodReference().method().text()).isEqualTo("method1");
     assertThat(tree.insteadOfToken().text()).isEqualTo("insteadof");
     assertThat(tree.traits()).hasSize(2);
     assertThat(tree.eosToken().text()).isEqualTo(";");
   }
-  
+
 }

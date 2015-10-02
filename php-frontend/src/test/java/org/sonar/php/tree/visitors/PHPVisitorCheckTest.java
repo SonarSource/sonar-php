@@ -1,0 +1,107 @@
+/*
+ * SonarQube PHP Plugin
+ * Copyright (C) 2010 SonarSource and Akram Ben Aissi
+ * sonarqube@googlegroups.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ */
+package org.sonar.php.tree.visitors;
+
+import com.google.common.base.Charsets;
+import com.sonar.sslr.api.typed.ActionParser;
+import org.junit.Test;
+import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import java.io.File;
+
+import static org.fest.assertions.Assertions.assertThat;
+
+public class PHPVisitorCheckTest {
+
+  @Test
+  public void test() {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
+    File file = new File("src/test/resources/visitors/test.php");
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
+
+    TestVisitor testVisitor = new TestVisitor();
+    testVisitor.analyze(file, tree);
+
+    assertThat(testVisitor.classCounter).isEqualTo(1);
+    assertThat(testVisitor.namespaceNameCounter).isEqualTo(2);
+    // fixme (Lena) : should 2
+    assertThat(testVisitor.varIdentifierCounter).isEqualTo(1);
+    // PHPCheck#init() is called by PHPAnalyzer
+    assertThat(testVisitor.initCounter).isEqualTo(0);
+    assertThat(testVisitor.tokenCounter).isEqualTo(25);
+    assertThat(testVisitor.triviaCounter).isEqualTo(2);
+  }
+
+
+  private class TestVisitor extends PHPVisitorCheck {
+    int classCounter = 0;
+    int namespaceNameCounter = 0;
+    int varIdentifierCounter = 0;
+    int initCounter = 0;
+    int triviaCounter = 0;
+    int tokenCounter = 0;
+
+    @Override
+    public void visitClassDeclaration(ClassDeclarationTree tree) {
+      super.visitClassDeclaration(tree);
+      classCounter++;
+    }
+
+
+    @Override
+    public void visitNamespaceName(NamespaceNameTree tree) {
+      super.visitNamespaceName(tree);
+      namespaceNameCounter++;
+    }
+
+    @Override
+    public void visitVariableIdentifier(VariableIdentifierTree tree) {
+      super.visitVariableIdentifier(tree);
+      varIdentifierCounter++;
+    }
+
+    @Override
+    public void init() {
+      initCounter++;
+    }
+
+    @Override
+    public void visitToken(SyntaxToken token) {
+      super.visitToken(token);
+      tokenCounter++;
+    }
+
+    @Override
+    public void visitTrivia(SyntaxTrivia trivia) {
+      triviaCounter++;
+    }
+
+
+  }
+
+}

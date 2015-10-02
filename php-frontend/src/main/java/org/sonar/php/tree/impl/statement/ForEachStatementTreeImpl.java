@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
-import org.sonar.plugins.php.api.visitors.TreeVisitor;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -148,7 +148,7 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
   }
 
   @Override
-  public void accept(TreeVisitor visitor) {
+  public void accept(VisitorCheck visitor) {
     visitor.visitForEachStatement(this);
   }
 
@@ -187,7 +187,12 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
     }
 
     @Override
-    public void accept(TreeVisitor visitor) {
+    public void accept(VisitorCheck visitor) {
+      throw new IllegalStateException("class ForEachStatementHeader is used only internally for building the tree and should not be used to tree visiting.");
+    }
+
+    @Override
+    public Kind getKind() {
       throw new IllegalStateException("class ForEachStatementHeader is used only internally for building the tree and should not be used to tree visiting.");
     }
 

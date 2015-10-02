@@ -20,14 +20,14 @@
 package org.sonar.php.utils;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.php.tree.visitors.SubscriptionAstTreeVisitor;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.List;
 
-public class SourceBuilder extends SubscriptionAstTreeVisitor {
+public class SourceBuilder extends PHPSubscriptionCheck {
 
   private final StringBuilder stringBuilder = new StringBuilder();
   private int line = 1;

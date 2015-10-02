@@ -34,7 +34,7 @@ public class GotoStatementTreeTest extends PHPTreeModelTest {
     GotoStatementTree tree = parse(" goto a ;", PHPLexicalGrammar.GOTO_STATEMENT);
 
     assertThat(tree.is(Kind.GOTO_STATEMENT)).isTrue();
-    assertThat(tree.identifier().name()).isEqualTo("a");
+    assertThat(tree.identifier().text()).isEqualTo("a");
   }
 
 }

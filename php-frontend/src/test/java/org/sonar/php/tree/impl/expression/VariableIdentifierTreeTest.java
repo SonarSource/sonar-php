@@ -34,7 +34,7 @@ public class VariableIdentifierTreeTest extends PHPTreeModelTest {
     VariableIdentifierTree tree = parse("$a", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.VARIABLE_IDENTIFIER)).isTrue();
-    assertThat(tree.variableExpression().name()).isEqualTo("$a");
+    assertThat(tree.variableExpression().text()).isEqualTo("$a");
   }
 
 }

@@ -30,8 +30,8 @@ import java.util.List;
 /**
  * Represents <a href="">for statement</a> and alternative for statement syntax as well.
  * <pre>
- *   for ( {@link #init()} ; {@link #condition()} ; {@link #update()} ) {@link #statement()}
- *   for ( {@link #init()} ; {@link #condition()} ; {@link #update()} ) : {@link #statement()} endfor ;
+ *   for ( {@link #init()} ; {@link #condition()} ; {@link #update()} ) {@link #statements()}
+ *   for ( {@link #init()} ; {@link #condition()} ; {@link #update()} ) : {@link #statements()} endfor ;
  * </pre>
  */
 @Beta
