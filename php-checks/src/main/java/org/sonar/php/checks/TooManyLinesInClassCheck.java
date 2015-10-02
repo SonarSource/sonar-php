@@ -19,26 +19,28 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2042",
+  key = TooManyLinesInClassCheck.KEY,
   name = "Classes should not have too many lines",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.ARCHITECTURE_CHANGEABILITY)
 @SqaleConstantRemediation("1h")
-public class TooManyLinesInClassCheck extends SquidCheck<LexerlessGrammar> {
+public class TooManyLinesInClassCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2042";
+
+  private static final String MESSAGE = "Class \"%s\" has %s lines, which is greater than the %s authorized. Split it into smaller classes.";
 
   private static final int DEFAULT = 200;
 
@@ -48,27 +50,13 @@ public class TooManyLinesInClassCheck extends SquidCheck<LexerlessGrammar> {
   public int maximumLinesThreshold = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CLASS_DECLARATION,
-      PHPGrammar.INTERFACE_DECLARATION);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    int nbLines = getNumberOfLine(astNode);
-
-    if (nbLines > maximumLinesThreshold) {
-      getContext().createLineViolation(this, "Class \"{0}\" has {1} lines, which is greater than the {2} authorized. Split it into smaller classes.",
-        astNode, astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue(), nbLines, maximumLinesThreshold);
+  public void visitClassDeclaration(ClassDeclarationTree declaration) {
+    int numberOfLines = declaration.closeCurlyBraceToken().line() - declaration.openCurlyBraceToken().line() + 1;
+    if (numberOfLines > maximumLinesThreshold) {
+      IdentifierTree name = declaration.name();
+      context().newIssue(KEY, String.format(MESSAGE, name.text(), numberOfLines, maximumLinesThreshold)).tree(name);
     }
-  }
-
-  public static int getNumberOfLine(AstNode classDeclaration) {
-    int firstLine = classDeclaration.getFirstChild(PHPPunctuator.LCURLYBRACE).getTokenLine();
-    int lastLine = classDeclaration.getFirstChild(PHPPunctuator.RCURLYBRACE).getTokenLine();
-
-    return lastLine - firstLine + 1;
+    super.visitClassDeclaration(declaration);
   }
 
 }

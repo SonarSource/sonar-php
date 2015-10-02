@@ -19,30 +19,24 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TooManyLinesInClassCheckTest extends CheckTest {
+public class TooManyLinesInClassCheckTest {
 
   private TooManyLinesInClassCheck check = new TooManyLinesInClassCheck();
 
   @Test
   public void test_default() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyLinesInClassCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile("TooManyLinesInClassCheck.php"), ImmutableList.<Issue>of());
   }
 
   @Test
   public void custom() throws Exception {
     check.maximumLinesThreshold = 7;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyLinesInClassCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Class \"A\" has 9 lines, which is greater than the " + check.maximumLinesThreshold + " authorized. Split it into smaller classes.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile("TooManyLinesInClassCheck.php"));
   }
 }
