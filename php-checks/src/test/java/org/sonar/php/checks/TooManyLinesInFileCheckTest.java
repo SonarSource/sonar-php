@@ -19,30 +19,28 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TooManyLinesInFileCheckTest extends CheckTest {
+public class TooManyLinesInFileCheckTest {
 
   private TooManyLinesInFileCheck check = new TooManyLinesInFileCheck();
+  private String fileName = "TooManyLinesInFileCheck.php";
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyLinesInFileCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 7;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyLinesInFileCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().withMessage("File \"TooManyLinesInFileCheck.php\" has 9 lines, which is greater than " + check.max + " authorized. Split it into smaller files.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of(new PHPIssue(
+      TooManyLinesInFileCheck.KEY,
+      "File \"TooManyLinesInFileCheck.php\" has 9 lines, which is greater than " + check.max + " authorized. Split it into smaller files.")));
   }
 }

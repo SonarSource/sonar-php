@@ -19,27 +19,29 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S104",
+  key = TooManyLinesInFileCheck.KEY,
   name = "Files should not have too many lines",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1h")
-public class TooManyLinesInFileCheck extends SquidCheck<LexerlessGrammar> {
+public class TooManyLinesInFileCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S104";
+
+  private static final String MESSAGE = "File \"%s\" has %s lines, which is greater than %s authorized. Split it into smaller files.";
 
   private static final int DEFAULT = 1000;
 
@@ -49,17 +51,11 @@ public class TooManyLinesInFileCheck extends SquidCheck<LexerlessGrammar> {
   public int max = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(GenericTokenType.EOF);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    int lines = astNode.getTokenLine();
-
-    if (lines > max) {
-      getContext().createFileViolation(this, "File \"{0}\" has {1} lines, which is greater than {2} authorized. Split it into smaller files.",
-        getContext().getFile().getName(), lines, max);
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    int numberOfLines = tree.eofToken().line();
+    if (numberOfLines > max) {
+      context().newIssue(KEY, String.format(MESSAGE, context().file().getName(), numberOfLines, max));
     }
   }
+
 }
