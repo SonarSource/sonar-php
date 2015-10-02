@@ -20,19 +20,15 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class EvalUseCheckTest extends CheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("EvalUseCheck.php"), new EvalUseCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Remove this use of the \"eval\" function.")
-      .noMore();
+    PHPCheckTest.check(new EvalUseCheck(), TestUtils.getCheckFile("EvalUseCheck.php"));
   }
+
 }
