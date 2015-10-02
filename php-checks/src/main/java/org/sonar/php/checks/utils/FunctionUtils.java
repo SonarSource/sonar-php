@@ -28,6 +28,10 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import java.util.Arrays;
@@ -52,6 +56,21 @@ public class FunctionUtils {
   public static String getFunctionName(AstNode functionDec) {
     Preconditions.checkArgument(functionDec.is(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION));
     return functionDec.is(PHPGrammar.FUNCTION_EXPRESSION) ? "expression" : ("\"" + functionDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue() + "\"");
+  }
+
+  /**
+   * Returns function or method's name, or "expression" if the given node is a function expression.
+   *
+   * @param functionDec FUNCTION_DECLARATION, METHOD_DECLARATION or FUNCTION_EXPRESSION
+   * @return name of function or "expression" if function expression
+   */
+  public static String getFunctionName(FunctionTree functionDec) {
+    if (functionDec.is(Kind.FUNCTION_DECLARATION)) {
+      return "\"" + ((FunctionDeclarationTree) functionDec).name().text() + "\"";
+    } else if (functionDec.is(Kind.METHOD_DECLARATION)) {
+      return "\"" + ((MethodDeclarationTree) functionDec).name().text() + "\"";
+    }
+    return "expression";
   }
 
   /**

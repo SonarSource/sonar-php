@@ -19,34 +19,26 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TooManyLinesInFunctionCheckTest extends CheckTest {
+public class TooManyLinesInFunctionCheckTest {
+
+  private static final String FILE_NAME = "TooManyLinesInFunctionCheck.php";
 
   private TooManyLinesInFunctionCheck check = new TooManyLinesInFunctionCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyLinesInFunctionCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of());
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 3;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyLinesInFunctionCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("This function \"f\" has 6 lines, which is greater than the " + check.max + " lines authorized. Split it into smaller functions.")
-      .next().atLine(4)
-      .next().atLine(10)
-      .next().atLine(15)
-      .next().atLine(23)
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 }

@@ -19,29 +19,36 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S138",
+  key = TooManyLinesInFunctionCheck.KEY,
   name = "Functions should not have too many lines",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("20min")
-public class TooManyLinesInFunctionCheck extends SquidCheck<LexerlessGrammar> {
+public class TooManyLinesInFunctionCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S138";
+
+  private static final String MESSAGE = "This function %s has %s lines, which is greater than the %s lines authorized. Split it into smaller functions.";
 
   private static final int DEFAULT = 150;
 
@@ -51,40 +58,35 @@ public class TooManyLinesInFunctionCheck extends SquidCheck<LexerlessGrammar> {
   public int max = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.METHOD_DECLARATION,
-      PHPGrammar.FUNCTION_DECLARATION,
-      PHPGrammar.FUNCTION_EXPRESSION);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(
+      Kind.METHOD_DECLARATION,
+      Kind.FUNCTION_DECLARATION,
+      Kind.FUNCTION_EXPRESSION);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    int nbLines = getNumberOfLine(astNode);
+  public void visitNode(Tree tree) {
+    FunctionTree declaration = (FunctionTree) tree;
+    int nbLines = getNumberOfLines(declaration);
 
     if (nbLines > max) {
-      getContext().createLineViolation(this, "This function {0} has {1} lines, which is greater than the {2} lines authorized. Split it into smaller functions.",
-        astNode, FunctionUtils.getFunctionName(astNode), nbLines, max);
+      context()
+        .newIssue(KEY, String.format(MESSAGE, FunctionUtils.getFunctionName(declaration), nbLines, max))
+        .tree(declaration);
     }
   }
 
-  public static int getNumberOfLine(AstNode functionNode) {
-    if (FunctionUtils.isAbstractMethod(functionNode)) {
+  public static int getNumberOfLines(FunctionTree declaration) {
+    Tree body = declaration.body();
+    if (!body.is(Kind.BLOCK)) {
       return 0;
     }
-    AstNode functionBlock = getFunctionBlock(functionNode);
 
-    int firstLine = functionBlock.getFirstChild(PHPPunctuator.LCURLYBRACE).getTokenLine();
-    int lastLine = functionBlock.getFirstChild(PHPPunctuator.RCURLYBRACE).getTokenLine();
-
+    BlockTree block = (BlockTree) body;
+    int firstLine = block.openCurlyBraceToken().line();
+    int lastLine = block.closeCurlyBraceToken().line();
     return lastLine - firstLine + 1;
   }
 
-  private static AstNode getFunctionBlock(AstNode functionNode) {
-    if (functionNode.is(PHPGrammar.METHOD_DECLARATION)) {
-      return functionNode.getFirstChild(PHPGrammar.METHOD_BODY).getFirstChild(PHPGrammar.BLOCK);
-    } else {
-      return functionNode.getFirstChild(PHPGrammar.BLOCK);
-    }
-  }
 }

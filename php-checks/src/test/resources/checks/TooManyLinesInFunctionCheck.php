@@ -1,13 +1,13 @@
 <?php
 
-function f() {           // NOK
+function f() {           // NOK {{This function "f" has 6 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
   function f() {         // NOK
     // comment
     return 1;
   }
 }
 
-$f = function () {       // NOK
+$f = function () {       // NOK {{This function expression has 4 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
   // comment
   return 1;
 };
@@ -20,7 +20,7 @@ function f() {           // NOK
 }
 
 abstract class C {
-  public function f() {  // NOK
+  public function f() {  // NOK {{This function "f" has 5 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
     // comment
     doSomething();
     return 1;
