@@ -19,53 +19,94 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S121",
+  key = AlwaysUseCurlyBracesCheck.KEY,
   name = "Control structures should always use curly braces",
   priority = Priority.MAJOR,
   tags = {Tags.CERT, Tags.CWE, Tags.MISRA, Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class AlwaysUseCurlyBracesCheck extends SquidCheck<LexerlessGrammar> {
+public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
 
-  @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.IF_STATEMENT,
-      PHPGrammar.ELSEIF_CLAUSE,
-      PHPGrammar.ELSE_CLAUSE,
-      PHPGrammar.FOR_STATEMENT,
-      PHPGrammar.FOREACH_STATEMENT,
-      PHPGrammar.WHILE_STATEMENT,
-      PHPGrammar.DO_WHILE_STATEMENT);
-  }
+  public static final String KEY = "S121";
+  private static final String MESSAGE = "Add curly braces around the nested statement(s).";
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (hasNestedStatementWithoutCurlyBraces(astNode)) {
-      getContext().createLineViolation(this, "Add curly braces around the nested statement(s).", astNode);
+  private void checkStatement(StatementTree statementTree, Tree parent) {
+    if (!statementTree.is(Tree.Kind.BLOCK) && !statementTree.is(Tree.Kind.EMPTY_STATEMENT)) {
+      context().newIssue(KEY, MESSAGE).tree(parent);
     }
   }
 
-  private static boolean hasNestedStatementWithoutCurlyBraces(AstNode node) {
-    AstNode statement = node.getFirstChild(PHPGrammar.STATEMENT);
-    return statement != null && statement.getFirstChild().isNot(PHPGrammar.EMPTY_STATEMENT, PHPGrammar.BLOCK)
-      && !isElseIf(node, statement);
+  @Override
+  public void visitIfStatement(IfStatementTree tree) {
+    super.visitIfStatement(tree);
+    if (tree.is(Tree.Kind.IF_STATEMENT)) {
+      checkStatement(tree.statements().get(0), tree);
+    }
   }
 
-  private static boolean isElseIf(AstNode node, AstNode stmt) {
-    return node.is(PHPGrammar.ELSE_CLAUSE) && stmt.getFirstChild().is(PHPGrammar.IF_STATEMENT);
+  @Override
+  public void visitElseifClause(ElseifClauseTree tree) {
+    super.visitElseifClause(tree);
+    if (tree.is(Tree.Kind.ELSEIF_CLAUSE)) {
+      checkStatement(tree.statements().get(0), tree);
+    }
   }
+
+  @Override
+  public void visitElseClause(ElseClauseTree tree) {
+    super.visitElseClause(tree);
+    if (tree.is(Tree.Kind.ELSE_CLAUSE) && !tree.statements().get(0).is(Tree.Kind.IF_STATEMENT)) {
+      checkStatement(tree.statements().get(0), tree);
+    }
+  }
+
+  @Override
+  public void visitForStatement(ForStatementTree tree) {
+    super.visitForStatement(tree);
+    if (tree.is(Tree.Kind.FOR_STATEMENT)) {
+      checkStatement(tree.statements().get(0), tree);
+    }
+  }
+
+  @Override
+  public void visitForEachStatement(ForEachStatementTree tree) {
+    super.visitForEachStatement(tree);
+    if (tree.is(Tree.Kind.FOREACH_STATEMENT)) {
+      checkStatement(tree.statements().get(0), tree);
+    }
+  }
+
+  @Override
+  public void visitDoWhileStatement(DoWhileStatementTree tree) {
+    super.visitDoWhileStatement(tree);
+    checkStatement(tree.statement(), tree);
+  }
+
+  @Override
+  public void visitWhileStatement(WhileStatementTree tree) {
+    super.visitWhileStatement(tree);
+    if (tree.is(Tree.Kind.WHILE_STATEMENT)) {
+      checkStatement(tree.statements().get(0), tree);
+    }
+  }
+
 }
