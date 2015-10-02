@@ -19,27 +19,31 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1151",
+  key = SwitchCaseTooBigCheck.KEY,
   name = "\"switch case\" clauses should not have too many lines",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")
-public class SwitchCaseTooBigCheck extends SquidCheck<LexerlessGrammar> {
+public class SwitchCaseTooBigCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1151";
+
+  private static final String MESSAGE = "Reduce this \"switch/case\" number of lines from %s to at most %s, for example by extracting code into function.";
 
   public static final int DEFAULT = 10;
 
@@ -49,18 +53,28 @@ public class SwitchCaseTooBigCheck extends SquidCheck<LexerlessGrammar> {
   int max = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CASE_CLAUSE,
-      PHPGrammar.DEFAULT_CLAUSE);
+  public void visitSwitchStatement(SwitchStatementTree tree) {
+    SwitchCaseClauseTree previousClause = null;
+
+    for (SwitchCaseClauseTree clause : tree.cases()) {
+      if (previousClause != null) {
+        checkCaseClause(previousClause, clause.caseToken().line());
+      }
+      previousClause = clause;
+    }
+
+    if (previousClause != null) {
+      SyntaxToken nextToken = tree.closeCurlyBraceToken() == null ? tree.endswitchToken() : tree.closeCurlyBraceToken();
+      checkCaseClause(previousClause, nextToken.line());
+    }
+
+    super.visitSwitchStatement(tree);
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    int lines = Math.max(astNode.getNextAstNode().getTokenLine() - astNode.getTokenLine(), 1);
+  private void checkCaseClause(SwitchCaseClauseTree clause, int nextNodeLine) {
+    int lines = nextNodeLine - clause.caseToken().line();
     if (lines > max) {
-      getContext().createLineViolation(this, "Reduce this \"switch/case\" number of lines from {0} to at most {1}, for example by extracting code into function.",
-        astNode, lines, max);
+      context().newIssue(KEY, String.format(MESSAGE, lines, max)).tree(clause);
     }
   }
 }

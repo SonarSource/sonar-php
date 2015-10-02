@@ -19,34 +19,26 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class SwitchCaseTooBigCheckTest extends CheckTest {
+public class SwitchCaseTooBigCheckTest {
+
+  private static final String FILE_NAME = "SwitchCaseTooBigCheck.php";
 
   private SwitchCaseTooBigCheck check = new SwitchCaseTooBigCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SwitchCaseTooBigCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(10).withMessage("Reduce this \"switch/case\" number of lines from 11 to at most " + check.DEFAULT + ", for example by extracting code into function.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of());
   }
-
 
   @Test
   public void custom() throws Exception {
     check.max = 4;
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SwitchCaseTooBigCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Reduce this \"switch/case\" number of lines from 5 to at most " + check.max + ", for example by extracting code into function.")
-      .next().atLine(10)
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 }
