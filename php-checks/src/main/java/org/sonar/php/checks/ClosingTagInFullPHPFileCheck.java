@@ -19,55 +19,55 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPTokenType;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 @Rule(
-  key = "S1780",
+  key = ClosingTagInFullPHPFileCheck.KEY,
   name = "Closing tag \"?>\" should be omitted on files containing only PHP",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class ClosingTagInFullPHPFileCheck extends SquidCheck<LexerlessGrammar> {
+public class ClosingTagInFullPHPFileCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1780";
+  private static final String MESSAGE = "Remove this closing tag \"?>\".";
 
   private int inlineHTMLCounter = 0;
   private boolean isOnlyClosingTag = false;
-  private AstNode lastInlineHTMLNode = null;
+  private SyntaxToken lastInlineHTMLToken = null;
 
-  @Override
   public void init() {
-    subscribeTo(PHPTokenType.INLINE_HTML);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    inlineHTMLCounter++;
-    isOnlyClosingTag = "?>".equals(astNode.getTokenOriginalValue().trim());
-    lastInlineHTMLNode = astNode;
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
     inlineHTMLCounter = 0;
     isOnlyClosingTag = false;
-    lastInlineHTMLNode = null;
+    lastInlineHTMLToken = null;
   }
 
   @Override
-  public void leaveFile(@Nullable AstNode astNode) {
-    if (inlineHTMLCounter == 1 && isOnlyClosingTag) {
-      getContext().createLineViolation(this, "Remove this closing tag \"?>\".", lastInlineHTMLNode);
+  public void visitToken(SyntaxToken token) {
+    if (token.is(Kind.INLINE_HTML_TOKEN)) {
+      inlineHTMLCounter++;
+      isOnlyClosingTag = "?>".equals(token.text().trim());
+      lastInlineHTMLToken = token;
     }
   }
 
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    init();
+
+    super.visitCompilationUnit(tree);
+
+    if (inlineHTMLCounter == 1 && isOnlyClosingTag) {
+      context().newIssue(KEY, "Remove this closing tag \"?>\".").tree(lastInlineHTMLToken);
+    }
+  }
 }

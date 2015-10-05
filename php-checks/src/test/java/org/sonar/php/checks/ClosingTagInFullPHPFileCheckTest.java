@@ -20,10 +20,9 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class ClosingTagInFullPHPFileCheckTest extends CheckTest {
 
@@ -32,17 +31,11 @@ public class ClosingTagInFullPHPFileCheckTest extends CheckTest {
 
   @Test
   public void ok() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
   }
 
   @Test
   public void ko() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(11).withMessage("Remove this closing tag \"?>\".")
-      .noMore();
-
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"));
   }
 }
