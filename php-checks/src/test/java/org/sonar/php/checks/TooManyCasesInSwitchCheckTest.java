@@ -19,30 +19,26 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TooManyCasesInSwitchCheckTest extends CheckTest {
+public class TooManyCasesInSwitchCheckTest {
+
+  private static final String FILE_NAME = "TooManyCasesInSwitchCheck.php";
 
   private TooManyCasesInSwitchCheck check = new TooManyCasesInSwitchCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyCasesInSwitchCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of());
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 3;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyCasesInSwitchCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Reduce the number of switch cases from 4 to at most " + check.max + ".")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 }

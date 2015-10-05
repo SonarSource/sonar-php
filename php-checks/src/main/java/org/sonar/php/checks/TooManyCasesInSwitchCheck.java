@@ -19,27 +19,27 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1479",
+  key = TooManyCasesInSwitchCheck.KEY,
   name = "\"switch\" statements should not have too many \"case\" clauses",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_CHANGEABILITY)
 @SqaleConstantRemediation("30min")
-public class TooManyCasesInSwitchCheck extends SquidCheck<LexerlessGrammar> {
+public class TooManyCasesInSwitchCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1479";
 
   public static final int DEFAULT = 30;
 
@@ -49,21 +49,14 @@ public class TooManyCasesInSwitchCheck extends SquidCheck<LexerlessGrammar> {
   int max = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.SWITCH_STATEMENT);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    int nbCase = getNumberOfCase(astNode);
-
-    if (nbCase > max) {
-      getContext().createLineViolation(this, "Reduce the number of switch cases from {0} to at most {1}.", astNode, nbCase, max);
+  public void visitSwitchStatement(SwitchStatementTree switchTree) {
+    int numberOfCases = switchTree.cases().size();
+    if (numberOfCases > max) {
+      context()
+        .newIssue(KEY, String.format("Reduce the number of switch cases from %s to at most %s.", numberOfCases, max))
+        .tree(switchTree);
     }
+    super.visitSwitchStatement(switchTree);
   }
 
-  private static int getNumberOfCase(AstNode switchStmt) {
-    AstNode caseList = switchStmt.getFirstChild(PHPGrammar.SWITCH_CASE_LIST).getFirstChild(PHPGrammar.CASE_LIST);
-    return caseList == null ? 0 : caseList.getNumberOfChildren();
-  }
 }

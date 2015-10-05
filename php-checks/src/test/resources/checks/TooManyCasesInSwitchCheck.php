@@ -1,6 +1,6 @@
 <?php
 
-switch ($i) {
+switch ($i) { // NOK {{Reduce the number of switch cases from 4 to at most 3.}}
     case 0:
     case 1:
       break;
@@ -12,6 +12,7 @@ switch ($i) {
 
 switch ($i) {
     case 0:
+    case 1:
       doSomething();
     default:
       break;
