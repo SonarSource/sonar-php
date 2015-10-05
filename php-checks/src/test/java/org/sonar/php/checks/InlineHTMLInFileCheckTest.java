@@ -19,11 +19,13 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
 public class InlineHTMLInFileCheckTest extends CheckTest {
 
@@ -32,24 +34,16 @@ public class InlineHTMLInFileCheckTest extends CheckTest {
 
   @Test
   public void ok() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
   }
 
   @Test
   public void ok_excluded_file() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.phtml"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.phtml"));
   }
 
   @Test
   public void ko() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(null).withMessage("Remove the inline HTML in this file.")
-      .noMore();
-
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.<Issue>of(new PHPIssue(InlineHTMLInFileCheck.KEY, "Remove the inline HTML in this file.")));
   }
 }

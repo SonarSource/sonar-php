@@ -19,17 +19,15 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPTokenType;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 @Rule(
   key = "S1997",
@@ -38,30 +36,35 @@ import javax.annotation.Nullable;
   tags = {Tags.CONVENTION, Tags.BRAIN_OVERLOAD})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("10min")
-public class InlineHTMLInFileCheck extends SquidCheck<LexerlessGrammar> {
+public class InlineHTMLInFileCheck extends PHPVisitorCheck {
 
-  private boolean fileHasIssue = false;
+  public static final String KEY = "S1997";
+  private static final String MESSAGE = "Remove the inline HTML in this file.";
 
-  @Override
-  public void init() {
-    subscribeTo(PHPTokenType.INLINE_HTML);
-  }
+  private boolean fileHasIssue;
 
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    fileHasIssue = false;
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (!"?>".equals(astNode.getTokenOriginalValue().trim()) && !fileHasIssue && !isExcludedFile()) {
-      getContext().createFileViolation(this, "Remove the inline HTML in this file.");
+  public void visitToken(SyntaxToken token) {
+    if (token.is(Kind.INLINE_HTML_TOKEN) && !"?>".equals(token.text().trim())) {
       fileHasIssue = true;
     }
   }
 
-  private boolean isExcludedFile() {
-    return getContext().getFile().getName().endsWith(".phtml");
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    if (!isExcludedFile()) {
+      fileHasIssue = false;
+      super.visitCompilationUnit(tree);
+      if (fileHasIssue) {
+        context().newIssue(KEY, MESSAGE);
+      }
+    }
   }
+
+  private boolean isExcludedFile() {
+    return context().file().getName().endsWith(".phtml");
+  }
+
+
 
 }
