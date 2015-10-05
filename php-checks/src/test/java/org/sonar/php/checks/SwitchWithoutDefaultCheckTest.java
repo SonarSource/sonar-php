@@ -20,20 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class SwitchWithoutDefaultCheckTest extends CheckTest {
+public class SwitchWithoutDefaultCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SwitchWithoutDefaultCheck.php"), new SwitchWithoutDefaultCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(10).withMessage("Add a \"case default\" clause to this \"switch\" statement.")
-      .next().atLine(18).withMessage("Move this \"case default\" clause to the end of this \"switch\" statement.")
-      .noMore();
+    PHPCheckTest.check(new SwitchWithoutDefaultCheck(), TestUtils.getCheckFile("SwitchWithoutDefaultCheck.php"));
   }
+
 }

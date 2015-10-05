@@ -7,7 +7,7 @@ switch ($a) {
     break;
 }
 
-switch ($a) { // NOK
+switch ($a) { // NOK {{Add a "case default" clause to this "switch" statement.}}
   case 1:
     break;
 }
@@ -15,7 +15,7 @@ switch ($a) { // NOK
 switch ($a) {
   case 0:
     break;
-  default:    // NOK
+  default:    // NOK {{Move this "case default" clause to the end of this "switch" statement.}}
     break;
   case 1:
     break;

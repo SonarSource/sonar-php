@@ -19,41 +19,52 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S131",
+  key = SwitchWithoutDefaultCheck.KEY,
   name = "\"switch\" statements should end with a \"case default\" clause",
   priority = Priority.MAJOR,
   tags = {Tags.CERT, Tags.CWE, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class SwitchWithoutDefaultCheck extends SquidCheck<LexerlessGrammar> {
+public class SwitchWithoutDefaultCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S131";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CASE_LIST);
-  }
+  public void visitSwitchStatement(SwitchStatementTree switchTree) {
+    SwitchCaseClauseTree defaultClause = null;
+    int defaultClauseIndex = 0;
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    AstNode defaultClause = astNode.getFirstChild(PHPGrammar.DEFAULT_CLAUSE);
+    for (SwitchCaseClauseTree clause : switchTree.cases()) {
+      if (clause.is(Kind.DEFAULT_CLAUSE)) {
+        defaultClause = clause;
+        break;
+      }
+      defaultClauseIndex++;
+    }
 
     if (defaultClause == null) {
-      getContext().createLineViolation(this, "Add a \"case default\" clause to this \"switch\" statement.", astNode.getParent());
-    } else if (defaultClause.getNextAstNode().isNot(PHPPunctuator.RCURLYBRACE)) {
-      getContext().createLineViolation(this, "Move this \"case default\" clause to the end of this \"switch\" statement.", defaultClause);
+      context()
+        .newIssue(KEY, "Add a \"case default\" clause to this \"switch\" statement.")
+        .tree(switchTree);
+    } else if (defaultClauseIndex < switchTree.cases().size() - 1) {
+      context()
+        .newIssue(KEY, "Move this \"case default\" clause to the end of this \"switch\" statement.")
+        .tree(defaultClause);
     }
+
+    super.visitSwitchStatement(switchTree);
   }
 }
