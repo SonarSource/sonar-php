@@ -19,44 +19,42 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Rule(
-  key = "S1788",
+  key = ArgumentWithDefaultValueNotLastCheck.KEY,
   name = "Method arguments with default value should be last",
   priority = Priority.CRITICAL,
   tags = {Tags.BUG, Tags.PSR2})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("20min")
-public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<LexerlessGrammar> {
+public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
 
+  public static final String KEY = "S1788";
 
-  @Override
-  public void init() {
-    subscribeTo(PHPGrammar.PARAMETER_LIST);
-  }
+  private static final String MESSAGE = "Move arguments %s after arguments without default value";
 
   @Override
-  public void visitNode(AstNode astNode) {
-    List<AstNode> paramToReport = getParamToReport(astNode);
-
-    if (!paramToReport.isEmpty()) {
-      getContext().createLineViolation(this, "Move arguments {0} after arguments without default value", astNode, paramToString(paramToReport));
+  public void visitParameterList(ParameterListTree parameterList) {
+    List<ParameterTree> parametersToMove = getParametersToMove(parameterList);
+    if (!parametersToMove.isEmpty()) {
+      context().newIssue(KEY, String.format(MESSAGE, getNameListString(parametersToMove))).tree(parameterList);
     }
+    super.visitParameterList(parameterList);
   }
 
   /**
@@ -65,36 +63,29 @@ public class ArgumentWithDefaultValueNotLastCheck extends SquidCheck<LexerlessGr
    * Example: $p2 will be returned.
    * <pre>function f($p1, $p2 = 1, $p3, $p4 = 4) {...}</pre>
    */
-  private List<AstNode> getParamToReport(AstNode paramListNode) {
-    List<AstNode> paramToReport = Lists.newArrayList();
+  private List<ParameterTree> getParametersToMove(ParameterListTree parameterList) {
+    List<ParameterTree> parametersToMove = Lists.newArrayList();
     boolean metParamWithoutDefault = false;
 
-    for (AstNode param : Lists.reverse(paramListNode.getChildren(PHPGrammar.PARAMETER))) {
-      boolean hasDefault = param.hasDirectChildren(PHPPunctuator.EQU);
+    for (ParameterTree param : Lists.reverse(parameterList.parameters())) {
+      boolean hasDefault = param.initValue() != null;
 
       if (!hasDefault && !metParamWithoutDefault) {
         metParamWithoutDefault = true;
       } else if (hasDefault && metParamWithoutDefault) {
-        paramToReport.add(param);
+        parametersToMove.add(param);
       }
     }
 
-    return Lists.reverse(paramToReport);
+    return Lists.reverse(parametersToMove);
   }
 
-  private String paramToString(List<AstNode> params) {
-    StringBuilder build = new StringBuilder();
-
-    for (int i = 0; i < params.size(); i++) {
-
-      if (i == (params.size() - 1)) {
-        build.append("\"" + params.get(i).getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue() + "\"");
-      } else {
-        build.append("\"" + params.get(i).getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue() + "\", ");
-      }
+  private String getNameListString(List<ParameterTree> params) {
+    List<String> parameterNames = new ArrayList<>();
+    for (ParameterTree parameter : params) {
+      parameterNames.add("\"" + parameter.variableIdentifier().variableExpression().text() + "\"");
     }
-
-    return build.toString();
+    return Joiner.on(", ").join(parameterNames);
   }
 
 }
