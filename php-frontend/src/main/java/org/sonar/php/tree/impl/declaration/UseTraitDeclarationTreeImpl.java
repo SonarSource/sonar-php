@@ -125,7 +125,7 @@ public class UseTraitDeclarationTreeImpl extends PHPTree implements UseTraitDecl
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitTraitUseStatement(this);
+    visitor.visitUseTraitDeclaration(this);
   }
 
 }

@@ -163,9 +163,8 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
     scan(tree);
   }
 
-  //fixme (Lena) : rename method to visitUseTraitDeclaration
   @Override
-  public void visitTraitUseStatement(UseTraitDeclarationTree tree) {
+  public void visitUseTraitDeclaration(UseTraitDeclarationTree tree) {
     scan(tree);
   }
 
