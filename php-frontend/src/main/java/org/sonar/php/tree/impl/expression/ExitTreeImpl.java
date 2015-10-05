@@ -63,7 +63,7 @@ public class ExitTreeImpl extends PHPTree implements ExitTree {
 
   @Override
   public SyntaxToken wordToken() {
-    return null;
+    return wordToken;
   }
 
   @Nullable

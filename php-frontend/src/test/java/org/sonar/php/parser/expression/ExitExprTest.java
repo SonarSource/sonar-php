@@ -19,7 +19,6 @@
  */
 package org.sonar.php.parser.expression;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.php.api.tree.Tree;
 
@@ -31,7 +30,9 @@ public class ExitExprTest {
   public void test() {
     assertThat(Tree.Kind.EXIT_EXPRESSION)
       .matches("exit (0)")
-      .matches("die ('Error')");
+      .matches("die ('Error')")
+      .matches("die ()")
+      .matches("die");
   }
 
 }
