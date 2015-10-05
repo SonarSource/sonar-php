@@ -106,6 +106,8 @@ public class PHPCheckTest {
       if (text.startsWith("// NOK {{")) {
         String message = text.substring(text.indexOf("{{") + 2, text.indexOf("}}"));
         context().newIssue("testKey", message).line(syntaxTrivia.line());
+      } else if (text.startsWith("// NOK")) {
+        context().newIssue("testKey", null).line(syntaxTrivia.line());
       }
     }
 
@@ -137,8 +139,9 @@ public class PHPCheckTest {
         return String.format(NO_ISSUE, expected.get(0).line());
 
       } else if (actual.size() == 1 && expected.size() == 1) {
-        if (!actual.get(0).message().equals(expected.get(0).message())) {
-          return String.format(WRONG_MESSAGE, actual.get(0).line(), expected.get(0).message(), actual.get(0).message());
+        String expectedMessage = expected.get(0).message();
+        if (expectedMessage != null && !actual.get(0).message().equals(expectedMessage)) {
+          return String.format(WRONG_MESSAGE, actual.get(0).line(), expectedMessage, actual.get(0).message());
         }
 
       } else if (actual.size() != expected.size()) {
@@ -153,17 +156,6 @@ public class PHPCheckTest {
       }
 
       return "";
-    }
-
-
-    private static Issue getIssue(List<Issue> issues, String message) {
-      for (Issue issue : issues) {
-        if (issue.message().equals(message)) {
-          return issue;
-        }
-      }
-
-      return null;
     }
 
   }
