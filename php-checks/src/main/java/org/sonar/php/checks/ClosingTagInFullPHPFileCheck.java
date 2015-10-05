@@ -45,7 +45,7 @@ public class ClosingTagInFullPHPFileCheck extends PHPVisitorCheck {
   private boolean isOnlyClosingTag = false;
   private SyntaxToken lastInlineHTMLToken = null;
 
-  public void init() {
+  public void initScan() {
     inlineHTMLCounter = 0;
     isOnlyClosingTag = false;
     lastInlineHTMLToken = null;
@@ -62,12 +62,12 @@ public class ClosingTagInFullPHPFileCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    init();
+    initScan();
 
     super.visitCompilationUnit(tree);
 
     if (inlineHTMLCounter == 1 && isOnlyClosingTag) {
-      context().newIssue(KEY, "Remove this closing tag \"?>\".").tree(lastInlineHTMLToken);
+      context().newIssue(KEY, MESSAGE).tree(lastInlineHTMLToken);
     }
   }
 }

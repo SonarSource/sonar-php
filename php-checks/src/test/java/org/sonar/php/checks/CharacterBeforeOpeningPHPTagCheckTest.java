@@ -22,12 +22,11 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.Issue;
 
-public class CharacterBeforeOpeningPHPTagCheckTest extends CheckTest {
+public class CharacterBeforeOpeningPHPTagCheckTest {
 
   private CharacterBeforeOpeningPHPTagCheck check = new CharacterBeforeOpeningPHPTagCheck();
   private final String TEST_DIR = "CharacterBeforeOpeningPHPTagCheck/";
