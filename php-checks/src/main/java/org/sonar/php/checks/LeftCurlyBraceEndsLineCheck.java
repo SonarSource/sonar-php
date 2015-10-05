@@ -94,8 +94,8 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitTraitUseStatement(UseTraitDeclarationTree tree) {
-    super.visitTraitUseStatement(tree);
+  public void visitUseTraitDeclaration(UseTraitDeclarationTree tree) {
+    super.visitUseTraitDeclaration(tree);
 
     if (tree.openCurlyBraceToken() != null) {
       TokenVisitor tokenVisitor = new TokenVisitor(tree);
@@ -233,11 +233,11 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
     }
   }
 
-  private SyntaxToken getLastToken(Tree tree) {
+  private static SyntaxToken getLastToken(Tree tree) {
     return ((PHPTree) tree).getLastToken();
   }
 
-  private SyntaxToken getFirstToken(List<StatementTree> statements) {
+  private static SyntaxToken getFirstToken(List<StatementTree> statements) {
     SyntaxToken nextToken = null;
 
     for (StatementTree statement : statements) {
@@ -250,7 +250,7 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
     return nextToken;
   }
 
-  private SyntaxToken getFirstToken(Tree tree) {
+  private static SyntaxToken getFirstToken(Tree tree) {
     return ((PHPTree) tree).getFirstToken();
   }
 }

@@ -47,12 +47,14 @@ public class TokenVisitor extends PHPVisitorCheck {
   @Override
   public void visitToken(SyntaxToken token) {
     super.visitToken(token);
-    if (token.is(Kind.TOKEN)) { tokens.add(token); }
+    if (token.is(Kind.TOKEN)) {
+      tokens.add(token);
+    }
   }
 
   public SyntaxToken prevToken(SyntaxToken token) {
     for (int i = 0; i < tokens.size(); i++) {
-      if (token == tokens.get(i)) {
+      if (token.equals(tokens.get(i))) {
         if (i > 0) {
           return tokens.get(i - 1);
         } else {
@@ -65,7 +67,7 @@ public class TokenVisitor extends PHPVisitorCheck {
 
   public SyntaxToken nextToken(SyntaxToken token) {
     for (int i = 0; i < tokens.size(); i++) {
-      if (token == tokens.get(i)) {
+      if (token.equals(tokens.get(i))) {
         if (i < tokens.size() - 1) {
           return tokens.get(i + 1);
         } else {

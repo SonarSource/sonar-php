@@ -100,7 +100,7 @@ import org.sonar.php.tree.impl.statement.ReturnStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.StaticStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.SwitchStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ThrowStatementTreeImpl;
-import org.sonar.php.tree.impl.statement.TryStatementImpl;
+import org.sonar.php.tree.impl.statement.TryStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.UnsetVariableStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.UseStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.VariableDeclarationTreeImpl;
@@ -580,7 +580,7 @@ public class TreeFactory {
     Optional<Tuple<InternalSyntaxToken, BlockTree>> finallyBlock
   ) {
     if (finallyBlock.isPresent()) {
-      return new TryStatementImpl(
+      return new TryStatementTreeImpl(
         tryToken,
         blockTree,
         optionalList(catchBlocks),
@@ -588,7 +588,7 @@ public class TreeFactory {
         finallyBlock.get().second()
       );
     } else {
-      return new TryStatementImpl(
+      return new TryStatementTreeImpl(
         tryToken,
         blockTree,
         optionalList(catchBlocks)

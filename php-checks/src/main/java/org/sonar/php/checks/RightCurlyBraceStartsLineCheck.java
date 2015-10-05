@@ -63,8 +63,8 @@ public class RightCurlyBraceStartsLineCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitTraitUseStatement(UseTraitDeclarationTree tree) {
-    super.visitTraitUseStatement(tree);
+  public void visitUseTraitDeclaration(UseTraitDeclarationTree tree) {
+    super.visitUseTraitDeclaration(tree);
 
     if (tree.openCurlyBraceToken() != null) {
       checkCloseCurlyBrace(

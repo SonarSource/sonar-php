@@ -125,7 +125,7 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitParameter(ParameterTree tree);
 
-  void visitTraitUseStatement(UseTraitDeclarationTree tree);
+  void visitUseTraitDeclaration(UseTraitDeclarationTree tree);
 
   void visitTraitPrecedence(TraitPrecedenceTree tree);
 

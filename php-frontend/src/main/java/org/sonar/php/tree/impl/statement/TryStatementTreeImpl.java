@@ -33,8 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
-// fixme (Lena) : rename to TryStatementTreeImpl
-public class TryStatementImpl extends PHPTree implements TryStatementTree {
+public class TryStatementTreeImpl extends PHPTree implements TryStatementTree {
 
   private static final Kind KIND = Kind.TRY_STATEMENT;
 
@@ -44,7 +43,7 @@ public class TryStatementImpl extends PHPTree implements TryStatementTree {
   private final InternalSyntaxToken finallyToken;
   private final BlockTree finallyBlock;
 
-  public TryStatementImpl(InternalSyntaxToken tryToken, BlockTree blockTree, List<CatchBlockTree> catchBlocks, InternalSyntaxToken finallyToken, BlockTree finallyBlock) {
+  public TryStatementTreeImpl(InternalSyntaxToken tryToken, BlockTree blockTree, List<CatchBlockTree> catchBlocks, InternalSyntaxToken finallyToken, BlockTree finallyBlock) {
     this.tryToken = tryToken;
     this.block = blockTree;
     this.catchBlocks = catchBlocks;
@@ -52,7 +51,7 @@ public class TryStatementImpl extends PHPTree implements TryStatementTree {
     this.finallyBlock = finallyBlock;
   }
 
-  public TryStatementImpl(InternalSyntaxToken tryToken, BlockTree blockTree, List<CatchBlockTree> catchBlocks) {
+  public TryStatementTreeImpl(InternalSyntaxToken tryToken, BlockTree blockTree, List<CatchBlockTree> catchBlocks) {
     this(tryToken, blockTree, catchBlocks, null, null);
   }
 
