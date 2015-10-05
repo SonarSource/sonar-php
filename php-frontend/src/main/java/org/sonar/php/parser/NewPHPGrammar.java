@@ -524,7 +524,7 @@ public class NewPHPGrammar {
   }
 
   public ExpressionStatementTree ECHO_STATEMENT() {
-    return b.<ExpressionStatementTree>nonterminal().is(
+    return b.<ExpressionStatementTree>nonterminal(PHPLexicalGrammar.ECHO_STATEMENT).is(
       f.echoStatement(
         b.token(ECHO),
         EXPRESSION(),

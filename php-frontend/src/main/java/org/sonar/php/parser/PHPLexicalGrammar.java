@@ -111,6 +111,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   USE_CLAUSE,
 
   EXPRESSION_STATEMENT,
+  ECHO_STATEMENT,
 
   IF_STATEMENT,
   ELSEIF_CLAUSE,
@@ -214,7 +215,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   REQUIRE,
   CLONE,
   PRINT,
-  
+
   INTEGER,
   INT,
   DOUBLE,
@@ -297,7 +298,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(REQUIRE).is(word(b, "REQUIRE")).skip();
     b.rule(CLONE).is(word(b, "CLONE")).skip();
     b.rule(PRINT).is(word(b, "PRINT")).skip();
-    
+
     b.rule(INTEGER).is(word(b, "INTEGER")).skip();
     b.rule(INT).is(word(b, "INT")).skip();
     b.rule(DOUBLE).is(word(b, "DOUBLE")).skip();
