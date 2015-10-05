@@ -19,72 +19,55 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
-import com.sonar.sslr.api.AstNode;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import java.util.Iterator;
 import java.util.Set;
 
 @Rule(
-  key = "S1536",
+  key = DuplicatedFunctionArgumentCheck.KEY,
   name = "Function argument names should be unique\n",
   priority = Priority.CRITICAL,
   tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("5min")
-public class DuplicatedFunctionArgumentCheck extends SquidCheck<LexerlessGrammar> {
+public class DuplicatedFunctionArgumentCheck extends PHPVisitorCheck {
 
-  private Set<String> parameters = Sets.newHashSet();
-  private Set<String> duplicatedParams = Sets.newTreeSet();
+  public static final String KEY = "S1536";
 
-
-  @Override
-  public void init() {
-    subscribeTo(PHPGrammar.PARAMETER_LIST);
-  }
+  private static final String MESSAGE = "Rename the duplicated function %s \"%s\".";
 
   @Override
-  public void visitNode(AstNode astNode) {
-    for (AstNode parameter : astNode.getChildren(PHPGrammar.PARAMETER)) {
-      String paramName = parameter.getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue();
+  public void visitParameterList(ParameterListTree parameterList) {
+    Set<String> parameterNames = Sets.newHashSet();
+    Set<String> duplicatedParamNames = Sets.newTreeSet();
 
-      if (parameters.contains(paramName)) {
-        duplicatedParams.add(paramName);
-      } else {
-        parameters.add(paramName);
+    for (ParameterTree parameter : parameterList.parameters()) {
+      String name = parameter.variableIdentifier().variableExpression().text();
+      boolean isNewName = parameterNames.add(name);
+      if (!isNewName) {
+        duplicatedParamNames.add(name);
       }
     }
 
-    if (!duplicatedParams.isEmpty()) {
-      getContext().createLineViolation(this, "Rename the duplicated function {0} \"{1}\".", astNode,
-        duplicatedParams.size() == 1 ? "parameter" : "parameters",
-        duplicatedParamsToString());
+    if (!duplicatedParamNames.isEmpty()) {
+      String listString = Joiner.on(", ").join(duplicatedParamNames);
+      context()
+        .newIssue(KEY, String.format(MESSAGE, duplicatedParamNames.size() == 1 ? "parameter" : "parameters", listString))
+        .tree(parameterList);
     }
 
-    parameters.clear();
-    duplicatedParams.clear();
-  }
-
-  private String duplicatedParamsToString() {
-    StringBuilder builder = new StringBuilder();
-
-    Iterator<String> it = duplicatedParams.iterator();
-    while (it.hasNext()) {
-      builder.append(it.next() + ", ");
-    }
-
-    return StringUtils.removeEnd(builder.toString().trim(), ",");
+    super.visitParameterList(parameterList);
   }
 
 }

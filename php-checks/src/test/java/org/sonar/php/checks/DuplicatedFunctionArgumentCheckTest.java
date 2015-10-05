@@ -20,20 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class DuplicatedFunctionArgumentCheckTest extends CheckTest {
+public class DuplicatedFunctionArgumentCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("DuplicatedFunctionArgumentCheck.php"), new DuplicatedFunctionArgumentCheck());
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Rename the duplicated function parameter \"$a\".")
-      .next().atLine(6).withMessage("Rename the duplicated function parameters \"$a, $b\".")
-      .noMore();
+    PHPCheckTest.check(new DuplicatedFunctionArgumentCheck(), TestUtils.getCheckFile("DuplicatedFunctionArgumentCheck.php"));
   }
 
 }
