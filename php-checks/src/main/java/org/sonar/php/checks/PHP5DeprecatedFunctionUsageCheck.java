@@ -21,25 +21,31 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2001",
+  key = PHP5DeprecatedFunctionUsageCheck.KEY,
   name = "Functions deprecated in PHP 5 should not be used",
   priority = Priority.MAJOR,
   tags = {Tags.OBSOLETE})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LANGUAGE_RELATED_PORTABILITY)
 @SqaleConstantRemediation("15min")
-public class PHP5DeprecatedFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
+public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
+
+  public static final String KEY = "S2001";
+  private static final String MESSAGE_SET_LOCAL_ARG = "Use the \"%s\" constant instead of a string literal.";
+  private static final String MESSAGE_WITH_REPLACEMENT = "Replace this \"%s()\" call with a call to \"%s\".";
+  private static final String MESSAGE_WITHOUT_REPLACEMENT = "Remove this \"%s()\" call.";
 
   private static final ImmutableMap<String, String> NEW_BY_DEPRECATED_FUNCTIONS = ImmutableMap.<String, String>builder()
     .put("call_user_method", "call_user_func()")
@@ -63,56 +69,53 @@ public class PHP5DeprecatedFunctionUsageCheck extends SquidCheck<LexerlessGramma
     .put("mysql_escape_string", "mysql_real_escape_string")
     .build();
 
+  private static final String SET_LOCALE_FUNCTION = "setlocale";
   private static final ImmutableSet<String> LOCALE_CATEGORY_CONSTANTS = ImmutableSet.of(
     "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.MEMBER_EXPRESSION);
+  protected ImmutableSet<String> functionNames() {
+    return ImmutableSet.<String>builder()
+      .addAll(NEW_BY_DEPRECATED_FUNCTIONS.keySet())
+      .add(SET_LOCALE_FUNCTION)
+      .build();
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    AstNode memberExpr = astNode.getFirstChild();
-    AstNode nextNode = memberExpr.getNextAstNode();
-    String calledFunctionName = memberExpr.getTokenOriginalValue();
-    String replacement = NEW_BY_DEPRECATED_FUNCTIONS.get(calledFunctionName);
+  protected void createIssue(FunctionCallTree tree) {
+    String functionName = functionName(tree.callee());
 
-
-    if (nextNode != null && nextNode.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-
-      if ("setlocale".equals(calledFunctionName)) {
-        String category = getCategoryFromStringLiteralParameter(nextNode);
-
-        if (category != null) {
-          getContext().createLineViolation(this, "Use the \"{0}\" constant instead of a string literal.", astNode, category);
-        }
-
-      } else if (replacement != null) {
-        getContext().createLineViolation(this, buildMessage(calledFunctionName, replacement), astNode);
-      }
-    }
-  }
-
-  private String getCategoryFromStringLiteralParameter(AstNode parameterList) {
-    String firstParam = parameterList.getFirstChild(PHPPunctuator.LPARENTHESIS).getNextAstNode().getTokenOriginalValue();
-
-    if (firstParam.startsWith("\"") && firstParam.endsWith("\"") || firstParam.startsWith("'") && firstParam.endsWith("'")) {
-      String category = firstParam.substring(1, firstParam.length() - 1);
-
-      if (LOCALE_CATEGORY_CONSTANTS.contains(category)) {
-        return category;
-      }
-    }
-    return null;
-  }
-
-  private String buildMessage(String calledFunctionName, String replacement) {
-    if (replacement.isEmpty()) {
-      return "Remove this \"" + calledFunctionName + "()\" call.";
+    if (SET_LOCALE_FUNCTION.equals(functionName)) {
+      checkLocalCategoryArgument(tree, tree.arguments());
 
     } else {
-      return "Replace this \"" + calledFunctionName + "()\" call with a call to \"" + replacement + "\".";
+      context().newIssue(KEY, buildMessage(functionName)).tree(tree.callee());
+    }
+
+  }
+
+  /**
+   * Build issue message depending on the presence of a replacement function of not.
+   */
+  private static String buildMessage(String functionName) {
+    String replacement = NEW_BY_DEPRECATED_FUNCTIONS.get(functionName);
+
+    return replacement.isEmpty() ?
+      String.format(MESSAGE_WITHOUT_REPLACEMENT, functionName) :
+      String.format(MESSAGE_WITH_REPLACEMENT, functionName, replacement);
+  }
+
+  /**
+   * Raise an issue if the local category is passed as a String.
+   */
+  private void checkLocalCategoryArgument(FunctionCallTree tree, SeparatedList<ExpressionTree> arguments) {
+    if (!arguments.isEmpty() && arguments.get(0).is(Kind.REGULAR_STRING_LITERAL)) {
+      String firstArg = ((LiteralTree) arguments.get(0)).value();
+      String localCategory = firstArg.substring(1, firstArg.length() - 1);
+
+      if (LOCALE_CATEGORY_CONSTANTS.contains(localCategory)) {
+        context().newIssue(KEY, String.format(MESSAGE_SET_LOCAL_ARG, localCategory)).tree(tree.callee());
+      }
     }
   }
 

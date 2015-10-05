@@ -20,24 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class PHP5DeprecatedFunctionUsageCheckTest extends CheckTest {
+public class PHP5DeprecatedFunctionUsageCheckTest extends PHPCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("PHP5DeprecatedFunctionUsageCheck.php"), new PHP5DeprecatedFunctionUsageCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Replace this \"call_user_method()\" call with a call to \"call_user_func()\".")
-      .next().atLine(4).withMessage("Remove this \"define_syslog_variables()\" call.")
-      .next().atLine(6)
-      .next().atLine(8).withMessage("Use the \"LC_ALL\" constant instead of a string literal.")
-      .next().atLine(9)
-      .noMore();
+    check(new PHP5DeprecatedFunctionUsageCheck(), TestUtils.getCheckFile("PHP5DeprecatedFunctionUsageCheck.php"));
   }
 
 }
