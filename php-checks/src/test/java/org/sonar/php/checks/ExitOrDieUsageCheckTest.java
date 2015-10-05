@@ -20,20 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ExitOrDieUsageCheckTest extends CheckTest {
+public class ExitOrDieUsageCheckTest extends PHPCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ExitOrDieUsageCheck.php"), new ExitOrDieUsageCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(10).withMessage("Remove this \"exit()\" call or ensure it is really required")
-      .next().atLine(12).withMessage("Remove this \"die()\" call or ensure it is really required")
-      .noMore();
+    check(new ExitOrDieUsageCheck(), TestUtils.getCheckFile("ExitOrDieUsageCheck.php"));
   }
+
 }

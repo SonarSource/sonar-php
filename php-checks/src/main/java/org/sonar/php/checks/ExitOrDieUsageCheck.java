@@ -22,30 +22,27 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.expression.ExitTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import com.sonar.sslr.api.AstNode;
 
 @Rule(
-  key = "S1799",
+  key = ExitOrDieUsageCheck.KEY,
   name = "\"exit(...)\" and \"die(...)\" statements should not be used",
   priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.ERRORS)
 @SqaleConstantRemediation("20min")
-public class ExitOrDieUsageCheck extends SquidCheck<LexerlessGrammar> {
+public class ExitOrDieUsageCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1799";
+  public static final String MESSAGE = "Remove this \"%s()\" call or ensure it is really required";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.EXIT_EXPR);
+  public void visitExit(ExitTree tree) {
+    context().newIssue(KEY, String.format(MESSAGE, tree.wordToken().text())).tree(tree);
+
+    super.visitExit(tree);
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Remove this \"{0}()\" call or ensure it is really required", astNode,
-      astNode.getFirstChild().getTokenOriginalValue());
-  }
 }
