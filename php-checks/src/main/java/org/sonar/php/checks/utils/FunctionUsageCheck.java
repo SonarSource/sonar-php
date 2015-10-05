@@ -38,7 +38,7 @@ public abstract class FunctionUsageCheck extends PHPVisitorCheck {
   }
 
   private boolean isForbiddenFunction(ExpressionTree callee) {
-    return callee.is(Kind.NAMESPACED_NAME) && functionNames().contains(((NamespaceNameTree) callee).name().text());
+    return callee.is(Kind.NAMESPACE_NAME) && functionNames().contains(((NamespaceNameTree) callee).name().text());
   }
 
   abstract protected ImmutableSet<String> functionNames();

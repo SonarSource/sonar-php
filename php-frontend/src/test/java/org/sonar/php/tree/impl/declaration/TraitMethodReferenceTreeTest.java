@@ -36,13 +36,13 @@ public class TraitMethodReferenceTreeTest extends PHPTreeModelTest {
     assertThat(tree.trait()).isNull();
     assertThat(tree.doubleColonToken()).isNull();
   }
-  
+
   @Test
   public void qualified() throws Exception {
     TraitMethodReferenceTree tree = parse("namespace\\NS1\\NS2::method1", PHPLexicalGrammar.TRAIT_METHOD_REFERENCE);
     assertThat(tree.is(Kind.TRAIT_METHOD_REFERENCE)).isTrue();
-    assertThat(tree.trait().is(Kind.NAMESPACED_NAME)).isTrue();
-    assertThat(tree.doubleColonToken().text()).isEqualTo("::");    
+    assertThat(tree.trait().is(Kind.NAMESPACE_NAME)).isTrue();
+    assertThat(tree.doubleColonToken().text()).isEqualTo("::");
   }
 
 }

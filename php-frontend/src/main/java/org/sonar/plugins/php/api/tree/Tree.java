@@ -252,7 +252,7 @@ public interface Tree {
     /**
      * {@link NamespaceNameTree}
      */
-    NAMESPACED_NAME(NamespaceNameTree.class),
+    NAMESPACE_NAME(NamespaceNameTree.class),
 
     /**
      * {@link ArrayPairTree}

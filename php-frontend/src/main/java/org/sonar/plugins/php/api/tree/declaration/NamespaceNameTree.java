@@ -39,4 +39,23 @@ public interface NamespaceNameTree extends ExpressionTree {
 
   String fullName();
 
+  /**
+   * Return true if the namespace name starts with a namespace separator.
+   * <p>Example:
+   * <pre>
+   *  \Foo\Bar
+   *  \AnotherFoo
+   * </pre>
+   */
+  boolean isFullyQualified();
+
+  /**
+   * Return true if the namespace name has namespace separator.
+   * <p>Example:
+   * <pre>
+   *  Foo\Bar
+   * </pre>
+   */
+  boolean hasQualifiers();
+
 }

@@ -33,7 +33,7 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
   public void absolute() throws Exception {
     NamespaceNameTree tree = parse("\\ns1\\ns2\\name", PHPLexicalGrammar.NAMESPACE_NAME);
 
-    assertThat(tree.is(Kind.NAMESPACED_NAME)).isTrue();
+    assertThat(tree.is(Kind.NAMESPACE_NAME)).isTrue();
     assertThat(tree.absoluteSeparator()).isNotNull();
     assertThat(tree.name().text()).isEqualTo("name");
     assertThat(tree.namespaces()).hasSize(2);
@@ -44,7 +44,7 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
   public void relative() throws Exception {
     NamespaceNameTree tree = parse("ns1\\ns2\\name", PHPLexicalGrammar.NAMESPACE_NAME);
 
-    assertThat(tree.is(Kind.NAMESPACED_NAME)).isTrue();
+    assertThat(tree.is(Kind.NAMESPACE_NAME)).isTrue();
     assertThat(tree.absoluteSeparator()).isNull();
     assertThat(tree.name().text()).isEqualTo("name");
     assertThat(tree.namespaces()).hasSize(2);

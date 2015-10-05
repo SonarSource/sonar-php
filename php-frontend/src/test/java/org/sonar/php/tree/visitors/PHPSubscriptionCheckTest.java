@@ -61,7 +61,7 @@ public class PHPSubscriptionCheckTest {
     public List<Tree.Kind> nodesToVisit() {
       return ImmutableList.of(
         Tree.Kind.CLASS_DECLARATION,
-        Tree.Kind.NAMESPACED_NAME,
+        Tree.Kind.NAMESPACE_NAME,
         Tree.Kind.VARIABLE_IDENTIFIER);
     }
 
@@ -72,7 +72,7 @@ public class PHPSubscriptionCheckTest {
           classCounter++;
           break;
 
-        case NAMESPACED_NAME:
+        case NAMESPACE_NAME:
           namespaceNameCounter++;
           break;
 

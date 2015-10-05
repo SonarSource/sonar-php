@@ -33,7 +33,7 @@ public class UseDeclarationTreeTest extends PHPTreeModelTest {
   public void without_alias() throws Exception {
     UseClauseTree tree = parse("\\ns1\\ns2\\name", PHPLexicalGrammar.USE_CLAUSE);
     assertThat(tree.is(Kind.USE_CLAUSE)).isTrue();
-    assertThat(tree.namespaceName().is(Kind.NAMESPACED_NAME)).isTrue();
+    assertThat(tree.namespaceName().is(Kind.NAMESPACE_NAME)).isTrue();
     assertThat(tree.asToken()).isNull();
     assertThat(tree.alias()).isNull();
   }
@@ -42,7 +42,7 @@ public class UseDeclarationTreeTest extends PHPTreeModelTest {
   public void with_alias() throws Exception {
     UseClauseTree tree = parse("\\ns1\\ns2\\name as alias1", PHPLexicalGrammar.USE_CLAUSE);
     assertThat(tree.is(Kind.USE_CLAUSE)).isTrue();
-    assertThat(tree.namespaceName().is(Kind.NAMESPACED_NAME)).isTrue();
+    assertThat(tree.namespaceName().is(Kind.NAMESPACE_NAME)).isTrue();
     assertThat(tree.asToken().text()).isEqualTo("as");
     assertThat(tree.alias().text()).isEqualTo("alias1");
   }

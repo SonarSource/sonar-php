@@ -8,24 +8,31 @@ use ErrorException;
 use Exception as Alias1;
 use RuntimeException as Alias2;
 use ErrorException as Alias3;
+use Foo\SomeException as Alias4;
 
 class ClassName {
     function test() {
-        throw new Exception();
+        throw new Exception();          // NOK {{Define and throw a dedicated exception instead of using a generic one.}}
     }
     function test() {
-        throw new RuntimeException();
+        throw new RuntimeException();   // NOK
     }
     function test() {
-        throw new ErrorException();
+        throw new ErrorException();     // NOK
     }
     function test() {
-        throw new Alias1();
+        throw new Alias1();             // NOK
     }
     function test() {
-        throw new Alias2();
+        throw new Alias2();             // NOK
     }
     function test() {
-        throw new Alias3();
+        throw new Alias3();             // NOK
+    }
+    function test() {
+        throw new Alias4();             // OK
+    }
+    function test() {
+        throw new Foo\Alias3();         // OK
     }
 }

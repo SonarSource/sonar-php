@@ -35,7 +35,7 @@ import java.util.Iterator;
 
 public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree {
 
-  private static final Kind KIND = Kind.NAMESPACED_NAME;
+  private static final Kind KIND = Kind.NAMESPACE_NAME;
 
   private final SyntaxToken absoluteSeparator;
   private final SeparatedListImpl<IdentifierTree> namespaces;
@@ -69,6 +69,16 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   @Override
   public String fullName() {
     return fullName;
+  }
+
+  @Override
+  public boolean isFullyQualified() {
+    return absoluteSeparator != null;
+  }
+
+  @Override
+  public boolean hasQualifiers() {
+    return !namespaces().isEmpty();
   }
 
   private String getFullName() {

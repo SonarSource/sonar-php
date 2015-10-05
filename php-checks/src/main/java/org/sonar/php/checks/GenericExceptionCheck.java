@@ -19,116 +19,119 @@
  */
 package org.sonar.php.checks;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
+import javax.annotation.Nullable;
+import java.util.Set;
 
 @Rule(
-  key = "S112",
+  key = GenericExceptionCheck.KEY,
   name = "Generic exceptions ErrorException, RuntimeException and Exception should not be thrown",
   priority = Priority.MAJOR,
   tags = {Tags.CWE, Tags.ERROR_HANDLING, Tags.SECURITY})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.EXCEPTION_HANDLING)
 @SqaleConstantRemediation("20min")
-public class GenericExceptionCheck extends SquidCheck<LexerlessGrammar> {
+public class GenericExceptionCheck extends PHPVisitorCheck {
 
+  public static final String KEY = "S112";
   public static final String MESSAGE = "Define and throw a dedicated exception instead of using a generic one.";
 
   private static final Set<String> RAW_EXCEPTIONS = ImmutableSet.of("ErrorException", "RuntimeException", "Exception");
-  private static final String SEPARATOR = PHPPunctuator.NS_SEPARATOR.getValue();
-  private String namespace;
-  private List<String> uses = Lists.newArrayList();
+  private Set<String> importedGenericExceptions = Sets.newHashSet();
+  private String currentNamespace = "";
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.NAMESPACE_STATEMENT,
-      PHPGrammar.USE_DECLARATION,
-      PHPGrammar.THROW_STATEMENT);
+  public void visitScript(ScriptTree tree) {
+    importedGenericExceptions.clear();
+    currentNamespace = "";
+    super.visitScript(tree);
   }
 
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    namespace = "";
-    uses.clear();
+  public void visitThrowStatement(ThrowStatementTree tree) {
+    NamespaceNameTree namespaceName = getThrownClassName(tree);
+
+    if (namespaceName != null && isGenericException(namespaceName)) {
+      context().newIssue(KEY, MESSAGE).tree(namespaceName);
+    }
+
+    super.visitThrowStatement(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.NAMESPACE_STATEMENT)) {
-      parseNamespace(astNode);
-      return;
+  public void visitUseClause(UseClauseTree tree) {
+    String name = tree.namespaceName().name().text();
+
+    if (tree.namespaceName().namespaces().isEmpty() && RAW_EXCEPTIONS.contains(name)) {
+      importedGenericExceptions.add(tree.alias() != null ? tree.alias().text() : name);
     }
-    if (astNode.is(PHPGrammar.USE_DECLARATION)) {
-      parseUse(astNode);
-      return;
+
+    super.visitUseClause(tree);
+  }
+
+  @Override
+  public void visitNamespaceStatement(NamespaceStatementTree tree) {
+    if (tree.namespaceName() != null) {
+      currentNamespace = tree.namespaceName().fullName();
     }
-    if (isBaseException(astNode)) {
-      getContext().createLineViolation(this, MESSAGE, astNode);
+
+    super.visitNamespaceStatement(tree);
+
+    // Delimited namespace with curly braces
+    if (tree.openCurlyBrace() != null) {
+      currentNamespace = "";
     }
   }
 
-  private void parseNamespace(AstNode astNode) {
-    AstNode namespaceNode = astNode.getFirstChild(PHPGrammar.NAMESPACE_NAME);
-    namespace = getStringValue(namespaceNode);
+  private boolean isGenericException(NamespaceNameTree namespaceName) {
+    return isImportedGenericException(namespaceName) || isGlobalNamespaceGenericException(namespaceName);
+
   }
 
-  private void parseUse(AstNode astNode) {
-    AstNode namespaceNode = astNode.getFirstChild(PHPGrammar.NAMESPACE_NAME);
-    String namespaceValue = getStringValue(namespaceNode);
-    for (String exc : RAW_EXCEPTIONS) {
-      if (namespaceValue.equals(exc)) {
-        AstNode idNode = astNode.getFirstChild(PHPGrammar.IDENTIFIER);
-        String alias = idNode != null ? getStringValue(idNode) : namespaceValue;
-        uses.add(alias);
+  private boolean isImportedGenericException(NamespaceNameTree namespaceName) {
+    return importedGenericExceptions.contains(namespaceName.fullName());
+  }
+
+  private boolean isGlobalNamespaceGenericException(NamespaceNameTree namespaceName) {
+    return isFromGlobalNamespace(namespaceName) && RAW_EXCEPTIONS.contains(namespaceName.name().text());
+  }
+
+  private boolean isFromGlobalNamespace(NamespaceNameTree namespaceName) {
+      return !namespaceName.hasQualifiers()
+        && (namespaceName.isFullyQualified() || currentNamespace.isEmpty());
+  }
+
+  @Nullable
+  private static NamespaceNameTree getThrownClassName(ThrowStatementTree tree) {
+    if (tree.expression().is(Kind.NEW_EXPRESSION)) {
+      NewExpressionTree newExpression = (NewExpressionTree) tree.expression();
+
+      if (newExpression.expression().is(Kind.FUNCTION_CALL)) {
+        FunctionCallTree functionCall = (FunctionCallTree) newExpression.expression();
+
+        if (functionCall.callee().is(Kind.NAMESPACE_NAME)) {
+          return (NamespaceNameTree) functionCall.callee();
+        }
       }
     }
-  }
-
-  private boolean isBaseException(AstNode throwNode) {
-    AstNode classNameNode = throwNode.getFirstDescendant(PHPGrammar.CLASS_NAME);
-    if (classNameNode == null) {
-      return false;
-    }
-    String className = getStringValue(classNameNode);
-    if (className.startsWith(SEPARATOR)) {
-      return RAW_EXCEPTIONS.contains(className.substring(1));
-    }
-    if (namespace.isEmpty()) {
-      return RAW_EXCEPTIONS.contains(className);
-    }
-
-    return uses.contains(className);
-  }
-
-  private String getStringValue(AstNode classNameNode) {
-    if (classNameNode == null) {
-      return "";
-    }
-
-    StringBuilder builder = new StringBuilder();
-    for (Token t : classNameNode.getTokens()) {
-      builder.append(t.getOriginalValue());
-    }
-    return builder.toString();
+    return null;
   }
 
 }

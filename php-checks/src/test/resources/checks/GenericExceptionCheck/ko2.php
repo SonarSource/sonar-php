@@ -4,12 +4,12 @@ namespace Package;
 
 class ClassName {
     function test() {
-        throw new \Exception();
+        throw new \Exception();         // NOK {{Define and throw a dedicated exception instead of using a generic one.}}
     }
     function test() {
-        throw new \RuntimeException();
+        throw new \RuntimeException();  // NOK
     }
     function test() {
-        throw new \ErrorException();
+        throw new \ErrorException();    // NOK
     }
 }
