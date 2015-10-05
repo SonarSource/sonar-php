@@ -19,44 +19,43 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import java.util.List;
 
 @Rule(
-  key = "S2041",
+  key = EchoWithParenthesisCheck.KEY,
   name = "Parentheses should not be used for calls to \"echo\"",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class EchoWithParenthesisCheck extends SquidCheck<LexerlessGrammar> {
+public class EchoWithParenthesisCheck extends FunctionUsageCheck {
+
+  public static final String KEY = "S2041";
+  private static final String MESSAGE = "Remove the parentheses from this \"echo\" call.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.ECHO_STATEMENT);
+  protected String functionName() {
+    return "echo";
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    List<AstNode> expressions = astNode.getChildren(PHPGrammar.EXPRESSION);
-
-    if (expressions.size() == 1) {
-      AstNode expression = expressions.get(0).getFirstChild().getFirstChild();
-
-      if (expression.is(PHPGrammar.MEMBER_EXPRESSION) && expression.getFirstChild().is(PHPGrammar.PARENTHESIS_EXPRESSION)) {
-        getContext().createLineViolation(this, "Remove the parentheses from this \"echo\" call.", expression);
-      }
+  protected void createIssue(FunctionCallTree tree) {
+    if (isParenthesized(tree)) {
+      context().newIssue(KEY, MESSAGE).tree(tree);
     }
   }
+
+  private static boolean isParenthesized(FunctionCallTree tree) {
+    return tree.arguments().size() == 1 && tree.arguments().get(0).is(Tree.Kind.PARENTHESISED_EXPRESSION);
+  }
+
 }
