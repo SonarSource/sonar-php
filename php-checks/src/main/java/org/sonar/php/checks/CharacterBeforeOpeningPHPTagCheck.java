@@ -19,20 +19,17 @@
  */
 package org.sonar.php.checks;
 
-import java.util.regex.Pattern;
-
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.LexicalConstant;
-import org.sonar.php.parser.PHPTokenType;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
+import java.util.regex.Pattern;
 
 @Rule(
   key = "S2000",
@@ -41,22 +38,18 @@ import com.sonar.sslr.api.Token;
   tags = {Tags.USER_EXPERIENCE})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("2min")
-public class CharacterBeforeOpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
+public class CharacterBeforeOpeningPHPTagCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2000";
+  private static final String MESSAGE = "Remove the extra characters before the open tag.";
 
   private static final Pattern OPENING_TAG = Pattern.compile(LexicalConstant.PHP_OPENING_TAG);
 
   @Override
-  public void init() {
-    subscribeTo(PHPTokenType.FILE_OPENING_TAG);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    Token token = astNode.getToken();
-
-    if (token.getColumn() != 0 || token.getLine() != 1 || !OPENING_TAG.matcher(token.getOriginalValue()).matches()) {
-      getContext().createLineViolation(this, "Remove the extra characters before the open tag.", astNode);
+  public void visitScript(ScriptTree tree) {
+    SyntaxToken openingTagToken = tree.fileOpeningTagToken();
+    if (openingTagToken.column() != 0 || openingTagToken.line() != 1 || !OPENING_TAG.matcher(openingTagToken.text()).matches()) {
+      context().newIssue(KEY, MESSAGE).tree(openingTagToken);
     }
   }
-
 }
