@@ -23,14 +23,13 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.TokenVisitor;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
-import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -68,12 +67,10 @@ public class RightCurlyBraceStartsLineCheck extends PHPVisitorCheck {
     super.visitTraitUseStatement(tree);
 
     if (tree.openCurlyBraceToken() != null) {
-      SyntaxToken prevToken = tree.openCurlyBraceToken();
-      if (!tree.adaptations().isEmpty()) {
-        prevToken = ((PHPTree) tree.adaptations().get(0)).getLastToken();
-      }
-
-      checkCloseCurlyBrace(tree.closeCurlyBraceToken(), tree.openCurlyBraceToken(), prevToken);
+      checkCloseCurlyBrace(
+        tree.closeCurlyBraceToken(),
+        tree.openCurlyBraceToken(),
+        new TokenVisitor(tree).prevToken(tree.closeCurlyBraceToken()));
     }
   }
 
@@ -81,28 +78,20 @@ public class RightCurlyBraceStartsLineCheck extends PHPVisitorCheck {
   public void visitSwitchStatement(SwitchStatementTree tree) {
     super.visitSwitchStatement(tree);
     if (tree.is(Kind.SWITCH_STATEMENT)) {
-      SyntaxToken prevToken = tree.openCurlyBraceToken();
-      List<SwitchCaseClauseTree> cases = tree.cases();
-
-      if (!cases.isEmpty()) {
-        prevToken = ((PHPTree) cases.get(cases.size() - 1)).getLastToken();
-      } else if (tree.semicolonToken() != null) {
-        prevToken = tree.semicolonToken();
-      }
-
-      checkCloseCurlyBrace(tree.closeCurlyBraceToken(), tree.openCurlyBraceToken(), prevToken);
+      checkCloseCurlyBrace(
+        tree.closeCurlyBraceToken(),
+        tree.openCurlyBraceToken(),
+        new TokenVisitor(tree).prevToken(tree.closeCurlyBraceToken()));
     }
   }
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     super.visitClassDeclaration(tree);
-    SyntaxToken prevToken = tree.openCurlyBraceToken();
-    List<ClassMemberTree> members = tree.members();
-    if (!members.isEmpty()) {
-      prevToken = ((PHPTree) members.get(members.size() - 1)).getLastToken();
-    }
-    checkCloseCurlyBrace(tree.closeCurlyBraceToken(), tree.openCurlyBraceToken(), prevToken);
+    checkCloseCurlyBrace(
+      tree.closeCurlyBraceToken(),
+      tree.openCurlyBraceToken(),
+      new TokenVisitor(tree).prevToken(tree.closeCurlyBraceToken()));
   }
 
 
