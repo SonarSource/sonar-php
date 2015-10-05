@@ -24,7 +24,6 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
@@ -53,7 +52,7 @@ public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
   }
 
   @Override
-  public ExpressionTree namespaceName() {
+  public NamespaceNameTree namespaceName() {
     return namespaceName;
   }
 
