@@ -17,17 +17,5 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
+@javax.annotation.ParametersAreNonnullByDefault
 package org.sonar.php.checks;
-
-import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-
-public class LeftCurlyBraceEndsLineCheckTest {
-
-  @Test
-  public void test() throws Exception {
-    PHPCheckTest.check(new LeftCurlyBraceEndsLineCheck(), TestUtils.getCheckFile("LeftCurlyBraceEndsLineCheck.php"));
-  }
-
-}

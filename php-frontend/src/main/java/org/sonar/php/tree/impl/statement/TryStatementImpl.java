@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
+// fixme (Lena) : rename to TryStatementTreeImpl
 public class TryStatementImpl extends PHPTree implements TryStatementTree {
 
   private static final Kind KIND = Kind.TRY_STATEMENT;

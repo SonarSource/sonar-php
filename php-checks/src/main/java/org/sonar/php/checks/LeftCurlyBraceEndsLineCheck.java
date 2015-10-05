@@ -19,80 +19,266 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.php.parser.PHPTokenType;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S1105",
+  key = LeftCurlyBraceEndsLineCheck.KEY,
   name = "An open curly brace should be located at the end of a line",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
-public class LeftCurlyBraceEndsLineCheck extends SquidCheck<LexerlessGrammar> {
+public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1105";
+  private static final String MESSAGE = "Move this open curly brace to the end of the previous line.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPPunctuator.LCURLYBRACE);
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
+    SyntaxToken lastToken = getLastTokenFromClassSignature(tree);
+    SyntaxToken nextToken = getNextTokenFromClassSignature(tree);
+    checkOpenCurlyBrace(tree.openCurlyBraceToken(), tree.closeCurlyBraceToken(), lastToken, nextToken);
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (!isExcluded(astNode) && (isFirstOnLine(astNode) || !isLastOnLine(astNode))) {
-      getContext().createLineViolation(this, "Move this open curly brace to the end of the previous line.", astNode);
+  private SyntaxToken getNextTokenFromClassSignature(ClassDeclarationTree tree) {
+    if (tree.members().isEmpty()) {
+      return tree.closeCurlyBraceToken();
+    } else {
+      return getFirstToken(tree.members().get(0));
     }
   }
 
-  private static boolean isLastOnLine(AstNode lcurly) {
-    return getNextNodeTokenLine(lcurly.getNextAstNode()) != lcurly.getTokenLine();
+  private SyntaxToken getLastTokenFromClassSignature(ClassDeclarationTree tree) {
+    SeparatedList<NamespaceNameTree> interfaces = tree.superInterfaces();
+    if (!interfaces.isEmpty()) {
+      return getLastToken(interfaces.get(interfaces.size() - 1));
+    }
+
+    if (tree.superClass() != null) {
+      return getLastToken(tree.superClass());
+    }
+
+    return getLastToken(tree.name());
   }
 
-  private static boolean isFirstOnLine(AstNode lcurly) {
-    return lcurly.getPreviousAstNode().getLastToken().getLine() != lcurly.getTokenLine();
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    super.visitFunctionDeclaration(tree);
+    checkBlock(tree.body(), getLastToken(tree.parameters()));
   }
 
-  private static boolean isExcluded(AstNode lcurly) {
-    return isOnSameLineThanRightCurlyBrace(lcurly) || isStatementBlock(lcurly);
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    super.visitMethodDeclaration(tree);
+    checkBlock(tree.body(), getLastToken(tree.parameters()));
   }
 
-  private static boolean isStatementBlock(AstNode lcurly) {
-    return lcurly.getParent().getParent().is(PHPGrammar.STATEMENT)
-      && lcurly.getParent().getParent().getParent().isNot(
-      PHPGrammar.DECLARE_STATEMENT,
-      PHPGrammar.FOREACH_STATEMENT,
-      PHPGrammar.FOR_STATEMENT,
-      PHPGrammar.DO_WHILE_STATEMENT,
-      PHPGrammar.WHILE_STATEMENT,
-      PHPGrammar.ELSE_CLAUSE,
-      PHPGrammar.ELSEIF_CLAUSE,
-      PHPGrammar.IF_STATEMENT);
+  @Override
+  public void visitTraitUseStatement(UseTraitDeclarationTree tree) {
+    super.visitTraitUseStatement(tree);
+
+    if (tree.openCurlyBraceToken() != null) {
+      SeparatedList<NamespaceNameTree> traits = tree.traits();
+      SyntaxToken prevToken = getLastToken(traits.get(traits.size() - 1));
+
+      SyntaxToken nextToken;
+      if (tree.adaptations().isEmpty()) {
+        nextToken = tree.closeCurlyBraceToken();
+      } else {
+        nextToken = getFirstToken(tree.adaptations().get(0));
+      }
+
+      checkOpenCurlyBrace(tree.openCurlyBraceToken(), tree.closeCurlyBraceToken(), prevToken, nextToken);
+    }
   }
 
-  private static boolean isOnSameLineThanRightCurlyBrace(AstNode lcurly) {
-    return lcurly.getParent().getFirstChild(PHPPunctuator.RCURLYBRACE).getTokenLine() == lcurly.getTokenLine();
+  @Override
+  public void visitDeclareStatement(DeclareStatementTree tree) {
+    super.visitDeclareStatement(tree);
+    if (tree.is(Kind.DECLARE_STATEMENT) && tree.statements().size() == 1) {
+      checkBlock(tree.statements().get(0), tree.closeParenthesisToken());
+    }
   }
 
-  /**
-   * Returns line of next token's node skipping INLINE_HTML node.
-   */
-  private static int getNextNodeTokenLine(AstNode lcurlyNextAstNode) {
-    int nextTokenLine = lcurlyNextAstNode.getTokenLine();
+  @Override
+  public void visitSwitchStatement(SwitchStatementTree tree) {
+    super.visitSwitchStatement(tree);
+    if (tree.is(Kind.SWITCH_STATEMENT)) {
+      SyntaxToken nextToken;
 
-    if (lcurlyNextAstNode.is(PHPGrammar.INNER_STATEMENT_LIST)) {
-      AstNode firstStatement = lcurlyNextAstNode.getFirstChild();
-      if (firstStatement.is(PHPGrammar.STATEMENT) && firstStatement.getFirstChild().is(PHPTokenType.INLINE_HTML)) {
-        nextTokenLine = firstStatement.getNextAstNode().getTokenLine();
+      if (tree.semicolonToken() != null) {
+        nextToken = tree.semicolonToken();
+      } else if (tree.cases().isEmpty()) {
+        nextToken = tree.closeCurlyBraceToken();
+      } else {
+        nextToken = getFirstToken(tree.cases().get(0));
+      }
+
+      checkOpenCurlyBrace(tree.openCurlyBraceToken(), tree.closeCurlyBraceToken(), getLastToken(tree.expression()), nextToken);
+    }
+  }
+
+  @Override
+  public void visitIfStatement(IfStatementTree tree) {
+    super.visitIfStatement(tree);
+    if (tree.is(Tree.Kind.IF_STATEMENT)) {
+      checkBlock(tree.statements().get(0), getLastToken(tree.condition()));
+    }
+  }
+
+  @Override
+  public void visitElseifClause(ElseifClauseTree tree) {
+    super.visitElseifClause(tree);
+    if (tree.is(Tree.Kind.ELSEIF_CLAUSE)) {
+      checkBlock(tree.statements().get(0), getLastToken(tree.condition()));
+    }
+  }
+
+  @Override
+  public void visitElseClause(ElseClauseTree tree) {
+    super.visitElseClause(tree);
+    if (tree.is(Tree.Kind.ELSE_CLAUSE)) {
+      checkBlock(tree.statements().get(0), getLastToken(tree.elseToken()));
+    }
+  }
+
+  @Override
+  public void visitForStatement(ForStatementTree tree) {
+    super.visitForStatement(tree);
+    if (tree.is(Tree.Kind.FOR_STATEMENT)) {
+      checkBlock(tree.statements().get(0), tree.closeParenthesisToken());
+    }
+  }
+
+  @Override
+  public void visitForEachStatement(ForEachStatementTree tree) {
+    super.visitForEachStatement(tree);
+    if (tree.is(Tree.Kind.FOREACH_STATEMENT)) {
+      checkBlock(tree.statements().get(0), tree.closeParenthesisToken());
+    }
+  }
+
+  @Override
+  public void visitDoWhileStatement(DoWhileStatementTree tree) {
+    super.visitDoWhileStatement(tree);
+    checkBlock(tree.statement(), tree.doToken());
+  }
+
+  @Override
+  public void visitWhileStatement(WhileStatementTree tree) {
+    super.visitWhileStatement(tree);
+    if (tree.is(Tree.Kind.WHILE_STATEMENT)) {
+      checkBlock(tree.statements().get(0), getLastToken(tree.condition()));
+    }
+  }
+
+  @Override
+  public void visitCatchBlock(CatchBlockTree tree) {
+    super.visitCatchBlock(tree);
+    checkBlock(tree.block(), tree.closeParenthesisToken());
+  }
+
+  @Override
+  public void visitTryStatement(TryStatementTree tree) {
+    super.visitTryStatement(tree);
+    checkBlock(tree.block(), tree.tryToken());
+    if (tree.finallyToken() != null) {
+      checkBlock(tree.finallyBlock(), tree.finallyToken());
+    }
+  }
+
+  @Override
+  public void visitNamespaceStatement(NamespaceStatementTree tree) {
+    super.visitNamespaceStatement(tree);
+    if (tree.openCurlyBrace() != null) {
+      SyntaxToken prevToken;
+      if (tree.namespaceName() != null) {
+        prevToken = getLastToken(tree.namespaceName());
+      } else {
+        prevToken = tree.namespaceToken();
+      }
+
+      SyntaxToken nextToken = getFirstToken(tree.statements());
+      if (nextToken == null) {
+        nextToken = tree.closeCurlyBrace();
+      }
+
+      checkOpenCurlyBrace(tree.openCurlyBrace(), tree.closeCurlyBrace(), prevToken, nextToken);
+    }
+  }
+
+  private void checkBlock(Tree body, SyntaxToken prevToken) {
+    if (body.is(Kind.BLOCK)) {
+      BlockTree blockTree = (BlockTree)body;
+      SyntaxToken nextToken = getFirstToken(blockTree.statements());
+      if (nextToken == null) {
+        nextToken = blockTree.closeCurlyBraceToken();
+      }
+      checkOpenCurlyBrace(blockTree.openCurlyBraceToken(), blockTree.closeCurlyBraceToken(), prevToken, nextToken);
+    }
+  }
+
+  private void checkOpenCurlyBrace(SyntaxToken lBrace, SyntaxToken rBrace, SyntaxToken prevToken, SyntaxToken nextToken) {
+    int leftBraceLine = lBrace.line();
+    if (leftBraceLine == rBrace.line()) {
+      return;
+    }
+
+    if ((leftBraceLine != prevToken.line()) || (leftBraceLine == nextToken.line())) {
+      context().newIssue(KEY, MESSAGE).line(leftBraceLine);
+    }
+  }
+
+  private SyntaxToken getLastToken(Tree tree) {
+    return ((PHPTree) tree).getLastToken();
+  }
+
+  private SyntaxToken getFirstToken(List<StatementTree> statements) {
+    SyntaxToken nextToken = null;
+
+    for (StatementTree statement : statements) {
+      if (!statement.is(Kind.INLINE_HTML)) {
+        nextToken = getFirstToken(statement);
+        break;
       }
     }
-    return nextTokenLine;
+
+    return nextToken;
+  }
+
+  private SyntaxToken getFirstToken(Tree tree) {
+    return ((PHPTree) tree).getFirstToken();
   }
 }
