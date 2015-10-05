@@ -19,22 +19,15 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-public abstract class PHPSubscriptionCheck implements PHPCheck {
+public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements PHPCheck {
 
   private CheckContext context;
-  private Collection<Tree.Kind> nodesToVisit;
-
-  public abstract List<Tree.Kind> nodesToVisit();
 
   @Override
   public CheckContext context() {
@@ -46,54 +39,12 @@ public abstract class PHPSubscriptionCheck implements PHPCheck {
     // Default behavior : do nothing.
   }
 
-  public void visitNode(Tree tree) {
-    // Default behavior : do nothing.
-  }
-
-  public void leaveNode(Tree tree) {
-    // Default behavior : do nothing.
-  }
-
   @Override
   public final List<Issue> analyze(File file, CompilationUnitTree tree) {
     this.context = new PHPCheckContext(file, tree);
     scanTree(context.tree());
 
     return context().getIssues();
-  }
-
-  protected void scanTree(Tree tree) {
-    nodesToVisit = nodesToVisit();
-    visit(tree);
-  }
-
-  private void visit(Tree tree) {
-    boolean isSubscribed = isSubscribed(tree);
-    if (isSubscribed) {
-      visitNode(tree);
-    }
-    visitChildren(tree);
-    if (isSubscribed) {
-      leaveNode(tree);
-    }
-  }
-
-  protected boolean isSubscribed(Tree tree) {
-    return nodesToVisit.contains(tree.getKind());
-  }
-
-  private void visitChildren(Tree tree) {
-    PHPTree javaTree = (PHPTree) tree;
-
-    if (!javaTree.isLeaf()) {
-      for (Iterator<Tree> iter = javaTree.childrenIterator(); iter.hasNext(); ) {
-        Tree next = iter.next();
-
-        if (next != null) {
-          visit(next);
-        }
-      }
-    }
   }
 
 }

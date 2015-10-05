@@ -19,71 +19,89 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Trivia;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPTreeSubscriber;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S128",
+  key = NonEmptyCaseWithoutBreakCheck.KEY,
   name = "Switch cases should end with an unconditional \"break\" statement",
   priority = Priority.CRITICAL,
   tags = {Tags.CERT, Tags.CWE, Tags.PITFALL, Tags.MISRA})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("10min")
-public class NonEmptyCaseWithoutBreakCheck extends SquidCheck<LexerlessGrammar> {
+public class NonEmptyCaseWithoutBreakCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S128";
+
+  private static final String MESSAGE = "End this switch case with an unconditional break, continue, return or throw statement.";
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CASE_CLAUSE,
-      PHPGrammar.DEFAULT_CLAUSE);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (!isLastCase(astNode) && !isEmpty(astNode) && (!hasJumpStatement(astNode) && !hasNoBreakComment(astNode))) {
-      getContext().createLineViolation(this, "End this switch case with an unconditional break, continue, return or throw statement.", astNode);
-    }
-  }
-
-  private boolean hasNoBreakComment(AstNode astNode) {
-    for (Trivia trivia : astNode.getNextSibling().getToken().getTrivia()) {
-      if (trivia.isComment()) {
-        return true;
+  public void visitSwitchStatement(SwitchStatementTree switchTree) {
+    SwitchCaseClauseTree currentClause = null;
+    for (SwitchCaseClauseTree nextClause : switchTree.cases()) {
+      if (currentClause != null && !isEmpty(currentClause) && !hasJumpStatement(currentClause) && !hasNoBreakComment(nextClause)) {
+        context().newIssue(KEY, MESSAGE).tree(currentClause);
       }
+      currentClause = nextClause;
     }
-    return false;
+    super.visitSwitchStatement(switchTree);
   }
 
-  private static boolean hasJumpStatement(AstNode casClause) {
+  private boolean hasNoBreakComment(SwitchCaseClauseTree caseClause) {
+    return !caseClause.caseToken().trivias().isEmpty();
+  }
 
-    AstNode lastStmt = casClause.getFirstChild(PHPGrammar.INNER_STATEMENT_LIST).getLastChild();
-    if (lastStmt.is(PHPGrammar.STATEMENT) && lastStmt.getFirstChild().is(PHPGrammar.BREAK_STATEMENT)) {
+  private static boolean hasJumpStatement(SwitchCaseClauseTree caseClause) {
+    List<StatementTree> statements = caseClause.statements();
+    if (statements.get(statements.size() - 1).is(Kind.BREAK_STATEMENT)) {
       return true;
     }
-    return casClause.hasDescendant(
-      PHPGrammar.EXIT_EXPR,
-      PHPGrammar.CONTINUE_STATEMENT,
-      PHPGrammar.THROW_STATEMENT,
-      PHPGrammar.RETURN_STATEMENT,
-      PHPGrammar.BREAK_STATEMENT,
-      PHPGrammar.GOTO_STATEMENT);
+    return JumpStatementFinder.hasJumpStatement(caseClause);
   }
 
-  private static boolean isEmpty(AstNode caseClause) {
-    return caseClause.getFirstChild(PHPGrammar.INNER_STATEMENT_LIST) == null;
+  private static boolean isEmpty(SwitchCaseClauseTree caseClause) {
+    return caseClause.statements().isEmpty();
   }
 
-  private static boolean isLastCase(AstNode caseClause) {
-    return caseClause.getNextAstNode().is(PHPPunctuator.RCURLYBRACE) || caseClause.getNextAstNode().is(PHPKeyword.ENDSWITCH);
+  private static class JumpStatementFinder extends PHPTreeSubscriber {
+
+    private boolean foundNode = false;
+
+    @Override
+    public List<Kind> nodesToVisit() {
+      return ImmutableList.of(
+        Kind.EXIT_EXPRESSION,
+        Kind.CONTINUE_STATEMENT,
+        Kind.THROW_STATEMENT,
+        Kind.RETURN_STATEMENT,
+        Kind.BREAK_STATEMENT,
+        Kind.GOTO_STATEMENT);
+    }
+
+    @Override
+    public void visitNode(Tree tree) {
+      foundNode = true;
+    }
+
+    public static boolean hasJumpStatement(Tree tree) {
+      JumpStatementFinder jumpStatementFinder = new JumpStatementFinder();
+      jumpStatementFinder.scanTree(tree);
+      return jumpStatementFinder.foundNode;
+    }
+
   }
+
 }

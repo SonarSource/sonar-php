@@ -2,10 +2,10 @@
 
 switch ($a) {
   case 0:
-  case 1:     // NOK
+  case 1:     // NOK {{End this switch case with an unconditional break, continue, return or throw statement.}}
     doSomething();
   case 2:     // NOK
-    __halt_compiler();
+    halt();
   case 3:     // OK
     echo "";
     // no break intentional
@@ -44,7 +44,7 @@ switch ($a):
   case 1:     // NOK
     doSomething();
   case 2:     // NOK
-    __halt_compiler();
+    halt();
   case 3:     // OK
     echo "";
     // this is intentional
