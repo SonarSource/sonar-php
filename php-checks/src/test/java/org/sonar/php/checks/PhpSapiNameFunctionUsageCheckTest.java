@@ -20,20 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class PhpSapiNameFunctionUsageCheckTest extends CheckTest {
+public class PhpSapiNameFunctionUsageCheckTest extends PHPCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("PhpSapiNameFunctionUsageCheck.php"), new PhpSapiNameFunctionUsageCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Use the \"PHP_SAPI\" constant instead.")
-      .noMore();
+    check(new PhpSapiNameFunctionUsageCheck(), TestUtils.getCheckFile("PhpSapiNameFunctionUsageCheck.php"));
   }
 
 }

@@ -19,50 +19,35 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableSet;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2044",
+  key = PhpSapiNameFunctionUsageCheck.KEY,
   name = "\"php_sapi_name()\" should not be used",
   priority = Priority.MINOR,
   tags = {Tags.PERFORMANCE})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.CPU_EFFICIENCY)
 @SqaleConstantRemediation("5min")
-public class PhpSapiNameFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
+public class PhpSapiNameFunctionUsageCheck extends FunctionUsageCheck {
+
+  public static final String KEY = "S2044";
+  private static final String MESSAGE = "Use the \"PHP_SAPI\" constant instead.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.MEMBER_EXPRESSION);
+  protected ImmutableSet<String> functionNames() {
+    return ImmutableSet.of("php_sapi_name");
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (isPhpSapiNameFunctionCall(astNode)) {
-      getContext().createLineViolation(this, "Use the \"PHP_SAPI\" constant instead.", astNode);
-    }
-  }
-
-
-  private boolean isPhpSapiNameFunctionCall(AstNode memberExpr) {
-    AstNode identifierNode = memberExpr.getFirstChild();
-
-    return isSimpleFunctionCall(memberExpr, identifierNode) && "php_sapi_name".equals(identifierNode.getTokenOriginalValue());
-
-  }
-
-  private boolean isSimpleFunctionCall(AstNode memberExpr, AstNode identifierNode) {
-    return identifierNode.isNot(PHPKeyword.NAMESPACE, PHPGrammar.VARIABLE_WITHOUT_OBJECTS, PHPGrammar.PARENTHESIS_EXPRESSION)
-      && memberExpr.getNumberOfChildren() == 2
-      && memberExpr.getLastChild().is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST);
+  protected void createIssue(FunctionCallTree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree.callee());
   }
 
 }
