@@ -19,32 +19,28 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TooManyFunctionParametersCheckTest extends CheckTest {
+public class TooManyFunctionParametersCheckTest {
+
+  private static final String FILE_NAME = "TooManyFunctionParametersCheck.php";
 
   private TooManyFunctionParametersCheck check = new TooManyFunctionParametersCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFunctionParametersCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("This function has 8 parameters, which is greater than the " + check.DEFAULT + " authorized.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
+      ImmutableList.<Issue>of(new PHPIssue(TooManyFunctionParametersCheck.KEY, null).line(3)));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 2;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFunctionParametersCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("This function has 8 parameters, which is greater than the " + check.max + " authorized.")
-      .next().atLine(6).withMessage("This function has 3 parameters, which is greater than the " + check.max + " authorized.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 }

@@ -19,27 +19,29 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S107",
+  key = TooManyFunctionParametersCheck.KEY,
   name = "Functions should not have too many parameters",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNIT_TESTABILITY)
 @SqaleConstantRemediation("20min")
-public class TooManyFunctionParametersCheck extends SquidCheck<LexerlessGrammar> {
+public class TooManyFunctionParametersCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S107";
+
+  private static final String MESSAGE = "This function has %s parameters, which is greater than the %s authorized.";
 
   public static final int DEFAULT = 7;
 
@@ -49,16 +51,12 @@ public class TooManyFunctionParametersCheck extends SquidCheck<LexerlessGrammar>
   int max = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.PARAMETER_LIST);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    int nbParam = astNode.getChildren(PHPGrammar.PARAMETER).size();
-
-    if (nbParam > max) {
-      getContext().createLineViolation(this, "This function has {0} parameters, which is greater than the {1} authorized.", astNode, nbParam, max);
+  public void visitParameterList(ParameterListTree parameterList) {
+    int numberOfParameters = parameterList.parameters().size();
+    if (numberOfParameters > max) {
+      context().newIssue(KEY, String.format(MESSAGE, numberOfParameters, max)).tree(parameterList);
     }
+    super.visitParameterList(parameterList);
   }
+
 }
