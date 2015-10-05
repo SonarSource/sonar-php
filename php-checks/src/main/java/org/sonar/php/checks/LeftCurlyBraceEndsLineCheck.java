@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
@@ -77,6 +78,12 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     super.visitFunctionDeclaration(tree);
+    checkBlock(tree.body(), getLastToken(tree.parameters()));
+  }
+
+  @Override
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    super.visitFunctionExpression(tree);
     checkBlock(tree.body(), getLastToken(tree.parameters()));
   }
 
