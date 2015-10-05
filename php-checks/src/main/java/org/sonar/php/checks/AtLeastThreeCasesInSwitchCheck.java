@@ -19,38 +19,35 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1301",
+  key = AtLeastThreeCasesInSwitchCheck.KEY,
   name = "\"switch\" statements should have at least 3 \"case\" clauses",
   priority = Priority.MINOR,
   tags = {Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")
-public class AtLeastThreeCasesInSwitchCheck extends SquidCheck<LexerlessGrammar> {
+public class AtLeastThreeCasesInSwitchCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1301";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.SWITCH_STATEMENT);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    AstNode caseList = astNode.getFirstChild(PHPGrammar.SWITCH_CASE_LIST).getFirstChild(PHPGrammar.CASE_LIST);
-
-    if (caseList == null || caseList.getNumberOfChildren() < 3) {
-      getContext().createLineViolation(this, "Replace this \"switch\" statement with \"if\" statements to increase readability.", astNode);
+  public void visitSwitchStatement(SwitchStatementTree switchTree) {
+    if (switchTree.cases().size() < 3) {
+      context()
+        .newIssue(KEY, "Replace this \"switch\" statement with \"if\" statements to increase readability.")
+        .tree(switchTree);
     }
+
+    super.visitSwitchStatement(switchTree);
   }
 }

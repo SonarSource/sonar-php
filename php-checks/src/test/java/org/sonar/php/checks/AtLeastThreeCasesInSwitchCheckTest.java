@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class AtLeastThreeCasesInSwitchCheckTest extends CheckTest {
+public class AtLeastThreeCasesInSwitchCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("AtLeastThreeCasesInSwitchCheck.php"), new AtLeastThreeCasesInSwitchCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Replace this \"switch\" statement with \"if\" statements to increase readability.")
-      .next().atLine(12)
-      .next().atLine(15)
-      .noMore();
+    PHPCheckTest.check(new AtLeastThreeCasesInSwitchCheck(), TestUtils.getCheckFile("AtLeastThreeCasesInSwitchCheck.php"));
   }
+
 }
