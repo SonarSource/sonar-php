@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableSet;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -40,8 +41,8 @@ public class CallToIniSetCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Move this configuration into a configuration file.";
 
   @Override
-  protected String functionName() {
-    return "ini_set";
+  protected ImmutableSet<String> functionNames() {
+    return ImmutableSet.of("ini_set");
   }
 
   @Override

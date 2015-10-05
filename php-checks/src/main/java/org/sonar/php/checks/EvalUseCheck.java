@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableSet;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -43,8 +44,8 @@ public class EvalUseCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Remove this use of the \"eval\" function.";
 
   @Override
-  protected String functionName() {
-    return PHPKeyword.EVAL.getValue();
+  protected ImmutableSet<String> functionNames() {
+    return ImmutableSet.of(PHPKeyword.EVAL.getValue());
   }
 
   @Override

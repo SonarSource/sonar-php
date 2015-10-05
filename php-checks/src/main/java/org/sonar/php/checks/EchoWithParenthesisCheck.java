@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableSet;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -43,8 +44,8 @@ public class EchoWithParenthesisCheck extends FunctionUsageCheck {
   private static final String MESSAGE = "Remove the parentheses from this \"echo\" call.";
 
   @Override
-  protected String functionName() {
-    return "echo";
+  protected ImmutableSet<String> functionNames() {
+    return ImmutableSet.of("echo");
   }
 
   @Override

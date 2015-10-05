@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks.utils;
 
+import com.google.common.collect.ImmutableSet;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -37,10 +38,10 @@ public abstract class FunctionUsageCheck extends PHPVisitorCheck {
   }
 
   private boolean isForbiddenFunction(ExpressionTree callee) {
-    return callee.is(Kind.NAMESPACED_NAME) && functionName().equals(((NamespaceNameTree) callee).name().text());
+    return callee.is(Kind.NAMESPACED_NAME) && functionNames().contains(((NamespaceNameTree) callee).name().text());
   }
 
-  abstract protected String functionName();
+  abstract protected ImmutableSet<String> functionNames();
 
   abstract protected void createIssue(FunctionCallTree tree);
 
