@@ -1244,7 +1244,6 @@ public class NewPHPGrammar {
         f.newStaticIdentifier(b.token(STATIC)),
         NAMESPACE_NAME(),
         VARIABLE_WITHOUT_OBJECTS(),
-        IDENTIFIER(),
         PARENTHESIZED_EXPRESSION()));
   }
 
@@ -1385,15 +1384,15 @@ public class NewPHPGrammar {
   public FunctionCallTree INTERNAL_FUNCTION() {
     return b.<FunctionCallTree>nonterminal(PHPLexicalGrammar.INTERNAL_FUNCTION).is(
       b.firstOf(
-        f.internalFunction1(b.token(PHPLexicalGrammar.ISSET), b.token(LPARENTHESIS), EXPRESSION(), b.zeroOrMore(f.newTuple15(b.token(COMMA), EXPRESSION())), b.token(RPARENTHESIS)),
+        f.internalFunction(b.token(PHPLexicalGrammar.ISSET), b.token(LPARENTHESIS), EXPRESSION(), b.zeroOrMore(f.newTuple15(b.token(COMMA), EXPRESSION())), b.token(RPARENTHESIS)),
 
-        f.internalFunction2(
+        f.internalFunction(
           b.firstOf(
             b.token(PHPLexicalGrammar.EMPTY),
             b.token(PHPLexicalGrammar.EVAL)),
           b.token(LPARENTHESIS), EXPRESSION(), b.token(RPARENTHESIS)),
 
-        f.internalFunction3(
+        f.internalFunction(
           b.firstOf(
             b.token(PHPLexicalGrammar.INCLUDE_ONCE),
             b.token(PHPLexicalGrammar.INCLUDE),

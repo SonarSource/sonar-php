@@ -958,7 +958,7 @@ public class TreeFactory {
   ) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
-        new IdentifierTreeImpl(haltCompilerToken),
+        new NamespaceNameTreeImpl(null, new SeparatedListImpl<IdentifierTree>(Collections.EMPTY_LIST, Collections.EMPTY_LIST), new IdentifierTreeImpl(haltCompilerToken)),
         openParenthesisToken,
         SeparatedListImpl.empty(),
         closeParenthesisToken),
@@ -973,7 +973,7 @@ public class TreeFactory {
   ) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
-        new IdentifierTreeImpl(echoToken),
+        new NamespaceNameTreeImpl(null, new SeparatedListImpl<IdentifierTree>(Collections.EMPTY_LIST, Collections.EMPTY_LIST), new IdentifierTreeImpl(echoToken)),
         separatedList(expression, list)),
       eosToken);
   }
@@ -1315,34 +1315,49 @@ public class TreeFactory {
     return new LexicalVariablesTreeImpl(useToken, openParenthesis, separatedList(variable, variableRest), closeParenthesis);
   }
 
-  public FunctionCallTree internalFunction1(
+  public FunctionCallTree internalFunction(
     InternalSyntaxToken issetToken, InternalSyntaxToken openParenthesis,
     ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressionRest,
     InternalSyntaxToken closeParenthesis
   ) {
-    return new FunctionCallTreeImpl(
-      new IdentifierTreeImpl(issetToken),
+    return internalFunction(
+      issetToken,
       openParenthesis,
       separatedList(expression, expressionRest),
       closeParenthesis);
   }
 
-  public FunctionCallTree internalFunction2(
+  public FunctionCallTree internalFunction(
     InternalSyntaxToken functionNameToken, InternalSyntaxToken openParenthesis,
     ExpressionTree expression,
     InternalSyntaxToken closeParenthesis
   ) {
-    return new FunctionCallTreeImpl(
-      new IdentifierTreeImpl(functionNameToken),
+    return internalFunction(
+      functionNameToken,
       openParenthesis,
       new SeparatedListImpl(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()),
       closeParenthesis);
   }
 
-  public FunctionCallTree internalFunction3(InternalSyntaxToken includeOnceToken, ExpressionTree expression) {
+  public FunctionCallTree internalFunction(InternalSyntaxToken includeOnceToken, ExpressionTree expression) {
+    return internalFunction(
+      includeOnceToken,
+      null,
+      new SeparatedListImpl(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()),
+      null);
+  }
+
+  public FunctionCallTree internalFunction(
+    InternalSyntaxToken callee,
+    @Nullable InternalSyntaxToken openParenthesis,
+    SeparatedListImpl<ExpressionTree> arguments,
+    @Nullable InternalSyntaxToken closeParenthesis
+  ) {
     return new FunctionCallTreeImpl(
-      new IdentifierTreeImpl(includeOnceToken),
-      new SeparatedListImpl(ImmutableList.of(expression), ImmutableList.<InternalSyntaxToken>of()));
+      new NamespaceNameTreeImpl(null, new SeparatedListImpl<IdentifierTree>(Collections.EMPTY_LIST, Collections.EMPTY_LIST), new IdentifierTreeImpl(callee)),
+      openParenthesis,
+      arguments,
+      closeParenthesis);
   }
 
   public ArrayPairTree arrayPair1(ExpressionTree expression, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> pairExpression) {
