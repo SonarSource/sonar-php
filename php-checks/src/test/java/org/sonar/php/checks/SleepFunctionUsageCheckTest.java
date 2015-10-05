@@ -20,19 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class SleepFunctionUsageCheckTest extends CheckTest {
+public class SleepFunctionUsageCheckTest extends PHPCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SleepFunctionUsageCheck.php"), new SleepFunctionUsageCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Remove this call to \"sleep\".")
-      .noMore();
+    check(new SleepFunctionUsageCheck(), TestUtils.getCheckFile("SleepFunctionUsageCheck.php"));
   }
 }

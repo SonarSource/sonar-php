@@ -19,42 +19,35 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableSet;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2964",
+  key = SleepFunctionUsageCheck.KEY,
   name = "\"sleep\" should not be called",
   priority = Priority.CRITICAL,
   tags = {Tags.SECURITY})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SECURITY_FEATURES)
 @SqaleConstantRemediation("15min")
-public class SleepFunctionUsageCheck extends SquidCheck<LexerlessGrammar> {
+public class SleepFunctionUsageCheck extends FunctionUsageCheck {
+
+  public static final String KEY = "S2964";
+  private static final String MESSAGE = "Remove this call to \"sleep\".";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.MEMBER_EXPRESSION);
+  protected ImmutableSet<String> functionNames() {
+    return ImmutableSet.of("sleep");
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (isSleepFunctionCall(astNode)) {
-      getContext().createLineViolation(this, "Remove this call to \"sleep\".", astNode);
-    }
-  }
-
-  private static boolean isSleepFunctionCall(AstNode memberExpr) {
-    return memberExpr.getNumberOfChildren() == 2
-      && memberExpr.getLastChild().is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)
-      && "sleep".equals(CheckUtils.getExpressionAsString(memberExpr.getFirstChild()));
+  protected void createIssue(FunctionCallTree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree.callee());
   }
 
 }
