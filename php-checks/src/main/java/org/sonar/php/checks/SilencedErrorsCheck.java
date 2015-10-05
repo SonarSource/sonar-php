@@ -19,33 +19,38 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S2002",
+  key = SilencedErrorsCheck.KEY,
   name = "Errors should not be silenced",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.EXCEPTION_HANDLING)
 @SqaleConstantRemediation("30min")
-public class SilencedErrorsCheck extends SquidCheck<LexerlessGrammar> {
+public class SilencedErrorsCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S2002";
+  private static final String MESSAGE = "Remove the '@' symbol from this function call to un-silence errors.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPPunctuator.AT);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(Kind.ERROR_CONTROL);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Remove the '@' symbol from this function call to un-silence errors.", astNode);
+  public void visitNode(Tree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree);
   }
 
 }
