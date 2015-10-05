@@ -19,45 +19,102 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S1109",
+  key = RightCurlyBraceStartsLineCheck.KEY,
   name = "A close curly brace should be located at the beginning of a line",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
-public class RightCurlyBraceStartsLineCheck extends SquidCheck<LexerlessGrammar> {
+public class RightCurlyBraceStartsLineCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1109";
+  private static final String MESSAGE = "Move this closing curly brace to the next line.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPPunctuator.RCURLYBRACE);
+  public void visitBlock(BlockTree tree) {
+    super.visitBlock(tree);
+    SyntaxToken prevToken = tree.openCurlyBraceToken();
+    List<StatementTree> statements = tree.statements();
+    if (!statements.isEmpty()) {
+      prevToken = ((PHPTree) statements.get(statements.size() - 1)).getLastToken();
+    }
+    checkCloseCurlyBrace(tree.closeCurlyBraceToken(), tree.openCurlyBraceToken(), prevToken);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (!isOnSameLineThanLeftCurlyBrace(astNode) && !isFirstOnLine(astNode)) {
-      getContext().createLineViolation(this, "Move this closing curly brace to the next line.", astNode);
+  public void visitTraitUseStatement(UseTraitDeclarationTree tree) {
+    super.visitTraitUseStatement(tree);
+
+    if (tree.openCurlyBraceToken() != null) {
+      SyntaxToken prevToken = tree.openCurlyBraceToken();
+      if (!tree.adaptations().isEmpty()) {
+        prevToken = ((PHPTree) tree.adaptations().get(0)).getLastToken();
+      }
+
+      checkCloseCurlyBrace(tree.closeCurlyBraceToken(), tree.openCurlyBraceToken(), prevToken);
     }
   }
 
-  private static boolean isFirstOnLine(AstNode rcurly) {
-    return rcurly.getPreviousAstNode().getLastToken().getLine() != rcurly.getTokenLine();
+  @Override
+  public void visitSwitchStatement(SwitchStatementTree tree) {
+    super.visitSwitchStatement(tree);
+    if (tree.is(Kind.SWITCH_STATEMENT)) {
+      SyntaxToken prevToken = tree.openCurlyBraceToken();
+      List<SwitchCaseClauseTree> cases = tree.cases();
+
+      if (!cases.isEmpty()) {
+        prevToken = ((PHPTree) cases.get(cases.size() - 1)).getLastToken();
+      } else if (tree.semicolonToken() != null) {
+        prevToken = tree.semicolonToken();
+      }
+
+      checkCloseCurlyBrace(tree.closeCurlyBraceToken(), tree.openCurlyBraceToken(), prevToken);
+    }
   }
 
-  private static boolean isOnSameLineThanLeftCurlyBrace(AstNode rcurly) {
-    return rcurly.getParent().getFirstChild(PHPPunctuator.LCURLYBRACE, PHPPunctuator.DOLLAR_LCURLY).getTokenLine() == rcurly.getTokenLine();
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
+    SyntaxToken prevToken = tree.openCurlyBraceToken();
+    List<ClassMemberTree> members = tree.members();
+    if (!members.isEmpty()) {
+      prevToken = ((PHPTree) members.get(members.size() - 1)).getLastToken();
+    }
+    checkCloseCurlyBrace(tree.closeCurlyBraceToken(), tree.openCurlyBraceToken(), prevToken);
+  }
+
+
+  private void checkCloseCurlyBrace(SyntaxToken rBrace, SyntaxToken lBrace, SyntaxToken prevToken) {
+    int rightBraceLine = rBrace.line();
+    if (rightBraceLine == lBrace.line()) {
+      return;
+    }
+
+    if (rightBraceLine == prevToken.line()) {
+      context().newIssue(KEY, MESSAGE).line(rightBraceLine);
+    }
   }
 
 }

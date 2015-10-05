@@ -20,22 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class RightCurlyBraceStartsLineCheckTest extends CheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("RightCurlyBraceStartsLineCheck.php"), new RightCurlyBraceStartsLineCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Move this closing curly brace to the next line.")
-      .next().atLine(7)
-      .next().atLine(10)
-      .next().atLine(13)
-      .noMore();
+    PHPCheckTest.check(new RightCurlyBraceStartsLineCheck(), TestUtils.getCheckFile("RightCurlyBraceStartsLineCheck.php"));
   }
 }
