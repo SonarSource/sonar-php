@@ -19,39 +19,34 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2918",
+  key = CallToIniSetCheck.KEY,
   name = "Configuration should not be changed dynamically",
   priority = Priority.CRITICAL,
   tags = {Tags.PITFALL})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class CallToIniSetCheck extends SquidCheck<LexerlessGrammar> {
+public class CallToIniSetCheck extends FunctionUsageCheck {
+
+  public static final String KEY = "S2918";
+  private static final String MESSAGE = "Move this configuration into a configuration file.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.MEMBER_EXPRESSION);
+  protected String functionName() {
+    return "ini_set";
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    AstNode callee = astNode.getFirstChild();
-    if (callee.getNextSibling() != null && callee.getNextSibling().is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-      String name = callee.getTokenOriginalValue();
-      if ("ini_set".equals(name)) {
-        getContext().createLineViolation(this, "Move this configuration into a configuration file.", astNode);
-      }
-    }
+  protected void createIssue(FunctionCallTree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree.callee());
   }
 
 }
