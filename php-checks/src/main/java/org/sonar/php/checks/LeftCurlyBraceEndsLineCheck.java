@@ -22,14 +22,13 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.TokenVisitor;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
@@ -67,30 +66,12 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     super.visitClassDeclaration(tree);
-    SyntaxToken lastToken = getLastTokenFromClassSignature(tree);
-    SyntaxToken nextToken = getNextTokenFromClassSignature(tree);
-    checkOpenCurlyBrace(tree.openCurlyBraceToken(), tree.closeCurlyBraceToken(), lastToken, nextToken);
-  }
-
-  private SyntaxToken getNextTokenFromClassSignature(ClassDeclarationTree tree) {
-    if (tree.members().isEmpty()) {
-      return tree.closeCurlyBraceToken();
-    } else {
-      return getFirstToken(tree.members().get(0));
-    }
-  }
-
-  private SyntaxToken getLastTokenFromClassSignature(ClassDeclarationTree tree) {
-    SeparatedList<NamespaceNameTree> interfaces = tree.superInterfaces();
-    if (!interfaces.isEmpty()) {
-      return getLastToken(interfaces.get(interfaces.size() - 1));
-    }
-
-    if (tree.superClass() != null) {
-      return getLastToken(tree.superClass());
-    }
-
-    return getLastToken(tree.name());
+    TokenVisitor tokenVisitor = new TokenVisitor(tree);
+    checkOpenCurlyBrace(
+      tree.openCurlyBraceToken(),
+      tree.closeCurlyBraceToken(),
+      tokenVisitor.prevToken(tree.openCurlyBraceToken()),
+      tokenVisitor.nextToken(tree.openCurlyBraceToken()));
   }
 
   @Override
@@ -110,17 +91,13 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
     super.visitTraitUseStatement(tree);
 
     if (tree.openCurlyBraceToken() != null) {
-      SeparatedList<NamespaceNameTree> traits = tree.traits();
-      SyntaxToken prevToken = getLastToken(traits.get(traits.size() - 1));
-
-      SyntaxToken nextToken;
-      if (tree.adaptations().isEmpty()) {
-        nextToken = tree.closeCurlyBraceToken();
-      } else {
-        nextToken = getFirstToken(tree.adaptations().get(0));
-      }
-
-      checkOpenCurlyBrace(tree.openCurlyBraceToken(), tree.closeCurlyBraceToken(), prevToken, nextToken);
+      TokenVisitor tokenVisitor = new TokenVisitor(tree);
+      checkOpenCurlyBrace(
+        tree.openCurlyBraceToken(),
+        tree.closeCurlyBraceToken(),
+        tokenVisitor.prevToken(tree.openCurlyBraceToken()),
+        tokenVisitor.nextToken(tree.openCurlyBraceToken())
+      );
     }
   }
 
@@ -136,17 +113,12 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
   public void visitSwitchStatement(SwitchStatementTree tree) {
     super.visitSwitchStatement(tree);
     if (tree.is(Kind.SWITCH_STATEMENT)) {
-      SyntaxToken nextToken;
-
-      if (tree.semicolonToken() != null) {
-        nextToken = tree.semicolonToken();
-      } else if (tree.cases().isEmpty()) {
-        nextToken = tree.closeCurlyBraceToken();
-      } else {
-        nextToken = getFirstToken(tree.cases().get(0));
-      }
-
-      checkOpenCurlyBrace(tree.openCurlyBraceToken(), tree.closeCurlyBraceToken(), getLastToken(tree.expression()), nextToken);
+      TokenVisitor tokenVisitor = new TokenVisitor(tree);
+      checkOpenCurlyBrace(
+        tree.openCurlyBraceToken(),
+        tree.closeCurlyBraceToken(),
+        tokenVisitor.prevToken(tree.openCurlyBraceToken()),
+        tokenVisitor.nextToken(tree.openCurlyBraceToken()));
     }
   }
 
@@ -223,19 +195,12 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
   public void visitNamespaceStatement(NamespaceStatementTree tree) {
     super.visitNamespaceStatement(tree);
     if (tree.openCurlyBrace() != null) {
-      SyntaxToken prevToken;
-      if (tree.namespaceName() != null) {
-        prevToken = getLastToken(tree.namespaceName());
-      } else {
-        prevToken = tree.namespaceToken();
-      }
-
-      SyntaxToken nextToken = getFirstToken(tree.statements());
-      if (nextToken == null) {
-        nextToken = tree.closeCurlyBrace();
-      }
-
-      checkOpenCurlyBrace(tree.openCurlyBrace(), tree.closeCurlyBrace(), prevToken, nextToken);
+      TokenVisitor tokenVisitor = new TokenVisitor(tree);
+      checkOpenCurlyBrace(
+        tree.openCurlyBrace(),
+        tree.closeCurlyBrace(),
+        tokenVisitor.prevToken(tree.openCurlyBrace()),
+        tokenVisitor.nextToken(tree.openCurlyBrace()));
     }
   }
 
