@@ -19,7 +19,7 @@ function f ()
 {                                // NOK {{Move this open curly brace to the end of the previous line.}}
 }
 
-$a = function () { doSomething;  // NOK
+$a = function () { doSomething;  // NOK {{Move this open curly brace to the end of the previous line.}}
 };
 
 function f() {                   // OK
