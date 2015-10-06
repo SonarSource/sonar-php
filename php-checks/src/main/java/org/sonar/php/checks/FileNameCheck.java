@@ -19,28 +19,30 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import javax.annotation.Nullable;
-
+import java.io.File;
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S1578",
+  key = FileNameCheck.KEY,
   name = "File names should comply with a naming convention",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("10min")
-public class FileNameCheck extends SquidCheck<LexerlessGrammar> {
+public class FileNameCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1578";
+
+  private static final String MESSAGE = "Rename this file to match this regular expression: \"%s\"";
 
   public static final String DEFAULT = "[a-z][A-Za-z0-9]+.php";
   private Pattern pattern = null;
@@ -57,9 +59,11 @@ public class FileNameCheck extends SquidCheck<LexerlessGrammar> {
   }
 
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    if (!pattern.matcher(getContext().getFile().getName()).matches()) {
-      getContext().createFileViolation(this, "Rename this file to match this regular expression: \"{0}\"", format);
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    File file = context().file();
+    if (!pattern.matcher(file.getName()).matches()) {
+      context().newIssue(KEY, String.format(MESSAGE, format));
     }
   }
+
 }
