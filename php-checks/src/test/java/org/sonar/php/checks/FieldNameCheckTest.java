@@ -19,34 +19,29 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class FieldNameCheckTest extends CheckTest {
+public class FieldNameCheckTest {
+
+  private static final String FILE_NAME = "FieldNameCheck.php";
 
   private FieldNameCheck check = new FieldNameCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FieldNameCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Rename this field \"$MyVariable\" to match the regular expression " + check.DEFAULT + ".")
-      .next().atLine(5)
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FieldNameCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Rename this field \"$myVariable\" to match the regular expression " + check.format + ".")
-      .noMore();
-
+    String message = "Rename this field \"$myVariable\" to match the regular expression " + check.format + ".";
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
+      ImmutableList.<Issue>of(new PHPIssue(FileNameCheck.KEY, message).line(6)));
   }
 }
