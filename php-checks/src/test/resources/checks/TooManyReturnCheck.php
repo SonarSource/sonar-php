@@ -1,6 +1,6 @@
 <?php
 
-function f() {          // NOK
+function f() {          // NOK {{Reduce the number of returns of this function 4, down to the maximum allowed 2.}}
   if (a) {
     return true;
   } else {
@@ -13,7 +13,7 @@ function f() {          // NOK
   return false;
 }
 
-function f() {          // OK
+function f() {          // NOK {{Reduce the number of returns of this function 3, down to the maximum allowed 2.}}
   if (a) {
     return true;
   } else if (b) {
@@ -22,7 +22,7 @@ function f() {          // OK
   return false;
 }
 
-function f() {          // OK
+function f() {          // NOK {{Reduce the number of returns of this function 3, down to the maximum allowed 2.}}
 
   function nestedF() {
     return true;        // Should not count return of nested function in enclosing function return counter
@@ -47,4 +47,15 @@ $a = function () { return 1; }; // OK
 
 if (a) {
   return;
+}
+
+// the issue is reported on the function signature and not the function body
+function f()  // NOK
+{
+  if (a) {
+    return true;
+  } else if (b) {
+    return false;
+  }
+  return false;
 }

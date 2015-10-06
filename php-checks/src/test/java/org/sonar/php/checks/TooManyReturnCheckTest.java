@@ -19,34 +19,27 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TooManyReturnCheckTest extends CheckTest {
+public class TooManyReturnCheckTest extends PHPCheckTest {
 
   private TooManyReturnCheck check = new TooManyReturnCheck();
+  private String fileName = "TooManyReturnCheck.php";
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyReturnCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Reduce the number of returns of this function 4, down to the maximum allowed 3.")
-      .noMore();
+    String message = "Reduce the number of returns of this function 4, down to the maximum allowed 3.";
+    check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of(new PHPIssue(TooManyReturnCheck.KEY, message).line(3)));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 2;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyReturnCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Reduce the number of returns of this function 4, down to the maximum allowed " + +check.max + ".")
-      .next().atLine(16)
-      .next().atLine(25)
-      .noMore();
+    check(check, TestUtils.getCheckFile(fileName));
   }
 }

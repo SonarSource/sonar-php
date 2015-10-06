@@ -19,90 +19,96 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 @Rule(
-  key = "S1142",
+  key = TooManyReturnCheck.KEY,
   name = "Functions should not contain too many return statements",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("20min")
-public class TooManyReturnCheck extends SquidCheck<LexerlessGrammar> {
+public class TooManyReturnCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1142";
+  private static final String MESSAGE = "Reduce the number of returns of this function %s, down to the maximum allowed %s.";
 
   private static final int DEFAULT = 3;
-  private final Deque<Integer> returnStatementCounter = new ArrayDeque<Integer>();
+  private final Deque<Integer> returnStatementCounter = new ArrayDeque<>();
 
   @RuleProperty(
     key = "max",
     defaultValue = "" + DEFAULT)
   int max = DEFAULT;
 
+
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.BLOCK,
-      PHPGrammar.RETURN_STATEMENT);
+  public void visitReturnStatement(ReturnStatementTree tree) {
+    super.visitReturnStatement(tree);
+    incReturnNumber();
+  }
+
+  private void incReturnNumber() {
+    boolean isGlobalScope = returnStatementCounter.isEmpty();
+    if (!isGlobalScope) {
+      Integer lastCounter = returnStatementCounter.pop();
+      returnStatementCounter.push(lastCounter + 1);
+    }
   }
 
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
+  public void visitScript(ScriptTree tree) {
     returnStatementCounter.clear();
+    super.visitScript(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.RETURN_STATEMENT) && isInFunctionBody()) {
-      setReturnStatementCounter(getReturnStatementCounter() + 1);
-    } else if (isFunctionBlock(astNode)) {
-      returnStatementCounter.push(0);
-    }
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    enterFunction();
+    super.visitFunctionDeclaration(tree);
+    leaveFunction(tree);
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.BLOCK) && isFunctionBlock(astNode)) {
-      if (getReturnStatementCounter() > max) {
-        getContext().createLineViolation(this, "Reduce the number of returns of this function {0}, down to the maximum allowed {1}.",
-          astNode.getParent(), getReturnStatementCounter(), max);
-      }
-      returnStatementCounter.pop();
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    enterFunction();
+    super.visitFunctionExpression(tree);
+    leaveFunction(tree);
+  }
+
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    enterFunction();
+    super.visitMethodDeclaration(tree);
+    leaveFunction(tree);
+  }
+
+  private void enterFunction() {
+    returnStatementCounter.push(0);
+  }
+
+  private void leaveFunction(FunctionTree tree) {
+    Integer returnNumber = returnStatementCounter.pop();
+    if (returnNumber > max) {
+      String message = String.format(MESSAGE, returnNumber, max);
+      context().newIssue(KEY, message).tree(tree);
     }
-  }
-
-  private boolean isInFunctionBody() {
-    return !returnStatementCounter.isEmpty();
-  }
-
-  private int getReturnStatementCounter() {
-    return returnStatementCounter.peek();
-  }
-
-  private void setReturnStatementCounter(int value) {
-    returnStatementCounter.pop();
-    returnStatementCounter.push(value);
-  }
-
-  private static boolean isFunctionBlock(AstNode block) {
-    return block.getParent().is(
-      PHPGrammar.METHOD_BODY,
-      PHPGrammar.FUNCTION_DECLARATION,
-      PHPGrammar.FUNCTION_EXPRESSION);
   }
 }
