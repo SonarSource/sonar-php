@@ -19,51 +19,52 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class FileNameCheckTest extends CheckTest {
+import java.net.URISyntaxException;
+
+public class FileNameCheckTest {
 
   private FileNameCheck check = new FileNameCheck();
   private static final String TEST_DIR = "FileNameCheck/";
 
   @Test
   public void ok_defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    checkNoIssue("ok.php");
   }
 
   @Test
   public void ko_defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "_ko.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(null).withMessage("Rename this file to match this regular expression: \"" + check.DEFAULT + "\"")
-      .noMore();
+    checkIssue("_ko.php", "Rename this file to match this regular expression: \"" + FileNameCheck.DEFAULT + "\"");
   }
 
   @Test
   public void ok_custom() throws Exception {
     check.format = "_[a-z][A-Za-z0-9]+.php";
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "_ko.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    checkNoIssue("_ko.php");
   }
 
   @Test
   public void ko_custom() throws Exception {
     check.format = "_[a-z][A-Za-z0-9]+.php";
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.php"), check);
+    checkIssue("ok.php", "Rename this file to match this regular expression: \"" + check.format + "\"");
+  }
 
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(null).withMessage("Rename this file to match this regular expression: \"" + check.format + "\"")
-      .noMore();
+  private void checkNoIssue(String fileName) throws URISyntaxException {
+    check(fileName, ImmutableList.<Issue>of());
+  }
+
+  private void checkIssue(String fileName, String expectedIssueMessage) throws URISyntaxException {
+    check(fileName, ImmutableList.<Issue>of(new PHPIssue(FileNameCheck.KEY, expectedIssueMessage)));
+  }
+
+  private void check(String fileName, ImmutableList<Issue> expectedIssues) throws URISyntaxException {
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + fileName), expectedIssues);
   }
 
 }
