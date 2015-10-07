@@ -19,24 +19,36 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TodoTagPresenceCheckTest extends CheckTest {
+import java.io.File;
+import java.util.List;
+
+public class TodoTagPresenceCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TodoTagPresenceCheck.php"), new TodoTagPresenceCheck());
-    CheckMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Complete the task associated to this \"TODO\" comment.")
-      .next().atLine(8)
-      .next().atLine(9)
-      .next().atLine(12)
-      .next().atLine(14)
-      .next().atLine(16);
+    File file = TestUtils.getCheckFile("TodoTagPresenceCheck.php");
+
+    List<Issue> issues = ImmutableList.of(
+      newIssue(4),
+      newIssue(8),
+      newIssue(9),
+      newIssue(12),
+      newIssue(14),
+      newIssue(16)
+    );
+
+    PHPCheckTest.check(new TodoTagPresenceCheck(), file, issues);
+  }
+
+  private Issue newIssue(int line) {
+    String message = "Complete the task associated to this \"TODO\" comment.";
+    return new PHPIssue("testKey", message).line(line);
   }
 }

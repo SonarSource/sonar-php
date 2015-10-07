@@ -22,30 +22,34 @@ package org.sonar.php.checks;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CommentContainsPatternChecker;
+import org.sonar.php.checks.utils.AbstractCommentContainsPatternCheck;
 import org.sonar.squidbridge.annotations.NoSqale;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import com.sonar.sslr.api.AstAndTokenVisitor;
-import com.sonar.sslr.api.Token;
 
 @Rule(
-  key = "S1135",
+  key = TodoTagPresenceCheck.KEY,
   name = "\"TODO\" tags should be handled",
   priority = Priority.INFO)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.INFO)
 @NoSqale
-public class TodoTagPresenceCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
+public class TodoTagPresenceCheck extends AbstractCommentContainsPatternCheck {
 
-  private static final String PATTERN = "TODO";
+  public static final String KEY = "S1135";
   private static final String MESSAGE = "Complete the task associated to this \"TODO\" comment.";
-
-  private final CommentContainsPatternChecker checker = new CommentContainsPatternChecker(this, PATTERN, MESSAGE);
+  private static final String PATTERN = "TODO";
 
   @Override
-  public void visitToken(Token token) {
-    checker.visitToken(token);
+  protected String pattern() {
+    return PATTERN;
+  }
+
+  @Override
+  protected String key() {
+    return KEY;
+  }
+
+  @Override
+  protected String message() {
+    return MESSAGE;
   }
 
 }

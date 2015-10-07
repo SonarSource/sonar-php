@@ -19,23 +19,36 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
+
+import java.io.File;
+import java.util.List;
 
 public class FixmeTagPresenceCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FixmeTagPresenceCheck.php"), new FixmeTagPresenceCheck());
+    File file = TestUtils.getCheckFile("FixmeTagPresenceCheck.php");
 
-    CheckMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Take the required action to fix the issue indicated by this \"FIXME\" comment.")
-      .next().atLine(8)
-      .next().atLine(9)
-      .next().atLine(12)
-      .next().atLine(14);
+    List<Issue> issues = ImmutableList.of(
+      newIssue(4),
+      newIssue(8),
+      newIssue(9),
+      newIssue(12),
+      newIssue(14)
+    );
+
+    PHPCheckTest.check(new FixmeTagPresenceCheck(), file, issues);
   }
+
+  private Issue newIssue(int line) {
+    String message = "Take the required action to fix the issue indicated by this \"FIXME\" comment.";
+    return new PHPIssue("testKey", message).line(line);
+  }
+
 }

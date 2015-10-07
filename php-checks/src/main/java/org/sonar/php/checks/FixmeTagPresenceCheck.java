@@ -22,30 +22,33 @@ package org.sonar.php.checks;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CommentContainsPatternChecker;
+import org.sonar.php.checks.utils.AbstractCommentContainsPatternCheck;
 import org.sonar.squidbridge.annotations.NoSqale;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import com.sonar.sslr.api.AstAndTokenVisitor;
-import com.sonar.sslr.api.Token;
 
 @Rule(
-  key = "S1134",
+  key = FixmeTagPresenceCheck.KEY,
   name = "\"FIXME\" tags should be handled",
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @NoSqale
-public class FixmeTagPresenceCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
+public class FixmeTagPresenceCheck extends AbstractCommentContainsPatternCheck {
 
-  private static final String PATTERN = "FIXME";
+  public static final String KEY = "S1134";
   private static final String MESSAGE = "Take the required action to fix the issue indicated by this \"FIXME\" comment.";
-
-  private final CommentContainsPatternChecker checker = new CommentContainsPatternChecker(this, PATTERN, MESSAGE);
+  private static final String PATTERN = "FIXME";
 
   @Override
-  public void visitToken(Token token) {
-    checker.visitToken(token);
+  protected String pattern() {
+    return PATTERN;
   }
 
+  @Override
+  protected String key() {
+    return KEY;
+  }
+
+  @Override
+  protected String message() {
+    return MESSAGE;
+  }
 }
