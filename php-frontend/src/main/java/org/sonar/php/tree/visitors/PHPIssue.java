@@ -33,6 +33,7 @@ public class PHPIssue implements Issue {
   private final String ruleKey;
   private final String message;
   private int line;
+  @Nullable
   private Double cost;
 
 
