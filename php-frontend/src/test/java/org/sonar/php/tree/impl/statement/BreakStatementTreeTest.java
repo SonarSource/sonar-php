@@ -34,15 +34,19 @@ public class BreakStatementTreeTest extends PHPTreeModelTest {
     BreakStatementTree tree = parse("break ;", PHPLexicalGrammar.BREAK_STATEMENT);
 
     assertThat(tree.is(Kind.BREAK_STATEMENT)).isTrue();
+    assertThat(tree.breakToken().text()).isEqualTo("break");
     assertThat(tree.argument()).isNull();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
   @Test
   public void not_empty() throws Exception {
     BreakStatementTree tree = parse("break $a;", PHPLexicalGrammar.BREAK_STATEMENT);
 
+    assertThat(tree.breakToken().text()).isEqualTo("break");
     assertThat(tree.argument()).isNotNull();
     assertThat(tree.argument().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 }

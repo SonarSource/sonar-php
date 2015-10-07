@@ -17,23 +17,35 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.tree.impl.expression;
+package org.sonar.php.tree.impl;
 
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class ExpandableStringCharactersTreeTest extends PHPTreeModelTest {
+public class ScriptTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
-    ExpandableStringCharactersTreeImpl tree = parse("characters with spaces", Kind.EXPANDABLE_STRING_CHARACTERS);
+  public void script_without_statement() throws Exception {
+    ScriptTree tree = parse("<?php", PHPLexicalGrammar.SCRIPT);
 
-    assertThat(tree.is(Kind.EXPANDABLE_STRING_CHARACTERS)).isTrue();
-    assertThat(tree.value()).isEqualTo("characters with spaces");
-    assertThat(tree.token().text()).isEqualTo(tree.value());
+    assertThat(tree.is(Kind.SCRIPT)).isTrue();
+    assertThat(tree.fileOpeningTagToken().text()).isEqualTo("<?php");
+    assertThat(tree.statements()).hasSize(0);
+  }
+
+  @Test
+  public void script_with_statement() throws Exception {
+    ScriptTree tree = parse("<?php $a;", PHPLexicalGrammar.SCRIPT);
+
+    assertThat(tree.is(Kind.SCRIPT)).isTrue();
+    assertThat(tree.fileOpeningTagToken().text()).isEqualTo("<?php");
+    assertThat(tree.statements()).hasSize(1);
+    assertThat(expressionToString(tree.statements().get(0))).isEqualTo("$a;");
   }
 
 }

@@ -19,8 +19,8 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import java.util.Iterator;
-
+import com.google.common.collect.Iterators;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
 
 public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
 
@@ -73,7 +73,7 @@ public class MemberAccessTreeImpl extends PHPTree implements MemberAccessTree {
 
   @Override
   public boolean isStatic() {
-    return false;
+    return PHPPunctuator.DOUBLECOLON.getValue().equals(accessToken.text());
   }
 
   @Override
