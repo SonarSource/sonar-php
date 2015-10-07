@@ -19,22 +19,30 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class CommentedOutCodeCheckTest extends CheckTest {
+import java.util.List;
+
+public class CommentedOutCodeCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("CommentedOutCodeCheck.php"), new CommentedOutCodeCheck());
+    List<Issue> issues = ImmutableList.of(
+      newIssue(9),
+      newIssue(16),
+      newIssue(25)
+    );
 
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(9)
-      .next().atLine(16).withMessage("Remove this commented out code.")
-      .next().atLine(25)
-      .noMore();
+    PHPCheckTest.check(new CommentedOutCodeCheck(), TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
+  }
+
+  private Issue newIssue(int line) {
+    String message = "Remove this commented out code.";
+    return new PHPIssue("testKey", message).line(line);
   }
 }

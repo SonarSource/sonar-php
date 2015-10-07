@@ -20,42 +20,45 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import com.sonar.sslr.api.AstAndTokenVisitor;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.api.Trivia;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.squidbridge.recognizer.CodeRecognizer;
 import org.sonar.squidbridge.recognizer.ContainsDetector;
 import org.sonar.squidbridge.recognizer.Detector;
 import org.sonar.squidbridge.recognizer.EndWithDetector;
 import org.sonar.squidbridge.recognizer.KeywordsDetector;
 import org.sonar.squidbridge.recognizer.LanguageFootprint;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.Set;
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S125",
+  key = CommentedOutCodeCheck.KEY,
   name = "Sections of code should not be \"commented out\"",
   priority = Priority.MAJOR,
   tags = {Tags.UNUSED, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("5min")
-public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
+public class CommentedOutCodeCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S125";
+  private static final String MESSAGE = "Remove this commented out code.";
 
   private static final double THRESHOLD = 0.9;
 
   private final CodeRecognizer codeRecognizer = new CodeRecognizer(THRESHOLD, new PHPRecognizer());
   private final Pattern regexpToDivideStringByLine = Pattern.compile("(\r?\n)|(\r)");
+
+  private SyntaxTrivia previousTrivia;
 
   private static class PHPRecognizer implements LanguageFootprint {
 
@@ -71,53 +74,63 @@ public class CommentedOutCodeCheck extends SquidCheck<LexerlessGrammar> implemen
   }
 
   @Override
-  public void visitToken(Token token) {
-    Trivia previousTrivia = null;
-
-    for (Trivia trivia : token.getTrivia()) {
-      checkTrivia(previousTrivia, trivia);
-      previousTrivia = trivia;
-    }
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    previousTrivia = null;
+    super.visitCompilationUnit(tree);
   }
 
-  private void checkTrivia(Trivia previousTrivia, Trivia trivia) {
+  @Override
+  public void visitTrivia(SyntaxTrivia trivia) {
+    super.visitTrivia(trivia);
+
     if (isInlineComment(trivia)) {
 
-      if (isCommentedCode(getContext().getCommentAnalyser().getContents(trivia.getToken().getValue())) && !previousLineIsCommentedCode(trivia, previousTrivia)) {
-        reportIssue(trivia.getToken().getLine());
+      if (isCommentedCode(getContents(trivia.text())) && !previousLineIsCommentedCode(trivia, previousTrivia)) {
+        reportIssue(trivia.line());
       }
 
     } else if (!isPHPDoc(trivia)) {
-      String[] lines = regexpToDivideStringByLine.split(getContext().getCommentAnalyser().getContents(trivia.getToken().getOriginalValue()));
+      String[] lines = regexpToDivideStringByLine.split(getContents(trivia.text()));
 
       for (int lineOffset = 0; lineOffset < lines.length; lineOffset++) {
         if (isCommentedCode(lines[lineOffset])) {
-          reportIssue(trivia.getToken().getLine() + lineOffset);
+          reportIssue(trivia.line() + lineOffset);
           break;
         }
       }
     }
+    previousTrivia = trivia;
   }
 
   private void reportIssue(int line) {
-    getContext().createLineViolation(this, "Remove this commented out code.", line);
+    context().newIssue(KEY, MESSAGE).line(line);
   }
 
-  private boolean previousLineIsCommentedCode(Trivia trivia, Trivia previousTrivia) {
-    return previousTrivia != null && (trivia.getToken().getLine() == previousTrivia.getToken().getLine() + 1)
-      && isCommentedCode(previousTrivia.getToken().getValue());
+  private boolean previousLineIsCommentedCode(SyntaxTrivia trivia, SyntaxTrivia previousTrivia) {
+    return previousTrivia != null && (trivia.line() == previousTrivia.line() + 1)
+      && isCommentedCode(previousTrivia.text());
   }
 
   private boolean isCommentedCode(String line) {
     return codeRecognizer.isLineOfCode(line);
   }
 
-  private boolean isInlineComment(Trivia trivia) {
-    return trivia.getToken().getValue().startsWith("//");
+  private boolean isInlineComment(SyntaxTrivia trivia) {
+    return trivia.text().startsWith("//");
   }
 
-  private boolean isPHPDoc(Trivia trivia) {
-    return trivia.getToken().getValue().startsWith("/**");
+  private boolean isPHPDoc(SyntaxTrivia trivia) {
+    return trivia.text().startsWith("/**");
+  }
+
+  private static String getContents(String comment) {
+    if (comment.startsWith("//")) {
+      return comment.substring(2);
+    } else if (comment.startsWith("#")) {
+      return comment.substring(1);
+    } else {
+      return comment.substring(2, comment.length() - 2);
+    }
   }
 
 }
