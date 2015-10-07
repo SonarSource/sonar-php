@@ -36,10 +36,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base helper class for checks unit test.
+ * <p/>
+ * Usage example:
+ * <p/>
+ * Check unit test class
+ * <pre>
+ *   public class MyCustomCheck extends PHPCheckTest {
+ *
+ *     {@literal@}Test
+ *     public void test() {
+ *       check(new MyCustomCheck(), new File("code_sample.php"));
+ *     }
+ *   }
+ * </pre>
+ *
+ * Code sample file: code_sample.php
+ * When an issue is expected on a line, it should contains a comment as the following
+ * <pre>
+ *  {@literal<}?php
+ *
+ *  $a = 1;  // NOK {{expected issue message}}
+ *  $a = 2;  // NOK
+ * </pre>
+ */
 public class PHPCheckTest {
 
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
 
+  /**
+   * Verifies that the given check raises issue as expected.
+   *
+   * @param check the tested check
+   * @param file File containing the php code sample annotated with comment for expected issues.
+   */
   public static void check(PHPCheck check, File file) {
     CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
     check.init();
@@ -48,6 +79,13 @@ public class PHPCheckTest {
     compare(actualIssues, expectedIssues);
   }
 
+  /**
+   * Verifies that the given check raises issue as expected.
+   *
+   * @param check the tested check
+   * @param file File containing the php code sample
+   * @param expectedIssues expected issues that should be raise. Overrides the comments in the code sample.
+   */
   public static void check(PHPCheck check, File file, List<Issue> expectedIssues) {
     CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
     check.init();
