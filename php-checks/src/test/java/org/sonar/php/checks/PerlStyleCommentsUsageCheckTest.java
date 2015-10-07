@@ -19,21 +19,24 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class PerlStyleCommentsUsageCheckTest extends CheckTest {
+import java.io.File;
+
+public class PerlStyleCommentsUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php"), new PerlStyleCommentsUsageCheck());
+    File file = TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php");
+    String message = "Use \"//\" instead of \"#\" to start this comment";
+    ImmutableList<Issue> issues = ImmutableList.<Issue>of(new PHPIssue(PerlStyleCommentsUsageCheck.KEY, message).line(3));
 
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Use \"//\" instead of \"#\" to start this comment")
-      .noMore();
+    PHPCheckTest.check(new PerlStyleCommentsUsageCheck(), file, issues);
   }
 }
 

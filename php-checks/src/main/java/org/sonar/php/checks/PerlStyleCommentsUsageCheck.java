@@ -19,34 +19,32 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstAndTokenVisitor;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.api.Trivia;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2046",
+  key = PerlStyleCommentsUsageCheck.KEY,
   name = "Perl-style comments should not be used",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class PerlStyleCommentsUsageCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
+public class PerlStyleCommentsUsageCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2046";
+  private static final String MESSAGE = "Use \"//\" instead of \"#\" to start this comment";
 
   @Override
-  public void visitToken(Token token) {
-    for (Trivia trivia : token.getTrivia()) {
-      Token comment = trivia.getToken();
+  public void visitTrivia(SyntaxTrivia trivia) {
+    super.visitTrivia(trivia);
 
-      if (comment.getValue().startsWith("#")) {
-        getContext().createLineViolation(this, "Use \"//\" instead of \"#\" to start this comment", comment.getLine());
-      }
+    if (trivia.text().startsWith("#")) {
+      context().newIssue(KEY, MESSAGE).tree(trivia);
     }
   }
 
