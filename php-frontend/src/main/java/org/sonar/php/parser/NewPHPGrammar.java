@@ -1038,7 +1038,7 @@ public class NewPHPGrammar {
   }
 
   public ExpressionTree CONDITIONAL_EXPR() {
-    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.CONDITIONAL_EXPR).is(
+    return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_EXPRESSION).is(
       f.completeConditionalExpr(
         CONDITIONAL_OR_EXPR(),
         b.optional(
