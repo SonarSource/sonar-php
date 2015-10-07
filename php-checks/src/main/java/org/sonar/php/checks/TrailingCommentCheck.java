@@ -19,31 +19,32 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstAndTokenVisitor;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.api.Trivia;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S139",
+  key = TrailingCommentCheck.KEY,
   name = "Comments should not be located at the end of lines of code",
   priority = Priority.INFO,
   tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.INFO)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
-public class TrailingCommentCheck extends SquidCheck<LexerlessGrammar> implements AstAndTokenVisitor {
+public class TrailingCommentCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S139";
+  private static final String MESSAGE = "Move this trailing comment on the previous empty line.";
 
   public static final String DEFAULT_LEGAL_COMMENT_PATTERN = "^(//|#)\\s*+[^\\s]++$";
 
@@ -56,21 +57,27 @@ public class TrailingCommentCheck extends SquidCheck<LexerlessGrammar> implement
   private int previousTokenLine;
 
   @Override
-  public void visitFile(AstNode astNode) {
-    previousTokenLine = -1;
+  public void init() {
+    super.init();
     pattern = Pattern.compile(legalCommentPattern);
   }
 
   @Override
-  public void visitToken(Token token) {
-    for (Trivia trivia : token.getTrivia()) {
-      if (trivia.isComment() && trivia.getToken().getLine() == previousTokenLine) {
-        String comment = trivia.getToken().getValue();
+  public void visitScript(ScriptTree tree) {
+    previousTokenLine = -1;
+    super.visitScript(tree);
+  }
+
+  @Override
+  public void visitToken(SyntaxToken token) {
+    for (SyntaxTrivia trivia : token.trivias()) {
+      if (trivia.line() == previousTokenLine) {
+        String comment = trivia.text();
         if ((comment.startsWith("//") || comment.startsWith("#")) && !pattern.matcher(comment).matches()) {
-          getContext().createLineViolation(this, "Move this trailing comment on the previous empty line.", previousTokenLine);
+          context().newIssue(KEY, MESSAGE).line(previousTokenLine);
         }
       }
     }
-    previousTokenLine = token.getLine();
+    previousTokenLine = token.line();
   }
 }

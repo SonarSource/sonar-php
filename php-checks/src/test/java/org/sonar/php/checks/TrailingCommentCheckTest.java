@@ -19,35 +19,44 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TrailingCommentCheckTest extends CheckTest {
+import java.util.List;
+
+public class TrailingCommentCheckTest {
 
   private TrailingCommentCheck check = new TrailingCommentCheck();
+  private String fileName = "TrailingCommentCheck.php";
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TrailingCommentCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Move this trailing comment on the previous empty line.")
-      .next().atLine(5)
-      .noMore();
+    List<Issue> issues = ImmutableList.of(
+      newIssue(4),
+      newIssue(5)
+    );
+
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 
   @Test
   public void custom() throws Exception {
     check.legalCommentPattern = "";
+    List<Issue> issues = ImmutableList.of(
+      newIssue(4),
+      newIssue(5),
+      newIssue(11),
+      newIssue(12)
+    );
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
+  }
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TrailingCommentCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4)
-      .next().atLine(5)
-      .next().atLine(11)
-      .next().atLine(12)
-      .noMore();
+  private Issue newIssue(int line) {
+    String message = "Move this trailing comment on the previous empty line.";
+    return new PHPIssue("testKey", message).line(line);
   }
 }
