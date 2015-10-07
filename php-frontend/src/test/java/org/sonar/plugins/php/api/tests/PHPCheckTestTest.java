@@ -26,10 +26,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.php.tree.visitors.PHPIssue;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.Issue;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import java.io.File;
 
@@ -142,18 +140,6 @@ public class PHPCheckTestTest extends PHPCheckTest {
     }
 
     return issueBuilder.build();
-  }
-
-  private static class DummyCheck extends PHPVisitorCheck {
-
-    @Override
-    public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-      if (tree.is(Tree.Kind.ASSIGNMENT)) {
-        context().newIssue("test", "message").tree(tree);
-      }
-
-      super.visitAssignmentExpression(tree);
-    }
   }
 
   private File createFile(String content) throws Exception {
