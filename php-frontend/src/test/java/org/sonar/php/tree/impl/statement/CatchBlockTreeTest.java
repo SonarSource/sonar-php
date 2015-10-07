@@ -34,8 +34,12 @@ public class CatchBlockTreeTest extends PHPTreeModelTest {
     CatchBlockTree tree = parse("catch (ExceptionType $e) {}", PHPLexicalGrammar.CATCH_BLOCK);
 
     assertThat(tree.is(Kind.CATCH_BLOCK)).isTrue();
+    assertThat(tree.catchToken().text()).isEqualTo("catch");
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.exceptionType().fullName()).isEqualTo("ExceptionType");
     assertThat(tree.variable().variableExpression().text()).isEqualTo("$e");
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
+    assertThat(expressionToString(tree.block())).isEqualTo("{}");
   }
 
 }

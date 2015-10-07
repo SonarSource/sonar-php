@@ -34,6 +34,8 @@ public class SwitchStatementTreeTest extends PHPTreeModelTest {
     SwitchStatementTree tree = parse("switch ($a) { case $a : break; default : break; }", PHPLexicalGrammar.SWITCH_STATEMENT);
 
     assertThat(tree.is(Kind.SWITCH_STATEMENT)).isTrue();
+    assertThat(tree.switchToken().text()).isEqualTo("switch");
+    assertThat(expressionToString(tree.expression())).isEqualTo("($a)");
     assertThat(tree.cases()).hasSize(2);
 
     assertThat(tree.colonToken()).isNull();
@@ -43,14 +45,16 @@ public class SwitchStatementTreeTest extends PHPTreeModelTest {
 
   @Test
   public void alternative_syntax() throws Exception {
-    SwitchStatementTree tree = parse("switch ($a) : default : break; endswitch ;", PHPLexicalGrammar.SWITCH_STATEMENT);
+    SwitchStatementTree tree = parse("switch ($a) : default : break; endswitch;", PHPLexicalGrammar.SWITCH_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_SWITCH_STATEMENT)).isTrue();
+    assertThat(tree.switchToken().text()).isEqualTo("switch");
+    assertThat(expressionToString(tree.expression())).isEqualTo("($a)");
     assertThat(tree.cases()).hasSize(1);
 
-    assertThat(tree.colonToken()).isNotNull();
-    assertThat(tree.endswitchToken()).isNotNull();
-    assertThat(tree.eosToken()).isNotNull();
+    assertThat(tree.colonToken().text()).isEqualTo(":");
+    assertThat(tree.endswitchToken().text()).isEqualTo("endswitch");
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 

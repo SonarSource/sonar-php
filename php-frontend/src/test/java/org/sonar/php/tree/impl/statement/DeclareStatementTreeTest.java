@@ -35,7 +35,9 @@ public class DeclareStatementTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.DECLARE_STATEMENT)).isTrue();
     assertThat(tree.declareToken().text()).isEqualTo("declare");
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.directives()).hasSize(1);
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endDeclareToken()).isNull();
     assertThat(tree.eosToken()).isNotNull();
@@ -47,7 +49,10 @@ public class DeclareStatementTreeTest extends PHPTreeModelTest {
     DeclareStatementTree tree = parse("declare (a = $a, b = $b) {}", PHPLexicalGrammar.DECLARE_STATEMENT);
 
     assertThat(tree.is(Kind.DECLARE_STATEMENT)).isTrue();
+    assertThat(tree.declareToken().text()).isEqualTo("declare");
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.directives()).hasSize(2);
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endDeclareToken()).isNull();
     assertThat(tree.eosToken()).isNull();

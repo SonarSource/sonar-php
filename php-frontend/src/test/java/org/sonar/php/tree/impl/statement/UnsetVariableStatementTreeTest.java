@@ -35,7 +35,9 @@ public class UnsetVariableStatementTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.UNSET_VARIABLE_STATEMENT)).isTrue();
     assertThat(tree.unsetToken().text()).isEqualTo("unset");
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.variables()).hasSize(2);
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 

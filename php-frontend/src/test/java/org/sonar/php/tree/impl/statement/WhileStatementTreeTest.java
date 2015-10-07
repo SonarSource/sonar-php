@@ -34,8 +34,11 @@ public class WhileStatementTreeTest extends PHPTreeModelTest {
     WhileStatementTree tree = parse("while ($a) {}", PHPLexicalGrammar.WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.WHILE_STATEMENT)).isTrue();
-    assertThat(tree.statements().get(0).is(Kind.BLOCK)).isTrue();
+    assertThat(tree.whileToken().text()).isEqualTo("while");
     assertThat(tree.condition().is(Kind.PARENTHESISED_EXPRESSION)).isTrue();
+    assertThat(tree.statements()).hasSize(1);
+    assertThat(tree.statements().get(0).is(Kind.BLOCK)).isTrue();
+
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endWhileToken()).isNull();
     assertThat(tree.eosToken()).isNull();
@@ -46,10 +49,11 @@ public class WhileStatementTreeTest extends PHPTreeModelTest {
     WhileStatementTree tree = parse("while ($a) : endwhile ;", PHPLexicalGrammar.WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_WHILE_STATEMENT)).isTrue();
+    assertThat(tree.whileToken().text()).isEqualTo("while");
     assertThat(tree.statements()).hasSize(0);
-    assertThat(tree.colonToken()).isNotNull();
-    assertThat(tree.endWhileToken()).isNotNull();
-    assertThat(tree.eosToken()).isNotNull();
+    assertThat(tree.colonToken().text()).isEqualTo(":");
+    assertThat(tree.endWhileToken().text()).isEqualTo("endwhile");
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 }

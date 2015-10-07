@@ -35,10 +35,10 @@ public class StaticStatementTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.STATIC_STATEMENT)).isTrue();
     assertThat(tree.staticToken().text()).isEqualTo("static");
-    assertThat(tree.eosToken().text()).isEqualTo(";");
     assertThat(tree.variables()).hasSize(2);
     assertThat(tree.variables().get(0).equalToken()).isNull();
     assertThat(tree.variables().get(1).equalToken()).isNotNull();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 }

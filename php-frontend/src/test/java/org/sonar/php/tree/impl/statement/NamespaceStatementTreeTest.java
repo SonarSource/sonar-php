@@ -35,7 +35,8 @@ public class NamespaceStatementTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.NAMESPACE_STATEMENT)).isTrue();
     assertThat(tree.namespaceToken().text()).isEqualTo("namespace");
-    assertThat(tree.namespaceName()).isNotNull();
+    assertThat(expressionToString(tree.namespaceName())).isEqualTo("NS");
+    assertThat(tree.eosToken().text()).isEqualTo(";");
 
     assertThat(tree.statements()).isEmpty();
     assertThat(tree.openCurlyBrace()).isNull();

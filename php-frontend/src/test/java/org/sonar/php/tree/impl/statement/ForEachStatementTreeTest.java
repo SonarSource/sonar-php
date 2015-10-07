@@ -34,7 +34,9 @@ public class ForEachStatementTreeTest extends PHPTreeModelTest {
     ForEachStatementTree tree = parse("foreach ($a as $b) {}", PHPLexicalGrammar.FOREACH_STATEMENT);
 
     assertThat(tree.is(Kind.FOREACH_STATEMENT)).isTrue();
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.asToken().text()).isEqualTo("as");
     assertThat(tree.value().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(tree.key()).isNull();
     assertThat(tree.doubleArrowToken()).isNull();
@@ -43,6 +45,7 @@ public class ForEachStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.eosToken()).isNull();
     assertThat(tree.statements()).hasSize(1);
     assertThat(tree.statements().get(0).is(Kind.BLOCK)).isTrue();
+    assertThat(tree.eosToken()).isNull();
   }
 
   @Test
@@ -50,14 +53,18 @@ public class ForEachStatementTreeTest extends PHPTreeModelTest {
     ForEachStatementTree tree = parse("foreach ($a as $b) : {} {} endforeach ;", PHPLexicalGrammar.FOREACH_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_FOREACH_STATEMENT)).isTrue();
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.asToken().text()).isEqualTo("as");
     assertThat(tree.value().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(tree.key()).isNull();
     assertThat(tree.doubleArrowToken()).isNull();
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(tree.colonToken().text()).isEqualTo(":");
     assertThat(tree.endforeachToken().text()).isEqualTo("endforeach");
     assertThat(tree.eosToken().text()).isEqualTo(";");
     assertThat(tree.statements()).hasSize(2);
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
   @Test

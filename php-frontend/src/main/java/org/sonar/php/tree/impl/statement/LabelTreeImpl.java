@@ -35,11 +35,11 @@ public class LabelTreeImpl extends PHPTree implements LabelTree {
   private static final Kind KIND = Kind.LABEL;
 
   private final IdentifierTree label;
-  private final InternalSyntaxToken colon;
+  private final InternalSyntaxToken colonToken;
 
-  public LabelTreeImpl(IdentifierTree label, InternalSyntaxToken colon) {
+  public LabelTreeImpl(IdentifierTree label, InternalSyntaxToken colonToken) {
     this.label = label;
-    this.colon = colon;
+    this.colonToken = colonToken;
   }
 
   @Override
@@ -48,8 +48,8 @@ public class LabelTreeImpl extends PHPTree implements LabelTree {
   }
 
   @Override
-  public SyntaxToken colon() {
-    return colon;
+  public SyntaxToken colonToken() {
+    return colonToken;
   }
 
   @Override
@@ -59,7 +59,7 @@ public class LabelTreeImpl extends PHPTree implements LabelTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(label, colon);
+    return Iterators.forArray(label, colonToken);
   }
 
   @Override

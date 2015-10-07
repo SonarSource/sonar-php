@@ -35,6 +35,7 @@ public class LabelTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.LABEL)).isTrue();
     assertThat(tree.label().text()).isEqualTo("a");
+    assertThat(tree.colonToken().text()).isEqualTo(":");
   }
 
 }

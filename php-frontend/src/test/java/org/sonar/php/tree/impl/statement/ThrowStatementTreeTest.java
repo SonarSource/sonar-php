@@ -35,7 +35,8 @@ public class ThrowStatementTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.THROW_STATEMENT)).isTrue();
     assertThat(tree.throwToken().text()).isEqualTo("throw");
-    assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.expression())).isEqualTo("$a");
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 }

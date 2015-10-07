@@ -30,22 +30,27 @@ import static org.fest.assertions.Assertions.assertThat;
 public class TryStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void testTwoCatchBlocks() throws Exception {
+  public void test_2_catch_blocks() throws Exception {
     TryStatementTree tree = parse("try {} catch(Exception1 $e1) {} catch(Exception2 $e2) {}", PHPLexicalGrammar.TRY_STATEMENT);
 
     assertThat(tree.is(Kind.TRY_STATEMENT)).isTrue();
+    assertThat(tree.tryToken().text()).isEqualTo("try");
+    assertThat(expressionToString(tree.block())).isEqualTo("{}");
     assertThat(tree.catchBlocks()).hasSize(2);
     assertThat(tree.finallyToken()).isNull();
+    assertThat(tree.finallyBlock()).isNull();
   }
 
   @Test
-  public void testFinallyBlock() throws Exception {
+  public void test_finally_block() throws Exception {
     TryStatementTree tree = parse("try {} finally {}", PHPLexicalGrammar.TRY_STATEMENT);
 
     assertThat(tree.is(Kind.TRY_STATEMENT)).isTrue();
+    assertThat(tree.tryToken().text()).isEqualTo("try");
+    assertThat(expressionToString(tree.block())).isEqualTo("{}");
     assertThat(tree.catchBlocks()).hasSize(0);
-    assertThat(tree.finallyToken()).isNotNull();
-    assertThat(tree.finallyBlock()).isNotNull();
+    assertThat(tree.finallyToken().text()).isEqualTo("finally");
+    assertThat(expressionToString(tree.finallyBlock())).isEqualTo("{}");
   }
 
 }

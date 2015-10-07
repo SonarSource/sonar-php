@@ -34,15 +34,19 @@ public class ContinueStatementTreeTest extends PHPTreeModelTest {
     ContinueStatementTree tree = parse("continue ;", PHPLexicalGrammar.CONTINUE_STATEMENT);
 
     assertThat(tree.is(Kind.CONTINUE_STATEMENT)).isTrue();
+    assertThat(tree.continueToken().text()).isEqualTo("continue");
     assertThat(tree.argument()).isNull();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
   @Test
   public void not_empty() throws Exception {
     ContinueStatementTree tree = parse("continue $a;", PHPLexicalGrammar.CONTINUE_STATEMENT);
 
+    assertThat(tree.continueToken().text()).isEqualTo("continue");
     assertThat(tree.argument()).isNotNull();
     assertThat(tree.argument().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 }

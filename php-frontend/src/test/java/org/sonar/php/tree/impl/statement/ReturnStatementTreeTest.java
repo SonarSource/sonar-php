@@ -34,15 +34,19 @@ public class ReturnStatementTreeTest extends PHPTreeModelTest {
     ReturnStatementTree tree = parse("return ;", PHPLexicalGrammar.RETURN_STATEMENT);
 
     assertThat(tree.is(Kind.RETURN_STATEMENT)).isTrue();
+    assertThat(tree.returnToken().text()).isEqualTo("return");
     assertThat(tree.expression()).isNull();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
   @Test
   public void not_empty() throws Exception {
     ReturnStatementTree tree = parse("return $a;", PHPLexicalGrammar.RETURN_STATEMENT);
 
+    assertThat(tree.returnToken().text()).isEqualTo("return");
     assertThat(tree.expression()).isNotNull();
     assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 }

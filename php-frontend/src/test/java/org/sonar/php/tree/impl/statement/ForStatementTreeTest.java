@@ -34,14 +34,18 @@ public class ForStatementTreeTest extends PHPTreeModelTest {
     ForStatementTree tree = parse("for ($a; ; $c, $b) {}", PHPLexicalGrammar.FOR_STATEMENT);
 
     assertThat(tree.is(Kind.FOR_STATEMENT)).isTrue();
+    assertThat(tree.forToken().text()).isEqualTo("for");
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.init()).hasSize(1);
     assertThat(tree.condition()).hasSize(0);
     assertThat(tree.update()).hasSize(2);
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(tree.colonToken()).isNull();
     assertThat(tree.endforToken()).isNull();
     assertThat(tree.eosToken()).isNull();
     assertThat(tree.statements()).hasSize(1);
     assertThat(tree.statements().get(0).is(Kind.BLOCK)).isTrue();
+    assertThat(tree.eosToken()).isNull();
   }
 
   @Test
@@ -49,12 +53,15 @@ public class ForStatementTreeTest extends PHPTreeModelTest {
     ForStatementTree tree = parse("for (; ;) : endfor ;", PHPLexicalGrammar.FOR_STATEMENT);
 
     assertThat(tree.is(Kind.ALTERNATIVE_FOR_STATEMENT)).isTrue();
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.init()).hasSize(0);
     assertThat(tree.condition()).hasSize(0);
     assertThat(tree.update()).hasSize(0);
     assertThat(tree.colonToken()).isNotNull();
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(tree.endforToken()).isNotNull();
     assertThat(tree.eosToken()).isNotNull();
     assertThat(tree.statements()).hasSize(0);
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 }

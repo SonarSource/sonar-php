@@ -34,9 +34,11 @@ public class DoWhileStatementTreeTest extends PHPTreeModelTest {
     DoWhileStatementTree tree = parse("do {} while ($a) ;", PHPLexicalGrammar.DO_WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.DO_WHILE_STATEMENT)).isTrue();
-    assertThat(tree.eosToken().text()).isEqualTo(";");
+    assertThat(tree.doToken().text()).isEqualTo("do");
     assertThat(tree.condition().is(Kind.PARENTHESISED_EXPRESSION)).isTrue();
     assertThat(tree.statement().is(Kind.BLOCK)).isTrue();
+    assertThat(tree.whileToken().text()).isEqualTo("while");
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
 
 }

@@ -35,6 +35,6 @@ public interface LabelTree extends StatementTree {
 
   IdentifierTree label();
 
-  SyntaxToken colon();
+  SyntaxToken colonToken();
 
 }

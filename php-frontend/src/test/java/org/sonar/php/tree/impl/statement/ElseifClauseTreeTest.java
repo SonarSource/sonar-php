@@ -23,31 +23,30 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
-import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class SwitchClauseTreeTest extends PHPTreeModelTest {
+public class ElseifClauseTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void case_clause() throws Exception {
-    CaseClauseTree tree = parse("case $a: $b;", PHPLexicalGrammar.SWITCH_CASE_CLAUSE);
+  public void standard_syntax() throws Exception {
+    ElseifClauseTree tree = parse("elseif ($condition) {}", PHPLexicalGrammar.ELSEIF_CLAUSE);
 
-    assertThat(tree.is(Kind.CASE_CLAUSE)).isTrue();
-    assertThat(tree.caseToken().text()).isEqualTo("case");
-    assertThat(tree.expression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
-    assertThat(tree.caseSeparatorToken().text()).isEqualTo(":");
+    assertThat(tree.is(Kind.ELSEIF_CLAUSE)).isTrue();
+    assertThat(tree.elseifToken().text()).isEqualTo("elseif");
+    assertThat(expressionToString(tree.condition())).isEqualTo("($condition)");
     assertThat(tree.statements()).hasSize(1);
   }
 
   @Test
-  public void default_clause() throws Exception {
-    DefaultClauseTree tree = parse("default: $b; break;", PHPLexicalGrammar.SWITCH_CASE_CLAUSE);
+  public void alternative_syntax() throws Exception {
+    ElseifClauseTree tree = parse("elseif ($condition) : $stmt1; $stmt2; ", PHPLexicalGrammar.ALTERNATIVE_ELSEIF_CLAUSE);
 
-    assertThat(tree.is(Kind.DEFAULT_CLAUSE)).isTrue();
-    assertThat(tree.caseToken().text()).isEqualTo("default");
-    assertThat(tree.caseSeparatorToken().text()).isEqualTo(":");
+    assertThat(tree.is(Kind.ALTERNATIVE_ELSEIF_CLAUSE)).isTrue();
+    assertThat(tree.elseifToken().text()).isEqualTo("elseif");
+    assertThat(expressionToString(tree.condition())).isEqualTo("($condition)");
+    assertThat(tree.colonToken().text()).isEqualTo(":");
     assertThat(tree.statements()).hasSize(2);
   }
 
