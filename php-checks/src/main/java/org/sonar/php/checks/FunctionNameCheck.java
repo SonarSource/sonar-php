@@ -20,28 +20,33 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S100",
+  key = FunctionNameCheck.KEY,
   name = "Function names should comply with a naming convention",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")
-public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
+public class FunctionNameCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S100";
+
+  private static final String MESSAGE = "Rename function \"%s\" to match the regular expression %s.";
 
   private static final ImmutableList<String> MAGIC_METHODS = ImmutableList.of(
     "__construct", "__destruct", "__call", "__callStatic", "__callStatic", "__get",
@@ -55,25 +60,30 @@ public class FunctionNameCheck extends SquidCheck<LexerlessGrammar> {
     defaultValue = DEFAULT)
   String format = DEFAULT;
 
-
   @Override
   public void init() {
     pattern = Pattern.compile(format);
-    subscribeTo(
-      PHPGrammar.METHOD_DECLARATION,
-      PHPGrammar.FUNCTION_DECLARATION);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    String functionName = astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    if (!FunctionUtils.isOverriding(tree)) {
+      check(tree, tree.name());
+    }
+    super.visitMethodDeclaration(tree);
+  }
 
-    if (!pattern.matcher(functionName).matches() && !isExcluded(astNode, functionName)) {
-      getContext().createLineViolation(this, "Rename function \"{0}\" to match the regular expression {1}.", astNode, functionName, format);
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    check(tree, tree.name());
+    super.visitFunctionDeclaration(tree);
+  }
+
+  private void check(FunctionTree functionDeclaration, IdentifierTree name) {
+    String functionName = name.text();
+    if (!pattern.matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
+      context().newIssue(KEY, String.format(MESSAGE, functionName, format)).tree(functionDeclaration);
     }
   }
 
-  private static boolean isExcluded(AstNode funcDec, String functionName) {
-    return MAGIC_METHODS.contains(functionName) || FunctionUtils.isOverriding(funcDec);
-  }
 }
