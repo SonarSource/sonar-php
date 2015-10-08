@@ -20,44 +20,33 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class OpeningPHPTagCheckTest extends CheckTest {
+public class OpeningPHPTagCheckTest {
 
   private OpeningPHPTagCheck check = new OpeningPHPTagCheck();
   private final String TEST_DIR = "OpeningPHPTagCheck/";
 
   @Test
   public void ok_long_tag() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok_long_tag.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_long_tag.php"));
   }
 
   @Test
   public void ok_short_echo_tag() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok_short_echo_tag.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_short_echo_tag.php"));
   }
 
   @Test
   // SONARPHP-436
   public void ok_just_html() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok_just_html.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_just_html.php"));
   }
 
   @Test
   public void ko() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Change this opening tag to either \"<?php\" or \"<?=\".")
-      .noMore();
-
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"));
   }
+
 }

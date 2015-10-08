@@ -19,38 +19,37 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPTokenType;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1757",
+  key = OpeningPHPTagCheck.KEY,
   name = "\"<?php\" and \"<?=\" tags should be used",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR1})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class OpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
+public class OpeningPHPTagCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1757";
+  private static final String MESSAGE = "Change this opening tag to either \"<?php\" or \"<?=\".";
 
   private static final String LONG_TAG = "<?php";
   private static final String SHORT_ECHO_TAG = "<?=";
   private static final String SHORT_TAG = "<?";
 
-  @Override
-  public void init() {
-    subscribeTo(PHPTokenType.FILE_OPENING_TAG);
-  }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (isNotAuthorisedTag(astNode)) {
-      getContext().createLineViolation(this, "Change this opening tag to either \"<?php\" or \"<?=\".", getLineToReport(astNode));
+  public void visitScript(ScriptTree tree) {
+    String openingTagWithContentBefore = tree.fileOpeningTagToken().text();
+
+    if (!isAuthorisedTag(openingTagWithContentBefore)) {
+      context().newIssue(KEY, MESSAGE).line(getLineToReport(openingTagWithContentBefore));
     }
   }
 
@@ -60,19 +59,14 @@ public class OpeningPHPTagCheck extends SquidCheck<LexerlessGrammar> {
    * The node contains everything before the first opening include HTML if present
    * this allows to ensure reporting the issue on the correct line.
    */
-  private int getLineToReport(AstNode node) {
-    return node.getTokenValue().split("(?:\r)?\n|\r").length;
+  private int getLineToReport(String openingTag) {
+    return openingTag.split("(?:\r)?\n|\r").length;
   }
 
-  private boolean isNotAuthorisedTag(AstNode node) {
-    int offset = 1 + LONG_TAG.length();
-    String openingTag = node.getTokenOriginalValue();
-
-    if (openingTag.length() > offset) {
-      openingTag = openingTag.substring(offset);
-    }
-
-    return !openingTag.contains(LONG_TAG) && !openingTag.contains(SHORT_ECHO_TAG) && openingTag.contains(SHORT_TAG);
+  private boolean isAuthorisedTag(String openingTagWithContentBefore) {
+    return openingTagWithContentBefore.endsWith(LONG_TAG)
+      || openingTagWithContentBefore.endsWith(SHORT_ECHO_TAG)
+      || !openingTagWithContentBefore.endsWith(SHORT_TAG);
   }
 
 }
