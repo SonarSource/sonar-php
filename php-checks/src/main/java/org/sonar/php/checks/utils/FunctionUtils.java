@@ -28,10 +28,12 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import java.util.Arrays;
@@ -94,6 +96,21 @@ public class FunctionUtils {
     Token functionToken = methodDec.getToken();
     for (Trivia comment : functionToken.getTrivia()) {
       if (StringUtils.containsIgnoreCase(comment.getToken().getValue(), "@inheritdoc")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Return whether the method is overriding a parent method or not.
+   *
+   * @param methodDec METHOD_DECLARATION
+   * @return true if method has tag "@inheritdoc" in it's doc comment.
+   */
+  public static boolean isOverriding(MethodDeclarationTree declaration) {
+    for (SyntaxTrivia comment : ((PHPTree) declaration).getFirstToken().trivias()) {
+      if (StringUtils.containsIgnoreCase(comment.text(), "@inheritdoc")) {
         return true;
       }
     }
