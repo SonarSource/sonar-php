@@ -37,7 +37,53 @@ public interface NamespaceNameTree extends ExpressionTree {
 
   IdentifierTree name();
 
+  /**
+   * Return the concatenation of:
+   * <ul>
+   * <li>absolute separator (if present)</li>
+   * <li>namespaces with separators (if present)</li>
+   * <li>name</li>
+   * </ul>
+   */
   String fullName();
+
+  /**
+   * Return the unqualified form of the namespaced name, means it will return
+   * just the String value of the name.
+   * <p>Example:
+   * <pre>
+   *  \Foo\Bar  => return "Bar"
+   *  Foo\Bar   => return "Bar"
+   *  Bar       => return "Bar"
+   * </pre>
+   */
+  String unqualifiedName();
+
+  /**
+   * Return the qualified form of the namespaced name, with the
+   * namespaces and separators if present, only the name otherwise.
+   * <p>
+   * <p>Example:
+   * <pre>
+   *  \Foo\Bar  => return "Foo\Bar"
+   *  Foo\Bar   => return "Foo\Bar"
+   *  Bar       => return "Bar"
+   * </pre>
+   */
+  String qualifiedName();
+
+  /**
+   * Return the fully qualified form of the namespaced name, with the
+   * namespaces and separators if present and the absolute separator if present.
+   * <p>
+   * <p>Example:
+   * <pre>
+   *  \Foo\Bar  => return "\Foo\Bar"
+   *  Foo\Bar   => return "Foo\Bar"
+   *  Bar       => return "Bar"
+   * </pre>
+   */
+  String fullyQualifiedName();
 
   /**
    * Return true if the namespace name starts with a namespace separator.

@@ -27,6 +27,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -83,7 +84,7 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    String functionName = functionName(tree.callee());
+    String functionName = ((NamespaceNameTree) tree.callee()).qualifiedName();
 
     if (SET_LOCALE_FUNCTION.equals(functionName)) {
       checkLocalCategoryArgument(tree, tree.arguments());

@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -43,13 +42,7 @@ public abstract class FunctionUsageCheck extends PHPVisitorCheck {
   }
 
   private boolean isForbiddenFunction(ExpressionTree callee) {
-    return callee.is(Kind.NAMESPACE_NAME) && functionNames().contains(((NamespaceNameTree) callee).name().text());
-  }
-
-  public String functionName(ExpressionTree callee) {
-    Preconditions.checkArgument(callee.is(Kind.NAMESPACE_NAME));
-
-    return ((NamespaceNameTree) callee).name().text();
+    return callee.is(Kind.NAMESPACE_NAME) && functionNames().contains(((NamespaceNameTree) callee).qualifiedName());
   }
 
 }

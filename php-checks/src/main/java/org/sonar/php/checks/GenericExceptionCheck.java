@@ -55,12 +55,12 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
 
   private static final Set<String> RAW_EXCEPTIONS = ImmutableSet.of("ErrorException", "RuntimeException", "Exception");
   private Set<String> importedGenericExceptions = Sets.newHashSet();
-  private String currentNamespace = "";
+  private boolean inGlobalNamespace = true;
 
   @Override
   public void visitScript(ScriptTree tree) {
     importedGenericExceptions.clear();
-    currentNamespace = "";
+    inGlobalNamespace = true;
     super.visitScript(tree);
   }
 
@@ -77,10 +77,10 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitUseClause(UseClauseTree tree) {
-    String name = tree.namespaceName().name().text();
+    String qualifiedName = tree.namespaceName().qualifiedName();
 
-    if (tree.namespaceName().namespaces().isEmpty() && RAW_EXCEPTIONS.contains(name)) {
-      importedGenericExceptions.add(tree.alias() != null ? tree.alias().text() : name);
+    if (RAW_EXCEPTIONS.contains(qualifiedName)) {
+      importedGenericExceptions.add(tree.alias() != null ? tree.alias().text() : qualifiedName);
     }
 
     super.visitUseClause(tree);
@@ -89,14 +89,14 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
   @Override
   public void visitNamespaceStatement(NamespaceStatementTree tree) {
     if (tree.namespaceName() != null) {
-      currentNamespace = tree.namespaceName().fullName();
+      inGlobalNamespace = false;
     }
 
     super.visitNamespaceStatement(tree);
 
     // Delimited namespace with curly braces
     if (tree.openCurlyBrace() != null) {
-      currentNamespace = "";
+      inGlobalNamespace = true;
     }
   }
 
@@ -115,7 +115,7 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
 
   private boolean isFromGlobalNamespace(NamespaceNameTree namespaceName) {
       return !namespaceName.hasQualifiers()
-        && (namespaceName.isFullyQualified() || currentNamespace.isEmpty());
+        && (namespaceName.isFullyQualified() || inGlobalNamespace);
   }
 
   @Nullable

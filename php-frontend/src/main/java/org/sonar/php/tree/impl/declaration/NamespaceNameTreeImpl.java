@@ -20,7 +20,6 @@
 package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
-import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -42,12 +41,16 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   private final IdentifierTree name;
 
   private final String fullName;
+  private final String qualifiedName;
 
   public NamespaceNameTreeImpl(@Nullable InternalSyntaxToken absoluteSeparator, SeparatedListImpl<IdentifierTree> namespaces, IdentifierTree name) {
     this.absoluteSeparator = absoluteSeparator;
     this.namespaces = namespaces;
     this.name = name;
     this.fullName = getFullName();
+    this.qualifiedName = new StringBuilder()
+      .append(qualifiers())
+      .append(unqualifiedName()).toString();
   }
 
   @Nullable
@@ -72,6 +75,21 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   }
 
   @Override
+  public String unqualifiedName() {
+    return name().text();
+  }
+
+  @Override
+  public String qualifiedName() {
+    return qualifiedName;
+  }
+
+  @Override
+  public String fullyQualifiedName() {
+    return getFullName();
+  }
+
+  @Override
   public boolean isFullyQualified() {
     return absoluteSeparator != null;
   }
@@ -82,12 +100,19 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   }
 
   private String getFullName() {
-    String separator = PHPPunctuator.NS_SEPARATOR.getValue();
     StringBuilder result = new StringBuilder();
 
     if (absoluteSeparator != null) {
-      result.append(separator);
+      result.append(absoluteSeparator.text());
     }
+    result.append(qualifiers());
+    result.append(unqualifiedName());
+
+    return result.toString();
+  }
+
+  private String qualifiers() {
+    StringBuilder result = new StringBuilder();
 
     Iterator<Tree> iterator = this.namespaces.elementsAndSeparators();
     while (iterator.hasNext()) {
@@ -95,10 +120,9 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
       if (next.is(Kind.IDENTIFIER)) {
         result.append(((IdentifierTree) next).text());
       } else {
-        result.append(separator);
+        result.append(((SyntaxToken) next).text());
       }
     }
-    result.append(name().text());
     return result.toString();
   }
 

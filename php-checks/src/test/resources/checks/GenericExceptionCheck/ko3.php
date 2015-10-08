@@ -9,6 +9,7 @@ use Exception as Alias1;
 use RuntimeException as Alias2;
 use ErrorException as Alias3;
 use Foo\SomeException as Alias4;
+use Foo\Exception as Alias5;
 
 class ClassName {
     function test() {
@@ -34,5 +35,8 @@ class ClassName {
     }
     function test() {
         throw new Foo\Alias3();         // OK
+    }
+    function test() {
+        throw new Alias4();         // OK
     }
 }
