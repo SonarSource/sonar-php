@@ -28,9 +28,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public abstract class FunctionUsageCheck extends PHPVisitorCheck {
 
-  abstract protected ImmutableSet<String> functionNames();
+  protected abstract ImmutableSet<String> functionNames();
 
-  abstract protected void createIssue(FunctionCallTree tree);
+  protected abstract void createIssue(FunctionCallTree tree);
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

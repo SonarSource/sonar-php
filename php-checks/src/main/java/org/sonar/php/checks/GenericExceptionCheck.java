@@ -114,8 +114,8 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
   }
 
   private boolean isFromGlobalNamespace(NamespaceNameTree namespaceName) {
-      return !namespaceName.hasQualifiers()
-        && (namespaceName.isFullyQualified() || inGlobalNamespace);
+    return !namespaceName.hasQualifiers()
+      && (namespaceName.isFullyQualified() || inGlobalNamespace);
   }
 
   @Nullable
