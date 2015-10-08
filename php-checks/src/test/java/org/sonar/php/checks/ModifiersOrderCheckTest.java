@@ -20,20 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ModifiersOrderCheckTest extends CheckTest {
+public class ModifiersOrderCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ModifiersOrderCheck.php"), new ModifiersOrderCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Reorder the modifiers to comply with the PSR2 standard.")
-      .next().atLine(6)
-      .next().atLine(9);
+    PHPCheckTest.check(new ModifiersOrderCheck(), TestUtils.getCheckFile("ModifiersOrderCheck.php"));
   }
+
 }
