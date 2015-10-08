@@ -20,6 +20,7 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
@@ -29,6 +30,7 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
@@ -45,6 +47,13 @@ public class FunctionUtils {
     PHPGrammar.METHOD_DECLARATION,
     PHPGrammar.FUNCTION_DECLARATION,
     PHPGrammar.FUNCTION_EXPRESSION};
+
+  private static final Kind[] DECLARATION_KINDS_ARRAY = {
+    Kind.METHOD_DECLARATION,
+    Kind.FUNCTION_DECLARATION,
+    Kind.FUNCTION_EXPRESSION};
+
+  public static final List<Kind> DECLARATION_KINDS = ImmutableList.copyOf(DECLARATION_KINDS_ARRAY);
 
   private FunctionUtils() {
   }
@@ -144,6 +153,10 @@ public class FunctionUtils {
    */
   public static GrammarRuleKey[] functions() {
     return Arrays.copyOf(FUNCTIONS, FUNCTIONS.length);
+  }
+
+  public static boolean isFunctionDeclaration(Tree tree) {
+    return tree.is(DECLARATION_KINDS_ARRAY);
   }
 
   /**

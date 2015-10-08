@@ -19,34 +19,46 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.sonar.sslr.api.AstNode;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S117",
+  key = LocalVariableAndParameterNameCheck.KEY,
   name = "Local variable and function parameter names should comply with a naming convention",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGrammar> {
+public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S117";
+
+  private static final String MESSAGE = "Rename this %s \"%s\" to match the regular expression %s.";
 
   private static final ImmutableSet<String> SUPERGLOBALS = ImmutableSet.of(
     "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
@@ -63,70 +75,82 @@ public class LocalVariableAndParameterNameCheck extends SquidCheck<LexerlessGram
   @Override
   public void init() {
     pattern = Pattern.compile(format);
-    subscribeTo(FunctionUtils.functions());
-    subscribeTo(PHPGrammar.ASSIGNMENT_EXPR, PHPGrammar.ASSIGNMENT_BY_REFERENCE);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(FunctionUtils.functions())) {
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.<Kind>builder()
+      .addAll(FunctionUtils.DECLARATION_KINDS)
+      .add(Kind.ASSIGNMENT_BY_REFERENCE)
+      .add(
+        Kind.ASSIGNMENT,
+        Kind.MULTIPLY_ASSIGNMENT,
+        Kind.DIVIDE_ASSIGNMENT,
+        Kind.REMAINDER_ASSIGNMENT,
+        Kind.PLUS_ASSIGNMENT,
+        Kind.MINUS_ASSIGNMENT,
+        Kind.LEFT_SHIFT_ASSIGNMENT,
+        Kind.RIGHT_SHIFT_ASSIGNMENT,
+        Kind.AND_ASSIGNMENT,
+        Kind.XOR_ASSIGNMENT,
+        Kind.OR_ASSIGNMENT,
+        Kind.CONCATENATION_ASSIGNMENT)
+      .build();
+  }
+
+  @Override
+  public void visitNode(Tree tree) {
+    if (FunctionUtils.isFunctionDeclaration(tree)) {
       enterScope();
-      checkParameters(astNode);
+      checkParameters((FunctionTree) tree);
     } else if (inScope()) {
-      checkLocalVariable(astNode);
+      checkLocalVariable(tree);
     }
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(FunctionUtils.functions())) {
+  public void leaveNode(Tree tree) {
+    if (FunctionUtils.isFunctionDeclaration(tree)) {
       leaveScope();
     }
   }
 
-  private void checkLocalVariable(AstNode assignmentExpr) {
-    AstNode varNode = getLeftHandExpression(assignmentExpr);
-
-    if (varNode != null && varNode.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
-      String varName = varNode.getTokenOriginalValue();
-
-      if (!isAlreadyChecked(varName) && !isCompliant(varName)) {
-        reportIssue("local variable", varNode, varName);
+  private void checkLocalVariable(Tree tree) {
+    ExpressionTree variable = getLeftHandExpression(tree);
+    if (variable.is(Kind.VARIABLE_IDENTIFIER)) {
+      VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) variable;
+      String variableName = variableIdentifier.variableExpression().text();
+      if (!isAlreadyChecked(variableName) && !isCompliant(variableName)) {
+        reportIssue("local variable", variable, variableName);
       }
     }
   }
 
-  private void checkParameters(AstNode functionDec) {
-    for (AstNode parameter : FunctionUtils.getFunctionParameters(functionDec)) {
-      String paramName = parameter.getTokenOriginalValue();
-
+  private void checkParameters(FunctionTree functionDec) {
+    for (ParameterTree parameter : functionDec.parameters().parameters()) {
+      String paramName = parameter.variableIdentifier().variableExpression().text();
       if (!isCompliant(paramName)) {
         reportIssue("parameter", parameter, paramName);
       }
     }
   }
 
-  private void reportIssue(String msg, AstNode node, String varName) {
-    getContext().createLineViolation(this, "Rename this {0} \"{1}\" to match the regular expression {2}.",
-      node, msg, varName, format);
+  private void reportIssue(String type, Tree tree, String varName) {
+    context().newIssue(KEY, String.format(MESSAGE, type, varName, format)).tree(tree);
     setAsCheckedVariable(varName);
   }
 
-  private AstNode getLeftHandExpression(AstNode assignmentExpr) {
-    AstNode leftExpr = assignmentExpr.getFirstChild();
-    AstNode variableNode = null;
-
-    if (leftExpr.is(PHPGrammar.MEMBER_EXPRESSION)) {
-      variableNode = leftExpr;
-    } else if (leftExpr.is(PHPGrammar.POSTFIX_EXPR)) {
-      variableNode = leftExpr.getFirstChild();
+  private ExpressionTree getLeftHandExpression(Tree assignmentExpr) {
+    ExpressionTree leftExpression;
+    if (assignmentExpr.is(Kind.ASSIGNMENT_BY_REFERENCE)) {
+      leftExpression = ((AssignmentByReferenceTree) assignmentExpr).variable();
+    } else {
+      leftExpression = ((AssignmentExpressionTree) assignmentExpr).variable();
     }
-
-    if (variableNode != null && variableNode.getNumberOfChildren() == 1) {
-      return variableNode.getFirstChild();
+    while (leftExpression.is(Kind.ARRAY_ACCESS)) {
+      leftExpression = ((ArrayAccessTree) leftExpression).object();
     }
-
-    return null;
+    return leftExpression;
   }
 
   private boolean isCompliant(String varName) {

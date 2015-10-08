@@ -19,39 +19,25 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class LocalVariableAndParameterNameCheckTest extends CheckTest {
+public class LocalVariableAndParameterNameCheckTest {
 
+  private static final String FILE_NAME = "LocalVariableAndParameterNameCheck.php";
   private LocalVariableAndParameterNameCheck check = new LocalVariableAndParameterNameCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LocalVariableAndParameterNameCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(13).withMessage("Rename this parameter \"$PARAM\" to match the regular expression " + check.DEFAULT + ".")
-      .next().atLine(15).withMessage("Rename this local variable \"$LOCAL\" to match the regular expression " + check.DEFAULT + ".")
-      .next().atLine(16)
-      .next().atLine(17)
-      .next().atLine(28)
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
-    check.format = "^[A-Z_]*$";
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LocalVariableAndParameterNameCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Rename this parameter \"$param\" to match the regular expression " + check.format + ".")
-      .next().atLine(5)
-      .next().atLine(6)
-      .next().atLine(9)
-      .noMore();
+    check.format = "^[A-Z_a-z0-9]*$";
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of());
   }
 }
