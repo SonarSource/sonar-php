@@ -19,30 +19,40 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S115",
+  key = ConstantNameCheck.KEY,
   name = "Constant names should comply with a naming convention",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class ConstantNameCheck extends SquidCheck<LexerlessGrammar> {
+public class ConstantNameCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S115";
+
+  private static final String MESSAGE = "Rename this constant \"%s\" to match the regular expression %s.";
 
   public static final String DEFAULT = "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$";
   private Pattern pattern = null;
@@ -52,42 +62,52 @@ public class ConstantNameCheck extends SquidCheck<LexerlessGrammar> {
     defaultValue = DEFAULT)
   String format = DEFAULT;
 
-
   @Override
   public void init() {
     pattern = Pattern.compile(format);
-    subscribeTo(
-      PHPGrammar.CLASS_CONSTANT_DECLARATION,
-      PHPGrammar.FUNCTION_CALL_PARAMETER_LIST,
-      PHPGrammar.CONSTANT_DECLARATION);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (isCallToDefine(astNode)) {
-      checkConstantName(astNode, getFirstParameter(astNode));
-    } else if (astNode.is(PHPGrammar.CLASS_CONSTANT_DECLARATION, PHPGrammar.CONSTANT_DECLARATION)) {
-      for (AstNode constDec : astNode.getChildren(PHPGrammar.MEMBER_CONST_DECLARATION, PHPGrammar.CONSTANT_VAR)) {
-        checkConstantName(constDec, constDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue());
+  public void visitFunctionCall(FunctionCallTree functionCall) {
+    ExpressionTree callee = functionCall.callee();
+    if (callee.is(Kind.NAMESPACED_NAME) && "define".equals(((NamespaceNameTree) callee).fullName())) {
+      SeparatedList<ExpressionTree> arguments = functionCall.arguments();
+      if (!arguments.isEmpty()) {
+        ExpressionTree firstArgument = arguments.get(0);
+        if (firstArgument.is(Kind.REGULAR_STRING_LITERAL)) {
+          String constantName = ((LiteralTree) firstArgument).value();
+          checkConstantName(firstArgument, constantName.substring(1, constantName.length() - 1));
+        }
       }
     }
+    super.visitFunctionCall(functionCall);
   }
 
-  private void checkConstantName(AstNode node, String constName) {
-    if (!pattern.matcher(constName).matches()) {
-      getContext().createLineViolation(this, "Rename this constant \"{0}\" to match the regular expression {1}.", node, constName, format);
+  @Override
+  public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
+    if (tree.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)) {
+      checkDeclarations(tree.declarations());
+    }
+    super.visitClassPropertyDeclaration(tree);
+  }
+
+  @Override
+  public void visitConstDeclaration(ConstantDeclarationTree tree) {
+    checkDeclarations(tree.declarations());
+    super.visitConstDeclaration(tree);
+  }
+
+  private void checkDeclarations(SeparatedList<VariableDeclarationTree> declarations) {
+    for (VariableDeclarationTree declaration : declarations) {
+      String constantName = declaration.variableIdentifier().text();
+      checkConstantName(declaration, constantName);
     }
   }
 
-  private String getFirstParameter(AstNode astNode) {
-    String firstParam = astNode.getFirstChild(PHPGrammar.PARAMETER_LIST_FOR_CALL).getFirstChild().getTokenOriginalValue();
-    return StringUtils.substring(firstParam, 1, firstParam.length() - 1);
+  private void checkConstantName(Tree tree, String constName) {
+    if (!pattern.matcher(constName).matches()) {
+      context().newIssue(KEY, String.format(MESSAGE, constName, format)).tree(tree);
+    }
   }
-
-  private static boolean isCallToDefine(AstNode node) {
-    return node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)
-      && "define".equals(node.getPreviousAstNode().getTokenOriginalValue());
-  }
-
 
 }
