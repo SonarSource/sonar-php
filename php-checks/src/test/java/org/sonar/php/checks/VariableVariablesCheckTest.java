@@ -20,20 +20,15 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class VariableVariablesCheckTest extends CheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("VariableVariablesCheck.php"), new VariableVariablesCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Remove the use of this variable variable \"$$$$$$a\".")
-      .next().atLine(4)
-      .noMore();
+    PHPCheckTest.check(new VariableVariablesCheck(), TestUtils.getCheckFile("VariableVariablesCheck.php"));
   }
+
 }

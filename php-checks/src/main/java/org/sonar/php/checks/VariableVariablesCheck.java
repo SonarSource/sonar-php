@@ -19,37 +19,33 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1599",
+  key = VariableVariablesCheck.KEY,
   name = "Variable variables should not be used",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("10min")
-public class VariableVariablesCheck extends SquidCheck<LexerlessGrammar> {
+public class VariableVariablesCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1599";
+  private static final String MESSAGE = "Remove the use of this variable variable \"%s\".";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.SIMPLE_INDIRECT_REFERENCE);
+  public void visitVariableVariable(VariableVariableTree tree) {
+    context().newIssue(KEY, String.format(MESSAGE, CheckUtils.asString(tree))).tree(tree);
+    super.visitVariableVariable(tree);
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    String varName = StringUtils.repeat(PHPPunctuator.DOLLAR.getValue(), astNode.getNumberOfChildren()) + astNode.getNextAstNode().getTokenOriginalValue();
-    getContext().createLineViolation(this, "Remove the use of this variable variable \"{0}\".", astNode, varName);
-  }
 }

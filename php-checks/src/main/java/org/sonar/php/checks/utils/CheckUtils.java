@@ -25,7 +25,12 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+import javax.annotation.Nullable;
+import java.util.Iterator;
 import java.util.List;
 
 public class CheckUtils {
@@ -103,4 +108,38 @@ public class CheckUtils {
     return true;
   }
 
+  public static String asString(Tree tree) {
+    if (tree.is(Tree.Kind.TOKEN)) {
+      return ((SyntaxToken) tree).text();
+
+    } else {
+      StringBuilder sb = new StringBuilder();
+      Iterator<Tree> treeIterator = ((PHPTree) tree).childrenIterator();
+      SyntaxToken prevToken = null;
+
+      while (treeIterator.hasNext()) {
+        Tree child = treeIterator.next();
+
+        if (child != null) {
+          appendChild(sb, prevToken, child);
+          prevToken = ((PHPTree) child).getLastToken();
+        }
+      }
+      return sb.toString();
+    }
+  }
+
+  private static void appendChild(StringBuilder sb, @Nullable SyntaxToken prevToken, Tree child) {
+    if (prevToken != null) {
+      SyntaxToken firstToken = ((PHPTree) child).getFirstToken();
+      if (isSpaceRequired(prevToken, firstToken)) {
+        sb.append(" ");
+      }
+    }
+    sb.append(asString(child));
+  }
+
+  private static boolean isSpaceRequired(SyntaxToken prevToken, SyntaxToken token) {
+    return (token.line() > prevToken.line()) || (prevToken.column() + prevToken.text().length() < token.column());
+  }
 }
