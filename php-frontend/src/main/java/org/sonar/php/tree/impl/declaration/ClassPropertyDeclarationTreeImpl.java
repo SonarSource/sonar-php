@@ -19,9 +19,8 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import java.util.Iterator;
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -31,8 +30,8 @@ import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
 
 public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPropertyDeclarationTree {
 
@@ -74,6 +73,26 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   @Override
   public SyntaxToken eosToken() {
     return eosToken;
+  }
+
+  @Override
+  public boolean hasModifiers(String... modifiers) {
+    int counter = 0;
+    for (String modifier : modifiers) {
+      if (modifiersContains(modifier)) {
+        counter++;
+      }
+    }
+    return counter == modifiers.length;
+  }
+
+  public boolean modifiersContains(String modifier) {
+    for (SyntaxToken token : modifierTokens()) {
+      if (token.text().equals(modifier)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

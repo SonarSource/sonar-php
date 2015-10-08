@@ -20,20 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class VarKeywordUsageCheckTest extends CheckTest {
+public class VarKeywordUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("VarKeywordUsageCheck.php"), new VarKeywordUsageCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Replace the \"var\" keyword with the modifier \"public\".")
-      .noMore();
+    PHPCheckTest.check(new VarKeywordUsageCheck(), TestUtils.getCheckFile("VarKeywordUsageCheck.php"));
   }
 
 }

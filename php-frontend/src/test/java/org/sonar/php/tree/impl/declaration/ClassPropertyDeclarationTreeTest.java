@@ -19,13 +19,13 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
 
@@ -36,6 +36,11 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.modifierTokens()).hasSize(2);
     assertThat(tree.declarations()).hasSize(3);
     assertThat(tree.eosToken().text()).isEqualTo(";");
+
+    assertThat(tree.hasModifiers("public", "final")).isTrue();
+    assertThat(tree.hasModifiers("public")).isTrue();
+    assertThat(tree.hasModifiers("public", "static")).isFalse();
+    assertThat(tree.hasModifiers("static")).isFalse();
   }
 
   @Test
@@ -45,6 +50,8 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.modifierTokens()).hasSize(1);
     assertThat(tree.declarations()).hasSize(2);
     assertThat(tree.eosToken().text()).isEqualTo(";");
+
+    assertThat(tree.hasModifiers("const")).isTrue();
   }
 
 }

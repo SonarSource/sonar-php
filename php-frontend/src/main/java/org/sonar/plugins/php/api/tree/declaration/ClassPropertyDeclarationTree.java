@@ -51,4 +51,6 @@ public interface ClassPropertyDeclarationTree extends ClassMemberTree {
 
   SyntaxToken eosToken();
 
+  boolean hasModifiers(String... modifiers);
+
 }
