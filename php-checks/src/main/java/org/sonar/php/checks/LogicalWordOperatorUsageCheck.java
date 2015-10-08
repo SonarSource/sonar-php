@@ -19,36 +19,50 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S2010",
+  key = LogicalWordOperatorUsageCheck.KEY,
   name = "\"&&\" and \"||\" should be used",
-  priority = Priority.CRITICAL,
-  tags = {Tags.PITFALL})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
+  priority = Priority.MAJOR,
+  tags = {Tags.SUSPICIOUS})
+@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class LogicalWordOperatorUsageCheck extends SquidCheck<LexerlessGrammar> {
+public class LogicalWordOperatorUsageCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S2010";
+  public static final String MESSAGE = "Replace \"%s\" with \"%s\".";
+
   @Override
-  public void init() {
-    subscribeTo(PHPKeyword.AND, PHPKeyword.OR);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(
+      Kind.ALTERNATIVE_CONDITIONAL_AND,
+      Kind.ALTERNATIVE_CONDITIONAL_OR);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    String punctuator = astNode.is(PHPKeyword.AND) ? PHPPunctuator.ANDAND.getValue() : PHPPunctuator.OROR.getValue();
-    getContext().createLineViolation(this, "Replace \"{0}\" with \"{1}\".", astNode, astNode.getTokenOriginalValue(), punctuator);
-  }
+  public void visitNode(Tree tree) {
+    SyntaxToken operator = ((BinaryExpressionTree) tree).operator();
+    String replacement = tree.is(Kind.ALTERNATIVE_CONDITIONAL_AND)
+      ? PHPPunctuator.ANDAND.getValue()
+      : PHPPunctuator.OROR.getValue();
 
+    context().newIssue(KEY, String.format(MESSAGE, operator.text(), replacement))
+      .tree(operator);
+  }
 }
