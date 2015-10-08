@@ -19,35 +19,33 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S907",
+  key = GotoUseCheck.KEY,
   name = "\"goto\" statement should not be used",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("10min")
-public class GotoUseCheck extends SquidCheck<LexerlessGrammar> {
+public class GotoUseCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S907";
+  private static final String MESSAGE = "Remove use of \"goto\" statement.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.GOTO_STATEMENT);
-  }
+  public void visitGotoStatement(GotoStatementTree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree);
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Remove use of \"goto\" statement.", astNode);
+    super.visitGotoStatement(tree);
   }
 
 }

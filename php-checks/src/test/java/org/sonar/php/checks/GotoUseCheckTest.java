@@ -20,19 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class GotoUseCheckTest extends CheckTest {
+public class GotoUseCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("GotoUseCheck.php"), new GotoUseCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(9).withMessage("Remove use of \"goto\" statement.")
-      .noMore();
+    PHPCheckTest.check(new GotoUseCheck(), TestUtils.getCheckFile("GotoUseCheck.php"));
   }
+
 }
