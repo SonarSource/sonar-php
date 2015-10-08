@@ -19,44 +19,39 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1145",
+  key = IfConditionAlwaysTrueOrFalseCheck.KEY,
   name = "Useless \"if(true) {...}\" and \"if(false){...}\" blocks should be removed",
   priority = Priority.MAJOR,
   tags = {Tags.BUG, Tags.CWE, Tags.SECURITY, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class IfConditionAlwaysTrueOrFalseCheck extends SquidCheck<LexerlessGrammar> {
+public class IfConditionAlwaysTrueOrFalseCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1145";
+  private static final String MESSAGE = "Remove this \"if\" statement.";
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.IF_STATEMENT,
-      PHPGrammar.ALTERNATIVE_IF_STATEMENT);
-  }
+  public void visitIfStatement(IfStatementTree tree) {
+    ExpressionTree condition = tree.condition().expression();
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (isConditionABooleanLiteral(astNode)) {
-      getContext().createLineViolation(this, "Remove this \"if\" statement.", astNode);
+    if (condition.is(Kind.BOOLEAN_LITERAL)) {
+      context().newIssue(KEY, MESSAGE).tree(condition);
     }
 
+    super.visitIfStatement(tree);
   }
 
-  private static boolean isConditionABooleanLiteral(AstNode ifStatement) {
-    return CheckUtils.isExpressionABooleanLiteral(ifStatement.getFirstChild(PHPGrammar.PARENTHESIS_EXPRESSION).getFirstChild(PHPGrammar.EXPRESSION));
-  }
 }
