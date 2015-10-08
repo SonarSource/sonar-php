@@ -2,10 +2,19 @@
 
 final class A {
 
-  public final function f() {  // NOK
+  public final function f() {  // NOK {{Remove this "final" modifier.}}
   }
 
   public function g() {        // OK
+  }
+  
+  public $a = 1;
+
+}
+
+class B {
+
+  public final function f() {  // OK
   }
 
 }

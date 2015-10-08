@@ -19,57 +19,67 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S1990",
+  key = RedundantFinalCheck.KEY,
   name = "\"final\" should not be used redundantly",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class RedundantFinalCheck extends SquidCheck<LexerlessGrammar> {
+public class RedundantFinalCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S1990";
+
+  private static final String MESSAGE = "Remove this \"final\" modifier.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CLASS_DECLARATION);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(Kind.CLASS_DECLARATION);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (isFinalClass(astNode)) {
+  public void visitNode(Tree tree) {
+    ClassDeclarationTree classDeclaration = (ClassDeclarationTree) tree;
 
-      for (AstNode classStatement : astNode.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-        AstNode statement = classStatement.getFirstChild();
+    if (isFinalModifier(classDeclaration.modifierToken())) {
 
-        if (statement.is(PHPGrammar.METHOD_DECLARATION) && hasFinalModifier(statement)) {
-          getContext().createLineViolation(this, "Remove this \"final\" modifier.", statement);
+      for (ClassMemberTree classMember : classDeclaration.members()) {
+        if (classMember.is(Kind.METHOD_DECLARATION) && hasFinalModifier((MethodDeclarationTree) classMember)) {
+          context().newIssue(KEY, MESSAGE).tree(classMember);
         }
       }
+
     }
   }
 
-  private boolean hasFinalModifier(AstNode methodDec) {
-    for (AstNode modifier : methodDec.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
-
-      if (modifier.getFirstChild().is(PHPKeyword.FINAL)) {
+  private static boolean hasFinalModifier(MethodDeclarationTree methodDeclaration) {
+    for (SyntaxToken modifier : methodDeclaration.modifiersToken()) {
+      if (isFinalModifier(modifier)) {
         return true;
       }
     }
     return false;
   }
 
-  private boolean isFinalClass(AstNode classDec) {
-    AstNode classType = classDec.getFirstChild(PHPGrammar.CLASS_ENTRY_TYPE).getFirstChild(PHPGrammar.CLASS_TYPE);
-    return classType != null && classType.getFirstChild().is(PHPKeyword.FINAL);
+  private static boolean isFinalModifier(SyntaxToken modifier) {
+    return modifier != null && PHPKeyword.FINAL.getValue().equalsIgnoreCase(modifier.text());
   }
+
 }
