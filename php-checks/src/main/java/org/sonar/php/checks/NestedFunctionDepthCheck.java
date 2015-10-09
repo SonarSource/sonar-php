@@ -19,27 +19,30 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 @Rule(
-  key = "S2004",
+  key = NestedFunctionDepthCheck.KEY,
   name = "Functions should not be nested too deeply",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_CHANGEABILITY)
 @SqaleConstantRemediation("20min")
-public class NestedFunctionDepthCheck extends SquidCheck<LexerlessGrammar> {
+public class NestedFunctionDepthCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2004";
+
+  private static final String MESSAGE = "Refactor this code to not nest functions more than %s levels deep.";
 
   private int nestedLevel = 0;
   public static final int DEFAULT = 3;
@@ -50,28 +53,34 @@ public class NestedFunctionDepthCheck extends SquidCheck<LexerlessGrammar> {
   int max = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.METHOD_DECLARATION,
-      PHPGrammar.FUNCTION_DECLARATION);
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
+  public void visitCompilationUnit(CompilationUnitTree tree) {
     nestedLevel = 0;
+    super.visitCompilationUnit(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    nestedLevel++;
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    enterFunction(tree);
+    super.visitFunctionDeclaration(tree);
+    exitFunction();
+  }
 
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    enterFunction(tree);
+    super.visitMethodDeclaration(tree);
+    exitFunction();
+  }
+
+  private void enterFunction(Tree tree) {
+    nestedLevel++;
     if (nestedLevel == max + 1) {
-      getContext().createLineViolation(this, "Refactor this code to not nest functions more than {0} levels deep.", astNode, max);
+      context().newIssue(KEY, String.format(MESSAGE, max)).tree(tree);
     }
   }
 
-  @Override
-  public void leaveNode(AstNode astNode) {
+  private void exitFunction() {
     nestedLevel--;
   }
+
 }

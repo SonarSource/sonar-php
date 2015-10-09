@@ -19,36 +19,33 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class NestedFunctionDepthCheckTest extends CheckTest {
+public class NestedFunctionDepthCheckTest {
 
+  private static final String FILE_NAME = "NestedFunctionDepthCheck.php";
   private NestedFunctionDepthCheck check = new NestedFunctionDepthCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NestedFunctionDepthCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Refactor this code to not nest functions more than " + check.DEFAULT + " levels deep.")
-      .next().atLine(17)
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
-
 
   @Test
   public void custom() throws Exception {
     check.max = 2;
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NestedFunctionDepthCheck.php"), check);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of(
+      issue(5),
+      issue(16),
+      issue(27)));
+  }
 
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Refactor this code to not nest functions more than " + check.max + " levels deep.")
-      .next().atLine(16)
-      .next().atLine(27)
-      .noMore();
+  private Issue issue(int line) {
+    return new PHPIssue(NestedFunctionDepthCheck.KEY, null).line(line);
   }
 }
