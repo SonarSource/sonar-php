@@ -27,6 +27,7 @@ public class PHP5DeprecatedFunctionUsageCheckTest extends PHPCheckTest {
 
   @Test
   public void test() throws Exception {
+    // FIXME (SONARPHP-552): FP line 27, should be OK
     check(new PHP5DeprecatedFunctionUsageCheck(), TestUtils.getCheckFile("PHP5DeprecatedFunctionUsageCheck.php"));
   }
 
