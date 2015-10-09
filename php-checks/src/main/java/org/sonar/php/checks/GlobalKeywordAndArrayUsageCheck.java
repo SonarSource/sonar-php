@@ -19,41 +19,56 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2011",
+  key = GlobalKeywordAndArrayUsageCheck.KEY,
   name = "The \"global\" keyword should not be used",
   priority = Priority.MAJOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
 @SqaleConstantRemediation("30min")
-public class GlobalKeywordAndArrayUsageCheck extends SquidCheck<LexerlessGrammar> {
+public class GlobalKeywordAndArrayUsageCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2011";
+  private static final String MESSAGE = "Pass this global variable to the function as a parameter rather than accessing it directly.";
+
+  private static final String GLOBAL_IDENTIFIER = "$GLOBALS";
 
   @Override
-  public void init() {
-    subscribeTo(PHPKeyword.GLOBAL, PHPGrammar.VAR_IDENTIFIER);
+  public void visitGlobalStatement(GlobalStatementTree tree) {
+    super.visitGlobalStatement(tree);
+    raiseIssue(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPKeyword.GLOBAL) || isGlobalsArray(astNode)) {
-      getContext().createLineViolation(this, "Pass this global variable to the function as a parameter rather than accessing it directly.", astNode);
+  public void visitArrayAccess(ArrayAccessTree tree) {
+    super.visitArrayAccess(tree);
+
+    ExpressionTree object = tree.object();
+
+    if (object.is(Kind.VARIABLE_IDENTIFIER)) {
+      String name = ((VariableIdentifierTree) object).variableExpression().text();
+
+      if (name.equals(GLOBAL_IDENTIFIER)) {
+        raiseIssue(tree);
+      }
     }
   }
 
-  private boolean isGlobalsArray(AstNode varIdentifier) {
-    return "$GLOBALS".equals(varIdentifier.getTokenOriginalValue())
-      && varIdentifier.getNextAstNode().is(PHPGrammar.DIMENSIONAL_OFFSET);
+  private void raiseIssue(Tree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree);
   }
 
 }

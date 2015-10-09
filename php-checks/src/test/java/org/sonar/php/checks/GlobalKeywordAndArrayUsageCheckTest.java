@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class GlobalKeywordAndArrayUsageCheckTest extends CheckTest {
+public class GlobalKeywordAndArrayUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("GlobalKeywordAndArrayUsageCheck.php"), new GlobalKeywordAndArrayUsageCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Pass this global variable to the function as a parameter rather than accessing it directly.")
-      .next().atLine(8)
-      .noMore();
+    PHPCheckTest.check(new GlobalKeywordAndArrayUsageCheck(), TestUtils.getCheckFile("GlobalKeywordAndArrayUsageCheck.php"));
   }
 
 }
