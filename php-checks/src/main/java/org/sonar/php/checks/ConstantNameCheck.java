@@ -70,7 +70,7 @@ public class ConstantNameCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree functionCall) {
     ExpressionTree callee = functionCall.callee();
-    if (callee.is(Kind.NAMESPACED_NAME) && "define".equals(((NamespaceNameTree) callee).fullName())) {
+    if (callee.is(Kind.NAMESPACE_NAME) && "define".equals(((NamespaceNameTree) callee).fullName())) {
       SeparatedList<ExpressionTree> arguments = functionCall.arguments();
       if (!arguments.isEmpty()) {
         ExpressionTree firstArgument = arguments.get(0);
