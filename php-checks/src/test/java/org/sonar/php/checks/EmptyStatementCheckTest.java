@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class EmptyStatementCheckTest extends CheckTest {
+public class EmptyStatementCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("EmptyStatementCheck.php"), new EmptyStatementCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Remove this empty statement.")
-      .next().atLine(7)
-      .next().atLine(10)
-      .noMore();
+    PHPCheckTest.check(new EmptyStatementCheck(), TestUtils.getCheckFile("EmptyStatementCheck.php"));
   }
+
 }

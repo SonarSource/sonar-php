@@ -19,34 +19,33 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1116",
+  key = EmptyStatementCheck.KEY,
   name = "Empty statements should be removed",
   priority = Priority.MINOR,
   tags = {Tags.CERT, Tags.UNUSED, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("2min")
-public class EmptyStatementCheck extends SquidCheck<LexerlessGrammar> {
+public class EmptyStatementCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1116";
+  private static final String MESSAGE = "Remove this empty statement.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.EMPTY_STATEMENT);
+  public void visitEmptyStatement(EmptyStatementTree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree);
+
+    super.visitEmptyStatement(tree);
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Remove this empty statement.", astNode);
-  }
 }

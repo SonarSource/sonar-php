@@ -3,7 +3,7 @@ declare(ticks=1);                              // OK
 
 function f() {
   doSomething();                               // OK
-  doSomethingElse();;                          // NOK
+  doSomethingElse();;                          // NOK {{Remove this empty statement.}}
   ;                                            // NOK
 }
 
