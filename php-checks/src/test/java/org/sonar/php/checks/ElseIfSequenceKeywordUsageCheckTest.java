@@ -20,19 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ElseIfSequenceKeywordUsageCheckTest extends CheckTest {
+public class ElseIfSequenceKeywordUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ElseIfSequenceKeywordUsageCheck.php"), new ElseIfSequenceKeywordUsageCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Replace this \"else if\" keyword sequence by \"elseif\" keyword.")
-      .noMore();
+    PHPCheckTest.check(new ElseIfSequenceKeywordUsageCheck(), TestUtils.getCheckFile("ElseIfSequenceKeywordUsageCheck.php"));
   }
+
 }
