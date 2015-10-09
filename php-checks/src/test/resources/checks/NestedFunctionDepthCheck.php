@@ -3,7 +3,7 @@
 function f1() {
   function f2() {
     function f3() {
-      function f4() {       // NOK
+      function f4() {       // NOK {{Refactor this code to not nest functions more than 3 levels deep.}}
       }
     }
   }
