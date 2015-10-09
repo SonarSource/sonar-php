@@ -20,6 +20,7 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
@@ -28,10 +29,13 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import java.util.Arrays;
@@ -43,6 +47,13 @@ public class FunctionUtils {
     PHPGrammar.METHOD_DECLARATION,
     PHPGrammar.FUNCTION_DECLARATION,
     PHPGrammar.FUNCTION_EXPRESSION};
+
+  private static final Kind[] DECLARATION_KINDS_ARRAY = {
+    Kind.METHOD_DECLARATION,
+    Kind.FUNCTION_DECLARATION,
+    Kind.FUNCTION_EXPRESSION};
+
+  public static final List<Kind> DECLARATION_KINDS = ImmutableList.copyOf(DECLARATION_KINDS_ARRAY);
 
   private FunctionUtils() {
   }
@@ -101,6 +112,21 @@ public class FunctionUtils {
   }
 
   /**
+   * Return whether the method is overriding a parent method or not.
+   *
+   * @param methodDec METHOD_DECLARATION
+   * @return true if method has tag "@inheritdoc" in it's doc comment.
+   */
+  public static boolean isOverriding(MethodDeclarationTree declaration) {
+    for (SyntaxTrivia comment : ((PHPTree) declaration).getFirstToken().trivias()) {
+      if (StringUtils.containsIgnoreCase(comment.text(), "@inheritdoc")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Test whether a non-private method is owned by a class declared with "extends" or "implements".
    *
    * @param methodDec METHOD_DECLARATION
@@ -127,6 +153,10 @@ public class FunctionUtils {
    */
   public static GrammarRuleKey[] functions() {
     return Arrays.copyOf(FUNCTIONS, FUNCTIONS.length);
+  }
+
+  public static boolean isFunctionDeclaration(Tree tree) {
+    return tree.is(DECLARATION_KINDS_ARRAY);
   }
 
   /**

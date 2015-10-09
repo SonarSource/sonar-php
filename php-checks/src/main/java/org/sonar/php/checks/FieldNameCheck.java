@@ -19,28 +19,35 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S116",
+  key = FieldNameCheck.KEY,
   name = "Field names should comply with a naming convention",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class FieldNameCheck extends SquidCheck<LexerlessGrammar> {
+public class FieldNameCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S116";
+
+  private static final String MESSAGE = "Rename this field \"%s\" to match the regular expression %s.";
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   private Pattern pattern = null;
@@ -54,16 +61,20 @@ public class FieldNameCheck extends SquidCheck<LexerlessGrammar> {
   @Override
   public void init() {
     pattern = Pattern.compile(format);
-    subscribeTo(PHPGrammar.CLASS_VARIABLE_DECLARATION);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    for (AstNode varDec : astNode.getChildren(PHPGrammar.VARIABLE_DECLARATION)) {
-      String fieldName = varDec.getFirstChild(PHPGrammar.VAR_IDENTIFIER).getTokenOriginalValue();
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(Kind.CLASS_PROPERTY_DECLARATION);
+  }
 
-      if (!pattern.matcher(StringUtils.remove(fieldName, "$")).matches()) {
-        getContext().createLineViolation(this, "Rename this field \"{0}\" to match the regular expression {1}.", astNode, fieldName, format);
+  @Override
+  public void visitNode(Tree tree) {
+    ClassPropertyDeclarationTree property = (ClassPropertyDeclarationTree) tree;
+    for (VariableDeclarationTree variableDeclarationTree : property.declarations()) {
+      String propertyName = variableDeclarationTree.variableIdentifier().text();
+      if (!pattern.matcher(StringUtils.remove(propertyName, "$")).matches()) {
+        context().newIssue(KEY, String.format(MESSAGE, propertyName, format)).tree(property);
       }
     }
   }

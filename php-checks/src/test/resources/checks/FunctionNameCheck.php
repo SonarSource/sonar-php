@@ -9,7 +9,7 @@ function __destruct() {   // OK
 function doSomething() {  // OK
 }
 
-function DoSomething() {  // NOK
+function DoSomething() {  // NOK {{Rename function "DoSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
 }
 
 class A {

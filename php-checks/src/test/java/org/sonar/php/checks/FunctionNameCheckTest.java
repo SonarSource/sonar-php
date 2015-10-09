@@ -19,32 +19,26 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class FunctionNameCheckTest extends CheckTest {
+public class FunctionNameCheckTest {
 
+  private static final String FILE_NAME = "FunctionNameCheck.php";
   private FunctionNameCheck check = new FunctionNameCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionNameCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(12).withMessage("Rename function \"DoSomething\" to match the regular expression " + check.DEFAULT + ".")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
     check.format =  "^[a-zA-Z][a-zA-Z0-9]*$";
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionNameCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
-
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of());
   }
+
 }
