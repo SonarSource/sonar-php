@@ -64,7 +64,7 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
   @Override
   public void visitNode(Tree tree) {
     if (tree.is(Kind.METHOD_DECLARATION)) {
-      checkModifiers(((MethodDeclarationTree) tree).modifiersToken());
+      checkModifiers(((MethodDeclarationTree) tree).modifiers());
     } else {
       checkModifiers(((ClassPropertyDeclarationTree) tree).modifierTokens());
     }

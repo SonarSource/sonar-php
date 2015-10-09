@@ -33,7 +33,7 @@ public class MethodDeclarationTreeTest extends PHPTreeModelTest {
   public void method_declaration() throws Exception {
     MethodDeclarationTree tree = parse("public final function &f($p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
     assertThat(tree.is(Kind.METHOD_DECLARATION)).isTrue();
-    assertThat(tree.modifiersToken()).hasSize(2);
+    assertThat(tree.modifiers()).hasSize(2);
     assertThat(tree.functionToken().text()).isEqualTo("function");
     assertThat(tree.referenceToken()).isNotNull();
     assertThat(tree.name().text()).isEqualTo("f");

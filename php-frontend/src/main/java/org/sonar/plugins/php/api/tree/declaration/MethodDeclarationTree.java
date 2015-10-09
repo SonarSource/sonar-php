@@ -55,7 +55,7 @@ public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
    *   <li>{@link PHPKeyword#FINAL final}
    * <ul/>
    */
-  List<SyntaxToken> modifiersToken();
+  List<SyntaxToken> modifiers();
 
   IdentifierTree name();
 

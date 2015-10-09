@@ -61,7 +61,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   }
 
   @Override
-  public List<SyntaxToken> modifiersToken() {
+  public List<SyntaxToken> modifiers() {
     return modifiersToken;
   }
 

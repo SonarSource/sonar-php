@@ -19,29 +19,33 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.TokenType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1448",
+  key = TooManyMethodsInClassCheck.KEY,
   name = "Classes should not have too many methods",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.ARCHITECTURE_CHANGEABILITY)
 @SqaleConstantRemediation("1h")
-public class TooManyMethodsInClassCheck extends SquidCheck<LexerlessGrammar> {
+public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1448";
+  private static final String MESSAGE = "Class \"%s\" has %s methods, which is greater than %s authorized. Split it into smaller classes.";
 
   private static final int DEFAULT_THRESHOLD = 20;
   private static final boolean DEFAULT_NON_PUBLIC = true;
@@ -57,45 +61,41 @@ public class TooManyMethodsInClassCheck extends SquidCheck<LexerlessGrammar> {
     defaultValue = "" + DEFAULT_NON_PUBLIC)
   public boolean countNonpublicMethods = DEFAULT_NON_PUBLIC;
 
-  @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CLASS_DECLARATION,
-      PHPGrammar.INTERFACE_DECLARATION);
-  }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    int nbMethod = getNumberOfMethods(astNode);
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
+    if (tree.is(Kind.CLASS_DECLARATION, Kind.INTERFACE_DECLARATION)) {
+      int nbMethod = getNumberOfMethods(tree);
 
-    if (nbMethod > maximumMethodThreshold) {
-      getContext().createLineViolation(this, "Class \"{0}\" has {1} methods, which is greater than {2} authorized. Split it into smaller classes.",
-        astNode, astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue(), nbMethod, maximumMethodThreshold);
-    }
-  }
-
-  public int getNumberOfMethods(AstNode classNode) {
-    int nbMethod = 0;
-
-    for (AstNode classStmt : classNode.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      AstNode classMember = classStmt.getFirstChild();
-      if (classMember.is(PHPGrammar.METHOD_DECLARATION) && !isExcluded(classMember)) {
-        nbMethod++;
-
+      if (nbMethod > maximumMethodThreshold) {
+        String message = String.format(MESSAGE, tree.name().text(), nbMethod, maximumMethodThreshold);
+        context().newIssue(KEY, message).tree(tree);
       }
     }
+  }
+
+  public int getNumberOfMethods(ClassDeclarationTree tree) {
+    int nbMethod = 0;
+
+    for (ClassMemberTree classMember : tree.members()) {
+      if (classMember.is(Kind.METHOD_DECLARATION) && !isExcluded((MethodDeclarationTree) classMember)) {
+        nbMethod++;
+      }
+    }
+
     return nbMethod;
   }
 
   /**
    * Return true if method is private or protected.
    */
-  private boolean isExcluded(AstNode methodDec) {
+  private boolean isExcluded(MethodDeclarationTree tree) {
     if (!countNonpublicMethods) {
 
-      for (AstNode modifier : methodDec.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
-        TokenType modifierType = modifier.getFirstChild().getToken().getType();
-        if (PHPKeyword.PROTECTED.equals(modifierType) || PHPKeyword.PRIVATE.equals(modifierType)) {
+      for (SyntaxToken modifierToken : tree.modifiers()) {
+        String modifier = modifierToken.text();
+        if (PHPKeyword.PROTECTED.getValue().equals(modifier) || PHPKeyword.PRIVATE.getValue().equals(modifier)) {
           return true;
         }
       }

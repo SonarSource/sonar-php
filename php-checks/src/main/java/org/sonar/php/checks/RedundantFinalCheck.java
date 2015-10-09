@@ -70,7 +70,7 @@ public class RedundantFinalCheck extends PHPSubscriptionCheck {
   }
 
   private static boolean hasFinalModifier(MethodDeclarationTree methodDeclaration) {
-    for (SyntaxToken modifier : methodDeclaration.modifiersToken()) {
+    for (SyntaxToken modifier : methodDeclaration.modifiers()) {
       if (isFinalModifier(modifier)) {
         return true;
       }

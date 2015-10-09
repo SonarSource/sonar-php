@@ -1,6 +1,6 @@
 <?php
 
-interface I {             // NOK
+interface I {             // NOK {{Class "I" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.}}
 
   public function f1();
 
