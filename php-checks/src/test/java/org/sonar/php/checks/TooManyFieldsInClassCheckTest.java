@@ -19,31 +19,29 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TooManyFieldsInClassCheckTest extends CheckTest {
+import java.util.List;
+
+public class TooManyFieldsInClassCheckTest {
 
   private TooManyFieldsInClassCheck check = new TooManyFieldsInClassCheck();
+  private static final String fileName = "TooManyFieldsInClassCheck.php";
 
   @Test
   public void test_default() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFieldsInClassCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of());
   }
 
   @Test
   public void custom_maximum_field_threshold() throws Exception {
     check.maximumFieldThreshold = 4;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFieldsInClassCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Refactor this class so it has no more than " + check.maximumFieldThreshold + " fields, rather than the 5 it currently has.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
@@ -51,9 +49,9 @@ public class TooManyFieldsInClassCheckTest extends CheckTest {
     check.maximumFieldThreshold = 2;
     check.countNonpublicFields = false;
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TooManyFieldsInClassCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Refactor this class so it has no more than " + check.maximumFieldThreshold + " public fields, rather than the 3 it currently has.")
-      .noMore();
+    List<Issue> issues = ImmutableList.<Issue>of(
+      new PHPIssue("testKey", "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(3)
+    );
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 }

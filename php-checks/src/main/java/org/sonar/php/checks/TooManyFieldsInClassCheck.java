@@ -20,28 +20,33 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.Lists;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.List;
 
 @Rule(
-  key = "S1820",
+  key = TooManyFieldsInClassCheck.KEY,
   name = "Classes should not have too many fields",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.ARCHITECTURE_CHANGEABILITY)
 @SqaleConstantRemediation("1h")
-public class TooManyFieldsInClassCheck extends SquidCheck<LexerlessGrammar> {
+public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1820";
+  private static final String MESSAGE = "Refactor this class so it has no more than %s%s fields, rather than the %s it currently has.";
 
   public static final int DEFAULT_MAX = 20;
   public static final boolean DEFAULT_COUNT_NON_PUBLIC = true;
@@ -57,25 +62,22 @@ public class TooManyFieldsInClassCheck extends SquidCheck<LexerlessGrammar> {
     defaultValue = "" + DEFAULT_COUNT_NON_PUBLIC)
   boolean countNonpublicFields = DEFAULT_COUNT_NON_PUBLIC;
 
-
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CLASS_DECLARATION);
-  }
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    int nbFields = getNumberOfFields(astNode);
+    if (tree.is(Kind.CLASS_DECLARATION)) {
+      int nbFields = getNumberOfFields(tree);
 
-    if (nbFields > maximumFieldThreshold) {
-      String msg = countNonpublicFields ? String.valueOf(maximumFieldThreshold) : (maximumFieldThreshold + " public");
-      getContext().createLineViolation(this, "Refactor this class so it has no more than {0} fields, rather than the {1} it currently has.", astNode,
-        msg, nbFields);
+      if (nbFields > maximumFieldThreshold) {
+        String message = String.format(MESSAGE, maximumFieldThreshold, countNonpublicFields ? "" : " public", nbFields);
+        context().newIssue(KEY, message).tree(tree);
+      }
     }
   }
 
-  private int getNumberOfFields(AstNode classDef) {
-    List<AstNode> fields = getClassFields(classDef);
+  private int getNumberOfFields(ClassDeclarationTree tree) {
+    List<ClassPropertyDeclarationTree> fields = getClassFields(tree);
     int nbFields = fields.size();
 
     if (!countNonpublicFields) {
@@ -84,35 +86,34 @@ public class TooManyFieldsInClassCheck extends SquidCheck<LexerlessGrammar> {
     return nbFields;
   }
 
-  private static List<AstNode> getClassFields(AstNode classDef) {
-    List<AstNode> fields = Lists.newArrayList();
+  private static List<ClassPropertyDeclarationTree> getClassFields(ClassDeclarationTree classDeclaration) {
+    List<ClassPropertyDeclarationTree> fields = Lists.newArrayList();
 
-    for (AstNode classStmt : classDef.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      AstNode statement = classStmt.getFirstChild();
-
-      if (statement.is(PHPGrammar.CLASS_CONSTANT_DECLARATION, PHPGrammar.CLASS_VARIABLE_DECLARATION)) {
-        fields.add(statement);
+    for (ClassMemberTree classMember : classDeclaration.members()) {
+      if (classMember.is(Kind.CLASS_PROPERTY_DECLARATION, Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)) {
+        fields.add((ClassPropertyDeclarationTree) classMember);
       }
     }
     return fields;
   }
 
-  private static int getNumberOfNonPublicFields(List<AstNode> fields) {
+  private static int getNumberOfNonPublicFields(List<ClassPropertyDeclarationTree> fields) {
     int nbNonPublicFields = 0;
 
-    for (AstNode field : fields) {
+    for (ClassPropertyDeclarationTree field : fields) {
 
       // class constants are public in PHP
-      if (field.is(PHPGrammar.CLASS_VARIABLE_DECLARATION) && isNonPublic(field.getFirstChild(PHPGrammar.VARIABLE_MODIFIERS))) {
+      if (field.is(Kind.CLASS_PROPERTY_DECLARATION) && isNonPublic(field.modifierTokens())) {
         nbNonPublicFields++;
       }
     }
     return nbNonPublicFields;
   }
 
-  private static boolean isNonPublic(AstNode modifiers) {
-    for (AstNode modifier : modifiers.getChildren()) {
-      if (modifier.isNot(PHPKeyword.VAR) && modifier.getFirstChild().is(PHPKeyword.PROTECTED, PHPKeyword.PRIVATE)) {
+  private static boolean isNonPublic(List<SyntaxToken> modifiers) {
+    for (SyntaxToken modifierToken : modifiers) {
+      String modifier = modifierToken.text();
+      if (!PHPKeyword.VAR.getValue().equals(modifier) && (PHPKeyword.PROTECTED.getValue().equals(modifier) || PHPKeyword.PRIVATE.getValue().equals(modifier))) {
         return true;
       }
     }
