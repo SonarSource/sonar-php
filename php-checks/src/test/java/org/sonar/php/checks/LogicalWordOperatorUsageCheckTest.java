@@ -20,11 +20,10 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class LogicalWordOperatorUsageCheckTest extends CheckTest {
+public class LogicalWordOperatorUsageCheckTest {
 
   @Test
   public void test() throws Exception {

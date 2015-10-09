@@ -79,14 +79,14 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   public boolean hasModifiers(String... modifiers) {
     int counter = 0;
     for (String modifier : modifiers) {
-      if (modifiersContains(modifier)) {
+      if (hasModifier(modifier)) {
         counter++;
       }
     }
     return counter == modifiers.length;
   }
 
-  public boolean modifiersContains(String modifier) {
+  public boolean hasModifier(String modifier) {
     for (SyntaxToken token : modifierTokens()) {
       if (token.text().equals(modifier)) {
         return true;
