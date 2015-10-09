@@ -19,30 +19,42 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import javax.annotation.Nullable;
+import java.util.List;
 
 @Rule(
-  key = "S134",
+  key = NestedControlFlowDepthCheck.KEY,
   name = "Control flow statements \"if\", \"for\", \"while\", \"switch\" and \"try\" should not be nested too deeply",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_CHANGEABILITY)
 @SqaleConstantRemediation("10min")
-public class NestedControlFlowDepthCheck extends SquidCheck<LexerlessGrammar> {
+public class NestedControlFlowDepthCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S134";
+
+  private static final String MESSAGE = "Refactor this code to not nest more than %s \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.";
 
   private int nestingLevel;
 
@@ -53,44 +65,85 @@ public class NestedControlFlowDepthCheck extends SquidCheck<LexerlessGrammar> {
     defaultValue = "" + DEFAULT)
   public int max = DEFAULT;
 
-
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.IF_STATEMENT,
-      PHPGrammar.ALTERNATIVE_IF_STATEMENT,
-      PHPGrammar.DO_WHILE_STATEMENT,
-      PHPGrammar.WHILE_STATEMENT,
-      PHPGrammar.FOR_STATEMENT,
-      PHPGrammar.FOREACH_STATEMENT,
-      PHPGrammar.SWITCH_STATEMENT,
-      PHPGrammar.TRY_STATEMENT);
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
+  public void visitCompilationUnit(CompilationUnitTree tree) {
     nestingLevel = 0;
+    super.visitCompilationUnit(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (!isElseIf(astNode)) {
-      nestingLevel++;
-      if (nestingLevel == max + 1) {
-        getContext().createLineViolation(this, "Refactor this code to not nest more than {0} \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.", astNode, max);
+  public void visitIfStatement(IfStatementTree tree) {
+    enterBlock(tree);
+    scanIf(tree);
+    leaveBlock();
+  }
+
+  private void scanIf(IfStatementTree ifTree) {
+    scan(ifTree.statements());
+    scan(ifTree.elseifClauses());
+
+    ElseClauseTree elseClause = ifTree.elseClause();
+    if (elseClause != null) {
+      List<StatementTree> elseStatements = elseClause.statements();
+      if (elseStatements.size() == 1 && elseStatements.get(0).is(Kind.IF_STATEMENT)) {
+        scanIf((IfStatementTree) elseStatements.get(0));
+      } else {
+        scan(elseClause);
       }
     }
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (!isElseIf(astNode)) {
-      nestingLevel--;
+  public void visitDoWhileStatement(DoWhileStatementTree tree) {
+    enterBlock(tree);
+    super.visitDoWhileStatement(tree);
+    leaveBlock();
+  }
+
+  @Override
+  public void visitForStatement(ForStatementTree tree) {
+    enterBlock(tree);
+    super.visitForStatement(tree);
+    leaveBlock();
+  }
+
+  @Override
+  public void visitForEachStatement(ForEachStatementTree tree) {
+    enterBlock(tree);
+    super.visitForEachStatement(tree);
+    leaveBlock();
+  }
+
+  @Override
+  public void visitSwitchStatement(SwitchStatementTree tree) {
+    enterBlock(tree);
+    super.visitSwitchStatement(tree);
+    leaveBlock();
+  }
+
+  @Override
+  public void visitTryStatement(TryStatementTree tree) {
+    enterBlock(tree);
+    super.visitTryStatement(tree);
+    leaveBlock();
+  }
+
+  @Override
+  public void visitWhileStatement(WhileStatementTree tree) {
+    enterBlock(tree);
+    super.visitWhileStatement(tree);
+    leaveBlock();
+  }
+
+  private void enterBlock(Tree tree) {
+    nestingLevel++;
+    if (nestingLevel == max + 1) {
+      context().newIssue(KEY, String.format(MESSAGE, max)).tree(tree);
     }
   }
 
-  private boolean isElseIf(AstNode astNode) {
-    AstNode parentPreviousSibling = astNode.getParent().getPreviousSibling();
-    return parentPreviousSibling != null && parentPreviousSibling.is(PHPKeyword.ELSE);
+  private void leaveBlock() {
+    nestingLevel--;
   }
+
 }

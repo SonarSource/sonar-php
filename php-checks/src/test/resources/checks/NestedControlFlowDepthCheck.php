@@ -14,21 +14,21 @@ function f() {
       while (false) {             // level 3
         if (true) {               // level 4
 
-          foreach ($arr as $v) {    // level 5 - NOK
+          foreach ($arr as $v) {    // NOK
           }
 
-          while (false) {           // level 5 - NOK
+          while (false) {           // NOK
           }
 
-          do {                      // level 5 - NOK
+          do {                      // NOK
           } while (false);
 
-          switch ($a) {             // level 5 - NOK
+          switch ($a) {             // NOK
           }
 
-          try {                     // level 5 - NOK
+          try {                     // NOK {{Refactor this code to not nest more than 4 "if", "for", "while", "switch" and "try" statements.}}
           } catch (Exception $e) {
-            if ($a) {               // level 6 - NOK
+            if ($a) {               // level 6 - OK
             }
           }
         }
@@ -42,6 +42,9 @@ function f() {
        } else if (true) {         // level 3
         for (;;) {
          }
+       } else {
+        for (;;) {
+         }       
        }
     }
   }

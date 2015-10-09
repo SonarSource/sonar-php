@@ -19,35 +19,26 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class NestedControlFlowDepthCheckTest extends CheckTest {
+public class NestedControlFlowDepthCheckTest {
 
+  private static final String FILE_NAME = "NestedControlFlowDepthCheck.php";
   private NestedControlFlowDepthCheck check = new NestedControlFlowDepthCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NestedControlFlowDepthCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(17).withMessage("Refactor this code to not nest more than " + check.DEFAULT + " \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.")
-      .next().atLine(20)
-      .next().atLine(23)
-      .next().atLine(26)
-      .next().atLine(29)
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 5;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("NestedControlFlowDepthCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(31).withMessage("Refactor this code to not nest more than " + check.max + " \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of(new PHPIssue("", null).line(31)));
   }
 }
