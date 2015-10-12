@@ -19,77 +19,53 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 @Rule(
-  key = "S2830",
+  key = ConstructorDependencyInversionCheck.KEY,
   name = "Class constructors should not create other objects",
   priority = Priority.MAJOR,
   tags = {"design"})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.ARCHITECTURE_CHANGEABILITY)
 @SqaleConstantRemediation("10min")
-public class ConstructorDependencyInversionCheck extends SquidCheck<LexerlessGrammar> {
+public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
 
-  public static final String MESSAGE = "Remove this creation of object in constructor. Use dependency injection instead.";
+  public static final String KEY = "S2830";
+  private static final String MESSAGE = "Remove this creation of object in constructor. Use dependency injection instead.";
+
   private boolean inConstructor = false;
-  private boolean inThrow = false;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.METHOD_DECLARATION,
-      PHPGrammar.THROW_STATEMENT,
-      PHPGrammar.NEW_EXPR);
-  }
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    MethodDeclarationTree constructor = tree.fetchConstructor();
 
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    inConstructor = false;
-    inThrow = false;
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.METHOD_DECLARATION) && isConstructor(astNode)) {
+    if (constructor != null) {
       inConstructor = true;
-
-    } else if (astNode.is(PHPGrammar.THROW_STATEMENT)) {
-      inThrow = true;
-
-    } else if (inConstructor && !inThrow) {
-      getContext().createLineViolation(this, MESSAGE, astNode);
-
+      scan(constructor);
+      inConstructor = false;
     }
-    // else do nothing
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.METHOD_DECLARATION) && isConstructor(astNode)) {
-      inConstructor = false;
+  public void visitThrowStatement(ThrowStatementTree tree) {
+    // Ignore instantiation in throw statement.
+  }
 
-    } else if (astNode.is(PHPGrammar.THROW_STATEMENT)) {
-      inThrow = false;
+  @Override
+  public void visitNewExpression(NewExpressionTree tree) {
+    if (inConstructor) {
+      context().newIssue(KEY, MESSAGE).tree(tree);
     }
-
-  }
-
-  private static boolean isConstructor(AstNode astNode) {
-    return "__construct".equals(getMethodName(astNode));
-  }
-
-  private static String getMethodName(AstNode method) {
-    return method.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
+    super.visitNewExpression(tree);
   }
 
 }

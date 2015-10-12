@@ -20,23 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class ConstructorDependencyInversionCheckTest extends CheckTest {
 
-  private ConstructorDependencyInversionCheck check = new ConstructorDependencyInversionCheck();
-
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("DependencyInversionCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(8).withMessage(ConstructorDependencyInversionCheck.MESSAGE)
-      .next().atLine(9).withMessage(ConstructorDependencyInversionCheck.MESSAGE)
-      .next().atLine(10).withMessage(ConstructorDependencyInversionCheck.MESSAGE)
-      .noMore();
+    PHPCheckTest.check(new ConstructorDependencyInversionCheck(), TestUtils.getCheckFile("DependencyInversionCheck.php"));
   }
 }
