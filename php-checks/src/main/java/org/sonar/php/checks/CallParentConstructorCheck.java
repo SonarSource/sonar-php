@@ -19,93 +19,81 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import javax.annotation.Nullable;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 @Rule(
-  key = "S1605",
+  key = CallParentConstructorCheck.KEY,
   name = "PHP 4 style calls to parent constructors should not be used in PHP5 \"__construct\" functions",
   priority = Priority.MAJOR,
   tags = {Tags.CONVENTION})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.COMPILER_RELATED_PORTABILITY)
 @SqaleConstantRemediation("2min")
-public class CallParentConstructorCheck extends SquidCheck<LexerlessGrammar> {
+public class CallParentConstructorCheck extends PHPVisitorCheck {
 
-  private Deque<String> scope = new ArrayDeque<String>();
-  private boolean inConstructor = false;
+  public static final String KEY = "S1605";
+  private static final String MESSAGE = "Replace \"parent::%s(...)\" by \"parent::__construct(...)\".";
 
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    scope.clear();
-    inConstructor = false;
-  }
+  private String superClass = null;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CLASS_DECLARATION,
-      PHPGrammar.METHOD_DECLARATION,
-      PHPGrammar.CLASS_MEMBER_ACCESS);
-  }
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    if (tree.is(Kind.CLASS_DECLARATION) && tree.superClass() != null) {
+      MethodDeclarationTree constructor = tree.fetchConstructor();
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
-      String parent = getExtendsFrom(astNode);
-      if (parent != null) {
-        scope.push(parent);
-      }
-    } else if (!scope.isEmpty()) {
-      if (astNode.is(PHPGrammar.METHOD_DECLARATION) && isNonDeprecatedConstructor(astNode)) {
-        inConstructor = true;
-      } else if (inConstructor && isAccessingParentMember(astNode)) {
-        String parentMemberName = astNode.getLastChild().getTokenOriginalValue();
-
-        if (getCurrentClassParent().equals(parentMemberName)) {
-          getContext().createLineViolation(this, "Replace \"parent::{0}(...)\" by \"parent::__construct(...)\".", astNode, parentMemberName);
-        }
+      if (constructor != null && isPHP5Constructor(constructor)) {
+        superClass = tree.superClass().fullName();
+        scan(constructor);
+        superClass = null;
       }
     }
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.METHOD_DECLARATION) && inConstructor) {
-      inConstructor = false;
-    } else if (!scope.isEmpty() && astNode.is(PHPGrammar.CLASS_DECLARATION)) {
-      scope.pop();
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if (superClass != null && tree.callee().is(Kind.CLASS_MEMBER_ACCESS)) {
+      MemberAccessTree memberAccess = (MemberAccessTree) tree.callee();
+      String memberName = getName(memberAccess.member());
+
+      if (isParent(memberAccess.object()) && superClass.equalsIgnoreCase(memberName)) {
+        context().newIssue(KEY, String.format(MESSAGE, memberName)).tree(tree);
+      }
+
     }
+    super.visitFunctionCall(tree);
   }
 
-  private String getCurrentClassParent() {
-    return scope.peek();
+  private static boolean isPHP5Constructor(MethodDeclarationTree constructor) {
+    return ClassDeclarationTree.PHP5_CONSTRUCTOR_NAME.equalsIgnoreCase(constructor.name().text());
   }
 
-  private static boolean isAccessingParentMember(AstNode node) {
-    return node.is(PHPGrammar.CLASS_MEMBER_ACCESS) && "parent".equals(node.getPreviousAstNode().getTokenOriginalValue());
+  @Nullable
+  private static String getName(Tree member) {
+    // Skipping other complex expression
+    return member.is(Kind.IDENTIFIER) ? ((IdentifierTree) member).text() : null;
   }
 
-  private boolean isNonDeprecatedConstructor(AstNode astNode) {
-    return "__construct".equals(astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue());
-  }
-
-  private String getExtendsFrom(AstNode classDec) {
-    AstNode extendsFrom = classDec.getFirstChild(PHPGrammar.EXTENDS_FROM);
-    return extendsFrom != null ? extendsFrom.getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME).getTokenOriginalValue() : null;
+  private static boolean isParent(ExpressionTree object) {
+    // Skipping other complex expression
+    return object.is(Kind.NAMESPACE_NAME)
+      && "parent".equalsIgnoreCase(((NamespaceNameTree) object).fullName());
   }
 
 }

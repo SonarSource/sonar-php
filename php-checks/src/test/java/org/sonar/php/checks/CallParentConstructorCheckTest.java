@@ -20,19 +20,15 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class CallParentConstructorCheckTest extends CheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("CallParentConstructorCheck.php"), new CallParentConstructorCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Replace \"parent::A(...)\" by \"parent::__construct(...)\".")
-      .noMore();
+    PHPCheckTest.check(new CallParentConstructorCheck(), TestUtils.getCheckFile("CallParentConstructorCheck.php"));
   }
+
 }
