@@ -20,72 +20,80 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.Sets;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Set;
 
 @Rule(
-  key = "S2007",
+  key = FunctionDefineOutsideClassCheck.KEY,
   name = "Functions and variables should not be defined outside of classes",
   priority = Priority.MAJOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNIT_TESTABILITY)
 @SqaleConstantRemediation("15min")
-public class FunctionDefineOutsideClassCheck extends SquidCheck<LexerlessGrammar> {
+public class FunctionDefineOutsideClassCheck extends PHPVisitorCheck {
 
-  private final Deque<AstNode> scopes = new ArrayDeque<>();
+  public static final String KEY = "S2007";
+  private static final String MESSAGE = "Move this %s into a class.";
+
+  private final Deque<Tree> scopes = new ArrayDeque<>();
   private final Set<String> globalVariableNames = Sets.newHashSet();
 
   @Override
-  public void init() {
-    subscribeTo(FunctionUtils.functions());
-    subscribeTo(PHPGrammar.ASSIGNMENT_EXPR);
-  }
-
-  @Override
-  public void leaveFile(AstNode astNode) {
+  public void visitScript(ScriptTree tree) {
     scopes.clear();
     globalVariableNames.clear();
+    super.visitScript(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.FUNCTION_DECLARATION)) {
-      getContext().createLineViolation(this, "Move this function into a class.", astNode);
-    } else if (scopes.isEmpty()) {
-      checkAssignment(astNode);
-    }
-    if (astNode.is(FunctionUtils.functions())) {
-      scopes.push(astNode);
-    }
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    scopes.push(tree);
+    super.visitFunctionExpression(tree);
+    scopes.pop();
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(FunctionUtils.functions())) {
-      scopes.pop();
-    }
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    scopes.push(tree);
+    super.visitMethodDeclaration(tree);
+    scopes.pop();
   }
 
-  private void checkAssignment(AstNode astNode) {
-    AstNode memberExpr = astNode.getFirstChild();
-    AstNode variable = memberExpr.getFirstChild();
-    if (memberExpr.getNumberOfChildren() == 1 && variable.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
-      String varName = variable.getTokenOriginalValue();
-      if (memberExpr.getTokens().size() == 1 && !CheckUtils.isSuperGlobal(varName) && !globalVariableNames.contains(varName)) {
-        getContext().createLineViolation(this, "Move this variable into a class.", astNode);
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    context().newIssue(KEY, String.format(MESSAGE, "function")).tree(tree);
+
+    scopes.push(tree);
+    super.visitFunctionDeclaration(tree);
+    scopes.pop();
+  }
+
+  @Override
+  public void visitAssignmentExpression(AssignmentExpressionTree tree) {
+    super.visitAssignmentExpression(tree);
+
+    if (scopes.isEmpty() && tree.is(Kind.ASSIGNMENT) && tree.variable().is(Kind.VARIABLE_IDENTIFIER)) {
+      String varName = ((VariableIdentifierTree) tree.variable()).variableExpression().text();
+
+      if (!CheckUtils.isSuperGlobal(varName) && !globalVariableNames.contains(varName)) {
+        context().newIssue(KEY, String.format(MESSAGE, "variable")).tree(tree);
         globalVariableNames.add(varName);
       }
     }

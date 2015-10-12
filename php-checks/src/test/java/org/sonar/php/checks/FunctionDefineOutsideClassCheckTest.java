@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class FunctionDefineOutsideClassCheckTest extends CheckTest {
+public class FunctionDefineOutsideClassCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionDefineOutsideClassCheck.php"), new FunctionDefineOutsideClassCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Move this function into a class.")
-      .next().atLine(17).withMessage("Move this variable into a class.")
-      .noMore();
+    PHPCheckTest.check(new FunctionDefineOutsideClassCheck(), TestUtils.getCheckFile("FunctionDefineOutsideClassCheck.php"));
   }
 
 }
