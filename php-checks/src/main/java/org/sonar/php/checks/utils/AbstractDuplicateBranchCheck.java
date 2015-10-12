@@ -50,22 +50,20 @@ public abstract class AbstractDuplicateBranchCheck extends PHPVisitorCheck {
     clauses.add(ifStatement);
     clauses.addAll(ifStatement.elseifClauses());
 
-    if (ifStatement.elseClause() != null) {
-      ElseClauseTree currentElseClause = ifStatement.elseClause();
+    ElseClauseTree currentElseClause = ifStatement.elseClause();
 
-      while (currentElseClause != null) {
-        StatementTree statement = currentElseClause.statements().get(0);
+    while (currentElseClause != null) {
+      StatementTree statement = currentElseClause.statements().get(0);
 
-        if (statement.is(Kind.IF_STATEMENT)) {
-          IfStatementTree nestedIfStatement = (IfStatementTree) statement;
-          clauses.add(nestedIfStatement);
-          checkedIfStatements.add(nestedIfStatement);
-          currentElseClause = nestedIfStatement.elseClause();
+      if (statement.is(Kind.IF_STATEMENT)) {
+        IfStatementTree nestedIfStatement = (IfStatementTree) statement;
+        clauses.add(nestedIfStatement);
+        checkedIfStatements.add(nestedIfStatement);
+        currentElseClause = nestedIfStatement.elseClause();
 
-        } else {
-          clauses.add(currentElseClause);
-          currentElseClause = null;
-        }
+      } else {
+        clauses.add(currentElseClause);
+        currentElseClause = null;
       }
     }
 

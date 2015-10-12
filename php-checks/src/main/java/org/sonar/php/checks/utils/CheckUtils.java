@@ -131,7 +131,7 @@ public class CheckUtils {
     return areSyntacticallyEquivalent(iterator1, iterator2);
   }
 
-  public static boolean areSyntacticallyEquivalent(Iterator<Tree> iterator1, Iterator<Tree> iterator2) {
+  public static boolean areSyntacticallyEquivalent(Iterator<? extends Tree> iterator1, Iterator<? extends Tree> iterator2) {
     while (iterator1.hasNext() && iterator2.hasNext()) {
       if (!areSyntacticallyEquivalent(iterator1.next(), iterator2.next())) {
         return false;

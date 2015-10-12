@@ -50,7 +50,7 @@ public class CollapsibleIfStatementCheck extends PHPVisitorCheck {
   public void visitIfStatement(IfStatementTree tree) {
     super.visitIfStatement(tree);
 
-    if (!hasElse(tree)) {
+    if (!hasElseOrElseIf(tree)) {
       StatementTree singleStatement = getSingleNestedStatement(tree);
 
       if (singleStatement != null && isIfStatementWithoutElse(singleStatement)) {
@@ -60,7 +60,7 @@ public class CollapsibleIfStatementCheck extends PHPVisitorCheck {
   }
 
   private static boolean isIfStatementWithoutElse(StatementTree statement) {
-    return statement.is(Kind.IF_STATEMENT, Kind.ALTRENATIVE_IF_STATEMENT) && !hasElse((IfStatementTree) statement);
+    return statement.is(Kind.IF_STATEMENT, Kind.ALTRENATIVE_IF_STATEMENT) && !hasElseOrElseIf((IfStatementTree) statement);
   }
 
   @Nullable
@@ -83,7 +83,7 @@ public class CollapsibleIfStatementCheck extends PHPVisitorCheck {
     return null;
   }
 
-  private static boolean hasElse(IfStatementTree ifStatement) {
+  private static boolean hasElseOrElseIf(IfStatementTree ifStatement) {
     return ifStatement.elseClause() != null || !ifStatement.elseifClauses().isEmpty();
   }
 
