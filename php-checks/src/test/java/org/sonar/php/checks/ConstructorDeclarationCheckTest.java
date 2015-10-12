@@ -20,19 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ConstructorDeclarationCheckTest extends CheckTest {
+public class ConstructorDeclarationCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ConstructorDeclarationCheck.php"), new ConstructorDeclarationCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Replace this function name \"C\" with \"__construct\".")
-      .noMore();
+    PHPCheckTest.check(new ConstructorDeclarationCheck(), TestUtils.getCheckFile("ConstructorDeclarationCheck.php"));
   }
+
 }

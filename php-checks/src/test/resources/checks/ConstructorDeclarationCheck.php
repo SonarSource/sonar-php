@@ -2,7 +2,30 @@
 
 class C {
 
-  public function C() {             // NOK
+  public function C() {             // NOK {{Replace this function name "C" with "__construct".}}
+  }
+
+  public function f() {
+  }
+}
+
+class C {
+
+  public function C() {             // NOK {{Replace this function name "C", since a "__construct" method has already been defined in this class.}}
+  }
+
+  public function __construct() {
+  }
+
+  public function f() {
+  }
+}
+
+class C {
+
+  const C = 1;
+
+  public function __construct() {   // OK
   }
 
   public function f() {
@@ -11,11 +34,6 @@ class C {
 
 
 class C {
-
-  const C = 1;
-
-  public function __construct() {   // OK
-  }
 
   public function f() {
   }

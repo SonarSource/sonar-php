@@ -19,55 +19,69 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S1603",
+  key = ConstructorDeclarationCheck.KEY,
   name = "PHP 4 constructor declarations should not be used",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.COMPILER_RELATED_PORTABILITY)
 @SqaleConstantRemediation("2min")
-public class ConstructorDeclarationCheck extends SquidCheck<LexerlessGrammar> {
+public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
+  public static final String KEY = "S1603";
+
+  private static final String MESSAGE_OLD_STYLE_PRESENT = "Replace this function name \"%s\" with \"__construct\".";
+  private static final String MESSAGE_BOTH_STYLE_PRESENT = "Replace this function name \"%s\", since a \"__construct\" method has already been defined in this class.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CLASS_DECLARATION);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(Kind.CLASS_DECLARATION);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    AstNode constructor = getDeprecatedConstructor(astNode);
+  public void visitNode(Tree tree) {
+    ClassDeclarationTree classDec = (ClassDeclarationTree) tree;
 
-    if (constructor != null) {
-      getContext().createLineViolation(this, "Replace this function name \"{0}\" with \"__construct\".", constructor, getMethodName(constructor));
-    }
-  }
+    MethodDeclarationTree oldStyleConstructor = null;
+    MethodDeclarationTree newStyleConstructor = null;
 
-  private static AstNode getDeprecatedConstructor(AstNode astNode) {
-    String className = astNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
+    for (ClassMemberTree member : classDec.members()) {
+      if (member.is(Kind.METHOD_DECLARATION)) {
+        MethodDeclarationTree method = (MethodDeclarationTree) member;
+        String methodName = method.name().text();
 
-    for (AstNode classStmt : astNode.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      AstNode stmt = classStmt.getFirstChild();
+        if (classDec.name().text().equalsIgnoreCase(methodName)) {
+          oldStyleConstructor = method;
 
-      if (stmt.is(PHPGrammar.METHOD_DECLARATION) && className.equals(getMethodName(stmt))) {
-        return stmt;
+        } else if (ClassDeclarationTree.PHP5_CONSTRUCTOR_NAME.equalsIgnoreCase(methodName)) {
+          newStyleConstructor = method;
+        }
       }
     }
-    return null;
+
+    if (oldStyleConstructor != null) {
+      String message = String.format(
+        newStyleConstructor != null ? MESSAGE_BOTH_STYLE_PRESENT : MESSAGE_OLD_STYLE_PRESENT,
+        oldStyleConstructor.name().text());
+
+      context().newIssue(KEY, message).tree(oldStyleConstructor);
+    }
   }
 
-  private static String getMethodName(AstNode method) {
-    return method.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
-  }
 }
