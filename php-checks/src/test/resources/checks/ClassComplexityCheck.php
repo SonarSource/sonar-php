@@ -1,6 +1,6 @@
 <?php
 
-class KO {
+class KO { // NOK {{The Cyclomatic Complexity of this class "KO" is 6 which is greater than 5 authorized, split this class.}}
   function f() // +1
   {
     switch (foo)

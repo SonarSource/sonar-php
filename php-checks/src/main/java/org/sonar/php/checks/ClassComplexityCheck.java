@@ -19,29 +19,33 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPMetric;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.metrics.NewComplexityVisitor;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.api.SourceClass;
-import org.sonar.squidbridge.checks.ChecksHelper;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
+import java.util.List;
 
 @Rule(
-  key = "S1311",
+  key = ClassComplexityCheck.KEY,
   name = "Classes should not be too complex",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "10min", effortToFixDescription = "per complexity point over the threshold")
-public class ClassComplexityCheck extends SquidCheck<LexerlessGrammar> {
+public class ClassComplexityCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S1311";
+
+  private static final String MESSAGE = "The Cyclomatic Complexity of this class \"%s\" is %s which is greater than %s authorized, split this class.";
 
   public static final int DEFAULT = 200;
 
@@ -51,19 +55,17 @@ public class ClassComplexityCheck extends SquidCheck<LexerlessGrammar> {
   int max = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CLASS_DECLARATION);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(Kind.CLASS_DECLARATION);
   }
 
   @Override
-  public void leaveNode(AstNode node) {
-    SourceClass sourceClass = (SourceClass) getContext().peekSourceCode();
-    int complexity = ChecksHelper.getRecursiveMeasureInt(sourceClass, PHPMetric.COMPLEXITY);
-
+  public void visitNode(Tree tree) {
+    int complexity = NewComplexityVisitor.complexity(tree);
     if (complexity > max) {
-      getContext().createLineViolation(this,
-        "The Cyclomatic Complexity of this class \"{0}\" is {1} which is greater than {2} authorized, split this class.",
-        node, node.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue(), complexity, max);
+      String className = ((ClassDeclarationTree) tree).name().text();
+      String message = String.format(MESSAGE, className, complexity, max);
+      context().newIssue(KEY, message).tree(tree);
     }
   }
 

@@ -19,31 +19,26 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class ClassComplexityCheckTest extends CheckTest {
+public class ClassComplexityCheckTest {
 
+  private static final String FILE_NAME = "ClassComplexityCheck.php";
   private ClassComplexityCheck check = new ClassComplexityCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassComplexityCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of());
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 5;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassComplexityCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("The Cyclomatic Complexity of this class \"KO\" is 6 which is greater than " + check.max + " authorized, split this class.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
 }
