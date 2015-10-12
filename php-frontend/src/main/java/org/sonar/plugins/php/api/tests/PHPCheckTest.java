@@ -155,6 +155,7 @@ public class PHPCheckTest {
 
     private static final String NO_ISSUE = "* [NO_ISSUE] Expected but no issue on line %s.\n\n";
     private static final String WRONG_MESSAGE = "* [WRONG_MESSAGE] Issue at line %s : \nExpected message : %s\nActual message : %s\n\n";
+    private static final String WRONG_COST = "* [WRONG_COST] Issue at line %s : \nExpected cost : %s\nActual cost : %s\n\n";
     private static final String UNEXPECTED_ISSUE = "* [UNEXPECTED_ISSUE] at line %s with a message: \"%s\"\n\n";
     private static final String WRONG_NUMBER = "* [WRONG_NUMBER] Line %s: Expecting %s issue, but actual issues number is %s\n\n";
 
@@ -180,6 +181,11 @@ public class PHPCheckTest {
         String expectedMessage = expected.get(0).message();
         if (expectedMessage != null && !actual.get(0).message().equals(expectedMessage)) {
           return String.format(WRONG_MESSAGE, actual.get(0).line(), expectedMessage, actual.get(0).message());
+        }
+
+        Double expectedCost = expected.get(0).cost();
+        if (expectedCost != null && !expectedCost.equals(actual.get(0).cost())) {
+          return String.format(WRONG_COST, actual.get(0).line(), expectedCost, actual.get(0).cost());
         }
 
       } else if (actual.size() != expected.size()) {

@@ -19,63 +19,59 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleLinearRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 @Rule(
-  key = "S1996",
+  key = MoreThanOneClassInFileCheck.KEY,
   name = "Files should contain only one class or interface each",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleLinearRemediation(coeff = "10min", effortToFixDescription = "classes + interfaces -1")
-public class MoreThanOneClassInFileCheck extends SquidCheck<LexerlessGrammar> {
+public class MoreThanOneClassInFileCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1996";
+  private static final String MESSAGE = "There are %s%s%sin this file; move all but one of them to other files.";
 
   private int nbClass = 0;
   private int nbInterface = 0;
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CLASS_DECLARATION, PHPGrammar.INTERFACE_DECLARATION);
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
 
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    nbClass = 0;
-    nbInterface = 0;
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
+    if (tree.is(Kind.CLASS_DECLARATION)) {
       nbClass++;
-    } else {
+
+    } else if (tree.is(Kind.INTERFACE_DECLARATION)) {
       nbInterface++;
     }
   }
 
   @Override
-  public void leaveFile(@Nullable AstNode astNode) {
-    if ((nbClass + nbInterface) > 1) {
+  public void visitScript(ScriptTree tree) {
+    nbClass = 0;
+    nbInterface = 0;
 
-      CheckMessage msg = new CheckMessage((Object) this, "There are {0}{1}{2}in this file; move all but one of them to other files.",
+    super.visitScript(tree);
+
+    if ((nbClass + nbInterface) > 1) {
+      String message = String.format(MESSAGE,
         nbClass > 0 ? (nbClass + " independent classes ") : "",
         nbClass > 0 && nbInterface > 0 ? "and " : "",
         nbInterface > 0 ? (nbInterface + " independent interfaces ") : "");
+
       int cost = nbClass + nbInterface - 1;
-      msg.setCost(cost);
-      getContext().log(msg);
+      context().newIssue(KEY, message).cost(cost);
     }
   }
+
 }

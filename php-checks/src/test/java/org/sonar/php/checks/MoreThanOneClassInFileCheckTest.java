@@ -19,50 +19,39 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class MoreThanOneClassInFileCheckTest extends CheckTest {
+public class MoreThanOneClassInFileCheckTest {
 
   private static final String TEST_DIR = "MoreThanOneClassInFileCheck/";
   private final MoreThanOneClassInFileCheck check = new MoreThanOneClassInFileCheck();
 
   @Test
   public void ok() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ok.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
   }
 
   @Test
   public void ko1() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko1.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().withCost(1.0).atLine(null).withMessage("There are 2 independent classes in this file; move all but one of them to other files.")
-      .noMore();
+    String message = "There are 2 independent classes in this file; move all but one of them to other files.";
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko1.php"), ImmutableList.<Issue>of(new PHPIssue("testKey", message).cost(1.0)));
   }
 
   @Test
   public void ko2() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko2.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(null).withCost(1.0).withMessage("There are 2 independent interfaces in this file; move all but one of them to other files.")
-      .noMore();
+    String message = "There are 2 independent interfaces in this file; move all but one of them to other files.";
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko2.php"), ImmutableList.<Issue>of(new PHPIssue("testKey", message).cost(1.0)));
   }
 
   @Test
   public void ko3() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_DIR + "ko3.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(null).withCost(2.0).withMessage("There are 1 independent classes and 2 independent interfaces in this file; move all but one of them to other files.")
-      .noMore();
+    String message = "There are 1 independent classes and 2 independent interfaces in this file; move all but one of them to other files.";
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko3.php"), ImmutableList.<Issue>of(new PHPIssue("testKey", message).cost(2.0)));
   }
 
 }
