@@ -19,72 +19,56 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableMap;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.AstNodeType;
+import com.google.common.collect.ImmutableSet;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import java.util.Map;
+import java.util.Set;
 
 @Rule(
-  key = "S1764",
+  key = IdenticalOperandsInBinaryExpressionCheck.KEY,
   name = "Identical expressions should not be used on both sides of a binary operator",
   priority = Priority.CRITICAL,
   tags = {Tags.BUG, Tags.CERT})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
-public class IdenticalOperandsInBinaryExpressionCheck extends SquidCheck<LexerlessGrammar> {
+public class IdenticalOperandsInBinaryExpressionCheck extends PHPVisitorCheck {
 
-  private static final Map<AstNodeType, AstNodeType> OPERATOR_TYPE_BY_EXPRESSION_TYPE =
-    ImmutableMap.<AstNodeType, AstNodeType>builder()
-      .put(PHPGrammar.EQUALITY_EXPR, PHPGrammar.EQUALITY_OPERATOR)
-      .put(PHPGrammar.LOGICAL_AND_EXPR, PHPGrammar.LOGICAL_AND_OPERATOR)
-      .put(PHPGrammar.LOGICAL_OR_EXPR, PHPGrammar.LOGICAL_OR_OPERATOR)
-      .put(PHPGrammar.MULTIPLICATIVE_EXPR, PHPGrammar.MULIPLICATIVE_OPERATOR)
-      .put(PHPGrammar.ADDITIVE_EXPR, PHPGrammar.ADDITIVE_OPERATOR)
-      .put(PHPGrammar.RELATIONAL_EXPR, PHPGrammar.RELATIONAL_OPERATOR)
-      .put(PHPGrammar.SHIFT_EXPR, PHPGrammar.SHIFT_OPERATOR)
-      .build();
+  public static final String KEY = "S1764";
 
-  private static final AstNodeType[] EXCLUDED_OPERATOR_TYPES = {PHPPunctuator.STAR, PHPPunctuator.PLUS};
+  private static final String MESSAGE = "Identical sub-expressions on both sides of operator \"%s\"";
+
+  private static final Set<String> EXCLUDED_OPERATORS = ImmutableSet.of("*", "+", ".");
 
   @Override
-  public void init() {
-    for (AstNodeType expressionType : OPERATOR_TYPE_BY_EXPRESSION_TYPE.keySet()) {
-      subscribeTo(expressionType);
+  public void visitBinaryExpression(BinaryExpressionTree binaryExp) {
+    String operator = binaryExp.operator().text();
+    if (!EXCLUDED_OPERATORS.contains(operator) && hasIdenticalOperands(binaryExp) && !isLeftShiftBy1(binaryExp)) {
+      context().newIssue(KEY, String.format(MESSAGE, operator)).tree(binaryExp);
     }
+    super.visitBinaryExpression(binaryExp);
   }
 
-  @Override
-  public void visitNode(AstNode expression) {
-    AstNodeType expressionType = expression.getType();
-    AstNodeType operatorType = OPERATOR_TYPE_BY_EXPRESSION_TYPE.get(expressionType);
-    AstNode operator = expression.getFirstChild(operatorType);
-    if (!operator.getFirstChild().is(EXCLUDED_OPERATOR_TYPES) && hasIdenticalOperands(operator) && !isLeftShiftBy1(operator)) {
-      String operatorValue = operator.getTokenOriginalValue();
-      String message = "Identical sub-expressions on both sides of operator \"{0}\"";
-      getContext().createLineViolation(this, message, expression, operatorValue);
+  private static boolean hasIdenticalOperands(BinaryExpressionTree binaryExp) {
+    return CheckUtils.areSyntacticallyEquivalent(binaryExp.leftOperand(), binaryExp.rightOperand());
+  }
+
+  private static boolean isLeftShiftBy1(BinaryExpressionTree binaryExp) {
+    if (binaryExp.is(Kind.LEFT_SHIFT) && binaryExp.rightOperand().is(Kind.NUMERIC_LITERAL)) {
+      LiteralTree rightOperand = (LiteralTree) binaryExp.rightOperand();
+      return "1".equals(rightOperand.token().text());
     }
-  }
-
-  private boolean hasIdenticalOperands(AstNode operator) {
-    return CheckUtils.areSyntacticallyEquivalent(operator.getPreviousSibling(), operator.getNextSibling());
-  }
-
-  private boolean isLeftShiftBy1(AstNode operator) {
-    AstNode operand = operator.getPreviousSibling();
-    return operator.getFirstChild().is(PHPPunctuator.SL) && operand.getNumberOfChildren() == 1 && "1".equals(operand.getTokenValue());
+    return false;
   }
 
 }

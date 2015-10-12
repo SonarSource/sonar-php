@@ -21,10 +21,9 @@ package org.sonar.php.checks;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
 
 public class IdenticalOperandsInBinaryExpressionCheckTest extends CheckTest {
@@ -34,21 +33,8 @@ public class IdenticalOperandsInBinaryExpressionCheckTest extends CheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(
-      TestUtils.getCheckFile("IdenticalOperandsInBinaryExpressionCheck.php"), new IdenticalOperandsInBinaryExpressionCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Identical sub-expressions on both sides of operator \"==\"")
-      .next().atLine(4).withMessage("Identical sub-expressions on both sides of operator \"!=\"")
-      .next().atLine(5)
-      .next().atLine(6)
-      .next().atLine(7)
-      .next().atLine(8)
-      .next().atLine(9)
-      .next().atLine(10)
-      .next().atLine(11)
-      .next().atLine(12)
-      .next().atLine(17)
-      .next().atLine(18);
+    PHPCheckTest.check(
+      new IdenticalOperandsInBinaryExpressionCheck(),
+      TestUtils.getCheckFile("IdenticalOperandsInBinaryExpressionCheck.php"));
   }
 }
