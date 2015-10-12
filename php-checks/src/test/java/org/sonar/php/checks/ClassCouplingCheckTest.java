@@ -19,30 +19,25 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class ClassCouplingCheckTest extends CheckTest {
+public class ClassCouplingCheckTest {
 
+  private final String filename = "ClassCouplingCheck.php";
   private ClassCouplingCheck check = new ClassCouplingCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassCouplingCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(filename), ImmutableList.<Issue>of());
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 10;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ClassCouplingCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Split this class into smaller and more specialized ones to reduce its dependencies on other classes from 13 to the maximum authorized " + check.max + " or less.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(filename));
   }
 }

@@ -21,35 +21,44 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.parser.LexicalConstant;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 import java.util.Set;
 
 @Rule(
-  key = "S1200",
+  key = ClassCouplingCheck.KEY,
   name = "Classes should not be coupled to too many other classes (Single Responsibility Principle)",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.ARCHITECTURE_CHANGEABILITY)
 @SqaleConstantRemediation("2h")
-public class ClassCouplingCheck extends SquidCheck<LexerlessGrammar> {
+public class ClassCouplingCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1200";
+  private static final String MESSAGE = "Split this class into smaller and more specialized ones " +
+    "to reduce its dependencies on other classes from %s to the maximum authorized %s or less.";
 
   public static final int DEFAULT = 20;
   private Set<String> types = Sets.newHashSet();
@@ -71,74 +80,68 @@ public class ClassCouplingCheck extends SquidCheck<LexerlessGrammar> {
   public int max = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CLASS_DECLARATION,
-      PHPGrammar.NEW_EXPR);
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
+  public void visitScript(ScriptTree tree) {
     types.clear();
+    super.visitScript(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
-      retrieveCoupledTypes(astNode);
-    } else {
-      retrieveInstantiatedClassName(astNode);
+  public void visitNewExpression(NewExpressionTree tree) {
+    retrieveInstantiatedClassName(tree);
+
+    super.visitNewExpression(tree);
+  }
+
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    if (tree.is(Kind.CLASS_DECLARATION)) {
+      retrieveCoupledTypes(tree);
     }
-  }
 
-  @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
+    super.visitClassDeclaration(tree);
+
+    if (tree.is(Kind.CLASS_DECLARATION)) {
       int nbType = types.size();
 
       if (nbType > max) {
-        getContext().createLineViolation(this,
-          "Split this class into smaller and more specialized ones to reduce its dependencies on other classes from {0} to the maximum authorized {1} or less.",
-          astNode, nbType, max);
+        String message = String.format(MESSAGE, nbType, max);
+        context().newIssue(KEY, message).tree(tree);
       }
       types.clear();
     }
   }
 
-  private void retrieveCoupledTypes(AstNode classDeclaration) {
-    for (AstNode classStatement : classDeclaration.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      AstNode stmt = classStatement.getFirstChild();
-
-      if (stmt.is(PHPGrammar.CLASS_VARIABLE_DECLARATION, PHPGrammar.CLASS_CONSTANT_DECLARATION)) {
-        retrieveTypeFromDoc(stmt);
-      } else if (stmt.is(PHPGrammar.METHOD_DECLARATION)) {
-        retrieveTypeFromDoc(stmt);
-        retrieveTypeFromParameter(stmt);
-      } else {
-        continue;
+  private void retrieveCoupledTypes(ClassDeclarationTree classDeclaration) {
+    for (ClassMemberTree classMember : classDeclaration.members()) {
+      switch (classMember.getKind()) {
+        case CLASS_PROPERTY_DECLARATION:
+        case CLASS_CONSTANT_PROPERTY_DECLARATION:
+          retrieveTypeFromDoc(classMember);
+          break;
+        case METHOD_DECLARATION:
+          retrieveTypeFromDoc(classMember);
+          retrieveTypeFromParameter((MethodDeclarationTree)classMember);
+          break;
+        default:
+          break;
       }
     }
   }
 
-  private void retrieveTypeFromParameter(AstNode methodDeclaration) {
-    AstNode parameterList = methodDeclaration.getFirstChild(PHPGrammar.PARAMETER_LIST);
-
-    if (parameterList != null) {
-      for (AstNode parameter : parameterList.getChildren(PHPGrammar.PARAMETER)) {
-        AstNode classType = parameter.getFirstChild(PHPGrammar.OPTIONAL_CLASS_TYPE);
-
-        if (classType != null && classType.getFirstChild().is(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME)) {
-          types.add(getClassName(classType.getFirstChild()));
-        }
+  private void retrieveTypeFromParameter(MethodDeclarationTree methodDeclaration) {
+    for (ParameterTree parameter : methodDeclaration.parameters().parameters()) {
+      Tree type = parameter.type();
+      if (type != null && type.is(Kind.NAMESPACE_NAME)) {
+        types.add(getTypeName((NamespaceNameTree) type));
       }
     }
   }
 
-  private void retrieveTypeFromDoc(AstNode varDeclaration) {
-    Token varDecToken = varDeclaration.getToken();
+  private void retrieveTypeFromDoc(ClassMemberTree varDeclaration) {
+    SyntaxToken varDecToken = ((PHPTree) varDeclaration).getFirstToken();
 
-    for (Trivia comment : varDecToken.getTrivia()) {
-      for (String line : comment.getToken().getValue().split("[" + LexicalConstant.LINE_TERMINATOR + "]++")) {
+    for (SyntaxTrivia comment : varDecToken.trivias()) {
+      for (String line : comment.text().split("[" + LexicalConstant.LINE_TERMINATOR + "]++")) {
         retrieveTypeFromCommentLine(line);
       }
     }
@@ -158,38 +161,30 @@ public class ClassCouplingCheck extends SquidCheck<LexerlessGrammar> {
     }
   }
 
-  private void retrieveInstantiatedClassName(AstNode astNode) {
-    String className = getInstantiatedClassName(astNode);
-    if (className != null) {
-      types.add(className);
+  private void retrieveInstantiatedClassName(NewExpressionTree newExpression) {
+    ExpressionTree expression = newExpression.expression();
+
+    if (expression.is(Kind.FUNCTION_CALL)) {
+      ExpressionTree callee = ((FunctionCallTree) expression).callee();
+
+      if (callee.is(Kind.NAMESPACE_NAME)) {
+        types.add(getTypeName((NamespaceNameTree) callee));
+      }
+
+    } else if (expression.is(Kind.NAMESPACE_NAME)) {
+      types.add(getTypeName((NamespaceNameTree) expression));
     }
   }
 
-  private String getInstantiatedClassName(AstNode newExpr) {
-    AstNode variable = newExpr.getFirstChild(PHPGrammar.MEMBER_EXPRESSION);
-    AstNode classNameNode = variable.getFirstChild();
-
-    if (classNameNode.is(PHPKeyword.NAMESPACE)) {
-      return getClassName(variable);
-    } else if (classNameNode.is(PHPGrammar.CLASS_NAME, PHPGrammar.IDENTIFIER) && classNameNode.getFirstChild().isNot(PHPKeyword.STATIC)) {
-      return getClassName(classNameNode);
-    } else {
-      return null;
+  private String getTypeName(NamespaceNameTree namespaceName) {
+    String name = namespaceName.fullName();
+    String prefix = "namespace\\";
+    if (StringUtils.startsWithIgnoreCase(name, prefix)) {
+      // fixme (SONARPHP-552): Handle namespaces properly
+      name = name.substring(prefix.length() - 1);
     }
-  }
 
-  private String getClassName(AstNode expr) {
-    StringBuilder builder = new StringBuilder();
-
-    for (Token token : expr.getTokens()) {
-      if (token.getType() == PHPPunctuator.LPARENTHESIS) {
-        break;
-      }
-      if (token.getType() != PHPKeyword.NAMESPACE) {
-        builder.append(token.getOriginalValue());
-      }
-    }
-    return builder.toString();
+    return name;
   }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-class Foo {                           // NOK - depends on 12 classes
+class Foo {       // NOK {{Split this class into smaller and more specialized ones to reduce its dependencies on other classes from 15 to the maximum authorized 10 or less.}}
 
     use MyTrait;
 
@@ -27,7 +27,7 @@ class Foo {                           // NOK - depends on 12 classes
     /**
      * @var T4
      */
-     const A4 = 1;
+     const A4 = 1;                     // coupled to T4
 
     /**
      * @param T6 $a
@@ -38,6 +38,7 @@ class Foo {                           // NOK - depends on 12 classes
      public function  f(T6 $a, $b) {  // coupled to T5, T6, T7
        $result = new T8();            // coupled to T8
        $localVar = new T9();          // coupled to T9
+       $withoutParentheses = new T16; // coupled to T16
 
        return $result;
      }
@@ -79,7 +80,7 @@ class Foo {                           // NOK - depends on 12 classes
      /**
       * No doc
       */
-      public function k() {
+      public function k(T15 $p) {
         $class = "T14";
         return new $class();          // Not supported
       }
