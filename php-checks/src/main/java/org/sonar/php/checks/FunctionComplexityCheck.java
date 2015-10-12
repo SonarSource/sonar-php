@@ -19,31 +19,36 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.metrics.NewComplexityVisitor;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.api.SourceFunction;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
+import java.util.List;
 
 @Rule(
-  key = "S1541",
+  key = FunctionComplexityCheck.KEY,
   name = "Functions should not be too complex",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNIT_TESTABILITY)
 @SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "10min", effortToFixDescription = "per complexity point above the threshold")
-public class FunctionComplexityCheck extends SquidCheck<LexerlessGrammar> {
+public class FunctionComplexityCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S1541";
+
+  private static final String MESSAGE = "The Cyclomatic Complexity of this function %s is %s which is greater than %s authorized.";
 
   public static final int DEFAULT = 20;
 
@@ -53,21 +58,20 @@ public class FunctionComplexityCheck extends SquidCheck<LexerlessGrammar> {
   int threshold = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.FUNCTION_DECLARATION,
-      PHPGrammar.METHOD_DECLARATION,
-      PHPGrammar.FUNCTION_EXPRESSION);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(
+      Kind.FUNCTION_DECLARATION,
+      Kind.METHOD_DECLARATION,
+      Kind.FUNCTION_EXPRESSION);
   }
 
   @Override
-  public void leaveNode(AstNode node) {
-    SourceFunction function = (SourceFunction) getContext().peekSourceCode();
-    if (function.getInt(PHPMetric.COMPLEXITY) > threshold) {
-
-      getContext().createLineViolation(this,
-        "The Cyclomatic Complexity of this function {0} is {1} which is greater than {2} authorized.", node,
-        FunctionUtils.getFunctionName(node), function.getInt(PHPMetric.COMPLEXITY), threshold);
+  public void visitNode(Tree tree) {
+    int complexity = NewComplexityVisitor.complexityWithoutNestedFunctions(tree);
+    if (complexity > threshold) {
+      String functionName = FunctionUtils.getFunctionName((FunctionTree) tree);
+      String message = String.format(MESSAGE, functionName, complexity, threshold);
+      context().newIssue(KEY, message).tree(tree);
     }
   }
 

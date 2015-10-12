@@ -19,36 +19,28 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class FunctionComplexityCheckTest extends CheckTest {
+public class FunctionComplexityCheckTest {
 
+  private static final String FILE_NAME = "FunctionComplexityCheck.php";
   private FunctionComplexityCheck check = new FunctionComplexityCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionComplexityCheck.php"), check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("The Cyclomatic Complexity of this function \"ko\" is 32 which is greater than " + check.threshold + " authorized.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of(
+      new PHPIssue("", "The Cyclomatic Complexity of this function \"ko\" is 32 which is greater than 20 authorized.").line(3)));
   }
 
   @Test
   public void custom() throws Exception {
     check.threshold = 2;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("FunctionComplexityCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("The Cyclomatic Complexity of this function \"ko\" is 32 which is greater than " + check.threshold + " authorized.")
-      .next().atLine(34)
-      .next().atLine(50)
-      .next().atLine(65)
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
 }

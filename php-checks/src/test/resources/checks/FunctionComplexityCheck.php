@@ -1,6 +1,6 @@
 <?php
 
-function ko() // +1
+function ko() // NOK {{The Cyclomatic Complexity of this function "ko" is 32 which is greater than 2 authorized.}}
 {
   switch (foo)
   {
@@ -31,7 +31,7 @@ function ko() // +1
   return 1;
 }
 
-function ko() // +1
+function ko() // NOK
 {
   switch (foo)
   {
@@ -47,7 +47,7 @@ function ok() {
 
 class C {
 
-  public function ko() // +1
+  public function ko() // NOK
   {
     switch (foo)
     {
@@ -62,8 +62,14 @@ class C {
   }
 }
 
-$f = function() {
+$f = function() { // NOK
   if (true) {
     return;
   }
 };
+
+function nesting() {
+  $nested = function() { return $a && $b; };
+  if ($a) {}
+  return 1;
+}
