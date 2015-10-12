@@ -10,7 +10,7 @@ class A {
     }
 
     if (false) {        // OK
-      if (false) {      // NOK
+      if (false) {      // NOK {{Merge this if statement with the enclosing one.}}
       }
     }
 
@@ -89,7 +89,7 @@ class A {
      }
 
     if (true) {         // OK
-      __halt_compiler();
+      halt();
     }
   }
 }

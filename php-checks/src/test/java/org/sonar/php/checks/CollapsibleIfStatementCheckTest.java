@@ -20,22 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class CollapsibleIfStatementCheckTest extends CheckTest {
+public class CollapsibleIfStatementCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("CollapsibleIfStatementCheck.php"), new CollapsibleIfStatementCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(13).withMessage("Merge this if statement with the enclosing one.")
-      .next().atLine(43)
-      .next().atLine(48)
-      .next().atLine(73)
-      .noMore();
+    PHPCheckTest.check(new CollapsibleIfStatementCheck(), TestUtils.getCheckFile("CollapsibleIfStatementCheck.php"));
   }
 }

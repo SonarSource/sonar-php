@@ -23,71 +23,68 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.grammar.GrammarRuleKey;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
+import javax.annotation.Nullable;
 
 @Rule(
-  key = "S1066",
+  key = CollapsibleIfStatementCheck.KEY,
   name = "Collapsible \"if\" statements should be merged",
   priority = Priority.MAJOR,
   tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")
-public class CollapsibleIfStatementCheck extends SquidCheck<LexerlessGrammar> {
+public class CollapsibleIfStatementCheck extends PHPVisitorCheck {
 
-  private static final GrammarRuleKey[] IF_STATEMENTS = {PHPGrammar.IF_STATEMENT, PHPGrammar.ALTERNATIVE_IF_STATEMENT};
-
-  @Override
-  public void init() {
-    subscribeTo(IF_STATEMENTS);
-  }
+  public static final String KEY = "S1066";
+  private static final String MESSAGE = "Merge this if statement with the enclosing one.";
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (!hasElseOrElseifClause(astNode)) {
-      AstNode singleChild = getSingleStatementChild(astNode);
+  public void visitIfStatement(IfStatementTree tree) {
+    super.visitIfStatement(tree);
 
-      if (singleChild != null && isIfStatementWithoutElse(singleChild)) {
-        getContext().createLineViolation(this, "Merge this if statement with the enclosing one.", singleChild);
+    if (!hasElse(tree)) {
+      StatementTree singleStatement = getSingleNestedStatement(tree);
+
+      if (singleStatement != null && isIfStatementWithoutElse(singleStatement)) {
+        context().newIssue(KEY, MESSAGE).tree(singleStatement);
       }
     }
   }
 
-  private static boolean isIfStatementWithoutElse(AstNode ifChild) {
-    return ifChild.is(PHPGrammar.STATEMENT) && ifChild.getFirstChild().is(IF_STATEMENTS) && !hasElseOrElseifClause(ifChild.getFirstChild());
+  private static boolean isIfStatementWithoutElse(StatementTree statement) {
+    return statement.is(Kind.IF_STATEMENT, Kind.ALTRENATIVE_IF_STATEMENT) && !hasElse((IfStatementTree) statement);
   }
 
-  private static AstNode getSingleStatementChild(AstNode ifStatement) {
-    AstNode ifInnerStmtList = null;
+  @Nullable
+  private static StatementTree getSingleNestedStatement(IfStatementTree ifStatement) {
+    if (ifStatement.statements().size() == 1) {
+      StatementTree statement = ifStatement.statements().get(0);
 
-    if (ifStatement.is(PHPGrammar.ALTERNATIVE_IF_STATEMENT)) {
-      ifInnerStmtList = ifStatement.getFirstChild(PHPGrammar.INNER_STATEMENT_LIST);
-    } else {
-      AstNode ifChild = ifStatement.getFirstChild(PHPGrammar.STATEMENT).getFirstChild();
+      if (statement.is(Kind.BLOCK)) {
+        BlockTree blockTree = (BlockTree) statement;
 
-      if (ifChild.is(PHPGrammar.BLOCK)) {
-        ifInnerStmtList = ifChild.getFirstChild(PHPGrammar.INNER_STATEMENT_LIST);
+        if (blockTree.statements().size() == 1) {
+          return blockTree.statements().get(0);
+        }
 
-      } else if (ifChild.is(IF_STATEMENTS)) {
-        return ifStatement.getFirstChild(PHPGrammar.STATEMENT);
+      } else {
+        return statement;
       }
     }
-    return ifInnerStmtList != null && ifInnerStmtList.getNumberOfChildren() == 1 ? ifInnerStmtList.getFirstChild() : null;
+
+    return null;
   }
 
-  private static boolean hasElseOrElseifClause(AstNode ifStatement) {
-    return ifStatement.hasDirectChildren(
-      PHPGrammar.ELSE_CLAUSE,
-      PHPGrammar.ALTERNATIVE_ELSE_CLAUSE,
-      PHPGrammar.ELSEIF_LIST,
-      PHPGrammar.ALTERNATIVE_ELSEIF_LIST);
+  private static boolean hasElse(IfStatementTree ifStatement) {
+    return ifStatement.elseClause() != null || !ifStatement.elseifClauses().isEmpty();
   }
 
 
