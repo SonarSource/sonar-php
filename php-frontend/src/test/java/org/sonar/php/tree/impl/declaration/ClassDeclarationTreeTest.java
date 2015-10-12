@@ -87,4 +87,15 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.members()).hasSize(1);
   }
 
+  @Test
+  public void test_fetchConstructor() throws Exception {
+    ClassDeclarationTree tree = parse("class A { function __construct(); }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree.fetchConstructor().name().text()).isEqualTo(ClassDeclarationTree.PHP5_CONSTRUCTOR_NAME);
+
+    tree = parse("class A { function A(); }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree.fetchConstructor().name().text()).isEqualTo("A");
+
+    tree = parse("class A { function doSomething(); }", PHPLexicalGrammar.CLASS_DECLARATION);
+    assertThat(tree.fetchConstructor()).isNull();
+  }
 }

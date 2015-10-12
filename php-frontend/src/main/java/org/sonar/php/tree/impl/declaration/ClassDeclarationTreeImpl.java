@@ -26,6 +26,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -122,6 +123,28 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   @Override
   public SyntaxToken closeCurlyBraceToken() {
     return closeCurlyBraceToken;
+  }
+
+  @Nullable
+  @Override
+  public MethodDeclarationTree fetchConstructor() {
+    MethodDeclarationTree oldStyleConstructor = null;
+    MethodDeclarationTree newStyleConstructor = null;
+
+    for (ClassMemberTree member : members) {
+      if (member.is(Kind.METHOD_DECLARATION)) {
+        MethodDeclarationTree method = (MethodDeclarationTree) member;
+        String methodName = method.name().text();
+
+        if (name.text().equalsIgnoreCase(methodName)) {
+          oldStyleConstructor = method;
+
+        } else if (PHP5_CONSTRUCTOR_NAME.equalsIgnoreCase(methodName)) {
+          newStyleConstructor = method;
+        }
+      }
+    }
+    return newStyleConstructor != null ? newStyleConstructor : oldStyleConstructor;
   }
 
   @Override

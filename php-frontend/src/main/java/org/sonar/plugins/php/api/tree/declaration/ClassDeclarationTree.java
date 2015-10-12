@@ -52,6 +52,12 @@ import java.util.List;
 public interface ClassDeclarationTree extends StatementTree {
 
   /**
+   * PHP 5 introduce a new way to declare constructors: by defining a method named "__construct".
+   * Previously constructors were declared by defining a method with the same name as the class.
+   */
+  String PHP5_CONSTRUCTOR_NAME = "__construct";
+
+  /**
    * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}
    */
   @Nullable
@@ -81,5 +87,15 @@ public interface ClassDeclarationTree extends StatementTree {
   List<ClassMemberTree> members();
 
   SyntaxToken closeCurlyBraceToken();
+
+  /**
+   * Fetch class constructor declaration within class {@link #members() members}.
+   * Will look for a method named "__construct", if cannot be found it will search for
+   * the old-style constructor function, by the name of the class.
+   *
+   * @return the class constructor method declaration if defined, null otherwise.
+   */
+  @Nullable
+  MethodDeclarationTree fetchConstructor();
 
 }
