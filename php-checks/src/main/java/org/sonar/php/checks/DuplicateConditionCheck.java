@@ -19,19 +19,29 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.AstNodeType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractDuplicateBranchCheck;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Rule(
-  key = "S1862",
+  key = DuplicateConditionCheck.KEY,
   name = "Related \"if/else if\" statements and \"cases\" in a \"switch\" should not have the same condition",
   tags = {Tags.BUG, Tags.CERT, Tags.PITFALL, Tags.UNUSED},
   priority = Priority.CRITICAL)
@@ -40,19 +50,59 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 @SqaleConstantRemediation("10min")
 public class DuplicateConditionCheck extends AbstractDuplicateBranchCheck {
 
+  public static final String KEY = "S1862";
+  private static final String MESSAGE = "This %s duplicates the one on line %s.";
+
   @Override
-  protected AstNodeType ifBranchNodeType() {
-    return PHPGrammar.PARENTHESIS_EXPRESSION;
+  public void visitSwitchStatement(SwitchStatementTree tree) {
+    super.visitSwitchStatement(tree);
+
+    List<ExpressionTree> expressions = new ArrayList<>();
+
+    for (SwitchCaseClauseTree switchCaseClauseTree : tree.cases()) {
+      if (switchCaseClauseTree.is(Kind.CASE_CLAUSE)) {
+        expressions.add(((CaseClauseTree) switchCaseClauseTree).expression());
+      }
+    }
+
+    checkForEquality(expressions, "case");
   }
 
   @Override
-  protected AstNodeType caseClauseChildType() {
-    return PHPGrammar.EXPRESSION;
+  public void visitIfStatement(IfStatementTree tree) {
+    if (tree.is(Kind.IF_STATEMENT) && !checkedIfStatements.contains(tree)) {
+
+      List<ExpressionTree> conditionsList = new ArrayList<>();
+      for (Tree clause : getClauses(tree)) {
+        if (clause.is(Kind.IF_STATEMENT)) {
+          conditionsList.add(((IfStatementTree) clause).condition());
+
+        } else if (clause.is(Kind.ELSEIF_CLAUSE)) {
+          conditionsList.add(((ElseifClauseTree) clause).condition());
+        }
+      }
+
+      checkForEquality(conditionsList, "branch");
+    }
+
+    super.visitIfStatement(tree);
+  }
+
+  private void checkForEquality(List<ExpressionTree> list, String branchType) {
+    for (int i = 1; i < list.size(); i++) {
+      for (int j = 0; j < i; j++) {
+        if (CheckUtils.areSyntacticallyEquivalent(list.get(i), list.get(j))) {
+          raiseIssue(branchType, list.get(j), list.get(i));
+          break;
+        }
+      }
+    }
   }
 
   @Override
-  protected void addIssue(String type, AstNode duplicate, AstNode duplicated) {
-    String message = "This {0} duplicates the one on line {1}.";
-    getContext().createLineViolation(this, message, duplicate, type, duplicated.getTokenLine());
+  protected void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree) {
+    String message = String.format(MESSAGE, branchType, ((PHPTree) duplicatedTree).getLine());
+    context().newIssue(KEY, message).tree(duplicatingTree);
   }
+
 }

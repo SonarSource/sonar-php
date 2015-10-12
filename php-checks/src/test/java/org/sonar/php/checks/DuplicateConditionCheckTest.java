@@ -21,10 +21,9 @@ package org.sonar.php.checks;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
 
 public class DuplicateConditionCheckTest extends CheckTest {
@@ -34,13 +33,7 @@ public class DuplicateConditionCheckTest extends CheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(
-      TestUtils.getCheckFile("DuplicateConditionCheck.php"), new DuplicateConditionCheck());
+    PHPCheckTest.check(new DuplicateConditionCheck(), TestUtils.getCheckFile("DuplicateConditionCheck.php"));
 
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("This branch duplicates the one on line 2.")
-      .next().atLine(5).withMessage("This branch duplicates the one on line 2.")
-      .next().atLine(10).withMessage("This branch duplicates the one on line 9.")
-      .next().atLine(18).withMessage("This case duplicates the one on line 14.");
   }
 }
