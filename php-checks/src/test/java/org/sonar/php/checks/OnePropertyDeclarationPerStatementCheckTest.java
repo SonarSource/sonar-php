@@ -20,20 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class OnePropertyDeclarationPerStatementCheckTest extends CheckTest {
+public class OnePropertyDeclarationPerStatementCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("OnePropertyDeclarationPerStatementCheck.php"), new OnePropertyDeclarationPerStatementCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("2 property declarations were found in this statement. Reformat the code to declare only one property per statement.")
-      .next().atLine(6)
-      .noMore();
+    PHPCheckTest.check(new OnePropertyDeclarationPerStatementCheck(), TestUtils.getCheckFile("OnePropertyDeclarationPerStatementCheck.php"));
   }
 }

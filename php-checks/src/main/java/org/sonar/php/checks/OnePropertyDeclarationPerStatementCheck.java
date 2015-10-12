@@ -19,40 +19,36 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1766",
+  key = OnePropertyDeclarationPerStatementCheck.KEY,
   name = "More than one property should not be declared per statement",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class OnePropertyDeclarationPerStatementCheck extends SquidCheck<LexerlessGrammar> {
+public class OnePropertyDeclarationPerStatementCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1766";
+  private static final String MESSAGE = "%s property declarations were found in this statement. Reformat the code to declare only one property per statement.";
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CLASS_VARIABLE_DECLARATION,
-      PHPGrammar.CLASS_CONSTANT_DECLARATION);
-  }
+  public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
+    super.visitClassPropertyDeclaration(tree);
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    int nbDeclaration = astNode.getChildren(PHPGrammar.VARIABLE_DECLARATION, PHPGrammar.MEMBER_CONST_DECLARATION).size();
+    int declarationsNumber = tree.declarations().size();
 
-    if (nbDeclaration > 1) {
-      getContext().createLineViolation(this, "{0} property declarations were found in this statement. Reformat the code to declare only one property per statement.",
-        astNode,
-        nbDeclaration);
+    if (declarationsNumber > 1) {
+      String message = String.format(MESSAGE, declarationsNumber);
+      context().newIssue(KEY, message).tree(tree);
     }
   }
+
 }
