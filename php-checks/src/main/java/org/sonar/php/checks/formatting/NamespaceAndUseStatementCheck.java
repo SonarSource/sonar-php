@@ -21,83 +21,112 @@ package org.sonar.php.checks.formatting;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.api.Trivia;
 import org.sonar.php.checks.FormattingStandardCheck;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import java.util.List;
 
-public class NamespaceAndUseStatementCheck {
+public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements FormattingCheck {
 
-  private List<AstNode> useNodes = Lists.newArrayList();
+  private static final String BLANK_LINE_NAMESPACE_MESSAGE = "Add a blank line after this \"namespace%s\" declaration.";
+  private static final String BLANK_LINE_USE_MESSAGE = "Add a blank line after this \"use\" declaration.";
+  private static final String USE_AFTER_NAMESPACE_MESSAGE = "Move the use declarations after the namespace declarations.";
+  private static final Kind[] USE_KINDS = {
+    Kind.USE_STATEMENT,
+    Kind.USE_CONST_STATEMENT,
+    Kind.USE_FUNCTION_STATEMENT};
 
-  public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
-    if (node.is(PHPGrammar.NAMESPACE_STATEMENT)) {
-      checkBlankLineAfterNamespace(formattingCheck, node);
+  private List<UseStatementTree> useStatements = Lists.newArrayList();
+  private StatementTree nextStatement = null;
+  private FormattingStandardCheck check = null;
 
-    } else if (node.is(PHPGrammar.USE_STATEMENT)) {
-      useNodes.add(node);
-      AstNode nextNode = node.getNextAstNode().getFirstChild();
 
-      if (nextNode == null || nextNode.isNot(PHPGrammar.USE_STATEMENT)) {
-        checkUsesAreBeforeNamespace(formattingCheck, nextNode);
-        checkBlankLineAfterUses(formattingCheck, node);
-        useNodes.clear();
-      }
+  @Override
+  public void checkFormat(FormattingStandardCheck formattingCheck, ScriptTree scriptTree) {
+    this.check = formattingCheck;
+
+    this.visitScript(scriptTree);
+
+    nextStatement = null;
+    useStatements.clear();
+  }
+
+  @Override
+  public void visitScript(ScriptTree tree) {
+    List<StatementTree> statements = tree.statements();
+    int nbStatements = statements.size();
+
+    for (int i = 0; i < nbStatements - 1; i++) {
+      nextStatement = statements.get(i + 1);
+      statements.get(i).accept(this);
+    }
+
+    nextStatement = null;
+    statements.get(nbStatements - 1).accept(this);
+
+  }
+
+
+  @Override
+  public void visitNamespaceStatement(NamespaceStatementTree tree) {
+    if (check.hasNamespaceBlankLine && nextStatement != null && !isFollowedWithBlankLine(tree)) {
+      String message = String.format(
+        BLANK_LINE_NAMESPACE_MESSAGE,
+        tree.namespaceName() == null ? "" : " " + tree.namespaceName().fullName());
+      reportIssue(message, tree);
     }
   }
 
-  public void leaveFile() {
-    useNodes.clear();
-  }
+  @Override
+  public void visitUseStatement(UseStatementTree tree) {
+    useStatements.add(tree);
 
-  private void checkBlankLineAfterUses(FormattingStandardCheck formattingCheck, AstNode useStatement) {
-    if (formattingCheck.hasUseBlankLine && isNotFollowedWithBlankLine(useStatement) && useStatement.getParent().getNextSibling() != null) {
-      formattingCheck.reportIssue("Add a blank line after this \"use\" declaration.", Iterables.getLast(useNodes));
+    if (nextStatement != null && !nextStatement.is(USE_KINDS)) {
+        checkUsesAreBeforeNamespace();
+        checkBlankLineAfterUses(tree);
+        useStatements.clear();
     }
   }
 
-  private void checkUsesAreBeforeNamespace(FormattingStandardCheck formattingCheck, AstNode nextNode) {
-    if (formattingCheck.isUseAfterNamespace && nextNode != null && nextNode.is(PHPGrammar.NAMESPACE_STATEMENT)) {
-      formattingCheck.reportIssue("Move the use declarations after the namespace declarations.", useNodes.get(0));
+  private void checkBlankLineAfterUses(UseStatementTree useStatement) {
+    if (check.hasUseBlankLine && !isFollowedWithBlankLine(useStatement)) {
+      reportIssue(BLANK_LINE_USE_MESSAGE, Iterables.getLast(useStatements));
     }
   }
 
-  private void checkBlankLineAfterNamespace(FormattingStandardCheck formattingCheck, AstNode namespaceNode) {
-    if (formattingCheck.hasNamespaceBlankLine && isNotFollowedWithBlankLine(namespaceNode)) {
-      formattingCheck.reportIssue("Add a blank line after this \"namespace " + getNamespaceName(namespaceNode) + "\" declaration.", namespaceNode);
+  private void checkUsesAreBeforeNamespace() {
+    if (check.isUseAfterNamespace && nextStatement.is(Kind.NAMESPACE_STATEMENT)) {
+      reportIssue(USE_AFTER_NAMESPACE_MESSAGE, useStatements.get(0));
     }
+  }
+
+  private void reportIssue(String message, Tree tree) {
+    check.reportIssue(message, tree);
   }
 
   /**
    * Returns true when there is either token or comment on node's next line.
    */
-  private boolean isNotFollowedWithBlankLine(AstNode node) {
-    int nextNodeLine = node.getTokenLine() + 1;
-    boolean isNotFollowedWithBlankLine = false;
+  private boolean isFollowedWithBlankLine(Tree tree) {
+    int nextLine = ((PHPTree) tree).getLastToken().line() + 1;
+    SyntaxToken nextToken = ((PHPTree) nextStatement).getFirstToken();
+    boolean isFollowedWithBlankLine = true;
 
     // Checking for comment: is allowed on the same line as the node declaration or on next line + 1.
-    for (Trivia t : node.getNextAstNode().getToken().getTrivia()) {
-      int line = t.getToken().getLine();
-      isNotFollowedWithBlankLine |= line == nextNodeLine;
+    for (SyntaxTrivia trivia : nextToken.trivias()) {
+      isFollowedWithBlankLine &= trivia.line() != nextLine;
     }
 
-    return isNotFollowedWithBlankLine || node.getNextAstNode().getTokenLine() == nextNodeLine;
-  }
-
-  private Object getNamespaceName(AstNode namespaceNode) {
-    AstNode namespaceName = namespaceNode.getFirstChild(PHPGrammar.NAMESPACE_NAME);
-    StringBuilder builder = new StringBuilder();
-
-    if (namespaceName != null) {
-      for (Token t : namespaceName.getTokens()) {
-        builder.append(t.getOriginalValue());
-      }
-    }
-
-    return builder.toString();
+    return isFollowedWithBlankLine && nextToken.line() != nextLine;
   }
 
 }

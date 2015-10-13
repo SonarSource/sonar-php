@@ -20,16 +20,15 @@
 package org.sonar.php.checks.formatting;
 
 import com.google.common.base.Preconditions;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.TokenType;
-import org.sonar.php.checks.FormattingStandardCheck;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-public abstract class SpacingCheck {
+public class TokenUtils {
 
-  public abstract void visitNode(FormattingStandardCheck formattingCheck, AstNode node);
+  private TokenUtils() {
+  }
 
-  protected String buildIssueMsg(int nbSpace, String end) {
+  public static String buildIssueMsg(int nbSpace, String end) {
     return (new StringBuilder()).append("Put ")
       .append(nbSpace > 1 ? "only " : "")
       .append("one space ")
@@ -39,10 +38,10 @@ public abstract class SpacingCheck {
   /**
    * Return true if the given token is one of the given types.
    */
-  protected boolean isType(Token token, TokenType... types) {
+  public static boolean isType(SyntaxToken token, TokenType... types) {
     boolean isOneOfType = false;
     for (TokenType type : types) {
-      isOneOfType |= token.getType().equals(type);
+      isOneOfType |= type.getValue().equals(token.text());
     }
     return isOneOfType;
   }
@@ -50,12 +49,12 @@ public abstract class SpacingCheck {
   /**
    * Returns true if all the tokens given as parameters are on the same line.
    */
-  protected boolean isOnSameLine(Token... tokens) {
+  public static boolean isOnSameLine(SyntaxToken... tokens) {
     Preconditions.checkArgument(tokens.length > 0);
 
-    int lineRef = tokens[0].getLine();
-    for (Token token : tokens) {
-      if (token.getLine() != lineRef) {
+    int lineRef = tokens[0].line();
+    for (SyntaxToken token : tokens) {
+      if (token.line() != lineRef) {
         return false;
       }
     }
@@ -65,20 +64,13 @@ public abstract class SpacingCheck {
   /**
    * Returns number of space between the 2 tokens.
    */
-  protected int getNbSpaceBetween(Token token1, Token token2) {
-    int token1EndColumn = token1.getColumn() + (token1.getValue().length() - 1);
-    int tok2StartColumn = token2.getColumn();
+  protected static int getNbSpaceBetween(SyntaxToken token1, SyntaxToken token2) {
+    Preconditions.checkArgument(token1 != null && token2 != null);
+
+    int token1EndColumn = token1.column() + (token1.text().length() - 1);
+    int tok2StartColumn = token2.column();
 
     return tok2StartColumn - token1EndColumn - 1;
-  }
-
-  /**
-   * Check the number of space before and after the given node.
-   */
-  protected boolean isSpaceAround(AstNode node, int before, int after) {
-    int spaceBefore = getNbSpaceBetween(node.getPreviousAstNode().getLastToken(), node.getToken());
-    int spaceAfter = getNbSpaceBetween(node.getToken(), node.getNextAstNode().getToken());
-    return spaceBefore == before && spaceAfter == after;
   }
 
 }

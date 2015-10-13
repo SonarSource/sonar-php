@@ -19,12 +19,13 @@
  */
 package org.sonar.php.checks.formatting;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
 import java.io.File;
 
@@ -40,28 +41,12 @@ public class ControlStructureSpacingTest extends FormattingStandardCheckTest {
   @Test
   public void defaultValue() throws IllegalAccessException {
     activeOnly("isOneSpaceBetweenKeywordAndNextToken", "isOneSpaceAfterForLoopSemicolon", "isSpaceForeachStatement");
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(6).withMessage("Put one space between this \"if\" keyword and the opening parenthesis.")
-      .next().atLine(8).withMessage("Put only one space between this \"if\" keyword and the opening parenthesis.")
-      .next().atLine(10).withMessage("Put one space between this \"else\" keyword and the opening curly brace.")
-
-      .next().atLine(29).withMessage("Put exactly one space after each \";\" character in the \"for\" statement.")
-
-      .next().atLine(39).withMessage("Put exactly one space after and before \"as\" in \"foreach\" statement.")
-      .next().atLine(40).withMessage("Put exactly one space after and before \"=>\" in \"foreach\" statement.")
-      .next().atLine(41).withMessage("Put exactly one space after and before \"as\" and \"=>\" in \"foreach\" statement.")
-
-      .noMore();
+    PHPCheckTest.check(check, TEST_FILE);
   }
 
   @Test
   public void custom() throws IllegalAccessException {
     deactivateAll();
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TEST_FILE, check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TEST_FILE, ImmutableList.<Issue>of());
   }
 }
