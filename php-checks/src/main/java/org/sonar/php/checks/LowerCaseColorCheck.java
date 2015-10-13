@@ -19,45 +19,47 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S2038",
+  key = LowerCaseColorCheck.KEY,
   name = "Colors should be defined in upper case",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class LowerCaseColorCheck extends SquidCheck<LexerlessGrammar> {
+public class LowerCaseColorCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S2038";
+  private static final String MESSAGE = "Replace \"%s\" with \"%s\".";
 
   private static final Pattern COLOR_REGEXP = Pattern.compile("#[A-Fa-f0-9]{3,6}");
   private static final Pattern COLOR_REGEXP_UPPER_CASE = Pattern.compile("#[A-F0-9]{3,6}");
 
-
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.STRING_LITERAL);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(Kind.REGULAR_STRING_LITERAL);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    // Skip string with encapsulated variables
-    if (astNode.getFirstChild().isNot(PHPGrammar.ENCAPS_STRING_LITERAL)) {
-      String stringContent = getStringContent(astNode);
+  public void visitNode(Tree tree) {
+    String stringContent = getStringContent((LiteralTree) tree);
 
-      if (isLowerCaseColor(stringContent)) {
-        getContext().createLineViolation(this, "Replace \"{0}\" with \"{1}\".", astNode, stringContent, stringContent.toUpperCase());
-      }
+    if (isLowerCaseColor(stringContent)) {
+      String message = String.format(MESSAGE, stringContent, stringContent.toUpperCase());
+      context().newIssue(KEY, message).tree(tree);
     }
   }
 
@@ -65,9 +67,8 @@ public class LowerCaseColorCheck extends SquidCheck<LexerlessGrammar> {
     return COLOR_REGEXP.matcher(str).matches() && !COLOR_REGEXP_UPPER_CASE.matcher(str).matches();
   }
 
-  private static String getStringContent(AstNode stringLiteral) {
-    String stringContent = stringLiteral.getTokenOriginalValue();
+  private static String getStringContent(LiteralTree stringLiteral) {
+    String stringContent = stringLiteral.value();
     return stringContent.substring(1, stringContent.length() - 1);
   }
-
 }
