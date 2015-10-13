@@ -19,60 +19,60 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableSet;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S1781",
+  key = KeywordsAndConstantsNotLowerCaseCheck.KEY,
   name = "PHP keywords and constants \"true\", \"false\", \"null\" should be in lower case",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
-public class KeywordsAndConstantsNotLowerCaseCheck extends SquidCheck<LexerlessGrammar> {
+public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1781";
+  private static final String MESSAGE = "Write this \"%s\" %s in lower case.";
 
   private static final Pattern PATTERN = Pattern.compile("[a-z_]+");
+  private static final Set<String> KEYWORDS = ImmutableSet.copyOf(PHPKeyword.getKeywordValues());
 
   @Override
-  public void init() {
-    subscribeTo(PHPKeyword.values());
-    subscribeTo(PHPGrammar.COMMON_SCALAR);
-  }
+  public void visitLiteral(LiteralTree tree) {
+    super.visitLiteral(tree);
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    String tokenValue = astNode.getTokenOriginalValue();
-
-    if (!PATTERN.matcher(tokenValue).matches()) {
-
-      if (isTrueFalseOrNull(astNode)) {
-        reportIssue(astNode, "constant", tokenValue);
-
-      } else if (astNode.is(PHPKeyword.values())) {
-        reportIssue(astNode, "keyword", tokenValue);
-      }
+    if (tree.is(Kind.NULL_LITERAL, Kind.BOOLEAN_LITERAL)) {
+      check(tree, tree.value(), "constant");
     }
   }
 
-  private boolean isTrueFalseOrNull(AstNode node) {
-    AstNode scalar = node.getFirstChild();
+  @Override
+  public void visitToken(SyntaxToken token) {
+    super.visitToken(token);
 
-    return node.is(PHPGrammar.COMMON_SCALAR)
-      && ("null".equalsIgnoreCase(scalar.getTokenOriginalValue()) || scalar.is(PHPGrammar.BOOLEAN_LITERAL));
+    if (KEYWORDS.contains(token.text().toLowerCase())) {
+      check(token, token.text(), "keyword");
+    }
   }
 
-  private final void reportIssue(AstNode node, String kind, String value) {
-    getContext().createLineViolation(this, "Write this \"" + value + "\" " + kind + " in lower case.", node);
+  private void check(Tree tree, String value, String kind) {
+    if (!PATTERN.matcher(value).matches()) {
+      String message = String.format(MESSAGE, value, kind);
+      context().newIssue(KEY, message).tree(tree);
+    }
   }
 
 }

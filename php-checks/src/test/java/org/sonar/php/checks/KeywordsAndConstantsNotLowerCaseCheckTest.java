@@ -20,22 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class KeywordsAndConstantsNotLowerCaseCheckTest extends CheckTest {
+public class KeywordsAndConstantsNotLowerCaseCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("KeywordsAndConstantsNotLowerCaseCheck.php"), new KeywordsAndConstantsNotLowerCaseCheck());
+    PHPCheckTest.check(new KeywordsAndConstantsNotLowerCaseCheck(), TestUtils.getCheckFile("KeywordsAndConstantsNotLowerCaseCheck.php"));
 
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Write this \"include_ONCE\" keyword in lower case.")
-      .next().atLine(5).withMessage("Write this \"NULL\" constant in lower case.")
-      .next().atLine(7).withMessage("Write this \"ECHO\" keyword in lower case.")
-      .next().atLine(9).withMessage("Write this \"True\" constant in lower case.")
-      .noMore();
   }
 }
