@@ -20,22 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class LowerCaseColorCheckTest extends CheckTest {
+public class LowerCaseColorCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LowerCaseColorCheck.php"), new LowerCaseColorCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Replace \"#fffffF\" with \"#FFFFFF\".")
-      .next().atLine(5)
-      .next().atLine(6).withMessage("Replace \"#0ff\" with \"#0FF\".")
-      .noMore();
+    PHPCheckTest.check(new LowerCaseColorCheck(), TestUtils.getCheckFile("LowerCaseColorCheck.php"));
   }
 
 }
