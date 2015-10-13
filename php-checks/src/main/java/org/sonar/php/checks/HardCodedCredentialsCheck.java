@@ -19,22 +19,25 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S2068",
+  key = HardCodedCredentialsCheck.KEY,
   name = "Credentials should not be hard-coded",
   tags = {Tags.CWE, Tags.OWASP_A2, Tags.SANS_TOP25_POROUS, Tags.SECURITY},
   priority = Priority.CRITICAL)
@@ -42,41 +45,45 @@ import java.util.regex.Pattern;
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SECURITY_FEATURES)
 @SqaleConstantRemediation("30min")
-public class HardCodedCredentialsCheck extends SquidCheck<LexerlessGrammar> {
+public class HardCodedCredentialsCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2068";
+
+  private static final String MESSAGE = "Remove this hard-coded password.";
 
   private static final Pattern PASSWORD_LITERAL_PATTERN = Pattern.compile("password=..", Pattern.CASE_INSENSITIVE);
   private static final Pattern PASSWORD_VARIABLE_PATTERN = Pattern.compile("password", Pattern.CASE_INSENSITIVE);
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.STRING_LITERAL, PHPGrammar.VARIABLE_DECLARATION, PHPGrammar.ASSIGNMENT_EXPR);
+  public void visitLiteral(LiteralTree literal) {
+    if (literal.is(Kind.REGULAR_STRING_LITERAL) && PASSWORD_LITERAL_PATTERN.matcher(literal.token().text()).find()) {
+      addIssue(literal);
+    }
+    super.visitLiteral(literal);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.STRING_LITERAL)) {
-      if (PASSWORD_LITERAL_PATTERN.matcher(astNode.getTokenOriginalValue()).find()) {
-        addIssue(astNode);
-      }
-    } else if (astNode.is(PHPGrammar.VARIABLE_DECLARATION)) {
-      String identifier = astNode.getFirstChild().getTokenOriginalValue();
-      AstNode value = astNode.getLastChild();
-      checkVariable(astNode, identifier, value);
-    } else {
-      String identifier = astNode.getFirstChild().getLastToken().getOriginalValue();
-      AstNode value = astNode.getLastChild();
-      checkVariable(astNode, identifier, value);
+  public void visitVariableDeclaration(VariableDeclarationTree declaration) {
+    String identifier = declaration.variableIdentifier().text();
+    checkVariable(declaration, identifier, declaration.initValue());
+    super.visitVariableDeclaration(declaration);
+  }
+
+  @Override
+  public void visitAssignmentExpression(AssignmentExpressionTree assignment) {
+    String variableName = ((PHPTree) assignment.variable()).getLastToken().text();
+    checkVariable(assignment, variableName, assignment.value());
+    super.visitAssignmentExpression(assignment);
+  }
+
+  private void checkVariable(Tree tree, String identifier, Tree value) {
+    if (value != null && value.is(Kind.REGULAR_STRING_LITERAL) && PASSWORD_VARIABLE_PATTERN.matcher(identifier).find()) {
+      addIssue(tree);
     }
   }
 
-  private void checkVariable(AstNode astNode, String identifier, AstNode value) {
-    if (value.hasDescendant(PHPGrammar.STRING_LITERAL) && value.getTokens().size() == 1 && PASSWORD_VARIABLE_PATTERN.matcher(identifier).find()) {
-      addIssue(astNode);
-    }
-  }
-
-  private void addIssue(AstNode astNode) {
-    getContext().createLineViolation(this, "Remove this hard-coded password.", astNode);
+  private void addIssue(Tree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree);
   }
 
 }

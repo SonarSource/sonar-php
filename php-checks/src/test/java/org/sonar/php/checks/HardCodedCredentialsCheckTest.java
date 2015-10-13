@@ -19,27 +19,15 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class HardCodedCredentialsCheckTest extends CheckTest {
-
-  @Rule
-  public CheckMessagesVerifierRule checkMessagesVerifier = new CheckMessagesVerifierRule();
+public class HardCodedCredentialsCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("HardCodedCredentialsCheck.php"), new HardCodedCredentialsCheck());
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Remove this hard-coded password.")
-      .next().atLine(11)
-      .next().atLine(15)
-      .next().atLine(17);
+    PHPCheckTest.check(new HardCodedCredentialsCheck(), TestUtils.getCheckFile("HardCodedCredentialsCheck.php"));
   }
 
 }

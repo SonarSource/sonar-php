@@ -2,20 +2,24 @@
 class A {
     
   public $fieldNameWithPasswordInIt = retrievePassword();
-  public $fieldNameWithPasswordInIt = ""; // Noncompliant
+  public $fieldNameWithPasswordInIt = ""; // NOK {{Remove this hard-coded password.}}
   public $fieldNameWithPasswordInIt = "$password";
+  public $fieldNameWithPasswordInIt;
   public $otherFieldName = "";
   
   private function a() {
     $variable1 = "blabla";
-    $variable2 = "login=a&password=xxx"; // Noncompliant
+    $variable2 = "login=a&password=xxx"; // NOK
     $variable3 = "login=a&password=";
     $variable4 = "login=a&password=$password";
 
-    $variableNameWithPasswordInIt = "xxx"; // Noncompliant
+    $variableNameWithPasswordInIt = "xxx"; // NOK
     $otherVariableNameWithPasswordInIt;
-    $this->fieldNameWithPasswordInIt = "xx"; // Noncompliant
+    $this->fieldNameWithPasswordInIt = "xx"; // NOK
     $this->fieldNameWithPasswordInIt = retrievePassword(); 
   }
 
 }
+
+const secretPassword = "xxx"; // NOK
+const otherConstant = "xxx";

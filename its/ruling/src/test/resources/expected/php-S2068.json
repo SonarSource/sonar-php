@@ -14,4 +14,7 @@
 306,
 1230,
 ],
+'project:symfony/Symfony/Component/Security/Core/Tests/Encoder/BCryptPasswordEncoderTest.php':[
+21,
+],
 }
