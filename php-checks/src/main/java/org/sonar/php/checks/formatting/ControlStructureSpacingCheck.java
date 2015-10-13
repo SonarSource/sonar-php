@@ -19,89 +19,160 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
+import com.google.common.collect.ImmutableList;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.TokenVisitor;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
-public class ControlStructureSpacingCheck extends SpacingCheck {
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
+
+public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implements FormattingCheck {
+
+  private static final String CONTROL_STRUCTURES_KEYWORD_MESSAGE = "between this \"%s\" keyword and the opening %s";
+  private static final String FOR_SEMICOLON_MESSAGE = "Put exactly one space after each \";\" character in the \"for\" statement.";
+  private static final String FOREACH_MESSAGE = "Put exactly one space after and before %s in \"foreach\" statement.";
+  private static final Kind[] CONTROL_STRUCTURES = {
+    Kind.IF_STATEMENT,
+    Kind.ELSEIF_CLAUSE,
+    Kind.ELSE_CLAUSE,
+    Kind.DO_WHILE_STATEMENT,
+    Kind.WHILE_STATEMENT,
+    Kind.FOR_STATEMENT,
+    Kind.FOREACH_STATEMENT,
+    Kind.SWITCH_STATEMENT,
+    Kind.TRY_STATEMENT,
+    Kind.CATCH_BLOCK
+  };
+
+  private FormattingStandardCheck check;
 
   @Override
-  public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
-    if (formattingCheck.isOneSpaceBetweenKeywordAndNextToken && node.is(FormattingStandardCheck.getControlStructureNodes())) {
-      checkSpaceBetweenKeywordAndNextNode(formattingCheck, node);
+  public void checkFormat(FormattingStandardCheck formattingCheck, ScriptTree scriptTree) {
+    this.check = formattingCheck;
+    this.scanTree(scriptTree);
+  }
+
+  @Override
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.copyOf(CONTROL_STRUCTURES);
+  }
+
+  @Override
+  public void visitNode(Tree tree) {
+    if (check.isOneSpaceBetweenKeywordAndNextToken) {
+      checkSpaceBetweenKeywordAndNextNode(new TokenVisitor(tree), tree);
     }
-    if (formattingCheck.isOneSpaceAfterForLoopSemicolon && node.is(PHPGrammar.FOR_STATEMENT)) {
-      checkSpaceForStatement(formattingCheck, node);
+    if (check.isOneSpaceAfterForLoopSemicolon && tree.is(Kind.FOR_STATEMENT)) {
+      checkSpaceForStatement(tree);
     }
-    if (formattingCheck.isSpaceForeachStatement && node.is(PHPGrammar.FOREACH_STATEMENT)) {
-      checkForeachStatement(formattingCheck, node);
+    if (check.isSpaceForeachStatement && tree.is(Kind.FOREACH_STATEMENT)) {
+      ForEachStatementTree foreachLoop = (ForEachStatementTree) tree;
+      checkForeachStatement(new TokenVisitor(tree), foreachLoop, foreachLoop.asToken(), foreachLoop.doubleArrowToken());
     }
   }
 
   /**
    * Check there is exactly one space around "as" keyword and "=>" punctuator in foreach statement.
    */
-  private void checkForeachStatement(FormattingStandardCheck formattingCheck, AstNode node) {
-    AstNode foreachExpr = node.getFirstChild(PHPGrammar.FOREACH_EXPR);
-    AstNode asKeyword = foreachExpr.getFirstChild(PHPKeyword.AS);
-    AstNode doubleArrow = foreachExpr.getFirstChild(PHPPunctuator.DOUBLEARROW);
+  private void checkForeachStatement(TokenVisitor tokenVisitor, ForEachStatementTree foreachLoop, SyntaxToken asKeyword, @Nullable SyntaxToken doubleArrow) {
 
-    boolean isSpaceCorrectAs = isSpaceAround(asKeyword, 1 /* space before*/, 1/* space after */);
-    boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isSpaceAround(doubleArrow, 1/* space before*/, 1/* space after */);
+    boolean isSpaceCorrectAs = isExactlyOneSpaceAround(tokenVisitor, asKeyword);
+    boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isExactlyOneSpaceAround(tokenVisitor, doubleArrow);
 
-    String keyword = null;
+    String messageDetail = null;
+
     if (!isSpaceCorrectAs && isSpaceCorrectDoubleArrow) {
-      keyword = "\"" + asKeyword.getTokenOriginalValue() + "\"";
+      messageDetail = "\"as\"";
+
     } else if (isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
-      keyword = "\"" + doubleArrow.getTokenOriginalValue() + "\"";
+      messageDetail = "\"=>\"";
+
     } else if (!isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
-      keyword = "\"" + asKeyword.getTokenOriginalValue() + "\" and \"" + doubleArrow.getTokenOriginalValue() + "\"";
+     messageDetail = "\"as\" and \"=>\"";
     }
 
-    if (keyword != null) {
-      formattingCheck.reportIssue("Put exactly one space after and before " + keyword + " in \"foreach\" statement.", node);
+    if (messageDetail != null) {
+      check.reportIssue(String.format(FOREACH_MESSAGE, messageDetail), foreachLoop);
     }
+  }
+
+  private static boolean isExactlyOneSpaceAround(TokenVisitor tokenVisitor, SyntaxToken token) {
+    return TokenUtils.getNbSpaceBetween(tokenVisitor.prevToken(token), token) == 1
+      && TokenUtils.getNbSpaceBetween(token,tokenVisitor.nextToken(token)) == 1;
   }
 
   /**
    * Check there is exactly one space after each ";" in for statement.
    */
-  private void checkSpaceForStatement(FormattingStandardCheck formattingCheck, AstNode node) {
-    boolean shouldReportIssue = false;
+  private void checkSpaceForStatement(Tree tree) {
+    Iterator<Tree> iterator = ((PHPTree) tree).childrenIterator();
+    Tree next;
+    Tree previous = null;
 
-    for (AstNode semicolon : node.getChildren(PHPPunctuator.SEMICOLON)) {
-      Token semicolonToken = semicolon.getToken();
-      Token nextToken = semicolon.getNextAstNode().getToken();
-      int nbSpace = getNbSpaceBetween(semicolonToken, nextToken);
+    while (iterator.hasNext()) {
+      next = iterator.next();
 
-      if (nbSpace != 1 && isOnSameLine(semicolonToken, nextToken)) {
-        shouldReportIssue = true;
+      if (isSemicolon(previous)) {
+        SyntaxToken semicolonToken = (SyntaxToken) previous;
+        SyntaxToken nextToken = ((PHPTree) next).getFirstToken();
+        int nbSpace = TokenUtils.getNbSpaceBetween(semicolonToken, nextToken);
+
+        if (nbSpace != 1 && TokenUtils.isOnSameLine(semicolonToken, nextToken)) {
+          check.reportIssue(FOR_SEMICOLON_MESSAGE, tree);
+          break;
+        }
+      }
+
+      previous = next;
+    }
+
+  }
+
+  private static boolean isSemicolon(@Nullable Tree tree) {
+    return tree != null && tree.is(Kind.TOKEN) && TokenUtils.isType((SyntaxToken) tree, PHPPunctuator.SEMICOLON);
+  }
+
+  private void checkSpaceBetweenKeywordAndNextNode(TokenVisitor tokenVisitor, Tree tree) {
+    SyntaxToken keyword = tokenVisitor.tokenByValue(PHPKeyword.getKeywordValues());
+
+    if (tree.is(Kind.TRY_STATEMENT)) {
+      TryStatementTree tryStatement = (TryStatementTree) tree;
+
+      if (tryStatement.finallyToken() != null) {
+        SyntaxToken finallyKeyword = tryStatement.finallyToken();
+        checkSpaceBetweenKeywordAndNextNode(finallyKeyword, tokenVisitor.nextToken(finallyKeyword));
       }
     }
 
-    if (shouldReportIssue) {
-      formattingCheck.reportIssue("Put exactly one space after each \";\" character in the \"for\" statement.", node);
-    }
+    checkSpaceBetweenKeywordAndNextNode(keyword, tokenVisitor.nextToken(keyword));
   }
 
   /**
    * Check that there is exactly one space between a control structure keyword and a opening parenthesis or curly brace.
    */
-  private void checkSpaceBetweenKeywordAndNextNode(FormattingStandardCheck formattingCheck, AstNode controlStructure) {
-    AstNode keyword = controlStructure.getFirstChild(PHPKeyword.values());
-    Token nextToken = keyword.getNextAstNode().getToken();
-
-    if (isType(nextToken, PHPPunctuator.LCURLYBRACE, PHPPunctuator.LPARENTHESIS) && isOnSameLine(keyword.getToken(), nextToken)) {
-      int nbSpace = getNbSpaceBetween(keyword.getToken(), nextToken);
+  private void checkSpaceBetweenKeywordAndNextNode(SyntaxToken keyword, SyntaxToken nextToken) {
+    if (TokenUtils.isType(nextToken, PHPPunctuator.LCURLYBRACE, PHPPunctuator.LPARENTHESIS) && TokenUtils.isOnSameLine(keyword, nextToken)) {
+      int nbSpace = TokenUtils.getNbSpaceBetween(keyword, nextToken);
 
       if (nbSpace != 1) {
-        String endMsg = "between this \"" + keyword.getTokenOriginalValue() + "\" keyword and the opening "
-          + (isType(nextToken, PHPPunctuator.LPARENTHESIS) ? "parenthesis." : "curly brace.");
-        formattingCheck.reportIssue(buildIssueMsg(nbSpace, endMsg), keyword);
+        String endMessage = String.format(
+          CONTROL_STRUCTURES_KEYWORD_MESSAGE,
+          keyword.text(),
+          TokenUtils.isType(nextToken, PHPPunctuator.LPARENTHESIS) ? "parenthesis." : "curly brace.");
+        check.reportIssue(TokenUtils.buildIssueMsg(nbSpace, endMessage), keyword);
       }
+
     }
   }
 

@@ -19,11 +19,13 @@
  */
 package org.sonar.php.checks.utils;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,16 @@ public class TokenVisitor extends PHPVisitorCheck {
     if (token.is(Kind.TOKEN)) {
       tokens.add(token);
     }
+  }
+
+  @Nullable
+  public SyntaxToken tokenByValue(String... tokenValues) {
+    for (SyntaxToken token : tokens) {
+      if (ArrayUtils.contains(tokenValues, token.text())) {
+        return token;
+      }
+    }
+    return null;
   }
 
   public SyntaxToken prevToken(SyntaxToken token) {

@@ -19,25 +19,11 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.google.common.collect.ImmutableList;
-import org.junit.Test;
-import org.sonar.php.checks.FormattingStandardCheckTest;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.php.checks.FormattingStandardCheck;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 
-public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTest {
+public interface FormattingCheck {
 
+  void checkFormat(FormattingStandardCheck formattingCheck, ScriptTree scriptTree);
 
-  @Test
-  public void defaultValue() throws Exception {
-    activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"));
-  }
-
-  @Test
-  public void custom() throws Exception {
-    deactivateAll();
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), ImmutableList.<Issue>of());
-  }
 }

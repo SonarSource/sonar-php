@@ -19,53 +19,56 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.sonar.sslr.api.AstNode;
-import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.FormattingStandardCheck;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import javax.annotation.Nullable;
 
-public class ExtendsImplementsLineCheck {
+public class ExtendsImplementsLineCheck extends PHPVisitorCheck implements FormattingCheck {
 
-  public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
-    if (formattingCheck.isExtendsAndImplementsLine && node.is(PHPGrammar.CLASS_DECLARATION)) {
-      checkExtendsAndImplementsLine(formattingCheck, node);
+  private static final String MESSAGE = "Move %s to the same line as the declaration of its class name, \"%s\".";
+  private FormattingStandardCheck check;
+
+  @Override
+  public void checkFormat(FormattingStandardCheck formattingCheck, ScriptTree scriptTree) {
+    this.check = formattingCheck;
+    super.visitScript(scriptTree);
+  }
+
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    if (check.isExtendsAndImplementsLine && tree.is(Kind.CLASS_DECLARATION)) {
+      checkExtendsAndImplementsLine(tree);
+    }
+    super.visitClassDeclaration(tree);
+  }
+
+  private void checkExtendsAndImplementsLine(ClassDeclarationTree tree) {
+    SyntaxToken classNameToken = tree.name().token();
+    int nameLine = classNameToken.line();
+
+    boolean isExtendsOnClassNameLine = isExtendsOnClassNameLine(tree, nameLine);
+    boolean isImplementsOnClassNameLine = isImplementsOnClassNameLine(tree, nameLine);
+
+    String partialMessage = getIssuePartialMessage(isExtendsOnClassNameLine, isImplementsOnClassNameLine);
+
+    if (partialMessage != null) {
+      check.reportIssue(String.format(MESSAGE, partialMessage, classNameToken.text()), tree);
     }
   }
 
-  private void checkExtendsAndImplementsLine(FormattingStandardCheck formattingCheck, AstNode node) {
-    AstNode identifier = node.getFirstChild(PHPGrammar.IDENTIFIER);
-    String className = identifier.getTokenOriginalValue();
-    int classNameLine = identifier.getTokenLine();
-
-    boolean isExtendsOnClassNameLine = isExtendsOnClassNameLine(node, classNameLine);
-    boolean isImplementsOnClassNameLine = isImplementsOnClassNameLine(node, classNameLine);
-
-    String msg = getIssueMessage(isExtendsOnClassNameLine, isImplementsOnClassNameLine);
-
-    if (msg != null) {
-      formattingCheck.reportIssue("Move " + msg + " to the same line as the declaration of its class name, \"" + className + "\".", node);
-    }
+  private boolean isExtendsOnClassNameLine(ClassDeclarationTree classDeclaration, int classNameLine) {
+    SyntaxToken extendsToken = classDeclaration.extendsToken();
+    return extendsToken == null || classNameLine == extendsToken.line();
   }
 
-  private boolean isExtendsOnClassNameLine(AstNode classDeclaration, int classNameLine) {
-    AstNode extendsNode = classDeclaration.getFirstChild(PHPGrammar.EXTENDS_FROM);
-    if (extendsNode != null) {
-      return classNameLine == extendsNode.getFirstChild(PHPKeyword.EXTENDS).getTokenLine();
-    }
-
-    return true;
-  }
-
-  private boolean isImplementsOnClassNameLine(AstNode classDeclaration, int classNameLine) {
-    AstNode implementsNode = classDeclaration.getFirstChild(PHPGrammar.IMPLEMENTS_LIST);
-
-    if (implementsNode != null) {
-      return classNameLine == implementsNode.getFirstChild(PHPKeyword.IMPLEMENTS).getTokenLine();
-    }
-
-    return true;
+  private boolean isImplementsOnClassNameLine(ClassDeclarationTree classDeclaration, int classNameLine) {
+    SyntaxToken implementsToken = classDeclaration.implementsToken();
+    return implementsToken == null || classNameLine == implementsToken.line();
   }
 
   /**
@@ -74,17 +77,22 @@ public class ExtendsImplementsLineCheck {
    * Return null if there is not issue to report.
    */
   @Nullable
-  private String getIssueMessage(boolean isExtendsOnClassNameLine, boolean isImplementsOnClassNameLine) {
+  private String getIssuePartialMessage(boolean isExtendsOnClassNameLine, boolean isImplementsOnClassNameLine) {
     String msg = null;
 
     if (!isExtendsOnClassNameLine && !isImplementsOnClassNameLine) {
       msg = "\"extends\" and \"implements\" keywords";
-    } else if (!isExtendsOnClassNameLine && isImplementsOnClassNameLine) {
+    }
+
+    if (!isExtendsOnClassNameLine && isImplementsOnClassNameLine) {
       msg = "\"extends\" keyword";
-    } else if (isExtendsOnClassNameLine && !isImplementsOnClassNameLine) {
+    }
+
+    if (isExtendsOnClassNameLine && !isImplementsOnClassNameLine) {
       msg = "\"implements\" keyword";
     }
 
     return msg;
   }
+
 }

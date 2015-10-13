@@ -19,123 +19,194 @@
  */
 package org.sonar.php.checks.formatting;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.AstNodeType;
-import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class IndentationCheck extends SpacingCheck {
+public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck {
 
+  private static final String ARGUMENT_LINE_SPLIT_MESSAGE =
+    "Either split this list into multiple lines, aligned at column \"%s\" or put all arguments on line \"%s\".";
+  private static final String ARGUMENT_INDENTATION_MESSAGE = "Align all arguments in this list at column \"%s\".";
   private static final int PSR2_INDENTATION = 4;
+  private static final String FUNCTION_CALL_PARENTHESIS_MESSAGE = "Move the closing parenthesis on the next line.";
+  private static final String FUNCTION_DEC_PARENTHESIS_MESSAGE = "Move the closing parenthesis with the opening brace on the next line.";
+  private static final String INTERFACE_SPLIT_MESSAGE = "Either split this list into multiple lines or move it on the same line \"%s\".";
+  private static final String INTERFACE_INDENTATION = "Align all interfaces in this list at column \"%s\".";
+
+  private FormattingStandardCheck check;
+  private Map<Integer, Integer> startColumnByLine = new HashMap<>();
 
   @Override
-  public void visitNode(FormattingStandardCheck formattingCheck, AstNode node) {
-    if (formattingCheck.isFunctionCallsArgumentsIndentation && node.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-      checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER_LIST_FOR_CALL);
+  public void checkFormat(FormattingStandardCheck formattingCheck, ScriptTree scriptTree) {
+    this.check = formattingCheck;
+    this.startColumnByLine.clear();
+
+    super.visitScript(scriptTree);
+  }
+
+  @Override
+  public void visitToken(SyntaxToken token) {
+    if (startColumnByLine.get(token.line()) == null) {
+      startColumnByLine.put(token.line(), token.column());
     }
-    if (formattingCheck.isMethodArgumentsIndentation && node.is(PHPGrammar.PARAMETER_LIST)) {
-      checkArgumentsIndentation(formattingCheck, node, PHPGrammar.PARAMETER);
-    }
-    if (formattingCheck.isInterfacesIndentation && node.is(PHPGrammar.CLASS_DECLARATION)) {
-      checkImplementListIndentation(formattingCheck, node);
+
+    super.visitToken(token);
+  }
+
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    super.visitFunctionCall(tree);
+
+    if (check.isFunctionCallsArgumentsIndentation && !check.isInternalFunction(tree.callee())) {
+      SyntaxToken calleeLastToken = ((PHPTree) tree.callee()).getLastToken();
+
+      checkArgumentsIndentation(
+        tree.arguments(),
+        calleeLastToken,
+        startColumnForLine(calleeLastToken.line()),
+        tree.closeParenthesisToken(), true);
     }
   }
 
-  private void checkImplementListIndentation(FormattingStandardCheck formattingCheck, AstNode node) {
-    AstNode implementList = node.getFirstChild(PHPGrammar.IMPLEMENTS_LIST);
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    super.visitFunctionDeclaration(tree);
 
-    if (implementList != null) {
-      List<AstNode> interfaceList = implementList.getFirstChild(PHPGrammar.INTERFACE_LIST).getChildren(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME);
-      int classDecLine = node.getTokenLine();
-      int expectedColumn = getLineStartingColumn(node) + PSR2_INDENTATION;
+    if (check.isMethodArgumentsIndentation) {
+      checkArgumentsIndentation(
+        tree.parameters().parameters(),
+        tree.name().token(),
+        startColumnForLine(tree.functionToken().line()),
+        tree.parameters().closeParenthesisToken(), false);
+    }
+  }
 
-      if (!isOnSameLine(node.getToken(), Iterables.getLast(interfaceList).getToken())) {
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    super.visitMethodDeclaration(tree);
 
-        if (!isCorrectlySplittedOnLines(classDecLine, interfaceList)) {
-          formattingCheck.reportIssue("Either split this list into multiple lines or move it on the same line \"" + classDecLine + "\".",
-            interfaceList.get(0));
+    if (check.isMethodArgumentsIndentation) {
+      checkArgumentsIndentation(
+        tree.parameters().parameters(),
+        tree.name().token(),
+        startColumnForLine(tree.functionToken().line()),
+        (tree.parameters().closeParenthesisToken()), false);
+    }
+  }
+
+  @Override
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    super.visitFunctionExpression(tree);
+
+    if (check.isMethodArgumentsIndentation) {
+      checkArgumentsIndentation(
+        tree.parameters().parameters(),
+        tree.functionToken(),
+        startColumnForLine(tree.functionToken().line()),
+        (tree.parameters().closeParenthesisToken()), false);
+    }
+  }
+
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
+    checkImplementListIndentation(tree);
+  }
+
+  private void checkImplementListIndentation(ClassDeclarationTree classTree) {
+    if (check.isInterfacesIndentation && classTree.is(Tree.Kind.CLASS_DECLARATION) && !classTree.superInterfaces().isEmpty()) {
+
+      List<Tree> interfaceList = ImmutableList.<Tree>copyOf(classTree.superInterfaces());
+      SyntaxToken classToken = classTree.classEntryTypeToken();
+      SyntaxToken lastInterfaceToken = ((PHPTree) Iterables.getLast(classTree.superInterfaces())).getFirstToken();
+      int expectedColumn = classToken.column() + PSR2_INDENTATION;
+
+      if (!TokenUtils.isOnSameLine(classToken, lastInterfaceToken)) {
+
+        if (!isCorrectlySplitOnLines(classToken.line(), interfaceList)) {
+          check.reportIssue(String.format(INTERFACE_SPLIT_MESSAGE, classToken.line()), classTree.superInterfaces().get(0));
+
         } else if (!isCorrectlyIndented(expectedColumn, interfaceList)) {
-          formattingCheck.reportIssue("Align all interfaces in this list at column \"" + expectedColumn + "\".", interfaceList.get(0));
+          check.reportIssue(String.format(INTERFACE_INDENTATION, expectedColumn), classTree.superInterfaces().get(0));
         }
       }
     }
   }
 
-  private void checkArgumentsIndentation(FormattingStandardCheck formattingCheck, AstNode node, AstNodeType parameterNodeType) {
-    List<AstNode> arguments = node.getChildren(parameterNodeType);
-
+  private void checkArgumentsIndentation(SeparatedList arguments, SyntaxToken functionName, int baseColumn, @Nullable SyntaxToken closeParenthesis, boolean isFunctionCall) {
     if (arguments.size() > 1) {
-      Token lastParam = Iterables.getLast(arguments).getLastToken();
-      AstNode methodName = node.getPreviousAstNode();
-      AstNode firstParam = arguments.get(0);
-      int expectedIndentationColumn = getLineStartingColumn(node.getParent()) + PSR2_INDENTATION;
-      int callingLine = methodName.getTokenLine();
+      SyntaxToken lastArg = ((PHPTree) Iterables.getLast(arguments)).getLastToken();
+      Tree firstArg = (Tree) arguments.get(0);
 
-      if (!isOnSameLine(methodName.getToken(), lastParam)) {
+      int expectedIndentationColumn = baseColumn + PSR2_INDENTATION;
+      int callingLine = functionName.line();
 
-        if (!isCorrectlySplittedOnLines(callingLine, arguments)) {
-          formattingCheck.reportIssue("Either split this list into multiple lines, aligned at column \""
-            + expectedIndentationColumn + "\" or put all arguments on line \""
-            + callingLine + "\".", firstParam);
+      if (!TokenUtils.isOnSameLine(functionName, lastArg)) {
+
+        if (!isCorrectlySplitOnLines(callingLine, arguments)) {
+          check.reportIssue(String.format(ARGUMENT_LINE_SPLIT_MESSAGE, expectedIndentationColumn, callingLine), firstArg);
+
         } else if (!isCorrectlyIndented(expectedIndentationColumn, arguments)) {
-          formattingCheck.reportIssue("Align all arguments in this list at column \"" + expectedIndentationColumn + "\".", firstParam);
+          check.reportIssue(String.format(ARGUMENT_INDENTATION_MESSAGE, expectedIndentationColumn), firstArg);
         }
-        checkClosingParenthesisLocation(formattingCheck, node, lastParam);
+
+        // Checking parenthesis
+        if (closeParenthesis != null) {
+          checkClosingParenthesisLocation((Tree) Iterables.getLast(arguments), closeParenthesis, isFunctionCall);
+        }
       }
     }
   }
 
-  private void checkClosingParenthesisLocation(FormattingStandardCheck formattingCheck, AstNode paramList, Token lastParam) {
-    AstNode rParenthesis;
-    String msg;
-
-    if (paramList.is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST)) {
-      rParenthesis = paramList.getFirstChild(PHPPunctuator.RPARENTHESIS);
-      msg = "Move the closing parenthesis on the next line.";
-    } else {
-      rParenthesis = paramList.getParent().getFirstChild(PHPPunctuator.RPARENTHESIS);
-      msg = "Move the closing parenthesis with the opening brace on the next line.";
-    }
-    if (!lastParam.getType().equals(PHPPunctuator.RPARENTHESIS) && isOnSameLine(lastParam, rParenthesis.getToken())) {
-      formattingCheck.reportIssue(msg, rParenthesis);
+  private void checkClosingParenthesisLocation(Tree lastArgument, SyntaxToken closeParenthesis, boolean isFunctionCall) {
+    if (!((PHPTree) lastArgument).getLastToken().text().equals(PHPPunctuator.RPARENTHESIS.getValue()) && TokenUtils.isOnSameLine(((PHPTree) lastArgument).getLastToken(), closeParenthesis)) {
+      check.reportIssue(
+        isFunctionCall ? FUNCTION_CALL_PARENTHESIS_MESSAGE : FUNCTION_DEC_PARENTHESIS_MESSAGE,
+        closeParenthesis);
     }
   }
 
-  private int getLineStartingColumn(AstNode node) {
-    int line = node.getTokenLine();
-    AstNode previousNode = node.getPreviousAstNode();
-    int column = node.getToken().getColumn();
-
-    while (previousNode != null && previousNode.getToken().getLine() == line) {
-      column = previousNode.getToken().getColumn();
-      previousNode = previousNode.getParent();
-    }
-    return column;
-  }
-
-  private boolean isCorrectlyIndented(int expectedColumn, List<AstNode> items) {
-    for (AstNode item : items) {
-      if (item.getToken().getColumn() != expectedColumn) {
+  private boolean isCorrectlyIndented(int expectedColumn, List<Tree> items) {
+    for (Tree item : items) {
+      if (((PHPTree) item).getFirstToken().column() != expectedColumn) {
         return false;
       }
     }
     return true;
   }
 
-  private boolean isCorrectlySplittedOnLines(int referenceLine, List<AstNode> items) {
+  private boolean isCorrectlySplitOnLines(int referenceLine, List<Tree> items) {
     int expectedLine = referenceLine + 1;
-    for (AstNode item : items) {
-      if (item.getTokenLine() < expectedLine) {
+
+    for (Tree item : items) {
+      if (((PHPTree) item).getFirstToken().line() < expectedLine) {
         return false;
       }
       expectedLine++;
     }
     return true;
+  }
+
+  private int startColumnForLine(int line) {
+    return startColumnByLine.get(line);
   }
 
 }

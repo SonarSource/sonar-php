@@ -4,13 +4,21 @@
  *  Class and function
  */
 
-class C1 {          // NOK
+abstract class C1 { // NOK {{Move this open curly brace to the beginning of the next line.}}
     function f() {  // NOK
     }
 
     function g()    // OK
     {
     }
+
+    function h();   // OK
+
+    function g($p1, $p2,
+               $p3, $p4
+    ) {              // OK
+    }
+
 }
 
 class C2            // OK
@@ -36,7 +44,7 @@ function g($p1, $p2,
  */
 
 if ($a)
-{                         // NOK
+{                         // NOK {{Move this open curly brace to the end of the previous line.}}
 }
 
 do
@@ -79,7 +87,7 @@ if ($aVeryLongConditionalExpression
  */
 if ($a) {
 }
-else {                  // NOK
+else {                  // NOK {{Move this "else" to the same line as the previous closing curly brace.}}
 }
 
 try {

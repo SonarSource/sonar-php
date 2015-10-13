@@ -19,68 +19,50 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.formatting.ControlStructureSpacingCheck;
 import org.sonar.php.checks.formatting.CurlyBraceCheck;
 import org.sonar.php.checks.formatting.ExtendsImplementsLineCheck;
+import org.sonar.php.checks.formatting.FormattingCheck;
 import org.sonar.php.checks.formatting.FunctionSpacingCheck;
 import org.sonar.php.checks.formatting.IndentationCheck;
 import org.sonar.php.checks.formatting.NamespaceAndUseStatementCheck;
 import org.sonar.php.checks.formatting.PunctuatorSpacingCheck;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.grammar.GrammarRuleKey;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import javax.annotation.Nullable;
-
-import java.util.Arrays;
+import java.util.List;
 
 @Rule(
-  key = "S1808",
+  key = FormattingStandardCheck.KEY,
   name = "Source code should comply with formatting standards",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
-public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
+public class FormattingStandardCheck extends PHPVisitorCheck {
 
-  private static final GrammarRuleKey[] CLASS_AND_FUNCTION = {
-    PHPGrammar.CLASS_DECLARATION,
-    PHPGrammar.INTERFACE_DECLARATION,
-    PHPGrammar.TRAIT_ADAPTATIONS,
-    PHPGrammar.METHOD_DECLARATION,
-    PHPGrammar.FUNCTION_DECLARATION
+  public static final String KEY = "S1808";
+
+  private static final FormattingCheck[] SUB_CHECKS = {
+    new NamespaceAndUseStatementCheck(),
+    new CurlyBraceCheck(),
+    new PunctuatorSpacingCheck(),
+    new FunctionSpacingCheck(),
+    new ControlStructureSpacingCheck(),
+    new IndentationCheck(),
+    new ExtendsImplementsLineCheck()
   };
-
-  private static final GrammarRuleKey[] CONTROL_STRUCTURE = {
-    PHPGrammar.IF_STATEMENT,
-    PHPGrammar.ELSEIF_CLAUSE,
-    PHPGrammar.ELSE_CLAUSE,
-    PHPGrammar.DO_WHILE_STATEMENT,
-    PHPGrammar.WHILE_STATEMENT,
-    PHPGrammar.FOR_STATEMENT,
-    PHPGrammar.FOREACH_STATEMENT,
-    PHPGrammar.SWITCH_STATEMENT,
-    PHPGrammar.TRY_STATEMENT,
-    PHPGrammar.CATCH_STATEMENT,
-    PHPGrammar.FINALLY_STATEMENT
-  };
-
-  private final NamespaceAndUseStatementCheck namespaceAndUseStatementCheck = new NamespaceAndUseStatementCheck();
-  private final CurlyBraceCheck curlyBraceCheck = new CurlyBraceCheck();
-  private final PunctuatorSpacingCheck punctuatorSpacingCheck = new PunctuatorSpacingCheck();
-  private final FunctionSpacingCheck functionSpacingCheck = new FunctionSpacingCheck();
-  private final ControlStructureSpacingCheck controlStructureSpacingCheck = new ControlStructureSpacingCheck();
-  private final IndentationCheck indentationCheck = new IndentationCheck();
-  private final ExtendsImplementsLineCheck extendsImplementsLineCheck = new ExtendsImplementsLineCheck();
 
   /**
    * Namespace and use statement
@@ -205,44 +187,34 @@ public class FormattingStandardCheck extends SquidCheck<LexerlessGrammar> {
     type = "BOOLEAN")
   public boolean isExtendsAndImplementsLine = true;
 
-  @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.NAMESPACE_STATEMENT,
-      PHPGrammar.PARAMETER_LIST,
-      PHPGrammar.FUNCTION_CALL_PARAMETER_LIST,
-      PHPGrammar.FUNCTION_EXPRESSION,
-      PHPGrammar.USE_STATEMENT);
-    subscribeTo(CLASS_AND_FUNCTION);
-    subscribeTo(CONTROL_STRUCTURE);
-    subscribeTo(PHPPunctuator.RPARENTHESIS);
+  private static final List<String> INTERNAL_FUNCTIONS = ImmutableList.of(
+    PHPKeyword.ECHO.getValue(),
+    PHPKeyword.ISSET.getValue(),
+    PHPKeyword.EMPTY.getValue(),
+    PHPKeyword.INCLUDE_ONCE.getValue(),
+    PHPKeyword.INCLUDE.getValue(),
+    PHPKeyword.EVAL.getValue(),
+    PHPKeyword.REQUIRE.getValue(),
+    PHPKeyword.REQUIRE_ONCE.getValue(),
+    PHPKeyword.CLONE.getValue(),
+    PHPKeyword.PRINT.getValue(),
+    PHPKeyword.HALT_COMPILER.getValue()
+  );
+
+  public boolean isInternalFunction(ExpressionTree callee) {
+    String calleeString = CheckUtils.asString(callee);
+    return INTERNAL_FUNCTIONS.contains(calleeString);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    namespaceAndUseStatementCheck.visitNode(this, astNode);
-    curlyBraceCheck.visitNode(this, astNode);
-    punctuatorSpacingCheck.visitNode(this, astNode);
-    functionSpacingCheck.visitNode(this, astNode);
-    controlStructureSpacingCheck.visitNode(this, astNode);
-    indentationCheck.visitNode(this, astNode);
-    extendsImplementsLineCheck.visitNode(this, astNode);
+  public void visitScript(ScriptTree tree) {
+    for (FormattingCheck subCheck : SUB_CHECKS) {
+      subCheck.checkFormat(this, tree);
+    }
   }
 
-  @Override
-  public void leaveFile(@Nullable AstNode astNode) {
-    namespaceAndUseStatementCheck.leaveFile();
+  public void reportIssue(String msg, Tree tree) {
+    context().newIssue(KEY, msg).tree(tree);
   }
 
-  public void reportIssue(String msg, AstNode node) {
-    getContext().createLineViolation(this, msg, node);
-  }
-
-  public static GrammarRuleKey[] getClassAndFunctionNodes() {
-    return Arrays.copyOf(CLASS_AND_FUNCTION, CLASS_AND_FUNCTION.length);
-  }
-
-  public static GrammarRuleKey[] getControlStructureNodes() {
-    return Arrays.copyOf(CONTROL_STRUCTURE, CONTROL_STRUCTURE.length);
-  }
 }
