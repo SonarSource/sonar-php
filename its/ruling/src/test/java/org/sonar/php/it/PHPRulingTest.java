@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 
 public class PHPRulingTest {
 
-  private static final String PLUGIN_KEY = "php";
   private static final File LITS_DIFFERENCES_FILE = FileLocation.of("target/differences").getFile();
 
   @ClassRule
@@ -35,13 +34,14 @@ public class PHPRulingTest {
     assertTrue(
       "SonarQube 5.1 is the minimum version to generate the issues report, change your orchestrator.properties",
       ORCHESTRATOR.getConfiguration().getSonarVersion().isGreaterThanOrEquals("5.1"));
+    ORCHESTRATOR.getServer().provisionProject("project", "project");
+    ORCHESTRATOR.getServer().associateProjectToQualityProfile("project", "php", "rules");
     SonarRunner build = SonarRunner.create(FileLocation.of("../sources/src").getFile())
       .setProjectKey("project")
       .setProjectName("project")
       .setProjectVersion("1")
       .setSourceDirs(".")
       .setSourceEncoding("UTF-8")
-      .setProfile("rules")
       .setProperty("sonar.analysis.mode", "preview")
       .setProperty("sonar.issuesReport.html.enable", "true")
       .setProperty("dump.old", FileLocation.of("src/test/resources/expected").getFile().getAbsolutePath())
