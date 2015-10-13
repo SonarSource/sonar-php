@@ -19,34 +19,31 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-public class NonLFCharAsEOLCheckTest extends CheckTest {
+public class NonLFCharAsEOLCheckTest {
 
   @Rule
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
   private NonLFCharAsEOLCheck check = new NonLFCharAsEOLCheck();
-  private final String TEST_DIR = "NonLFCharAsEOFCheck";
   private File ok_file;
   private File ko_file;
 
-
   @Before
   public void setUp() throws Exception {
-    temporaryFolder.newFolder(TEST_DIR);
-
     ok_file = temporaryFolder.newFile();
     Files.write("<?php $foo = 1; \n", ok_file, Charset.defaultCharset());
 
@@ -56,19 +53,14 @@ public class NonLFCharAsEOLCheckTest extends CheckTest {
 
   @Test
   public void ok() throws IOException {
-    SourceFile file = PHPAstScanner.scanSingleFile(ok_file, check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, ok_file);
   }
 
   @Test
   public void ko() throws IOException {
-    SourceFile file = PHPAstScanner.scanSingleFile(ko_file, check);
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().withMessage("Replace all non line feed end of line characters in this file \"" + ko_file.getName() + "\" by LF.")
-      .noMore();
+    ImmutableList<Issue> issues = ImmutableList.<Issue>of(
+      new PHPIssue("testKey", "Replace all non line feed end of line characters in this file \"" + ko_file.getName() + "\" by LF."));
+    PHPCheckTest.check(check, ko_file, issues);
   }
 
 }

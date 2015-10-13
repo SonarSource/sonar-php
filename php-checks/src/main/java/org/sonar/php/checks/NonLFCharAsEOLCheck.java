@@ -20,32 +20,32 @@
 package org.sonar.php.checks;
 
 import com.google.common.io.Files;
-import com.sonar.sslr.api.AstNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 @Rule(
-  key = "S1779",
+  key = NonLFCharAsEOLCheck.KEY,
   name = "Only LF character (Unix-like) should be used to end lines",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class NonLFCharAsEOLCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
+public class NonLFCharAsEOLCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
 
-  private static final Logger LOG = LoggerFactory.getLogger(NonLFCharAsEOLCheck.class);
+  public static final String KEY = "S1779";
+  private static final String MESSAGE = "Replace all non line feed end of line characters in this file \"%s\" by LF.";
+
   private Charset charset;
 
   @Override
@@ -53,22 +53,25 @@ public class NonLFCharAsEOLCheck extends SquidCheck<LexerlessGrammar> implements
     this.charset = charset;
   }
 
+
   @Override
-  public void visitFile(AstNode astNode) {
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    File file = context().file();
     try {
-      BufferedReader reader = Files.newReader(getContext().getFile(), charset);
+      BufferedReader reader = Files.newReader(file, charset);
 
       int c;
       while ((c = reader.read()) != -1) {
 
         if (c == '\r' || c == '\u2028' || c == '\u2029') {
-          getContext().createFileViolation(this, "Replace all non line feed end of line characters in this file \"{0}\" by LF.",
-            getContext().getFile().getName());
+          String message = String.format(MESSAGE, file.getName());
+          context().newIssue(KEY, message);
           break;
         }
       }
     } catch (IOException e) {
-      LOG.error("Unable to process check S1779 on file: {}", getContext().getFile().getName(), e);
+      throw new IllegalStateException("Check S1779: Can't read the file", e);
     }
   }
+
 }
