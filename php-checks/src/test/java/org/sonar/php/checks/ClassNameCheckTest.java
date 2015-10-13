@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.Issue;
@@ -29,7 +28,7 @@ import org.sonar.plugins.php.api.visitors.Issue;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClassNameCheckTest extends CheckTest {
+public class ClassNameCheckTest {
 
   private ClassNameCheck check = new ClassNameCheck();
   private String fileName = "ClassNameCheck.php";

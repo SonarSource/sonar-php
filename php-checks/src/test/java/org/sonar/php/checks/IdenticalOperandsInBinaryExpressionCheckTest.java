@@ -21,12 +21,11 @@ package org.sonar.php.checks;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
 
-public class IdenticalOperandsInBinaryExpressionCheckTest extends CheckTest {
+public class IdenticalOperandsInBinaryExpressionCheckTest {
 
   @Rule
   public CheckMessagesVerifierRule checkMessagesVerifier = new CheckMessagesVerifierRule();
