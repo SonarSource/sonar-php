@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.tests;
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -31,6 +32,7 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +65,8 @@ import java.util.Map;
  */
 public class PHPCheckTest {
 
-  private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
+  private static final Charset charset = Charsets.UTF_8;
+  private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(charset);
 
   /**
    * Verifies that the given check raises issue as expected.
@@ -74,9 +77,16 @@ public class PHPCheckTest {
   public static void check(PHPCheck check, File file) {
     CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
     check.init();
-    List<Issue> actualIssues = check.analyze(file, tree);
+    List<Issue> actualIssues = getActualIssues(check, file, tree);
     List<Issue> expectedIssues = getExpectedIssues(file, tree);
     compare(actualIssues, expectedIssues);
+  }
+
+  private static List<Issue> getActualIssues(PHPCheck check, File file, CompilationUnitTree tree) {
+    if (check instanceof CharsetAwareVisitor) {
+      ((CharsetAwareVisitor) check).setCharset(charset);
+    }
+    return check.analyze(file, tree);
   }
 
   /**
@@ -89,7 +99,7 @@ public class PHPCheckTest {
   public static void check(PHPCheck check, File file, List<Issue> expectedIssues) {
     CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
     check.init();
-    List<Issue> actualIssues = check.analyze(file, tree);
+    List<Issue> actualIssues = getActualIssues(check, file, tree);
     compare(actualIssues, expectedIssues);
   }
 

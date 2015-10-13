@@ -21,6 +21,7 @@ package org.sonar.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
+import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -41,6 +42,9 @@ public class PHPAnalyzer {
     this.checks = checks;
 
     for (PHPCheck check : checks) {
+      if (check instanceof CharsetAwareVisitor) {
+        ((CharsetAwareVisitor) check).setCharset(charset);
+      }
       check.init();
     }
   }

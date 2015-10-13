@@ -19,20 +19,18 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TrailingWhitespaceCheckTest extends CheckTest {
+public class TrailingWhitespaceCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TrailingWhitespaceCheck.php"), new TrailingWhitespaceCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Remove the useless trailing whitespaces at the end of this line.")
-      .noMore();
+    ImmutableList<Issue> issues = ImmutableList.<Issue>of(new PHPIssue("testKey", "Remove the useless trailing whitespaces at the end of this line.").line(5));
+    PHPCheckTest.check(new TrailingWhitespaceCheck(), TestUtils.getCheckFile("TrailingWhitespaceCheck.php"), issues);
   }
 }
