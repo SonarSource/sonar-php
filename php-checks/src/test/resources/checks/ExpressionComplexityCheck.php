@@ -1,13 +1,13 @@
 <?php
 
-$b = false ? (true ? (false ? (true ? 1 : 0) : 0) : 0) : 1;         // NOK
+$b = false ? (true ? (false ? (true ? 1 : 0) : 0) : 0) : 1;         // NOK {{Reduce the number of conditional operators (4) used in the expression (maximum allowed 3).}}
 
 $c = true || false || true || false || false;                       // NOK
 
 $d = true && false && true && false && true && true;                // NOK
 
 function f() {
-  if ((true ? 0 : 1) || false || true && false && true || false) {  // NOK
+  if ((true ? 0 : 1) || false || true && false && true || false) {  // NOK {{Reduce the number of conditional operators (6) used in the expression (maximum allowed 3).}}
   }
 }
 
@@ -40,4 +40,15 @@ function g() {
   return array (true && true && true, true && true && true);        // OK
 }
 
+$a && 
+f($d && $e && $f && $g && $h) &&                                    // NOK
+$b &&
+$c;
 
+myfunction(
+    $a                                                              // OK
+    .($b ? 'x' : 'y')
+    .($c ? 'x' : 'y')
+    .($d ? 'x' : 'y')
+    .($e ? 'x' : 'y')
+);

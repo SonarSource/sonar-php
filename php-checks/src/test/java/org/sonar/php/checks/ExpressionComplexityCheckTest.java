@@ -19,37 +19,26 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class ExpressionComplexityCheckTest extends CheckTest {
+public class ExpressionComplexityCheckTest {
 
+  private static final String FILE_NAME = "ExpressionComplexityCheck.php";
   private ExpressionComplexityCheck check = new ExpressionComplexityCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ExpressionComplexityCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Reduce the number of conditional operators (4) used in the expression (maximum allowed " + check.DEFAULT + ").")
-      .next().atLine(5)
-      .next().atLine(7)
-      .next().atLine(10).withMessage("Reduce the number of conditional operators (6) used in the expression (maximum allowed " + check.DEFAULT + ").")
-      .next().atLine(14)
-      .next().atLine(16)
-      .next().atLine(22)
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 5;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ExpressionComplexityCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(10).withMessage("Reduce the number of conditional operators (6) used in the expression (maximum allowed " + check.max + ").")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of(new PHPIssue("", null).line(10)));
   }
 }

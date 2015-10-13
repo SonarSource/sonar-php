@@ -19,128 +19,114 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.grammar.GrammarRuleKey;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 
 @Rule(
-  key = "S1067",
+  key = ExpressionComplexityCheck.KEY,
   name = "Expressions should not be too complex",
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNIT_TESTABILITY)
 @SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "5min", effortToFixDescription = "per complexity point above the threshold")
-public class ExpressionComplexityCheck extends SquidCheck<LexerlessGrammar> {
+public class ExpressionComplexityCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S1067";
+
+  private static final String MESSAGE = "Reduce the number of conditional operators (%s) used in the expression (maximum allowed %s).";
 
   public static final int DEFAULT = 3;
-  private Deque<ExpressionComplexity> scope = new ArrayDeque<ExpressionComplexity>();
-  private static final GrammarRuleKey[] REQUIRES_NEW_SCOPE = {
-    PHPGrammar.FUNCTION_EXPRESSION,
-    PHPGrammar.ARRAY_PAIR_LIST,
-    PHPGrammar.RETURN_STATEMENT,
-    PHPGrammar.FOR_EXRR,
-    PHPGrammar.PARAMETER_LIST_FOR_CALL};
 
-  private static final GrammarRuleKey[] LOGICAL_AND_CONDITIONAL_EXPRS = {
-    PHPGrammar.CONDITIONAL_EXPR,
-    PHPGrammar.LOGICAL_AND_EXPR,
-    PHPGrammar.LOGICAL_OR_EXPR};
+  private Deque<ComplexExpression> expressions = new ArrayDeque<>();
 
   @RuleProperty(defaultValue = "" + DEFAULT)
   public int max = DEFAULT;
 
-  public static class ExpressionComplexity {
-    private int nestedLevel = 0;
-    private int counterOperator = 0;
+  private static final Kind[] COMPLEXITY_INCREMENTING_KINDS = {
+    Kind.CONDITIONAL_EXPRESSION,
+    Kind.CONDITIONAL_AND,
+    Kind.CONDITIONAL_OR,
+    Kind.ALTERNATIVE_CONDITIONAL_AND,
+    Kind.ALTERNATIVE_CONDITIONAL_OR
+  };
 
-    public void increaseOperatorCounter(int nbOperator) {
-      counterOperator += nbOperator;
-    }
-
-    public void incrementNestedExprLevel() {
-      nestedLevel++;
-    }
-
-    public void decrementNestedExprLevel() {
-      nestedLevel--;
-    }
-
-    public boolean isOnFirstExprLevel() {
-      return nestedLevel == 0;
-    }
-
-    public int getExprNumberOfOperator() {
-      return counterOperator;
-    }
-
-    public void resetExprOperatorCounter() {
-      counterOperator = 0;
-    }
-  }
+  private static final Kind[] NESTING_KINDS = {
+    Kind.COMPILATION_UNIT,
+    Kind.FUNCTION_EXPRESSION,
+    Kind.FUNCTION_CALL
+  };
 
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    scope.clear();
-    scope.push(new ExpressionComplexity());
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.<Kind>builder()
+      .add(COMPLEXITY_INCREMENTING_KINDS)
+      .add(NESTING_KINDS)
+      .build();
   }
 
-  @Override
-  public void init() {
-    subscribeTo(LOGICAL_AND_CONDITIONAL_EXPRS);
-    subscribeTo(PHPGrammar.EXPRESSION);
-    subscribeTo(REQUIRES_NEW_SCOPE);
-  }
+  private static class ComplexExpression {
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (isExpression(astNode)) {
-      scope.peek().incrementNestedExprLevel();
-    }
-    if (astNode.is(LOGICAL_AND_CONDITIONAL_EXPRS)) {
-      scope.peek().increaseOperatorCounter(
-        astNode.getChildren(PHPGrammar.LOGICAL_OR_OPERATOR, PHPGrammar.LOGICAL_AND_OPERATOR, PHPPunctuator.QUERY).size());
-    }
-    if (astNode.is(REQUIRES_NEW_SCOPE)) {
-      scope.push(new ExpressionComplexity());
-    }
-  }
+    // root is the highest level of a complex expression which may aggregate other logical operators.
+    // We don't want to report issues on parts of the complex expression, only at the root.
+    private Tree root;
+    private int complexity = 0;
 
-  @Override
-  public void leaveNode(AstNode astNode) {
-    if (isExpression(astNode)) {
-      ExpressionComplexity currentExpression = scope.peek();
-      currentExpression.decrementNestedExprLevel();
-
-      if (currentExpression.isOnFirstExprLevel()) {
-        if (currentExpression.getExprNumberOfOperator() > max) {
-          getContext().createLineViolation(this,
-            "Reduce the number of conditional operators (" + currentExpression.getExprNumberOfOperator() + ") used in the expression (maximum allowed " + max + ").",
-            astNode);
-        }
-        currentExpression.resetExprOperatorCounter();
+    public void increment(Tree tree) {
+      if (root == null) {
+        root = tree;
       }
-    } else if (astNode.is(REQUIRES_NEW_SCOPE)) {
-      scope.pop();
+      complexity++;
+    }
+
+  }
+
+  @Override
+  public void visitNode(Tree tree) {
+    if (tree.is(Kind.COMPILATION_UNIT)) {
+      expressions.clear();
+    }
+
+    if (tree.is(NESTING_KINDS)) {
+      expressions.push(new ComplexExpression());
+    } else {
+      expressions.peek().increment(tree);
     }
   }
 
-  public static boolean isExpression(AstNode node) {
-    return node.is(PHPGrammar.EXPRESSION) || node.is(LOGICAL_AND_CONDITIONAL_EXPRS);
+  @Override
+  public void leaveNode(Tree tree) {
+    if (tree.is(NESTING_KINDS)) {
+
+      expressions.pop();
+
+    } else {
+
+      ComplexExpression currentExpression = expressions.peek();
+
+      if (tree.equals(currentExpression.root)) {
+        if (currentExpression.complexity > max) {
+          String message = String.format(MESSAGE, currentExpression.complexity, max);
+          context().newIssue(KEY, message).tree(tree);
+        }
+        expressions.pop();
+        expressions.push(new ComplexExpression());
+      }
+
+    }
   }
+
 }

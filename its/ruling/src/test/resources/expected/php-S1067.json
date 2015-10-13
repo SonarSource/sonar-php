@@ -18,8 +18,8 @@
 989,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Calculation/FormulaParser.php':[
-494,
-506,
+495,
+507,
 543,
 561,
 ],
@@ -28,9 +28,6 @@
 892,
 929,
 930,
-],
-'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Cell/DataValidation.php':[
-442,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Reader/Excel2007.php':[
 907,
@@ -43,9 +40,6 @@
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Shared/String.php':[
 319,
-],
-'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Style/Font.php':[
-519,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Worksheet/Protection.php':[
 170,
@@ -90,10 +84,6 @@
 'project:symfony/Symfony/Component/Config/FileLocator.php':[
 87,
 ],
-'project:symfony/Symfony/Component/Console/Descriptor/MarkdownDescriptor.php':[
-33,
-48,
-],
 'project:symfony/Symfony/Component/Console/Input/InputOption.php':[
 204,
 ],
@@ -111,9 +101,6 @@
 ],
 'project:symfony/Symfony/Component/Finder/Expression/Glob.php':[
 122,
-],
-'project:symfony/Symfony/Component/Finder/Expression/Regex.php':[
-116,
 ],
 'project:symfony/Symfony/Component/Finder/Glob.php':[
 68,
