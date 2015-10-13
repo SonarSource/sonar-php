@@ -24,59 +24,47 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import com.sonar.sslr.api.AstNode;
-
-import javax.annotation.Nullable;
 
 @Rule(
-  key = "S2014",
+  key = ThisVariableUsageInStaticContextCheck.KEY,
   name = "\"$this\" should not be used in a static context",
   priority = Priority.BLOCKER,
   tags = {Tags.BUG})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.BLOCKER)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("15min")
-public class ThisVariableUsageInStaticContextCheck extends SquidCheck<LexerlessGrammar> {
+public class ThisVariableUsageInStaticContextCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2014";
+
+  private static final String MESSAGE = "Remove this use of \"$this\".";
 
   private boolean inStaticContext = false;
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.METHOD_DECLARATION,
-      PHPGrammar.VAR_IDENTIFIER);
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
+  public void visitCompilationUnit(CompilationUnitTree tree) {
     inStaticContext = false;
+    super.visitCompilationUnit(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.METHOD_DECLARATION)) {
-      inStaticContext = CheckUtils.isStaticClassMember(astNode.getChildren(PHPGrammar.MEMBER_MODIFIER));
-
-    } else if (inStaticContext && isThisVariable(astNode)) {
-      getContext().createLineViolation(this, "Remove this use of \"$this\".", astNode);
-    }
-  }
-
-  private boolean isThisVariable(AstNode varIdentifier) {
-    return "$this".equals(varIdentifier.getTokenOriginalValue());
+  public void visitMethodDeclaration(MethodDeclarationTree methodDec) {
+    inStaticContext = CheckUtils.hasModifier(methodDec.modifiers(), "static");
+    super.visitMethodDeclaration(methodDec);
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.METHOD_DECLARATION)) {
-      inStaticContext = false;
+  public void visitVariableIdentifier(VariableIdentifierTree varIdentifier) {
+    if (inStaticContext && "$this".equals(varIdentifier.variableExpression().text())) {
+      context().newIssue(KEY, MESSAGE).tree(varIdentifier);
     }
+    super.visitVariableIdentifier(varIdentifier);
   }
 
 }

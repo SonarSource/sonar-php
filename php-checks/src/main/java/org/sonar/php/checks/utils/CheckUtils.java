@@ -66,6 +66,15 @@ public class CheckUtils {
     return false;
   }
 
+  public static boolean hasModifier(List<SyntaxToken> modifiers, String toFind) {
+    for (SyntaxToken modifier : modifiers) {
+      if (modifier.text().equalsIgnoreCase(toFind)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public static boolean isExpressionABooleanLiteral(AstNode expression) {
     Preconditions.checkArgument(expression.is(PHPGrammar.EXPRESSION));
     AstNode postfixExpr = expression.getFirstChild(PHPGrammar.POSTFIX_EXPR);

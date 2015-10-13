@@ -20,18 +20,15 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class ThisVariableUsageInStaticContextCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ThisVariableUsageInStaticContextCheck.php"), new ThisVariableUsageInStaticContextCheck());
-
-    CheckMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(8).withMessage("Remove this use of \"$this\".");
+    PHPCheckTest.check(
+      new ThisVariableUsageInStaticContextCheck(),
+      TestUtils.getCheckFile("ThisVariableUsageInStaticContextCheck.php"));
   }
 }
