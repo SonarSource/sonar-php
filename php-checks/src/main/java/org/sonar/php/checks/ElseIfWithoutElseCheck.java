@@ -22,59 +22,56 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
+import java.util.List;
 
 @Rule(
-  key = "S126",
+  key = ElseIfWithoutElseCheck.KEY,
   name = "\"if ... else if\" constructs shall be terminated with an \"else\" clause",
   priority = Priority.MAJOR,
   tags = {Tags.CERT, Tags.MISRA})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class ElseIfWithoutElseCheck extends SquidCheck<LexerlessGrammar> {
+public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S126";
+  private static final String MESSAGE = "Add the missing \"else\" clause.";
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.IF_STATEMENT,
-      PHPGrammar.ALTERNATIVE_IF_STATEMENT);
-  }
+  public void visitIfStatement(IfStatementTree tree) {
+    super.visitIfStatement(tree);
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (isElseIf(astNode) && !hasElse(astNode)) {
-      AstNode reportNode = hasElseif(astNode) ? getLastElseif(astNode) : astNode;
-      reportIssue(reportNode);
-    } else if (hasElseif(astNode) && !hasElse(astNode)) {
-      reportIssue(getLastElseif(astNode));
+    List<ElseifClauseTree> elseifClauses = tree.elseifClauses();
+
+    if (!elseifClauses.isEmpty() && tree.elseClause() == null) {
+      ElseifClauseTree lastElseIf = elseifClauses.get(elseifClauses.size() - 1);
+      raiseIssue(lastElseIf);
     }
   }
 
-  private void reportIssue(AstNode node) {
-    getContext().createLineViolation(this, "Add the missing \"else\" clause.", node);
+  @Override
+  public void visitElseClause(ElseClauseTree tree) {
+    super.visitElseClause(tree);
+
+    if (tree.is(Kind.ELSE_CLAUSE) && tree.statements().get(0).is(Kind.IF_STATEMENT)) {
+      IfStatementTree nestedIf = (IfStatementTree)tree.statements().get(0);
+
+      if (nestedIf.elseClause() == null && nestedIf.elseifClauses().isEmpty()) {
+        raiseIssue(tree);
+      }
+    }
   }
 
-  private static boolean isElseIf(AstNode ifStmt) {
-    AstNode parentPreviousSibling = ifStmt.getParent().getPreviousSibling();
-    return parentPreviousSibling != null && parentPreviousSibling.is(PHPKeyword.ELSE);
+  private void raiseIssue(Tree tree) {
+    context().newIssue(KEY, MESSAGE).tree(tree);
   }
 
-  private static AstNode getLastElseif(AstNode ifStmt) {
-    return ifStmt.getFirstChild(PHPGrammar.ELSEIF_LIST, PHPGrammar.ALTERNATIVE_ELSEIF_LIST).getLastChild();
-  }
-
-  private static boolean hasElseif(AstNode ifStmt) {
-    return ifStmt.hasDirectChildren(PHPGrammar.ELSEIF_LIST, PHPGrammar.ALTERNATIVE_ELSEIF_LIST);
-  }
-
-  private static boolean hasElse(AstNode ifStmt) {
-    return ifStmt.hasDirectChildren(PHPGrammar.ELSE_CLAUSE, PHPGrammar.ALTERNATIVE_ELSE_CLAUSE);
-  }
 }

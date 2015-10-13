@@ -20,24 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ElseIfWithoutElseCheckTest extends CheckTest {
+public class ElseIfWithoutElseCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ElseIfWithoutElseCheck.php"), new ElseIfWithoutElseCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Add the missing \"else\" clause.")
-      .next().atLine(9)
-      .next().atLine(13)
-      .next().atLine(18)
-      .next().atLine(23)
-      .next().atLine(28)
-      .noMore();
+    PHPCheckTest.check(new ElseIfWithoutElseCheck(), TestUtils.getCheckFile("ElseIfWithoutElseCheck.php"));
   }
 }

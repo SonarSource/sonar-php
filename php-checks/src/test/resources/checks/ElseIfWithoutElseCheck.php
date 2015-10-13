@@ -2,7 +2,7 @@
 
 if ($a) {
 } elseif ($a) {
-} elseif ($a) {      // NOK
+} elseif ($a) {      // NOK {{Add the missing "else" clause.}}
 }
 
 if ($a):
