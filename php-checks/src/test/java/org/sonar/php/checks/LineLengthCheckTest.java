@@ -19,32 +19,34 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class LineLengthCheckTest extends CheckTest {
+import java.util.List;
+
+public class LineLengthCheckTest {
 
   private LineLengthCheck check = new LineLengthCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LineLengthCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Split this 122 characters long line (which is greater than " + check.DEFAULT + " authorized).")
-      .noMore();
+    List<Issue> issues = ImmutableList.<Issue>of(
+      new PHPIssue("testKey", "Split this 122 characters long line (which is greater than 120 authorized).").line(4));
+
+    PHPCheckTest.check(check, TestUtils.getCheckFile("LineLengthCheck.php"), issues);
   }
 
   @Test
   public void custom() throws Exception {
     check.maximumLineLength = 30;
+    List<Issue> issues = ImmutableList.<Issue>of(
+      new PHPIssue("testKey", "Split this 122 characters long line (which is greater than 30 authorized).").line(4),
+      new PHPIssue("testKey", "Split this 42 characters long line (which is greater than 30 authorized).").line(5));
 
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LineLengthCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4)
-      .next().atLine(5).withMessage("Split this 42 characters long line (which is greater than " + check.maximumLineLength + " authorized).")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile("LineLengthCheck.php"), issues);
   }
 }

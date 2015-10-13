@@ -20,32 +20,31 @@
 package org.sonar.php.checks;
 
 import com.google.common.io.Files;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.utils.SonarException;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
 @Rule(
-  key = "S103",
+  key = LineLengthCheck.KEY,
   name = "Lines should not be too long",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
-public class LineLengthCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
+public class LineLengthCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
+
+  public static final String KEY = "S103";
+  private static final String MESSAGE = "Split this %s characters long line (which is greater than %s authorized).";
 
   public static final int DEFAULT = 120;
   private Charset charset;
@@ -61,19 +60,22 @@ public class LineLengthCheck extends SquidCheck<LexerlessGrammar> implements Cha
   }
 
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
+  public void visitCompilationUnit(CompilationUnitTree tree) {
     List<String> lines;
 
     try {
-      lines = Files.readLines(getContext().getFile(), charset);
+      lines = Files.readLines(context().file(), charset);
     } catch (IOException e) {
-      throw new SonarException(e);
+      throw new IllegalStateException("Check S103: Can't read the file", e);
     }
+
     for (int i = 0; i < lines.size(); i++) {
       String line = lines.get(i);
       if (line.length() > maximumLineLength) {
-        getContext().createLineViolation(this, "Split this {0} characters long line (which is greater than {1} authorized).", i + 1, line.length(), maximumLineLength);
+        String message = String.format(MESSAGE, line.length(), maximumLineLength);
+        context().newIssue(KEY, message).line(i + 1);
       }
     }
   }
+
 }
