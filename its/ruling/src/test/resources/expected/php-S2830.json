@@ -411,6 +411,9 @@
 'project:symfony/Symfony/Component/HttpKernel/Tests/HttpCache/TestMultipleHttpKernel.php':[
 37,
 ],
+'project:symfony/Symfony/Component/HttpKernel/Tests/HttpKernelTest.php':[
+288,
+],
 'project:symfony/Symfony/Component/HttpKernel/Tests/TestHttpKernel.php':[
 24,
 ],
