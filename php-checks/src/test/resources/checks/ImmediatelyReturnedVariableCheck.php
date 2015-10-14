@@ -4,7 +4,7 @@ function f() {
   $result = 1;                 // OK
 
   $f = function() {
-    $result = 1;               // NOK
+    $result = 1;               // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$result".}}
     return $result;
   };
 
@@ -12,13 +12,33 @@ function f() {
 }
 
 function h() {
-  $e = new Exception();        // NOK
+  $e = new Exception();        // NOK {{Immediately throw this expression instead of assigning it to the temporary variable "$e".}}
   throw $e;
 }
 
 function l($p) {
 
-  $a =& $p;                    // NOK
+  $a =& $p;                    // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
+  return $a;
+}
+
+function l($p) {
+  if (true) {
+    $a = $p;                    // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
+    return $a;
+  }
+}
+function l($p) {
+  doSomething();
+  if (true) {
+    $a = $p;                    // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
+    return $a;
+  }
+}
+
+function l($p) {
+  $a = 1;
+  $a += $p;                    // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
   return $a;
 }
 
@@ -92,3 +112,9 @@ function l() {
 }
 
 $result = 1;
+return $result;               // OK, global
+
+if (true) {
+  $result = 1;
+  return $result;               // OK, global
+}

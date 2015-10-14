@@ -20,16 +20,31 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -183,6 +198,73 @@ public class CheckUtils {
 
   private static boolean isSpaceRequired(SyntaxToken prevToken, SyntaxToken token) {
     return (token.line() > prevToken.line()) || (prevToken.column() + prevToken.text().length() < token.column());
+  }
+  
+  public static final  List<Kind> STATEMENT_CONTAINERS = ImmutableList.of(
+    Kind.SCRIPT,
+    Kind.BLOCK,
+    Kind.CASE_CLAUSE,
+    Kind.DEFAULT_CLAUSE,
+    Kind.DECLARE_STATEMENT,
+    Kind.IF_STATEMENT,
+    Kind.ALTRENATIVE_IF_STATEMENT,
+    Kind.ELSE_CLAUSE,
+    Kind.ALTERNATIVE_ELSE_CLAUSE,
+    Kind.ELSEIF_CLAUSE,
+    Kind.ALTERNATIVE_ELSEIF_CLAUSE,
+    Kind.FOREACH_STATEMENT,
+    Kind.ALTERNATIVE_FOREACH_STATEMENT,
+    Kind.FOR_STATEMENT,
+    Kind.ALTERNATIVE_FOR_STATEMENT,
+    Kind.NAMESPACE_STATEMENT,
+    Kind.WHILE_STATEMENT);
+
+  public static List<StatementTree> getStatements(Tree tree) {
+    List<StatementTree> statements = Collections.emptyList();
+    switch (tree.getKind()) {
+      case SCRIPT:
+        statements = ((ScriptTree) tree).statements();
+        break;
+      case BLOCK:
+        statements = ((BlockTree) tree).statements();
+        break;
+      case CASE_CLAUSE:
+      case DEFAULT_CLAUSE:
+        statements = ((SwitchCaseClauseTree) tree).statements();
+        break;
+      case DECLARE_STATEMENT:
+        statements = ((DeclareStatementTree) tree).statements();
+        break;
+      case IF_STATEMENT:
+      case ALTRENATIVE_IF_STATEMENT:
+        statements = ((IfStatementTree) tree).statements();
+        break;
+      case ELSE_CLAUSE:
+      case ALTERNATIVE_ELSE_CLAUSE:
+        statements = ((ElseClauseTree) tree).statements();
+        break;
+      case ELSEIF_CLAUSE:
+      case ALTERNATIVE_ELSEIF_CLAUSE:
+        statements = ((ElseifClauseTree) tree).statements();
+        break;
+      case FOREACH_STATEMENT:
+      case ALTERNATIVE_FOREACH_STATEMENT:
+        statements = ((ForEachStatementTree) tree).statements();
+        break;
+      case FOR_STATEMENT:
+      case ALTERNATIVE_FOR_STATEMENT:
+        statements = ((ForStatementTree) tree).statements();
+        break;
+      case NAMESPACE_STATEMENT:
+        statements = ((NamespaceStatementTree) tree).statements();
+        break;
+      case WHILE_STATEMENT:
+        statements = ((WhileStatementTree) tree).statements();
+        break;
+      default:
+        break;
+    }
+    return statements;
   }
 
 }

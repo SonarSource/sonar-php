@@ -20,22 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ImmediatelyReturnedVariableCheckTest extends CheckTest {
+public class ImmediatelyReturnedVariableCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ImmediatelyReturnedVariableCheck.php"), new ImmediatelyReturnedVariableCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(7).withMessage("Immediately return this expression instead of assigning it to the temporary variable \"$result\".")
-      .next().atLine(15).withMessage("Immediately throw this expression instead of assigning it to the temporary variable \"$e\".")
-      .next().atLine(21).withMessage("Immediately return this expression instead of assigning it to the temporary variable \"$a\".")
-      .next().atLine(26)
-      .noMore();
+    PHPCheckTest.check(new ImmediatelyReturnedVariableCheck(), TestUtils.getCheckFile("ImmediatelyReturnedVariableCheck.php"));
   }
 }

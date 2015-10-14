@@ -19,133 +19,157 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.Lists;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Rule(
-  key = "S1488",
+  key = ImmediatelyReturnedVariableCheck.KEY,
   name = "Local variables should not be declared and then immediately returned or thrown",
   priority = Priority.MINOR,
   tags = {Tags.CLUMSY})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class ImmediatelyReturnedVariableCheck extends SquidCheck<LexerlessGrammar> {
+public class ImmediatelyReturnedVariableCheck extends PHPSubscriptionCheck {
 
-  private boolean inFunction = false;
+  public static final String KEY = "S1488";
+  private static final String MESSAGE = "Immediately %s this expression instead of assigning it to the temporary variable \"%s\".";
 
-  @Override
-  public void init() {
-    subscribeTo(FunctionUtils.functions());
-    subscribeTo(PHPGrammar.EXPRESSION_STATEMENT);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(FunctionUtils.functions())) {
-      inFunction = true;
-    }
-    if (inFunction && astNode.is(PHPGrammar.EXPRESSION_STATEMENT)) {
-      checkExpression(astNode);
-    }
-  }
+  private int level = 0;
+  private static final Kind[] FUNCTIONS = {
+    Kind.FUNCTION_DECLARATION,
+    Kind.FUNCTION_EXPRESSION,
+    Kind.METHOD_DECLARATION};
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(FunctionUtils.functions())) {
-      inFunction = false;
+  public List<Kind> nodesToVisit() {
+    Builder<Kind> builder = ImmutableList.builder();
+    builder.addAll(Lists.newArrayList(FUNCTIONS));
+    builder.addAll(CheckUtils.STATEMENT_CONTAINERS);
+
+    return builder.build();
+  }
+
+  @Override
+  public void visitNode(Tree tree) {
+    if (tree.is(FUNCTIONS)) {
+      level++;
+
+    } else if (level > 0) {
+      checkStatements(CheckUtils.getStatements(tree));
     }
   }
 
-  private void checkExpression(AstNode exprStmt) {
-    AstNode nextStmt = exprStmt.getNextAstNode().getFirstChild();
-    if (nextStmt == null || nextStmt.isNot(PHPGrammar.RETURN_STATEMENT, PHPGrammar.THROW_STATEMENT) || isInnerIfStatement(exprStmt)) {
-      return;
+  @Override
+  public void leaveNode(Tree tree) {
+    if (tree.is(FUNCTIONS)) {
+      level--;
     }
+  }
 
-    AstNode expression = exprStmt.getFirstChild(PHPGrammar.EXPRESSION).getFirstChild();
+  private void checkStatements(List<StatementTree> statements) {
+    for (int i = 0; i < statements.size() - 1; i++) {
 
-    if (expression.is(PHPGrammar.ASSIGNMENT_EXPR, PHPGrammar.ASSIGNMENT_BY_REFERENCE)) {
-      checkAssignedVariable(expression, nextStmt);
-    } else {
-      AstNode exprChild = expression.getFirstChild();
-      if (exprChild.is(PHPGrammar.LIST_ASSIGNMENT_EXPR)) {
-        checkListVariables(exprChild, nextStmt);
+      StatementTree currentStatement = statements.get(i);
+      StatementTree nextStatement = statements.get(i + 1);
+
+      List<String> assignedNames = getAssignedVariablesNames(currentStatement);
+      String returnedName = getReturnedOrThrownVariableName(nextStatement);
+
+      if (returnedName != null && assignedNames.contains(returnedName)) {
+        reportIssue(nextStatement, returnedName, currentStatement);
+      }
+
+    }
+  }
+
+  private List<String> getAssignedVariablesNames(StatementTree currentStatement) {
+    ExpressionTree variable = null;
+
+    if (currentStatement.is(Kind.EXPRESSION_STATEMENT)) {
+      ExpressionTree expression = ((ExpressionStatementTree) currentStatement).expression();
+
+      if (expression instanceof AssignmentExpressionTree) {
+        variable = ((AssignmentExpressionTree) expression).variable();
+
+      } else if (expression.is(Kind.ASSIGNMENT_BY_REFERENCE)) {
+        variable = ((AssignmentByReferenceTree) expression).variable();
       }
     }
+
+    List<String> names = new ArrayList<>();
+
+    if (variable != null) {
+
+      if (variable.is(Kind.VARIABLE_IDENTIFIER)) {
+        names.add(((VariableIdentifierTree) variable).variableExpression().text());
+      } else if (variable.is(Kind.LIST_EXPRESSION)) {
+        names.addAll(getVariablesFromList((ListExpressionTree) variable));
+      }
+
+    }
+
+    return names;
   }
 
-  private boolean isInnerIfStatement(AstNode exprStmt) {
-    return exprStmt.getParent().getParent().is(PHPGrammar.IF_STATEMENT);
-  }
-
-  private void checkListVariables(AstNode listAssignmentExpr, AstNode nextStmt) {
-    AstNode assignmentList = listAssignmentExpr.getFirstChild(PHPGrammar.LIST_EXPR).getFirstChild(PHPGrammar.ASSIGNMENT_LIST);
-
-    for (AstNode element : assignmentList.getChildren(PHPGrammar.ASSIGNMENT_LIST_ELEMENT)) {
-      AstNode variable = element.getFirstChild(PHPGrammar.MEMBER_EXPRESSION);
-
-      if (variable != null && variable.getNumberOfChildren() == 1 && isSimplyReturnedOrThrown(variable, nextStmt)) {
-        reportIssue(variable, nextStmt);
+  private List<String> getVariablesFromList(ListExpressionTree listExpressionTree) {
+    List<String> names = new ArrayList<>();
+    for (ExpressionTree element : listExpressionTree.elements()) {
+      if (element.is(Kind.VARIABLE_IDENTIFIER)) {
+        names.add(((VariableIdentifierTree) element).variableExpression().text());
       }
     }
+    return names;
   }
 
-  private void checkAssignedVariable(AstNode assignmentExpr, AstNode nextStmt) {
-    AstNode leftExpr = getLeftHandExpression(assignmentExpr);
+  @Nullable
+  private String getReturnedOrThrownVariableName(StatementTree statement) {
+    ExpressionTree returnedVariable = null;
 
-    if (leftExpr != null && isSimplyReturnedOrThrown(leftExpr, nextStmt)) {
-      reportIssue(leftExpr, nextStmt);
-    }
-  }
+    if (statement.is(Kind.RETURN_STATEMENT)) {
+      returnedVariable = ((ReturnStatementTree) statement).expression();
 
-  private void reportIssue(AstNode varNode, AstNode nextStmt) {
-    getContext().createLineViolation(this, "Immediately {0} this expression instead of assigning it to the temporary variable \"{1}\".",
-      varNode, nextStmt.getFirstChild().getTokenOriginalValue(), varNode.getTokenOriginalValue());
-  }
-
-  private boolean isSimplyReturnedOrThrown(AstNode varNode, AstNode nextStmt) {
-    AstNode returnedOrThrownExpr = nextStmt.getFirstChild(PHPGrammar.EXPRESSION);
-    return returnedOrThrownExpr != null
-      && CheckUtils.getExpressionAsString(returnedOrThrownExpr).equals(CheckUtils.getExpressionAsString(varNode));
-  }
-
-  /**
-   * Returns left hand expression of the assignment only if it a simple variable,
-   * returns null otherwise.
-   * <p/>
-   * Example:<br>
-   * $a = 1 returns $a<br>
-   * $a->property = 1 returns null
-   */
-  private AstNode getLeftHandExpression(AstNode assignmentExpr) {
-    AstNode leftExpr = assignmentExpr.getFirstChild();
-    AstNode variableNode = null;
-
-    if (leftExpr.is(PHPGrammar.MEMBER_EXPRESSION)) {
-      variableNode = leftExpr;
-    } else if (leftExpr.is(PHPGrammar.POSTFIX_EXPR)) {
-      variableNode = leftExpr.getFirstChild();
+    } else if (statement.is(Kind.THROW_STATEMENT)) {
+      returnedVariable = ((ThrowStatementTree) statement).expression();
     }
 
-    if (variableNode != null && variableNode.getNumberOfChildren() == 1) {
-      AstNode variableChild = variableNode.getFirstChild();
+    String returnedName = null;
 
-      if (variableChild.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS) && variableChild.getFirstChild(PHPGrammar.REFERENCE_VARIABLE).getNumberOfChildren() == 1) {
-        return variableChild;
-      }
+    if (returnedVariable != null && returnedVariable.is(Kind.VARIABLE_IDENTIFIER)) {
+      returnedName = ((VariableIdentifierTree) returnedVariable).variableExpression().text();
     }
-    return null;
+
+    return returnedName;
+  }
+
+
+  private void reportIssue(StatementTree nextStatement, String varName, Tree tree) {
+    String message = String.format(MESSAGE, nextStatement.is(Kind.RETURN_STATEMENT) ? "return" : "throw", varName);
+    context().newIssue(KEY, message).tree(tree);
   }
 
 }
