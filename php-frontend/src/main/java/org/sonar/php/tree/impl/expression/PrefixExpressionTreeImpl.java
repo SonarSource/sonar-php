@@ -64,7 +64,7 @@ public class PrefixExpressionTreeImpl extends PHPTree implements UnaryExpression
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitUnaryExpression(this);
+    visitor.visitPrefixExpression(this);
   }
 
 }

@@ -20,22 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class IncrementDecrementInSubExpressionCheckTest extends CheckTest {
+public class IncrementDecrementInSubExpressionCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("IncrementDecrementInSubExpressionCheck.php"), new IncrementDecrementInSubExpressionCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(10).withMessage("Extract this increment or decrement operator into a dedicated statement.")
-      .next().atLine(11)
-      .next().atLine(12)
-      .next().atLine(13)
-      .noMore();
+    PHPCheckTest.check(new IncrementDecrementInSubExpressionCheck(), TestUtils.getCheckFile("IncrementDecrementInSubExpressionCheck.php"));
   }
 }

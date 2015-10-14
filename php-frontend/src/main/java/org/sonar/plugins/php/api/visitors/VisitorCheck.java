@@ -210,7 +210,7 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitCastExpression(CastExpressionTree tree);
 
-  void visitUnaryExpression(UnaryExpressionTree tree);
+  void visitPrefixExpression(UnaryExpressionTree tree);
 
   void visitBinaryExpression(BinaryExpressionTree tree);
 

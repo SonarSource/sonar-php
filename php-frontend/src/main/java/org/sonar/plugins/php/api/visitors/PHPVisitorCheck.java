@@ -344,7 +344,7 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
-  public void visitUnaryExpression(UnaryExpressionTree tree) {
+  public void visitPrefixExpression(UnaryExpressionTree tree) {
     scan(tree);
   }
 
