@@ -20,19 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ReferenceInFunctionCallCheckTest extends CheckTest {
+public class ReferenceInFunctionCallCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ReferenceInFunctionCallCheck.php"), new ReferenceInFunctionCallCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Remove the '&' to pass \"$p1\" by value.")
-      .noMore();
+    PHPCheckTest.check(new ReferenceInFunctionCallCheck(), TestUtils.getCheckFile("ReferenceInFunctionCallCheck.php"));
   }
 }

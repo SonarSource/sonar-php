@@ -19,17 +19,18 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
   key = "S1998",
@@ -39,22 +40,20 @@ import org.sonar.sslr.parser.LexerlessGrammar;
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("15min")
-public class ReferenceInFunctionCallCheck extends SquidCheck<LexerlessGrammar> {
+public class ReferenceInFunctionCallCheck extends PHPVisitorCheck {
 
-
-  @Override
-  public void init() {
-    subscribeTo(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST);
-  }
+  public static final String KEY = "S1998";
+  private static final String MESSAGE = "Remove the '&' to pass \"%s\" by value.";
 
   @Override
-  public void visitNode(AstNode astNode) {
-    for (AstNode paramList : astNode.getChildren(PHPGrammar.PARAMETER_LIST_FOR_CALL)) {
-      AstNode param = paramList.getFirstChild();
+  public void visitFunctionCall(FunctionCallTree tree) {
+    super.visitFunctionCall(tree);
 
-      if (param.is(PHPGrammar.ALIAS_VARIABLE)) {
-        getContext().createLineViolation(this, "Remove the ''&'' to pass \"{0}\" by value.", param,
-          CheckUtils.getExpressionAsString(param.getFirstChild(PHPGrammar.MEMBER_EXPRESSION)));
+    for (ExpressionTree argument : tree.arguments()) {
+
+      if (argument.is(Kind.REFERENCE_VARIABLE)) {
+        String message = String.format(MESSAGE, CheckUtils.asString(((ReferenceVariableTree) argument).variableExpression()));
+        context().newIssue(KEY, message).tree(argument);
       }
     }
   }
