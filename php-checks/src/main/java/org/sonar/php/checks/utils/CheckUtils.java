@@ -131,7 +131,7 @@ public class CheckUtils {
     }
     return true;
   }
-  
+
   public static boolean areSyntacticallyEquivalent(@Nullable Tree tree1, @Nullable Tree tree2) {
     if (tree1 == tree2) {
       return true;
@@ -177,7 +177,7 @@ public class CheckUtils {
       while (treeIterator.hasNext()) {
         Tree child = treeIterator.next();
 
-        if (child != null) {
+        if (child != null && !child.is(Kind.SKIPPED_LIST_ELEMENT)) {
           appendChild(sb, prevToken, child);
           prevToken = ((PHPTree) child).getLastToken();
         }

@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -47,6 +48,14 @@ public class CheckUtilsTest {
 
   private boolean areSyntacticallyEquivalent(String toParse1, String toParse2) throws Exception {
     return CheckUtils.areSyntacticallyEquivalent(parse(toParse1), parse(toParse2));
+  }
+
+  @Test
+  public void asString() {
+    ActionParser<Tree> listParser = PHPParserBuilder.createParser(Kind.LIST_EXPRESSION, Charsets.UTF_8);
+    assertThat(CheckUtils.asString(listParser.parse("list(a, ,)"))).isEqualTo("list(a, ,)");
+    assertThat(CheckUtils.asString(listParser.parse("list()"))).isEqualTo("list()");
+    assertThat(CheckUtils.asString(listParser.parse("list(a, b)"))).isEqualTo("list(a, b)");
   }
 
   private Tree parse(String toParse) {

@@ -30,6 +30,7 @@ public class ListExpressionTest {
   public void test() {
     assertThat(Kind.LIST_EXPRESSION)
       .matches("list ()")
+      .matches("list (,)")
       .matches("list ($a)")
       .matches("list ($a, $b)")
       .matches("list ($a, ,)")
