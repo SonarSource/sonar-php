@@ -20,21 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ForHidingWhileCheckTest extends CheckTest {
+public class ForHidingWhileCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ForHidingWhileCheck.php"), new ForHidingWhileCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Replace this \"for\" loop with a \"while\" loop.")
-      .next().atLine(6)
-      .next().atLine(9)
-      .noMore();
+    PHPCheckTest.check(new ForHidingWhileCheck(), TestUtils.getCheckFile("ForHidingWhileCheck.php"));
   }
 }

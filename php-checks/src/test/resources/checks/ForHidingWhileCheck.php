@@ -1,6 +1,6 @@
 <?php
 
-for(;condition;) {             // NOK
+for(;condition;) {             // NOK {{Replace this "for" loop with a "while" loop.}}
 }
 
 for(;;) {                      // NOK

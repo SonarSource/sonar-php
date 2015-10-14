@@ -19,45 +19,35 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1264",
+  key = ForHidingWhileCheck.KEY,
   name = "A \"while\" loop should be used instead of a \"for\" loop",
   priority = Priority.MINOR,
   tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")
-public class ForHidingWhileCheck extends SquidCheck<LexerlessGrammar> {
+public class ForHidingWhileCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1264";
+  private static final String MESSAGE = "Replace this \"for\" loop with a \"while\" loop.";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.FOR_STATEMENT);
-  }
+  public void visitForStatement(ForStatementTree tree) {
+    super.visitForStatement(tree);
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (!hasInitialisation(astNode) && !hasIncrement(astNode)) {
-      getContext().createLineViolation(this, "Replace this \"for\" loop with a \"while\" loop.", astNode);
+    if (tree.init().isEmpty() && tree.update().isEmpty()) {
+      context().newIssue(KEY, MESSAGE).tree(tree);
     }
   }
 
-  public static boolean hasInitialisation(AstNode forStmt) {
-    return forStmt.getFirstChild(PHPPunctuator.LPARENTHESIS).getNextSibling().is(PHPGrammar.FOR_EXRR);
-  }
-
-  public static boolean hasIncrement(AstNode forStmt) {
-    return forStmt.getFirstChild(PHPPunctuator.RPARENTHESIS).getPreviousSibling().is(PHPGrammar.FOR_EXRR);
-  }
 }
