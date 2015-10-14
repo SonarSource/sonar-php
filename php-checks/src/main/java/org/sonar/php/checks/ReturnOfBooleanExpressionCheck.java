@@ -23,17 +23,20 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
+import javax.annotation.Nullable;
+import java.util.List;
 
 @Rule(
-  key = "S1126",
+  key = ReturnOfBooleanExpressionCheck.KEY,
   name = "Return of boolean expressions should not be wrapped into an \"if-then-else\" statement",
   priority = Priority.MINOR,
   tags = Tags.CLUMSY)
@@ -41,69 +44,51 @@ import com.sonar.sslr.api.AstNode;
 
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class ReturnOfBooleanExpressionCheck extends SquidCheck<LexerlessGrammar> {
-  @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.IF_STATEMENT,
-      PHPGrammar.ALTERNATIVE_IF_STATEMENT);
-  }
+public class ReturnOfBooleanExpressionCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1126";
+  private static final String MESSAGE = "Replace this \"if-then-else\" statement by a single \"return\" statement.";
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (!hasElseIf(astNode) && hasElse(astNode) && returnsBoolean(getTrueStatement(astNode)) && returnsBoolean(getFalseStatement(astNode))) {
-      getContext().createLineViolation(this, "Replace this \"if-then-else\" statement by a single \"return\" statement.", astNode);
+  public void visitIfStatement(IfStatementTree tree) {
+    super.visitIfStatement(tree);
+
+    if (!tree.elseifClauses().isEmpty() || tree.elseClause() == null) {
+      return;
+    }
+
+    if (returnsBoolean(getSingleStatement(tree.statements())) && returnsBoolean(getSingleStatement(tree.elseClause().statements()))) {
+      context().newIssue(KEY, MESSAGE).tree(tree);
     }
   }
 
-  private static AstNode getTrueStatement(AstNode ifStmt) {
-    return getInnerStmtOfIfStmt(ifStmt.getFirstChild(PHPGrammar.ELSE_CLAUSE, PHPGrammar.ALTERNATIVE_ELSE_CLAUSE)
-      .getFirstChild(PHPGrammar.STATEMENT, PHPGrammar.INNER_STATEMENT_LIST));
+  private static boolean returnsBoolean(@Nullable StatementTree statement) {
+    if (statement != null && statement.is(Kind.RETURN_STATEMENT)) {
+      ReturnStatementTree returnStatement = (ReturnStatementTree)statement;
+
+      if (returnStatement.expression() != null && returnStatement.expression().is(Kind.BOOLEAN_LITERAL)) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  private static AstNode getFalseStatement(AstNode ifStmt) {
-    return getInnerStmtOfIfStmt(ifStmt.getFirstChild(PHPGrammar.STATEMENT, PHPGrammar.INNER_STATEMENT_LIST));
-  }
+  @Nullable
+  private static StatementTree getSingleStatement(List<StatementTree> statements) {
+    if (statements.size() == 1) {
 
-  private static AstNode getInnerStmtOfIfStmt(AstNode statement) {
-    if (statement != null && statement.is(PHPGrammar.INNER_STATEMENT_LIST)) {
-      return statement.getNumberOfChildren() > 1 ? null : statement.getFirstChild();
+      if (statements.get(0).is(Kind.BLOCK)) {
+        List<StatementTree> blockStatements = ((BlockTree) statements.get(0)).statements();
+
+        if (blockStatements.size() == 1) {
+          return blockStatements.get(0);
+        }
+
+      } else {
+        return statements.get(0);
+      }
     }
 
-    return statement;
-  }
-
-  private static boolean hasElseIf(AstNode ifStmt) {
-    return ifStmt.hasDirectChildren(PHPGrammar.ELSEIF_LIST, PHPGrammar.ALTERNATIVE_ELSEIF_LIST);
-  }
-
-  private static boolean hasElse(AstNode ifStmt) {
-    return ifStmt.hasDirectChildren(PHPGrammar.ELSE_CLAUSE, PHPGrammar.ALTERNATIVE_ELSE_CLAUSE);
-  }
-
-  private static boolean returnsBoolean(AstNode statement) {
-    return statement != null && (isBlockReturningBooleanLiteral(statement) || isSimpleReturnBooleanLiteral(statement));
-  }
-
-  private static boolean isBlockReturningBooleanLiteral(AstNode statement) {
-    AstNode block = statement.getFirstChild(PHPGrammar.BLOCK);
-    if (block == null) {
-      return false;
-    }
-
-    AstNode stmtList = block.getFirstChild(PHPGrammar.INNER_STATEMENT_LIST);
-    return stmtList != null
-      && stmtList.getNumberOfChildren() == 1
-      && isSimpleReturnBooleanLiteral(stmtList.getFirstChild());
-  }
-
-  private static boolean isSimpleReturnBooleanLiteral(AstNode statement) {
-    AstNode returnStmt = statement.getFirstChild(PHPGrammar.RETURN_STATEMENT);
-    if (returnStmt == null) {
-      return false;
-    }
-
-    AstNode expression = returnStmt.getFirstChild(PHPGrammar.EXPRESSION);
-    return expression != null && CheckUtils.isExpressionABooleanLiteral(expression);
+    return null;
   }
 }

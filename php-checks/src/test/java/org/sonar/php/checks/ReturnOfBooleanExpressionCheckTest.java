@@ -20,22 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ReturnOfBooleanExpressionCheckTest extends CheckTest {
+public class ReturnOfBooleanExpressionCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ReturnOfBooleanExpressionCheck.php"), new ReturnOfBooleanExpressionCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Replace this \"if-then-else\" statement by a single \"return\" statement.")
-      .next().atLine(9)
-      .next().atLine(15)
-      .next().atLine(20)
-      .noMore();
+    PHPCheckTest.check(new ReturnOfBooleanExpressionCheck(), TestUtils.getCheckFile("ReturnOfBooleanExpressionCheck.php"));
   }
 }
