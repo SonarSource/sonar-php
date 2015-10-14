@@ -20,18 +20,16 @@
 package org.sonar.php.checks;
 
 import com.google.common.io.Files;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.utils.SonarException;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.LexicalConstant;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -40,12 +38,15 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Rule(
-  key = "S1451",
+  key = FileHeaderCheck.KEY,
   name = "Copyright and license headers should be defined",
   priority = Priority.BLOCKER)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SECURITY_FEATURES)
 @SqaleConstantRemediation("5min")
-public class FileHeaderCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
+public class FileHeaderCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
+
+  public static final String KEY = "S1451";
+  private static final String MESSAGE = "Add or update the header of this file.";
 
   private static final String DEFAULT_HEADER_FORMAT = "";
   private static final Pattern PHP_OPEN_TAG = Pattern.compile(LexicalConstant.PHP_OPENING_TAG);
@@ -70,16 +71,16 @@ public class FileHeaderCheck extends SquidCheck<LexerlessGrammar> implements Cha
   }
 
   @Override
-  public void visitFile(AstNode astNode) {
+  public void visitCompilationUnit(CompilationUnitTree tree) {
     List<String> lines;
     try {
-      lines = Files.readLines(getContext().getFile(), charset);
+      lines = Files.readLines(context().file(), charset);
     } catch (IOException e) {
-      throw new SonarException(e);
+      throw new IllegalStateException("Check S1451: Can't read the file", e);
     }
 
     if (!lines.isEmpty() && !matches(expectedLines, lines)) {
-      getContext().createFileViolation(this, "Add or update the header of this file.");
+      context().newIssue(KEY, MESSAGE);
     }
   }
 
@@ -94,9 +95,9 @@ public class FileHeaderCheck extends SquidCheck<LexerlessGrammar> implements Cha
       result = true;
 
       Iterator<String> it = lines.iterator();
-      for (int i = 0; i < expectedLines.length; i++) {
+      for (String expectedLine : expectedLines) {
         String line = it.next();
-        if (!line.equals(expectedLines[i])) {
+        if (!line.equals(expectedLine)) {
           result = false;
           break;
         }
