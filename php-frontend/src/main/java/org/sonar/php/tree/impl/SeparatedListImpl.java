@@ -24,9 +24,9 @@ import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.UnmodifiableIterator;
-import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -36,9 +36,9 @@ import java.util.ListIterator;
 public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
 
   private final List<T> list;
-  private final List<InternalSyntaxToken> separators;
+  private final List<SyntaxToken> separators;
 
-  public SeparatedListImpl(List<T> list, List<InternalSyntaxToken> separators) {
+  public SeparatedListImpl(List<T> list, List<SyntaxToken> separators) {
     Preconditions.checkArgument(
       list.size() == separators.size() + 1 || list.size() == separators.size(),
       "Instanciating a SeparatedList with inconsistent number of elements (%s) and separators (%s)",
@@ -48,14 +48,14 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
   }
 
   public static <T extends Tree> SeparatedListImpl<T> empty() {
-    return new SeparatedListImpl<>(ImmutableList.<T>of(), ImmutableList.<InternalSyntaxToken>of());
+    return new SeparatedListImpl<>(ImmutableList.<T>of(), ImmutableList.<SyntaxToken>of());
   }
 
-  public InternalSyntaxToken getSeparator(int i) {
+  public SyntaxToken getSeparator(int i) {
     return separators.get(i);
   }
 
-  public List<InternalSyntaxToken> getSeparators() {
+  public List<SyntaxToken> getSeparators() {
     return separators;
   }
 
@@ -187,7 +187,7 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
 
     private final Function<T, ? extends Tree> elementTransformer;
     private final Iterator<T> elementIterator = list.iterator();
-    private final Iterator<InternalSyntaxToken> separatorIterator = separators.iterator();
+    private final Iterator<SyntaxToken> separatorIterator = separators.iterator();
     private boolean nextIsElement = true;
 
     private ElementAndSeparatorIterator(Function<T, ? extends Tree> elementTransformer) {

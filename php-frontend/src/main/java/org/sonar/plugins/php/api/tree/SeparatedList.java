@@ -20,16 +20,16 @@
 package org.sonar.plugins.php.api.tree;
 
 import com.google.common.base.Function;
-import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.Iterator;
 import java.util.List;
 
 public interface SeparatedList<T extends Tree> extends List<T> {
 
-  InternalSyntaxToken getSeparator(int i);
+  SyntaxToken getSeparator(int i);
 
-  List<InternalSyntaxToken> getSeparators();
+  List<SyntaxToken> getSeparators();
 
   Iterator<Tree> elementsAndSeparators(final Function<T, ? extends Tree> elementTransformer);
 

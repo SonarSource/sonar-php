@@ -243,7 +243,7 @@ public class TreeFactory {
     if (list.isPresent()) {
       return list.get();
     } else {
-      return new SeparatedListImpl<>(new LinkedList<T>(), new LinkedList<InternalSyntaxToken>());
+      return new SeparatedListImpl<>(new LinkedList<T>(), new LinkedList<SyntaxToken>());
     }
   }
 
@@ -253,7 +253,7 @@ public class TreeFactory {
 
   private <T extends Tree> SeparatedListImpl<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples, InternalSyntaxToken trailingSeparator) {
     ImmutableList.Builder<T> elements = ImmutableList.builder();
-    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+    ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
 
     elements.add(firstElement);
     if (tuples.isPresent()) {
@@ -623,7 +623,7 @@ public class TreeFactory {
   ) {
 
     ImmutableList.Builder<IdentifierTree> elements = ImmutableList.builder();
-    ImmutableList.Builder<InternalSyntaxToken> separators = ImmutableList.builder();
+    ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
 
     if (namespaceToken != null && separator != null) {
       elements.add(new IdentifierTreeImpl(namespaceToken));
@@ -1165,7 +1165,7 @@ public class TreeFactory {
     Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> restElements,
     InternalSyntaxToken closeParenthesis
   ) {
-    ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+    ImmutableList.Builder<SyntaxToken> commas = ImmutableList.builder();
     ImmutableList.Builder<ExpressionTree> listElements = ImmutableList.builder();
 
     if (firstElement.isPresent()) {
@@ -1387,14 +1387,14 @@ public class TreeFactory {
     return new ArrayInitializerFunctionTreeImpl(
       arrayToken,
       openParenthesis,
-      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
+      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<SyntaxToken>of()),
       closeParenthesis);
   }
 
   public ArrayInitializerTree newArrayInitBracket(InternalSyntaxToken openBracket, Optional<SeparatedListImpl<ArrayPairTree>> elements, InternalSyntaxToken closeBracket) {
     return new ArrayInitializerBracketTreeImpl(
       openBracket,
-      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<InternalSyntaxToken>of()),
+      elements.isPresent() ? elements.get() : new SeparatedListImpl<>(ImmutableList.<ArrayPairTree>of(), ImmutableList.<SyntaxToken>of()),
       closeBracket);
   }
 
