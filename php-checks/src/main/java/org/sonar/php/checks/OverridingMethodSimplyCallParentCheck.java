@@ -19,116 +19,115 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Lists;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.LexicalConstant;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import java.util.List;
-import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 @Rule(
-  key = "S1185",
+  key = OverridingMethodSimplyCallParentCheck.KEY,
   name = "Overriding methods should do more than simply call the same method in the super class",
   priority = Priority.MINOR,
   tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("5min")
-public class OverridingMethodSimplyCallParentCheck extends SquidCheck<LexerlessGrammar> {
+public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1185";
+  private static final String MESSAGE = "Remove this method \"%s\" to simply inherit it.";
+
+  private String superClass = null;
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CLASS_DECLARATION);
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
+
+    if (tree.superClass() != null) {
+      superClass = tree.superClass().fullName();
+
+      for (ClassMemberTree member : tree.members()) {
+        if (member.is(Kind.METHOD_DECLARATION)) {
+          checkMethod((MethodDeclarationTree) member);
+        }
+      }
+
+      superClass = null;
+    }
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.hasDirectChildren(PHPGrammar.EXTENDS_FROM)) {
-      String parentClassName = getParentClassName(astNode);
+  private void checkMethod(MethodDeclarationTree method) {
+    if (method.body().is(Kind.BLOCK)) {
+      BlockTree blockTree = (BlockTree)method.body();
 
-      for (AstNode method : getMethods(astNode)) {
-        AstNode methodBody = method.getFirstChild(PHPGrammar.METHOD_BODY).getFirstChild();
-        String methodName = method.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
+      if (blockTree.statements().size() == 1) {
+        StatementTree statementTree = blockTree.statements().get(0);
 
-        // Non-abstract
-        if (methodBody.is(PHPGrammar.BLOCK) && isOnlyCallingParentMethod(method, methodBody.getFirstChild(PHPGrammar.INNER_STATEMENT_LIST), parentClassName, methodName)) {
-          getContext().createLineViolation(this, "Remove this method \"{0}\" to simply inherit it.", method, methodName);
+        ExpressionTree expressionTree = null;
+        if (statementTree.is(Kind.EXPRESSION_STATEMENT)) {
+          expressionTree = ((ExpressionStatementTree) statementTree).expression();
+
+        } else if (statementTree.is(Kind.RETURN_STATEMENT)) {
+          expressionTree = ((ReturnStatementTree) statementTree).expression();
+        }
+
+        checkExpression(expressionTree, method);
+      }
+    }
+  }
+
+  private void checkExpression(@Nullable ExpressionTree expressionTree, MethodDeclarationTree method) {
+    if (expressionTree != null && expressionTree.is(Kind.FUNCTION_CALL)) {
+      FunctionCallTree functionCallTree = (FunctionCallTree)expressionTree;
+
+      if (functionCallTree.callee().is(Kind.CLASS_MEMBER_ACCESS)) {
+        MemberAccessTree memberAccessTree = (MemberAccessTree)functionCallTree.callee();
+
+        String methodName = method.name().text();
+        boolean sameMethodName = CheckUtils.asString(memberAccessTree.member()).equals(methodName);
+
+        if (isSuperClass(memberAccessTree.object()) && sameMethodName && sameArguments(functionCallTree, method)) {
+          String message = String.format(MESSAGE, methodName);
+          context().newIssue(KEY, message).tree(method);
         }
       }
     }
   }
 
-  private boolean isOnlyCallingParentMethod(AstNode method, AstNode stmtList, String parentClassName, String methodName) {
-    if (stmtList != null && stmtList.getNumberOfChildren() == 1) {
-      String expression = getExpressionAsString(stmtList);
+  private boolean sameArguments(FunctionCallTree functionCallTree, MethodDeclarationTree method) {
+    boolean sameArgumentsNumber = functionCallTree.arguments().size() == method.parameters().parameters().size();
+    return sameArgumentsNumber && allArgumentsAreTrivial(functionCallTree);
+  }
 
-      if (expression != null) {
-        String expectedParam = buildExpectedParamRegexp(getNumberOfParameter(method.getFirstChild(PHPGrammar.PARAMETER_LIST)));
-        // (parent || parentClassName) :: functionName ( params )
-        String expectedExpression = "(?:parent|" + parentClassName.replace("\\", "\\\\") + ")::" + methodName + "\\(" + expectedParam + "\\)";
-
-        return Pattern.matches(expectedExpression, expression);
+  private boolean allArgumentsAreTrivial(FunctionCallTree functionCallTree) {
+    for (ExpressionTree argument : functionCallTree.arguments()) {
+      if (!argument.is(Kind.VARIABLE_IDENTIFIER)) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
-  private String buildExpectedParamRegexp(int nbParam) {
-    String expectedParam;
-
-    if (nbParam == 0) {
-      expectedParam = "";
-    } else if (nbParam == 1) {
-      expectedParam = LexicalConstant.VAR_IDENTIFIER;
-    } else {
-      expectedParam = "(?:" + LexicalConstant.VAR_IDENTIFIER + ",){" + (nbParam - 1) + ",}" + LexicalConstant.VAR_IDENTIFIER;
-    }
-    return expectedParam;
-  }
-
-  private String getExpressionAsString(AstNode stmtList) {
-    AstNode stmt = stmtList.getFirstChild().getFirstChild();
-
-    if (stmt.is(PHPGrammar.RETURN_STATEMENT) && stmt.hasDirectChildren(PHPGrammar.EXPRESSION)) {
-      return CheckUtils.getExpressionAsString(stmt.getFirstChild(PHPGrammar.EXPRESSION));
-
-    } else if (stmt.is(PHPGrammar.EXPRESSION_STATEMENT)) {
-      return CheckUtils.getExpressionAsString(stmt.getFirstChild(PHPGrammar.EXPRESSION));
-
-    } else {
-      return null;
-    }
-  }
-
-  private int getNumberOfParameter(AstNode paramList) {
-    return paramList != null ? paramList.getChildren(PHPGrammar.PARAMETER).size() : 0;
-  }
-
-  private List<AstNode> getMethods(AstNode classDec) {
-    List<AstNode> methods = Lists.newArrayList();
-
-    for (AstNode classStmt : classDec.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      AstNode stmtKind = classStmt.getFirstChild();
-
-      if (stmtKind.is(PHPGrammar.METHOD_DECLARATION)) {
-        methods.add(stmtKind);
-      }
-    }
-    return methods;
-  }
-
-  private String getParentClassName(AstNode classDec) {
-    return CheckUtils.getExpressionAsString(classDec.getFirstChild(PHPGrammar.EXTENDS_FROM).getFirstChild(PHPGrammar.FULLY_QUALIFIED_CLASS_NAME));
+  private boolean isSuperClass(ExpressionTree tree) {
+    String str = CheckUtils.asString(tree);
+    return superClass.equalsIgnoreCase(str) || "parent".equalsIgnoreCase(str);
   }
 
 }

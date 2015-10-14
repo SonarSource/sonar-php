@@ -2,12 +2,12 @@
 
 abstract class B extends A {
 
-  public function f() {      // NOK
+  public function f() {      // NOK {{Remove this method "f" to simply inherit it.}}
     parent::f();
   }
 
   public function f() {      // NOK
-    return parent::f();
+    return Parent::f();
   }
 
   public function g($p1) {   // NOK
@@ -18,8 +18,12 @@ abstract class B extends A {
     parent::g($p1, $p2, $p3);
   }
 
+  public function e() {      // NOK
+    A::e();
+  }
+
   public function h() {      // NOK
-    A::h();
+    a::h();
   }
 
   public function h() {      // OK
@@ -53,6 +57,10 @@ class D extends C {
 
   public function g($p1) {  // OK
     parent::g($p1, 1);
+  }
+
+  public function k($p1) {  // OK
+    parent::k($p1 + 1);
   }
 
   public function h() {     // OK

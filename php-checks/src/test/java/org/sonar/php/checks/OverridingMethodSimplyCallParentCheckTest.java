@@ -20,23 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class OverridingMethodSimplyCallParentCheckTest extends CheckTest {
+public class OverridingMethodSimplyCallParentCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("OverridingMethodSimplyCallParentCheck.php"), new OverridingMethodSimplyCallParentCheck());
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Remove this method \"f\" to simply inherit it.")
-      .next().atLine(9)
-      .next().atLine(13)
-      .next().atLine(17)
-      .next().atLine(21)
-      .noMore();
+    PHPCheckTest.check(new OverridingMethodSimplyCallParentCheck(), TestUtils.getCheckFile("OverridingMethodSimplyCallParentCheck.php"));
   }
 
 }
