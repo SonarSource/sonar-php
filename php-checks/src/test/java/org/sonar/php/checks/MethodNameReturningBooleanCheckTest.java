@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class MethodNameReturningBooleanCheckTest extends CheckTest {
+public class MethodNameReturningBooleanCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("MethodNameReturningBooleanCheck.php"), new MethodNameReturningBooleanCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(8).withMessage("Rename this method to start with \"is\" or \"has\".")
-      .next().atLine(14)
-      .noMore();
+    PHPCheckTest.check(new MethodNameReturningBooleanCheck(), TestUtils.getCheckFile("MethodNameReturningBooleanCheck.php"));
   }
 
 }

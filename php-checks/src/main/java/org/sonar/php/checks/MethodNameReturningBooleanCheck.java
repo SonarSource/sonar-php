@@ -19,53 +19,49 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.api.Trivia;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.LexicalConstant;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2047",
+  key = MethodNameReturningBooleanCheck.KEY,
   name = "The names of methods with boolean return values should start with \"is\" or \"has\"",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("15min")
-public class MethodNameReturningBooleanCheck extends SquidCheck<LexerlessGrammar> {
+public class MethodNameReturningBooleanCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2047";
+  private static final String MESSAGE = "Rename this method to start with \"is\" or \"has\".";
 
   private static final String RETURN_TAG = "@return";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.METHOD_DECLARATION);
-  }
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    super.visitMethodDeclaration(tree);
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (isReturningBoolean(astNode) && !hasBooleanPrefixName(astNode)) {
-      getContext().createLineViolation(this, "Rename this method to start with \"is\" or \"has\".", astNode);
+    if (isReturningBoolean(tree) && !hasBooleanPrefixName(tree)) {
+      context().newIssue(KEY, MESSAGE).tree(tree);
     }
   }
 
-  private boolean hasBooleanPrefixName(AstNode methodDec) {
-    String methodName = methodDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
+  private boolean hasBooleanPrefixName(MethodDeclarationTree methodDeclaration) {
+    String methodName = methodDeclaration.name().text();
     return methodName.startsWith("has") || methodName.startsWith("is");
   }
 
-  private boolean isReturningBoolean(AstNode methodDec) {
-    Token functionToken = methodDec.getToken();
-
-    for (Trivia comment : functionToken.getTrivia()) {
-      for (String line : comment.getToken().getOriginalValue().split(LexicalConstant.LINE_TERMINATOR)) {
+  private boolean isReturningBoolean(MethodDeclarationTree methodDeclaration) {
+    for (SyntaxTrivia comment : ((PHPTree) methodDeclaration).getFirstToken().trivias()) {
+      for (String line : comment.text().split(LexicalConstant.LINE_TERMINATOR)) {
 
         if (StringUtils.containsIgnoreCase(line, RETURN_TAG)) {
           return returnsBoolean(line);
