@@ -20,81 +20,81 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.Set;
 
 @Rule(
-  key = "S1784",
+  key = MissingMethodVisibilityCheck.KEY,
   name = "Method visibility should be explicitly declared",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("2min")
-public class MissingMethodVisibilityCheck extends SquidCheck<LexerlessGrammar> {
+public class MissingMethodVisibilityCheck extends PHPVisitorCheck {
 
-  private static final Set<PHPKeyword> VISIBILITIES = ImmutableSet.of(
-    PHPKeyword.PRIVATE,
-    PHPKeyword.PROTECTED,
-    PHPKeyword.PUBLIC);
+  public static final String KEY = "S1784";
+  private static final String MESSAGE = "Explicitly mention the visibility of this %s \"%s\".";
 
-  @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.METHOD_DECLARATION);
-  }
+  private static final Set<String> VISIBILITIES = ImmutableSet.of(
+    PHPKeyword.PRIVATE.getValue(),
+    PHPKeyword.PROTECTED.getValue(),
+    PHPKeyword.PUBLIC.getValue());
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (!hasVisibility(astNode)) {
-      getContext().createLineViolation(this, "Explicitly mention the visibility of this {0}.", astNode, getMessageForMethodName(astNode));
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    super.visitClassDeclaration(tree);
+
+    if (tree.is(Kind.CLASS_DECLARATION)) {
+
+      for (ClassMemberTree member : tree.members()) {
+
+        if (member.is(Kind.METHOD_DECLARATION)) {
+          checkMethod((MethodDeclarationTree) member, tree.name().text());
+        }
+      }
     }
   }
 
-  private boolean hasVisibility(AstNode astNode) {
-    for (AstNode modifier : astNode.getChildren(PHPGrammar.MEMBER_MODIFIER)) {
-      if (VISIBILITIES.contains(modifier.getFirstChild().getType())) {
+  private void checkMethod(MethodDeclarationTree method, String className) {
+    if (!hasVisibilityModifier(method)) {
+      String methodName = method.name().text();
+      String message = String.format(MESSAGE, getMethodKind(methodName, className), methodName);
+      context().newIssue(KEY, message).tree(method);
+    }
+  }
+
+  // fixme (Lena) : could be replaced with method implemented in https://github.com/pynicolas/sonar-php/commit/c8ba74d43c0816871e928d9415da68791fbde5e8
+  private boolean hasVisibilityModifier(MethodDeclarationTree method) {
+    for (SyntaxToken modifier : method.modifiers()) {
+      if (VISIBILITIES.contains(modifier.text().toLowerCase())) {
         return true;
       }
     }
     return false;
   }
 
-  private String getMessageForMethodName(AstNode methodNode) {
-    StringBuilder builder = new StringBuilder();
-    String name = methodNode.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
+  private String getMethodKind(String methodName, String className) {
+    if ("__construct".equalsIgnoreCase(methodName) || methodName.equalsIgnoreCase(className)) {
+      return "constructor";
 
-    if (isConstructor(methodNode, name)) {
-      builder.append("constructor ");
-    } else if ("__destruct".equals(name)) {
-      builder.append("destructor ");
+    } else if ("__destruct".equalsIgnoreCase(methodName)) {
+      return "destructor";
+
     } else {
-      builder.append("method ");
+      return "method";
     }
-
-    builder.append("\"" + name + "\"");
-
-    return builder.toString();
-  }
-
-  private boolean isConstructor(AstNode methodNode, String methodName) {
-    AstNode grandParent = methodNode.getParent().getParent();
-    boolean isConstructorBeforePHP5_3_3 = false;
-
-    if (grandParent.is(PHPGrammar.CLASS_DECLARATION)) {
-      isConstructorBeforePHP5_3_3 = methodName.equals(grandParent.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue());
-    }
-
-    return isConstructorBeforePHP5_3_3 || "__construct".equals(methodName);
   }
 
 }

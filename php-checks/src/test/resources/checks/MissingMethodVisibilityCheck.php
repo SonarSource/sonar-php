@@ -2,9 +2,9 @@
 
 abstract class C1
 {
-    static function f() { return; }          // NOK
-    abstract function g();                   // NOK
-    function h() {return; }                  // NOK
+    static function f() { return; }          // NOK {{Explicitly mention the visibility of this method "f".}}
+    abstract function g();                   // NOK {{Explicitly mention the visibility of this method "g".}}
+    function h() {return; }                  // NOK {{Explicitly mention the visibility of this method "h".}}
 
     private static function i() { return; }  // OK
     protected abstract function j();         // OK
@@ -13,10 +13,10 @@ abstract class C1
 
 class C2 {
 
-  function C2 () { return; }
-  function __destruct() { return; }
+  function C2 () { return; }                  // NOK {{Explicitly mention the visibility of this constructor "C2".}}
+  function __destruct() { return; }           // NOK {{Explicitly mention the visibility of this destructor "__destruct".}}
 }
 
 class C3 {
-  function __construct() { return; }
+  function __construct() { return; }          // NOK {{Explicitly mention the visibility of this constructor "__construct".}}
 }

@@ -20,24 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class MissingMethodVisibilityCheckTest extends CheckTest {
+public class MissingMethodVisibilityCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("MissingMethodVisibilityCheck.php"), new MissingMethodVisibilityCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Explicitly mention the visibility of this method \"f\".")
-      .next().atLine(6).withMessage("Explicitly mention the visibility of this method \"g\".")
-      .next().atLine(7).withMessage("Explicitly mention the visibility of this method \"h\".")
-      .next().atLine(16).withMessage("Explicitly mention the visibility of this constructor \"C2\".")
-      .next().atLine(17).withMessage("Explicitly mention the visibility of this destructor \"__destruct\".")
-      .next().atLine(21).withMessage("Explicitly mention the visibility of this constructor \"__construct\".")
-      .noMore();
+    PHPCheckTest.check(new MissingMethodVisibilityCheck(), TestUtils.getCheckFile("MissingMethodVisibilityCheck.php"));
   }
 }
