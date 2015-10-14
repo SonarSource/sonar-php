@@ -19,42 +19,54 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.Maps;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.check.Priority;
+import org.sonar.check.Rule;
+import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.Priority;
-import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.parser.PHPGrammar;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import com.google.common.collect.Maps;
-import com.sonar.sslr.api.AstNode;
-
 @Rule(
-  key = "S1117",
+  key = LocalVariableShadowsClassFieldCheck.KEY,
   name = "Local variables should not have the same name as class fields",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGrammar> {
+public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1117";
+  private static final String MESSAGE = "Rename \"%s\" which has the same name as the field declared at line %s.";
 
   private ClassState classState = new ClassState();
 
   private static class ClassState {
 
-    private Map<String, AstNode> classFields = Maps.newHashMap();
+    private Map<String, Integer> classFields = Maps.newHashMap();
     private Deque<Set<String>> checkedVariables = new ArrayDeque<Set<String>>();
     private String className;
 
@@ -63,16 +75,16 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
       checkedVariables.clear();
     }
 
-    public void setClassName(AstNode classDeclaration) {
-      className = classDeclaration.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
+    public void setClassName(ClassDeclarationTree classDeclaration) {
+      className = classDeclaration.name().text();
     }
 
     public boolean isInClass() {
       return !classFields.isEmpty();
     }
 
-    public void declareField(AstNode varIdentifier) {
-      classFields.put(varIdentifier.getTokenOriginalValue(), varIdentifier);
+    public void declareField(SyntaxToken fieldToken) {
+      classFields.put(fieldToken.text(), fieldToken.line());
     }
 
     public boolean hasFieldNamed(String paramName) {
@@ -80,7 +92,7 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
     }
 
     public int getLineOfFieldNamed(String name) {
-      return classFields.get(name).getTokenLine();
+      return classFields.get(name);
     }
 
     public void setAsCheckedVariable(String varName) {
@@ -100,65 +112,74 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
     }
   }
 
-  private boolean skip = false;
-
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.CLASS_DECLARATION,
-      PHPGrammar.METHOD_DECLARATION,
-      PHPGrammar.FUNCTION_EXPRESSION,
-      PHPGrammar.ASSIGNMENT_EXPR,
-      PHPGrammar.ASSIGNMENT_BY_REFERENCE);
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
+  public void visitCompilationUnit(CompilationUnitTree tree) {
     classState.clear();
-    skip = false;
+    super.visitCompilationUnit(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
-      declareClassField(astNode);
-      classState.setClassName(astNode);
-
-    } else if (classState.isInClass() && astNode.is(PHPGrammar.METHOD_DECLARATION)) {
-      if (isExcluded(astNode)) {
-        skip = true;
-      } else {
-        classState.newFunctionScope();
-        checkParameters(astNode);
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    for (ClassMemberTree classMemberTree : tree.members()) {
+      if (classMemberTree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
+        for (VariableDeclarationTree declaration : ((ClassPropertyDeclarationTree) classMemberTree).declarations()) {
+          classState.declareField(declaration.variableIdentifier().token());
+        }
       }
+    }
 
-    } else if (astNode.is(PHPGrammar.FUNCTION_EXPRESSION) && classState.isInClass() && !skip) {
+    classState.setClassName(tree);
+    super.visitClassDeclaration(tree);
+    classState.clear();
+  }
+
+  @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    if (!isExcluded(tree)) {
       classState.newFunctionScope();
-      checkParameters(astNode);
-
-    } else if (classState.isInClass() && !skip) {
-      checkLocalVariable(astNode);
+      checkParameters(tree);
+      super.visitMethodDeclaration(tree);
+      classState.leaveFunctionScope();
     }
   }
 
-  private boolean isExcluded(AstNode methodDec) {
-    String methodName = methodDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue();
-    return CheckUtils.isStaticClassMember(methodDec.getChildren(PHPGrammar.MEMBER_MODIFIER))
-      || isConstructor(methodName) || isSetter(methodName);
+  @Override
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    if (classState.isInClass()) {
+      classState.newFunctionScope();
+      checkParameters(tree);
+      super.visitFunctionExpression(tree);
+      classState.leaveFunctionScope();
+    }
   }
 
-  private void checkLocalVariable(AstNode assignmentExpr) {
-    AstNode varNode = assignmentExpr.getFirstChild();
-    String varName = CheckUtils.getExpressionAsString(varNode);
+  @Override
+  public void visitAssignmentExpression(AssignmentExpressionTree tree) {
+    if (classState.isInClass()) {
+      checkLocalVariable(tree.variable());
+      super.visitAssignmentExpression(tree);
+    }
+  }
+
+  @Override
+  public void visitAssignmentByReference(AssignmentByReferenceTree tree) {
+    if (classState.isInClass()) {
+      checkLocalVariable(tree.variable());
+      super.visitAssignmentByReference(tree);
+    }
+  }
+
+  private void checkLocalVariable(ExpressionTree assignedExpression) {
+    String varName = CheckUtils.asString(assignedExpression);
 
     if (classState.hasFieldNamed(varName) && !classState.hasAlreadyBeenChecked(varName)) {
-      reportIssue(varNode, varName);
+      reportIssue(assignedExpression, varName);
     }
   }
 
-  private void checkParameters(AstNode functionDec) {
-    for (AstNode parameter : FunctionUtils.getFunctionParameters(functionDec)) {
-      String name = parameter.getTokenOriginalValue();
+  private void checkParameters(FunctionTree functionDec) {
+    for (ParameterTree parameter : functionDec.parameters().parameters()) {
+      String name = parameter.variableIdentifier().variableExpression().text();
 
       if (classState.hasFieldNamed(name)) {
         reportIssue(parameter, name);
@@ -166,42 +187,24 @@ public class LocalVariableShadowsClassFieldCheck extends SquidCheck<LexerlessGra
     }
   }
 
-  private void reportIssue(AstNode node, String varName) {
-    getContext().createLineViolation(this, "Rename \"{0}\" which has the same name as the field declared at line {1}.",
-      node, varName, classState.getLineOfFieldNamed(varName));
-    classState.setAsCheckedVariable(varName);
+  private boolean isExcluded(MethodDeclarationTree methodDec) {
+    String methodName = methodDec.name().text();
+    return CheckUtils.hasModifier(methodDec.modifiers(), PHPKeyword.STATIC.getValue())
+      || isConstructor(methodName) || isSetter(methodName);
   }
 
-  private boolean isSetter(String methodName) {
+  private static boolean isSetter(String methodName) {
     return methodName.length() > 2 && "set".equalsIgnoreCase(methodName.substring(0, 3));
   }
 
   private boolean isConstructor(String methodName) {
-    return classState.className.equals(methodName) || "__construct".equals(methodName);
+    return classState.className.equalsIgnoreCase(methodName) || "__construct".equalsIgnoreCase(methodName);
   }
 
-  private void declareClassField(AstNode classDeclaration) {
-    for (AstNode classStatement : classDeclaration.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      AstNode stmt = classStatement.getFirstChild();
+  private void reportIssue(Tree tree, String varName) {
+    String message = String.format(MESSAGE, varName, classState.getLineOfFieldNamed(varName));
+    context().newIssue(KEY, message).tree(tree);
 
-      if (stmt.is(PHPGrammar.CLASS_VARIABLE_DECLARATION)) {
-        for (AstNode varDeclaration : stmt.getChildren(PHPGrammar.VARIABLE_DECLARATION)) {
-          classState.declareField(varDeclaration.getFirstChild(PHPGrammar.VAR_IDENTIFIER));
-        }
-      }
-    }
-  }
-
-  @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.CLASS_DECLARATION)) {
-      classState.clear();
-
-    } else if (astNode.is(PHPGrammar.METHOD_DECLARATION, PHPGrammar.FUNCTION_EXPRESSION) && !skip && classState.isInClass()) {
-      classState.leaveFunctionScope();
-
-    } else if (astNode.is(PHPGrammar.METHOD_DECLARATION) && skip) {
-      skip = false;
-    }
+    classState.setAsCheckedVariable(varName);
   }
 }

@@ -20,23 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class LocalVariableShadowsClassFieldCheckTest extends CheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("LocalVariableShadowsClassFieldCheck.php"), new LocalVariableShadowsClassFieldCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(26).withMessage("Rename \"$field\" which has the same name as the field declared at line 9.")
-      .next().atLine(29)
-      .next().atLine(32)
-      .next().atLine(36)
-      .next().atLine(42)
-      .noMore();
+    PHPCheckTest.check(new LocalVariableShadowsClassFieldCheck(), TestUtils.getCheckFile("LocalVariableShadowsClassFieldCheck.php"));
   }
 }

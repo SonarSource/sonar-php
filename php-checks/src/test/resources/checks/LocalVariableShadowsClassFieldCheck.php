@@ -23,7 +23,7 @@ class A {
 
   public function f2($param) {          // OK
     $foo = 1;                           // OK
-    $field = 1;                         // NOK
+    $field = 1;                         // NOK {{Rename "$field" which has the same name as the field declared at line 9.}}
   }
 
   public function f3($field) {}         // NOK
@@ -39,7 +39,7 @@ class A {
   }
 
   public function f5($param) {
-    $field =& $param;
+    $field =& $param;                    // NOK
   }
 }
 
