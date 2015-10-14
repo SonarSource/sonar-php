@@ -19,38 +19,34 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class MissingNewLineAtEOFCheckTest extends CheckTest {
+import java.util.List;
+
+public class MissingNewLineAtEOFCheckTest {
 
   private MissingNewLineAtEOFCheck check = new MissingNewLineAtEOFCheck();
   private static final String TEST_FILE_DIR = "MissingNewLineAtEOF/";
+  private List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Add a new line at the end of this file."));
 
   @Test
-  public void noeNewLine() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_FILE_DIR + "MissingNewLineAtEOF.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().withMessage("Add a new line at the end of this file.")
-      .noMore();
+  public void noNewLine() throws Exception {
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "MissingNewLineAtEOF.php"), issue);
   }
 
   @Test
   public void emptyFile() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_FILE_DIR + "EmptyFile.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next()
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "EmptyFile.php"), issue);
   }
 
   @Test
   public void newLine() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile(TEST_FILE_DIR + "NewLineAtEOF.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "NewLineAtEOF.php"));
   }
 
 }

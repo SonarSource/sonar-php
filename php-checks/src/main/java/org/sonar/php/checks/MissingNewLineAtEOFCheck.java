@@ -19,55 +19,32 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.io.Closeables;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.utils.SonarException;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import java.io.IOException;
-import java.io.RandomAccessFile;
 
 @Rule(
-  key = "S113",
+  key = MissingNewLineAtEOFCheck.KEY,
   name = "Files should contain an empty new line at the end",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
-public class MissingNewLineAtEOFCheck extends SquidCheck<LexerlessGrammar> {
+public class MissingNewLineAtEOFCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S113";
+  private static final String MESSAGE = "Add a new line at the end of this file.";
 
   @Override
-  public void visitFile(AstNode astNode) {
-    RandomAccessFile randomAccessFile = null;
-    try {
-      randomAccessFile = new RandomAccessFile(getContext().getFile(), "r");
-      if (!endsWithNewline(randomAccessFile)) {
-        getContext().createFileViolation(this, "Add a new line at the end of this file.");
-      }
-    } catch (IOException e) {
-      throw new SonarException(e);
-    } finally {
-      Closeables.closeQuietly(randomAccessFile);
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    SyntaxToken eofToken = tree.eofToken();
+    if (eofToken.column() != 0 || eofToken.line() == 1) {
+      context().newIssue(KEY, MESSAGE);
     }
   }
-
-  private boolean endsWithNewline(RandomAccessFile randomAccessFile) throws IOException {
-    if (randomAccessFile.length() < 1) {
-      return false;
-    }
-    randomAccessFile.seek(randomAccessFile.length() - 1);
-    byte[] chars = new byte[1];
-    if (randomAccessFile.read(chars) < 1) {
-      return false;
-    }
-    String ch = new String(chars);
-    return "\n".equals(ch) || "\r".equals(ch);
-  }
-
 }
