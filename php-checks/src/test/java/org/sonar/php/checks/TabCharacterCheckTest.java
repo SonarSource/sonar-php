@@ -19,20 +19,20 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TabCharacterCheckTest extends CheckTest {
+import java.util.List;
+
+public class TabCharacterCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("TabCharacterCheck.php"), new TabCharacterCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().withMessage("Replace all tab characters in this file by sequences of white-spaces.")
-      .noMore();
+    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Replace all tab characters in this file by sequences of white-spaces."));
+    PHPCheckTest.check(new TabCharacterCheck(), TestUtils.getCheckFile("TabCharacterCheck.php"), issue);
   }
 }

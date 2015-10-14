@@ -20,31 +20,33 @@
 package org.sonar.php.checks;
 
 import com.google.common.io.Files;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.utils.SonarException;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
 @Rule(
-  key = "S105",
+  key = TabCharacterCheck.KEY,
   name = "Tabulation characters should not be used",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class TabCharacterCheck extends SquidCheck<LexerlessGrammar> implements CharsetAwareVisitor {
+public class TabCharacterCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
+
+  public static final String KEY = "S105";
+  private static final String MESSAGE = "Replace all tab characters in this file by sequences of white-spaces.";
+
   private Charset charset;
 
   @Override
@@ -53,16 +55,16 @@ public class TabCharacterCheck extends SquidCheck<LexerlessGrammar> implements C
   }
 
   @Override
-  public void visitFile(AstNode astNode) {
+  public void visitCompilationUnit(CompilationUnitTree tree) {
     List<String> lines;
     try {
-      lines = Files.readLines(getContext().getFile(), charset);
+      lines = Files.readLines(context().file(), charset);
     } catch (IOException e) {
-      throw new SonarException(e);
+      throw new IllegalStateException("Check S105: Can't read the file", e);
     }
     for (String line : lines) {
       if (line.contains("\t")) {
-        getContext().createFileViolation(this, "Replace all tab characters in this file by sequences of white-spaces.");
+        context().newIssue(KEY, MESSAGE);
         break;
       }
     }
