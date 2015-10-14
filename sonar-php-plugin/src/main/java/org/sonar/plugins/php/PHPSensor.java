@@ -48,6 +48,7 @@ import org.sonar.php.metrics.FileLinesVisitor;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.squidbridge.AstScanner;
+import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.SquidAstVisitor;
 import org.sonar.squidbridge.api.CheckMessage;
 import org.sonar.squidbridge.api.CodeVisitor;
@@ -63,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class PHPSensor implements Sensor {
 
@@ -120,14 +122,22 @@ public class PHPSensor implements Sensor {
     this.scanner = PHPAstScanner.create(createConfiguration(), oldChecks.toArray(new SquidAstVisitor[oldChecks.size()]));
     scanner.scanFiles(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
     save(scanner.getIndex().search(new QueryByType(SourceFile.class)));
+
+    LOG.info("Starting running rules based on strongly-typed tree");
     // --------------
 
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), phpCheckBuilder.build());
     ArrayList<InputFile> inputFiles = Lists.newArrayList(fileSystem.inputFiles(mainFilePredicate));
 
+    ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
+    progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
+
     for (InputFile inputFile : inputFiles) {
       saveIssues(phpAnalyzer.analyze(inputFile.file()), inputFile);
+      progressReport.nextFile();
     }
+
+    progressReport.stop();
 
   }
 
