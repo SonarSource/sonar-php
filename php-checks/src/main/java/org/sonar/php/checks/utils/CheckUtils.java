@@ -207,7 +207,7 @@ public class CheckUtils {
     Kind.DEFAULT_CLAUSE,
     Kind.DECLARE_STATEMENT,
     Kind.IF_STATEMENT,
-    Kind.ALTRENATIVE_IF_STATEMENT,
+    Kind.ALTERNATIVE_IF_STATEMENT,
     Kind.ELSE_CLAUSE,
     Kind.ALTERNATIVE_ELSE_CLAUSE,
     Kind.ELSEIF_CLAUSE,
@@ -236,7 +236,7 @@ public class CheckUtils {
         statements = ((DeclareStatementTree) tree).statements();
         break;
       case IF_STATEMENT:
-      case ALTRENATIVE_IF_STATEMENT:
+      case ALTERNATIVE_IF_STATEMENT:
         statements = ((IfStatementTree) tree).statements();
         break;
       case ELSE_CLAUSE:

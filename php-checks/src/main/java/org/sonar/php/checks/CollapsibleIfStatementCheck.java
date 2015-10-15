@@ -60,7 +60,7 @@ public class CollapsibleIfStatementCheck extends PHPVisitorCheck {
   }
 
   private static boolean isIfStatementWithoutElse(StatementTree statement) {
-    return statement.is(Kind.IF_STATEMENT, Kind.ALTRENATIVE_IF_STATEMENT) && !hasElseOrElseIf((IfStatementTree) statement);
+    return statement.is(Kind.IF_STATEMENT, Kind.ALTERNATIVE_IF_STATEMENT) && !hasElseOrElseIf((IfStatementTree) statement);
   }
 
   @Nullable
