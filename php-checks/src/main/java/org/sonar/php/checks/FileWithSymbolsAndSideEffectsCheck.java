@@ -19,117 +19,99 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.AstNodeType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
+import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
+import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 @Rule(
-  key = "S2036",
+  key = FileWithSymbolsAndSideEffectsCheck.KEY,
   name = "Files that define symbols should not cause side-effects",
   priority = Priority.CRITICAL,
   tags = {Tags.PSR1, Tags.USER_EXPERIENCE})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SOFTWARE_RELATED_PORTABILITY)
 @SqaleConstantRemediation("5min")
-public class FileWithSymbolsAndSideEffectsCheck extends SquidCheck<LexerlessGrammar> {
+public class FileWithSymbolsAndSideEffectsCheck extends PHPVisitorCheck {
 
-  private static class File {
-    boolean hasSymbol = false;
-    boolean hasSideEffects = false;
-    boolean inDeclaration = false;
-    boolean hasIssue = false;
+  public static final String KEY = "S2036";
+  private static final String MESSAGE = "Refactor this file to either declare symbols or cause side effects, but not both.";
 
-    public void reset() {
-      hasSymbol = false;
-      hasSideEffects = false;
-      hasIssue = false;
-      inDeclaration = false;
-    }
-  }
-
-  private static AstNodeType[] DECLARATIONS = {
-    PHPGrammar.CLASS_DECLARATION,
-    PHPGrammar.FUNCTION_DECLARATION,
-    PHPGrammar.INTERFACE_DECLARATION
-  };
-
-  private static AstNodeType[] SIDE_EFFECTS_STATEMENT = {
-    PHPGrammar.YIELD_STATEMENT,
-    PHPGrammar.ECHO_STATEMENT,
-    PHPGrammar.INLINE_HTML,
-    PHPGrammar.UNSET_VARIABLE_STATEMENT,
-    PHPGrammar.EXPRESSION_STATEMENT
-  };
+  private boolean fileHasSymbol;
+  private boolean fileHasSideEffect;
 
   @Override
-  public void init() {
-    subscribeTo(DECLARATIONS);
-    subscribeTo(SIDE_EFFECTS_STATEMENT);
-  }
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    fileHasSymbol = false;
+    fileHasSideEffect = false;
 
-  private File currentFile = new File();
+    super.visitCompilationUnit(tree);
 
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    currentFile.reset();
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(DECLARATIONS)) {
-      currentFile.inDeclaration = true;
-
-      if (!currentFile.hasSymbol) {
-        currentFile.hasSymbol = true;
-      }
-
-      // Do not report "side-effects" statement within a declaration
-    } else if (!currentFile.inDeclaration && !currentFile.hasSideEffects && astNode.is(SIDE_EFFECTS_STATEMENT) && !isExcluded(astNode)) {
-      currentFile.hasSideEffects = true;
-    }
-
-    if (!currentFile.hasIssue && currentFile.hasSymbol && currentFile.hasSideEffects) {
-      getContext().createFileViolation(this, "Refactor this file to either declare symbols or cause side effects, but not both.");
-      currentFile.hasIssue = true;
+    if (fileHasSymbol && fileHasSideEffect) {
+      context().newIssue(KEY, MESSAGE);
     }
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(DECLARATIONS)) {
-      currentFile.inDeclaration = false;
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    if (tree.is(Kind.CLASS_DECLARATION, Kind.INTERFACE_DECLARATION)) {
+      fileHasSymbol = true;
+      // do not enter inside class declaration
     }
   }
 
-  /**
-   * Return true if expression is "define" function call, use to declare constant.
-   */
-  private boolean isExcluded(AstNode astNode) {
-    if (astNode.is(PHPGrammar.EXPRESSION_STATEMENT)) {
-      AstNode expression = astNode.getFirstChild(PHPGrammar.EXPRESSION).getFirstChild();
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    fileHasSymbol = true;
+    // do not enter inside function declaration
+  }
 
-      if (expression.is(PHPGrammar.POSTFIX_EXPR)) {
-        AstNode child = expression.getFirstChild();
+  @Override
+  public void visitYieldStatement(YieldStatementTree tree) {
+    super.visitYieldStatement(tree);
+    fileHasSideEffect = true;
+  }
 
-        if (child.is(PHPGrammar.MEMBER_EXPRESSION) && isDefineMethodCall(child)) {
-          return true;
-        }
+  @Override
+  public void visitInlineHTML(InlineHTMLTree tree) {
+    boolean isClosingTag = "?>".equals(tree.inlineHTMLToken().text().trim());
+    if (!isClosingTag) {
+      fileHasSideEffect = true;
+    }
+  }
+
+  @Override
+  public void visitUnsetVariableStatement(UnsetVariableStatementTree tree) {
+    super.visitUnsetVariableStatement(tree);
+    fileHasSideEffect = true;
+  }
+
+  @Override
+  public void visitExpressionStatement(ExpressionStatementTree tree) {
+    super.visitExpressionStatement(tree);
+
+    if (tree.expression().is(Tree.Kind.FUNCTION_CALL)) {
+      FunctionCallTree functionCallTree = (FunctionCallTree)tree.expression();
+
+      String callee = CheckUtils.asString(functionCallTree.callee());
+      if ("define".equalsIgnoreCase(callee)) {
+        return;
       }
     }
-    return false;
-  }
 
-  private boolean isDefineMethodCall(AstNode memberExpr) {
-    return "define".equals(memberExpr.getFirstChild().getTokenOriginalValue())
-      && memberExpr.getLastChild().is(PHPGrammar.FUNCTION_CALL_PARAMETER_LIST);
+    fileHasSideEffect = true;
   }
 
 }
