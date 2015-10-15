@@ -19,34 +19,42 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
+import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S2003",
+  key = RequireInsteadOfRequireOnceCheck.KEY,
   name = "\"require_once\" and \"include_once\" should be used instead of \"require\" and \"include\"",
   priority = Priority.CRITICAL,
   tags = {Tags.BUG})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class RequireInsteadOfRequireOnceCheck extends SquidCheck<LexerlessGrammar> {
+public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S2003";
+  private static final String MESSAGE = "Replace \"%s\" with \"%s\".";
+
+  private static final List<String> WRONG_FUNCTIONS = ImmutableList.of("require", "include");
 
   @Override
-  public void init() {
-    subscribeTo(PHPKeyword.INCLUDE, PHPKeyword.REQUIRE);
+  public void visitFunctionCall(FunctionCallTree tree) {
+    super.visitFunctionCall(tree);
+
+    String callee = CheckUtils.asString(tree.callee());
+
+    if (WRONG_FUNCTIONS.contains(callee.toLowerCase())) {
+      String message = String.format(MESSAGE, callee, callee + "_once");
+      context().newIssue(KEY, message).tree(tree);
+    }
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    getContext().createLineViolation(this, "Replace \"{0}\" with \"{1}\".", astNode,
-      astNode.getTokenOriginalValue(),
-      astNode.is(PHPKeyword.INCLUDE) ? PHPKeyword.INCLUDE_ONCE.getValue() : PHPKeyword.REQUIRE_ONCE.getValue());
-  }
 }
