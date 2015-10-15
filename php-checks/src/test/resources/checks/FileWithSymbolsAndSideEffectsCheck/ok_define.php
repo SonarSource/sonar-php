@@ -1,5 +1,7 @@
 <?php
 
+define(NAME, "value");   // define is exlusion
+
 class A {
 
   public function f() {
@@ -7,3 +9,5 @@ class A {
   }
 
 }
+
+?>
