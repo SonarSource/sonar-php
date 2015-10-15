@@ -24,7 +24,7 @@ plugin|ruling)
   fi
 
   cd its/$TEST
-  mvn -DphpVersion="DEV" -Dsonar.runtimeVersion="$SQ_VERSION" -Dmaven.test.redirectTestOutputToFile=false install
+  mvn -Dsonar.runtimeVersion="$SQ_VERSION" -Dmaven.test.redirectTestOutputToFile=false package
   ;;
 
 *)
