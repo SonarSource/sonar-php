@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class SelfKeywordUsageCheckTest extends CheckTest {
-
+public class SelfKeywordUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("SelfKeywordUsageCheck.php"), new SelfKeywordUsageCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(19).withMessage("Use \"static\" keyword instead of \"self\".")
-      .noMore();
+    PHPCheckTest.check(new SelfKeywordUsageCheck(), TestUtils.getCheckFile("SelfKeywordUsageCheck.php"));
   }
 
 }

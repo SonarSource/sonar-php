@@ -19,65 +19,43 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.grammar.GrammarRuleKey;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
 
 @Rule(
-  key = "S2037",
+  key = SelfKeywordUsageCheck.KEY,
   name = "Static members should be referenced with \"static::\"",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("2min")
-public class SelfKeywordUsageCheck extends SquidCheck<LexerlessGrammar> {
+public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
-  private boolean inFieldDeclaration = false;
-  private static final GrammarRuleKey[] FIELDS_DECLARATION = {
-    PHPGrammar.CLASS_VARIABLE_DECLARATION,
-    PHPGrammar.CLASS_CONSTANT_DECLARATION
-  };
+  public static final String KEY = "S2037";
+  private static final String MESSAGE = "Use \"static\" keyword instead of \"self\".";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CLASS_MEMBER_ACCESS);
-    subscribeTo(FIELDS_DECLARATION);
+  public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
+    // don't enter inside class property declarations
   }
 
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    inFieldDeclaration = false;
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(FIELDS_DECLARATION)) {
-      inFieldDeclaration = true;
+  public void visitMemberAccess(MemberAccessTree tree) {
+    if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) && "self".equals(CheckUtils.asString(tree.object()))) {
+      context().newIssue(KEY, MESSAGE).tree(tree);
     }
 
-    AstNode caller = astNode.getPreviousAstNode();
-
-    if (!inFieldDeclaration && "self".equals(caller.getTokenOriginalValue())) {
-      getContext().createLineViolation(this, "Use \"static\" keyword instead of \"self\".", caller);
-    }
-  }
-
-  @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(FIELDS_DECLARATION)) {
-      inFieldDeclaration = false;
-    }
+    super.visitMemberAccess(tree);
   }
 
 }

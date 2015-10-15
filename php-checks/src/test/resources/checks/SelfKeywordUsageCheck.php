@@ -16,7 +16,7 @@ class A {
   );
 
   public static function f1() {
-    return self::$field;       // NOK
+    return self::$field;       // NOK {{Use "static" keyword instead of "self".}}
   }
 
   public static function f2() {
