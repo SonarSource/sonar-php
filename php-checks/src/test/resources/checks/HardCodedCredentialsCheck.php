@@ -23,3 +23,13 @@ class A {
 
 const secretPassword = "xxx"; // NOK
 const otherConstant = "xxx";
+
+class A {
+  const constFieldNameWithPasswordInIt = ""; // NOK
+  const otherConstFieldName = "";
+}
+
+function foo() {
+  static $staticVariableNameWithPasswordInIt = "xxx"; // NOK
+  static $otherStaticVariableName = "xxx";
+}
