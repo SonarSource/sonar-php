@@ -20,8 +20,9 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import java.util.List;
  * Parent interface for {@link CaseClauseTree} and {@link DefaultClauseTree}.
  */
 @Beta
-public interface SwitchCaseClauseTree extends StatementTree {
+public interface SwitchCaseClauseTree extends Tree {
 
   SyntaxToken caseToken();
 

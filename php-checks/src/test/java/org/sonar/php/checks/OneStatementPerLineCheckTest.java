@@ -20,22 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class OneStatementPerLineCheckTest extends CheckTest {
+public class OneStatementPerLineCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("OneStatementPerLineCheck.php"), new OneStatementPerLineCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("2 statements were found on this line. Reformat the code to have only one statement per line.")
-      .next().atLine(5)
-      .next().atLine(17).withMessage("3 statements were found on this line. Reformat the code to have only one statement per line.")
-      .next().atLine(19)
-      .noMore();
+    PHPCheckTest.check(new OneStatementPerLineCheck(), TestUtils.getCheckFile("OneStatementPerLineCheck.php"));
   }
 }

@@ -1,6 +1,6 @@
 <?php
 
-doSomething(); doSomething();                   // NOK
+doSomething(); doSomething();                   // NOK {{2 statements were found on this line. Reformat the code to have only one statement per line.}}
 
 if ($a) doSomething();                          // NOK
 
@@ -14,9 +14,27 @@ label: while ($a) {                             // OK
 
 $a = function () { return 1; };                 // OK
 
-$a = call(function($a) { return 1; }, function($a) { return 1; });  // NOK
+$a = call(function($a) { return 1; }, function($a) { return 1; });  // NOK {{3 statements were found on this line. Reformat the code to have only one statement per line.}}
 
 $a = function () { doSomething(); return 1; };  // NOK - more than one statement nested in anonymous function.
+
+
+if (true) {
+
+} else if (true) {                                  // OK
+
+}
+
+if (true) {
+
+} elseif (true) {                                  // OK
+
+}
+
+switch (a) {
+  case 1 : echo 1;                              // OK
+  default : echo 2;
+}
 
 ?>
 
@@ -27,3 +45,6 @@ html
 html
 
 <h1 a="<?php echo $a;?>" b="<?php echo $b;?>">  // OK
+
+
+

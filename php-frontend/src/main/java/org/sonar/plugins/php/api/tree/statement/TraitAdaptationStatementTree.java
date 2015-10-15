@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
-
 @Beta
-public interface TraitAdaptationStatementTree extends StatementTree {
+public interface TraitAdaptationStatementTree extends Tree {
 
   SyntaxToken eosToken();
 
