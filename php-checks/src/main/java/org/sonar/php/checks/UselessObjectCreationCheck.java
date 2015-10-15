@@ -19,44 +19,49 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1848",
+  key = UselessObjectCreationCheck.KEY,
   name = "Objects should not be created to be dropped immediately without being used",
   tags = {"bug"},
   priority = Priority.CRITICAL)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class UselessObjectCreationCheck extends SquidCheck<LexerlessGrammar> {
+public class UselessObjectCreationCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1848";
+  private static final String MESSAGE = "Either remove this useless object instantiation of class \"%s\" or use it";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.EXPRESSION_STATEMENT);
+  public void visitExpressionStatement(ExpressionStatementTree tree) {
+    super.visitExpressionStatement(tree);
+
+    if (tree.expression().is(Tree.Kind.NEW_EXPRESSION)) {
+      String message = String.format(MESSAGE, getClassName(((NewExpressionTree) tree.expression()).expression()));
+      context().newIssue(KEY, message).tree(tree);
+    }
   }
 
-  @Override
-  public void visitNode(AstNode node) {
-    AstNode expression = node.getFirstChild(PHPGrammar.EXPRESSION);
-    AstNode postfixExpression = expression.getFirstChild(PHPGrammar.POSTFIX_EXPR);
-    if (postfixExpression != null) {
-      AstNode newExpression = postfixExpression.getFirstChild(PHPGrammar.NEW_EXPR);
-      if (newExpression != null) {
-        String className = CheckUtils.getExpressionAsString(newExpression.getFirstChild(PHPGrammar.MEMBER_EXPRESSION).getFirstChild());
-        getContext().createLineViolation(
-          this, "Either remove this useless object instantiation of class \"{0}\" or use it", node, className);
-      }
+  private static String getClassName(ExpressionTree expression) {
+    if (expression.is(Tree.Kind.FUNCTION_CALL)) {
+      return CheckUtils.asString(((FunctionCallTree) expression).callee());
+
+    } else {
+      return CheckUtils.asString(expression);
     }
   }
 

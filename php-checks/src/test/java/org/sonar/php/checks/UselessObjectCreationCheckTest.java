@@ -19,25 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class UselessObjectCreationCheckTest extends CheckTest {
-
-  @Rule
-  public CheckMessagesVerifierRule checkMessagesVerifier = new CheckMessagesVerifierRule();
+public class UselessObjectCreationCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(
-      TestUtils.getCheckFile("UselessObjectCreationCheck.php"), new UselessObjectCreationCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Either remove this useless object instantiation of class \"class1\" or use it");
+    PHPCheckTest.check(new UselessObjectCreationCheck(), TestUtils.getCheckFile("UselessObjectCreationCheck.php"));
   }
 }
