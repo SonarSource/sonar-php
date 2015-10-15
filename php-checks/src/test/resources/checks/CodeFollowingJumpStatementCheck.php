@@ -1,22 +1,22 @@
 <?php
 
 function f() {
-  return;
-  $a;            // NOK
+  return;            // NOK {{Remove the code after this "return".}}
+  $a;
 
   if (true) {
-    return;
-    $b;          // NOK
+    return;          // NOK
+    $b;
   } else {
     $c;
   }
 
   while (true) {
-    break;
-    $d;          // NOK
+    break;            // NOK {{Remove the code after this "break".}}
+    $d;
 
-    continue;
-    $e;          // NOK
+    continue;         // NOK {{Remove the code after this "continue".}}
+    $e;
 
     if (true) {
       break;
@@ -36,8 +36,8 @@ function f() {
 
   switch (a) {
   case 1: {
-    break;
-    $e;          // NOK
+    break;            // NOK
+    $e;
   }
   case 2:
     break;       // OK
@@ -49,8 +49,8 @@ function f() {
 
   try {
     $h;
-    throw ("MyException");
-    $i;          // NOK
+    throw ("MyException");          // NOK
+    $i;
   } catch (Exception $e) {
     $j;
     throw ("MyException");
@@ -71,9 +71,9 @@ function f() {
 
   $n; // TODO: NOK - both if branches returns, so this is also unreachable
 
-  return;
+  return;       // OK
 
-  function f(){  // OK
+  function f(){
   }
 
 }
@@ -83,6 +83,10 @@ function f2() {
 }
 
 function f3() {
-  return;;
-  $x;            // NOK
+  return;;            // NOK
+  $x;
 }
+
+return;         // NOK
+
+if (true) {}

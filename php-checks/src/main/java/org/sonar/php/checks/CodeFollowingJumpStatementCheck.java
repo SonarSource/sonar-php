@@ -19,56 +19,80 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
+
+import java.util.List;
 
 @Rule(
-  key = "S1763",
+  key = CodeFollowingJumpStatementCheck.KEY,
   name = "Jump statements should not be followed by other statements",
   priority = Priority.MAJOR,
   tags = {Tags.MISRA, Tags.CERT, Tags.CWE, Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class CodeFollowingJumpStatementCheck extends SquidCheck<LexerlessGrammar> {
+public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
+
+  public static final String KEY = "S1763";
+  private static final String MESSAGE = "Remove the code after this \"%s\".";
+
+  private static final Tree.Kind[] JUMP_KINDS = {
+    Tree.Kind.BREAK_STATEMENT,
+    Tree.Kind.RETURN_STATEMENT,
+    Tree.Kind.CONTINUE_STATEMENT,
+    Tree.Kind.THROW_STATEMENT
+  };
+
+  private static final Tree.Kind[] NO_ACTION_KINDS = {
+    Tree.Kind.EMPTY_STATEMENT,
+    Tree.Kind.CLASS_DECLARATION,
+    Tree.Kind.FUNCTION_DECLARATION,
+    Tree.Kind.INTERFACE_DECLARATION,
+    Tree.Kind.TRAIT_DECLARATION,
+    Tree.Kind.NAMESPACE_STATEMENT,
+    Tree.Kind.USE_CONST_STATEMENT,
+    Tree.Kind.USE_STATEMENT,
+    Tree.Kind.USE_FUNCTION_STATEMENT,
+    Tree.Kind.CONSTANT_DECLARATION
+  };
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.BREAK_STATEMENT,
-      PHPGrammar.RETURN_STATEMENT,
-      PHPGrammar.CONTINUE_STATEMENT,
-      PHPGrammar.THROW_STATEMENT);
+  public List<Tree.Kind> nodesToVisit() {
+    return CheckUtils.STATEMENT_CONTAINERS;
   }
 
   @Override
-  public void visitNode(AstNode node) {
-    AstNode statementNode = node.getParent();
+  public void visitNode(Tree tree) {
+    List<StatementTree> statements = CheckUtils.getStatements(tree);
 
-    AstNode nextStatement = nextStatement(statementNode);
-    if (nextStatement != null) {
-      getContext().createLineViolation(this, "Remove the code after this \"{0}\".", nextStatement,
-        node.getFirstChild().getTokenOriginalValue());
-    }
-  }
+    for (int i = 0; i < statements.size() - 1; i++) {
+      StatementTree currentStatement = statements.get(i);
 
-  private AstNode nextStatement(AstNode statementNode) {
-    AstNode next = statementNode.getNextSibling();
-    while (next != null) {
-      if (next.is(PHPGrammar.STATEMENT) && !next.getFirstChild().is(PHPGrammar.EMPTY_STATEMENT)) {
-        return next;
+      if (currentStatement.is(JUMP_KINDS) && hasActionStatementAfter(statements, i)) {
+        String message = String.format(MESSAGE, ((PHPTree) currentStatement).getFirstToken().text());
+        context().newIssue(KEY, message).tree(currentStatement);
       }
-      next = next.getNextSibling();
     }
-    return null;
+
+  }
+
+  private boolean hasActionStatementAfter(List<StatementTree> statements, int currentStatementNumber) {
+    for (int i = currentStatementNumber + 1; i < statements.size(); i++) {
+      if (!statements.get(i).is(NO_ACTION_KINDS)) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

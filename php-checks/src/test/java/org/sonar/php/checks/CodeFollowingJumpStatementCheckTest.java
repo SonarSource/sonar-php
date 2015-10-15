@@ -20,26 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class CodeFollowingJumpStatementCheckTest extends CheckTest {
+public class CodeFollowingJumpStatementCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("CodeFollowingJumpStatementCheck.php"), new CodeFollowingJumpStatementCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Remove the code after this \"return\".")
-      .next().atLine(9)
-      .next().atLine(16).withMessage("Remove the code after this \"break\".")
-      .next().atLine(19).withMessage("Remove the code after this \"continue\".")
-      .next().atLine(40)
-      .next().atLine(53).withMessage("Remove the code after this \"throw\".")
-      .next().atLine(87).withMessage("Remove the code after this \"return\".")
-      .noMore();
+    PHPCheckTest.check(new CodeFollowingJumpStatementCheck(), TestUtils.getCheckFile("CodeFollowingJumpStatementCheck.php"));
   }
 
 }
