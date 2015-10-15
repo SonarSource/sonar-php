@@ -19,27 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class SelfAssignmentCheckTest extends CheckTest {
-
-  @Rule
-  public CheckMessagesVerifierRule checkMessagesVerifier = new CheckMessagesVerifierRule();
+public class SelfAssignmentCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(
-      TestUtils.getCheckFile("SelfAssignmentCheck.php"), new SelfAssignmentCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Remove or correct this useless self-assignment")
-      .next().atLine(5)
-      .next().atLine(7);
+    PHPCheckTest.check(new SelfAssignmentCheck(), TestUtils.getCheckFile("SelfAssignmentCheck.php"));
   }
 }

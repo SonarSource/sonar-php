@@ -19,52 +19,50 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1656",
+  key = SelfAssignmentCheck.KEY,
   name = "Variables should not be self-assigned",
   tags = {"bug", "cert"},
   priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
 @SqaleConstantRemediation("3min")
-public class SelfAssignmentCheck extends SquidCheck<LexerlessGrammar> {
+public class SelfAssignmentCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1656";
+  private static final String MESSAGE = "Remove or correct this useless self-assignment";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.ASSIGNMENT_EXPR, PHPGrammar.ASSIGNMENT_BY_REFERENCE);
-  }
+  public void visitAssignmentExpression(AssignmentExpressionTree tree) {
+    super.visitAssignmentExpression(tree);
 
-  @Override
-  public void visitNode(AstNode node) {
-    AstNode assignedValue = node.getLastChild();
-    if (node.is(PHPGrammar.ASSIGNMENT_EXPR)) {
-      if (isCompoundAssignment(node)) {
-        return;
-      }
-      if (assignedValue.getFirstChild().getNumberOfChildren() == 1) {
-        assignedValue = assignedValue.getFirstChild().getFirstChild();
-      }
-    }
-    if (CheckUtils.areSyntacticallyEquivalent(node.getFirstChild(), assignedValue)) {
-      getContext().createLineViolation(this, "Remove or correct this useless self-assignment", node);
+    if (tree.is(Kind.ASSIGNMENT)) {
+      check(tree.variable(), tree.value());
     }
   }
 
-  private boolean isCompoundAssignment(AstNode node) {
-    return !node.getFirstChild(PHPGrammar.ASSIGNMENT_OPERATOR).getFirstChild().is(PHPPunctuator.EQU);
+  @Override
+  public void visitAssignmentByReference(AssignmentByReferenceTree tree) {
+    super.visitAssignmentByReference(tree);
+    check(tree.variable(), tree.value());
   }
 
+  private void check(ExpressionTree lhs, ExpressionTree rhs) {
+    if (CheckUtils.areSyntacticallyEquivalent(lhs, rhs)) {
+      context().newIssue(KEY, MESSAGE).tree(lhs);
+    }
+  }
 }
