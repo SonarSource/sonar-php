@@ -23,50 +23,67 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.sonar.sslr.api.AstNode;
+import javax.annotation.Nullable;
+import java.util.List;
 
 @Rule(
-  key = "S108",
+  key = EmptyNestedBlockCheck.KEY,
   name = "Nested blocks of code should not be left empty",
   priority = Priority.MAJOR,
   tags = Tags.BUG)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class EmptyNestedBlockCheck extends SquidCheck<LexerlessGrammar> {
+public class EmptyNestedBlockCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S108";
+  private static final String MESSAGE = "Either remove or fill this block of code.";
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.BLOCK,
-      PHPGrammar.SWITCH_CASE_LIST,
-      PHPGrammar.TRAIT_ADAPTATIONS);
-  }
-
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (isNested(astNode) && isEmptyBlock(astNode)) {
-      getContext().createLineViolation(this, "Either remove or fill this block of code.", astNode);
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    if (tree.body().is(Tree.Kind.BLOCK)) {
+      super.visitBlock((BlockTree) tree.body());
     }
   }
 
-  private static boolean isNested(AstNode node) {
-    return !node.getParent().is(PHPGrammar.METHOD_BODY, PHPGrammar.FUNCTION_DECLARATION);
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    super.visitBlock(tree.body());
   }
 
-  private static boolean isEmptyBlock(AstNode node) {
-    AstNode rightCurlyBrace = node.getFirstChild(PHPPunctuator.RCURLYBRACE);
-    return rightCurlyBrace != null && rightCurlyBrace.getPreviousAstNode().is(PHPPunctuator.LCURLYBRACE) && !hasComment(rightCurlyBrace);
+  @Override
+  public void visitBlock(BlockTree tree) {
+    super.visitBlock(tree);
+    check(tree.statements(), tree.closeCurlyBraceToken(), tree);
   }
 
-  private static boolean hasComment(AstNode node) {
-    return node.getToken().hasTrivia();
+  @Override
+  public void visitSwitchStatement(SwitchStatementTree tree) {
+    super.visitSwitchStatement(tree);
+    check(tree.cases(), tree.closeCurlyBraceToken(), tree.openCurlyBraceToken());
   }
+
+  @Override
+  public void visitUseTraitDeclaration(UseTraitDeclarationTree tree) {
+    super.visitUseTraitDeclaration(tree);
+    check(tree.adaptations(), tree.closeCurlyBraceToken(), tree.openCurlyBraceToken());
+  }
+
+  private <T extends Tree> void check(List<T> statements, @Nullable SyntaxToken lastToken, Tree issueTree) {
+    if (statements.isEmpty() && lastToken != null && lastToken.trivias().isEmpty()) {
+      context().newIssue(KEY, MESSAGE).tree(issueTree);
+    }
+  }
+
 }

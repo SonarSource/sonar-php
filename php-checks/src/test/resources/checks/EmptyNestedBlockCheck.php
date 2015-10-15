@@ -1,6 +1,6 @@
 <?php
 
-for ($i = 0; i < 42; i++){}  // NOK
+for ($i = 0; i < 42; i++){}  // NOK {{Either remove or fill this block of code.}}
 
 for ($i = 0; i < 42; i++);   // OK
 
@@ -11,19 +11,24 @@ if ($a == 3)                 // OK
 
 class c {
  use A {}                    // NOK
+ use A { /*some comment*/}                    // OK
 }
 
-try                          // NOK
-{
-} catch (Error $e)           // OK
+try
+{ }                           // NOK
+ catch (Error $e)           // OK
 {
   // Ignore
-} finally {
-}
+} finally { }                  // NOK
 
-switch ($a)                  // NOK
-{
-}
+
+switch ($a)
+{   }                         // NOK
+
+
+switch ($a)
+{   /*Some comment*/   }                      // OK
+
 
 switch ($a):                 // OK
 endswitch;
@@ -40,4 +45,13 @@ function f()                 // OK
   doSomething();
 }
 
-class c {}                   // OK
+function foo() {            // OK
+}
+
+class c {                  // OK
+}
+
+class d {
+  function foo(){         // OK
+  }
+}

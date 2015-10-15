@@ -20,23 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class EmptyNestedBlockCheckTest extends CheckTest {
+public class EmptyNestedBlockCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("EmptyNestedBlockCheck.php"), new EmptyNestedBlockCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Either remove or fill this block of code.")
-      .next().atLine(13)
-      .next().atLine(17)
-      .next().atLine(21)
-      .next().atLine(25)
-      .noMore();
+    PHPCheckTest.check(new EmptyNestedBlockCheck(), TestUtils.getCheckFile("EmptyNestedBlockCheck.php"));
   }
 }
