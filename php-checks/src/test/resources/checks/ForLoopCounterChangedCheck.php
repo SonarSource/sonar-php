@@ -1,7 +1,7 @@
 <?php
 
 for ($a = 0; $a < 42; $a++) {
-  $a = 0;                                // NOK
+  $a = 0;                                // NOK {{Refactor the code to avoid updating the loop counter "$a" within the loop body.}}
 }
 
 for ($a = 0; $a < 42; $a++):
@@ -63,7 +63,7 @@ for ($i = 0; $i < 10; $i++) {
 
 
 for ($a->i++; $a->i < 3; $a->i++) {
-  $a->i = 1;                              // NOK
+  $a->i = 1;                              // NOK {{Refactor the code to avoid updating the loop counter "$a->i" within the loop body.}}
 }
 
 for ($a->i++; $a->i < 3; $a->i++) {

@@ -19,125 +19,130 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Sets;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import javax.annotation.Nullable;
-
-import java.util.Collections;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.Set;
 
-import static org.sonar.php.parser.PHPGrammar.ASSIGNMENT_BY_REFERENCE;
-import static org.sonar.php.parser.PHPGrammar.ASSIGNMENT_EXPR;
-
 @Rule(
-  key = "S127",
+  key = ForLoopCounterChangedCheck.KEY,
   name = "\"for\" loop stop conditions should be invariant",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL, Tags.MISRA})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("10min")
-public class ForLoopCounterChangedCheck extends SquidCheck<LexerlessGrammar> {
+public class ForLoopCounterChangedCheck extends PHPVisitorCheck {
 
-  private Set<String> counters = Sets.newHashSet();
-  private Set<String> pendingCounters = Sets.newHashSet();
+  public static final String KEY = "S127";
+
+  private static final String MESSAGE = "Refactor the code to avoid updating the loop counter \"%s\" within the loop body.";
+
+  private static final Kind[] INCREMENT_DECREMENT = {
+    Kind.PREFIX_INCREMENT,
+    Kind.PREFIX_DECREMENT,
+    Kind.POSTFIX_INCREMENT,
+    Kind.POSTFIX_DECREMENT};
+
+  private Deque<Set<String>> counterStack = new ArrayDeque<>();
 
   @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    counters.clear();
-  }
-
-  @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.FOR_STATEMENT,
-      PHPGrammar.STATEMENT,
-
-      PHPGrammar.ASSIGNMENT_EXPR,
-      PHPGrammar.ASSIGNMENT_BY_REFERENCE,
-      PHPPunctuator.INC,
-      PHPPunctuator.DEC);
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    counterStack.clear();
+    super.visitCompilationUnit(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.FOR_STATEMENT)) {
-      pendingCounters = getLoopsCounters(astNode);
-    } else if (astNode.is(PHPGrammar.STATEMENT)) {
-      counters.addAll(pendingCounters);
-      pendingCounters = Collections.emptySet();
-    } else if (!counters.isEmpty() && astNode.is(ASSIGNMENT_EXPR, ASSIGNMENT_BY_REFERENCE, PHPPunctuator.INC, PHPPunctuator.DEC)) {
-      check(astNode);
+  public void visitForStatement(ForStatementTree forStatement) {
+    visitAll(forStatement.init());
+    visitAll(forStatement.condition());
+    visitAll(forStatement.update());
+
+    Set<String> newCounters = new HashSet<>();
+    if (!counterStack.isEmpty()) {
+      newCounters.addAll(counterStack.peek());
+    }
+    newCounters.addAll(getCounterNames(forStatement));
+
+    counterStack.push(newCounters);
+    visitAll(forStatement.statements());
+    counterStack.pop();
+  }
+
+  private void visitAll(Iterable<? extends Tree> trees) {
+    for (Tree tree : trees) {
+      tree.accept(this);
     }
   }
 
   @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(PHPGrammar.FOR_STATEMENT)) {
-      counters.removeAll(getLoopsCounters(astNode));
+  public void visitAssignmentExpression(AssignmentExpressionTree tree) {
+    checkVariable(tree.variable());
+    super.visitAssignmentExpression(tree);
+  }
+
+  @Override
+  public void visitAssignmentByReference(AssignmentByReferenceTree tree) {
+    checkVariable(tree.variable());
+    super.visitAssignmentByReference(tree);
+  }
+
+  @Override
+  public void visitPrefixExpression(UnaryExpressionTree tree) {
+    checkUnaryExpressionTree(tree);
+    super.visitPrefixExpression(tree);
+  }
+
+  @Override
+  public void visitPostfixExpression(UnaryExpressionTree tree) {
+    checkUnaryExpressionTree(tree);
+    super.visitPostfixExpression(tree);
+  }
+
+  private void checkUnaryExpressionTree(UnaryExpressionTree tree) {
+    if (tree.is(INCREMENT_DECREMENT)) {
+      checkVariable(tree.expression());
     }
   }
 
-  private void check(AstNode astNode) {
-    AstNode varNode;
-
-    if (astNode.is(ASSIGNMENT_EXPR, ASSIGNMENT_BY_REFERENCE)) {
-      varNode = astNode.getFirstChild();
-    } else {
-      // Increment or decrement
-      varNode = isPostUnaryExpr(astNode) ? astNode.getNextAstNode() : astNode.getPreviousAstNode();
-    }
-
-    String varName = CheckUtils.getExpressionAsString(varNode);
-
-    if (counters.contains(varName)) {
-      reportIssue(astNode, varName);
+  private void checkVariable(ExpressionTree variable) {
+    if (!counterStack.isEmpty()) {
+      String variableName = CheckUtils.asString(variable);
+      if (counterStack.peek().contains(variableName)) {
+        context().newIssue(KEY, String.format(MESSAGE, variableName)).tree(variable);
+      }
     }
   }
 
-  private void reportIssue(AstNode astNode, String counter) {
-    getContext().createLineViolation(this, "Refactor the code to avoid updating the loop counter \"{0}\" within the loop body.", astNode, counter);
-  }
+  private static Set<String> getCounterNames(ForStatementTree forStatement) {
+    Set<String> counterNames = new HashSet<>();
+    for (ExpressionTree initExpression : forStatement.init()) {
 
-  private Set<String> getLoopsCounters(AstNode astNode) {
-    Set<String> counterList = Sets.newHashSet();
-    AstNode forExpr = astNode.getFirstChild(PHPPunctuator.SEMICOLON).getPreviousAstNode();
+      if (initExpression.is(Kind.ASSIGNMENT)) {
+        counterNames.add(CheckUtils.asString(((AssignmentExpressionTree) initExpression).variable()));
+      } else if (initExpression.is(INCREMENT_DECREMENT)) {
+        counterNames.add(CheckUtils.asString(((UnaryExpressionTree) initExpression).expression()));
+      }
 
-    for (AstNode expr : forExpr.getChildren(PHPGrammar.EXPRESSION)) {
-      counterList.add(getCounterName(expr));
     }
-    return counterList;
-  }
-
-  private String getCounterName(AstNode expression) {
-    AstNode exprChild = expression.getFirstChild();
-    AstNode variable;
-
-    if (exprChild.is(PHPGrammar.POSTFIX_EXPR)) {
-      variable = exprChild.getFirstChild();
-    } else if (exprChild.is(PHPGrammar.UNARY_EXPR)) {
-      variable = exprChild.getLastChild();
-    } else {
-      variable = exprChild.getFirstChild().getFirstChild();
-    }
-
-    return CheckUtils.getExpressionAsString(variable);
-  }
-
-  private boolean isPostUnaryExpr(AstNode unaryOperator) {
-    return unaryOperator.getParent().is(PHPGrammar.UNARY_EXPR);
+    return counterNames;
   }
 
 }
