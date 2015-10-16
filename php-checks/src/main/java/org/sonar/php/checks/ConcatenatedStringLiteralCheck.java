@@ -19,75 +19,70 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Rule(
-  key = "S2005",
+  key = ConcatenatedStringLiteralCheck.KEY,
   name = "String literals should not be concatenated",
   priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("5min")
-public class ConcatenatedStringLiteralCheck extends SquidCheck<LexerlessGrammar> {
+public class ConcatenatedStringLiteralCheck extends PHPVisitorCheck {
 
-  private static class Expression {
-    AstNode node;
-    boolean isStringLiteral = false;
+  public static final String KEY = "S2005";
+  private static final String MESSAGE = "Combine these strings instead of concatenating them.";
 
-    private Expression(AstNode node) {
-      this.node = node;
-      AstNode child = this.node.getFirstChild();
+  private static final Kind[] STRING_KINDS = {
+    Kind.REGULAR_STRING_LITERAL,
+    Kind.EXPANDABLE_STRING_LITERAL
+  };
 
-      if (child.is(PHPGrammar.COMMON_SCALAR)) {
-        AstNode scalar = child.getFirstChild();
 
-        if (scalar.is(PHPGrammar.STRING_LITERAL)) {
-          isStringLiteral = true;
-        }
+  @Override
+  public void visitBinaryExpression(BinaryExpressionTree tree) {
+    List<ExpressionTree> arguments = getFlatConcatenationArguments(tree);
+
+    for (int i = 0; i < arguments.size() - 1; i++) {
+      if (arguments.get(i).is(STRING_KINDS) && arguments.get(i + 1).is(STRING_KINDS)) {
+        context().newIssue(KEY, MESSAGE).tree(arguments.get(i));
+        return;
       }
     }
 
-    public String getTokenValue() {
-      return node.getTokenOriginalValue();
+    if (arguments.isEmpty()) {
+      super.visitBinaryExpression(tree);
     }
-
   }
 
-  @Override
-  public void init() {
-    subscribeTo(PHPGrammar.CONCATENATION_EXPR);
-  }
+  private static List<ExpressionTree> getFlatConcatenationArguments(BinaryExpressionTree tree) {
+    List<ExpressionTree> arguments = new ArrayList<>();
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    Iterator<AstNode> childIt = astNode.getChildren().iterator();
-    Expression previousExpr = new Expression(childIt.next());
+    ExpressionTree currentExpression = tree;
 
-    while (childIt.hasNext()) {
-      AstNode currentNode = childIt.next();
-
-      if (!currentNode.is(PHPPunctuator.DOT)) {
-        Expression currentExpr = new Expression(currentNode);
-
-        if (previousExpr.isStringLiteral && currentExpr.isStringLiteral) {
-          getContext().createLineViolation(this, "Combine these strings instead of concatenating them.", previousExpr.node,
-            previousExpr.getTokenValue(), currentExpr.getTokenValue());
-          // On issue per concatenation expression is reported
-          break;
-        }
-        previousExpr = currentExpr;
-      }
+    while (currentExpression.is(Kind.CONCATENATION)) {
+      arguments.add(((BinaryExpressionTree) currentExpression).rightOperand());
+      currentExpression = ((BinaryExpressionTree) currentExpression).leftOperand();
     }
+
+    if (currentExpression.is(STRING_KINDS)) {
+      arguments.add(currentExpression);
+    }
+
+    Collections.reverse(arguments);
+
+    return arguments;
   }
 
 }

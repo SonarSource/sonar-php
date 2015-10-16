@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ConcatenatedStringLiteralCheckTest extends CheckTest {
+public class ConcatenatedStringLiteralCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ConcatenatedStringLiteralCheck.php"), new ConcatenatedStringLiteralCheck());
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Combine these strings instead of concatenating them.")
-      .next().atLine(4)
-      .next().atLine(5)
-      .noMore();
+    PHPCheckTest.check(new ConcatenatedStringLiteralCheck(), TestUtils.getCheckFile("ConcatenatedStringLiteralCheck.php"));
   }
 
 }
