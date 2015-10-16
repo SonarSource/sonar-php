@@ -19,37 +19,39 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S2043",
+  key = DirectlyAccessingSuperGlobalCheck.KEY,
   name = "Superglobals should not be accessed directly",
   priority = Priority.MAJOR,
   tags = {Tags.SECURITY})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INPUT_VALIDATION_AND_REPRESENTATION)
 @SqaleConstantRemediation("15min")
-public class DirectlyAccessingSuperGlobalCheck extends SquidCheck<LexerlessGrammar> {
+public class DirectlyAccessingSuperGlobalCheck extends PHPVisitorCheck {
+
+  private static final String MESSAGE = "Do not access \"%s\" directly.";
+  public static final String KEY = "S2043";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.VAR_IDENTIFIER);
+  public void visitVariableIdentifier(VariableIdentifierTree tree) {
+    checkVariable(tree.variableExpression().token());
+    super.visitVariableIdentifier(tree);
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    String varName = astNode.getTokenOriginalValue();
+  private void checkVariable(SyntaxToken variable) {
+    String name = variable.text();
 
-    if (CheckUtils.PREDEFINED_VARIABLES.values().contains(varName)) {
-      getContext().createLineViolation(this, "Do not access \"{0}\" directly.", astNode, varName);
+    if (CheckUtils.PREDEFINED_VARIABLES.values().contains(name)) {
+      context().newIssue(KEY, String.format(MESSAGE, name)).tree(variable);
     }
   }
 

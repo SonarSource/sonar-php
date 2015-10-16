@@ -20,20 +20,15 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class DirectlyAccessingSuperGlobalCheckTest extends CheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("DirectlyAccessingSuperGlobalCheck.php"), new DirectlyAccessingSuperGlobalCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Do not access \"$_POST\" directly.")
-      .noMore();
+    PHPCheckTest.check(new DirectlyAccessingSuperGlobalCheck(), TestUtils.getCheckFile("DirectlyAccessingSuperGlobalCheck.php"));
   }
 
 }
