@@ -20,38 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class ForLoopCounterChangedCheckTest extends CheckTest {
+public class ForLoopCounterChangedCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("ForLoopCounterChangedCheck.php"), new ForLoopCounterChangedCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Refactor the code to avoid updating the loop counter \"$a\" within the loop body.")
-      .next().atLine(8)
-      .next().atLine(12)
-      .next().atLine(13)
-      .next().atLine(18)
-      .next().atLine(21)
-      .next().atLine(22)
-      .next().atLine(24)
-      .next().atLine(31)
-      .next().atLine(32)
-      .next().atLine(42)
-      .next().atLine(43)
-      .next().atLine(44)
-      .next().atLine(45)
-      .next().atLine(49)
-      .next().atLine(58)
-      .next().atLine(60)
-      .next().atLine(66)
-      .next().atLine(79)
-      .next().atLine(87)
-      .noMore();
+    PHPCheckTest.check(new ForLoopCounterChangedCheck(), TestUtils.getCheckFile("ForLoopCounterChangedCheck.php"));
   }
+
 }
