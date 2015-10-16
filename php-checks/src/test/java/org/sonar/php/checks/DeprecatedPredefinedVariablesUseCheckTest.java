@@ -20,20 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class DeprecatedPredefinedVariablesUseCheckTest extends CheckTest {
+public class DeprecatedPredefinedVariablesUseCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("DeprecatedPredefinedVariablesUseCheck.php"), new DeprecatedPredefinedVariablesUseCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(5).withMessage("Replace this use of the deprecated \"$HTTP_POST_VARS\" variable with \"$_POST\".")
-      .next().atLine(8).withMessage("Replace this use of the deprecated \"$HTTP_GET_VARS\" variable with \"$_GET\".")
-      .noMore();
+    PHPCheckTest.check(new DeprecatedPredefinedVariablesUseCheck(), TestUtils.getCheckFile("DeprecatedPredefinedVariablesUseCheck.php"));
   }
+
 }

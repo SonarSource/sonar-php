@@ -19,56 +19,49 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 @Rule(
-  key = "S1600",
+  key = DeprecatedPredefinedVariablesUseCheck.KEY,
   name = "Deprecated predefined variables should not be used",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.COMPILER_RELATED_PORTABILITY)
 @SqaleConstantRemediation("2min")
-public class DeprecatedPredefinedVariablesUseCheck extends SquidCheck<LexerlessGrammar> {
+public class DeprecatedPredefinedVariablesUseCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1600";
+  private static final String MESSAGE = "Replace this use of the deprecated \"%s\" variable with \"%s\".";
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.COMPOUND_VARIABLE);
+  public void visitVariableIdentifier(VariableIdentifierTree tree) {
+    checkVariable(tree.variableExpression().token());
+    super.visitVariableIdentifier(tree);
   }
 
-  @Override
-  public void visitNode(AstNode astNode) {
-    if (isSimpleVariable(astNode)) {
-      String varName = astNode.getFirstChild().getTokenOriginalValue();
+  private void checkVariable(SyntaxToken variable) {
+    String name = variable.text();
 
-      if (CheckUtils.PREDEFINED_VARIABLES.containsKey(varName)) {
-        getContext().createLineViolation(this, "Replace this use of the deprecated \"{0}\" variable with \"{1}\".", astNode, varName, CheckUtils.PREDEFINED_VARIABLES.get(varName));
-      }
+    if (CheckUtils.PREDEFINED_VARIABLES.containsKey(name)) {
+      String message = String.format(MESSAGE, name, CheckUtils.PREDEFINED_VARIABLES.get(name));
+      context().newIssue(KEY, message).tree(variable);
     }
   }
 
-  private static boolean isSimpleVariable(AstNode compoundNode) {
-    AstNode compoundChild = compoundNode.getFirstChild();
-    if (compoundChild.isNot(PHPGrammar.VAR_IDENTIFIER)) {
-      return false;
-    }
-
-    return isNotVariableVariables(compoundNode) && compoundChild.getPreviousAstNode().isNot(PHPPunctuator.ARROW, PHPPunctuator.DOUBLECOLON, PHPPunctuator.DOLLAR_LCURLY);
+  @Override
+  public void visitMemberAccess(MemberAccessTree tree) {
+    // skip
   }
 
-  private static boolean isNotVariableVariables(AstNode compoundNode) {
-    AstNode compoundParentPreviousNode = compoundNode.getParent().getPreviousAstNode();
-    return compoundParentPreviousNode != null && compoundParentPreviousNode.isNot(PHPGrammar.SIMPLE_INDIRECT_REFERENCE);
-  }
 }
