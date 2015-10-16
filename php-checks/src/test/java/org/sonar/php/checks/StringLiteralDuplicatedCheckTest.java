@@ -19,33 +19,28 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.Issue;
 
-public class StringLiteralDuplicatedCheckTest extends CheckTest {
+import java.util.List;
+
+public class StringLiteralDuplicatedCheckTest {
 
   private StringLiteralDuplicatedCheck check = new StringLiteralDuplicatedCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(10).withMessage("Define a constant instead of duplicating this literal \"aaaaa\" 3 times.")
-      .next().atLine(14).withMessage("Define a constant instead of duplicating this literal \"$toto\" 3 times.")
-      .next().atLine(18).withMessage("Define a constant instead of duplicating this literal \"name1\" 4 times.")
-      .noMore();
+    PHPCheckTest.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"));
   }
 
   @Test
   public void custom() throws Exception {
     check.threshold = 4;
-
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), check);
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(18)
-      .noMore();
+    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Define a constant instead of duplicating this literal \"name1\" 4 times.").line(18));
+    PHPCheckTest.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), issue);
   }
 }

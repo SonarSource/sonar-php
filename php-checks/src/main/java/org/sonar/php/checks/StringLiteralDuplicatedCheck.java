@@ -19,8 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import java.util.Map;
-
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
@@ -28,29 +27,35 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import com.google.common.collect.Maps;
-import com.sonar.sslr.api.AstNode;
+import java.util.Map;
 
 @Rule(
-  key = "S1192",
+  key = StringLiteralDuplicatedCheck.KEY,
   name = "String literals should not be duplicated",
   priority = Priority.MINOR,
   tags = {Tags.DESIGN})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
 @SqaleLinearWithOffsetRemediation(coeff = "2min", offset = "2min", effortToFixDescription = "per duplicate instance")
-public class StringLiteralDuplicatedCheck extends SquidCheck<LexerlessGrammar> {
+public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1192";
+  private static final String MESSAGE = "Define a constant instead of duplicating this literal \"%s\" %s times.";
 
   private static final Integer MINIMAL_LITERAL_LENGTH = 5;
 
-  private final Map<String, Integer> firstOccurrence = Maps.newHashMap();
-  private final Map<String, Integer> literalsOccurrences = Maps.newHashMap();
+  private final Map<String, Integer> firstOccurrenceLines = Maps.newHashMap();
+  private final Map<String, Integer> sameLiteralOccurrencesCounter = Maps.newHashMap();
 
   public static final int DEFAULT = 3;
 
@@ -60,53 +65,52 @@ public class StringLiteralDuplicatedCheck extends SquidCheck<LexerlessGrammar> {
   int threshold = DEFAULT;
 
   @Override
-  public void init() {
-    subscribeTo(PHPGrammar.STRING_LITERAL);
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    firstOccurrenceLines.clear();
+    sameLiteralOccurrencesCounter.clear();
+
+    super.visitCompilationUnit(tree);
+
+    finish();
   }
 
-  @Override
-  public void visitFile(AstNode node) {
-    firstOccurrence.clear();
-    literalsOccurrences.clear();
-  }
-
-  @Override
-  public void visitNode(AstNode node) {
-    String literal = getStringLiteralValue(node);
-    visitOccurrence(StringUtils.substring(literal, 1, literal.length() - 1), node.getTokenLine());
-  }
-
-  @Override
-  public void leaveFile(AstNode node) {
-    for (Map.Entry<String, Integer> literalOccurrences : literalsOccurrences.entrySet()) {
+  private void finish() {
+    for (Map.Entry<String, Integer> literalOccurrences : sameLiteralOccurrencesCounter.entrySet()) {
       Integer occurrences = literalOccurrences.getValue();
 
       if (occurrences >= threshold) {
         String literal = literalOccurrences.getKey();
-
-        getContext().createLineViolation(this, "Define a constant instead of duplicating this literal \"{0}\" {1} times.", firstOccurrence.get(literal),
-          literal, occurrences);
+        String message = String.format(MESSAGE, literal, occurrences);
+        context().newIssue(KEY, message).line(firstOccurrenceLines.get(literal));
       }
     }
   }
 
-  private void visitOccurrence(String literal, int line) {
-    if (literal.length() >= MINIMAL_LITERAL_LENGTH) {
-      if (!firstOccurrence.containsKey(literal)) {
-        firstOccurrence.put(literal, line);
-        literalsOccurrences.put(literal, 1);
+  @Override
+  public void visitLiteral(LiteralTree tree) {
+    if (tree.is(Kind.REGULAR_STRING_LITERAL)) {
+      visitOccurrence(tree.value(), tree);
+    }
+  }
+
+  @Override
+  public void visitExpandableStringLiteral(ExpandableStringLiteralTree tree) {
+    visitOccurrence(CheckUtils.asString(tree), tree);
+  }
+
+  private void visitOccurrence(String literal, Tree tree) {
+    String value = StringUtils.substring(literal, 1, literal.length() - 1);
+
+    if (value.length() >= MINIMAL_LITERAL_LENGTH) {
+
+      if (!sameLiteralOccurrencesCounter.containsKey(value)) {
+        sameLiteralOccurrencesCounter.put(value, 1);
+        firstOccurrenceLines.put(value, ((PHPTree) tree).getLine());
+
       } else {
-        int occurrences = literalsOccurrences.get(literal);
-        literalsOccurrences.put(literal, occurrences + 1);
+        int occurrences = sameLiteralOccurrencesCounter.get(value);
+        sameLiteralOccurrencesCounter.put(value, occurrences + 1);
       }
-    }
-  }
-
-  private static String getStringLiteralValue(AstNode stringLiteral) {
-    if (stringLiteral.getFirstChild().is(PHPGrammar.ENCAPS_STRING_LITERAL)) {
-      return CheckUtils.getExpressionAsString(stringLiteral);
-    } else {
-      return stringLiteral.getTokenOriginalValue();
     }
   }
 
