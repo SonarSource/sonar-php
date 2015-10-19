@@ -20,35 +20,15 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
 import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class BooleanEqualityComparisonCheckTest extends CheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("BooleanEqualityComparisonCheck.php"), new BooleanEqualityComparisonCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Remove the literal \"true\" boolean value.")
-      .next().atLine(4).withMessage("Remove the literal \"false\" boolean value.")
-      .next().atLine(5)
-      .next().atLine(6)
-      .next().atLine(7)
-      .next().atLine(8)
-      .next().atLine(9)
-      .next().atLine(10)
-      .next().atLine(11)
-      .next().atLine(12)
-      .next().atLine(13)
-      .next().atLine(14)
-      .next().atLine(15)
-      .next().atLine(16)
-      .next().atLine(17)
-      .next().atLine(18)
-      .next().atLine(18)
-      .noMore();
+    PHPCheckTest.check(new BooleanEqualityComparisonCheck(), TestUtils.getCheckFile("BooleanEqualityComparisonCheck.php"));
   }
+
 }

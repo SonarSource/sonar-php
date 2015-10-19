@@ -1,7 +1,7 @@
 <?php
 
-!true;            // NOK
-!false;           // NOK
+!true;            // NOK {{Remove the literal "true" boolean value.}}
+!false;           // NOK {{Remove the literal "false" boolean value.}}
 a == false;       // NOK
 a == true;        // NOK
 a != false;       // NOK
@@ -14,8 +14,12 @@ false && foo();   // NOK
 foo() || true;    // NOK
 a == true == b;   // NOK
 a ? true : b;     // NOK
+a ? : true;       // NOK
 a ? b : false;    // NOK
-a || true || b || true; // NOK
+
+a || true         // NOK
+  || b
+  || true;        // NOK
 
 a === false;      // OK - exception
 a === true;       // OK - exception

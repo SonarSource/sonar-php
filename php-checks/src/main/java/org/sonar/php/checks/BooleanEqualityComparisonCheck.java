@@ -19,131 +19,71 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Maps;
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.api.PHPPunctuator;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
-
-import javax.annotation.Nullable;
-
-import java.util.Map;
 
 @Rule(
-  key = "S1125",
+  key = BooleanEqualityComparisonCheck.KEY,
   name = "Literal boolean values should not be used in condition expressions",
   priority = Priority.MINOR,
   tags = Tags.CLUMSY)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class BooleanEqualityComparisonCheck extends SquidCheck<LexerlessGrammar> {
+public class BooleanEqualityComparisonCheck extends PHPVisitorCheck {
 
-  private Map<Integer, Integer> alreadyChecked = Maps.newHashMap();
+  public static final String KEY = "S1125";
+  private static final String MESSAGE = "Remove the literal \"%s\" boolean value.";
+  private static final Kind[] BINARY_CONDITIONAL_KINDS = {
+    Kind.CONDITIONAL_OR,
+    Kind.ALTERNATIVE_CONDITIONAL_OR,
+    Kind.CONDITIONAL_AND,
+    Kind.ALTERNATIVE_CONDITIONAL_AND,
+    Kind.EQUAL_TO,
+    Kind.NOT_EQUAL_TO,
+    Kind.ALTERNATIVE_NOT_EQUAL_TO
+  };
 
   @Override
-  public void init() {
-    subscribeTo(
-      PHPGrammar.UNARY_EXPR,
-      PHPGrammar.CONDITIONAL_EXPR,
-      PHPGrammar.EQUALITY_OPERATOR,
-      PHPGrammar.LOGICAL_AND_OPERATOR,
-      PHPGrammar.LOGICAL_OR_OPERATOR);
+  public void visitConditionalExpression(ConditionalExpressionTree tree) {
+    check(tree.condition(), tree.falseExpression(), tree.trueExpression());
+    super.visitConditionalExpression(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (!isIdentityComparison(astNode)) {
-      AstNode boolLiteral = getBooleanLiteralFromExpression(astNode);
+  public void visitPrefixExpression(UnaryExpressionTree tree) {
+    if (tree.is(Kind.LOGICAL_COMPLEMENT)) {
+      check(tree.expression());
+    }
+    super.visitPrefixExpression(tree);
+  }
 
-      if (boolLiteral != null && !isAlreadyChecked(boolLiteral)) {
-        getContext().createLineViolation(this, "Remove the literal \"" + boolLiteral.getTokenOriginalValue() + "\" boolean value.", astNode);
-        alreadyChecked.put(boolLiteral.getTokenLine(), boolLiteral.getToken().getColumn());
+  @Override
+  public void visitBinaryExpression(BinaryExpressionTree tree) {
+    if (tree.is(BINARY_CONDITIONAL_KINDS)) {
+      check(tree.leftOperand(), tree.rightOperand());
+    }
+    super.visitBinaryExpression(tree);
+  }
+
+  private void check(ExpressionTree... expressions) {
+    for (ExpressionTree expression : expressions) {
+      if (expression != null && expression.is(Kind.BOOLEAN_LITERAL)) {
+        context().newIssue(KEY, String.format(MESSAGE, ((LiteralTree) expression).value()))
+          .tree(expression);
       }
     }
-  }
-
-  private boolean isIdentityComparison(AstNode astNode) {
-    return astNode.is(PHPGrammar.EQUALITY_OPERATOR)
-      && astNode.getFirstChild().is(PHPPunctuator.EQUAL2, PHPPunctuator.NOTEQUAL2);
-  }
-
-  @Override
-  public void visitFile(@Nullable AstNode astNode) {
-    alreadyChecked.clear();
-  }
-
-  private static AstNode getBooleanLiteralFromExpression(AstNode expression) {
-    if (expression.is(PHPGrammar.UNARY_EXPR)) {
-      return getLiteralFromUnaryExpression(expression);
-
-    } else if (expression.is(PHPGrammar.CONDITIONAL_EXPR)) {
-      return getLiteralFromConditionalExpression(expression);
-
-    } else {
-      return getLiteralFromLogicalOrEqualityComparison(expression);
-    }
-  }
-
-  private static AstNode getLiteralFromLogicalOrEqualityComparison(AstNode operator) {
-    AstNode leftExpr = operator.getPreviousAstNode();
-    AstNode rightExpr = operator.getNextAstNode();
-
-    if (isBooleanLiteral(leftExpr)) {
-      return leftExpr;
-    } else if (isBooleanLiteral(rightExpr)) {
-      return rightExpr;
-    } else {
-      return null;
-    }
-  }
-
-  private static AstNode getLiteralFromConditionalExpression(AstNode conditionalExpr) {
-    AstNode booleanLiteral = null;
-
-    AstNode colonNode = conditionalExpr.getFirstChild(PHPPunctuator.COLON);
-    AstNode leftExpr = colonNode.getPreviousAstNode();
-    AstNode rightExpr = colonNode.getNextAstNode();
-
-
-    if (isBooleanLiteral(leftExpr)) {
-      booleanLiteral = leftExpr;
-    }
-    if (isBooleanLiteral(rightExpr)) {
-      booleanLiteral = rightExpr;
-    }
-    return booleanLiteral;
-  }
-
-  private static AstNode getLiteralFromUnaryExpression(AstNode unaryExpression) {
-    AstNode boolLiteral = null;
-
-    if (unaryExpression.getFirstChild().is(PHPPunctuator.BANG)) {
-      AstNode expr = unaryExpression.getLastChild();
-
-      if (isBooleanLiteral(expr)) {
-        boolLiteral = expr;
-      }
-    }
-    return boolLiteral;
-  }
-
-  private static boolean isBooleanLiteral(AstNode astNode) {
-    return astNode.is(PHPGrammar.POSTFIX_EXPR)
-      && astNode.getFirstChild().is(PHPGrammar.COMMON_SCALAR)
-      && astNode.getFirstChild().getFirstChild().is(PHPGrammar.BOOLEAN_LITERAL);
-  }
-
-  private boolean isAlreadyChecked(AstNode boolLiteral) {
-    Integer column = alreadyChecked.get(boolLiteral.getTokenLine());
-    return column != null && column.equals(boolLiteral.getToken().getColumn());
   }
 
 }
