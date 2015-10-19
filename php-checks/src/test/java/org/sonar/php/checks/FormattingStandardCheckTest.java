@@ -20,11 +20,10 @@
 package org.sonar.php.checks;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.sonar.plugins.php.CheckTest;
 
 import java.lang.reflect.Field;
 
-abstract public class FormattingStandardCheckTest extends CheckTest {
+abstract public class FormattingStandardCheckTest {
 
   protected FormattingStandardCheck check = new FormattingStandardCheck();
   protected static final String TEST_DIR = "formattingCheck/";
