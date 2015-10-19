@@ -33,6 +33,7 @@ import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
+import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.PersistenceMode;
@@ -45,6 +46,7 @@ import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.metrics.FileLinesVisitor;
+import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.squidbridge.AstScanner;
@@ -77,17 +79,19 @@ public class PHPSensor implements Sensor {
   private final FilePredicate mainFilePredicate;
   private final FileLinesContextFactory fileLinesContextFactory;
   private final Checks<CodeVisitor> checks;
+  private final NoSonarFilter noSonarFilter;
   private AstScanner<LexerlessGrammar> scanner;
   private SensorContext context;
 
   public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem filesystem,
-                   FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory) {
+                   FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
     this.checks = checkFactory
       .<CodeVisitor>create(CheckList.REPOSITORY_KEY)
       .addAnnotatedChecks(CheckList.getChecks());
     this.resourcePerspectives = resourcePerspectives;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.fileSystem = filesystem;
+    this.noSonarFilter = noSonarFilter;
     this.mainFilePredicate = fileSystem.predicates().and(
       fileSystem.predicates().hasType(InputFile.Type.MAIN),
       fileSystem.predicates().hasLanguage(Php.KEY));
@@ -133,12 +137,33 @@ public class PHPSensor implements Sensor {
     progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
     for (InputFile inputFile : inputFiles) {
-      saveIssues(phpAnalyzer.analyze(inputFile.file()), inputFile);
       progressReport.nextFile();
+      phpAnalyzer.nextFile(inputFile.file());
+
+      saveIssues(phpAnalyzer.analyze(), inputFile);
+//      saveNewFileMeasures(phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
     }
 
     progressReport.stop();
 
+  }
+
+  private void saveNewFileMeasures(FileMeasures fileMeasures, InputFile inputFile) {
+    context.saveMeasure(inputFile, CoreMetrics.LINES, fileMeasures.getLinesNumber());
+    context.saveMeasure(inputFile, CoreMetrics.NCLOC, fileMeasures.getLinesOfCodeNumber());
+    context.saveMeasure(inputFile, CoreMetrics.COMMENT_LINES, fileMeasures.getCommentLinesNumber());
+    context.saveMeasure(inputFile, CoreMetrics.CLASSES, fileMeasures.getClassNumber());
+    context.saveMeasure(inputFile, CoreMetrics.FUNCTIONS, fileMeasures.getFunctionNumber());
+    context.saveMeasure(inputFile, CoreMetrics.STATEMENTS, fileMeasures.getStatementNumber());
+
+    context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY, fileMeasures.getFileComplexity());
+    context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY_IN_CLASSES, fileMeasures.getClassComplexity());
+    context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, fileMeasures.getFunctionComplexity());
+
+    context.saveMeasure(inputFile, fileMeasures.getFunctionComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
+    context.saveMeasure(inputFile, fileMeasures.getFileComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
+
+    noSonarFilter.addComponent(context.getResource(inputFile).getEffectiveKey(), fileMeasures.getNoSonarLines());
   }
 
   private void save(Collection<SourceCode> squidSourceFiles) {

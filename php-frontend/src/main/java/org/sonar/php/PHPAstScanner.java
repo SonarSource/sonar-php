@@ -19,8 +19,6 @@
  */
 package org.sonar.php;
 
-import org.sonar.squidbridge.ProgressAstScanner;
-
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
@@ -33,6 +31,7 @@ import org.sonar.php.parser.PHPParser;
 import org.sonar.php.parser.PHPTokenType;
 import org.sonar.squidbridge.AstScanner;
 import org.sonar.squidbridge.CommentAnalyser;
+import org.sonar.squidbridge.ProgressAstScanner;
 import org.sonar.squidbridge.SourceCodeBuilderCallback;
 import org.sonar.squidbridge.SourceCodeBuilderVisitor;
 import org.sonar.squidbridge.SquidAstVisitor;

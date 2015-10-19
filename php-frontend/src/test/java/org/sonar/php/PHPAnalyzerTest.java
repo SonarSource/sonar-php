@@ -44,7 +44,8 @@ public class PHPAnalyzerTest {
     File file =  tmpFolder.newFile();
     FileUtils.write(file, "<?php $a = 1;");
 
-    List<Issue> issues = analyzer.analyze(file);
+    analyzer.nextFile(file);
+    List<Issue> issues = analyzer.analyze();
     assertThat(issues).hasSize(1);
     assertThat(issues.get(0).line()).isEqualTo(1);
     assertThat(issues.get(0).ruleKey()).isEqualTo(DummyCheck.KEY);

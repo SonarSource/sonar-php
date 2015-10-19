@@ -29,11 +29,13 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Resource;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
@@ -57,13 +59,13 @@ public class PHPSensorTest {
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-    sensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory);
+    sensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter());
   }
 
   @Test
   public void shouldExecuteOnProject() {
     DefaultFileSystem localFS = new DefaultFileSystem();
-    PHPSensor localSensor = new PHPSensor(mock(ResourcePerspectives.class), localFS, null, new CheckFactory(mock(ActiveRules.class)));
+    PHPSensor localSensor = new PHPSensor(mock(ResourcePerspectives.class), localFS, null, new CheckFactory(mock(ActiveRules.class)), new NoSonarFilter());
 
     // empty file system
     assertThat(localSensor.shouldExecuteOnProject(null), is(false));
@@ -80,6 +82,10 @@ public class PHPSensorTest {
       .setType(InputFile.Type.MAIN)
       .setLanguage(Php.KEY));
 
+    Resource resource = mock(Resource.class);
+
+    when(resource.getEffectiveKey()).thenReturn("someKey");
+    when(context.getResource(any(InputFile.class))).thenReturn(resource);
     sensor.analyse(new Project(""), context);
 
     verify(context).saveMeasure(Mockito.any(File.class), Mockito.eq(CoreMetrics.FILES), Mockito.eq(1.0));
@@ -92,6 +98,7 @@ public class PHPSensorTest {
     verify(context).saveMeasure(Mockito.any(File.class), Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(7.0));
     verify(context).saveMeasure(Mockito.any(File.class), Mockito.eq(CoreMetrics.FUNCTIONS), Mockito.eq(3.0));
     verify(context).saveMeasure(Mockito.any(File.class), Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(12.0));
+
   }
 
 }

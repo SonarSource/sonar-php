@@ -21,7 +21,10 @@ package org.sonar.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
+import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.metrics.FileMeasures;
+import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -37,6 +40,9 @@ public class PHPAnalyzer {
   private final ActionParser<Tree> parser;
   private final ImmutableList<PHPCheck> checks;
 
+  private CompilationUnitTree currentFileTree;
+  private File currentFile;
+
   public PHPAnalyzer(Charset charset, ImmutableList<PHPCheck> checks) {
     this.parser = PHPParserBuilder.createParser(charset);
     this.checks = checks;
@@ -49,16 +55,23 @@ public class PHPAnalyzer {
     }
   }
 
-  public List<Issue> analyze(File file) {
+  public void nextFile(File file) {
     // fixme : handle parsing exceptions
-    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
+    currentFile = file;
+    currentFileTree = (CompilationUnitTree) parser.parse(file);
+  }
 
+  public List<Issue> analyze() {
     ImmutableList.Builder<Issue> issuesBuilder = ImmutableList.builder();
     for (PHPCheck check : checks) {
-      issuesBuilder.addAll(check.analyze(file, tree));
+      issuesBuilder.addAll(check.analyze(currentFile, currentFileTree));
     }
 
     return issuesBuilder.build();
+  }
+
+  public FileMeasures computeMeasures(FileLinesContext fileLinesContext) {
+    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext);
   }
 
 }
