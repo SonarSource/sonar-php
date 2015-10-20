@@ -19,31 +19,23 @@
  */
 package org.sonar.php.metrics;
 
-import org.junit.Test;
-import org.sonar.api.measures.FileLinesContext;
+import com.google.common.base.Charsets;
+import com.sonar.sslr.api.typed.ActionParser;
+import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 
 import java.io.File;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+public class MetricTest {
 
-public class MetricsVisitorTest extends MetricTest {
+  protected ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT, Charsets.UTF_8);
 
-  @Test
-  public void test() {
-    String filename = "lines_of_code.php";
-    File file = new File(filename);
+  protected CompilationUnitTree parse(String filename) {
+    File file = new File("src/test/resources/metrics/", filename);
 
-    FileLinesContext linesContext = mock(FileLinesContext.class);
-
-    MetricsVisitor metricsVisitor = new MetricsVisitor();
-
-    FileMeasures fileMeasures = metricsVisitor.getFileMeasures(file, parse(filename), linesContext);
-
-    // fixme : finish this test
-    assertThat(fileMeasures.getFileComplexity()).isEqualTo(1.0);
-    assertThat(fileMeasures.getFunctionNumber()).isEqualTo(1.0);
-    assertThat(fileMeasures.getStatementNumber()).isEqualTo(0.0);
-    assertThat(fileMeasures.getClassNumber()).isEqualTo(1.0);
+    ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
+    return (CompilationUnitTree) parser.parse(file);
   }
 }

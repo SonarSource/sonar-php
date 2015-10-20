@@ -20,30 +20,28 @@
 package org.sonar.php.metrics;
 
 import org.junit.Test;
-import org.sonar.api.measures.FileLinesContext;
-
-import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
-public class MetricsVisitorTest extends MetricTest {
+
+public class CounterVisitorTest extends MetricTest {
 
   @Test
-  public void test() {
-    String filename = "lines_of_code.php";
-    File file = new File(filename);
-
-    FileLinesContext linesContext = mock(FileLinesContext.class);
-
-    MetricsVisitor metricsVisitor = new MetricsVisitor();
-
-    FileMeasures fileMeasures = metricsVisitor.getFileMeasures(file, parse(filename), linesContext);
-
-    // fixme : finish this test
-    assertThat(fileMeasures.getFileComplexity()).isEqualTo(1.0);
-    assertThat(fileMeasures.getFunctionNumber()).isEqualTo(1.0);
-    assertThat(fileMeasures.getStatementNumber()).isEqualTo(0.0);
-    assertThat(fileMeasures.getClassNumber()).isEqualTo(1.0);
+  public void test_class() throws Exception {
+    CounterVisitor counterVisitor = new CounterVisitor(parse("classes.php"));
+    assertThat(counterVisitor.getClassNumber()).isEqualTo(4);
   }
+
+  @Test
+  public void test_statements() throws Exception {
+    CounterVisitor counterVisitor = new CounterVisitor(parse("statements.php"));
+    assertThat(counterVisitor.getStatementNumber()).isEqualTo(29);
+  }
+
+  @Test
+  public void test_functions() throws Exception {
+    CounterVisitor counterVisitor = new CounterVisitor(parse("functions.php"));
+    assertThat(counterVisitor.getFunctionNumber()).isEqualTo(4);
+  }
+
 }

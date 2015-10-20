@@ -37,11 +37,18 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   private static final Number[] LIMITS_COMPLEXITY_FUNCTIONS = {1, 2, 4, 6, 8, 10, 12, 20, 30};
   private static final Number[] FILES_DISTRIBUTION_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
-  private static final Kind[] FUNCTION_NODES = {
+  public static final Kind[] FUNCTION_NODES = {
     Kind.FUNCTION_DECLARATION,
     Kind.FUNCTION_EXPRESSION,
     Kind.METHOD_DECLARATION,
   };
+
+  public static final Kind[] CLASS_NODES = {
+    Kind.CLASS_DECLARATION,
+    Kind.INTERFACE_DECLARATION,
+    Kind.TRAIT_DECLARATION
+  };
+
 
   private FileMeasures fileMeasures;
   private FileLinesContext fileLinesContext;
@@ -49,7 +56,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   @Override
   public List<Kind> nodesToVisit() {
     List<Kind> result = new ArrayList<>(Arrays.asList(FUNCTION_NODES));
-    result.add(Kind.CLASS_DECLARATION);
+    result.addAll(Arrays.asList(CLASS_NODES));
     result.add(Kind.COMPILATION_UNIT);
     return result;
   }
