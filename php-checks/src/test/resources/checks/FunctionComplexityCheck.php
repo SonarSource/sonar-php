@@ -69,7 +69,7 @@ $f = function() { // NOK
 };
 
 function nesting() {
-  $nested = function() { return $a && $b; };
+  $nested = function() { $a && $b; };
   if ($a) {}
   return 1;
 }

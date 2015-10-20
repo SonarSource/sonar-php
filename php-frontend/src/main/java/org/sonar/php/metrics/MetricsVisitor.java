@@ -66,11 +66,11 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     if (tree.is(Kind.COMPILATION_UNIT)) {
       fileMeasures.setFileComplexity(NewComplexityVisitor.complexity(tree));
 
-    } else if (tree.is(Kind.CLASS_DECLARATION)) {
+    } else if (tree.is(CLASS_NODES)) {
       fileMeasures.addClassComplexity(NewComplexityVisitor.complexity(tree));
 
     } else if (tree.is(FUNCTION_NODES)) {
-      fileMeasures.addFunctionComplexity(NewComplexityVisitor.complexityWithoutNestedFunctions(tree));
+      fileMeasures.addFunctionComplexity(NewComplexityVisitor.complexity(tree));
     }
   }
 

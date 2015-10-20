@@ -144,7 +144,7 @@ public class NewComplexityVisitor extends PHPVisitorCheck {
   }
 
   private void processFunction(FunctionTree tree) {
-    if (!endsWithReturn(tree)) {
+    if (tree.is(Kind.FUNCTION_EXPRESSION) || !endsWithReturn(tree)) {
       incrementComplexity();
     }
   }
