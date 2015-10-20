@@ -47,6 +47,7 @@ public class ExpandableStringCharactersTreeImpl extends PHPTree implements Expan
     return token.text();
   }
 
+  @Override
   public SyntaxToken token() {
     return token;
   }

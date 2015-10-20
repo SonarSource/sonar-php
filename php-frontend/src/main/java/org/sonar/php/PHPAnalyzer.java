@@ -23,6 +23,9 @@ import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.highlighter.HighlighterVisitor;
+import org.sonar.php.highlighter.HighlightingData;
+import org.sonar.php.highlighter.SourceFileOffsets;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -39,6 +42,7 @@ public class PHPAnalyzer {
 
   private final ActionParser<Tree> parser;
   private final ImmutableList<PHPCheck> checks;
+  private final Charset charset;
 
   private CompilationUnitTree currentFileTree;
   private File currentFile;
@@ -46,6 +50,7 @@ public class PHPAnalyzer {
   public PHPAnalyzer(Charset charset, ImmutableList<PHPCheck> checks) {
     this.parser = PHPParserBuilder.createParser(charset);
     this.checks = checks;
+    this.charset = charset;
 
     for (PHPCheck check : checks) {
       if (check instanceof CharsetAwareVisitor) {
@@ -74,4 +79,7 @@ public class PHPAnalyzer {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext);
   }
 
+  public List<HighlightingData> getHighlighting() {
+    return HighlighterVisitor.getHighlightData(currentFileTree, new SourceFileOffsets(currentFile, charset));
+  }
 }

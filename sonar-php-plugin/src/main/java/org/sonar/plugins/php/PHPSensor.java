@@ -40,11 +40,14 @@ import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.source.Highlightable;
+import org.sonar.api.source.Highlightable.HighlightingBuilder;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.CheckList;
+import org.sonar.php.highlighter.HighlightingData;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -139,11 +142,27 @@ public class PHPSensor implements Sensor {
       phpAnalyzer.nextFile(inputFile.file());
 
       saveIssues(phpAnalyzer.analyze(), inputFile);
+      saveHighlighting(phpAnalyzer.getHighlighting(), inputFile);
       saveNewFileMeasures(phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
     }
 
     progressReport.stop();
 
+  }
+
+  private void saveHighlighting(List<HighlightingData> highlightingDataList, InputFile inputFile) {
+    Highlightable highlightable = resourcePerspectives.as(Highlightable.class, inputFile);
+
+    if (highlightable == null) {
+      LOG.warn("Could not get " + Highlightable.class.getCanonicalName() + " for " + inputFile.file());
+
+    } else {
+      HighlightingBuilder highlightingBuilder = highlightable.newHighlighting();
+      for (HighlightingData highlightingData : highlightingDataList) {
+        highlightingBuilder.highlight(highlightingData.startOffset(), highlightingData.endOffset(), highlightingData.highlightCode());
+      }
+      highlightingBuilder.done();
+    }
   }
 
   private void saveNewFileMeasures(FileMeasures fileMeasures, InputFile inputFile) {

@@ -17,16 +17,38 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.tree.expression;
+package org.sonar.php.highlighter;
 
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+public class HighlightingData {
 
-@Beta
-public interface ExpandableStringCharactersTree extends ExpressionTree {
+  private Integer startOffset;
+  private Integer endOffset;
+  private String highlightCode;
 
-  String value();
+  public HighlightingData(Integer startOffset, Integer endOffset, String highlightCode) {
+    this.startOffset = startOffset;
+    this.endOffset = endOffset;
+    this.highlightCode = highlightCode;
+  }
 
-  SyntaxToken token();
+  public Integer startOffset() {
+    return startOffset;
+  }
 
+  public Integer endOffset() {
+    return endOffset;
+  }
+
+  public String highlightCode() {
+    return highlightCode;
+  }
+
+  @Override
+  public String toString() {
+    return "HighlightingData{" +
+      "startOffset=" + startOffset +
+      ", endOffset=" + endOffset +
+      ", highlightCode='" + highlightCode + '\'' +
+      '}';
+  }
 }
