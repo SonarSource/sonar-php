@@ -45,7 +45,6 @@ import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
 import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.CheckList;
-import org.sonar.php.metrics.FileLinesVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -108,7 +107,6 @@ public class PHPSensor implements Sensor {
 
     List<CodeVisitor> visitors = getCheckVisitors();
 
-    visitors.add(new FileLinesVisitor(fileSystem, fileLinesContextFactory));
     ImmutableList.Builder<PHPCheck> phpCheckBuilder = ImmutableList.builder();
 
     // fixme : Remove this after migration of all checks
@@ -149,8 +147,8 @@ public class PHPSensor implements Sensor {
   }
 
   private void saveNewFileMeasures(FileMeasures fileMeasures, InputFile inputFile) {
-//    context.saveMeasure(inputFile, CoreMetrics.LINES, fileMeasures.getLinesNumber());
-//    context.saveMeasure(inputFile, CoreMetrics.NCLOC, fileMeasures.getLinesOfCodeNumber());
+    context.saveMeasure(inputFile, CoreMetrics.LINES, fileMeasures.getLinesNumber());
+    context.saveMeasure(inputFile, CoreMetrics.NCLOC, fileMeasures.getLinesOfCodeNumber());
 //    context.saveMeasure(inputFile, CoreMetrics.COMMENT_LINES, fileMeasures.getCommentLinesNumber());
     context.saveMeasure(inputFile, CoreMetrics.CLASSES, fileMeasures.getClassNumber());
     context.saveMeasure(inputFile, CoreMetrics.FUNCTIONS, fileMeasures.getFunctionNumber());
@@ -187,8 +185,8 @@ public class PHPSensor implements Sensor {
 
   private void saveFileMeasures(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
     context.saveMeasure(sonarFile, CoreMetrics.FILES, squidFile.getDouble(PHPMetric.FILES));
-    context.saveMeasure(sonarFile, CoreMetrics.LINES, squidFile.getDouble(PHPMetric.LINES));
-    context.saveMeasure(sonarFile, CoreMetrics.NCLOC, squidFile.getDouble(PHPMetric.LINES_OF_CODE));
+//    context.saveMeasure(sonarFile, CoreMetrics.LINES, squidFile.getDouble(PHPMetric.LINES));
+//    context.saveMeasure(sonarFile, CoreMetrics.NCLOC, squidFile.getDouble(PHPMetric.LINES_OF_CODE));
     context.saveMeasure(sonarFile, CoreMetrics.COMMENT_LINES, squidFile.getDouble(PHPMetric.COMMENT_LINES));
 //    context.saveMeasure(sonarFile, CoreMetrics.CLASSES, squidFile.getDouble(PHPMetric.CLASSES));
 //    context.saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, squidFile.getDouble(PHPMetric.FUNCTIONS));

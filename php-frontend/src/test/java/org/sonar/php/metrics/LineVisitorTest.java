@@ -20,33 +20,32 @@
 package org.sonar.php.metrics;
 
 import org.junit.Test;
-import org.sonar.api.measures.FileLinesContext;
 
-import java.io.File;
+import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
-public class MetricsVisitorTest extends MetricTest {
+
+public class LineVisitorTest extends MetricTest {
 
   @Test
-  public void test() {
-    String filename = "lines_of_code.php";
-    File file = new File(filename);
-
-    FileLinesContext linesContext = mock(FileLinesContext.class);
-
-    MetricsVisitor metricsVisitor = new MetricsVisitor();
-
-    FileMeasures fileMeasures = metricsVisitor.getFileMeasures(file, parse(filename), linesContext);
-
-    // fixme : finish this test
-    assertThat(fileMeasures.getFileComplexity()).isEqualTo(1.0);
-    assertThat(fileMeasures.getFunctionNumber()).isEqualTo(1.0);
-    assertThat(fileMeasures.getStatementNumber()).isEqualTo(2.0);
-    assertThat(fileMeasures.getClassNumber()).isEqualTo(1.0);
-
-    assertThat(fileMeasures.getLinesNumber()).isEqualTo(29.0);
-    assertThat(fileMeasures.getLinesOfCodeNumber()).isEqualTo(7);
+  public void test_lines_number() throws Exception {
+    LineVisitor lineVisitor = new LineVisitor(parse("lines.php"));
+    assertThat(lineVisitor.getLinesNumber()).isEqualTo(17);
   }
+
+  @Test
+  public void test_lines_of_code_number() throws Exception {
+    LineVisitor lineVisitor = new LineVisitor(parse("lines_of_code.php"));
+    assertThat(lineVisitor.getLinesOfCodeNumber()).isEqualTo(7);
+  }
+
+  @Test
+  public void test_lines_of_code() throws Exception {
+    LineVisitor lineVisitor = new LineVisitor(parse("lines_of_code.php"));
+    Set<Integer> linesOfCode = lineVisitor.getLinesOfCode();
+    assertThat(linesOfCode).hasSize(7);
+    assertThat(linesOfCode).contains(13, 17, 19, 20, 21, 22, 23);
+  }
+
 }

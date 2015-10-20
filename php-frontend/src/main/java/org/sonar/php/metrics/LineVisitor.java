@@ -19,25 +19,58 @@
  */
 package org.sonar.php.metrics;
 
+import com.google.common.collect.Sets;
+import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class LineVisitor {
-  public LineVisitor(CompilationUnitTree tree) {
+public class LineVisitor extends PHPVisitorCheck {
 
+  private Set<Integer> lines = Sets.newHashSet();
+  private int lastLine = 0;
+
+  public LineVisitor(CompilationUnitTree tree) {
+    this.visitCompilationUnit(tree);
   }
 
-  public int getLinesNumber() {
-    return 0;
+  @Override
+  public void visitScript(ScriptTree tree) {
+    // ignore opening tag
+    this.scan(tree.statements());
+  }
+
+  @Override
+  public void visitToken(SyntaxToken token) {
+    boolean isEOF = ((InternalSyntaxToken) token).isEOF();
+
+    if (token.is(Tree.Kind.TOKEN) && !isEOF) {
+      String[] tokenLines = token.text().split("\n", -1);
+      for (int i = token.line(); i < token.line() + tokenLines.length; i++) {
+        lines.add(i);
+      }
+
+    }
+
+    if (isEOF) {
+      lastLine = token.line();
+    }
   }
 
   public int getLinesOfCodeNumber() {
-    return 0;
+    return lines.size();
   }
 
   public Set<Integer> getLinesOfCode() {
-    return Collections.emptySet();
+    return lines;
   }
+
+  public int getLinesNumber() {
+    return lastLine;
+  }
+
 }

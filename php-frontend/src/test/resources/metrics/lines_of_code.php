@@ -18,6 +18,9 @@ class A {
     // NOSONAR comment
   }
 }
+"string one line";
+"string
+multiline";
 /* closing tag is not considered as a line of code */ ?>
 
 <p>

@@ -45,7 +45,6 @@ import org.sonar.squidbridge.indexer.QueryByType;
 import org.sonar.squidbridge.metrics.CommentsVisitor;
 import org.sonar.squidbridge.metrics.CounterVisitor;
 import org.sonar.squidbridge.metrics.LinesOfCodeVisitor;
-import org.sonar.squidbridge.metrics.LinesVisitor;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.io.File;
@@ -184,8 +183,6 @@ public class PHPAstScanner {
       .build());
 
     /* Metrics */
-    builder.withSquidAstVisitor(new LinesVisitor<LexerlessGrammar>(PHPMetric.LINES));
-    builder.withSquidAstVisitor(new PHPLinesOfCodeVisitor());
 
     builder.withSquidAstVisitor(new ComplexityVisitor());
     builder.withSquidAstVisitor(CommentsVisitor.<LexerlessGrammar>builder().withCommentMetric(PHPMetric.COMMENT_LINES)

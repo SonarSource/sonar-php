@@ -44,18 +44,6 @@ public class PHPAstScannerTest {
   }
 
   @Test
-  public void lines() {
-    SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines.php"));
-    assertThat(file.getInt(PHPMetric.LINES)).isEqualTo(17);
-  }
-
-  @Test
-  public void lines_of_code() {
-    SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/lines_of_code.php"));
-    assertThat(file.getInt(PHPMetric.LINES_OF_CODE)).isEqualTo(4);
-  }
-
-  @Test
   public void functions() {
     SourceFile file = PHPAstScanner.scanSingleFile(new File("src/test/resources/metrics/functions.php"));
     assertThat(file.getInt(PHPMetric.FUNCTIONS)).isEqualTo(4);
