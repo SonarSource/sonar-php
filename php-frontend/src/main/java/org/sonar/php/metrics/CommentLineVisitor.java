@@ -19,24 +19,83 @@
  */
 package org.sonar.php.metrics;
 
+import com.google.common.collect.Sets;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import java.util.Collections;
 import java.util.Set;
 
-public class CommentLineVisitor {
+public class CommentLineVisitor extends PHPVisitorCheck {
+
+  private final boolean ignoreHeaderComments;
+  private Set<Integer> comments = Sets.newHashSet();
+  private Set<Integer> noSonarLines = Sets.newHashSet();
+
+  // seenFirstToken is required to track header comments (header comments are saved as trivias of first non-trivia token)
+  private boolean seenFirstToken = false;
+
   public CommentLineVisitor(CompilationUnitTree tree) {
+    // FIXME SONARPHP-575
+    this.ignoreHeaderComments = false;
+    this.seenFirstToken = false;
+    super.visitCompilationUnit(tree);
   }
 
-  public int getCommentLineNumber() {
-    return 0;
+  @Override
+  public void visitToken(SyntaxToken token) {
+    for (SyntaxTrivia trivia : token.trivias()) {
+      if ((ignoreHeaderComments && seenFirstToken) || !ignoreHeaderComments) {
+        String[] commentLines = getContents(trivia.text())
+          .split("(\r)?\n|\r", -1);
+        int line = trivia.line();
+        for (String commentLine : commentLines) {
+          if (commentLine.contains("NOSONAR")) {
+            noSonarLines.add(line);
+          } else if (!isBlank(commentLine)) {
+            comments.add(line);
+          }
+          line++;
+        }
+      } else {
+        seenFirstToken = true;
+      }
+    }
+    seenFirstToken = true;
+
+    super.visitToken(token);
   }
 
-  public Set<Integer> getNoSonarLines() {
-    return Collections.emptySet();
+  private static boolean isBlank(CharSequence line) {
+    for (int i = 0; i < line.length(); i++) {
+      if (Character.isLetterOrDigit(line.charAt(i))) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
-  public Set<Integer> getCommentLines() {
-    return Collections.emptySet();
+  private static String getContents(String comment) {
+    if (comment.startsWith("//")) {
+      return comment.substring(2);
+    } else if (comment.startsWith("#")) {
+      return comment.substring(1);
+    } else {
+      return comment.substring(2, comment.length() - 2);
+    }
+  }
+
+  public Set<Integer> noSonarLines() {
+    return noSonarLines;
+  }
+
+  public Set<Integer> commentLines() {
+    return comments;
+  }
+
+  public int commentLineNumber() {
+    return comments.size();
   }
 }
