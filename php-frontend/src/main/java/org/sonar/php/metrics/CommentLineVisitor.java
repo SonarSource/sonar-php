@@ -29,24 +29,17 @@ import java.util.Set;
 
 public class CommentLineVisitor extends PHPVisitorCheck {
 
-  private final boolean ignoreHeaderComments;
   private Set<Integer> comments = Sets.newHashSet();
   private Set<Integer> noSonarLines = Sets.newHashSet();
 
-  // seenFirstToken is required to track header comments (header comments are saved as trivias of first non-trivia token)
-  private boolean seenFirstToken = false;
-
   public CommentLineVisitor(CompilationUnitTree tree) {
-    // FIXME SONARPHP-575
-    this.ignoreHeaderComments = false;
-    this.seenFirstToken = false;
     super.visitCompilationUnit(tree);
   }
 
   @Override
   public void visitToken(SyntaxToken token) {
     for (SyntaxTrivia trivia : token.trivias()) {
-      if ((ignoreHeaderComments && seenFirstToken) || !ignoreHeaderComments) {
+
         String[] commentLines = getContents(trivia.text())
           .split("(\r)?\n|\r", -1);
         int line = trivia.line();
@@ -58,11 +51,8 @@ public class CommentLineVisitor extends PHPVisitorCheck {
           }
           line++;
         }
-      } else {
-        seenFirstToken = true;
-      }
+
     }
-    seenFirstToken = true;
 
     super.visitToken(token);
   }

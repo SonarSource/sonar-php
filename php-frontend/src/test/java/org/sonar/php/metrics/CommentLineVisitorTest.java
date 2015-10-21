@@ -19,7 +19,6 @@
  */
 package org.sonar.php.metrics;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -32,22 +31,7 @@ public class CommentLineVisitorTest extends MetricTest {
     CommentLineVisitor comment = new CommentLineVisitor(parse("comments.php"));
 
     assertThat(comment.commentLineNumber()).isEqualTo(3);
-    assertThat(comment.commentLines()).contains(3);
-    assertThat(comment.commentLines()).contains(7);
-    assertThat(comment.commentLines()).contains(11);
-    assertThat(comment.commentLines().contains(2)).isFalse();
-    assertThat(comment.noSonarLines()).containsOnly(14);
-  }
-
-  @Ignore // FIXME SONARPHP-575
-  @Test
-  public void comment_line_ignoring_header() throws Exception {
-    CommentLineVisitor comment = new CommentLineVisitor(parse("comments.php"));
-
-    assertThat(comment.commentLineNumber()).isEqualTo(2);
-    assertThat(comment.commentLines().contains(3)).isFalse();
-    assertThat(comment.commentLines()).contains(7);
-    assertThat(comment.commentLines()).contains(11);
+    assertThat(comment.commentLines()).contains(3, 7, 11);
     assertThat(comment.noSonarLines()).containsOnly(14);
   }
 

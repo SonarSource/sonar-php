@@ -34,19 +34,23 @@ public class MetricsVisitorTest extends MetricTest {
     String filename = "lines_of_code.php";
     File file = new File(filename);
 
-    FileLinesContext linesContext = mock(FileLinesContext.class);
+    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), mock(FileLinesContext.class));
 
-    MetricsVisitor metricsVisitor = new MetricsVisitor();
+    assertThat(fileMeasures.getFileComplexity()).isEqualTo(1);
+    assertThat(fileMeasures.getClassComplexity()).isEqualTo(1);
+    assertThat(fileMeasures.getFunctionComplexity()).isEqualTo(1);
 
-    FileMeasures fileMeasures = metricsVisitor.getFileMeasures(file, parse(filename), linesContext);
+    assertThat(fileMeasures.getFileComplexityDistribution().build().getData()).isEqualTo("0=1;5=0;10=0;20=0;30=0;60=0;90=0");
+    assertThat(fileMeasures.getFunctionComplexityDistribution().build().getData()).isEqualTo("1=1;2=0;4=0;6=0;8=0;10=0;12=0");
 
-    // fixme : finish this test
-    assertThat(fileMeasures.getFileComplexity()).isEqualTo(1.0);
-    assertThat(fileMeasures.getFunctionNumber()).isEqualTo(1.0);
-    assertThat(fileMeasures.getStatementNumber()).isEqualTo(2.0);
-    assertThat(fileMeasures.getClassNumber()).isEqualTo(1.0);
+    assertThat(fileMeasures.getFunctionNumber()).isEqualTo(1);
+    assertThat(fileMeasures.getStatementNumber()).isEqualTo(2);
+    assertThat(fileMeasures.getClassNumber()).isEqualTo(1);
 
-    assertThat(fileMeasures.getLinesNumber()).isEqualTo(29.0);
+    assertThat(fileMeasures.getLinesNumber()).isEqualTo(29);
     assertThat(fileMeasures.getLinesOfCodeNumber()).isEqualTo(7);
+
+    assertThat(fileMeasures.getNoSonarLines()).containsOnly(18);
+    assertThat(fileMeasures.getCommentLinesNumber()).isEqualTo(5);
   }
 }

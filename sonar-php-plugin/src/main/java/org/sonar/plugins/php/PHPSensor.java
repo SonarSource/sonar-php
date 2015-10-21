@@ -37,7 +37,6 @@ import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.PersistenceMode;
-import org.sonar.api.measures.RangeDistributionBuilder;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.source.Highlightable;
@@ -45,7 +44,6 @@ import org.sonar.api.source.Highlightable.HighlightingBuilder;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.PHPAstScanner;
 import org.sonar.php.PHPConfiguration;
-import org.sonar.php.api.PHPMetric;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.highlighter.HighlightingData;
 import org.sonar.php.metrics.FileMeasures;
@@ -58,8 +56,6 @@ import org.sonar.squidbridge.api.CheckMessage;
 import org.sonar.squidbridge.api.CodeVisitor;
 import org.sonar.squidbridge.api.SourceCode;
 import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.api.SourceFunction;
-import org.sonar.squidbridge.indexer.QueryByParent;
 import org.sonar.squidbridge.indexer.QueryByType;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -72,7 +68,6 @@ import java.util.concurrent.TimeUnit;
 public class PHPSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
-  private static final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = {1, 2, 4, 6, 8, 10, 12};
 
   private final ResourcePerspectives resourcePerspectives;
   private final FileSystem fileSystem;
@@ -175,7 +170,7 @@ public class PHPSensor implements Sensor {
     context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY_IN_CLASSES, fileMeasures.getClassComplexity());
     context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, fileMeasures.getFunctionComplexity());
 
-//    context.saveMeasure(inputFile, fileMeasures.getFunctionComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
+    context.saveMeasure(inputFile, fileMeasures.getFunctionComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
     context.saveMeasure(inputFile, fileMeasures.getFileComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
 
     noSonarFilter.addComponent(context.getResource(inputFile).getEffectiveKey(), fileMeasures.getNoSonarLines());
@@ -188,26 +183,12 @@ public class PHPSensor implements Sensor {
 
       if (inputFile != null) {
         org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.create(inputFile.relativePath());
-
-        saveFunctionsComplexityDistribution(sonarFile, squidFile);
         saveOldIssues(sonarFile, squidFile);
       } else {
         LOG.warn("Cannot save analysis information for file {}. Unable to retrieve the associated sonar resource.", squidFile.getKey());
       }
     }
   }
-
-  private void saveFunctionsComplexityDistribution(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
-    Collection<SourceCode> squidFunctionsInFile = scanner.getIndex().search(new QueryByParent(squidFile), new QueryByType(SourceFunction.class));
-    RangeDistributionBuilder complexityDistribution = new RangeDistributionBuilder(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
-
-    for (SourceCode squidFunction : squidFunctionsInFile) {
-      double functionComplexity = squidFunction.getDouble(PHPMetric.COMPLEXITY);
-      complexityDistribution.add(functionComplexity);
-    }
-    context.saveMeasure(sonarFile, complexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
-  }
-
 
   /**
    * To remove after migration of all checks.

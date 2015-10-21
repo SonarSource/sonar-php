@@ -34,21 +34,28 @@ import java.util.Set;
 
 public class MetricsVisitor extends PHPSubscriptionCheck {
 
-  private static final Number[] LIMITS_COMPLEXITY_FUNCTIONS = {1, 2, 4, 6, 8, 10, 12, 20, 30};
+  private static final Number[] LIMITS_COMPLEXITY_FUNCTIONS = {1, 2, 4, 6, 8, 10, 12};
   private static final Number[] FILES_DISTRIBUTION_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
 
-  public static final Kind[] FUNCTION_NODES = {
+  private static final Kind[] FUNCTION_NODES = {
     Kind.FUNCTION_DECLARATION,
     Kind.FUNCTION_EXPRESSION,
     Kind.METHOD_DECLARATION,
   };
 
-  public static final Kind[] CLASS_NODES = {
+  private static final Kind[] CLASS_NODES = {
     Kind.CLASS_DECLARATION,
     Kind.INTERFACE_DECLARATION,
     Kind.TRAIT_DECLARATION
   };
 
+  public static Kind[] getClassNodes() {
+    return CLASS_NODES;
+  }
+
+  public static Kind[] getFunctionNodes() {
+    return FUNCTION_NODES;
+  }
 
   private FileMeasures fileMeasures;
   private FileLinesContext fileLinesContext;
@@ -94,6 +101,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
 
   private void setLineAndCommentMeasures() {
     LineVisitor lineVisitor = new LineVisitor(context().tree());
+
     CommentLineVisitor commentVisitor = new CommentLineVisitor(context().tree());
 
     int linesNumber = lineVisitor.getLinesNumber();
@@ -111,7 +119,6 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
       fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, line, commentLines.contains(line) ? 1 : 0);
     }
 
-    // fixme (is it compliant with our idea of separate logic?)
     fileLinesContext.save();
   }
 

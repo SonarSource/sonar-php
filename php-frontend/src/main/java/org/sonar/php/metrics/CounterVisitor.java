@@ -69,21 +69,21 @@ public class CounterVisitor extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    List<Kind> result = new ArrayList<>(Arrays.asList(MetricsVisitor.FUNCTION_NODES));
+    List<Kind> result = new ArrayList<>(Arrays.asList(MetricsVisitor.getFunctionNodes()));
     result.addAll(Arrays.asList(STATEMENT_NODES));
-    result.addAll(Arrays.asList(MetricsVisitor.CLASS_NODES));
+    result.addAll(Arrays.asList(MetricsVisitor.getClassNodes()));
     return result;
   }
 
   @Override
   public void visitNode(Tree tree) {
-    if (tree.is(MetricsVisitor.FUNCTION_NODES)) {
+    if (tree.is(MetricsVisitor.getFunctionNodes())) {
       functionCounter++;
 
     } else if (tree.is(STATEMENT_NODES)) {
       statementCounter++;
 
-    } else if (tree.is(MetricsVisitor.CLASS_NODES)) {
+    } else if (tree.is(MetricsVisitor.getClassNodes())) {
       classCounter++;
     }
   }
