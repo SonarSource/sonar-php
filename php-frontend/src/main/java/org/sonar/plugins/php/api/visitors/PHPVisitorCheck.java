@@ -520,6 +520,7 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
     }
   }
 
+  // fixme (@Lena) : test this test. Looks like it visits only children of test elements
   protected <T extends Tree> void scan(List<T> trees) {
     for (T tree : trees) {
       scan(tree);
