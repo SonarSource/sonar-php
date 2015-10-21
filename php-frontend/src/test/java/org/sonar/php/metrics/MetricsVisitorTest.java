@@ -21,17 +21,18 @@ package org.sonar.php.metrics;
 
 import org.junit.Test;
 import org.sonar.api.measures.FileLinesContext;
+import org.sonar.php.ParsingTestUtils;
 
 import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class MetricsVisitorTest extends MetricTest {
+public class MetricsVisitorTest extends ParsingTestUtils {
 
   @Test
   public void test() {
-    String filename = "lines_of_code.php";
+    String filename = "metrics/lines_of_code.php";
     File file = new File(filename);
 
     FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), mock(FileLinesContext.class));

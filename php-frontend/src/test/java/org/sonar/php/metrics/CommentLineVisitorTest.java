@@ -20,15 +20,16 @@
 package org.sonar.php.metrics;
 
 import org.junit.Test;
+import org.sonar.php.ParsingTestUtils;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 
-public class CommentLineVisitorTest extends MetricTest {
+public class CommentLineVisitorTest extends ParsingTestUtils {
 
   @Test
   public void comment_lines() throws Exception {
-    CommentLineVisitor comment = new CommentLineVisitor(parse("comments.php"));
+    CommentLineVisitor comment = new CommentLineVisitor(parse("metrics/comments.php"));
 
     assertThat(comment.commentLineNumber()).isEqualTo(3);
     assertThat(comment.commentLines()).contains(3, 7, 11);

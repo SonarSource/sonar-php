@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.metrics;
+package org.sonar.php;
 
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
@@ -28,12 +28,12 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 import java.io.File;
 
-public class MetricTest {
+public class ParsingTestUtils {
 
   protected ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT, Charsets.UTF_8);
 
   protected CompilationUnitTree parse(String filename) {
-    File file = new File("src/test/resources/metrics/", filename);
+    File file = new File("src/test/resources/", filename);
 
     ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
     return (CompilationUnitTree) parser.parse(file);
