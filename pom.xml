@@ -32,7 +32,6 @@
   <modules>
     <module>sonar-php-plugin</module>
     <module>php-frontend</module>
-    <module>sslr-php-toolkit</module>
     <module>php-checks</module>
   </modules>
 
