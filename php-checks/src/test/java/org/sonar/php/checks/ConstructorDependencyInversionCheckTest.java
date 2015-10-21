@@ -27,6 +27,6 @@ public class ConstructorDependencyInversionCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(new ConstructorDependencyInversionCheck(), TestUtils.getCheckFile("DependencyInversionCheck.php"));
+    PHPCheckTest.check(new ConstructorDependencyInversionCheck(), TestUtils.getCheckFile("ConstructorDependencyInversion.php"));
   }
 }

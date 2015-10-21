@@ -36,7 +36,7 @@ import java.util.List;
 
 public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
 
-  private final Kind KIND;
+  private final Kind kind;
 
   private final InternalSyntaxToken elseifToken;
   private final ParenthesisedExpressionTree condition;
@@ -44,7 +44,7 @@ public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
   private final List<StatementTree> statements;
 
   public ElseifClauseTreeImpl(InternalSyntaxToken elseifToken, ParenthesisedExpressionTree condition, StatementTree statement) {
-    this.KIND = Kind.ELSEIF_CLAUSE;
+    this.kind = Kind.ELSEIF_CLAUSE;
 
     this.elseifToken = elseifToken;
     this.condition = condition;
@@ -54,7 +54,7 @@ public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
   }
 
   public ElseifClauseTreeImpl(InternalSyntaxToken elseifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken, List<StatementTree> statements) {
-    this.KIND = Kind.ALTERNATIVE_ELSEIF_CLAUSE;
+    this.kind = Kind.ALTERNATIVE_ELSEIF_CLAUSE;
 
     this.elseifToken = elseifToken;
     this.condition = condition;
@@ -86,7 +86,7 @@ public class ElseifClauseTreeImpl extends PHPTree implements ElseifClauseTree {
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

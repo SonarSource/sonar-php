@@ -284,10 +284,11 @@ public class TreeFactory {
    */
 
   public VariableDeclarationTree variableDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
+    VariableIdentifierTreeImpl variableIdentifier = new VariableIdentifierTreeImpl(new IdentifierTreeImpl(identifierToken));
     if (optionalEqual.isPresent()) {
-      return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), optionalEqual.get().first(), optionalEqual.get().second());
+      return new VariableDeclarationTreeImpl(variableIdentifier, optionalEqual.get().first(), optionalEqual.get().second());
     } else {
-      return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), null, null);
+      return new VariableDeclarationTreeImpl(variableIdentifier, null, null);
     }
   }
 
@@ -300,7 +301,8 @@ public class TreeFactory {
   }
 
   public VariableDeclarationTree constDeclaration(InternalSyntaxToken identifierToken, InternalSyntaxToken equToken, ExpressionTree expression) {
-    return new VariableDeclarationTreeImpl(new IdentifierTreeImpl(identifierToken), equToken, expression);
+    VariableIdentifierTreeImpl variableIdentifier = new VariableIdentifierTreeImpl(new IdentifierTreeImpl(identifierToken));
+    return new VariableDeclarationTreeImpl(variableIdentifier, equToken, expression);
   }
 
   public UseClauseTree useClause(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
@@ -958,7 +960,7 @@ public class TreeFactory {
   ) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
-        new NamespaceNameTreeImpl(null, new SeparatedListImpl<IdentifierTree>(Collections.EMPTY_LIST, Collections.EMPTY_LIST), new IdentifierTreeImpl(haltCompilerToken)),
+        new NamespaceNameTreeImpl(null, SeparatedListImpl.<IdentifierTree>empty(), new IdentifierTreeImpl(haltCompilerToken)),
         openParenthesisToken,
         SeparatedListImpl.empty(),
         closeParenthesisToken),
@@ -973,7 +975,7 @@ public class TreeFactory {
   ) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
-        new NamespaceNameTreeImpl(null, new SeparatedListImpl<IdentifierTree>(Collections.EMPTY_LIST, Collections.EMPTY_LIST), new IdentifierTreeImpl(echoToken)),
+        new NamespaceNameTreeImpl(null, SeparatedListImpl.<IdentifierTree>empty(), new IdentifierTreeImpl(echoToken)),
         separatedList(expression, list)),
       eosToken);
   }
@@ -1354,7 +1356,7 @@ public class TreeFactory {
     @Nullable InternalSyntaxToken closeParenthesis
   ) {
     return new FunctionCallTreeImpl(
-      new NamespaceNameTreeImpl(null, new SeparatedListImpl<IdentifierTree>(Collections.EMPTY_LIST, Collections.EMPTY_LIST), new IdentifierTreeImpl(callee)),
+      new NamespaceNameTreeImpl(null, SeparatedListImpl.<IdentifierTree>empty(), new IdentifierTreeImpl(callee)),
       openParenthesis,
       arguments,
       closeParenthesis);

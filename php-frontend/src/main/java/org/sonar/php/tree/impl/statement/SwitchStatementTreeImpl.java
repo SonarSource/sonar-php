@@ -35,7 +35,7 @@ import java.util.List;
 
 public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementTree {
 
-  private final Kind KIND;
+  private final Kind kind;
 
   private final InternalSyntaxToken switchToken;
   private final ParenthesisedExpressionTree expression;
@@ -53,7 +53,7 @@ public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementT
       List<SwitchCaseClauseTree> cases,
       InternalSyntaxToken closeCurlyBraceToken
   ) {
-    this.KIND = Kind.SWITCH_STATEMENT;
+    this.kind = Kind.SWITCH_STATEMENT;
 
     this.switchToken = switchToken;
     this.expression = expression;
@@ -73,7 +73,7 @@ public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementT
       List<SwitchCaseClauseTree> cases,
       InternalSyntaxToken endswitchToken, InternalSyntaxToken eosToken
   ) {
-    this.KIND = Kind.ALTERNATIVE_SWITCH_STATEMENT;
+    this.kind = Kind.ALTERNATIVE_SWITCH_STATEMENT;
 
     this.switchToken = switchToken;
     this.expression = expression;
@@ -89,7 +89,7 @@ public class SwitchStatementTreeImpl extends PHPTree implements SwitchStatementT
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

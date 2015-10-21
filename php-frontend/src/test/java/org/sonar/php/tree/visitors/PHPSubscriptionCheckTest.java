@@ -46,8 +46,7 @@ public class PHPSubscriptionCheckTest {
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
     assertThat(testVisitor.namespaceNameCounter).isEqualTo(2);
-    // fixme (Lena) : should 2
-    assertThat(testVisitor.varIdentifierCounter).isEqualTo(1);
+    assertThat(testVisitor.varIdentifierCounter).isEqualTo(2);
   }
 
 

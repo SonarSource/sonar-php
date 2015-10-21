@@ -72,7 +72,7 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
 
     if (!pattern.matcher(className).matches()) {
       String message = String.format(MESSAGE, className, this.format);
-      context().newIssue(this.KEY, message)
+      context().newIssue(KEY, message)
         .tree(tree);
     }
   }

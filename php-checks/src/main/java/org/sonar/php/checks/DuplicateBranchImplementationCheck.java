@@ -43,8 +43,8 @@ import java.util.List;
 @Rule(
   key = DuplicateBranchImplementationCheck.KEY,
   name = "Two branches in the same conditional structure should not have exactly the same implementation",
-  tags = {Tags.BUG},
-  priority = Priority.MAJOR)
+  priority = Priority.MAJOR,
+  tags = {Tags.BUG})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("10min")

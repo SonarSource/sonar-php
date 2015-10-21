@@ -39,8 +39,8 @@ import java.util.regex.Pattern;
 @Rule(
   key = HardCodedCredentialsCheck.KEY,
   name = "Credentials should not be hard-coded",
-  tags = {Tags.CWE, Tags.OWASP_A2, Tags.SANS_TOP25_POROUS, Tags.SECURITY},
-  priority = Priority.CRITICAL)
+  priority = Priority.CRITICAL,
+  tags = {Tags.CWE, Tags.OWASP_A2, Tags.SANS_TOP25_POROUS, Tags.SECURITY})
 @ActivatedByDefault
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.SECURITY_FEATURES)
@@ -64,7 +64,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitVariableDeclaration(VariableDeclarationTree declaration) {
-    String identifier = declaration.variableIdentifier().text();
+    String identifier = declaration.variableIdentifier().variableExpression().text();
     checkVariable(declaration, identifier, declaration.initValue());
     super.visitVariableDeclaration(declaration);
   }

@@ -37,6 +37,7 @@ import org.sonar.squidbridge.recognizer.EndWithDetector;
 import org.sonar.squidbridge.recognizer.KeywordsDetector;
 import org.sonar.squidbridge.recognizer.LanguageFootprint;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -106,7 +107,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
     context().newIssue(KEY, MESSAGE).line(line);
   }
 
-  private boolean previousLineIsCommentedCode(SyntaxTrivia trivia, SyntaxTrivia previousTrivia) {
+  private boolean previousLineIsCommentedCode(SyntaxTrivia trivia, @Nullable SyntaxTrivia previousTrivia) {
     return previousTrivia != null && (trivia.line() == previousTrivia.line() + 1)
       && isCommentedCode(previousTrivia.text());
   }
@@ -115,11 +116,11 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
     return codeRecognizer.isLineOfCode(line);
   }
 
-  private boolean isInlineComment(SyntaxTrivia trivia) {
+  private static boolean isInlineComment(SyntaxTrivia trivia) {
     return trivia.text().startsWith("//");
   }
 
-  private boolean isPHPDoc(SyntaxTrivia trivia) {
+  private static boolean isPHPDoc(SyntaxTrivia trivia) {
     return trivia.text().startsWith("/**");
   }
 

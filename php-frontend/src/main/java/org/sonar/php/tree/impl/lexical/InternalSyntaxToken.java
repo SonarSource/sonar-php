@@ -33,7 +33,7 @@ import java.util.List;
 
 public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
-  private final Kind KIND;
+  private final Kind kind;
 
   private List<SyntaxTrivia> trivias;
   private int startIndex;
@@ -51,9 +51,9 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
     this.isEOF = isEOF;
 
     if (PHPTokenType.INLINE_HTML.equals(type)) {
-      KIND = Kind.INLINE_HTML_TOKEN;
+      kind = Kind.INLINE_HTML_TOKEN;
     } else {
-      KIND = Kind.TOKEN;
+      kind = Kind.TOKEN;
     }
   }
 
@@ -95,7 +95,7 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

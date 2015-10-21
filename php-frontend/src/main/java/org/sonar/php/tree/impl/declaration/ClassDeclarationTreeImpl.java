@@ -38,7 +38,7 @@ import java.util.List;
 
 public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclarationTree {
 
-  private final Kind KIND;
+  private final Kind kind;
 
   private final SyntaxToken modifierToken;
   private final SyntaxToken classEntryTypeToken;
@@ -58,7 +58,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
       @Nullable SyntaxToken implementsToken, SeparatedListImpl<NamespaceNameTree> superInterfaces,
       SyntaxToken openCurlyBraceToken, List<ClassMemberTree> members, SyntaxToken closeCurlyBraceToken
   ) {
-    this.KIND = kind;
+    this.kind = kind;
     this.modifierToken = modifierToken;
     this.classEntryTypeToken = classEntryTypeToken;
     this.name = name;
@@ -149,7 +149,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

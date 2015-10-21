@@ -35,21 +35,21 @@ import java.util.List;
 
 public class ElseClauseTreeImpl extends PHPTree implements ElseClauseTree {
 
-  private final Kind KIND;
+  private final Kind kind;
 
   private final InternalSyntaxToken elseToken;
   private final InternalSyntaxToken colonToken;
   private final List<StatementTree> statements;
 
   public ElseClauseTreeImpl(InternalSyntaxToken elseToken, StatementTree statement) {
-    this.KIND = Kind.ELSE_CLAUSE;
+    this.kind = Kind.ELSE_CLAUSE;
     this.elseToken = elseToken;
     this.statements = Collections.singletonList(statement);
     this.colonToken = null;
   }
 
   public ElseClauseTreeImpl(InternalSyntaxToken elseToken, InternalSyntaxToken colonToken, List<StatementTree> statements) {
-    this.KIND = Kind.ALTERNATIVE_ELSE_CLAUSE;
+    this.kind = Kind.ALTERNATIVE_ELSE_CLAUSE;
     this.elseToken = elseToken;
     this.statements = statements;
     this.colonToken = colonToken;
@@ -73,7 +73,7 @@ public class ElseClauseTreeImpl extends PHPTree implements ElseClauseTree {
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

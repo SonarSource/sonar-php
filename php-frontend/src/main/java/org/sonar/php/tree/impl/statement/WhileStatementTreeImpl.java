@@ -36,7 +36,7 @@ import java.util.List;
 
 public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTree {
 
-  private final Kind KIND;
+  private final Kind kind;
 
   private final InternalSyntaxToken whileToken;
   private final ParenthesisedExpressionTree condition;
@@ -46,7 +46,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
   private final InternalSyntaxToken eosToken;
 
   public WhileStatementTreeImpl(InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, StatementTree statement) {
-    this.KIND = Kind.WHILE_STATEMENT;
+    this.kind = Kind.WHILE_STATEMENT;
 
     this.whileToken = whileToken;
     this.condition = condition;
@@ -61,7 +61,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
       InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
       List<StatementTree> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken
   ) {
-    this.KIND = Kind.ALTERNATIVE_WHILE_STATEMENT;
+    this.kind = Kind.ALTERNATIVE_WHILE_STATEMENT;
 
     this.whileToken = whileToken;
     this.condition = condition;
@@ -74,7 +74,7 @@ public class WhileStatementTreeImpl extends PHPTree implements WhileStatementTre
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

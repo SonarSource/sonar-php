@@ -53,8 +53,8 @@ public class FileHeaderCheck extends PHPVisitorCheck implements CharsetAwareVisi
 
   @RuleProperty(
     key = "headerFormat",
-    type = "TEXT",
-    defaultValue = DEFAULT_HEADER_FORMAT)
+    defaultValue = DEFAULT_HEADER_FORMAT,
+    type = "TEXT")
   public String headerFormat = DEFAULT_HEADER_FORMAT;
 
   private Charset charset;

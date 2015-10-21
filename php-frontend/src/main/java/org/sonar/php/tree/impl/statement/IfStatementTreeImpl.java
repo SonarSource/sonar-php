@@ -38,7 +38,7 @@ import java.util.List;
 
 public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
 
-  private final Kind KIND;
+  private final Kind kind;
 
   private final InternalSyntaxToken ifToken;
   private final ParenthesisedExpressionTree condition;
@@ -53,7 +53,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
       InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, StatementTree statement,
       List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause
   ) {
-    KIND = Kind.IF_STATEMENT;
+    kind = Kind.IF_STATEMENT;
 
     this.ifToken = ifToken;
     this.condition = condition;
@@ -71,7 +71,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
       List<StatementTree> statements, List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause,
       InternalSyntaxToken endifToken, InternalSyntaxToken eosToken
   ) {
-    KIND = Kind.ALTERNATIVE_IF_STATEMENT;
+    kind = Kind.ALTERNATIVE_IF_STATEMENT;
 
     this.ifToken = ifToken;
     this.condition = condition;
@@ -130,7 +130,7 @@ public class IfStatementTreeImpl extends PHPTree implements IfStatementTree {
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

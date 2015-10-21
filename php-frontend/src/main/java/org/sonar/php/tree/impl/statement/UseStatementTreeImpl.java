@@ -35,7 +35,7 @@ import java.util.Iterator;
 
 public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
 
-  private final Kind KIND;
+  private final Kind kind;
   private InternalSyntaxToken useToken;
   private InternalSyntaxToken useTypeToken;
   private SeparatedListImpl<UseClauseTree> declarations;
@@ -53,11 +53,11 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     this.eosToken = eosToken;
 
     if (useTypeToken == null) {
-      this.KIND = Kind.USE_STATEMENT;
+      this.kind = Kind.USE_STATEMENT;
     } else if (useTypeToken().text().equals(PHPKeyword.CONST.getValue())) {
-      this.KIND = Kind.USE_CONST_STATEMENT;
+      this.kind = Kind.USE_CONST_STATEMENT;
     } else {
-      this.KIND = Kind.USE_FUNCTION_STATEMENT;
+      this.kind = Kind.USE_FUNCTION_STATEMENT;
     }
   }
 
@@ -83,7 +83,7 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

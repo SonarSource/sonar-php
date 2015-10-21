@@ -43,8 +43,8 @@ import java.util.List;
 @Rule(
   key = DuplicateConditionCheck.KEY,
   name = "Related \"if/else if\" statements and \"cases\" in a \"switch\" should not have the same condition",
-  tags = {Tags.BUG, Tags.CERT, Tags.PITFALL, Tags.UNUSED},
-  priority = Priority.CRITICAL)
+  priority = Priority.CRITICAL,
+  tags = {Tags.BUG, Tags.CERT, Tags.PITFALL, Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.CRITICAL)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("10min")

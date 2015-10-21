@@ -49,8 +49,7 @@ public class PHPVisitorCheckTest {
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
     assertThat(testVisitor.namespaceNameCounter).isEqualTo(2);
-    // fixme (Lena) : should 2
-    assertThat(testVisitor.varIdentifierCounter).isEqualTo(1);
+    assertThat(testVisitor.varIdentifierCounter).isEqualTo(2);
     // PHPCheck#init() is called by PHPAnalyzer
     assertThat(testVisitor.initCounter).isEqualTo(0);
     assertThat(testVisitor.tokenCounter).isEqualTo(25);

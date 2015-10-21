@@ -107,7 +107,7 @@ public class ImmediatelyReturnedVariableCheck extends PHPSubscriptionCheck {
     }
   }
 
-  private List<String> getAssignedVariablesNames(StatementTree currentStatement) {
+  private static List<String> getAssignedVariablesNames(StatementTree currentStatement) {
     ExpressionTree variable = null;
 
     if (currentStatement.is(Kind.EXPRESSION_STATEMENT)) {
@@ -136,7 +136,7 @@ public class ImmediatelyReturnedVariableCheck extends PHPSubscriptionCheck {
     return names;
   }
 
-  private List<String> getVariablesFromList(ListExpressionTree listExpressionTree) {
+  private static List<String> getVariablesFromList(ListExpressionTree listExpressionTree) {
     List<String> names = new ArrayList<>();
     for (ExpressionTree element : listExpressionTree.elements()) {
       if (element.is(Kind.VARIABLE_IDENTIFIER)) {
@@ -147,7 +147,7 @@ public class ImmediatelyReturnedVariableCheck extends PHPSubscriptionCheck {
   }
 
   @Nullable
-  private String getReturnedOrThrownVariableName(StatementTree statement) {
+  private static String getReturnedOrThrownVariableName(StatementTree statement) {
     ExpressionTree returnedVariable = null;
 
     if (statement.is(Kind.RETURN_STATEMENT)) {

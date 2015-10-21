@@ -19,9 +19,9 @@ class C {
   }
 }
 
-class C {
+class D {
 
-  public function C($a, $b) {
+  public function D($a, $b) {
         $object = new SomeClass();                     // NOK
   }
 
@@ -29,3 +29,12 @@ class C {
     $object = new SomeClass();                          // OK
   }
 }
+
+class ClassWithoutConstructor {
+
+  public function f() {
+    $object = new SomeClass();                          // OK
+  }
+}
+
+$object = new SomeClass();                             // OK

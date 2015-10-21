@@ -37,7 +37,7 @@ import java.util.List;
 
 public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
 
-  private final Kind KIND;
+  private final Kind kind;
 
   private final ForStatementHeader header;
   private final InternalSyntaxToken colonToken;
@@ -57,7 +57,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
     this.statements = statements;
     this.eosToken = eosToken;
 
-    this.KIND = kind;
+    this.kind = kind;
   }
 
   public ForStatementTreeImpl(
@@ -137,7 +137,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

@@ -99,7 +99,7 @@ public class ConstantNameCheck extends PHPVisitorCheck {
 
   private void checkDeclarations(SeparatedList<VariableDeclarationTree> declarations) {
     for (VariableDeclarationTree declaration : declarations) {
-      String constantName = declaration.variableIdentifier().text();
+      String constantName = declaration.variableIdentifier().variableExpression().text();
       checkConstantName(declaration, constantName);
     }
   }

@@ -25,7 +25,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -36,11 +36,11 @@ public class VariableDeclarationTreeImpl extends PHPTree implements VariableDecl
 
   private static final Kind KIND = Kind.VARIABLE_DECLARATION;
 
-  private final IdentifierTree variableIdentifier;
+  private final VariableIdentifierTree variableIdentifier;
   private final InternalSyntaxToken equalToken;
   private final ExpressionTree initialisation;
 
-  public VariableDeclarationTreeImpl(IdentifierTree variableIdentifier, @Nullable InternalSyntaxToken equalToken, @Nullable ExpressionTree initialisation) {
+  public VariableDeclarationTreeImpl(VariableIdentifierTree variableIdentifier, @Nullable InternalSyntaxToken equalToken, @Nullable ExpressionTree initialisation) {
     this.variableIdentifier = variableIdentifier;
     this.equalToken = equalToken;
     this.initialisation = initialisation;
@@ -57,7 +57,7 @@ public class VariableDeclarationTreeImpl extends PHPTree implements VariableDecl
   }
 
   @Override
-  public IdentifierTree variableIdentifier() {
+  public VariableIdentifierTree variableIdentifier() {
     return variableIdentifier;
   }
 
