@@ -21,6 +21,7 @@ package org.sonar.plugins.php;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.sonar.sslr.api.RecognitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
@@ -132,15 +133,25 @@ public class PHPSensor implements Sensor {
 
     for (InputFile inputFile : inputFiles) {
       progressReport.nextFile();
-      phpAnalyzer.nextFile(inputFile.file());
-
-      saveIssues(phpAnalyzer.analyze(), inputFile);
-      saveHighlighting(phpAnalyzer.getHighlighting(), inputFile);
-      saveNewFileMeasures(phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
+      analyseFile(phpAnalyzer, inputFile);
     }
 
     progressReport.stop();
 
+  }
+
+  private void analyseFile(PHPAnalyzer phpAnalyzer, InputFile inputFile) {
+    try {
+      phpAnalyzer.nextFile(inputFile.file());
+    } catch (RecognitionException e) {
+      LOG.error("Unable to parse file: " + inputFile.absolutePath());
+      LOG.error(e.getMessage());
+      return;
+    }
+
+    saveIssues(phpAnalyzer.analyze(), inputFile);
+    saveHighlighting(phpAnalyzer.getHighlighting(), inputFile);
+    saveNewFileMeasures(phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
   }
 
   private void saveHighlighting(List<HighlightingData> highlightingDataList, InputFile inputFile) {

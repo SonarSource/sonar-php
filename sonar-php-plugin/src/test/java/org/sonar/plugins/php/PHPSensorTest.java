@@ -43,6 +43,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class PHPSensorTest {
@@ -76,16 +77,7 @@ public class PHPSensorTest {
   @Test
   public void analyse() {
     SensorContext context = mock(SensorContext.class);
-    fileSystem.add(new DefaultInputFile("PHPSquidSensor.php")
-      .setAbsolutePath(TestUtils.getResource("PHPSquidSensor.php").getAbsolutePath())
-      .setType(InputFile.Type.MAIN)
-      .setLanguage(Php.KEY));
-
-    Resource resource = mock(Resource.class);
-
-    when(resource.getEffectiveKey()).thenReturn("someKey");
-    when(context.getResource(any(InputFile.class))).thenReturn(resource);
-    sensor.analyse(new Project(""), context);
+    analyseSingleFile(context, "PHPSquidSensor.php");
 
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.LINES), Mockito.eq(55.0));
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.NCLOC), Mockito.eq(32.0));
@@ -97,6 +89,26 @@ public class PHPSensorTest {
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.CLASSES), Mockito.eq(1.0));
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(16.0));
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.FUNCTIONS), Mockito.eq(3.0));
+  }
+
+  @Test
+  public void parse_error() throws Exception {
+    SensorContext context = mock(SensorContext.class);
+    analyseSingleFile(context, "parseError.php");
+    verifyZeroInteractions(context);
+  }
+
+  private void analyseSingleFile(SensorContext context, String fileName) {
+    fileSystem.add(new DefaultInputFile(fileName)
+      .setAbsolutePath(TestUtils.getResource(fileName).getAbsolutePath())
+      .setType(InputFile.Type.MAIN)
+      .setLanguage(Php.KEY));
+
+    Resource resource = mock(Resource.class);
+
+    when(resource.getEffectiveKey()).thenReturn("someKey");
+    when(context.getResource(any(InputFile.class))).thenReturn(resource);
+    sensor.analyse(new Project(""), context);
   }
 
 }
