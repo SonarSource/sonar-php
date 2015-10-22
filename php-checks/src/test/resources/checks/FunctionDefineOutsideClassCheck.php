@@ -2,16 +2,19 @@
 
 function f() {           // NOK {{Move this function into a class.}}
   $x = 1;                // OK
+  function nested() {}   // OK
 }
 
 foo(function () {
   $y = 1;                // OK
+  function nested() {}   // OK
 });
 
 class A {
 
   public function f() {  // OK
     $x = 1; // OK
+    function nested() {} // OK
   }
   
   public static $x = 1;  // OK

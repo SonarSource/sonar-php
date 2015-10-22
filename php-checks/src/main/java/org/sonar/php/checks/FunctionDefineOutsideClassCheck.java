@@ -25,7 +25,6 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -36,8 +35,6 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.Set;
 
 @Rule(
@@ -52,44 +49,35 @@ public class FunctionDefineOutsideClassCheck extends PHPVisitorCheck {
   public static final String KEY = "S2007";
   private static final String MESSAGE = "Move this %s into a class.";
 
-  private final Deque<Tree> scopes = new ArrayDeque<>();
   private final Set<String> globalVariableNames = Sets.newHashSet();
 
   @Override
   public void visitScript(ScriptTree tree) {
-    scopes.clear();
     globalVariableNames.clear();
     super.visitScript(tree);
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    scopes.push(tree);
-    super.visitFunctionExpression(tree);
-    scopes.pop();
+    // don't visit nested nodes
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    scopes.push(tree);
-    super.visitMethodDeclaration(tree);
-    scopes.pop();
+    // don't visit nested nodes
   }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     context().newIssue(KEY, String.format(MESSAGE, "function")).tree(tree);
-
-    scopes.push(tree);
-    super.visitFunctionDeclaration(tree);
-    scopes.pop();
+    // don't visit nested nodes
   }
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
     super.visitAssignmentExpression(tree);
 
-    if (scopes.isEmpty() && tree.is(Kind.ASSIGNMENT) && tree.variable().is(Kind.VARIABLE_IDENTIFIER)) {
+    if (tree.is(Kind.ASSIGNMENT) && tree.variable().is(Kind.VARIABLE_IDENTIFIER)) {
       String varName = ((VariableIdentifierTree) tree.variable()).variableExpression().text();
 
       if (!CheckUtils.isSuperGlobal(varName) && !globalVariableNames.contains(varName)) {
