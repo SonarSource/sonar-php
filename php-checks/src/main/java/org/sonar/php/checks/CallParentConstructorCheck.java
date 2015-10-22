@@ -30,7 +30,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -87,7 +87,7 @@ public class CallParentConstructorCheck extends PHPVisitorCheck {
   @Nullable
   private static String getName(Tree member) {
     // Skipping other complex expression
-    return member.is(Kind.IDENTIFIER) ? ((IdentifierTree) member).text() : null;
+    return member.is(Kind.NAME_IDENTIFIER) ? ((NameIdentifierTree) member).text() : null;
   }
 
   private static boolean isParent(ExpressionTree object) {

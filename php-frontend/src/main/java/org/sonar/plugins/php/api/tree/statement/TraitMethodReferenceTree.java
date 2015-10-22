@@ -20,13 +20,12 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-
-import javax.annotation.Nullable;
-
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+
+import javax.annotation.Nullable;
 
 @Beta
 public interface TraitMethodReferenceTree extends Tree {
@@ -37,5 +36,5 @@ public interface TraitMethodReferenceTree extends Tree {
   @Nullable
   SyntaxToken doubleColonToken();
 
-  IdentifierTree method();
+  NameIdentifierTree method();
 }

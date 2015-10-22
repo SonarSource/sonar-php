@@ -20,7 +20,7 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -44,7 +44,7 @@ public interface FunctionDeclarationTree extends FunctionTree, StatementTree {
   @Override
   SyntaxToken referenceToken();
 
-  IdentifierTree name();
+  NameIdentifierTree name();
 
   @Override
   ParameterListTree parameters();

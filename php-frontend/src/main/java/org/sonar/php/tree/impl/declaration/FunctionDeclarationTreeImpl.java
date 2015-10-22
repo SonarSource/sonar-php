@@ -28,7 +28,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -41,14 +41,14 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
 
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
-  private final IdentifierTree name;
+  private final NameIdentifierTree name;
   private final ParameterListTree parameters;
   private final BlockTree body;
 
   public FunctionDeclarationTreeImpl(
     InternalSyntaxToken functionToken,
     @Nullable InternalSyntaxToken referenceToken,
-    IdentifierTree name,
+    NameIdentifierTree name,
     ParameterListTree parameters,
     BlockTree body
     ) {
@@ -71,7 +71,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
   }
 
   @Override
-  public IdentifierTree name() {
+  public NameIdentifierTree name() {
     return name;
   }
 

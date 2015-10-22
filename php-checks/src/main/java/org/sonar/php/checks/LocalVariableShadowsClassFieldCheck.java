@@ -123,7 +123,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
     for (ClassMemberTree classMemberTree : tree.members()) {
       if (classMemberTree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
         for (VariableDeclarationTree declaration : ((ClassPropertyDeclarationTree) classMemberTree).declarations()) {
-          classState.declareField(declaration.variableIdentifier().variableExpression().token());
+          classState.declareField(declaration.identifier().token());
         }
       }
     }

@@ -19,20 +19,18 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import com.google.common.collect.Iterators;
+import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class TraitAliasTreeImpl extends PHPTree implements TraitAliasTree {
 
@@ -41,14 +39,14 @@ public class TraitAliasTreeImpl extends PHPTree implements TraitAliasTree {
   private final TraitMethodReferenceTree methodReference;
   private final InternalSyntaxToken asToken;
   private final SyntaxToken modifier;
-  private final IdentifierTree alias;
+  private final NameIdentifierTree alias;
   private final InternalSyntaxToken eosToken;
 
   public TraitAliasTreeImpl(
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken asToken,
     @Nullable SyntaxToken modifier,
-    @Nullable IdentifierTree alias,
+    @Nullable NameIdentifierTree alias,
     InternalSyntaxToken eos
     ) {
     this.methodReference = methodReference;
@@ -76,7 +74,7 @@ public class TraitAliasTreeImpl extends PHPTree implements TraitAliasTree {
 
   @Nullable
   @Override
-  public IdentifierTree alias() {
+  public NameIdentifierTree alias() {
     return alias;
   }
 

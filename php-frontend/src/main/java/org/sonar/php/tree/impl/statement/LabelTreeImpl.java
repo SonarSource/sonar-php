@@ -23,7 +23,7 @@ import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -34,16 +34,16 @@ public class LabelTreeImpl extends PHPTree implements LabelTree {
 
   private static final Kind KIND = Kind.LABEL;
 
-  private final IdentifierTree label;
+  private final NameIdentifierTree label;
   private final InternalSyntaxToken colonToken;
 
-  public LabelTreeImpl(IdentifierTree label, InternalSyntaxToken colonToken) {
+  public LabelTreeImpl(NameIdentifierTree label, InternalSyntaxToken colonToken) {
     this.label = label;
     this.colonToken = colonToken;
   }
 
   @Override
-  public IdentifierTree label() {
+  public NameIdentifierTree label() {
     return label;
   }
 

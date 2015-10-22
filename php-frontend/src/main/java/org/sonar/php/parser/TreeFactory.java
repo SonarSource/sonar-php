@@ -58,7 +58,7 @@ import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionExpressionTreeImpl;
-import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
+import org.sonar.php.tree.impl.expression.NameIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LexicalVariablesTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
@@ -133,7 +133,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -284,7 +284,7 @@ public class TreeFactory {
    */
 
   public VariableDeclarationTree variableDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
-    VariableIdentifierTreeImpl variableIdentifier = new VariableIdentifierTreeImpl(new IdentifierTreeImpl(identifierToken));
+    VariableIdentifierTreeImpl variableIdentifier = new VariableIdentifierTreeImpl(identifierToken);
     if (optionalEqual.isPresent()) {
       return new VariableDeclarationTreeImpl(variableIdentifier, optionalEqual.get().first(), optionalEqual.get().second());
     } else {
@@ -297,17 +297,21 @@ public class TreeFactory {
   }
 
   public VariableDeclarationTree memberConstDeclaration(InternalSyntaxToken identifierToken, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> optionalEqual) {
-    return variableDeclaration(identifierToken, optionalEqual);
+    NameIdentifierTree identifier = new NameIdentifierTreeImpl(identifierToken);
+    if (optionalEqual.isPresent()) {
+      return new VariableDeclarationTreeImpl(identifier, optionalEqual.get().first(), optionalEqual.get().second());
+    } else {
+      return new VariableDeclarationTreeImpl(identifier, null, null);
+    }
   }
 
   public VariableDeclarationTree constDeclaration(InternalSyntaxToken identifierToken, InternalSyntaxToken equToken, ExpressionTree expression) {
-    VariableIdentifierTreeImpl variableIdentifier = new VariableIdentifierTreeImpl(new IdentifierTreeImpl(identifierToken));
-    return new VariableDeclarationTreeImpl(variableIdentifier, equToken, expression);
+    return new VariableDeclarationTreeImpl(new NameIdentifierTreeImpl(identifierToken), equToken, expression);
   }
 
   public UseClauseTree useClause(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
     if (alias.isPresent()) {
-      IdentifierTreeImpl aliasName = new IdentifierTreeImpl(alias.get().second());
+      NameIdentifierTreeImpl aliasName = new NameIdentifierTreeImpl(alias.get().second());
       return new UseClauseTreeImpl(namespaceName, alias.get().first(), aliasName);
     }
     return new UseClauseTreeImpl(namespaceName);
@@ -344,7 +348,7 @@ public class TreeFactory {
     Optional<List<SyntaxToken>> modifiers,
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> referenceToken,
-    IdentifierTree name,
+    NameIdentifierTree name,
     ParameterListTree parameters,
     Tree body
   ) {
@@ -354,7 +358,7 @@ public class TreeFactory {
   public FunctionDeclarationTree functionDeclaration(
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> referenceToken,
-    IdentifierTree name,
+    NameIdentifierTree name,
     ParameterListTree parameters,
     BlockTree body
   ) {
@@ -386,7 +390,7 @@ public class TreeFactory {
       eqToken = eqAndInitValue.get().first();
       initValue = eqAndInitValue.get().second();
     }
-    VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(new IdentifierTreeImpl(identifier));
+    VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(identifier);
     return new ParameterTreeImpl(classType.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
   }
 
@@ -421,7 +425,7 @@ public class TreeFactory {
     TraitMethodReferenceTree methodReference,
     InternalSyntaxToken asToken,
     Optional<SyntaxToken> modifier,
-    IdentifierTree alias,
+    NameIdentifierTree alias,
     InternalSyntaxToken eos
   ) {
     return new TraitAliasTreeImpl(methodReference, asToken, modifier.orNull(), alias, eos);
@@ -437,15 +441,15 @@ public class TreeFactory {
   }
 
   public TraitMethodReferenceTree traitMethodReference(InternalSyntaxToken identifier) {
-    return new TraitMethodReferenceTreeImpl(new IdentifierTreeImpl(identifier));
+    return new TraitMethodReferenceTreeImpl(new NameIdentifierTreeImpl(identifier));
   }
 
   public TraitMethodReferenceTree traitMethodReference(NamespaceNameTree trait, InternalSyntaxToken doubleColonToken, InternalSyntaxToken identifier) {
-    return new TraitMethodReferenceTreeImpl(trait, doubleColonToken, new IdentifierTreeImpl(identifier));
+    return new TraitMethodReferenceTreeImpl(trait, doubleColonToken, new NameIdentifierTreeImpl(identifier));
   }
 
   public ClassDeclarationTree interfaceDeclaration(
-    InternalSyntaxToken interfaceToken, IdentifierTree name,
+    InternalSyntaxToken interfaceToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> extendsClause,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
@@ -467,7 +471,7 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree traitDeclaration(
-    InternalSyntaxToken traitToken, IdentifierTree name,
+    InternalSyntaxToken traitToken, NameIdentifierTree name,
     InternalSyntaxToken openCurlyBraceToken, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBraceToken
   ) {
     return ClassDeclarationTreeImpl.createTrait(
@@ -480,7 +484,7 @@ public class TreeFactory {
   }
 
   public ClassDeclarationTree classDeclaration(
-    Optional<InternalSyntaxToken> modifier, InternalSyntaxToken classToken, IdentifierTree name,
+    Optional<InternalSyntaxToken> modifier, InternalSyntaxToken classToken, NameIdentifierTree name,
     Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace
@@ -564,7 +568,7 @@ public class TreeFactory {
   }
 
   public GotoStatementTree gotoStatement(InternalSyntaxToken gotoToken, InternalSyntaxToken identifier, InternalSyntaxToken eos) {
-    return new GotoStatementTreeImpl(gotoToken, new IdentifierTreeImpl(identifier), eos);
+    return new GotoStatementTreeImpl(gotoToken, new NameIdentifierTreeImpl(identifier), eos);
   }
 
   public ExpressionStatementTree expressionStatement(ExpressionTree expression, InternalSyntaxToken eos) {
@@ -572,7 +576,7 @@ public class TreeFactory {
   }
 
   public LabelTree label(InternalSyntaxToken identifier, InternalSyntaxToken colon) {
-    return new LabelTreeImpl(new IdentifierTreeImpl(identifier), colon);
+    return new LabelTreeImpl(new NameIdentifierTreeImpl(identifier), colon);
   }
 
 
@@ -624,22 +628,22 @@ public class TreeFactory {
     InternalSyntaxToken name
   ) {
 
-    ImmutableList.Builder<IdentifierTree> elements = ImmutableList.builder();
+    ImmutableList.Builder<NameIdentifierTree> elements = ImmutableList.builder();
     ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
 
     if (namespaceToken != null && separator != null) {
-      elements.add(new IdentifierTreeImpl(namespaceToken));
+      elements.add(new NameIdentifierTreeImpl(namespaceToken));
       separators.add(separator);
     }
 
     if (listOptional.isPresent()) {
       for (Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple : listOptional.get()) {
-        elements.add(new IdentifierTreeImpl(tuple.first()));
+        elements.add(new NameIdentifierTreeImpl(tuple.first()));
         separators.add(tuple.second());
       }
     }
 
-    return new NamespaceNameTreeImpl(absoluteSeparator, new SeparatedListImpl<>(elements.build(), separators.build()), new IdentifierTreeImpl(name));
+    return new NamespaceNameTreeImpl(absoluteSeparator, new SeparatedListImpl<>(elements.build(), separators.build()), new NameIdentifierTreeImpl(name));
 
   }
 
@@ -652,7 +656,7 @@ public class TreeFactory {
       catchToken,
       lParenthesis,
       exceptionType,
-      new VariableIdentifierTreeImpl(new IdentifierTreeImpl(variable)),
+      new VariableIdentifierTreeImpl(variable),
       rParenthsis,
       block
     );
@@ -960,7 +964,7 @@ public class TreeFactory {
   ) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
-        new NamespaceNameTreeImpl(null, SeparatedListImpl.<IdentifierTree>empty(), new IdentifierTreeImpl(haltCompilerToken)),
+        new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(haltCompilerToken)),
         openParenthesisToken,
         SeparatedListImpl.empty(),
         closeParenthesisToken),
@@ -975,7 +979,7 @@ public class TreeFactory {
   ) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
-        new NamespaceNameTreeImpl(null, SeparatedListImpl.<IdentifierTree>empty(), new IdentifierTreeImpl(echoToken)),
+        new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(echoToken)),
         separatedList(expression, list)),
       eosToken);
   }
@@ -1096,19 +1100,15 @@ public class TreeFactory {
     return new ExpandableStringCharactersTreeImpl(token);
   }
 
-  public VariableIdentifierTree expandableStringVariableIdentifier(InternalSyntaxToken token) {
-    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(token));
-  }
-
-  public IdentifierTree identifier(InternalSyntaxToken token) {
-    return new IdentifierTreeImpl(token);
+  public NameIdentifierTree identifier(InternalSyntaxToken token) {
+    return new NameIdentifierTreeImpl(token);
   }
 
   public ArrayAccessTree expandableArrayAccess(InternalSyntaxToken openBracket, ExpressionTree offset, InternalSyntaxToken closeBracket) {
     return new ArrayAccessTreeImpl(openBracket, offset, closeBracket);
   }
 
-  public MemberAccessTree expandableObjectMemberAccess(InternalSyntaxToken arrow, IdentifierTree property) {
+  public MemberAccessTree expandableObjectMemberAccess(InternalSyntaxToken arrow, NameIdentifierTree property) {
     return new MemberAccessTreeImpl(Kind.OBJECT_MEMBER_ACCESS, arrow, property);
   }
 
@@ -1127,7 +1127,7 @@ public class TreeFactory {
   }
 
   public ExpressionTree expressionRecovery(InternalSyntaxToken token) {
-    return new IdentifierTreeImpl(token);
+    return new NameIdentifierTreeImpl(token);
   }
 
   public ExpressionTree encapsulatedSemiComplexVariable(InternalSyntaxToken openDollarCurly, ExpressionTree expressionTree, InternalSyntaxToken closeCurly) {
@@ -1135,7 +1135,7 @@ public class TreeFactory {
   }
 
   public VariableIdentifierTree encapsulatedVariableIdentifier(InternalSyntaxToken spaces, InternalSyntaxToken variableIdentifier) {
-    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(variableIdentifier));
+    return new VariableIdentifierTreeImpl(variableIdentifier);
   }
 
   public ExpressionTree encapsulatedComplexVariable(InternalSyntaxToken openCurly, Tree lookahead, ExpressionTree expression, InternalSyntaxToken closeCurly) {
@@ -1202,7 +1202,7 @@ public class TreeFactory {
   }
 
   public VariableIdentifierTree variableIdentifier(InternalSyntaxToken variableIdentifier) {
-    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(variableIdentifier));
+    return new VariableIdentifierTreeImpl(variableIdentifier);
   }
 
   public CompoundVariableTree compoundVariable(InternalSyntaxToken openDollarCurly, ExpressionTree expression, InternalSyntaxToken closeDollarCurly) {
@@ -1236,8 +1236,8 @@ public class TreeFactory {
     return new ArrayAccessTreeImpl(openBrace, closeBrace);
   }
 
-  public IdentifierTree newStaticIdentifier(InternalSyntaxToken staticToken) {
-    return new IdentifierTreeImpl(staticToken);
+  public NameIdentifierTree newStaticIdentifier(InternalSyntaxToken staticToken) {
+    return new NameIdentifierTreeImpl(staticToken);
   }
 
   public ReferenceVariableTree referenceVariable(InternalSyntaxToken ampersand, ExpressionTree variable) {
@@ -1277,8 +1277,8 @@ public class TreeFactory {
     return result;
   }
 
-  public IdentifierTree variableName(InternalSyntaxToken token) {
-    return new IdentifierTreeImpl(token);
+  public NameIdentifierTree variableName(InternalSyntaxToken token) {
+    return new NameIdentifierTreeImpl(token);
   }
 
   public MemberAccessTree objectMemberAccess(InternalSyntaxToken accessToken, ExpressionTree member) {
@@ -1356,7 +1356,7 @@ public class TreeFactory {
     @Nullable InternalSyntaxToken closeParenthesis
   ) {
     return new FunctionCallTreeImpl(
-      new NamespaceNameTreeImpl(null, SeparatedListImpl.<IdentifierTree>empty(), new IdentifierTreeImpl(callee)),
+      new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(callee)),
       openParenthesis,
       arguments,
       closeParenthesis);
@@ -1494,10 +1494,6 @@ public class TreeFactory {
 
   public ExpressionTree completeConditionalExpr(ExpressionTree expression, Optional<ConditionalExpressionTreeImpl> partial) {
     return partial.isPresent() ? partial.get().complete(expression) : expression;
-  }
-
-  public ExpressionTree expression(InternalSyntaxToken token) {
-    return new VariableIdentifierTreeImpl(new IdentifierTreeImpl(token));
   }
 
   /**

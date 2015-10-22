@@ -23,6 +23,7 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
@@ -33,7 +34,7 @@ public interface NamespaceNameTree extends ExpressionTree {
   @Nullable
   SyntaxToken absoluteSeparator();
 
-  SeparatedList<IdentifierTree> namespaces();
+  SeparatedList<NameIdentifierTree> namespaces();
 
   IdentifierTree name();
 

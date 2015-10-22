@@ -23,7 +23,7 @@ import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -35,10 +35,10 @@ public class GotoStatementTreeImpl extends PHPTree implements GotoStatementTree 
   private static final Kind KIND = Kind.GOTO_STATEMENT;
 
   private final InternalSyntaxToken gotoToken;
-  private final IdentifierTree identifier;
+  private final NameIdentifierTree identifier;
   private final InternalSyntaxToken eosToken;
 
-  public GotoStatementTreeImpl(InternalSyntaxToken gotoToken, IdentifierTree identifier, InternalSyntaxToken eosToken) {
+  public GotoStatementTreeImpl(InternalSyntaxToken gotoToken, NameIdentifierTree identifier, InternalSyntaxToken eosToken) {
     this.gotoToken = gotoToken;
     this.identifier = identifier;
     this.eosToken = eosToken;
@@ -50,7 +50,7 @@ public class GotoStatementTreeImpl extends PHPTree implements GotoStatementTree 
   }
 
   @Override
-  public IdentifierTree identifier() {
+  public NameIdentifierTree identifier() {
     return identifier;
   }
 

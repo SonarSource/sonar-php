@@ -64,7 +64,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   @Override
   public void visitVariableDeclaration(VariableDeclarationTree declaration) {
-    String identifier = declaration.variableIdentifier().variableExpression().text();
+    String identifier = declaration.identifier().text();
     checkVariable(declaration, identifier, declaration.initValue());
     super.visitVariableDeclaration(declaration);
   }

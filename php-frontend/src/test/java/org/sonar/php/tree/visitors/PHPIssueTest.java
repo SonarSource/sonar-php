@@ -21,7 +21,7 @@ package org.sonar.php.tree.visitors;
 
 import org.fest.assertions.Assertions;
 import org.junit.Test;
-import org.sonar.php.tree.impl.expression.IdentifierTreeImpl;
+import org.sonar.php.tree.impl.expression.NameIdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 
 import java.util.Collections;
@@ -63,7 +63,7 @@ public class PHPIssueTest {
   @Test
   public void test_setting_line_from_tree() throws Exception {
     final int line = 3;
-    IdentifierTreeImpl tree = new IdentifierTreeImpl(new InternalSyntaxToken(line, 1, "tree", Collections.EMPTY_LIST, 0, false, null));
+    NameIdentifierTreeImpl tree = new NameIdentifierTreeImpl(new InternalSyntaxToken(line, 1, "tree", Collections.EMPTY_LIST, 0, false, null));
     PHPIssue issue = new PHPIssue("key", "message").tree(tree);
 
     Assertions.assertThat(issue.ruleKey()).isEqualTo("key");

@@ -24,7 +24,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -37,9 +37,9 @@ public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
   private static final Kind KIND = Kind.USE_CLAUSE;
   private final NamespaceNameTree namespaceName;
   private final InternalSyntaxToken asToken;
-  private final IdentifierTree alias;
+  private final NameIdentifierTree alias;
 
-  public UseClauseTreeImpl(NamespaceNameTree namespaceName, InternalSyntaxToken asToken, IdentifierTree alias) {
+  public UseClauseTreeImpl(NamespaceNameTree namespaceName, InternalSyntaxToken asToken, NameIdentifierTree alias) {
     this.namespaceName = namespaceName;
     this.asToken = asToken;
     this.alias = alias;
@@ -64,7 +64,7 @@ public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
 
   @Nullable
   @Override
-  public IdentifierTree alias() {
+  public NameIdentifierTree alias() {
     return alias;
   }
 

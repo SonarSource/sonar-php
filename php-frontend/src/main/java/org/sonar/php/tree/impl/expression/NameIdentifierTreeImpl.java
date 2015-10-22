@@ -24,18 +24,18 @@ import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Iterator;
 
-public class IdentifierTreeImpl extends PHPTree implements IdentifierTree {
+public class NameIdentifierTreeImpl extends PHPTree implements NameIdentifierTree {
 
   private final InternalSyntaxToken nameToken;
-  private static final Kind KIND = Kind.IDENTIFIER;
+  private static final Kind KIND = Kind.NAME_IDENTIFIER;
 
-  public IdentifierTreeImpl(InternalSyntaxToken nameToken) {
+  public NameIdentifierTreeImpl(InternalSyntaxToken nameToken) {
     this.nameToken = Preconditions.checkNotNull(nameToken);
   }
 
@@ -67,6 +67,6 @@ public class IdentifierTreeImpl extends PHPTree implements IdentifierTree {
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitIdentifier(this);
+    visitor.visitNameIdentifier(this);
   }
 }

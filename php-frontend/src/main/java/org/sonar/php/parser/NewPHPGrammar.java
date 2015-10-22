@@ -52,7 +52,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -236,7 +236,7 @@ public class NewPHPGrammar {
       f.classDeclaration(
         b.optional(b.firstOf(b.token(ABSTRACT), b.token(FINAL))),
         b.token(CLASS),
-        IDENTIFIER(),
+        NAME_IDENTIFIER(),
         b.optional(f.newTuple50(b.token(EXTENDS), NAMESPACE_NAME())),
         b.optional(f.newTuple30(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
@@ -248,7 +248,7 @@ public class NewPHPGrammar {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.TRAIT_DECLARATION).is(
       f.traitDeclaration(
         b.token(TRAIT),
-        IDENTIFIER(),
+        NAME_IDENTIFIER(),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
         b.token(RCURLYBRACE)));
@@ -258,7 +258,7 @@ public class NewPHPGrammar {
     return b.<ClassDeclarationTree>nonterminal(PHPLexicalGrammar.INTERFACE_DECLARATION).is(
       f.interfaceDeclaration(
         b.token(INTERFACE),
-        IDENTIFIER(),
+        NAME_IDENTIFIER(),
         b.optional(f.newTuple26(b.token(EXTENDS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
@@ -321,7 +321,7 @@ public class NewPHPGrammar {
         b.zeroOrMore(MEMBER_MODIFIER()),
         b.token(PHPKeyword.FUNCTION),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
-        IDENTIFIER(),
+        NAME_IDENTIFIER(),
         PARAMETER_LIST(),
         b.firstOf(
           EOS(),
@@ -333,7 +333,7 @@ public class NewPHPGrammar {
       f.functionDeclaration(
         b.token(PHPKeyword.FUNCTION),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
-        IDENTIFIER(),
+        NAME_IDENTIFIER(),
         PARAMETER_LIST(),
         BLOCK()));
   }
@@ -410,7 +410,7 @@ public class NewPHPGrammar {
           TRAIT_METHOD_REFERENCE(),
           b.token(PHPKeyword.AS),
           b.optional(MEMBER_MODIFIER()),
-          IDENTIFIER(),
+          NAME_IDENTIFIER(),
           EOS()),
         f.traitAlias(
           TRAIT_METHOD_REFERENCE(),
@@ -1127,15 +1127,15 @@ public class NewPHPGrammar {
         b.optional(b.firstOf(
           f.expandableArrayAccess(
             b.token(LBRACKET),
-            b.firstOf(IDENTIFIER(), NUMERIC_LITERAL(), ENCAPSULATED_VARIABLE_IDENTIFIER()),
+            b.firstOf(NAME_IDENTIFIER(), NUMERIC_LITERAL(), ENCAPSULATED_VARIABLE_IDENTIFIER()),
             b.token(RBRACKET)),
           f.expandableObjectMemberAccess(
             b.token(ARROW),
-            IDENTIFIER())))));
+            NAME_IDENTIFIER())))));
   }
 
-  public IdentifierTree IDENTIFIER() {
-    return b.<IdentifierTree>nonterminal(Kind.IDENTIFIER).is(
+  public NameIdentifierTree NAME_IDENTIFIER() {
+    return b.<NameIdentifierTree>nonterminal(Kind.NAME_IDENTIFIER).is(
       f.identifier(b.token(PHPLexicalGrammar.IDENTIFIER)));
   }
 
@@ -1330,14 +1330,14 @@ public class NewPHPGrammar {
         b.firstOf(
           VARIABLE_WITHOUT_OBJECTS(),
           OBJECT_DIMENSIONAL_LIST(),
-          IDENTIFIER())));
+          NAME_IDENTIFIER())));
   }
 
   public ExpressionTree OBJECT_DIMENSIONAL_LIST() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.OBJECT_DIM_LIST).is(
       f.objectDimensionalList(
         b.firstOf(
-          IDENTIFIER(),
+          NAME_IDENTIFIER(),
           f.variableName(b.token(PHPLexicalGrammar.KEYWORDS)),
           COMPUTED_VARIABLE_NAME()),
         b.zeroOrMore(
@@ -1352,7 +1352,7 @@ public class NewPHPGrammar {
         b.token(DOUBLECOLON),
         b.firstOf(
           VARIABLE_WITHOUT_OBJECTS(),
-          IDENTIFIER(),
+          NAME_IDENTIFIER(),
           b.token(CLASS),
           COMPUTED_VARIABLE_NAME())));
   }

@@ -25,7 +25,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -40,7 +40,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   private final List<SyntaxToken> modifiersToken;
   private final InternalSyntaxToken functionToken;
   private final InternalSyntaxToken referenceToken;
-  private final IdentifierTree name;
+  private final NameIdentifierTree name;
   private final ParameterListTree parameters;
   private final Tree body;
 
@@ -48,7 +48,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     List<SyntaxToken> modifiersToken,
     InternalSyntaxToken functionToken,
     @Nullable InternalSyntaxToken referenceToken,
-    IdentifierTree name,
+    NameIdentifierTree name,
     ParameterListTree parameters,
     Tree body
     ) {
@@ -77,7 +77,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   }
 
   @Override
-  public IdentifierTree name() {
+  public NameIdentifierTree name() {
     return name;
   }
 

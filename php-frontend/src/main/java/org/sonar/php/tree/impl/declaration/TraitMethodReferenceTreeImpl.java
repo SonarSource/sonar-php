@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -39,15 +39,15 @@ public class TraitMethodReferenceTreeImpl extends PHPTree implements TraitMethod
 
   private final NamespaceNameTree trait;
   private final SyntaxToken doubleColonToken;
-  private final IdentifierTree method;
+  private final NameIdentifierTree method;
 
-  public TraitMethodReferenceTreeImpl(IdentifierTree method) {
+  public TraitMethodReferenceTreeImpl(NameIdentifierTree method) {
     this.trait = null;
     this.doubleColonToken = null;
     this.method = method;
   }
 
-  public TraitMethodReferenceTreeImpl(NamespaceNameTree trait, SyntaxToken doubleColonToken, IdentifierTree method) {
+  public TraitMethodReferenceTreeImpl(NamespaceNameTree trait, SyntaxToken doubleColonToken, NameIdentifierTree method) {
     this.trait = trait;
     this.doubleColonToken = doubleColonToken;
     this.method = method;
@@ -66,7 +66,7 @@ public class TraitMethodReferenceTreeImpl extends PHPTree implements TraitMethod
   }
 
   @Override
-  public IdentifierTree method() {
+  public NameIdentifierTree method() {
     return method;
   }
 

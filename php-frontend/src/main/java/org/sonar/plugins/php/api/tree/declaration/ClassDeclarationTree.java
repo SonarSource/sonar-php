@@ -22,7 +22,7 @@ package org.sonar.plugins.php.api.tree.declaration;
 import com.google.common.annotations.Beta;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.SeparatedList;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
@@ -69,7 +69,7 @@ public interface ClassDeclarationTree extends StatementTree {
    */
   SyntaxToken classEntryTypeToken();
 
-  IdentifierTree name();
+  NameIdentifierTree name();
 
   @Nullable
   SyntaxToken extendsToken();

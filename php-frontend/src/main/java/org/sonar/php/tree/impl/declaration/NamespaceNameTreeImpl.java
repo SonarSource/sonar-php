@@ -26,6 +26,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -37,13 +38,13 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   private static final Kind KIND = Kind.NAMESPACE_NAME;
 
   private final SyntaxToken absoluteSeparator;
-  private final SeparatedListImpl<IdentifierTree> namespaces;
+  private final SeparatedListImpl<NameIdentifierTree> namespaces;
   private final IdentifierTree name;
 
   private final String fullName;
   private final String qualifiedName;
 
-  public NamespaceNameTreeImpl(@Nullable InternalSyntaxToken absoluteSeparator, SeparatedListImpl<IdentifierTree> namespaces, IdentifierTree name) {
+  public NamespaceNameTreeImpl(@Nullable InternalSyntaxToken absoluteSeparator, SeparatedListImpl<NameIdentifierTree> namespaces, IdentifierTree name) {
     this.absoluteSeparator = absoluteSeparator;
     this.namespaces = namespaces;
     this.name = name;
@@ -60,7 +61,7 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
   }
 
   @Override
-  public SeparatedListImpl<IdentifierTree> namespaces() {
+  public SeparatedListImpl<NameIdentifierTree> namespaces() {
     return namespaces;
   }
 
@@ -117,8 +118,8 @@ public class NamespaceNameTreeImpl extends PHPTree implements NamespaceNameTree 
     Iterator<Tree> iterator = this.namespaces.elementsAndSeparators();
     while (iterator.hasNext()) {
       Tree next = iterator.next();
-      if (next.is(Kind.IDENTIFIER)) {
-        result.append(((IdentifierTree) next).text());
+      if (next.is(Kind.NAME_IDENTIFIER)) {
+        result.append(((NameIdentifierTree) next).text());
       } else {
         result.append(((SyntaxToken) next).text());
       }

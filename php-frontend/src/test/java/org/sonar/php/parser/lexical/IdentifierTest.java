@@ -28,7 +28,7 @@ public class IdentifierTest {
 
   @Test
   public void test() {
-    assertThat(Kind.IDENTIFIER)
+    assertThat(Kind.NAME_IDENTIFIER)
       .matches("identifier")
       .matches("_identifier")
       .matches("identifier1")

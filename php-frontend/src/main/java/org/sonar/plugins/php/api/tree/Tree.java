@@ -47,7 +47,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -218,9 +218,9 @@ public interface Tree {
     VARIABLE_IDENTIFIER(VariableIdentifierTree.class),
 
     /**
-     * {@link IdentifierTree}
+     * {@link NameIdentifierTree}
      */
-    IDENTIFIER(IdentifierTree.class),
+    NAME_IDENTIFIER(NameIdentifierTree.class),
 
     /**
      * {@link ReferenceVariableTree}

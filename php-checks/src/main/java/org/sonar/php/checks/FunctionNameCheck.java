@@ -28,7 +28,7 @@ import org.sonar.php.checks.utils.FunctionUtils;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -79,7 +79,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
     super.visitFunctionDeclaration(tree);
   }
 
-  private void check(FunctionTree functionDeclaration, IdentifierTree name) {
+  private void check(FunctionTree functionDeclaration, NameIdentifierTree name) {
     String functionName = name.text();
     if (!pattern.matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
       context().newIssue(KEY, String.format(MESSAGE, functionName, format)).tree(functionDeclaration);

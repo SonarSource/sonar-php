@@ -24,7 +24,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -53,7 +53,7 @@ public class TooManyLinesInClassCheck extends PHPVisitorCheck {
   public void visitClassDeclaration(ClassDeclarationTree declaration) {
     int numberOfLines = declaration.closeCurlyBraceToken().line() - declaration.openCurlyBraceToken().line() + 1;
     if (numberOfLines > maximumLinesThreshold) {
-      IdentifierTree name = declaration.name();
+      NameIdentifierTree name = declaration.name();
       context().newIssue(KEY, String.format(MESSAGE, name.text(), numberOfLines, maximumLinesThreshold)).tree(name);
     }
     super.visitClassDeclaration(declaration);

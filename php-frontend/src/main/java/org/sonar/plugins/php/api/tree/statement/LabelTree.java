@@ -20,7 +20,7 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -33,7 +33,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 @Beta
 public interface LabelTree extends StatementTree {
 
-  IdentifierTree label();
+  NameIdentifierTree label();
 
   SyntaxToken colonToken();
 

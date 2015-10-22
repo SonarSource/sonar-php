@@ -23,7 +23,7 @@ import com.google.common.annotations.Beta;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.List;
@@ -57,7 +57,7 @@ public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
    */
   List<SyntaxToken> modifiers();
 
-  IdentifierTree name();
+  NameIdentifierTree name();
 
   /**
    * Either {@link PHPPunctuator#SEMICOLON ;} or {@link Tree.Kind#BLOCK block}
