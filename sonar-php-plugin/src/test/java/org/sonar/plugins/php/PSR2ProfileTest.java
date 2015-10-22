@@ -38,7 +38,7 @@ public class PSR2ProfileTest {
 
     assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
     assertThat(profile.getName()).isEqualTo("PSR-2");
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(19);
+    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(20);
     assertThat(validation.hasErrors()).isFalse();
   }
 
