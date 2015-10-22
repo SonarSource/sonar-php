@@ -19,17 +19,17 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractCommentContainsPatternCheck;
+import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.NoSqale;
 
 @Rule(
   key = FixmeTagPresenceCheck.KEY,
   name = "\"FIXME\" tags should be handled",
   priority = Priority.MAJOR)
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
+@ActivatedByDefault
 @NoSqale
 public class FixmeTagPresenceCheck extends AbstractCommentContainsPatternCheck {
 
