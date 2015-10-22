@@ -28,9 +28,11 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -40,6 +42,8 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Rule(
   key = OverridingMethodSimplyCallParentCheck.KEY,
@@ -111,18 +115,21 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
     }
   }
 
-  private boolean sameArguments(FunctionCallTree functionCallTree, MethodDeclarationTree method) {
-    boolean sameArgumentsNumber = functionCallTree.arguments().size() == method.parameters().parameters().size();
-    return sameArgumentsNumber && allArgumentsAreTrivial(functionCallTree);
-  }
-
-  private boolean allArgumentsAreTrivial(FunctionCallTree functionCallTree) {
+  private static boolean sameArguments(FunctionCallTree functionCallTree, MethodDeclarationTree method) {
+    List<String> argumentNames = new ArrayList<>();
     for (ExpressionTree argument : functionCallTree.arguments()) {
       if (!argument.is(Kind.VARIABLE_IDENTIFIER)) {
         return false;
       }
+      argumentNames.add(((VariableIdentifierTree) argument).variableExpression().text());
     }
-    return true;
+
+    List<String> parameterNames = new ArrayList<>();
+    for (ParameterTree parameter : method.parameters().parameters()) {
+      parameterNames.add(parameter.variableIdentifier().variableExpression().text());
+    }
+
+    return argumentNames.equals(parameterNames);
   }
 
   private boolean isSuperClass(ExpressionTree tree) {
