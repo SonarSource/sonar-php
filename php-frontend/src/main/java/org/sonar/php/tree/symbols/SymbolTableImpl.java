@@ -25,8 +25,10 @@ import com.google.common.collect.Sets;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +37,9 @@ public class SymbolTableImpl implements SymbolTable {
 
   private List<Symbol> symbols = new ArrayList<>();
   private Set<Scope> scopes = Sets.newHashSet();
+
+  private SymbolTableImpl(){
+  }
 
   public static SymbolTableImpl create(CompilationUnitTree compilationUnit) {
     SymbolTableImpl symbolModel = new SymbolTableImpl();
@@ -49,6 +54,17 @@ public class SymbolTableImpl implements SymbolTable {
   @Override
   public ImmutableSet<Scope> getScopes(){
     return ImmutableSet.copyOf(scopes);
+  }
+
+  @Nullable
+  @Override
+  public Scope getScopeFor(Tree tree) {
+    for (Scope scope : scopes) {
+      if (scope.tree().equals(tree)) {
+        return scope;
+      }
+    }
+    return null;
   }
 
   public Symbol declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope) {

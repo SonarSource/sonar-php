@@ -22,7 +22,9 @@ package org.sonar.plugins.php.api.symbols;
 import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableList;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.plugins.php.api.tree.Tree;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
@@ -48,4 +50,7 @@ public interface SymbolTable {
   List<Symbol> getSymbols(String name);
 
   Set<Scope> getScopes();
+
+  @Nullable
+  Scope getScopeFor(Tree tree);
 }

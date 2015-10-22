@@ -43,6 +43,7 @@ import java.util.List;
 
 public class FunctionUtils {
 
+  // fixme (@lena) refactor this class
   private static final GrammarRuleKey[] FUNCTIONS = {
     PHPGrammar.METHOD_DECLARATION,
     PHPGrammar.FUNCTION_DECLARATION,
@@ -93,22 +94,6 @@ public class FunctionUtils {
   public static boolean isAbstractMethod(AstNode methodDec) {
     return methodDec.is(PHPGrammar.METHOD_DECLARATION)
       && methodDec.getFirstChild(PHPGrammar.METHOD_BODY).getFirstChild().is(PHPPunctuator.SEMICOLON);
-  }
-
-  /**
-   * Return wether the method is overriding a parent method or not.
-   *
-   * @param methodDec METHOD_DECLARATION
-   * @return true if method has tag "@inheritdoc" in it's doc comment.
-   */
-  public static boolean isOverriding(AstNode methodDec) {
-    Token functionToken = methodDec.getToken();
-    for (Trivia comment : functionToken.getTrivia()) {
-      if (StringUtils.containsIgnoreCase(comment.getToken().getValue(), "@inheritdoc")) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /**

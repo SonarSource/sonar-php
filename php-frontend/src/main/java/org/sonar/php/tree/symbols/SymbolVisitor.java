@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -32,6 +33,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -108,8 +110,29 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitVariableIdentifier(VariableIdentifierTree tree) {
-    System.out.println(tree.token().text() + " - " + tree.token().line());
     createVariableIdentifierSymbol(tree);
+  }
+
+  @Override
+  public void visitCompoundVariable(CompoundVariableTree tree) {
+    NameIdentifierTree nameIdentifier = null;
+    if (tree.variableExpression().is(Tree.Kind.NAME_IDENTIFIER)) {
+      nameIdentifier = (NameIdentifierTree) tree.variableExpression();
+    } else if (tree.variableExpression().is(Tree.Kind.NAMESPACE_NAME)) {
+      NamespaceNameTree namespaceName = (NamespaceNameTree) tree.variableExpression();
+      if (namespaceName.namespaces().isEmpty() && namespaceName.name().is(Kind.NAME_IDENTIFIER)) {
+        nameIdentifier = (NameIdentifierTree) namespaceName.name();
+      }
+    }
+
+    if (nameIdentifier != null) {
+      Symbol symbol = currentScope.getSymbol("$" + nameIdentifier.text());
+      if (symbol != null) {
+        // fixme (Lena) : on symbol highlighting the size of symbol should be the same for all usages
+        symbol.addUsage(nameIdentifier);
+      }
+    }
+    super.visitCompoundVariable(tree);
   }
 
   @Override
@@ -141,9 +164,13 @@ public class SymbolVisitor extends PHPVisitorCheck {
       // Other cases are not supported
       IdentifierTree identifier;
       if (variable.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-        // fixme add usage for parent symbol
         identifier = (IdentifierTree) variable.variableExpression();
         createSymbol(identifier, Symbol.Kind.VARIABLE);
+        Symbol parentSymbol = currentScope.outer().getSymbol(identifier.text());
+        if (parentSymbol != null) {
+          // fixme (Lena) : symbol highlighting will fail as for this token we have usage and declaration
+          parentSymbol.addUsage(identifier);
+        }
 
       } else if (variable.is(Tree.Kind.REFERENCE_VARIABLE) && variable.variableExpression().is(Tree.Kind.VARIABLE_IDENTIFIER)) {
         identifier = ((VariableIdentifierTree) variable.variableExpression()).variableExpression();

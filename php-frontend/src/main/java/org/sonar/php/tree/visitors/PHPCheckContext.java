@@ -20,6 +20,8 @@
 package org.sonar.php.tree.visitors;
 
 import com.google.common.collect.ImmutableList;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.Issue;
@@ -32,11 +34,13 @@ public class PHPCheckContext implements CheckContext {
 
   private final File file;
   private final CompilationUnitTree tree;
+  private final SymbolTable symbolTable;
   private List<Issue> issues;
 
   public PHPCheckContext(File file, CompilationUnitTree tree) {
     this.file = file;
     this.tree = tree;
+    this.symbolTable = SymbolTableImpl.create(tree);
     this.issues = new ArrayList<>();
   }
 
@@ -61,6 +65,11 @@ public class PHPCheckContext implements CheckContext {
   @Override
   public ImmutableList<Issue> getIssues() {
     return ImmutableList.copyOf(issues);
+  }
+
+  @Override
+  public SymbolTable symbolTable() {
+    return symbolTable;
   }
 
 }

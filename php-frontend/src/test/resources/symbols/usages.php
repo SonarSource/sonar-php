@@ -42,3 +42,12 @@ class A {
     }
 }
 
+
+// compound variable
+$compoundVar = "str";
+${$compoundVar} = 1;    // use of $compoundVar
+${compoundVar} = 1;     // use of $compoundVar
+
+$var = "str";
+echo "${var}";          // use of $var
+

@@ -20,24 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class UnusedFunctionParametersCheckTest extends CheckTest {
+public class UnusedFunctionParametersCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("UnusedFunctionParametersCheck.php"), new UnusedFunctionParametersCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(3).withMessage("Remove the unused function parameter \"$p1\".")
-      .next().atLine(8).withMessage("Remove the unused function parameter \"$p2\".")
-      .next().atLine(11).withMessage("Remove the unused function parameter \"$p1\".")
-      .next().atLine(12).withMessage("Remove the unused function parameter \"$p2\".")
-      .next().atLine(20).withMessage("Remove the unused function parameters \"$p2, $p3\".")
-      .next().atLine(46).withMessage("Remove the unused function parameter \"$p1\".")
-      .noMore();
+    PHPCheckTest.check(new UnusedFunctionParametersCheck(), TestUtils.getCheckFile("UnusedFunctionParametersCheck.php"));
   }
 }

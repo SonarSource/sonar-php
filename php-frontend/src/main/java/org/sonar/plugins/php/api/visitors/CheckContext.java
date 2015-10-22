@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 
 import java.io.File;
@@ -54,5 +55,7 @@ public interface CheckContext {
   File file();
 
   List<Issue> getIssues();
+
+  SymbolTable symbolTable();
 
 }

@@ -82,7 +82,7 @@ public class UsagesTest extends ParsingTestUtils {
   }
 
   private void test_global_scope(Scope scope) {
-    assertThat(globalSymbolA.usages()).hasSize(2);
+    assertThat(globalSymbolA.usages()).hasSize(3);
     assertThat(globalSymbolB.usages()).hasSize(1);
 
     Symbol arraySymbol = scope.getSymbol("$array");
@@ -91,6 +91,9 @@ public class UsagesTest extends ParsingTestUtils {
     assertThat(scope.getSymbol("$f").usages()).hasSize(1);
     assertThat(scope.getSymbol("h").usages()).hasSize(1);
     assertThat(scope.getSymbol("j").usages()).hasSize(1);
+
+    assertThat(scope.getSymbol("$compoundVar").usages()).hasSize(2);
+    assertThat(scope.getSymbol("$var").usages()).hasSize(1);
   }
 
   private void test_global_statement(Scope scope) {
