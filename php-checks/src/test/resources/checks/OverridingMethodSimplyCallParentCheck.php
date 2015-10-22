@@ -18,6 +18,10 @@ abstract class B extends A {
     parent::g($p1, $p2, $p3);
   }
 
+  public function g2($p1, $p2, $p3) {   // OK
+    parent::g2($p1, $p3, $p2);
+  }
+
   public function e() {      // NOK
     A::e();
   }
