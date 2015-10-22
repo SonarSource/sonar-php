@@ -26,12 +26,9 @@ import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
@@ -89,27 +86,19 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   @Override
   public void visitLiteral(LiteralTree tree) {
     if (tree.is(Kind.REGULAR_STRING_LITERAL)) {
-      visitOccurrence(tree.value(), tree);
-    }
-  }
+      String literal = tree.value();
+      String value = StringUtils.substring(literal, 1, literal.length() - 1);
 
-  @Override
-  public void visitExpandableStringLiteral(ExpandableStringLiteralTree tree) {
-    visitOccurrence(CheckUtils.asString(tree), tree);
-  }
+      if (value.length() >= MINIMAL_LITERAL_LENGTH) {
 
-  private void visitOccurrence(String literal, Tree tree) {
-    String value = StringUtils.substring(literal, 1, literal.length() - 1);
+        if (!sameLiteralOccurrencesCounter.containsKey(value)) {
+          sameLiteralOccurrencesCounter.put(value, 1);
+          firstOccurrenceLines.put(value, ((PHPTree) tree).getLine());
 
-    if (value.length() >= MINIMAL_LITERAL_LENGTH) {
-
-      if (!sameLiteralOccurrencesCounter.containsKey(value)) {
-        sameLiteralOccurrencesCounter.put(value, 1);
-        firstOccurrenceLines.put(value, ((PHPTree) tree).getLine());
-
-      } else {
-        int occurrences = sameLiteralOccurrencesCounter.get(value);
-        sameLiteralOccurrencesCounter.put(value, occurrences + 1);
+        } else {
+          int occurrences = sameLiteralOccurrencesCounter.get(value);
+          sameLiteralOccurrencesCounter.put(value, occurrences + 1);
+        }
       }
     }
   }

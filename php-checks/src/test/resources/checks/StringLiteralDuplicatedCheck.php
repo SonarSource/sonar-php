@@ -11,7 +11,8 @@ echo "aaaaa";  // NOK {{Define a constant instead of duplicating this literal "a
 echo "aaaaa";
 echo "aaaaa";
 
-echo "$toto";  // NOK {{Define a constant instead of duplicating this literal "$toto" 3 times.}}
+echo "$toto";  // OK
+$toto = "new value";
 echo "$toto";
 echo "$toto";
 

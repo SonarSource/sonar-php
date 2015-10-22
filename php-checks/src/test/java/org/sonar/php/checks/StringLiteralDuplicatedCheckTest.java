@@ -40,7 +40,7 @@ public class StringLiteralDuplicatedCheckTest {
   @Test
   public void custom() throws Exception {
     check.threshold = 4;
-    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Define a constant instead of duplicating this literal \"name1\" 4 times.").line(18));
+    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Define a constant instead of duplicating this literal \"name1\" 4 times.").line(19));
     PHPCheckTest.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), issue);
   }
 }
