@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.TokenVisitor;
@@ -33,6 +32,7 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
@@ -43,7 +43,7 @@ import java.util.List;
   name = "A close curly brace should be located at the beginning of a line",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
+@ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
 public class RightCurlyBraceStartsLineCheck extends PHPVisitorCheck {

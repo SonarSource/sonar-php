@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -30,6 +29,7 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
@@ -38,7 +38,7 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
   name = "Increment (++) and decrement (--) operators should not be used in a method call or mixed with other operators in an expression",
   priority = Priority.MAJOR,
   tags = {Tags.CERT, Tags.MISRA})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
+@ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
 public class IncrementDecrementInSubExpressionCheck extends PHPVisitorCheck {

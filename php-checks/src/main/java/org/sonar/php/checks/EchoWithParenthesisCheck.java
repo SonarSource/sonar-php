@@ -21,12 +21,12 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
@@ -35,7 +35,7 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
   name = "Parentheses should not be used for calls to \"echo\"",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
+@ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
 public class EchoWithParenthesisCheck extends FunctionUsageCheck {
