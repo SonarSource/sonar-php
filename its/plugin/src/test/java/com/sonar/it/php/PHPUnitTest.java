@@ -71,7 +71,7 @@ public class PHPUnitTest {
   public void it_coverage() throws Exception {
     Assume.assumeTrue(Tests.is_after_plugin("2.5"));
     assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(3);
-    assertThat(getProjectMeasure("uncovered_lines").getValue()).isEqualTo(1);
+    assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(1);
   }
 
   @Test

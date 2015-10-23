@@ -26,6 +26,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.Mockito;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -111,38 +112,47 @@ public class PhpUnitCoverageResultParserTest {
    * SONARPLUGINS-1591
    */
   @Test
-  public void shouldNotFailIfNoStatementCount() {
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-no-statements-covered.xml"));
-    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINE_COVERAGE), eq(0.0d));
+  public void shouldNotFailIfNoStatementCount() throws Exception {
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-no-statements-covered.xml"));
+    
+    verify(context).saveMeasure(any(Resource.class), eq(CoreMetrics.LINES_TO_COVER), eq(0.0d));
+    verify(context).saveMeasure(any(Resource.class), eq(CoreMetrics.UNCOVERED_LINES), eq(0.0d));
   }
 
   /**
    * SONARPLUGINS-1675
    */
   @Test
-  public void shouldNotFailIfNoLineForFileNode() {
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-with-filenode-without-line.xml"));
-    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINE_COVERAGE), eq(0.0d));
+  public void shouldNotFailIfNoLineForFileNode() throws Exception {
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-filenode-without-line.xml"));
+    
+    verify(context).saveMeasure(any(Resource.class), eq(CoreMetrics.LINES_TO_COVER), eq(0.0d));
+    verify(context).saveMeasure(any(Resource.class), eq(CoreMetrics.UNCOVERED_LINES), eq(0.0d));
   }
 
   @Test
-  public void should_save_measure_for_missing_file_in_report() throws Exception {
-    when(context.getResource(any(Resource.class))).thenReturn(org.sonar.api.resources.File.create("Banana.php"));
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit.coverage-empty.xml"));
+  public void should_set_metrics_to_ncloc_for_missing_files() throws Exception {
+    when(context.getMeasure(any(Resource.class), eq(CoreMetrics.NCLOC)))
+      .thenReturn(new Measure<Integer>(CoreMetrics.NCLOC, 42.));
 
-    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINE_COVERAGE), eq(0.0d));
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"));
+
+    verify(context).saveMeasure(any(Resource.class), eq(CoreMetrics.LINES_TO_COVER), eq(42.0d));
+    verify(context).saveMeasure(any(Resource.class), eq(CoreMetrics.UNCOVERED_LINES), eq(42.0d));
+  }
+
+  @Test
+  public void should_skip_missing_files_with_no_ncloc() throws Exception {
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"));
+
+    verify(context, Mockito.never()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINES_TO_COVER), any(Double.class));
   }
 
   private static void addFiles(DefaultFileSystem fs) {
     File baseDir = TestUtils.getResource(BASE_DIR);
-
     InputFile monkeyFile = new DefaultInputFile(MONKEY_FILE_NAME).setAbsolutePath(MONKEY_FILE.getAbsolutePath()).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
-    InputFile bananaFile = new DefaultInputFile(BANANA_FILE_NAME).setAbsolutePath(BANANA_FILE.getAbsolutePath()).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
-
     fs.setBaseDir(baseDir);
-
     fs.add(monkeyFile);
-    fs.add(bananaFile);
   }
 
   /**
