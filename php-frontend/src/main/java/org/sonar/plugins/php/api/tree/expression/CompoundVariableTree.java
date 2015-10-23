@@ -31,7 +31,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 @Beta
 public interface CompoundVariableTree extends VariableTree {
 
-  SyntaxToken openDolarCurlyBraceToken();
+  SyntaxToken openDollarCurlyBraceToken();
 
   @Override
   ExpressionTree variableExpression();

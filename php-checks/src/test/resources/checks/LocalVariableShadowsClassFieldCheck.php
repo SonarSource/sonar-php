@@ -13,7 +13,7 @@ class A {
   }
 
   public function A($field) {           // OK (Constructor)
-    $this->$field = $field;
+    $this->field = $field;
   }
 
   public static function f1($field) {   // OK

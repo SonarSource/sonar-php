@@ -229,7 +229,7 @@ public interface Tree {
 
     /**
      * {@link org.sonar.plugins.php.api.tree.expression.MemberAccessTree}
-     * {@code =>}
+     * {@code ->}
      */
     OBJECT_MEMBER_ACCESS(MemberAccessTree.class),
 

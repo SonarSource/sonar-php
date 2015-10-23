@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
-import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 
 public class CompoundVariableTreeTest extends PHPTreeModelTest {
 
@@ -34,7 +33,7 @@ public class CompoundVariableTreeTest extends PHPTreeModelTest {
     CompoundVariableTree tree = parse("${$a}", Kind.COMPOUND_VARIABLE_NAME);
 
     assertThat(tree.is(Kind.COMPOUND_VARIABLE_NAME)).isTrue();
-    assertThat(tree.openDolarCurlyBraceToken().text()).isEqualTo("${");
+    assertThat(tree.openDollarCurlyBraceToken().text()).isEqualTo("${");
     assertThat(expressionToString(tree.variableExpression())).isEqualTo("$a");
     assertThat(tree.variableExpression().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(tree.closeCurlyBraceToken().text()).isEqualTo("}");

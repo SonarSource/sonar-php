@@ -6,8 +6,8 @@
 function f() {
   $a = 1;    // OK
   $b = 1;    // OK
-  $c = 1;    // NOK
-  $d =& $a;  // NOK
+  $c = 1;    // NOK {{Remove this unused "$c" local variable.}}
+  $d =& $a;  // NOK {{Remove this unused "$d" local variable.}}
   $a[$b];
 }
 
@@ -45,15 +45,16 @@ function i($p) {  // OK - not a local variable
 /*
  *  USE
  */
-$a = function($p) use ($u) {   // OK - $u exclusion
+$a = function($p) use ($u) {   // OK - $u exclusion as it's not defined
 	return $p;
 };
 
-function j($p) {
+function j($p) {               // OK
   $a = 1;                      // OK - use in anonymous function
   $b = 1;                      // OK - use in anonymous function
 
-  call(function () use ($a, $b, $p) {  // NOK - $b ($p exclusion)
+  call(function () use ($a, $b,   // NOK
+                            $p) { // NOK
     return $a;
   });
 }
@@ -64,7 +65,8 @@ function j($p) {
 function j() {
   $a = 1;                                 // OK - use in anonymous function
 
-  call(function () use (&$a, &$b, &$c) {  // NOK - $a, $c (not use in outer, reference not needed )
+  call(function () use (&$a,             // NOK - $a (not use in outer, reference not needed )
+                            &$b, &$c) {  // NOK - $c (not use in outer, reference not needed )
     $b = 1 ;
     $c = 1;
   });
@@ -125,7 +127,7 @@ function n(){
 
   list($a, $b) = array();             // NOK - $a
   list(static::$d) = array();         // OK
-  list(list($c)) = array(); // NOK - $c
+  list(list($c)) = array();           // NOK {{Remove this unused "$c" local variable.}}
 
   doSomething($b);
 }
@@ -153,8 +155,12 @@ function o(){
     $v = 3;
   }
 
-  foreach ($arr as $key => $value) { // OK - cannot have the key without defining the value
-      $key = 3;
+  foreach ($arr as $key1 => $value1) { // OK - cannot have the key without defining the value
+      $key1 = 3;
+  }
+
+  foreach ($arr as $key2 => &$value2) { // OK - cannot have the key without defining the value
+      $key2 = 3;
   }
 }
 
@@ -179,3 +185,42 @@ function p(){
  * OUT OF EVERY SCOPE
  */
 $a = 1;
+
+function nested_foreach() {
+  foreach([1, 2] as $k){
+    echo $k;
+    foreach([1, 2] as $rowKey => $cellValue) {
+      echo $rowKey;
+    }
+  }
+}
+
+
+function arguments_are_ignored() {
+  sscanf("somestr", "somepattern", $arg1);     // OK
+  foo($arg2);                                  // OK
+}
+
+function catch_exception() {
+  try {
+    doSomething();
+  } catch (\InvalidArgumentException $e) {    // OK
+    return false;
+  }
+
+  ItemQuery::$result1 = 1;
+  ItemQuery->result4 = 1;
+  this::$result2 = 1;
+  this->result3 = 1;
+}
+
+function foreach_key_declared_twice($arr) {
+
+  foreach([1, 2] as $key => $val) {    // Should be NOK (FN, SONARPHP-587)
+    echo "hello";
+  }
+
+  foreach($arr as $key => $value) {    // Should be NOK (FN, SONARPHP-587)
+    echo "world";
+  }
+}

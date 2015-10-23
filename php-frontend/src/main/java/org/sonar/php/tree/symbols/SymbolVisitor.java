@@ -20,12 +20,16 @@
 package org.sonar.php.tree.symbols;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -34,21 +38,60 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import java.util.Set;
+
 public class SymbolVisitor extends PHPVisitorCheck {
+
+  private static final Set<String> BUILT_IN_VARIABLES = ImmutableSet.of(
+    "$THIS",
+    "$GLOBALS",
+    "$_SERVER",
+    "$_GET",
+    "$_POST",
+    "$_FILES",
+    "$_SESSION",
+    "$_ENV",
+    "$PHP_ERRORMSG",
+    "$HTTP_RAW_POST_DATA",
+    "$HTTP_RESPONSE_HEADER",
+    "$ARGC",
+    "$ARGV",
+    "$_COOKIE",
+    "$_REQUEST"
+  );
+
+  private Scope classScope = null;
+  private boolean insideCallee = false;
+
+  static class ClassMemberUsageState {
+    boolean isStatic = false;
+
+    boolean isField = false;
+
+    boolean isSelfMember = false;
+
+    boolean isConst = false;
+  }
 
   private SymbolTableImpl symbolTable;
   private Scope currentScope;
   private Scope globalScope;
+  private ClassMemberUsageState classMemberUsageState = null;
+
 
   public SymbolVisitor(SymbolTableImpl symbolTable) {
     this.symbolTable = symbolTable;
@@ -80,24 +123,39 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    createSymbol(tree.name(), Symbol.Kind.FUNCTION);
     newScope(tree);
     super.visitMethodDeclaration(tree);
     leaveScope();
   }
 
   @Override
-  public void visitClassDeclaration(ClassDeclarationTree tree) {
-    createSymbol(tree.name(), Symbol.Kind.CLASS);
-    newScope(tree);
-    super.visitClassDeclaration(tree);
-    leaveScope();
+  public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
+    // do nothing as this symbols already saved during visiting class tree
   }
 
   @Override
-  public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
-    for (VariableDeclarationTree field : tree.declarations()) {
-      createSymbol(field.identifier(), Symbol.Kind.FIELD).addModifiers(tree.modifierTokens());
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    createSymbol(tree.name(), Symbol.Kind.CLASS);
+    newScope(tree);
+    classScope = currentScope;
+    createMemberSymbols(tree);
+    super.visitClassDeclaration(tree);
+    classScope = null;
+    leaveScope();
+  }
+
+  private void createMemberSymbols(ClassDeclarationTree tree) {
+    for (ClassMemberTree member : tree.members()) {
+      if (member.is(Kind.METHOD_DECLARATION)) {
+        createSymbol(((MethodDeclarationTree) member).name(), Symbol.Kind.FUNCTION);
+
+      } else if (member.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, Kind.CLASS_PROPERTY_DECLARATION)) {
+        ClassPropertyDeclarationTree classPropertyDeclaration = (ClassPropertyDeclarationTree) member;
+        for (VariableDeclarationTree field : classPropertyDeclaration.declarations()) {
+          createSymbol(field.identifier(), Symbol.Kind.FIELD).addModifiers(classPropertyDeclaration.modifierTokens());
+        }
+      }
+
     }
   }
 
@@ -110,28 +168,66 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitVariableIdentifier(VariableIdentifierTree tree) {
-    createVariableIdentifierSymbol(tree);
+    if (!isBuiltInVariable(tree)) {
+      if (classMemberUsageState == null) {
+        createOrUseVariableIdentifierSymbol(tree);
+
+      } else {
+
+        if (classMemberUsageState.isSelfMember && classScope != null && classMemberUsageState.isStatic) {
+          Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FIELD);
+          if (symbol != null) {
+            symbol.addUsage(tree);
+          }
+        }
+
+        // see test_property_name_in_variable and case $this->$key ($key stores the name of field)
+        Symbol symbol = currentScope.getSymbol(tree.text(), Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
+        if (symbol != null) {
+          symbol.addUsage(tree);
+        }
+
+        classMemberUsageState = null;
+      }
+    }
+  }
+
+  @Override
+  public void visitNameIdentifier(NameIdentifierTree tree) {
+    if (classMemberUsageState != null && classMemberUsageState.isSelfMember && classScope != null) {
+
+      if (classMemberUsageState.isField) {
+        String dollar = classMemberUsageState.isConst ? "" : "$";
+        Symbol symbol = classScope.getSymbol(dollar + tree.text(), Symbol.Kind.FIELD);
+        if (symbol != null) {
+          symbol.addUsage(tree);
+        }
+
+      } else {
+        Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FUNCTION);
+        if (symbol != null) {
+          symbol.addUsage(tree);
+        }
+      }
+    }
+
+    classMemberUsageState = null;
+  }
+
+  private boolean isBuiltInVariable(VariableIdentifierTree tree) {
+    return BUILT_IN_VARIABLES.contains(tree.text().toUpperCase());
   }
 
   @Override
   public void visitCompoundVariable(CompoundVariableTree tree) {
-    NameIdentifierTree nameIdentifier = null;
-    if (tree.variableExpression().is(Tree.Kind.NAME_IDENTIFIER)) {
-      nameIdentifier = (NameIdentifierTree) tree.variableExpression();
-    } else if (tree.variableExpression().is(Tree.Kind.NAMESPACE_NAME)) {
-      NamespaceNameTree namespaceName = (NamespaceNameTree) tree.variableExpression();
-      if (namespaceName.namespaces().isEmpty() && namespaceName.name().is(Kind.NAME_IDENTIFIER)) {
-        nameIdentifier = (NameIdentifierTree) namespaceName.name();
+    SyntaxToken firstExpressionToken = ((PHPTree) tree.variableExpression()).getFirstToken();
+    if (!firstExpressionToken.text().startsWith("$")) {
+      Symbol symbol = currentScope.getSymbol("$" + firstExpressionToken.text());
+      if (symbol != null) {
+        symbol.addUsage(firstExpressionToken);
       }
     }
 
-    if (nameIdentifier != null) {
-      Symbol symbol = currentScope.getSymbol("$" + nameIdentifier.text());
-      if (symbol != null) {
-        // fixme (Lena) : on symbol highlighting the size of symbol should be the same for all usages
-        symbol.addUsage(nameIdentifier);
-      }
-    }
     super.visitCompoundVariable(tree);
   }
 
@@ -161,28 +257,24 @@ public class SymbolVisitor extends PHPVisitorCheck {
   @Override
   public void visitLexicalVariables(LexicalVariablesTree tree) {
     for (VariableTree variable : tree.variables()) {
-      // Other cases are not supported
-      IdentifierTree identifier;
+      IdentifierTree identifier = null;
       if (variable.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
         identifier = (IdentifierTree) variable.variableExpression();
-        createSymbol(identifier, Symbol.Kind.VARIABLE);
-        Symbol parentSymbol = currentScope.outer().getSymbol(identifier.text());
-        if (parentSymbol != null) {
-          // fixme (Lena) : symbol highlighting will fail as for this token we have usage and declaration
-          parentSymbol.addUsage(identifier);
-        }
-
       } else if (variable.is(Tree.Kind.REFERENCE_VARIABLE) && variable.variableExpression().is(Tree.Kind.VARIABLE_IDENTIFIER)) {
         identifier = ((VariableIdentifierTree) variable.variableExpression()).variableExpression();
-        Symbol symbol = currentScope.outer().getSymbol(identifier.text(), Symbol.Kind.VARIABLE);
-        if (symbol != null) {
-          currentScope.addSymbol(symbol);
-        } else {
-          createSymbol(identifier, Symbol.Kind.VARIABLE);
-        }
+      }
 
+      if (identifier != null) {
+        Symbol symbol = currentScope.outer().getSymbol(identifier.text());
+        if (symbol != null) {
+          symbol.addUsage(identifier);
+        } else if (variable.is(Kind.REFERENCE_VARIABLE)) {
+          symbolTable.declareSymbol(identifier, Symbol.Kind.VARIABLE, currentScope.outer());
+        }
+        createSymbol(identifier, Symbol.Kind.VARIABLE);
       }
     }
+
   }
 
   @Override
@@ -190,9 +282,17 @@ public class SymbolVisitor extends PHPVisitorCheck {
     if (tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
       NamespaceNameTree namespaceNameCallee = (NamespaceNameTree) tree.callee();
       usageForNamespaceName(namespaceNameCallee, Symbol.Kind.FUNCTION);
+
     }
 
-    super.visitFunctionCall(tree);
+    this.insideCallee = true;
+    tree.callee().accept(this);
+    this.insideCallee = false;
+
+    // fixme optimize through visitor
+    for (ExpressionTree argument : tree.arguments()) {
+      argument.accept(this);
+    }
   }
 
   private void usageForNamespaceName(NamespaceNameTree namespaceName, Symbol.Kind kind) {
@@ -206,6 +306,28 @@ public class SymbolVisitor extends PHPVisitorCheck {
     }
   }
 
+  @Override
+  public void visitMemberAccess(MemberAccessTree tree) {
+    tree.object().accept(this);
+
+    Set<String> selfObjects = ImmutableSet.of("$this", "self", "static");
+    String strObject = SourceBuilder.build(tree.object()).trim();
+
+    classMemberUsageState = new ClassMemberUsageState();
+    classMemberUsageState.isStatic = tree.isStatic();
+    classMemberUsageState.isSelfMember = selfObjects.contains(strObject.toLowerCase());
+    classMemberUsageState.isField = !insideCallee;
+    classMemberUsageState.isConst = !insideCallee && tree.isStatic();
+
+    tree.member().accept(this);
+  }
+
+  @Override
+  public void visitComputedVariable(ComputedVariableTree tree) {
+    classMemberUsageState = null;
+    super.visitComputedVariable(tree);
+  }
+
   private void leaveScope() {
     Preconditions.checkState(currentScope != null, "Current scope should never be null when calling method \"leaveScope\"");
     currentScope = currentScope.outer();
@@ -216,17 +338,14 @@ public class SymbolVisitor extends PHPVisitorCheck {
     symbolTable.addScope(currentScope);
   }
 
-  private Symbol createVariableIdentifierSymbol(IdentifierTree identifier) {
-    Symbol symbol = currentScope.getSymbol(identifier.text());
+  private Symbol createOrUseVariableIdentifierSymbol(IdentifierTree identifier) {
+    Symbol symbol = currentScope.getSymbol(identifier.text(), Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
 
     if (symbol == null) {
       symbol = symbolTable.declareSymbol(identifier, Symbol.Kind.VARIABLE, currentScope);
 
-    } else {
-      symbol = currentScope.getSymbol(identifier.text());
-      if (symbol != null && !symbol.is(Symbol.Kind.FIELD)) {
-        symbol.addUsage(identifier);
-      }
+    } else if (!symbol.is(Symbol.Kind.FIELD)) {
+      symbol.addUsage(identifier);
     }
 
     return symbol;

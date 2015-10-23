@@ -20,10 +20,12 @@
 package org.sonar.php.tree.symbols;
 
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.Tree;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,23 +70,20 @@ public class Scope {
     symbols.add(symbol);
   }
 
+  /**
+   *
+   * returns first good!
+   * // fixme may be return null if ambiguity?
+   */
   @Nullable
-  public Symbol getSymbol(String name, Symbol.Kind kind) {
+  public Symbol getSymbol(String name, Kind ... kinds) {
+    List<Kind> kindList = Arrays.asList(kinds);
     for (Symbol s : symbols) {
-      if (s.called(name) && s.is(kind)) {
+      if (s.called(name) && (kindList.isEmpty() || kindList.contains(s.kind()))) {
         return s;
       }
     }
-    return null;
-  }
 
-  @Nullable
-  public Symbol getSymbol(String name) {
-    for (Symbol s : symbols) {
-      if (s.called(name)) {
-        return s;
-      }
-    }
     return null;
   }
 }

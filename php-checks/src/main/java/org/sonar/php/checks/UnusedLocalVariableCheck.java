@@ -19,144 +19,117 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.checks.utils.LocalVariableScope;
-import org.sonar.php.checks.utils.Variable;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.symbols.Scope;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
+import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableTree;
+import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
-import javax.annotation.Nullable;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 @Rule(
-  key = "S1481",
+  key = UnusedLocalVariableCheck.KEY,
   name = "Unused local variables should be removed",
   priority = Priority.MAJOR,
   tags = {Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("5min")
-public class UnusedLocalVariableCheck extends SquidCheck<LexerlessGrammar> {
+public class UnusedLocalVariableCheck extends PHPVisitorCheck {
 
-  private Deque<LocalVariableScope> scopes = new ArrayDeque<LocalVariableScope>();
+  public static final String KEY = "S1481";
+  private static final String MESSAGE = "Remove this unused \"%s\" local variable.";
+
+  private List<IdentifierTree> exclusions = new ArrayList<>();
 
   @Override
-  public void init() {
-    subscribeTo(FunctionUtils.functions());
-    subscribeTo(
-      PHPGrammar.GLOBAL_STATEMENT,
-      PHPGrammar.STATIC_STATEMENT,
-      PHPGrammar.LEXICAL_VAR_LIST,
-      PHPGrammar.VAR_IDENTIFIER,
-      PHPGrammar.SIMPLE_ENCAPS_VARIABLE,
-      PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE,
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    if (tree.lexicalVars() != null) {
+      Scope parentScope = context().symbolTable().getScopeFor(tree).outer();
 
-      PHPGrammar.ASSIGNMENT_EXPR,
-      PHPGrammar.ASSIGNMENT_BY_REFERENCE,
-      PHPGrammar.LIST_EXPR,
-      PHPGrammar.FOREACH_EXPR);
+      for (VariableTree variableTree : tree.lexicalVars().variables()) {
+
+        if (variableTree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+          VariableIdentifierTree variableIdentifier = (VariableIdentifierTree) variableTree;
+          Symbol parentScopeSymbol = parentScope.getSymbol(variableIdentifier.text());
+
+          if (parentScopeSymbol == null) {
+            exclusions.add(variableIdentifier);
+          }
+        }
+      }
+    }
+
+    super.visitFunctionExpression(tree);
   }
 
   @Override
-  public void leaveFile(@Nullable AstNode astNode) {
-    scopes.clear();
+  public void visitFunctionCall(FunctionCallTree tree) {
+    for (ExpressionTree argument : tree.arguments()) {
+      if (argument.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+        exclusions.add((IdentifierTree) argument);
+      }
+    }
+    super.visitFunctionCall(tree);
   }
 
   @Override
-  public void visitNode(AstNode astNode) {
-    if (astNode.is(FunctionUtils.functions())) {
-      scopes.push(new LocalVariableScope());
-      getCurrentScope().declareParameters(astNode);
-    } else if (!scopes.isEmpty()) {
+  public void visitCatchBlock(CatchBlockTree tree) {
+    exclusions.add(tree.variable());
+    super.visitCatchBlock(tree);
+  }
 
-      if (astNode.is(PHPGrammar.GLOBAL_STATEMENT)) {
-        getCurrentScope().declareGlobals(astNode);
+  @Override
+  public void visitForEachStatement(ForEachStatementTree tree) {
+    if (tree.key() != null) {
+      if (tree.value().is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+        exclusions.add((IdentifierTree) tree.value());
 
-      } else if (astNode.is(PHPGrammar.STATIC_STATEMENT)) {
-        getCurrentScope().declareStaticVariables(astNode);
+      } else if (tree.value().is(Tree.Kind.REFERENCE_VARIABLE) && ((ReferenceVariableTree) tree.value()).variableExpression().is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+        exclusions.add((IdentifierTree) ((ReferenceVariableTree) tree.value()).variableExpression());
+      }
+    }
+    super.visitForEachStatement(tree);
+  }
 
-      } else if (astNode.is(PHPGrammar.LEXICAL_VAR_LIST)) {
-        getCurrentScope().declareLexicalVariable(astNode, getOuterScope());
-
-      } else if (astNode.is(PHPGrammar.FOREACH_EXPR)) {
-        getCurrentScope().declareForeachVariable(astNode);
-
-      } else if (astNode.is(PHPGrammar.VAR_IDENTIFIER) && !isDeclaration(astNode)) {
-        getCurrentScope().useVariable(astNode);
-
-      } else if (astNode.is(PHPGrammar.SEMI_COMPLEX_ENCAPS_VARIABLE)) {
-        getCurrentScope().useVariale("$" + astNode.getFirstChild(PHPGrammar.EXPRESSION).getTokenOriginalValue());
-
-      } else if (astNode.is(PHPGrammar.ASSIGNMENT_EXPR, PHPGrammar.ASSIGNMENT_BY_REFERENCE)) {
-        declareNewLocalVariable(astNode);
-
-      } else if (astNode.is(PHPGrammar.LIST_EXPR)) {
-        getCurrentScope().declareListVariable(astNode);
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    exclusions.clear();
+    super.visitCompilationUnit(tree);
+    for (Scope scope : context().symbolTable().getScopes()) {
+      if (scope.tree() instanceof FunctionTree) {
+        checkScope(scope);
       }
     }
   }
 
-  private boolean isDeclaration(AstNode varIdentifier) {
-    AstNode parent = varIdentifier.getParent();
-    return parent.getParent().is(PHPGrammar.GLOBAL_VAR) || parent.is(PHPGrammar.STATIC_VAR, PHPGrammar.LEXICAL_VAR);
-  }
-
-  @Override
-  public void leaveNode(AstNode astNode) {
-    if (astNode.is(FunctionUtils.functions())) {
-      reportUnusedVariable();
-      scopes.pop();
-    }
-  }
-
-  private void declareNewLocalVariable(AstNode astNode) {
-    AstNode leftExpr = getLeftHandExpression(astNode);
-    if (leftExpr != null && leftExpr.is(PHPGrammar.VARIABLE_WITHOUT_OBJECTS)) {
-      getCurrentScope().declareVariable(leftExpr);
-    }
-  }
-
-  private AstNode getLeftHandExpression(AstNode assignmentExpr) {
-    AstNode leftExpr = assignmentExpr.getFirstChild();
-
-    if (leftExpr.is(PHPGrammar.MEMBER_EXPRESSION)) {
-      return leftExpr.getFirstChild();
-    } else if (leftExpr.is(PHPGrammar.POSTFIX_EXPR)) {
-      return leftExpr.getFirstChild().getFirstChild();
-    } else {
-      return null;
-    }
-  }
-
-  private void reportUnusedVariable() {
-    for (Variable localVar : getCurrentScope().getLocalVariables().values()) {
-
-      if (localVar.getUsage() == 1) {
-        getContext().createLineViolation(this, "Remove this unused \"{0}\" local variable.", localVar.getDeclaration(),
-          localVar.getDeclaration().getTokenOriginalValue());
+  private void checkScope(Scope scope) {
+    for (Symbol symbol : scope.getSymbols(Kind.VARIABLE)) {
+      // symbol should be declared in this scope
+      if (symbol.scope().equals(scope)) {
+        if (symbol.usages().isEmpty() && !exclusions.contains(symbol.declaration())) {
+          context().newIssue(KEY, String.format(MESSAGE, symbol.name())).tree(symbol.declaration());
+        }
       }
     }
   }
 
-  private LocalVariableScope getCurrentScope() {
-    return scopes.peek();
-  }
-
-  @Nullable
-  private LocalVariableScope getOuterScope() {
-    Iterator<LocalVariableScope> it = scopes.iterator();
-    it.next(); // current
-    return it.hasNext() ? it.next() /*previous*/ : null;
-  }
 }

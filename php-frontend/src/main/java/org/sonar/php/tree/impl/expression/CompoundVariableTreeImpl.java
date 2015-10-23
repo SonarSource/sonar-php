@@ -51,7 +51,7 @@ public class CompoundVariableTreeImpl extends PHPTree implements CompoundVariabl
   }
 
   @Override
-  public SyntaxToken openDolarCurlyBraceToken() {
+  public SyntaxToken openDollarCurlyBraceToken() {
     return openDollarCurly;
   }
 

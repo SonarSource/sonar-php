@@ -52,7 +52,7 @@ public class Symbol {
   private final IdentifierTree declaration;
   private Kind kind;
   private Scope scope;
-  private List<IdentifierTree> usages = new LinkedList<>();
+  private List<SyntaxToken> usages = new LinkedList<>();
   private List<SyntaxToken> modifiers = new LinkedList<>();
 
   public Symbol(IdentifierTree declaration, Kind kind, Scope scope) {
@@ -79,11 +79,15 @@ public class Symbol {
     this.modifiers.addAll(modifiers);
   }
 
-  public void addUsage(IdentifierTree usage){
+  public void addUsage(SyntaxToken usage){
     usages.add(usage);
   }
 
-  public List<IdentifierTree> usages(){
+  public void addUsage(IdentifierTree usage){
+    usages.add(usage.token());
+  }
+
+  public List<SyntaxToken> usages(){
     return usages;
   }
 

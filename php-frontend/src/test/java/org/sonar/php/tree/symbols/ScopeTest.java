@@ -76,7 +76,7 @@ public class ScopeTest extends ParsingTestUtils {
     Scope functionScope = getScopeFor(Kind.FUNCTION_DECLARATION);
 
     assertThat(functionScope.getSymbol("$b")).isNotNull();
-    assertThat(SYMBOL_TABLE.getSymbols("$b")).hasSize(1);
+    assertThat(SYMBOL_TABLE.getSymbols("$b")).hasSize(2);
     assertThat(functionScope.getSymbol("$externalVariable")).isNotNull();
     assertThat(SYMBOL_TABLE.getSymbols("$externalVariable")).hasSize(1);
 
@@ -92,11 +92,11 @@ public class ScopeTest extends ParsingTestUtils {
     assertThat(functionScope.getSymbol("$c")).isNotNull();
     assertThat(SYMBOL_TABLE.getSymbols("$c")).hasSize(2);
     assertThat(functionScope.getSymbol("$b")).isNotNull();
-    assertThat(SYMBOL_TABLE.getSymbols("$b")).hasSize(1);
+    assertThat(SYMBOL_TABLE.getSymbols("$b")).hasSize(2);
 
     Scope parentScope = getScopeFor(Kind.FUNCTION_DECLARATION);
     assertThat(parentScope.getSymbol("$c")).isNotEqualTo(functionScope.getSymbol("$c"));
-    assertThat(parentScope.getSymbol("$b")).isEqualTo(functionScope.getSymbol("$b"));
+    assertThat(parentScope.getSymbol("$b")).isNotEqualTo(functionScope.getSymbol("$b"));
   }
 
   @Test
