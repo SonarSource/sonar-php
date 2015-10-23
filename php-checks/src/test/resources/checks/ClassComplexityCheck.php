@@ -1,6 +1,6 @@
 <?php
 
-class KO { // NOK {{The Cyclomatic Complexity of this class "KO" is 6 which is greater than 5 authorized, split this class.}}
+class KO { // NOK [[effortToFix=1]] {{The Cyclomatic Complexity of this class "KO" is 6 which is greater than 5 authorized, split this class.}}
   function f() // +1
   {
     switch (foo)
@@ -19,6 +19,12 @@ class KO { // NOK {{The Cyclomatic Complexity of this class "KO" is 6 which is g
 
   function f() // +1
   {
+  }
+}
+
+class KO2 { // NOK [[effortToFix=2]]
+  function f() {
+    return true && true && true && true && true && true && true; // +6
   }
 }
 

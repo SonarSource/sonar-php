@@ -7,7 +7,7 @@ echo "aaa";
 echo "bbbbb";  // OK
 echo "bbbbb";
 
-echo "aaaaa";  // NOK {{Define a constant instead of duplicating this literal "aaaaa" 3 times.}}
+echo "aaaaa";  // NOK [[effortToFix=3]] {{Define a constant instead of duplicating this literal "aaaaa" 3 times.}}
 echo "aaaaa";
 echo "aaaaa";
 
@@ -16,7 +16,7 @@ $toto = "new value";
 echo "$toto";
 echo "$toto";
 
-$a["name1"];    // NOK {{Define a constant instead of duplicating this literal "name1" 4 times.}}
+$a["name1"];    // NOK [[effortToFix=4]] {{Define a constant instead of duplicating this literal "name1" 4 times.}}
 $a["name1"];
 $a["name1"];
 $a["name1"];

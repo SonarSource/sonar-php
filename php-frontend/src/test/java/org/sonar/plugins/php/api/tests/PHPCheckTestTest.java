@@ -128,6 +128,36 @@ public class PHPCheckTestTest extends PHPCheckTest {
     check(new DummyCheck(), createFile("<?php $a = 1; // NOK"), createIssuesForLines(1, 1));
   }
 
+  @Test
+  public void test_expected_cost() throws Exception {
+    check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=2]]"));
+  }
+
+  @Test
+  public void test_no_expected_cost() throws Exception {
+    check(new DummyCheck(2), createFile("<?php $a = 1; // NOK"));
+  }
+
+  @Test
+  public void test_wrong_cost() throws Exception {
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("* [WRONG_COST] Issue at line 1 : \n"
+      + "Expected cost : 3.0\n"
+      + "Actual cost : 2.0");
+
+    check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=3]]"));
+  }
+
+  @Test
+  public void missing_cost() throws Exception {
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("* [WRONG_COST] Issue at line 1 : \n"
+      + "Expected cost : 3.0\n"
+      + "Actual cost : null");
+
+    check(new DummyCheck(), createFile("<?php $a = 1; // NOK [[effortToFix=3]]"));
+  }
+
   public ImmutableList<Issue> createIssuesForLines(int... lines) {
     return createIssuesForLines("message", lines);
   }
