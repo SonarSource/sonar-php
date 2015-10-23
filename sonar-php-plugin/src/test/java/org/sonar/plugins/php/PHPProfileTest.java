@@ -22,7 +22,6 @@ package org.sonar.plugins.php;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.sonar.api.profiles.AnnotationProfileParser;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
@@ -42,7 +41,7 @@ public class PHPProfileTest {
     ValidationMessages validation = ValidationMessages.create();
 
     RuleFinder ruleFinder = ruleFinder();
-    PHPProfile definition = new PHPProfile(new AnnotationProfileParser(ruleFinder));
+    PHPProfile definition = new PHPProfile(ruleFinder);
     RulesProfile profile = definition.createProfile(validation);
 
     assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
