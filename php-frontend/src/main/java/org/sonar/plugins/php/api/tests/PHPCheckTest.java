@@ -151,11 +151,35 @@ public class PHPCheckTest {
     public void visitTrivia(SyntaxTrivia syntaxTrivia) {
       String text = syntaxTrivia.text();
 
-      if (text.startsWith("// NOK {{")) {
-        String message = text.substring(text.indexOf("{{") + 2, text.indexOf("}}"));
-        context().newIssue("testKey", message).line(syntaxTrivia.line());
-      } else if (text.startsWith("// NOK")) {
-        context().newIssue("testKey", null).line(syntaxTrivia.line());
+      if (text.startsWith("// NOK")) {
+        String message = null;
+        Integer effortToFix = null;
+
+        int expectedMessageIndex = text.indexOf("{{");
+        if (expectedMessageIndex > -1) {
+          message = text.substring(expectedMessageIndex + 2, text.indexOf("}}"));
+        }
+
+        String effortToFixStartMarker = "[[effortToFix=";
+        int effortToFixIndex = text.indexOf(effortToFixStartMarker);
+        if (effortToFixIndex > -1) {
+          String remaining = text.substring(effortToFixIndex + effortToFixStartMarker.length());
+          int effortToFixEndIndex = remaining.indexOf("]]");
+          if (effortToFixEndIndex == -1) {
+            throw new IllegalStateException("No end marker for effortToFix in: " + text);
+          }
+          String effortToFixString = remaining.substring(0, effortToFixEndIndex);
+          try {
+            effortToFix = Integer.parseInt(effortToFixString, 10);
+          } catch (NumberFormatException e) {
+            throw new IllegalStateException("Could not parse effortToFix: " + effortToFixString, e);
+          }
+        }
+
+        Issue issue = context().newIssue("testKey", message).line(syntaxTrivia.line());
+        if (effortToFix != null) {
+          issue.cost(effortToFix);
+        }
       }
     }
 
