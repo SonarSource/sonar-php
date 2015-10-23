@@ -120,7 +120,8 @@ public class ExpressionComplexityCheck extends PHPSubscriptionCheck {
       if (tree.equals(currentExpression.root)) {
         if (currentExpression.complexity > max) {
           String message = String.format(MESSAGE, currentExpression.complexity, max);
-          context().newIssue(KEY, message).tree(tree);
+          int cost = currentExpression.complexity - max;
+          context().newIssue(KEY, message).tree(tree).cost(cost);
         }
         expressions.pop();
         expressions.push(new ComplexExpression());
