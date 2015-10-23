@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.visitors;
 
 import org.sonar.php.tree.visitors.PHPCheckContext;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 
 import java.io.File;
@@ -47,5 +48,12 @@ public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements 
     return context().getIssues();
   }
 
+  @Override
+  public List<Issue> analyze(File file, CompilationUnitTree tree, SymbolTable symbolTable) {
+    this.context = new PHPCheckContext(file, tree, symbolTable);
+    scanTree(context.tree());
+
+    return context().getIssues();
+  }
 }
 

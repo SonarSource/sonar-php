@@ -38,11 +38,16 @@ public class PHPCheckContext implements CheckContext {
   private List<Issue> issues;
 
   public PHPCheckContext(File file, CompilationUnitTree tree) {
+    this(file, tree, SymbolTableImpl.create(tree));
+  }
+
+  public PHPCheckContext(File file, CompilationUnitTree tree, SymbolTable symbolTable) {
     this.file = file;
     this.tree = tree;
-    this.symbolTable = SymbolTableImpl.create(tree);
+    this.symbolTable = symbolTable;
     this.issues = new ArrayList<>();
   }
+
 
   @Override
   public CompilationUnitTree tree() {

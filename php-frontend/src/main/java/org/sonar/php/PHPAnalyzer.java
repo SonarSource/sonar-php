@@ -29,6 +29,8 @@ import org.sonar.php.highlighter.SourceFileOffsets;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.Issue;
@@ -46,6 +48,7 @@ public class PHPAnalyzer {
 
   private CompilationUnitTree currentFileTree;
   private File currentFile;
+  private SymbolTable currentFileSymbolTable;
 
   public PHPAnalyzer(Charset charset, ImmutableList<PHPCheck> checks) {
     this.parser = PHPParserBuilder.createParser(charset);
@@ -61,15 +64,15 @@ public class PHPAnalyzer {
   }
 
   public void nextFile(File file) {
-    // fixme : handle parsing exceptions
     currentFile = file;
     currentFileTree = (CompilationUnitTree) parser.parse(file);
+    currentFileSymbolTable = SymbolTableImpl.create(currentFileTree);
   }
 
   public List<Issue> analyze() {
     ImmutableList.Builder<Issue> issuesBuilder = ImmutableList.builder();
     for (PHPCheck check : checks) {
-      issuesBuilder.addAll(check.analyze(currentFile, currentFileTree));
+      issuesBuilder.addAll(check.analyze(currentFile, currentFileTree, currentFileSymbolTable));
     }
 
     return issuesBuilder.build();
