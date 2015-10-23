@@ -65,7 +65,8 @@ public class ClassComplexityCheck extends PHPSubscriptionCheck {
     if (complexity > max) {
       String className = ((ClassDeclarationTree) tree).name().text();
       String message = String.format(MESSAGE, className, complexity, max);
-      context().newIssue(KEY, message).tree(tree);
+      int cost = complexity - max;
+      context().newIssue(KEY, message).tree(tree).cost(cost);
     }
   }
 
