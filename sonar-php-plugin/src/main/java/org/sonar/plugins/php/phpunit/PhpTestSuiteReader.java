@@ -68,7 +68,7 @@ public class PhpTestSuiteReader {
    * the annotation dataProvider.
    *
    * @param testSuite the test suite
-   * @return List<PhpUnitTestReport> A list containing on report per php class
+   * Method adds to the field <code>reportsPerClass</code> reports per php class
    */
   public void readSuite(TestSuite testSuite, String parentFileName) {
     List<TestSuite> testSuites = testSuite.getTestSuites();
@@ -92,14 +92,17 @@ public class PhpTestSuiteReader {
           report = new PhpUnitTestReport();
           report.setDetails(new ArrayList<TestCase>());
           report.setClassKey(testClassName);
+
           String file = testCase.getFile();
           // test cases with @dataProvider, we get the file name in the parent test suite.
           if (file == null) {
             file = parentFileName;
           }
-          report.setFile(file);
-          // and add it to the map
-          reportsPerClass.put(testClassName, report);
+
+          if (file != null) {
+            report.setFile(file);
+            reportsPerClass.put(testClassName, report);
+          }
         }
         if (parentFileName == null) {
           report.setTime(testSuite.getTime());

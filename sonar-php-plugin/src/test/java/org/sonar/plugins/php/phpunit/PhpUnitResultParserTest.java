@@ -22,11 +22,6 @@ package org.sonar.plugins.php.phpunit;
 import com.thoughtworks.xstream.XStreamException;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyDouble;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -39,6 +34,12 @@ import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
 import java.io.File;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 public class PhpUnitResultParserTest {
 
@@ -67,8 +68,15 @@ public class PhpUnitResultParserTest {
    * Should throw an exception when report is invalid.
    */
   @Test(expected = XStreamException.class)
-  public void shouldNotThrowAnExceptionWhenReportIsInvalid() {
+  public void shouldThrowAnExceptionWhenReportIsInvalid() {
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"));
+
+    verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
+  }
+
+  @Test
+  public void shouldNotFailIfNoFileName() {
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-no-filename.xml"));
 
     verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
   }
