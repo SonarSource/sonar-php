@@ -25,10 +25,9 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
@@ -115,19 +114,17 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
     exclusions.clear();
     super.visitCompilationUnit(tree);
     for (Scope scope : context().symbolTable().getScopes()) {
-      if (scope.tree() instanceof FunctionTree) {
+      if (scope.tree().is(Kind.FUNCTION_EXPRESSION, Kind.FUNCTION_DECLARATION, Kind.METHOD_DECLARATION)) {
         checkScope(scope);
       }
     }
   }
 
   private void checkScope(Scope scope) {
-    for (Symbol symbol : scope.getSymbols(Kind.VARIABLE)) {
+    for (Symbol symbol : scope.getSymbols(Symbol.Kind.VARIABLE)) {
       // symbol should be declared in this scope
-      if (symbol.scope().equals(scope)) {
-        if (symbol.usages().isEmpty() && !exclusions.contains(symbol.declaration())) {
-          context().newIssue(KEY, String.format(MESSAGE, symbol.name())).tree(symbol.declaration());
-        }
+      if (symbol.scope().equals(scope) && symbol.usages().isEmpty() && !exclusions.contains(symbol.declaration())) {
+        context().newIssue(KEY, String.format(MESSAGE, symbol.name())).tree(symbol.declaration());
       }
     }
   }

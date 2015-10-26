@@ -103,7 +103,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    newScope(tree);
+    enterScope(tree);
     globalScope = currentScope;
     super.visitCompilationUnit(tree);
   }
@@ -111,21 +111,21 @@ public class SymbolVisitor extends PHPVisitorCheck {
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     createSymbol(tree.name(), Symbol.Kind.FUNCTION);
-    newScope(tree);
+    enterScope(tree);
     super.visitFunctionDeclaration(tree);
     leaveScope();
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    newScope(tree);
+    enterScope(tree);
     super.visitFunctionExpression(tree);
     leaveScope();
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    newScope(tree);
+    enterScope(tree);
     super.visitMethodDeclaration(tree);
     leaveScope();
   }
@@ -138,7 +138,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     createSymbol(tree.name(), Symbol.Kind.CLASS);
-    newScope(tree);
+    enterScope(tree);
     classScope = currentScope;
     createMemberSymbols(tree);
     super.visitClassDeclaration(tree);
@@ -216,7 +216,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     classMemberUsageState = null;
   }
 
-  private boolean isBuiltInVariable(VariableIdentifierTree tree) {
+  private static boolean isBuiltInVariable(VariableIdentifierTree tree) {
     return BUILT_IN_VARIABLES.contains(tree.text().toUpperCase());
   }
 
@@ -312,7 +312,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   public void visitMemberAccess(MemberAccessTree tree) {
     tree.object().accept(this);
 
-    Set<String> selfObjects = ImmutableSet.of("$this", "self", "static");
+    final ImmutableSet<String> selfObjects = ImmutableSet.of("$this", "self", "static");
     String strObject = SourceBuilder.build(tree.object()).trim();
 
     classMemberUsageState = new ClassMemberUsageState();
@@ -335,7 +335,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     currentScope = currentScope.outer();
   }
 
-  private void newScope(Tree tree) {
+  private void enterScope(Tree tree) {
     currentScope = new Scope(currentScope, tree);
     symbolTable.addScope(currentScope);
   }

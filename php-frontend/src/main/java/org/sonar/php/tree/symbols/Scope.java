@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Scope {
 
-  private Scope outer;
+  private final Scope outer;
   private final Tree tree;
   protected List<Symbol> symbols = new ArrayList<>();
 
@@ -71,19 +71,19 @@ public class Scope {
   }
 
   /**
-   *
-   * returns first good!
-   * // fixme may be return null if ambiguity?
+   * returns symbol available in this scope with satisfying name and kind.
+   * If no or more than one symbols meet conditions, then null is returned.
    */
   @Nullable
   public Symbol getSymbol(String name, Kind ... kinds) {
     List<Kind> kindList = Arrays.asList(kinds);
+    List<Symbol> result = new ArrayList<>();
     for (Symbol s : symbols) {
       if (s.called(name) && (kindList.isEmpty() || kindList.contains(s.kind()))) {
-        return s;
+        result.add(s);
       }
     }
 
-    return null;
+    return result.size() == 1 ? result.get(0) : null;
   }
 }

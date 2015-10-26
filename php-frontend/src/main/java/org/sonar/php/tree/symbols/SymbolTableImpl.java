@@ -77,7 +77,6 @@ public class SymbolTableImpl implements SymbolTable {
   /**
    * Returns all symbols in script
    */
-  @Override
   public ImmutableList<Symbol> getSymbols() {
     return ImmutableList.copyOf(symbols);
   }
@@ -103,7 +102,6 @@ public class SymbolTableImpl implements SymbolTable {
    * @param name name of symbols to look for
    * @return list of symbols with the given name
    */
-  @Override
   public List<Symbol> getSymbols(String name) {
     List<Symbol> result = new ArrayList<>();
     for (Symbol symbol : getSymbols()){

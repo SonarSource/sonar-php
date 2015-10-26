@@ -17,28 +17,5 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.php.api.symbols;
-
-import com.google.common.annotations.Beta;
-import org.sonar.php.tree.symbols.Scope;
-import org.sonar.plugins.php.api.tree.Tree;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Set;
-
-@Beta
-public interface SymbolTable {
-
-  /**
-   *
-   * @param kind kind of symbols to look for
-   * @return list of symbols with the given kind
-   */
-  List<Symbol> getSymbols(Symbol.Kind kind);
-
-  Set<Scope> getScopes();
-
-  @Nullable
-  Scope getScopeFor(Tree tree);
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.php.utils;
