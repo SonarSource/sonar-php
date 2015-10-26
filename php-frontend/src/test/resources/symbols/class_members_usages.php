@@ -68,10 +68,17 @@ class E {
 
   function method() {
     echo "method\n";
+    return $this;
+  }
+
+  function copy() {
+    return $this;
   }
 
   function testMethod($obj1, $obj2) {
     $this->method();
+    $this->copy()->method();
+    $this->method()->copy();
     echo $this->method;
 
     $funcExpr1 = function() { self::method(); };

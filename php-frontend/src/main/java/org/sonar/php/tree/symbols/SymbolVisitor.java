@@ -52,6 +52,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Set;
 
 public class SymbolVisitor extends PHPVisitorCheck {
@@ -75,7 +77,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   );
 
   private Scope classScope = null;
-  private boolean insideCallee = false;
+  private Deque<Boolean> insideCallee = new ArrayDeque<>();
 
   static class ClassMemberUsageState {
     boolean isStatic = false;
@@ -147,7 +149,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   private void createMemberSymbols(ClassDeclarationTree tree) {
     for (ClassMemberTree member : tree.members()) {
       if (member.is(Kind.METHOD_DECLARATION)) {
-        createSymbol(((MethodDeclarationTree) member).name(), Symbol.Kind.FUNCTION);
+        createSymbol(((MethodDeclarationTree) member).name(), Symbol.Kind.FUNCTION).addModifiers(((MethodDeclarationTree) member).modifiers());
 
       } else if (member.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, Kind.CLASS_PROPERTY_DECLARATION)) {
         ClassPropertyDeclarationTree classPropertyDeclaration = (ClassPropertyDeclarationTree) member;
@@ -285,9 +287,9 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
     }
 
-    this.insideCallee = true;
+    this.insideCallee.push(true);
     tree.callee().accept(this);
-    this.insideCallee = false;
+    this.insideCallee.pop();
 
     // fixme optimize through visitor
     for (ExpressionTree argument : tree.arguments()) {
@@ -316,8 +318,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
     classMemberUsageState = new ClassMemberUsageState();
     classMemberUsageState.isStatic = tree.isStatic();
     classMemberUsageState.isSelfMember = selfObjects.contains(strObject.toLowerCase());
-    classMemberUsageState.isField = !insideCallee;
-    classMemberUsageState.isConst = !insideCallee && tree.isStatic();
+    classMemberUsageState.isField = insideCallee.isEmpty();
+    classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
 
     tree.member().accept(this);
   }

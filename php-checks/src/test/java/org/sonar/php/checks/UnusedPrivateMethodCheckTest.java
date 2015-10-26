@@ -20,20 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class UnusedPrivateMethodCheckTest extends CheckTest {
+public class UnusedPrivateMethodCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("UnusedPrivateMethodCheck.php"), new UnusedPrivateMethodCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(8).withMessage("Remove this unused private \"f\" method.")
-      .noMore();
+    PHPCheckTest.check(new UnusedPrivateMethodCheck(), TestUtils.getCheckFile("UnusedPrivateMethodCheck.php"));
   }
 
 }

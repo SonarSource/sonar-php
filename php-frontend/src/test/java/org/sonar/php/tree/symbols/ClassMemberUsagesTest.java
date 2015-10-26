@@ -58,7 +58,7 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
     assertThat(field).isNotNull();
 
     assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(4);
+    assertThat(method.usages()).hasSize(6);
   }
 
   @Test

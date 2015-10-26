@@ -5,7 +5,7 @@ class A {
   private function __construct() {  // OK - private constructor
   }
 
-  private function f() {            // NOK
+  private function f() {            // NOK {{Remove this unused private "f" method.}}
     $foo = clone $this;
 
     $code = '_i';

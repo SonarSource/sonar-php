@@ -19,53 +19,82 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.AbstractUnusedPrivateClassMemberCheck;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.php.tree.symbols.Scope;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Rule(
-  key = "S1144",
+  key = UnusedPrivateMethodCheck.KEY,
   name = "Unused private method should be removed",
   priority = Priority.MAJOR,
   tags = {Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("5min")
-public class UnusedPrivateMethodCheck extends AbstractUnusedPrivateClassMemberCheck {
+public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1144";
+  private static final String MESSAGE = "Remove this unused private \"%s\" method.";
+
+  private List<String> stringLiterals = new ArrayList<>();
 
   @Override
-  protected String getIssueMessage() {
-    return "Remove this unused private \"{0}\" method.";
-  }
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    stringLiterals.clear();
+    super.visitClassDeclaration(tree);
 
-  @Override
-  protected void retrievePrivateClassMember(AstNode classDec) {
-    for (AstNode classStmt : classDec.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      AstNode stmtChild = classStmt.getFirstChild();
+    if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
+      Scope classScope = context().symbolTable().getScopeFor(tree);
+      for (Symbol methodSymbol : classScope.getSymbols(Kind.FUNCTION)) {
 
-      if (stmtChild.is(PHPGrammar.METHOD_DECLARATION)) {
-        List<AstNode> modifiers = stmtChild.getChildren(PHPGrammar.MEMBER_MODIFIER);
-        AstNode identifier = stmtChild.getFirstChild(PHPGrammar.IDENTIFIER);
-        String methodName = identifier.getTokenOriginalValue();
+        boolean ruleConditions = methodSymbol.hasModifier("private") && methodSymbol.usages().isEmpty();
 
-        if (isPrivate(modifiers) && !isConstructor(methodName, classDec) && !isMagicMethod(methodName)) {
-          // Parenthesis specifies that member is a method
-          addPrivateMember(getCalledName(identifier, modifiers) + "()", identifier);
+        if (ruleConditions
+          && !isConstructor(methodSymbol.declaration(), tree)
+          && !isMagicMethod(methodSymbol.name())
+          && !isUsedInStringLiteral(methodSymbol)) {
+          context().newIssue(KEY, String.format(MESSAGE, methodSymbol.name())).tree(methodSymbol.declaration());
         }
       }
     }
   }
 
-  private static boolean isConstructor(String methodName, AstNode classDec) {
-    return "__construct".equals(methodName) || classDec.getFirstChild(PHPGrammar.IDENTIFIER).getTokenOriginalValue().equals(methodName);
+  @Override
+  public void visitLiteral(LiteralTree tree) {
+    if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+      String value = tree.value();
+      stringLiterals.add(value.substring(1, value.length() - 1));
+    }
+  }
+
+
+  private boolean isUsedInStringLiteral(Symbol methodSymbol) {
+    for (String stringLiteral : stringLiterals) {
+      if (stringLiteral.contains(methodSymbol.name())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean isConstructor(IdentifierTree methodName, ClassDeclarationTree classDec) {
+    MethodDeclarationTree constructor = classDec.fetchConstructor();
+    return  constructor != null && constructor.name().equals(methodName);
   }
 
   private static boolean isMagicMethod(String methodName) {
