@@ -24,6 +24,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/language.types.string.php">Expandable String</a>, containing variable name
+ * <pre>
+ *   "{@link #strings() string characters} {@link #expressions() $expression}"
+ *   "{@link #expressions()}"
+ * </pre>
+ */
 @Beta
 public interface ExpandableStringLiteralTree extends ExpressionTree {
 

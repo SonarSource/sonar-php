@@ -19,13 +19,19 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import javax.annotation.Nullable;
-
+import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
 
+/**
+ * <a href="http://php.net/manual/en/language.types.array.php">Array</a> Pair
+ * <pre>
+ *  {@link #value()}
+ *  {@link #key()} => {@link #value()}
+ * </pre>
+ */
 @Beta
 public interface ArrayPairTree extends Tree {
 

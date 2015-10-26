@@ -25,9 +25,9 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import java.util.List;
 
 /**
+ * <a href="http://php.net/manual/en/language.variables.variable.php"></a>
  * <pre>
- *   $$foo
- *   $$$foo
+ *   {@link #dollarTokens()} {@link #variableExpression()}
  * </pre>
  */
 @Beta

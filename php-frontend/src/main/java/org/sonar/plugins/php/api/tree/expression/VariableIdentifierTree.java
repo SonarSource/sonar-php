@@ -22,6 +22,9 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/language.variables.basics.php">Variable Identifier</a>
+ */
 @Beta
 public interface VariableIdentifierTree extends VariableTree, IdentifierTree {
 

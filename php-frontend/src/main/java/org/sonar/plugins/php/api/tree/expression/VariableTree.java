@@ -21,6 +21,16 @@ package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
 
+/**
+ * <a href="http://php.net/manual/en/language.variables.php">Common interface to represent variable name expression</a>
+ * <pre>
+ *   ${ {@link #variableExpression()} } // {@link Kind#COMPOUND_VARIABLE_NAME COMPOUND_VARIABLE_NAME}
+ *   { {@link #variableExpression()} }  // {@link Kind#COMPOUND_VARIABLE_NAME COMPOUND_VARIABLE_NAME}
+ *   & {@link #variableExpression()}    // {@link Kind#COMPUTED_VARIABLE_NAME COMPUTED_VARIABLE_NAME}
+ *   $$ {@link #variableExpression()}   // {@link Kind#VARIABLE_VARIABLE VARIABLE_VARIABLE}
+ *   {@link #variableExpression()}      // {@link Kind#VARIABLE_IDENTIFIER VARIABLE_IDENTIFIER}
+ * </pre>
+ */
 @Beta
 public interface VariableTree extends ExpressionTree {
 

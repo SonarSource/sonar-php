@@ -24,6 +24,13 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 import java.util.List;
 
+/**
+ * PHP Script
+ * <pre>
+ *   {@literal<}?php {@link #statements()}
+ *   {@literal<}?= {@link #statements()}
+ * </pre>
+ */
 public interface ScriptTree extends Tree {
 
   SyntaxToken fileOpeningTagToken();

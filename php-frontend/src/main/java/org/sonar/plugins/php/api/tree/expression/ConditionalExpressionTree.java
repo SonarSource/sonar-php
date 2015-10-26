@@ -24,6 +24,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * Conditional Expression
+ * <pre>
+ *   {@link #condition()} ? : {@link #falseExpression()}
+ *   {@link #condition()} ? {@link #trueExpression()} : {@link #falseExpression()}
+ * </pre>
+ */
 @Beta
 public interface ConditionalExpressionTree extends ExpressionTree {
 

@@ -22,6 +22,12 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/fr/language.oop5.basic.php">New Expression</a>
+ * <pre>
+ *   new {@link #expression()}
+ * </pre>
+ */
 @Beta
 public interface NewExpressionTree extends ExpressionTree {
 

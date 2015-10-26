@@ -23,11 +23,14 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
+ * Curly variable syntax
  * <pre>
- *   { $foo[1] }
+ *   { {@link #variableExpression()} }
+ * </pre>
  *
- *   // Real life example:
- *   $bar->{$foo[1]}
+ * Real life example:
+ * <pre>
+ *   $bar->{$foo[1]};
  * </pre>
  */
 @Beta

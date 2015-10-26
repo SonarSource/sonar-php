@@ -22,6 +22,12 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * Parenthesised Expression
+ * <pre>
+ *   ( {@link #expression()} )
+ * </pre>
+ */
 @Beta
 public interface ParenthesisedExpressionTree extends ExpressionTree {
 

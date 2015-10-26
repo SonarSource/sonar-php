@@ -23,6 +23,12 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/function.list.php">List</a>
+ * <pre>
+ *   list ( {@link #elements()} )
+ * </pre>
+ */
 @Beta
 public interface ListExpressionTree extends ExpressionTree {
 

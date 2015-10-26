@@ -24,6 +24,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * <a href="http://php.net/manual/en/language.generators.syntax.php">Generator syntax</a>
+ * <pre>
+ *  yield {@link #value()}
+ *  yield {@link #key()} => {@link #value()}
+ * </pre>
+ */
 @Beta
 public interface YieldExpressionTree extends ExpressionTree {
 

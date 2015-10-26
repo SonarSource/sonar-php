@@ -207,6 +207,10 @@ public interface VisitorCheck extends PHPCheck {
    * [ END ] Statement
    */
 
+  /**
+   * [ START ] Expression
+   */
+
   void visitCastExpression(CastExpressionTree tree);
 
   void visitPrefixExpression(UnaryExpressionTree tree);
@@ -270,5 +274,9 @@ public interface VisitorCheck extends PHPCheck {
   void visitConditionalExpression(ConditionalExpressionTree tree);
 
   void visitSkippedListElement(ExpressionTree tree);
+  /**
+   * [ END ] Expression
+   */
+
 }
 

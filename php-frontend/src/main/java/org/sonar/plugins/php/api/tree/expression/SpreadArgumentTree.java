@@ -22,6 +22,12 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/functions.arguments.php">Variable-length argument lists</a>
+ * <pre>
+ *   ... {@link #argument()};
+ * </pre>
+ */
 @Beta
 public interface SpreadArgumentTree extends ExpressionTree {
 

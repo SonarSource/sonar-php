@@ -28,6 +28,21 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * <a href="http://php.net/manual/en/language.namespaces.rules.php">Namespace name</a>
+ * <ul>
+ * <li><b>Unqualified name</b>: this is an identifier without a namespace separator, such as Foo</li>
+ * <li><b>Qualified name</b>: this is an identifier with a namespace separator, such as Foo\Bar</li>
+ * <li><b>Fully qualified name</b>: this is an identifier with a namespace separator that begins with a namespace separator,
+ *                                  such as \Foo\Bar. The namespace \Foo is also a fully qualified name.</li>
+ * </ul>
+ *
+ * <pre>
+ *  {@link #name()}                                  // unqualified
+ *  {@link #namespaces()} {@link #name()}                     // qualified
+ *  {@link #absoluteSeparator()} {@link #namespaces()} {@link #name()} // fully qualified
+ * <pre/>
+ */
 @Beta
 public interface NamespaceNameTree extends ExpressionTree {
 

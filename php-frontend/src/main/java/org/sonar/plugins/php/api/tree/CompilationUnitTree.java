@@ -23,6 +23,12 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * Compilation Unit
+ * <pre>
+ *   {@link #script()} {@link #eofToken()}
+ * </pre>
+ */
 public interface CompilationUnitTree extends Tree {
   @Nullable
   ScriptTree script();

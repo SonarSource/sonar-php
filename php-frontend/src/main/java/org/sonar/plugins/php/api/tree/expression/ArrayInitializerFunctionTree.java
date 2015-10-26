@@ -24,6 +24,12 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import com.google.common.annotations.Beta;
 
+/**
+ * <a href="http://php.net/manual/en/language.types.array.php">Array</a> Initializer Function
+ * <pre>
+ *   array ( {@link #arrayPairs()} )
+ * <pre/>
+ */
 @Beta
 public interface ArrayInitializerFunctionTree extends ArrayInitializerTree {
 

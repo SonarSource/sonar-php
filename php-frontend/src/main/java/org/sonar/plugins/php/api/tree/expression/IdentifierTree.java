@@ -22,6 +22,13 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * Common interface to represent all kinds of identifiers.
+ * <pre>
+ *   {@link Kind#NAME_IDENTIFIER name_identifier}
+ *   {@link Kind#VARIABLE_IDENTIFIER $variable_identifier}
+ * </pre>
+ */
 @Beta
 public interface IdentifierTree extends ExpressionTree {
 

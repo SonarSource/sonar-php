@@ -25,6 +25,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import javax.annotation.Nullable;
 
+/**
+ * <a href="http://php.net/manual/en/functions.user-defined.php">Function call</a>
+ * <pre>
+ *   {@link #callee()} {@link #arguments()}
+ *   {@link #callee()} ( {@link #arguments()} )
+ * </pre>
+ */
 @Beta
 public interface FunctionCallTree extends ExpressionTree {
 
@@ -42,6 +49,7 @@ public interface FunctionCallTree extends ExpressionTree {
    * Nullable in case of internal function call with no parenthesis
    */
   @Nullable
+
   SyntaxToken closeParenthesisToken();
 
 }

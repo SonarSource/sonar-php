@@ -22,6 +22,18 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * Literal
+ *
+ * <pre>
+ *   {@link Kind#NULL_LITERAL null}
+ *   {@link Kind#BOOLEAN_LITERAL true}               // boolean
+ *   {@link Kind#NUMERIC_LITERAL 0}                  // numeric
+ *   {@link Kind#REGULAR_STRING_LITERAL "regular string"}   // string without embedded variable
+ *   {@link Kind#HEREDOC_LITERAL heredoc}
+ *   {@link Kind#HEREDOC_LITERAL __CLASS__}          // magic constant
+ * </pre>
+ */
 @Beta
 public interface LiteralTree extends ExpressionTree {
 

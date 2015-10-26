@@ -23,6 +23,14 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/functions.anonymous.php">Lexical Variable</a>: use construct that allows
+ * to anonymous function to inherit from parent scope variables.
+ * <pre>
+ *   use ( {@link #variables()} )
+ * </pre>
+ *
+ */
 @Beta
 public interface LexicalVariablesTree extends ExpressionTree {
 

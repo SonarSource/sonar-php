@@ -23,8 +23,9 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
+ * <a href="http://php.net/manual/en/language.references.php">Reference Variable</a>
  * <pre>
- *   &$foo
+ *   & {@link #variableExpression()}
  * </pre>
  */
 @Beta

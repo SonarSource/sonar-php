@@ -25,8 +25,6 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 /**
  * <a href="http://php.net/manual/fa/language.operators.assignment.php">Assignment Expression</a>
- * <p/>
- *
  * <pre>
  *   {@link #variable()} {@link Tree.Kind#ASSIGNMENT =} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#MULTIPLY_ASSIGNMENT *=} {@link #value()}

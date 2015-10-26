@@ -22,6 +22,13 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 
+/**
+ * Common interface for <a href="http://php.net/manual/en/language.types.array.php">Array</a> Initializer
+ * <ul>
+ *   <li>{@link Kind#ARRAY_INITIALIZER_BRACKET Array initializer bracket}
+ *   <li>{@link Kind#ARRAY_INITIALIZER_FUNCTION Array initializer function}
+ * <ul/>
+ */
 @Beta
 public interface ArrayInitializerTree extends ExpressionTree {
 
