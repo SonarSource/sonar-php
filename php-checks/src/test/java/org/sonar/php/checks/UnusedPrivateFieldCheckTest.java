@@ -20,20 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class UnusedPrivateFieldCheckTest extends CheckTest {
+public class UnusedPrivateFieldCheckTest {
 
   @Test
   public void test() throws Exception {
-    SourceFile file = PHPAstScanner.scanSingleFile(TestUtils.getCheckFile("UnusedPrivateFieldCheck.php"), new UnusedPrivateFieldCheck());
-
-    checkMessagesVerifier.verify(file.getCheckMessages())
-      .next().atLine(4).withMessage("Remove this unused \"$field1\" private field.")
-      .next().atLine(22)
-      .noMore();
+    PHPCheckTest.check(new UnusedPrivateFieldCheck(), TestUtils.getCheckFile("UnusedPrivateFieldCheck.php"));
   }
 }

@@ -31,7 +31,7 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
   private final SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/class_members_usages.php"));
 
   @Test
-  public void test_static() throws Exception {
+  public void test_static_field() throws Exception {
     Symbol staticField = getSymbol("$staticField", Kind.FIELD);
     assertThat(staticField).isNotNull();
     assertThat(staticField.usages()).hasSize(4);
@@ -41,7 +41,7 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
   public void test_field() throws Exception {
     Symbol field = getSymbol("$field", Kind.FIELD);
     assertThat(field).isNotNull();
-    assertThat(field.usages()).hasSize(1);
+    assertThat(field.usages()).hasSize(2);
 
 
     Symbol arrayField = getSymbol("$fieldArray", Kind.FIELD);
@@ -58,7 +58,7 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
     assertThat(field).isNotNull();
 
     assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(2);
+    assertThat(method.usages()).hasSize(4);
   }
 
   @Test
@@ -70,7 +70,7 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
     assertThat(field).isNotNull();
 
     assertThat(field.usages()).hasSize(1);
-    assertThat(method.usages()).hasSize(4);
+    assertThat(method.usages()).hasSize(5);
   }
 
   @Test

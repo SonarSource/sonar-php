@@ -19,50 +19,36 @@
  */
 package org.sonar.php.checks;
 
-import com.sonar.sslr.api.AstNode;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.AbstractUnusedPrivateClassMemberCheck;
-import org.sonar.php.parser.PHPGrammar;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
-import java.util.List;
-
 @Rule(
-  key = "S1068",
+  key = UnusedPrivateFieldCheck.KEY,
   name = "Unused private fields should be removed",
   priority = Priority.MAJOR,
   tags = {Tags.UNUSED})
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("5min")
-public class UnusedPrivateFieldCheck extends AbstractUnusedPrivateClassMemberCheck {
+public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
+
+  public static final String KEY = "S1068";
+  private static final String MESSAGE = "Remove this unused \"%s\" private field.";
 
   @Override
-  protected String getIssueMessage() {
-    return "Remove this unused \"{0}\" private field.";
-  }
-
-  @Override
-  protected void retrievePrivateClassMember(AstNode classDeclaration) {
-    for (AstNode classStmt : classDeclaration.getChildren(PHPGrammar.CLASS_STATEMENT)) {
-      AstNode stmtChild = classStmt.getFirstChild();
-
-      if (stmtChild.is(PHPGrammar.CLASS_VARIABLE_DECLARATION)) {
-        List<AstNode> modifiers = stmtChild.getFirstChild(PHPGrammar.VARIABLE_MODIFIERS).getChildren(PHPGrammar.MEMBER_MODIFIER);
-
-        if (isPrivate(modifiers)) {
-          for (AstNode varDeclaration : stmtChild.getChildren(PHPGrammar.VARIABLE_DECLARATION)) {
-            AstNode varIdentifier = varDeclaration.getFirstChild(PHPGrammar.VAR_IDENTIFIER);
-
-            addPrivateMember(getCalledName(varIdentifier, modifiers), varIdentifier);
-          }
-        }
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    for (Symbol fieldSymbol : context().symbolTable().getSymbols(Kind.FIELD)) {
+      if (fieldSymbol.hasModifier("private") && fieldSymbol.usages().isEmpty()) {
+        context().newIssue(KEY, String.format(MESSAGE, fieldSymbol.name())).tree(fieldSymbol.declaration());
       }
     }
   }
-
 }

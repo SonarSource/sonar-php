@@ -1,7 +1,7 @@
 <?php
 
 
-// ------------ test_static ----------------
+// ------------ test_static_field ----------------
 class A {
   static $staticField = 2;
 
@@ -24,7 +24,7 @@ class A {
 
 
 
-// ------------ test_fields ----------------
+// ------------ test_field ----------------
 
 class C {
   public $anotherClassField = 6;
@@ -54,7 +54,7 @@ class B {
 
 
 
-// ------------ test_methods ----------------
+// ------------ test_method ----------------
 
 class F {
 

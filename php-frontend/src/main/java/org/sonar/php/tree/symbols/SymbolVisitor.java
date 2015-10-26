@@ -194,7 +194,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitNameIdentifier(NameIdentifierTree tree) {
-    if (classMemberUsageState != null && classMemberUsageState.isSelfMember && classScope != null) {
+    if (classMemberUsageState != null && classScope != null) {
 
       if (classMemberUsageState.isField) {
         String dollar = classMemberUsageState.isConst ? "" : "$";
