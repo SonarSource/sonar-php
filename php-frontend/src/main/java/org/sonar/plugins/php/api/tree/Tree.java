@@ -110,7 +110,7 @@ public interface Tree {
 
   Kind getKind();
 
-  public enum Kind implements AstNodeType, GrammarRuleKey {
+  enum Kind implements AstNodeType, GrammarRuleKey {
 
     /**
      * {@link CompilationUnitTree}

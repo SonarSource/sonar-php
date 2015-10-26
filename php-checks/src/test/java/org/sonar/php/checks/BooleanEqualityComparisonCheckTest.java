@@ -20,11 +20,10 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.CheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class BooleanEqualityComparisonCheckTest extends CheckTest {
+public class BooleanEqualityComparisonCheckTest {
 
   @Test
   public void test() throws Exception {

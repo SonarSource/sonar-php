@@ -95,7 +95,7 @@ public enum PHPKeyword implements TokenType, GrammarRuleKey {
 
   private final String value;
 
-  private PHPKeyword(String value) {
+  PHPKeyword(String value) {
     this.value = value;
   }
 

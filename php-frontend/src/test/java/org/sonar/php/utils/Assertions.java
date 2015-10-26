@@ -21,7 +21,6 @@ package org.sonar.php.utils;
 
 import org.fest.assertions.GenericAssert;
 import org.sonar.php.parser.NewPHPGrammar;
-import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPNodeBuilder;
 import org.sonar.php.parser.TreeFactory;

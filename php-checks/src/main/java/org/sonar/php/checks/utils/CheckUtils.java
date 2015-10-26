@@ -19,13 +19,8 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import org.sonar.php.api.PHPKeyword;
-import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -66,21 +61,6 @@ public class CheckUtils {
     return "$GLOBALS".equals(varName) || PREDEFINED_VARIABLES.values().contains(varName);
   }
 
-  /**
-   * Returns whether a class member (method or variable) is static or not.
-   *
-   * @param modifiers List of MEMBER_MODIFIER
-   * @return true if the class member is static, false otherwise
-   */
-  public static boolean isStaticClassMember(List<AstNode> modifiers) {
-    for (AstNode modifier : modifiers) {
-      if (modifier.getFirstChild().is(PHPKeyword.STATIC)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public static boolean hasModifier(List<SyntaxToken> modifiers, String toFind) {
     for (SyntaxToken modifier : modifiers) {
       if (modifier.text().equalsIgnoreCase(toFind)) {
@@ -88,48 +68,6 @@ public class CheckUtils {
       }
     }
     return false;
-  }
-
-  public static boolean isExpressionABooleanLiteral(AstNode expression) {
-    Preconditions.checkArgument(expression.is(PHPGrammar.EXPRESSION));
-    AstNode postfixExpr = expression.getFirstChild(PHPGrammar.POSTFIX_EXPR);
-
-    if (postfixExpr == null) {
-      return false;
-    }
-
-    AstNode commonScalar = postfixExpr.getFirstChild(PHPGrammar.COMMON_SCALAR);
-    return commonScalar != null && commonScalar.getFirstChild().is(PHPGrammar.BOOLEAN_LITERAL);
-  }
-
-  /**
-   * Return String representing the full expression given as parameter.
-   */
-  public static String getExpressionAsString(AstNode node) {
-    StringBuilder builder = new StringBuilder();
-    for (Token token : node.getTokens()) {
-      builder.append(token.getOriginalValue());
-    }
-    return builder.toString();
-  }
-
-  public static boolean areSyntacticallyEquivalent(AstNode node1, AstNode node2) {
-    if (!node1.getType().equals(node2.getType())) {
-      return false;
-    }
-    List<Token> tokens1 = node1.getTokens();
-    List<Token> tokens2 = node2.getTokens();
-    if (tokens1.size() != tokens2.size()) {
-      return false;
-    }
-    for (int i = 0; i < tokens1.size(); i++) {
-      Token token1 = tokens1.get(i);
-      Token token2 = tokens2.get(i);
-      if (!token1.getValue().equals(token2.getValue())) {
-        return false;
-      }
-    }
-    return true;
   }
 
   public static boolean areSyntacticallyEquivalent(@Nullable Tree tree1, @Nullable Tree tree2) {

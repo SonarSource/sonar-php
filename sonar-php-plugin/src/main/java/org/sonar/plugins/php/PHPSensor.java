@@ -33,7 +33,6 @@ import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
-import org.sonar.api.issue.Issue;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
@@ -43,27 +42,15 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.source.Highlightable;
 import org.sonar.api.source.Highlightable.HighlightingBuilder;
 import org.sonar.php.PHPAnalyzer;
-import org.sonar.php.PHPAstScanner;
-import org.sonar.php.PHPConfiguration;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.highlighter.HighlightingData;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonar.squidbridge.AstScanner;
 import org.sonar.squidbridge.ProgressReport;
-import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.api.CodeVisitor;
-import org.sonar.squidbridge.api.SourceCode;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.indexer.QueryByType;
-import org.sonar.sslr.parser.LexerlessGrammar;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class PHPSensor implements Sensor {
@@ -74,15 +61,14 @@ public class PHPSensor implements Sensor {
   private final FileSystem fileSystem;
   private final FilePredicate mainFilePredicate;
   private final FileLinesContextFactory fileLinesContextFactory;
-  private final Checks<CodeVisitor> checks;
+  private final Checks<PHPCheck> checks;
   private final NoSonarFilter noSonarFilter;
-  private AstScanner<LexerlessGrammar> scanner;
   private SensorContext context;
 
   public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem filesystem,
                    FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
     this.checks = checkFactory
-      .<CodeVisitor>create(CheckList.REPOSITORY_KEY)
+      .<PHPCheck>create(CheckList.REPOSITORY_KEY)
       .addAnnotatedChecks(CheckList.getChecks());
     this.resourcePerspectives = resourcePerspectives;
     this.fileLinesContextFactory = fileLinesContextFactory;
@@ -102,30 +88,9 @@ public class PHPSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     this.context = context;
 
-    List<CodeVisitor> visitors = getCheckVisitors();
+    ImmutableList<PHPCheck> visitors = getCheckVisitors();
 
-    ImmutableList.Builder<PHPCheck> phpCheckBuilder = ImmutableList.builder();
-
-    // fixme : Remove this after migration of all checks
-    // --------------
-    List<CodeVisitor> oldChecks = new ArrayList<>();
-
-    for (CodeVisitor codeVisitor : visitors) {
-      if (codeVisitor instanceof PHPCheck) {
-        phpCheckBuilder.add((PHPCheck) codeVisitor);
-      } else {
-        oldChecks.add(codeVisitor);
-      }
-    }
-
-    this.scanner = PHPAstScanner.create(createConfiguration(), oldChecks.toArray(new SquidAstVisitor[oldChecks.size()]));
-    scanner.scanFiles(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
-    save(scanner.getIndex().search(new QueryByType(SourceFile.class)));
-
-    LOG.info("Starting running rules based on strongly-typed tree");
-    // --------------
-
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), phpCheckBuilder.build());
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors);
     ArrayList<InputFile> inputFiles = Lists.newArrayList(fileSystem.inputFiles(mainFilePredicate));
 
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
@@ -187,44 +152,6 @@ public class PHPSensor implements Sensor {
     noSonarFilter.addComponent(context.getResource(inputFile).getEffectiveKey(), fileMeasures.getNoSonarLines());
   }
 
-  private void save(Collection<SourceCode> squidSourceFiles) {
-    for (SourceCode squidSourceFile : squidSourceFiles) {
-      SourceFile squidFile = (SourceFile) squidSourceFile;
-      InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(squidFile.getKey()));
-
-      if (inputFile != null) {
-        org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.create(inputFile.relativePath());
-        saveOldIssues(sonarFile, squidFile);
-      } else {
-        LOG.warn("Cannot save analysis information for file {}. Unable to retrieve the associated sonar resource.", squidFile.getKey());
-      }
-    }
-  }
-
-  /**
-   * To remove after migration of all checks.
-   */
-  private void saveOldIssues(org.sonar.api.resources.File sonarFile, SourceFile squidFile) {
-    Collection<CheckMessage> messages = squidFile.getCheckMessages();
-    if (messages != null) {
-
-      for (CheckMessage message : messages) {
-        RuleKey ruleKey = checks.ruleKey((CodeVisitor) message.getCheck());
-        Issuable issuable = resourcePerspectives.as(Issuable.class, sonarFile);
-
-        if (issuable != null) {
-          Issue issue = issuable.newIssueBuilder()
-            .ruleKey(ruleKey)
-            .line(message.getLine())
-            .message(message.getText(Locale.ENGLISH))
-            .effortToFix(message.getCost())
-            .build();
-          issuable.addIssue(issue);
-        }
-      }
-    }
-  }
-
   private void saveIssues(List<org.sonar.plugins.php.api.visitors.Issue> issues, InputFile inputFile) {
     for (org.sonar.plugins.php.api.visitors.Issue phpIssue : issues) {
       RuleKey ruleKey = RuleKey.of(CheckList.REPOSITORY_KEY, phpIssue.ruleKey());
@@ -245,12 +172,8 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private PHPConfiguration createConfiguration() {
-    return new PHPConfiguration(fileSystem.encoding());
-  }
-
-  private List<CodeVisitor> getCheckVisitors() {
-    return new ArrayList<>(checks.all());
+  private ImmutableList<PHPCheck> getCheckVisitors() {
+    return ImmutableList.copyOf(checks.all());
   }
 
   @Override
