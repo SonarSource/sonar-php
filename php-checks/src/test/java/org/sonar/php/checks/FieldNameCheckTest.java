@@ -42,6 +42,6 @@ public class FieldNameCheckTest {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
     String message = "Rename this field \"$myVariable\" to match the regular expression " + check.format + ".";
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
-      ImmutableList.<Issue>of(new PHPIssue(FileNameCheck.KEY, message).line(6)));
+      ImmutableList.<Issue>of(new PHPIssue(check, message).line(6)));
   }
 }

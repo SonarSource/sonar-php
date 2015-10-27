@@ -35,7 +35,7 @@ public class TooManyFunctionParametersCheckTest {
   @Test
   public void defaultValue() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
-      ImmutableList.<Issue>of(new PHPIssue(TooManyFunctionParametersCheck.KEY, null).line(3)));
+      ImmutableList.<Issue>of(new PHPIssue(check, null).line(3)));
   }
 
   @Test

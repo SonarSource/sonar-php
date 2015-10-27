@@ -68,7 +68,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
           && !isConstructor(methodSymbol.declaration(), tree)
           && !isMagicMethod(methodSymbol.name())
           && !isUsedInStringLiteral(methodSymbol)) {
-          context().newIssue(KEY, String.format(MESSAGE, methodSymbol.name())).tree(methodSymbol.declaration());
+          context().newIssue(this, String.format(MESSAGE, methodSymbol.name())).tree(methodSymbol.declaration());
         }
       }
     }

@@ -158,7 +158,7 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
 
       if (stmtCount.nbStatement > 1 || stmtCount.nbFunctionExpression > 1 || stmtCount.nbNestedStatement > 1) {
         String message = String.format(MESSAGE, stmtCount.nbStatement + stmtCount.nbNestedStatement);
-        context().newIssue(KEY, message).line(line);
+        context().newIssue(this, message).line(line);
       }
     }
   }

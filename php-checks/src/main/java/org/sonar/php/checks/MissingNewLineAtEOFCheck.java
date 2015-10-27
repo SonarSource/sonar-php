@@ -44,7 +44,7 @@ public class MissingNewLineAtEOFCheck extends PHPVisitorCheck {
   public void visitCompilationUnit(CompilationUnitTree tree) {
     SyntaxToken eofToken = tree.eofToken();
     if (eofToken.column() != 0 || eofToken.line() == 1) {
-      context().newIssue(KEY, MESSAGE);
+      context().newIssue(this, MESSAGE);
     }
   }
 }

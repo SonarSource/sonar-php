@@ -25,12 +25,15 @@ import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 public class TrailingWhitespaceCheckTest {
 
   @Test
   public void test() throws Exception {
-    ImmutableList<Issue> issues = ImmutableList.<Issue>of(new PHPIssue("testKey", "Remove the useless trailing whitespaces at the end of this line.").line(5));
-    PHPCheckTest.check(new TrailingWhitespaceCheck(), TestUtils.getCheckFile("TrailingWhitespaceCheck.php"), issues);
+    PHPCheck check = new TrailingWhitespaceCheck();
+
+    ImmutableList<Issue> issues = ImmutableList.<Issue>of(new PHPIssue(check, "Remove the useless trailing whitespaces at the end of this line.").line(5));
+    PHPCheckTest.check(check, TestUtils.getCheckFile("TrailingWhitespaceCheck.php"), issues);
   }
 }

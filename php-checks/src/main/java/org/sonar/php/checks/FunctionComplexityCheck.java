@@ -72,7 +72,7 @@ public class FunctionComplexityCheck extends PHPSubscriptionCheck {
       String functionName = FunctionUtils.getFunctionName((FunctionTree) tree);
       String message = String.format(MESSAGE, functionName, complexity, threshold);
       int cost = complexity - threshold;
-      context().newIssue(KEY, message).tree(tree).cost(cost);
+      context().newIssue(this, message).tree(tree).cost(cost);
     }
   }
 

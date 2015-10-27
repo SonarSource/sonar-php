@@ -59,7 +59,7 @@ public class NonLFCharAsEOLCheckTest {
   @Test
   public void ko() throws IOException {
     ImmutableList<Issue> issues = ImmutableList.<Issue>of(
-      new PHPIssue("testKey", "Replace all non line feed end of line characters in this file \"" + ko_file.getName() + "\" by LF."));
+      new PHPIssue(check, "Replace all non line feed end of line characters in this file \"" + ko_file.getName() + "\" by LF."));
     PHPCheckTest.check(check, ko_file, issues);
   }
 

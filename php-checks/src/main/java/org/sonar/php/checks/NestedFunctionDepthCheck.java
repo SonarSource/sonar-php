@@ -75,7 +75,7 @@ public class NestedFunctionDepthCheck extends PHPVisitorCheck {
   private void enterFunction(Tree tree) {
     nestedLevel++;
     if (nestedLevel == max + 1) {
-      context().newIssue(KEY, String.format(MESSAGE, max)).tree(tree);
+      context().newIssue(this, String.format(MESSAGE, max)).tree(tree);
     }
   }
 

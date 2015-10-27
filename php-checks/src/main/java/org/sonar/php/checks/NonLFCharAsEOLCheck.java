@@ -65,7 +65,7 @@ public class NonLFCharAsEOLCheck extends PHPVisitorCheck implements CharsetAware
 
         if (c == '\r' || c == '\u2028' || c == '\u2029') {
           String message = String.format(MESSAGE, file.getName());
-          context().newIssue(KEY, message);
+          context().newIssue(this, message);
           break;
         }
       }

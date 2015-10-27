@@ -124,7 +124,7 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
     for (Symbol symbol : scope.getSymbols(Symbol.Kind.VARIABLE)) {
       // symbol should be declared in this scope
       if (symbol.scope().equals(scope) && symbol.usages().isEmpty() && !exclusions.contains(symbol.declaration())) {
-        context().newIssue(KEY, String.format(MESSAGE, symbol.name())).tree(symbol.declaration());
+        context().newIssue(this, String.format(MESSAGE, symbol.name())).tree(symbol.declaration());
       }
     }
   }

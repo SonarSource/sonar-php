@@ -59,7 +59,7 @@ public class LowerCaseColorCheck extends PHPSubscriptionCheck {
 
     if (isLowerCaseColor(stringContent)) {
       String message = String.format(MESSAGE, stringContent, stringContent.toUpperCase());
-      context().newIssue(KEY, message).tree(tree);
+      context().newIssue(this, message).tree(tree);
     }
   }
 

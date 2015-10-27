@@ -50,7 +50,7 @@ public class MethodNameReturningBooleanCheck extends PHPVisitorCheck {
     super.visitMethodDeclaration(tree);
 
     if (isReturningBoolean(tree) && !hasBooleanPrefixName(tree)) {
-      context().newIssue(KEY, MESSAGE).tree(tree);
+      context().newIssue(this, MESSAGE).tree(tree);
     }
   }
 

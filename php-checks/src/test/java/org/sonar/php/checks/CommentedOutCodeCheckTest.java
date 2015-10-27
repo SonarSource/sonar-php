@@ -25,10 +25,13 @@ import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.util.List;
 
 public class CommentedOutCodeCheckTest {
+
+  private static final PHPCheck CHECK = new CommentedOutCodeCheck();
 
   @Test
   public void test() throws Exception {
@@ -38,11 +41,11 @@ public class CommentedOutCodeCheckTest {
       newIssue(25)
     );
 
-    PHPCheckTest.check(new CommentedOutCodeCheck(), TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
+    PHPCheckTest.check(CHECK, TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
   }
 
   private Issue newIssue(int line) {
     String message = "Remove this commented out code.";
-    return new PHPIssue("testKey", message).line(line);
+    return new PHPIssue(CHECK, message).line(line);
   }
 }

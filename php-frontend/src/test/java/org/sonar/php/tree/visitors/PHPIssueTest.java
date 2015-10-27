@@ -23,16 +23,19 @@ import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.sonar.php.tree.impl.expression.NameIdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.php.utils.DummyCheck;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.util.Collections;
 
 public class PHPIssueTest {
 
+  private static final PHPCheck CHECK = new DummyCheck();
   @Test
   public void test_no_line() throws Exception {
-    PHPIssue issue = new PHPIssue("key", "message");
+    PHPIssue issue = new PHPIssue(CHECK, "message");
 
-    Assertions.assertThat(issue.ruleKey()).isEqualTo("key");
+    Assertions.assertThat(issue.check()).isEqualTo(CHECK);
     Assertions.assertThat(issue.message()).isEqualTo("message");
     Assertions.assertThat(issue.line()).isEqualTo(0);
     Assertions.assertThat(issue.cost()).isNull();
@@ -41,9 +44,9 @@ public class PHPIssueTest {
   @Test
   public void test_with_line() throws Exception {
     final int line = 7;
-    PHPIssue issue = new PHPIssue("key", "message").line(line);
+    PHPIssue issue = new PHPIssue(CHECK, "message").line(line);
 
-    Assertions.assertThat(issue.ruleKey()).isEqualTo("key");
+    Assertions.assertThat(issue.check()).isEqualTo(CHECK);
     Assertions.assertThat(issue.message()).isEqualTo("message");
     Assertions.assertThat(issue.line()).isEqualTo(line);
     Assertions.assertThat(issue.cost()).isNull();
@@ -52,9 +55,9 @@ public class PHPIssueTest {
   @Test
   public void test_with_line_and_cost() throws Exception {
     final int cost = 7;
-    PHPIssue issue = new PHPIssue("key", "message").cost(cost);
+    PHPIssue issue = new PHPIssue(CHECK, "message").cost(cost);
 
-    Assertions.assertThat(issue.ruleKey()).isEqualTo("key");
+    Assertions.assertThat(issue.check()).isEqualTo(CHECK);
     Assertions.assertThat(issue.message()).isEqualTo("message");
     Assertions.assertThat(issue.line()).isEqualTo(0);
     Assertions.assertThat(issue.cost()).isEqualTo(cost);
@@ -64,9 +67,9 @@ public class PHPIssueTest {
   public void test_setting_line_from_tree() throws Exception {
     final int line = 3;
     NameIdentifierTreeImpl tree = new NameIdentifierTreeImpl(new InternalSyntaxToken(line, 1, "tree", Collections.EMPTY_LIST, 0, false, null));
-    PHPIssue issue = new PHPIssue("key", "message").tree(tree);
+    PHPIssue issue = new PHPIssue(CHECK, "message").tree(tree);
 
-    Assertions.assertThat(issue.ruleKey()).isEqualTo("key");
+    Assertions.assertThat(issue.check()).isEqualTo(CHECK);
     Assertions.assertThat(issue.message()).isEqualTo("message");
     Assertions.assertThat(issue.line()).isEqualTo(line);
     Assertions.assertThat(issue.cost()).isNull();

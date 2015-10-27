@@ -100,7 +100,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
       if (!unused.isEmpty()) {
         String message = String.format(MESSAGE, unused.size() == 1 ? "" : "s", StringUtils.join(unused, ", "));
-        context().newIssue(KEY, message).tree(tree);
+        context().newIssue(this, message).tree(tree);
       }
     }
   }

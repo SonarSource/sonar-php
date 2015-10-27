@@ -48,7 +48,7 @@ public class TooManyMethodsInClassCheckTest {
     check.countNonpublicMethods = false;
 
     ImmutableList<Issue> issues = ImmutableList.<Issue>of(
-      new PHPIssue("testKey", "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3)
+      new PHPIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3)
     );
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }

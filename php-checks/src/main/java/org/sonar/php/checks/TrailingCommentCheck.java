@@ -74,7 +74,7 @@ public class TrailingCommentCheck extends PHPVisitorCheck {
       if (trivia.line() == previousTokenLine) {
         String comment = trivia.text();
         if ((comment.startsWith("//") || comment.startsWith("#")) && !pattern.matcher(comment).matches()) {
-          context().newIssue(KEY, MESSAGE).line(previousTokenLine);
+          context().newIssue(this, MESSAGE).line(previousTokenLine);
         }
       }
     }

@@ -52,7 +52,7 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
   public void visitParameterList(ParameterListTree parameterList) {
     List<ParameterTree> parametersToMove = getParametersToMove(parameterList);
     if (!parametersToMove.isEmpty()) {
-      context().newIssue(KEY, String.format(MESSAGE, getNameListString(parametersToMove))).tree(parameterList);
+      context().newIssue(this, String.format(MESSAGE, getNameListString(parametersToMove))).tree(parameterList);
     }
     super.visitParameterList(parameterList);
   }

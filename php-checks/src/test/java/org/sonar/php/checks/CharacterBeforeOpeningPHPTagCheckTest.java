@@ -38,7 +38,7 @@ public class CharacterBeforeOpeningPHPTagCheckTest {
 
   @Test
   public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.<Issue>of(new PHPIssue(CharacterBeforeOpeningPHPTagCheck.KEY, "Remove the extra characters before the open tag.").line(1)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.<Issue>of(new PHPIssue(check, "Remove the extra characters before the open tag.").line(1)));
   }
 
 }

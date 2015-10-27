@@ -216,7 +216,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   }
 
   public void reportIssue(String msg, Tree tree) {
-    context().newIssue(KEY, msg).tree(tree);
+    context().newIssue(this, msg).tree(tree);
   }
 
 }

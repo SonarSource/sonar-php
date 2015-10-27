@@ -43,6 +43,6 @@ public class InlineHTMLInFileCheckTest {
 
   @Test
   public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.<Issue>of(new PHPIssue(InlineHTMLInFileCheck.KEY, "Remove the inline HTML in this file.")));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.<Issue>of(new PHPIssue(check, "Remove the inline HTML in this file.")));
   }
 }

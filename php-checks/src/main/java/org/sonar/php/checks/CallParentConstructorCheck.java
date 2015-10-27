@@ -73,7 +73,7 @@ public class CallParentConstructorCheck extends PHPVisitorCheck {
       String memberName = getName(memberAccess.member());
 
       if (isParent(memberAccess.object()) && superClass.equalsIgnoreCase(memberName)) {
-        context().newIssue(KEY, String.format(MESSAGE, memberName)).tree(tree);
+        context().newIssue(this, String.format(MESSAGE, memberName)).tree(tree);
       }
 
     }

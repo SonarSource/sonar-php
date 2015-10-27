@@ -73,7 +73,7 @@ public class LineLengthCheck extends PHPVisitorCheck implements CharsetAwareVisi
       String line = lines.get(i);
       if (line.length() > maximumLineLength) {
         String message = String.format(MESSAGE, line.length(), maximumLineLength);
-        context().newIssue(KEY, message).line(i + 1);
+        context().newIssue(this, message).line(i + 1);
       }
     }
   }

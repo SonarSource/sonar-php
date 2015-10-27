@@ -154,7 +154,7 @@ public class PHPSensor implements Sensor {
 
   private void saveIssues(List<org.sonar.plugins.php.api.visitors.Issue> issues, InputFile inputFile) {
     for (org.sonar.plugins.php.api.visitors.Issue phpIssue : issues) {
-      RuleKey ruleKey = RuleKey.of(CheckList.REPOSITORY_KEY, phpIssue.ruleKey());
+      RuleKey ruleKey = checks.ruleKey(phpIssue.check());
       Issuable issuable = resourcePerspectives.as(Issuable.class, inputFile);
 
       if (issuable != null) {

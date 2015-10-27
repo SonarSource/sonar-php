@@ -25,11 +25,14 @@ import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.io.File;
 import java.util.List;
 
 public class TodoTagPresenceCheckTest {
+
+  private static final PHPCheck CHECK = new TodoTagPresenceCheck();
 
   @Test
   public void test() throws Exception {
@@ -44,11 +47,11 @@ public class TodoTagPresenceCheckTest {
       newIssue(16)
     );
 
-    PHPCheckTest.check(new TodoTagPresenceCheck(), file, issues);
+    PHPCheckTest.check(CHECK, file, issues);
   }
 
   private Issue newIssue(int line) {
     String message = "Complete the task associated to this \"TODO\" comment.";
-    return new PHPIssue("testKey", message).line(line);
+    return new PHPIssue(CHECK, message).line(line);
   }
 }

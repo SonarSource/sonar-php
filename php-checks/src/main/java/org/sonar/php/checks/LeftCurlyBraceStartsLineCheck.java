@@ -209,7 +209,7 @@ public class LeftCurlyBraceStartsLineCheck extends PHPVisitorCheck {
   private void checkOpenCurlyBrace(SyntaxToken lBrace, SyntaxToken rBrace, SyntaxToken prevToken) {
     int leftBraceLine = lBrace.line();
     if (leftBraceLine != rBrace.line() && leftBraceLine == prevToken.line()) {
-      context().newIssue(KEY, MESSAGE).line(leftBraceLine);
+      context().newIssue(this, MESSAGE).line(leftBraceLine);
     }
   }
 

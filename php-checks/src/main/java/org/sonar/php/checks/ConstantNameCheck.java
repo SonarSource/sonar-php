@@ -106,7 +106,7 @@ public class ConstantNameCheck extends PHPVisitorCheck {
 
   private void checkConstantName(Tree tree, String constName) {
     if (!pattern.matcher(constName).matches()) {
-      context().newIssue(KEY, String.format(MESSAGE, constName, format)).tree(tree);
+      context().newIssue(this, String.format(MESSAGE, constName, format)).tree(tree);
     }
   }
 

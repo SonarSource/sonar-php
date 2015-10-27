@@ -78,10 +78,10 @@ public class PHPCheckTest {
    * @param file File containing the php code sample annotated with comment for expected issues.
    */
   public static void check(PHPCheck check, File file) {
-    CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
     check.init();
     List<Issue> actualIssues = getActualIssues(check, file, tree);
-    List<Issue> expectedIssues = getExpectedIssues(file, tree);
+    List<Issue> expectedIssues = getExpectedIssues(check, file, tree);
     compare(actualIssues, expectedIssues);
   }
 
@@ -143,12 +143,18 @@ public class PHPCheckTest {
   }
 
   // NOK {{message here}}
-  private static List<Issue> getExpectedIssues(File file, CompilationUnitTree tree) {
-    IssueParser issueParser = new IssueParser();
+  private static List<Issue> getExpectedIssues(PHPCheck check, File file, CompilationUnitTree tree) {
+    IssueParser issueParser = new IssueParser(check);
     return issueParser.analyze(file, tree);
   }
 
   private static class IssueParser extends PHPVisitorCheck {
+
+    private final PHPCheck check;
+
+    public IssueParser(PHPCheck check) {
+      this.check = check;
+    }
 
     @Override
     public void visitTrivia(SyntaxTrivia syntaxTrivia) {
@@ -179,7 +185,7 @@ public class PHPCheckTest {
           }
         }
 
-        Issue issue = context().newIssue("testKey", message).line(syntaxTrivia.line());
+        Issue issue = context().newIssue(check, message).line(syntaxTrivia.line());
         if (effortToFix != null) {
           issue.cost(effortToFix);
         }

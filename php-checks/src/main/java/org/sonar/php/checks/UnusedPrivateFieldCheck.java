@@ -47,7 +47,7 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
   public void visitCompilationUnit(CompilationUnitTree tree) {
     for (Symbol fieldSymbol : context().symbolTable().getSymbols(Kind.FIELD)) {
       if (fieldSymbol.hasModifier("private") && fieldSymbol.usages().isEmpty()) {
-        context().newIssue(KEY, String.format(MESSAGE, fieldSymbol.name())).tree(fieldSymbol.declaration());
+        context().newIssue(this, String.format(MESSAGE, fieldSymbol.name())).tree(fieldSymbol.declaration());
       }
     }
   }

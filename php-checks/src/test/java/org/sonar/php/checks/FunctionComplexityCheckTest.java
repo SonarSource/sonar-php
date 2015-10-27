@@ -34,7 +34,7 @@ public class FunctionComplexityCheckTest {
   @Test
   public void defaultValue() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of(
-      new PHPIssue("", "The Cyclomatic Complexity of this function \"ko\" is 32 which is greater than 20 authorized.").line(3)));
+      new PHPIssue(check, "The Cyclomatic Complexity of this function \"ko\" is 32 which is greater than 20 authorized.").line(3)));
   }
 
   @Test

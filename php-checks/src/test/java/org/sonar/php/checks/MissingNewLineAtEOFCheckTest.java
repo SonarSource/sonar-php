@@ -32,7 +32,7 @@ public class MissingNewLineAtEOFCheckTest {
 
   private MissingNewLineAtEOFCheck check = new MissingNewLineAtEOFCheck();
   private static final String TEST_FILE_DIR = "MissingNewLineAtEOF/";
-  private List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Add a new line at the end of this file."));
+  private List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue(check, "Add a new line at the end of this file."));
 
   @Test
   public void noNewLine() throws Exception {

@@ -80,7 +80,7 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
         newStyleConstructor != null ? MESSAGE_BOTH_STYLE_PRESENT : MESSAGE_OLD_STYLE_PRESENT,
         oldStyleConstructor.name().text());
 
-      context().newIssue(KEY, message).tree(oldStyleConstructor);
+      context().newIssue(this, message).tree(oldStyleConstructor);
     }
   }
 

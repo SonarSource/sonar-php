@@ -43,7 +43,7 @@ public class GotoUseCheck extends PHPVisitorCheck {
 
   @Override
   public void visitGotoStatement(GotoStatementTree tree) {
-    context().newIssue(KEY, MESSAGE).tree(tree);
+    context().newIssue(this, MESSAGE).tree(tree);
 
     super.visitGotoStatement(tree);
   }

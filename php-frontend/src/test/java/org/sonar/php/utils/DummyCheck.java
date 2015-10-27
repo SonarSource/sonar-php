@@ -23,8 +23,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.visitors.Issue;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
 /**
+
  * Dummy check for testing. Raises an issue on assignment expression.
  * <p> Example:
  * <pre>
@@ -52,7 +52,7 @@ public class DummyCheck extends PHPVisitorCheck {
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
     if (tree.is(Tree.Kind.ASSIGNMENT)) {
-      Issue issue = context().newIssue(KEY, MESSAGE).tree(tree);
+      Issue issue = context().newIssue(this, MESSAGE).tree(tree);
       if (cost != null) {
         issue.cost(cost);
       }

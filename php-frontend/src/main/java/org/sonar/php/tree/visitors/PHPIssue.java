@@ -22,6 +22,7 @@ package org.sonar.php.tree.visitors;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import javax.annotation.Nullable;
 
@@ -30,23 +31,23 @@ import javax.annotation.Nullable;
  */
 public class PHPIssue implements Issue {
 
-  private final String ruleKey;
+  private final PHPCheck check;
   private final String message;
   private int line;
   @Nullable
   private Double cost;
 
 
-  public PHPIssue(String ruleKey, String message) {
-    this.ruleKey = ruleKey;
+  public PHPIssue(PHPCheck check, String message) {
+    this.check = check;
     this.message = message;
     this.line = 0;
     this.cost = null;
   }
 
   @Override
-  public String ruleKey() {
-    return ruleKey;
+  public PHPCheck check() {
+    return check;
   }
 
   @Override

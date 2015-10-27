@@ -50,7 +50,7 @@ public class SilencedErrorsCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    context().newIssue(KEY, MESSAGE).tree(tree);
+    context().newIssue(this, MESSAGE).tree(tree);
   }
 
 }

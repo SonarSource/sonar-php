@@ -44,7 +44,7 @@ public class AtLeastThreeCasesInSwitchCheck extends PHPVisitorCheck {
   public void visitSwitchStatement(SwitchStatementTree switchTree) {
     if (switchTree.cases().size() < 3) {
       context()
-        .newIssue(KEY, "Replace this \"switch\" statement with \"if\" statements to increase readability.")
+        .newIssue(this, "Replace this \"switch\" statement with \"if\" statements to increase readability.")
         .tree(switchTree);
     }
 

@@ -80,7 +80,7 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
         }
       }
       if (i == EXPECTED_ORDER.length) {
-        context().newIssue(KEY, MESSAGE).tree(modifiers.get(0));
+        context().newIssue(this, MESSAGE).tree(modifiers.get(0));
       }
     }
   }

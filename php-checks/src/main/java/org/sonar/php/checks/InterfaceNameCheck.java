@@ -74,7 +74,7 @@ public class InterfaceNameCheck extends PHPSubscriptionCheck {
     ClassDeclarationTree declaration = (ClassDeclarationTree) tree;
     String name = declaration.name().text();
     if (!pattern.matcher(name).matches()) {
-      context().newIssue(KEY, String.format(MESSAGE, format)).tree(tree);
+      context().newIssue(this, String.format(MESSAGE, format)).tree(tree);
     }
   }
 

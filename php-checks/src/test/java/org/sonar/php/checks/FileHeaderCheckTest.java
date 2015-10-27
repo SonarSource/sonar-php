@@ -34,7 +34,7 @@ public class FileHeaderCheckTest {
 
   @Test
   public void test() throws Exception {
-    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Add or update the header of this file."));
+    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue(check, "Add or update the header of this file."));
     List<Issue> noIssue = ImmutableList.of();
 
     check.headerFormat = "// copyright 2005";

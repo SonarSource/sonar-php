@@ -31,7 +31,7 @@ public class FileWithSymbolsAndSideEffectsCheckTest {
   private final String TEST_DIR = "FileWithSymbolsAndSideEffectsCheck/";
   private final FileWithSymbolsAndSideEffectsCheck check = new FileWithSymbolsAndSideEffectsCheck();
 
-  private final ImmutableList<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Refactor this file to either declare symbols or cause side effects, but not both."));
+  private final ImmutableList<Issue> issue = ImmutableList.<Issue>of(new PHPIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
 
 
   @Test

@@ -126,6 +126,6 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
   @Override
   protected void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree) {
     String message = String.format(MESSAGE, branchType, branchType, ((PHPTree) duplicatedTree).getLine());
-    context().newIssue(KEY, message).tree(duplicatingTree);
+    context().newIssue(this, message).tree(duplicatingTree);
   }
 }

@@ -44,7 +44,7 @@ public class VariableVariablesCheck extends PHPVisitorCheck {
 
   @Override
   public void visitVariableVariable(VariableVariableTree tree) {
-    context().newIssue(KEY, String.format(MESSAGE, CheckUtils.asString(tree))).tree(tree);
+    context().newIssue(this, String.format(MESSAGE, CheckUtils.asString(tree))).tree(tree);
     super.visitVariableVariable(tree);
   }
 

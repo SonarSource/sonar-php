@@ -43,11 +43,6 @@ public class TodoTagPresenceCheck extends AbstractCommentContainsPatternCheck {
   }
 
   @Override
-  protected String key() {
-    return KEY;
-  }
-
-  @Override
   protected String message() {
     return MESSAGE;
   }

@@ -54,7 +54,7 @@ public class TooManyLinesInClassCheck extends PHPVisitorCheck {
     int numberOfLines = declaration.closeCurlyBraceToken().line() - declaration.openCurlyBraceToken().line() + 1;
     if (numberOfLines > maximumLinesThreshold) {
       NameIdentifierTree name = declaration.name();
-      context().newIssue(KEY, String.format(MESSAGE, name.text(), numberOfLines, maximumLinesThreshold)).tree(name);
+      context().newIssue(this, String.format(MESSAGE, name.text(), numberOfLines, maximumLinesThreshold)).tree(name);
     }
     super.visitClassDeclaration(declaration);
   }

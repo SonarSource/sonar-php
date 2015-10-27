@@ -55,7 +55,7 @@ public class DeprecatedPredefinedVariablesUseCheck extends PHPVisitorCheck {
 
     if (CheckUtils.PREDEFINED_VARIABLES.containsKey(name)) {
       String message = String.format(MESSAGE, name, CheckUtils.PREDEFINED_VARIABLES.get(name));
-      context().newIssue(KEY, message).tree(variable);
+      context().newIssue(this, message).tree(variable);
     }
   }
 

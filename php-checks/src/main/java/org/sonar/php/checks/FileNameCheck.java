@@ -62,7 +62,7 @@ public class FileNameCheck extends PHPVisitorCheck {
   public void visitCompilationUnit(CompilationUnitTree tree) {
     File file = context().file();
     if (!pattern.matcher(file.getName()).matches()) {
-      context().newIssue(KEY, String.format(MESSAGE, format));
+      context().newIssue(this, String.format(MESSAGE, format));
     }
   }
 

@@ -25,6 +25,7 @@ import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.util.List;
 
@@ -32,7 +33,9 @@ public class TabCharacterCheckTest {
 
   @Test
   public void test() throws Exception {
-    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue("testKey", "Replace all tab characters in this file by sequences of white-spaces."));
-    PHPCheckTest.check(new TabCharacterCheck(), TestUtils.getCheckFile("TabCharacterCheck.php"), issue);
+    PHPCheck check = new TabCharacterCheck();
+
+    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue(check, "Replace all tab characters in this file by sequences of white-spaces."));
+    PHPCheckTest.check(check, TestUtils.getCheckFile("TabCharacterCheck.php"), issue);
   }
 }

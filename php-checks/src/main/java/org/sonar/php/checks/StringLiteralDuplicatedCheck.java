@@ -78,7 +78,7 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
       if (occurrences >= threshold) {
         String literal = literalOccurrences.getKey();
         String message = String.format(MESSAGE, literal, occurrences);
-        context().newIssue(KEY, message).line(firstOccurrenceLines.get(literal)).cost(occurrences);
+        context().newIssue(this, message).line(firstOccurrenceLines.get(literal)).cost(occurrences);
       }
     }
   }

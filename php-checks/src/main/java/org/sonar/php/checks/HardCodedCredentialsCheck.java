@@ -81,7 +81,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   }
 
   private void addIssue(Tree tree) {
-    context().newIssue(KEY, MESSAGE).tree(tree);
+    context().newIssue(this, MESSAGE).tree(tree);
   }
 
 }

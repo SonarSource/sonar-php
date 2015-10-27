@@ -35,7 +35,7 @@ public class LineLengthCheckTest {
   @Test
   public void defaultValue() throws Exception {
     List<Issue> issues = ImmutableList.<Issue>of(
-      new PHPIssue("testKey", "Split this 122 characters long line (which is greater than 120 authorized).").line(4));
+      new PHPIssue(check, "Split this 122 characters long line (which is greater than 120 authorized).").line(4));
 
     PHPCheckTest.check(check, TestUtils.getCheckFile("LineLengthCheck.php"), issues);
   }
@@ -44,8 +44,8 @@ public class LineLengthCheckTest {
   public void custom() throws Exception {
     check.maximumLineLength = 30;
     List<Issue> issues = ImmutableList.<Issue>of(
-      new PHPIssue("testKey", "Split this 122 characters long line (which is greater than 30 authorized).").line(4),
-      new PHPIssue("testKey", "Split this 42 characters long line (which is greater than 30 authorized).").line(5));
+      new PHPIssue(check, "Split this 122 characters long line (which is greater than 30 authorized).").line(4),
+      new PHPIssue(check, "Split this 42 characters long line (which is greater than 30 authorized).").line(5));
 
     PHPCheckTest.check(check, TestUtils.getCheckFile("LineLengthCheck.php"), issues);
   }

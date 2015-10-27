@@ -25,18 +25,21 @@ import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.io.File;
 
 public class PerlStyleCommentsUsageCheckTest {
 
+  private static final PHPCheck CHECK = new PerlStyleCommentsUsageCheck();
+
   @Test
   public void test() throws Exception {
     File file = TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php");
     String message = "Use \"//\" instead of \"#\" to start this comment";
-    ImmutableList<Issue> issues = ImmutableList.<Issue>of(new PHPIssue(PerlStyleCommentsUsageCheck.KEY, message).line(3));
+    ImmutableList<Issue> issues = ImmutableList.<Issue>of(new PHPIssue(CHECK, message).line(3));
 
-    PHPCheckTest.check(new PerlStyleCommentsUsageCheck(), file, issues);
+    PHPCheckTest.check(CHECK, file, issues);
   }
 }
 

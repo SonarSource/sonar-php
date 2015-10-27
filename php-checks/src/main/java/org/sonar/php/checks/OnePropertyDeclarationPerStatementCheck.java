@@ -47,7 +47,7 @@ public class OnePropertyDeclarationPerStatementCheck extends PHPVisitorCheck {
 
     if (declarationsNumber > 1) {
       String message = String.format(MESSAGE, declarationsNumber);
-      context().newIssue(KEY, message).tree(tree);
+      context().newIssue(this, message).tree(tree);
     }
   }
 

@@ -58,7 +58,7 @@ public class ReturnOfBooleanExpressionCheck extends PHPVisitorCheck {
     }
 
     if (returnsBoolean(getSingleStatement(tree.statements())) && returnsBoolean(getSingleStatement(tree.elseClause().statements()))) {
-      context().newIssue(KEY, MESSAGE).tree(tree);
+      context().newIssue(this, MESSAGE).tree(tree);
     }
   }
 

@@ -34,7 +34,7 @@ public class TooManyReturnCheckTest {
   @Test
   public void defaultValue() throws Exception {
     String message = "Reduce the number of returns of this function 4, down to the maximum allowed 3.";
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of(new PHPIssue(TooManyReturnCheck.KEY, message).line(3)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of(new PHPIssue(check, message).line(3)));
   }
 
   @Test

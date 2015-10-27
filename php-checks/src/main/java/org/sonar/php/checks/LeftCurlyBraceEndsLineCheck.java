@@ -229,7 +229,7 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
     }
 
     if ((leftBraceLine != prevToken.line()) || (leftBraceLine == nextToken.line())) {
-      context().newIssue(KEY, MESSAGE).line(leftBraceLine);
+      context().newIssue(this, MESSAGE).line(leftBraceLine);
     }
   }
 

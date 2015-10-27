@@ -67,7 +67,7 @@ public class ClosingTagInFullPHPFileCheck extends PHPVisitorCheck {
     super.visitCompilationUnit(tree);
 
     if (inlineHTMLCounter == 1 && isOnlyClosingTag) {
-      context().newIssue(KEY, MESSAGE).tree(lastInlineHTMLToken);
+      context().newIssue(this, MESSAGE).tree(lastInlineHTMLToken);
     }
   }
 }

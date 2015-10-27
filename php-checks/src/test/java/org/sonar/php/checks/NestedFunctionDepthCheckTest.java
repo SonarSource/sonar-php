@@ -46,6 +46,6 @@ public class NestedFunctionDepthCheckTest {
   }
 
   private Issue issue(int line) {
-    return new PHPIssue(NestedFunctionDepthCheck.KEY, null).line(line);
+    return new PHPIssue(check, null).line(line);
   }
 }

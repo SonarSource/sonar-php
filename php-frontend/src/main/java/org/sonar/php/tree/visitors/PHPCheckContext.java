@@ -25,6 +25,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,8 +56,8 @@ public class PHPCheckContext implements CheckContext {
   }
 
   @Override
-  public PHPIssue newIssue(String ruleKey, String message) {
-    PHPIssue issue = new PHPIssue(ruleKey, message);
+  public PHPIssue newIssue(PHPCheck check, String message) {
+    PHPIssue issue = new PHPIssue(check, message);
     issues.add(issue);
 
     return issue;

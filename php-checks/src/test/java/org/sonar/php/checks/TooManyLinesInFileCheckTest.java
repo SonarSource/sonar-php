@@ -40,7 +40,7 @@ public class TooManyLinesInFileCheckTest {
   public void custom() throws Exception {
     check.max = 7;
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of(new PHPIssue(
-      TooManyLinesInFileCheck.KEY,
+      check,
       "File \"TooManyLinesInFileCheck.php\" has 9 lines, which is greater than " + check.max + " authorized. Split it into smaller files.")));
   }
 }

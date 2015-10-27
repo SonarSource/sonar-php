@@ -70,7 +70,7 @@ public class MoreThanOneClassInFileCheck extends PHPVisitorCheck {
         nbInterface > 0 ? (nbInterface + " independent interfaces ") : "");
 
       int cost = nbClass + nbInterface - 1;
-      context().newIssue(KEY, message).cost(cost);
+      context().newIssue(this, message).cost(cost);
     }
   }
 

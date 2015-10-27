@@ -80,7 +80,7 @@ public class FileHeaderCheck extends PHPVisitorCheck implements CharsetAwareVisi
     }
 
     if (!lines.isEmpty() && !matches(expectedLines, lines)) {
-      context().newIssue(KEY, MESSAGE);
+      context().newIssue(this, MESSAGE);
     }
   }
 

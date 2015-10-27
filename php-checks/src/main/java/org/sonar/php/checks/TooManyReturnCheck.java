@@ -108,7 +108,7 @@ public class TooManyReturnCheck extends PHPVisitorCheck {
     Integer returnNumber = returnStatementCounter.pop();
     if (returnNumber > max) {
       String message = String.format(MESSAGE, returnNumber, max);
-      context().newIssue(KEY, message).tree(tree);
+      context().newIssue(this, message).tree(tree);
     }
   }
 }

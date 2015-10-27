@@ -80,7 +80,7 @@ public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
 
       if (currentStatement.is(JUMP_KINDS) && hasActionStatementAfter(statements, i)) {
         String message = String.format(MESSAGE, ((PHPTree) currentStatement).getFirstToken().text());
-        context().newIssue(KEY, message).tree(currentStatement);
+        context().newIssue(this, message).tree(currentStatement);
       }
     }
 

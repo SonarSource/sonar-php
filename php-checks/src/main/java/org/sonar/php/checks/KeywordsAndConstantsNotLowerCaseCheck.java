@@ -71,7 +71,7 @@ public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
   private void check(Tree tree, String value, String kind) {
     if (!PATTERN.matcher(value).matches()) {
       String message = String.format(MESSAGE, value, kind);
-      context().newIssue(KEY, message).tree(tree);
+      context().newIssue(this, message).tree(tree);
     }
   }
 

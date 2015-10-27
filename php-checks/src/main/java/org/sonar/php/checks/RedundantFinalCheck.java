@@ -62,7 +62,7 @@ public class RedundantFinalCheck extends PHPSubscriptionCheck {
 
       for (ClassMemberTree classMember : classDeclaration.members()) {
         if (classMember.is(Kind.METHOD_DECLARATION) && hasFinalModifier((MethodDeclarationTree) classMember)) {
-          context().newIssue(KEY, MESSAGE).tree(classMember);
+          context().newIssue(this, MESSAGE).tree(classMember);
         }
       }
 

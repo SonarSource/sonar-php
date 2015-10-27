@@ -66,7 +66,7 @@ public class TrailingWhitespaceCheck extends PHPVisitorCheck implements CharsetA
     for (int i = 0; i < lines.size(); i++) {
       String line = lines.get(i);
       if (line.length() > 0 && WHITESPACE_PATTERN.matcher(line.subSequence(line.length() - 1, line.length())).matches()) {
-        context().newIssue(KEY, MESSAGE).line(i + 1);
+        context().newIssue(this, MESSAGE).line(i + 1);
       }
     }
 

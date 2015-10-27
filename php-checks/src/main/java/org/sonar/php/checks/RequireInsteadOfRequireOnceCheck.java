@@ -53,7 +53,7 @@ public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
 
     if (WRONG_FUNCTIONS.contains(callee.toLowerCase())) {
       String message = String.format(MESSAGE, callee, callee + "_once");
-      context().newIssue(KEY, message).tree(tree);
+      context().newIssue(this, message).tree(tree);
     }
   }
 

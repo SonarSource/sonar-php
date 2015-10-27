@@ -90,7 +90,7 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       checkLocalCategoryArgument(tree, tree.arguments());
 
     } else {
-      context().newIssue(KEY, buildMessage(functionName)).tree(tree.callee());
+      context().newIssue(this, buildMessage(functionName)).tree(tree.callee());
     }
 
   }
@@ -115,7 +115,7 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       String localCategory = firstArg.substring(1, firstArg.length() - 1);
 
       if (LOCALE_CATEGORY_CONSTANTS.contains(localCategory)) {
-        context().newIssue(KEY, String.format(MESSAGE_SET_LOCAL_ARG, localCategory)).tree(tree.callee());
+        context().newIssue(this, String.format(MESSAGE_SET_LOCAL_ARG, localCategory)).tree(tree.callee());
       }
     }
   }

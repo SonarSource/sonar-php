@@ -60,7 +60,7 @@ public class FileNameCheckTest {
   }
 
   private void checkIssue(String fileName, String expectedIssueMessage) throws URISyntaxException {
-    check(fileName, ImmutableList.<Issue>of(new PHPIssue(FileNameCheck.KEY, expectedIssueMessage)));
+    check(fileName, ImmutableList.<Issue>of(new PHPIssue(check, expectedIssueMessage)));
   }
 
   private void check(String fileName, ImmutableList<Issue> expectedIssues) throws URISyntaxException {

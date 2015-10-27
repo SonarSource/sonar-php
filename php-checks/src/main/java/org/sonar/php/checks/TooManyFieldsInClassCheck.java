@@ -71,7 +71,7 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
 
       if (nbFields > maximumFieldThreshold) {
         String message = String.format(MESSAGE, maximumFieldThreshold, countNonpublicFields ? "" : " public", nbFields);
-        context().newIssue(KEY, message).tree(tree);
+        context().newIssue(this, message).tree(tree);
       }
     }
   }

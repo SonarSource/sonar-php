@@ -53,7 +53,7 @@ public class TooManyCasesInSwitchCheck extends PHPVisitorCheck {
     int numberOfCases = switchTree.cases().size();
     if (numberOfCases > max) {
       context()
-        .newIssue(KEY, String.format("Reduce the number of switch cases from %s to at most %s.", numberOfCases, max))
+        .newIssue(this, String.format("Reduce the number of switch cases from %s to at most %s.", numberOfCases, max))
         .tree(switchTree);
     }
     super.visitSwitchStatement(switchTree);

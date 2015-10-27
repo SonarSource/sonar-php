@@ -203,7 +203,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
 
   private void reportIssue(Tree tree, String varName) {
     String message = String.format(MESSAGE, varName, classState.getLineOfFieldNamed(varName));
-    context().newIssue(KEY, message).tree(tree);
+    context().newIssue(this, message).tree(tree);
 
     classState.setAsCheckedVariable(varName);
   }

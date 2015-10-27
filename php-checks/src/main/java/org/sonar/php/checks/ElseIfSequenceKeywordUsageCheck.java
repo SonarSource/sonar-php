@@ -43,7 +43,7 @@ public class ElseIfSequenceKeywordUsageCheck extends PHPVisitorCheck {
   @Override
   public void visitElseClause(ElseClauseTree tree) {
     if (!tree.is(Kind.ALTERNATIVE_ELSE_CLAUSE) && isElseIf(tree)) {
-      context().newIssue(KEY, MESSAGE).tree(tree);
+      context().newIssue(this, MESSAGE).tree(tree);
     }
     super.visitElseClause(tree);
   }

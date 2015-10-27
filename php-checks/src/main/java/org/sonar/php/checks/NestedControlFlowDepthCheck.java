@@ -138,7 +138,7 @@ public class NestedControlFlowDepthCheck extends PHPVisitorCheck {
   private void enterBlock(Tree tree) {
     nestingLevel++;
     if (nestingLevel == max + 1) {
-      context().newIssue(KEY, String.format(MESSAGE, max)).tree(tree);
+      context().newIssue(this, String.format(MESSAGE, max)).tree(tree);
     }
   }
 

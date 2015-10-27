@@ -104,7 +104,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
   }
 
   private void reportIssue(int line) {
-    context().newIssue(KEY, MESSAGE).line(line);
+    context().newIssue(this, MESSAGE).line(line);
   }
 
   private boolean previousLineIsCommentedCode(SyntaxTrivia trivia, @Nullable SyntaxTrivia previousTrivia) {

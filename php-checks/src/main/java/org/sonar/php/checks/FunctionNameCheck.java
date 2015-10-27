@@ -82,7 +82,7 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   private void check(FunctionTree functionDeclaration, NameIdentifierTree name) {
     String functionName = name.text();
     if (!pattern.matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
-      context().newIssue(KEY, String.format(MESSAGE, functionName, format)).tree(functionDeclaration);
+      context().newIssue(this, String.format(MESSAGE, functionName, format)).tree(functionDeclaration);
     }
   }
 

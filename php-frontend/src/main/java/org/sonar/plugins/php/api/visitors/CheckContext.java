@@ -43,11 +43,11 @@ public interface CheckContext {
    *     .cost(3);
    * </pre>
    *
-   * @param ruleKey key of the rule for which issue should be created
+   * @param check the instance of the rule for which issue should be created
    * @param message message of the issue
    * @return instance of Issue
    */
-  Issue newIssue(String ruleKey, String message);
+  Issue newIssue(PHPCheck check, String message);
 
   /**
    * @return the current file

@@ -39,6 +39,6 @@ public class ExpressionComplexityCheckTest {
   @Test
   public void custom() throws Exception {
     check.max = 5;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of(new PHPIssue("", null).line(10)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of(new PHPIssue(check, null).line(10)));
   }
 }

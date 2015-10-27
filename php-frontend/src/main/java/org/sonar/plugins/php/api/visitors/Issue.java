@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  */
 public interface Issue {
 
-  String ruleKey();
+  PHPCheck check();
 
   int line();
 

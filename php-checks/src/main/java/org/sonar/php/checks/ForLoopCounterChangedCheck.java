@@ -126,7 +126,7 @@ public class ForLoopCounterChangedCheck extends PHPVisitorCheck {
     if (!counterStack.isEmpty()) {
       String variableName = CheckUtils.asString(variable);
       if (counterStack.peek().contains(variableName)) {
-        context().newIssue(KEY, String.format(MESSAGE, variableName)).tree(variable);
+        context().newIssue(this, String.format(MESSAGE, variableName)).tree(variable);
       }
     }
   }

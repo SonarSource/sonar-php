@@ -82,7 +82,7 @@ public class EmptyNestedBlockCheck extends PHPVisitorCheck {
 
   private <T extends Tree> void check(List<T> statements, @Nullable SyntaxToken lastToken, Tree issueTree) {
     if (statements.isEmpty() && lastToken != null && lastToken.trivias().isEmpty()) {
-      context().newIssue(KEY, MESSAGE).tree(issueTree);
+      context().newIssue(this, MESSAGE).tree(issueTree);
     }
   }
 

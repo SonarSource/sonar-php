@@ -69,7 +69,7 @@ public class FunctionDefineOutsideClassCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    context().newIssue(KEY, String.format(MESSAGE, "function")).tree(tree);
+    context().newIssue(this, String.format(MESSAGE, "function")).tree(tree);
     // don't visit nested nodes
   }
 
@@ -81,7 +81,7 @@ public class FunctionDefineOutsideClassCheck extends PHPVisitorCheck {
       String varName = ((VariableIdentifierTree) tree.variable()).variableExpression().text();
 
       if (!CheckUtils.isSuperGlobal(varName) && !globalVariableNames.contains(varName)) {
-        context().newIssue(KEY, String.format(MESSAGE, "variable")).tree(tree);
+        context().newIssue(this, String.format(MESSAGE, "variable")).tree(tree);
         globalVariableNames.add(varName);
       }
     }

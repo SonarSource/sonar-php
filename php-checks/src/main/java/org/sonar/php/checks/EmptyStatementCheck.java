@@ -43,7 +43,7 @@ public class EmptyStatementCheck extends PHPVisitorCheck {
 
   @Override
   public void visitEmptyStatement(EmptyStatementTree tree) {
-    context().newIssue(KEY, MESSAGE).tree(tree);
+    context().newIssue(this, MESSAGE).tree(tree);
 
     super.visitEmptyStatement(tree);
   }

@@ -54,7 +54,7 @@ public class CollapsibleIfStatementCheck extends PHPVisitorCheck {
       StatementTree singleStatement = getSingleNestedStatement(tree);
 
       if (singleStatement != null && isIfStatementWithoutElse(singleStatement)) {
-        context().newIssue(KEY, MESSAGE).tree(singleStatement);
+        context().newIssue(this, MESSAGE).tree(singleStatement);
       }
     }
   }

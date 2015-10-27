@@ -169,7 +169,7 @@ public class ImmediatelyReturnedVariableCheck extends PHPSubscriptionCheck {
 
   private void reportIssue(StatementTree nextStatement, String varName, Tree tree) {
     String message = String.format(MESSAGE, nextStatement.is(Kind.RETURN_STATEMENT) ? "return" : "throw", varName);
-    context().newIssue(KEY, message).tree(tree);
+    context().newIssue(this, message).tree(tree);
   }
 
 }

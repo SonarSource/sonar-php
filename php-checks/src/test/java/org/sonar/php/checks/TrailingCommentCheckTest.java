@@ -57,6 +57,6 @@ public class TrailingCommentCheckTest {
 
   private Issue newIssue(int line) {
     String message = "Move this trailing comment on the previous empty line.";
-    return new PHPIssue("testKey", message).line(line);
+    return new PHPIssue(check, message).line(line);
   }
 }

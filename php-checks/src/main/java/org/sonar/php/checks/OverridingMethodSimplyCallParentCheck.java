@@ -109,7 +109,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
         if (isSuperClass(memberAccessTree.object()) && sameMethodName && sameArguments(functionCallTree, method)) {
           String message = String.format(MESSAGE, methodName);
-          context().newIssue(KEY, message).tree(method);
+          context().newIssue(this, message).tree(method);
         }
       }
     }

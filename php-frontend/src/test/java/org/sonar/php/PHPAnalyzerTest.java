@@ -40,7 +40,8 @@ public class PHPAnalyzerTest {
 
   @Test
   public void test_analyze() throws Exception {
-    PHPAnalyzer analyzer = new PHPAnalyzer(Charsets.UTF_8, ImmutableList.<PHPCheck>of(new DummyCheck()));
+    PHPCheck check = new DummyCheck();
+    PHPAnalyzer analyzer = new PHPAnalyzer(Charsets.UTF_8, ImmutableList.of(check));
     File file =  tmpFolder.newFile();
     FileUtils.write(file, "<?php $a = 1;");
 
@@ -48,7 +49,7 @@ public class PHPAnalyzerTest {
     List<Issue> issues = analyzer.analyze();
     assertThat(issues).hasSize(1);
     assertThat(issues.get(0).line()).isEqualTo(1);
-    assertThat(issues.get(0).ruleKey()).isEqualTo(DummyCheck.KEY);
+    assertThat(issues.get(0).check()).isEqualTo(check);
     assertThat(issues.get(0).message()).isEqualTo(DummyCheck.MESSAGE);
   }
 

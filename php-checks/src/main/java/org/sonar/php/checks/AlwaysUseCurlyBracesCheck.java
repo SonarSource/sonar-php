@@ -51,7 +51,7 @@ public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
 
   private void checkStatement(StatementTree statementTree, Tree parent) {
     if (!statementTree.is(Tree.Kind.BLOCK) && !statementTree.is(Tree.Kind.EMPTY_STATEMENT)) {
-      context().newIssue(KEY, MESSAGE).tree(parent);
+      context().newIssue(this, MESSAGE).tree(parent);
     }
   }
 

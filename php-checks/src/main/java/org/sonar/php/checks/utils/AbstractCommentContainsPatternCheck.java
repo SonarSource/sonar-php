@@ -27,8 +27,6 @@ public abstract class AbstractCommentContainsPatternCheck extends PHPVisitorChec
 
   protected abstract String pattern();
 
-  protected abstract String key();
-
   protected abstract String message();
 
   @Override
@@ -57,7 +55,7 @@ public abstract class AbstractCommentContainsPatternCheck extends PHPVisitorChec
   }
 
   private void createIssue(int line) {
-    context().newIssue(key(), message()).line(line);
+    context().newIssue(this, message()).line(line);
   }
 
 }

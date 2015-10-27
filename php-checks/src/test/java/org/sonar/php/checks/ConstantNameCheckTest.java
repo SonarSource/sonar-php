@@ -41,8 +41,8 @@ public class ConstantNameCheckTest {
   public void custom() throws Exception {
     check.format = "^[A-Z][a-z]*$";
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of(
-      new PHPIssue(ConstantNameCheck.KEY, "Rename this constant \"FOO\" to match the regular expression " + check.format + ".").line(8),
-      new PHPIssue(ConstantNameCheck.KEY, null).line(11),
-      new PHPIssue(ConstantNameCheck.KEY, null).line(15)));
+      new PHPIssue(check, "Rename this constant \"FOO\" to match the regular expression " + check.format + ".").line(8),
+      new PHPIssue(check, null).line(11),
+      new PHPIssue(check, null).line(15)));
   }
 }

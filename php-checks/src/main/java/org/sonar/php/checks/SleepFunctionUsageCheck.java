@@ -47,7 +47,7 @@ public class SleepFunctionUsageCheck extends FunctionUsageCheck {
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    context().newIssue(KEY, MESSAGE).tree(tree.callee());
+    context().newIssue(this, MESSAGE).tree(tree.callee());
   }
 
 }

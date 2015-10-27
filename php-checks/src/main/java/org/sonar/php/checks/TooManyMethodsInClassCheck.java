@@ -70,7 +70,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
       if (nbMethod > maximumMethodThreshold) {
         String message = String.format(MESSAGE, tree.name().text(), nbMethod, maximumMethodThreshold);
-        context().newIssue(KEY, message).tree(tree);
+        context().newIssue(this, message).tree(tree);
       }
     }
   }
