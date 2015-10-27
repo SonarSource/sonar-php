@@ -142,6 +142,7 @@ public class CheckList {
       CallToIniSetCheck.class,
       SleepFunctionUsageCheck.class,
       HardCodedCredentialsCheck.class,
+      MultilineBlocksCurlyBracesCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }

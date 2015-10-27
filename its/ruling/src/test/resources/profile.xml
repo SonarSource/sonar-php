@@ -606,6 +606,11 @@
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
+      <key>S2681</key> <!-- MultilineBlocksCurlyBracesCheck -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
       <key>S2918</key> <!-- call to ini_set -->
       <priority>INFO</priority>
     </rule>
