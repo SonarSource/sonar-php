@@ -34,20 +34,26 @@ import java.io.File;
   PHPIntegrationTest.class,
   PHPUnitTest.class,
   CommonRulesTest.class,
+  CustomRulesTest.class,
   ReportWithUnresolvedPathTest.class
 })
 public class Tests {
 
-  private static final String PLUGIN_KEY = "php";
   public static final String PROJECT_ROOT_DIR = "../projects/";
+  private static final String PLUGIN_KEY = "php";
+  private static final String RESOURCE_DIRECTORY = "/com/sonar/it/php/";
 
   @ClassRule
   public static final Orchestrator ORCHESTRATOR;
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
+      // PHP Plugin
       .addPlugin(FileLocation.of("../../../sonar-php-plugin/target/sonar-php-plugin.jar"))
-      .restoreProfileAtStartup(FileLocation.ofClasspath("/com/sonar/it/php/profile.xml"));
+      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
+      // Custom rules plugin
+      .addPlugin(FileLocation.of("../plugins/php-custom-rules-plugin/target/php-custom-rules-plugin-1.0-SNAPSHOT.jar"))
+      .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
   }
 

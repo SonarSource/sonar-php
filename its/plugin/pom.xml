@@ -7,7 +7,6 @@
     <groupId>org.sonarsource.parent</groupId>
     <artifactId>parent</artifactId>
     <version>24</version>
-    <relativePath/>
   </parent>
 
   <groupId>org.sonarsource.it.php</groupId>
@@ -24,7 +23,7 @@
   <inceptionYear>2011</inceptionYear>
 
   <modules>
-    <!--<module>plugins</module>-->
+    <module>plugins</module>
     <module>tests</module>
   </modules>
 

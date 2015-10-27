@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+function cleanPhpInMavenRepository {
+  rm -rf ~/.m2/repository/org/sonarsource/php
+}
+
 function installTravisTools {
   mkdir ~/.local
   curl -sSL https://github.com/SonarSource/travis-utils/tarball/v16 | tar zx --strip-components 1 -C ~/.local
@@ -17,7 +21,8 @@ ci)
 plugin|ruling)
   installTravisTools
 
-  mvn package -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
+  cleanPhpInMavenRepository # make sure we don't use an old version from the travis cache
+  mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
 
   if [ "$SQ_VERSION" = "DEV" ] ; then
     build_snapshot "SonarSource/sonarqube"
@@ -25,6 +30,7 @@ plugin|ruling)
 
   cd its/$TEST
   mvn -Dsonar.runtimeVersion="$SQ_VERSION" -Dmaven.test.redirectTestOutputToFile=false package
+  cleanPhpInMavenRepository # avoid adding snapshot to the travis cache
   ;;
 
 *)
