@@ -1,14 +1,27 @@
 /*
- * Copyright (C) 2011-2014 SonarSource SA
- * All rights reserved
- * mailto:contact AT sonarsource DOT com
+ * PHP :: Integration Tests
+ * Copyright (C) 2011 SonarSource
+ * sonarqube@googlegroups.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarRunner;
 import com.sonar.orchestrator.locator.FileLocation;
-import static org.fest.assertions.Assertions.assertThat;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -19,6 +32,8 @@ import org.sonar.wsclient.services.ResourceQuery;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class PHPIntegrationTest {
 
@@ -39,7 +54,7 @@ public class PHPIntegrationTest {
       .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
-      .setProjectDir(FileLocation.of("../sources/src/symfony/Symfony/").getFile())
+      .setProjectDir(FileLocation.of("../../sources/src/symfony/Symfony/").getFile())
       .setProfile("it-profile")
       .setProperty("sonar.exclusions", "**/Component/**/*.php");
 

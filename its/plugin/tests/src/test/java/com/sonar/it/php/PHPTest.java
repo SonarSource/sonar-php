@@ -1,13 +1,26 @@
 /*
- * Copyright (C) 2011-2014 SonarSource SA
- * All rights reserved
- * mailto:contact AT sonarsource DOT com
+ * PHP :: Integration Tests
+ * Copyright (C) 2011 SonarSource
+ * sonarqube@googlegroups.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarRunner;
-import static org.fest.assertions.Assertions.assertThat;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -16,9 +29,10 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class PHPTest {
 
@@ -42,7 +56,7 @@ public class PHPTest {
   @Test
   public void should_import_sources_with_user_defined_file_suffixes() {
     SonarRunner build = SonarRunner.create()
-      .setProjectDir(new File("projects/project-with-several-extensions/"))
+      .setProjectDir(Tests.projectDirectoryFor("project-with-several-extensions"))
       .setProfile("it-profile")
       .setProperty("sonar.php.file.suffixes", "php,php3,php4,myphp,html");
     orchestrator.executeBuild(build);
@@ -59,7 +73,7 @@ public class PHPTest {
   @Test
   public void should_support_multimodule_projects() {
     SonarRunner build = SonarRunner.create()
-      .setProjectDir(new File("projects/multimodule/"))
+      .setProjectDir(Tests.projectDirectoryFor("multimodule"))
       .setProfile("it-profile");
     orchestrator.executeBuild(build);
 

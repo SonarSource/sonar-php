@@ -1,7 +1,21 @@
 /*
- * Copyright (C) 2011-2014 SonarSource SA
- * All rights reserved
- * mailto:contact AT sonarsource DOT com
+ * PHP :: Integration Tests
+ * Copyright (C) 2011 SonarSource
+ * sonarqube@googlegroups.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 package com.sonar.it.php;
 
@@ -22,14 +36,14 @@ public class ReportWithUnresolvedPathTest {
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
 
-  private static final File projectDir = new File("projects/phpunit/");
+  private static final File PROJECT_DIR = Tests.projectDirectoryFor("phpunit");
 
   @Test
   public void should_log_a_warning() throws Exception {
     Assume.assumeTrue(Tests.is_after_plugin("2.6"));
     orchestrator.resetData();
     SonarRunner build = SonarRunner.create()
-      .setProjectDir(projectDir)
+      .setProjectDir(PROJECT_DIR)
       .setProjectKey("project")
       .setProjectName("project")
       .setProjectVersion("1.0")

@@ -1,7 +1,21 @@
 /*
- * Copyright (C) 2011-2014 SonarSource SA
- * All rights reserved
- * mailto:contact AT sonarsource DOT com
+ * PHP :: Integration Tests
+ * Copyright (C) 2011 SonarSource
+ * sonarqube@googlegroups.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 package com.sonar.it.php;
 
@@ -24,7 +38,7 @@ public class CommonRulesTest {
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
 
-  private static final File projectDir = new File("projects/common-rules/");
+  private static final File PROJECT_DIR = Tests.projectDirectoryFor("common-rules");
 
   private static final String SOURCE_DIR = "src";
   private static final String TESTS_DIR = "tests";
@@ -39,7 +53,7 @@ public class CommonRulesTest {
     createReportsWithAbsolutePath();
 
     SonarRunner build = SonarRunner.create()
-      .setProjectDir(projectDir)
+      .setProjectDir(PROJECT_DIR)
       .setProjectKey("project")
       .setProjectName("project")
       .setProjectVersion("1.0")
@@ -74,14 +88,14 @@ public class CommonRulesTest {
    */
   private static void createReportsWithAbsolutePath() throws Exception {
     Files.write(
-      Files.toString(new File(projectDir, REPORTS_DIR + "/phpunit.coverage.xml"), Charsets.UTF_8)
-        .replace("Math.php", new File(projectDir, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(projectDir, REPORTS_DIR + "/.coverage-with-absolute-path.xml"), Charsets.UTF_8);
+      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.coverage.xml"), Charsets.UTF_8)
+        .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
+      new File(PROJECT_DIR, REPORTS_DIR + "/.coverage-with-absolute-path.xml"), Charsets.UTF_8);
 
     Files.write(
-      Files.toString(new File(projectDir, REPORTS_DIR + "/phpunit.xml"), Charsets.UTF_8)
-        .replace("SomeTest.php", new File(projectDir, TESTS_DIR + "/SomeTest.php").getAbsolutePath()),
-      new File(projectDir, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
+      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.xml"), Charsets.UTF_8)
+        .replace("SomeTest.php", new File(PROJECT_DIR, TESTS_DIR + "/SomeTest.php").getAbsolutePath()),
+      new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
   }
 
 }
