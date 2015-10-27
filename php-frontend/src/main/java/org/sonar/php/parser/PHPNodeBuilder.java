@@ -55,14 +55,12 @@ public class PHPNodeBuilder implements NodeBuilder {
     boolean isEof = GenericTokenType.EOF.equals(type);
     LineColumnValue lineColumnValue = tokenPosition(input, startIndex, endIndex);
     return new InternalSyntaxToken(
-        lineColumnValue.line,
-        lineColumnValue.column,
-        lineColumnValue.value,
-        createTrivias(trivias),
-        startIndex,
-        isEof,
-        type
-    );
+      lineColumnValue.line,
+      lineColumnValue.column,
+      lineColumnValue.value,
+      createTrivias(trivias),
+      startIndex,
+      isEof);
   }
 
   private static List<SyntaxTrivia> createTrivias(List<Trivia> trivias) {

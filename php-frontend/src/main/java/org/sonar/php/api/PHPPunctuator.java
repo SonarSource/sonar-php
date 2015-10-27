@@ -19,11 +19,9 @@
  */
 package org.sonar.php.api;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.TokenType;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
-public enum PHPPunctuator implements TokenType, GrammarRuleKey {
+public enum PHPPunctuator implements GrammarRuleKey {
 
   ANDEQUAL("&="),
   CONCATEQUAL(".="),
@@ -93,18 +91,8 @@ public enum PHPPunctuator implements TokenType, GrammarRuleKey {
     this.value = value;
   }
 
-  @Override
-  public boolean hasToBeSkippedFromAst(AstNode astNode) {
-    return false;
-  }
-
-  @Override
-  public String getName() {
-    return name();
-  }
-
-  @Override
   public String getValue() {
     return value;
   }
+
 }

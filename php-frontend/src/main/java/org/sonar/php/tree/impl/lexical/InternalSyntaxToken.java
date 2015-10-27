@@ -21,7 +21,6 @@ package org.sonar.php.tree.impl.lexical;
 
 import com.google.common.collect.Iterators;
 import com.sonar.sslr.api.TokenType;
-import org.sonar.php.parser.PHPTokenType;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -35,26 +34,21 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
   private final Kind kind;
 
-  private List<SyntaxTrivia> trivias;
-  private int startIndex;
+  private final List<SyntaxTrivia> trivias;
+  private final int startIndex;
   private final int line;
   private final int column;
   private final String value;
   private final boolean isEOF;
 
-  public InternalSyntaxToken(int line, int column, String value, List<SyntaxTrivia> trivias, int startIndex, boolean isEOF, TokenType type) {
+  public InternalSyntaxToken(int line, int column, String value, List<SyntaxTrivia> trivias, int startIndex, boolean isEOF) {
     this.value = value;
     this.line = line;
     this.column = column;
     this.trivias = trivias;
     this.startIndex = startIndex;
     this.isEOF = isEOF;
-
-    if (PHPTokenType.INLINE_HTML.equals(type)) {
-      kind = Kind.INLINE_HTML_TOKEN;
-    } else {
-      kind = Kind.TOKEN;
-    }
+    this.kind = value.startsWith("?>") ? Kind.INLINE_HTML_TOKEN : Kind.TOKEN;
   }
 
   public int toIndex() {
@@ -85,7 +79,7 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
     return startIndex;
   }
 
-  public boolean isEOF(){
+  public boolean isEOF() {
     return isEOF;
   }
 

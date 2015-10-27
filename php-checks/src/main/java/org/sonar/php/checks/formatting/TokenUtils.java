@@ -20,7 +20,7 @@
 package org.sonar.php.checks.formatting;
 
 import com.google.common.base.Preconditions;
-import com.sonar.sslr.api.TokenType;
+import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 public class TokenUtils {
@@ -38,9 +38,9 @@ public class TokenUtils {
   /**
    * Return true if the given token is one of the given types.
    */
-  public static boolean isType(SyntaxToken token, TokenType... types) {
+  public static boolean isType(SyntaxToken token, PHPPunctuator... types) {
     boolean isOneOfType = false;
-    for (TokenType type : types) {
+    for (PHPPunctuator type : types) {
       isOneOfType |= type.getValue().equals(token.text());
     }
     return isOneOfType;
