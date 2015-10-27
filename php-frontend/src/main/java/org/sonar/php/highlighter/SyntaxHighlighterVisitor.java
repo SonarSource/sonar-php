@@ -33,7 +33,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HighlighterVisitor extends PHPVisitorCheck {
+public class SyntaxHighlighterVisitor extends PHPVisitorCheck {
 
   private static final ImmutableList<String> PHP_RESERVED_VARIABLES = ImmutableList.of(
     "__FUNCTION__",
@@ -49,16 +49,16 @@ public class HighlighterVisitor extends PHPVisitorCheck {
     .add(PHPKeyword.getKeywordValues())
     .addAll(PHP_RESERVED_VARIABLES).build();
 
-  private final List<HighlightingData> highlightingDataList;
+  private final List<SyntaxHighlightingData> highlightingDataList;
   private final SourceFileOffsets offsets;
 
-  private HighlighterVisitor(SourceFileOffsets offsets) {
+  private SyntaxHighlighterVisitor(SourceFileOffsets offsets) {
     this.highlightingDataList = new ArrayList<>();
     this.offsets = offsets;
   }
 
-  public static List<HighlightingData> getHighlightData(Tree tree, SourceFileOffsets sourceFileOffsets) {
-    HighlighterVisitor visitor = new HighlighterVisitor(sourceFileOffsets);
+  public static List<SyntaxHighlightingData> getHighlightData(Tree tree, SourceFileOffsets sourceFileOffsets) {
+    SyntaxHighlighterVisitor visitor = new SyntaxHighlighterVisitor(sourceFileOffsets);
     visitor.scan(tree);
     return visitor.highlightingDataList;
   }
@@ -108,7 +108,7 @@ public class HighlighterVisitor extends PHPVisitorCheck {
   }
 
   private void highlight(SyntaxToken token, String code) {
-    highlightingDataList.add(new HighlightingData(offsets.startOffset(token), offsets.endOffset(token), code));
+    highlightingDataList.add(new SyntaxHighlightingData(offsets.startOffset(token), offsets.endOffset(token), code));
   }
 
 }

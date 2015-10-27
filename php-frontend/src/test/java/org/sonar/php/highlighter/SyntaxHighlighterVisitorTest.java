@@ -29,20 +29,20 @@ import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class HighlighterVisitorTest {
+public class SyntaxHighlighterVisitorTest {
 
   private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(Charsets.UTF_8);
 
   @Test
   public void empty_input() throws Exception {
-    List<HighlightingData> data = getData("<?php ");
+    List<SyntaxHighlightingData> data = getData("<?php ");
 
     assertThat(data).hasSize(0);
   }
 
   @Test
   public void multiline_comment() throws Exception {
-    List<HighlightingData> data = getData("<?php   /*Comment*/ ");
+    List<SyntaxHighlightingData> data = getData("<?php   /*Comment*/ ");
 
     assertThat(data).hasSize(1);
     assertData(data.get(0), 8, 19, "cd");
@@ -50,7 +50,7 @@ public class HighlighterVisitorTest {
 
   @Test
   public void single_line_comment() throws Exception {
-    List<HighlightingData> data = getData("<?php   //Comment ");
+    List<SyntaxHighlightingData> data = getData("<?php   //Comment ");
 
     assertThat(data).hasSize(1);
     assertData(data.get(0), 8, 18, "cd");
@@ -58,7 +58,7 @@ public class HighlighterVisitorTest {
 
   @Test
   public void shell_style_comment() throws Exception {
-    List<HighlightingData> data = getData("<?php   #Comment ");
+    List<SyntaxHighlightingData> data = getData("<?php   #Comment ");
 
     assertThat(data).hasSize(1);
     assertData(data.get(0), 8, 17, "cd");
@@ -66,7 +66,7 @@ public class HighlighterVisitorTest {
 
   @Test
   public void phpdoc_comment() throws Exception {
-    List<HighlightingData> data = getData("<?php   /**Comment*/ ");
+    List<SyntaxHighlightingData> data = getData("<?php   /**Comment*/ ");
 
     assertThat(data).hasSize(1);
     assertData(data.get(0), 8, 20, "j");
@@ -74,7 +74,7 @@ public class HighlighterVisitorTest {
 
   @Test
   public void keyword() throws Exception {
-    List<HighlightingData> data = getData("<?php eval(\"1\");");
+    List<SyntaxHighlightingData> data = getData("<?php eval(\"1\");");
 
     assertThat(data).hasSize(2);
     assertData(data.get(0), 6, 10, "k");
@@ -83,7 +83,7 @@ public class HighlighterVisitorTest {
 
   @Test
   public void php_reserved_variables() throws Exception {
-    List<HighlightingData> data = getData("<?php $a = $this; $b = __LINE__;");
+    List<SyntaxHighlightingData> data = getData("<?php $a = $this; $b = __LINE__;");
 
     assertThat(data).hasSize(2);
     assertData(data.get(0), 11, 16, "k");
@@ -92,7 +92,7 @@ public class HighlighterVisitorTest {
 
   @Test
   public void string() throws Exception {
-    List<HighlightingData> data = getData("<?php $x = \"a\";");
+    List<SyntaxHighlightingData> data = getData("<?php $x = \"a\";");
 
     assertThat(data).hasSize(1);
     assertData(data.get(0), 11, 14, "s");
@@ -100,7 +100,7 @@ public class HighlighterVisitorTest {
 
   @Test
   public void expandable_string() throws Exception {
-    List<HighlightingData> data = getData("<?php \"Hello $name!\";");
+    List<SyntaxHighlightingData> data = getData("<?php \"Hello $name!\";");
 
     assertThat(data).hasSize(4);
     assertData(data.get(0), 6, 7, "s");    // open quote
@@ -111,19 +111,19 @@ public class HighlighterVisitorTest {
 
   @Test
   public void numbers() throws Exception {
-    List<HighlightingData> data = getData("<?php $x = 1; $y = 1.0;");
+    List<SyntaxHighlightingData> data = getData("<?php $x = 1; $y = 1.0;");
 
     assertThat(data).hasSize(2);
     assertData(data.get(0), 11, 12, "c");
     assertData(data.get(1), 19, 22, "c");
   }
 
-  private List<HighlightingData> getData(String s) {
-    return HighlighterVisitor.getHighlightData(PARSER.parse(s), new SourceFileOffsets(s));
+  private List<SyntaxHighlightingData> getData(String s) {
+    return SyntaxHighlighterVisitor.getHighlightData(PARSER.parse(s), new SourceFileOffsets(s));
 
   }
 
-  private static void assertData(HighlightingData data, Integer startOffset, Integer endOffset, String code) {
+  private static void assertData(SyntaxHighlightingData data, Integer startOffset, Integer endOffset, String code) {
     assertThat(data.startOffset()).isEqualTo(startOffset);
     assertThat(data.endOffset()).isEqualTo(endOffset);
     assertThat(data.highlightCode()).isEqualTo(code);

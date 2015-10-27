@@ -23,8 +23,10 @@ import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.api.CharsetAwareVisitor;
-import org.sonar.php.highlighter.HighlighterVisitor;
-import org.sonar.php.highlighter.HighlightingData;
+import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
+import org.sonar.php.highlighter.SymbolHighlighter;
+import org.sonar.php.highlighter.SymbolHighlightingData;
+import org.sonar.php.highlighter.SyntaxHighlightingData;
 import org.sonar.php.highlighter.SourceFileOffsets;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
@@ -49,6 +51,7 @@ public class PHPAnalyzer {
   private CompilationUnitTree currentFileTree;
   private File currentFile;
   private SymbolTable currentFileSymbolTable;
+  private SourceFileOffsets currentFileOffsets;
 
   public PHPAnalyzer(Charset charset, ImmutableList<PHPCheck> checks) {
     this.parser = PHPParserBuilder.createParser(charset);
@@ -67,6 +70,7 @@ public class PHPAnalyzer {
     currentFile = file;
     currentFileTree = (CompilationUnitTree) parser.parse(file);
     currentFileSymbolTable = SymbolTableImpl.create(currentFileTree);
+    currentFileOffsets = new SourceFileOffsets(currentFile, charset);
   }
 
   public List<Issue> analyze() {
@@ -82,7 +86,11 @@ public class PHPAnalyzer {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext);
   }
 
-  public List<HighlightingData> getHighlighting() {
-    return HighlighterVisitor.getHighlightData(currentFileTree, new SourceFileOffsets(currentFile, charset));
+  public List<SyntaxHighlightingData> getSyntaxHighlighting() {
+    return SyntaxHighlighterVisitor.getHighlightData(currentFileTree, currentFileOffsets);
+  }
+
+  public List<SymbolHighlightingData> getSymbolHighlighting() {
+    return SymbolHighlighter.getHighlightData(currentFileSymbolTable, currentFileOffsets);
   }
 }

@@ -30,6 +30,7 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.component.Perspective;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.NoSonarFilter;
@@ -40,9 +41,12 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.source.Highlightable;
 import org.sonar.api.source.Highlightable.HighlightingBuilder;
+import org.sonar.api.source.Symbolizable;
+import org.sonar.api.source.Symbolizable.SymbolTableBuilder;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
-import org.sonar.php.highlighter.HighlightingData;
+import org.sonar.php.highlighter.SymbolHighlightingData;
+import org.sonar.php.highlighter.SyntaxHighlightingData;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -66,10 +70,12 @@ public class PHPSensor implements Sensor {
   private final NoSonarFilter noSonarFilter;
   private SensorContext context;
 
+
   public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
     this(resourcePerspectives, fileSystem, fileLinesContextFactory, checkFactory, noSonarFilter, null);
   }
+
   public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRulesDefinition[] customRulesDefinitions) {
 
@@ -121,23 +127,49 @@ public class PHPSensor implements Sensor {
     }
 
     saveIssues(phpAnalyzer.analyze(), inputFile);
-    saveHighlighting(phpAnalyzer.getHighlighting(), inputFile);
+    saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(), inputFile);
+    saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(), inputFile);
     saveNewFileMeasures(phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
   }
 
-  private void saveHighlighting(List<HighlightingData> highlightingDataList, InputFile inputFile) {
-    Highlightable highlightable = resourcePerspectives.as(Highlightable.class, inputFile);
+  private void saveSymbolHighlighting(List<SymbolHighlightingData> highlightingDataList, InputFile inputFile) {
+    Symbolizable symbolizable = perspective(Symbolizable.class, inputFile);
+    if (symbolizable != null) {
+      SymbolTableBuilder symbolTableBuilder = symbolizable.newSymbolTableBuilder();
 
-    if (highlightable == null) {
-      LOG.warn("Could not get " + Highlightable.class.getCanonicalName() + " for " + inputFile.file());
+      for (SymbolHighlightingData symbolHighlightingData : highlightingDataList) {
+        org.sonar.api.source.Symbol symbol = symbolTableBuilder.newSymbol(symbolHighlightingData.startOffset(), symbolHighlightingData.endOffset());
 
-    } else {
+        for (Integer referenceStartOffset : symbolHighlightingData.referencesStartOffset()) {
+          symbolTableBuilder.newReference(symbol, referenceStartOffset);
+        }
+      }
+
+      symbolizable.setSymbolTable(symbolTableBuilder.build());
+    }
+  }
+
+  private void saveSyntaxHighlighting(List<SyntaxHighlightingData> highlightingDataList, InputFile inputFile) {
+    Highlightable highlightable = perspective(Highlightable.class, inputFile);
+    if (highlightable != null) {
       HighlightingBuilder highlightingBuilder = highlightable.newHighlighting();
-      for (HighlightingData highlightingData : highlightingDataList) {
+
+      for (SyntaxHighlightingData highlightingData : highlightingDataList) {
         highlightingBuilder.highlight(highlightingData.startOffset(), highlightingData.endOffset(), highlightingData.highlightCode());
       }
+
       highlightingBuilder.done();
     }
+
+  }
+
+  @Nullable
+  <P extends Perspective<?>> P perspective(Class<P> clazz, InputFile file) {
+    P result = resourcePerspectives.as(clazz, file);
+    if (result == null) {
+      LOG.warn("Could not get " + clazz.getCanonicalName() + " for " + file);
+    }
+    return result;
   }
 
   private void saveNewFileMeasures(FileMeasures fileMeasures, InputFile inputFile) {

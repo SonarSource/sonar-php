@@ -19,13 +19,13 @@
  */
 package org.sonar.php.highlighter;
 
-public class HighlightingData {
+public class SyntaxHighlightingData {
 
   private Integer startOffset;
   private Integer endOffset;
   private String highlightCode;
 
-  public HighlightingData(Integer startOffset, Integer endOffset, String highlightCode) {
+  public SyntaxHighlightingData(Integer startOffset, Integer endOffset, String highlightCode) {
     this.startOffset = startOffset;
     this.endOffset = endOffset;
     this.highlightCode = highlightCode;
@@ -45,7 +45,7 @@ public class HighlightingData {
 
   @Override
   public String toString() {
-    return "HighlightingData{" +
+    return "SyntaxHighlightingData{" +
       "startOffset=" + startOffset +
       ", endOffset=" + endOffset +
       ", highlightCode='" + highlightCode + '\'' +
