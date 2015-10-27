@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import java.io.File;
 import java.util.List;
@@ -29,6 +30,9 @@ import java.util.List;
 public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements PHPCheck {
 
   private CheckContext context;
+
+  @Override
+  public abstract List<Kind> nodesToVisit();
 
   @Override
   public CheckContext context() {

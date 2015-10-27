@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.visitors;
 
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -30,7 +31,7 @@ public abstract class PHPTreeSubscriber {
 
   private Collection<Tree.Kind> nodesToVisit;
 
-  public abstract List<Tree.Kind> nodesToVisit();
+  public abstract List<Kind> nodesToVisit();
 
   public void visitNode(Tree tree) {
     // Default behavior : do nothing.

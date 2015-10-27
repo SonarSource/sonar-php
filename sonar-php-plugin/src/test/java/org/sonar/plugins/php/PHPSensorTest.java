@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -35,7 +36,11 @@ import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
+import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.test.TestUtils;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -51,6 +56,36 @@ public class PHPSensorTest {
 
   private final DefaultFileSystem fileSystem = new DefaultFileSystem();
   private PHPSensor sensor;
+  private final PHPCustomRulesDefinition[] CUSTOM_RULES = {new PHPCustomRulesDefinition() {
+    @Override
+    public String repositoryName() {
+      return "custom name";
+    }
+
+    @Override
+    public String repositoryKey() {
+      return "customKey";
+    }
+
+    @Override
+    public ImmutableList<Class> checkClasses() {
+      return ImmutableList.<Class>of(MyCustomRule.class);
+    }
+  }};
+
+  @Rule(
+    key = "key",
+    name = "name",
+    description = "desc",
+    tags = {"bug"})
+  public class MyCustomRule extends PHPVisitorCheck {
+    @RuleProperty(
+      key = "customParam",
+      description = "Custome parameter",
+      defaultValue = "value")
+    public String customParam = "value";
+  }
+
 
   @Before
   public void setUp() {
@@ -59,7 +94,7 @@ public class PHPSensorTest {
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-    sensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter());
+    sensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
   @Test

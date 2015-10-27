@@ -30,7 +30,6 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.CheckFactory;
-import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.NoSonarFilter;
@@ -47,8 +46,10 @@ import org.sonar.php.highlighter.HighlightingData;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.squidbridge.ProgressReport;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -61,22 +62,27 @@ public class PHPSensor implements Sensor {
   private final FileSystem fileSystem;
   private final FilePredicate mainFilePredicate;
   private final FileLinesContextFactory fileLinesContextFactory;
-  private final Checks<PHPCheck> checks;
+  private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
   private SensorContext context;
 
-  public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem filesystem,
-                   FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
-    this.checks = checkFactory
-      .<PHPCheck>create(CheckList.REPOSITORY_KEY)
-      .addAnnotatedChecks(CheckList.getChecks());
+  public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
+                   CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
+    this(resourcePerspectives, fileSystem, fileLinesContextFactory, checkFactory, noSonarFilter, null);
+  }
+  public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
+                   CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRulesDefinition[] customRulesDefinitions) {
+
+    this.checks = PHPChecks.createPHPCheck(checkFactory)
+      .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
+      .addCustomChecks(customRulesDefinitions);
     this.resourcePerspectives = resourcePerspectives;
     this.fileLinesContextFactory = fileLinesContextFactory;
-    this.fileSystem = filesystem;
+    this.fileSystem = fileSystem;
     this.noSonarFilter = noSonarFilter;
-    this.mainFilePredicate = fileSystem.predicates().and(
-      fileSystem.predicates().hasType(InputFile.Type.MAIN),
-      fileSystem.predicates().hasLanguage(Php.KEY));
+    this.mainFilePredicate = this.fileSystem.predicates().and(
+      this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
+      this.fileSystem.predicates().hasLanguage(Php.KEY));
   }
 
   @Override
