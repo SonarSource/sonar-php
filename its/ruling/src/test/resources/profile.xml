@@ -576,6 +576,11 @@
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
+      <key>S905</key> <!-- Non-empty statements should change control flow or have at least one side-effect -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
       <key>S1848</key> <!-- useless object creation -->
       <priority>INFO</priority>
     </rule>
