@@ -43,7 +43,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import java.util.List;
 
-public class NewComplexityVisitor extends PHPVisitorCheck {
+public class ComplexityVisitor extends PHPVisitorCheck {
 
   private int complexity = 0;
 
@@ -167,18 +167,18 @@ public class NewComplexityVisitor extends PHPVisitorCheck {
   }
 
   public static int complexity(Tree tree) {
-    NewComplexityVisitor visitor = new NewComplexityVisitor();
+    ComplexityVisitor visitor = new ComplexityVisitor();
     tree.accept(visitor);
     return visitor.complexity;
   }
 
   public static int complexityWithoutNestedFunctions(Tree tree) {
-    NewComplexityVisitor visitor = new ShallowComplexityVisitor(tree);
+    ComplexityVisitor visitor = new ShallowComplexityVisitor(tree);
     tree.accept(visitor);
     return visitor.complexity;
   }
 
-  public static class ShallowComplexityVisitor extends NewComplexityVisitor {
+  public static class ShallowComplexityVisitor extends ComplexityVisitor {
 
     private Tree root;
 

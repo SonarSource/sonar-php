@@ -24,7 +24,7 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.metrics.NewComplexityVisitor;
+import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -61,7 +61,7 @@ public class ClassComplexityCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    int complexity = NewComplexityVisitor.complexity(tree);
+    int complexity = ComplexityVisitor.complexity(tree);
     if (complexity > max) {
       String className = ((ClassDeclarationTree) tree).name().text();
       String message = String.format(MESSAGE, className, complexity, max);

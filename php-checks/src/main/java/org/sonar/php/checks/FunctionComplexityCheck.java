@@ -25,7 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.FunctionUtils;
-import org.sonar.php.metrics.NewComplexityVisitor;
+import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
@@ -67,7 +67,7 @@ public class FunctionComplexityCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    int complexity = NewComplexityVisitor.complexityWithoutNestedFunctions(tree);
+    int complexity = ComplexityVisitor.complexityWithoutNestedFunctions(tree);
     if (complexity > threshold) {
       String functionName = FunctionUtils.getFunctionName((FunctionTree) tree);
       String message = String.format(MESSAGE, functionName, complexity, threshold);

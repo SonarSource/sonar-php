@@ -35,7 +35,7 @@ public class PHPParserBuilder {
     return new ActionParser<>(
         charset,
         PHPLexicalGrammar.createGrammarBuilder(),
-        NewPHPGrammar.class,
+        PHPGrammar.class,
         new TreeFactory(),
         new PHPNodeBuilder(),
         PHPLexicalGrammar.COMPILATION_UNIT);
@@ -51,7 +51,7 @@ public class PHPParserBuilder {
     return new ActionParser<>(
         charset,
         PHPLexicalGrammar.createGrammarBuilder(),
-        NewPHPGrammar.class,
+        PHPGrammar.class,
         new TreeFactory(),
         new PHPNodeBuilder(),
         rootRule);

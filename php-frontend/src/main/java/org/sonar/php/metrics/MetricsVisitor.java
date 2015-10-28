@@ -71,13 +71,13 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   @Override
   public void visitNode(Tree tree) {
     if (tree.is(Kind.COMPILATION_UNIT)) {
-      fileMeasures.setFileComplexity(NewComplexityVisitor.complexity(tree));
+      fileMeasures.setFileComplexity(ComplexityVisitor.complexity(tree));
 
     } else if (tree.is(CLASS_NODES)) {
-      fileMeasures.addClassComplexity(NewComplexityVisitor.complexity(tree));
+      fileMeasures.addClassComplexity(ComplexityVisitor.complexity(tree));
 
     } else if (tree.is(FUNCTION_NODES)) {
-      fileMeasures.addFunctionComplexity(NewComplexityVisitor.complexity(tree));
+      fileMeasures.addFunctionComplexity(ComplexityVisitor.complexity(tree));
     }
   }
 

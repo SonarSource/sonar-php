@@ -86,12 +86,12 @@ public class ComplexityVisitorTest {
 
   private int complexity(String toParse) {
     Tree tree = parser.parse(toParse);
-    return NewComplexityVisitor.complexity(tree);
+    return ComplexityVisitor.complexity(tree);
   }
 
   private int complexityWithoutNestedFunctions(String toParse) {
     Tree tree = parser.parse(toParse);
-    return NewComplexityVisitor.complexityWithoutNestedFunctions(tree);
+    return ComplexityVisitor.complexityWithoutNestedFunctions(tree);
   }
 
 }

@@ -155,12 +155,12 @@ import static org.sonar.php.api.PHPPunctuator.SL;
 import static org.sonar.php.api.PHPPunctuator.SR;
 import static org.sonar.php.api.PHPPunctuator.STAR;
 
-public class NewPHPGrammar {
+public class PHPGrammar {
 
   private final GrammarBuilder<InternalSyntaxToken> b;
   private final TreeFactory f;
 
-  public NewPHPGrammar(GrammarBuilder<InternalSyntaxToken> b, TreeFactory f) {
+  public PHPGrammar(GrammarBuilder<InternalSyntaxToken> b, TreeFactory f) {
     this.b = b;
     this.f = f;
   }
