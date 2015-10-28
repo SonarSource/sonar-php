@@ -42,6 +42,7 @@ public final class TestSuites {
    * be compatible with Java 7.
    * */
   public TestSuites() {
+    // Empty constructor is required by xstream
   }
 
   /**
@@ -69,7 +70,7 @@ public final class TestSuites {
    */
   public void addTestSuite(final TestSuite testSuite) {
     if (testSuites == null) {
-      testSuites = new ArrayList<TestSuite>();
+      testSuites = new ArrayList<>();
     }
     testSuites.add(testSuite);
   }

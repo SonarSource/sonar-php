@@ -99,7 +99,7 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
       messageDetail = "\"=>\"";
 
     } else if (!isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
-     messageDetail = "\"as\" and \"=>\"";
+      messageDetail = "\"as\" and \"=>\"";
     }
 
     if (messageDetail != null) {

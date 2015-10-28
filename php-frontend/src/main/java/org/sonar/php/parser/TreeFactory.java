@@ -815,7 +815,8 @@ public class TreeFactory {
 
   public WhileStatementTree alternativeWhileStatement(
     InternalSyntaxToken whileToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
-    Optional<List<StatementTree>> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken) {
+    Optional<List<StatementTree>> statements, InternalSyntaxToken endwhileToken, InternalSyntaxToken eosToken
+  ) {
     return new WhileStatementTreeImpl(
       whileToken,
       condition,
@@ -1178,11 +1179,11 @@ public class TreeFactory {
       listElements.add(new SkippedListElementTreeImpl());
     }
 
-      // Remaining elements
+    // Remaining elements
     if (restElements.isPresent()) {
       for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> rest : restElements.get()) {
-          commas.add(rest.first());
-          listElements.add(rest.second().isPresent() ? rest.second().get() : new SkippedListElementTreeImpl());
+        commas.add(rest.first());
+        listElements.add(rest.second().isPresent() ? rest.second().get() : new SkippedListElementTreeImpl());
       }
     }
 
@@ -1400,8 +1401,10 @@ public class TreeFactory {
       closeBracket);
   }
 
-  public FunctionExpressionTree functionExpression(Optional<InternalSyntaxToken> staticToken, InternalSyntaxToken functionToken, Optional<InternalSyntaxToken> ampersandToken,
-    ParameterListTree parameters, Optional<LexicalVariablesTree> lexicalVariables, BlockTree block) {
+  public FunctionExpressionTree functionExpression(
+    Optional<InternalSyntaxToken> staticToken, InternalSyntaxToken functionToken, Optional<InternalSyntaxToken> ampersandToken,
+    ParameterListTree parameters, Optional<LexicalVariablesTree> lexicalVariables, BlockTree block
+  ) {
 
     return new FunctionExpressionTreeImpl(
       staticToken.orNull(),
@@ -1437,7 +1440,7 @@ public class TreeFactory {
     if (optional.isPresent()) {
 
       if (optional.get() instanceof SyntaxToken) {
-        SyntaxToken operator = ((SyntaxToken) optional.get());
+        SyntaxToken operator = (SyntaxToken) optional.get();
 
         return new PostfixExpressionTreeImpl(
           operator.text().equals(PHPPunctuator.INC.getValue()) ? Kind.POSTFIX_INCREMENT : Kind.POSTFIX_DECREMENT,
@@ -1445,7 +1448,7 @@ public class TreeFactory {
           operator);
 
       } else {
-        Tuple<InternalSyntaxToken, ExpressionTree> tuple = ((Tuple) optional.get());
+        Tuple<InternalSyntaxToken, ExpressionTree> tuple = (Tuple) optional.get();
         return new BinaryExpressionTreeImpl(Kind.INSTANCE_OF, expression, tuple.first(), tuple.second);
       }
     }
@@ -1488,7 +1491,10 @@ public class TreeFactory {
     return new AssignmentByReferenceTreeImpl(lhs, equToken, ampersandToken, rhs);
   }
 
-  public ConditionalExpressionTreeImpl newConditionalExpr(InternalSyntaxToken queryToken, Optional<ExpressionTree> trueExpression, InternalSyntaxToken colonToken, ExpressionTree falseExpression) {
+  public ConditionalExpressionTreeImpl newConditionalExpr(
+    InternalSyntaxToken queryToken, Optional<ExpressionTree> trueExpression,
+    InternalSyntaxToken colonToken, ExpressionTree falseExpression
+  ) {
     return new ConditionalExpressionTreeImpl(queryToken, trueExpression.orNull(), colonToken, falseExpression);
   }
 
@@ -1522,7 +1528,7 @@ public class TreeFactory {
   }
 
   private <T, U> Tuple<T, U> newTuple(T first, U second) {
-    return new Tuple<T, U>(first, second);
+    return new Tuple<>(first, second);
   }
 
   public <T, U> Tuple<T, U> newTuple1(T first, U second) {

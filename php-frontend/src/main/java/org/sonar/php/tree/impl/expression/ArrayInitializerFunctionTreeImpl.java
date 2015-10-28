@@ -39,7 +39,12 @@ public class ArrayInitializerFunctionTreeImpl extends PHPTree implements ArrayIn
   private final SeparatedListImpl<ArrayPairTree> arrayPairs;
   private final InternalSyntaxToken closeParenthesis;
 
-  public ArrayInitializerFunctionTreeImpl(InternalSyntaxToken arrayToken, InternalSyntaxToken openParenthesis, SeparatedListImpl<ArrayPairTree> arrayPairs, InternalSyntaxToken closeParenthesis) {
+  public ArrayInitializerFunctionTreeImpl(
+    InternalSyntaxToken arrayToken,
+    InternalSyntaxToken openParenthesis,
+    SeparatedListImpl<ArrayPairTree> arrayPairs,
+    InternalSyntaxToken closeParenthesis
+  ) {
     this.arrayToken = arrayToken;
     this.openParenthesis = openParenthesis;
     this.arrayPairs = arrayPairs;

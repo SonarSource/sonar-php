@@ -29,10 +29,10 @@ public class MemberExpressionTest {
   @Test
   public void test() {
     // callable_variable -> simple_variable
-    // matches("a"); FIXME is Zend's T_VARIABLE with or without '$' ?
     assertThat(PHPLexicalGrammar.MEMBER_EXPRESSION)
       .matches("${3 + 2}")
       .matches("$a")
+      .matches("a")
       .matches("$$a")
 
     // callable_variable -> dereferencable '[' optional_expr ']' -> variable '[' optional_expr ']'

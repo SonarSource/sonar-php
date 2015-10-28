@@ -134,7 +134,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     private static final double PHP_KEYWORDS_PROBABILITY = 0.3;
     private static final double BOOLEAN_OPERATOR_PROBABILITY = 0.7;
     private static final double END_WITH_DETECTOR_PROBABILITY = 0.95;
-    private final Set<Detector> detectors = new HashSet<Detector>();
+    private final Set<Detector> detectors = new HashSet<>();
 
     public PhpLanguageFootprint() {
       detectors.add(new EndWithDetector(END_WITH_DETECTOR_PROBABILITY, '}', ';', '{'));

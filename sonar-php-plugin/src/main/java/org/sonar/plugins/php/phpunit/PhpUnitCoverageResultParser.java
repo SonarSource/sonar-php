@@ -57,7 +57,7 @@ import java.util.Map;
 public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParser {
 
   // Used for debugging purposes to store measure by resource
-  private static final Map<Resource, Measure> MEASURES_BY_RESOURCE = new HashMap<Resource, Measure>();
+  private static final Map<Resource, Measure> MEASURES_BY_RESOURCE = new HashMap<>();
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
   private final SensorContext context;
@@ -173,7 +173,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
       resolvedPaths.add(inputFile.relativePath());
       // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
       // This should look like (lineNumner=Count) : 1=0;2=1;3=1....
-      PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<Integer, Integer>(coverageLineHitsDataMetric);
+      PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<>(coverageLineHitsDataMetric);
       if (fileNode.getLines() != null) {
         for (LineNode line : fileNode.getLines()) {
           saveLineMeasure(line, lineHits);

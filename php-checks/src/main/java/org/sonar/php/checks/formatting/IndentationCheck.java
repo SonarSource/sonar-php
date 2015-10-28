@@ -108,7 +108,8 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
         tree.parameters().parameters(),
         tree.name().token(),
         startColumnForLine(tree.functionToken().line()),
-        (tree.parameters().closeParenthesisToken()), false);
+        tree.parameters().closeParenthesisToken(),
+        false);
     }
   }
 
@@ -121,7 +122,8 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
         tree.parameters().parameters(),
         tree.functionToken(),
         startColumnForLine(tree.functionToken().line()),
-        (tree.parameters().closeParenthesisToken()), false);
+        tree.parameters().closeParenthesisToken(),
+        false);
     }
   }
 
@@ -177,14 +179,15 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
   }
 
   private void checkClosingParenthesisLocation(Tree lastArgument, SyntaxToken closeParenthesis, boolean isFunctionCall) {
-    if (!((PHPTree) lastArgument).getLastToken().text().equals(PHPPunctuator.RPARENTHESIS.getValue()) && TokenUtils.isOnSameLine(((PHPTree) lastArgument).getLastToken(), closeParenthesis)) {
+    if (!((PHPTree) lastArgument).getLastToken().text().equals(PHPPunctuator.RPARENTHESIS.getValue())
+      && TokenUtils.isOnSameLine(((PHPTree) lastArgument).getLastToken(), closeParenthesis)) {
       check.reportIssue(
         isFunctionCall ? FUNCTION_CALL_PARENTHESIS_MESSAGE : FUNCTION_DEC_PARENTHESIS_MESSAGE,
         closeParenthesis);
     }
   }
 
-  private boolean isCorrectlyIndented(int expectedColumn, List<Tree> items) {
+  private static boolean isCorrectlyIndented(int expectedColumn, List<Tree> items) {
     for (Tree item : items) {
       if (((PHPTree) item).getFirstToken().column() != expectedColumn) {
         return false;
@@ -193,7 +196,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     return true;
   }
 
-  private boolean isCorrectlySplitOnLines(int referenceLine, List<Tree> items) {
+  private static boolean isCorrectlySplitOnLines(int referenceLine, List<Tree> items) {
     int expectedLine = referenceLine + 1;
 
     for (Tree item : items) {

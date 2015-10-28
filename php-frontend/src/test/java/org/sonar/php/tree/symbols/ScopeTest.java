@@ -103,7 +103,7 @@ public class ScopeTest extends ParsingTestUtils {
   public void class_scope() throws Exception {
     Scope classScope = getScopeFor(Kind.CLASS_DECLARATION);
 
-    assertThat(classScope.getSymbol("$field1")).isNotNull(); // FIXME: which name in symbol table
+    assertThat(classScope.getSymbol("$field1")).isNotNull();
     assertThat(classScope.getSymbol("method")).isNotNull();
   }
 

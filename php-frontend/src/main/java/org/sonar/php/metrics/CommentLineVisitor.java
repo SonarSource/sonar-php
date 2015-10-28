@@ -40,17 +40,17 @@ public class CommentLineVisitor extends PHPVisitorCheck {
   public void visitToken(SyntaxToken token) {
     for (SyntaxTrivia trivia : token.trivias()) {
 
-        String[] commentLines = getContents(trivia.text())
-          .split("(\r)?\n|\r", -1);
-        int line = trivia.line();
-        for (String commentLine : commentLines) {
-          if (commentLine.contains("NOSONAR")) {
-            noSonarLines.add(line);
-          } else if (!isBlank(commentLine)) {
-            comments.add(line);
-          }
-          line++;
+      String[] commentLines = getContents(trivia.text())
+        .split("(\r)?\n|\r", -1);
+      int line = trivia.line();
+      for (String commentLine : commentLines) {
+        if (commentLine.contains("NOSONAR")) {
+          noSonarLines.add(line);
+        } else if (!isBlank(commentLine)) {
+          comments.add(line);
         }
+        line++;
+      }
 
     }
 

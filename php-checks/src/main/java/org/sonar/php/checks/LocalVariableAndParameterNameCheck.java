@@ -64,7 +64,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
     "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
-  private Deque<Set<String>> checkedVariables = new ArrayDeque<Set<String>>();
+  private Deque<Set<String>> checkedVariables = new ArrayDeque<>();
   private Pattern pattern = null;
 
   @RuleProperty(

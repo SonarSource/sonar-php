@@ -66,7 +66,7 @@ public class ExtendsImplementsLineCheck extends PHPVisitorCheck implements Forma
     return extendsToken == null || classNameLine == extendsToken.line();
   }
 
-  private boolean isImplementsOnClassNameLine(ClassDeclarationTree classDeclaration, int classNameLine) {
+  private static boolean isImplementsOnClassNameLine(ClassDeclarationTree classDeclaration, int classNameLine) {
     SyntaxToken implementsToken = classDeclaration.implementsToken();
     return implementsToken == null || classNameLine == implementsToken.line();
   }

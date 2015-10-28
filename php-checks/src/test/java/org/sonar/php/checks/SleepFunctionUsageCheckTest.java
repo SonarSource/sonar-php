@@ -23,10 +23,10 @@ import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class SleepFunctionUsageCheckTest extends PHPCheckTest {
+public class SleepFunctionUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    check(new SleepFunctionUsageCheck(), TestUtils.getCheckFile("SleepFunctionUsageCheck.php"));
+    PHPCheckTest.check(new SleepFunctionUsageCheck(), TestUtils.getCheckFile("SleepFunctionUsageCheck.php"));
   }
 }

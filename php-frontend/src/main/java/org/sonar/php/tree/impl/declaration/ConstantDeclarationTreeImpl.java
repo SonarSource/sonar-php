@@ -34,7 +34,7 @@ import java.util.Iterator;
 
 public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDeclarationTree {
 
-  private final static Kind KIND = Kind.CONSTANT_DECLARATION;
+  private static final Kind KIND = Kind.CONSTANT_DECLARATION;
   private final SyntaxToken constToken;
   private final SeparatedListImpl<VariableDeclarationTree> declarations;
   private final InternalSyntaxToken eosToken;

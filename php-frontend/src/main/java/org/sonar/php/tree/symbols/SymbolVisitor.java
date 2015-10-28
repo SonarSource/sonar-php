@@ -291,7 +291,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     tree.callee().accept(this);
     this.insideCallee.pop();
 
-    // fixme optimize through visitor
+    // fixme (Lena) : optimize through visitor
     for (ExpressionTree argument : tree.arguments()) {
       argument.accept(this);
     }

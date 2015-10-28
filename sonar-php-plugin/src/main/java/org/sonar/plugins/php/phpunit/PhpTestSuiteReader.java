@@ -40,7 +40,7 @@ public class PhpTestSuiteReader {
   /**
    * The reports per class.
    */
-  private Map<String, PhpUnitTestReport> reportsPerClass = new HashMap<String, PhpUnitTestReport>();
+  private Map<String, PhpUnitTestReport> reportsPerClass = new HashMap<>();
 
   /**
    * Cumulates test case details.

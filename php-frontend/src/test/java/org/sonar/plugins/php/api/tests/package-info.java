@@ -17,45 +17,5 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.php.api;
-
-import org.sonar.squidbridge.measures.CalculatedMetricFormula;
-import org.sonar.squidbridge.measures.MetricDef;
-
-// fixme remove this class after migration of all checks
-public enum PHPMetric implements MetricDef {
-
-  LINES_OF_CODE,
-  LINES,
-  FILES,
-  COMMENT_LINES,
-  CLASSES,
-  FUNCTIONS,
-  STATEMENTS,
-  COMPLEXITY;
-
-  @Override
-  public String getName() {
-    return name();
-  }
-
-  @Override
-  public boolean isCalculatedMetric() {
-    return false;
-  }
-
-  @Override
-  public boolean aggregateIfThereIsAlreadyAValue() {
-    return true;
-  }
-
-  @Override
-  public boolean isThereAggregationFormula() {
-    return true;
-  }
-
-  @Override
-  public CalculatedMetricFormula getCalculatedMetricFormula() {
-    return null;
-  }
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.plugins.php.api.tests;

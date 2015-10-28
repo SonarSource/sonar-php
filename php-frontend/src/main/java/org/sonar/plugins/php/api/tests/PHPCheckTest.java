@@ -68,6 +68,9 @@ public class PHPCheckTest {
   private static final Charset charset = Charsets.UTF_8;
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(charset);
 
+  private PHPCheckTest() {
+  }
+
   /**
    * Verifies that the given check raises issue as expected.
    *

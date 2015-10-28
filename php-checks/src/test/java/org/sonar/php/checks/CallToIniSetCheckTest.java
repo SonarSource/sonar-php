@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
-public class CallToIniSetCheckTest extends PHPCheckTest {
+public class CallToIniSetCheckTest {
 
   @Test
   public void defaultValue() throws Exception {

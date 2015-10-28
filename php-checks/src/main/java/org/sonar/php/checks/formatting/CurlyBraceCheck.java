@@ -218,7 +218,7 @@ public class CurlyBraceCheck extends PHPVisitorCheck implements FormattingCheck 
   }
 
   @Nullable
-  private SyntaxToken getOpenCurlyIfBlock(List<StatementTree> statements) {
+  private static SyntaxToken getOpenCurlyIfBlock(List<StatementTree> statements) {
     if (!statements.isEmpty()) {
       StatementTree firstStmt = statements.get(0);
       return firstStmt.is(Tree.Kind.BLOCK) ? ((BlockTree) firstStmt).openCurlyBraceToken() : null;

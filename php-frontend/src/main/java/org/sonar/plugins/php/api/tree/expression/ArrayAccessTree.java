@@ -39,7 +39,8 @@ public interface ArrayAccessTree extends ExpressionTree {
 
   SyntaxToken openBraceToken();
 
-  @Nullable // FIXME martin: to check
+  @Nullable
+  // FIXME martin: to check
   ExpressionTree offset();
 
   SyntaxToken closeBraceToken();

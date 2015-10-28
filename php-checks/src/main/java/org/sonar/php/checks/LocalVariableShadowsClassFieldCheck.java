@@ -67,7 +67,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   private static class ClassState {
 
     private Map<String, Integer> classFields = Maps.newHashMap();
-    private Deque<Set<String>> checkedVariables = new ArrayDeque<Set<String>>();
+    private Deque<Set<String>> checkedVariables = new ArrayDeque<>();
     private String className;
 
     public void clear() {

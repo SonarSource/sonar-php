@@ -46,7 +46,10 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
   private final LexicalVariablesTree lexicalVars;
   private final BlockTree body;
 
-  public FunctionExpressionTreeImpl(@Nullable InternalSyntaxToken staticToken, InternalSyntaxToken functionToken, @Nullable InternalSyntaxToken referenceToken, ParameterListTree parameters, @Nullable LexicalVariablesTree lexicalVars, BlockTree body) {
+  public FunctionExpressionTreeImpl(
+    @Nullable InternalSyntaxToken staticToken, InternalSyntaxToken functionToken, @Nullable InternalSyntaxToken referenceToken,
+    ParameterListTree parameters, @Nullable LexicalVariablesTree lexicalVars, BlockTree body
+  ) {
     this.staticToken = staticToken;
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;

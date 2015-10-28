@@ -51,10 +51,12 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
     return new SeparatedListImpl<>(ImmutableList.<T>of(), ImmutableList.<SyntaxToken>of());
   }
 
+  @Override
   public SyntaxToken getSeparator(int i) {
     return separators.get(i);
   }
 
+  @Override
   public List<SyntaxToken> getSeparators() {
     return separators;
   }
@@ -175,10 +177,12 @@ public class SeparatedListImpl<T extends Tree> implements SeparatedList<T> {
     return list.subList(fromIndex, toIndex);
   }
 
+  @Override
   public Iterator<Tree> elementsAndSeparators(final Function<T, ? extends Tree> elementTransformer) {
     return new ElementAndSeparatorIterator(elementTransformer);
   }
 
+  @Override
   public Iterator<Tree> elementsAndSeparators() {
     return elementsAndSeparators(Functions.<T>identity());
   }

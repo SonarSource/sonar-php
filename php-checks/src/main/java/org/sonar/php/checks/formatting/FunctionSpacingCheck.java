@@ -122,7 +122,7 @@ public class FunctionSpacingCheck extends PHPVisitorCheck implements FormattingC
   private void checkSpaceForComma(TokenVisitor tokenVisitor, List<SyntaxToken> commas, Tree tree) {
     if (check.isOneSpaceAfterComma) {
 
-    int msgIndex = -1;
+      int msgIndex = -1;
 
       for (SyntaxToken commaToken : commas) {
         SyntaxToken nextToken = tokenVisitor.nextToken(commaToken);

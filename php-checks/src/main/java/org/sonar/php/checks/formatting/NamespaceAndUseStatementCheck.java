@@ -91,9 +91,9 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
     useStatements.add(tree);
 
     if (nextStatement != null && !nextStatement.is(USE_KINDS)) {
-        checkUsesAreBeforeNamespace();
-        checkBlankLineAfterUses(tree);
-        useStatements.clear();
+      checkUsesAreBeforeNamespace();
+      checkBlankLineAfterUses(tree);
+      useStatements.clear();
     }
   }
 

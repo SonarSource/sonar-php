@@ -39,7 +39,10 @@ public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTre
   private final SeparatedListImpl<ExpressionTree> elements;
   private final InternalSyntaxToken closeParenthesis;
 
-  public ListExpressionTreeImpl(InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis, SeparatedListImpl<ExpressionTree> elements, InternalSyntaxToken closeParenthesis) {
+  public ListExpressionTreeImpl(
+    InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
+    SeparatedListImpl<ExpressionTree> elements, InternalSyntaxToken closeParenthesis
+  ) {
     this.listToken = listToken;
     this.openParenthesis = openParenthesis;
     this.elements = elements;

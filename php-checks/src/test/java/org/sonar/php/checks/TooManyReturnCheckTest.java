@@ -26,7 +26,7 @@ import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.Issue;
 
-public class TooManyReturnCheckTest extends PHPCheckTest {
+public class TooManyReturnCheckTest {
 
   private TooManyReturnCheck check = new TooManyReturnCheck();
   private String fileName = "TooManyReturnCheck.php";
@@ -34,12 +34,12 @@ public class TooManyReturnCheckTest extends PHPCheckTest {
   @Test
   public void defaultValue() throws Exception {
     String message = "Reduce the number of returns of this function 4, down to the maximum allowed 3.";
-    check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of(new PHPIssue(TooManyReturnCheck.KEY, message).line(3)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of(new PHPIssue(TooManyReturnCheck.KEY, message).line(3)));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 2;
-    check(check, TestUtils.getCheckFile(fileName));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
   }
 }

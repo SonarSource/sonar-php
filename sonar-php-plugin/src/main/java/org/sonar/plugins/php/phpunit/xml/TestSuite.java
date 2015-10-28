@@ -78,6 +78,7 @@ public final class TestSuite {
    * be compatible with Java 7.
    * */
   public TestSuite() {
+    // Empty constructor is required by xstream
   }
 
   /**
