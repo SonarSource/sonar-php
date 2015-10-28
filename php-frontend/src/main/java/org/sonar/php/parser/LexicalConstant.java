@@ -24,8 +24,8 @@ public class LexicalConstant {
   /**
    * PHP TAGS & INLINE HTML
    */
-  public static final String PHP_OPENING_TAG = "(?i)<\\?(php|=|)";
-  public static final String PHP_CLOSING_TAG = "\\?>";
+  public static final String PHP_OPENING_TAG = "(?i)(?:<\\?(?:php|=|)|<%)";
+  public static final String PHP_CLOSING_TAG = "(?:[\\?%]>)";
 
   public static final String PHP_START_TAG = "(?:(?!" + PHP_OPENING_TAG + ")[\\s\\S])*+(" + PHP_OPENING_TAG + ")?+";
   public static final String PHP_END_TAG = PHP_CLOSING_TAG + PHP_START_TAG;
