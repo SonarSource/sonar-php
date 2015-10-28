@@ -24,13 +24,12 @@ import org.junit.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class PHPCustomRulesDefinitionTest extends PHPCheckTest {
+public class PHPCustomRulesDefinitionTest {
 
   private static final String REPOSITORY_NAME = "Custom Rule Repository";
   private static final String REPOSITORY_KEY = "CustomRuleRepository";

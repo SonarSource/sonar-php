@@ -1,6 +1,6 @@
 /*
- * SonarSource :: JavaScript :: ITs :: Plugin :: Tests
- * Copyright (C) 2012 SonarSource
+ * PHP :: Integration Tests
+ * Copyright (C) 2011 SonarSource
  * sonarqube@googlegroups.com
  *
  * This program is free software; you can redistribute it and/or

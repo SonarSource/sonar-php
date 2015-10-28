@@ -81,7 +81,7 @@ public class PHPSensorTest {
   public class MyCustomRule extends PHPVisitorCheck {
     @RuleProperty(
       key = "customParam",
-      description = "Custome parameter",
+      description = "Custom parameter",
       defaultValue = "value")
     public String customParam = "value";
   }
