@@ -120,6 +120,7 @@ public class CheckList {
       GlobalKeywordAndArrayUsageCheck.class,
       MoreThanOneClassInFileCheck.class,
       LowerCaseColorCheck.class,
+      NullDereferenceInConditionalCheck.class,
       DirectlyAccessingSuperGlobalCheck.class,
       RequireInsteadOfRequireOnceCheck.class,
       InlineHTMLInFileCheck.class,

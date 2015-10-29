@@ -217,6 +217,11 @@
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
+      <key>S1697</key> <!-- Short-circuit logic should be used to prevent null pointer dereferences in conditionals -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
       <key>S1067</key> <!-- expression complexity -->
       <priority>INFO</priority>
     </rule>
