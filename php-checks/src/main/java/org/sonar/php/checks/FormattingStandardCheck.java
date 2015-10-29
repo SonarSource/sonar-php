@@ -198,7 +198,9 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
     PHPKeyword.REQUIRE_ONCE.getValue(),
     PHPKeyword.CLONE.getValue(),
     PHPKeyword.PRINT.getValue(),
-    PHPKeyword.HALT_COMPILER.getValue()
+    PHPKeyword.HALT_COMPILER.getValue(),
+    PHPKeyword.DIE.getValue(),
+    PHPKeyword.EXIT.getValue()
   );
 
   public boolean isInternalFunction(ExpressionTree callee) {

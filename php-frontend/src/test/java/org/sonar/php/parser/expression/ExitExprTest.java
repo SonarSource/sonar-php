@@ -20,7 +20,7 @@
 package org.sonar.php.parser.expression;
 
 import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
@@ -28,7 +28,7 @@ public class ExitExprTest {
 
   @Test
   public void test() {
-    assertThat(Tree.Kind.EXIT_EXPRESSION)
+    assertThat(PHPLexicalGrammar.EXIT_EXPRESSION)
       .matches("exit (0)")
       .matches("die ('Error')")
       .matches("die ()")

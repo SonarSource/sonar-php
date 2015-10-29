@@ -22,7 +22,8 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.tree.expression.ExitTree;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -39,10 +40,13 @@ public class ExitOrDieUsageCheck extends PHPVisitorCheck {
   public static final String MESSAGE = "Remove this \"%s()\" call or ensure it is really required";
 
   @Override
-  public void visitExit(ExitTree tree) {
-    context().newIssue(KEY, String.format(MESSAGE, tree.wordToken().text())).tree(tree);
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if (CheckUtils.isExitExpression(tree)) {
+      String callee = CheckUtils.asString(tree.callee());
+      context().newIssue(KEY, String.format(MESSAGE, callee)).tree(tree);
+    }
 
-    super.visitExit(tree);
+    super.visitFunctionCall(tree);
   }
 
 }

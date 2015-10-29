@@ -53,16 +53,15 @@ import org.sonar.php.tree.impl.expression.CastExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ConditionalExpressionTreeImpl;
-import org.sonar.php.tree.impl.expression.ExitTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionExpressionTreeImpl;
-import org.sonar.php.tree.impl.expression.NameIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LexicalVariablesTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.NameIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.NewExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.PostfixExpressionTreeImpl;
@@ -127,17 +126,16 @@ import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
-import org.sonar.plugins.php.api.tree.expression.ExitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
@@ -967,7 +965,7 @@ public class TreeFactory {
       new FunctionCallTreeImpl(
         new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(haltCompilerToken)),
         openParenthesisToken,
-        SeparatedListImpl.empty(),
+        SeparatedListImpl.<ExpressionTree>empty(),
         closeParenthesisToken),
       eosToken);
   }
@@ -1419,12 +1417,19 @@ public class TreeFactory {
     return new NewExpressionTreeImpl(newToken, expression);
   }
 
-  public ExitTreeImpl newExitExpression(InternalSyntaxToken openParenthesis, Optional<ExpressionTree> expressionTreeOptional, InternalSyntaxToken closeParenthesis) {
-    return new ExitTreeImpl(openParenthesis, expressionTreeOptional.orNull(), closeParenthesis);
+  public FunctionCallTreeImpl newExitExpression(InternalSyntaxToken openParenthesis, Optional<ExpressionTree> expressionTreeOptional, InternalSyntaxToken closeParenthesis) {
+    SeparatedListImpl<ExpressionTree> arguments;
+    if (expressionTreeOptional.isPresent()) {
+      arguments = new SeparatedListImpl<>(ImmutableList.of(expressionTreeOptional.get()), Collections.<SyntaxToken>emptyList());
+    } else {
+      arguments = SeparatedListImpl.empty();
+    }
+    return new FunctionCallTreeImpl(openParenthesis, arguments, closeParenthesis);
   }
 
-  public ExitTree completeExitExpression(InternalSyntaxToken exitOrDie, Optional<ExitTreeImpl> partial) {
-    return partial.isPresent() ? partial.get().complete(exitOrDie) : new ExitTreeImpl(exitOrDie);
+  public FunctionCallTree completeExitExpression(InternalSyntaxToken exitOrDie, Optional<FunctionCallTreeImpl> partial) {
+    NameIdentifierTreeImpl callee = new NameIdentifierTreeImpl(exitOrDie);
+    return partial.isPresent() ? partial.get().complete(callee) : new FunctionCallTreeImpl(callee, SeparatedListImpl.<ExpressionTree>empty());
   }
 
   public ExpressionTree combinedScalarOffset(ArrayInitializerTree arrayInitialiser, Optional<List<ArrayAccessTree>> offsets) {

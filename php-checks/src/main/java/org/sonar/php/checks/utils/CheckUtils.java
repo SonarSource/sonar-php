@@ -25,6 +25,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
@@ -55,6 +56,11 @@ public class CheckUtils {
     .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
 
   private CheckUtils() {
+  }
+
+  public static boolean isExitExpression(FunctionCallTree functionCallTree) {
+    String callee = CheckUtils.asString(functionCallTree.callee());
+    return "die".equalsIgnoreCase(callee) || "exit".equalsIgnoreCase(callee);
   }
 
   public static boolean isSuperGlobal(String varName) {

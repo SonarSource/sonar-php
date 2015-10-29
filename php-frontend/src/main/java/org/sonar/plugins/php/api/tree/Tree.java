@@ -41,17 +41,16 @@ import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ExitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
@@ -88,11 +87,11 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
 import org.sonar.plugins.php.api.tree.statement.TraitMethodReferenceTree;
 import org.sonar.plugins.php.api.tree.statement.TraitPrecedenceTree;
-import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -278,11 +277,6 @@ public interface Tree {
      * {@link LexicalVariablesTree}
      */
     LEXICAL_VARIABLES(LexicalVariablesTree.class),
-
-    /**
-     * {@link ExitTree}
-     */
-    EXIT_EXPRESSION(ExitTree.class),
 
     /**
      * {@link ListExpressionTree}

@@ -23,8 +23,10 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
@@ -83,7 +85,7 @@ public class NonEmptyCaseWithoutBreakCheck extends PHPVisitorCheck {
     @Override
     public List<Kind> nodesToVisit() {
       return ImmutableList.of(
-        Kind.EXIT_EXPRESSION,
+        Kind.FUNCTION_CALL,
         Kind.CONTINUE_STATEMENT,
         Kind.THROW_STATEMENT,
         Kind.RETURN_STATEMENT,
@@ -93,6 +95,10 @@ public class NonEmptyCaseWithoutBreakCheck extends PHPVisitorCheck {
 
     @Override
     public void visitNode(Tree tree) {
+      if (tree.is(Kind.FUNCTION_CALL) && !CheckUtils.isExitExpression((FunctionCallTree) tree)) {
+        return;
+      }
+
       foundNode = true;
     }
 

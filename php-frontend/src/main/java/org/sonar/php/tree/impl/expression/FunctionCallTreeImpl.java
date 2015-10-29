@@ -37,24 +37,24 @@ public class FunctionCallTreeImpl extends PHPTree implements FunctionCallTree {
   private static final Kind KIND = Kind.FUNCTION_CALL;
   private ExpressionTree callee;
   private final InternalSyntaxToken openParenthesisToken;
-  private final SeparatedListImpl arguments;
+  private final SeparatedListImpl<ExpressionTree> arguments;
   private final InternalSyntaxToken closeParenthesisToken;
 
-  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl arguments, InternalSyntaxToken closeParenthesisToken) {
+  public FunctionCallTreeImpl(ExpressionTree callee, InternalSyntaxToken openParenthesisToken, SeparatedListImpl<ExpressionTree> arguments, InternalSyntaxToken closeParenthesisToken) {
     this.callee = callee;
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = arguments;
     this.closeParenthesisToken = closeParenthesisToken;
   }
 
-  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedListImpl arguments) {
+  public FunctionCallTreeImpl(ExpressionTree callee, SeparatedListImpl<ExpressionTree> arguments) {
     this.callee = callee;
     this.openParenthesisToken = null;
     this.arguments = arguments;
     this.closeParenthesisToken = null;
   }
 
-  public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedListImpl arguments, InternalSyntaxToken closeParenthesisToken) {
+  public FunctionCallTreeImpl(InternalSyntaxToken openParenthesisToken, SeparatedListImpl<ExpressionTree> arguments, InternalSyntaxToken closeParenthesisToken) {
     this.openParenthesisToken = openParenthesisToken;
     this.arguments = arguments;
     this.closeParenthesisToken = closeParenthesisToken;

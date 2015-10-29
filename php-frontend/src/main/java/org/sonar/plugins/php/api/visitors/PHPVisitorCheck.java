@@ -45,17 +45,16 @@ import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ExitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
@@ -481,11 +480,6 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    scan(tree);
-  }
-
-  @Override
-  public void visitExit(ExitTree tree) {
     scan(tree);
   }
 
