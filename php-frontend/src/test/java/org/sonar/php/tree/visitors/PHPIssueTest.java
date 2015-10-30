@@ -66,7 +66,7 @@ public class PHPIssueTest {
   @Test
   public void test_setting_line_from_tree() throws Exception {
     final int line = 3;
-    NameIdentifierTreeImpl tree = new NameIdentifierTreeImpl(new InternalSyntaxToken(line, 1, "tree", Collections.EMPTY_LIST, 0, false, null));
+    NameIdentifierTreeImpl tree = new NameIdentifierTreeImpl(new InternalSyntaxToken(line, 1, "tree", Collections.EMPTY_LIST, 0, false));
     PHPIssue issue = new PHPIssue(CHECK, "message").tree(tree);
 
     Assertions.assertThat(issue.check()).isEqualTo(CHECK);

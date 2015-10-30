@@ -20,7 +20,6 @@
 package org.sonar.php.parser;
 
 import com.sonar.sslr.api.GenericTokenType;
-
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.sslr.grammar.GrammarRuleKey;
@@ -226,7 +225,6 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   BOOL,
   BINARY;
 
-
   public static LexerlessGrammar createGrammar() {
     return createGrammarBuilder().build();
   }
@@ -247,7 +245,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       b.zeroOrMore(
         b.commentTrivia(b.regexp(LexicalConstant.COMMENT)),
         b.skippedTrivia(b.regexp("[" + LexicalConstant.LINE_TERMINATOR + LexicalConstant.WHITESPACE + "]*+")))
-    ).skip();
+      ).skip();
 
     // Literals
     b.rule(HEREDOC).is(SPACING, b.regexp(LexicalConstant.HEREDOC));
@@ -266,8 +264,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(IDENTIFIER).is(SPACING, b.nextNot(KEYWORDS), b.regexp(LexicalConstant.IDENTIFIER));
 
     // Tags & Inline HTML
-    b.rule(FILE_OPENING_TAG).is(SPACING, b.token(PHPTokenType.FILE_OPENING_TAG, b.regexp(LexicalConstant.PHP_START_TAG))).skip();
-    b.rule(INLINE_HTML).is(SPACING, b.token(PHPTokenType.INLINE_HTML, b.regexp(LexicalConstant.PHP_END_TAG))).skip();
+    b.rule(FILE_OPENING_TAG).is(SPACING, b.regexp(LexicalConstant.PHP_START_TAG)).skip();
+    b.rule(INLINE_HTML).is(SPACING, b.regexp(LexicalConstant.PHP_END_TAG)).skip();
 
     b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
 
@@ -315,7 +313,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       PHPKeyword tokenType = PHPKeyword.values()[i];
 
       // PHP keywords are case insensitive
-      b.rule(tokenType).is(SPACING, b.token(tokenType, b.regexp("(?i)" + tokenType.getValue())), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))).skip();
+      b.rule(tokenType).is(SPACING, b.regexp("(?i)" + tokenType.getValue()), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))).skip();
       if (i > 1) {
         rest[i - 2] = b.regexp("(?i)" + tokenType.getValue());
       }
@@ -327,12 +325,12 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
         PHPKeyword.getKeywordValues()[1],
         rest),
       b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))
-    );
+      );
   }
 
   private static void punctuators(LexerlessGrammarBuilder b) {
     for (PHPPunctuator p : PHPPunctuator.values()) {
-      b.rule(p).is(SPACING, b.token(p, p.getValue())).skip();
+      b.rule(p).is(SPACING, p.getValue()).skip();
     }
   }
 

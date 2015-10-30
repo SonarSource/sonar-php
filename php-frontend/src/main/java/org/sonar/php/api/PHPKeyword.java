@@ -19,11 +19,9 @@
  */
 package org.sonar.php.api;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.TokenType;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
-public enum PHPKeyword implements TokenType, GrammarRuleKey {
+public enum PHPKeyword implements GrammarRuleKey {
 
   HALT_COMPILER("__halt_compiler"),
   ABSTRACT("abstract"),
@@ -99,17 +97,6 @@ public enum PHPKeyword implements TokenType, GrammarRuleKey {
     this.value = value;
   }
 
-  @Override
-  public boolean hasToBeSkippedFromAst(AstNode astNode) {
-    return false;
-  }
-
-  @Override
-  public String getName() {
-    return name();
-  }
-
-  @Override
   public String getValue() {
     return value;
   }

@@ -19,26 +19,9 @@
  */
 package org.sonar.php.parser;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.TokenType;
-
-public enum PHPTokenType implements TokenType {
+public enum PHPTokenType {
 
   FILE_OPENING_TAG,
   INLINE_HTML;
 
-  @Override
-  public String getName() {
-    return name();
-  }
-
-  @Override
-  public String getValue() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean hasToBeSkippedFromAst(AstNode node) {
-    return false;
-  }
 }
