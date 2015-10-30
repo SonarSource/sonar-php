@@ -51,3 +51,5 @@ ${compoundVar} = 1;     // use of $compoundVar
 $var = "str";
 echo "${var}";          // use of $var
 
+new A();
+new A;

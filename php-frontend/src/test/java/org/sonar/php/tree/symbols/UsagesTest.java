@@ -41,6 +41,7 @@ package org.sonar.php.tree.symbols;
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 
@@ -101,7 +102,7 @@ public class UsagesTest extends ParsingTestUtils {
   }
 
   private void test_global_scope(Scope scope) {
-    assertThat(globalSymbolA.usages()).hasSize(3);
+    assertThat(globalSymbolA.usages()).hasSize(4);
     assertThat(globalSymbolB.usages()).hasSize(1);
 
     Symbol arraySymbol = scope.getSymbol("$array");
@@ -113,6 +114,12 @@ public class UsagesTest extends ParsingTestUtils {
 
     assertThat(scope.getSymbol("$compoundVar").usages()).hasSize(2);
     assertThat(scope.getSymbol("$var").usages()).hasSize(1);
+
+    Symbol classSymbol = scope.getSymbol("A");
+    assertThat(classSymbol).isNotNull();
+    assertThat(classSymbol.is(Kind.CLASS)).isTrue();
+    assertThat(classSymbol.usages()).hasSize(2);
+
   }
 
   private void test_global_statement(Scope scope) {

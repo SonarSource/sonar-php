@@ -211,6 +211,13 @@ public class SymbolVisitor extends PHPVisitorCheck {
           symbol.addUsage(tree);
         }
       }
+
+    } else {
+      // fixme (Lena): class names are visible in function scopes, so may be globalScope.getSymbol(tree.text(), Symbol.Kind.CLASS) will work here
+      Symbol symbol = currentScope.getSymbol(tree.text(), Symbol.Kind.CLASS);
+      if (symbol != null) {
+        symbol.addUsage(tree);
+      }
     }
 
     classMemberUsageState = null;
@@ -247,6 +254,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
         IdentifierTree identifier = (IdentifierTree) variable.variableExpression();
         Symbol symbol = globalScope.getSymbol(identifier.text(), Symbol.Kind.VARIABLE);
         if (symbol != null) {
+          // actually this identifier in global statement is not usage, but we do this for the symbol highlighting
+          symbol.addUsage(identifier);
           currentScope.addSymbol(symbol);
         } else {
           createSymbol(identifier, Symbol.Kind.VARIABLE);
