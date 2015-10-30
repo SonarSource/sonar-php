@@ -27,6 +27,7 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
@@ -52,6 +53,7 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
 
   public static final String KEY = "S1871";
   private static final String MESSAGE = "This %s's code block is the same as the block for the %s on line %s.";
+  private static final String MESSAGE_CONDITIONAL = "This conditional operation returns the same value whether the condition is \"true\" or \"false\".";
 
   private static class Branch {
     Tree clause;
@@ -61,6 +63,15 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
       this.clause = clause;
       this.body = body;
     }
+  }
+
+  @Override
+  public void visitConditionalExpression(ConditionalExpressionTree tree) {
+    if (CheckUtils.areSyntacticallyEquivalent(tree.trueExpression(), tree.falseExpression())) {
+      context().newIssue(this, MESSAGE_CONDITIONAL).tree(tree);
+    }
+
+    super.visitConditionalExpression(tree);
   }
 
   @Override
