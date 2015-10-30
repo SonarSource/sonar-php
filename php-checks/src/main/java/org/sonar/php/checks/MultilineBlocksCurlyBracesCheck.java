@@ -54,9 +54,6 @@ public class MultilineBlocksCurlyBracesCheck extends PHPSubscriptionCheck {
   private static final String MESSAGE_LOOP = "Only the first line of this %s-line block will be executed in a loop. The rest will execute only once.";
   private static final String MESSAGE_IF = "Only the first line of this %s-line block will be executed conditionally. The rest will execute unconditionally.";
 
-
-  private List<StatementTree> statements;
-
   @Override
   public List<Kind> nodesToVisit() {
     return CheckUtils.STATEMENT_CONTAINERS;
@@ -64,22 +61,22 @@ public class MultilineBlocksCurlyBracesCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    statements = CheckUtils.getStatements(tree);
+    List<StatementTree> statements = CheckUtils.getStatements(tree);
 
     for (int i = 0; i < statements.size() - 1; i++) {
       StatementTree currentStatement = statements.get(i);
 
       if (currentStatement.is(Kind.IF_STATEMENT)) {
-        checkStatement(getLastStatement((IfStatementTree)currentStatement), i, MESSAGE_IF);
+        checkStatement(getLastStatement((IfStatementTree)currentStatement), i, statements);
 
       } else if (currentStatement.is(Kind.FOR_STATEMENT)) {
-        checkStatement(((ForStatementTree) currentStatement).statements().get(0), i, MESSAGE_LOOP);
+        checkStatement(((ForStatementTree) currentStatement).statements().get(0), i, statements);
 
       } else if (currentStatement.is(Kind.FOREACH_STATEMENT)) {
-        checkStatement(((ForEachStatementTree) currentStatement).statements().get(0), i, MESSAGE_LOOP);
+        checkStatement(((ForEachStatementTree) currentStatement).statements().get(0), i, statements);
 
       } else if (currentStatement.is(Kind.WHILE_STATEMENT)) {
-        checkStatement(((WhileStatementTree) currentStatement).statements().get(0), i, MESSAGE_LOOP);
+        checkStatement(((WhileStatementTree) currentStatement).statements().get(0), i, statements);
 
       }
 
@@ -113,13 +110,13 @@ public class MultilineBlocksCurlyBracesCheck extends PHPSubscriptionCheck {
     return statement;
   }
 
-  private void checkStatement(StatementTree firstInnerStatement, int nestingStatementNum, String message) {
+  private void checkStatement(StatementTree firstInnerStatement, int nestingStatementNum, List<StatementTree> statements) {
     if (firstInnerStatement.is(Kind.BLOCK)) {
       return;
     }
 
     int firstIndent = column(firstInnerStatement);
-    List<StatementTree> shouldBeNested = new ArrayList<>();
+    List<StatementTree> statementsWhichShouldBeNested = new ArrayList<>();
 
     for (int i = nestingStatementNum + 1; i < statements.size(); i++) {
       StatementTree nextStatement = statements.get(i);
@@ -127,7 +124,7 @@ public class MultilineBlocksCurlyBracesCheck extends PHPSubscriptionCheck {
       if (!nextStatement.is(Kind.INLINE_HTML)) {
 
         if (column(nextStatement) == firstIndent) {
-          shouldBeNested.add(nextStatement);
+          statementsWhichShouldBeNested.add(nextStatement);
 
         } else {
           break;
@@ -135,11 +132,12 @@ public class MultilineBlocksCurlyBracesCheck extends PHPSubscriptionCheck {
       }
     }
 
-    if (!shouldBeNested.isEmpty()) {
+    if (!statementsWhichShouldBeNested.isEmpty()) {
       int firstInnerStatementLine = ((PHPTree) firstInnerStatement).getLine();
-      int lastShouldBeNestedLine = ((PHPTree) shouldBeNested.get(shouldBeNested.size() - 1)).getLine();
+      int lastShouldBeNestedLine = ((PHPTree) statementsWhichShouldBeNested.get(statementsWhichShouldBeNested.size() - 1)).getLine();
       int blockSize = lastShouldBeNestedLine - firstInnerStatementLine + 1;
-      context().newIssue(KEY, String.format(message, blockSize)).tree(shouldBeNested.get(0));
+      String message = statements.get(nestingStatementNum).is(Kind.IF_STATEMENT) ? MESSAGE_IF : MESSAGE_LOOP;
+      context().newIssue(this, String.format(message, blockSize)).tree(statementsWhichShouldBeNested.get(0));
     }
   }
 
