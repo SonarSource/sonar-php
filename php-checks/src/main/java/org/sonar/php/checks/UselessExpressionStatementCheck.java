@@ -54,16 +54,34 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
     Kind.GREATER_THAN,
     Kind.LESS_THAN_OR_EQUAL_TO,
     Kind.GREATER_THAN_OR_EQUAL_TO,
+    Kind.PLUS,
+    Kind.MINUS,
+    Kind.REMAINDER,
+    Kind.MULTIPLY,
+    Kind.DIVIDE,
+    Kind.LEFT_SHIFT,
+    Kind.RIGHT_SHIFT,
+    Kind.INSTANCE_OF,
+    Kind.ALTERNATIVE_NOT_EQUAL_TO,
+
+    Kind.UNARY_MINUS,
+    Kind.UNARY_PLUS,
+    Kind.LOGICAL_COMPLEMENT,
+
     Kind.REGULAR_STRING_LITERAL,
     Kind.EXPANDABLE_STRING_LITERAL,
-    Kind.CONCATENATION
+    Kind.CONCATENATION,
+    Kind.NAME_IDENTIFIER,
+    Kind.NUMERIC_LITERAL,
+    Kind.NULL_LITERAL,
+    Kind.BOOLEAN_LITERAL
   };
 
   @Override
   public void visitExpressionStatement(ExpressionStatementTree tree) {
     ExpressionTree expression = tree.expression();
     if (expression.is(USELESS_KINDS)) {
-      context().newIssue(KEY, MESSAGE).tree(tree);
+      context().newIssue(this, MESSAGE).tree(tree);
     }
 
     super.visitExpressionStatement(tree);
