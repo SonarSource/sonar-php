@@ -20,8 +20,10 @@
 package org.sonar.plugins.php;
 
 import com.google.common.collect.ImmutableList;
+import com.sonar.sslr.api.RecognitionException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
@@ -38,9 +40,14 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.PHPAnalyzer;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.squidbridge.ProgressReport;
+import org.sonar.squidbridge.api.AnalysisException;
 import org.sonar.test.TestUtils;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -51,11 +58,20 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.io.InterruptedIOException;
+import java.nio.charset.StandardCharsets;
+
 public class PHPSensorTest {
 
-
   private final DefaultFileSystem fileSystem = new DefaultFileSystem();
+
   private PHPSensor sensor;
+
+  private ProgressReport progressReport = mock(ProgressReport.class);
+
+  @org.junit.Rule
+  public final ExpectedException thrown = ExpectedException.none();
+
   private final PHPCustomRulesDefinition[] CUSTOM_RULES = {new PHPCustomRulesDefinition() {
     @Override
     public String repositoryName() {
@@ -134,16 +150,69 @@ public class PHPSensorTest {
   }
 
   private void analyseSingleFile(SensorContext context, String fileName) {
-    fileSystem.add(new DefaultInputFile(fileName)
-      .setAbsolutePath(TestUtils.getResource(fileName).getAbsolutePath())
-      .setType(InputFile.Type.MAIN)
-      .setLanguage(Php.KEY));
+    fileSystem.add(inputFile(fileName));
 
     Resource resource = mock(Resource.class);
-
     when(resource.getEffectiveKey()).thenReturn("someKey");
     when(context.getResource(any(InputFile.class))).thenReturn(resource);
     sensor.analyse(new Project(""), context);
+  }
+
+  private InputFile inputFile(String fileName) {
+    return new DefaultInputFile(fileName)
+      .setAbsolutePath(TestUtils.getResource(fileName).getAbsolutePath())
+      .setType(InputFile.Type.MAIN)
+      .setLanguage(Php.KEY);
+  }
+
+  @Test
+  public void progress_report_should_be_stopped() throws Exception {
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.<PHPCheck>of());
+    sensor.analyseFiles(phpAnalyzer, ImmutableList.<InputFile>of(), progressReport);
+    verify(progressReport).stop();
+  }
+
+  @Test
+  public void exception_should_report_file_name() throws Exception {
+    PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
+    analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "PHPSquidSensor.php");
+  }
+
+  @Test
+  public void cancelled_analysis() throws Exception {
+    PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException(new InterruptedException()));
+    analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "Analysis cancelled");
+  }
+
+  @Test
+  public void cancelled_analysis_causing_recognition_exception() throws Exception {
+    PHPCheck check = new ExceptionRaisingCheck(new RecognitionException(42, "message", new InterruptedIOException()));
+    analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "Analysis cancelled");
+  }
+
+  private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.of(check));
+    thrown.expect(AnalysisException.class);
+    thrown.expectMessage(expectedMessageSubstring);
+    try {
+      sensor.analyseFiles(phpAnalyzer, ImmutableList.of(inputFile), progressReport);
+    } finally {
+      verify(progressReport).cancel();
+    }
+  }
+
+  private final class ExceptionRaisingCheck extends PHPVisitorCheck {
+
+    private final RuntimeException exception;
+
+    public ExceptionRaisingCheck(RuntimeException exception) {
+      this.exception = exception;
+    }
+
+    @Override
+    public void visitCompilationUnit(CompilationUnitTree tree) {
+      throw exception;
+    }
   }
 
 }

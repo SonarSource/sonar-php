@@ -19,9 +19,12 @@
  */
 package org.sonar.plugins.php;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
+import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
@@ -52,8 +55,9 @@ import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.squidbridge.ProgressReport;
+import org.sonar.squidbridge.api.AnalysisException;
 
-import javax.annotation.Nullable;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -108,28 +112,54 @@ public class PHPSensor implements Sensor {
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
-    for (InputFile inputFile : inputFiles) {
-      progressReport.nextFile();
-      analyseFile(phpAnalyzer, inputFile);
+    analyseFiles(phpAnalyzer, inputFiles, progressReport);
+  }
+
+  @VisibleForTesting
+  void analyseFiles(PHPAnalyzer phpAnalyzer, List<InputFile> inputFiles, ProgressReport progressReport) {
+    boolean success = false;
+    try {
+      for (InputFile inputFile : inputFiles) {
+        progressReport.nextFile();
+        analyseFile(phpAnalyzer, inputFile);
+      }
+      success = true;
+    } finally {
+      stopProgressReport(progressReport, success);
     }
+  }
 
-    progressReport.stop();
-
+  private static void stopProgressReport(ProgressReport progressReport, boolean success) {
+    if (success) {
+      progressReport.stop();
+    } else {
+      progressReport.cancel();
+    }
   }
 
   private void analyseFile(PHPAnalyzer phpAnalyzer, InputFile inputFile) {
     try {
       phpAnalyzer.nextFile(inputFile.file());
+      saveIssues(phpAnalyzer.analyze(), inputFile);
+      saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(), inputFile);
+      saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(), inputFile);
+      saveNewFileMeasures(phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
     } catch (RecognitionException e) {
+      checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());
       LOG.error(e.getMessage());
       return;
+    } catch (Exception e) {
+      checkInterrupted(e);
+      throw new AnalysisException("Could not analyse " + inputFile.absolutePath(), e);
     }
+  }
 
-    saveIssues(phpAnalyzer.analyze(), inputFile);
-    saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(), inputFile);
-    saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(), inputFile);
-    saveNewFileMeasures(phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
+  private static void checkInterrupted(Exception e) {
+    Throwable cause = Throwables.getRootCause(e);
+    if (cause instanceof InterruptedException || cause instanceof InterruptedIOException) {
+      throw new AnalysisException("Analysis cancelled", e);
+    }
   }
 
   private void saveSymbolHighlighting(List<SymbolHighlightingData> highlightingDataList, InputFile inputFile) {
