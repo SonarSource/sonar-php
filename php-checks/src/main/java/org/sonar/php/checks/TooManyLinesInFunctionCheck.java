@@ -19,12 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.checks.utils.FunctionUtils;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
@@ -59,10 +58,7 @@ public class TooManyLinesInFunctionCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(
-      Kind.METHOD_DECLARATION,
-      Kind.FUNCTION_DECLARATION,
-      Kind.FUNCTION_EXPRESSION);
+    return CheckUtils.FUNCTION_KINDS;
   }
 
   @Override
@@ -72,7 +68,7 @@ public class TooManyLinesInFunctionCheck extends PHPSubscriptionCheck {
 
     if (nbLines > max) {
       context()
-        .newIssue(this, String.format(MESSAGE, FunctionUtils.getFunctionName(declaration), nbLines, max))
+        .newIssue(this, String.format(MESSAGE, CheckUtils.getFunctionName(declaration), nbLines, max))
         .tree(declaration);
     }
   }

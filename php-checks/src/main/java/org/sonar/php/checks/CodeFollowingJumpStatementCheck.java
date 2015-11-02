@@ -22,11 +22,10 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
-import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -41,7 +40,7 @@ import java.util.List;
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
+public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
 
   public static final String KEY = "S1763";
   private static final String MESSAGE = "Remove the code after this \"%s\".";
@@ -67,13 +66,8 @@ public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
   };
 
   @Override
-  public List<Tree.Kind> nodesToVisit() {
-    return CheckUtils.STATEMENT_CONTAINERS;
-  }
-
-  @Override
   public void visitNode(Tree tree) {
-    List<StatementTree> statements = CheckUtils.getStatements(tree);
+    List<StatementTree> statements = getStatements(tree);
 
     for (int i = 0; i < statements.size() - 1; i++) {
       StatementTree currentStatement = statements.get(i);

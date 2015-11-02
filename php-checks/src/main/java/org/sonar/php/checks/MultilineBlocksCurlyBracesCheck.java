@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition.SubCharacteristics;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -32,7 +32,6 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
-import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -48,20 +47,15 @@ import java.util.List;
 @ActivatedByDefault
 @SqaleSubCharacteristic(SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
-public class MultilineBlocksCurlyBracesCheck extends PHPSubscriptionCheck {
+public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
 
   public static final String KEY = "S2681";
   private static final String MESSAGE_LOOP = "Only the first line of this %s-line block will be executed in a loop. The rest will execute only once.";
   private static final String MESSAGE_IF = "Only the first line of this %s-line block will be executed conditionally. The rest will execute unconditionally.";
 
   @Override
-  public List<Kind> nodesToVisit() {
-    return CheckUtils.STATEMENT_CONTAINERS;
-  }
-
-  @Override
   public void visitNode(Tree tree) {
-    List<StatementTree> statements = CheckUtils.getStatements(tree);
+    List<StatementTree> statements = getStatements(tree);
 
     for (int i = 0; i < statements.size() - 1; i++) {
       StatementTree currentStatement = statements.get(i);

@@ -22,6 +22,7 @@ package org.sonar.php.tree.impl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
 
 public abstract class PHPTree implements Tree {
@@ -80,6 +81,42 @@ public abstract class PHPTree implements Tree {
       }
     } while (child == null || child.is(Kind.SKIPPED_LIST_ELEMENT));
     return ((PHPTree) child).getFirstToken();
+  }
+
+  @Override
+  public String toString() {
+    if (this.is(Kind.TOKEN, Kind.INLINE_HTML_TOKEN)) {
+      return ((SyntaxToken) this).text();
+
+    } else {
+      StringBuilder sb = new StringBuilder();
+      Iterator<Tree> treeIterator = childrenIterator();
+      SyntaxToken prevToken = null;
+
+      while (treeIterator.hasNext()) {
+        Tree child = treeIterator.next();
+
+        if (child != null && !child.is(Kind.SKIPPED_LIST_ELEMENT)) {
+          appendChild(sb, prevToken, child);
+          prevToken = ((PHPTree) child).getLastToken();
+        }
+      }
+      return sb.toString();
+    }
+  }
+
+  private static void appendChild(StringBuilder sb, @Nullable SyntaxToken prevToken, Tree child) {
+    if (prevToken != null) {
+      SyntaxToken firstToken = ((PHPTree) child).getFirstToken();
+      if (isSpaceRequired(prevToken, firstToken)) {
+        sb.append(" ");
+      }
+    }
+    sb.append(child.toString());
+  }
+
+  private static boolean isSpaceRequired(SyntaxToken prevToken, SyntaxToken token) {
+    return (token.line() > prevToken.line()) || (prevToken.column() + prevToken.text().length() < token.column());
   }
 }
 

@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -124,7 +123,7 @@ public class ForLoopCounterChangedCheck extends PHPVisitorCheck {
 
   private void checkVariable(ExpressionTree variable) {
     if (!counterStack.isEmpty()) {
-      String variableName = CheckUtils.asString(variable);
+      String variableName = variable.toString();
       if (counterStack.peek().contains(variableName)) {
         context().newIssue(this, String.format(MESSAGE, variableName)).tree(variable);
       }
@@ -136,9 +135,9 @@ public class ForLoopCounterChangedCheck extends PHPVisitorCheck {
     for (ExpressionTree initExpression : forStatement.init()) {
 
       if (initExpression.is(Kind.ASSIGNMENT)) {
-        counterNames.add(CheckUtils.asString(((AssignmentExpressionTree) initExpression).variable()));
+        counterNames.add(((AssignmentExpressionTree) initExpression).variable().toString());
       } else if (initExpression.is(INCREMENT_DECREMENT)) {
-        counterNames.add(CheckUtils.asString(((UnaryExpressionTree) initExpression).expression()));
+        counterNames.add(((UnaryExpressionTree) initExpression).expression().toString());
       }
 
     }

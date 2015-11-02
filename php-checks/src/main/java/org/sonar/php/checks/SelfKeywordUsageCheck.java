@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -51,7 +50,7 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
-    if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) && "self".equals(CheckUtils.asString(tree.object()))) {
+    if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) && "self".equals(tree.object().toString())) {
       context().newIssue(this, MESSAGE).tree(tree);
     }
 

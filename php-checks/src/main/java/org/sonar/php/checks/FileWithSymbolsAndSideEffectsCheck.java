@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -105,7 +104,7 @@ public class FileWithSymbolsAndSideEffectsCheck extends PHPVisitorCheck {
     if (tree.expression().is(Tree.Kind.FUNCTION_CALL)) {
       FunctionCallTree functionCallTree = (FunctionCallTree)tree.expression();
 
-      String callee = CheckUtils.asString(functionCallTree.callee());
+      String callee = functionCallTree.callee().toString();
       if ("define".equalsIgnoreCase(callee)) {
         return;
       }

@@ -22,11 +22,11 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
@@ -114,7 +114,7 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
     exclusions.clear();
     super.visitCompilationUnit(tree);
     for (Scope scope : context().symbolTable().getScopes()) {
-      if (scope.tree().is(Kind.FUNCTION_EXPRESSION, Kind.FUNCTION_DECLARATION, Kind.METHOD_DECLARATION)) {
+      if (CheckUtils.isFunction(scope.tree())) {
         checkScope(scope);
       }
     }

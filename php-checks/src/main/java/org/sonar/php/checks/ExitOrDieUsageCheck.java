@@ -42,7 +42,7 @@ public class ExitOrDieUsageCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (CheckUtils.isExitExpression(tree)) {
-      String callee = CheckUtils.asString(tree.callee());
+      String callee = tree.callee().toString();
       context().newIssue(this, String.format(MESSAGE, callee)).tree(tree);
     }
 

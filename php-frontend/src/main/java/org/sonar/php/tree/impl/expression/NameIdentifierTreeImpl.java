@@ -56,11 +56,6 @@ public class NameIdentifierTreeImpl extends PHPTree implements NameIdentifierTre
   }
 
   @Override
-  public String toString() {
-    return "[IdentifierTree] \"" + text() + "\"";
-  }
-
-  @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.<Tree>singletonIterator(nameToken);
   }

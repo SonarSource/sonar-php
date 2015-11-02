@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.Equality;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -61,7 +61,7 @@ public class SelfAssignmentCheck extends PHPVisitorCheck {
   }
 
   private void check(ExpressionTree lhs, ExpressionTree rhs) {
-    if (CheckUtils.areSyntacticallyEquivalent(lhs, rhs)) {
+    if (Equality.areSyntacticallyEquivalent(lhs, rhs)) {
       context().newIssue(this, MESSAGE).tree(lhs);
     }
   }

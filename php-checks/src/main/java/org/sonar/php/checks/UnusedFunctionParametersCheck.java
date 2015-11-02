@@ -24,7 +24,6 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -33,8 +32,6 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -108,17 +105,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   public boolean isExcluded(MethodDeclarationTree tree) {
     return (mayOverride && !CheckUtils.hasModifier(tree.modifiers(), "private"))
       || !tree.body().is(Tree.Kind.BLOCK)
-      || hasInheritdocTag(tree);
-  }
-
-  public static boolean hasInheritdocTag(MethodDeclarationTree methodDec) {
-    SyntaxToken firstToken = ((PHPTree) methodDec).getFirstToken();
-    for (SyntaxTrivia comment : firstToken.trivias()) {
-      if (StringUtils.containsIgnoreCase(comment.text(), "@inheritdoc")) {
-        return true;
-      }
-    }
-    return false;
+      || CheckUtils.isOverriding(tree);
   }
 
 }

@@ -170,7 +170,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   }
 
   private void checkLocalVariable(ExpressionTree assignedExpression) {
-    String varName = CheckUtils.asString(assignedExpression);
+    String varName = assignedExpression.toString();
 
     if (classState.hasFieldNamed(varName) && !classState.hasAlreadyBeenChecked(varName)) {
       reportIssue(assignedExpression, varName);

@@ -21,30 +21,64 @@ package org.sonar.php.checks.utils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-import org.sonar.plugins.php.api.tree.statement.BlockTree;
-import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
-import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
-import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
-import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
-import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
-import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
-import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
-import org.sonar.plugins.php.api.tree.statement.StatementTree;
-import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
-import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class CheckUtils {
+
+  private CheckUtils() {
+  }
+
+  private static final Kind[] FUNCTION_KINDS_ARRAY = {
+    Kind.METHOD_DECLARATION,
+    Kind.FUNCTION_DECLARATION,
+    Kind.FUNCTION_EXPRESSION};
+
+  public static final ImmutableList<Kind> FUNCTION_KINDS = ImmutableList.copyOf(FUNCTION_KINDS_ARRAY);
+
+  public static boolean isFunction(Tree tree) {
+    return tree.is(FUNCTION_KINDS_ARRAY);
+  }
+
+  /**
+   * Returns function or method's name, or "expression" if the given node is a function expression.
+   *
+   * @param functionDec FUNCTION_DECLARATION, METHOD_DECLARATION or FUNCTION_EXPRESSION
+   * @return name of function or "expression" if function expression
+   */
+  public static String getFunctionName(FunctionTree functionDec) {
+    if (functionDec.is(Kind.FUNCTION_DECLARATION)) {
+      return "\"" + ((FunctionDeclarationTree) functionDec).name().text() + "\"";
+    } else if (functionDec.is(Kind.METHOD_DECLARATION)) {
+      return "\"" + ((MethodDeclarationTree) functionDec).name().text() + "\"";
+    }
+    return "expression";
+  }
+
+  /**
+   * Return whether the method is overriding a parent method or not.
+   *
+   * @param declaration METHOD_DECLARATION
+   * @return true if method has tag "@inheritdoc" in it's doc comment.
+   */
+  public static boolean isOverriding(MethodDeclarationTree declaration) {
+    for (SyntaxTrivia comment : ((PHPTree) declaration).getFirstToken().trivias()) {
+      if (StringUtils.containsIgnoreCase(comment.text(), "@inheritdoc")) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   public static final ImmutableMap<String, String> PREDEFINED_VARIABLES = ImmutableMap.<String, String>builder()
     .put("$HTTP_SERVER_VARS", "$_SERVER")
@@ -55,16 +89,9 @@ public class CheckUtils {
     .put("$HTTP_ENV_VARS", "$_ENV")
     .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
 
-  private CheckUtils() {
-  }
-
   public static boolean isExitExpression(FunctionCallTree functionCallTree) {
-    String callee = CheckUtils.asString(functionCallTree.callee());
+    String callee = functionCallTree.callee().toString();
     return "die".equalsIgnoreCase(callee) || "exit".equalsIgnoreCase(callee);
-  }
-
-  public static boolean isSuperGlobal(String varName) {
-    return "$GLOBALS".equals(varName) || PREDEFINED_VARIABLES.values().contains(varName);
   }
 
   public static boolean hasModifier(List<SyntaxToken> modifiers, String toFind) {
@@ -74,141 +101,6 @@ public class CheckUtils {
       }
     }
     return false;
-  }
-
-  public static boolean areSyntacticallyEquivalent(@Nullable Tree tree1, @Nullable Tree tree2) {
-    if (tree1 == tree2) {
-      return true;
-    }
-
-    if (tree1 == null || tree2 == null) {
-      return false;
-    }
-
-    PHPTree phpTree1 = (PHPTree) tree1;
-    PHPTree phpTree2 = (PHPTree) tree2;
-
-    if (phpTree1.getKind() != phpTree2.getKind()) {
-      return false;
-    } else if (phpTree1.isLeaf()) {
-      return phpTree1.getFirstToken().text().equals(phpTree2.getFirstToken().text());
-    }
-
-    Iterator<Tree> iterator1 = phpTree1.childrenIterator();
-    Iterator<Tree> iterator2 = phpTree2.childrenIterator();
-    return areSyntacticallyEquivalent(iterator1, iterator2);
-  }
-
-  public static boolean areSyntacticallyEquivalent(Iterator<? extends Tree> iterator1, Iterator<? extends Tree> iterator2) {
-    while (iterator1.hasNext() && iterator2.hasNext()) {
-      if (!areSyntacticallyEquivalent(iterator1.next(), iterator2.next())) {
-        return false;
-      }
-    }
-
-    return !iterator1.hasNext() && !iterator2.hasNext();
-  }
-
-  public static String asString(Tree tree) {
-    if (tree.is(Tree.Kind.TOKEN)) {
-      return ((SyntaxToken) tree).text();
-
-    } else {
-      StringBuilder sb = new StringBuilder();
-      Iterator<Tree> treeIterator = ((PHPTree) tree).childrenIterator();
-      SyntaxToken prevToken = null;
-
-      while (treeIterator.hasNext()) {
-        Tree child = treeIterator.next();
-
-        if (child != null && !child.is(Kind.SKIPPED_LIST_ELEMENT)) {
-          appendChild(sb, prevToken, child);
-          prevToken = ((PHPTree) child).getLastToken();
-        }
-      }
-      return sb.toString();
-    }
-  }
-
-  private static void appendChild(StringBuilder sb, @Nullable SyntaxToken prevToken, Tree child) {
-    if (prevToken != null) {
-      SyntaxToken firstToken = ((PHPTree) child).getFirstToken();
-      if (isSpaceRequired(prevToken, firstToken)) {
-        sb.append(" ");
-      }
-    }
-    sb.append(asString(child));
-  }
-
-  private static boolean isSpaceRequired(SyntaxToken prevToken, SyntaxToken token) {
-    return (token.line() > prevToken.line()) || (prevToken.column() + prevToken.text().length() < token.column());
-  }
-  
-  public static final  List<Kind> STATEMENT_CONTAINERS = ImmutableList.of(
-    Kind.SCRIPT,
-    Kind.BLOCK,
-    Kind.CASE_CLAUSE,
-    Kind.DEFAULT_CLAUSE,
-    Kind.DECLARE_STATEMENT,
-    Kind.IF_STATEMENT,
-    Kind.ALTERNATIVE_IF_STATEMENT,
-    Kind.ELSE_CLAUSE,
-    Kind.ALTERNATIVE_ELSE_CLAUSE,
-    Kind.ELSEIF_CLAUSE,
-    Kind.ALTERNATIVE_ELSEIF_CLAUSE,
-    Kind.FOREACH_STATEMENT,
-    Kind.ALTERNATIVE_FOREACH_STATEMENT,
-    Kind.FOR_STATEMENT,
-    Kind.ALTERNATIVE_FOR_STATEMENT,
-    Kind.NAMESPACE_STATEMENT,
-    Kind.WHILE_STATEMENT);
-
-  public static List<StatementTree> getStatements(Tree tree) {
-    List<StatementTree> statements = Collections.emptyList();
-    switch (tree.getKind()) {
-      case SCRIPT:
-        statements = ((ScriptTree) tree).statements();
-        break;
-      case BLOCK:
-        statements = ((BlockTree) tree).statements();
-        break;
-      case CASE_CLAUSE:
-      case DEFAULT_CLAUSE:
-        statements = ((SwitchCaseClauseTree) tree).statements();
-        break;
-      case DECLARE_STATEMENT:
-        statements = ((DeclareStatementTree) tree).statements();
-        break;
-      case IF_STATEMENT:
-      case ALTERNATIVE_IF_STATEMENT:
-        statements = ((IfStatementTree) tree).statements();
-        break;
-      case ELSE_CLAUSE:
-      case ALTERNATIVE_ELSE_CLAUSE:
-        statements = ((ElseClauseTree) tree).statements();
-        break;
-      case ELSEIF_CLAUSE:
-      case ALTERNATIVE_ELSEIF_CLAUSE:
-        statements = ((ElseifClauseTree) tree).statements();
-        break;
-      case FOREACH_STATEMENT:
-      case ALTERNATIVE_FOREACH_STATEMENT:
-        statements = ((ForEachStatementTree) tree).statements();
-        break;
-      case FOR_STATEMENT:
-      case ALTERNATIVE_FOR_STATEMENT:
-        statements = ((ForStatementTree) tree).statements();
-        break;
-      case NAMESPACE_STATEMENT:
-        statements = ((NamespaceStatementTree) tree).statements();
-        break;
-      case WHILE_STATEMENT:
-        statements = ((WhileStatementTree) tree).statements();
-        break;
-      default:
-        break;
-    }
-    return statements;
   }
 
 }

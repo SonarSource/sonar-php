@@ -26,7 +26,7 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.checks.utils.FunctionUtils;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
@@ -80,7 +80,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
   @Override
   public List<Kind> nodesToVisit() {
     return ImmutableList.<Kind>builder()
-      .addAll(FunctionUtils.DECLARATION_KINDS)
+      .addAll(CheckUtils.FUNCTION_KINDS)
       .add(Kind.ASSIGNMENT_BY_REFERENCE)
       .add(
         Kind.ASSIGNMENT,
@@ -100,7 +100,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    if (FunctionUtils.isFunctionDeclaration(tree)) {
+    if (CheckUtils.isFunction(tree)) {
       enterScope();
       checkParameters((FunctionTree) tree);
     } else if (inScope()) {
@@ -110,7 +110,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public void leaveNode(Tree tree) {
-    if (FunctionUtils.isFunctionDeclaration(tree)) {
+    if (CheckUtils.isFunction(tree)) {
       leaveScope();
     }
   }

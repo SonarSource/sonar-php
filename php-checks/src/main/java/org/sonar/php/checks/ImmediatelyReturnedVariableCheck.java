@@ -21,10 +21,10 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.Lists;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -37,7 +37,6 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
-import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -54,39 +53,35 @@ import java.util.List;
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
-public class ImmediatelyReturnedVariableCheck extends PHPSubscriptionCheck {
+public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
 
   public static final String KEY = "S1488";
   private static final String MESSAGE = "Immediately %s this expression instead of assigning it to the temporary variable \"%s\".";
 
   private int level = 0;
-  private static final Kind[] FUNCTIONS = {
-    Kind.FUNCTION_DECLARATION,
-    Kind.FUNCTION_EXPRESSION,
-    Kind.METHOD_DECLARATION};
 
   @Override
   public List<Kind> nodesToVisit() {
     Builder<Kind> builder = ImmutableList.builder();
-    builder.addAll(Lists.newArrayList(FUNCTIONS));
-    builder.addAll(CheckUtils.STATEMENT_CONTAINERS);
+    builder.addAll(CheckUtils.FUNCTION_KINDS);
+    builder.addAll(super.nodesToVisit());
 
     return builder.build();
   }
 
   @Override
   public void visitNode(Tree tree) {
-    if (tree.is(FUNCTIONS)) {
+    if (CheckUtils.isFunction(tree)) {
       level++;
 
     } else if (level > 0) {
-      checkStatements(CheckUtils.getStatements(tree));
+      checkStatements(getStatements(tree));
     }
   }
 
   @Override
   public void leaveNode(Tree tree) {
-    if (tree.is(FUNCTIONS)) {
+    if (CheckUtils.isFunction(tree)) {
       level--;
     }
   }

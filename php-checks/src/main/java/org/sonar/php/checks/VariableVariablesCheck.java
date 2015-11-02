@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
@@ -44,7 +43,7 @@ public class VariableVariablesCheck extends PHPVisitorCheck {
 
   @Override
   public void visitVariableVariable(VariableVariableTree tree) {
-    context().newIssue(this, String.format(MESSAGE, CheckUtils.asString(tree))).tree(tree);
+    context().newIssue(this, String.format(MESSAGE, tree.toString())).tree(tree);
     super.visitVariableVariable(tree);
   }
 

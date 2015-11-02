@@ -35,6 +35,7 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
     ListExpressionTree tree = parse("list ()", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 0, 0);
+    assertThat(tree.toString()).isEqualTo("list ()");
   }
 
   @Test
@@ -43,6 +44,7 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
 
     assertListExpression(tree, 2, 1);
     assertFirstElement(tree, Kind.VARIABLE_IDENTIFIER, "$a");
+    assertThat(tree.toString()).isEqualTo("list ($a, $b)");
   }
 
   @Test
@@ -50,6 +52,7 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
     ListExpressionTree tree = parse("list (, $a, , ,$b)", Kind.LIST_EXPRESSION);
 
     assertListExpression(tree, 5, 4);
+    assertThat(tree.toString()).isEqualTo("list (, $a, , ,$b)");
     assertFirstElement(tree, Kind.SKIPPED_LIST_ELEMENT, "");
     assertThat(expressionToString(Iterables.getLast(tree.elements()))).isEqualTo("$b");
   }

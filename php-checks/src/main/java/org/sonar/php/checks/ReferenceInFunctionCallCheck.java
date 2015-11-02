@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -52,7 +51,7 @@ public class ReferenceInFunctionCallCheck extends PHPVisitorCheck {
     for (ExpressionTree argument : tree.arguments()) {
 
       if (argument.is(Kind.REFERENCE_VARIABLE)) {
-        String message = String.format(MESSAGE, CheckUtils.asString(((ReferenceVariableTree) argument).variableExpression()));
+        String message = String.format(MESSAGE, ((ReferenceVariableTree) argument).variableExpression().toString());
         context().newIssue(this, message).tree(argument);
       }
     }

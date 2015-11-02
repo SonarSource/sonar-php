@@ -121,9 +121,4 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
     return this;
   }
 
-  @Override
-  public String toString() {
-    return "[SyntaxToken] \"" + text() + "\"";
-  }
-
 }

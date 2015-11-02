@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -49,7 +48,7 @@ public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     super.visitFunctionCall(tree);
 
-    String callee = CheckUtils.asString(tree.callee());
+    String callee = tree.callee().toString();
 
     if (WRONG_FUNCTIONS.contains(callee.toLowerCase())) {
       String message = String.format(MESSAGE, callee, callee + "_once");

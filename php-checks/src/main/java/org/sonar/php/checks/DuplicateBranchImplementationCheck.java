@@ -23,7 +23,7 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractDuplicateBranchCheck;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.Equality;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -67,7 +67,7 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
 
   @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
-    if (CheckUtils.areSyntacticallyEquivalent(tree.trueExpression(), tree.falseExpression())) {
+    if (Equality.areSyntacticallyEquivalent(tree.trueExpression(), tree.falseExpression())) {
       context().newIssue(this, MESSAGE_CONDITIONAL).tree(tree);
     }
 
@@ -131,7 +131,7 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
 
   private static boolean areSyntacticallyEquivalent(List<StatementTree> list1, List<StatementTree> list2) {
     boolean bothEmpty = list1.isEmpty() && list2.isEmpty();
-    return !bothEmpty && CheckUtils.areSyntacticallyEquivalent(list1.iterator(), list2.iterator());
+    return !bothEmpty && Equality.areSyntacticallyEquivalent(list1.iterator(), list2.iterator());
   }
 
   @Override

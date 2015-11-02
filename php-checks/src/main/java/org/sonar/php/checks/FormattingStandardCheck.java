@@ -33,7 +33,6 @@ import org.sonar.php.checks.formatting.FunctionSpacingCheck;
 import org.sonar.php.checks.formatting.IndentationCheck;
 import org.sonar.php.checks.formatting.NamespaceAndUseStatementCheck;
 import org.sonar.php.checks.formatting.PunctuatorSpacingCheck;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -204,7 +203,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   );
 
   public boolean isInternalFunction(ExpressionTree callee) {
-    String calleeString = CheckUtils.asString(callee);
+    String calleeString = callee.toString();
     return INTERNAL_FUNCTIONS.contains(calleeString);
   }
 

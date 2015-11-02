@@ -19,12 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.checks.utils.FunctionUtils;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -59,17 +58,14 @@ public class FunctionComplexityCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(
-      Kind.FUNCTION_DECLARATION,
-      Kind.METHOD_DECLARATION,
-      Kind.FUNCTION_EXPRESSION);
+    return CheckUtils.FUNCTION_KINDS;
   }
 
   @Override
   public void visitNode(Tree tree) {
     int complexity = ComplexityVisitor.complexityWithoutNestedFunctions(tree);
     if (complexity > threshold) {
-      String functionName = FunctionUtils.getFunctionName((FunctionTree) tree);
+      String functionName = CheckUtils.getFunctionName((FunctionTree) tree);
       String message = String.format(MESSAGE, functionName, complexity, threshold);
       int cost = complexity - threshold;
       context().newIssue(this, message).tree(tree).cost(cost);

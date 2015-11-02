@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -58,10 +57,10 @@ public class UselessObjectCreationCheck extends PHPVisitorCheck {
 
   private static String getClassName(ExpressionTree expression) {
     if (expression.is(Tree.Kind.FUNCTION_CALL)) {
-      return CheckUtils.asString(((FunctionCallTree) expression).callee());
+      return ((FunctionCallTree) expression).callee().toString();
 
     } else {
-      return CheckUtils.asString(expression);
+      return expression.toString();
     }
   }
 

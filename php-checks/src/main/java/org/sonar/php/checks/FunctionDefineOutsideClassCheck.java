@@ -80,11 +80,15 @@ public class FunctionDefineOutsideClassCheck extends PHPVisitorCheck {
     if (tree.is(Kind.ASSIGNMENT) && tree.variable().is(Kind.VARIABLE_IDENTIFIER)) {
       String varName = ((VariableIdentifierTree) tree.variable()).variableExpression().text();
 
-      if (!CheckUtils.isSuperGlobal(varName) && !globalVariableNames.contains(varName)) {
+      if (!isSuperGlobal(varName) && !globalVariableNames.contains(varName)) {
         context().newIssue(this, String.format(MESSAGE, "variable")).tree(tree);
         globalVariableNames.add(varName);
       }
     }
+  }
+
+  private static boolean isSuperGlobal(String varName) {
+    return "$GLOBALS".equals(varName) || CheckUtils.PREDEFINED_VARIABLES.values().contains(varName);
   }
 
 }

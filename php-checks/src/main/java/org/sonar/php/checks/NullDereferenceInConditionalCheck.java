@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.Equality;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -119,7 +119,7 @@ public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
 
   @Nullable
   private static ExpressionTree retrieveArgumentFromIsNullCall(FunctionCallTree functionCall) {
-    if ("is_null".equalsIgnoreCase(CheckUtils.asString(functionCall.callee())) && functionCall.arguments().size() == 1) {
+    if ("is_null".equalsIgnoreCase(functionCall.callee().toString()) && functionCall.arguments().size() == 1) {
       return functionCall.arguments().get(0);
     } else {
       return null;
@@ -166,8 +166,8 @@ public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
 
     @Override
     public void visitMemberAccess(MemberAccessTree tree) {
-      if (CheckUtils.areSyntacticallyEquivalent(removeParenthesis(tree.object()), nullExpression)) {
-        context.newIssue(check, String.format(MESSAGE_FORMAT, CheckUtils.asString(nullExpression))).tree(nullExpression);
+      if (Equality.areSyntacticallyEquivalent(removeParenthesis(tree.object()), nullExpression)) {
+        context.newIssue(check, String.format(MESSAGE_FORMAT, nullExpression.toString())).tree(nullExpression);
       }
 
       super.visitMemberAccess(tree);

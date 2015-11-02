@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -105,7 +104,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
         MemberAccessTree memberAccessTree = (MemberAccessTree)functionCallTree.callee();
 
         String methodName = method.name().text();
-        boolean sameMethodName = CheckUtils.asString(memberAccessTree.member()).equals(methodName);
+        boolean sameMethodName = memberAccessTree.member().toString().equals(methodName);
 
         if (isSuperClass(memberAccessTree.object()) && sameMethodName && sameArguments(functionCallTree, method)) {
           String message = String.format(MESSAGE, methodName);
@@ -133,7 +132,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
   }
 
   private boolean isSuperClass(ExpressionTree tree) {
-    String str = CheckUtils.asString(tree);
+    String str = tree.toString();
     return superClass.equalsIgnoreCase(str) || "parent".equalsIgnoreCase(str);
   }
 
