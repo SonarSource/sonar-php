@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -61,18 +62,21 @@ public class IncrementDecrementInSubExpressionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitForStatement(ForStatementTree tree) {
-    scan(tree.init());
-    scan(tree.condition());
-
-    for (ExpressionTree update : tree.update()) {
-      if (update.is(INC_DEC)) {
-        scan(((UnaryExpressionTree) update).expression());
-      } else {
-        scan(update);
-      }
-    }
+    scanExpressionList(tree.init());
+    scanExpressionList(tree.condition());
+    scanExpressionList(tree.update());
 
     scan(tree.statements());
+  }
+
+  private void scanExpressionList(SeparatedList<ExpressionTree> list) {
+    for (ExpressionTree expression : list) {
+      if (expression.is(INC_DEC)) {
+        scan(((UnaryExpressionTree) expression).expression());
+      } else {
+        scan(expression);
+      }
+    }
   }
 
   @Override

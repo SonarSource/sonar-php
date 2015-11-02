@@ -45,7 +45,7 @@ public class PHPSubscriptionCheckTest {
     testVisitor.analyze(file, tree);
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
-    assertThat(testVisitor.namespaceNameCounter).isEqualTo(2);
+    assertThat(testVisitor.namespaceNameCounter).isEqualTo(3);
     assertThat(testVisitor.varIdentifierCounter).isEqualTo(2);
   }
 

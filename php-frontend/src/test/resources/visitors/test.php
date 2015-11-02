@@ -7,5 +7,6 @@ class A extends B {
 
   public function foo() {
     $var = 1;
+    foo(1, 2);
   }
 }

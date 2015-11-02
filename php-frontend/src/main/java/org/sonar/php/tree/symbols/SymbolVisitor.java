@@ -39,7 +39,6 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -300,10 +299,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     tree.callee().accept(this);
     this.insideCallee.pop();
 
-    // fixme (Lena) : optimize through visitor
-    for (ExpressionTree argument : tree.arguments()) {
-      argument.accept(this);
-    }
+    scan(tree.arguments());
   }
 
   private void usageForNamespaceName(NamespaceNameTree namespaceName, Symbol.Kind kind) {

@@ -27,6 +27,8 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
@@ -48,11 +50,12 @@ public class PHPVisitorCheckTest {
     testVisitor.analyze(file, tree);
 
     assertThat(testVisitor.classCounter).isEqualTo(1);
-    assertThat(testVisitor.namespaceNameCounter).isEqualTo(2);
+    assertThat(testVisitor.namespaceNameCounter).isEqualTo(3);
     assertThat(testVisitor.varIdentifierCounter).isEqualTo(2);
     // PHPCheck#init() is called by PHPAnalyzer
     assertThat(testVisitor.initCounter).isEqualTo(0);
-    assertThat(testVisitor.tokenCounter).isEqualTo(25);
+    assertThat(testVisitor.literalCounter).isEqualTo(3);
+    assertThat(testVisitor.tokenCounter).isEqualTo(29);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
   }
 
@@ -64,6 +67,7 @@ public class PHPVisitorCheckTest {
     int initCounter = 0;
     int triviaCounter = 0;
     int tokenCounter = 0;
+    int literalCounter = 0;
 
     @Override
     public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -76,6 +80,12 @@ public class PHPVisitorCheckTest {
     public void visitNamespaceName(NamespaceNameTree tree) {
       super.visitNamespaceName(tree);
       namespaceNameCounter++;
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCallTree tree) {
+      tree.callee().accept(this);
+      scan(tree.arguments());
     }
 
     @Override
@@ -93,6 +103,12 @@ public class PHPVisitorCheckTest {
     public void visitToken(SyntaxToken token) {
       super.visitToken(token);
       tokenCounter++;
+    }
+
+    @Override
+    public void visitLiteral(LiteralTree tree) {
+      literalCounter++;
+      super.visitLiteral(tree);
     }
 
     @Override
