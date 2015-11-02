@@ -19,13 +19,18 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import com.google.common.annotations.Beta;
-
-import javax.annotation.Nullable;
-
+/**
+ * <a href="http://php.net/manual/en/language.oop5.traits.php">Trait alias</a>
+ * <pre>
+ * {@link #methodReference()} as {@link #alias()} ;
+ * {@link #methodReference()} as {@link #modifierToken()} {@link #alias()} ;
+ * </pre>
+ */
 @Beta
 public interface TraitAliasTree extends TraitAdaptationStatementTree {
 

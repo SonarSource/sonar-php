@@ -19,14 +19,21 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/language.oop5.traits.php">Trait use</a>
+ * <pre>
+ *   use {@link #traits()} {@link #adaptations()} ;
+ *   use {@link #traits()} { {@link #adaptations()} }
+ * </pre>
+ */
 public interface UseTraitDeclarationTree extends ClassMemberTree {
 
   SyntaxToken useToken();

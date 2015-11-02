@@ -24,6 +24,12 @@ import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/language.variables.scope.php#language.variables.scope.static">Static</a> variable declaration
+ * <pre>
+ *   static {@link #variables()} ;
+ * </pre>
+ */
 @Beta
 public interface StaticStatementTree extends StatementTree {
 

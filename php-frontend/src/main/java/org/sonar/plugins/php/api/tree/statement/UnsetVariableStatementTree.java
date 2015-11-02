@@ -24,6 +24,12 @@ import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/function.unset.php">Unset</a>
+ * <pre>
+ *   unset ( {@link #variables()} ) ;
+ * </pre>
+ */
 @Beta
 public interface UnsetVariableStatementTree extends StatementTree {
 

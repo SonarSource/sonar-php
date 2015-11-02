@@ -26,6 +26,13 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
 import java.util.List;
 
+/**
+ * <a href="http://php.net/manual/en/language.namespaces.php">Namespace</a> definition
+ * <pre>
+ * namespace {@link #namespaceName()} ;
+ * namespace {@link #namespaceName()} { {@link #statements()} }
+ * </pre>
+ */
 @Beta
 public interface NamespaceStatementTree extends StatementTree {
 

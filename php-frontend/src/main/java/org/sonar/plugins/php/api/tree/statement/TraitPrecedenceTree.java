@@ -24,6 +24,12 @@ import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * <a href="http://php.net/manual/en/language.oop5.traits.php">Trait precedence</a>
+ * <pre>
+ * {@link #methodReference()} insteadof {@link #traits()} ;
+ * </pre>
+ */
 @Beta
 public interface TraitPrecedenceTree extends TraitAdaptationStatementTree {
 
