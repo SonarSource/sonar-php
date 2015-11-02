@@ -45,9 +45,14 @@ public class InlineHTMLInFileCheck extends PHPVisitorCheck {
 
   @Override
   public void visitToken(SyntaxToken token) {
-    if (token.is(Kind.INLINE_HTML_TOKEN) && !"?>".equals(token.text().trim())) {
+    if (token.is(Kind.INLINE_HTML_TOKEN) && !isCloseTag(token)) {
       fileHasIssue = true;
     }
+  }
+
+  private static boolean isCloseTag(SyntaxToken token) {
+    String value = token.text().trim();
+    return "?>".equals(value) || "%>".equals(value);
   }
 
   @Override

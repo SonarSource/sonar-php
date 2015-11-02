@@ -37,6 +37,11 @@ public class InlineHTMLInFileCheckTest {
   }
 
   @Test
+  public void ok_asp() throws Exception {
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_asp.php"));
+  }
+
+  @Test
   public void ok_excluded_file() throws Exception {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.phtml"));
   }
