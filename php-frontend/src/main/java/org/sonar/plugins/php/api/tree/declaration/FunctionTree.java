@@ -26,7 +26,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import javax.annotation.Nullable;
 
 /**
- * Common interface for all types <a href="http://php.net/manual/en/language.functions.php">Function</a>.
+ * Common interface for all kinds of <a href="http://php.net/manual/en/language.functions.php">function</a>.
  */
 @Beta
 public interface FunctionTree extends Tree {

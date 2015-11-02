@@ -27,7 +27,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * <pre>
  *   {@link #expression()} {@link Tree.Kind#POSTFIX_INCREMENT ++}
  *   {@link #expression()} {@link Tree.Kind#POSTFIX_DECREMENT --}
- *   {@link Tree.Kind++} {@link #expression()}
  *   {@link Tree.Kind#ERROR_CONTROL @} {@link #expression()}
  *   {@link Tree.Kind#PREFIX_DECREMENT --} {@link #expression()}
  *   {@link Tree.Kind#PREFIX_INCREMENT ++} {@link #expression()}
