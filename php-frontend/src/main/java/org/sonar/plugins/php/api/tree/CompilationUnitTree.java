@@ -19,9 +19,9 @@
  */
 package org.sonar.plugins.php.api.tree;
 
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
+import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
  * Compilation Unit
@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
  *   {@link #script()} {@link #eofToken()}
  * </pre>
  */
+@Beta
 public interface CompilationUnitTree extends Tree {
   @Nullable
   ScriptTree script();

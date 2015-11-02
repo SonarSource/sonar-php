@@ -19,12 +19,14 @@
  */
 package org.sonar.plugins.php.api.tree.statement;
 
+import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
+@Beta
 public interface NamespaceStatementTree extends StatementTree {
 
   InternalSyntaxToken namespaceToken();

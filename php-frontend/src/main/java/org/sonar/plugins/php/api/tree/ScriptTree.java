@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.api.tree;
 
+import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
@@ -31,6 +32,7 @@ import java.util.List;
  *   {@literal<}?= {@link #statements()}
  * </pre>
  */
+@Beta
 public interface ScriptTree extends Tree {
 
   SyntaxToken fileOpeningTagToken();
