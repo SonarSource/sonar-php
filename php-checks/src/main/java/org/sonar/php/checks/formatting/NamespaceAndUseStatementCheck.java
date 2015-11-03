@@ -69,16 +69,11 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
       nextStatement = statements.get(i + 1);
       statements.get(i).accept(this);
     }
-
-    nextStatement = null;
-    statements.get(nbStatements - 1).accept(this);
-
   }
-
 
   @Override
   public void visitNamespaceStatement(NamespaceStatementTree tree) {
-    if (check.hasNamespaceBlankLine && nextStatement != null && !isFollowedWithBlankLine(tree)) {
+    if (check.hasNamespaceBlankLine && !isFollowedWithBlankLine(tree)) {
       String message = String.format(
         BLANK_LINE_NAMESPACE_MESSAGE,
         tree.namespaceName() == null ? "" : " " + tree.namespaceName().fullName());
@@ -90,7 +85,7 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
   public void visitUseStatement(UseStatementTree tree) {
     useStatements.add(tree);
 
-    if (nextStatement != null && !nextStatement.is(USE_KINDS)) {
+    if (!nextStatement.is(USE_KINDS)) {
       checkUsesAreBeforeNamespace();
       checkBlankLineAfterUses(tree);
       useStatements.clear();

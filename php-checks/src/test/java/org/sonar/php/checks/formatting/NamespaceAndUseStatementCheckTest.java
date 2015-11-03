@@ -40,4 +40,11 @@ public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTe
     deactivateAll();
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), ImmutableList.<Issue>of());
   }
+
+  @Test
+  public void emptyScript() throws Exception {
+    activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "empty-script.php"));
+  }
+
 }
