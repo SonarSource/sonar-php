@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -55,7 +56,7 @@ public class ClosingTagInFullPHPFileCheck extends PHPVisitorCheck {
   public void visitToken(SyntaxToken token) {
     if (token.is(Kind.INLINE_HTML_TOKEN)) {
       inlineHTMLCounter++;
-      isOnlyClosingTag = "?>".equals(token.text().trim());
+      isOnlyClosingTag = CheckUtils.isClosingTag(token);
       lastInlineHTMLToken = token;
     }
   }

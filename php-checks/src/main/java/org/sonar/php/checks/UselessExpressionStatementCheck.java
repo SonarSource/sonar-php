@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -111,7 +112,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 
   @Override
   public void visitToken(SyntaxToken token) {
-    if (token.is(Kind.INLINE_HTML_TOKEN) && !token.text().equals("?>") && !token.text().equals("%>")) {
+    if (token.is(Kind.INLINE_HTML_TOKEN) && !CheckUtils.isClosingTag(token)) {
       fileContainsHTML = true;
     }
   }

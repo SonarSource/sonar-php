@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -45,14 +46,9 @@ public class InlineHTMLInFileCheck extends PHPVisitorCheck {
 
   @Override
   public void visitToken(SyntaxToken token) {
-    if (token.is(Kind.INLINE_HTML_TOKEN) && !isCloseTag(token)) {
+    if (token.is(Kind.INLINE_HTML_TOKEN) && !CheckUtils.isClosingTag(token)) {
       fileHasIssue = true;
     }
-  }
-
-  private static boolean isCloseTag(SyntaxToken token) {
-    String value = token.text().trim();
-    return "?>".equals(value) || "%>".equals(value);
   }
 
   @Override
@@ -69,7 +65,5 @@ public class InlineHTMLInFileCheck extends PHPVisitorCheck {
   private boolean isExcludedFile() {
     return context().file().getName().endsWith(".phtml");
   }
-
-
 
 }

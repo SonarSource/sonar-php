@@ -103,4 +103,12 @@ public class CheckUtils {
     return false;
   }
 
+  public static boolean isClosingTag(SyntaxToken token) {
+    if (token.is(Kind.INLINE_HTML_TOKEN)) {
+      String text = token.text().trim();
+      return "?>".equals(text) || "%>".equals(text);
+    }
+    return false;
+  }
+
 }
