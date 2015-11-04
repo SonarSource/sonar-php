@@ -22,14 +22,19 @@ package org.sonar.php.checks;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Rule(
   key = UselessExpressionStatementCheck.KEY,
@@ -77,13 +82,37 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
     Kind.BOOLEAN_LITERAL
   };
 
+  private boolean fileContainsHTML;
+  private List<Tree> uselessNodes;
+
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    this.fileContainsHTML = false;
+    uselessNodes = new ArrayList<>();
+
+    super.visitCompilationUnit(tree);
+
+    if (!fileContainsHTML) {
+      for (Tree uselessNode : uselessNodes) {
+        context().newIssue(this, MESSAGE).tree(uselessNode);
+      }
+    }
+  }
+
   @Override
   public void visitExpressionStatement(ExpressionStatementTree tree) {
     ExpressionTree expression = tree.expression();
     if (expression.is(USELESS_KINDS)) {
-      context().newIssue(this, MESSAGE).tree(tree);
+      uselessNodes.add(tree);
     }
 
     super.visitExpressionStatement(tree);
+  }
+
+  @Override
+  public void visitToken(SyntaxToken token) {
+    if (token.is(Kind.INLINE_HTML_TOKEN) && !token.text().equals("?>") && !token.text().equals("%>")) {
+      fileContainsHTML = true;
+    }
   }
 }

@@ -29,4 +29,9 @@ public class UselessExpressionStatementCheckTest {
   public void test() throws Exception {
     PHPCheckTest.check(new UselessExpressionStatementCheck(), TestUtils.getCheckFile("UselessExpressionStatementCheck.php"));
   }
+
+  @Test
+  public void test_no_issue_in_file_with_html() throws Exception {
+    PHPCheckTest.check(new UselessExpressionStatementCheck(), TestUtils.getCheckFile("UselessExpressionStatementCheckHTML.php"));
+  }
 }
