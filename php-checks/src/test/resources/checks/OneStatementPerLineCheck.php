@@ -46,5 +46,9 @@ html
 
 <h1 a="<?php echo $a;?>" b="<?php echo $b;?>">  // OK
 
+<h1 a="<?php echo $a?>" b="<?php echo $b?>">  // OK
+
+<h1 a="<?php echo $a?>" b="<?php echo $b;?>">  // OK
+
 
 

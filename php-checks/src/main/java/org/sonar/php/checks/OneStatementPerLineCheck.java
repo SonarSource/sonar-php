@@ -85,7 +85,7 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
         Kind.FUNCTION_EXPRESSION,
         Kind.GLOBAL_STATEMENT,
         Kind.GOTO_STATEMENT,
-        Kind.INLINE_HTML,
+        Kind.INLINE_HTML_TOKEN,
         Kind.RETURN_STATEMENT,
         Kind.STATIC_STATEMENT,
         Kind.SWITCH_STATEMENT,
@@ -110,7 +110,7 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
 
     int line = line(tree);
 
-    if (tree.is(Kind.INLINE_HTML)) {
+    if (tree.is(Kind.INLINE_HTML_TOKEN)) {
       linesWithHtml.add(line);
 
     } else if (tree.is(Kind.FUNCTION_EXPRESSION)) {
