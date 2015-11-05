@@ -22,6 +22,16 @@ package org.sonar.plugins.php.api.tree.statement;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
+/**
+ * This interface presents HTML code embedded into php code.
+ * <p>NOTE! If you want consider all HTML code in the tree you should use {@link SyntaxToken} with kind {@link Kind#INLINE_HTML_TOKEN}.
+ * <p> In the following code both "?> &lt;/a> <?php" are presented as {@link Kind#INLINE_HTML_TOKEN} but in first line this token is part of assignment statement
+ * ({@link ExpressionStatementTree#eosToken()}).
+ * <pre>
+ *   ... $a = 5 ?> &lt;/a> <?php ...   // "?> &lt;/a> <?php" is considered as end of assignment statement
+ *   ... $a = 5; ?> &lt;/a> <?php ...   // ";" is considered as end of assignment statement and "?> &lt;/a> <?php" is considered as instance of {@link InlineHTMLTree}
+ * </pre>
+ */
 @Beta
 public interface InlineHTMLTree extends StatementTree {
 
