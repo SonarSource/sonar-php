@@ -51,7 +51,7 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
     this.kind = isInlineHTML(value) ? Kind.INLINE_HTML_TOKEN : Kind.TOKEN;
   }
 
-  private boolean isInlineHTML(String value) {
+  private static boolean isInlineHTML(String value) {
     return value.startsWith("?>") || value.startsWith("%>");
   }
 
