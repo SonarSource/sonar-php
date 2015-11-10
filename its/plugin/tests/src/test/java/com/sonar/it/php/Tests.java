@@ -19,6 +19,7 @@
  */
 package com.sonar.it.php;
 
+import com.google.common.collect.Iterables;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
@@ -27,6 +28,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Arrays;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -49,7 +52,12 @@ public class Tests {
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
       // PHP Plugin
-      .addPlugin(FileLocation.of("../../../sonar-php-plugin/target/sonar-php-plugin.jar"))
+      .addPlugin(FileLocation.of(Iterables.getOnlyElement(Arrays.asList(new File("../../../sonar-php-plugin/target/").listFiles(new FilenameFilter() {
+        @Override
+        public boolean accept(File dir, String name) {
+          return name.endsWith(".jar") && !name.endsWith("-sources.jar");
+        }
+      }))).getAbsolutePath()))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
       // Custom rules plugin
       .addPlugin(FileLocation.of("../plugins/php-custom-rules-plugin/target/php-custom-rules-plugin-1.0-SNAPSHOT.jar"))

@@ -5,17 +5,21 @@
  */
 package org.sonar.php.it;
 
+import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarRunner;
 import com.sonar.orchestrator.locator.FileLocation;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class PHPRulingTest {
 
@@ -23,7 +27,12 @@ public class PHPRulingTest {
 
   @ClassRule
   public static Orchestrator ORCHESTRATOR = Orchestrator.builderEnv()
-    .addPlugin(FileLocation.of("../../sonar-php-plugin/target/sonar-php-plugin.jar"))
+    .addPlugin(FileLocation.of(Iterables.getOnlyElement(Arrays.asList(new File("../../sonar-php-plugin/target/").listFiles(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.endsWith(".jar") && !name.endsWith("-sources.jar");
+      }
+    }))).getAbsolutePath()))
     .setOrchestratorProperty("litsVersion", "0.5")
     .addPlugin("lits")
     .restoreProfileAtStartup(FileLocation.of("src/test/resources/profile.xml"))
