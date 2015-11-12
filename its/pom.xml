@@ -6,15 +6,16 @@
   <parent>
     <groupId>org.sonarsource.php</groupId>
     <version>2.8-SNAPSHOT</version>
-    <artifactId>it-php-plugin</artifactId>
+    <artifactId>php</artifactId>
   </parent>
 
-  <artifactId>it-php-plugin-plugins</artifactId>
-  <name>PHP :: IT :: Plugin :: Plugins</name>
+  <artifactId>php-its</artifactId>
+  <name>PHP :: IT</name>
   <packaging>pom</packaging>
 
   <modules>
-    <module>php-custom-rules-plugin</module>
+    <module>plugin</module>
+    <module>ruling</module>
   </modules>
 
 </project>

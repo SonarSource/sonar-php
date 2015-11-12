@@ -1,5 +1,5 @@
 /*
- * PHP :: Integration Tests
+ * SonarQube PHP Plugin
  * Copyright (C) 2011 SonarSource
  * sonarqube@googlegroups.com
  *
