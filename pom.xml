@@ -10,7 +10,7 @@
 
   <groupId>org.sonarsource.php</groupId>
   <artifactId>php</artifactId>
-  <version>2.7-SNAPSHOT</version>
+  <version>2.7</version>
   <packaging>pom</packaging>
 
   <name>PHP</name>
@@ -78,7 +78,7 @@
     <connection>scm:git:git@github.com:SonarCommunity/sonar-php.git</connection>
     <developerConnection>scm:git:git@github.com:SonarCommunity/sonar-php.git</developerConnection>
     <url>https://github.com/SonarCommunity/sonar-php</url>
-    <tag>HEAD</tag>
+    <tag>2.7</tag>
   </scm>
   <issueManagement>
     <system>JIRA</system>
