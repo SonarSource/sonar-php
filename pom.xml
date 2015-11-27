@@ -75,9 +75,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:SonarCommunity/sonar-php.git</connection>
-    <developerConnection>scm:git:git@github.com:SonarCommunity/sonar-php.git</developerConnection>
-    <url>https://github.com/SonarCommunity/sonar-php</url>
+    <connection>scm:git:git@github.com:SonarSource/sonar-php.git</connection>
+    <developerConnection>scm:git:git@github.com:SonarSource/sonar-php.git</developerConnection>
+    <url>https://github.com/SonarSource/sonar-php</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
