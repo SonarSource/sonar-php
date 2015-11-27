@@ -3,7 +3,7 @@ Sonar PHP plugin
 
 ### Build status
 
-[![Build Status](https://travis-ci.org/SonarCommunity/sonar-php.svg?branch=master)](https://travis-ci.org/SonarCommunity/sonar-php)
+[![Build Status](https://travis-ci.org/SonarSource/sonar-php.svg?branch=master)](https://travis-ci.org/SonarSource/sonar-php)
 
 This is the Sonar PHP plugin
 
