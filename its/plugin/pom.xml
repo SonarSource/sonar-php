@@ -4,15 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.sonarsource.parent</groupId>
-    <artifactId>parent</artifactId>
-    <version>24</version>
+    <groupId>org.sonarsource.php</groupId>
+    <version>2.8-SNAPSHOT</version>
+    <artifactId>php-its</artifactId>
   </parent>
 
-  <groupId>org.sonarsource.it.php</groupId>
   <artifactId>it-php-plugin</artifactId>
-  <name>SonarSource :: PHP :: ITs :: Plugin</name>
-  <version>1.0-SNAPSHOT</version>
+  <name>PHP :: IT :: Plugin</name>
   <packaging>pom</packaging>
 
   <organization>

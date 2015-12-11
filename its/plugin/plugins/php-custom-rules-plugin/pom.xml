@@ -3,19 +3,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.sonarsource.it.php</groupId>
+  <parent>
+    <groupId>org.sonarsource.php</groupId>
+    <version>2.8-SNAPSHOT</version>
+    <artifactId>it-php-plugin-plugins</artifactId>
+  </parent>
+
   <artifactId>php-custom-rules-plugin</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
-  <name>PHP Custom Rules Plugin</name>
+  <name>PHP :: IT :: Plugin :: Plugins :: Custom Rules</name>
   <description>PHP Custom Rules</description>
 
   <dependencies>
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-plugin-api</artifactId>
-      <version>4.5.2</version>
       <scope>provided</scope>
     </dependency>
 
@@ -23,7 +26,7 @@
       <groupId>org.sonarsource.php</groupId>
       <artifactId>sonar-php-plugin</artifactId>
       <type>sonar-plugin</type>
-      <version>2.8-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

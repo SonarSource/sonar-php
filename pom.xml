@@ -33,6 +33,7 @@
     <module>sonar-php-plugin</module>
     <module>php-frontend</module>
     <module>php-checks</module>
+    <module>its</module>
   </modules>
 
   <developers>
