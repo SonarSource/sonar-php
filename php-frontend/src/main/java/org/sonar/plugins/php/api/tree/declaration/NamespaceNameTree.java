@@ -44,7 +44,7 @@ import javax.annotation.Nullable;
  * <pre/>
  */
 @Beta
-public interface NamespaceNameTree extends ExpressionTree {
+public interface NamespaceNameTree extends ExpressionTree, TypeTree {
 
   @Nullable
   SyntaxToken absoluteSeparator();

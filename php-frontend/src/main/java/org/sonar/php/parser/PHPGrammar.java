@@ -39,6 +39,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -101,6 +102,7 @@ import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
+import static org.sonar.php.api.PHPKeyword.CALLABLE;
 import static org.sonar.php.api.PHPKeyword.CLASS;
 import static org.sonar.php.api.PHPKeyword.DIE;
 import static org.sonar.php.api.PHPKeyword.ECHO;
@@ -433,6 +435,21 @@ public class PHPGrammar {
         NAMESPACE_NAME(),
         b.token(PHPPunctuator.DOUBLECOLON),
         b.token(PHPLexicalGrammar.IDENTIFIER)));
+  }
+
+  public TypeTree TYPE_NAME() {
+    return b.<TypeTree>nonterminal(PHPLexicalGrammar.TYPE_NAME).is(
+      b.firstOf(
+        f.builtInType(b.firstOf(
+          b.token(ARRAY),
+          b.token(CALLABLE),
+          b.token(PHPLexicalGrammar.SELF),
+          b.token(PHPLexicalGrammar.BOOL),
+          b.token(PHPLexicalGrammar.FLOAT),
+          b.token(PHPLexicalGrammar.INT),
+          b.token(PHPLexicalGrammar.STRING))),
+        NAMESPACE_NAME()
+      ));
   }
 
   /**

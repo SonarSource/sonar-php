@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.tree;
 
 import com.google.common.annotations.Beta;
 import com.sonar.sslr.api.AstNodeType;
+import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -885,7 +886,12 @@ public interface Tree {
     /**
      * {@link UnsetVariableStatementTree}
      */
-    UNSET_VARIABLE_STATEMENT(UnsetVariableStatementTree.class);
+    UNSET_VARIABLE_STATEMENT(UnsetVariableStatementTree.class),
+
+    /**
+     * {@link BuiltInTypeTree}
+     */
+    BUILT_IN_TYPE(BuiltInTypeTree.class);
 
     final Class<? extends Tree> associatedInterface;
 

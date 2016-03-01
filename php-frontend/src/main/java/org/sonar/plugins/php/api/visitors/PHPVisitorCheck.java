@@ -25,6 +25,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -495,6 +496,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitSkippedListElement(ExpressionTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitBuiltInType(BuiltInTypeTree tree) {
     scan(tree);
   }
 

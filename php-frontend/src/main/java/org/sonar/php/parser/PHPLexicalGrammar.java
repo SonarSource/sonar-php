@@ -61,6 +61,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   TRAIT_ALIAS,
   TRAIT_PRECEDENCE,
 
+  TYPE_NAME,
+
   /**
    * Lexical
    */
@@ -215,6 +217,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   CLONE,
   PRINT,
 
+  SELF,
+
   INTEGER,
   INT,
   DOUBLE,
@@ -293,6 +297,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(REQUIRE).is(word(b, "REQUIRE")).skip();
     b.rule(CLONE).is(word(b, "CLONE")).skip();
     b.rule(PRINT).is(word(b, "PRINT")).skip();
+
+    b.rule(SELF).is(word(b, "SELF")).skip();
 
     b.rule(INTEGER).is(word(b, "INTEGER")).skip();
     b.rule(INT).is(word(b, "INT")).skip();

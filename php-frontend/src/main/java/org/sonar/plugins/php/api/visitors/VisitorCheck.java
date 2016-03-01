@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
@@ -133,6 +134,8 @@ public interface VisitorCheck extends PHPCheck {
   void visitTraitMethodReference(TraitMethodReferenceTree tree);
 
   void visitClassDeclaration(ClassDeclarationTree tree);
+
+  void visitBuiltInType(BuiltInTypeTree tree);
 
   /**
    * [ END ] Declaration

@@ -24,12 +24,18 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
 import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
+import org.sonar.php.tree.impl.declaration.BuiltInTypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ClassPropertyDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.ConstantDeclarationTreeImpl;
@@ -110,6 +116,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -182,12 +189,6 @@ import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 
 public class TreeFactory {
@@ -1521,6 +1522,10 @@ public class TreeFactory {
 
   public ExpressionTree completeConditionalExpr(ExpressionTree expression, Optional<ConditionalExpressionTreeImpl> partial) {
     return partial.isPresent() ? partial.get().complete(expression) : expression;
+  }
+
+  public BuiltInTypeTree builtInType(InternalSyntaxToken token) {
+    return new BuiltInTypeTreeImpl(token);
   }
 
   /**
