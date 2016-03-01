@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
@@ -501,6 +502,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitBuiltInType(BuiltInTypeTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitReturnTypeClause(ReturnTypeClauseTree tree) {
     scan(tree);
   }
 

@@ -24,6 +24,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -36,25 +37,29 @@ import java.util.Iterator;
 public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpressionTree {
 
   private static final Kind KIND = Kind.FUNCTION_EXPRESSION;
-  @Nullable
   private final InternalSyntaxToken staticToken;
   private final InternalSyntaxToken functionToken;
-  @Nullable
   private final InternalSyntaxToken referenceToken;
   private final ParameterListTree parameters;
-  @Nullable
   private final LexicalVariablesTree lexicalVars;
+  private final ReturnTypeClauseTree returnTypeClause;
   private final BlockTree body;
 
   public FunctionExpressionTreeImpl(
-    @Nullable InternalSyntaxToken staticToken, InternalSyntaxToken functionToken, @Nullable InternalSyntaxToken referenceToken,
-    ParameterListTree parameters, @Nullable LexicalVariablesTree lexicalVars, BlockTree body
+    @Nullable InternalSyntaxToken staticToken,
+    InternalSyntaxToken functionToken,
+    @Nullable InternalSyntaxToken referenceToken,
+    ParameterListTree parameters,
+    @Nullable LexicalVariablesTree lexicalVars,
+    @Nullable ReturnTypeClauseTree returnTypeClause,
+    BlockTree body
   ) {
     this.staticToken = staticToken;
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
     this.parameters = parameters;
     this.lexicalVars = lexicalVars;
+    this.returnTypeClause = returnTypeClause;
     this.body = body;
   }
 
@@ -82,6 +87,12 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
 
   @Nullable
   @Override
+  public ReturnTypeClauseTree returnTypeClause() {
+    return returnTypeClause;
+  }
+
+  @Nullable
+  @Override
   public LexicalVariablesTree lexicalVars() {
     return lexicalVars;
   }
@@ -98,7 +109,7 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(staticToken, functionToken, referenceToken, parameters, lexicalVars, body);
+    return Iterators.forArray(staticToken, functionToken, referenceToken, parameters, lexicalVars, returnTypeClause, body);
   }
 
   @Override

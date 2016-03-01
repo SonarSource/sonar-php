@@ -19,10 +19,10 @@
  */
 package org.sonar.php.parser.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class FunctionDeclarationTest {
 
@@ -30,6 +30,8 @@ public class FunctionDeclarationTest {
   public void test() {
     assertThat(PHPLexicalGrammar.FUNCTION_DECLARATION)
       .matches("function f() {}")
-      .matches("function &f() {}");
+      .matches("function &f() {}")
+      .matches("function f() : bool {}")
+    ;
   }
 }

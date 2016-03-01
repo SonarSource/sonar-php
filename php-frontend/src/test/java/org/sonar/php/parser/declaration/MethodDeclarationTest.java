@@ -19,10 +19,10 @@
  */
 package org.sonar.php.parser.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class MethodDeclarationTest {
 
@@ -35,7 +35,9 @@ public class MethodDeclarationTest {
       .matches("private function f () {}")
       .matches("protected abstract function f () {}")
       .matches("public static function f () {}")
-      .matches("final function f () {}");
+      .matches("final function f () {}")
+      .matches("function f () : bool {}")
+    ;
   }
 
   @Test

@@ -25,6 +25,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -42,6 +43,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   private final InternalSyntaxToken referenceToken;
   private final NameIdentifierTree name;
   private final ParameterListTree parameters;
+  private final ReturnTypeClauseTree returnTypeClause;
   private final Tree body;
 
   public MethodDeclarationTreeImpl(
@@ -50,6 +52,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     @Nullable InternalSyntaxToken referenceToken,
     NameIdentifierTree name,
     ParameterListTree parameters,
+    @Nullable ReturnTypeClauseTree returnTypeClause,
     Tree body
     ) {
     this.modifiersToken = modifiersToken;
@@ -57,6 +60,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     this.referenceToken = referenceToken;
     this.name = name;
     this.parameters = parameters;
+    this.returnTypeClause = returnTypeClause;
     this.body = body;
   }
 
@@ -86,6 +90,12 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
     return parameters;
   }
 
+  @Nullable
+  @Override
+  public ReturnTypeClauseTree returnTypeClause() {
+    return returnTypeClause;
+  }
+
   @Override
   public Tree body() {
     return body;
@@ -100,7 +110,7 @@ public class MethodDeclarationTreeImpl extends PHPTree implements MethodDeclarat
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       modifiersToken.iterator(),
-      Iterators.forArray(functionToken, referenceToken, name, parameters, body));
+      Iterators.forArray(functionToken, referenceToken, name, parameters, returnTypeClause, body));
   }
 
   @Override

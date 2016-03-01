@@ -28,6 +28,7 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -43,6 +44,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
   private final InternalSyntaxToken referenceToken;
   private final NameIdentifierTree name;
   private final ParameterListTree parameters;
+  private final ReturnTypeClauseTree returnTypeClause;
   private final BlockTree body;
 
   public FunctionDeclarationTreeImpl(
@@ -50,12 +52,14 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
     @Nullable InternalSyntaxToken referenceToken,
     NameIdentifierTree name,
     ParameterListTree parameters,
+    @Nullable ReturnTypeClauseTree returnTypeClause,
     BlockTree body
-    ) {
+  ) {
     this.functionToken = functionToken;
     this.referenceToken = referenceToken;
     this.name = name;
     this.parameters = parameters;
+    this.returnTypeClause = returnTypeClause;
     this.body = body;
   }
 
@@ -80,6 +84,12 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
     return parameters;
   }
 
+  @Nullable
+  @Override
+  public ReturnTypeClauseTree returnTypeClause() {
+    return returnTypeClause;
+  }
+
   @Override
   public BlockTree body() {
     return body;
@@ -92,7 +102,7 @@ public class FunctionDeclarationTreeImpl extends PHPTree implements FunctionDecl
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(functionToken, referenceToken, name, parameters, body);
+    return Iterators.forArray(functionToken, referenceToken, name, parameters, returnTypeClause, body);
   }
 
   @Override

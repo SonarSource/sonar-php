@@ -23,23 +23,16 @@ import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
-
 /**
- * Common interface for all kinds of <a href="http://php.net/manual/en/language.functions.php">function</a>.
+ * ReturnTypeClauseTree is an optional element of function declaration
+ * <pre>
+ *  : {@link #type()}
+ *  </pre>
  */
 @Beta
-public interface FunctionTree extends Tree {
+public interface ReturnTypeClauseTree extends Tree {
 
-  SyntaxToken functionToken();
+  SyntaxToken colonToken();
 
-  @Nullable
-  SyntaxToken referenceToken();
-
-  ParameterListTree parameters();
-
-  @Nullable
-  ReturnTypeClauseTree returnTypeClause();
-
-  Tree body();
+  TypeTree type();
 }

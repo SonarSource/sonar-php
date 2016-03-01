@@ -19,18 +19,18 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 public class MethodDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void method_declaration() throws Exception {
+  public void test() throws Exception {
     MethodDeclarationTree tree = parse("public final function &f($p) {}", PHPLexicalGrammar.METHOD_DECLARATION);
     assertThat(tree.is(Kind.METHOD_DECLARATION)).isTrue();
     assertThat(tree.modifiers()).hasSize(2);
@@ -38,7 +38,14 @@ public class MethodDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.referenceToken()).isNotNull();
     assertThat(tree.name().text()).isEqualTo("f");
     assertThat(tree.parameters().parameters()).hasSize(1);
+    assertThat(tree.returnTypeClause()).isNull();
     assertThat(tree.body().is(Kind.BLOCK)).isTrue();
+  }
+
+  @Test
+  public void return_type() throws Exception {
+    MethodDeclarationTree tree = parse("public function f() : bool {}", PHPLexicalGrammar.METHOD_DECLARATION);
+    assertThat(tree.returnTypeClause()).isNotNull();
   }
 
 }

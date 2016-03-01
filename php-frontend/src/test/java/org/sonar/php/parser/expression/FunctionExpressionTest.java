@@ -31,7 +31,10 @@ public class FunctionExpressionTest {
     assertThat(Tree.Kind.FUNCTION_EXPRESSION)
       .matches("function () {}")
       .matches("function &() {}")
-      .matches("function () use ($a) {}");
+      .matches("function () use ($a) {}")
+      .matches("function () : bool {}")
+      .matches("function () use ($a) : bool {}")
+    ;
   }
 
 }

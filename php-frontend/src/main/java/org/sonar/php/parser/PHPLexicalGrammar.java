@@ -62,6 +62,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   TRAIT_PRECEDENCE,
 
   TYPE_NAME,
+  RETURN_TYPE_CLAUSE,
 
   /**
    * Lexical

@@ -19,13 +19,13 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
 
@@ -37,6 +37,7 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.name().text()).isEqualTo("f");
     assertThat(tree.parameters().parameters()).hasSize(1);
+    assertThat(tree.returnTypeClause()).isNull();
     assertThat(tree.body().statements()).isEmpty();
   }
 
@@ -45,5 +46,14 @@ public class FunctionDeclarationTreeTest extends PHPTreeModelTest {
     FunctionDeclarationTree tree = parse("function &f($p) {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
     assertThat(tree.referenceToken()).isNotNull();
   }
+
+  @Test
+  public void with_return_type_clause() throws Exception {
+    FunctionDeclarationTree tree = parse("function f() : array {}", PHPLexicalGrammar.FUNCTION_DECLARATION);
+    assertThat(tree.returnTypeClause()).isNotNull();
+    assertThat(tree.returnTypeClause().colonToken().text()).isEqualTo(":");
+    assertThat(tree.returnTypeClause().type().is(Kind.BUILT_IN_TYPE)).isTrue();
+  }
+
 
 }

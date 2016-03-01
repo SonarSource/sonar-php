@@ -50,6 +50,10 @@ public interface FunctionDeclarationTree extends FunctionTree, StatementTree {
   ParameterListTree parameters();
 
   @Override
+  @Nullable
+  ReturnTypeClauseTree returnTypeClause();
+
+  @Override
   BlockTree body();
 
 }

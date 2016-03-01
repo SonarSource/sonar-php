@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -57,7 +58,21 @@ public interface MethodDeclarationTree extends ClassMemberTree, FunctionTree {
    */
   List<SyntaxToken> modifiers();
 
+  @Override
+  SyntaxToken functionToken();
+
+  @Override
+  @Nullable
+  SyntaxToken referenceToken();
+
   NameIdentifierTree name();
+
+  @Override
+  ParameterListTree parameters();
+
+  @Override
+  @Nullable
+  ReturnTypeClauseTree returnTypeClause();
 
   /**
    * Either {@link PHPPunctuator#SEMICOLON ;} or {@link Tree.Kind#BLOCK block}

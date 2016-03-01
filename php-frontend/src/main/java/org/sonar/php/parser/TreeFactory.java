@@ -44,6 +44,7 @@ import org.sonar.php.tree.impl.declaration.MethodDeclarationTreeImpl;
 import org.sonar.php.tree.impl.declaration.NamespaceNameTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterListTreeImpl;
 import org.sonar.php.tree.impl.declaration.ParameterTreeImpl;
+import org.sonar.php.tree.impl.declaration.ReturnTypeClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
@@ -126,6 +127,8 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -352,9 +355,10 @@ public class TreeFactory {
     Optional<InternalSyntaxToken> referenceToken,
     NameIdentifierTree name,
     ParameterListTree parameters,
+    Optional<ReturnTypeClauseTree> returnTypeClause,
     Tree body
   ) {
-    return new MethodDeclarationTreeImpl(optionalList(modifiers), functionToken, referenceToken.orNull(), name, parameters, body);
+    return new MethodDeclarationTreeImpl(optionalList(modifiers), functionToken, referenceToken.orNull(), name, parameters, returnTypeClause.orNull(), body);
   }
 
   public FunctionDeclarationTree functionDeclaration(
@@ -362,9 +366,10 @@ public class TreeFactory {
     Optional<InternalSyntaxToken> referenceToken,
     NameIdentifierTree name,
     ParameterListTree parameters,
+    Optional<ReturnTypeClauseTree> returnTypeClauseTree,
     BlockTree body
   ) {
-    return new FunctionDeclarationTreeImpl(functionToken, referenceToken.orNull(), name, parameters, body);
+    return new FunctionDeclarationTreeImpl(functionToken, referenceToken.orNull(), name, parameters, returnTypeClauseTree.orNull(), body);
   }
 
   public ParameterListTree parameterList(
@@ -1417,8 +1422,13 @@ public class TreeFactory {
   }
 
   public FunctionExpressionTree functionExpression(
-    Optional<InternalSyntaxToken> staticToken, InternalSyntaxToken functionToken, Optional<InternalSyntaxToken> ampersandToken,
-    ParameterListTree parameters, Optional<LexicalVariablesTree> lexicalVariables, BlockTree block
+    Optional<InternalSyntaxToken> staticToken,
+    InternalSyntaxToken functionToken,
+    Optional<InternalSyntaxToken> ampersandToken,
+    ParameterListTree parameters,
+    Optional<LexicalVariablesTree> lexicalVariables,
+    Optional<ReturnTypeClauseTree> returnTypeClause,
+    BlockTree block
   ) {
 
     return new FunctionExpressionTreeImpl(
@@ -1427,6 +1437,7 @@ public class TreeFactory {
       ampersandToken.orNull(),
       parameters,
       lexicalVariables.orNull(),
+      returnTypeClause.orNull(),
       block);
   }
 
@@ -1526,6 +1537,10 @@ public class TreeFactory {
 
   public BuiltInTypeTree builtInType(InternalSyntaxToken token) {
     return new BuiltInTypeTreeImpl(token);
+  }
+
+  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken token, TypeTree typeTree) {
+    return new ReturnTypeClauseTreeImpl(token, typeTree);
   }
 
   /**

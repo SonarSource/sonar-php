@@ -38,6 +38,7 @@ public class FunctionExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.parameters().parameters()).isEmpty();
     assertThat(tree.lexicalVars()).isNull();
+    assertThat(tree.returnTypeClause()).isNull();
     assertThat(expressionToString(tree.body())).isEqualTo("{}");
   }
 
@@ -51,6 +52,7 @@ public class FunctionExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.referenceToken().text()).isEqualTo("&");
     assertThat(tree.parameters().parameters()).isEmpty();
     assertThat(tree.lexicalVars()).isNull();
+    assertThat(tree.returnTypeClause()).isNull();
     assertThat(expressionToString(tree.body())).isEqualTo("{}");
   }
 
@@ -64,6 +66,7 @@ public class FunctionExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.parameters().parameters()).isEmpty();
     assertThat(tree.lexicalVars()).isNull();
+    assertThat(tree.returnTypeClause()).isNull();
     assertThat(expressionToString(tree.body())).isEqualTo("{}");
   }
 
@@ -77,6 +80,21 @@ public class FunctionExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.referenceToken()).isNull();
     assertThat(tree.parameters().parameters()).isEmpty();
     assertThat(tree.lexicalVars()).isNotNull();
+    assertThat(tree.returnTypeClause()).isNull();
+    assertThat(expressionToString(tree.body())).isEqualTo("{}");
+  }
+
+  @Test
+  public void with_return_type() throws Exception {
+    FunctionExpressionTree tree = parse("function () : bool {}", Kind.FUNCTION_EXPRESSION);
+
+    assertThat(tree.is(Kind.FUNCTION_EXPRESSION)).isTrue();
+    assertThat(tree.staticToken()).isNull();
+    assertThat(tree.functionToken().text()).isEqualTo("function");
+    assertThat(tree.referenceToken()).isNull();
+    assertThat(tree.parameters().parameters()).isEmpty();
+    assertThat(tree.lexicalVars()).isNull();
+    assertThat(tree.returnTypeClause()).isNotNull();
     assertThat(expressionToString(tree.body())).isEqualTo("{}");
   }
 

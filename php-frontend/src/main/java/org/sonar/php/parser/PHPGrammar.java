@@ -39,6 +39,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -325,6 +326,7 @@ public class PHPGrammar {
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         NAME_IDENTIFIER(),
         PARAMETER_LIST(),
+        b.optional(RETURN_TYPE_CLAUSE()),
         b.firstOf(
           EOS(),
           BLOCK())));
@@ -337,7 +339,14 @@ public class PHPGrammar {
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         NAME_IDENTIFIER(),
         PARAMETER_LIST(),
+        b.optional(RETURN_TYPE_CLAUSE()),
         BLOCK()));
+  }
+
+  public ReturnTypeClauseTree RETURN_TYPE_CLAUSE() {
+    return b.<ReturnTypeClauseTree>nonterminal(PHPLexicalGrammar.RETURN_TYPE_CLAUSE).is(
+      f.returnTypeClause(b.token(COLON), TYPE_NAME())
+    );
   }
 
   public ParameterListTree PARAMETER_LIST() {
@@ -1459,6 +1468,7 @@ public class PHPGrammar {
         b.optional(b.token(AMPERSAND)),
         PARAMETER_LIST(),
         b.optional(LEXICAL_VARIABLES()),
+        b.optional(RETURN_TYPE_CLAUSE()),
         BLOCK()));
   }
 

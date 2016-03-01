@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 
@@ -54,6 +55,10 @@ public interface FunctionExpressionTree extends FunctionTree, ExpressionTree {
 
   @Nullable
   LexicalVariablesTree lexicalVars();
+
+  @Override
+  @Nullable
+  ReturnTypeClauseTree returnTypeClause();
 
   @Override
   BlockTree body();
