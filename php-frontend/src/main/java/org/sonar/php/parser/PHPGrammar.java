@@ -1210,6 +1210,7 @@ public class PHPGrammar {
     return b.<YieldExpressionTree>nonterminal(Kind.YIELD_EXPRESSION).is(
       b.firstOf(
         f.yieldExpressionWithKey(b.token(YIELD), EXPRESSION(), b.token(DOUBLEARROW), EXPRESSION()),
+        f.yieldFromExpression(b.token(YIELD), b.token(PHPLexicalGrammar.FROM), EXPRESSION()),
         f.yieldExpression(b.token(YIELD), b.optional(EXPRESSION()))));
   }
 

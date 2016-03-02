@@ -1185,6 +1185,10 @@ public class TreeFactory {
     return new YieldExpressionTreeImpl(yieldToken, expr.orNull());
   }
 
+  public YieldExpressionTree yieldFromExpression(InternalSyntaxToken yieldToken, InternalSyntaxToken fromToken, ExpressionTree expr) {
+    return new YieldExpressionTreeImpl(yieldToken, fromToken, expr);
+  }
+
   public YieldExpressionTree yieldExpressionWithKey(InternalSyntaxToken yieldToken, ExpressionTree expr1, InternalSyntaxToken arrow, ExpressionTree expr2) {
     return new YieldExpressionTreeImpl(yieldToken, expr1, arrow, expr2);
   }

@@ -31,7 +31,9 @@ public class YieldExpressionTest {
     assertThat(Kind.YIELD_EXPRESSION)
       .matches("yield")
       .matches("yield $a")
-      .matches("yield $a=>$b");
+      .matches("yield $a=>$b")
+      .matches("yield from foo()")
+    ;
 
   }
 }

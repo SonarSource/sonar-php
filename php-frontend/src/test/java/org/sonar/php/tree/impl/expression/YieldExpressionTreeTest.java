@@ -35,6 +35,7 @@ public class YieldExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
 
     assertThat(tree.yieldToken().text()).isEqualTo("yield");
+    assertThat(tree.fromToken()).isNull();
     assertThat(tree.key()).isNull();
     assertThat(tree.doubleArrowToken()).isNull();
     assertThat(expressionToString(tree.value())).isEqualTo("$a");
@@ -47,6 +48,7 @@ public class YieldExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
 
     assertThat(tree.yieldToken().text()).isEqualTo("yield");
+    assertThat(tree.fromToken()).isNull();
     assertThat(expressionToString(tree.key())).isEqualTo("$a");
     assertThat(expressionToString(tree.doubleArrowToken())).isEqualTo("=>");
     assertThat(expressionToString(tree.value())).isEqualTo("$b");
@@ -57,10 +59,23 @@ public class YieldExpressionTreeTest extends PHPTreeModelTest {
     YieldExpressionTree tree = parse("yield", Kind.YIELD_EXPRESSION);
 
     assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
-
     assertThat(tree.yieldToken().text()).isEqualTo("yield");
+    assertThat(tree.fromToken()).isNull();
     assertThat(tree.key()).isNull();
     assertThat(tree.doubleArrowToken()).isNull();
     assertThat(tree.value()).isNull();
+  }
+
+  @Test
+  public void yield_from() throws Exception {
+    YieldExpressionTree tree = parse("yield from foo()", Kind.YIELD_EXPRESSION);
+
+    assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
+
+    assertThat(tree.yieldToken().text()).isEqualTo("yield");
+    assertThat(tree.fromToken()).isNotNull();
+    assertThat(tree.key()).isNull();
+    assertThat(tree.doubleArrowToken()).isNull();
+    assertThat(expressionToString(tree.value())).isEqualTo("foo()");
   }
 }

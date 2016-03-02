@@ -229,7 +229,10 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   OBJECT,
   BOOLEAN,
   BOOL,
-  BINARY;
+  BINARY,
+
+  FROM
+  ;
 
   public static LexerlessGrammar createGrammar() {
     return createGrammarBuilder().build();
@@ -311,6 +314,8 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(BOOLEAN).is(word(b, "BOOLEAN")).skip();
     b.rule(BOOL).is(word(b, "BOOL")).skip();
     b.rule(BINARY).is(word(b, "BINARY")).skip();
+
+    b.rule(FROM).is(word(b, "FROM")).skip();
 
   }
 

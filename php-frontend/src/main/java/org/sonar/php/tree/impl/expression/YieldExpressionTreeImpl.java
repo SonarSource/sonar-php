@@ -35,14 +35,14 @@ public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionT
 
   private static final Kind KIND = Kind.YIELD_EXPRESSION;
   private final InternalSyntaxToken yieldToken;
-  @Nullable
+  private final InternalSyntaxToken fromToken;
   private final ExpressionTree key;
-  @Nullable
   private final InternalSyntaxToken doubleArrowToken;
   private final ExpressionTree value;
 
   public YieldExpressionTreeImpl(InternalSyntaxToken yieldToken, ExpressionTree key, InternalSyntaxToken doubleArrowToken, ExpressionTree value) {
     this.yieldToken = yieldToken;
+    this.fromToken = null;
     this.key = key;
     this.doubleArrowToken = doubleArrowToken;
     this.value = value;
@@ -50,6 +50,15 @@ public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionT
 
   public YieldExpressionTreeImpl(InternalSyntaxToken yieldToken, @Nullable ExpressionTree value) {
     this.yieldToken = yieldToken;
+    this.fromToken = null;
+    this.key = null;
+    this.doubleArrowToken = null;
+    this.value = value;
+  }
+
+  public YieldExpressionTreeImpl(InternalSyntaxToken yieldToken, InternalSyntaxToken fromToken, ExpressionTree value) {
+    this.yieldToken = yieldToken;
+    this.fromToken = fromToken;
     this.key = null;
     this.doubleArrowToken = null;
     this.value = value;
@@ -63,6 +72,12 @@ public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionT
   @Override
   public SyntaxToken yieldToken() {
     return yieldToken;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken fromToken() {
+    return fromToken;
   }
 
   @Nullable
@@ -85,7 +100,7 @@ public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionT
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(yieldToken, key, doubleArrowToken, value);
+    return Iterators.forArray(yieldToken, fromToken, key, doubleArrowToken, value);
   }
 
   @Override

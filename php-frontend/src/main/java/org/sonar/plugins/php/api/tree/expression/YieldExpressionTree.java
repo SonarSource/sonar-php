@@ -30,12 +30,16 @@ import javax.annotation.Nullable;
  *  yield
  *  yield {@link #value()}
  *  yield {@link #key()} => {@link #value()}
+ *  yield from {@link #value()}
  * </pre>
  */
 @Beta
 public interface YieldExpressionTree extends ExpressionTree {
 
   SyntaxToken yieldToken();
+
+  @Nullable
+  SyntaxToken fromToken();
 
   @Nullable
   ExpressionTree key();
