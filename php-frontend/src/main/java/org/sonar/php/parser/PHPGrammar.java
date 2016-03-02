@@ -151,6 +151,7 @@ import static org.sonar.php.api.PHPPunctuator.RBRACKET;
 import static org.sonar.php.api.PHPPunctuator.RCURLYBRACE;
 import static org.sonar.php.api.PHPPunctuator.RPARENTHESIS;
 import static org.sonar.php.api.PHPPunctuator.SL;
+import static org.sonar.php.api.PHPPunctuator.SPACESHIP;
 import static org.sonar.php.api.PHPPunctuator.SR;
 import static org.sonar.php.api.PHPPunctuator.STAR;
 
@@ -978,7 +979,7 @@ public class PHPGrammar {
       f.equalityExpr(
         RELATIONAL_EXPR(),
         b.zeroOrMore(f.newTuple65(
-          b.firstOf(b.token(NOTEQUAL2), b.token(NOTEQUAL), b.token(EQUAL2), b.token(EQUAL), b.token(NOTEQUALBIS)),
+          b.firstOf(b.token(NOTEQUAL2), b.token(NOTEQUAL), b.token(EQUAL2), b.token(EQUAL), b.token(NOTEQUALBIS), b.token(SPACESHIP)),
           RELATIONAL_EXPR()))));
   }
 

@@ -69,6 +69,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
     testBinary(Kind.STRICT_EQUAL_TO, "===", PHPLexicalGrammar.EQUALITY_EXPR);
     testBinary(Kind.EQUAL_TO, "==", PHPLexicalGrammar.EQUALITY_EXPR);
     testBinary(Kind.ALTERNATIVE_NOT_EQUAL_TO, "<>", PHPLexicalGrammar.EQUALITY_EXPR);
+    testBinary(Kind.COMPARISON, "<=>", PHPLexicalGrammar.EQUALITY_EXPR);
   }
 
   @Test

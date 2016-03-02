@@ -32,6 +32,7 @@ public enum PHPPunctuator implements GrammarRuleKey {
   NOTEQUALBIS("<>"),
   EQUAL2("==="),
   NOTEQUAL2("!=="),
+  SPACESHIP("<=>"),
   LT("<"),
   GT(">"),
   LE("<="),

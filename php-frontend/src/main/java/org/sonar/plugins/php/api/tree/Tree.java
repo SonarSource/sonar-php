@@ -476,6 +476,12 @@ public interface Tree {
 
     /**
      * {@link BinaryExpressionTree}
+     * {@code <=>}
+     */
+    COMPARISON(BinaryExpressionTree.class),
+
+    /**
+     * {@link BinaryExpressionTree}
      * {@code &}
      */
     BITWISE_AND(BinaryExpressionTree.class),

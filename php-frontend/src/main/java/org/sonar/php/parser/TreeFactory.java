@@ -209,6 +209,7 @@ public class TreeFactory {
     .put(PHPPunctuator.NOTEQUAL.getValue(), Kind.NOT_EQUAL_TO)
     .put(PHPPunctuator.NOTEQUAL2.getValue(), Kind.STRICT_NOT_EQUAL_TO)
     .put(PHPPunctuator.NOTEQUALBIS.getValue(), Kind.ALTERNATIVE_NOT_EQUAL_TO)
+    .put(PHPPunctuator.SPACESHIP.getValue(), Kind.COMPARISON)
     .put(PHPPunctuator.AMPERSAND.getValue(), Kind.BITWISE_AND)
     .put(PHPPunctuator.XOR.getValue(), Kind.BITWISE_XOR)
     .put(PHPPunctuator.OR.getValue(), Kind.BITWISE_OR)
