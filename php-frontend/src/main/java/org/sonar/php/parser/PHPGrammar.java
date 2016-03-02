@@ -1037,10 +1037,19 @@ public class PHPGrammar {
           CONDITIONAL_XOR_EXPR()))));
   }
 
+  public ExpressionTree NULL_COALESCING_EXPRESSION() {
+    return b.<ExpressionTree>nonterminal(Kind.NULL_COALESCING_EXPRESSION).is(
+      f.nullCoalescingExpr(
+        b.zeroOrMore(f.newTuple72(
+          CONDITIONAL_OR_EXPR(),
+          b.token(PHPPunctuator.NULL_COALESCE))),
+        CONDITIONAL_OR_EXPR()));
+  }
+
   public ExpressionTree CONDITIONAL_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_EXPRESSION).is(
       f.completeConditionalExpr(
-        CONDITIONAL_OR_EXPR(),
+        NULL_COALESCING_EXPRESSION(),
         b.optional(
           f.newConditionalExpr(b.token(QUERY), b.optional(CONDITIONAL_EXPR()), b.token(COLON), CONDITIONAL_EXPR())
         )));

@@ -529,6 +529,12 @@ public interface Tree {
     ALTERNATIVE_CONDITIONAL_XOR(BinaryExpressionTree.class),
 
     /**
+     * {@link BinaryExpressionTree}
+     * {@code ??}
+     */
+    NULL_COALESCING_EXPRESSION(BinaryExpressionTree.class),
+
+    /**
      * {@link ConditionalExpressionTree}
      */
     CONDITIONAL_EXPRESSION(ConditionalExpressionTree.class),

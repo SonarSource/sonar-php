@@ -131,4 +131,29 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
     assertThat(expressionToString(tree.rightOperand())).isEqualTo("$b");
   }
 
+  @Test
+  public void test_associativity_or() throws Exception {
+    Kind conditionalOr = Kind.CONDITIONAL_OR;
+    BinaryExpressionTree tree = parse("$a || $b || $c", conditionalOr);
+
+    assertThat(tree.is(conditionalOr)).isTrue();
+    assertThat(tree.leftOperand().is(conditionalOr)).isTrue();
+    assertThat(expressionToString(tree.leftOperand())).isEqualTo("$a || $b");
+    assertThat(tree.rightOperand().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.rightOperand())).isEqualTo("$c");
+  }
+
+  @Test
+  public void test_associativity_null_coalescing() throws Exception {
+    Kind coalescingExpr = Kind.NULL_COALESCING_EXPRESSION;
+    BinaryExpressionTree tree = parse("$a ?? $b ?? $c", coalescingExpr);
+
+    assertThat(tree.is(coalescingExpr)).isTrue();
+    assertThat(tree.leftOperand().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.leftOperand())).isEqualTo("$a");
+    assertThat(tree.rightOperand().is(coalescingExpr)).isTrue();
+    assertThat(expressionToString(tree.rightOperand())).isEqualTo("$b ?? $c");
+  }
+
+
 }

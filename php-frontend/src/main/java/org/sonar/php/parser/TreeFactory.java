@@ -22,6 +22,7 @@ package org.sonar.php.parser;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
@@ -218,6 +219,7 @@ public class TreeFactory {
     .put(PHPKeyword.AND.getValue(), Kind.ALTERNATIVE_CONDITIONAL_AND)
     .put(PHPKeyword.XOR.getValue(), Kind.ALTERNATIVE_CONDITIONAL_XOR)
     .put(PHPKeyword.OR.getValue(), Kind.ALTERNATIVE_CONDITIONAL_OR)
+    .put(PHPPunctuator.NULL_COALESCE.getValue(), Kind.NULL_COALESCING_EXPRESSION)
     .build();
 
   private static final Map<String, Kind> UNARY_EXPRESSION_KINDS_BY_OPERATOR = ImmutableMap.<String, Kind>builder()
@@ -1052,6 +1054,19 @@ public class TreeFactory {
     return binaryExpression(exp1, operatorsAndOperands);
   }
 
+  public ExpressionTree nullCoalescingExpr(Optional<List<Tuple<ExpressionTree, InternalSyntaxToken>>> operatorsAndOperands, ExpressionTree exp1) {
+    if (!operatorsAndOperands.isPresent()) {
+      return exp1;
+    }
+
+    // coalescing operator has right associativity
+    ExpressionTree result = exp1;
+    for (Tuple<ExpressionTree, InternalSyntaxToken> t : Lists.reverse(operatorsAndOperands.get())) {
+      result = new BinaryExpressionTreeImpl(binaryKind(t.second()), t.first(), t.second(), result);
+    }
+    return result;
+  }
+
   private ExpressionTree binaryExpression(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
     if (!operatorsAndOperands.isPresent()) {
       return exp1;
@@ -1726,6 +1741,10 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple71(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple72(T first, U second) {
     return newTuple(first, second);
   }
 

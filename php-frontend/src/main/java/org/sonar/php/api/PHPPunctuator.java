@@ -63,6 +63,8 @@ public enum PHPPunctuator implements GrammarRuleKey {
   OROR("||"),
   OR("|"),
 
+  NULL_COALESCE("??"),
+
   ARROW("->"),
   DOUBLEARROW("=>"),
 
@@ -88,7 +90,7 @@ public enum PHPPunctuator implements GrammarRuleKey {
 
   private final String value;
 
-  private PHPPunctuator(String value) {
+  PHPPunctuator(String value) {
     this.value = value;
   }
 
