@@ -317,11 +317,15 @@ public class TreeFactory {
   }
 
   public UseClauseTree useClause(NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
+    return groupUseClause(Optional.<InternalSyntaxToken>absent(), namespaceName, alias);
+  }
+
+  public UseClauseTree groupUseClause(Optional<InternalSyntaxToken> useTypeToken, NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
     if (alias.isPresent()) {
       NameIdentifierTreeImpl aliasName = new NameIdentifierTreeImpl(alias.get().second());
-      return new UseClauseTreeImpl(namespaceName, alias.get().first(), aliasName);
+      return new UseClauseTreeImpl(useTypeToken.orNull(), namespaceName, alias.get().first(), aliasName);
     }
-    return new UseClauseTreeImpl(namespaceName);
+    return new UseClauseTreeImpl(useTypeToken.orNull(), namespaceName);
   }
 
   public ClassPropertyDeclarationTree classConstantDeclaration(
@@ -541,7 +545,30 @@ public class TreeFactory {
     InternalSyntaxToken eosToken
   ) {
     SeparatedListImpl<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
-    return new UseStatementTreeImpl(useToken, useTypeToken.orNull(), declarations, eosToken);
+    return UseStatementTreeImpl.createUseStatement(useToken, useTypeToken.orNull(), declarations, eosToken);
+  }
+
+  public UseStatementTree groupUseStatement(
+    InternalSyntaxToken useToken,
+    Optional<InternalSyntaxToken> useTypeToken,
+    NamespaceNameTree prefix,
+    InternalSyntaxToken nsSeparator,
+    InternalSyntaxToken lCurlyBrace,
+    UseClauseTree firstDeclaration,
+    Optional<List<Tuple<InternalSyntaxToken, UseClauseTree>>> additionalDeclarations,
+    InternalSyntaxToken rCurlyBrace,
+    InternalSyntaxToken eosToken
+  ) {
+    SeparatedListImpl<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
+    return UseStatementTreeImpl.createGroupUseStatement(
+      useToken,
+      useTypeToken.orNull(),
+      prefix,
+      nsSeparator,
+      lCurlyBrace,
+      declarations,
+      rCurlyBrace,
+      eosToken);
   }
 
   public ReturnStatementTree returnStatement(InternalSyntaxToken returnToken, Optional<ExpressionTree> expression, InternalSyntaxToken eos) {
@@ -595,49 +622,47 @@ public class TreeFactory {
     }
   }
 
-  public NamespaceNameTree namespaceName(
-    Optional<InternalSyntaxToken> separator,
-    Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional,
-    InternalSyntaxToken name
-  ) {
-    return namespaceName(separator.orNull(), null, null, listOptional, name);
+
+  public NamespaceNameTree namespaceName(List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> tuples) {
+    NameIdentifierTree lastPartIfOneTuple = new NameIdentifierTreeImpl(tuples.get(0).second());
+    return namespaceName(lastPartIfOneTuple, tuples.get(0).first(), tuples.subList(1, tuples.size()));
   }
 
-
-  public NamespaceNameTree namespaceName(
-    InternalSyntaxToken namespaceToken,
-    InternalSyntaxToken separator,
-    Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional,
-    InternalSyntaxToken name
-  ) {
-    return namespaceName(null, namespaceToken, separator, listOptional, name);
+  public NamespaceNameTree namespaceName(InternalSyntaxToken token, Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional) {
+    NameIdentifierTree lastPartIfNoTuples = new NameIdentifierTreeImpl(token);
+    return namespaceName(lastPartIfNoTuples, null, listOptional.or(Collections.<Tuple<InternalSyntaxToken,InternalSyntaxToken>>emptyList()));
   }
 
-  private NamespaceNameTree namespaceName(
+  private static NamespaceNameTree namespaceName(
+    NameIdentifierTree lastPartIfNoTuples,
     @Nullable InternalSyntaxToken absoluteSeparator,
-    @Nullable InternalSyntaxToken namespaceToken,
-    @Nullable InternalSyntaxToken separator,
-    Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> listOptional,
-    InternalSyntaxToken name
+    List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> separatorIdentifierTuples
   ) {
 
-    ImmutableList.Builder<NameIdentifierTree> elements = ImmutableList.builder();
-    ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
+    if (separatorIdentifierTuples.isEmpty()) {
+      return new NamespaceNameTreeImpl(absoluteSeparator, SeparatedListImpl.<NameIdentifierTree>empty(), lastPartIfNoTuples);
 
-    if (namespaceToken != null && separator != null) {
-      elements.add(new NameIdentifierTreeImpl(namespaceToken));
-      separators.add(separator);
-    }
+    } else {
+      ImmutableList.Builder<NameIdentifierTree> elements = ImmutableList.builder();
+      ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
 
-    if (listOptional.isPresent()) {
-      for (Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple : listOptional.get()) {
-        elements.add(new NameIdentifierTreeImpl(tuple.first()));
-        separators.add(tuple.second());
+      elements.add(lastPartIfNoTuples);
+
+      int lastIndex = separatorIdentifierTuples.size() - 1;
+      Tuple<InternalSyntaxToken, InternalSyntaxToken> lastTuple = separatorIdentifierTuples.get(lastIndex);
+
+      for (int i = 0; i < lastIndex; i++) {
+        elements.add(new NameIdentifierTreeImpl(separatorIdentifierTuples.get(i).second()));
+        separators.add(separatorIdentifierTuples.get(i).first());
       }
+
+      separators.add(lastTuple.first());
+
+      return new NamespaceNameTreeImpl(
+        absoluteSeparator,
+        new SeparatedListImpl<>(elements.build(), separators.build()),
+        new NameIdentifierTreeImpl(lastTuple.second));
     }
-
-    return new NamespaceNameTreeImpl(absoluteSeparator, new SeparatedListImpl<>(elements.build(), separators.build()), new NameIdentifierTreeImpl(name));
-
   }
 
   public CatchBlockTree catchBlock(
@@ -1797,6 +1822,13 @@ public class TreeFactory {
     return newTuple(first, second);
   }
 
+  public <T, U> Tuple<T, U> newTuple75(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple89(T first, U second) {
+    return newTuple(first, second);
+  }
   public <T, U> Tuple<T, U> newTuple90(T first, U second) {
     return newTuple(first, second);
   }

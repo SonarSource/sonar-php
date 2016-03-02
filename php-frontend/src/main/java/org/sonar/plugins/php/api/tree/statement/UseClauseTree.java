@@ -32,10 +32,18 @@ import javax.annotation.Nullable;
  * <pre>
  *   {@link #namespaceName()}
  *   {@link #namespaceName()} as {@link #alias()}
+ *   const {@link #namespaceName()} as {@link #alias()}
+ *   function {@link #namespaceName()}
  * </pre>
  */
 @Beta
 public interface UseClauseTree extends Tree {
+
+  @Nullable
+  /**
+   * Either {@link org.sonar.php.api.PHPKeyword#CONST const} or {@link org.sonar.php.api.PHPKeyword#FUNCTION function}
+   */
+  SyntaxToken useTypeToken();
 
   NamespaceNameTree namespaceName();
 

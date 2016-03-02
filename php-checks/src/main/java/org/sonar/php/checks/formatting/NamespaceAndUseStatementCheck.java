@@ -40,10 +40,6 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
   private static final String BLANK_LINE_NAMESPACE_MESSAGE = "Add a blank line after this \"namespace%s\" declaration.";
   private static final String BLANK_LINE_USE_MESSAGE = "Add a blank line after this \"use\" declaration.";
   private static final String USE_AFTER_NAMESPACE_MESSAGE = "Move the use declarations after the namespace declarations.";
-  private static final Kind[] USE_KINDS = {
-    Kind.USE_STATEMENT,
-    Kind.USE_CONST_STATEMENT,
-    Kind.USE_FUNCTION_STATEMENT};
 
   private List<UseStatementTree> useStatements = Lists.newArrayList();
   private StatementTree nextStatement = null;
@@ -85,7 +81,7 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
   public void visitUseStatement(UseStatementTree tree) {
     useStatements.add(tree);
 
-    if (!nextStatement.is(USE_KINDS)) {
+    if (!nextStatement.is(Kind.USE_STATEMENT)) {
       checkUsesAreBeforeNamespace();
       checkBlankLineAfterUses(tree);
       useStatements.clear();

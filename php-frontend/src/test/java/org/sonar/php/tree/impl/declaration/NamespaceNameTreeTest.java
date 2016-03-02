@@ -57,4 +57,8 @@ public class NamespaceNameTreeTest extends PHPTreeModelTest {
     assertThat(tree.namespaces().get(0).text()).isEqualTo("namespace");
   }
 
+  @Test
+  public void test_simple() throws Exception {
+    parse("\\a", PHPLexicalGrammar.NAMESPACE_NAME);
+  }
 }

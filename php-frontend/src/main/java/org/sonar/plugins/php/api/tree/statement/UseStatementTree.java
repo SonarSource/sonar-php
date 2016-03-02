@@ -20,25 +20,37 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
 import javax.annotation.Nullable;
-import java.util.List;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
  * <a href="http://php.net/manual/en/language.namespaces.importing.php">Use namespaces</a> declaration
+ * <p>Corresponds to {@link Tree.Kind#USE_STATEMENT}</p>
  * <pre>
  *   use {@link #clauses()} ;
  * </pre>
  *
  * <p><a href="http://php.net/manual/en/language.oop5.properties.php">Use Function</a> declaration
+ * <p>Corresponds to {@link Tree.Kind#USE_STATEMENT}</p>
  * <pre>
  *   use function {@link #clauses()} ;
  * </pre>
  *
  * <p><a href="http://php.net/manual/en/language.oop5.constants.php">Use Constant</a> declaration
+ * <p>Corresponds to {@link Tree.Kind#USE_STATEMENT}</p>
  * <pre>
  *   use const {@link #clauses()} ;
+ * </pre>
+ *
+ * <p><a href="http://php.net/manual/en/language.namespaces.importing.php#language.namespaces.importing.group">Group Use</a> declaration
+ * <p>Corresponds to {@link Tree.Kind#GROUP_USE_STATEMENT}</p>
+ * <pre>
+ *   use {@link #prefix()} \ { {@link #clauses()} } ;
+ *   use const {@link #prefix()} \ { {@link #clauses()} } ;
+ *   use function {@link #prefix()} \ { {@link #clauses()} } ;
  * </pre>
  */
 @Beta
@@ -52,7 +64,19 @@ public interface UseStatementTree extends StatementTree {
   @Nullable
   SyntaxToken useTypeToken();
 
-  List<UseClauseTree> clauses();
+  @Nullable
+  NamespaceNameTree prefix();
+
+  @Nullable
+  SyntaxToken nsSeparatorToken();
+
+  @Nullable
+  SyntaxToken openCurlyBraceToken();
+
+  SeparatedList<UseClauseTree> clauses();
+
+  @Nullable
+  SyntaxToken closeCurlyBraceToken();
 
   @Nullable
   SyntaxToken eosToken();

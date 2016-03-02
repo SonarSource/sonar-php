@@ -34,4 +34,19 @@ public class UseClauseTest {
       .matches("My\\Full\\functionName as func")
       .notMatches("My\\Full\\functionName as");
   }
+
+  @Test
+  public void test_group_use_clause() {
+    assertThat(PHPLexicalGrammar.GROUP_USE_CLAUSE)
+      .matches("ArrayObject")
+      .matches("My\\Full\\functionName")
+      .matches("My\\Full\\functionName as func")
+      .matches("function My\\Full\\Name as func")
+      .matches("function My\\Full\\Name")
+      .matches("const My\\Full\\Name as func")
+      .matches("const My\\Full\\Name")
+      .notMatches("My\\Full\\functionName as");
+  }
+
+
 }

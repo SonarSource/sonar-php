@@ -59,9 +59,7 @@ public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
     Tree.Kind.INTERFACE_DECLARATION,
     Tree.Kind.TRAIT_DECLARATION,
     Tree.Kind.NAMESPACE_STATEMENT,
-    Tree.Kind.USE_CONST_STATEMENT,
     Tree.Kind.USE_STATEMENT,
-    Tree.Kind.USE_FUNCTION_STATEMENT,
     Tree.Kind.CONSTANT_DECLARATION
   };
 

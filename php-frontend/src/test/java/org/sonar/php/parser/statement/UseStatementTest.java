@@ -21,6 +21,7 @@ package org.sonar.php.parser.statement;
 
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
@@ -36,4 +37,20 @@ public class UseStatementTest {
       .matches("use function foo;")
       .notMatches("use function My\\Full\\Name1 as func, const My\\Full\\Name2;");
   }
+
+  @Test
+  public void group_use() {
+    assertThat(Kind.GROUP_USE_STATEMENT)
+      .matches("use My\\Project\\{Class1, Class2};")
+      .matches("use const My\\Full\\{Name1 as A, Name2 as B};")
+      .matches("use function My\\Full\\{Name as alias};")
+      .matches("use \\My\\Full\\{Name1, Name2};")
+      .matches("use My\\Full\\{const Name1, function Name2, const Name3 as C};")
+
+      // matches but it's not a valid PHP code
+      .matches("use const My\\Full\\{const Name1};")
+      .matches("use function My\\Full\\{function Name1};")
+    ;
+  }
+
 }

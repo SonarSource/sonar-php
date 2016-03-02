@@ -149,6 +149,7 @@ import static org.sonar.php.api.PHPPunctuator.MOD;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUAL;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUAL2;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUALBIS;
+import static org.sonar.php.api.PHPPunctuator.NS_SEPARATOR;
 import static org.sonar.php.api.PHPPunctuator.PLUS;
 import static org.sonar.php.api.PHPPunctuator.QUERY;
 import static org.sonar.php.api.PHPPunctuator.RBRACKET;
@@ -209,20 +210,33 @@ public class PHPGrammar {
     return b.<NamespaceNameTree>nonterminal(PHPLexicalGrammar.NAMESPACE_NAME).is(
       b.firstOf(
         f.namespaceName(
-          b.optional(b.token(PHPPunctuator.NS_SEPARATOR)),
-          b.zeroOrMore(f.newTuple4(
-            b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER)),
-            b.token(PHPPunctuator.NS_SEPARATOR)
-          )),
-          b.token(PHPLexicalGrammar.IDENTIFIER)),
+          b.oneOrMore(f.newTuple75(
+            b.token(PHPPunctuator.NS_SEPARATOR),
+            b.token(PHPLexicalGrammar.IDENTIFIER)))),
         f.namespaceName(
-          b.token(PHPKeyword.NAMESPACE),
-          b.token(PHPPunctuator.NS_SEPARATOR),
-          b.zeroOrMore(f.newTuple6(
-            b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER)),
-            b.token(PHPPunctuator.NS_SEPARATOR)
-          )),
-          b.token(PHPLexicalGrammar.IDENTIFIER))));
+          b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER), b.token(PHPKeyword.NAMESPACE)),
+          b.zeroOrMore(f.newTuple4(
+            b.token(PHPPunctuator.NS_SEPARATOR),
+            b.token(PHPLexicalGrammar.IDENTIFIER))))));
+  }
+
+  public UseClauseTree GROUP_USE_CLAUSE() {
+    return b.<UseClauseTree>nonterminal(PHPLexicalGrammar.GROUP_USE_CLAUSE).is(
+      f.groupUseClause(
+        b.optional(USE_TYPE()),
+        NAMESPACE_NAME(),
+        b.optional(
+          f.newTuple55(
+            b.token(PHPKeyword.AS),
+            b.token(PHPLexicalGrammar.IDENTIFIER)))));
+  }
+
+  public InternalSyntaxToken USE_TYPE() {
+    return b.<InternalSyntaxToken>nonterminal().is(
+      b.firstOf(
+        b.token(PHPKeyword.CONST),
+        b.token(PHPKeyword.FUNCTION))
+    );
   }
 
   public UseClauseTree USE_CLAUSE() {
@@ -474,6 +488,7 @@ public class PHPGrammar {
         FUNCTION_DECLARATION(),
         INTERFACE_DECLARATION(),
         NAMESPACE_STATEMENT(),
+        GROUP_USE_STATEMENT(),
         USE_STATEMENT(),
         CONSTANT_DECLARATION(),
         HALT_COMPILER_STATEMENT(),
@@ -509,12 +524,23 @@ public class PHPGrammar {
     return b.<UseStatementTree>nonterminal(PHPLexicalGrammar.USE_STATEMENT).is(
       f.useStatement(
         b.token(PHPKeyword.USE),
-        b.optional(
-          b.firstOf(
-            b.token(PHPKeyword.CONST),
-            b.token(PHPKeyword.FUNCTION))),
+        b.optional(USE_TYPE()),
         USE_CLAUSE(),
         b.zeroOrMore(f.newTuple90(b.token(PHPPunctuator.COMMA), USE_CLAUSE())),
+        EOS()));
+  }
+
+  public UseStatementTree GROUP_USE_STATEMENT() {
+    return b.<UseStatementTree>nonterminal(Kind.GROUP_USE_STATEMENT).is(
+      f.groupUseStatement(
+        b.token(PHPKeyword.USE),
+        b.optional(USE_TYPE()),
+        NAMESPACE_NAME(),
+        b.token(NS_SEPARATOR),
+        b.token(LCURLYBRACE),
+        GROUP_USE_CLAUSE(),
+        b.zeroOrMore(f.newTuple89(b.token(PHPPunctuator.COMMA), GROUP_USE_CLAUSE())),
+        b.token(RCURLYBRACE),
         EOS()));
   }
 

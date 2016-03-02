@@ -35,20 +35,29 @@ import java.util.Iterator;
 public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
 
   private static final Kind KIND = Kind.USE_CLAUSE;
+  private final InternalSyntaxToken useTypeToken;
   private final NamespaceNameTree namespaceName;
   private final InternalSyntaxToken asToken;
   private final NameIdentifierTree alias;
 
-  public UseClauseTreeImpl(NamespaceNameTree namespaceName, InternalSyntaxToken asToken, NameIdentifierTree alias) {
+  public UseClauseTreeImpl(@Nullable InternalSyntaxToken useTypeToken, NamespaceNameTree namespaceName, InternalSyntaxToken asToken, NameIdentifierTree alias) {
+    this.useTypeToken = useTypeToken;
     this.namespaceName = namespaceName;
     this.asToken = asToken;
     this.alias = alias;
   }
 
-  public UseClauseTreeImpl(NamespaceNameTree namespaceName) {
+  public UseClauseTreeImpl(@Nullable InternalSyntaxToken useTypeToken, NamespaceNameTree namespaceName) {
+    this.useTypeToken = useTypeToken;
     this.namespaceName = namespaceName;
     this.asToken = null;
     this.alias = null;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken useTypeToken() {
+    return useTypeToken;
   }
 
   @Override
@@ -75,7 +84,7 @@ public class UseClauseTreeImpl extends PHPTree implements UseClauseTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(namespaceName, asToken, alias);
+    return Iterators.forArray(useTypeToken, namespaceName, asToken, alias);
   }
 
   @Override

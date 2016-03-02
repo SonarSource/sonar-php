@@ -20,45 +20,73 @@
 package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.Iterators;
-import org.sonar.php.api.PHPKeyword;
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-
 public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
 
   private final Kind kind;
-  private InternalSyntaxToken useToken;
-  private InternalSyntaxToken useTypeToken;
-  private SeparatedListImpl<UseClauseTree> declarations;
-  private InternalSyntaxToken eosToken;
+  private final InternalSyntaxToken useToken;
+  private final InternalSyntaxToken useTypeToken;
+  private final NamespaceNameTree prefix;
+  private final InternalSyntaxToken nsSeparatorToken;
+  private final InternalSyntaxToken openCurlyBraceToken;
+  private final SeparatedListImpl<UseClauseTree> clauses;
+  private final InternalSyntaxToken closeCurlyBraceToken;
+  private final InternalSyntaxToken eosToken;
 
-  public UseStatementTreeImpl(
-      InternalSyntaxToken useToken,
-      @Nullable InternalSyntaxToken useTypeToken,
-      SeparatedListImpl<UseClauseTree> declarations,
-      InternalSyntaxToken eosToken
+  private UseStatementTreeImpl(
+    Tree.Kind kind,
+    InternalSyntaxToken useToken,
+    @Nullable InternalSyntaxToken useTypeToken,
+    @Nullable NamespaceNameTree prefix,
+    @Nullable InternalSyntaxToken nsSeparatorToken,
+    @Nullable InternalSyntaxToken openCurlyBraceToken,
+    SeparatedListImpl<UseClauseTree> clauses,
+    @Nullable InternalSyntaxToken closeCurlyBraceToken,
+    InternalSyntaxToken eosToken
   ) {
     this.useToken = useToken;
     this.useTypeToken = useTypeToken;
-    this.declarations = declarations;
+    this.prefix = prefix;
+    this.nsSeparatorToken = nsSeparatorToken;
+    this.openCurlyBraceToken = openCurlyBraceToken;
+    this.clauses = clauses;
+    this.closeCurlyBraceToken = closeCurlyBraceToken;
     this.eosToken = eosToken;
 
-    if (useTypeToken == null) {
-      this.kind = Kind.USE_STATEMENT;
-    } else if (useTypeToken().text().equals(PHPKeyword.CONST.getValue())) {
-      this.kind = Kind.USE_CONST_STATEMENT;
-    } else {
-      this.kind = Kind.USE_FUNCTION_STATEMENT;
-    }
+    this.kind = kind;
+  }
+
+  public static UseStatementTreeImpl createUseStatement(
+    InternalSyntaxToken useToken,
+    @Nullable InternalSyntaxToken useTypeToken,
+    SeparatedListImpl<UseClauseTree> clauses,
+    InternalSyntaxToken eosToken
+  ) {
+    return new UseStatementTreeImpl(Kind.USE_STATEMENT, useToken, useTypeToken, null, null, null, clauses, null, eosToken);
+  }
+
+  public static UseStatementTreeImpl createGroupUseStatement(
+    InternalSyntaxToken useToken,
+    @Nullable InternalSyntaxToken useTypeToken,
+    NamespaceNameTree prefix,
+    InternalSyntaxToken nsSeparatorToken,
+    InternalSyntaxToken openCurlyBraceToken,
+    SeparatedListImpl<UseClauseTree> clauses,
+    InternalSyntaxToken closeCurlyBraceToken,
+    InternalSyntaxToken eosToken
+  ) {
+    return new UseStatementTreeImpl(Kind.GROUP_USE_STATEMENT, useToken, useTypeToken, prefix, nsSeparatorToken, openCurlyBraceToken, clauses, closeCurlyBraceToken, eosToken);
   }
 
   @Override
@@ -71,9 +99,33 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     return useTypeToken;
   }
 
+  @Nullable
+  @Override
+  public NamespaceNameTree prefix() {
+    return prefix;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken nsSeparatorToken() {
+    return nsSeparatorToken;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken openCurlyBraceToken() {
+    return openCurlyBraceToken;
+  }
+
   @Override
   public SeparatedListImpl<UseClauseTree> clauses() {
-    return declarations;
+    return clauses;
+  }
+
+  @Nullable
+  @Override
+  public SyntaxToken closeCurlyBraceToken() {
+    return closeCurlyBraceToken;
   }
 
   @Override
@@ -89,9 +141,9 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
   @Override
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
-      Iterators.forArray(useToken, useTypeToken),
-      declarations.elementsAndSeparators(),
-      Iterators.singletonIterator(eosToken)
+      Iterators.forArray(useToken, useTypeToken, prefix, nsSeparatorToken, openCurlyBraceToken),
+      clauses.elementsAndSeparators(),
+      Iterators.forArray(closeCurlyBraceToken, eosToken)
       );
   }
 

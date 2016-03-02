@@ -678,12 +678,7 @@ public interface Tree {
     /**
      * {@link UseStatementTree}
      */
-    USE_CONST_STATEMENT(UseStatementTree.class),
-
-    /**
-     * {@link UseStatementTree}
-     */
-    USE_FUNCTION_STATEMENT(UseStatementTree.class),
+    GROUP_USE_STATEMENT(UseStatementTree.class),
 
     /**
      * {@link UseTraitDeclarationTree}
