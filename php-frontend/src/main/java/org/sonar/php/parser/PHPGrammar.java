@@ -42,6 +42,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
@@ -549,11 +550,8 @@ public class PHPGrammar {
     return b.<ExpressionStatementTree>nonterminal(PHPLexicalGrammar.ECHO_STATEMENT).is(
       f.echoStatement(
         b.token(ECHO),
-        EXPRESSION(),
-        b.zeroOrMore(f.newTuple54(b.token(COMMA), EXPRESSION())),
-        EOS()
-      )
-    );
+        ARGUMENTS(),
+        EOS()));
   }
 
   public StaticStatementTree STATIC_STATEMENT() {
@@ -1328,9 +1326,15 @@ public class PHPGrammar {
     return b.<FunctionCallTree>nonterminal(PHPLexicalGrammar.FUNCTION_CALL_PARAMETER_LIST).is(
       f.functionCallParameterList(
         b.token(LPARENTHESIS),
-        b.optional(f.newTuple9(
-          FUNCTION_CALL_ARGUMENT(), b.zeroOrMore(f.newTuple5(b.token(COMMA), FUNCTION_CALL_ARGUMENT())))),
+        ARGUMENTS(),
         b.token(RPARENTHESIS)));
+  }
+
+  public SeparatedListImpl<ExpressionTree> ARGUMENTS() {
+    return b.<SeparatedListImpl<ExpressionTree>>nonterminal().is(
+      f.arguments(b.optional(f.newTuple9(
+        FUNCTION_CALL_ARGUMENT(), b.zeroOrMore(f.newTuple5(b.token(COMMA), FUNCTION_CALL_ARGUMENT())))))
+    );
   }
 
   public ExpressionTree FUNCTION_CALL_ARGUMENT() {
@@ -1470,7 +1474,22 @@ public class PHPGrammar {
 
   public NewExpressionTree NEW_EXPRESSION() {
     return b.<NewExpressionTree>nonterminal(Kind.NEW_EXPRESSION).is(
-      f.newExpression(b.token(NEW), MEMBER_EXPRESSION()));
+      f.newExpression(b.token(NEW), b.firstOf(MEMBER_EXPRESSION(), ANONYMOUS_CLASS())));
+  }
+
+  public AnonymousClassTree ANONYMOUS_CLASS() {
+    return b.<AnonymousClassTree>nonterminal(Kind.ANONYMOUS_CLASS).is(
+      f.anonymousClass(
+        b.token(CLASS),
+        b.optional(b.token(PHPPunctuator.LPARENTHESIS)),
+        ARGUMENTS(),
+        b.optional(b.token(PHPPunctuator.RPARENTHESIS)),
+        b.optional(f.newTuple51(b.token(EXTENDS), NAMESPACE_NAME())),
+        b.optional(f.newTuple31(b.token(IMPLEMENTS), INTERFACE_LIST())),
+        b.token(LCURLYBRACE),
+        b.zeroOrMore(CLASS_MEMBER()),
+        b.token(RCURLYBRACE))
+    );
   }
 
   public FunctionCallTree EXIT_EXPRESSION() {

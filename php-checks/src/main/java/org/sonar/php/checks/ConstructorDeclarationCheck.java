@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -27,13 +28,12 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.List;
 
 @Rule(
   key = ConstructorDeclarationCheck.KEY,
@@ -69,7 +69,7 @@ public class ConstructorDeclarationCheck extends PHPSubscriptionCheck {
         if (classDec.name().text().equalsIgnoreCase(methodName)) {
           oldStyleConstructor = method;
 
-        } else if (ClassDeclarationTree.PHP5_CONSTRUCTOR_NAME.equalsIgnoreCase(methodName)) {
+        } else if (ClassTree.PHP5_CONSTRUCTOR_NAME.equalsIgnoreCase(methodName)) {
           newStyleConstructor = method;
         }
       }

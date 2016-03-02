@@ -45,17 +45,11 @@ import java.util.List;
  * <p><a href="http://php.net/manual/en/language.oop5.interfaces.php">Interface</a>
  * <pre>
  *  interface {@link #name()} { {@link #members()} }
- *  interface {@link #name()} implements {@link #superInterfaces()} { {@link #members()} }
+ *  interface {@link #name()} extends {@link #superInterfaces()} { {@link #members()} }
  * </pre>
  */
 @Beta
-public interface ClassDeclarationTree extends StatementTree {
-
-  /**
-   * PHP 5 introduce a new way to declare constructors: by defining a method named "__construct".
-   * Previously constructors were declared by defining a method with the same name as the class.
-   */
-  String PHP5_CONSTRUCTOR_NAME = "__construct";
+public interface ClassDeclarationTree extends StatementTree, ClassTree {
 
   /**
    * Either {@link PHPKeyword#ABSTRACT abstract} or {@link PHPKeyword#FINAL final}
@@ -71,31 +65,27 @@ public interface ClassDeclarationTree extends StatementTree {
 
   NameIdentifierTree name();
 
+  @Override
   @Nullable
   SyntaxToken extendsToken();
 
+  @Override
   @Nullable
   NamespaceNameTree superClass();
 
+  @Override
   @Nullable
   SyntaxToken implementsToken();
 
+  @Override
   SeparatedList<NamespaceNameTree> superInterfaces();
 
+  @Override
   SyntaxToken openCurlyBraceToken();
 
+  @Override
   List<ClassMemberTree> members();
 
+  @Override
   SyntaxToken closeCurlyBraceToken();
-
-  /**
-   * Fetch class constructor declaration within class {@link #members() members}.
-   * Will look for a method named "__construct", if cannot be found it will search for
-   * the old-style constructor function, by the name of the class.
-   *
-   * @return the class constructor method declaration if defined, null otherwise.
-   */
-  @Nullable
-  MethodDeclarationTree fetchConstructor();
-
 }

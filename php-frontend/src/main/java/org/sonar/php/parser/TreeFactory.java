@@ -50,6 +50,7 @@ import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
+import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
@@ -130,6 +131,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
@@ -496,26 +498,10 @@ public class TreeFactory {
     Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
     InternalSyntaxToken openCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken closeCurlyBrace
   ) {
-    InternalSyntaxToken extendsToken = null;
-    NamespaceNameTree superClass = null;
-
-    InternalSyntaxToken implementsToken = null;
-    SeparatedListImpl<NamespaceNameTree> superInterfaces = SeparatedListImpl.empty();
-
-    if (extendsClause.isPresent()) {
-      extendsToken = extendsClause.get().first();
-      superClass = extendsClause.get().second();
-    }
-
-    if (implementsClause.isPresent()) {
-      implementsToken = implementsClause.get().first();
-      superInterfaces = implementsClause.get().second();
-    }
-
     return ClassDeclarationTreeImpl.createClass(
       modifier.orNull(), classToken, name,
-      extendsToken, superClass,
-      implementsToken, superInterfaces,
+      extendsToken(extendsClause), superClass(extendsClause),
+      implementsToken(implementsClause), superInterfaces(implementsClause),
       openCurlyBrace, optionalList(members), closeCurlyBrace
     );
   }
@@ -981,14 +967,13 @@ public class TreeFactory {
 
   public ExpressionStatementTree echoStatement(
     InternalSyntaxToken echoToken,
-    ExpressionTree expression,
-    Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> list,
+    SeparatedListImpl<ExpressionTree> list,
     InternalSyntaxToken eosToken
   ) {
     return new ExpressionStatementTreeImpl(
       new FunctionCallTreeImpl(
         new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(echoToken)),
-        separatedList(expression, list)),
+        list),
       eosToken);
   }
 
@@ -1271,17 +1256,10 @@ public class TreeFactory {
 
   public FunctionCallTree functionCallParameterList(
     InternalSyntaxToken openParenthesis,
-    Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> arguments,
+    SeparatedListImpl<ExpressionTree> arguments,
     InternalSyntaxToken closeParenthesis
   ) {
-    SeparatedListImpl<ExpressionTree> list;
-    if (arguments.isPresent()) {
-      list = separatedList(arguments.get().first(), arguments.get().second());
-    } else {
-      list = SeparatedListImpl.empty();
-    }
-
-    return new FunctionCallTreeImpl(openParenthesis, list, closeParenthesis);
+    return new FunctionCallTreeImpl(openParenthesis, arguments, closeParenthesis);
   }
 
   public MemberAccessTree classMemberAccess(InternalSyntaxToken token, Tree member) {
@@ -1543,6 +1521,53 @@ public class TreeFactory {
     return new ReturnTypeClauseTreeImpl(token, typeNameTree);
   }
 
+  public SeparatedListImpl<ExpressionTree> arguments(Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> arguments) {
+    SeparatedListImpl<ExpressionTree> list;
+    if (arguments.isPresent()) {
+      list = separatedList(arguments.get().first(), arguments.get().second());
+    } else {
+      list = SeparatedListImpl.empty();
+    }
+
+    return list;
+  }
+
+  public AnonymousClassTree anonymousClass(
+    InternalSyntaxToken classToken,
+    Optional<InternalSyntaxToken> lParenthesis, SeparatedListImpl<ExpressionTree> arguments, Optional<InternalSyntaxToken> rParenthesis,
+    Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause,
+    Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause,
+    InternalSyntaxToken lCurlyBrace, Optional<List<ClassMemberTree>> members, InternalSyntaxToken rCurlyBrace
+  ) {
+    return new AnonymousClassTreeImpl(
+      classToken,
+      lParenthesis.orNull(),
+      arguments,
+      rParenthesis.orNull(),
+      extendsToken(extendsClause), superClass(extendsClause),
+      implementsToken(implementsClause), superInterfaces(implementsClause),
+      lCurlyBrace,
+      optionalList(members),
+      rCurlyBrace
+    );
+  }
+
+  private static InternalSyntaxToken extendsToken(Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause) {
+    return extendsClause.isPresent() ? extendsClause.get().first() : null;
+  }
+
+  private static NamespaceNameTree superClass(Optional<Tuple<InternalSyntaxToken, NamespaceNameTree>> extendsClause) {
+    return extendsClause.isPresent() ? extendsClause.get().second() : null;
+  }
+
+  private static InternalSyntaxToken implementsToken(Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause) {
+    return implementsClause.isPresent() ? implementsClause.get().first() : null;
+  }
+
+  private static SeparatedListImpl<NamespaceNameTree> superInterfaces(Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause) {
+    return implementsClause.isPresent() ? implementsClause.get().second() : SeparatedListImpl.<NamespaceNameTree>empty();
+  }
+
   /**
    * [ END ] Expression
    */
@@ -1689,6 +1714,10 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple30(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple31(T first, U second) {
     return newTuple(first, second);
   }
 

@@ -20,20 +20,19 @@
 package org.sonar.php.parser.expression;
 
 import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class NewExpressionTest {
+public class AnonymousClassTest {
 
   @Test
   public void test() {
-    assertThat(Tree.Kind.NEW_EXPRESSION)
-    .matches("new Foo")
-    .matches("new Foo ()")
-    .matches("new Foo ($x, $y)")
-    .matches("new class {}")
-  ;
+    assertThat(Kind.ANONYMOUS_CLASS)
+      .matches("class(1, foo()) extends A implements B, C {var $a;}")
+      .matches("class implements B {}")
+      .matches("class extends B {}")
+      .matches("class {}")
+    ;
   }
-
 }

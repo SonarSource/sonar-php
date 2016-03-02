@@ -24,6 +24,7 @@ import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -90,7 +91,7 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
   @Test
   public void test_fetchConstructor() throws Exception {
     ClassDeclarationTree tree = parse("class A { function __construct(); }", PHPLexicalGrammar.CLASS_DECLARATION);
-    assertThat(tree.fetchConstructor().name().text()).isEqualTo(ClassDeclarationTree.PHP5_CONSTRUCTOR_NAME);
+    assertThat(tree.fetchConstructor().name().text()).isEqualTo(ClassTree.PHP5_CONSTRUCTOR_NAME);
 
     tree = parse("class A { function A(); }", PHPLexicalGrammar.CLASS_DECLARATION);
     assertThat(tree.fetchConstructor().name().text()).isEqualTo("A");
