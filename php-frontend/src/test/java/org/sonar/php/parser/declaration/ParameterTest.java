@@ -31,6 +31,7 @@ public class ParameterTest {
     assertThat(PHPLexicalGrammar.PARAMETER)
       .matches("callable $a")
       .matches("array $a")
+      .matches("int $a")
       .matches("Foo $a")
       .matches("&$a")
       .matches("...$a")

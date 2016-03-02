@@ -20,13 +20,11 @@
 package org.sonar.plugins.php.api.tree.declaration;
 
 import com.google.common.annotations.Beta;
-import org.sonar.php.api.PHPKeyword;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import javax.annotation.Nullable;
 
 /**
  * <a href="http://php.net/manual/en/functions.arguments.php">Function Argument</a>
@@ -43,12 +41,8 @@ import javax.annotation.Nullable;
 @Beta
 public interface ParameterTree extends Tree {
 
-  /**
-   * Either {@link PHPKeyword#ARRAY array}, {@link PHPKeyword#CALLABLE callable}
-   * or FULLY_QUALIFIED_CLASS_NAME
-   */
   @Nullable
-  Tree type();
+  TypeTree type();
 
   @Nullable
   SyntaxToken referenceToken();

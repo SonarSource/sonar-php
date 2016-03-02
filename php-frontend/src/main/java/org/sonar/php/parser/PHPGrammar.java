@@ -366,11 +366,7 @@ public class PHPGrammar {
   public ParameterTree PARAMETER() {
     return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
       f.parameter(
-        b.optional(
-          b.firstOf(
-            b.token(PHPKeyword.ARRAY),
-            b.token(PHPKeyword.CALLABLE),
-            NAMESPACE_NAME())),
+        b.optional(TYPE_NAME()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),

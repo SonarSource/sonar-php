@@ -385,7 +385,7 @@ public class TreeFactory {
   }
 
   public ParameterTree parameter(
-    Optional<Tree> classType,
+    Optional<TypeTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
     InternalSyntaxToken identifier,
@@ -398,7 +398,7 @@ public class TreeFactory {
       initValue = eqAndInitValue.get().second();
     }
     VariableIdentifierTree varIdentifier = new VariableIdentifierTreeImpl(identifier);
-    return new ParameterTreeImpl(classType.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
+    return new ParameterTreeImpl(type.orNull(), ampersand.orNull(), ellipsis.orNull(), varIdentifier, eqToken, initValue);
   }
 
   public SeparatedListImpl<NamespaceNameTree> interfaceList(NamespaceNameTree first, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> others) {
