@@ -19,16 +19,17 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class YieldExpressionTest {
 
   @Test
   public void test() {
     assertThat(Kind.YIELD_EXPRESSION)
+      .matches("yield")
       .matches("yield $a")
       .matches("yield $a=>$b");
 

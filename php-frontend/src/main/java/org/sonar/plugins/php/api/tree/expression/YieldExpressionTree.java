@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 /**
  * <a href="http://php.net/manual/en/language.generators.syntax.php">Generator syntax</a>
  * <pre>
+ *  yield
  *  yield {@link #value()}
  *  yield {@link #key()} => {@link #value()}
  * </pre>
@@ -42,6 +43,7 @@ public interface YieldExpressionTree extends ExpressionTree {
   @Nullable
   SyntaxToken doubleArrowToken();
 
+  @Nullable
   ExpressionTree value();
 
 }

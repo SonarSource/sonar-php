@@ -1181,11 +1181,12 @@ public class TreeFactory {
     return new ExpandableStringLiteralTreeImpl(openDoubleQuote, expressions, closeDoubleQuote);
   }
 
-  public YieldExpressionTree yieldExpression(InternalSyntaxToken yieldToken, ExpressionTree expr1, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> expr2) {
-    if (expr2.isPresent()) {
-      return new YieldExpressionTreeImpl(yieldToken, expr1, expr2.get().first(), expr2.get().second());
-    }
-    return new YieldExpressionTreeImpl(yieldToken, expr1);
+  public YieldExpressionTree yieldExpression(InternalSyntaxToken yieldToken, Optional<ExpressionTree> expr) {
+    return new YieldExpressionTreeImpl(yieldToken, expr.orNull());
+  }
+
+  public YieldExpressionTree yieldExpressionWithKey(InternalSyntaxToken yieldToken, ExpressionTree expr1, InternalSyntaxToken arrow, ExpressionTree expr2) {
+    return new YieldExpressionTreeImpl(yieldToken, expr1, arrow, expr2);
   }
 
   public ParenthesisedExpressionTree parenthesizedExpression(InternalSyntaxToken openParenthesis, ExpressionTree expression, InternalSyntaxToken closeParenthesis) {

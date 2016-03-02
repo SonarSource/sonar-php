@@ -19,15 +19,12 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
-import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class YieldExpressionTreeTest extends PHPTreeModelTest {
 
@@ -55,4 +52,15 @@ public class YieldExpressionTreeTest extends PHPTreeModelTest {
     assertThat(expressionToString(tree.value())).isEqualTo("$b");
   }
 
+  @Test
+  public void yield_null() throws Exception {
+    YieldExpressionTree tree = parse("yield", Kind.YIELD_EXPRESSION);
+
+    assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
+
+    assertThat(tree.yieldToken().text()).isEqualTo("yield");
+    assertThat(tree.key()).isNull();
+    assertThat(tree.doubleArrowToken()).isNull();
+    assertThat(tree.value()).isNull();
+  }
 }

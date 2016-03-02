@@ -1208,10 +1208,9 @@ public class PHPGrammar {
 
   public YieldExpressionTree YIELD_EXPRESSION() {
     return b.<YieldExpressionTree>nonterminal(Kind.YIELD_EXPRESSION).is(
-      f.yieldExpression(
-        b.token(YIELD),
-        EXPRESSION(),
-        b.optional(f.newTuple1(b.token(DOUBLEARROW), EXPRESSION()))));
+      b.firstOf(
+        f.yieldExpressionWithKey(b.token(YIELD), EXPRESSION(), b.token(DOUBLEARROW), EXPRESSION()),
+        f.yieldExpression(b.token(YIELD), b.optional(EXPRESSION()))));
   }
 
   public ParenthesisedExpressionTree PARENTHESIZED_EXPRESSION() {

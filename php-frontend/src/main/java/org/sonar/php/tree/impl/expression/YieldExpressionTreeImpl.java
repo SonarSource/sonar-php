@@ -48,7 +48,7 @@ public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionT
     this.value = value;
   }
 
-  public YieldExpressionTreeImpl(InternalSyntaxToken yieldToken, ExpressionTree value) {
+  public YieldExpressionTreeImpl(InternalSyntaxToken yieldToken, @Nullable ExpressionTree value) {
     this.yieldToken = yieldToken;
     this.key = null;
     this.doubleArrowToken = null;
@@ -77,6 +77,7 @@ public class YieldExpressionTreeImpl extends PHPTree implements YieldExpressionT
     return doubleArrowToken;
   }
 
+  @Nullable
   @Override
   public ExpressionTree value() {
     return value;
