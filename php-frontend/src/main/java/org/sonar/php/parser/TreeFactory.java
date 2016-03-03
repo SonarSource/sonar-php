@@ -252,11 +252,11 @@ public class TreeFactory {
     }
   }
 
-  private <T extends Tree> SeparatedListImpl<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples) {
+  private static <T extends Tree> SeparatedListImpl<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples) {
     return separatedList(firstElement, tuples, null);
   }
 
-  private <T extends Tree> SeparatedListImpl<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples, InternalSyntaxToken trailingSeparator) {
+  private static <T extends Tree> SeparatedListImpl<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples, InternalSyntaxToken trailingSeparator) {
     ImmutableList.Builder<T> elements = ImmutableList.builder();
     ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
 
@@ -701,7 +701,7 @@ public class TreeFactory {
   }
 
   @Nullable
-  private ExpressionTree getForEachKey(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey) {
+  private static ExpressionTree getForEachKey(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey) {
     if (optionalKey.isPresent()) {
       return optionalKey.get().first();
     } else {
@@ -710,7 +710,7 @@ public class TreeFactory {
   }
 
   @Nullable
-  private InternalSyntaxToken getForEachArrow(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey) {
+  private static InternalSyntaxToken getForEachArrow(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> optionalKey) {
     if (optionalKey.isPresent()) {
       return optionalKey.get().second();
     } else {
@@ -1073,7 +1073,7 @@ public class TreeFactory {
     return result;
   }
 
-  private ExpressionTree binaryExpression(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+  private static ExpressionTree binaryExpression(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
     if (!operatorsAndOperands.isPresent()) {
       return exp1;
     }
@@ -1568,7 +1568,7 @@ public class TreeFactory {
     }
   }
 
-  private <T, U> Tuple<T, U> newTuple(T first, U second) {
+  private static <T, U> Tuple<T, U> newTuple(T first, U second) {
     return new Tuple<>(first, second);
   }
 

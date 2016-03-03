@@ -57,9 +57,7 @@ public class NonLFCharAsEOLCheck extends PHPVisitorCheck implements CharsetAware
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     File file = context().file();
-    try {
-      BufferedReader reader = Files.newReader(file, charset);
-
+    try (BufferedReader reader = Files.newReader(file, charset)){
       int c;
       while ((c = reader.read()) != -1) {
 
