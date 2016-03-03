@@ -30,5 +30,5 @@ import org.sonar.plugins.php.api.tree.Tree;
  * <ul/>
  */
 @Beta
-public interface TypeTree extends Tree {
+public interface TypeNameTree extends Tree {
 }

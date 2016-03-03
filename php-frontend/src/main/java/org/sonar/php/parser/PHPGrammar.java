@@ -40,7 +40,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
-import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -442,8 +442,8 @@ public class PHPGrammar {
         b.token(PHPLexicalGrammar.IDENTIFIER)));
   }
 
-  public TypeTree TYPE_NAME() {
-    return b.<TypeTree>nonterminal(PHPLexicalGrammar.TYPE_NAME).is(
+  public TypeNameTree TYPE_NAME() {
+    return b.<TypeNameTree>nonterminal(PHPLexicalGrammar.TYPE_NAME).is(
       b.firstOf(
         f.builtInType(b.firstOf(
           b.token(ARRAY),

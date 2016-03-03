@@ -28,7 +28,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class TypeTreeTest extends PHPTreeModelTest {
+public class TypeNameTreeTest extends PHPTreeModelTest {
 
   @Test
   public void built_in_type() throws Exception {

@@ -37,6 +37,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * <pre/>
  */
 @Beta
-public interface BuiltInTypeTree extends TypeTree {
+public interface BuiltInTypeTree extends TypeNameTree {
   SyntaxToken token();
 }

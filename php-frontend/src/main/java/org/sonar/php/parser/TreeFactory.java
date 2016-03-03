@@ -128,7 +128,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
-import org.sonar.plugins.php.api.tree.declaration.TypeTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -385,7 +385,7 @@ public class TreeFactory {
   }
 
   public ParameterTree parameter(
-    Optional<TypeTree> type,
+    Optional<TypeNameTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
     InternalSyntaxToken identifier,
@@ -1539,8 +1539,8 @@ public class TreeFactory {
     return new BuiltInTypeTreeImpl(token);
   }
 
-  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken token, TypeTree typeTree) {
-    return new ReturnTypeClauseTreeImpl(token, typeTree);
+  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken token, TypeNameTree typeNameTree) {
+    return new ReturnTypeClauseTreeImpl(token, typeNameTree);
   }
 
   /**
