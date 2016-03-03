@@ -224,3 +224,16 @@ function foreach_key_declared_twice($arr) {
     echo "world";
   }
 }
+
+
+/**
+ *  SONARPHP-602
+ */
+class Foo{
+  public function foo()
+  {
+     ObjectCustomService::class;
+     $M = 1;
+     return $M; // OK
+  }
+}

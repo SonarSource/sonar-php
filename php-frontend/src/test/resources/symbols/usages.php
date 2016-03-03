@@ -39,6 +39,10 @@ class A {
         echo $field;
         echo $this->field;
         $this->method();
+
+        foo(A::class);
+        $A = 1;
+        return $A;
     }
 }
 

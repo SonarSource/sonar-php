@@ -79,6 +79,9 @@ public class UsagesTest extends ParsingTestUtils {
 
       } else if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
         test_class(scope);
+
+      } else if (tree.is(Tree.Kind.METHOD_DECLARATION)) {
+        test_method(scope);
       }
     }
 
@@ -87,6 +90,10 @@ public class UsagesTest extends ParsingTestUtils {
   private void test_class(Scope scope) {
     assertThat(scope.getSymbol("$field").usages()).hasSize(1);
     assertThat(scope.getSymbol("method").usages()).hasSize(1);
+  }
+
+  private void test_method(Scope scope) {
+    assertThat(scope.getSymbol("$A").usages()).hasSize(1);
   }
 
   private void test_local_variable(Scope scope) {

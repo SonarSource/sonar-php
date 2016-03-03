@@ -22,6 +22,7 @@ package org.sonar.php.tree.symbols;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -191,6 +192,15 @@ public class SymbolVisitor extends PHPVisitorCheck {
         classMemberUsageState = null;
       }
     }
+  }
+
+  @Override
+  public void visitToken(SyntaxToken token) {
+    if (classMemberUsageState != null && classMemberUsageState.isStatic && token.text().equals(PHPKeyword.CLASS.getValue())){
+      classMemberUsageState = null;
+    }
+
+    super.visitToken(token);
   }
 
   @Override
