@@ -117,6 +117,15 @@ public class PhpUnitResultParserTest {
     verify(context).saveMeasure(bananaFile, CoreMetrics.TEST_EXECUTION_TIME, 570.0);
   }
 
+  /**
+   * Should not fail with empty test suite.
+   */
+  @Test
+  public void shouldNotFailWithEmptyTestSuite() {
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuite.xml"));
+    verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
+  }
+
   @Test(expected = SonarException.class)
   public void testGetTestSuitesWithUnexistingFile() throws Exception {
     parser.getTestSuites(new File("target/unexistingFile.xml"));

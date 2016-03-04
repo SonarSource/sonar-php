@@ -19,11 +19,15 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
-import java.util.List;
 
 /**
  * The Class TestSuite.
@@ -79,6 +83,8 @@ public final class TestSuite {
    * */
   public TestSuite() {
     // Empty constructor is required by xstream
+    this.testSuites = new ArrayList<>();
+    this.testCases = new ArrayList<>();
   }
 
   /**
@@ -100,8 +106,8 @@ public final class TestSuite {
     this.tests = tests;
     this.assertions = assertions;
     this.time = time;
-    this.testSuites = testSuites;
-    this.testCases = testCases;
+    this.testSuites = CollectionUtils.isEmpty(testSuites) ? Collections.<TestSuite>emptyList() : testSuites;
+    this.testCases = CollectionUtils.isEmpty(testCases) ? Collections.<TestCase>emptyList() : testCases;
   }
 
   /**

@@ -43,6 +43,7 @@ public final class TestSuites {
    * */
   public TestSuites() {
     // Empty constructor is required by xstream
+    this.testSuites = new ArrayList<>();
   }
 
   /**
@@ -69,9 +70,6 @@ public final class TestSuites {
    * @param testSuite the test suite
    */
   public void addTestSuite(final TestSuite testSuite) {
-    if (testSuites == null) {
-      testSuites = new ArrayList<>();
-    }
     testSuites.add(testSuite);
   }
 }
