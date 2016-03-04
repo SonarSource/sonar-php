@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Project Test Suite" tests="59" assertions="333" failures="0" errors="0" time="50.006862">
+    <testsuite name="App\MyBundle\Tests\Controller\DefaultControllerTest" time="44.765998">
+      <testcase name="testIndex" time="0.291205"/>
+      <testcase name="testAbout" time="0.323882"/>
+      <testcase name="testHelp" time="0.280838"/>
+      <testcase name="testTermsandconditions" time="0.256445"/>
+      <testcase name="testLandingpage" time="0.238981"/>
+      <testcase name="testHealthCheck" time="2.079682"/>
+      <testcase name="testCountcsw" time="4.024171"/>
+      <testcase name="testCountCSWWithDates" time="0.616031"/>
+      <testcase name="testCountStations" time="4.463266"/>
+      <testcase name="testCountBis" time="24.601176"/>
+      <testcase name="testCountChem" time="2.167579"/>
+      <testcase name="testCountBio" time="3.303988"/>
+      <testcase name="testTerminal" time="0.091584"/>
+      <testcase name="testSources" time="0.058048"/>
+      <testcase name="testApplicationMessages" time="0.063716"/>
+      <testcase name="testGetmetadataAction" time="1.714323"/>
+      <testcase name="testWmsclickAction" time="0.099985"/>
+      <testcase name="testWmsclickAction_no_results" time="0.091099"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Controller\ChemControllerTest" time="4.117753">
+      <testcase name="testDetailsAsJsonAction_not_login" time="0.056348"/>
+      <testcase name="testDetailsAsJsonAction" time="2.712707"/>
+      <testcase name="testChemLandingPageAction_no_login" time="0.189914"/>
+      <testcase name="testChemLandingPageAction" time="0.472690"/>
+      <testcase name="testChemLandingPageAction_user_with_no_permits" time="0.686094"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Controller\HelperControllerTest" time="0.063471">
+      <testcase name="testLastUrlAction" time="0.063471"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Controller\ReportsControllerTest" time="0.472779">
+      <testcase name="testCreateAction_far" time="0.228874"/>
+      <testcase name="testCreateAction_Bisr" time="0.243905"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Controller\SensorObsControllerTest" time="0.497297">
+      <testcase name="testGetTimeSeriesList" time="0.184976"/>
+      <testcase name="testGetTimeSeriesData" time="0.312321"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Entity\DCSearchSourceTest" time="0.000488">
+      <testcase name="testGetSet" time="0.000488"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Entity\EntitiesTest" time="0.001068">
+      <testcase name="testGetEntities" time="0.001068"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Entity\BisSearchSourceTest" time="0.000330">
+      <testcase name="testGetSet" time="0.000330"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Entity\ChemSearchSourceTest" time="0.000236">
+      <testcase name="testGetSet" time="0.000236"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Entity\BioSearchSourceTest" time="0.000264">
+      <testcase name="testGetSet" time="0.000264"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Entity\StationsSearchSourceTest" time="0.000302">
+      <testcase name="testGetSet" time="0.000302"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Entity\SearchTest" time="0.000273">
+      <testcase name="testGetSet" time="0.000273"/>
+    </testsuite>
+    <testsuite name="CswRequestBodyTest" time="0.000308">
+      <testcase name="testGetCountBody" time="0.000308">
+        <system-out>&lt;?xml version="1.0"?&gt;&lt;csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" xmlns:gmd="http://www.isotc211.org/2005/gmd" service="CSW" version="2.0.2" startPosition="1" maxRecords="20" xmlns:ows="http://www.opengis.net/ows" resultType="results"&gt;&lt;csw:Query typeNames="gmd:MD_Metadata"&gt;&lt;csw:Constraint version="1.1.0"&gt;&lt;ogc:Filter&gt;&lt;ogc:And&gt;&lt;ogc:Or&gt;&lt;ogc:BBOX&gt;&lt;ogc:PropertyName&gt;iso:BoundingBox&lt;/ogc:PropertyName&gt;&lt;gml:Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;&lt;gml:lowerCorner&gt;-184.92019754028 -37.13141456295096&lt;/gml:lowerCorner&gt;&lt;gml:upperCorner&gt;-184.74750619507 37.07665174093083&lt;/gml:upperCorner&gt;&lt;/gml:Envelope&gt;&lt;/ogc:BBOX&gt;&lt;ogc:BBOX&gt;&lt;ogc:PropertyName&gt;iso:BoundingBox&lt;/ogc:PropertyName&gt;&lt;gml:Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;&lt;gml:lowerCorner&gt;175.0798024597168 -37.13141456295096&lt;/gml:lowerCorner&gt;&lt;gml:upperCorner&gt;175.25249380493165 37.07665174093083&lt;/gml:upperCorner&gt;&lt;/gml:Envelope&gt;&lt;/ogc:BBOX&gt;&lt;ogc:BBOX&gt;&lt;ogc:PropertyName&gt;iso:BoundingBox&lt;/ogc:PropertyName&gt;&lt;gml:Envelope srsName="http://www.opengis.net/gml/srs/epsg.xml#4326"&gt;&lt;gml:lowerCorner&gt;535.07980245972 -37.13141456295096&lt;/gml:lowerCorner&gt;&lt;gml:upperCorner&gt;535.25249380493 37.07665174093083&lt;/gml:upperCorner&gt;&lt;/gml:Envelope&gt;&lt;/ogc:BBOX&gt;&lt;/ogc:Or&gt;&lt;/ogc:And&gt;&lt;/ogc:Filter&gt;&lt;/csw:Constraint&gt;&lt;/csw:Query&gt;&lt;/csw:GetRecords&gt;</system-out>
+      </testcase>
+    </testsuite>
+    <testsuite name="BoundingboxTest" time="0.000423">
+      <testcase name="testBoundingbox" time="0.000423"/>
+    </testsuite>
+    <testsuite name="featureRequestTest" time="0.001885">
+      <testcase name="testSetFilters" time="0.000413"/>
+      <testcase name="testGetUrl" time="0.000211"/>
+      <testcase name="testGetFilter" time="0.001261"/>
+    </testsuite>
+    <testsuite name="wfsSearchValuesTest" time="0.001239">
+      <testcase name="testAdavancedBis" time="0.000441"/>
+      <testcase name="testAdavancedStations" time="0.000374"/>
+      <testcase name="testSearchKeyValuePair" time="0.000424"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Services\52RendererTest" time="0.063931">
+      <testcase name="testTimeSeriesDataXMLToJSON" time="0.063931"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Services\AquaRendererTest" time="0.003571">
+      <testcase name="testTimeSeriesDataXMLToJSON" time="0.003571"/>
+    </testsuite>
+    <testsuite name="OGCRendererTest" time="0.000797">
+      <testcase name="testOWSException" time="0.000797"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Services\SensorObsRendererTest" time="0.002452">
+      <testcase name="testSetFlavour_Aqua" time="0.001171"/>
+      <testcase name="testSetFlavour_52" time="0.001096"/>
+      <testcase name="testSetFlavour_wrong_renderer" time="0.000185"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Services\StationRendererTest" time="0.002600">
+      <testcase name="testDetailsToJson" time="0.002600"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Services\TerminalRemoteTest" time="0.006743">
+      <testcase name="testAutocomplete" time="0.006743"/>
+    </testsuite>
+    <testsuite name="App\MyBundle\Tests\Services\UserServiceTest" time="0.002339">
+      <testcase name="testCheckRegistered_null_user" time="0.000214"/>
+      <testcase name="testCheckRegistered_wrong_object" time="0.000556"/>
+      <testcase name="testCheckRegistered_no_roles" time="0.000623"/>
+      <testcase name="testCheckRegistered_many_roles" time="0.000230"/>
+      <testcase name="testCheckRegistered_pending_roles" time="0.000240"/>
+      <testcase name="testCheckRegistered_active_roles" time="0.000246"/>
+      <testcase name="testCheckRegistered_disabled_roles" time="0.000230"/>
+    </testsuite>
+    <testsuite name="SourcesTest" time="0.000315">
+      <testcase name="testGetAll" time="0.000315"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

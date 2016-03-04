@@ -112,6 +112,12 @@ public final class TestCase {
   private String failure;
 
   /**
+   * The system output.
+   */
+  @XStreamAlias("system-out")
+  private String systemOutput;
+
+  /**
    * Gets the assertions.
    *
    * @return the assertions
@@ -238,6 +244,24 @@ public final class TestCase {
     this.name = name;
   }
 
+  /**
+   * Sets the system output.
+   *
+   * @param systemOutput the new system output
+   */
+  public void setSystemOutput(final String systemOutput) {
+      this.systemOutput = systemOutput;
+  }
+
+  /**
+   * Gets the system output.
+   *
+   * @return the system output
+   */
+  public String getSystemOutput() {
+      return this.systemOutput;
+  }
+
   /*
    * (non-Javadoc)
    *
@@ -249,7 +273,7 @@ public final class TestCase {
     builder.append("TestCase [assertions=").append(assertions).append(", fileName=").append(className).append(", errorMessage=")
       .append(errorMessage).append(", file=").append(file).append(", line=").append(line).append(", name=").append(name)
       .append(", status=").append(status).append(", time=").append(time).append(", error=").append(error).append(", failure=")
-      .append(failure).append("]");
+      .append(failure).append("]").append(", systemOut=[").append(systemOutput).append("]");
     return builder.toString();
   }
 
