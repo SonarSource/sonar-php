@@ -35,7 +35,7 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
-@SqaleLinearRemediation(coeff = "10min", effortToFixDescription = "classes + interfaces -1")
+@SqaleLinearRemediation(coeff = "10min", effortToFixDescription = "per extra \"class\" or \"interface\"")
 public class MoreThanOneClassInFileCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1996";
