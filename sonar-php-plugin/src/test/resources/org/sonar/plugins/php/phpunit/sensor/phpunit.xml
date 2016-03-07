@@ -20,8 +20,10 @@
           expected &lt;integer:1&gt;.
           D:\projets\math-php-test\source\tests\AllTests2.php:105
         </failure>
+        <system-out>foo</system-out>
       </testcase>
       <testcase name="testDataProviderOneWillFail with data set #3" assertions="1" time="1.002675"/>
+      <system-err>foo</system-err>
     </testsuite>
   </testsuite>
   <testsuite name="Banana" file="Banana.php" tests="1" assertions="0" failures="0" errors="0" time="0.57">

@@ -20,6 +20,13 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -37,13 +44,6 @@ import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The Class PhpUnitResultParser.
@@ -89,13 +89,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
   protected TestSuites getTestSuites(File report) {
     InputStream inputStream = null;
     try {
-      XStream xstream = new XStream();
-      // Sonar 2.2 migration
-      xstream.setClassLoader(getClass().getClassLoader());
-      xstream.aliasSystemAttribute("fileName", "class");
-      xstream.processAnnotations(TestSuites.class);
-      xstream.processAnnotations(TestSuite.class);
-      xstream.processAnnotations(TestCase.class);
+      XStream xstream = getXStream();
       inputStream = new FileInputStream(report);
       TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
       LOG.debug("Tests suites: " + testSuites.getTestSuiteList());
@@ -105,6 +99,28 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
     } finally {
       IOUtils.closeQuietly(inputStream);
     }
+  }
+
+  private XStream getXStream() {
+    XStream xstream = new XStream(){
+      // Trick to ignore unknown elements
+      @Override
+      protected MapperWrapper wrapMapper(MapperWrapper next) {
+        return new MapperWrapper(next) {
+          @Override
+          public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+            return definedIn != Object.class && super.shouldSerializeMember(definedIn, fieldName);
+          }
+        };
+      }
+    };
+    // Sonar 2.2 migration
+    xstream.setClassLoader(getClass().getClassLoader());
+    xstream.aliasSystemAttribute("fileName", "class");
+    xstream.processAnnotations(TestSuites.class);
+    xstream.processAnnotations(TestSuite.class);
+    xstream.processAnnotations(TestCase.class);
+    return xstream;
   }
 
   /**
