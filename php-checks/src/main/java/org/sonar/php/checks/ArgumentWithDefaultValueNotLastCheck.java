@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -51,10 +52,19 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
   @Override
   public void visitParameterList(ParameterListTree parameterList) {
     List<ParameterTree> parametersToMove = getParametersToMove(parameterList);
-    if (!parametersToMove.isEmpty()) {
+    if (!parametersToMove.isEmpty() && !isVariableLengthParameterList(parameterList)) {
       context().newIssue(this, String.format(MESSAGE, getNameListString(parametersToMove))).tree(parameterList);
     }
     super.visitParameterList(parameterList);
+  }
+  
+  private static boolean isVariableLengthParameterList(ParameterListTree parameterList) {
+    SeparatedList<ParameterTree> parameters = parameterList.parameters();
+    if (!parameters.isEmpty()) {
+      ParameterTree lastParameter = parameters.get(parameters.size() - 1);
+      return lastParameter.ellipsisToken() != null;
+    }
+    return false;
   }
 
   /**
