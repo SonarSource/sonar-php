@@ -20,11 +20,18 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.Maps;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.tree.symbols.Scope;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -33,7 +40,6 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -43,12 +49,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 @Rule(
   key = LocalVariableShadowsClassFieldCheck.KEY,
@@ -63,6 +63,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Rename \"%s\" which has the same name as the field declared at line %s.";
 
   private ClassState classState = new ClassState();
+  private Deque<FunctionTree> functions = new ArrayDeque<>();
 
   private static class ClassState {
 
@@ -115,6 +116,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     classState.clear();
+    functions.clear();
     super.visitCompilationUnit(tree);
   }
 
@@ -137,8 +139,9 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     if (!isExcluded(tree)) {
       classState.newFunctionScope();
-      checkParameters(tree);
+      functions.push(tree);
       super.visitMethodDeclaration(tree);
+      functions.pop();
       classState.leaveFunctionScope();
     }
   }
@@ -147,8 +150,9 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   public void visitFunctionExpression(FunctionExpressionTree tree) {
     if (classState.isInClass()) {
       classState.newFunctionScope();
-      checkParameters(tree);
+      functions.push(tree);
       super.visitFunctionExpression(tree);
+      functions.pop();
       classState.leaveFunctionScope();
     }
   }
@@ -172,19 +176,17 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   private void checkLocalVariable(ExpressionTree assignedExpression) {
     String varName = assignedExpression.toString();
 
-    if (classState.hasFieldNamed(varName) && !classState.hasAlreadyBeenChecked(varName)) {
+    if (isLocalVar(varName) && classState.hasFieldNamed(varName) && !classState.hasAlreadyBeenChecked(varName)) {
       reportIssue(assignedExpression, varName);
     }
   }
 
-  private void checkParameters(FunctionTree functionDec) {
-    for (ParameterTree parameter : functionDec.parameters().parameters()) {
-      String name = parameter.variableIdentifier().variableExpression().text();
-
-      if (classState.hasFieldNamed(name)) {
-        reportIssue(parameter, name);
-      }
+  private boolean isLocalVar(String varName) {
+    if (functions.isEmpty()) {
+      return false;
     }
+    Scope scope = context().symbolTable().getScopeFor(functions.peek());
+    return scope.getSymbol(varName, Symbol.Kind.VARIABLE) != null;
   }
 
   private boolean isExcluded(MethodDeclarationTree methodDec) {
@@ -194,7 +196,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   }
 
   private static boolean isSetter(String methodName) {
-    return methodName.length() > 2 && "set".equalsIgnoreCase(methodName.substring(0, 3));
+    return methodName.startsWith("set");
   }
 
   private boolean isConstructor(String methodName) {

@@ -1,6 +1,4 @@
-<p>
-  Shadowing fields with a local variable or with a [function|method] parameter is a bad practice that reduces code readability: It makes it confusing to know whether the field or the variable is being used.
-</p>
+<p>Shadowing fields with a local variable is a bad practice that reduces code readability: It makes it confusing to know whether the field or the variable is being used.</p>
 
 <h2>Noncompliant Code Example</h2>
 <pre>
@@ -11,29 +9,11 @@ class Foo {
     $myField = 0;
     ...
   }
-
-  public function doSomethingElse($myField) {
-    ...
-  }
 }
 </pre>
 
-<h2>Exceptions</h2>
-<p>Constructors and setters are exceptions; it is common practice to name arguments for the fields the values will be assigned to. Static methods are also excepted.</p>
-<pre>
-class Foo {
-  public $myField;
+<h2>See</h2>
+<ul>
+<li> <a href="https://www.securecoding.cert.org/confluence/x/2ADEAw">CERT, DCL51-J.</a> - Do not shadow or obscure identifiers in subscopes
+</li></ul>
 
-  public function Foo($myField) {
-    $this->myField = $myField;
-  }
-
-  public static function build($myField) {
-    ...
-  }
-
-  public function setMyField($myField){
-    $this->myField = $myField;
-  }
-}
-</pre>

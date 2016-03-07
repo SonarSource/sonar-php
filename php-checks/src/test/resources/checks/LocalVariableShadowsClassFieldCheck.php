@@ -7,16 +7,23 @@ interface I {
 class A {
 
   public $field;
+  public $otherField = $x = 1;
 
-  public function setField($field) {    // OK (Accessor)
+  public function setField($field) {    // OK
     $this->field = $field;
   }
 
-  public function A($field) {           // OK (Constructor)
+  public function setX() {              // OK
+    $field = 1;
+    foo($field);
+  }
+
+  public function A() {                 // OK (Constructor)
+    $field = foo();
     $this->field = $field;
   }
 
-  public static function f1($field) {   // OK
+  public static function f1() {
     $field = 1;                         // OK
     $f = function ($field) {};          // OK
   }
@@ -26,10 +33,15 @@ class A {
     $field = 1;                         // NOK {{Rename "$field" which has the same name as the field declared at line 9.}}
   }
 
-  public function f3($field) {}         // NOK
+  public function f3($field) {          // OK
+    if (empty($field)) {
+      $field = 1;
+    }
+    foo($field);
+  }
 
   public function f4() {
-    $f1 = function ($field) {           // NOK
+    $f1 = function ($field) {           // OK
     };
 
     $f2 = function () {
@@ -41,12 +53,26 @@ class A {
   public function f5($param) {
     $field =& $param;                    // NOK
   }
+  
+  public function f6() {
+    $field = foo();                      // NOK
+    callback(function() use ($field)  {  // OK
+    });
+  }
+
+  public function f7() {
+    $f = function () {
+      $field = 1;                        // NOK
+    };
+  }
+
 }
 
 class B {
   public $field;
 
-  public function __construct($field) {  // OK (Constructor)
+  public function __construct() {
+    $field = foo();                      // OK (Constructor)
     $this->field = $field;
   }
 
