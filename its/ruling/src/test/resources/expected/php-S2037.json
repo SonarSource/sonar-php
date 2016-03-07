@@ -2264,9 +2264,6 @@
 171,
 175,
 ],
-'project:PHP_CodeSniffer/CodeSniffer/Tokens.php':[
-484,
-],
 'project:PHP_CodeSniffer/tests/AllTests.php':[
 61,
 ],
@@ -3176,9 +3173,6 @@
 'project:symfony/Symfony/Component/Form/FormRenderer.php':[
 114,
 174,
-],
-'project:symfony/Symfony/Component/Form/Forms.php':[
-163,
 ],
 'project:symfony/Symfony/Component/Form/Guess/Guess.php':[
 95,
@@ -4736,10 +4730,6 @@
 1202,
 1257,
 ],
-'project:symfony/Symfony/Component/PropertyAccess/PropertyAccess.php':[
-28,
-51,
-],
 'project:symfony/Symfony/Component/PropertyAccess/PropertyAccessor.php':[
 61,
 80,
@@ -4862,9 +4852,6 @@
 201,
 203,
 205,
-],
-'project:symfony/Symfony/Component/Security/Acl/Domain/UserSecurityIdentity.php':[
-72,
 ],
 'project:symfony/Symfony/Component/Security/Acl/Permission/BasicPermissionMap.php':[
 36,
@@ -5131,9 +5118,6 @@
 ],
 'project:symfony/Symfony/Component/Validator/Tests/ValidationVisitorTest.php':[
 54,
-],
-'project:symfony/Symfony/Component/Validator/Validation.php':[
-31,
 ],
 'project:symfony/Symfony/Component/Yaml/Escaper.php':[
 51,
