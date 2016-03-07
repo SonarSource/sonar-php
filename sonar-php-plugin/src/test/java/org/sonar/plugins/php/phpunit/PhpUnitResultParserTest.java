@@ -81,6 +81,13 @@ public class PhpUnitResultParserTest {
     verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
   }
 
+  @Test
+  public void shouldNotFailWithEmptyTestSuites() {
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"));
+
+    verify(context, never()).saveMeasure(any(org.sonar.api.resources.File.class), any(Metric.class), anyDouble());
+  }
+
   /**
    * Should generate tests metrics.
    */

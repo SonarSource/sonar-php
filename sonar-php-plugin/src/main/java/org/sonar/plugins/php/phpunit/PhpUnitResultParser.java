@@ -98,7 +98,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
       xstream.processAnnotations(TestCase.class);
       inputStream = new FileInputStream(report);
       TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
-      LOG.debug("Tests suites: " + testSuites.getTestSuites());
+      LOG.debug("Tests suites: " + testSuites.getTestSuiteList());
       return testSuites;
     } catch (IOException e) {
       throw new SonarException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
@@ -162,7 +162,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    */
   private List<PhpUnitTestReport> readSuites(TestSuites testSuites) {
     List<PhpUnitTestReport> result = new ArrayList<>();
-    for (TestSuite testSuite : testSuites.getTestSuites()) {
+    for (TestSuite testSuite : testSuites.getTestSuiteList()) {
       PhpTestSuiteReader reader = new PhpTestSuiteReader();
       reader.readSuite(testSuite, null);
       result.addAll(reader.getReportsPerClass());

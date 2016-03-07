@@ -57,14 +57,14 @@ public class TestSuitesTest {
   }
 
   /**
-   * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#setTestSuites(java.util.List)}.
+   * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#setTestSuiteList(java.util.List)}.
    */
   @Test
   public void testSetTestSuites() {
     List<TestSuite> testSuitesList = new ArrayList<TestSuite>();
 
-    testSuites.setTestSuites(testSuitesList);
-    assertSame(testSuitesList, testSuites.getTestSuites());
+    testSuites.setTestSuiteList(testSuitesList);
+    assertSame(testSuitesList, testSuites.getTestSuiteList());
   }
 
   /**
@@ -76,7 +76,7 @@ public class TestSuitesTest {
 
     testSuites.addTestSuite(suite);
 
-    assertThat(testSuites.getTestSuites(), hasItem(suite));
+    assertThat(testSuites.getTestSuiteList(), hasItem(suite));
   }
 
   /**
@@ -90,7 +90,7 @@ public class TestSuitesTest {
     testSuites.addTestSuite(suite1);
     testSuites.addTestSuite(suite2);
 
-    assertThat(testSuites.getTestSuites(), both(hasItem(suite1)).and(hasItem(suite2)));
+    assertThat(testSuites.getTestSuiteList(), both(hasItem(suite1)).and(hasItem(suite2)));
   }
 
   /**

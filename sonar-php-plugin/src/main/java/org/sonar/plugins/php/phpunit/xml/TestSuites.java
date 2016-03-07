@@ -35,7 +35,7 @@ public final class TestSuites {
    * The test suites.
    */
   @XStreamImplicit(itemFieldName = "testsuite")
-  private List<TestSuite> testSuites;
+  private List<TestSuite> testSuiteList = new ArrayList<>();
 
   /**
    * Empty constructor is required by xstream in order to
@@ -50,17 +50,17 @@ public final class TestSuites {
    *
    * @return the test suites
    */
-  public List<TestSuite> getTestSuites() {
-    return testSuites;
+  public List<TestSuite> getTestSuiteList() {
+    return testSuiteList;
   }
 
   /**
    * Sets the test suites.
    *
-   * @param testSuites the new test suites
+   * @param testSuiteList the new test suites
    */
-  public void setTestSuites(final List<TestSuite> testSuites) {
-    this.testSuites = testSuites;
+  public void setTestSuiteList(final List<TestSuite> testSuiteList) {
+    this.testSuiteList = testSuiteList;
   }
 
   /**
@@ -69,9 +69,6 @@ public final class TestSuites {
    * @param testSuite the test suite
    */
   public void addTestSuite(final TestSuite testSuite) {
-    if (testSuites == null) {
-      testSuites = new ArrayList<>();
-    }
-    testSuites.add(testSuite);
+    testSuiteList.add(testSuite);
   }
 }
