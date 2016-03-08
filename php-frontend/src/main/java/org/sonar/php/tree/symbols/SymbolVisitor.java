@@ -22,11 +22,15 @@ package org.sonar.php.tree.symbols;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Set;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -40,10 +44,12 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -51,10 +57,6 @@ import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Set;
 
 public class SymbolVisitor extends PHPVisitorCheck {
 
@@ -309,7 +311,32 @@ public class SymbolVisitor extends PHPVisitorCheck {
     tree.callee().accept(this);
     this.insideCallee.pop();
 
+    String callee = SourceBuilder.build(tree.callee()).trim();
+    if ("compact".equals(callee)) {
+      visitCompactFunctionCall(tree.arguments());
+    }
+
     scan(tree.arguments());
+  }
+
+  /**
+   * See <a href="http://php.net/manual/en/function.compact.php">docs</a> of "compact" function
+   * @param arguments of call of "compact" function
+   */
+  private void visitCompactFunctionCall(SeparatedList<ExpressionTree> arguments) {
+    for (ExpressionTree argument : arguments) {
+
+      if (argument.is(Kind.REGULAR_STRING_LITERAL)) {
+        String value = ((LiteralTree) argument).value();
+        String variableName = "$" + value.substring(1, value.length() - 1);
+
+        Symbol symbol = currentScope.getSymbol(variableName, Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
+
+        if (symbol != null) {
+          symbol.addUsage(((LiteralTree) argument).token());
+        }
+      }
+    }
   }
 
   private void usageForNamespaceName(NamespaceNameTree namespaceName, Symbol.Kind kind) {

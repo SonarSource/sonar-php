@@ -120,7 +120,7 @@ public class UsagesTest extends ParsingTestUtils {
     assertThat(scope.getSymbol("j").usages()).hasSize(1);
 
     assertThat(scope.getSymbol("$compoundVar").usages()).hasSize(2);
-    assertThat(scope.getSymbol("$var").usages()).hasSize(1);
+    assertThat(scope.getSymbol("$var").usages()).hasSize(2);
 
     Symbol classSymbol = scope.getSymbol("A");
     assertThat(classSymbol).isNotNull();
@@ -142,7 +142,6 @@ public class UsagesTest extends ParsingTestUtils {
   }
 
   Symbol getGlobalScopeSymbol(String name) {
-    System.out.println("");
     for (Scope scope : SYMBOL_TABLE.getScopes()) {
       if (scope.isGlobal()) {
         return scope.getSymbol(name);

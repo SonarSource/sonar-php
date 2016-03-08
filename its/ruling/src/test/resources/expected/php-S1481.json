@@ -682,9 +682,6 @@
 'project:symfony/Symfony/Component/Templating/Tests/Loader/FilesystemLoaderTest.php':[
 30,
 ],
-'project:symfony/Symfony/Component/Translation/Loader/MoFileLoader.php':[
-146,
-],
 'project:symfony/Symfony/Component/Validator/Mapping/Loader/XmlFileLoader.php':[
 48,
 ],
