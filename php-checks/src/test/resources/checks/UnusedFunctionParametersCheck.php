@@ -62,3 +62,7 @@ function foo($p1) {   // OK
    };
 }
 
+function foo($variable) {  // OK
+    $array = compact('variable');
+    return $array;
+}
