@@ -23,7 +23,11 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -43,20 +47,53 @@ public class TooManyFunctionParametersCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "This function has %s parameters, which is greater than the %s authorized.";
 
-  public static final int DEFAULT = 7;
+  public static final int DEFAULT_MAX = 7;
+  public static final int DEFAULT_CONSTRUCTOR_MAX = 7;
 
   @RuleProperty(
     key = "max",
-    defaultValue = "" + DEFAULT)
-  int max = DEFAULT;
+    defaultValue = "" + DEFAULT_MAX)
+  int max = DEFAULT_MAX;
+
+  @RuleProperty(
+    key = "constructorMax",
+    defaultValue = "" + DEFAULT_CONSTRUCTOR_MAX)
+  int constructorMax = DEFAULT_CONSTRUCTOR_MAX;
+
+  private ClassTree classTree = null;
 
   @Override
   public void visitParameterList(ParameterListTree parameterList) {
     int numberOfParameters = parameterList.parameters().size();
-    if (numberOfParameters > max) {
-      context().newIssue(this, String.format(MESSAGE, numberOfParameters, max)).tree(parameterList);
+    int maxValue = isConstructorParameterList(parameterList) ? constructorMax : max;
+    if (numberOfParameters > maxValue) {
+      context().newIssue(this, String.format(MESSAGE, numberOfParameters, maxValue)).tree(parameterList);
     }
     super.visitParameterList(parameterList);
+  }
+
+  private boolean isConstructorParameterList(ParameterListTree parameterList) {
+    if (classTree != null) {
+      MethodDeclarationTree constructor = classTree.fetchConstructor();
+      if (constructor != null) {
+        return parameterList.equals(constructor.parameters());
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    classTree = tree;
+    super.visitClassDeclaration(tree);
+    classTree = null;
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    classTree = tree;
+    super.visitAnonymousClass(tree);
+    classTree = null;
   }
 
 }

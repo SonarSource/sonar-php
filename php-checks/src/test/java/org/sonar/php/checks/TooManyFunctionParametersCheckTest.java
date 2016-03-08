@@ -19,7 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
@@ -33,14 +34,28 @@ public class TooManyFunctionParametersCheckTest {
   private TooManyFunctionParametersCheck check = new TooManyFunctionParametersCheck();
 
   @Test
-  public void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
-      ImmutableList.<Issue>of(new PHPIssue(check, null).line(3)));
+  public void default_parameter_values() throws Exception {
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 13, 23));
   }
 
   @Test
-  public void custom() throws Exception {
+  public void custom_value_for_max() throws Exception {
     check.max = 2;
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
+
+  @Test
+  public void custom_value_for_constructor_max() throws Exception {
+    check.constructorMax = 2;
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 13, 18, 23, 28));
+  }
+
+  private List<Issue> issues(int... lines) {
+    List<Issue> list = new ArrayList<>();
+    for (int line : lines) {
+      list.add(new PHPIssue(check, null).line(line));
+    }
+    return list;
+  }
+
 }
