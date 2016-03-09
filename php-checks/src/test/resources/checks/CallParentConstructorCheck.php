@@ -8,6 +8,16 @@ class B extends A {
   }
 }
 
+$x = new class extends A {
+  public function __construct() {
+    parent::A();                   // NOK
+  }
+};
+
+$y = new class  {
+  public function __construct() {  }
+};
+
 class C extends A {
   public function C() {
     parent::A();                   // OK

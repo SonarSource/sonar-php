@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -55,9 +56,19 @@ public class CallParentConstructorCheck extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    if (tree.is(Kind.CLASS_DECLARATION) && tree.superClass() != null) {
-      MethodDeclarationTree constructor = tree.fetchConstructor();
+    if (tree.is(Kind.CLASS_DECLARATION)) {
+      visitClass(tree);
+    }
+  }
 
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    visitClass(tree);
+  }
+
+  private void visitClass(ClassTree tree) {
+    if (tree.superClass() != null) {
+      MethodDeclarationTree constructor = tree.fetchConstructor();
       if (constructor != null && isPHP5Constructor(constructor)) {
         superClass = tree.superClass().fullName();
         scan(constructor);
