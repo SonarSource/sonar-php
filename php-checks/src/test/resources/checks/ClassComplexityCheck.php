@@ -47,3 +47,12 @@ class OK {
 
 class OK {
 }
+
+$x = new class {        // NOK {{The Cyclomatic Complexity of this anonymous class is 6 which is greater than 5 authorized, split this class.}}
+  function f1() {}// +1
+  function f2() {}// +1
+  function f3() {}// +1
+  function f4() {}// +1
+  function f5() {}// +1
+  function f6() {}// +1
+};

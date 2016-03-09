@@ -46,6 +46,7 @@ public class ClassComplexityCheck extends PHPSubscriptionCheck {
   public static final String KEY = "S1311";
 
   private static final String MESSAGE = "The Cyclomatic Complexity of this class \"%s\" is %s which is greater than %s authorized, split this class.";
+  private static final String MESSAGE_ANONYMOUS_CLASS = "The Cyclomatic Complexity of this anonymous class is %s which is greater than %s authorized, split this class.";
 
   public static final int DEFAULT = 200;
 
@@ -56,17 +57,25 @@ public class ClassComplexityCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.CLASS_DECLARATION);
+    return ImmutableList.of(Kind.CLASS_DECLARATION, Kind.ANONYMOUS_CLASS);
   }
 
   @Override
   public void visitNode(Tree tree) {
     int complexity = ComplexityVisitor.complexity(tree);
     if (complexity > max) {
-      String className = ((ClassDeclarationTree) tree).name().text();
-      String message = String.format(MESSAGE, className, complexity, max);
       int cost = complexity - max;
-      context().newIssue(this, message).tree(tree).cost(cost);
+      context().newIssue(this, message(tree, complexity)).tree(tree).cost(cost);
+    }
+  }
+
+  private String message(Tree tree, int complexity) {
+    if (tree.is(Kind.CLASS_DECLARATION)) {
+      String className = ((ClassDeclarationTree) tree).name().text();
+      return String.format(MESSAGE, className, complexity, max);
+
+    } else {
+      return String.format(MESSAGE_ANONYMOUS_CLASS, complexity, max);
     }
   }
 
