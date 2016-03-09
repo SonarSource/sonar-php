@@ -1,16 +1,12 @@
-<p>
-  Shared coding conventions allow teams to collaborate efficiently. To avoid the confusion that can be caused by tangling two coding languages in the same file, inline HTML should be avoided.
-</p>
+<p>Shared coding conventions allow teams to collaborate efficiently. To avoid the confusion that can be caused by tangling two coding languages in the same file, inline HTML should be avoided.</p>
 
 <h2>Noncompliant Code Example</h2>
 <pre>
-&lt;php
+&lt;?php
 $name = "George";
 ?&gt;
-&lt;p&gt; Hello &lt;?php $name ?>&lt;/p&gt;
+&lt;p&gt; Hello &lt;?php echo $name ?&gt;!&lt;/p&gt;
 </pre>
 
-<h2>Exception</h2>
-<p>
-  File having the extension <code>.phtml</code> are ignored by this rule because they are expected to have mixed PHP and HTML.
-</p>
+<h2>Exceptions</h2>
+<p>File having the extension <code>.phtml</code> are ignored by this rule because they are expected to have mixed PHP and HTML.</p>
