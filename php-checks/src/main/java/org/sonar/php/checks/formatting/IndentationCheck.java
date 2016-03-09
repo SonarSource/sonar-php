@@ -27,6 +27,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
@@ -155,13 +156,12 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
 
   private void checkArgumentsIndentation(SeparatedList arguments, SyntaxToken functionName, int baseColumn, @Nullable SyntaxToken closeParenthesis, boolean isFunctionCall) {
     if (arguments.size() > 1) {
-      SyntaxToken lastArg = ((PHPTree) Iterables.getLast(arguments)).getLastToken();
       Tree firstArg = (Tree) arguments.get(0);
 
       int expectedIndentationColumn = baseColumn + PSR2_INDENTATION;
       int callingLine = functionName.line();
 
-      if (!TokenUtils.isOnSameLine(functionName, lastArg)) {
+      if (!allArgumentsOnSameLine(functionName, arguments)) {
 
         if (!isCorrectlySplitOnLines(callingLine, arguments)) {
           check.reportIssue(String.format(ARGUMENT_LINE_SPLIT_MESSAGE, expectedIndentationColumn, callingLine), firstArg);
@@ -176,6 +176,22 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
         }
       }
     }
+  }
+
+  // http://www.php-fig.org/psr/psr-2/meta/#3-1-multi-line-arguments-09-08-2013
+  private static boolean allArgumentsOnSameLine(SyntaxToken functionName, List<Tree> arguments) {
+    int expectedLine = getLastLine(functionName);
+    for (Tree argument : arguments) {
+      if (getStartLine(argument) != expectedLine) {
+        return false;
+      }
+
+      if (argument.is(Kind.ARRAY_INITIALIZER_BRACKET, Kind.FUNCTION_EXPRESSION)) {
+        expectedLine = getLastLine(argument);
+      }
+    }
+
+    return getLastLine(arguments.get(arguments.size() - 1)) == expectedLine;
   }
 
   private void checkClosingParenthesisLocation(Tree lastArgument, SyntaxToken closeParenthesis, boolean isFunctionCall) {
@@ -200,12 +216,26 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     int expectedLine = referenceLine + 1;
 
     for (Tree item : items) {
-      if (((PHPTree) item).getFirstToken().line() < expectedLine) {
+      if (getStartLine(item) < expectedLine) {
         return false;
       }
-      expectedLine++;
+
+      if (item.is(Kind.ARRAY_INITIALIZER_BRACKET, Kind.FUNCTION_EXPRESSION)) {
+        expectedLine = getLastLine(item) + 1;
+      } else {
+        expectedLine++;
+      }
     }
+
     return true;
+  }
+
+  private static int getStartLine(Tree tree) {
+    return ((PHPTree) tree).getLine();
+  }
+
+  private static int getLastLine(Tree tree) {
+    return ((PHPTree) tree).getLastToken().line();
   }
 
   private int startColumnForLine(int line) {

@@ -97,3 +97,33 @@ class C5 implements       // OK
     A,
     B
 {}
+
+
+// Arrays and anonymous functions are allowed to be split on lines
+
+doSomething($a, [      // OK
+  1,
+  2], $b);
+
+doSomething($a, function () {      // OK
+  // ...
+  }, $b);
+
+doSomething(a, function () { // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "112".}}
+  // ...
+  },
+  b
+);
+
+// not an array or function
+doSomething($a, 1           // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "119".}}
+   + 2, $b
+);
+
+doSomething(        // OK
+    $a,
+    function () {
+
+    },
+    $b
+);
