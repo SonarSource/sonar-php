@@ -29,7 +29,9 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -57,17 +59,27 @@ public class MissingMethodVisibilityCheck extends PHPVisitorCheck {
     super.visitClassDeclaration(tree);
 
     if (tree.is(Kind.CLASS_DECLARATION)) {
+      visitClass(tree, tree.name().text());
+    }
+  }
 
-      for (ClassMemberTree member : tree.members()) {
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    super.visitAnonymousClass(tree);
 
-        if (member.is(Kind.METHOD_DECLARATION)) {
-          checkMethod((MethodDeclarationTree) member, tree.name().text());
-        }
+    visitClass(tree, null);
+  }
+
+  private void visitClass(ClassTree classTree, @Nullable String name) {
+    for (ClassMemberTree member : classTree.members()) {
+
+      if (member.is(Kind.METHOD_DECLARATION)) {
+        checkMethod((MethodDeclarationTree) member, name);
       }
     }
   }
 
-  private void checkMethod(MethodDeclarationTree method, String className) {
+  private void checkMethod(MethodDeclarationTree method, @Nullable String className) {
     if (!hasVisibilityModifier(method)) {
       String methodName = method.name().text();
       String message = String.format(MESSAGE, getMethodKind(methodName, className), methodName);

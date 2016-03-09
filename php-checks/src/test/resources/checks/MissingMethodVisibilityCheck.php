@@ -20,3 +20,8 @@ class C2 {
 class C3 {
   function __construct() { return; }          // NOK {{Explicitly mention the visibility of this constructor "__construct".}}
 }
+
+$x = new class {
+  static function f() { return; }             // NOK {{Explicitly mention the visibility of this method "f".}}
+  function __construct() { return; }          // NOK {{Explicitly mention the visibility of this constructor "__construct".}}
+};
