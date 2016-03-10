@@ -19,6 +19,8 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
@@ -28,9 +30,11 @@ import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
@@ -53,15 +57,28 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   public static final String KEY = "S1172";
   private static final String MESSAGE = "Remove the unused function parameter%s \"%s\".";
 
-  private boolean mayOverride = false;
+  private Deque<Boolean> mayOverrideStack = new ArrayDeque<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    if (tree.superClass() != null || tree.implementsToken() != null) {
-      mayOverride = true;
-    }
+    mayOverrideStack.addLast(mayOverride(tree));
+
     super.visitClassDeclaration(tree);
-    mayOverride = false;
+
+    mayOverrideStack.removeLast();
+  }
+
+  private static boolean mayOverride(ClassTree tree) {
+    return tree.superClass() != null || tree.implementsToken() != null;
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    mayOverrideStack.addLast(mayOverride(tree));
+
+    super.visitAnonymousClass(tree);
+
+    mayOverrideStack.removeLast();
   }
 
   @Override
@@ -103,7 +120,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   }
 
   public boolean isExcluded(MethodDeclarationTree tree) {
-    return (mayOverride && !CheckUtils.hasModifier(tree.modifiers(), "private"))
+    return (mayOverrideStack.getLast() && !CheckUtils.hasModifier(tree.modifiers(), "private"))
       || !tree.body().is(Tree.Kind.BLOCK)
       || CheckUtils.isOverriding(tree);
   }

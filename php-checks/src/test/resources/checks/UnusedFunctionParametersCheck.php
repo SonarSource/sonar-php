@@ -62,7 +62,17 @@ function foo($p1) {   // OK
    };
 }
 
+
 function foo($variable) {  // OK
     $array = compact('variable');
     return $array;
+}
+
+class Foo {
+  public function f1($p1) {                   // NOK {{Remove the unused function parameter "$p1".}}
+    $x = new class extends A {
+     public function f1($p1) {}                 // OK
+     private function f2($p1) {}               // NOK {{Remove the unused function parameter "$p1".}}
+    };
+ }
 }
