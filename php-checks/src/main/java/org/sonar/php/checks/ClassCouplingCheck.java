@@ -21,6 +21,10 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
@@ -28,14 +32,15 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
@@ -44,8 +49,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.Set;
 
 @Rule(
   key = ClassCouplingCheck.KEY,
@@ -61,7 +64,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
     "to reduce its dependencies on other classes from %s to the maximum authorized %s or less.";
 
   public static final int DEFAULT = 20;
-  private Set<String> types = Sets.newHashSet();
+  private Deque<Set<String>> types = new ArrayDeque<>();
   private static final Set<String> DOC_TAGS = ImmutableSet.of(
     "@var", "@global", "@staticvar", "@throws", "@param", "@return");
 
@@ -80,12 +83,6 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
   public int max = DEFAULT;
 
   @Override
-  public void visitScript(ScriptTree tree) {
-    types.clear();
-    super.visitScript(tree);
-  }
-
-  @Override
   public void visitNewExpression(NewExpressionTree tree) {
     retrieveInstantiatedClassName(tree);
 
@@ -95,24 +92,41 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     if (tree.is(Kind.CLASS_DECLARATION)) {
-      retrieveCoupledTypes(tree);
+      enterClass(tree);
     }
 
     super.visitClassDeclaration(tree);
 
     if (tree.is(Kind.CLASS_DECLARATION)) {
-      int nbType = types.size();
-
-      if (nbType > max) {
-        String message = String.format(MESSAGE, nbType, max);
-        context().newIssue(this, message).tree(tree);
-      }
-      types.clear();
+      leaveClass(tree);
     }
   }
 
-  private void retrieveCoupledTypes(ClassDeclarationTree classDeclaration) {
-    for (ClassMemberTree classMember : classDeclaration.members()) {
+  private void leaveClass(ClassTree tree) {
+    int nbType = types.removeLast().size();
+
+    if (nbType > max) {
+      String message = String.format(MESSAGE, nbType, max);
+      context().newIssue(this, message).tree(tree);
+    }
+  }
+
+  private void enterClass(ClassTree tree) {
+    types.addLast(new HashSet<String>());
+    retrieveCoupledTypes(tree);
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    enterClass(tree);
+
+    super.visitAnonymousClass(tree);
+
+    leaveClass(tree);
+  }
+
+  private void retrieveCoupledTypes(ClassTree classTree) {
+    for (ClassMemberTree classMember : classTree.members()) {
       switch (classMember.getKind()) {
         case CLASS_PROPERTY_DECLARATION:
         case CLASS_CONSTANT_PROPERTY_DECLARATION:
@@ -132,7 +146,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
     for (ParameterTree parameter : methodDeclaration.parameters().parameters()) {
       Tree type = parameter.type();
       if (type != null && type.is(Kind.NAMESPACE_NAME)) {
-        types.add(getTypeName((NamespaceNameTree) type));
+        addType(getTypeName((NamespaceNameTree) type));
       }
     }
   }
@@ -155,7 +169,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
         type = StringUtils.removeEnd(type, "[]");
 
         if (!EXCLUDED_TYPES.contains(type)) {
-          types.add(type);
+          addType(type);
         }
       }
     }
@@ -168,11 +182,11 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
       ExpressionTree callee = ((FunctionCallTree) expression).callee();
 
       if (callee.is(Kind.NAMESPACE_NAME)) {
-        types.add(getTypeName((NamespaceNameTree) callee));
+        addType(getTypeName((NamespaceNameTree) callee));
       }
 
     } else if (expression.is(Kind.NAMESPACE_NAME)) {
-      types.add(getTypeName((NamespaceNameTree) expression));
+      addType(getTypeName((NamespaceNameTree) expression));
     }
   }
 
@@ -185,6 +199,12 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
     }
 
     return name;
+  }
+
+  private void addType(String type) {
+    if (!types.isEmpty()) {
+      types.getLast().add(type);
+    }
   }
 
 }

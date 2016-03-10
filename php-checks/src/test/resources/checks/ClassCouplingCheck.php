@@ -107,3 +107,21 @@ class Bar {       // OK - depends on 2 classes
      return $p->toString();
    }
 }
+
+$x = new class {       // NOK
+  function foo() {
+    new T1();
+    new T2();
+    new T3();
+    new T4();
+    new T5();
+    new T6();
+    new T7();
+    new T8();
+    new T9();
+    new T10();
+    new T11();
+  }
+};
+
+new T8();
