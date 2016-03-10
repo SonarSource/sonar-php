@@ -29,6 +29,8 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -67,16 +69,27 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
     super.visitClassDeclaration(tree);
 
     if (tree.is(Kind.CLASS_DECLARATION)) {
-      int nbFields = getNumberOfFields(tree);
-
-      if (nbFields > maximumFieldThreshold) {
-        String message = String.format(MESSAGE, maximumFieldThreshold, countNonpublicFields ? "" : " public", nbFields);
-        context().newIssue(this, message).tree(tree);
-      }
+      visitClass(tree);
     }
   }
 
-  private int getNumberOfFields(ClassDeclarationTree tree) {
+  private void visitClass(ClassTree tree) {
+    int nbFields = getNumberOfFields(tree);
+
+    if (nbFields > maximumFieldThreshold) {
+      String message = String.format(MESSAGE, maximumFieldThreshold, countNonpublicFields ? "" : " public", nbFields);
+      context().newIssue(this, message).tree(tree);
+    }
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    super.visitAnonymousClass(tree);
+
+    visitClass(tree);
+  }
+
+  private int getNumberOfFields(ClassTree tree) {
     List<ClassPropertyDeclarationTree> fields = getClassFields(tree);
     int nbFields = fields.size();
 
@@ -86,7 +99,7 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
     return nbFields;
   }
 
-  private static List<ClassPropertyDeclarationTree> getClassFields(ClassDeclarationTree classDeclaration) {
+  private static List<ClassPropertyDeclarationTree> getClassFields(ClassTree classDeclaration) {
     List<ClassPropertyDeclarationTree> fields = Lists.newArrayList();
 
     for (ClassMemberTree classMember : classDeclaration.members()) {
