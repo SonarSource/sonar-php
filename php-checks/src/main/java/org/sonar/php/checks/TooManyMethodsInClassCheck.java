@@ -27,7 +27,9 @@ import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
@@ -46,6 +48,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1448";
   private static final String MESSAGE = "Class \"%s\" has %s methods, which is greater than %s authorized. Split it into smaller classes.";
+  private static final String MESSAGE_ANONYMOUS_CLASS = "This anonymous class has %s methods, which is greater than %s authorized. Split it into smaller classes.";
 
   private static final int DEFAULT_THRESHOLD = 20;
   private static final boolean DEFAULT_NON_PUBLIC = true;
@@ -66,16 +69,31 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     super.visitClassDeclaration(tree);
     if (tree.is(Kind.CLASS_DECLARATION, Kind.INTERFACE_DECLARATION)) {
-      int nbMethod = getNumberOfMethods(tree);
-
-      if (nbMethod > maximumMethodThreshold) {
-        String message = String.format(MESSAGE, tree.name().text(), nbMethod, maximumMethodThreshold);
-        context().newIssue(this, message).tree(tree);
-      }
+      checkClass(tree);
     }
   }
 
-  public int getNumberOfMethods(ClassDeclarationTree tree) {
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    super.visitAnonymousClass(tree);
+    checkClass(tree);
+  }
+
+  private void checkClass(ClassTree tree) {
+    int nbMethod = getNumberOfMethods(tree);
+
+    if (nbMethod > maximumMethodThreshold) {
+      String message;
+      if (tree.is(Kind.ANONYMOUS_CLASS)) {
+        message = String.format(MESSAGE_ANONYMOUS_CLASS, nbMethod, maximumMethodThreshold);
+      } else {
+        message = String.format(MESSAGE, ((ClassDeclarationTree) tree).name().text(), nbMethod, maximumMethodThreshold);
+      }
+      context().newIssue(this, message).tree(tree);
+    }
+  }
+
+  private int getNumberOfMethods(ClassTree tree) {
     int nbMethod = 0;
 
     for (ClassMemberTree classMember : tree.members()) {

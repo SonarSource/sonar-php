@@ -9,7 +9,7 @@ interface I {             // NOK {{Class "I" has 3 methods, which is greater tha
   public function f3();
 }
 
-abstract class C1 {       // NOK
+class C1 {       // NOK
 
   public function f1() {
   }
@@ -20,7 +20,7 @@ abstract class C1 {       // NOK
   private function f3();
 }
 
-abstract class C1 {       // OK
+class C1 {       // OK
 
   private $i;
 
@@ -29,3 +29,14 @@ abstract class C1 {       // OK
 
   public function f2();
 }
+
+$x = new class {       // NOK
+
+  public function f1() {  }
+
+  public function f2() {  }
+
+  public function f3() {  }
+
+  private function f4();
+};
