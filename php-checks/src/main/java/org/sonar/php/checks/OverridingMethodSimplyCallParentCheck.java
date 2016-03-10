@@ -19,14 +19,19 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -39,10 +44,6 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Rule(
   key = OverridingMethodSimplyCallParentCheck.KEY,
@@ -57,26 +58,30 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
   public static final String KEY = "S1185";
   private static final String MESSAGE = "Remove this method \"%s\" to simply inherit it.";
 
-  private String superClass = null;
-
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     super.visitClassDeclaration(tree);
+    visitClass(tree);
+  }
 
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    super.visitAnonymousClass(tree);
+    visitClass(tree);
+  }
+
+  private void visitClass(ClassTree tree) {
     if (tree.superClass() != null) {
-      superClass = tree.superClass().fullName();
-
+      String superClass = tree.superClass().fullName();
       for (ClassMemberTree member : tree.members()) {
         if (member.is(Kind.METHOD_DECLARATION)) {
-          checkMethod((MethodDeclarationTree) member);
+          checkMethod((MethodDeclarationTree) member, superClass);
         }
       }
-
-      superClass = null;
     }
   }
 
-  private void checkMethod(MethodDeclarationTree method) {
+  private void checkMethod(MethodDeclarationTree method, String superClass) {
     if (method.body().is(Kind.BLOCK)) {
       BlockTree blockTree = (BlockTree)method.body();
 
@@ -91,12 +96,12 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
           expressionTree = ((ReturnStatementTree) statementTree).expression();
         }
 
-        checkExpression(expressionTree, method);
+        checkExpression(expressionTree, method, superClass);
       }
     }
   }
 
-  private void checkExpression(@Nullable ExpressionTree expressionTree, MethodDeclarationTree method) {
+  private void checkExpression(@Nullable ExpressionTree expressionTree, MethodDeclarationTree method, String superClass) {
     if (expressionTree != null && expressionTree.is(Kind.FUNCTION_CALL)) {
       FunctionCallTree functionCallTree = (FunctionCallTree)expressionTree;
 
@@ -106,7 +111,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
         String methodName = method.name().text();
         boolean sameMethodName = memberAccessTree.member().toString().equals(methodName);
 
-        if (isSuperClass(memberAccessTree.object()) && sameMethodName && sameArguments(functionCallTree, method)) {
+        if (isSuperClass(memberAccessTree.object(), superClass) && sameMethodName && sameArguments(functionCallTree, method)) {
           String message = String.format(MESSAGE, methodName);
           context().newIssue(this, message).tree(method);
         }
@@ -131,7 +136,7 @@ public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
     return argumentNames.equals(parameterNames);
   }
 
-  private boolean isSuperClass(ExpressionTree tree) {
+  private static boolean isSuperClass(ExpressionTree tree, String superClass) {
     String str = tree.toString();
     return superClass.equalsIgnoreCase(str) || "parent".equalsIgnoreCase(str);
   }

@@ -40,6 +40,16 @@ abstract class B extends A {
   }
 
   public function j() {      // OK
+    new class extends B {
+      public function f() {      // NOK
+        parent::f();
+      }
+
+      public function g() {      // NOK
+        B::g();
+      }
+
+    };
   }
 
   public function k() {      // OK
