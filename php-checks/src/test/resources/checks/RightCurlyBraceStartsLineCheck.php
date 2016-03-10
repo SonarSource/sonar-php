@@ -40,3 +40,12 @@ switch (a) {
 
 switch (a) {
   ; }                        // NOK {{Move this closing curly brace to the next line.}}
+
+$x = new class {
+  use SomeTrait, OtherTrait{         // OK
+  }
+
+  use SomeTrait, OtherTrait {
+    Foo as bar; }                    // NOK {{Move this closing curly brace to the next line.}}
+
+  use SomeTrait; };                   // NOK {{Move this closing curly brace to the next line.}}

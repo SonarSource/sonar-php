@@ -26,6 +26,8 @@ import org.sonar.php.checks.utils.TokenVisitor;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -88,12 +90,21 @@ public class RightCurlyBraceStartsLineCheck extends PHPVisitorCheck {
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     super.visitClassDeclaration(tree);
+    checkClass(tree);
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    super.visitAnonymousClass(tree);
+    checkClass(tree);
+  }
+
+  private void checkClass(ClassTree tree) {
     checkCloseCurlyBrace(
       tree.closeCurlyBraceToken(),
       tree.openCurlyBraceToken(),
       new TokenVisitor(tree).prevToken(tree.closeCurlyBraceToken()));
   }
-
 
   private void checkCloseCurlyBrace(SyntaxToken rBrace, SyntaxToken lBrace, SyntaxToken prevToken) {
     int rightBraceLine = rBrace.line();
