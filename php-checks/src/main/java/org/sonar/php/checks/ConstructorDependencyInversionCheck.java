@@ -19,11 +19,16 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -42,17 +47,36 @@ public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
   public static final String KEY = "S2830";
   private static final String MESSAGE = "Remove this creation of object in constructor. Use dependency injection instead.";
 
-  private boolean inConstructor = false;
+  private Deque<Boolean> inConstructor = new ArrayDeque<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
+    visitClass(tree);
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    visitClass(tree);
+  }
+
+  private void visitClass(ClassTree tree) {
+    inConstructor.addLast(false);
+
     MethodDeclarationTree constructor = tree.fetchConstructor();
 
-    if (constructor != null) {
-      inConstructor = true;
-      scan(constructor);
-      inConstructor = false;
+    for (ClassMemberTree memberTree : tree.members()) {
+      if (memberTree.equals(constructor)) {
+        inConstructor.addLast(true);
+        scan(memberTree);
+        inConstructor.removeLast();
+        inConstructor.addLast(false);
+
+      } else {
+        scan(memberTree);
+      }
     }
+
+    inConstructor.removeLast();
   }
 
   @Override
@@ -62,7 +86,7 @@ public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitNewExpression(NewExpressionTree tree) {
-    if (inConstructor) {
+    if (!inConstructor.isEmpty() && inConstructor.getLast()) {
       context().newIssue(this, MESSAGE).tree(tree);
     }
     super.visitNewExpression(tree);

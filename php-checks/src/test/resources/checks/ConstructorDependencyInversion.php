@@ -38,3 +38,33 @@ class ClassWithoutConstructor {
 }
 
 $object = new SomeClass();                             // OK
+
+class A {
+  function __construct() {
+    $x = new class {                // NOK
+      function foo() {
+        new Foo();                  // OK
+      }
+
+      function __construct() {
+        new Foo();                  // NOK
+      }
+
+      function bar() {
+        new Foo();                  // OK
+      }
+    };
+  }
+
+  function foo() {
+    $x = new class {                // OK
+      function __construct() {
+        new Foo();                  // NOK
+      }
+
+      function bar() {
+        new Foo();                  // OK
+      }
+    };
+  }
+}
