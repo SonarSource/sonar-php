@@ -14,7 +14,7 @@
   <packaging>pom</packaging>
 
   <name>PHP</name>
-  <description>Enables analysis of PHP projects into Sonar.</description>
+  <description>Enables scanning of PHP source files</description>
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
   <inceptionYear>2010</inceptionYear>
   <organization>
