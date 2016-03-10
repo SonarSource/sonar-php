@@ -23,15 +23,13 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarRunner;
-import org.junit.Assume;
+import java.io.File;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
-
-import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -83,14 +81,12 @@ public class PHPUnitTest {
 
   @Test
   public void it_coverage() throws Exception {
-    Assume.assumeTrue(Tests.is_after_plugin("2.5"));
     assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(3);
     assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(1);
   }
 
   @Test
   public void overall_coverage() throws Exception {
-    Assume.assumeTrue(Tests.is_after_plugin("2.5"));
     assertThat(getProjectMeasure("overall_lines_to_cover").getValue()).isEqualTo(3);
     assertThat(getProjectMeasure("overall_uncovered_lines").getValue()).isEqualTo(1);
   }

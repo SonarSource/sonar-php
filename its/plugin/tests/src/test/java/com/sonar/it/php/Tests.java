@@ -65,10 +65,6 @@ public class Tests {
     ORCHESTRATOR = orchestratorBuilder.build();
   }
 
-  public static boolean is_after_plugin(String version) {
-    return ORCHESTRATOR.getConfiguration().getPluginVersion(PLUGIN_KEY).isGreaterThanOrEquals(version);
-  }
-
   public static final File projectDirectoryFor(String projectDirName) {
     return new File(Tests.PROJECT_ROOT_DIR + projectDirName + "/");
   }

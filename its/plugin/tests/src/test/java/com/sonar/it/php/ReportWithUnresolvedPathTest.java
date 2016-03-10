@@ -40,7 +40,6 @@ public class ReportWithUnresolvedPathTest {
 
   @Test
   public void should_log_a_warning() throws Exception {
-    Assume.assumeTrue(Tests.is_after_plugin("2.6"));
     orchestrator.resetData();
     SonarRunner build = SonarRunner.create()
       .setProjectDir(PROJECT_DIR)

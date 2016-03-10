@@ -45,9 +45,7 @@ public class CommonRulesTest {
   private static final String REPORTS_DIR = "reports";
 
   @BeforeClass
-  public static void sspotartServer() throws Exception {
-    Assume.assumeTrue(Tests.is_after_plugin("2.5"));
-
+  public static void startServer() throws Exception {
     orchestrator.resetData();
 
     createReportsWithAbsolutePath();
