@@ -20,7 +20,14 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStream;
-import org.apache.commons.io.IOUtils;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
@@ -42,15 +49,6 @@ import org.sonar.plugins.php.phpunit.xml.MetricsNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * The Class PhpUnitCoverageResultParser.
  */
@@ -66,6 +64,8 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
   protected Metric<Integer> linesToCoverMetric = CoreMetrics.LINES_TO_COVER;
   protected Metric<Integer> uncoveredLinesMetric = CoreMetrics.UNCOVERED_LINES;
   protected Metric<String> coverageLineHitsDataMetric = CoreMetrics.COVERAGE_LINE_HITS_DATA;
+
+  private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number %s doesn't belong to file %s";
 
   /**
    * Instantiates a new php unit coverage result parser.
@@ -159,11 +159,12 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    * Saves the required metrics found on the fileNode
    *
    * @param fileNode the file
-   * @param unmappedPaths list of paths which cannot be mapped to imported files
+   * @param unresolvedPaths list of paths which cannot be mapped to imported files
+   * @param resolvedPaths list of paths which can be mapped to imported files
    */
   protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, List<String> resolvedPaths) {
-    String path = fileNode.getName();
     //PHP supports only absolute paths
+    String path = fileNode.getName();
     InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(path));
 
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
@@ -171,20 +172,10 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
     if (inputFile != null) {
       org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.create(inputFile.relativePath());
       resolvedPaths.add(inputFile.relativePath());
-      // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
-      // This should look like (lineNumner=Count) : 1=0;2=1;3=1....
-      PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<>(coverageLineHitsDataMetric);
-      if (fileNode.getLines() != null) {
-        for (LineNode line : fileNode.getLines()) {
-          saveLineMeasure(line, lineHits);
-        }
-      }
-      MetricsNode metrics = fileNode.getMetrics();
-      Measure measure = lineHits.build();
-      logMeasureByResource(phpFile, measure);
-      context.saveMeasure(phpFile, measure);
+      saveCoverageLineHitsData(fileNode, inputFile, phpFile);
 
       // Save uncovered statements (lines)
+      MetricsNode metrics = fileNode.getMetrics();
       double totalStatementsCount = metrics.getTotalStatementsCount();
       double uncoveredLines = totalStatementsCount - metrics.getCoveredStatements();
       context.saveMeasure(phpFile, linesToCoverMetric, totalStatementsCount);
@@ -192,6 +183,25 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
     } else {
       unresolvedPaths.add(path);
     }
+  }
+
+  private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, org.sonar.api.resources.File phpFile) {
+    // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
+    // This should look like (lineNumber=Count) : 1=0;2=1;3=1....
+    PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<>(coverageLineHitsDataMetric);
+    if (fileNode.getLines() != null) {
+      for (LineNode line : fileNode.getLines()) {
+        int lineNum = line.getNum();
+        if (lineNum > 0 && lineNum <= inputFile.lines()) {
+          saveLineMeasure(line, lineHits);
+        } else {
+          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, phpFile.getLongName()));
+        }
+      }
+    }
+    Measure measure = lineHits.build();
+    logMeasureByResource(phpFile, measure);
+    context.saveMeasure(phpFile, measure);
   }
 
   private static void logMeasureByResource(Resource resource, Measure measure) {

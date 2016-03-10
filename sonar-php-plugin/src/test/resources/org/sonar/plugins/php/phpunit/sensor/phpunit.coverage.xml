@@ -28,12 +28,14 @@
       <class name="Monkey" namespace="global" fullPackage="Animals.Monkey" category="Monkey" package="Animals">
         <metrics methods="2" coveredmethods="0" statements="3" coveredstatements="0" elements="6" coveredelements="3"/>
       </class>
+      <line num="0" type="method" count="1"/>
       <line num="34" type="method" count="1"/>
       <line num="35" type="stmt" count="1"/>
       <line num="38" type="stmt" count="1"/>
       <line num="40" type="stmt" count="0"/>
       <line num="45" type="method" count="1"/>
       <line num="46" type="stmt" count="1"/>
+      <line num="100" type="stmt" count="1"/>
       <metrics loc="49" ncloc="20" classes="1" methods="2" coveredmethods="2" statements="4" coveredstatements="2" elements="6" coveredelements="3"/>
     </file>
     <file name="/Banana.php">

@@ -21,11 +21,13 @@ package org.sonar.plugins.php.phpunit;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
@@ -39,15 +41,13 @@ import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
-import java.io.File;
-
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.sonar.api.measures.CoreMetrics.COVERAGE_LINE_HITS_DATA;
 import static org.sonar.api.measures.CoreMetrics.LINES_TO_COVER;
 import static org.sonar.api.measures.CoreMetrics.UNCOVERED_LINES;
 
@@ -62,7 +62,7 @@ public class PhpUnitCoverageResultParserTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
   @Rule
-  public TemporaryFolder folder= new TemporaryFolder();
+  public TemporaryFolder folder = new TemporaryFolder();
   private PhpUnitCoverageResultParser parser;
   private SensorContext context;
   private DefaultFileSystem fileSystem;
@@ -104,8 +104,23 @@ public class PhpUnitCoverageResultParserTest {
   public void shouldGenerateCoverageMeasures() throws Exception {
     parser.parse(getReportsWithAbsolutePath("phpunit.coverage.xml"));
 
-    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(new Measure(COVERAGE_LINE_HITS_DATA, "34=1;35=1;38=1;40=0;45=1;46=1")));
-    verify(context).saveMeasure(any(Resource.class), eq(UNCOVERED_LINES), eq(2.0));
+    ArgumentCaptor<Measure> measures = ArgumentCaptor.forClass(Measure.class);
+    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), measures.capture());
+
+    Measure coverageLineHitsDataMeasure = getMeasure(measures, CoreMetrics.COVERAGE_LINE_HITS_DATA_KEY);
+    assertThat(coverageLineHitsDataMeasure).isNotNull();
+    assertThat(coverageLineHitsDataMeasure.getData()).isEqualTo("34=1;35=1;38=1;40=0;45=1;46=1");
+
+    verify(context, atLeastOnce()).saveMeasure(any(Resource.class), eq(CoreMetrics.UNCOVERED_LINES), eq(2.));
+  }
+
+  private static Measure getMeasure(ArgumentCaptor<Measure> measures, String metric) {
+    for (Measure measure : measures.getAllValues()) {
+      if (measure.getMetricKey().equals(metric)) {
+        return measure;
+      }
+    }
+    return null;
   }
 
   /**
@@ -150,7 +165,11 @@ public class PhpUnitCoverageResultParserTest {
 
   private static void addFiles(DefaultFileSystem fs) {
     File baseDir = TestUtils.getResource(BASE_DIR);
-    InputFile monkeyFile = new DefaultInputFile(MONKEY_FILE_NAME).setAbsolutePath(MONKEY_FILE.getAbsolutePath()).setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
+    InputFile monkeyFile = new DefaultInputFile(MONKEY_FILE_NAME)
+      .setAbsolutePath(MONKEY_FILE.getAbsolutePath())
+      .setType(InputFile.Type.MAIN)
+      .setLanguage(Php.KEY)
+      .setLines(50);
     fs.setBaseDir(baseDir);
     fs.add(monkeyFile);
   }
