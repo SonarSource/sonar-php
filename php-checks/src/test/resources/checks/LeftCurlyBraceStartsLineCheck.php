@@ -56,3 +56,14 @@ try {                             // NOK {{Move this open curly brace to the beg
 } catch (Type $e) {               // NOK {{Move this open curly brace to the beginning of next line.}}
 } finally {                       // NOK {{Move this open curly brace to the beginning of next line.}}
 }
+
+$x = new class {                       // NOK {{Move this open curly brace to the beginning of next line.}}
+
+  function foo(){               // NOK {{Move this open curly brace to the beginning of next line.}}
+  }
+
+  use SomeTrait {               // NOK {{Move this open curly brace to the beginning of next line.}}
+  }
+
+  use SomaTrait;
+};
