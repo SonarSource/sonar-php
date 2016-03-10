@@ -177,3 +177,32 @@ namespace
 
 namespace {                         // OK
 }
+
+
+// --- ANONYMOUS CLASS  ---
+
+$x = new class {                        // OK
+  function foo();
+};
+$x = new class { };                      // OK
+
+$x = new class implements B {            // OK
+  function foo();
+};
+
+$x = new class extends B {              // OK
+  function foo();
+};
+
+$x = new class extends B
+{                                // NOK {{Move this open curly brace to the end of the previous line.}}
+  function foo();
+
+  function bar()
+  {                              // NOK {{Move this open curly brace to the end of the previous line.}}
+    foo();
+  }
+};
+
+$x = new class extends B { function foo();  // NOK {{Move this open curly brace to the end of the previous line.}}
+};

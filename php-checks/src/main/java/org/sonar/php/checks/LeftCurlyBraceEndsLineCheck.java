@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import java.util.List;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -27,8 +28,10 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -50,8 +53,6 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
-import java.util.List;
-
 @Rule(
   key = LeftCurlyBraceEndsLineCheck.KEY,
   name = "An open curly brace should be located at the end of a line",
@@ -67,6 +68,16 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     super.visitClassDeclaration(tree);
+    checkClass(tree);
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    super.visitAnonymousClass(tree);
+    checkClass(tree);
+  }
+
+  private void checkClass(ClassTree tree) {
     TokenVisitor tokenVisitor = new TokenVisitor(tree);
     checkOpenCurlyBrace(
       tree.openCurlyBraceToken(),
@@ -74,6 +85,7 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
       tokenVisitor.prevToken(tree.openCurlyBraceToken()),
       tokenVisitor.nextToken(tree.openCurlyBraceToken()));
   }
+
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
