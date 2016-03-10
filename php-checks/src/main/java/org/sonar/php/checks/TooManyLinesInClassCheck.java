@@ -23,8 +23,10 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -41,6 +43,7 @@ public class TooManyLinesInClassCheck extends PHPVisitorCheck {
   public static final String KEY = "S2042";
 
   private static final String MESSAGE = "Class \"%s\" has %s lines, which is greater than the %s authorized. Split it into smaller classes.";
+  private static final String MESSAGE_ANONYMOUS_CLASS = "This anonymous class has %s lines, which is greater than the %s authorized. Split it into smaller classes.";
 
   private static final int DEFAULT = 200;
 
@@ -51,12 +54,28 @@ public class TooManyLinesInClassCheck extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree declaration) {
-    int numberOfLines = declaration.closeCurlyBraceToken().line() - declaration.openCurlyBraceToken().line() + 1;
-    if (numberOfLines > maximumLinesThreshold) {
-      NameIdentifierTree name = declaration.name();
-      context().newIssue(this, String.format(MESSAGE, name.text(), numberOfLines, maximumLinesThreshold)).tree(name);
-    }
+    checkClass(declaration);
     super.visitClassDeclaration(declaration);
   }
 
+  private void checkClass(ClassTree tree) {
+    int numberOfLines = tree.closeCurlyBraceToken().line() - tree.openCurlyBraceToken().line() + 1;
+    if (numberOfLines > maximumLinesThreshold) {
+
+      String message;
+      if (tree.is(Kind.ANONYMOUS_CLASS)) {
+        message = String.format(MESSAGE_ANONYMOUS_CLASS, numberOfLines, maximumLinesThreshold);
+
+      } else {
+        message = String.format(MESSAGE, ((ClassDeclarationTree) tree).name().text(), numberOfLines, maximumLinesThreshold);
+      }
+      context().newIssue(this, message).tree(tree);
+    }
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    checkClass(tree);
+    super.visitAnonymousClass(tree);
+  }
 }
