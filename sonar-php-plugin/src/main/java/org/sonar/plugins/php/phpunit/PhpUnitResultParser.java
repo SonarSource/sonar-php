@@ -38,7 +38,6 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.utils.ParsingUtils;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
@@ -92,7 +91,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
       LOG.debug("Tests suites: " + testSuites.getTestSuiteList());
       return testSuites;
     } catch (IOException e) {
-      throw new SonarException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
+      throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
     }
   }
 
@@ -192,7 +191,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
     }
     InputFile unitTestFile = getUnitTestInputFile(fileReport);
     if (unitTestFile != null) {
-      double testsCount = fileReport.getTests() - fileReport.getSkipped();
+      double testsCount = (double) fileReport.getTests() - fileReport.getSkipped();
       if (fileReport.getSkipped() > 0) {
         context.saveMeasure(unitTestFile, CoreMetrics.SKIPPED_TESTS, (double) fileReport.getSkipped());
       }

@@ -36,7 +36,6 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
@@ -80,7 +79,7 @@ public class PhpUnitCoverageResultParserTest {
 
   @Test
   public void shouldThrowAnExceptionWhenReportNotFound() {
-    thrown.expect(SonarException.class);
+    thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Can't read phpUnit report:");
 
     parser.parse(new File("notfound.txt"));

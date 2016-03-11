@@ -21,8 +21,11 @@ package org.sonar.plugins.php.core;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -36,7 +39,6 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
-import org.sonar.api.utils.SonarException;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.measures.Metric;
@@ -77,7 +79,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
       // TODO: remove when deprecated NoSonarFilter will be replaced.
       org.sonar.api.resources.File phpFile = context.getResource(org.sonar.api.resources.File.create(file.relativePath()));
       if (phpFile != null) {
-        Source source = analyseSourceCode(file.file());
+        Source source = analyseSourceCode(file.file(), filesystem.encoding());
         if (source != null) {
           filter.addComponent(phpFile.getEffectiveKey(), source.getNoSonarTagLines());
           double measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
@@ -92,13 +94,13 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     return org.sonar.api.resources.File.fromIOFile(file, project);
   }
 
-  protected static Source analyseSourceCode(File file) {
+  protected static Source analyseSourceCode(File file, Charset charset) {
     Source result = null;
 
-    try (FileReader reader = new FileReader(file)){
+    try (Reader reader = new InputStreamReader(new FileInputStream(file), charset)) {
       result = new Source(reader, new CodeRecognizer(CODE_RECOGNIZER_SENSITIVITY, new PhpLanguageFootprint()));
     } catch (IOException e) {
-      throw new SonarException("Unable to open file '" + file.getAbsolutePath() + "'", e);
+      throw new IllegalStateException("Unable to open file '" + file.getAbsolutePath() + "'", e);
     } catch (RuntimeException rEx) {
       LOG.error("Error while parsing file '" + file.getAbsolutePath() + "'", rEx);
     }

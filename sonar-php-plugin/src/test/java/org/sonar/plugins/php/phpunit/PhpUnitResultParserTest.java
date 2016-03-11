@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
+import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
@@ -28,12 +29,9 @@ import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
-
-import java.io.File;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
@@ -124,7 +122,7 @@ public class PhpUnitResultParserTest {
     verify(context).saveMeasure(bananaFile, CoreMetrics.TEST_EXECUTION_TIME, 570.0);
   }
 
-  @Test(expected = SonarException.class)
+  @Test(expected = IllegalStateException.class)
   public void testGetTestSuitesWithUnexistingFile() throws Exception {
     parser.getTestSuites(new File("target/unexistingFile.xml"));
   }

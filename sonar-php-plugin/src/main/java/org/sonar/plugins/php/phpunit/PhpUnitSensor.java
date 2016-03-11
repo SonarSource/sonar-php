@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
+import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
@@ -29,11 +30,8 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
-
-import java.io.File;
 
 /**
  * The Class PhpUnitSensor is used by the plugin to collect coverage metrics from PHPUnit report.
@@ -89,7 +87,7 @@ public class PhpUnitSensor implements Sensor {
         try {
           parser.parse(xmlFile);
         } catch (XStreamException e) {
-          throw new SonarException("Report file is invalid, plugin will stop.", e);
+          throw new IllegalStateException("Report file is invalid, plugin will stop.", e);
         }
       } else {
         LOGGER.info("PHPUnit xml " + msg + " report not found: " + reportPath);

@@ -19,19 +19,9 @@
  */
 package org.sonar.plugins.php.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import java.io.File;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
@@ -45,7 +35,15 @@ import org.sonar.squidbridge.measures.Metric;
 import org.sonar.squidbridge.text.Source;
 import org.sonar.test.TestUtils;
 
-import java.io.File;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class NoSonarAndCommentedOutLocSensorTest {
 
@@ -106,7 +104,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
   @Test
   public void testAnalyseSourceCode() {
     File file = new File(this.getClass().getResource("/Mail.php").getPath());
-    Source source = NoSonarAndCommentedOutLocSensor.analyseSourceCode(file);
+    Source source = NoSonarAndCommentedOutLocSensor.analyseSourceCode(file, UTF_8);
     assertEquals(1, source.getNoSonarTagLines().size());
     assertEquals(17, (int) source.getNoSonarTagLines().iterator().next());
 
@@ -116,7 +114,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
   @Test
   public void testAnalyseSourceCodeWithRegions() {
     File file = new File(this.getClass().getResource("/Math2.php").getPath());
-    Source source = NoSonarAndCommentedOutLocSensor.analyseSourceCode(file);
+    Source source = NoSonarAndCommentedOutLocSensor.analyseSourceCode(file, UTF_8);
     assertEquals(1, source.getNoSonarTagLines().size());
     assertEquals(126, (int) source.getNoSonarTagLines().iterator().next());
 
@@ -126,7 +124,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
   @Test
   public void testAnalyseSourceCodeWithNoNoSonar() {
     File file = new File(this.getClass().getResource("/Math3.php").getPath());
-    Source source = NoSonarAndCommentedOutLocSensor.analyseSourceCode(file);
+    Source source = NoSonarAndCommentedOutLocSensor.analyseSourceCode(file, UTF_8);
     assertEquals(0, source.getNoSonarTagLines().size());
     assertEquals(5, source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES));
   }
@@ -135,10 +133,15 @@ public class NoSonarAndCommentedOutLocSensorTest {
   @Test
   public void testAnalyseSourceCodeWithMultiLineString() {
     File file = new File(this.getClass().getResource("/Math4.php").getPath());
-    Source source = NoSonarAndCommentedOutLocSensor.analyseSourceCode(file);
+    Source source = NoSonarAndCommentedOutLocSensor.analyseSourceCode(file, UTF_8);
     assertEquals(1, source.getNoSonarTagLines().size());
     assertEquals(91, (int) source.getNoSonarTagLines().iterator().next());
 
     assertEquals(5, source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testAnalyseSourceCodeWithIOException() throws Exception {
+    NoSonarAndCommentedOutLocSensor.analyseSourceCode(new File("xxx"), UTF_8);
   }
 }

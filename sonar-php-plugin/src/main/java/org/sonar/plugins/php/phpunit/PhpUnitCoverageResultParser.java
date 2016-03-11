@@ -40,7 +40,6 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.PropertiesBuilder;
 import org.sonar.api.resources.Resource;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
@@ -244,7 +243,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
 
       return (CoverageNode) xstream.fromXML(inputStream);
     } catch (IOException e) {
-      throw new SonarException("Can't read phpUnit report: " + coverageReportFile.getName(), e);
+      throw new IllegalStateException("Can't read phpUnit report: " + coverageReportFile.getName(), e);
     }
   }
 

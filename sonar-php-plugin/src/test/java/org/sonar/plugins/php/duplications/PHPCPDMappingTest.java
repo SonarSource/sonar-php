@@ -20,17 +20,18 @@
 package org.sonar.plugins.php.duplications;
 
 import com.google.common.base.Charsets;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import net.sourceforge.pmd.cpd.SourceCode;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.test.TestUtils;
-
-import java.nio.charset.Charset;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -39,7 +40,12 @@ import static org.mockito.Mockito.when;
 
 public class PHPCPDMappingTest {
 
+  private static final String UTF_8 = StandardCharsets.UTF_8.displayName();
+
   private Tokenizer tokenizer;
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void test() throws Exception {
@@ -53,12 +59,19 @@ public class PHPCPDMappingTest {
 
   @Test
   public void testTokenize() throws Exception {
-    SourceCode source = new SourceCode(new SourceCode.FileCodeLoader(
-      TestUtils.getResource("org/sonar/plugins/php/duplications/SmallFile.php"), Charset.defaultCharset().displayName()));
+    File file = TestUtils.getResource("org/sonar/plugins/php/duplications/SmallFile.php");
+    SourceCode source = new SourceCode(new SourceCode.FileCodeLoader(file, UTF_8));
     Tokens tokens = new Tokens();
     tokenizer.tokenize(source, tokens);
 
     assertThat(tokens.size(), is(33));
+  }
+
+  @Test
+  public void unknown_file() throws Exception {
+    SourceCode source = new SourceCode(new SourceCode.FileCodeLoader(new File("xxx"), UTF_8));
+    thrown.expect(IllegalStateException.class);
+    tokenizer.tokenize(source, new Tokens());
   }
 
 }

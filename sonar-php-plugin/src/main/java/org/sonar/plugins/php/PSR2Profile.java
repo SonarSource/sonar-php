@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.ValidationMessages;
-
-import java.io.InputStreamReader;
 
 public final class PSR2Profile extends ProfileDefinition {
 
@@ -36,7 +36,9 @@ public final class PSR2Profile extends ProfileDefinition {
 
   @Override
   public RulesProfile createProfile(ValidationMessages validation) {
-    InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/org/sonar/plugins/php/profile/psr2-profile.xml"));
+    InputStreamReader reader = new InputStreamReader(
+      getClass().getResourceAsStream("/org/sonar/plugins/php/profile/psr2-profile.xml"),
+      StandardCharsets.UTF_8);
 
     return xmlProfileParser.parse(reader, validation);
   }

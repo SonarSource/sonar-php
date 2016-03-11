@@ -32,7 +32,6 @@ import org.sonar.api.batch.AbstractCpdMapping;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Project;
-import org.sonar.api.utils.SonarException;
 import org.sonar.duplications.token.Token;
 import org.sonar.duplications.token.TokenChunker;
 import org.sonar.duplications.token.TokenQueue;
@@ -118,7 +117,7 @@ public class PhpCPDMapping extends AbstractCpdMapping {
           }
         }
       } catch (IOException e) {
-        throw new SonarException(e);
+        throw new IllegalStateException(e);
       }
 
       cpdTokens.add(TokenEntry.getEOF());

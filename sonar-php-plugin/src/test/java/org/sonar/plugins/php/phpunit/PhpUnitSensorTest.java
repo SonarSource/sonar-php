@@ -19,17 +19,15 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import static org.fest.assertions.Assertions.assertThat;
+import com.thoughtworks.xstream.XStreamException;
+import java.io.File;
+import java.util.Properties;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import static org.mockito.Matchers.any;
 import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
@@ -43,8 +41,12 @@ import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
-import java.io.File;
-import java.util.Properties;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class PhpUnitSensorTest {
 
@@ -79,7 +81,7 @@ public class PhpUnitSensorTest {
 
     settings = newSettings();
     project = mock(Project.class);
-    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+    sensor = createSensor(fs, settings);
     fs.setBaseDir(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
   }
 
@@ -102,8 +104,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldParserReport() {
-    FileSystem locaFS = new DefaultFileSystem();
-    sensor = new PhpUnitSensor(locaFS, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+    sensor = createSensor(new DefaultFileSystem(), settings);
 
     sensor.analyse(project, context);
 
@@ -115,7 +116,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void noReport() {
-    sensor = new PhpUnitSensor(new DefaultFileSystem(), new Settings(), parser, coverageParser, itCoverageParser, overallCoverageParser);
+    sensor = createSensor(new DefaultFileSystem(), new Settings());
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -123,30 +124,38 @@ public class PhpUnitSensorTest {
 
   @Test
   public void badReport() {
-    String fakePath = "/fake/path.xml";
-
-    Settings localSettings = new Settings();
-    Properties props = new Properties();
-    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, fakePath);
-    localSettings.addProperties(props);
-
-    sensor = new PhpUnitSensor(new DefaultFileSystem(), localSettings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+    sensor = createSensor(new DefaultFileSystem(), settings("/fake/path.xml"));
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
   }
 
   @Test
-  public void should_parse_relative_path_report() {
-    Settings settings = new Settings();
-    Properties props = new Properties();
-    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, "phpunit.xml");
-    settings.addProperties(props);
-    sensor = new PhpUnitSensor(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+  public void xstream_exception() throws Exception {
+    Mockito.doThrow(new XStreamException("")).when(parser).parse((File) any());
+    sensor = createSensor(fs, settings("phpunit.xml"));
+    expected.expect(IllegalStateException.class);
+    sensor.analyse(project, context);
+  }
 
+  @Test
+  public void should_parse_relative_path_report() {
+    sensor = createSensor(fs, settings("phpunit.xml"));
     sensor.analyse(project, context);
 
     verify(parser, times(1)).parse(TEST_REPORT_FILE);
+  }
+
+  private PhpUnitSensor createSensor(FileSystem fs, Settings settings) {
+    return new PhpUnitSensor(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+  }
+
+  private Settings settings(String path) {
+    Properties props = new Properties();
+    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, path);
+    Settings settings = new Settings();
+    settings.addProperties(props);
+    return settings;
   }
 
   private static Settings newSettings() {
