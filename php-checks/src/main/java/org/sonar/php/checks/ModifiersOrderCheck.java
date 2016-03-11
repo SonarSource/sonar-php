@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import java.util.Locale;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -74,7 +75,7 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
     if (modifiers.size() > 1) {
       int i = 0;
       for (SyntaxToken modifier : modifiers) {
-        String normalizedModifier = modifier.text().toLowerCase();
+        String normalizedModifier = modifier.text().toLowerCase(Locale.ENGLISH);
         while (i < EXPECTED_ORDER.length && !EXPECTED_ORDER[i].equals(normalizedModifier)) {
           i++;
         }

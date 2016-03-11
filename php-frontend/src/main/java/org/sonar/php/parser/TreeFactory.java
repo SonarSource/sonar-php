@@ -27,6 +27,7 @@ import com.sonar.sslr.api.typed.Optional;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
@@ -1096,7 +1097,7 @@ public class TreeFactory {
   }
 
   private static Kind binaryKind(InternalSyntaxToken token) {
-    Kind kind = BINARY_EXPRESSION_KINDS_BY_OPERATOR.get(token.text().toLowerCase());
+    Kind kind = BINARY_EXPRESSION_KINDS_BY_OPERATOR.get(token.text().toLowerCase(Locale.ENGLISH));
     if (kind == null) {
       throw new IllegalArgumentException("Mapping not found for binary operator " + token.text());
     }

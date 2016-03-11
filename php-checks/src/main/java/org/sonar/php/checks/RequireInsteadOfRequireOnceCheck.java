@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import java.util.Locale;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -50,7 +51,7 @@ public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
 
     String callee = tree.callee().toString();
 
-    if (WRONG_FUNCTIONS.contains(callee.toLowerCase())) {
+    if (WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))) {
       String message = String.format(MESSAGE, callee, callee + "_once");
       context().newIssue(this, message).tree(tree);
     }

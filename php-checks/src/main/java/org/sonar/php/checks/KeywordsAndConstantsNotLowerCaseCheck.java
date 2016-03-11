@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Locale;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -63,7 +64,7 @@ public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
   public void visitToken(SyntaxToken token) {
     super.visitToken(token);
 
-    if (KEYWORDS.contains(token.text().toLowerCase())) {
+    if (KEYWORDS.contains(token.text().toLowerCase(Locale.ENGLISH))) {
       check(token, token.text(), "keyword");
     }
   }

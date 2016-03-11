@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Locale;
 import java.util.Set;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
@@ -235,7 +236,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   private static boolean isBuiltInVariable(VariableIdentifierTree tree) {
-    return BUILT_IN_VARIABLES.contains(tree.text().toUpperCase());
+    return BUILT_IN_VARIABLES.contains(tree.text().toUpperCase(Locale.ENGLISH));
   }
 
   @Override
@@ -359,7 +360,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
     classMemberUsageState = new ClassMemberUsageState();
     classMemberUsageState.isStatic = tree.isStatic();
-    classMemberUsageState.isSelfMember = selfObjects.contains(strObject.toLowerCase());
+    classMemberUsageState.isSelfMember = selfObjects.contains(strObject.toLowerCase(Locale.ENGLISH));
     classMemberUsageState.isField = insideCallee.isEmpty();
     classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
 

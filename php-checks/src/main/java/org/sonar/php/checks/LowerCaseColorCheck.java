@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import java.util.Locale;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -58,7 +59,7 @@ public class LowerCaseColorCheck extends PHPSubscriptionCheck {
     String stringContent = getStringContent((LiteralTree) tree);
 
     if (isLowerCaseColor(stringContent)) {
-      String message = String.format(MESSAGE, stringContent, stringContent.toUpperCase());
+      String message = String.format(MESSAGE, stringContent, stringContent.toUpperCase(Locale.ENGLISH));
       context().newIssue(this, message).tree(tree);
     }
   }
