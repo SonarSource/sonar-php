@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,17 +86,13 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    * @return the test suites
    */
   protected TestSuites getTestSuites(File report) {
-    InputStream inputStream = null;
-    try {
+    try (InputStream inputStream = new FileInputStream(report)){
       XStream xstream = getXStream();
-      inputStream = new FileInputStream(report);
       TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
       LOG.debug("Tests suites: " + testSuites.getTestSuiteList());
       return testSuites;
     } catch (IOException e) {
       throw new SonarException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
-    } finally {
-      IOUtils.closeQuietly(inputStream);
     }
   }
 

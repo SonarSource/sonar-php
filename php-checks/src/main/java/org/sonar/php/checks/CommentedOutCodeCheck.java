@@ -127,7 +127,7 @@ public class CommentedOutCodeCheck extends PHPVisitorCheck {
   private static String getContents(String comment) {
     if (comment.startsWith("//")) {
       return comment.substring(2);
-    } else if (comment.startsWith("#")) {
+    } else if (comment.charAt(0) == '#') {
       return comment.substring(1);
     } else {
       return comment.substring(2, comment.length() - 2);

@@ -43,7 +43,7 @@ public class PerlStyleCommentsUsageCheck extends PHPVisitorCheck {
   public void visitTrivia(SyntaxTrivia trivia) {
     super.visitTrivia(trivia);
 
-    if (trivia.text().startsWith("#")) {
+    if (trivia.text().charAt(0) == '#') {
       context().newIssue(this, MESSAGE).tree(trivia);
     }
   }

@@ -242,7 +242,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   @Override
   public void visitCompoundVariable(CompoundVariableTree tree) {
     SyntaxToken firstExpressionToken = ((PHPTree) tree.variableExpression()).getFirstToken();
-    if (!firstExpressionToken.text().startsWith("$")) {
+    if (firstExpressionToken.text().charAt(0) != '$') {
       Symbol symbol = currentScope.getSymbol("$" + firstExpressionToken.text());
       if (symbol != null) {
         symbol.addUsage(firstExpressionToken);

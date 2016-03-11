@@ -222,8 +222,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    * @return the coverage
    */
   private CoverageNode getCoverage(File coverageReportFile) {
-    InputStream inputStream = null;
-    try {
+    try (InputStream inputStream = new FileInputStream(coverageReportFile);){
       XStream xstream = new XStream();
       xstream.setClassLoader(getClass().getClassLoader());
       xstream.aliasSystemAttribute("classType", "class");
@@ -232,12 +231,10 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
       xstream.processAnnotations(FileNode.class);
       xstream.processAnnotations(MetricsNode.class);
       xstream.processAnnotations(LineNode.class);
-      inputStream = new FileInputStream(coverageReportFile);
+
       return (CoverageNode) xstream.fromXML(inputStream);
     } catch (IOException e) {
       throw new SonarException("Can't read phpUnit report: " + coverageReportFile.getName(), e);
-    } finally {
-      IOUtils.closeQuietly(inputStream);
     }
   }
 

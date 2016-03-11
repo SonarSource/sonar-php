@@ -20,7 +20,11 @@
 package org.sonar.plugins.php.core;
 
 import com.google.common.annotations.VisibleForTesting;
-import org.apache.commons.io.IOUtils;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Phase;
@@ -44,12 +48,6 @@ import org.sonar.squidbridge.recognizer.EndWithDetector;
 import org.sonar.squidbridge.recognizer.KeywordsDetector;
 import org.sonar.squidbridge.recognizer.LanguageFootprint;
 import org.sonar.squidbridge.text.Source;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.HashSet;
-import java.util.Set;
 
 @Phase(name = Phase.Name.PRE)
 // The NoSonarFilter must be fed before launching the violation engines
@@ -96,16 +94,13 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
 
   protected static Source analyseSourceCode(File file) {
     Source result = null;
-    FileReader reader = null;
-    try {
-      reader = new FileReader(file);
+
+    try (FileReader reader = new FileReader(file)){
       result = new Source(reader, new CodeRecognizer(CODE_RECOGNIZER_SENSITIVITY, new PhpLanguageFootprint()));
-    } catch (FileNotFoundException e) {
+    } catch (IOException e) {
       throw new SonarException("Unable to open file '" + file.getAbsolutePath() + "'", e);
     } catch (RuntimeException rEx) {
       LOG.error("Error while parsing file '" + file.getAbsolutePath() + "'", rEx);
-    } finally {
-      IOUtils.closeQuietly(reader);
     }
 
     return result;

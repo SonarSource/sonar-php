@@ -321,7 +321,11 @@ public class TreeFactory {
     return groupUseClause(Optional.<InternalSyntaxToken>absent(), namespaceName, alias);
   }
 
-  public UseClauseTree groupUseClause(Optional<InternalSyntaxToken> useTypeToken, NamespaceNameTree namespaceName, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias) {
+  public UseClauseTree groupUseClause(
+    Optional<InternalSyntaxToken> useTypeToken,
+    NamespaceNameTree namespaceName,
+    Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> alias
+  ) {
     if (alias.isPresent()) {
       NameIdentifierTreeImpl aliasName = new NameIdentifierTreeImpl(alias.get().second());
       return new UseClauseTreeImpl(useTypeToken.orNull(), namespaceName, alias.get().first(), aliasName);

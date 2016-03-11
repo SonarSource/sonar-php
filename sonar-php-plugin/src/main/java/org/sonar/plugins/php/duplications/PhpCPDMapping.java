@@ -19,11 +19,15 @@
  */
 package org.sonar.plugins.php.duplications;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Iterator;
 import net.sourceforge.pmd.cpd.SourceCode;
 import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
-import org.apache.commons.io.IOUtils;
 import org.sonar.api.batch.AbstractCpdMapping;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Language;
@@ -33,12 +37,6 @@ import org.sonar.duplications.token.Token;
 import org.sonar.duplications.token.TokenChunker;
 import org.sonar.duplications.token.TokenQueue;
 import org.sonar.plugins.php.api.Php;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Iterator;
 
 /**
  * Temporary PHP CPD engine mapping class, used until we can migrate to Sonar CPD Engine.
@@ -99,16 +97,15 @@ public class PhpCPDMapping extends AbstractCpdMapping {
     public final void tokenize(SourceCode source, Tokens cpdTokens) {
       String fileName = source.getFileName();
 
-      Reader reader = null;
-      try {
-        reader = new InputStreamReader(new FileInputStream(fileName), fileSystem.encoding());
+      try (Reader reader = new InputStreamReader(new FileInputStream(fileName), fileSystem.encoding())) {
+
         TokenQueue queue = tokenChunker.chunk(reader);
 
         Iterator<Token> iterator = queue.iterator();
         // we currently use this hack to remove "use" directives
         boolean useDirective = false;
         while (iterator.hasNext()) {
-          Token token = (Token) iterator.next();
+          Token token = iterator.next();
           if (token.getValue().equalsIgnoreCase(USE_KEYWORD)) {
             useDirective = true;
           } else if (useDirective) {
@@ -120,10 +117,8 @@ public class PhpCPDMapping extends AbstractCpdMapping {
             cpdTokens.add(new TokenEntry(token.getValue(), fileName, token.getLine()));
           }
         }
-      } catch (FileNotFoundException e) {
+      } catch (IOException e) {
         throw new SonarException(e);
-      } finally {
-        IOUtils.closeQuietly(reader);
       }
 
       cpdTokens.add(TokenEntry.getEOF());
