@@ -50,6 +50,10 @@ public class AssignmentExpressionTreeImpl extends PHPTree implements AssignmentE
   }
 
   @Override
+  public String operator() {
+    return equalToken.text();
+  }
+
   public SyntaxToken equalToken() {
     return equalToken;
   }

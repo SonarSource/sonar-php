@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**
@@ -38,6 +37,7 @@ import org.sonar.plugins.php.api.tree.Tree;
  *   {@link #variable()} {@link Tree.Kind#XOR_ASSIGNMENT ^=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#OR_ASSIGNMENT |=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#CONCATENATION_ASSIGNMENT .=} {@link #value()}
+ *   {@link #variable()} {@link Tree.Kind#ASSIGNMENT_BY_REFERENCE =&} {@link #value()}
  * </pre>
  */
 @Beta
@@ -45,7 +45,7 @@ public interface AssignmentExpressionTree extends ExpressionTree {
 
   ExpressionTree variable();
 
-  SyntaxToken equalToken();
+  String operator();
 
   ExpressionTree value();
 

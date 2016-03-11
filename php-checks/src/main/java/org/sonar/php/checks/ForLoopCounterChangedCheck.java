@@ -19,13 +19,16 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
@@ -34,11 +37,6 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
 
 @Rule(
   key = ForLoopCounterChangedCheck.KEY,
@@ -95,12 +93,6 @@ public class ForLoopCounterChangedCheck extends PHPVisitorCheck {
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
     checkVariable(tree.variable());
     super.visitAssignmentExpression(tree);
-  }
-
-  @Override
-  public void visitAssignmentByReference(AssignmentByReferenceTree tree) {
-    checkVariable(tree.variable());
-    super.visitAssignmentByReference(tree);
   }
 
   @Override

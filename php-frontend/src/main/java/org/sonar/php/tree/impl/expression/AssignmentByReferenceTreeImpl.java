@@ -20,17 +20,16 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import java.util.Iterator;
-
-public class AssignmentByReferenceTreeImpl extends PHPTree implements AssignmentByReferenceTree {
+public class AssignmentByReferenceTreeImpl extends PHPTree implements AssignmentExpressionTree {
 
   private static final Kind KIND = Kind.ASSIGNMENT_BY_REFERENCE;
 
@@ -52,11 +51,14 @@ public class AssignmentByReferenceTreeImpl extends PHPTree implements Assignment
   }
 
   @Override
+  public String operator() {
+    return equalToken.text() + ampersandToken.text();
+  }
+
   public SyntaxToken equalToken() {
     return equalToken;
   }
 
-  @Override
   public SyntaxToken ampersandToken() {
     return ampersandToken;
   }
@@ -78,6 +80,6 @@ public class AssignmentByReferenceTreeImpl extends PHPTree implements Assignment
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitAssignmentByReference(this);
+    visitor.visitAssignmentExpression(this);
   }
 }

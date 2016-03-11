@@ -21,6 +21,12 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
@@ -32,20 +38,12 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 @Rule(
   key = LocalVariableAndParameterNameCheck.KEY,
@@ -141,12 +139,8 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
   }
 
   private static ExpressionTree getLeftHandExpression(Tree assignmentExpr) {
-    ExpressionTree leftExpression;
-    if (assignmentExpr.is(Kind.ASSIGNMENT_BY_REFERENCE)) {
-      leftExpression = ((AssignmentByReferenceTree) assignmentExpr).variable();
-    } else {
-      leftExpression = ((AssignmentExpressionTree) assignmentExpr).variable();
-    }
+    ExpressionTree leftExpression = ((AssignmentExpressionTree) assignmentExpr).variable();
+
     while (leftExpression.is(Kind.ARRAY_ACCESS)) {
       leftExpression = ((ArrayAccessTree) leftExpression).object();
     }

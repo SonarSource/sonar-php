@@ -41,7 +41,6 @@ import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
@@ -162,14 +161,6 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
     if (classState.isInClass()) {
       checkLocalVariable(tree.variable());
       super.visitAssignmentExpression(tree);
-    }
-  }
-
-  @Override
-  public void visitAssignmentByReference(AssignmentByReferenceTree tree) {
-    if (classState.isInClass()) {
-      checkLocalVariable(tree.variable());
-      super.visitAssignmentByReference(tree);
     }
   }
 

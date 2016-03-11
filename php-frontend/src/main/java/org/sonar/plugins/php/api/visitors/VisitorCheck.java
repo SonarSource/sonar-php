@@ -38,7 +38,6 @@ import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
@@ -265,8 +264,6 @@ public interface VisitorCheck extends PHPCheck {
   void visitArrayInitializerFunction(ArrayInitializerFunctionTree tree);
 
   void visitArrayInitializerBracket(ArrayInitializerBracketTree tree);
-
-  void visitAssignmentByReference(AssignmentByReferenceTree tree);
 
   void visitScript(ScriptTree tree);
 

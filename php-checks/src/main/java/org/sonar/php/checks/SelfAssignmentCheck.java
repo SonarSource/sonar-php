@@ -24,7 +24,6 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.Equality;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -49,15 +48,9 @@ public class SelfAssignmentCheck extends PHPVisitorCheck {
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
     super.visitAssignmentExpression(tree);
 
-    if (tree.is(Kind.ASSIGNMENT)) {
+    if (tree.is(Kind.ASSIGNMENT, Kind.ASSIGNMENT_BY_REFERENCE)) {
       check(tree.variable(), tree.value());
     }
-  }
-
-  @Override
-  public void visitAssignmentByReference(AssignmentByReferenceTree tree) {
-    super.visitAssignmentByReference(tree);
-    check(tree.variable(), tree.value());
   }
 
   private void check(ExpressionTree lhs, ExpressionTree rhs) {

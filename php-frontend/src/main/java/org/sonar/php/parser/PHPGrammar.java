@@ -46,7 +46,6 @@ import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
@@ -971,7 +970,6 @@ public class PHPGrammar {
           UNARY_EXPR()),
         CAST_EXPR(),
         ASSIGNMENT_EXPRESSION(),
-        ASSIGNMENT_BY_REFERENCE(),
         POSTFIX_EXPRESSION()));
   }
 
@@ -1302,8 +1300,8 @@ public class PHPGrammar {
         PARENTHESIZED_EXPRESSION()));
   }
 
-  public AssignmentByReferenceTree ASSIGNMENT_BY_REFERENCE() {
-    return b.<AssignmentByReferenceTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_BY_REFERENCE).is(
+  public AssignmentExpressionTree ASSIGNMENT_BY_REFERENCE() {
+    return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_BY_REFERENCE).is(
       f.assignmentByReference(
         MEMBER_EXPRESSION(),
         b.token(PHPPunctuator.EQU), b.token(AMPERSAND),
@@ -1311,8 +1309,10 @@ public class PHPGrammar {
   }
 
   public AssignmentExpressionTree ASSIGNMENT_EXPRESSION() {
-    return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION).is(
-      f.assignmentExpression(MEMBER_EXPRESSION(), ASSIGNMENT_OPERATOR(), EXPRESSION()));
+    return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION).is(b.firstOf(
+      f.assignmentExpression(MEMBER_EXPRESSION(), ASSIGNMENT_OPERATOR(), EXPRESSION()),
+      ASSIGNMENT_BY_REFERENCE()
+    ));
   }
 
   public InternalSyntaxToken ASSIGNMENT_OPERATOR() {

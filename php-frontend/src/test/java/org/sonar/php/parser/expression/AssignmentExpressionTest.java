@@ -43,6 +43,12 @@ public class AssignmentExpressionTest {
       .matches("$a -= $b")
       .matches("$a -= $b")
 
+      .matches("$a =& $b")
+      .matches("$a =& new X")
+      .matches("$a =& myFunction()")
+
+      .notMatches("$a =& $b * $c")
+
       .matches("$var = function () {}");
   }
 }

@@ -35,7 +35,18 @@ public class AssignmentExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.REMAINDER_ASSIGNMENT)).isTrue();
     assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(expressionToString(tree.variable())).isEqualTo("$a");
-    assertThat(tree.equalToken().text()).isEqualTo("%=");
+    assertThat(tree.operator()).isEqualTo("%=");
+    assertThat(tree.value().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.value())).isEqualTo("$b");
+  }
+
+  @Test
+  public void test_assignment_by_reference() throws Exception {
+    AssignmentExpressionTree tree = parse("$a =& $b", PHPLexicalGrammar.ASSIGNMENT_BY_REFERENCE);
+    assertThat(tree.is(Kind.ASSIGNMENT_BY_REFERENCE)).isTrue();
+    assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(expressionToString(tree.variable())).isEqualTo("$a");
+    assertThat(tree.operator()).isEqualTo("=&");
     assertThat(tree.value().is(Kind.VARIABLE_IDENTIFIER)).isTrue();
     assertThat(expressionToString(tree.value())).isEqualTo("$b");
   }

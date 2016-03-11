@@ -21,6 +21,9 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -28,7 +31,6 @@ import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.AssignmentByReferenceTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
@@ -40,10 +42,6 @@ import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Rule(
   key = ImmediatelyReturnedVariableCheck.KEY,
@@ -110,9 +108,6 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
 
       if (expression instanceof AssignmentExpressionTree) {
         variable = ((AssignmentExpressionTree) expression).variable();
-
-      } else if (expression.is(Kind.ASSIGNMENT_BY_REFERENCE)) {
-        variable = ((AssignmentByReferenceTree) expression).variable();
       }
     }
 
