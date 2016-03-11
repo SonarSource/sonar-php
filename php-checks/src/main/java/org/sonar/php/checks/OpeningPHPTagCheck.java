@@ -59,11 +59,11 @@ public class OpeningPHPTagCheck extends PHPVisitorCheck {
    * The node contains everything before the first opening include HTML if present
    * this allows to ensure reporting the issue on the correct line.
    */
-  private int getLineToReport(String openingTag) {
+  private static int getLineToReport(String openingTag) {
     return openingTag.split("(?:\r)?\n|\r").length;
   }
 
-  private boolean isAuthorisedTag(String openingTagWithContentBefore) {
+  private static boolean isAuthorisedTag(String openingTagWithContentBefore) {
     return openingTagWithContentBefore.endsWith(LONG_TAG)
       || openingTagWithContentBefore.endsWith(SHORT_ECHO_TAG)
       || !openingTagWithContentBefore.endsWith(SHORT_TAG);

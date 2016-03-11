@@ -176,7 +176,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    * @param testSuites the test suites
    * @return List<PhpUnitTestReport> A list of all test reports
    */
-  private List<PhpUnitTestReport> readSuites(TestSuites testSuites) {
+  private static List<PhpUnitTestReport> readSuites(TestSuites testSuites) {
     List<PhpUnitTestReport> result = new ArrayList<>();
     for (TestSuite testSuite : testSuites.getTestSuiteList()) {
       PhpTestSuiteReader reader = new PhpTestSuiteReader();

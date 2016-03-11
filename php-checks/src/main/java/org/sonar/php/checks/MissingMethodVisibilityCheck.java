@@ -20,6 +20,8 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -32,8 +34,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.Set;
 
 @Rule(
   key = MissingMethodVisibilityCheck.KEY,
@@ -76,7 +76,7 @@ public class MissingMethodVisibilityCheck extends PHPVisitorCheck {
   }
 
   // fixme (Lena) : could be replaced with method implemented in https://github.com/pynicolas/sonar-php/commit/c8ba74d43c0816871e928d9415da68791fbde5e8
-  private boolean hasVisibilityModifier(MethodDeclarationTree method) {
+  private static boolean hasVisibilityModifier(MethodDeclarationTree method) {
     for (SyntaxToken modifier : method.modifiers()) {
       if (VISIBILITIES.contains(modifier.text().toLowerCase())) {
         return true;
@@ -85,7 +85,7 @@ public class MissingMethodVisibilityCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private String getMethodKind(String methodName, String className) {
+  private static String getMethodKind(String methodName, @Nullable String className) {
     if ("__construct".equalsIgnoreCase(methodName) || methodName.equalsIgnoreCase(className)) {
       return "constructor";
 

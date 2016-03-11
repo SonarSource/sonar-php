@@ -140,7 +140,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
     setAsCheckedVariable(varName);
   }
 
-  private ExpressionTree getLeftHandExpression(Tree assignmentExpr) {
+  private static ExpressionTree getLeftHandExpression(Tree assignmentExpr) {
     ExpressionTree leftExpression;
     if (assignmentExpr.is(Kind.ASSIGNMENT_BY_REFERENCE)) {
       leftExpression = ((AssignmentByReferenceTree) assignmentExpr).variable();
@@ -157,7 +157,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
     return pattern.matcher(StringUtils.remove(varName, "$")).matches() || isSuperGlobal(varName);
   }
 
-  private boolean isSuperGlobal(String varName) {
+  private static boolean isSuperGlobal(String varName) {
     return SUPERGLOBALS.contains(varName);
   }
 

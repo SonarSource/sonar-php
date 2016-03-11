@@ -61,7 +61,7 @@ public class ExtendsImplementsLineCheck extends PHPVisitorCheck implements Forma
     }
   }
 
-  private boolean isExtendsOnClassNameLine(ClassDeclarationTree classDeclaration, int classNameLine) {
+  private static boolean isExtendsOnClassNameLine(ClassDeclarationTree classDeclaration, int classNameLine) {
     SyntaxToken extendsToken = classDeclaration.extendsToken();
     return extendsToken == null || classNameLine == extendsToken.line();
   }
@@ -77,7 +77,7 @@ public class ExtendsImplementsLineCheck extends PHPVisitorCheck implements Forma
    * Return null if there is not issue to report.
    */
   @Nullable
-  private String getIssuePartialMessage(boolean isExtendsOnClassNameLine, boolean isImplementsOnClassNameLine) {
+  private static String getIssuePartialMessage(boolean isExtendsOnClassNameLine, boolean isImplementsOnClassNameLine) {
     String msg = null;
 
     if (!isExtendsOnClassNameLine && !isImplementsOnClassNameLine) {

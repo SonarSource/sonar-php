@@ -73,7 +73,7 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
    * Example: $p2 will be returned.
    * <pre>function f($p1, $p2 = 1, $p3, $p4 = 4) {...}</pre>
    */
-  private List<ParameterTree> getParametersToMove(ParameterListTree parameterList) {
+  private static List<ParameterTree> getParametersToMove(ParameterListTree parameterList) {
     List<ParameterTree> parametersToMove = Lists.newArrayList();
     boolean metParamWithoutDefault = false;
 
@@ -90,7 +90,7 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
     return Lists.reverse(parametersToMove);
   }
 
-  private String getNameListString(List<ParameterTree> params) {
+  private static String getNameListString(List<ParameterTree> params) {
     List<String> parameterNames = new ArrayList<>();
     for (ParameterTree parameter : params) {
       parameterNames.add("\"" + parameter.variableIdentifier().variableExpression().text() + "\"");

@@ -62,7 +62,7 @@ public class NonEmptyCaseWithoutBreakCheck extends PHPVisitorCheck {
     super.visitSwitchStatement(switchTree);
   }
 
-  private boolean hasNoBreakComment(SwitchCaseClauseTree caseClause) {
+  private static boolean hasNoBreakComment(SwitchCaseClauseTree caseClause) {
     return !caseClause.caseToken().trivias().isEmpty();
   }
 

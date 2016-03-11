@@ -78,7 +78,7 @@ public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
 
   }
 
-  private boolean hasActionStatementAfter(List<StatementTree> statements, int currentStatementNumber) {
+  private static boolean hasActionStatementAfter(List<StatementTree> statements, int currentStatementNumber) {
     for (int i = currentStatementNumber + 1; i < statements.size(); i++) {
       if (!statements.get(i).is(NO_ACTION_KINDS)) {
         return true;

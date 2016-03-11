@@ -176,7 +176,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
     }
   }
 
-  private String getTypeName(NamespaceNameTree namespaceName) {
+  private static String getTypeName(NamespaceNameTree namespaceName) {
     String name = namespaceName.fullName();
     String prefix = "namespace\\";
     if (StringUtils.startsWithIgnoreCase(name, prefix)) {

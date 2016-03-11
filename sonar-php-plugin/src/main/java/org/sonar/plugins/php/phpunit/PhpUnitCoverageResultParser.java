@@ -194,7 +194,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
     }
   }
 
-  private void logMeasureByResource(Resource resource, Measure measure) {
+  private static void logMeasureByResource(Resource resource, Measure measure) {
     if (LOG.isDebugEnabled()) {
       Measure alreadySaved = MEASURES_BY_RESOURCE.get(resource);
       if (alreadySaved == null) {
@@ -211,7 +211,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    * @param line     the line
    * @param lineHits the line hits
    */
-  private void saveLineMeasure(LineNode line, PropertiesBuilder<Integer, Integer> lineHits) {
+  private static void saveLineMeasure(LineNode line, PropertiesBuilder<Integer, Integer> lineHits) {
     lineHits.add(line.getNum(), line.getCount());
   }
 

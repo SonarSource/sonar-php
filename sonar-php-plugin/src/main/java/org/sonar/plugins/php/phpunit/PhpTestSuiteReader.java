@@ -48,7 +48,7 @@ public class PhpTestSuiteReader {
    * @param testCase the test case to analyse
    * @param report   the report in which results will be added
    */
-  private void cumulateTestCaseDetails(TestCase testCase, PhpUnitTestReport report) {
+  private static void cumulateTestCaseDetails(TestCase testCase, PhpUnitTestReport report) {
 
     if (TestCase.STATUS_SKIPPED.equals(testCase.getStatus())) {
       report.setSkipped(report.getSkipped() + 1);

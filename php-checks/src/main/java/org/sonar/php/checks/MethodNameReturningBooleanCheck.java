@@ -54,12 +54,12 @@ public class MethodNameReturningBooleanCheck extends PHPVisitorCheck {
     }
   }
 
-  private boolean hasBooleanPrefixName(MethodDeclarationTree methodDeclaration) {
+  private static boolean hasBooleanPrefixName(MethodDeclarationTree methodDeclaration) {
     String methodName = methodDeclaration.name().text();
     return methodName.startsWith("has") || methodName.startsWith("is");
   }
 
-  private boolean isReturningBoolean(MethodDeclarationTree methodDeclaration) {
+  private static boolean isReturningBoolean(MethodDeclarationTree methodDeclaration) {
     for (SyntaxTrivia comment : ((PHPTree) methodDeclaration).getFirstToken().trivias()) {
       for (String line : comment.text().split(LexicalConstant.LINE_TERMINATOR)) {
 
@@ -71,7 +71,7 @@ public class MethodNameReturningBooleanCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private boolean returnsBoolean(String line) {
+  private static boolean returnsBoolean(String line) {
     boolean isPreviousReturnTag = false;
 
     for (String word : line.split("\\s")) {

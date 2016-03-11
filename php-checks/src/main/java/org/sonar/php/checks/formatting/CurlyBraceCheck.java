@@ -98,7 +98,7 @@ public class CurlyBraceCheck extends PHPVisitorCheck implements FormattingCheck 
    *  }
    * </code>
    */
-  private SyntaxToken getPreviousToken(ParameterListTree parameterList) {
+  private static SyntaxToken getPreviousToken(ParameterListTree parameterList) {
     return new TokenVisitor(parameterList).prevToken(parameterList.closeParenthesisToken());
   }
 
