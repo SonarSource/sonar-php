@@ -8,7 +8,6 @@ install: true
 script: ./travis.sh
 env:
   - TEST=ci
-
 matrix:
   fast_finish: true
 
@@ -19,4 +18,5 @@ cache:
 notifications:
   email: false
   webhooks:
-    - secure: "Kj6s9yXqOiXyJobgdz+duPw6QEuoTbIG8co33EFny+v7Ot8+3wFTkLtqxM4Y7T0iKP4hKHyVsaPXxOoTI1cQhySJwvd/4krkD/d2o/Mk4RwhEq+VMU38B12J+NVz7441C6aQwnkC0KI8iysfxsOL/K4t67O7YvmiWjKKr5TaNgU="1
+    - secure: "W2KMCYTiAXrxgJW9ErsCTuLbLzUPYN2zEVPseOIooOwBajdPyefJ5hASUQXT2h06e6e5ID44xD70zZ3BXucPkXTFD2s1BcHpb7tzJt9vgaraZJFu4eBRRFG7hnqsJUWNzyTukGOypvbZtg5jnS39mDHSUk/RmugNZlvs9uBrzE8="
+  
