@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.sonarsource.parent</groupId>
     <artifactId>parent</artifactId>
-    <version>29</version>
+    <version>31</version>
   </parent>
 
   <groupId>org.sonarsource.php</groupId>
@@ -95,6 +95,8 @@
 
     <sonar.version>4.5.2</sonar.version>
     <sslr.version>1.21</sslr.version>
+
+    <gitRepositoryName>sonar-php</gitRepositoryName>
   </properties>
 
   <dependencyManagement>
@@ -183,5 +185,14 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <profiles>
+    <profile>
+      <id>its</id>
+      <modules>
+        <module>its</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>

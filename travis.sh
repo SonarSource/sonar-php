@@ -6,20 +6,38 @@ function cleanPhpInMavenRepository {
   rm -rf ~/.m2/repository/org/sonarsource/php
 }
 
-function installTravisTools {
+function configureTravis {
   mkdir ~/.local
-  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v21 | tar zx --strip-components 1 -C ~/.local
+  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v27 | tar zx --strip-components 1 -C ~/.local
   source ~/.local/bin/install
 }
+
+configureTravis
 
 case "$TEST" in
 
 ci)
-  mvn verify -B -e -V
+  git fetch --unshallow || true
+
+  # Analyze with SNAPSHOT version as long as SQ does not correctly handle
+  # purge of release data
+  SONAR_PROJECT_VERSION=`maven_expression "project.version"`
+
+  # Do not deploy a SNAPSHOT version but the release version related to this build
+  set_maven_build_version $TRAVIS_BUILD_NUMBER
+
+  export MAVEN_OPTS="-Xmx1536m -Xms128m"
+  mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy sonar:sonar \
+      -Pcoverage-per-test,deploy-sonarsource \
+      -Dmaven.test.redirectTestOutputToFile=false \
+      -Dsonar.host.url=$SONAR_HOST_URL \
+      -Dsonar.login=$SONAR_TOKEN \
+      -Dsonar.projectVersion=$SONAR_PROJECT_VERSION \
+      -B -e -V
+
   ;;
 
-plugin|ruling)
-  installTravisTools
+plugin|ruling)  
 
   cleanPhpInMavenRepository # make sure we don't use an old version from the travis cache
   mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
