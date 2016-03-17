@@ -1,0 +1,21 @@
+# Definition of QA pipeline at SonarSource
+
+
+TEST:
+  - plugin
+  - ruling
+
+SQ_VERSION: 
+  - DEV
+  - LATEST_RELEASE
+  - LTS
+
+exclude:
+  - TEST: plugin
+    SQ_VERSION: LATEST_RELEASE
+
+  - TEST: ruling
+    SQ_VERSION: DEV
+
+  - TEST: ruling
+    SQ_VERSION: LTS
