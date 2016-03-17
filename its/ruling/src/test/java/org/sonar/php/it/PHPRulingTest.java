@@ -41,7 +41,7 @@ public class PHPRulingTest {
 
   @ClassRule
   public static Orchestrator ORCHESTRATOR = Orchestrator.builderEnv()
-    .addPlugin(FileLocation.of(Iterables.getOnlyElement(Arrays.asList(new File("../../sonar-php-plugin/target/").listFiles(new FilenameFilter() {
+    .addPlugin(FileLocation.byWildcardMavenFilename(Iterables.getOnlyElement(Arrays.asList(new File("../../sonar-php-plugin/target/").listFiles(new FilenameFilter() {
       @Override
       public boolean accept(File dir, String name) {
         return name.endsWith(".jar") && !name.endsWith("-sources.jar");

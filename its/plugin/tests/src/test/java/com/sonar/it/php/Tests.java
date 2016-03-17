@@ -52,7 +52,7 @@ public class Tests {
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
       // PHP Plugin
-      .addPlugin(FileLocation.of(Iterables.getOnlyElement(Arrays.asList(new File("../../../sonar-php-plugin/target/").listFiles(new FilenameFilter() {
+      .addPlugin(FileLocation.byWildcardMavenFilename(Iterables.getOnlyElement(Arrays.asList(new File("../../../sonar-php-plugin/target/").listFiles(new FilenameFilter() {
         @Override
         public boolean accept(File dir, String name) {
           return name.endsWith(".jar") && !name.endsWith("-sources.jar");
@@ -60,7 +60,7 @@ public class Tests {
       }))).getAbsolutePath()))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
       // Custom rules plugin
-      .addPlugin(FileLocation.of("../plugins/php-custom-rules-plugin/target/php-custom-rules-plugin-1.0-SNAPSHOT.jar"))
+      .addPlugin(FileLocation.byWildcardMavenFilename("../plugins/php-custom-rules-plugin/target/php-custom-rules-plugin-*.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
   }
