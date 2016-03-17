@@ -1,7 +1,7 @@
 /*
- * PHP :: Integration Tests
- * Copyright (C) 2011 SonarSource
- * sonarqube@googlegroups.com
+ * SonarQube PHP Plugin
+ * Copyright (C) 2011-2016 SonarSource SA
+ * mailto:contact AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,9 +13,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package com.sonar.it.php;
 
@@ -52,15 +52,10 @@ public class Tests {
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
       // PHP Plugin
-      .addPlugin(FileLocation.byWildcardMavenFilename(Iterables.getOnlyElement(Arrays.asList(new File("../../../sonar-php-plugin/target/").listFiles(new FilenameFilter() {
-        @Override
-        public boolean accept(File dir, String name) {
-          return name.endsWith(".jar") && !name.endsWith("-sources.jar");
-        }
-      }))).getAbsolutePath()))
+      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
       // Custom rules plugin
-      .addPlugin(FileLocation.byWildcardMavenFilename("../plugins/php-custom-rules-plugin/target/php-custom-rules-plugin-*.jar"))
+      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"),"php-custom-rules-plugin-*.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
   }
