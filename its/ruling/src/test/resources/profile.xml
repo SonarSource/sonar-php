@@ -348,6 +348,11 @@
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
+      <key>S2050</key> <!-- alias function usage -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
       <key>S1765</key> <!-- var keyword usage -->
       <priority>INFO</priority>
     </rule>
