@@ -22,6 +22,8 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarRunner;
 import com.sonar.orchestrator.locator.FileLocation;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -29,9 +31,6 @@ import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -77,7 +76,6 @@ public class PHPIntegrationTest {
     assertThat(getProjectMeasure("comment_lines").getIntValue()).isEqualTo(4836);
     assertThat(getProjectMeasure("public_documented_api_density")).isNull();
     assertThat(getProjectMeasure("public_undocumented_api")).isNull();
-    assertThat(getProjectMeasure("commented_out_code_lines").getIntValue()).isEqualTo(19);
     assertThat(getProjectMeasure("public_api")).isNull();
 
     // Complexity
@@ -104,9 +102,6 @@ public class PHPIntegrationTest {
     assertThat(getFileMeasure("comment_lines").getIntValue()).isEqualTo(15);
     assertThat(getFileMeasure("public_documented_api_density")).isNull();
     assertThat(getFileMeasure("public_undocumented_api")).isNull();
-
-    System.out.println(getFileMeasure("commented_out_code_lines").getIntValue());
-    assertThat(getFileMeasure("commented_out_code_lines").getIntValue()).isEqualTo(3);
 
     assertThat(getFileMeasure("public_api")).isNull();
 
