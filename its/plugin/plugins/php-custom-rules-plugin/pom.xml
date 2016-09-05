@@ -19,9 +19,7 @@
     <dependency>
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-plugin-api</artifactId>
-      <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>org.sonarsource.php</groupId>
       <artifactId>sonar-php-plugin</artifactId>

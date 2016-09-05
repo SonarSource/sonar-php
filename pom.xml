@@ -113,6 +113,7 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Compile dependencies -->
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>php-frontend</artifactId>
@@ -125,24 +126,7 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.sonar</groupId>
-        <artifactId>sonar-plugin-api</artifactId>
-        <version>${version.sonar}</version>
-        <exclusions>
-          <!-- allows to package dependencies into plugin -->
-          <exclusion>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.sonar</groupId>
         <artifactId>sonar-deprecated</artifactId>
-        <version>${version.sonar}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.sonar</groupId>
-        <artifactId>sonar-testing-harness</artifactId>
         <version>${version.sonar}</version>
       </dependency>
       <dependency>
@@ -161,36 +145,6 @@
         <version>${version.sslr-squid-bridge}</version>
       </dependency>
       <dependency>
-        <groupId>org.sonarsource.sslr</groupId>
-        <artifactId>sslr-testing-harness</artifactId>
-        <version>${version.sslr}</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${version.junit}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-all</artifactId>
-        <version>${version.mockito}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.easytesting</groupId>
-        <artifactId>fest-assert</artifactId>
-        <version>${version.fest-assert}</version>
-      </dependency>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${version.logback}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${version.slf4j}</version>
-      </dependency>
-      <dependency>
         <groupId>com.thoughtworks.xstream</groupId>
         <artifactId>xstream</artifactId>
         <version>${version.xstream}</version>
@@ -200,10 +154,70 @@
         <artifactId>maven-project</artifactId>
         <version>${version.maven-project}</version>
       </dependency>
+
+      <!-- Test dependencies -->
+      <dependency>
+        <groupId>org.codehaus.sonar</groupId>
+        <artifactId>sonar-testing-harness</artifactId>
+        <version>${version.sonar}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.sslr</groupId>
+        <artifactId>sslr-testing-harness</artifactId>
+        <version>${version.sslr}</version>
+        <scope>test</scope>
+      </dependency>
       <dependency>
         <groupId>org.sonarsource.orchestrator</groupId>
         <artifactId>sonar-orchestrator</artifactId>
         <version>${version.sonar-orchestrator}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${version.junit}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>${version.mockito}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.easytesting</groupId>
+        <artifactId>fest-assert</artifactId>
+        <version>${version.fest-assert}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- Provided dependencies -->
+      <dependency>
+        <groupId>org.codehaus.sonar</groupId>
+        <artifactId>sonar-plugin-api</artifactId>
+        <version>${version.sonar}</version>
+        <scope>provided</scope>
+        <exclusions>
+          <!-- allows to package dependencies into plugin -->
+          <exclusion>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${version.logback}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${version.slf4j}</version>
+        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
