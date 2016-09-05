@@ -9,7 +9,7 @@
 
 <h2>Noncompliant Code Example</h2>
 <pre>
-<?php  // Noncompliant; file comment missing
+// Noncompliant; file comment missing
 class MyClass   // Noncompliant; undocumented
 {
 
@@ -34,9 +34,8 @@ class MyClass   // Noncompliant; undocumented
 }
 </pre>
 
-    <h2>Compliant Solution</h2>
+<h2>Compliant Solution</h2>
 <pre>
-<?php
 /**
  * This is a file comment. There is vertical whitespace
  * between it and the next element.
@@ -83,12 +82,5 @@ class MyClass
 
     return 42;
   }
-}
-</pre>
-
-    <pre>
-// I do something
-function doSomething($b) {
-  return compute($b);
 }
 </pre>
