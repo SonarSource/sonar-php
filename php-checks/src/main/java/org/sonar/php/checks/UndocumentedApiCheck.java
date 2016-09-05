@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Checks every method and class declaration for presence of a comment in the line before
  * <p>
- * Every declaration should have a short comment explaining what the {class|method} is doing
+ * Every declaration should have a short comment explaining what the {class|method|function} is doing
  *
  * @author Nils-Janis Mahlstädt <nils-janis.mahlstaedt@hmmh.de>
  */
@@ -53,7 +53,7 @@ import java.util.List;
 public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
 
     public static final String KEY = "S1176";
-    public static final String MESSAGE = "method an class declarations should always be documented";
+    public static final String MESSAGE = "method, function and class declarations should always be documented";
 
     private static final String MESSAGE_PARTIAL = " declaration should always be documented";
     private static final boolean defaultTrue = true;
@@ -66,22 +66,23 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
 
     // check if class has comment
     @RuleProperty(
-            key = "class",
+            key = "checkClassForComment",
             defaultValue = "true")
     boolean checkClassComment = defaultTrue;
 
     // check if function has comment
     @RuleProperty(
-            key = "method",
+            key = "checkFunctionForComment",
             defaultValue = "true")
-    boolean checkFunctionDeclComment = defaultTrue;
+    boolean checkFunctionComment = defaultTrue;
 
     // check if method has comment
     @RuleProperty(
-            key = "method",
+            key = "checkMethodForComment",
             defaultValue = "true")
-    boolean checkMethodDeclComment = defaultTrue;
+    boolean checkMethodComment = defaultTrue;
 
+    // does a comment need to be in block form
     @RuleProperty(
             key = "enforceBlockComment",
             defaultValue = "false")
@@ -103,13 +104,12 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
             }
         }
 
-        //super.scan(tree);
         super.visitClassDeclaration(tree);
     }
 
     @Override
     public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-        if (checkFunctionDeclComment) {
+        if (checkFunctionComment) {
             //get current line in file
             int position = tree.name().token().line();
             if (!isComment(previousLine(position))) {
@@ -117,13 +117,12 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
             }
         }
 
-        //super.scan(tree);
         super.visitFunctionDeclaration(tree);
     }
 
     @Override
     public void visitMethodDeclaration(MethodDeclarationTree tree) {
-        if (checkMethodDeclComment) {
+        if (checkMethodComment) {
             //get current line in file
             int position = tree.name().token().line();
             if (!isComment(previousLine(position))) {
@@ -131,7 +130,6 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
             }
         }
 
-        //super.scan(tree);
         super.visitMethodDeclaration(tree);
     }
 
@@ -171,7 +169,7 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
         String line = c.trim();
         boolean isSingleLineCommentBegin = line.startsWith("//") || line.startsWith("#");
         boolean isBlockCommentBegin = line.startsWith("/**") || line.startsWith("/*");
-        boolean isBlockCommentEnd = line.endsWith("*/");
+        boolean isBlockCommentEnd = !line.startsWith("//") && line.endsWith("*/");
 
         if (enforceBlockComment) {
             //only accept block comments

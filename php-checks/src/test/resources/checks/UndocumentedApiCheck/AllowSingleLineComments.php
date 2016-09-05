@@ -60,5 +60,9 @@
 
     }
 
-    $imavar = "" // OK
+    $imavar = ""; // OK
+
+    // strage comment */
+    function z() { // OK
+    }
 ?>
