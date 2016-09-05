@@ -175,11 +175,6 @@
         <artifactId>xstream</artifactId>
         <version>${version.xstream}</version>
       </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-project</artifactId>
-        <version>${version.maven-project}</version>
-      </dependency>
 
       <!-- Test dependencies -->
       <dependency>
@@ -216,6 +211,12 @@
         <groupId>org.easytesting</groupId>
         <artifactId>fest-assert</artifactId>
         <version>${version.fest-assert}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-project</artifactId>
+        <version>${version.maven-project}</version>
         <scope>test</scope>
       </dependency>
 
