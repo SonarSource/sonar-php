@@ -1,0 +1,94 @@
+<p>
+    Public types, methods and fields should be documented
+</p>
+<p>
+    Try to imagine using a standard library without documentation.
+    It would be a nightmare, because documentation is the only way to understand of the contract of the API. Documenting an API increases the productivity of the developers consuming it.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+<?php  // Noncompliant; file comment missing
+class MyClass   // Noncompliant; undocumented
+{
+
+  $prop; // Noncompliant
+
+  /**
+   * Variable comment.
+   */
+  $prop2;  // Noncompliant; variable comment present, but @var tag missing
+
+  protected $name, $description;  // Noncompliant
+
+  function doSomething($param)  // Noncompliant
+  {
+    // ...
+    if ($vogons) {
+        throw new Exception('Help!.');
+    }
+
+    return 42;
+  }
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+<?php
+/**
+ * This is a file comment. There is vertical whitespace
+ * between it and the next element.
+ */
+
+/**
+ * MyClass does something interesting...
+ */
+class MyClass
+{
+  /**
+   * Holds the vault combination
+   * @var string
+   */
+  $prop;
+
+  /**
+   * Variable comment.
+   * @var number
+   */
+  $prop2;
+
+  /**
+   *  @var string $name
+   *  @var string $description
+   */
+  protected $name, $description;
+
+  /**
+   * Calculates the answer to a question
+   *
+   * @param string   The question
+   *
+   * @throws exception  If Vogons encountered
+   *
+   * @return integer  Returns the answer to life, the universe and everything
+   */
+  function doSomething($param)  // Noncompliant
+  {
+    // ...
+    if ($vogons) {
+        throw new Exception('Help!.');
+    }
+
+    return 42;
+  }
+}
+</pre>
+
+<pre>
+// I do something
+function doSomething($b) {
+  return compute($b);
+}
+</pre>
+
