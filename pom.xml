@@ -90,13 +90,25 @@
   </ciManagement>
 
   <properties>
+    <gitRepositoryName>sonar-php</gitRepositoryName>
     <license.title>SonarQube PHP Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-    <sonar.version>4.5.2</sonar.version>
-    <sslr.version>1.21</sslr.version>
+    <!-- plugin versions -->
+    <version.sonar-packaging-maven-plugin>1.12.1</version.sonar-packaging-maven-plugin>
 
-    <gitRepositoryName>sonar-php</gitRepositoryName>
+    <!-- JAR versions -->
+    <version.fest-assert>1.4</version.fest-assert>
+    <version.junit>4.10</version.junit>
+    <version.logback>0.9.30</version.logback>
+    <version.maven-project>2.0.6</version.maven-project>
+    <version.mockito>1.9.0</version.mockito>
+    <version.slf4j>1.6.2</version.slf4j>
+    <version.sonar>4.5.2</version.sonar>
+    <version.sonar-orchestrator>3.10.1</version.sonar-orchestrator>
+    <version.sslr>1.21</version.sslr>
+    <version.sslr-squid-bridge>2.6.1</version.sslr-squid-bridge>
+    <version.xstream>1.3.1</version.xstream>
   </properties>
 
   <dependencyManagement>
@@ -114,7 +126,7 @@
       <dependency>
         <groupId>org.codehaus.sonar</groupId>
         <artifactId>sonar-plugin-api</artifactId>
-        <version>${sonar.version}</version>
+        <version>${version.sonar}</version>
         <exclusions>
           <!-- allows to package dependencies into plugin -->
           <exclusion>
@@ -126,65 +138,87 @@
       <dependency>
         <groupId>org.codehaus.sonar</groupId>
         <artifactId>sonar-deprecated</artifactId>
-        <version>${sonar.version}</version>
+        <version>${version.sonar}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.sonar</groupId>
         <artifactId>sonar-testing-harness</artifactId>
-        <version>${sonar.version}</version>
+        <version>${version.sonar}</version>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.sslr</groupId>
         <artifactId>sslr-core</artifactId>
-        <version>${sslr.version}</version>
+        <version>${version.sslr}</version>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.sslr</groupId>
         <artifactId>sslr-toolkit</artifactId>
-        <version>${sslr.version}</version>
+        <version>${version.sslr}</version>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.sslr-squid-bridge</groupId>
         <artifactId>sslr-squid-bridge</artifactId>
-        <version>2.6.1</version>
+        <version>${version.sslr-squid-bridge}</version>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.sslr</groupId>
         <artifactId>sslr-testing-harness</artifactId>
-        <version>${sslr.version}</version>
+        <version>${version.sslr}</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.10</version>
+        <version>${version.junit}</version>
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>
-        <version>1.9.0</version>
+        <version>${version.mockito}</version>
       </dependency>
       <dependency>
         <groupId>org.easytesting</groupId>
         <artifactId>fest-assert</artifactId>
-        <version>1.4</version>
+        <version>${version.fest-assert}</version>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>0.9.30</version>
+        <version>${version.logback}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.6.2</version>
+        <version>${version.slf4j}</version>
       </dependency>
       <dependency>
         <groupId>com.thoughtworks.xstream</groupId>
         <artifactId>xstream</artifactId>
-        <version>1.3.1</version>
+        <version>${version.xstream}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-project</artifactId>
+        <version>${version.maven-project}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.orchestrator</groupId>
+        <artifactId>sonar-orchestrator</artifactId>
+        <version>${version.sonar-orchestrator}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.sonar</groupId>
+          <artifactId>sonar-packaging-maven-plugin</artifactId>
+          <version>${version.sonar-packaging-maven-plugin}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
   <profiles>
     <profile>
