@@ -21,12 +21,15 @@ package org.sonar.plugins.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
+import java.io.InterruptedIOException;
+import java.nio.charset.StandardCharsets;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.rule.ActiveRules;
@@ -48,7 +51,6 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
-import org.sonar.test.TestUtils;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -58,12 +60,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import java.io.InterruptedIOException;
-import java.nio.charset.StandardCharsets;
-
 public class PHPSensorTest {
 
-  private final DefaultFileSystem fileSystem = new DefaultFileSystem();
+  private DefaultFileSystem fileSystem;
 
   private PHPSensor sensor;
 
@@ -102,9 +101,9 @@ public class PHPSensorTest {
     public String customParam = "value";
   }
 
-
   @Before
   public void setUp() {
+    fileSystem = MockUtils.getDefaultFileSystem();
     FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
@@ -115,13 +114,12 @@ public class PHPSensorTest {
 
   @Test
   public void shouldExecuteOnProject() {
-    DefaultFileSystem localFS = new DefaultFileSystem();
-    PHPSensor localSensor = new PHPSensor(mock(ResourcePerspectives.class), localFS, null, new CheckFactory(mock(ActiveRules.class)), new NoSonarFilter());
+    PHPSensor localSensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, null, new CheckFactory(mock(ActiveRules.class)), new NoSonarFilter());
 
     // empty file system
     assertThat(localSensor.shouldExecuteOnProject(null), is(false));
 
-    localFS.add(new DefaultInputFile("file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY));
+    fileSystem.add(new DefaultInputFile("moduleKey", "file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY));
     assertThat(localSensor.shouldExecuteOnProject(null), is(true));
   }
 
@@ -136,7 +134,6 @@ public class PHPSensorTest {
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMPLEXITY_IN_FUNCTIONS), Mockito.eq(10.0));
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(7.0));
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(12.0));
-
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.CLASSES), Mockito.eq(1.0));
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(16.0));
     verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.FUNCTIONS), Mockito.eq(3.0));
@@ -146,6 +143,7 @@ public class PHPSensorTest {
   public void parse_error() throws Exception {
     SensorContext context = mock(SensorContext.class);
     analyseSingleFile(context, "parseError.php");
+
     verifyZeroInteractions(context);
   }
 
@@ -158,10 +156,10 @@ public class PHPSensorTest {
     sensor.analyse(new Project(""), context);
   }
 
-  private InputFile inputFile(String fileName) {
-    return new DefaultInputFile(fileName)
-      .setAbsolutePath(TestUtils.getResource(fileName).getAbsolutePath())
-      .setType(InputFile.Type.MAIN)
+  private DefaultInputFile inputFile(String fileName) {
+    return new DefaultInputFile("moduleKey", fileName)
+      .setModuleBaseDir(MockUtils.getModuleBaseDir().toPath())
+      .setType(Type.MAIN)
       .setLanguage(Php.KEY);
   }
 

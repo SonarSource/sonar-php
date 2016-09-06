@@ -42,12 +42,13 @@ import static org.mockito.Mockito.verify;
 public class PhpUnitResultParserTest {
 
   private SensorContext context;
+
   private PhpUnitResultParser parser;
 
   @Before
   public void setUp() throws Exception {
     context = mock(SensorContext.class);
-    parser = new PhpUnitResultParser(context, new DefaultFileSystem());
+    parser = new PhpUnitResultParser(context, MockUtils.getDefaultFileSystem());
   }
 
   /**
@@ -55,8 +56,6 @@ public class PhpUnitResultParserTest {
    */
   @Test
   public void shouldNotThrowAnExceptionWhenReportNotFound() {
-    context = mock(SensorContext.class);
-    PhpUnitResultParser parser = new PhpUnitResultParser(context, new DefaultFileSystem());
     parser.parse(null);
 
     verify(context).saveMeasure(CoreMetrics.TESTS, 0.0);
@@ -92,11 +91,10 @@ public class PhpUnitResultParserTest {
   @Test()
   public void shouldGenerateTestsMeasures() {
     File baseDir = TestUtils.getResource("/org/sonar/plugins/php/phpunit/sensor/src/");
-    DefaultFileSystem fs = new DefaultFileSystem();
-    InputFile monkeyFile = new DefaultInputFile("Monkey.php").setAbsolutePath((new File(baseDir, "Monkey.php").getAbsolutePath())).setType(InputFile.Type.TEST).setLanguage(Php.KEY);
-    InputFile bananaFile = new DefaultInputFile("Banana.php").setAbsolutePath((new File(baseDir, "Monkey.php").getAbsolutePath())).setType(InputFile.Type.TEST).setLanguage(Php.KEY);
+    DefaultFileSystem fs = new DefaultFileSystem(baseDir);
+    DefaultInputFile monkeyFile = new DefaultInputFile("moduleKey", "Monkey.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY);
+    DefaultInputFile bananaFile = new DefaultInputFile("moduleKey", "Banana.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY);
 
-    fs.setBaseDir(baseDir);
     fs.add(monkeyFile);
     fs.add(bananaFile);
 

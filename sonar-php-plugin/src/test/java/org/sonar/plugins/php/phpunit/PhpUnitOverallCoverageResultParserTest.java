@@ -25,9 +25,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.MockUtils;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -35,15 +35,18 @@ public class PhpUnitOverallCoverageResultParserTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
+
   @Mock
   private Project project;
+
   @Mock
   private SensorContext context;
+
   private PhpUnitCoverageResultParser parser;
 
   @Before
   public void setUp() throws Exception {
-    parser = new PhpUnitOverallCoverageResultParser(context, new DefaultFileSystem());
+    parser = new PhpUnitOverallCoverageResultParser(context, MockUtils.getDefaultFileSystem());
   }
 
   @Test
@@ -52,4 +55,5 @@ public class PhpUnitOverallCoverageResultParserTest {
     assertThat(parser.uncoveredLinesMetric).isEqualTo(CoreMetrics.OVERALL_UNCOVERED_LINES);
     assertThat(parser.coverageLineHitsDataMetric).isEqualTo(CoreMetrics.OVERALL_COVERAGE_LINE_HITS_DATA);
   }
+
 }

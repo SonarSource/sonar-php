@@ -39,15 +39,11 @@
       <artifactId>php-checks</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.sonar</groupId>
+      <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-plugin-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-deprecated</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
+      <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-testing-harness</artifactId>
     </dependency>
     <dependency>
@@ -82,8 +78,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <minsize>1550000</minsize>
-                  <maxsize>1750000</maxsize>
+                  <minsize>3400000</minsize>
+                  <maxsize>3600000</maxsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>

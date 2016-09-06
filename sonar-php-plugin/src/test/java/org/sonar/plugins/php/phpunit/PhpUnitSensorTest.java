@@ -53,7 +53,7 @@ public class PhpUnitSensorTest {
   @Rule
   public ExpectedException expected = ExpectedException.none();
 
-  private final DefaultFileSystem fs = new DefaultFileSystem();
+  private DefaultFileSystem fs;
 
   @Mock
   private PhpUnitResultParser parser;
@@ -63,6 +63,7 @@ public class PhpUnitSensorTest {
 
   @Mock
   private PhpUnitItCoverageResultParser itCoverageParser;
+
   @Mock
   private PhpUnitOverallCoverageResultParser overallCoverageParser;
 
@@ -81,8 +82,8 @@ public class PhpUnitSensorTest {
 
     settings = newSettings();
     project = mock(Project.class);
+    fs = new DefaultFileSystem(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
     sensor = createSensor(fs, settings);
-    fs.setBaseDir(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
   }
 
   @Test
@@ -92,19 +93,19 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldExecuteOnProject() {
-    DefaultFileSystem localFS = new DefaultFileSystem();
+    DefaultFileSystem localFS = fs;
     PhpUnitSensor localSensor = new PhpUnitSensor(localFS, null, null, null, null, null);
 
     // Empty file system
     assertThat(localSensor.shouldExecuteOnProject(project)).isFalse();
 
-    localFS.add((new DefaultInputFile("file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY)));
+    localFS.add((new DefaultInputFile("moduleKey", "file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY)));
     assertThat(localSensor.shouldExecuteOnProject(project)).isTrue();
   }
 
   @Test
-  public void shouldParserReport() {
-    sensor = createSensor(new DefaultFileSystem(), settings);
+  public void shouldParseReport() {
+    sensor = createSensor(fs, settings);
 
     sensor.analyse(project, context);
 
@@ -116,7 +117,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void noReport() {
-    sensor = createSensor(new DefaultFileSystem(), new Settings());
+    sensor = createSensor(fs, new Settings());
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));
@@ -124,7 +125,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void badReport() {
-    sensor = createSensor(new DefaultFileSystem(), settings("/fake/path.xml"));
+    sensor = createSensor(fs, settings("/fake/path.xml"));
     sensor.analyse(project, context);
 
     verify(parser, never()).parse(any(File.class));

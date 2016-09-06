@@ -60,10 +60,14 @@ public class PhpUnitCoverageResultParserTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
+
   @Rule
   public TemporaryFolder folder = new TemporaryFolder();
+
   private PhpUnitCoverageResultParser parser;
+
   private SensorContext context;
+
   private DefaultFileSystem fileSystem;
 
   @Before
@@ -71,8 +75,12 @@ public class PhpUnitCoverageResultParserTest {
     context = mock(SensorContext.class);
     when(context.getResource(any(Resource.class))).thenReturn(org.sonar.api.resources.File.create(MONKEY_FILE_NAME));
 
-    fileSystem = new DefaultFileSystem();
-    addFiles(fileSystem);
+    fileSystem = new DefaultFileSystem(TestUtils.getResource(BASE_DIR));
+    DefaultInputFile monkeyFile = new DefaultInputFile("moduleKey", MONKEY_FILE_NAME)
+        .setType(InputFile.Type.MAIN)
+        .setLanguage(Php.KEY)
+        .setLines(50);
+    fileSystem.add(monkeyFile);
 
     parser = new PhpUnitCoverageResultParser(context, fileSystem);
   }
@@ -162,17 +170,6 @@ public class PhpUnitCoverageResultParserTest {
     verify(context, Mockito.never()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINES_TO_COVER), any(Double.class));
   }
 
-  private static void addFiles(DefaultFileSystem fs) {
-    File baseDir = TestUtils.getResource(BASE_DIR);
-    InputFile monkeyFile = new DefaultInputFile(MONKEY_FILE_NAME)
-      .setAbsolutePath(MONKEY_FILE.getAbsolutePath())
-      .setType(InputFile.Type.MAIN)
-      .setLanguage(Php.KEY)
-      .setLines(50);
-    fs.setBaseDir(baseDir);
-    fs.add(monkeyFile);
-  }
-
   /**
    * Replace file name with absolute path in coverage report.
    *
@@ -190,4 +187,5 @@ public class PhpUnitCoverageResultParserTest {
 
     return fileWIthAbsolutePaths;
   }
+
 }

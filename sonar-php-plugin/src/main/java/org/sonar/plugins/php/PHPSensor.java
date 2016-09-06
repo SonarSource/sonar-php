@@ -190,11 +190,10 @@ public class PHPSensor implements Sensor {
 
       highlightingBuilder.done();
     }
-
   }
 
   @Nullable
-  <P extends Perspective<?>> P perspective(Class<P> clazz, InputFile file) {
+  <P extends Perspective> P perspective(Class<P> clazz, InputFile file) {
     P result = resourcePerspectives.as(clazz, file);
     if (result == null) {
       LOG.warn("Could not get " + clazz.getCanonicalName() + " for " + file);

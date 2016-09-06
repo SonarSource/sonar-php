@@ -73,6 +73,7 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
   /**
    * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
    */
+  @Override
   public void analyse(Project project, SensorContext context) {
     Iterable<InputFile> sourceFiles = filesystem.inputFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
     for (InputFile file : sourceFiles) {
@@ -144,8 +145,10 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     /**
      * @see org.sonar.squidbridge.recognizer.LanguageFootprint#getDetectors()
      */
+    @Override
     public Set<Detector> getDetectors() {
       return detectors;
     }
   }
+
 }

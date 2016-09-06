@@ -22,6 +22,9 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.File;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+
 public class MockUtils {
 
   public static final String PHPUNIT_REPORT_DIR = "/org/sonar/plugins/php/phpunit/sensor/";
@@ -29,6 +32,14 @@ public class MockUtils {
   public static final String PHPUNIT_COVERAGE_REPORT = PHPUNIT_REPORT_DIR + "phpunit.coverage.xml";
 
   private MockUtils() {
+  }
+  
+  public static DefaultFileSystem getDefaultFileSystem() {
+    return new DefaultFileSystem(getModuleBaseDir());
+  }
+
+  public static File getModuleBaseDir() {
+    return new File("src/test/resources");
   }
 
 }
