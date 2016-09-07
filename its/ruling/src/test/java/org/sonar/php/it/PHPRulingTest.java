@@ -19,18 +19,14 @@
  */
 package org.sonar.php.it;
 
-import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarRunner;
 import com.sonar.orchestrator.locator.FileLocation;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;

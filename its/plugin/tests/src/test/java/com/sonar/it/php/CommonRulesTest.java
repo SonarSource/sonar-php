@@ -23,13 +23,11 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarRunner;
-import org.junit.Assume;
+import java.io.File;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.sonar.wsclient.issue.IssueQuery;
-
-import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
 

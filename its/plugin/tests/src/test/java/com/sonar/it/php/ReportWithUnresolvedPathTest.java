@@ -22,12 +22,10 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarRunner;
-import org.junit.Assume;
-import org.junit.ClassRule;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.regex.Pattern;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 

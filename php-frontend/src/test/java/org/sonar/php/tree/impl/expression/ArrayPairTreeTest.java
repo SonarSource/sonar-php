@@ -21,9 +21,7 @@ package org.sonar.php.tree.impl.expression;
 
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
-import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 
 import static org.fest.assertions.Assertions.assertThat;
