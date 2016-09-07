@@ -19,7 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.api.server.rule.RulesDefinition.SubCharacteristics;
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractStatementsCheck;
@@ -34,10 +35,6 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Rule(
   key = MultilineBlocksCurlyBracesCheck.KEY,
@@ -45,7 +42,6 @@ import java.util.List;
   priority = Priority.CRITICAL,
   tags = {Tags.BUG, Tags.CWE})
 @ActivatedByDefault
-@SqaleSubCharacteristic(SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
 public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
 

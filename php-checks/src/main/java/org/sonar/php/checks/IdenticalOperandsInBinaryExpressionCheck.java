@@ -20,7 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.Set;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.Equality;
@@ -30,9 +30,6 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.Set;
 
 @Rule(
   key = IdenticalOperandsInBinaryExpressionCheck.KEY,
@@ -40,7 +37,6 @@ import java.util.Set;
   priority = Priority.CRITICAL,
   tags = {Tags.BUG, Tags.CERT})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
 public class IdenticalOperandsInBinaryExpressionCheck extends PHPVisitorCheck {
 
