@@ -32,7 +32,7 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.sonar</groupId>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
         <extensions>true</extensions>
         <configuration>
