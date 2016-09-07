@@ -24,15 +24,21 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
+import java.io.InterruptedIOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.component.Perspective;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
@@ -40,7 +46,6 @@ import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.PersistenceMode;
-import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.source.Highlightable;
 import org.sonar.api.source.Highlightable.HighlightingBuilder;
@@ -57,11 +62,6 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
-import java.io.InterruptedIOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 public class PHPSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
@@ -72,8 +72,6 @@ public class PHPSensor implements Sensor {
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
-  private SensorContext context;
-
 
   public PHPSensor(ResourcePerspectives resourcePerspectives, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
@@ -96,14 +94,15 @@ public class PHPSensor implements Sensor {
   }
 
   @Override
-  public boolean shouldExecuteOnProject(Project project) {
-    return fileSystem.hasFiles(mainFilePredicate);
+  public void describe(SensorDescriptor descriptor) {
+    descriptor
+      .onlyOnLanguage(Php.KEY)
+      .name("PHP sensor")
+      .onlyOnFileType(Type.MAIN);
   }
 
   @Override
-  public void analyse(Project project, SensorContext context) {
-    this.context = context;
-
+  public void execute(SensorContext context) {
     ImmutableList<PHPCheck> visitors = getCheckVisitors();
 
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors);
@@ -112,16 +111,16 @@ public class PHPSensor implements Sensor {
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
-    analyseFiles(phpAnalyzer, inputFiles, progressReport);
+    analyseFiles(context, phpAnalyzer, inputFiles, progressReport);
   }
 
   @VisibleForTesting
-  void analyseFiles(PHPAnalyzer phpAnalyzer, List<InputFile> inputFiles, ProgressReport progressReport) {
+  void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, List<InputFile> inputFiles, ProgressReport progressReport) {
     boolean success = false;
     try {
       for (InputFile inputFile : inputFiles) {
         progressReport.nextFile();
-        analyseFile(phpAnalyzer, inputFile);
+        analyseFile(context, phpAnalyzer, inputFile);
       }
       success = true;
     } finally {
@@ -137,13 +136,13 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void analyseFile(PHPAnalyzer phpAnalyzer, InputFile inputFile) {
+  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile) {
     try {
       phpAnalyzer.nextFile(inputFile.file());
       saveIssues(phpAnalyzer.analyze(), inputFile);
       saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(), inputFile);
       saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(), inputFile);
-      saveNewFileMeasures(phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
+      saveNewFileMeasures(context, phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)), inputFile);
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());
@@ -201,22 +200,21 @@ public class PHPSensor implements Sensor {
     return result;
   }
 
-  private void saveNewFileMeasures(FileMeasures fileMeasures, InputFile inputFile) {
-    context.saveMeasure(inputFile, CoreMetrics.LINES, fileMeasures.getLinesNumber());
-    context.saveMeasure(inputFile, CoreMetrics.NCLOC, fileMeasures.getLinesOfCodeNumber());
-    context.saveMeasure(inputFile, CoreMetrics.COMMENT_LINES, fileMeasures.getCommentLinesNumber());
-    context.saveMeasure(inputFile, CoreMetrics.CLASSES, fileMeasures.getClassNumber());
-    context.saveMeasure(inputFile, CoreMetrics.FUNCTIONS, fileMeasures.getFunctionNumber());
-    context.saveMeasure(inputFile, CoreMetrics.STATEMENTS, fileMeasures.getStatementNumber());
+  private void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesNumber()).forMetric(CoreMetrics.LINES).save();
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesOfCodeNumber()).forMetric(CoreMetrics.NCLOC).save();
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getCommentLinesNumber()).forMetric(CoreMetrics.COMMENT_LINES).save();
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getClassNumber()).forMetric(CoreMetrics.CLASSES).save();
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFunctionNumber()).forMetric(CoreMetrics.FUNCTIONS).save();
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getStatementNumber()).forMetric(CoreMetrics.STATEMENTS).save();
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFileComplexity()).forMetric(CoreMetrics.COMPLEXITY).save();
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getClassComplexity()).forMetric(CoreMetrics.COMPLEXITY_IN_CLASSES).save();
+    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFunctionComplexity()).forMetric(CoreMetrics.COMPLEXITY_IN_FUNCTIONS).save();
 
-    context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY, fileMeasures.getFileComplexity());
-    context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY_IN_CLASSES, fileMeasures.getClassComplexity());
-    context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, fileMeasures.getFunctionComplexity());
+    context.newMeasure().on(inputFile).withValue(fileMeasures.getFunctionComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
+    context.newMeasure().on(inputFile).withValue(fileMeasures.getFileComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
 
-    context.saveMeasure(inputFile, fileMeasures.getFunctionComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
-    context.saveMeasure(inputFile, fileMeasures.getFileComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY));
-
-    noSonarFilter.addComponent(context.getResource(inputFile).getEffectiveKey(), fileMeasures.getNoSonarLines());
+    noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }
 
   private void saveIssues(List<org.sonar.plugins.php.api.visitors.Issue> issues, InputFile inputFile) {

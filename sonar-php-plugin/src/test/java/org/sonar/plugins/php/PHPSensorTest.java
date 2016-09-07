@@ -21,29 +21,33 @@ package org.sonar.plugins.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
+import java.io.File;
 import java.io.InterruptedIOException;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.batch.sensor.measure.Measure;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.PHPAnalyzer;
+import org.sonar.php.checks.CheckList;
+import org.sonar.php.checks.LeftCurlyBraceEndsLineCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -51,9 +55,12 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
+import org.sonar.api.measures.Metric;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.api.scan.issue.filter.FilterableIssue;
+import org.sonar.api.scan.issue.filter.IssueFilterChain;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -67,6 +74,8 @@ public class PHPSensorTest {
   private PHPSensor sensor;
 
   private ProgressReport progressReport = mock(ProgressReport.class);
+
+  private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
 
   @org.junit.Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -113,30 +122,54 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void shouldExecuteOnProject() {
-    PHPSensor localSensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, null, new CheckFactory(mock(ActiveRules.class)), new NoSonarFilter());
+  public void analyse() throws NoSuchFieldException, IllegalAccessException {
+    String fileName = "PHPSquidSensor.php";
+    String componentKey = "moduleKey:" + fileName;
 
-    // empty file system
-    assertThat(localSensor.shouldExecuteOnProject(null), is(false));
+    analyseSingleFile(context, fileName);
 
-    fileSystem.add(new DefaultInputFile("moduleKey", "file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY));
-    assertThat(localSensor.shouldExecuteOnProject(null), is(true));
+    assertMeasure(context, componentKey, CoreMetrics.LINES, 55);
+    assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
+    assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 7);
+    assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 10);
+    assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
+    assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 12);
+    assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
+    assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
+    assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
+
+    // TODO unit test:
+    // - getFunctionComplexityDistribution
+    // - getFileComplexityDistribution
+
+    // the .php file contains NOSONAR at line 34
+    checkNoSonar(componentKey, 33, true);
+    checkNoSonar(componentKey, 34, false);
   }
 
-  @Test
-  public void analyse() {
-    SensorContext context = mock(SensorContext.class);
-    analyseSingleFile(context, "PHPSquidSensor.php");
+  private void assertMeasure(SensorContextTester context, String componentKey, Metric<Integer> metric, int expected) {
+    assertThat(context.measure(componentKey, metric).value()).as("metric for: " + metric.getKey()).isEqualTo(expected);
+  }
 
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.LINES), Mockito.eq(55.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.NCLOC), Mockito.eq(32.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMPLEXITY_IN_CLASSES), Mockito.eq(7.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMPLEXITY_IN_FUNCTIONS), Mockito.eq(10.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(7.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(12.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.CLASSES), Mockito.eq(1.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(16.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.FUNCTIONS), Mockito.eq(3.0));
+  private void checkNoSonar(String componentKey, int line, boolean expected) throws NoSuchFieldException, IllegalAccessException {
+    // retrieve the noSonarFilter, which is private
+    Field field = PHPSensor.class.getDeclaredField("noSonarFilter");
+    field.setAccessible(true);
+    NoSonarFilter noSonarFilter = (NoSonarFilter) field.get(sensor);
+
+    // a filter chain that does nothing
+    IssueFilterChain chain = mock(IssueFilterChain.class);
+    when(chain.accept(any(FilterableIssue.class))).thenReturn(true);
+
+    // an issue
+    FilterableIssue issue = mock(FilterableIssue.class);
+    when(issue.line()).thenReturn(line);
+    when(issue.componentKey()).thenReturn(componentKey);
+    when(issue.ruleKey()).thenReturn(RuleKey.parse(CheckList.REPOSITORY_KEY + ":" + LeftCurlyBraceEndsLineCheck.KEY));
+
+    // test the noSonarFilter
+    boolean accepted = noSonarFilter.accept(issue, chain);
+    assertThat(accepted).as("response of noSonarFilter.accept for line " + line).isEqualTo(expected);
   }
 
   @Test
@@ -149,11 +182,7 @@ public class PHPSensorTest {
 
   private void analyseSingleFile(SensorContext context, String fileName) {
     fileSystem.add(inputFile(fileName));
-
-    Resource resource = mock(Resource.class);
-    when(resource.getEffectiveKey()).thenReturn("someKey");
-    when(context.getResource(any(InputFile.class))).thenReturn(resource);
-    sensor.analyse(new Project(""), context);
+    sensor.execute(context);
   }
 
   private DefaultInputFile inputFile(String fileName) {
@@ -166,7 +195,7 @@ public class PHPSensorTest {
   @Test
   public void progress_report_should_be_stopped() throws Exception {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.<PHPCheck>of());
-    sensor.analyseFiles(phpAnalyzer, ImmutableList.<InputFile>of(), progressReport);
+    sensor.analyseFiles(context, phpAnalyzer, ImmutableList.<InputFile>of(), progressReport);
     verify(progressReport).stop();
   }
 
@@ -193,7 +222,7 @@ public class PHPSensorTest {
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     try {
-      sensor.analyseFiles(phpAnalyzer, ImmutableList.of(inputFile), progressReport);
+      sensor.analyseFiles(context, phpAnalyzer, ImmutableList.of(inputFile), progressReport);
     } finally {
       verify(progressReport).cancel();
     }

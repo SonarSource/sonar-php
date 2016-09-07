@@ -31,7 +31,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     private function updateLevel()
     {
         if (null === $this->output || OutputInterface::VERBOSITY_QUIET === $verbosity = $this->output->getVerbosity()) {
-            return false;
+            return false;   // NOSONAR
         }
 
         if (isset($this->verbosityLevelMap[$verbosity])) {

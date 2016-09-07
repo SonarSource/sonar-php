@@ -46,7 +46,7 @@ public class FileMeasures {
     this.noSonarLines = noSonarLines;
   }
 
-  public double getCommentLinesNumber() {
+  public int getCommentLinesNumber() {
     return commentLinesNumber;
   }
 
@@ -54,7 +54,7 @@ public class FileMeasures {
     this.commentLinesNumber = commentLinesNumber;
   }
 
-  public double getLinesNumber() {
+  public int getLinesNumber() {
     return linesNumber;
   }
 
@@ -62,7 +62,7 @@ public class FileMeasures {
     this.linesNumber = linesNumber;
   }
 
-  public double getLinesOfCodeNumber() {
+  public int getLinesOfCodeNumber() {
     return linesOfCodeNumber;
   }
 
@@ -70,7 +70,7 @@ public class FileMeasures {
     this.linesOfCodeNumber = linesOfCodeNumber;
   }
 
-  public double getFileComplexity() {
+  public int getFileComplexity() {
     return fileComplexity;
   }
 
@@ -101,23 +101,23 @@ public class FileMeasures {
     return functionComplexityDistribution;
   }
 
-  public double getFunctionComplexity() {
+  public int getFunctionComplexity() {
     return functionComplexity;
   }
 
-  public double getClassComplexity() {
+  public int getClassComplexity() {
     return classComplexity;
   }
 
-  public double getClassNumber() {
+  public int getClassNumber() {
     return classNumber;
   }
 
-  public double getStatementNumber() {
+  public int getStatementNumber() {
     return statementNumber;
   }
 
-  public double getFunctionNumber() {
+  public int getFunctionNumber() {
     return functionNumber;
   }
 
