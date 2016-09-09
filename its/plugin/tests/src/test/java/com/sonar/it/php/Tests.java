@@ -32,7 +32,6 @@ import org.junit.runners.Suite;
   PHPTest.class,
   PHPIntegrationTest.class,
   PHPUnitTest.class,
-  CommonRulesTest.class,
   CustomRulesTest.class,
   ReportWithUnresolvedPathTest.class
 })
