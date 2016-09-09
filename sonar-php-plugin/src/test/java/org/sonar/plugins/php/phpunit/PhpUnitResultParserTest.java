@@ -102,21 +102,21 @@ public class PhpUnitResultParserTest {
     parser = new PhpUnitResultParser(context, fs);
     parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_NAME));
 
-    assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
-    assertMeasure(context, banana, CoreMetrics.TESTS, 1);
+    MockUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
+    MockUtils.assertMeasure(context, banana, CoreMetrics.TESTS, 1);
 
-    assertMeasure(context, monkey, CoreMetrics.TEST_FAILURES, 2);
-    assertMeasure(context, banana, CoreMetrics.TEST_FAILURES, 0);
+    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_FAILURES, 2);
+    MockUtils.assertMeasure(context, banana, CoreMetrics.TEST_FAILURES, 0);
 
-    assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
-    assertMeasure(context, banana, CoreMetrics.TEST_ERRORS, 1);
+    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
+    MockUtils.assertMeasure(context, banana, CoreMetrics.TEST_ERRORS, 1);
 
     // Test execution time:
-    assertMeasure(context, monkey, CoreMetrics.TEST_EXECUTION_TIME, 447L);
-    assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
-    assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
-    assertMeasure(context, monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
-    assertMeasure(context, banana, CoreMetrics.TEST_EXECUTION_TIME, 570L);
+    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_EXECUTION_TIME, 447L);
+    MockUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
+    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
+    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
+    MockUtils.assertMeasure(context, banana, CoreMetrics.TEST_EXECUTION_TIME, 570L);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -124,10 +124,6 @@ public class PhpUnitResultParserTest {
     setUpForSensorContextTester();
 
     parser.getTestSuites(new File("target/unexistingFile.xml"));
-  }
-
-  private <T extends Serializable> void assertMeasure(SensorContextTester context, String componentKey, Metric<T> metric, T expected) {
-    assertThat(context.measure(componentKey, metric).value()).as("metric for: " + metric.getKey()).isEqualTo(expected);
   }
 
 }

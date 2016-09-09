@@ -41,7 +41,6 @@ import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.measures.Metric;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.scan.issue.filter.FilterableIssue;
 import org.sonar.api.scan.issue.filter.IssueFilterChain;
@@ -126,15 +125,15 @@ public class PHPSensorTest {
 
     analyseSingleFile(context, fileName);
 
-    assertMeasure(context, componentKey, CoreMetrics.LINES, 55);
-    assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
-    assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 7);
-    assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 10);
-    assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
-    assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 12);
-    assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
-    assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
-    assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.LINES, 55);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 7);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 10);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 12);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
 
     // TODO unit test:
     // - getFunctionComplexityDistribution
@@ -143,10 +142,6 @@ public class PHPSensorTest {
     // the .php file contains NOSONAR at line 34
     checkNoSonar(componentKey, 33, true);
     checkNoSonar(componentKey, 34, false);
-  }
-
-  private void assertMeasure(SensorContextTester context, String componentKey, Metric<Integer> metric, int expected) {
-    assertThat(context.measure(componentKey, metric).value()).as("metric for: " + metric.getKey()).isEqualTo(expected);
   }
 
   private void checkNoSonar(String componentKey, int line, boolean expected) throws NoSuchFieldException, IllegalAccessException {

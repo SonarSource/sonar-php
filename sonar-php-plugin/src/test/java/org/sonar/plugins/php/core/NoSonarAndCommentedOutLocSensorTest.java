@@ -77,11 +77,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
     sensor.execute(context);
 
     // Mail.php contains 9 commented out code lines
-    assertMeasure(context, component, CoreMetrics.COMMENTED_OUT_CODE_LINES, 9);
-  }
-
-  private <T extends Serializable> void assertMeasure(SensorContextTester context, String componentKey, org.sonar.api.measures.Metric<T> metric, T expected) {
-    assertThat(context.measure(componentKey, metric).value()).as("metric for: " + metric.getKey()).isEqualTo(expected);
+    MockUtils.assertMeasure(context, component, CoreMetrics.COMMENTED_OUT_CODE_LINES, 9);
   }
 
   @Test
