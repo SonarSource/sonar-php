@@ -19,9 +19,9 @@
  */
 package org.sonar.plugins.php.core;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -31,14 +31,14 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Phase;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.Project;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.measures.Metric;
@@ -59,6 +59,8 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(NoSonarAndCommentedOutLocSensor.class);
 
+  private static final String NAME = "NoSonar and Commented out LOC Sensor";
+
   private final NoSonarFilter filter;
   private final FileSystem filesystem;
   private final FilePredicates filePredicates;
@@ -67,32 +69,28 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     this.filter = noSonarFilter;
     this.filesystem = filesystem;
     this.filePredicates = filesystem.predicates();
-
   }
 
-  /**
-   * @see org.sonar.api.batch.Sensor#analyse(org.sonar.api.resources.Project, org.sonar.api.batch.SensorContext)
-   */
   @Override
-  public void analyse(Project project, SensorContext context) {
+  public void describe(SensorDescriptor descriptor) {
+    descriptor.name(NAME);
+  }
+
+  @Override
+  public void execute(SensorContext context) {
     Iterable<InputFile> sourceFiles = filesystem.inputFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
     for (InputFile file : sourceFiles) {
       // TODO: remove when deprecated NoSonarFilter will be replaced.
-      org.sonar.api.resources.File phpFile = context.getResource(org.sonar.api.resources.File.create(file.relativePath()));
+      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.create(file.relativePath());
       if (phpFile != null) {
         Source source = analyseSourceCode(file.file(), filesystem.encoding());
         if (source != null) {
           filter.addComponent(phpFile.getEffectiveKey(), source.getNoSonarTagLines());
-          double measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
-          context.saveMeasure(phpFile, CoreMetrics.COMMENTED_OUT_CODE_LINES, measure);
+          int measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
+          context.<Integer>newMeasure().on(file).withValue(measure).forMetric(CoreMetrics.COMMENTED_OUT_CODE_LINES).save();
         }
       }
     }
-  }
-
-  @VisibleForTesting
-  org.sonar.api.resources.File getSonarResource(Project project, File file) {
-    return org.sonar.api.resources.File.fromIOFile(file, project);
   }
 
   protected static Source analyseSourceCode(File file, Charset charset) {
@@ -100,6 +98,8 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
 
     try (Reader reader = new InputStreamReader(new FileInputStream(file), charset)) {
       result = new Source(reader, new CodeRecognizer(CODE_RECOGNIZER_SENSITIVITY, new PhpLanguageFootprint()));
+    } catch (FileNotFoundException e) {
+      LOG.error("Error while parsing file '" + file.getAbsolutePath() + "'", e);
     } catch (IOException e) {
       throw new IllegalStateException("Unable to open file '" + file.getAbsolutePath() + "'", e);
     } catch (RuntimeException rEx) {
@@ -109,20 +109,9 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     return result;
   }
 
-  /**
-   * @see org.sonar.api.batch.CheckProject#shouldExecuteOnProject(org.sonar.api.resources.Project)
-   */
-  @Override
-  public boolean shouldExecuteOnProject(Project project) {
-    return filesystem.hasFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
-    return "NoSonar and Commented out LOC Sensor";
+    return NAME;
   }
 
   private static class PhpLanguageFootprint implements LanguageFootprint {
@@ -142,9 +131,6 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
       detectors.add(new CamelCaseDetector(CAMEL_CASE_PROBABILITY));
     }
 
-    /**
-     * @see org.sonar.squidbridge.recognizer.LanguageFootprint#getDetectors()
-     */
     @Override
     public Set<Detector> getDetectors() {
       return detectors;
