@@ -29,21 +29,16 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.PhpPlugin;
-import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -70,7 +65,6 @@ public class PhpUnitSensorTest {
   @Mock
   private SensorContext context;
 
-  private Project project;
   private Settings settings;
   private PhpUnitSensor sensor;
   private static final File TEST_REPORT_FILE = TestUtils.getResource(MockUtils.PHPUNIT_REPORT_NAME);
@@ -81,7 +75,6 @@ public class PhpUnitSensorTest {
     MockitoAnnotations.initMocks(this);
 
     settings = newSettings();
-    project = mock(Project.class);
     fs = new DefaultFileSystem(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
     sensor = createSensor(fs, settings);
   }
@@ -92,22 +85,9 @@ public class PhpUnitSensorTest {
   }
 
   @Test
-  public void shouldExecuteOnProject() {
-    DefaultFileSystem localFS = fs;
-    PhpUnitSensor localSensor = new PhpUnitSensor(localFS, null, null, null, null, null);
-
-    // Empty file system
-    assertThat(localSensor.shouldExecuteOnProject(project)).isFalse();
-
-    localFS.add((new DefaultInputFile("moduleKey", "file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY)));
-    assertThat(localSensor.shouldExecuteOnProject(project)).isTrue();
-  }
-
-  @Test
   public void shouldParseReport() {
     sensor = createSensor(fs, settings);
-
-    sensor.analyse(project, context);
+    sensor.execute(context);
 
     verify(parser, times(1)).parse(TEST_REPORT_FILE);
     verify(coverageParser, times(1)).parse(COVERAGE_REPORT_FILE);
@@ -118,7 +98,7 @@ public class PhpUnitSensorTest {
   @Test
   public void noReport() {
     sensor = createSensor(fs, new Settings());
-    sensor.analyse(project, context);
+    sensor.execute(context);
 
     verify(parser, never()).parse(any(File.class));
   }
@@ -126,7 +106,7 @@ public class PhpUnitSensorTest {
   @Test
   public void badReport() {
     sensor = createSensor(fs, settings("/fake/path.xml"));
-    sensor.analyse(project, context);
+    sensor.execute(context);
 
     verify(parser, never()).parse(any(File.class));
   }
@@ -136,13 +116,13 @@ public class PhpUnitSensorTest {
     Mockito.doThrow(new XStreamException("")).when(parser).parse((File) any());
     sensor = createSensor(fs, settings("phpunit.xml"));
     expected.expect(IllegalStateException.class);
-    sensor.analyse(project, context);
+    sensor.execute(context);
   }
 
   @Test
   public void should_parse_relative_path_report() {
     sensor = createSensor(fs, settings("phpunit.xml"));
-    sensor.analyse(project, context);
+    sensor.execute(context);
 
     verify(parser, times(1)).parse(TEST_REPORT_FILE);
   }
