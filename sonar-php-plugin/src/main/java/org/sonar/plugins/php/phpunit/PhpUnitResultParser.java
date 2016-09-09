@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.google.common.base.Preconditions;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 import java.io.File;
@@ -31,12 +32,11 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Measure;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
@@ -130,25 +130,15 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
   }
 
   /**
-   * Insert zero when no reports can be found.
-   */
-  private void insertZeroWhenNoReports() {
-    context.saveMeasure(CoreMetrics.TESTS, 0.0);
-  }
-
-  /**
    * Collect the metrics found.
    *
    * @param reportFile the reports directories to be scan
    */
   @Override
   public void parse(File reportFile) {
-    if (reportFile == null) {
-      insertZeroWhenNoReports();
-    } else {
-      LOG.debug("Parsing file: " + reportFile.getAbsolutePath());
-      parseFile(reportFile);
-    }
+    Preconditions.checkNotNull(reportFile);
+    LOG.debug("Parsing file: " + reportFile.getAbsolutePath());
+    parseFile(reportFile);
   }
 
   /**
@@ -193,17 +183,17 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
     if (unitTestFile != null) {
       double testsCount = (double) fileReport.getTests() - fileReport.getSkipped();
       if (fileReport.getSkipped() > 0) {
-        context.saveMeasure(unitTestFile, CoreMetrics.SKIPPED_TESTS, (double) fileReport.getSkipped());
+        context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getSkipped()).forMetric(CoreMetrics.SKIPPED_TESTS).save();
       }
       double duration = Math.round(fileReport.getTime() * MILLISECONDS);
-      context.saveMeasure(unitTestFile, CoreMetrics.TEST_EXECUTION_TIME, duration);
-      context.saveMeasure(unitTestFile, CoreMetrics.TESTS, testsCount);
-      context.saveMeasure(unitTestFile, CoreMetrics.TEST_ERRORS, (double) fileReport.getErrors());
-      context.saveMeasure(unitTestFile, CoreMetrics.TEST_FAILURES, (double) fileReport.getFailures());
+      context.<Long>newMeasure().on(unitTestFile).withValue((long)duration).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue((int)testsCount).forMetric(CoreMetrics.TESTS).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getErrors()).forMetric(CoreMetrics.TEST_ERRORS).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getFailures()).forMetric(CoreMetrics.TEST_FAILURES).save();
       if (testsCount > 0) {
         double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
         double percentage = passedTests * PERCENT / testsCount;
-        context.saveMeasure(unitTestFile, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
+        context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
       }
       saveTestsDetails(fileReport);
     } else {
@@ -238,7 +228,8 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
     details.append("</tests-details>");
     InputFile unitTestFile = getUnitTestInputFile(fileReport);
     if (unitTestFile != null) {
-      context.saveMeasure(unitTestFile, new Measure(CoreMetrics.TEST_DATA, details.toString()));
+      context.<String>newMeasure().on(unitTestFile).withValue(details.toString()).forMetric(CoreMetrics.TEST_DATA).save();
     }
   }
+
 }
