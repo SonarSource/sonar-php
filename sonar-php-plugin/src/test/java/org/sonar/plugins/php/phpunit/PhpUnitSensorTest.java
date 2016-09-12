@@ -21,6 +21,7 @@ package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
+import java.util.Map;
 import java.util.Properties;
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,6 +40,7 @@ import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyMap;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -64,6 +66,9 @@ public class PhpUnitSensorTest {
 
   @Mock
   private SensorContext context;
+  
+  @Mock
+  private Map<File, Integer> numberOfLinesOfCode;
 
   private Settings settings;
   private PhpUnitSensor sensor;
@@ -87,44 +92,47 @@ public class PhpUnitSensorTest {
   @Test
   public void shouldParseReport() {
     sensor = createSensor(fs, settings);
-    sensor.execute(context);
+    sensor.execute(context, numberOfLinesOfCode);
 
-    verify(parser, times(1)).parse(TEST_REPORT_FILE);
-    verify(coverageParser, times(1)).parse(COVERAGE_REPORT_FILE);
-    verify(itCoverageParser, times(1)).parse(COVERAGE_REPORT_FILE);
-    verify(overallCoverageParser, times(1)).parse(COVERAGE_REPORT_FILE);
+    verify(parser, times(1)).parse(TEST_REPORT_FILE, context, numberOfLinesOfCode);
+    verify(coverageParser, times(1)).parse(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
+    verify(itCoverageParser, times(1)).parse(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
+    verify(overallCoverageParser, times(1)).parse(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void noReport() {
     sensor = createSensor(fs, new Settings());
-    sensor.execute(context);
+    sensor.execute(context, numberOfLinesOfCode);
 
-    verify(parser, never()).parse(any(File.class));
+    verify(parser, never()).parse(any(File.class), any(SensorContext.class), anyMap());
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void badReport() {
     sensor = createSensor(fs, settings("/fake/path.xml"));
-    sensor.execute(context);
+    sensor.execute(context, numberOfLinesOfCode);
 
-    verify(parser, never()).parse(any(File.class));
+    verify(parser, never()).parse(any(File.class), any(SensorContext.class), anyMap());
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void xstream_exception() throws Exception {
-    Mockito.doThrow(new XStreamException("")).when(parser).parse((File) any());
+    Mockito.doThrow(new XStreamException("")).when(parser).parse((File) any(), any(SensorContext.class), anyMap());
     sensor = createSensor(fs, settings("phpunit.xml"));
     expected.expect(IllegalStateException.class);
-    sensor.execute(context);
+    sensor.execute(context, numberOfLinesOfCode);
   }
 
   @Test
   public void should_parse_relative_path_report() {
     sensor = createSensor(fs, settings("phpunit.xml"));
-    sensor.execute(context);
+    sensor.execute(context, numberOfLinesOfCode);
 
-    verify(parser, times(1)).parse(TEST_REPORT_FILE);
+    verify(parser, times(1)).parse(TEST_REPORT_FILE, context, numberOfLinesOfCode);
   }
 
   private PhpUnitSensor createSensor(FileSystem fs, Settings settings) {

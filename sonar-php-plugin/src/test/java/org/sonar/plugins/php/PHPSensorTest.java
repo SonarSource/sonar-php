@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.InterruptedIOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -37,6 +38,7 @@ import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.config.Settings;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -115,7 +117,7 @@ public class PHPSensorTest {
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-    sensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    sensor = new PHPSensor(mock(ResourcePerspectives.class), new Settings(), fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
   @Test
@@ -134,11 +136,9 @@ public class PHPSensorTest {
     MockUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
     MockUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
     MockUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
-
-    // TODO unit test:
-    // - getFunctionComplexityDistribution
-    // - getFileComplexityDistribution
-
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=0;2=2;4=1;6=0;8=0;10=0;12=0");
+    MockUtils.assertMeasure(context, componentKey, CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=1;20=0;30=0;60=0;90=0");
+    
     // the .php file contains NOSONAR at line 34
     checkNoSonar(componentKey, 33, true);
     checkNoSonar(componentKey, 34, false);
@@ -188,7 +188,7 @@ public class PHPSensorTest {
   @Test
   public void progress_report_should_be_stopped() throws Exception {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.<PHPCheck>of());
-    sensor.analyseFiles(context, phpAnalyzer, ImmutableList.<InputFile>of(), progressReport);
+    sensor.analyseFiles(context, phpAnalyzer, ImmutableList.<InputFile>of(), progressReport, new HashMap<File, Integer>());
     verify(progressReport).stop();
   }
 
@@ -215,7 +215,7 @@ public class PHPSensorTest {
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     try {
-      sensor.analyseFiles(context, phpAnalyzer, ImmutableList.of(inputFile), progressReport);
+      sensor.analyseFiles(context, phpAnalyzer, ImmutableList.of(inputFile), progressReport, new HashMap<File, Integer>());
     } finally {
       verify(progressReport).cancel();
     }

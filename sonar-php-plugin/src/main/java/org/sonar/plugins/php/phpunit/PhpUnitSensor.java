@@ -21,19 +21,18 @@ package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Settings;
 import org.sonar.plugins.php.PhpPlugin;
 
 /**
  * The Class PhpUnitSensor is used by the plugin to collect coverage metrics from PHPUnit report.
  */
-public class PhpUnitSensor implements Sensor {
+public class PhpUnitSensor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitSensor.class);
 
@@ -60,20 +59,14 @@ public class PhpUnitSensor implements Sensor {
     this.overallCoverageParser = overallCoverageParser;
   }
 
-  @Override
-  public void describe(SensorDescriptor descriptor) {
-    descriptor.name(NAME);
+  public void execute(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, parser, "test", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageParser, "unit test coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageParser, "integration test coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage", context, numberOfLinesOfCode);
   }
 
-  @Override
-  public void execute(SensorContext context) {
-    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, parser, "test");
-    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageParser, "unit test coverage");
-    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageParser, "integration test coverage");
-    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage");
-  }
-
-  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg) {
+  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
     String reportPath = settings.getString(reportPathKey);
 
     if (reportPath != null) {
@@ -83,7 +76,7 @@ public class PhpUnitSensor implements Sensor {
         LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath + " with " + parser.toString());
 
         try {
-          parser.parse(xmlFile);
+          parser.parse(xmlFile, context, numberOfLinesOfCode);
         } catch (XStreamException e) {
           throw new IllegalStateException("Report file is invalid, plugin will stop.", e);
         }

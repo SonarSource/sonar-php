@@ -50,4 +50,8 @@ public class MockUtils {
     assertThat(context.measure(componentKey, metric).value()).as("metric for: " + metric.getKey()).isEqualTo(expected);
   }
 
+  public static <T extends Serializable> void assertNoMeasure(SensorContextTester context, String componentKey, org.sonar.api.measures.Metric<T> metric) {
+    assertThat(context.measure(componentKey, metric)).as("metric for: " + metric.getKey()).isNull();
+  }
+
 }

@@ -21,13 +21,17 @@ package org.sonar.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.io.File;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.api.CharsetAwareVisitor;
-import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
+import org.sonar.php.highlighter.SourceFileOffsets;
 import org.sonar.php.highlighter.SymbolHighlighter;
 import org.sonar.php.highlighter.SymbolHighlightingData;
+import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.highlighter.SyntaxHighlightingData;
-import org.sonar.php.highlighter.SourceFileOffsets;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -37,10 +41,6 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.Issue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-
-import java.io.File;
-import java.nio.charset.Charset;
-import java.util.List;
 
 public class PHPAnalyzer {
 
@@ -82,8 +82,8 @@ public class PHPAnalyzer {
     return issuesBuilder.build();
   }
 
-  public FileMeasures computeMeasures(FileLinesContext fileLinesContext) {
-    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext);
+  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode) {
+    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode);
   }
 
   public List<SyntaxHighlightingData> getSyntaxHighlighting() {

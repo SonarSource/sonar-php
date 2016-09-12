@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,21 +60,14 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    */
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitResultParser.class);
 
-  /**
-   * The context.
-   */
-  private SensorContext context;
   private FileSystem fileSystem;
+
   private FilePredicates filePredicates;
 
   /**
    * Instantiates a new php unit result parser.
-   *
-   * @param context the context
    */
-  public PhpUnitResultParser(SensorContext context, FileSystem fileSystem) {
-    super();
-    this.context = context;
+  public PhpUnitResultParser(FileSystem fileSystem) {
     this.fileSystem = fileSystem;
     this.filePredicates = fileSystem.predicates();
   }
@@ -135,10 +129,10 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    * @param reportFile the reports directories to be scan
    */
   @Override
-  public void parse(File reportFile) {
+  public void parse(File reportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
     Preconditions.checkNotNull(reportFile);
     LOG.debug("Parsing file: " + reportFile.getAbsolutePath());
-    parseFile(reportFile);
+    parseFile(reportFile, context);
   }
 
   /**
@@ -146,11 +140,11 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    *
    * @param report the report file
    */
-  private void parseFile(File report) {
+  private void parseFile(File report, SensorContext context) {
     TestSuites testSuites = getTestSuites(report);
     List<PhpUnitTestReport> fileReports = readSuites(testSuites);
     for (PhpUnitTestReport fileReport : fileReports) {
-      saveTestReportMeasures(fileReport);
+      saveTestReportMeasures(fileReport, context);
     }
   }
 
@@ -175,7 +169,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    *
    * @param fileReport the unit test report
    */
-  protected void saveTestReportMeasures(PhpUnitTestReport fileReport) {
+  protected void saveTestReportMeasures(PhpUnitTestReport fileReport, SensorContext context) {
     if (!fileReport.isValid()) {
       return;
     }
@@ -195,7 +189,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
         double percentage = passedTests * PERCENT / testsCount;
         context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
       }
-      saveTestsDetails(fileReport);
+      saveTestsDetails(fileReport, context);
     } else {
       LOG.debug("Following file is not located in the test folder specified in the Sonar configuration: " + fileReport.getFile()
         + ". The test results won't be reported in Sonar.");
@@ -207,7 +201,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    *
    * @param fileReport the file report
    */
-  private void saveTestsDetails(PhpUnitTestReport fileReport) {
+  private void saveTestsDetails(PhpUnitTestReport fileReport, SensorContext context) {
     StringBuilder details = new StringBuilder();
     details.append("<tests-details>");
     for (TestCase detail : fileReport.getDetails()) {

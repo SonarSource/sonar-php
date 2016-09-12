@@ -21,6 +21,8 @@ package org.sonar.php;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
+import java.io.File;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,9 +30,6 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.Issue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-
-import java.io.File;
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 

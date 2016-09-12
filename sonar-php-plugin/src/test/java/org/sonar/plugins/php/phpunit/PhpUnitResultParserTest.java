@@ -21,7 +21,7 @@ package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
-import java.io.Serializable;
+import java.util.HashMap;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputFile;
@@ -30,12 +30,10 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Metric;
 import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -45,13 +43,13 @@ public class PhpUnitResultParserTest {
 
   private SensorContextTester setUpForSensorContextTester() {
     SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
-    parser = new PhpUnitResultParser(context, MockUtils.getDefaultFileSystem());
+    parser = new PhpUnitResultParser(MockUtils.getDefaultFileSystem());
     return context;
   }
 
   private SensorContext setUpForMockedSensorContext() {
     SensorContext context = Mockito.mock(SensorContext.class);
-    parser = new PhpUnitResultParser(context, MockUtils.getDefaultFileSystem());
+    parser = new PhpUnitResultParser(MockUtils.getDefaultFileSystem());
     return context;
   }
 
@@ -61,7 +59,7 @@ public class PhpUnitResultParserTest {
   @Test(expected = XStreamException.class)
   public void shouldThrowAnExceptionWhenReportIsInvalid() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"), context, new HashMap<File, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -69,7 +67,7 @@ public class PhpUnitResultParserTest {
   @Test
   public void shouldNotFailIfNoFileName() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-no-filename.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-no-filename.xml"), context, new HashMap<File, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -77,7 +75,7 @@ public class PhpUnitResultParserTest {
   @Test
   public void shouldNotFailWithEmptyTestSuites() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"));
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"), context, new HashMap<File, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -99,8 +97,8 @@ public class PhpUnitResultParserTest {
     String monkey = "moduleKey:" + "Monkey.php";
     String banana = "moduleKey:" + "Banana.php";
 
-    parser = new PhpUnitResultParser(context, fs);
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_NAME));
+    parser = new PhpUnitResultParser(fs);
+    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_NAME), context, new HashMap<File, Integer>());
 
     MockUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
     MockUtils.assertMeasure(context, banana, CoreMetrics.TESTS, 1);

@@ -19,18 +19,18 @@
  */
 package org.sonar.php.metrics;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 
 public class MetricsVisitor extends PHPSubscriptionCheck {
 
@@ -60,6 +60,8 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   private FileMeasures fileMeasures;
   private FileLinesContext fileLinesContext;
 
+  private Map<File, Integer> numberOfLinesOfCode;
+
   @Override
   public List<Kind> nodesToVisit() {
     List<Kind> result = new ArrayList<>(Arrays.asList(FUNCTION_NODES));
@@ -81,14 +83,15 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     }
   }
 
-  public FileMeasures getFileMeasures(File file, CompilationUnitTree tree, FileLinesContext fileLinesContext) {
+  public FileMeasures getFileMeasures(File file, CompilationUnitTree tree, FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode) {
     this.fileMeasures = new FileMeasures(LIMITS_COMPLEXITY_FUNCTIONS, FILES_DISTRIBUTION_BOTTOM_LIMITS);
     this.fileLinesContext = fileLinesContext;
+    this.numberOfLinesOfCode = numberOfLinesOfCode;
 
     super.analyze(file, tree);
 
     setCounterMeasures();
-    setLineAndCommentMeasures();
+    setLineAndCommentMeasures(file);
     return this.fileMeasures;
   }
 
@@ -99,7 +102,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     fileMeasures.setStatementNumber(counter.getStatementNumber());
   }
 
-  private void setLineAndCommentMeasures() {
+  private void setLineAndCommentMeasures(File file) {
     LineVisitor lineVisitor = new LineVisitor(context().tree());
 
     CommentLineVisitor commentVisitor = new CommentLineVisitor(context().tree());
@@ -118,6 +121,8 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
       fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, line, linesOfCode.contains(line) ? 1 : 0);
       fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, line, commentLines.contains(line) ? 1 : 0);
     }
+
+    numberOfLinesOfCode.put(file, linesOfCode.size());
 
     fileLinesContext.save();
   }

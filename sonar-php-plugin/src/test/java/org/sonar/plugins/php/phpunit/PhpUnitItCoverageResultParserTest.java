@@ -24,7 +24,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
@@ -46,7 +46,7 @@ public class PhpUnitItCoverageResultParserTest {
 
   @Before
   public void setUp() throws Exception {
-    parser = new PhpUnitItCoverageResultParser(context, MockUtils.getDefaultFileSystem());
+    parser = new PhpUnitItCoverageResultParser(MockUtils.getDefaultFileSystem());
   }
 
   @Test

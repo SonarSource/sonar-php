@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.core;
 
 import java.io.File;
-import java.io.Serializable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -62,6 +61,11 @@ public class NoSonarAndCommentedOutLocSensorTest {
     fs = MockUtils.getDefaultFileSystem();
     noSonarFilter = new NoSonarFilter();
     sensor = spy(new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter));
+  }
+
+  @Test
+  public void testToString() {
+    assertThat(sensor.toString()).isEqualTo("NoSonar and Commented out LOC Sensor");
   }
 
   @Test

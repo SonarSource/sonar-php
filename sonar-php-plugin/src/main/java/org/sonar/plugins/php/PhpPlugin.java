@@ -25,10 +25,6 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
-import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitSensor;
 
 public class PhpPlugin implements Plugin {
@@ -65,10 +61,6 @@ public class PhpPlugin implements Plugin {
 
       // PhpUnit
       PhpUnitSensor.class,
-      PhpUnitResultParser.class,
-      PhpUnitCoverageResultParser.class,
-      PhpUnitItCoverageResultParser.class,
-      PhpUnitOverallCoverageResultParser.class,
 
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
