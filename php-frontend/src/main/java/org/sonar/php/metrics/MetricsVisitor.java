@@ -49,6 +49,12 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     Kind.TRAIT_DECLARATION
   };
 
+  private FileMeasures fileMeasures;
+
+  private FileLinesContext fileLinesContext;
+
+  private Map<File, Integer> numberOfLinesOfCode;
+
   public static Kind[] getClassNodes() {
     return CLASS_NODES;
   }
@@ -56,11 +62,6 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   public static Kind[] getFunctionNodes() {
     return FUNCTION_NODES;
   }
-
-  private FileMeasures fileMeasures;
-  private FileLinesContext fileLinesContext;
-
-  private Map<File, Integer> numberOfLinesOfCode;
 
   @Override
   public List<Kind> nodesToVisit() {
