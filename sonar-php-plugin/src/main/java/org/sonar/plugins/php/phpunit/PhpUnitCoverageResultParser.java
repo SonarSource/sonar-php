@@ -41,7 +41,6 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.PropertiesBuilder;
-import org.sonar.api.resources.Resource;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
@@ -53,7 +52,7 @@ import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParser {
 
   // Used for debugging purposes to store measure by resource
-  private static final Map<Resource, Measure> MEASURES_BY_RESOURCE = new HashMap<>();
+  private static final Map<InputFile, Measure> MEASURES_BY_RESOURCE = new HashMap<>();
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
 
@@ -166,17 +165,16 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
     if (inputFile != null) {
-      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.create(inputFile.relativePath());
       resolvedPaths.add(inputFile.relativePath());
-      saveCoverageLineHitsData(fileNode, inputFile, phpFile, context);
+      saveCoverageLineHitsData(fileNode, inputFile, context);
 
-      // Save uncovered statements (lines) no longer needed because coverage metrics are internally derived by the NewCoverage
+      // Saving the uncovered statements (lines) is no longer needed because coverage metrics are internally derived by the NewCoverage
     } else {
       unresolvedPaths.add(path);
     }
   }
 
-  private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, org.sonar.api.resources.File phpFile, SensorContext context) {
+  private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
     // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
     // This should look like (lineNumber=Count) : 1=0;2=1;3=1....
     NewCoverage newCoverage = context.newCoverage().onFile(inputFile).ofType(coverageType);
@@ -187,22 +185,23 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
         if (lineNum > 0 && lineNum <= inputFile.lines()) {
           newCoverage.lineHits(line.getNum(), line.getCount());
         } else {
-          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, phpFile.getLongName()));
+          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, inputFile.file()));
         }
       }
     }
+
     Measure<String> measure = lineHits.build();
-    logMeasureByResource(phpFile, measure);
+    logMeasureByResource(inputFile, measure);
     newCoverage.save();
   }
 
-  private static void logMeasureByResource(Resource resource, Measure measure) {
+  private static void logMeasureByResource(InputFile inputFile, Measure measure) {
     if (LOG.isDebugEnabled()) {
-      Measure alreadySaved = MEASURES_BY_RESOURCE.get(resource);
+      Measure alreadySaved = MEASURES_BY_RESOURCE.get(inputFile);
       if (alreadySaved == null) {
-        MEASURES_BY_RESOURCE.put(resource, measure);
+        MEASURES_BY_RESOURCE.put(inputFile, measure);
       } else {
-        LOG.debug("Measure {} already saved for resource {}", measure, resource);
+        LOG.debug("Measure {} already saved for resource {}", measure, inputFile.file());
       }
     }
   }
