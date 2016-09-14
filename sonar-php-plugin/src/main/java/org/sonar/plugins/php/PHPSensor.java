@@ -49,8 +49,6 @@ import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.measures.Measure;
-import org.sonar.api.measures.PersistenceMode;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.source.Highlightable;
 import org.sonar.api.source.Highlightable.HighlightingBuilder;
@@ -243,11 +241,11 @@ public class PHPSensor implements Sensor {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getClassComplexity()).forMetric(CoreMetrics.COMPLEXITY_IN_CLASSES).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getFunctionComplexity()).forMetric(CoreMetrics.COMPLEXITY_IN_FUNCTIONS).save();
 
-    Measure<String> functionComplexityMeasure = fileMeasures.getFunctionComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY);
-    context.<String>newMeasure().on(inputFile).withValue(functionComplexityMeasure.getData()).forMetric(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION).save();
+    String functionComplexityMeasure = fileMeasures.getFunctionComplexityDistribution().build();
+    context.<String>newMeasure().on(inputFile).withValue(functionComplexityMeasure).forMetric(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION).save();
 
-    Measure<String> fileComplexityMeasure = fileMeasures.getFileComplexityDistribution().build(true).setPersistenceMode(PersistenceMode.MEMORY);
-    context.<String>newMeasure().on(inputFile).withValue(fileComplexityMeasure.getData()).forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION).save();
+    String fileComplexityMeasure = fileMeasures.getFileComplexityDistribution().build();
+    context.<String>newMeasure().on(inputFile).withValue(fileComplexityMeasure).forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION).save();
 
     noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }

@@ -47,7 +47,7 @@ public class PHPChecks {
     return new PHPChecks(checkFactory);
   }
 
-  public PHPChecks addChecks(String repositoryKey, List<Class> checkClass) {
+  public PHPChecks addChecks(String repositoryKey, Iterable<Class> checkClass) {
     checksByRepository.add(checkFactory
       .<PHPCheck>create(repositoryKey)
       .addAnnotatedChecks(checkClass));

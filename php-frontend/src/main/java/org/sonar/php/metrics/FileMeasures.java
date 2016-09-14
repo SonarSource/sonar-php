@@ -19,10 +19,8 @@
  */
 package org.sonar.php.metrics;
 
-import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.RangeDistributionBuilder;
-
 import java.util.Set;
+import org.sonar.api.ce.measure.RangeDistributionBuilder;
 
 public class FileMeasures {
   private int functionNumber;
@@ -37,6 +35,20 @@ public class FileMeasures {
   private int commentLinesNumber;
 
   private Set<Integer> noSonarLines;
+
+  private RangeDistributionBuilder functionComplexityDistribution;
+
+  private RangeDistributionBuilder fileComplexityDistribution;
+
+  public FileMeasures(Number[] limitsComplexityFunctions, Number[] filesDistributionBottomLimits) {
+    functionNumber = 0;
+    classNumber = 0;
+    statementNumber = 0;
+    classComplexity = 0;
+    functionComplexity = 0;
+    functionComplexityDistribution = new RangeDistributionBuilder(limitsComplexityFunctions);
+    fileComplexityDistribution = new RangeDistributionBuilder(filesDistributionBottomLimits);
+  }
 
   public Set<Integer> getNoSonarLines() {
     return noSonarLines;
@@ -77,20 +89,6 @@ public class FileMeasures {
   public void setFileComplexity(int fileComplexity) {
     this.fileComplexity = fileComplexity;
     fileComplexityDistribution.add(fileComplexity);
-  }
-
-  private RangeDistributionBuilder functionComplexityDistribution;
-  private RangeDistributionBuilder fileComplexityDistribution;
-
-  public FileMeasures(Number[] limitsComplexityFunctions, Number[] filesDistributionBottomLimits) {
-    functionNumber = 0;
-    classNumber = 0;
-    statementNumber = 0;
-    classComplexity = 0;
-    functionComplexity = 0;
-
-    functionComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, limitsComplexityFunctions);
-    fileComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, filesDistributionBottomLimits);
   }
 
   public RangeDistributionBuilder getFileComplexityDistribution() {
@@ -141,4 +139,5 @@ public class FileMeasures {
     this.functionComplexity += functionComplexity;
     functionComplexityDistribution.add(functionComplexity);
   }
+
 }
