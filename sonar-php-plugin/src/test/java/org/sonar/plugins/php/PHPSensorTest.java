@@ -33,12 +33,14 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.config.Settings;
+import org.sonar.api.internal.google.common.base.Charsets;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -179,10 +181,12 @@ public class PHPSensorTest {
   }
 
   private DefaultInputFile inputFile(String fileName) {
-    return new DefaultInputFile("moduleKey", fileName)
+    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", fileName)
       .setModuleBaseDir(MockUtils.getModuleBaseDir().toPath())
       .setType(Type.MAIN)
       .setLanguage(Php.KEY);
+    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+    return inputFile;
   }
 
   @Test

@@ -25,13 +25,15 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.highlighter.SourceFileOffsets;
 import org.sonar.php.highlighter.SymbolHighlighter;
 import org.sonar.php.highlighter.SymbolHighlightingData;
 import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
-import org.sonar.php.highlighter.SyntaxHighlightingData;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -86,11 +88,14 @@ public class PHPAnalyzer {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode);
   }
 
-  public List<SyntaxHighlightingData> getSyntaxHighlighting() {
-    return SyntaxHighlighterVisitor.getHighlightData(currentFileTree, currentFileOffsets);
+  public void performSyntaxHighlighting(SensorContext context, InputFile inputFile) {
+    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
+    SyntaxHighlighterVisitor.highlight(currentFileTree, highlighting);
+    highlighting.save();
   }
 
   public List<SymbolHighlightingData> getSymbolHighlighting() {
     return SymbolHighlighter.getHighlightData(currentFileSymbolTable, currentFileOffsets);
   }
+
 }

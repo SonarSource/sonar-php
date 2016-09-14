@@ -50,14 +50,11 @@ import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.source.Highlightable;
-import org.sonar.api.source.Highlightable.HighlightingBuilder;
 import org.sonar.api.source.Symbolizable;
 import org.sonar.api.source.Symbolizable.SymbolTableBuilder;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.highlighter.SymbolHighlightingData;
-import org.sonar.php.highlighter.SyntaxHighlightingData;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -170,7 +167,7 @@ public class PHPSensor implements Sensor {
     try {
       phpAnalyzer.nextFile(inputFile.file());
       saveIssues(phpAnalyzer.analyze(), inputFile);
-      saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(), inputFile);
+      phpAnalyzer.performSyntaxHighlighting(context, inputFile);
       saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(), inputFile);
       saveNewFileMeasures(context, phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile), numberOfLinesOfCode), inputFile);
     } catch (RecognitionException e) {
@@ -205,19 +202,6 @@ public class PHPSensor implements Sensor {
       }
 
       symbolizable.setSymbolTable(symbolTableBuilder.build());
-    }
-  }
-
-  private void saveSyntaxHighlighting(List<SyntaxHighlightingData> highlightingDataList, InputFile inputFile) {
-    Highlightable highlightable = perspective(Highlightable.class, inputFile);
-    if (highlightable != null) {
-      HighlightingBuilder highlightingBuilder = highlightable.newHighlighting();
-
-      for (SyntaxHighlightingData highlightingData : highlightingDataList) {
-        highlightingBuilder.highlight(highlightingData.startOffset(), highlightingData.endOffset(), highlightingData.highlightCode());
-      }
-
-      highlightingBuilder.done();
     }
   }
 
@@ -278,4 +262,5 @@ public class PHPSensor implements Sensor {
   public String toString() {
     return getClass().getSimpleName();
   }
+
 }

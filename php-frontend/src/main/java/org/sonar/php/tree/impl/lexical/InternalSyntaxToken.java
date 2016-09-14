@@ -21,14 +21,13 @@ package org.sonar.php.tree.impl.lexical;
 
 import com.google.common.collect.Iterators;
 import com.sonar.sslr.api.TokenType;
+import java.util.Iterator;
+import java.util.List;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
 
@@ -40,6 +39,8 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
   private final int column;
   private final String value;
   private final boolean isEOF;
+  private int endLine;
+  private int endColumn;
 
   public InternalSyntaxToken(int line, int column, String value, List<SyntaxTrivia> trivias, int startIndex, boolean isEOF) {
     this.value = value;
@@ -49,6 +50,17 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
     this.startIndex = startIndex;
     this.isEOF = isEOF;
     this.kind = isInlineHTML(value) ? Kind.INLINE_HTML_TOKEN : Kind.TOKEN;
+    calculateEndOffsets();
+  }
+
+  private void calculateEndOffsets() {
+    String[] lines = value.split("\r\n|\n|\r", -1);
+    endColumn = column + value.length();
+    endLine = line + lines.length - 1;
+
+    if (endLine != line) {
+      endColumn = lines[lines.length - 1].length();
+    }
   }
 
   private static boolean isInlineHTML(String value) {
@@ -77,6 +89,16 @@ public class InternalSyntaxToken extends PHPTree implements SyntaxToken {
   @Override
   public int column() {
     return column;
+  }
+
+  @Override
+  public int endLine() {
+    return endLine;
+  }
+
+  @Override
+  public int endColumn() {
+    return endColumn;
   }
 
   public int startIndex() {

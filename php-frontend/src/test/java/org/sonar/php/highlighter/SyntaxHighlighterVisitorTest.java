@@ -21,112 +21,194 @@ package org.sonar.php.highlighter;
 
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
+import org.sonar.api.batch.sensor.highlighting.TypeOfText;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 
-import java.util.List;
-
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SyntaxHighlighterVisitorTest {
 
   private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(Charsets.UTF_8);
 
-  @Test
-  public void empty_input() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php ");
+  private DefaultFileSystem fileSystem;
 
-    assertThat(data).hasSize(0);
+  private File file;
+
+  private DefaultInputFile inputFile;
+
+  private SensorContextTester context;
+
+  private NewHighlighting highlighting;
+
+  @Rule
+  public TemporaryFolder tempFolder = new TemporaryFolder();
+
+  @Before
+  public void setUp() throws IOException {
+    fileSystem = new DefaultFileSystem(tempFolder.getRoot());
+    fileSystem.setEncoding(Charsets.UTF_8);
+    file = tempFolder.newFile();
+    inputFile = new DefaultInputFile("moduleKey",  file.getName())
+      .setLanguage("php")
+      .setType(Type.MAIN);
+    fileSystem.add(inputFile);
+
+    context = SensorContextTester.create(tempFolder.getRoot());
+
+    highlighting = context.newHighlighting().onFile(inputFile);
   }
 
   @Test
-  public void multiline_comment() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php   /*Comment*/ ");
+  public void empty_input() throws Exception {
+    highlight("<?php ");
 
-    assertThat(data).hasSize(1);
-    assertData(data.get(0), 8, 19, "cd");
+    assertThat(context.highlightingTypeAt("moduleKey:" + file.getName(), 1, 0)).isEmpty();
   }
 
   @Test
   public void single_line_comment() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php   //Comment ");
+    highlight("<?php   //Comment ");
 
-    assertThat(data).hasSize(1);
-    assertData(data.get(0), 8, 18, "cd");
+    checkOnRange(1, 8, 10, TypeOfText.COMMENT);
+  }
+
+  @Test
+  public void multiline_comment_on_one_line() throws Exception {
+    highlight("<?php   /*Comment*/ ");
+
+    checkOnRange(1, 8, 11, TypeOfText.COMMENT);
+  }
+
+  @Test
+  public void multiline_comment_on_three_lines() throws Exception {
+    highlight("<?php   /*Comment line 1\n  Comment line 2\n  Comment line 3*/ ");
+    
+    // line 1
+    check(1, 7, null);
+    check(1, 8, TypeOfText.COMMENT);
+    check(1, 23, TypeOfText.COMMENT);
+
+    // line 2
+    check(2, 0, TypeOfText.COMMENT);
+    check(2, 5, TypeOfText.COMMENT);
+    check(2, 5, TypeOfText.COMMENT);
+
+    // line 3
+    check(3, 0, TypeOfText.COMMENT);
+    check(3, 17, TypeOfText.COMMENT);
+    check(3, 18, null);
   }
 
   @Test
   public void shell_style_comment() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php   #Comment ");
+    highlight("<?php   #Comment ");
 
-    assertThat(data).hasSize(1);
-    assertData(data.get(0), 8, 17, "cd");
+    checkOnRange(1, 8, 9, TypeOfText.COMMENT);
   }
 
   @Test
   public void phpdoc_comment() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php   /**Comment*/ ");
+    highlight("<?php   /**Comment*/ ");
 
-    assertThat(data).hasSize(1);
-    assertData(data.get(0), 8, 20, "j");
+    checkOnRange(1, 8, 12, TypeOfText.STRUCTURED_COMMENT);
   }
 
   @Test
   public void keyword() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php eval(\"1\");");
+    highlight("<?php eval(\"1\");");
 
-    assertThat(data).hasSize(2);
-    assertData(data.get(0), 6, 10, "k");
-    assertData(data.get(1), 11, 14, "s");
+    checkOnRange(1, 6, 4, TypeOfText.KEYWORD);
+    checkOnRange(1, 11, 3, TypeOfText.STRING);
   }
 
   @Test
   public void php_reserved_variables() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php $a = $this; $b = __LINE__;");
+    highlight("<?php $a = $this; $b = __LINE__;");
 
-    assertThat(data).hasSize(2);
-    assertData(data.get(0), 11, 16, "k");
-    assertData(data.get(1), 23, 31, "k");
+    checkOnRange(1, 11, 5, TypeOfText.KEYWORD);
+    checkOnRange(1, 23, 8, TypeOfText.KEYWORD);
   }
 
   @Test
   public void string() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php $x = \"a\";");
+    highlight("<?php $x = \"a\";");
 
-    assertThat(data).hasSize(1);
-    assertData(data.get(0), 11, 14, "s");
+    checkOnRange(1, 11, 3, TypeOfText.STRING);
   }
 
   @Test
   public void expandable_string() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php \"Hello $name!\";");
+    highlight("<?php \"Hello $name!\";");
 
-    assertThat(data).hasSize(4);
-    assertData(data.get(0), 6, 7, "s");    // open quote
-    assertData(data.get(1), 19, 20, "s");  // close quote
-    assertData(data.get(2), 7, 13, "s");
-    assertData(data.get(3), 18, 19, "s");
+    checkOnRange(1, 6, 7, TypeOfText.STRING);    // "Hello_
+    checkOnRange(1, 18, 2, TypeOfText.STRING);   // !"
   }
 
   @Test
   public void numbers() throws Exception {
-    List<SyntaxHighlightingData> data = getData("<?php $x = 1; $y = 1.0;");
+    highlight("<?php $x = 1; $y = 1.0;");
 
-    assertThat(data).hasSize(2);
-    assertData(data.get(0), 11, 12, "c");
-    assertData(data.get(1), 19, 22, "c");
+    checkOnRange(1, 11, 1, TypeOfText.CONSTANT);
+    checkOnRange(1, 19, 3, TypeOfText.CONSTANT);
   }
 
-  private List<SyntaxHighlightingData> getData(String s) {
-    return SyntaxHighlighterVisitor.getHighlightData(PARSER.parse(s), new SourceFileOffsets(s));
-
+  private void highlight(String s) {
+    inputFile.initMetadata(s);
+    Tree tree = PARSER.parse(s);
+    SyntaxHighlighterVisitor.highlight(tree, highlighting);
+    highlighting.save();
   }
 
-  private static void assertData(SyntaxHighlightingData data, Integer startOffset, Integer endOffset, String code) {
-    assertThat(data.startOffset()).isEqualTo(startOffset);
-    assertThat(data.endOffset()).isEqualTo(endOffset);
-    assertThat(data.highlightCode()).isEqualTo(code);
+  /**
+   * Checks the highlighting of a range of columns. The first column of a line has index 0.
+   * The range is the columns of the token.
+   */
+  private void checkOnRange(int line, int firstColumn, int length, TypeOfText expectedTypeOfText) {
+    // check that every column of the token is highlighted (and with the expected type)
+    for (int column = firstColumn; column < firstColumn + length; column++) {
+      checkInternal(line, column, "", expectedTypeOfText);
+    }
+
+    // check that the column before the token is not highlighted
+    if (firstColumn != 0) {
+      checkInternal(line, firstColumn - 1, " (= before the token)", null);
+    }
+
+    // check that the column after the token is not highlighted
+    checkInternal(line, firstColumn + length, " (= after the token)", null);
+  }
+
+  /**
+   * Checks the highlighting of one column. The first column of a line has index 0.
+   */
+  private void check(int line, int column, TypeOfText expectedTypeOfText) {
+    checkInternal(line, column, "", expectedTypeOfText);
+  }
+
+  private void checkInternal(int line, int column, String messageComplement, TypeOfText expectedTypeOfText) {
+    String componentKey = "moduleKey:" + file.getName();
+    List<TypeOfText> foundTypeOfTexts = context.highlightingTypeAt(componentKey, line, column);
+
+    int expectedNumberOfTypeOfText = expectedTypeOfText == null ? 0 : 1;
+    String message = "number of TypeOfTexts at line " + line + " and column " + column + messageComplement;
+    assertThat(foundTypeOfTexts).as(message).hasSize(expectedNumberOfTypeOfText);
+    if (expectedNumberOfTypeOfText > 0) {
+      message = "found TypeOfTexts at line " + line + " and column " + column + messageComplement;
+      assertThat(foundTypeOfTexts.get(0)).as(message).isEqualTo(expectedTypeOfText);
+    }
   }
 
 }

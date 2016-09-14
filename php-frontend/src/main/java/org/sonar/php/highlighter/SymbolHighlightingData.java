@@ -21,6 +21,7 @@ package org.sonar.php.highlighter;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 
 public class SymbolHighlightingData {
 
@@ -47,6 +48,10 @@ public class SymbolHighlightingData {
 
   public List<Integer> referencesStartOffset() {
     return referencesStartOffset;
+  }
+  
+  public TypeOfText getTypeOfText() {
+    return TypeOfText.STRING;
   }
 
   @Override
