@@ -26,7 +26,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.Project;
 import org.sonar.plugins.php.MockUtils;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -35,9 +34,6 @@ public class PhpUnitOverallCoverageResultParserTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
-
-  @Mock
-  private Project project;
 
   @Mock
   private SensorContext context;
