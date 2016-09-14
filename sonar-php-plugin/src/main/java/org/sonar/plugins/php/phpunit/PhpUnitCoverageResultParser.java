@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.BatchExtension;
+import org.sonar.api.ExtensionPoint;
+import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -49,7 +50,9 @@ import org.sonar.plugins.php.phpunit.xml.MetricsNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
-public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParser {
+@BatchSide
+@ExtensionPoint
+public class PhpUnitCoverageResultParser implements PhpUnitParser {
 
   // Used for debugging purposes to store measure by resource
   private static final Map<InputFile, Measure> MEASURES_BY_RESOURCE = new HashMap<>();

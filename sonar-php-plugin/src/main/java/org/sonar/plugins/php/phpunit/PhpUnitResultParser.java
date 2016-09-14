@@ -32,7 +32,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.BatchExtension;
+import org.sonar.api.ExtensionPoint;
+import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -44,10 +45,9 @@ import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
 
-/**
- * The Class PhpUnitResultParser.
- */
-public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
+@BatchSide
+@ExtensionPoint
+public class PhpUnitResultParser implements PhpUnitParser {
 
   private static final double PERCENT = 100d;
 

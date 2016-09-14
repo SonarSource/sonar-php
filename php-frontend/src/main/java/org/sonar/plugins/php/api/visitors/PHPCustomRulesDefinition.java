@@ -21,7 +21,8 @@ package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableList;
-import org.sonar.api.BatchExtension;
+import org.sonar.api.ExtensionPoint;
+import org.sonar.api.batch.BatchSide;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
@@ -29,7 +30,9 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
  * Extension point to create custom rule repository for PHP.
  */
 @Beta
-public abstract class PHPCustomRulesDefinition implements RulesDefinition, BatchExtension {
+@BatchSide
+@ExtensionPoint
+public abstract class PHPCustomRulesDefinition implements RulesDefinition {
 
   /**
    * PHP language key
