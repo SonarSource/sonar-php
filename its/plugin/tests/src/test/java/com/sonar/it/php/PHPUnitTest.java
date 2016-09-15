@@ -73,22 +73,22 @@ public class PHPUnitTest {
 
   @Test
   public void coverage() throws Exception {
-    assertThat(getProjectMeasure("lines_to_cover").getValue()).isEqualTo(3);
-    assertThat(getProjectMeasure("uncovered_lines").getValue()).isEqualTo(1);
+    assertThat(getProjectMeasure("lines_to_cover").getValue()).isEqualTo(6);
+    assertThat(getProjectMeasure("uncovered_lines").getValue()).isEqualTo(2);
     assertThat(getProjectMeasure("conditions_to_cover")).isNull();
     assertThat(getProjectMeasure("uncovered_conditions")).isNull();
   }
 
   @Test
   public void it_coverage() throws Exception {
-    assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(3);
-    assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(1);
+    assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(6);
+    assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(2);
   }
 
   @Test
   public void overall_coverage() throws Exception {
-    assertThat(getProjectMeasure("overall_lines_to_cover").getValue()).isEqualTo(3);
-    assertThat(getProjectMeasure("overall_uncovered_lines").getValue()).isEqualTo(1);
+    assertThat(getProjectMeasure("overall_lines_to_cover").getValue()).isEqualTo(6);
+    assertThat(getProjectMeasure("overall_uncovered_lines").getValue()).isEqualTo(2);
   }
 
   private Measure getProjectMeasure(String metricKey) {
