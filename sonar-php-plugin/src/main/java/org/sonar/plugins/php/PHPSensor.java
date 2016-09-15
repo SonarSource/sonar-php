@@ -55,6 +55,7 @@ import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.api.visitors.Issue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
@@ -213,7 +214,7 @@ public class PHPSensor implements Sensor {
   }
 
   private void saveIssues(SensorContext context, List<org.sonar.plugins.php.api.visitors.Issue> issues, InputFile inputFile) {
-    for (org.sonar.plugins.php.api.visitors.Issue phpIssue : issues) {
+    for (Issue phpIssue : issues) {
       RuleKey ruleKey = checks.ruleKeyFor(phpIssue.check());
 
       NewIssue issue = context.newIssue();
@@ -221,6 +222,10 @@ public class PHPSensor implements Sensor {
       NewIssueLocation location = issue.newLocation()
         .message(phpIssue.message())
         .on(inputFile);
+
+      if (phpIssue.line() > 0) {
+        location.at(inputFile.selectLine(phpIssue.line()));
+      }
 
       issue
         .forRule(ruleKey)
