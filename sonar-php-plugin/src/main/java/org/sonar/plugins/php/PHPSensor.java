@@ -43,10 +43,10 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
+import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
-import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.config.Settings;
-import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
@@ -69,7 +69,6 @@ public class PHPSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
 
-  private final ResourcePerspectives resourcePerspectives;
   private final FileSystem fileSystem;
   private final Settings settings;
   private final FilePredicate mainFilePredicate;
@@ -77,18 +76,17 @@ public class PHPSensor implements Sensor {
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
 
-  public PHPSensor(ResourcePerspectives resourcePerspectives, Settings settings, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
+  public PHPSensor(Settings settings, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
-    this(resourcePerspectives, settings, fileSystem, fileLinesContextFactory, checkFactory, noSonarFilter, null);
+    this(settings, fileSystem, fileLinesContextFactory, checkFactory, noSonarFilter, null);
   }
 
-  public PHPSensor(ResourcePerspectives resourcePerspectives, Settings settings, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
+  public PHPSensor(Settings settings, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRulesDefinition[] customRulesDefinitions) {
 
     this.checks = PHPChecks.createPHPCheck(checkFactory)
       .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
       .addCustomChecks(customRulesDefinitions);
-    this.resourcePerspectives = resourcePerspectives;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.fileSystem = fileSystem;
     this.settings = settings;
@@ -164,7 +162,7 @@ public class PHPSensor implements Sensor {
   private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile, Map<File, Integer> numberOfLinesOfCode) {
     try {
       phpAnalyzer.nextFile(inputFile.file());
-      saveIssues(phpAnalyzer.analyze(), inputFile);
+      saveIssues(context, phpAnalyzer.analyze(), inputFile);
       saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
       saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
       saveNewFileMeasures(context, phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile), numberOfLinesOfCode), inputFile);
@@ -214,23 +212,21 @@ public class PHPSensor implements Sensor {
     noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }
 
-  private void saveIssues(List<org.sonar.plugins.php.api.visitors.Issue> issues, InputFile inputFile) {
+  private void saveIssues(SensorContext context, List<org.sonar.plugins.php.api.visitors.Issue> issues, InputFile inputFile) {
     for (org.sonar.plugins.php.api.visitors.Issue phpIssue : issues) {
       RuleKey ruleKey = checks.ruleKeyFor(phpIssue.check());
-      Issuable issuable = resourcePerspectives.as(Issuable.class, inputFile);
 
-      if (issuable != null) {
-        Issuable.IssueBuilder issueBuilder = issuable.newIssueBuilder()
-          .ruleKey(ruleKey)
-          .message(phpIssue.message())
-          .effortToFix(phpIssue.cost());
+      NewIssue issue = context.newIssue();
 
-        if (phpIssue.line() > 0) {
-          issueBuilder.line(phpIssue.line());
-        }
+      NewIssueLocation location = issue.newLocation()
+        .message(phpIssue.message())
+        .on(inputFile);
 
-        issuable.addIssue(issueBuilder.build());
-      }
+      issue
+        .forRule(ruleKey)
+        .gap(phpIssue.cost())
+        .at(location)
+        .save();
     }
   }
 
