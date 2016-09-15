@@ -28,11 +28,10 @@ import java.util.Map;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
+import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.api.CharsetAwareVisitor;
-import org.sonar.php.highlighter.SourceFileOffsets;
 import org.sonar.php.highlighter.SymbolHighlighter;
-import org.sonar.php.highlighter.SymbolHighlightingData;
 import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
@@ -48,17 +47,14 @@ public class PHPAnalyzer {
 
   private final ActionParser<Tree> parser;
   private final ImmutableList<PHPCheck> checks;
-  private final Charset charset;
 
   private CompilationUnitTree currentFileTree;
   private File currentFile;
   private SymbolTable currentFileSymbolTable;
-  private SourceFileOffsets currentFileOffsets;
 
   public PHPAnalyzer(Charset charset, ImmutableList<PHPCheck> checks) {
     this.parser = PHPParserBuilder.createParser(charset);
     this.checks = checks;
-    this.charset = charset;
 
     for (PHPCheck check : checks) {
       if (check instanceof CharsetAwareVisitor) {
@@ -72,7 +68,6 @@ public class PHPAnalyzer {
     currentFile = file;
     currentFileTree = (CompilationUnitTree) parser.parse(file);
     currentFileSymbolTable = SymbolTableImpl.create(currentFileTree);
-    currentFileOffsets = new SourceFileOffsets(currentFile, charset);
   }
 
   public List<Issue> analyze() {
@@ -88,14 +83,16 @@ public class PHPAnalyzer {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode);
   }
 
-  public void performSyntaxHighlighting(SensorContext context, InputFile inputFile) {
+  public NewHighlighting getSyntaxHighlighting(SensorContext context, InputFile inputFile) {
     NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
     SyntaxHighlighterVisitor.highlight(currentFileTree, highlighting);
-    highlighting.save();
+    return highlighting;
   }
 
-  public List<SymbolHighlightingData> getSymbolHighlighting() {
-    return SymbolHighlighter.getHighlightData(currentFileSymbolTable, currentFileOffsets);
+  public NewSymbolTable getSymbolHighlighting(SensorContext context, InputFile inputFile) {
+    NewSymbolTable symbolTable = context.newSymbolTable().onFile(inputFile);
+    new SymbolHighlighter().highlight(currentFileSymbolTable, symbolTable);
+    return symbolTable;
   }
 
 }

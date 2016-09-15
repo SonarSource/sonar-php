@@ -42,7 +42,8 @@ import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.component.Perspective;
+import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
+import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.config.Settings;
 import org.sonar.api.issue.Issuable;
@@ -50,11 +51,8 @@ import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.source.Symbolizable;
-import org.sonar.api.source.Symbolizable.SymbolTableBuilder;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
-import org.sonar.php.highlighter.SymbolHighlightingData;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -167,8 +165,8 @@ public class PHPSensor implements Sensor {
     try {
       phpAnalyzer.nextFile(inputFile.file());
       saveIssues(phpAnalyzer.analyze(), inputFile);
-      phpAnalyzer.performSyntaxHighlighting(context, inputFile);
-      saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(), inputFile);
+      saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
+      saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
       saveNewFileMeasures(context, phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile), numberOfLinesOfCode), inputFile);
     } catch (RecognitionException e) {
       checkInterrupted(e);
@@ -180,7 +178,7 @@ public class PHPSensor implements Sensor {
       throw new AnalysisException("Could not analyse " + inputFile.absolutePath(), e);
     }
   }
-
+  
   private static void checkInterrupted(Exception e) {
     Throwable cause = Throwables.getRootCause(e);
     if (cause instanceof InterruptedException || cause instanceof InterruptedIOException) {
@@ -188,32 +186,14 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void saveSymbolHighlighting(List<SymbolHighlightingData> highlightingDataList, InputFile inputFile) {
-    Symbolizable symbolizable = perspective(Symbolizable.class, inputFile);
-    if (symbolizable != null) {
-      SymbolTableBuilder symbolTableBuilder = symbolizable.newSymbolTableBuilder();
-
-      for (SymbolHighlightingData symbolHighlightingData : highlightingDataList) {
-        org.sonar.api.source.Symbol symbol = symbolTableBuilder.newSymbol(symbolHighlightingData.startOffset(), symbolHighlightingData.endOffset());
-
-        for (Integer referenceStartOffset : symbolHighlightingData.referencesStartOffset()) {
-          symbolTableBuilder.newReference(symbol, referenceStartOffset);
-        }
-      }
-
-      symbolizable.setSymbolTable(symbolTableBuilder.build());
-    }
+  private void saveSyntaxHighlighting(NewHighlighting highlighting) {
+    highlighting.save();
   }
 
-  @Nullable
-  <P extends Perspective> P perspective(Class<P> clazz, InputFile file) {
-    P result = resourcePerspectives.as(clazz, file);
-    if (result == null) {
-      LOG.warn("Could not get " + clazz.getCanonicalName() + " for " + file);
-    }
-    return result;
+  private void saveSymbolHighlighting(NewSymbolTable newSymbolTable) {
+    newSymbolTable.save();
   }
-
+  
   private void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesNumber()).forMetric(CoreMetrics.LINES).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesOfCodeNumber()).forMetric(CoreMetrics.NCLOC).save();

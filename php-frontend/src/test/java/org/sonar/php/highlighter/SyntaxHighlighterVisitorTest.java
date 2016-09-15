@@ -23,7 +23,6 @@ import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,8 +42,6 @@ public class SyntaxHighlighterVisitorTest {
 
   private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(Charsets.UTF_8);
 
-  private DefaultFileSystem fileSystem;
-
   private File file;
 
   private DefaultInputFile inputFile;
@@ -58,7 +55,7 @@ public class SyntaxHighlighterVisitorTest {
 
   @Before
   public void setUp() throws IOException {
-    fileSystem = new DefaultFileSystem(tempFolder.getRoot());
+    DefaultFileSystem fileSystem = new DefaultFileSystem(tempFolder.getRoot());
     fileSystem.setEncoding(Charsets.UTF_8);
     file = tempFolder.newFile();
     inputFile = new DefaultInputFile("moduleKey",  file.getName())
@@ -177,38 +174,16 @@ public class SyntaxHighlighterVisitorTest {
    * The range is the columns of the token.
    */
   private void checkOnRange(int line, int firstColumn, int length, TypeOfText expectedTypeOfText) {
-    // check that every column of the token is highlighted (and with the expected type)
-    for (int column = firstColumn; column < firstColumn + length; column++) {
-      checkInternal(line, column, "", expectedTypeOfText);
-    }
-
-    // check that the column before the token is not highlighted
-    if (firstColumn != 0) {
-      checkInternal(line, firstColumn - 1, " (= before the token)", null);
-    }
-
-    // check that the column after the token is not highlighted
-    checkInternal(line, firstColumn + length, " (= after the token)", null);
+    String componentKey = "moduleKey:" + file.getName();
+    new HighlightChecker(componentKey).checkOnRange(context, line, firstColumn, length, expectedTypeOfText);
   }
 
   /**
    * Checks the highlighting of one column. The first column of a line has index 0.
    */
   private void check(int line, int column, TypeOfText expectedTypeOfText) {
-    checkInternal(line, column, "", expectedTypeOfText);
-  }
-
-  private void checkInternal(int line, int column, String messageComplement, TypeOfText expectedTypeOfText) {
     String componentKey = "moduleKey:" + file.getName();
-    List<TypeOfText> foundTypeOfTexts = context.highlightingTypeAt(componentKey, line, column);
-
-    int expectedNumberOfTypeOfText = expectedTypeOfText == null ? 0 : 1;
-    String message = "number of TypeOfTexts at line " + line + " and column " + column + messageComplement;
-    assertThat(foundTypeOfTexts).as(message).hasSize(expectedNumberOfTypeOfText);
-    if (expectedNumberOfTypeOfText > 0) {
-      message = "found TypeOfTexts at line " + line + " and column " + column + messageComplement;
-      assertThat(foundTypeOfTexts.get(0)).as(message).isEqualTo(expectedTypeOfText);
-    }
+    new HighlightChecker(componentKey).check(context, line, column, expectedTypeOfText);
   }
 
 }
