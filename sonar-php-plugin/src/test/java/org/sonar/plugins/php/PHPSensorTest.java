@@ -37,6 +37,7 @@ import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.Settings;
 import org.sonar.api.internal.google.common.base.Charsets;
@@ -119,6 +120,16 @@ public class PHPSensorTest {
 
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
     sensor = new PHPSensor(new Settings(), fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+  }
+
+  @Test
+  public void sensor_descriptor() {
+    DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
+    sensor.describe(descriptor);
+
+    assertThat(descriptor.name()).isEqualTo("PHP sensor");
+    assertThat(descriptor.languages()).containsOnly("php");
+    assertThat(descriptor.type()).isEqualTo(Type.MAIN);
   }
 
   @Test

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -133,7 +132,6 @@ public class PHPSensor implements Sensor {
     phpUnitSensor.execute(context, numberOfLinesOfCode);
   }
 
-  @VisibleForTesting
   void analyseFiles(
       SensorContext context, 
       PHPAnalyzer phpAnalyzer, 
