@@ -189,7 +189,7 @@ public class PhpUnitResultParser implements PhpUnitParser {
         double percentage = passedTests * PERCENT / testsCount;
         context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
       }
-      saveTestsDetails(fileReport, context);
+      saveTestsDetails(fileReport);
     } else {
       LOG.debug("Following file is not located in the test folder specified in the Sonar configuration: " + fileReport.getFile()
         + ". The test results won't be reported in Sonar.");
@@ -201,7 +201,7 @@ public class PhpUnitResultParser implements PhpUnitParser {
    *
    * @param fileReport the file report
    */
-  private void saveTestsDetails(PhpUnitTestReport fileReport, SensorContext context) {
+  private static void saveTestsDetails(PhpUnitTestReport fileReport) {
     StringBuilder details = new StringBuilder();
     details.append("<tests-details>");
     for (TestCase detail : fileReport.getDetails()) {
