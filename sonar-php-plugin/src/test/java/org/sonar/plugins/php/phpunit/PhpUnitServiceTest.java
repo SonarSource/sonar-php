@@ -45,7 +45,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class PhpUnitSensorTest {
+public class PhpUnitServiceTest {
 
   @Rule
   public ExpectedException expected = ExpectedException.none();
@@ -71,7 +71,7 @@ public class PhpUnitSensorTest {
   private Map<File, Integer> numberOfLinesOfCode;
 
   private Settings settings;
-  private PhpUnitSensor sensor;
+  private PhpUnitService sensor;
   private static final File TEST_REPORT_FILE = TestUtils.getResource(MockUtils.PHPUNIT_REPORT_NAME);
   private static final File COVERAGE_REPORT_FILE = TestUtils.getResource(MockUtils.PHPUNIT_COVERAGE_REPORT);
 
@@ -81,7 +81,7 @@ public class PhpUnitSensorTest {
 
     settings = newSettings();
     fs = new DefaultFileSystem(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
-    sensor = createSensor(fs, settings);
+    sensor = createService(fs, settings);
   }
 
   @Test
@@ -91,7 +91,7 @@ public class PhpUnitSensorTest {
 
   @Test
   public void shouldParseReport() {
-    sensor = createSensor(fs, settings);
+    sensor = createService(fs, settings);
     sensor.execute(context, numberOfLinesOfCode);
 
     verify(parser, times(1)).parse(TEST_REPORT_FILE, context, numberOfLinesOfCode);
@@ -103,7 +103,7 @@ public class PhpUnitSensorTest {
   @SuppressWarnings("unchecked")
   @Test
   public void noReport() {
-    sensor = createSensor(fs, new Settings());
+    sensor = createService(fs, new Settings());
     sensor.execute(context, numberOfLinesOfCode);
 
     verify(parser, never()).parse(any(File.class), any(SensorContext.class), anyMap());
@@ -112,7 +112,7 @@ public class PhpUnitSensorTest {
   @SuppressWarnings("unchecked")
   @Test
   public void badReport() {
-    sensor = createSensor(fs, settings("/fake/path.xml"));
+    sensor = createService(fs, settings("/fake/path.xml"));
     sensor.execute(context, numberOfLinesOfCode);
 
     verify(parser, never()).parse(any(File.class), any(SensorContext.class), anyMap());
@@ -122,21 +122,21 @@ public class PhpUnitSensorTest {
   @Test
   public void xstream_exception() throws Exception {
     Mockito.doThrow(new XStreamException("")).when(parser).parse((File) any(), any(SensorContext.class), anyMap());
-    sensor = createSensor(fs, settings("phpunit.xml"));
+    sensor = createService(fs, settings("phpunit.xml"));
     expected.expect(IllegalStateException.class);
     sensor.execute(context, numberOfLinesOfCode);
   }
 
   @Test
   public void should_parse_relative_path_report() {
-    sensor = createSensor(fs, settings("phpunit.xml"));
+    sensor = createService(fs, settings("phpunit.xml"));
     sensor.execute(context, numberOfLinesOfCode);
 
     verify(parser, times(1)).parse(TEST_REPORT_FILE, context, numberOfLinesOfCode);
   }
 
-  private PhpUnitSensor createSensor(FileSystem fs, Settings settings) {
-    return new PhpUnitSensor(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
+  private PhpUnitService createService(FileSystem fs, Settings settings) {
+    return new PhpUnitService(fs, settings, parser, coverageParser, itCoverageParser, overallCoverageParser);
   }
 
   private Settings settings(String path) {
@@ -151,10 +151,10 @@ public class PhpUnitSensorTest {
     Settings settings = new Settings();
     Properties props = new Properties();
 
-    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpUnitSensorTest.TEST_REPORT_FILE.getAbsolutePath());
-    props.put(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpUnitSensorTest.COVERAGE_REPORT_FILE.getAbsolutePath());
-    props.put(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, PhpUnitSensorTest.COVERAGE_REPORT_FILE.getAbsolutePath());
-    props.put(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, PhpUnitSensorTest.COVERAGE_REPORT_FILE.getAbsolutePath());
+    props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpUnitServiceTest.TEST_REPORT_FILE.getAbsolutePath());
+    props.put(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpUnitServiceTest.COVERAGE_REPORT_FILE.getAbsolutePath());
+    props.put(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, PhpUnitServiceTest.COVERAGE_REPORT_FILE.getAbsolutePath());
+    props.put(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, PhpUnitServiceTest.COVERAGE_REPORT_FILE.getAbsolutePath());
 
     settings.addProperties(props);
 

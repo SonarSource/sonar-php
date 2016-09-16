@@ -30,11 +30,11 @@ import org.sonar.api.config.Settings;
 import org.sonar.plugins.php.PhpPlugin;
 
 /**
- * The Class PhpUnitSensor is used by the plugin to collect coverage metrics from PHPUnit report.
+ * Used by the plugin to collect coverage metrics from PHPUnit report.
  */
-public class PhpUnitSensor {
+public class PhpUnitService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitSensor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitService.class);
 
   private static final String NAME = "PHPUnit Sensor";
 
@@ -44,9 +44,10 @@ public class PhpUnitSensor {
   private final PhpUnitItCoverageResultParser itCoverageParser;
   private final PhpUnitCoverageResultParser coverageParser;
   private final PhpUnitResultParser parser;
+
   private final FileSystem fileSystem;
 
-  public PhpUnitSensor(FileSystem fileSystem, Settings settings, PhpUnitResultParser parser,
+  public PhpUnitService(FileSystem fileSystem, Settings settings, PhpUnitResultParser parser,
                        PhpUnitCoverageResultParser coverageParser,
                        PhpUnitItCoverageResultParser itCoverageParser,
                        PhpUnitOverallCoverageResultParser overallCoverageParser) {

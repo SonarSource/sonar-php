@@ -62,7 +62,7 @@ import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitSensor;
+import org.sonar.plugins.php.phpunit.PhpUnitService;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
@@ -123,7 +123,7 @@ public class PHPSensor implements Sensor {
   }
   
   private void processCoverage(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
-    PhpUnitSensor phpUnitSensor = new PhpUnitSensor(
+    PhpUnitService phpUnitSensor = new PhpUnitService(
       fileSystem,
       settings,
       new PhpUnitResultParser(fileSystem),

@@ -25,7 +25,7 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
-import org.sonar.plugins.php.phpunit.PhpUnitSensor;
+import org.sonar.plugins.php.phpunit.PhpUnitService;
 
 public class PhpPlugin implements Plugin {
 
@@ -60,7 +60,7 @@ public class PhpPlugin implements Plugin {
       DrupalProfile.class,
 
       // PhpUnit
-      PhpUnitSensor.class,
+      PhpUnitService.class,
 
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
