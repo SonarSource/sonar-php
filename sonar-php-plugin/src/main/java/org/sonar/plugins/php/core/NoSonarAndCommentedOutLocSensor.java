@@ -80,15 +80,11 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
   public void execute(SensorContext context) {
     Iterable<InputFile> sourceFiles = filesystem.inputFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
     for (InputFile file : sourceFiles) {
-      // TODO: remove when deprecated NoSonarFilter will be replaced.
-      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.create(file.relativePath());
-      if (phpFile != null) {
-        Source source = analyseSourceCode(file.file(), filesystem.encoding());
-        if (source != null) {
-          filter.addComponent(phpFile.getEffectiveKey(), source.getNoSonarTagLines());
-          int measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
-          context.<Integer>newMeasure().on(file).withValue(measure).forMetric(CoreMetrics.COMMENTED_OUT_CODE_LINES).save();
-        }
+      Source source = analyseSourceCode(file.file(), filesystem.encoding());
+      if (source != null) {
+        filter.noSonarInFile(file, source.getNoSonarTagLines());
+        int measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
+        context.<Integer>newMeasure().on(file).withValue(measure).forMetric(CoreMetrics.COMMENTED_OUT_CODE_LINES).save();
       }
     }
   }

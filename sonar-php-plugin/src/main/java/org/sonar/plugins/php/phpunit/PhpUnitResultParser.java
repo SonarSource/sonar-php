@@ -220,10 +220,6 @@ public class PhpUnitResultParser implements PhpUnitParser {
       }
     }
     details.append("</tests-details>");
-    InputFile unitTestFile = getUnitTestInputFile(fileReport);
-    if (unitTestFile != null) {
-      context.<String>newMeasure().on(unitTestFile).withValue(details.toString()).forMetric(CoreMetrics.TEST_DATA).save();
-    }
   }
 
 }
