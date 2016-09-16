@@ -30,7 +30,7 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.plugins.php.MockUtils;
+import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
@@ -43,13 +43,13 @@ public class PhpUnitResultParserTest {
 
   private SensorContextTester setUpForSensorContextTester() {
     SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
-    parser = new PhpUnitResultParser(MockUtils.getDefaultFileSystem());
+    parser = new PhpUnitResultParser(PhpTestUtils.getDefaultFileSystem());
     return context;
   }
 
   private SensorContext setUpForMockedSensorContext() {
     SensorContext context = Mockito.mock(SensorContext.class);
-    parser = new PhpUnitResultParser(MockUtils.getDefaultFileSystem());
+    parser = new PhpUnitResultParser(PhpTestUtils.getDefaultFileSystem());
     return context;
   }
 
@@ -59,7 +59,7 @@ public class PhpUnitResultParserTest {
   @Test(expected = XStreamException.class)
   public void shouldThrowAnExceptionWhenReportIsInvalid() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"), context, new HashMap<File, Integer>());
+    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"), context, new HashMap<File, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -67,7 +67,7 @@ public class PhpUnitResultParserTest {
   @Test
   public void shouldNotFailIfNoFileName() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-no-filename.xml"), context, new HashMap<File, Integer>());
+    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-no-filename.xml"), context, new HashMap<File, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -75,7 +75,7 @@ public class PhpUnitResultParserTest {
   @Test
   public void shouldNotFailWithEmptyTestSuites() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"), context, new HashMap<File, Integer>());
+    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"), context, new HashMap<File, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -98,23 +98,23 @@ public class PhpUnitResultParserTest {
     String banana = "moduleKey:" + "Banana.php";
 
     parser = new PhpUnitResultParser(fs);
-    parser.parse(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_NAME), context, new HashMap<File, Integer>());
+    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<File, Integer>());
 
-    MockUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
-    MockUtils.assertMeasure(context, banana, CoreMetrics.TESTS, 1);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
+    PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TESTS, 1);
 
-    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_FAILURES, 2);
-    MockUtils.assertMeasure(context, banana, CoreMetrics.TEST_FAILURES, 0);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_FAILURES, 2);
+    PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TEST_FAILURES, 0);
 
-    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
-    MockUtils.assertMeasure(context, banana, CoreMetrics.TEST_ERRORS, 1);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
+    PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TEST_ERRORS, 1);
 
     // Test execution time:
-    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_EXECUTION_TIME, 447L);
-    MockUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
-    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
-    MockUtils.assertMeasure(context, monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
-    MockUtils.assertMeasure(context, banana, CoreMetrics.TEST_EXECUTION_TIME, 570L);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_EXECUTION_TIME, 447L);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
+    PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TEST_EXECUTION_TIME, 570L);
   }
 
   @Test(expected = IllegalStateException.class)

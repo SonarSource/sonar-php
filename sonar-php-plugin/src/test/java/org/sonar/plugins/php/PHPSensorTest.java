@@ -112,7 +112,7 @@ public class PHPSensorTest {
 
   @Before
   public void setUp() {
-    fileSystem = MockUtils.getDefaultFileSystem();
+    fileSystem = PhpTestUtils.getDefaultFileSystem();
     FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
@@ -128,17 +128,17 @@ public class PHPSensorTest {
 
     analyseSingleFile(context, fileName);
 
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.LINES, 55);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 7);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 10);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 12);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=0;2=2;4=1;6=0;8=0;10=0;12=0");
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=1;20=0;30=0;60=0;90=0");
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES, 55);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 7);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 10);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 12);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=0;2=2;4=1;6=0;8=0;10=0;12=0");
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=1;20=0;30=0;60=0;90=0");
     
     // the .php file contains NOSONAR at line 34
     checkNoSonar(componentKey, 33, true);
@@ -181,7 +181,7 @@ public class PHPSensorTest {
 
   private DefaultInputFile inputFile(String fileName) {
     DefaultInputFile inputFile = new DefaultInputFile("moduleKey", fileName)
-      .setModuleBaseDir(MockUtils.getModuleBaseDir().toPath())
+      .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
       .setType(Type.MAIN)
       .setLanguage(Php.KEY);
     inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));

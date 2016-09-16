@@ -36,7 +36,7 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.plugins.php.MockUtils;
+import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
@@ -117,7 +117,7 @@ public class PhpUnitCoverageResultParserTest {
      parser.parse(getReportsWithAbsolutePath("phpunit.coverage.xml"), context, numberOfLinesOfCode);
 
      // UNCOVERED_LINES is implicitly stored in the NewCoverage
-     MockUtils.assertNoMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES);
+     PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES);
 
      assertCoverageLineHits(context, componentKey, 34, 1);
      assertCoverageLineHits(context, componentKey, 35, 1);
@@ -160,8 +160,8 @@ public class PhpUnitCoverageResultParserTest {
 
     parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
 
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.LINES_TO_COVER, 42);
-    MockUtils.assertMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES, 42);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES_TO_COVER, 42);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES, 42);
   }
 
 //  @Test
@@ -184,7 +184,7 @@ public class PhpUnitCoverageResultParserTest {
     File fileWIthAbsolutePaths = folder.newFile("report_with_absolute_paths.xml");
 
     Files.write(
-      Files.toString(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR + reportName), Charsets.UTF_8)
+      Files.toString(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + reportName), Charsets.UTF_8)
         .replace("/" + MONKEY_FILE_NAME, MONKEY_FILE.getAbsolutePath())
         .replace("/" + BANANA_FILE_NAME, BANANA_FILE.getAbsolutePath()),
       fileWIthAbsolutePaths, Charsets.UTF_8);

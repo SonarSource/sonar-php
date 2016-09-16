@@ -29,13 +29,13 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MockUtils {
+public class PhpTestUtils {
 
   public static final String PHPUNIT_REPORT_DIR = "/org/sonar/plugins/php/phpunit/sensor/";
   public static final String PHPUNIT_REPORT_NAME = PHPUNIT_REPORT_DIR + "phpunit.xml";
   public static final String PHPUNIT_COVERAGE_REPORT = PHPUNIT_REPORT_DIR + "phpunit.coverage.xml";
 
-  private MockUtils() {
+  private PhpTestUtils() {
   }
   
   public static DefaultFileSystem getDefaultFileSystem() {

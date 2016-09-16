@@ -30,7 +30,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.plugins.php.MockUtils;
+import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.measures.Metric;
 import org.sonar.squidbridge.text.Source;
@@ -58,7 +58,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
 
   @Before
   public void setUp() throws Exception {
-    fs = MockUtils.getDefaultFileSystem();
+    fs = PhpTestUtils.getDefaultFileSystem();
     noSonarFilter = new NoSonarFilter();
     sensor = spy(new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter));
   }
@@ -81,7 +81,7 @@ public class NoSonarAndCommentedOutLocSensorTest {
     sensor.execute(context);
 
     // Mail.php contains 9 commented out code lines
-    MockUtils.assertMeasure(context, component, CoreMetrics.COMMENTED_OUT_CODE_LINES, 9);
+    PhpTestUtils.assertMeasure(context, component, CoreMetrics.COMMENTED_OUT_CODE_LINES, 9);
   }
 
   @Test

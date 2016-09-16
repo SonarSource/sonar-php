@@ -34,8 +34,8 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.config.Settings;
-import org.sonar.plugins.php.MockUtils;
 import org.sonar.plugins.php.PhpPlugin;
+import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,15 +72,15 @@ public class PhpUnitServiceTest {
 
   private Settings settings;
   private PhpUnitService sensor;
-  private static final File TEST_REPORT_FILE = TestUtils.getResource(MockUtils.PHPUNIT_REPORT_NAME);
-  private static final File COVERAGE_REPORT_FILE = TestUtils.getResource(MockUtils.PHPUNIT_COVERAGE_REPORT);
+  private static final File TEST_REPORT_FILE = TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME);
+  private static final File COVERAGE_REPORT_FILE = TestUtils.getResource(PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
 
   @Before
   public void init() throws Exception {
     MockitoAnnotations.initMocks(this);
 
     settings = newSettings();
-    fs = new DefaultFileSystem(TestUtils.getResource(MockUtils.PHPUNIT_REPORT_DIR));
+    fs = new DefaultFileSystem(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR));
     sensor = createService(fs, settings);
   }
 
