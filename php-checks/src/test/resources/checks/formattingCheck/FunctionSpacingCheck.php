@@ -32,3 +32,4 @@ foo->
   bar($a,$b);    // NOK
 
 echo "la" , "lala";    // OK - internal
+Echo "la" , "lala";    // OK - internal

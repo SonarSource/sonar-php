@@ -203,7 +203,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   );
 
   public boolean isInternalFunction(ExpressionTree callee) {
-    String calleeString = callee.toString();
+    String calleeString = callee.toString().toLowerCase();
     return INTERNAL_FUNCTIONS.contains(calleeString);
   }
 
