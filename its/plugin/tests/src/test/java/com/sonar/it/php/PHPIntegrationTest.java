@@ -20,7 +20,7 @@
 package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.build.SonarRunner;
+import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -47,7 +47,7 @@ public class PHPIntegrationTest {
     orchestrator.resetData();
     sonar = orchestrator.getServer().getWsClient();
 
-    SonarRunner build = SonarRunner.create()
+    SonarScanner build = SonarScanner.create()
       .setProjectKey("project")
       .setProjectName("project")
       .setProjectVersion("1")
@@ -58,8 +58,6 @@ public class PHPIntegrationTest {
       .setProperty("sonar.exclusions", "**/Component/**/*.php");
 
     orchestrator.executeBuild(build);
-//    Thread.sleep(Integer.MAX_VALUE);
-
   }
 
   @Test

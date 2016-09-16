@@ -22,7 +22,7 @@ package com.sonar.it.php;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.build.SonarRunner;
+import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -45,12 +45,12 @@ public class PHPUnitTest {
   private static final String REPORTS_DIR = "reports";
 
   @BeforeClass
-  public static void sspotartServer() throws Exception {
+  public static void startServer() throws Exception {
     orchestrator.resetData();
 
     createReportsWithAbsolutePath();
 
-    SonarRunner build = SonarRunner.create()
+    SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
       .setProjectKey("project")
       .setProjectName("project")

@@ -19,17 +19,15 @@
  */
 package com.sonar.it.php;
 
-import org.junit.ClassRule;
-
 import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.build.SonarRunner;
+import com.sonar.orchestrator.build.SonarScanner;
+import java.util.List;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.sonar.wsclient.issue.Issue;
 import org.sonar.wsclient.issue.IssueClient;
 import org.sonar.wsclient.issue.IssueQuery;
-
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -43,7 +41,7 @@ public class CustomRulesTest {
   @BeforeClass
   public static void prepare() throws InterruptedException {
     orchestrator.resetData();
-    SonarRunner build = SonarRunner.create()
+    SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("custom_rules"))
       .setProjectKey("custom-rules")
       .setProjectName("Custom Rules")
