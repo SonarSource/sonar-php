@@ -36,8 +36,6 @@ public class PhpUnitService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitService.class);
 
-  private static final String NAME = "PHPUnit Sensor";
-
   private final Settings settings;
 
   private final PhpUnitOverallCoverageResultParser overallCoverageParser;
@@ -100,11 +98,6 @@ public class PhpUnitService {
     }
 
     return file;
-  }
-
-  @Override
-  public String toString() {
-    return NAME;
   }
 
 }

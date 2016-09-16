@@ -105,11 +105,6 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
     return result;
   }
 
-  @Override
-  public String toString() {
-    return NAME;
-  }
-
   private static class PhpLanguageFootprint implements LanguageFootprint {
 
     private static final double CAMEL_CASE_PROBABILITY = 0.5;
