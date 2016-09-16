@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -39,9 +38,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.measures.PropertiesBuilder;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
@@ -54,16 +51,13 @@ import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 @ExtensionPoint
 public class PhpUnitCoverageResultParser implements PhpUnitParser {
 
-  // Used for debugging purposes to store measure by resource
-  private static final Map<InputFile, Measure> MEASURES_BY_RESOURCE = new HashMap<>();
-
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
 
   private final FileSystem fileSystem;
 
   protected Metric<Integer> linesToCoverMetric = CoreMetrics.LINES_TO_COVER;
+
   protected Metric<Integer> uncoveredLinesMetric = CoreMetrics.UNCOVERED_LINES;
-  protected Metric<String> coverageLineHitsDataMetric = CoreMetrics.COVERAGE_LINE_HITS_DATA;
 
   protected CoverageType coverageType = CoverageType.UNIT;
 
@@ -178,10 +172,8 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
   }
 
   private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
-    // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
-    // This should look like (lineNumber=Count) : 1=0;2=1;3=1....
     NewCoverage newCoverage = context.newCoverage().onFile(inputFile).ofType(coverageType);
-    PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<>(coverageLineHitsDataMetric);
+
     if (fileNode.getLines() != null) {
       for (LineNode line : fileNode.getLines()) {
         int lineNum = line.getNum();
@@ -193,20 +185,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
       }
     }
 
-    Measure<String> measure = lineHits.build();
-    logMeasureByResource(inputFile, measure);
     newCoverage.save();
-  }
-
-  private static void logMeasureByResource(InputFile inputFile, Measure measure) {
-    if (LOG.isDebugEnabled()) {
-      Measure alreadySaved = MEASURES_BY_RESOURCE.get(inputFile);
-      if (alreadySaved == null) {
-        MEASURES_BY_RESOURCE.put(inputFile, measure);
-      } else {
-        LOG.debug("Measure {} already saved for resource {}", measure, inputFile.file());
-      }
-    }
   }
 
   /**

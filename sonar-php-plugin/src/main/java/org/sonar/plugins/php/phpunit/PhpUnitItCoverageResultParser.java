@@ -35,7 +35,6 @@ public class PhpUnitItCoverageResultParser extends PhpUnitCoverageResultParser {
     super(fileSystem);
     linesToCoverMetric = CoreMetrics.IT_LINES_TO_COVER;
     uncoveredLinesMetric = CoreMetrics.IT_UNCOVERED_LINES;
-    coverageLineHitsDataMetric = CoreMetrics.IT_COVERAGE_LINE_HITS_DATA;
     coverageType = CoverageType.IT;
   }
 

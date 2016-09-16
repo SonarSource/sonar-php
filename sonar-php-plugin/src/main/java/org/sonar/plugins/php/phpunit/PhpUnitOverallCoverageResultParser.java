@@ -35,7 +35,6 @@ public class PhpUnitOverallCoverageResultParser extends PhpUnitCoverageResultPar
     super(fileSystem);
     linesToCoverMetric = CoreMetrics.OVERALL_LINES_TO_COVER;
     uncoveredLinesMetric = CoreMetrics.OVERALL_UNCOVERED_LINES;
-    coverageLineHitsDataMetric = CoreMetrics.OVERALL_COVERAGE_LINE_HITS_DATA;
     coverageType = CoverageType.OVERALL;
   }
 

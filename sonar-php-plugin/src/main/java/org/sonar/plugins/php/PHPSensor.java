@@ -185,11 +185,11 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void saveSyntaxHighlighting(NewHighlighting highlighting) {
+  private static void saveSyntaxHighlighting(NewHighlighting highlighting) {
     highlighting.save();
   }
 
-  private void saveSymbolHighlighting(NewSymbolTable newSymbolTable) {
+  private static void saveSymbolHighlighting(NewSymbolTable newSymbolTable) {
     newSymbolTable.save();
   }
   
@@ -213,7 +213,7 @@ public class PHPSensor implements Sensor {
     noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }
 
-  private void saveIssues(SensorContext context, List<org.sonar.plugins.php.api.visitors.Issue> issues, InputFile inputFile) {
+  private void saveIssues(SensorContext context, List<Issue> issues, InputFile inputFile) {
     for (Issue phpIssue : issues) {
       RuleKey ruleKey = checks.ruleKeyFor(phpIssue.check());
 
