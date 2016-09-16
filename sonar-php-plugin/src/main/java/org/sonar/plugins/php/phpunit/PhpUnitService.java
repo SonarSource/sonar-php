@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.config.Settings;
 import org.sonar.plugins.php.PhpPlugin;
 
 /**
@@ -36,8 +35,6 @@ public class PhpUnitService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitService.class);
 
-  private final Settings settings;
-
   private final PhpUnitOverallCoverageResultParser overallCoverageParser;
   private final PhpUnitItCoverageResultParser itCoverageParser;
   private final PhpUnitCoverageResultParser coverageParser;
@@ -45,13 +42,12 @@ public class PhpUnitService {
 
   private final FileSystem fileSystem;
 
-  public PhpUnitService(FileSystem fileSystem, Settings settings, PhpUnitResultParser parser,
+  public PhpUnitService(FileSystem fileSystem, PhpUnitResultParser parser,
                        PhpUnitCoverageResultParser coverageParser,
                        PhpUnitItCoverageResultParser itCoverageParser,
                        PhpUnitOverallCoverageResultParser overallCoverageParser) {
 
     this.fileSystem = fileSystem;
-    this.settings = settings;
     this.parser = parser;
     this.coverageParser = coverageParser;
     this.itCoverageParser = itCoverageParser;
@@ -66,7 +62,7 @@ public class PhpUnitService {
   }
 
   private void parseReport(String reportPathKey, PhpUnitParser parser, String msg, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
-    String reportPath = settings.getString(reportPathKey);
+    String reportPath = context.settings().getString(reportPathKey);
 
     if (reportPath != null) {
       File xmlFile = getIOFile(reportPath);

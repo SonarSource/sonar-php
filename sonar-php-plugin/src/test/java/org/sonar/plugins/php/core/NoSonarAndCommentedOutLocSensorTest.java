@@ -36,7 +36,6 @@ import org.sonar.squidbridge.measures.Metric;
 import org.sonar.squidbridge.text.Source;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -61,11 +60,6 @@ public class NoSonarAndCommentedOutLocSensorTest {
     fs = PhpTestUtils.getDefaultFileSystem();
     noSonarFilter = new NoSonarFilter();
     sensor = spy(new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter));
-  }
-
-  @Test
-  public void testToString() {
-    assertThat(sensor.toString()).isEqualTo("NoSonar and Commented out LOC Sensor");
   }
 
   @Test

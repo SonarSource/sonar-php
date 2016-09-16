@@ -45,7 +45,6 @@ import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
-import org.sonar.api.config.Settings;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
@@ -70,18 +69,17 @@ public class PHPSensor implements Sensor {
   private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
 
   private final FileSystem fileSystem;
-  private final Settings settings;
   private final FilePredicate mainFilePredicate;
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
 
-  public PHPSensor(Settings settings, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
+  public PHPSensor(FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
-    this(settings, fileSystem, fileLinesContextFactory, checkFactory, noSonarFilter, null);
+    this(fileSystem, fileLinesContextFactory, checkFactory, noSonarFilter, null);
   }
 
-  public PHPSensor(Settings settings, FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
+  public PHPSensor(FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRulesDefinition[] customRulesDefinitions) {
 
     this.checks = PHPChecks.createPHPCheck(checkFactory)
@@ -89,7 +87,6 @@ public class PHPSensor implements Sensor {
       .addCustomChecks(customRulesDefinitions);
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.fileSystem = fileSystem;
-    this.settings = settings;
     this.noSonarFilter = noSonarFilter;
     this.mainFilePredicate = this.fileSystem.predicates().and(
       this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
@@ -124,7 +121,6 @@ public class PHPSensor implements Sensor {
   private void processCoverage(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
     PhpUnitService phpUnitSensor = new PhpUnitService(
       fileSystem,
-      settings,
       new PhpUnitResultParser(fileSystem),
       new PhpUnitCoverageResultParser(fileSystem),
       new PhpUnitItCoverageResultParser(fileSystem),

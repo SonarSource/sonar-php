@@ -64,6 +64,7 @@ import org.sonar.squidbridge.api.AnalysisException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -119,7 +120,7 @@ public class PHPSensorTest {
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-    sensor = new PHPSensor(new Settings(), fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    sensor = new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
   @Test
@@ -180,8 +181,11 @@ public class PHPSensorTest {
   @Test
   public void parse_error() throws Exception {
     SensorContext context = mock(SensorContext.class);
+    when(context.settings()).thenReturn(new Settings());
     analyseSingleFile(context, "parseError.php");
 
+    // check that the context is never used, except for a few calls to method settings()
+    verify(context, times(4)).settings();
     verifyZeroInteractions(context);
   }
 
