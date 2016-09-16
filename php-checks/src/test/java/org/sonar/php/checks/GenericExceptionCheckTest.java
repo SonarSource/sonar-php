@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 
 public class GenericExceptionCheckTest {
 
@@ -30,32 +30,32 @@ public class GenericExceptionCheckTest {
 
   @Test
   public void ok_non_namespace() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok1.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok1.php"));
   }
 
   @Test
   public void ok_namespace() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok2.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok2.php"));
   }
 
   @Test
   public void ko_non_namespace() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko1.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko1.php"));
   }
 
   @Test
   public void ko_namespace() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko2.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko2.php"));
   }
 
   @Test
   public void ko_namespace_use() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko3.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko3.php"));
   }
 
   @Test
   public void ko_multiple_namespaces() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko4.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko4.php"));
   }
 
 }

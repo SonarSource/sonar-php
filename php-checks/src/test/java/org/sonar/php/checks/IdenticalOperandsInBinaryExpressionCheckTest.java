@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import org.junit.Rule;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
 
 public class IdenticalOperandsInBinaryExpressionCheckTest {
@@ -32,7 +32,7 @@ public class IdenticalOperandsInBinaryExpressionCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(
+    PhpCheckTestUtils.check(
       new IdenticalOperandsInBinaryExpressionCheck(),
       TestUtils.getCheckFile("IdenticalOperandsInBinaryExpressionCheck.php"));
   }

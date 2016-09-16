@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 
 public class ClosingTagInFullPHPFileCheckTest {
 
@@ -30,11 +30,11 @@ public class ClosingTagInFullPHPFileCheckTest {
 
   @Test
   public void ok() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
   }
 
   @Test
   public void ko() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"));
   }
 }

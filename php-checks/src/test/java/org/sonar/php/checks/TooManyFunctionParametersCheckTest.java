@@ -24,7 +24,7 @@ import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 public class TooManyFunctionParametersCheckTest {
@@ -35,19 +35,19 @@ public class TooManyFunctionParametersCheckTest {
 
   @Test
   public void default_parameter_values() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 13, 23));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 13, 23));
   }
 
   @Test
   public void custom_value_for_max() throws Exception {
     check.max = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom_value_for_constructor_max() throws Exception {
     check.constructorMax = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 13, 18, 23, 28));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 13, 18, 23, 28));
   }
 
   private List<Issue> issues(int... lines) {

@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class LineLengthCheckTest {
     List<Issue> issues = ImmutableList.<Issue>of(
       new PHPIssue(check, "Split this 122 characters long line (which is greater than 120 authorized).").line(4));
 
-    PHPCheckTest.check(check, TestUtils.getCheckFile("LineLengthCheck.php"), issues);
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile("LineLengthCheck.php"), issues);
   }
 
   @Test
@@ -47,6 +47,6 @@ public class LineLengthCheckTest {
       new PHPIssue(check, "Split this 122 characters long line (which is greater than 30 authorized).").line(4),
       new PHPIssue(check, "Split this 42 characters long line (which is greater than 30 authorized).").line(5));
 
-    PHPCheckTest.check(check, TestUtils.getCheckFile("LineLengthCheck.php"), issues);
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile("LineLengthCheck.php"), issues);
   }
 }

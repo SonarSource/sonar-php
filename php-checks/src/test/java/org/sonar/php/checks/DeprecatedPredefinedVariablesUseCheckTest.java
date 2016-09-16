@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 
 public class DeprecatedPredefinedVariablesUseCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(new DeprecatedPredefinedVariablesUseCheck(), TestUtils.getCheckFile("DeprecatedPredefinedVariablesUseCheck.php"));
+    PhpCheckTestUtils.check(new DeprecatedPredefinedVariablesUseCheck(), TestUtils.getCheckFile("DeprecatedPredefinedVariablesUseCheck.php"));
   }
 
 }

@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 public class FunctionNameCheckTest {
@@ -32,13 +32,13 @@ public class FunctionNameCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
     check.format =  "^[a-zA-Z][a-zA-Z0-9]*$";
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of());
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of());
   }
 
 }

@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 public class NestedFunctionDepthCheckTest {
@@ -33,13 +33,13 @@ public class NestedFunctionDepthCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of(
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of(
       issue(5),
       issue(16),
       issue(27)));

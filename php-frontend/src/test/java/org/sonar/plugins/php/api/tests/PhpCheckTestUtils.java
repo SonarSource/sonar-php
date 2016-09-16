@@ -39,20 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Base helper class for checks unit test.
- * <p/>
- * Usage example:
- * <p/>
- * Check unit test class
- * <pre>
- *   public class MyCustomCheck extends PHPCheckTest {
- *
- *     {@literal@}Test
- *     public void test() {
- *       check(new MyCustomCheck(), new File("code_sample.php"));
- *     }
- *   }
- * </pre>
+ * Helper class for checks unit test.
  *
  * Code sample file: code_sample.php
  * When an issue is expected on a line, it should contains a comment as the following
@@ -63,12 +50,13 @@ import java.util.Map;
  *  $a = 2;  // NOK
  * </pre>
  */
-public class PHPCheckTest {
+public class PhpCheckTestUtils {
 
   private static final Charset charset = Charsets.UTF_8;
+
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(charset);
 
-  private PHPCheckTest() {
+  private PhpCheckTestUtils() {
   }
 
   /**

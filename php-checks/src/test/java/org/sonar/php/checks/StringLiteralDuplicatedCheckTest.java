@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 import java.util.List;
@@ -34,13 +34,13 @@ public class StringLiteralDuplicatedCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"));
   }
 
   @Test
   public void custom() throws Exception {
     check.threshold = 4;
     List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue(check, "Define a constant instead of duplicating this literal \"name1\" 4 times.").line(19));
-    PHPCheckTest.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), issue);
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile("StringLiteralDuplicatedCheck.php"), issue);
   }
 }
