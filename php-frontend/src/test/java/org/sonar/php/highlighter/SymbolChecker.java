@@ -48,7 +48,7 @@ public class SymbolChecker {
 
     if (mustExist) {
       String message = "a symbol is expected to exist at line " + line + " and column " + column;
-      assertThat(foundReferences).as(message).isEmpty();
+      assertThat(foundReferences).as(message).isNotNull();
     } else {
       // currently (Sonar API 5.6), there is no way to make the distinction between "no symbol" and "no reference to symbol".
       // When upgrading to Sonar API 6.1+, we will have to change the code below and verify that foundReferences is null
