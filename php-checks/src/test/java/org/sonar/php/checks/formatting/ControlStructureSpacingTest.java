@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 import java.io.File;
@@ -41,12 +41,12 @@ public class ControlStructureSpacingTest extends FormattingStandardCheckTest {
   @Test
   public void defaultValue() throws IllegalAccessException {
     activeOnly("isOneSpaceBetweenKeywordAndNextToken", "isOneSpaceAfterForLoopSemicolon", "isSpaceForeachStatement");
-    PHPCheckTest.check(check, TEST_FILE);
+    PhpCheckTestUtils.check(check, TEST_FILE);
   }
 
   @Test
   public void custom() throws IllegalAccessException {
     deactivateAll();
-    PHPCheckTest.check(check, TEST_FILE, ImmutableList.<Issue>of());
+    PhpCheckTestUtils.check(check, TEST_FILE, ImmutableList.<Issue>of());
   }
 }

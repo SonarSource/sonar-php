@@ -25,7 +25,6 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
@@ -47,14 +46,12 @@ import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 @Rule(
   key = LocalVariableShadowsClassFieldCheck.KEY,
   name = "Local variables should not have the same name as class fields",
   priority = Priority.MAJOR,
   tags = {Tags.PITFALL})
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
 @SqaleConstantRemediation("5min")
 public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
 

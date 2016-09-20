@@ -19,13 +19,14 @@
  */
 package org.sonar.php.metrics;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.ParsingTestUtils;
 
-import java.io.File;
-
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class MetricsVisitorTest extends ParsingTestUtils {
@@ -34,15 +35,16 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   public void test() {
     String filename = "metrics/lines_of_code.php";
     File file = new File(filename);
+    Map<File, Integer> numberOfLinesOfCode = new HashMap<File, Integer>();
 
-    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), mock(FileLinesContext.class));
+    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), mock(FileLinesContext.class), numberOfLinesOfCode);
 
     assertThat(fileMeasures.getFileComplexity()).isEqualTo(1);
     assertThat(fileMeasures.getClassComplexity()).isEqualTo(1);
     assertThat(fileMeasures.getFunctionComplexity()).isEqualTo(1);
 
-    assertThat(fileMeasures.getFileComplexityDistribution().build().getData()).isEqualTo("0=1;5=0;10=0;20=0;30=0;60=0;90=0");
-    assertThat(fileMeasures.getFunctionComplexityDistribution().build().getData()).isEqualTo("1=1;2=0;4=0;6=0;8=0;10=0;12=0");
+    assertThat(fileMeasures.getFileComplexityDistribution().build()).isEqualTo("0=1;5=0;10=0;20=0;30=0;60=0;90=0");
+    assertThat(fileMeasures.getFunctionComplexityDistribution().build()).isEqualTo("1=1;2=0;4=0;6=0;8=0;10=0;12=0");
 
     assertThat(fileMeasures.getFunctionNumber()).isEqualTo(1);
     assertThat(fileMeasures.getStatementNumber()).isEqualTo(2);
@@ -53,5 +55,8 @@ public class MetricsVisitorTest extends ParsingTestUtils {
 
     assertThat(fileMeasures.getNoSonarLines()).containsOnly(18);
     assertThat(fileMeasures.getCommentLinesNumber()).isEqualTo(5);
+    
+    assertThat(numberOfLinesOfCode.values().iterator().next()).as("number of lines of code in the file").isEqualTo(7);
   }
+
 }

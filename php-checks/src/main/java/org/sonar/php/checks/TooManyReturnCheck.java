@@ -19,7 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -32,10 +33,6 @@ import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 @Rule(
   key = TooManyReturnCheck.KEY,
@@ -43,7 +40,6 @@ import java.util.Deque;
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("20min")
 public class TooManyReturnCheck extends PHPVisitorCheck {
 

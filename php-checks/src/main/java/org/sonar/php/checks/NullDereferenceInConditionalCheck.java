@@ -20,7 +20,8 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.Equality;
@@ -36,10 +37,6 @@ import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 @Rule(
   key = "S1697",
@@ -47,7 +44,6 @@ import java.util.List;
   priority = Priority.BLOCKER,
   tags = {Tags.BUG})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
 public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
 

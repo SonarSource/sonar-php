@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
@@ -36,6 +36,6 @@ public class TabCharacterCheckTest {
     PHPCheck check = new TabCharacterCheck();
 
     List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue(check, "Replace all tab characters in this file by sequences of white-spaces."));
-    PHPCheckTest.check(check, TestUtils.getCheckFile("TabCharacterCheck.php"), issue);
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile("TabCharacterCheck.php"), issue);
   }
 }

@@ -52,7 +52,7 @@ public class PHPCustomRulesDefinitionTest {
     assertThat(customRule).isNotNull();
     assertThat(customRule.name()).isEqualTo(RULE_NAME);
     assertThat(customRule.htmlDescription()).isEqualTo("desc");
-    assertThat(customRule.tags()).contains("bug");
+    assertThat(customRule.tags()).contains("mybug");
 
     assertThat(customRule.params()).hasSize(1);
 
@@ -66,7 +66,7 @@ public class PHPCustomRulesDefinitionTest {
     key = RULE_KEY,
     name = RULE_NAME,
     description = "desc",
-    tags = {"bug"})
+    tags = {"mybug"})
   public class MyCustomRule extends PHPVisitorCheck {
     @RuleProperty(
       key = "customParam",

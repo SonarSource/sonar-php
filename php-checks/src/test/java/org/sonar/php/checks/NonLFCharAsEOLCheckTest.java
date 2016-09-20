@@ -26,7 +26,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.php.tree.visitors.PHPIssue;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 import java.io.File;
@@ -53,14 +53,14 @@ public class NonLFCharAsEOLCheckTest {
 
   @Test
   public void ok() throws IOException {
-    PHPCheckTest.check(check, ok_file);
+    PhpCheckTestUtils.check(check, ok_file);
   }
 
   @Test
   public void ko() throws IOException {
     ImmutableList<Issue> issues = ImmutableList.<Issue>of(
       new PHPIssue(check, "Replace all non line feed end of line characters in this file \"" + ko_file.getName() + "\" by LF."));
-    PHPCheckTest.check(check, ko_file, issues);
+    PhpCheckTestUtils.check(check, ko_file, issues);
   }
 
 }

@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import com.google.common.base.Preconditions;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 import java.io.File;
@@ -27,26 +28,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.BatchExtension;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.ExtensionPoint;
+import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Measure;
 import org.sonar.api.utils.ParsingUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
 
-/**
- * The Class PhpUnitResultParser.
- */
-public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
+@BatchSide
+@ExtensionPoint
+public class PhpUnitResultParser implements PhpUnitParser {
 
   private static final double PERCENT = 100d;
 
@@ -59,21 +60,14 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    */
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitResultParser.class);
 
-  /**
-   * The context.
-   */
-  private SensorContext context;
   private FileSystem fileSystem;
+
   private FilePredicates filePredicates;
 
   /**
    * Instantiates a new php unit result parser.
-   *
-   * @param context the context
    */
-  public PhpUnitResultParser(SensorContext context, FileSystem fileSystem) {
-    super();
-    this.context = context;
+  public PhpUnitResultParser(FileSystem fileSystem) {
     this.fileSystem = fileSystem;
     this.filePredicates = fileSystem.predicates();
   }
@@ -130,25 +124,15 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
   }
 
   /**
-   * Insert zero when no reports can be found.
-   */
-  private void insertZeroWhenNoReports() {
-    context.saveMeasure(CoreMetrics.TESTS, 0.0);
-  }
-
-  /**
    * Collect the metrics found.
    *
    * @param reportFile the reports directories to be scan
    */
   @Override
-  public void parse(File reportFile) {
-    if (reportFile == null) {
-      insertZeroWhenNoReports();
-    } else {
-      LOG.debug("Parsing file: " + reportFile.getAbsolutePath());
-      parseFile(reportFile);
-    }
+  public void parse(File reportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+    Preconditions.checkNotNull(reportFile);
+    LOG.debug("Parsing file: " + reportFile.getAbsolutePath());
+    parseFile(reportFile, context);
   }
 
   /**
@@ -156,11 +140,11 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    *
    * @param report the report file
    */
-  private void parseFile(File report) {
+  private void parseFile(File report, SensorContext context) {
     TestSuites testSuites = getTestSuites(report);
     List<PhpUnitTestReport> fileReports = readSuites(testSuites);
     for (PhpUnitTestReport fileReport : fileReports) {
-      saveTestReportMeasures(fileReport);
+      saveTestReportMeasures(fileReport, context);
     }
   }
 
@@ -185,7 +169,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    *
    * @param fileReport the unit test report
    */
-  protected void saveTestReportMeasures(PhpUnitTestReport fileReport) {
+  protected void saveTestReportMeasures(PhpUnitTestReport fileReport, SensorContext context) {
     if (!fileReport.isValid()) {
       return;
     }
@@ -193,17 +177,17 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
     if (unitTestFile != null) {
       double testsCount = (double) fileReport.getTests() - fileReport.getSkipped();
       if (fileReport.getSkipped() > 0) {
-        context.saveMeasure(unitTestFile, CoreMetrics.SKIPPED_TESTS, (double) fileReport.getSkipped());
+        context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getSkipped()).forMetric(CoreMetrics.SKIPPED_TESTS).save();
       }
       double duration = Math.round(fileReport.getTime() * MILLISECONDS);
-      context.saveMeasure(unitTestFile, CoreMetrics.TEST_EXECUTION_TIME, duration);
-      context.saveMeasure(unitTestFile, CoreMetrics.TESTS, testsCount);
-      context.saveMeasure(unitTestFile, CoreMetrics.TEST_ERRORS, (double) fileReport.getErrors());
-      context.saveMeasure(unitTestFile, CoreMetrics.TEST_FAILURES, (double) fileReport.getFailures());
+      context.<Long>newMeasure().on(unitTestFile).withValue((long)duration).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue((int)testsCount).forMetric(CoreMetrics.TESTS).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getErrors()).forMetric(CoreMetrics.TEST_ERRORS).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getFailures()).forMetric(CoreMetrics.TEST_FAILURES).save();
       if (testsCount > 0) {
         double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
         double percentage = passedTests * PERCENT / testsCount;
-        context.saveMeasure(unitTestFile, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
+        context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
       }
       saveTestsDetails(fileReport);
     } else {
@@ -217,7 +201,7 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
    *
    * @param fileReport the file report
    */
-  private void saveTestsDetails(PhpUnitTestReport fileReport) {
+  private static void saveTestsDetails(PhpUnitTestReport fileReport) {
     StringBuilder details = new StringBuilder();
     details.append("<tests-details>");
     for (TestCase detail : fileReport.getDetails()) {
@@ -236,9 +220,6 @@ public class PhpUnitResultParser implements BatchExtension, PhpUnitParser {
       }
     }
     details.append("</tests-details>");
-    InputFile unitTestFile = getUnitTestInputFile(fileReport);
-    if (unitTestFile != null) {
-      context.saveMeasure(unitTestFile, new Measure(CoreMetrics.TEST_DATA, details.toString()));
-    }
   }
+
 }

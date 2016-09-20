@@ -19,8 +19,8 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.measures.CoreMetrics;
 
 /**
@@ -29,21 +29,18 @@ import org.sonar.api.measures.CoreMetrics;
 public class PhpUnitOverallCoverageResultParser extends PhpUnitCoverageResultParser {
 
   /**
-   * Instantiates a new php unit coverage result parser.
-   *
-   * @param context    the context
+   * Instantiates a new PHPUnit coverage result parser.
    */
-  public PhpUnitOverallCoverageResultParser(SensorContext context, FileSystem fileSystem) {
-    super(context, fileSystem);
+  public PhpUnitOverallCoverageResultParser(FileSystem fileSystem) {
+    super(fileSystem);
     linesToCoverMetric = CoreMetrics.OVERALL_LINES_TO_COVER;
     uncoveredLinesMetric = CoreMetrics.OVERALL_UNCOVERED_LINES;
-    coverageLineHitsDataMetric = CoreMetrics.OVERALL_COVERAGE_LINE_HITS_DATA;
+    coverageType = CoverageType.OVERALL;
   }
 
   @Override
   public String toString() {
     return "PHPUnit Overall Coverage Result Parser";
-
   }
 
 }

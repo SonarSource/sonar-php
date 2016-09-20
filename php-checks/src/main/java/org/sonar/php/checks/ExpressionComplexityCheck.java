@@ -20,7 +20,9 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -29,11 +31,6 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
 
 @Rule(
   key = ExpressionComplexityCheck.KEY,
@@ -41,7 +38,6 @@ import java.util.List;
   priority = Priority.MAJOR,
   tags = {Tags.BRAIN_OVERLOAD})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNIT_TESTABILITY)
 @SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "5min", effortToFixDescription = "per complexity point above the threshold")
 public class ExpressionComplexityCheck extends PHPSubscriptionCheck {
 

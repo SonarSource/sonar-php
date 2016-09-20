@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.TokenVisitor;
@@ -49,14 +48,12 @@ import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 @Rule(
   key = LeftCurlyBraceStartsLineCheck.KEY,
   name = "An open curly brace should be located at the beginning of a line",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION})
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
 public class LeftCurlyBraceStartsLineCheck extends PHPVisitorCheck {
 

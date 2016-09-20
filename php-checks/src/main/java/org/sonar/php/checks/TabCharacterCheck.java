@@ -20,7 +20,9 @@
 package org.sonar.php.checks;
 
 import com.google.common.io.Files;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
@@ -28,11 +30,6 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.List;
 
 @Rule(
   key = TabCharacterCheck.KEY,
@@ -40,7 +37,6 @@ import java.util.List;
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
 public class TabCharacterCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
 

@@ -21,7 +21,8 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.Set;
+import java.util.regex.Pattern;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
@@ -31,17 +32,12 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.Set;
-import java.util.regex.Pattern;
 
 @Rule(
   key = KeywordsAndConstantsNotLowerCaseCheck.KEY,
   name = "PHP keywords and constants \"true\", \"false\", \"null\" should be in lower case",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
 public class KeywordsAndConstantsNotLowerCaseCheck extends PHPVisitorCheck {
 

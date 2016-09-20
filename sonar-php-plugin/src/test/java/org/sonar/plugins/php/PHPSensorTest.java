@@ -21,26 +21,38 @@ package org.sonar.plugins.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
+import java.io.File;
+import java.io.InterruptedIOException;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
-import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
-import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.config.Settings;
+import org.sonar.api.internal.google.common.base.Charsets;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.api.scan.issue.filter.FilterableIssue;
+import org.sonar.api.scan.issue.filter.IssueFilterChain;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.PHPAnalyzer;
+import org.sonar.php.checks.CheckList;
+import org.sonar.php.checks.LeftCurlyBraceEndsLineCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -48,26 +60,24 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
-import org.sonar.test.TestUtils;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import java.io.InterruptedIOException;
-import java.nio.charset.StandardCharsets;
-
 public class PHPSensorTest {
 
-  private final DefaultFileSystem fileSystem = new DefaultFileSystem();
+  private DefaultFileSystem fileSystem;
 
   private PHPSensor sensor;
 
   private ProgressReport progressReport = mock(ProgressReport.class);
+
+  private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
 
   @org.junit.Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -102,73 +112,101 @@ public class PHPSensorTest {
     public String customParam = "value";
   }
 
-
   @Before
   public void setUp() {
+    fileSystem = PhpTestUtils.getDefaultFileSystem();
     FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
 
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-    sensor = new PHPSensor(mock(ResourcePerspectives.class), fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    sensor = new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
   @Test
-  public void shouldExecuteOnProject() {
-    DefaultFileSystem localFS = new DefaultFileSystem();
-    PHPSensor localSensor = new PHPSensor(mock(ResourcePerspectives.class), localFS, null, new CheckFactory(mock(ActiveRules.class)), new NoSonarFilter());
+  public void sensor_descriptor() {
+    DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
+    sensor.describe(descriptor);
 
-    // empty file system
-    assertThat(localSensor.shouldExecuteOnProject(null), is(false));
-
-    localFS.add(new DefaultInputFile("file.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY));
-    assertThat(localSensor.shouldExecuteOnProject(null), is(true));
+    assertThat(descriptor.name()).isEqualTo("PHP sensor");
+    assertThat(descriptor.languages()).containsOnly("php");
+    assertThat(descriptor.type()).isEqualTo(Type.MAIN);
   }
 
   @Test
-  public void analyse() {
-    SensorContext context = mock(SensorContext.class);
-    analyseSingleFile(context, "PHPSquidSensor.php");
+  public void analyse() throws NoSuchFieldException, IllegalAccessException {
+    String fileName = "PHPSquidSensor.php";
+    String componentKey = "moduleKey:" + fileName;
 
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.LINES), Mockito.eq(55.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.NCLOC), Mockito.eq(32.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMPLEXITY_IN_CLASSES), Mockito.eq(7.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMPLEXITY_IN_FUNCTIONS), Mockito.eq(10.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMMENT_LINES), Mockito.eq(7.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.COMPLEXITY), Mockito.eq(12.0));
+    analyseSingleFile(context, fileName);
 
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.CLASSES), Mockito.eq(1.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.STATEMENTS), Mockito.eq(16.0));
-    verify(context).saveMeasure(Mockito.any(InputFile.class), Mockito.eq(CoreMetrics.FUNCTIONS), Mockito.eq(3.0));
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES, 55);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 7);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 10);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 12);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=0;2=2;4=1;6=0;8=0;10=0;12=0");
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=1;20=0;30=0;60=0;90=0");
+    
+    // the .php file contains NOSONAR at line 34
+    checkNoSonar(componentKey, 33, true);
+    checkNoSonar(componentKey, 34, false);
+  }
+
+  private void checkNoSonar(String componentKey, int line, boolean expected) throws NoSuchFieldException, IllegalAccessException {
+    // retrieve the noSonarFilter, which is private
+    Field field = PHPSensor.class.getDeclaredField("noSonarFilter");
+    field.setAccessible(true);
+    NoSonarFilter noSonarFilter = (NoSonarFilter) field.get(sensor);
+
+    // a filter chain that does nothing
+    IssueFilterChain chain = mock(IssueFilterChain.class);
+    when(chain.accept(any(FilterableIssue.class))).thenReturn(true);
+
+    // an issue
+    FilterableIssue issue = mock(FilterableIssue.class);
+    when(issue.line()).thenReturn(line);
+    when(issue.componentKey()).thenReturn(componentKey);
+    when(issue.ruleKey()).thenReturn(RuleKey.parse(CheckList.REPOSITORY_KEY + ":" + LeftCurlyBraceEndsLineCheck.KEY));
+
+    // test the noSonarFilter
+    boolean accepted = noSonarFilter.accept(issue, chain);
+    assertThat(accepted).as("response of noSonarFilter.accept for line " + line).isEqualTo(expected);
   }
 
   @Test
   public void parse_error() throws Exception {
     SensorContext context = mock(SensorContext.class);
+    when(context.settings()).thenReturn(new Settings());
     analyseSingleFile(context, "parseError.php");
+
+    // check that the context is never used, except for a few calls to method settings()
+    verify(context, times(4)).settings();
     verifyZeroInteractions(context);
   }
 
   private void analyseSingleFile(SensorContext context, String fileName) {
     fileSystem.add(inputFile(fileName));
-
-    Resource resource = mock(Resource.class);
-    when(resource.getEffectiveKey()).thenReturn("someKey");
-    when(context.getResource(any(InputFile.class))).thenReturn(resource);
-    sensor.analyse(new Project(""), context);
+    sensor.execute(context);
   }
 
-  private InputFile inputFile(String fileName) {
-    return new DefaultInputFile(fileName)
-      .setAbsolutePath(TestUtils.getResource(fileName).getAbsolutePath())
-      .setType(InputFile.Type.MAIN)
+  private DefaultInputFile inputFile(String fileName) {
+    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", fileName)
+      .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
+      .setType(Type.MAIN)
       .setLanguage(Php.KEY);
+    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+    return inputFile;
   }
 
   @Test
   public void progress_report_should_be_stopped() throws Exception {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.<PHPCheck>of());
-    sensor.analyseFiles(phpAnalyzer, ImmutableList.<InputFile>of(), progressReport);
+    sensor.analyseFiles(context, phpAnalyzer, ImmutableList.<InputFile>of(), progressReport, new HashMap<File, Integer>());
     verify(progressReport).stop();
   }
 
@@ -195,7 +233,7 @@ public class PHPSensorTest {
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     try {
-      sensor.analyseFiles(phpAnalyzer, ImmutableList.of(inputFile), progressReport);
+      sensor.analyseFiles(context, phpAnalyzer, ImmutableList.of(inputFile), progressReport, new HashMap<File, Integer>());
     } finally {
       verify(progressReport).cancel();
     }

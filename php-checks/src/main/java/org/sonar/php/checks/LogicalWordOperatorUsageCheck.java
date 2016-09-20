@@ -20,7 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
@@ -31,9 +31,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.List;
 
 @Rule(
   key = LogicalWordOperatorUsageCheck.KEY,
@@ -41,7 +38,6 @@ import java.util.List;
   priority = Priority.MAJOR,
   tags = {Tags.SUSPICIOUS})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
 public class LogicalWordOperatorUsageCheck extends PHPSubscriptionCheck {
 

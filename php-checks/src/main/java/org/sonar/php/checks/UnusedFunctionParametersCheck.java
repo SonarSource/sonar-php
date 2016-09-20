@@ -20,9 +20,10 @@
 package org.sonar.php.checks;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -39,10 +40,6 @@ import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Rule(
   key = UnusedFunctionParametersCheck.KEY,
@@ -50,7 +47,6 @@ import java.util.List;
   priority = Priority.MAJOR,
   tags = {Tags.UNUSED, Tags.MISRA})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("5min")
 public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 

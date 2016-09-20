@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.regex.Pattern;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -29,9 +29,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.regex.Pattern;
 
 @Rule(
   key = TrailingCommentCheck.KEY,
@@ -39,7 +36,6 @@ import java.util.regex.Pattern;
   priority = Priority.INFO,
   tags = {Tags.CONVENTION})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
 public class TrailingCommentCheck extends PHPVisitorCheck {
 

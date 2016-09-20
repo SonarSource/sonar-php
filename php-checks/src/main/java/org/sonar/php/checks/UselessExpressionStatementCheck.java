@@ -19,7 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -32,10 +33,6 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Rule(
   key = UselessExpressionStatementCheck.KEY,
@@ -43,7 +40,6 @@ import java.util.List;
   priority = Priority.CRITICAL,
   tags = {Tags.UNUSED, Tags.CWE, Tags.MISRA, Tags.BUG})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.INSTRUCTION_RELIABILITY)
 @SqaleConstantRemediation("10min")
 public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 

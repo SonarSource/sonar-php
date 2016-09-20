@@ -19,7 +19,7 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -29,16 +29,12 @@ import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.List;
 
 @Rule(
   key = ElseIfWithoutElseCheck.KEY,
   name = "\"if ... else if\" constructs shall be terminated with an \"else\" clause",
   priority = Priority.MAJOR,
   tags = {Tags.CERT, Tags.MISRA})
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("5min")
 public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
 

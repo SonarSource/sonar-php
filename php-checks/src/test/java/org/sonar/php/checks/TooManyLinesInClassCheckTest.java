@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 public class TooManyLinesInClassCheckTest {
@@ -31,12 +31,12 @@ public class TooManyLinesInClassCheckTest {
 
   @Test
   public void test_default() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile("TooManyLinesInClassCheck.php"), ImmutableList.<Issue>of());
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile("TooManyLinesInClassCheck.php"), ImmutableList.<Issue>of());
   }
 
   @Test
   public void custom() throws Exception {
     check.maximumLinesThreshold = 7;
-    PHPCheckTest.check(check, TestUtils.getCheckFile("TooManyLinesInClassCheck.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile("TooManyLinesInClassCheck.php"));
   }
 }

@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTest {
@@ -32,19 +32,19 @@ public class NamespaceAndUseStatementCheckTest extends FormattingStandardCheckTe
   @Test
   public void defaultValue() throws Exception {
     activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"));
   }
 
   @Test
   public void custom() throws Exception {
     deactivateAll();
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), ImmutableList.<Issue>of());
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "NamespaceAndUseStatementCheck.php"), ImmutableList.<Issue>of());
   }
 
   @Test
   public void emptyScript() throws Exception {
     activeOnly("hasNamespaceBlankLine", "isUseAfterNamespace", "hasUseBlankLine");
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "empty-script.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "empty-script.php"));
   }
 
 }

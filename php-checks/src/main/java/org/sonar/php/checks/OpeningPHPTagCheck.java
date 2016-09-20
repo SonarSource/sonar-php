@@ -19,20 +19,17 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 @Rule(
   key = OpeningPHPTagCheck.KEY,
   name = "\"<?php\" and \"<?=\" tags should be used",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR1})
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
 public class OpeningPHPTagCheck extends PHPVisitorCheck {
 

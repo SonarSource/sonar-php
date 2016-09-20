@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
+ 
   <parent>
     <groupId>org.sonarsource.parent</groupId>
     <artifactId>parent</artifactId>
-    <version>31</version>
+    <version>36</version>
   </parent>
 
   <groupId>org.sonarsource.php</groupId>
@@ -98,13 +98,15 @@
     <version.sonar-packaging-maven-plugin>1.12.1</version.sonar-packaging-maven-plugin>
 
     <!-- JAR versions -->
+    <version.commons-io>2.5</version.commons-io>
+    <version.commons-lang>2.6</version.commons-lang>
     <version.fest-assert>1.4</version.fest-assert>
     <version.junit>4.10</version.junit>
     <version.logback>0.9.30</version.logback>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>1.9.0</version.mockito>
     <version.slf4j>1.6.2</version.slf4j>
-    <version.sonar>4.5.2</version.sonar>
+    <version.sonar>5.6</version.sonar>
     <version.sonar-orchestrator>3.10.1</version.sonar-orchestrator>
     <version.sslr>1.21</version.sslr>
     <version.sslr-squid-bridge>2.6.1</version.sslr-squid-bridge>
@@ -123,11 +125,6 @@
         <groupId>${project.groupId}</groupId>
         <artifactId>php-checks</artifactId>
         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.sonar</groupId>
-        <artifactId>sonar-deprecated</artifactId>
-        <version>${version.sonar}</version>
       </dependency>
       <dependency>
         <groupId>org.sonarsource.sslr</groupId>
@@ -175,10 +172,20 @@
         <artifactId>xstream</artifactId>
         <version>${version.xstream}</version>
       </dependency>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>${version.commons-lang}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${version.commons-io}</version>
+      </dependency>
 
       <!-- Test dependencies -->
       <dependency>
-        <groupId>org.codehaus.sonar</groupId>
+        <groupId>org.sonarsource.sonarqube</groupId>
         <artifactId>sonar-testing-harness</artifactId>
         <version>${version.sonar}</version>
         <scope>test</scope>
@@ -222,7 +229,7 @@
 
       <!-- Provided dependencies -->
       <dependency>
-        <groupId>org.codehaus.sonar</groupId>
+        <groupId>org.sonarsource.sonarqube</groupId>
         <artifactId>sonar-plugin-api</artifactId>
         <version>${version.sonar}</version>
         <scope>provided</scope>

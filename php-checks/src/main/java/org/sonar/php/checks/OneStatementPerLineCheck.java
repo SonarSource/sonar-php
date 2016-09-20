@@ -22,7 +22,9 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.impl.PHPTree;
@@ -31,11 +33,6 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Rule(
   key = OneStatementPerLineCheck.KEY,
@@ -43,7 +40,6 @@ import java.util.Set;
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
 public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
 

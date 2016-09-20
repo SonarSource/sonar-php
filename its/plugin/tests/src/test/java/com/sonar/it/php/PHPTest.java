@@ -20,7 +20,9 @@
 package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.build.SonarRunner;
+import com.sonar.orchestrator.build.SonarScanner;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -28,9 +30,6 @@ import org.sonar.wsclient.Sonar;
 import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -55,7 +54,7 @@ public class PHPTest {
    */
   @Test
   public void should_import_sources_with_user_defined_file_suffixes() {
-    SonarRunner build = SonarRunner.create()
+    SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("project-with-several-extensions"))
       .setProfile("it-profile")
       .setProperty("sonar.php.file.suffixes", "php,php3,php4,myphp,html");
@@ -66,13 +65,12 @@ public class PHPTest {
     assertThat(getResource(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math3.pgp"))).isNull();
   }
 
-
   /**
    * SONARPLUGINS-943
    */
   @Test
   public void should_support_multimodule_projects() {
-    SonarRunner build = SonarRunner.create()
+    SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("multimodule"))
       .setProfile("it-profile");
     orchestrator.executeBuild(build);
@@ -89,6 +87,7 @@ public class PHPTest {
   private Resource getResource(String resourceKey) {
     return sonar.find(ResourceQuery.create(resourceKey));
   }
+
   private Measure getResourceMeasure(String resourceKey, String metricKey) {
     Resource resource = sonar.find(ResourceQuery.createForMetrics(resourceKey, metricKey.trim()));
     return resource == null ? null : resource.getMeasure(metricKey.trim());

@@ -22,83 +22,73 @@ package org.sonar.plugins.php.core;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.batch.SensorContext;
+import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
+import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.measures.Metric;
 import org.sonar.squidbridge.text.Source;
-import org.sonar.test.TestUtils;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class NoSonarAndCommentedOutLocSensorTest {
 
   private DefaultFileSystem fs;
-  private Project project;
   private NoSonarFilter noSonarFilter;
   private NoSonarAndCommentedOutLocSensor sensor;
-  private SensorContext context;
+
+  private SensorContextTester setUpForSensorContextTester() {
+    return SensorContextTester.create(new File("src/test/resources"));
+  }
+
+  private SensorContext setUpForMockedSensorContext() {
+    return Mockito.mock(SensorContext.class);
+  }
 
   @Before
   public void setUp() throws Exception {
-    fs = new DefaultFileSystem();
-    project = mock(Project.class);
-
-    context = mock(SensorContext.class);
+    fs = PhpTestUtils.getDefaultFileSystem();
     noSonarFilter = new NoSonarFilter();
     sensor = spy(new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter));
   }
 
   @Test
   public void testAnalyse() {
-    DefaultInputFile mainFile = new DefaultInputFile("Mail.php").setAbsolutePath(TestUtils.getResource("/Mail.php").getAbsolutePath()).setLanguage(Php.KEY).setType(InputFile.Type.MAIN);
+    SensorContextTester context = setUpForSensorContextTester();
+
+    String moduleKey = "moduleKey";
+    String fileName = "Mail.php";
+    String component = moduleKey + ":" + fileName;
+    DefaultInputFile mainFile = new DefaultInputFile(moduleKey, fileName).setLanguage(Php.KEY).setType(InputFile.Type.MAIN);
     fs.add(mainFile);
 
-    // TODO: remove when deprecated NoSonarFilter will be replaced.
-    org.sonar.api.resources.File sonarFile = org.sonar.api.resources.File.create("Mail.php");
-    when(context.getResource(any(Resource.class))).thenReturn(sonarFile);
+    sensor.execute(context);
 
-    sensor.analyse(project, context);
-    // Mail.php contains 9 commented oud code lines.
-    verify(context).saveMeasure(sonarFile, CoreMetrics.COMMENTED_OUT_CODE_LINES, 9d);
-  }
-
-  @Test
-  public void test_should_execute_on_project() {
-    DefaultFileSystem localFS = new DefaultFileSystem();
-    NoSonarAndCommentedOutLocSensor localSensor = new NoSonarAndCommentedOutLocSensor(localFS, noSonarFilter);
-
-    // fs is empty
-    assertThat(localSensor.shouldExecuteOnProject(null)).isFalse();
-
-    localFS.add((new DefaultInputFile("file.php")).setType(InputFile.Type.MAIN).setLanguage(Php.KEY));
-    assertThat(localSensor.shouldExecuteOnProject(null)).isTrue();
+    // Mail.php contains 9 commented out code lines
+    PhpTestUtils.assertMeasure(context, component, CoreMetrics.COMMENTED_OUT_CODE_LINES, 9);
   }
 
   @Test
   public void testAnalyseEmptySourceFiles() {
-    DefaultFileSystem localFS = new DefaultFileSystem();
-    DefaultInputFile file = new DefaultInputFile("fake").setAbsolutePath("/fake/absolute/path").setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
-    localFS.add(file);
+    SensorContext context = setUpForMockedSensorContext();
 
-    NoSonarAndCommentedOutLocSensor localSensor = new NoSonarAndCommentedOutLocSensor(localFS, noSonarFilter);
-    localSensor.analyse(project, context);
-    verify(context, never()).saveMeasure(any(Resource.class), any(org.sonar.api.measures.Metric.class), any(Double.class));
+    DefaultInputFile file = new DefaultInputFile("moduleKey", "nonexistent.php").setType(InputFile.Type.MAIN).setLanguage(Php.KEY);
+    fs.add(file);
 
+    NoSonarAndCommentedOutLocSensor localSensor = new NoSonarAndCommentedOutLocSensor(fs, noSonarFilter);
+    localSensor.execute(context);
+
+    verify(context, never()).newMeasure();
   }
 
   @Test
@@ -140,8 +130,9 @@ public class NoSonarAndCommentedOutLocSensorTest {
     assertEquals(5, source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES));
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void testAnalyseSourceCodeWithIOException() throws Exception {
+  @Test
+  public void testAnalyseSourceCodeWithNonexistentFile() throws Exception {
     NoSonarAndCommentedOutLocSensor.analyseSourceCode(new File("xxx"), UTF_8);
   }
+
 }

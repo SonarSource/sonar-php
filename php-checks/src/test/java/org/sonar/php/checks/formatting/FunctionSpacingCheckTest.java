@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 import java.io.File;
@@ -41,14 +41,14 @@ public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
   @Test
   public void defaultValue() throws Exception {
     activeOnly("isOneSpaceAfterComma", "isNoSpaceAfterMethodName", "isClosureSpacing");
-    PHPCheckTest.check(check, TEST_FILE);
+    PhpCheckTestUtils.check(check, TEST_FILE);
 
   }
 
   @Test
   public void custom() throws Exception {
     deactivateAll();
-    PHPCheckTest.check(check, TEST_FILE, ImmutableList.<Issue>of());
+    PhpCheckTestUtils.check(check, TEST_FILE, ImmutableList.<Issue>of());
   }
 
 }

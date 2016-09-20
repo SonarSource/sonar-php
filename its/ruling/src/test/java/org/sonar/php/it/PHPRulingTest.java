@@ -19,18 +19,14 @@
  */
 package org.sonar.php.it;
 
-import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.build.SonarRunner;
+import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -54,7 +50,7 @@ public class PHPRulingTest {
       ORCHESTRATOR.getConfiguration().getSonarVersion().isGreaterThanOrEquals("5.1"));
     ORCHESTRATOR.getServer().provisionProject("project", "project");
     ORCHESTRATOR.getServer().associateProjectToQualityProfile("project", "php", "rules");
-    SonarRunner build = SonarRunner.create(FileLocation.of("../sources/src").getFile())
+    SonarScanner build = SonarScanner.create(FileLocation.of("../sources/src").getFile())
       .setProjectKey("project")
       .setProjectName("project")
       .setProjectVersion("1")
@@ -65,8 +61,8 @@ public class PHPRulingTest {
       .setProperty("dump.old", FileLocation.of("src/test/resources/expected").getFile().getAbsolutePath())
       .setProperty("dump.new", FileLocation.of("target/actual").getFile().getAbsolutePath())
       .setProperty("sonar.cpd.skip", "true")
-      .setProperty("lits.differences", LITS_DIFFERENCES_FILE.getAbsolutePath())
-      .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1000m");
+      .setProperty("lits.differences", LITS_DIFFERENCES_FILE.getAbsolutePath());
+      build.setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1000m");
     ORCHESTRATOR.executeBuild(build);
 
     assertThat(Files.toString(LITS_DIFFERENCES_FILE, StandardCharsets.UTF_8)).isEmpty();

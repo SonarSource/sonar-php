@@ -21,13 +21,11 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
-import com.sonar.orchestrator.build.SonarRunner;
-import org.junit.Assume;
-import org.junit.ClassRule;
-import org.junit.Test;
-
+import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
 import java.util.regex.Pattern;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -41,7 +39,7 @@ public class ReportWithUnresolvedPathTest {
   @Test
   public void should_log_a_warning() throws Exception {
     orchestrator.resetData();
-    SonarRunner build = SonarRunner.create()
+    SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
       .setProjectKey("project")
       .setProjectName("project")

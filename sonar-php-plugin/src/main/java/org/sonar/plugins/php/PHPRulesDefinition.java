@@ -31,7 +31,7 @@ public class PHPRulesDefinition implements RulesDefinition {
   @Override
   public void define(Context context) {
     NewRepository repository = context.createRepository(CheckList.REPOSITORY_KEY, Php.KEY).setName(REPOSITORY_NAME);
-    AnnotationBasedRulesDefinition.load(repository, Php.KEY, CheckList.getChecks());
+    new AnnotationBasedRulesDefinition(repository, Php.KEY).addRuleClasses(false, CheckList.getChecks());
     repository.done();
   }
 
