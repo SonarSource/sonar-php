@@ -83,12 +83,6 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
             defaultValue = "true")
     boolean checkMethodComment = defaultTrue;
 
-    // does a comment need to be in block form
-    @RuleProperty(
-            key = "enforceBlockComment",
-            defaultValue = "false")
-    boolean enforceBlockComment = defaultFalse;
-
     @Override
     public void setCharset(Charset charset) {
         this.charset = charset;

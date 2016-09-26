@@ -32,7 +32,6 @@ public class UndocumentedApiCheckTest {
     @Test
     public void test() throws Exception {
         UndocumentedApiCheck check = new UndocumentedApiCheck();
-        check.enforceBlockComment = true;
 
         PhpCheckTestUtils.check(check, TestUtils.getCheckFile("UndocumentedApiCheck.php"));
     }
