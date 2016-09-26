@@ -21,7 +21,8 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -35,10 +36,6 @@ import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import javax.annotation.Nullable;
-import java.util.Set;
 
 @Rule(
   key = GenericExceptionCheck.KEY,
@@ -46,7 +43,6 @@ import java.util.Set;
   priority = Priority.MAJOR,
   tags = {Tags.CWE, Tags.ERROR_HANDLING, Tags.SECURITY})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.EXCEPTION_HANDLING)
 @SqaleConstantRemediation("20min")
 public class GenericExceptionCheck extends PHPVisitorCheck {
 

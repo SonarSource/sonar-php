@@ -19,20 +19,17 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 @Rule(
   key = OnePropertyDeclarationPerStatementCheck.KEY,
   name = "More than one property should not be declared per statement",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("2min")
 public class OnePropertyDeclarationPerStatementCheck extends PHPVisitorCheck {
 

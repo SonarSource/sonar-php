@@ -31,37 +31,39 @@ import org.sonar.plugins.php.api.visitors.Issue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
-public class PHPCheckTestTest {
+public class PhpCheckTestUtilsTest {
 
   @Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
+
   private static final PHPCheck CHECK = new DummyCheck();
 
   @Test
   public void test_no_issue() throws Exception {
-    PHPCheckTest.check(CHECK, createFile("<?php $a += 1; // No issue"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a += 1; // No issue"));
   }
 
   @Test
   public void test_with_message() throws Exception {
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK {{message}}"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK {{message}}"));
   }
 
   @Test
   public void test_without_message() throws Exception {
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK"));
   }
-
 
   @Test
   public void test_error_unexpected_issue() throws Exception {
     thrown.expect(AssertionError.class);
     thrown.expectMessage("* [UNEXPECTED_ISSUE] at line 1 with a message: \"message\"");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1;"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1;"));
   }
 
   @Test
@@ -69,7 +71,7 @@ public class PHPCheckTestTest {
     thrown.expect(AssertionError.class);
     thrown.expectMessage("* [NO_ISSUE] Expected but no issue on line 1.");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a += 1; // NOK"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a += 1; // NOK"));
   }
 
   @Test
@@ -79,7 +81,7 @@ public class PHPCheckTestTest {
       + "Expected message : another message\n"
       + "Actual message : message");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK {{another message}}"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK {{another message}}"));
   }
 
   @Test
@@ -87,7 +89,7 @@ public class PHPCheckTestTest {
     thrown.expect(AssertionError.class);
     thrown.expectMessage("* [NO_ISSUE] Expected but no issue on line 1.");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a += 1; // NOK"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a += 1; // NOK"));
   }
 
   @Test
@@ -96,12 +98,12 @@ public class PHPCheckTestTest {
     thrown.expect(AssertionError.class);
     thrown.expectMessage("* [UNEXPECTED_ISSUE] at line 1 with a message: \"message\"");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK {{message}}"), createIssuesForLines( /*None */));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK {{message}}"), createIssuesForLines( /*None */));
   }
 
   @Test
   public void test_multiple_issue_on_same_line() throws Exception {
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; $a = 1; $a = 1;"), createIssuesForLines(1, 1, 1));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; $a = 1; $a = 1;"), createIssuesForLines(1, 1, 1));
   }
 
   @Test
@@ -111,7 +113,7 @@ public class PHPCheckTestTest {
       + "Expected message : another message\n"
       + "Actual message : message");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; $a = 1; $a = 1;"), createIssuesForLines("another message", 1, 1, 1));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; $a = 1; $a = 1;"), createIssuesForLines("another message", 1, 1, 1));
   }
 
   @Test
@@ -119,7 +121,7 @@ public class PHPCheckTestTest {
     thrown.expect(AssertionError.class);
     thrown.expectMessage("* [WRONG_NUMBER] Line 1: Expecting 1 issue, but actual issues number is 2");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; $a = 1; // NOK"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; $a = 1; // NOK"));
   }
 
   @Test
@@ -127,17 +129,17 @@ public class PHPCheckTestTest {
     thrown.expect(AssertionError.class);
     thrown.expectMessage("* [WRONG_NUMBER] Line 1: Expecting 2 issue, but actual issues number is 1");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK"), createIssuesForLines(1, 1));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK"), createIssuesForLines(1, 1));
   }
 
   @Test
   public void test_expected_cost() throws Exception {
-    PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=2]]"));
+    PhpCheckTestUtils.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=2]]"));
   }
 
   @Test
   public void test_no_expected_cost() throws Exception {
-    PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK"));
+    PhpCheckTestUtils.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK"));
   }
 
   @Test
@@ -147,7 +149,7 @@ public class PHPCheckTestTest {
       + "Expected cost : 3.0\n"
       + "Actual cost : 2.0");
 
-    PHPCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=3]]"));
+    PhpCheckTestUtils.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=3]]"));
   }
 
   @Test
@@ -157,7 +159,7 @@ public class PHPCheckTestTest {
       + "Expected cost : 3.0\n"
       + "Actual cost : null");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK [[effortToFix=3]]"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK [[effortToFix=3]]"));
   }
 
   public ImmutableList<Issue> createIssuesForLines(int... lines) {
@@ -176,10 +178,9 @@ public class PHPCheckTestTest {
 
   private File createFile(String content) throws Exception {
     File f = tmpFolder.newFile("test_check.php");
-    FileUtils.writeStringToFile(f, content);
+    FileUtils.writeStringToFile(f, content, Charset.defaultCharset());
 
     return f;
   }
 
 }
-

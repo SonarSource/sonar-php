@@ -20,7 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.api.server.rule.RulesDefinition;
+import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -38,16 +38,12 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.List;
 
 @Rule(
   key = FormattingStandardCheck.KEY,
   name = "Source code should comply with formatting standards",
   priority = Priority.MINOR,
   tags = {Tags.CONVENTION, Tags.PSR2})
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")
 public class FormattingStandardCheck extends PHPVisitorCheck {
 
@@ -203,7 +199,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   );
 
   public boolean isInternalFunction(ExpressionTree callee) {
-    String calleeString = callee.toString();
+    String calleeString = callee.toString().toLowerCase();
     return INTERNAL_FUNCTIONS.contains(calleeString);
   }
 

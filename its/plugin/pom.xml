@@ -9,10 +9,8 @@
     <version>2.9-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.sonarsource.php</groupId>
   <artifactId>it-php-plugin</artifactId>
   <name>SonarSource :: PHP :: ITs :: Plugin</name>
-  <version>2.9-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <organization>

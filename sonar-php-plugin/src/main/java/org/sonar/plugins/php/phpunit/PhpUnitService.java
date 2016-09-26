@@ -21,62 +21,48 @@ package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.PhpPlugin;
-import org.sonar.plugins.php.api.Php;
 
 /**
- * The Class PhpUnitSensor is used by the plugin to collect coverage metrics from PHPUnit report.
+ * Used by the plugin to collect coverage metrics from PHPUnit report.
  */
-public class PhpUnitSensor implements Sensor {
+public class PhpUnitService {
 
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitSensor.class);
-  private final Settings settings;
+  private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitService.class);
 
   private final PhpUnitOverallCoverageResultParser overallCoverageParser;
   private final PhpUnitItCoverageResultParser itCoverageParser;
   private final PhpUnitCoverageResultParser coverageParser;
   private final PhpUnitResultParser parser;
-  private final FileSystem fileSystem;
-  private final FilePredicates filePredicates;
 
-  public PhpUnitSensor(FileSystem fileSystem, Settings settings, PhpUnitResultParser parser,
+  private final FileSystem fileSystem;
+
+  public PhpUnitService(FileSystem fileSystem, PhpUnitResultParser parser,
                        PhpUnitCoverageResultParser coverageParser,
                        PhpUnitItCoverageResultParser itCoverageParser,
                        PhpUnitOverallCoverageResultParser overallCoverageParser) {
 
     this.fileSystem = fileSystem;
-    this.filePredicates = fileSystem.predicates();
-    this.settings = settings;
     this.parser = parser;
     this.coverageParser = coverageParser;
     this.itCoverageParser = itCoverageParser;
     this.overallCoverageParser = overallCoverageParser;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void analyse(Project project, SensorContext context) {
-    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, parser, "test");
-    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageParser, "unit test coverage");
-    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageParser, "integration test coverage");
-    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage");
+  public void execute(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, parser, "test", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageParser, "unit test coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageParser, "integration test coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage", context, numberOfLinesOfCode);
   }
 
-
-  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg) {
-    String reportPath = settings.getString(reportPathKey);
+  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+    String reportPath = context.settings().getString(reportPathKey);
 
     if (reportPath != null) {
       File xmlFile = getIOFile(reportPath);
@@ -85,7 +71,7 @@ public class PhpUnitSensor implements Sensor {
         LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath + " with " + parser.toString());
 
         try {
-          parser.parse(xmlFile);
+          parser.parse(xmlFile, context, numberOfLinesOfCode);
         } catch (XStreamException e) {
           throw new IllegalStateException("Report file is invalid, plugin will stop.", e);
         }
@@ -110,20 +96,4 @@ public class PhpUnitSensor implements Sensor {
     return file;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean shouldExecuteOnProject(Project project) {
-    return fileSystem.hasFiles(filePredicates.and(filePredicates.hasLanguage(Php.KEY), filePredicates.hasType(InputFile.Type.MAIN)));
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    return "PHPUnit Sensor";
-  }
 }

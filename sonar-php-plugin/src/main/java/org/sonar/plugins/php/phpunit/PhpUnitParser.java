@@ -20,7 +20,12 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
+import java.util.Map;
+import org.sonar.api.batch.sensor.SensorContext;
 
+@FunctionalInterface
 public interface PhpUnitParser {
-  void parse(File coverageReportFile);
+
+  void parse(File coverageReportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode);
+
 }

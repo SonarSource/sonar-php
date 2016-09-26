@@ -19,17 +19,13 @@
  */
 package com.sonar.it.php;
 
-import com.google.common.collect.Iterables;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
+import java.io.File;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Arrays;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -43,7 +39,7 @@ import java.util.Arrays;
 public class Tests {
 
   public static final String PROJECT_ROOT_DIR = "../projects/";
-  private static final String PLUGIN_KEY = "php";
+
   private static final String RESOURCE_DIRECTORY = "/com/sonar/it/php/";
 
   @ClassRule

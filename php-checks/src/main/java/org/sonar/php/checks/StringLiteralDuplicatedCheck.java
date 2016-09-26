@@ -20,8 +20,8 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.Maps;
+import java.util.Map;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -32,9 +32,6 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-
-import java.util.Map;
 
 @Rule(
   key = StringLiteralDuplicatedCheck.KEY,
@@ -42,7 +39,6 @@ import java.util.Map;
   priority = Priority.MINOR,
   tags = {Tags.DESIGN})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.DATA_RELIABILITY)
 @SqaleLinearWithOffsetRemediation(coeff = "2min", offset = "2min", effortToFixDescription = "per duplicate instance")
 public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 

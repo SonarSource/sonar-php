@@ -19,11 +19,10 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sonar.plugins.php.api.tree.Tree;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class CompoundVariableTest {
 

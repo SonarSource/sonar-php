@@ -19,18 +19,13 @@
  */
 package org.sonar.samples.php;
 
-import com.google.common.collect.ImmutableList;
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.Plugin;
 
-import java.util.List;
-
-public class CustomPHPRulesPlugin extends SonarPlugin {
+public class CustomPHPRulesPlugin implements Plugin {
 
   @Override
-  public List getExtensions() {
-    return ImmutableList.of(
-      CustomPHPRulesDefinition.class
-    );
+  public void define(Context context) {
+    context.addExtension(CustomPHPRulesDefinition.class);
   }
 
 }

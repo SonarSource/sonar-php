@@ -19,34 +19,26 @@
  */
 package org.sonar.php.highlighter;
 
+import org.sonar.api.batch.sensor.symbol.NewSymbol;
+import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SymbolHighlighter {
 
-  private SymbolHighlighter() {
-  }
-
-  public static List<SymbolHighlightingData> getHighlightData(SymbolTable symbolTable, SourceFileOffsets sourceFileOffsets) {
-    List<SymbolHighlightingData> dataList = new ArrayList<>();
-
+  public void highlight(SymbolTable symbolTable, NewSymbolTable newSymbolTable) {
     for (Symbol symbol : ((SymbolTableImpl) symbolTable).getSymbols()) {
       SyntaxToken token = symbol.declaration().token();
-      SymbolHighlightingData symbolHighlightingData = new SymbolHighlightingData(sourceFileOffsets.startOffset(token), sourceFileOffsets.endOffset(token));
+      NewSymbol newSymbol = newSymbolTable.newSymbol(token.line(), token.column(), token.endLine(), token.endColumn());
       for (SyntaxToken usageToken : symbol.usages()) {
         // we do not highlight cases like "${someVar}" as such usages are shorter and will cause incorrect highlighting
         if (usageToken.text().length() == token.text().length()) {
-          symbolHighlightingData.addReference(sourceFileOffsets.startOffset(usageToken));
+          newSymbol.newReference(usageToken.line(), usageToken.column(), usageToken.endLine(), usageToken.endColumn());
         }
       }
-      dataList.add(symbolHighlightingData);
     }
-
-    return dataList;
   }
+
 }

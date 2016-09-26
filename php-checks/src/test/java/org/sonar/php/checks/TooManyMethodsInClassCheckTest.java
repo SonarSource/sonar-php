@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 import org.sonar.plugins.php.api.visitors.Issue;
 
 public class TooManyMethodsInClassCheckTest {
@@ -33,13 +33,13 @@ public class TooManyMethodsInClassCheckTest {
 
   @Test
   public void defaultValue() throws Exception  {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of());
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of());
   }
 
   @Test
   public void custom_maximum_method_threshold() throws Exception {
     check.maximumMethodThreshold = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
@@ -51,7 +51,7 @@ public class TooManyMethodsInClassCheckTest {
       new PHPIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3),
       new PHPIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(33)
     );
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 
 }

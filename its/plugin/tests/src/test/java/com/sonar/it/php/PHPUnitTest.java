@@ -22,7 +22,7 @@ package com.sonar.it.php;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.build.SonarRunner;
+import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -45,12 +45,12 @@ public class PHPUnitTest {
   private static final String REPORTS_DIR = "reports";
 
   @BeforeClass
-  public static void sspotartServer() throws Exception {
+  public static void startServer() throws Exception {
     orchestrator.resetData();
 
     createReportsWithAbsolutePath();
 
-    SonarRunner build = SonarRunner.create()
+    SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
       .setProjectKey("project")
       .setProjectName("project")
@@ -73,22 +73,22 @@ public class PHPUnitTest {
 
   @Test
   public void coverage() throws Exception {
-    assertThat(getProjectMeasure("lines_to_cover").getValue()).isEqualTo(3);
-    assertThat(getProjectMeasure("uncovered_lines").getValue()).isEqualTo(1);
+    assertThat(getProjectMeasure("lines_to_cover").getValue()).isEqualTo(6);
+    assertThat(getProjectMeasure("uncovered_lines").getValue()).isEqualTo(2);
     assertThat(getProjectMeasure("conditions_to_cover")).isNull();
     assertThat(getProjectMeasure("uncovered_conditions")).isNull();
   }
 
   @Test
   public void it_coverage() throws Exception {
-    assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(3);
-    assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(1);
+    assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(6);
+    assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(2);
   }
 
   @Test
   public void overall_coverage() throws Exception {
-    assertThat(getProjectMeasure("overall_lines_to_cover").getValue()).isEqualTo(3);
-    assertThat(getProjectMeasure("overall_uncovered_lines").getValue()).isEqualTo(1);
+    assertThat(getProjectMeasure("overall_lines_to_cover").getValue()).isEqualTo(6);
+    assertThat(getProjectMeasure("overall_uncovered_lines").getValue()).isEqualTo(2);
   }
 
   private Measure getProjectMeasure(String metricKey) {

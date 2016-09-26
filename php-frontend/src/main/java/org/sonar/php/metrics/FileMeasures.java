@@ -19,10 +19,8 @@
  */
 package org.sonar.php.metrics;
 
-import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.RangeDistributionBuilder;
-
 import java.util.Set;
+import org.sonar.api.ce.measure.RangeDistributionBuilder;
 
 public class FileMeasures {
   private int functionNumber;
@@ -38,48 +36,8 @@ public class FileMeasures {
 
   private Set<Integer> noSonarLines;
 
-  public Set<Integer> getNoSonarLines() {
-    return noSonarLines;
-  }
-
-  public void setNoSonarLines(Set<Integer> noSonarLines) {
-    this.noSonarLines = noSonarLines;
-  }
-
-  public double getCommentLinesNumber() {
-    return commentLinesNumber;
-  }
-
-  public void setCommentLinesNumber(int commentLinesNumber) {
-    this.commentLinesNumber = commentLinesNumber;
-  }
-
-  public double getLinesNumber() {
-    return linesNumber;
-  }
-
-  public void setLinesNumber(int linesNumber) {
-    this.linesNumber = linesNumber;
-  }
-
-  public double getLinesOfCodeNumber() {
-    return linesOfCodeNumber;
-  }
-
-  public void setLinesOfCodeNumber(int linesOfCodeNumber) {
-    this.linesOfCodeNumber = linesOfCodeNumber;
-  }
-
-  public double getFileComplexity() {
-    return fileComplexity;
-  }
-
-  public void setFileComplexity(int fileComplexity) {
-    this.fileComplexity = fileComplexity;
-    fileComplexityDistribution.add(fileComplexity);
-  }
-
   private RangeDistributionBuilder functionComplexityDistribution;
+
   private RangeDistributionBuilder fileComplexityDistribution;
 
   public FileMeasures(Number[] limitsComplexityFunctions, Number[] filesDistributionBottomLimits) {
@@ -88,9 +46,49 @@ public class FileMeasures {
     statementNumber = 0;
     classComplexity = 0;
     functionComplexity = 0;
+    functionComplexityDistribution = new RangeDistributionBuilder(limitsComplexityFunctions);
+    fileComplexityDistribution = new RangeDistributionBuilder(filesDistributionBottomLimits);
+  }
 
-    functionComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, limitsComplexityFunctions);
-    fileComplexityDistribution = new RangeDistributionBuilder(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, filesDistributionBottomLimits);
+  public Set<Integer> getNoSonarLines() {
+    return noSonarLines;
+  }
+
+  public void setNoSonarLines(Set<Integer> noSonarLines) {
+    this.noSonarLines = noSonarLines;
+  }
+
+  public int getCommentLinesNumber() {
+    return commentLinesNumber;
+  }
+
+  public void setCommentLinesNumber(int commentLinesNumber) {
+    this.commentLinesNumber = commentLinesNumber;
+  }
+
+  public int getLinesNumber() {
+    return linesNumber;
+  }
+
+  public void setLinesNumber(int linesNumber) {
+    this.linesNumber = linesNumber;
+  }
+
+  public int getLinesOfCodeNumber() {
+    return linesOfCodeNumber;
+  }
+
+  public void setLinesOfCodeNumber(int linesOfCodeNumber) {
+    this.linesOfCodeNumber = linesOfCodeNumber;
+  }
+
+  public int getFileComplexity() {
+    return fileComplexity;
+  }
+
+  public void setFileComplexity(int fileComplexity) {
+    this.fileComplexity = fileComplexity;
+    fileComplexityDistribution.add(fileComplexity);
   }
 
   public RangeDistributionBuilder getFileComplexityDistribution() {
@@ -101,23 +99,23 @@ public class FileMeasures {
     return functionComplexityDistribution;
   }
 
-  public double getFunctionComplexity() {
+  public int getFunctionComplexity() {
     return functionComplexity;
   }
 
-  public double getClassComplexity() {
+  public int getClassComplexity() {
     return classComplexity;
   }
 
-  public double getClassNumber() {
+  public int getClassNumber() {
     return classNumber;
   }
 
-  public double getStatementNumber() {
+  public int getStatementNumber() {
     return statementNumber;
   }
 
-  public double getFunctionNumber() {
+  public int getFunctionNumber() {
     return functionNumber;
   }
 
@@ -141,4 +139,5 @@ public class FileMeasures {
     this.functionComplexity += functionComplexity;
     functionComplexityDistribution.add(functionComplexity);
   }
+
 }

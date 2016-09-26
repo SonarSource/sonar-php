@@ -25,21 +25,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.BatchExtension;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.ExtensionPoint;
+import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.coverage.CoverageType;
+import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.measures.PropertiesBuilder;
-import org.sonar.api.resources.Resource;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
@@ -48,21 +47,19 @@ import org.sonar.plugins.php.phpunit.xml.MetricsNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
-/**
- * The Class PhpUnitCoverageResultParser.
- */
-public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParser {
-
-  // Used for debugging purposes to store measure by resource
-  private static final Map<Resource, Measure> MEASURES_BY_RESOURCE = new HashMap<>();
+@BatchSide
+@ExtensionPoint
+public class PhpUnitCoverageResultParser implements PhpUnitParser {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
-  private final SensorContext context;
+
   private final FileSystem fileSystem;
 
   protected Metric<Integer> linesToCoverMetric = CoreMetrics.LINES_TO_COVER;
+
   protected Metric<Integer> uncoveredLinesMetric = CoreMetrics.UNCOVERED_LINES;
-  protected Metric<String> coverageLineHitsDataMetric = CoreMetrics.COVERAGE_LINE_HITS_DATA;
+
+  protected CoverageType coverageType = CoverageType.UNIT;
 
   private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number %s doesn't belong to file %s";
 
@@ -71,9 +68,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    *
    * @param context the context
    */
-  public PhpUnitCoverageResultParser(SensorContext context, FileSystem fileSystem) {
-    super();
-    this.context = context;
+  public PhpUnitCoverageResultParser(FileSystem fileSystem) {
     this.fileSystem = fileSystem;
   }
 
@@ -83,9 +78,9 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    * @param coverageReportFile the coverage report file
    */
   @Override
-  public void parse(File coverageReportFile) {
+  public void parse(File coverageReportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
     LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
-    parseFile(coverageReportFile);
+    parseFile(coverageReportFile, context, numberOfLinesOfCode);
   }
 
   /**
@@ -93,7 +88,7 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    *
    * @param coverageReportFile the coverage report file
    */
-  private void parseFile(File coverageReportFile) {
+  private void parseFile(File coverageReportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
     List<String> unresolvedPaths = new ArrayList<>();
@@ -101,9 +96,9 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      parseFileNodes(projectNode.getFiles(), unresolvedPaths, resolvedPaths);
-      parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, resolvedPaths);
-      saveMeasureForMissingFiles(resolvedPaths);
+      parseFileNodes(projectNode.getFiles(), unresolvedPaths, resolvedPaths, context);
+      parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, resolvedPaths, context);
+      saveMeasureForMissingFiles(resolvedPaths, context, numberOfLinesOfCode);
     }
     if (!unresolvedPaths.isEmpty()) {
       LOG.warn(
@@ -117,51 +112,49 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
    * Set default 0 value for files that do not have coverage metrics because they were not touched by any test,
    * and thus not present in the coverage report file.
    */
-  private void saveMeasureForMissingFiles(List<String> resolvedPaths) {
+  private void saveMeasureForMissingFiles(List<String> resolvedPaths, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
     FilePredicate mainFilesPredicate = fileSystem.predicates().and(
       fileSystem.predicates().hasType(InputFile.Type.MAIN),
       fileSystem.predicates().hasLanguage(Php.KEY));
 
     for (InputFile phpFile : fileSystem.inputFiles(mainFilesPredicate)) {
       if (!resolvedPaths.contains(phpFile.relativePath())) {
-        org.sonar.api.resources.File resource = org.sonar.api.resources.File.create(phpFile.relativePath());
         LOG.debug("Coverage metrics have not been set on '{}': default values will be inserted.", phpFile.file().getName());
 
         // for LINES_TO_COVER and UNCOVERED_LINES, we use NCLOC as an approximation
-        Measure<Integer> ncloc = context.getMeasure(resource, CoreMetrics.NCLOC);
+        File file = phpFile.file();
+        Integer ncloc = numberOfLinesOfCode.get(file);
         if (ncloc != null) {
-          context.saveMeasure(resource, linesToCoverMetric, ncloc.getValue());
-          context.saveMeasure(resource, uncoveredLinesMetric, ncloc.getValue());
+          context.<Integer>newMeasure().on(phpFile).withValue(ncloc).forMetric(linesToCoverMetric).save();
+          context.<Integer>newMeasure().on(phpFile).withValue(ncloc).forMetric(uncoveredLinesMetric).save();
         }
-
       }
     }
   }
 
-  private void parsePackagesNodes(List<PackageNode> packages, List<String> unresolvedPaths, List<String> resolvedPaths) {
+  private void parsePackagesNodes(List<PackageNode> packages, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
     if (packages != null) {
       for (PackageNode packageNode : packages) {
-        parseFileNodes(packageNode.getFiles(), unresolvedPaths, resolvedPaths);
+        parseFileNodes(packageNode.getFiles(), unresolvedPaths, resolvedPaths, context);
       }
     }
   }
 
-  private void parseFileNodes(List<FileNode> fileNodes, List<String> unresolvedPaths, List<String> resolvedPaths) {
+  private void parseFileNodes(List<FileNode> fileNodes, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
     if (fileNodes != null) {
       for (FileNode file : fileNodes) {
-        saveCoverageMeasure(file, unresolvedPaths, resolvedPaths);
+        saveCoverageMeasure(file, unresolvedPaths, resolvedPaths, context);
       }
     }
   }
 
   /**
    * Saves the required metrics found on the fileNode
-   *
    * @param fileNode the file
    * @param unresolvedPaths list of paths which cannot be mapped to imported files
    * @param resolvedPaths list of paths which can be mapped to imported files
    */
-  protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, List<String> resolvedPaths) {
+  protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
     //PHP supports only absolute paths
     String path = fileNode.getName();
     InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(path));
@@ -169,59 +162,30 @@ public class PhpUnitCoverageResultParser implements BatchExtension, PhpUnitParse
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
     if (inputFile != null) {
-      org.sonar.api.resources.File phpFile = org.sonar.api.resources.File.create(inputFile.relativePath());
       resolvedPaths.add(inputFile.relativePath());
-      saveCoverageLineHitsData(fileNode, inputFile, phpFile);
+      saveCoverageLineHitsData(fileNode, inputFile, context);
 
-      // Save uncovered statements (lines)
-      MetricsNode metrics = fileNode.getMetrics();
-      double totalStatementsCount = metrics.getTotalStatementsCount();
-      double uncoveredLines = totalStatementsCount - metrics.getCoveredStatements();
-      context.saveMeasure(phpFile, linesToCoverMetric, totalStatementsCount);
-      context.saveMeasure(phpFile, this.uncoveredLinesMetric, uncoveredLines);
+      // Saving the uncovered statements (lines) is no longer needed because coverage metrics are internally derived by the NewCoverage
     } else {
       unresolvedPaths.add(path);
     }
   }
 
-  private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, org.sonar.api.resources.File phpFile) {
-    // Properties builder will generate the data associate with COVERAGE_LINE_HITS_DATA metrics.
-    // This should look like (lineNumber=Count) : 1=0;2=1;3=1....
-    PropertiesBuilder<Integer, Integer> lineHits = new PropertiesBuilder<>(coverageLineHitsDataMetric);
+  private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
+    NewCoverage newCoverage = context.newCoverage().onFile(inputFile).ofType(coverageType);
+
     if (fileNode.getLines() != null) {
       for (LineNode line : fileNode.getLines()) {
         int lineNum = line.getNum();
         if (lineNum > 0 && lineNum <= inputFile.lines()) {
-          saveLineMeasure(line, lineHits);
+          newCoverage.lineHits(line.getNum(), line.getCount());
         } else {
-          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, phpFile.getLongName()));
+          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, inputFile.file()));
         }
       }
     }
-    Measure measure = lineHits.build();
-    logMeasureByResource(phpFile, measure);
-    context.saveMeasure(phpFile, measure);
-  }
 
-  private static void logMeasureByResource(Resource resource, Measure measure) {
-    if (LOG.isDebugEnabled()) {
-      Measure alreadySaved = MEASURES_BY_RESOURCE.get(resource);
-      if (alreadySaved == null) {
-        MEASURES_BY_RESOURCE.put(resource, measure);
-      } else {
-        LOG.debug("Measure {} already saved for resource {}", measure, resource);
-      }
-    }
-  }
-
-  /**
-   * Save line measure.
-   *
-   * @param line     the line
-   * @param lineHits the line hits
-   */
-  private static void saveLineMeasure(LineNode line, PropertiesBuilder<Integer, Integer> lineHits) {
-    lineHits.add(line.getNum(), line.getCount());
+    newCoverage.save();
   }
 
   /**

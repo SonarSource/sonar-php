@@ -24,10 +24,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.resources.Project;
+import org.sonar.plugins.php.PhpTestUtils;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -35,21 +34,21 @@ public class PhpUnitItCoverageResultParserTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
-  @Mock
-  private Project project;
+
   @Mock
   private SensorContext context;
+
   private PhpUnitCoverageResultParser parser;
 
   @Before
   public void setUp() throws Exception {
-    parser = new PhpUnitItCoverageResultParser(context, new DefaultFileSystem());
+    parser = new PhpUnitItCoverageResultParser(PhpTestUtils.getDefaultFileSystem());
   }
 
   @Test
   public void shouldSetMetrics() {
     assertThat(parser.linesToCoverMetric).isEqualTo(CoreMetrics.IT_LINES_TO_COVER);
     assertThat(parser.uncoveredLinesMetric).isEqualTo(CoreMetrics.IT_UNCOVERED_LINES);
-    assertThat(parser.coverageLineHitsDataMetric).isEqualTo(CoreMetrics.IT_COVERAGE_LINE_HITS_DATA);
   }
+
 }

@@ -19,24 +19,15 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.collect.ImmutableList;
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarAndCommentedOutLocSensor;
-import org.sonar.plugins.php.core.PhpCommonRulesDecorator;
-import org.sonar.plugins.php.core.PhpCommonRulesEngine;
 import org.sonar.plugins.php.duplications.PhpCPDMapping;
-import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitSensor;
+import org.sonar.plugins.php.phpunit.PhpUnitService;
 
-import java.util.List;
-
-public class PhpPlugin extends SonarPlugin {
+public class PhpPlugin implements Plugin {
 
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
   public static final String PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.overallReportPath";
@@ -48,16 +39,11 @@ public class PhpPlugin extends SonarPlugin {
   public static final String GENERAL_SUBCATEGORY = "General";
   public static final String PHPUNIT_SUBCATEGORY = "PHPUnit";
 
-  /**
-   * Gets the extensions.
-   *
-   * @return the extensions
-   * @see org.sonar.api.SonarPlugin#getExtensions()
-   */
   @Override
-  public List getExtensions() {
-    return ImmutableList.of(
+  public void define(Context context) {
+    context.addExtensions(
 
+      // Language
       Php.class,
 
       // Core extensions
@@ -65,10 +51,6 @@ public class PhpPlugin extends SonarPlugin {
 
       // Duplications
       PhpCPDMapping.class,
-
-      // Common rules
-      PhpCommonRulesEngine.class,
-      PhpCommonRulesDecorator.class,
 
       PHPSensor.class,
 
@@ -78,11 +60,7 @@ public class PhpPlugin extends SonarPlugin {
       DrupalProfile.class,
 
       // PhpUnit
-      PhpUnitSensor.class,
-      PhpUnitResultParser.class,
-      PhpUnitCoverageResultParser.class,
-      PhpUnitItCoverageResultParser.class,
-      PhpUnitOverallCoverageResultParser.class,
+      PhpUnitService.class,
 
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
@@ -127,4 +105,5 @@ public class PhpPlugin extends SonarPlugin {
         .build()
     );
   }
+
 }

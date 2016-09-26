@@ -19,14 +19,12 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
-import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class LexicalVariablesTreeTest extends PHPTreeModelTest {
 

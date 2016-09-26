@@ -22,70 +22,123 @@ package org.sonar.php.highlighter;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.TextRange;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.DefaultTextPointer;
+import org.sonar.api.batch.fs.internal.DefaultTextRange;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
-import java.util.Collections;
-import java.util.List;
-
-import static org.fest.assertions.Assertions.assertThat;
-
 public class SymbolHighlighterTest {
 
   private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(Charsets.UTF_8);
 
+  private File file;
+
+  private DefaultInputFile inputFile;
+
+  private SensorContextTester context;
+
+  private NewSymbolTable newSymbolTable;
+
+  @Rule
+  public TemporaryFolder tempFolder = new TemporaryFolder();
+
+  @Before
+  public void setUp() throws IOException {
+    DefaultFileSystem fileSystem = new DefaultFileSystem(tempFolder.getRoot());
+    fileSystem.setEncoding(Charsets.UTF_8);
+    file = tempFolder.newFile();
+    inputFile = new DefaultInputFile("moduleKey",  file.getName())
+      .setLanguage("php")
+      .setType(Type.MAIN);
+    fileSystem.add(inputFile);
+
+    context = SensorContextTester.create(tempFolder.getRoot());
+
+    newSymbolTable = context.newSymbolTable().onFile(inputFile);
+  }
+
   @Test
   public void test_empty_input() throws Exception {
-    List<SymbolHighlightingData> data = getData("<?php ");
+    highlight("<?php ");
 
-    assertThat(data).hasSize(0);
+    checkSymbolExistence(1, 1, false);
   }
 
   @Test
   public void test_no_usages() throws Exception {
-    List<SymbolHighlightingData> data = getData("<?php   $a = 1; ");
+    highlight("<?php   $a = 1; ");
 
-    assertThat(data).hasSize(1);
-    assertData(data.get(0), 8, 10, Collections.<Integer>emptyList());
+    checkSymbolExistence(1, 7, false);   // (blank)
+    checkSymbolExistence(1, 8, true);    // $
+    checkSymbolExistence(1, 9, true);    // a
+    checkSymbolExistence(1, 10, false);  // (blank)
+
+    checkSymbolReferences(1, 8, new LinkedList<>());
   }
 
   @Test
   public void test_usages() throws Exception {
-    List<SymbolHighlightingData> data = getData("<?php   $a = 1; echo $a; $a = 4; ");
+    highlight("<?php   $a = 1; echo $a; $a = 4; ");
 
-    assertThat(data).hasSize(1);
-    assertData(data.get(0), 8, 10, ImmutableList.of(21, 25));
+    checkSymbolReferences(1, 8, ImmutableList.of(
+      textRange(1, 21, 1, 23),
+      textRange(1, 25, 1, 27)
+    ));
   }
 
   @Test
   public void test_compound_variable() throws Exception {
-    List<SymbolHighlightingData> data = getData("<?php   $a = 1; echo \"${a}\"; echo \"$a\";");
+    highlight("<?php   $a = 1; echo \"${a}\"; echo \"$a\";");
 
-    assertThat(data).hasSize(1);
-    assertData(data.get(0), 8, 10, ImmutableList.of(35));
+    checkSymbolReferences(1, 8, ImmutableList.of(textRange(1, 35, 1, 37)));
   }
 
   @Test
   public void test_use_clause() throws Exception {
-    List<SymbolHighlightingData> data = getData("<?php $b = 42; $f = function() use($b) { echo $b; };");
+    highlight("<?php $b = 42; $f = function() use($b) { echo $b; };");
 
-    assertThat(data).hasSize(3);   // global $b, local $b, $f
-    assertData(data.get(0), 6, 8, ImmutableList.of(35));     // global $b
-    assertData(data.get(2), 35, 37, ImmutableList.of(46));   // local $b
+    // there are 3 symbols: global $b, local $b, $f
+    checkSymbolExistence(1, 15, true);                                         // $f
+
+    checkSymbolReferences(1, 6, ImmutableList.of(textRange(1, 35, 1, 37)));    // global $b
+    checkSymbolReferences(1, 35, ImmutableList.of(textRange(1, 46, 1, 48)));   // local $b
   }
 
-  private List<SymbolHighlightingData> getData(String s) {
-    return SymbolHighlighter.getHighlightData(SymbolTableImpl.create((CompilationUnitTree) PARSER.parse(s)), new SourceFileOffsets(s));
-
+  private void highlight(String s) {
+    inputFile.initMetadata(s);
+    Tree tree = PARSER.parse(s);
+    new SymbolHighlighter().highlight(SymbolTableImpl.create((CompilationUnitTree) tree), newSymbolTable);
+    newSymbolTable.save();
   }
 
-  private static void assertData(SymbolHighlightingData data, Integer startOffset, Integer endOffset, List<Integer> references) {
-    assertThat(data.startOffset()).isEqualTo(startOffset);
-    assertThat(data.endOffset()).isEqualTo(endOffset);
-    assertThat(data.referencesStartOffset()).isEqualTo(references);
+  private TextRange textRange(int startLine, int startColumn, int endLine, int endColumn) {
+    return new DefaultTextRange(new DefaultTextPointer(startLine, startColumn), new DefaultTextPointer(endLine, endColumn));
+  }
+
+  private void checkSymbolExistence(int line, int column, boolean mustExist) {
+    String componentKey = "moduleKey:" + file.getName();
+    new SymbolChecker(componentKey).checkSymbolExistence(context, line, column, mustExist);
+  }
+
+  private void checkSymbolReferences(int line, int column, List<? extends TextRange> referenceRanges) {
+    String componentKey = "moduleKey:" + file.getName();
+    new SymbolChecker(componentKey).checkSymbolReferences(context, line, column, referenceRanges);
   }
 
 }

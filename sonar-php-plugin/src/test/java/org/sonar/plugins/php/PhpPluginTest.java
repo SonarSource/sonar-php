@@ -22,22 +22,20 @@
  */
 package org.sonar.plugins.php;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.Plugin;
+import org.sonar.api.utils.Version;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class PhpPluginTest {
 
-  private PhpPlugin plugin;
-
-  @Before
-  public void setUp() {
-    plugin = new PhpPlugin();
-  }
-
   @Test
   public void test() {
-    assertThat(plugin.getExtensions().size()).isGreaterThan(0);
+    Plugin.Context context = new Plugin.Context(Version.create(5, 6));
+    new PhpPlugin().define(context);
+
+    assertThat(context.getExtensions()).hasSize(14);
   }
+
 }
