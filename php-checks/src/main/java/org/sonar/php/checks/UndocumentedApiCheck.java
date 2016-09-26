@@ -59,6 +59,7 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
     private static final boolean defaultTrue = true;
     private static final boolean defaultFalse = false;
 
+
     private Charset charset;
     private String currentFilename = "";
     //lines in currentFile
@@ -99,7 +100,8 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
         if (checkClassComment) {
             //get current line in file
             int position = tree.classEntryTypeToken().line();
-            if (!isComment(previousLine(position))) {
+            //position for comment check is "position-1" because, previous line does this -1 as well
+            if (!isComment(previousLine(position), position - 1)) {
                 context().newIssue(this, "A class" + MESSAGE_PARTIAL).tree(tree);
             }
         }
@@ -112,7 +114,7 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
         if (checkFunctionComment) {
             //get current line in file
             int position = tree.name().token().line();
-            if (!isComment(previousLine(position))) {
+            if (!isComment(previousLine(position), position - 1)) {
                 context().newIssue(this, "A function" + MESSAGE_PARTIAL).tree(tree);
             }
         }
@@ -125,7 +127,7 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
         if (checkMethodComment) {
             //get current line in file
             int position = tree.name().token().line();
-            if (!isComment(previousLine(position))) {
+            if (!isComment(previousLine(position), position - 1)) {
                 context().newIssue(this, "A method" + MESSAGE_PARTIAL).tree(tree);
             }
         }
@@ -160,25 +162,39 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
     /**
      * checks if String c is a comment
      * <p>
-     * only accepts single line comments ("//" and "#") if enforceBlockComment is true!
+     * only allows block comments, as described in the phpdoc guide
+     * <p>
+     * see:
+     * https://www.phpdoc.org/docs/latest/getting-started/your-first-set-of-documentation.html
      *
      * @param c string to check
      * @return true if c is comment, false otherwise
      */
-    private boolean isComment(String c) {
+    private boolean isComment(String c, int linenumber) {
         String line = c.trim();
-        boolean isSingleLineCommentBegin = line.startsWith("//") || line.startsWith("#");
-        boolean isBlockCommentBegin = line.startsWith("/**") || line.startsWith("/*");
-        boolean isBlockCommentEnd = !line.startsWith("//") && line.endsWith("*/");
+        boolean isDocOneLiner = line.startsWith("/**") && line.endsWith("*/");
+        boolean isBlockCommentEnd = !line.startsWith("//") && !line.startsWith("/*") && line.endsWith("*/");
+        boolean wasDocCommentBegin = false;
 
-        if (enforceBlockComment) {
-            //only accept block comments
-            return isBlockCommentBegin || isBlockCommentEnd;
-        } else {
-            //accept all comments
-            return isBlockCommentBegin || isSingleLineCommentBegin || isBlockCommentEnd;
+        if (isBlockCommentEnd) {
+            int checkpos = linenumber;
+            boolean isCommentBody = true;
+
+            while (checkpos > 0 && isCommentBody) {
+                String prevLine = previousLine(checkpos).trim();
+                checkpos--;
+                isCommentBody = prevLine.startsWith("*");
+                wasDocCommentBegin = prevLine.startsWith("/**");
+
+                if (wasDocCommentBegin) {
+                    break;
+                }
+
+            }
+
         }
 
+        return isDocOneLiner || (isBlockCommentEnd && wasDocCommentBegin);
     }
 
     private String previousLine(int line) {
@@ -194,8 +210,7 @@ public class UndocumentedApiCheck extends PHPVisitorCheck implements CharsetAwar
     private String getLine(int line) {
         try {
             return lines().get(line - 1);
-        } catch (Exception ex) {
-            System.out.println("error! could not get line " + line);
+        } catch (IndexOutOfBoundsException ex) {
             return "";
         }
     }

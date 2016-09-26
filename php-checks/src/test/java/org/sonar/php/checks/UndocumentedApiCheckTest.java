@@ -21,7 +21,8 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+
 
 /**
  * @author Nils-Janis Mahlstädt <nils-janis.mahlstaedt@hmmh.de>
@@ -29,18 +30,10 @@ import org.sonar.plugins.php.api.tests.PHPCheckTest;
 public class UndocumentedApiCheckTest {
 
     @Test
-    public void allowSingleLineComments() throws Exception {
-        UndocumentedApiCheck check = new UndocumentedApiCheck();
-        check.enforceBlockComment = false;
-
-        PHPCheckTest.check(check, TestUtils.getCheckFile("UndocumentedApiCheck/AllowSingleLineComments.php"));
-    }
-
-    @Test
-    public void enforceBlockComments() throws Exception {
+    public void test() throws Exception {
         UndocumentedApiCheck check = new UndocumentedApiCheck();
         check.enforceBlockComment = true;
 
-        PHPCheckTest.check(check, TestUtils.getCheckFile("UndocumentedApiCheck/EnforceBlockComments.php"));
+        PhpCheckTestUtils.check(check, TestUtils.getCheckFile("UndocumentedApiCheck.php"));
     }
 }

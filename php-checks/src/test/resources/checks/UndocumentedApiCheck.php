@@ -13,6 +13,11 @@
     function b() { // OK
     }
 
+    /**
+     */
+    function b2() { // OK
+    }
+
     //Comment
     function c() { // NOK
     }
@@ -24,7 +29,7 @@
     /*
     comment
     */
-    function e() { // OK
+    function e() { // NOK
     }
 
     class F { // NOK
@@ -40,19 +45,24 @@
     class G { // OK
     }
 
+    /**
+     */
+    class G2 { // OK
+    }
+
     // Comment
     class H { // NOK
     }
 
     /* Comment */
-    Class I { // OK
+    Class I { // NOK
     }
 
-    /* Comment */
+    /** Comment */
     Class I2 { // OK
 
-        /* is correcty commented */
-        function imFine() {} // OK
+        /* is incorrecty commented */
+        function imFine() {} // NOK
 
         function imNotOk() {} // NOK
 
