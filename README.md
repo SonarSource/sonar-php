@@ -7,7 +7,7 @@ This is the plugin for the [SonarQube](http://www.sonarqube.org/) platform which
 * Support of PHP 7
 * Metrics (complexity, number of lines etc.)
 * Import of [unit test and coverage results](http://docs.sonarqube.org/display/PLUG/PHP+Unit+Test+and+Coverage+Results+Import)
-* [Custom rules](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP)
+* Support of [custom rules](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP)
 
 # Useful links
 
@@ -19,7 +19,7 @@ This is the plugin for the [SonarQube](http://www.sonarqube.org/) platform which
 
 # Have question or feedback?
 To provide feedback (request a feature, report a bug etc.) use the [SonarQube Google Group](https://groups.google.com/forum/#!forum/sonarqube). Please do not forget to specify the language (PHP!), plugin version and SonarQube version.
-If you have a question on how to use plugin (and the [docs](http://docs.sonarqube.org/display/PLUG/PHP+Plugin) don't help you) direct it to [StackOverflow](http://stackoverflow.com/questions/tagged/sonarqube+php) tagged both `sonarqube` and `php`.
+If you have a question on how to use the plugin (and the [docs](http://docs.sonarqube.org/display/PLUG/PHP+Plugin) don't help you), direct it to [StackOverflow](http://stackoverflow.com/questions/tagged/sonarqube+php) tagged both `sonarqube` and `php`.
 
 # Contributing
 
@@ -33,10 +33,10 @@ To submit a contribution, create a pull request for this repository. Please make
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you. 
 
 # <a name="testing"></a>Testing
-To run tests locally follow these instructions
+To run tests locally follow these instructions.
 
 ### Build the Project and Run Unit Tests
-To build the plugin and run its unit tests, execute this command from the project's root directory:
+To build the plugin and run its unit tests, execute this command from the project's root directory (you will need [Maven](http://maven.apache.org/)):
 ```
 mvn clean install
 ```
