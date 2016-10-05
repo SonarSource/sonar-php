@@ -22,7 +22,7 @@ package org.sonar.php.metrics;
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class CommentLineVisitorTest extends ParsingTestUtils {

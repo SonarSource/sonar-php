@@ -19,7 +19,7 @@
  */
 package org.sonar.php.parser;
 
-import org.fest.assertions.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.sonar.php.api.PHPKeyword;
 

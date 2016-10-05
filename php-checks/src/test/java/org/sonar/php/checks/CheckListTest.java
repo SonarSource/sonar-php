@@ -25,7 +25,8 @@ import org.junit.Test;
 import java.io.File;
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class CheckListTest {
 
