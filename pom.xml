@@ -98,9 +98,9 @@
     <version.sonar-packaging-maven-plugin>1.12.1</version.sonar-packaging-maven-plugin>
 
     <!-- JAR versions -->
+    <version.assertj>3.5.2</version.assertj>
     <version.commons-io>2.5</version.commons-io>
     <version.commons-lang>2.6</version.commons-lang>
-    <version.fest-assert>1.4</version.fest-assert>
     <version.junit>4.10</version.junit>
     <version.logback>0.9.30</version.logback>
     <version.maven-project>2.0.6</version.maven-project>
@@ -215,9 +215,9 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>org.easytesting</groupId>
-        <artifactId>fest-assert</artifactId>
-        <version>${version.fest-assert}</version>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${version.assertj}</version>
         <scope>test</scope>
       </dependency>
       <dependency>

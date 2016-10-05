@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SymbolTableImplTest extends ParsingTestUtils {
 

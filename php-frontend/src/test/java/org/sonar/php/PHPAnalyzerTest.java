@@ -31,7 +31,7 @@ import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.Issue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PHPAnalyzerTest {
   @Rule

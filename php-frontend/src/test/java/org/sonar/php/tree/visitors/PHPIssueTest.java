@@ -19,7 +19,7 @@
  */
 package org.sonar.php.tree.visitors;
 
-import org.fest.assertions.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.sonar.php.tree.impl.expression.NameIdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
