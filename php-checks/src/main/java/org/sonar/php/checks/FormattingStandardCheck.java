@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
+import java.util.Locale;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -199,7 +200,7 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
   );
 
   public boolean isInternalFunction(ExpressionTree callee) {
-    String calleeString = callee.toString().toLowerCase();
+    String calleeString = callee.toString().toLowerCase(Locale.ROOT);
     return INTERNAL_FUNCTIONS.contains(calleeString);
   }
 
