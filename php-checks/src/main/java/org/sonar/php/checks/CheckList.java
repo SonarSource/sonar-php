@@ -144,6 +144,7 @@ public class CheckList {
       SleepFunctionUsageCheck.class,
       HardCodedCredentialsCheck.class,
       MultilineBlocksCurlyBracesCheck.class,
-      IdenticalOperandsInBinaryExpressionCheck.class);
+      IdenticalOperandsInBinaryExpressionCheck.class,
+      UndocumentedApiCheck.class);
   }
 }

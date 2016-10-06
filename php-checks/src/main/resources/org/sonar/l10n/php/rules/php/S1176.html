@@ -1,0 +1,38 @@
+<p>
+    Public types, methods and fields should be documented
+</p>
+<p>
+    Try to imagine using a standard library without documentation.
+    It would be a nightmare, because documentation is the only way to understand the contract of the API. Documenting
+    an API increases the productivity of the developers consuming it.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+class MyClass   // Noncompliant; undocumented
+{
+
+  function doSomething($param)  // Noncompliant; undocumented
+  {
+    // ...
+    }
+}
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+/**
+ * MyClass does something interesting...
+ */
+class MyClass
+{
+
+  /**
+   * Calculates the answer to a question
+   */
+  function doSomething($param)
+  {
+    // ...
+  }
+}
+</pre>
