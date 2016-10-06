@@ -26,7 +26,7 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
 public class PHPRulesDefinition implements RulesDefinition {
 
-  private static final String REPOSITORY_NAME = "SonarQube";
+  private static final String REPOSITORY_NAME = "SonarAnalyzer";
 
   @Override
   public void define(Context context) {
