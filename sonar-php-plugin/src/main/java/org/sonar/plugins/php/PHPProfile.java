@@ -21,6 +21,7 @@ package org.sonar.plugins.php;
 
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.php.checks.CheckList;
@@ -38,6 +39,20 @@ public final class PHPProfile extends ProfileDefinition {
   @Override
   public RulesProfile createProfile(ValidationMessages validation) {
     AnnotationBasedProfileBuilder annotationBasedProfileBuilder = new AnnotationBasedProfileBuilder(ruleFinder);
-    return annotationBasedProfileBuilder.build(CheckList.REPOSITORY_KEY, CheckList.SONAR_WAY_PROFILE, Php.KEY, CheckList.getChecks(), validation);
+    RulesProfile profile = annotationBasedProfileBuilder.build(CheckList.REPOSITORY_KEY, CheckList.SONAR_WAY_PROFILE, Php.KEY, CheckList.getChecks(), validation);
+    
+    loadFromCommonRepository(profile);
+    
+    return profile;
   }
+
+  private void loadFromCommonRepository(RulesProfile profile) {
+    Rule duplicatedBlocksRule = ruleFinder.findByKey("common-" + Php.KEY, "DuplicatedBlocks");
+
+    // in SonarLint duplicatedBlocksRule == null
+    if (duplicatedBlocksRule != null) {
+      profile.activateRule(duplicatedBlocksRule, null);
+    }
+  }
+
 }
