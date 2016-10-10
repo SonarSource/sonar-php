@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
+import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.Issue;
@@ -74,6 +76,8 @@ public class PHPSensor implements Sensor {
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
 
+  private RuleKey parsingErrorRuleKey;
+
   public PHPSensor(FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
     this(fileSystem, fileLinesContextFactory, checkFactory, noSonarFilter, null);
@@ -91,6 +95,8 @@ public class PHPSensor implements Sensor {
     this.mainFilePredicate = this.fileSystem.predicates().and(
       this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
       this.fileSystem.predicates().hasLanguage(Php.KEY));
+
+    parsingErrorRuleKey = getParsingErrorRuleKey();
   }
 
   @Override
@@ -165,6 +171,7 @@ public class PHPSensor implements Sensor {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());
       LOG.error(e.getMessage());
+      saveParsingIssue(context, e, inputFile);
       return;
     } catch (Exception e) {
       checkInterrupted(e);
@@ -207,6 +214,28 @@ public class PHPSensor implements Sensor {
     noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }
 
+  /**
+   * Creates and saves an issue for a parsing error.
+   */
+  private void saveParsingIssue(SensorContext context, RecognitionException e, InputFile inputFile) {
+    if (parsingErrorRuleKey != null) {
+      NewIssue issue = context.newIssue();
+
+      NewIssueLocation location = issue.newLocation()
+        .message(e.getMessage())
+        .on(inputFile);
+
+      if (e.getLine() > 0) {
+        location.at(inputFile.selectLine(e.getLine()));
+      }
+
+      issue
+        .forRule(parsingErrorRuleKey)
+        .at(location)
+        .save();
+    }
+  }
+
   private void saveIssues(SensorContext context, List<Issue> issues, InputFile inputFile) {
     for (Issue phpIssue : issues) {
       RuleKey ruleKey = checks.ruleKeyFor(phpIssue.check());
@@ -236,6 +265,15 @@ public class PHPSensor implements Sensor {
   @Override
   public String toString() {
     return getClass().getSimpleName();
+  }
+
+  private RuleKey getParsingErrorRuleKey() {
+    List<RuleKey> keys = checks.all().stream()
+      .filter(check -> check instanceof ParsingErrorCheck)
+      .map(check -> checks.ruleKeyFor((ParsingErrorCheck) check))
+      .collect(Collectors.toList());
+
+    return keys.isEmpty() ? null : keys.get(0);
   }
 
 }

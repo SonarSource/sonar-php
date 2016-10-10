@@ -31,15 +31,17 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.config.Settings;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.internal.google.common.base.Charsets;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
@@ -64,9 +66,7 @@ import org.sonar.squidbridge.api.AnalysisException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class PHPSensorTest {
@@ -115,11 +115,9 @@ public class PHPSensorTest {
   @Before
   public void setUp() {
     fileSystem = PhpTestUtils.getDefaultFileSystem();
-    FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
-    FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
-
+    FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
+
     sensor = new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
@@ -179,14 +177,44 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void parse_error() throws Exception {
-    SensorContext context = mock(SensorContext.class);
-    when(context.settings()).thenReturn(new Settings());
+  public void empty_file_should_raise_no_issue() throws Exception {
+    analyseSingleFile(context, "empty.php");
+
+    assertThat(context.allIssues()).as("No issue must be raised").hasSize(0);
+  }
+
+  @Test
+  public void parsing_error_should_raise_an_issue_if_check_rule_is_activated() throws Exception {
+    // Add 1 rule, in order to active the rule of parsing errors
+    FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
+    String parsingErrorCheckKey = "S2260";
+    ActiveRules activeRules = (new ActiveRulesBuilder())
+      .create(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey))
+      .setName(parsingErrorCheckKey)
+      .activate()
+      .build();
+    CheckFactory checkFactory = new CheckFactory(activeRules);
+    sensor = new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+
     analyseSingleFile(context, "parseError.php");
 
-    // check that the context is never used, except for a few calls to method settings()
-    verify(context, times(4)).settings();
-    verifyZeroInteractions(context);
+    assertThat(context.allIssues()).as("One issue must be raised").hasSize(1);
+
+    Issue issue = context.allIssues().iterator().next();
+    assertThat(issue.ruleKey().rule()).as("A parsing error must be raised").isEqualTo("S2260");
+
+    TextRange range = issue.primaryLocation().textRange();
+    assertThat(range.start().line()).isEqualTo(2);
+    assertThat(range.start().lineOffset()).isEqualTo(0);
+    assertThat(range.end().line()).isEqualTo(2);
+    assertThat(range.end().lineOffset()).isEqualTo(16);
+  }
+
+  @Test
+  public void parsing_error_should_raise_no_issue_if_check_rule_is_not_activated() throws Exception {
+    analyseSingleFile(context, "parseError.php");
+
+    assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
   }
 
   private void analyseSingleFile(SensorContext context, String fileName) {
@@ -226,6 +254,13 @@ public class PHPSensorTest {
   public void cancelled_analysis_causing_recognition_exception() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new RecognitionException(42, "message", new InterruptedIOException()));
     analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "Analysis cancelled");
+  }
+
+  private FileLinesContextFactory createFileLinesContextFactory() {
+    FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
+    FileLinesContext fileLinesContext = mock(FileLinesContext.class);
+    when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
+    return fileLinesContextFactory;
   }
 
   private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {

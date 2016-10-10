@@ -616,6 +616,11 @@
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
+      <key>S2260</key> <!-- ParsingErrorCheck -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
       <key>S2918</key> <!-- call to ini_set -->
       <priority>INFO</priority>
     </rule>

@@ -54,11 +54,13 @@ public class CheckListTest {
   public void test() {
     List<Class> checks = CheckList.getChecks();
 
-    for (Class cls : checks) {
-      String testName = '/' + cls.getName().replace('.', '/') + "Test.class";
-      assertThat(getClass().getResource(testName))
-        .overridingErrorMessage("No test for " + cls.getSimpleName())
-        .isNotNull();
+    for (Class<?> cls : checks) {
+      if (cls != ParsingErrorCheck.class) {
+        String testName = '/' + cls.getName().replace('.', '/') + "Test.class";
+        assertThat(getClass().getResource(testName))
+          .overridingErrorMessage("No test for " + cls.getSimpleName())
+          .isNotNull();
+      }
     }
   }
 
