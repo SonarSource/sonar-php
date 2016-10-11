@@ -20,23 +20,27 @@
 package org.sonar.php.tree.visitors;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.php.tree.symbols.SymbolTableImpl;
-import org.sonar.plugins.php.api.symbols.SymbolTable;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.visitors.CheckContext;
-import org.sonar.plugins.php.api.visitors.Issue;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.visitors.CheckContext;
+import org.sonar.plugins.php.api.visitors.FileIssue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.IssueLocation;
+import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 public class PHPCheckContext implements CheckContext {
 
   private final File file;
   private final CompilationUnitTree tree;
   private final SymbolTable symbolTable;
-  private List<Issue> issues;
+  private List<CheckIssue> issues;
 
   public PHPCheckContext(File file, CompilationUnitTree tree) {
     this(file, tree, SymbolTableImpl.create(tree));
@@ -64,12 +68,44 @@ public class PHPCheckContext implements CheckContext {
   }
 
   @Override
+  public PreciseIssue newIssue(PHPCheck check, Tree tree, String message) {
+    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(tree, message));
+    issues.add(issue);
+
+    return issue;
+  }
+
+  @Override
+  public PreciseIssue newIssue(PHPCheck check, Tree startTree, Tree endTree, String message) {
+    PreciseIssue issue = new PreciseIssue(check, new IssueLocation(startTree, endTree, message));
+    issues.add(issue);
+
+    return issue;
+  }
+
+  @Override
+  public LineIssue newLineIssue(PHPCheck check, int line, String message) {
+    LineIssue issue = new LineIssue(check, line, message);
+    issues.add(issue);
+
+    return issue;
+  }
+
+  @Override
+  public FileIssue newFileIssue(PHPCheck check, String message) {
+    FileIssue issue = new FileIssue(check, message);
+    issues.add(issue);
+
+    return issue;
+  }
+
+  @Override
   public File file() {
     return file;
   }
 
   @Override
-  public ImmutableList<Issue> getIssues() {
+  public ImmutableList<CheckIssue> getIssues() {
     return ImmutableList.copyOf(issues);
   }
 

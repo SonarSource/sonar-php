@@ -17,26 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.formatting;
+package org.sonar.plugins.php.api.visitors;
 
-import com.google.common.collect.ImmutableList;
-import org.junit.Test;
-import org.sonar.php.checks.FormattingStandardCheckTest;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import javax.annotation.Nullable;
 
-public class ExtendsImplementsLineCheckTest extends FormattingStandardCheckTest {
+/**
+ * This interface is used to represent issue created by checks before feeding them to SonarQube.
+ */
+public interface CheckIssue {
 
-  @Test
-  public void test() throws Exception {
-    activeOnly("isExtendsAndImplementsLine");
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"));
-  }
+  PHPCheck check();
 
-  @Test
-  public void custom() throws Exception {
-    deactivateAll();
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"), ImmutableList.<CheckIssue>of());
-  }
+  @Nullable
+  Double cost();
+
+  CheckIssue cost(double cost);
+
 }

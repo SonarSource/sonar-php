@@ -19,19 +19,17 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
-import javax.annotation.Nullable;
+public interface Issue extends CheckIssue {
 
-/**
- * This interface is used to represent issue created by checks before feeding them to SonarQube.
- */
-public interface Issue {
-
+  @Override
   PHPCheck check();
 
   int line();
 
+  @Override
   @Nullable
   Double cost();
 
@@ -41,6 +39,6 @@ public interface Issue {
 
   Issue tree(Tree tree);
 
+  @Override
   Issue cost(double cost);
-
 }

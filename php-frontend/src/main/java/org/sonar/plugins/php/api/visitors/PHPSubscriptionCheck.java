@@ -45,7 +45,7 @@ public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements 
   }
 
   @Override
-  public final List<Issue> analyze(File file, CompilationUnitTree tree) {
+  public final List<CheckIssue> analyze(File file, CompilationUnitTree tree) {
     this.context = new PHPCheckContext(file, tree);
     scanTree(context.tree());
 
@@ -53,7 +53,7 @@ public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements 
   }
 
   @Override
-  public List<Issue> analyze(File file, CompilationUnitTree tree, SymbolTable symbolTable) {
+  public List<CheckIssue> analyze(File file, CompilationUnitTree tree, SymbolTable symbolTable) {
     this.context = new PHPCheckContext(file, tree, symbolTable);
     scanTree(context.tree());
 

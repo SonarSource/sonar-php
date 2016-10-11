@@ -27,6 +27,7 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -64,12 +65,12 @@ public class ClassNameCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    String className = ((ClassDeclarationTree) tree).name().text();
+    NameIdentifierTree nameTree = ((ClassDeclarationTree) tree).name();
+    String className = nameTree.text();
 
     if (!pattern.matcher(className).matches()) {
       String message = String.format(MESSAGE, className, this.format);
-      context().newIssue(this, message)
-        .tree(tree);
+      context().newIssue(this, nameTree, message);
     }
   }
 

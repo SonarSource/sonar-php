@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class TooManyMethodsInClassCheckTest {
 
@@ -33,7 +33,7 @@ public class TooManyMethodsInClassCheckTest {
 
   @Test
   public void defaultValue() throws Exception  {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of());
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<CheckIssue>of());
   }
 
   @Test
@@ -47,7 +47,7 @@ public class TooManyMethodsInClassCheckTest {
     check.maximumMethodThreshold = 2;
     check.countNonpublicMethods = false;
 
-    ImmutableList<Issue> issues = ImmutableList.<Issue>of(
+    ImmutableList<CheckIssue> issues = ImmutableList.<CheckIssue>of(
       new PHPIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3),
       new PHPIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(33)
     );

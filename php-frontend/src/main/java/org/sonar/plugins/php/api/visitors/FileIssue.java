@@ -17,26 +17,39 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks.formatting;
+package org.sonar.plugins.php.api.visitors;
 
-import com.google.common.collect.ImmutableList;
-import org.junit.Test;
-import org.sonar.php.checks.FormattingStandardCheckTest;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import javax.annotation.Nullable;
 
-public class ExtendsImplementsLineCheckTest extends FormattingStandardCheckTest {
+public class FileIssue implements CheckIssue {
 
-  @Test
-  public void test() throws Exception {
-    activeOnly("isExtendsAndImplementsLine");
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"));
+  private PHPCheck check;
+  private Double cost;
+  private String message;
+
+  public FileIssue(PHPCheck check, String message) {
+    this.check = check;
+    this.message = message;
   }
 
-  @Test
-  public void custom() throws Exception {
-    deactivateAll();
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"), ImmutableList.<CheckIssue>of());
+  @Override
+  public PHPCheck check() {
+    return check;
+  }
+
+  @Nullable
+  @Override
+  public Double cost() {
+    return cost;
+  }
+
+  @Override
+  public FileIssue cost(double cost) {
+    this.cost = cost;
+    return this;
+  }
+
+  public String message() {
+    return message;
   }
 }

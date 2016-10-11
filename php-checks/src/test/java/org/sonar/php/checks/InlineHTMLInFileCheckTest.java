@@ -21,10 +21,9 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
 
 public class InlineHTMLInFileCheckTest {
 
@@ -48,6 +47,6 @@ public class InlineHTMLInFileCheckTest {
 
   @Test
   public void ko() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.<Issue>of(new PHPIssue(check, "Remove the inline HTML in this file.")));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new FileIssue(check, "Remove the inline HTML in this file.")));
   }
 }

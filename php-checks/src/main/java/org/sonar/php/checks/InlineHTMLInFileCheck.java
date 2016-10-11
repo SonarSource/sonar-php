@@ -54,7 +54,7 @@ public class InlineHTMLInFileCheck extends PHPVisitorCheck {
       fileHasIssue = false;
       super.visitCompilationUnit(tree);
       if (fileHasIssue) {
-        context().newIssue(this, MESSAGE);
+        context().newFileIssue(this, MESSAGE);
       }
     }
   }

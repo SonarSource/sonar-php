@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 import java.io.File;
 
@@ -47,6 +47,6 @@ public class ControlStructureSpacingTest extends FormattingStandardCheckTest {
   @Test
   public void custom() throws IllegalAccessException {
     deactivateAll();
-    PhpCheckTestUtils.check(check, TEST_FILE, ImmutableList.<Issue>of());
+    PhpCheckTestUtils.check(check, TEST_FILE, ImmutableList.<CheckIssue>of());
   }
 }

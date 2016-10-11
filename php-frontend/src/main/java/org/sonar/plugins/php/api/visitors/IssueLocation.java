@@ -17,69 +17,49 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.tree.visitors;
+package org.sonar.plugins.php.api.visitors;
 
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.visitors.Issue;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-/**
- * This class is used to represent issue created by checks before feeding them to SonarQube.
- */
-public class PHPIssue implements Issue {
+public class IssueLocation {
 
-  private final PHPCheck check;
+  private final SyntaxToken firstToken;
+  private final SyntaxToken lastToken;
   private final String message;
-  private int line;
-  @Nullable
-  private Double cost;
 
-  public PHPIssue(PHPCheck check, String message) {
-    this.check = check;
+  public IssueLocation(Tree tree, @Nullable String message) {
+    this.firstToken = ((PHPTree) tree).getFirstToken();
+    this.lastToken = ((PHPTree) tree).getLastToken();
     this.message = message;
-    this.line = 0;
-    this.cost = null;
   }
 
-  @Override
-  public PHPCheck check() {
-    return check;
+  public IssueLocation(Tree startTree, Tree endTree, @Nullable String message) {
+    this.firstToken = ((PHPTree) startTree).getFirstToken();
+    this.lastToken = ((PHPTree) endTree).getLastToken();
+    this.message = message;
   }
 
-  @Override
-  public int line() {
-    return line;
+  public int startLine() {
+    return firstToken.line();
   }
 
-  @Override
+  public int startLineOffset() {
+    return firstToken.column();
+  }
+
+  public int endLine() {
+    return lastToken.endLine();
+  }
+
+  public int endLineOffset() {
+    return lastToken.endColumn();
+  }
+
   @Nullable
-  public Double cost() {
-    return cost;
-  }
-
-  @Override
   public String message() {
     return message;
   }
-
-  @Override
-  public PHPIssue line(int line) {
-    this.line = line;
-    return this;
-  }
-
-  @Override
-  public PHPIssue tree(Tree tree) {
-    this.line = ((PHPTree) tree).getLine();
-    return this;
-  }
-
-  @Override
-  public PHPIssue cost(double cost) {
-    this.cost = cost;
-    return this;
-  }
-
 }

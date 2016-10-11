@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class FixmeTagPresenceCheckTest {
   public void test() throws Exception {
     File file = TestUtils.getCheckFile("FixmeTagPresenceCheck.php");
 
-    List<Issue> issues = ImmutableList.of(
+    List<CheckIssue> issues = ImmutableList.of(
       newIssue(4),
       newIssue(8),
       newIssue(9),
@@ -49,7 +49,7 @@ public class FixmeTagPresenceCheckTest {
     PhpCheckTestUtils.check(CHECK, file, issues);
   }
 
-  private Issue newIssue(int line) {
+  private CheckIssue newIssue(int line) {
     String message = "Take the required action to fix the issue indicated by this \"FIXME\" comment.";
     return new PHPIssue(CHECK, message).line(line);
   }

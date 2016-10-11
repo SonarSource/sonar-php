@@ -17,30 +17,38 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.tree.visitors;
+package org.sonar.plugins.php.api.visitors;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Nullable;
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.visitors.Issue;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-/**
- * This class is used to represent issue created by checks before feeding them to SonarQube.
- */
-public class PHPIssue implements Issue {
+public class PreciseIssue implements CheckIssue {
 
-  private final PHPCheck check;
-  private final String message;
-  private int line;
-  @Nullable
+  private PHPCheck check;
   private Double cost;
+  private IssueLocation primaryLocation;
+  private List<IssueLocation> secondaryLocations;
 
-  public PHPIssue(PHPCheck check, String message) {
+  public PreciseIssue(PHPCheck check, IssueLocation primaryLocation) {
     this.check = check;
-    this.message = message;
-    this.line = 0;
+    this.primaryLocation = primaryLocation;
     this.cost = null;
+    this.secondaryLocations = new ArrayList<>();
+  }
+
+  public IssueLocation primaryLocation() {
+    return primaryLocation;
+  }
+
+  public List<IssueLocation> secondaryLocations() {
+    return secondaryLocations;
+  }
+
+  public PreciseIssue secondary(Tree tree, @Nullable String message) {
+    this.secondaryLocations.add(new IssueLocation(tree, message));
+    return this;
   }
 
   @Override
@@ -48,38 +56,15 @@ public class PHPIssue implements Issue {
     return check;
   }
 
-  @Override
-  public int line() {
-    return line;
-  }
-
-  @Override
   @Nullable
+  @Override
   public Double cost() {
     return cost;
   }
 
   @Override
-  public String message() {
-    return message;
-  }
-
-  @Override
-  public PHPIssue line(int line) {
-    this.line = line;
-    return this;
-  }
-
-  @Override
-  public PHPIssue tree(Tree tree) {
-    this.line = ((PHPTree) tree).getLine();
-    return this;
-  }
-
-  @Override
-  public PHPIssue cost(double cost) {
+  public PreciseIssue cost(double cost) {
     this.cost = cost;
     return this;
   }
-
 }

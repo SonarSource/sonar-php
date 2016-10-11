@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 import java.net.URISyntaxException;
 
@@ -56,14 +56,14 @@ public class FileNameCheckTest {
   }
 
   private void checkNoIssue(String fileName) throws URISyntaxException {
-    check(fileName, ImmutableList.<Issue>of());
+    check(fileName, ImmutableList.<CheckIssue>of());
   }
 
   private void checkIssue(String fileName, String expectedIssueMessage) throws URISyntaxException {
-    check(fileName, ImmutableList.<Issue>of(new PHPIssue(check, expectedIssueMessage)));
+    check(fileName, ImmutableList.<CheckIssue>of(new PHPIssue(check, expectedIssueMessage)));
   }
 
-  private void check(String fileName, ImmutableList<Issue> expectedIssues) throws URISyntaxException {
+  private void check(String fileName, ImmutableList<CheckIssue> expectedIssues) throws URISyntaxException {
     PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + fileName), expectedIssues);
   }
 

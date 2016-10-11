@@ -42,7 +42,7 @@ public interface PHPCheck extends CodeVisitor {
    */
   void init();
 
-  List<Issue> analyze(File file, CompilationUnitTree tree);
+  List<CheckIssue> analyze(File file, CompilationUnitTree tree);
 
-  List<Issue> analyze(File file, CompilationUnitTree tree, SymbolTable symbolTable);
+  List<CheckIssue> analyze(File file, CompilationUnitTree tree, SymbolTable symbolTable);
 }

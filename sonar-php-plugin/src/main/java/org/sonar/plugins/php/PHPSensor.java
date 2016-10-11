@@ -38,6 +38,7 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -54,10 +55,15 @@ import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.metrics.FileMeasures;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.IssueLocation;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultParser;
@@ -215,6 +221,7 @@ public class PHPSensor implements Sensor {
     noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }
 
+
   /**
    * Creates and saves an issue for a parsing error.
    */
@@ -234,27 +241,73 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void saveIssues(SensorContext context, List<Issue> issues, InputFile inputFile) {
-    for (Issue phpIssue : issues) {
-      RuleKey ruleKey = checks.ruleKeyFor(phpIssue.check());
+  private void saveIssues(SensorContext context, List<CheckIssue> issues, InputFile inputFile) {
+    for (CheckIssue issue : issues) {
+      RuleKey ruleKey = checks.ruleKeyFor(issue.check());
+      NewIssue newIssue = context.newIssue()
+        .forRule(ruleKey)
+        .gap(issue.cost());
 
-      NewIssue issue = context.newIssue();
+      if (issue instanceof PHPIssue) {
+        // todo: this block should be removed as PHPIssue's usages will be removed
+        PHPIssue phpIssue = (PHPIssue) issue;
 
-      NewIssueLocation location = issue.newLocation()
-        .message(phpIssue.message())
-        .on(inputFile);
+        NewIssueLocation location = newIssue.newLocation()
+          .message(phpIssue.message())
+          .on(inputFile);
 
-      if (phpIssue.line() > 0) {
-        location.at(inputFile.selectLine(phpIssue.line()));
+        if (phpIssue.line() > 0) {
+          location.at(inputFile.selectLine(phpIssue.line()));
+        }
+
+        newIssue.at(location);
+
+      } else if (issue instanceof LineIssue) {
+
+        LineIssue lineIssue = (LineIssue) issue;
+
+        NewIssueLocation location = newIssue.newLocation()
+          .message(lineIssue.message())
+          .on(inputFile)
+          .at(inputFile.selectLine(lineIssue.line()));
+
+        newIssue.at(location);
+
+      } else if (issue instanceof FileIssue) {
+
+        FileIssue fileIssue = (FileIssue) issue;
+
+        NewIssueLocation location = newIssue.newLocation()
+          .message(fileIssue.message())
+          .on(inputFile);
+
+        newIssue.at(location);
+
+      } else {
+
+        PreciseIssue preciseIssue = (PreciseIssue) issue;
+
+        newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
+        preciseIssue.secondaryLocations().forEach(secondary -> newIssue.addLocation(newLocation(inputFile, newIssue, secondary)));
       }
 
-      issue
-        .forRule(ruleKey)
-        .gap(phpIssue.cost())
-        .at(location)
-        .save();
+      newIssue.save();
     }
   }
+
+  private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {
+    TextRange range = inputFile.newRange(location.startLine(), location.startLineOffset(), location.endLine(), location.endLineOffset());
+
+    NewIssueLocation newLocation = issue.newLocation()
+      .on(inputFile)
+      .at(range);
+
+    if (location.message() != null) {
+      newLocation.message(location.message());
+    }
+    return newLocation;
+  }
+
 
   private ImmutableList<PHPCheck> getCheckVisitors() {
     return ImmutableList.copyOf(checks.all());
