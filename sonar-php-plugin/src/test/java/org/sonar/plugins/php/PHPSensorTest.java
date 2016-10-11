@@ -32,13 +32,11 @@ import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
@@ -71,9 +69,7 @@ import static org.mockito.Mockito.when;
 
 public class PHPSensorTest {
 
-  private DefaultFileSystem fileSystem;
-
-  private PHPSensor sensor;
+  private PHPSensor sensor = createSensor();
 
   private ProgressReport progressReport = mock(ProgressReport.class);
 
@@ -112,12 +108,6 @@ public class PHPSensorTest {
     public String customParam = "value";
   }
 
-  @Before
-  public void setUp() {
-    fileSystem = PhpTestUtils.getDefaultFileSystem();
-    sensor = createSensor();
-  }
-
   @Test
   public void sensor_descriptor() {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
@@ -133,7 +123,7 @@ public class PHPSensorTest {
     String fileName = "PHPSquidSensor.php";
     String componentKey = "moduleKey:" + fileName;
 
-    analyseSingleFile(context, fileName);
+    analyseSingleFile(fileName);
 
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES, 55);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
@@ -178,7 +168,7 @@ public class PHPSensorTest {
     // replace sensor with sensor having one rule
     sensor = createSensorWithParsingErrorCheckActivated();
 
-    analyseSingleFile(context, "empty.php");
+    analyseSingleFile("empty.php");
 
     assertThat(context.allIssues()).as("No issue must be raised").hasSize(0);
   }
@@ -188,7 +178,7 @@ public class PHPSensorTest {
     // replace sensor with sensor having one rule
     sensor = createSensorWithParsingErrorCheckActivated();
 
-    analyseSingleFile(context, "parseError.php");
+    analyseSingleFile("parseError.php");
 
     assertThat(context.allIssues()).as("One issue must be raised").hasSize(1);
 
@@ -204,13 +194,12 @@ public class PHPSensorTest {
 
   @Test
   public void parsing_error_should_raise_no_issue_if_check_rule_is_not_activated() throws Exception {
-    analyseSingleFile(context, "parseError.php");
-
+    analyseSingleFile("parseError.php");
     assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
   }
 
-  private void analyseSingleFile(SensorContext context, String fileName) {
-    fileSystem.add(inputFile(fileName));
+  private void analyseSingleFile(String fileName) {
+    context.fileSystem().add(inputFile(fileName));
     sensor.execute(context);
   }
 
@@ -250,10 +239,8 @@ public class PHPSensorTest {
 
   private PHPSensor createSensor() {
     FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
-
     CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-
-    return new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
   /**
@@ -270,7 +257,7 @@ public class PHPSensorTest {
       .build();
     CheckFactory checkFactory = new CheckFactory(activeRules);
 
-    return new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
   private FileLinesContextFactory createFileLinesContextFactory() {

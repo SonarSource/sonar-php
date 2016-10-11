@@ -70,33 +70,28 @@ public class PHPSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
 
-  private final FileSystem fileSystem;
-  private final FilePredicate mainFilePredicate;
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
 
   private RuleKey parsingErrorRuleKey;
 
-  public PHPSensor(FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
+  private FileSystem fileSystem;
+
+  public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
-    this(fileSystem, fileLinesContextFactory, checkFactory, noSonarFilter, null);
+    this(fileLinesContextFactory, checkFactory, noSonarFilter, null);
   }
 
-  public PHPSensor(FileSystem fileSystem, FileLinesContextFactory fileLinesContextFactory,
+  public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
                    CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRulesDefinition[] customRulesDefinitions) {
 
     this.checks = PHPChecks.createPHPCheck(checkFactory)
       .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
       .addCustomChecks(customRulesDefinitions);
     this.fileLinesContextFactory = fileLinesContextFactory;
-    this.fileSystem = fileSystem;
     this.noSonarFilter = noSonarFilter;
-    this.mainFilePredicate = this.fileSystem.predicates().and(
-      this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
-      this.fileSystem.predicates().hasLanguage(Php.KEY));
-
-    parsingErrorRuleKey = getParsingErrorRuleKey();
+    this.parsingErrorRuleKey = getParsingErrorRuleKey();
   }
 
   @Override
@@ -109,6 +104,12 @@ public class PHPSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
+    this.fileSystem = context.fileSystem();
+
+    FilePredicate mainFilePredicate = this.fileSystem.predicates().and(
+      this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
+      this.fileSystem.predicates().hasLanguage(Php.KEY));
+
     ImmutableList<PHPCheck> visitors = getCheckVisitors();
 
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors);
