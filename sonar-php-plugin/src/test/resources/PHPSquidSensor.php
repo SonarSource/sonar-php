@@ -3,7 +3,7 @@ namespace Symfony\Bridge\Monolog\Handler;
 
 use Monolog\Handler\AbstractProcessingHandler;
 
-class ConsoleHandler extends AbstractProcessingHandler implements EventSubscriberInterface
+class Console_Handler extends AbstractProcessingHandler implements EventSubscriberInterface
 {
     /*
      * @var OutputInterface|null
@@ -13,13 +13,13 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /*
      * Constructor.
      *
-     * @param OutputInterface|null $output            The console output to use (the handler remains disabled when passing null
+     * @param OutputInterface|null $output            The console output to use (the handler remains disabled when
      *                                                until the output is set, e.g. by using console events)
      * @param Boolean              $bubble            Whether the messages that are handled can bubble up the stack
      * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
      *                                                level (leave empty to use the default mapping)
      */
-    public function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = array())
+    abstract final function __construct(OutputInterface $output = null, $bubble = true, array $verbosityLevelMap = array())
     {
         parent::__construct(Logger::DEBUG, $bubble);
 
@@ -52,3 +52,10 @@ function helper($param) {
 if (true) {
   return;
 }
+?>
+
+<html>
+
+<?php  ?>
+
+<html>

@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class TooManyFunctionParametersCheckTest {
 
@@ -50,8 +50,8 @@ public class TooManyFunctionParametersCheckTest {
     PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), issues(3, 13, 18, 23, 28));
   }
 
-  private List<Issue> issues(int... lines) {
-    List<Issue> list = new ArrayList<>();
+  private List<CheckIssue> issues(int... lines) {
+    List<CheckIssue> list = new ArrayList<>();
     for (int line : lines) {
       list.add(new PHPIssue(check, null).line(line));
     }

@@ -24,10 +24,13 @@ import com.sonar.sslr.api.typed.ActionParser;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -37,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 /**
  * Helper class for checks unit test.
@@ -68,12 +72,12 @@ public class PhpCheckTestUtils {
   public static void check(PHPCheck check, File file) {
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
     check.init();
-    List<Issue> actualIssues = getActualIssues(check, file, tree);
-    List<Issue> expectedIssues = getExpectedIssues(check, file, tree);
+    List<CheckIssue> actualIssues = getActualIssues(check, file, tree);
+    List<CheckIssue> expectedIssues = getExpectedIssues(check, file, tree);
     compare(actualIssues, expectedIssues);
   }
 
-  private static List<Issue> getActualIssues(PHPCheck check, File file, CompilationUnitTree tree) {
+  private static List<CheckIssue> getActualIssues(PHPCheck check, File file, CompilationUnitTree tree) {
     if (check instanceof CharsetAwareVisitor) {
       ((CharsetAwareVisitor) check).setCharset(charset);
     }
@@ -87,18 +91,18 @@ public class PhpCheckTestUtils {
    * @param file File containing the php code sample
    * @param expectedIssues expected issues that should be raise. Overrides the comments in the code sample.
    */
-  public static void check(PHPCheck check, File file, List<Issue> expectedIssues) {
+  public static void check(PHPCheck check, File file, List<CheckIssue> expectedIssues) {
     CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
     check.init();
-    List<Issue> actualIssues = getActualIssues(check, file, tree);
+    List<CheckIssue> actualIssues = getActualIssues(check, file, tree);
     compare(actualIssues, expectedIssues);
   }
 
-  private static void compare(List<Issue> actualIssues, List<Issue> expectedIssues) {
+  private static void compare(List<CheckIssue> actualIssues, List<CheckIssue> expectedIssues) {
     Map<Integer, Tuple> map = new HashMap<>();
 
-    for (Issue issue : actualIssues) {
-      int line = issue.line();
+    for (CheckIssue issue : actualIssues) {
+      int line = line(issue);
       if (map.get(line) == null) {
         Tuple tuple = new Tuple();
         tuple.addActual(issue);
@@ -108,8 +112,8 @@ public class PhpCheckTestUtils {
       }
     }
 
-    for (Issue issue : expectedIssues) {
-      int line = issue.line();
+    for (CheckIssue issue : expectedIssues) {
+      int line = line(issue);
       if (map.get(line) == null) {
         Tuple tuple = new Tuple();
         tuple.addExpected(issue);
@@ -131,7 +135,7 @@ public class PhpCheckTestUtils {
   }
 
   // NOK {{message here}}
-  private static List<Issue> getExpectedIssues(PHPCheck check, File file, CompilationUnitTree tree) {
+  private static List<CheckIssue> getExpectedIssues(PHPCheck check, File file, CompilationUnitTree tree) {
     IssueParser issueParser = new IssueParser(check);
     return issueParser.analyze(file, tree);
   }
@@ -173,13 +177,41 @@ public class PhpCheckTestUtils {
           }
         }
 
-        Issue issue = context().newIssue(check, message).line(syntaxTrivia.line());
+        CheckIssue issue = context().newIssue(check, message).line(syntaxTrivia.line());
         if (effortToFix != null) {
           issue.cost(effortToFix);
         }
       }
     }
 
+  }
+
+  private static int line(CheckIssue issue) {
+    if (issue instanceof PHPIssue) {
+      return ((PHPIssue) issue).line();
+
+    } else if (issue instanceof LineIssue) {
+      return ((LineIssue) issue).line();
+
+    } else if (issue instanceof FileIssue) {
+      return 0;
+    }
+
+    return ((PreciseIssue) issue).primaryLocation().startLine();
+  }
+
+  private static String message(CheckIssue issue) {
+    if (issue instanceof PHPIssue) {
+      return ((PHPIssue) issue).message();
+
+    } else if (issue instanceof LineIssue) {
+      return ((LineIssue) issue).message();
+
+    } else if (issue instanceof FileIssue) {
+      return ((FileIssue) issue).message();
+    }
+
+    return ((PreciseIssue) issue).primaryLocation().message();
   }
 
   private static class Tuple {
@@ -190,42 +222,42 @@ public class PhpCheckTestUtils {
     private static final String UNEXPECTED_ISSUE = "* [UNEXPECTED_ISSUE] at line %s with a message: \"%s\"\n\n";
     private static final String WRONG_NUMBER = "* [WRONG_NUMBER] Line %s: Expecting %s issue, but actual issues number is %s\n\n";
 
-    List<Issue> actual = new ArrayList<>();
-    List<Issue> expected = new ArrayList<>();
+    List<CheckIssue> actual = new ArrayList<>();
+    List<CheckIssue> expected = new ArrayList<>();
 
-    void addActual(Issue actual) {
+    void addActual(CheckIssue actual) {
       this.actual.add(actual);
     }
 
-    void addExpected(Issue expected) {
+    void addExpected(CheckIssue expected) {
       this.expected.add(expected);
     }
 
     String check() {
       if (!actual.isEmpty() && expected.isEmpty()) {
-        return String.format(UNEXPECTED_ISSUE, actual.get(0).line(), actual.get(0).message());
+        return String.format(UNEXPECTED_ISSUE, line(actual.get(0)), message(actual.get(0)));
 
       } else if (actual.isEmpty() && !expected.isEmpty()) {
-        return String.format(NO_ISSUE, expected.get(0).line());
+        return String.format(NO_ISSUE, line(expected.get(0)));
 
       } else if (actual.size() == 1 && expected.size() == 1) {
-        String expectedMessage = expected.get(0).message();
-        if (expectedMessage != null && !actual.get(0).message().equals(expectedMessage)) {
-          return String.format(WRONG_MESSAGE, actual.get(0).line(), expectedMessage, actual.get(0).message());
+        String expectedMessage = message(expected.get(0));
+        if (expectedMessage != null && !message(actual.get(0)).equals(expectedMessage)) {
+          return String.format(WRONG_MESSAGE, line(actual.get(0)), expectedMessage, message(actual.get(0)));
         }
 
         Double expectedCost = expected.get(0).cost();
         if (expectedCost != null && !expectedCost.equals(actual.get(0).cost())) {
-          return String.format(WRONG_COST, actual.get(0).line(), expectedCost, actual.get(0).cost());
+          return String.format(WRONG_COST, line(actual.get(0)), expectedCost, actual.get(0).cost());
         }
 
       } else if (actual.size() != expected.size()) {
-        return String.format(WRONG_NUMBER, actual.get(0).line(), expected.size(), actual.size());
+        return String.format(WRONG_NUMBER, line(actual.get(0)), expected.size(), actual.size());
 
       } else {
         for (int i = 0; i < actual.size(); i++) {
-          if (!actual.get(i).message().equals(expected.get(i).message())) {
-            return String.format(WRONG_MESSAGE, actual.get(i).line(), expected.get(i).message(), actual.get(i).message());
+          if (!message(actual.get(i)).equals(message(expected.get(i)))) {
+            return String.format(WRONG_MESSAGE, line(actual.get(i)), message(expected.get(i)), message(actual.get(i)));
           }
         }
       }

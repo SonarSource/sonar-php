@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class CommentedOutCodeCheckTest {
 
   @Test
   public void test() throws Exception {
-    List<Issue> issues = ImmutableList.of(
+    List<CheckIssue> issues = ImmutableList.of(
       newIssue(9),
       newIssue(16),
       newIssue(25)
@@ -44,7 +44,7 @@ public class CommentedOutCodeCheckTest {
     PhpCheckTestUtils.check(CHECK, TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
   }
 
-  private Issue newIssue(int line) {
+  private CheckIssue newIssue(int line) {
     String message = "Remove this commented out code.";
     return new PHPIssue(CHECK, message).line(line);
   }

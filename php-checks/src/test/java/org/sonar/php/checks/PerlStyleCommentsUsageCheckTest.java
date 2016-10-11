@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.io.File;
@@ -37,7 +37,7 @@ public class PerlStyleCommentsUsageCheckTest {
   public void test() throws Exception {
     File file = TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php");
     String message = "Use \"//\" instead of \"#\" to start this comment";
-    ImmutableList<Issue> issues = ImmutableList.<Issue>of(new PHPIssue(CHECK, message).line(3));
+    ImmutableList<CheckIssue> issues = ImmutableList.<CheckIssue>of(new PHPIssue(CHECK, message).line(3));
 
     PhpCheckTestUtils.check(CHECK, file, issues);
   }

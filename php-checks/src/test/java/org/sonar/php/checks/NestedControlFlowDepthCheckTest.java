@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class NestedControlFlowDepthCheckTest {
 
@@ -39,6 +39,6 @@ public class NestedControlFlowDepthCheckTest {
   @Test
   public void custom() throws Exception {
     check.max = 5;
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<Issue>of(new PHPIssue(check, null).line(31)));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<CheckIssue>of(new PHPIssue(check, null).line(31)));
   }
 }

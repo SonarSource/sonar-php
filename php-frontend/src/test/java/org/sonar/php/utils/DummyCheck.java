@@ -21,7 +21,7 @@ package org.sonar.php.utils;
 
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 /**
 
@@ -52,7 +52,7 @@ public class DummyCheck extends PHPVisitorCheck {
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
     if (tree.is(Tree.Kind.ASSIGNMENT)) {
-      Issue issue = context().newIssue(this, MESSAGE).tree(tree);
+      CheckIssue issue = context().newIssue(this, MESSAGE).tree(tree);
       if (cost != null) {
         issue.cost(cost);
       }

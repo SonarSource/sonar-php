@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class TooManyLinesInFileCheckTest {
 
@@ -39,7 +39,7 @@ public class TooManyLinesInFileCheckTest {
   @Test
   public void custom() throws Exception {
     check.max = 7;
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<Issue>of(new PHPIssue(
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<CheckIssue>of(new PHPIssue(
       check,
       "File \"TooManyLinesInFileCheck.php\" has 9 lines, which is greater than " + check.max + " authorized. Split it into smaller files.")));
   }

@@ -27,7 +27,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.php.utils.DummyCheck;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.io.File;
@@ -162,12 +162,12 @@ public class PhpCheckTestUtilsTest {
     PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK [[effortToFix=3]]"));
   }
 
-  public ImmutableList<Issue> createIssuesForLines(int... lines) {
+  public ImmutableList<CheckIssue> createIssuesForLines(int... lines) {
     return createIssuesForLines("message", lines);
   }
 
-  public ImmutableList<Issue> createIssuesForLines(String message, int... lines) {
-    ImmutableList.Builder<Issue> issueBuilder = ImmutableList.builder();
+  public ImmutableList<CheckIssue> createIssuesForLines(String message, int... lines) {
+    ImmutableList.Builder<CheckIssue> issueBuilder = ImmutableList.builder();
 
     for (int line : lines) {
       issueBuilder.add(new PHPIssue(CHECK, message).line(line));

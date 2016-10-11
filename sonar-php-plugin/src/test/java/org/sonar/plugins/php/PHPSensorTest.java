@@ -25,8 +25,8 @@ import java.io.File;
 import java.io.InterruptedIOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.HashMap;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.InputFile;
@@ -62,6 +62,7 @@ import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -69,11 +70,11 @@ import static org.mockito.Mockito.when;
 
 public class PHPSensorTest {
 
-  private PHPSensor sensor = createSensor();
-
   private ProgressReport progressReport = mock(ProgressReport.class);
 
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
+
+  private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
 
   @org.junit.Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -91,7 +92,7 @@ public class PHPSensorTest {
 
     @Override
     public ImmutableList<Class> checkClasses() {
-      return ImmutableList.<Class>of(MyCustomRule.class);
+      return ImmutableList.of(MyCustomRule.class);
     }
   }};
 
@@ -108,10 +109,14 @@ public class PHPSensorTest {
     public String customParam = "value";
   }
 
+  private PHPSensor createSensor() {
+    return new PHPSensor(createFileLinesContextFactory(), checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+  }
+
   @Test
   public void sensor_descriptor() {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
-    sensor.describe(descriptor);
+    createSensor().describe(descriptor);
 
     assertThat(descriptor.name()).isEqualTo("PHP sensor");
     assertThat(descriptor.languages()).containsOnly("php");
@@ -123,9 +128,10 @@ public class PHPSensorTest {
     String fileName = "PHPSquidSensor.php";
     String componentKey = "moduleKey:" + fileName;
 
-    analyseSingleFile(fileName);
+    PHPSensor phpSensor = createSensor();
+    analyseSingleFile(phpSensor, fileName);
 
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES, 55);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES, 62);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 7);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 10);
@@ -138,15 +144,15 @@ public class PHPSensorTest {
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=1;20=0;30=0;60=0;90=0");
     
     // the .php file contains NOSONAR at line 34
-    checkNoSonar(componentKey, 33, true);
-    checkNoSonar(componentKey, 34, false);
+    checkNoSonar(componentKey, 33, true, phpSensor);
+    checkNoSonar(componentKey, 34, false, phpSensor);
   }
 
-  private void checkNoSonar(String componentKey, int line, boolean expected) throws NoSuchFieldException, IllegalAccessException {
+  private void checkNoSonar(String componentKey, int line, boolean expected, PHPSensor phpSensor) throws NoSuchFieldException, IllegalAccessException {
     // retrieve the noSonarFilter, which is private
     Field field = PHPSensor.class.getDeclaredField("noSonarFilter");
     field.setAccessible(true);
-    NoSonarFilter noSonarFilter = (NoSonarFilter) field.get(sensor);
+    NoSonarFilter noSonarFilter = (NoSonarFilter) field.get(phpSensor);
 
     // a filter chain that does nothing
     IssueFilterChain chain = mock(IssueFilterChain.class);
@@ -165,20 +171,14 @@ public class PHPSensorTest {
 
   @Test
   public void empty_file_should_raise_no_issue() throws Exception {
-    // replace sensor with sensor having one rule
-    sensor = createSensorWithParsingErrorCheckActivated();
-
-    analyseSingleFile("empty.php");
+    analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "empty.php");
 
     assertThat(context.allIssues()).as("No issue must be raised").hasSize(0);
   }
 
   @Test
   public void parsing_error_should_raise_an_issue_if_check_rule_is_activated() throws Exception {
-    // replace sensor with sensor having one rule
-    sensor = createSensorWithParsingErrorCheckActivated();
-
-    analyseSingleFile("parseError.php");
+    analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "parseError.php");
 
     assertThat(context.allIssues()).as("One issue must be raised").hasSize(1);
 
@@ -194,11 +194,11 @@ public class PHPSensorTest {
 
   @Test
   public void parsing_error_should_raise_no_issue_if_check_rule_is_not_activated() throws Exception {
-    analyseSingleFile("parseError.php");
+    analyseSingleFile(createSensor(), "parseError.php");
     assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
   }
 
-  private void analyseSingleFile(String fileName) {
+  private void analyseSingleFile(PHPSensor sensor, String fileName) {
     context.fileSystem().add(inputFile(fileName));
     sensor.execute(context);
   }
@@ -215,7 +215,7 @@ public class PHPSensorTest {
   @Test
   public void progress_report_should_be_stopped() throws Exception {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.<PHPCheck>of());
-    sensor.analyseFiles(context, phpAnalyzer, ImmutableList.<InputFile>of(), progressReport, new HashMap<File, Integer>());
+    createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.<InputFile>of(), progressReport, new HashMap<File, Integer>());
     verify(progressReport).stop();
   }
 
@@ -235,12 +235,6 @@ public class PHPSensorTest {
   public void cancelled_analysis_causing_recognition_exception() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new RecognitionException(42, "message", new InterruptedIOException()));
     analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "Analysis cancelled");
-  }
-
-  private PHPSensor createSensor() {
-    FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
-    CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-    return new PHPSensor(fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
   /**
@@ -267,12 +261,41 @@ public class PHPSensorTest {
     return fileLinesContextFactory;
   }
 
+  @Test
+  public void test_issues() throws Exception {
+    ActiveRules activeRules = (new ActiveRulesBuilder())
+      // class name check -> PreciseIssue
+      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
+      .activate()
+      // inline html in file check -> FileIssue
+      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1997"))
+      .activate()
+      // line size -> LineIssue
+      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S103"))
+      .activate()
+      // Modifiers order -> PHPIssue
+      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1124"))
+      .activate()
+      .build();
+
+    checkFactory = new CheckFactory(activeRules);
+    analyseSingleFile(createSensor(), "PHPSquidSensor.php");
+
+    Collection<Issue> issues = context.allIssues();
+
+    assertThat(issues).extracting("ruleKey.rule", "primaryLocation.textRange.start.line").containsOnly(
+      tuple("S101", 6),
+      tuple("S1997", null),
+      tuple("S103", 22),
+      tuple("S1124", 22));
+  }
+
   private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.of(check));
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     try {
-      sensor.analyseFiles(context, phpAnalyzer, ImmutableList.of(inputFile), progressReport, new HashMap<File, Integer>());
+      createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.of(inputFile), progressReport, new HashMap<File, Integer>());
     } finally {
       verify(progressReport).cancel();
     }

@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class NestedFunctionDepthCheckTest {
 
@@ -45,7 +45,7 @@ public class NestedFunctionDepthCheckTest {
       issue(27)));
   }
 
-  private Issue issue(int line) {
+  private CheckIssue issue(int line) {
     return new PHPIssue(check, null).line(line);
   }
 }

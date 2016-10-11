@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class TrailingCommentCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    List<Issue> issues = ImmutableList.of(
+    List<CheckIssue> issues = ImmutableList.of(
       newIssue(4),
       newIssue(5)
     );
@@ -46,7 +46,7 @@ public class TrailingCommentCheckTest {
   @Test
   public void custom() throws Exception {
     check.legalCommentPattern = "";
-    List<Issue> issues = ImmutableList.of(
+    List<CheckIssue> issues = ImmutableList.of(
       newIssue(4),
       newIssue(5),
       newIssue(11),
@@ -55,7 +55,7 @@ public class TrailingCommentCheckTest {
     PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 
-  private Issue newIssue(int line) {
+  private CheckIssue newIssue(int line) {
     String message = "Move this trailing comment on the previous empty line.";
     return new PHPIssue(check, message).line(line);
   }

@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class MoreThanOneClassInFileCheckTest {
 
@@ -39,19 +39,19 @@ public class MoreThanOneClassInFileCheckTest {
   @Test
   public void ko1() throws Exception {
     String message = "There are 2 independent classes in this file; move all but one of them to other files.";
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko1.php"), ImmutableList.<Issue>of(new PHPIssue(check, message).cost(1.0)));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko1.php"), ImmutableList.<CheckIssue>of(new PHPIssue(check, message).cost(1.0)));
   }
 
   @Test
   public void ko2() throws Exception {
     String message = "There are 2 independent interfaces in this file; move all but one of them to other files.";
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko2.php"), ImmutableList.<Issue>of(new PHPIssue(check, message).cost(1.0)));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko2.php"), ImmutableList.<CheckIssue>of(new PHPIssue(check, message).cost(1.0)));
   }
 
   @Test
   public void ko3() throws Exception {
     String message = "There are 1 independent classes and 2 independent interfaces in this file; move all but one of them to other files.";
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko3.php"), ImmutableList.<Issue>of(new PHPIssue(check, message).cost(2.0)));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko3.php"), ImmutableList.<CheckIssue>of(new PHPIssue(check, message).cost(2.0)));
   }
 
 }

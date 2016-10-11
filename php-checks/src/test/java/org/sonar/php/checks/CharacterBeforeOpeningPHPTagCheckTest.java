@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class CharacterBeforeOpeningPHPTagCheckTest {
 
@@ -38,7 +38,7 @@ public class CharacterBeforeOpeningPHPTagCheckTest {
 
   @Test
   public void ko() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.<Issue>of(new PHPIssue(check, "Remove the extra characters before the open tag.").line(1)));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.<CheckIssue>of(new PHPIssue(check, "Remove the extra characters before the open tag.").line(1)));
   }
 
 }

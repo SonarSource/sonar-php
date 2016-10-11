@@ -17,32 +17,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.plugins.php.api.visitors;
 
 import org.junit.Test;
-import org.sonar.php.tree.visitors.PHPIssue;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.php.utils.DummyCheck;
 
-import java.util.LinkedList;
-import java.util.List;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class ClassNameCheckTest {
+public class LineIssueTest {
 
-  private ClassNameCheck check = new ClassNameCheck();
-  private String fileName = "ClassNameCheck.php";
+
+  private static final PHPCheck CHECK = new DummyCheck();
 
   @Test
-  public void defaultValue() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName));
+  public void test() throws Exception {
+    LineIssue lineIssue = new LineIssue(CHECK, 42, "Test message");
+
+    assertThat(lineIssue.check()).isEqualTo(CHECK);
+    assertThat(lineIssue.cost()).isNull();
+    assertThat(lineIssue.line()).isEqualTo(42);
+    assertThat(lineIssue.message()).isEqualTo("Test message");
   }
 
   @Test
-  public void custom() throws Exception {
-    check.format = "^[a-z][a-zA-Z0-9]*$";
-    List<CheckIssue> expectedIssues = new LinkedList<>();
-    expectedIssues.add(new PHPIssue(check, "Rename class \"MyClass\" to match the regular expression " + check.format + ".").line(6));
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), expectedIssues);
+  public void with_cost() throws Exception {
+    LineIssue lineIssue = new LineIssue(CHECK, 42, "Test message").cost(5);
+
+    assertThat(lineIssue.check()).isEqualTo(CHECK);
+    assertThat(lineIssue.cost()).isEqualTo(5);
+    assertThat(lineIssue.line()).isEqualTo(42);
+    assertThat(lineIssue.message()).isEqualTo("Test message");
   }
 }

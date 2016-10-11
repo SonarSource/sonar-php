@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.Issue;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 import java.util.List;
 
@@ -34,8 +34,8 @@ public class FileHeaderCheckTest {
 
   @Test
   public void test() throws Exception {
-    List<Issue> issue = ImmutableList.<Issue>of(new PHPIssue(check, "Add or update the header of this file."));
-    List<Issue> noIssue = ImmutableList.of();
+    List<CheckIssue> issue = ImmutableList.<CheckIssue>of(new PHPIssue(check, "Add or update the header of this file."));
+    List<CheckIssue> noIssue = ImmutableList.of();
 
     check.headerFormat = "// copyright 2005";
     PhpCheckTestUtils.check(check, TestUtils.getCheckFile("FileHeaderCheck/file1.php"), noIssue);
