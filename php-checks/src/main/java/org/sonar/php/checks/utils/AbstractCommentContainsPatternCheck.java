@@ -55,7 +55,7 @@ public abstract class AbstractCommentContainsPatternCheck extends PHPVisitorChec
   }
 
   private void createIssue(int line) {
-    context().newIssue(this, message()).line(line);
+    context().newLineIssue(this, line, message());
   }
 
 }

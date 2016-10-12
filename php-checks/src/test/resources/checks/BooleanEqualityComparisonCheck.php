@@ -3,6 +3,7 @@
 !true;            // NOK {{Remove the literal "true" boolean value.}}
 !false;           // NOK {{Remove the literal "false" boolean value.}}
 a == false;       // NOK
+//   ^^^^^
 a == true;        // NOK
 a != false;       // NOK
 a != true;        // NOK

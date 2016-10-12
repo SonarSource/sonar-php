@@ -6,6 +6,7 @@ function nonCompliant() {
   } elseif ($condition)
     firstActionInBlock();
     secondAction();  // NOK {{Only the first line of this 2-line block will be executed conditionally. The rest will execute unconditionally.}}
+//  ^^^^^^^^^^^^^^^
 
   if ($condition)
     firstActionInBlock();

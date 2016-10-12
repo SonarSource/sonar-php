@@ -50,7 +50,7 @@ public class IdenticalOperandsInBinaryExpressionCheck extends PHPVisitorCheck {
   public void visitBinaryExpression(BinaryExpressionTree binaryExp) {
     String operator = binaryExp.operator().text();
     if (!EXCLUDED_OPERATORS.contains(operator) && hasIdenticalOperands(binaryExp) && !isLeftShiftBy1(binaryExp)) {
-      context().newIssue(this, String.format(MESSAGE, operator)).tree(binaryExp);
+      context().newIssue(this, binaryExp.rightOperand(), String.format(MESSAGE, operator)).secondary(binaryExp.leftOperand(), null);
     }
     super.visitBinaryExpression(binaryExp);
   }

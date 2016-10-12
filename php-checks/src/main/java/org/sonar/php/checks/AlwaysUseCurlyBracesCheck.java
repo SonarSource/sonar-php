@@ -46,9 +46,9 @@ public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
   public static final String KEY = "S121";
   private static final String MESSAGE = "Add curly braces around the nested statement(s).";
 
-  private void checkStatement(StatementTree statementTree, Tree parent) {
+  private void checkStatement(StatementTree statementTree, Tree statementKeyword) {
     if (!statementTree.is(Tree.Kind.BLOCK) && !statementTree.is(Tree.Kind.EMPTY_STATEMENT)) {
-      context().newIssue(this, MESSAGE).tree(parent);
+      context().newIssue(this, statementKeyword, MESSAGE);
     }
   }
 
@@ -56,7 +56,7 @@ public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
   public void visitIfStatement(IfStatementTree tree) {
     super.visitIfStatement(tree);
     if (tree.is(Tree.Kind.IF_STATEMENT)) {
-      checkStatement(tree.statements().get(0), tree);
+      checkStatement(tree.statements().get(0), tree.ifToken());
     }
   }
 
@@ -64,7 +64,7 @@ public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
   public void visitElseifClause(ElseifClauseTree tree) {
     super.visitElseifClause(tree);
     if (tree.is(Tree.Kind.ELSEIF_CLAUSE)) {
-      checkStatement(tree.statements().get(0), tree);
+      checkStatement(tree.statements().get(0), tree.elseifToken());
     }
   }
 
@@ -72,7 +72,7 @@ public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
   public void visitElseClause(ElseClauseTree tree) {
     super.visitElseClause(tree);
     if (tree.is(Tree.Kind.ELSE_CLAUSE) && !tree.statements().get(0).is(Tree.Kind.IF_STATEMENT)) {
-      checkStatement(tree.statements().get(0), tree);
+      checkStatement(tree.statements().get(0), tree.elseToken());
     }
   }
 
@@ -80,7 +80,7 @@ public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
   public void visitForStatement(ForStatementTree tree) {
     super.visitForStatement(tree);
     if (tree.is(Tree.Kind.FOR_STATEMENT)) {
-      checkStatement(tree.statements().get(0), tree);
+      checkStatement(tree.statements().get(0), tree.forToken());
     }
   }
 
@@ -88,21 +88,21 @@ public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
   public void visitForEachStatement(ForEachStatementTree tree) {
     super.visitForEachStatement(tree);
     if (tree.is(Tree.Kind.FOREACH_STATEMENT)) {
-      checkStatement(tree.statements().get(0), tree);
+      checkStatement(tree.statements().get(0), tree.foreachToken());
     }
   }
 
   @Override
   public void visitDoWhileStatement(DoWhileStatementTree tree) {
     super.visitDoWhileStatement(tree);
-    checkStatement(tree.statement(), tree);
+    checkStatement(tree.statement(), tree.doToken());
   }
 
   @Override
   public void visitWhileStatement(WhileStatementTree tree) {
     super.visitWhileStatement(tree);
     if (tree.is(Tree.Kind.WHILE_STATEMENT)) {
-      checkStatement(tree.statements().get(0), tree);
+      checkStatement(tree.statements().get(0), tree.whileToken());
     }
   }
 

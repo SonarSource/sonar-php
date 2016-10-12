@@ -6,6 +6,7 @@ function myMethod()
   {                              // OK
     executeTask();
   } else {                       // NOK {{Move this open curly brace to the beginning of next line.}}
+//       ^
     doSomethingElse();
   }
 }

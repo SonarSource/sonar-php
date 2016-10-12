@@ -41,8 +41,8 @@ public class NestedFunctionDepthCheckTest {
     check.max = 2;
     PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of(
       issue(5),
-      issue(16),
-      issue(27)));
+      issue(17),
+      issue(28)));
   }
 
   private CheckIssue issue(int line) {

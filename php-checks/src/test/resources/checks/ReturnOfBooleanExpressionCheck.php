@@ -1,6 +1,7 @@
 <?php
 
-if ($a) {       // NOK {{Replace this "if-then-else" statement by a single "return" statement.}}
+  if ($a) {       // NOK {{Replace this "if-then-else" statement by a single "return" statement.}}
+//^^^^^^^
   return true;
 } else {
   return false;

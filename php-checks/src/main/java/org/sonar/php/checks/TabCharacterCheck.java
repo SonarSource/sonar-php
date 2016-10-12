@@ -60,7 +60,7 @@ public class TabCharacterCheck extends PHPVisitorCheck implements CharsetAwareVi
     }
     for (String line : lines) {
       if (line.contains("\t")) {
-        context().newIssue(this, MESSAGE);
+        context().newFileIssue(this, MESSAGE);
         break;
       }
     }

@@ -3,6 +3,7 @@
 switch ($a) {
   case 0:
   case 1:     // NOK {{End this switch case with an unconditional break, continue, return or throw statement.}}
+//^^^^^^^
     doSomething();
   case 2:     // NOK
     halt();

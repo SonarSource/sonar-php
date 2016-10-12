@@ -3,6 +3,7 @@
 abstract class Foo
 {
     static private $foo1;   // NOK {{Reorder the modifiers to comply with the PSR2 standard.}}
+//  ^^^^^^^^^^^^^^
     static protected $foo2; // NOK
     private static $foo3;   // OK
 

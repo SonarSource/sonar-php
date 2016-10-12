@@ -65,7 +65,7 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
     NamespaceNameTree namespaceName = getThrownClassName(tree);
 
     if (namespaceName != null && isGenericException(namespaceName)) {
-      context().newIssue(this, MESSAGE).tree(namespaceName);
+      context().newIssue(this, namespaceName, MESSAGE);
     }
 
     super.visitThrowStatement(tree);

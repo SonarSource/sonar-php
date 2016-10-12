@@ -104,7 +104,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
 
     if (nbType > max) {
       String message = String.format(MESSAGE, nbType, max);
-      context().newIssue(this, message).tree(tree);
+      context().newIssue(this, tree.classToken(), message);
     }
   }
 

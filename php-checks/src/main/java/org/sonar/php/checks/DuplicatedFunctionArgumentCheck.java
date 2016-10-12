@@ -58,9 +58,7 @@ public class DuplicatedFunctionArgumentCheck extends PHPVisitorCheck {
 
     if (!duplicatedParamNames.isEmpty()) {
       String listString = Joiner.on(", ").join(duplicatedParamNames);
-      context()
-        .newIssue(this, String.format(MESSAGE, duplicatedParamNames.size() == 1 ? "parameter" : "parameters", listString))
-        .tree(parameterList);
+      context().newIssue(this, parameterList, String.format(MESSAGE, duplicatedParamNames.size() == 1 ? "parameter" : "parameters", listString));
     }
 
     super.visitParameterList(parameterList);

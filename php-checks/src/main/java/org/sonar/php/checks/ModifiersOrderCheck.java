@@ -77,7 +77,7 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
         }
       }
       if (i == EXPECTED_ORDER.length) {
-        context().newIssue(this, MESSAGE).tree(modifiers.get(0));
+        context().newIssue(this, modifiers.get(0), modifiers.get(modifiers.size() - 1), MESSAGE);
       }
     }
   }

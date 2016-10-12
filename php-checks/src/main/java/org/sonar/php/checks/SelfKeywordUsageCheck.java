@@ -90,7 +90,7 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
     if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) && "self".equals(tree.object().toString()) && !isException(tree)) {
-      context().newIssue(this, MESSAGE).tree(tree);
+      context().newIssue(this, tree.object(), MESSAGE);
     }
 
     super.visitMemberAccess(tree);

@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
@@ -55,26 +56,32 @@ public class RedundantFinalCheck extends PHPSubscriptionCheck {
     ClassDeclarationTree classDeclaration = (ClassDeclarationTree) tree;
 
     if (isFinalModifier(classDeclaration.modifierToken())) {
-
       for (ClassMemberTree classMember : classDeclaration.members()) {
-        if (classMember.is(Kind.METHOD_DECLARATION) && hasFinalModifier((MethodDeclarationTree) classMember)) {
-          context().newIssue(this, MESSAGE).tree(classMember);
-        }
+        checkClassMember(classMember);
       }
-
     }
   }
 
-  private static boolean hasFinalModifier(MethodDeclarationTree methodDeclaration) {
+  private void checkClassMember(ClassMemberTree classMember) {
+    if (classMember.is(Kind.METHOD_DECLARATION)) {
+      SyntaxToken finalModifier = getFinalModifier((MethodDeclarationTree) classMember);
+      if (finalModifier != null) {
+        context().newIssue(this, finalModifier, MESSAGE);
+      }
+    }
+  }
+
+  @Nullable
+  private static SyntaxToken getFinalModifier(MethodDeclarationTree methodDeclaration) {
     for (SyntaxToken modifier : methodDeclaration.modifiers()) {
       if (isFinalModifier(modifier)) {
-        return true;
+        return modifier;
       }
     }
-    return false;
+    return null;
   }
 
-  private static boolean isFinalModifier(SyntaxToken modifier) {
+  private static boolean isFinalModifier(@Nullable SyntaxToken modifier) {
     return modifier != null && PHPKeyword.FINAL.getValue().equalsIgnoreCase(modifier.text());
   }
 

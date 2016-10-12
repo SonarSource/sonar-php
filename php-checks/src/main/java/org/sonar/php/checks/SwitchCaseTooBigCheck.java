@@ -71,7 +71,7 @@ public class SwitchCaseTooBigCheck extends PHPVisitorCheck {
   private void checkCaseClause(SwitchCaseClauseTree clause, int nextNodeLine) {
     int lines = nextNodeLine - clause.caseToken().line();
     if (lines > max) {
-      context().newIssue(this, String.format(MESSAGE, lines, max)).tree(clause);
+      context().newIssue(this, clause.caseToken(), String.format(MESSAGE, lines, max));
     }
   }
 }

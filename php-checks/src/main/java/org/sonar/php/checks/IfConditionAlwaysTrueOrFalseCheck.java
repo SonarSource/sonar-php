@@ -45,7 +45,7 @@ public class IfConditionAlwaysTrueOrFalseCheck extends PHPVisitorCheck {
     ExpressionTree condition = tree.condition().expression();
 
     if (condition.is(Kind.BOOLEAN_LITERAL)) {
-      context().newIssue(this, MESSAGE).tree(condition);
+      context().newIssue(this, tree.ifToken(), tree.condition(), MESSAGE);
     }
 
     super.visitIfStatement(tree);

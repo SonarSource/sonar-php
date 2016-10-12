@@ -91,7 +91,7 @@ public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 
     if (!fileContainsHTML) {
       for (Tree uselessNode : uselessNodes) {
-        context().newIssue(this, MESSAGE).tree(uselessNode);
+        context().newIssue(this, uselessNode, MESSAGE);
       }
     }
   }

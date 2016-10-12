@@ -6,6 +6,7 @@ class A {
   }
 
   private function f() {            // NOK {{Remove this unused private "f" method.}}
+//                 ^
     $foo = clone $this;
 
     $code = '_i';

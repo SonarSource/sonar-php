@@ -3,6 +3,7 @@
 $GLOBALS['G'];
 
 if ($HTTP_POST_VARS["name"]) {  // NOK {{Replace this use of the deprecated "$HTTP_POST_VARS" variable with "$_POST".}}
+//  ^^^^^^^^^^^^^^^
 }
 
 call($HTTP_GET_VARS["name"]);   // NOK {{Replace this use of the deprecated "$HTTP_GET_VARS" variable with "$_GET".}}

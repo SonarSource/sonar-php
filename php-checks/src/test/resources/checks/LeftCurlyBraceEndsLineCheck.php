@@ -16,10 +16,12 @@ $var->{'user_' . $id};
 // --- FUNCTION DECLARATION ----
 
 function f ()
-{                                // NOK {{Move this open curly brace to the end of the previous line.}}
+  {                                // NOK {{Move this open curly brace to the end of the previous line.}}
+//^
 }
 
 $a = function () { doSomething;  // NOK {{Move this open curly brace to the end of the previous line.}}
+//               ^
 };
 
 function f() {                   // OK

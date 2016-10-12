@@ -52,7 +52,8 @@ public class ConcatenatedStringLiteralCheck extends PHPVisitorCheck {
 
     for (int i = 0; i < arguments.size() - 1; i++) {
       if (arguments.get(i).is(STRING_KINDS) && arguments.get(i + 1).is(STRING_KINDS)) {
-        context().newIssue(this, MESSAGE).tree(arguments.get(i));
+        context().newIssue(this, arguments.get(i), MESSAGE)
+          .secondary(arguments.get(i + 1), null);
         return;
       }
     }

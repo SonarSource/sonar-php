@@ -10,7 +10,8 @@ if (a === b) {        // OK
   doSomething();
 }
 
-if (true) {           // NOK {{Remove this "if" statement.}}
+  if (true) {           // NOK {{Remove this "if" statement.}}
+//^^^^^^^^^
   doSomething();
 }
 

@@ -238,7 +238,7 @@ public class LeftCurlyBraceEndsLineCheck extends PHPVisitorCheck {
     }
 
     if ((leftBraceLine != prevToken.line()) || (leftBraceLine == nextToken.line())) {
-      context().newIssue(this, MESSAGE).line(leftBraceLine);
+      context().newIssue(this, lBrace, MESSAGE);
     }
   }
 

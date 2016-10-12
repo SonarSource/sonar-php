@@ -57,7 +57,7 @@ public class FileWithSymbolsAndSideEffectsCheck extends PHPVisitorCheck {
     super.visitCompilationUnit(tree);
 
     if (fileHasSymbol && fileHasSideEffect) {
-      context().newIssue(this, MESSAGE);
+      context().newFileIssue(this, MESSAGE);
     }
   }
 

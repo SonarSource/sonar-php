@@ -28,6 +28,7 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -59,14 +60,15 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   @Override
   public void visitVariableDeclaration(VariableDeclarationTree declaration) {
     String identifier = declaration.identifier().text();
-    checkVariable(declaration, identifier, declaration.initValue());
+    checkVariable(declaration.identifier(), identifier, declaration.initValue());
     super.visitVariableDeclaration(declaration);
   }
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree assignment) {
-    String variableName = ((PHPTree) assignment.variable()).getLastToken().text();
-    checkVariable(assignment, variableName, assignment.value());
+    SyntaxToken lastToken = ((PHPTree) assignment.variable()).getLastToken();
+    String variableName = lastToken.text();
+    checkVariable(lastToken, variableName, assignment.value());
     super.visitAssignmentExpression(assignment);
   }
 
@@ -77,7 +79,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
   }
 
   private void addIssue(Tree tree) {
-    context().newIssue(this, MESSAGE).tree(tree);
+    context().newIssue(this, tree, MESSAGE);
   }
 
 }

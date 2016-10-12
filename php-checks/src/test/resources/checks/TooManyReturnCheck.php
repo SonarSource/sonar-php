@@ -1,6 +1,7 @@
 <?php
 
-function f() {          // NOK {{Reduce the number of returns of this function 4, down to the maximum allowed 2.}}
+  function f() {          // NOK [[secondary=+3,+6,+8,+11]] {{Reduce the number of returns of this function 4, down to the maximum allowed 2.}}
+//^^^^^^^^
   if (a) {
     return true;
   } else {

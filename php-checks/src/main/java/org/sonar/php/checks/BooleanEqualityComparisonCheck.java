@@ -77,8 +77,7 @@ public class BooleanEqualityComparisonCheck extends PHPVisitorCheck {
   private void check(ExpressionTree... expressions) {
     for (ExpressionTree expression : expressions) {
       if (expression != null && expression.is(Kind.BOOLEAN_LITERAL)) {
-        context().newIssue(this, String.format(MESSAGE, ((LiteralTree) expression).value()))
-          .tree(expression);
+        context().newIssue(this, expression, String.format(MESSAGE, ((LiteralTree) expression).value()));
       }
     }
   }

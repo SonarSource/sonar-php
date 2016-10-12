@@ -19,7 +19,9 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
+import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
 
@@ -35,6 +37,6 @@ public class ClosingTagInFullPHPFileCheckTest {
 
   @Test
   public void ko() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"));
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new PHPIssue(check, "Remove this closing tag \"?>\".").line(11)));
   }
 }

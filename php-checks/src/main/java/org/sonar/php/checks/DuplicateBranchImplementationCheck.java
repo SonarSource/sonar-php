@@ -64,7 +64,7 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
   @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
     if (Equality.areSyntacticallyEquivalent(tree.trueExpression(), tree.falseExpression())) {
-      context().newIssue(this, MESSAGE_CONDITIONAL).tree(tree);
+      context().newIssue(this, tree, MESSAGE_CONDITIONAL);
     }
 
     super.visitConditionalExpression(tree);
@@ -133,6 +133,6 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
   @Override
   protected void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree) {
     String message = String.format(MESSAGE, branchType, branchType, ((PHPTree) duplicatedTree).getLine());
-    context().newIssue(this, message).tree(duplicatingTree);
+    context().newIssue(this, duplicatingTree, message).secondary(duplicatedTree, null);
   }
 }

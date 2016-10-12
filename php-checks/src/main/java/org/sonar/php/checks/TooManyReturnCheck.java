@@ -29,8 +29,10 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
@@ -47,7 +49,7 @@ public class TooManyReturnCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Reduce the number of returns of this function %s, down to the maximum allowed %s.";
 
   private static final int DEFAULT = 3;
-  private final Deque<Integer> returnStatementCounter = new ArrayDeque<>();
+  private final Deque<Deque<SyntaxToken>> returnStatementCounter = new ArrayDeque<>();
 
   @RuleProperty(
     key = "max",
@@ -58,14 +60,9 @@ public class TooManyReturnCheck extends PHPVisitorCheck {
   @Override
   public void visitReturnStatement(ReturnStatementTree tree) {
     super.visitReturnStatement(tree);
-    incReturnNumber();
-  }
-
-  private void incReturnNumber() {
     boolean isGlobalScope = returnStatementCounter.isEmpty();
     if (!isGlobalScope) {
-      Integer lastCounter = returnStatementCounter.pop();
-      returnStatementCounter.push(lastCounter + 1);
+      returnStatementCounter.peek().push(tree.returnToken());
     }
   }
 
@@ -97,14 +94,15 @@ public class TooManyReturnCheck extends PHPVisitorCheck {
   }
 
   private void enterFunction() {
-    returnStatementCounter.push(0);
+    returnStatementCounter.push(new ArrayDeque<>());
   }
 
   private void leaveFunction(FunctionTree tree) {
-    Integer returnNumber = returnStatementCounter.pop();
-    if (returnNumber > max) {
-      String message = String.format(MESSAGE, returnNumber, max);
-      context().newIssue(this, message).tree(tree);
+    Deque<SyntaxToken> thisFunctionReturns = returnStatementCounter.pop();
+    if (thisFunctionReturns.size() > max) {
+      String message = String.format(MESSAGE, thisFunctionReturns.size(), max);
+      PreciseIssue issue = context().newIssue(this, tree.functionToken(), message);
+      thisFunctionReturns.forEach(returnToken -> issue.secondary(returnToken, null));
     }
   }
 }

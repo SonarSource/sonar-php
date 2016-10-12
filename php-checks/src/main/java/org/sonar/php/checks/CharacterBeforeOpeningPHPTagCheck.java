@@ -45,7 +45,7 @@ public class CharacterBeforeOpeningPHPTagCheck extends PHPVisitorCheck {
   public void visitScript(ScriptTree tree) {
     SyntaxToken openingTagToken = tree.fileOpeningTagToken();
     if (openingTagToken.column() != 0 || openingTagToken.line() != 1 || !OPENING_TAG.matcher(openingTagToken.text()).matches()) {
-      context().newIssue(this, MESSAGE).tree(openingTagToken);
+      context().newIssue(this, openingTagToken, MESSAGE);
     }
   }
 }

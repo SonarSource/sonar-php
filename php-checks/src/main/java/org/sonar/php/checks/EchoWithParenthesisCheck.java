@@ -48,7 +48,7 @@ public class EchoWithParenthesisCheck extends FunctionUsageCheck {
   @Override
   protected void createIssue(FunctionCallTree tree) {
     if (isParenthesized(tree)) {
-      context().newIssue(this, MESSAGE).tree(tree);
+      context().newIssue(this, tree.callee(), MESSAGE);
     }
   }
 

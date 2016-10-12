@@ -23,6 +23,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
@@ -40,7 +41,7 @@ public class ElseIfSequenceKeywordUsageCheck extends PHPVisitorCheck {
   @Override
   public void visitElseClause(ElseClauseTree tree) {
     if (!tree.is(Kind.ALTERNATIVE_ELSE_CLAUSE) && isElseIf(tree)) {
-      context().newIssue(this, MESSAGE).tree(tree);
+      context().newIssue(this, tree.elseToken(), ((IfStatementTree) tree.statements().get(0)).ifToken(), MESSAGE);
     }
     super.visitElseClause(tree);
   }

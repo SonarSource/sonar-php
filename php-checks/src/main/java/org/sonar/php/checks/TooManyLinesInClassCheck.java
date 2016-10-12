@@ -66,7 +66,7 @@ public class TooManyLinesInClassCheck extends PHPVisitorCheck {
       } else {
         message = String.format(MESSAGE, ((ClassDeclarationTree) tree).name().text(), numberOfLines, maximumLinesThreshold);
       }
-      context().newIssue(this, message).tree(tree);
+      context().newIssue(this, tree.classToken(), message);
     }
   }
 

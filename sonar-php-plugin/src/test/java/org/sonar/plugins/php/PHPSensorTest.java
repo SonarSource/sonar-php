@@ -273,7 +273,7 @@ public class PHPSensorTest {
       // line size -> LineIssue
       .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S103"))
       .activate()
-      // Modifiers order -> PHPIssue
+      // Modifiers order -> PreciseIssue
       .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1124"))
       .activate()
       .build();

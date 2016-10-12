@@ -3,14 +3,17 @@
 if ($a) {
 } elseif ($a) {
 } elseif ($a) {      // NOK {{Add the missing "else" clause.}}
+//^^^^^^
 }
 
 if ($a):
-elseif ($a):         // NOK
+  elseif ($a):         // NOK
+//^^^^^^
 endif;
 
 if ($a) {
 } else if ($a) {     // NOK
+//^^^^^^^
 }
 
 if ($a) {

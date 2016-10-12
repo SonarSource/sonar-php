@@ -30,7 +30,8 @@ class A {
 
   public function f2($param) {          // OK
     $foo = 1;                           // OK
-    $field = 1;                         // NOK {{Rename "$field" which has the same name as the field declared at line 9.}}
+    $field = 1;                         // NOK [[secondary=9]] {{Rename "$field" which has the same name as the field declared at line 9.}}
+//  ^^^^^^
   }
 
   public function f3($field) {          // OK

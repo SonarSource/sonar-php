@@ -19,14 +19,18 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 @Rule(
@@ -41,7 +45,7 @@ public class NestedFunctionDepthCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Refactor this code to not nest functions more than %s levels deep.";
 
-  private int nestedLevel = 0;
+  private Deque<SyntaxToken> nestedStack = new ArrayDeque<>();
   public static final int DEFAULT = 3;
 
   @RuleProperty(
@@ -51,7 +55,7 @@ public class NestedFunctionDepthCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    nestedLevel = 0;
+    nestedStack.clear();
     super.visitCompilationUnit(tree);
   }
 
@@ -69,15 +73,16 @@ public class NestedFunctionDepthCheck extends PHPVisitorCheck {
     exitFunction();
   }
 
-  private void enterFunction(Tree tree) {
-    nestedLevel++;
-    if (nestedLevel == max + 1) {
-      context().newIssue(this, String.format(MESSAGE, max)).tree(tree);
+  private void enterFunction(FunctionTree tree) {
+    nestedStack.push(tree.functionToken());
+    if (nestedStack.size() == max + 1) {
+      PreciseIssue issue = context().newIssue(this, tree.functionToken(), String.format(MESSAGE, max));
+      nestedStack.forEach(secondary -> issue.secondary(secondary, "Nesting +1"));
     }
   }
 
   private void exitFunction() {
-    nestedLevel--;
+    nestedStack.pop();
   }
 
 }

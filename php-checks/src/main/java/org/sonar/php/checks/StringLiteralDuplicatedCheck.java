@@ -20,16 +20,18 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.Maps;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 
@@ -47,8 +49,8 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   private static final Integer MINIMAL_LITERAL_LENGTH = 5;
 
-  private final Map<String, Integer> firstOccurrenceLines = Maps.newHashMap();
-  private final Map<String, Integer> sameLiteralOccurrencesCounter = Maps.newHashMap();
+  private final Map<String, LiteralTree> firstOccurrenceTrees = Maps.newHashMap();
+  private final Map<String, List<LiteralTree>> sameLiteralOccurrences = Maps.newHashMap();
 
   public static final int DEFAULT = 3;
 
@@ -59,8 +61,8 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    firstOccurrenceLines.clear();
-    sameLiteralOccurrencesCounter.clear();
+    firstOccurrenceTrees.clear();
+    sameLiteralOccurrences.clear();
 
     super.visitCompilationUnit(tree);
 
@@ -68,13 +70,14 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
   }
 
   private void finish() {
-    for (Map.Entry<String, Integer> literalOccurrences : sameLiteralOccurrencesCounter.entrySet()) {
-      Integer occurrences = literalOccurrences.getValue();
+    for (Map.Entry<String, List<LiteralTree>> literalOccurrences : sameLiteralOccurrences.entrySet()) {
+      List<LiteralTree> occurrences = literalOccurrences.getValue();
 
-      if (occurrences >= threshold) {
+      if (occurrences.size() >= threshold) {
         String literal = literalOccurrences.getKey();
-        String message = String.format(MESSAGE, literal, occurrences);
-        context().newIssue(this, message).line(firstOccurrenceLines.get(literal)).cost(occurrences);
+        String message = String.format(MESSAGE, literal, occurrences.size());
+        PreciseIssue issue = context().newIssue(this, firstOccurrenceTrees.get(literal), message).cost(occurrences.size());
+        occurrences.forEach(occurrence -> issue.secondary(occurrence, null));
       }
     }
   }
@@ -87,13 +90,14 @@ public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
       if (value.length() >= MINIMAL_LITERAL_LENGTH) {
 
-        if (!sameLiteralOccurrencesCounter.containsKey(value)) {
-          sameLiteralOccurrencesCounter.put(value, 1);
-          firstOccurrenceLines.put(value, ((PHPTree) tree).getLine());
+        if (!sameLiteralOccurrences.containsKey(value)) {
+          List<LiteralTree> occurrences = new ArrayList<>();
+          occurrences.add(tree);
+          sameLiteralOccurrences.put(value, occurrences);
+          firstOccurrenceTrees.put(value, tree);
 
         } else {
-          int occurrences = sameLiteralOccurrencesCounter.get(value);
-          sameLiteralOccurrencesCounter.put(value, occurrences + 1);
+          sameLiteralOccurrences.get(value).add(tree);
         }
       }
     }

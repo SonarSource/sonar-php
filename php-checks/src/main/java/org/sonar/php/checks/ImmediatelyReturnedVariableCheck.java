@@ -91,7 +91,8 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
       String returnedName = getReturnedOrThrownVariableName(nextStatement);
 
       if (returnedName != null && assignedNames.contains(returnedName)) {
-        reportIssue(nextStatement, returnedName, currentStatement);
+        ExpressionTree variable = ((AssignmentExpressionTree) ((ExpressionStatementTree) currentStatement).expression()).variable();
+        reportIssue(nextStatement, returnedName, variable);
       }
 
     }
@@ -156,7 +157,7 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
 
   private void reportIssue(StatementTree nextStatement, String varName, Tree tree) {
     String message = String.format(MESSAGE, nextStatement.is(Kind.RETURN_STATEMENT) ? "return" : "throw", varName);
-    context().newIssue(this, message).tree(tree);
+    context().newIssue(this, tree, message);
   }
 
 }

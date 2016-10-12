@@ -7,6 +7,7 @@ function f() {
   $a = 1;    // OK
   $b = 1;    // OK
   $c = 1;    // NOK {{Remove this unused "$c" local variable.}}
+//^^
   $d =& $a;  // NOK {{Remove this unused "$d" local variable.}}
   $a[$b];
 }
@@ -29,6 +30,7 @@ function g($p) {
  */
 function h() {
   static $a, $b = 1;  // NOK - $b
+//           ^^
 
   return $a;
 }
@@ -54,6 +56,7 @@ function j($p) {               // OK
   $b = 1;                      // OK - use in anonymous function
 
   call(function () use ($a, $b,   // NOK
+//                          ^^
                             $p) { // NOK
     return $a;
   });
@@ -66,6 +69,7 @@ function j() {
   $a = 1;                                 // OK - use in anonymous function
 
   call(function () use (&$a,             // NOK - $a (not use in outer, reference not needed )
+//                       ^^
                             &$b, &$c) {  // NOK - $c (not use in outer, reference not needed )
     $b = 1 ;
     $c = 1;
@@ -128,6 +132,7 @@ function n(){
   list($a, $b) = array();             // NOK - $a
   list(static::$d) = array();         // OK
   list(list($c)) = array();           // NOK {{Remove this unused "$c" local variable.}}
+//          ^^
 
   doSomething($b);
 }

@@ -49,7 +49,7 @@ public class TooManyMethodsInClassCheckTest {
 
     ImmutableList<CheckIssue> issues = ImmutableList.<CheckIssue>of(
       new PHPIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3),
-      new PHPIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(33)
+      new PHPIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(35)
     );
     PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), issues);
   }

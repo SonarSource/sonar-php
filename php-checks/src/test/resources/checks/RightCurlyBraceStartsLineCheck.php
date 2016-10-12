@@ -2,6 +2,7 @@
 
 function f () {
   doSomthing();}               // NOK {{Move this closing curly brace to the next line.}}
+//             ^
 
 if (true){
   doSomething();}              // NOK {{Move this closing curly brace to the next line.}}

@@ -2,6 +2,7 @@
 
 function f() {
   return;            // NOK {{Remove the code after this "return".}}
+//^^^^^^
   $a;
 
   if (true) {
@@ -16,6 +17,7 @@ function f() {
     $d;
 
     continue;         // NOK {{Remove the code after this "continue".}}
+//  ^^^^^^^^
     $e;
 
     if (true) {

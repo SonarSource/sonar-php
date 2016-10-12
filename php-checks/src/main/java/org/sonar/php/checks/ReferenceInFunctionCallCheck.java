@@ -49,7 +49,7 @@ public class ReferenceInFunctionCallCheck extends PHPVisitorCheck {
 
       if (argument.is(Kind.REFERENCE_VARIABLE)) {
         String message = String.format(MESSAGE, ((ReferenceVariableTree) argument).variableExpression().toString());
-        context().newIssue(this, message).tree(argument);
+        context().newIssue(this, argument, message);
       }
     }
   }

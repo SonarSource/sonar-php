@@ -86,7 +86,7 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
       } else {
         message = String.format(MESSAGE, ((ClassDeclarationTree) tree).name().text(), nbMethod, maximumMethodThreshold);
       }
-      context().newIssue(this, message).tree(tree);
+      context().newIssue(this, tree.classToken(), message);
     }
   }
 

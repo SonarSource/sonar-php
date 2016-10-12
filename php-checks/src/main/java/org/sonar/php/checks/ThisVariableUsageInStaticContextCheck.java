@@ -59,7 +59,7 @@ public class ThisVariableUsageInStaticContextCheck extends PHPVisitorCheck {
   @Override
   public void visitVariableIdentifier(VariableIdentifierTree varIdentifier) {
     if (inStaticContext && "$this".equals(varIdentifier.variableExpression().text())) {
-      context().newIssue(this, MESSAGE).tree(varIdentifier);
+      context().newIssue(this, varIdentifier.variableExpression(), MESSAGE);
     }
     super.visitVariableIdentifier(varIdentifier);
   }

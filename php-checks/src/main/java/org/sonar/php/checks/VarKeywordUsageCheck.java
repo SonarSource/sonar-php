@@ -42,7 +42,7 @@ public class VarKeywordUsageCheck extends PHPVisitorCheck {
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
     SyntaxToken varToken = getVarModifier(tree);
     if (varToken != null) {
-      context().newIssue(this, MESSAGE).tree(varToken);
+      context().newIssue(this, varToken, MESSAGE);
     }
 
     super.visitClassPropertyDeclaration(tree);

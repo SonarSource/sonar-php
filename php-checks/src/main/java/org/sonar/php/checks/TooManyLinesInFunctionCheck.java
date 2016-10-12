@@ -63,9 +63,7 @@ public class TooManyLinesInFunctionCheck extends PHPSubscriptionCheck {
     int nbLines = getNumberOfLines(declaration);
 
     if (nbLines > max) {
-      context()
-        .newIssue(this, String.format(MESSAGE, CheckUtils.getFunctionName(declaration), nbLines, max))
-        .tree(declaration);
+      context().newIssue(this, declaration.functionToken(), declaration.parameters(), String.format(MESSAGE, CheckUtils.getFunctionName(declaration), nbLines, max));
     }
   }
 

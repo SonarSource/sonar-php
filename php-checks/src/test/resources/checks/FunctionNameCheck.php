@@ -10,6 +10,7 @@ function doSomething() {  // OK
 }
 
 function DoSomething() {  // NOK {{Rename function "DoSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+//       ^^^^^^^^^^^
 }
 
 class A {
@@ -18,6 +19,10 @@ class A {
    * @inheritdoc
    */
   public function DoSomething() {  // OK
+  }
+
+  function DoSomething() {  // NOK {{Rename function "DoSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+//         ^^^^^^^^^^^
   }
 
   /**

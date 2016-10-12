@@ -3,6 +3,7 @@
 class B extends A {
   public function __construct() {
     parent::A();                   // NOK {{Replace "parent::A(...)" by "parent::__construct(...)".}}
+//  ^^^^^^^^^^^
     parent::f();                   // OK
     parent::FOO->f();              // OK
   }

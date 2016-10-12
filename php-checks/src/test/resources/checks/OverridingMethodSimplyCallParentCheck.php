@@ -3,6 +3,7 @@
 abstract class B extends A {
 
   public function f() {      // NOK {{Remove this method "f" to simply inherit it.}}
+//                ^
     parent::f();
   }
 

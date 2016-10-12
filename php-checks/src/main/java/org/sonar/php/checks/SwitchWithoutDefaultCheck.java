@@ -54,12 +54,10 @@ public class SwitchWithoutDefaultCheck extends PHPVisitorCheck {
 
     if (defaultClause == null) {
       context()
-        .newIssue(this, "Add a \"case default\" clause to this \"switch\" statement.")
-        .tree(switchTree);
+        .newIssue(this, switchTree.switchToken(), "Add a \"case default\" clause to this \"switch\" statement.");
     } else if (defaultClauseIndex < switchTree.cases().size() - 1) {
       context()
-        .newIssue(this, "Move this \"case default\" clause to the end of this \"switch\" statement.")
-        .tree(defaultClause);
+        .newIssue(this, defaultClause.caseToken(), "Move this \"case default\" clause to the end of this \"switch\" statement.");
     }
 
     super.visitSwitchStatement(switchTree);

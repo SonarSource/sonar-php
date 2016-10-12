@@ -47,8 +47,9 @@ public class UselessObjectCreationCheck extends PHPVisitorCheck {
     super.visitExpressionStatement(tree);
 
     if (tree.expression().is(Tree.Kind.NEW_EXPRESSION)) {
-      String message = String.format(MESSAGE, getClassName(((NewExpressionTree) tree.expression()).expression()));
-      context().newIssue(this, message).tree(tree);
+      NewExpressionTree newExpression = (NewExpressionTree) tree.expression();
+      String message = String.format(MESSAGE, getClassName(newExpression.expression()));
+      context().newIssue(this, newExpression, message);
     }
   }
 

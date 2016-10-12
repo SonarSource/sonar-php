@@ -93,6 +93,6 @@ public class IncrementDecrementInSubExpressionCheck extends PHPVisitorCheck {
   }
 
   private void raiseIssue(Tree tree) {
-    context().newIssue(this, MESSAGE).tree(tree);
+    context().newIssue(this, tree, MESSAGE);
   }
 }

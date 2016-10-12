@@ -1,6 +1,7 @@
 <?php
 
-switch ($variable) {    // NOK {{Replace this "switch" statement with "if" statements to increase readability.}}
+   switch ($variable) {    // NOK {{Replace this "switch" statement with "if" statements to increase readability.}}
+// ^^^^^^
   case 0:
     do_something();
     break;

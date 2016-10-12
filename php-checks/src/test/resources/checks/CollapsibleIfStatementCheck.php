@@ -11,6 +11,7 @@ class A {
 
     if (false) {        // OK
       if (false) {      // NOK {{Merge this if statement with the enclosing one.}}
+//    ^^
       }
     }
 
