@@ -20,6 +20,8 @@
 package org.sonar.plugins.php.api.tests;
 
 import com.google.common.collect.ImmutableList;
+import java.io.File;
+import java.nio.charset.Charset;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,9 +31,6 @@ import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-
-import java.io.File;
-import java.nio.charset.Charset;
 
 public class PhpCheckTestUtilsTest {
 
@@ -162,11 +161,87 @@ public class PhpCheckTestUtilsTest {
     PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK [[effortToFix=3]]"));
   }
 
-  public ImmutableList<CheckIssue> createIssuesForLines(int... lines) {
+  @Test
+  public void test_precise_location() throws Exception {
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK\n" +
+                                              "//    ^^^^^^      "));
+  }
+
+  @Test
+  public void test_wrong_start_precise_location() throws Exception {
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("* [WRONG_PRIMARY_LOCATION] Line 1: actual start column is 6");
+
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK\n" +
+      "//   ^^^^^^^      "));
+  }
+
+  @Test
+  public void test_wrong_end_precise_location() throws Exception {
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("* [WRONG_PRIMARY_LOCATION] Line 1: actual end column is 12");
+
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK\n" +
+      "//    ^^^^^       "));
+  }
+
+  @Test
+  public void test_issue_without_precise_location() throws Exception {
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("* [NO_PRECISE_LOCATION] Line 1: issue with precise location is expected");
+
+    PhpCheckTestUtils.check(CHECK, createFile("<?php class A {} // NOK\n" +
+                                              "//    ^^^^^      "));
+  }
+
+  @Test
+  public void test_secondary_location() throws Exception {
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK [[secondary=+0,-0]] {{message}}"));
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK [[secondary=1,1]] {{message}}"));
+  }
+
+  @Test
+  public void test_missing_secondary_location() throws Exception {
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("* [WRONG_SECONDARY_LOCATION] Line 1: missing secondary location at line 2");
+
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK [[secondary=+1]] {{message}}"));
+  }
+
+  @Test
+  public void test_unexpected_secondary_location() throws Exception {
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("* [WRONG_SECONDARY_LOCATION] Line 1: unexpected secondary location at line 1");
+
+    PhpCheckTestUtils.check(CHECK, createFile("<?php $a = 1; // NOK [[secondary=+0]] {{message}}"));
+  }
+
+  @Test
+  public void test_wrong_cost_with_secondary() throws Exception {
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("* [WRONG_COST] Issue at line 1 : \n"
+      + "Expected cost : 3.0\n"
+      + "Actual cost : 2.0");
+
+    PhpCheckTestUtils.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=3;secondary=1,1]]"));
+  }
+
+  @Test
+  public void test_shifted_line() throws Exception {
+    PhpCheckTestUtils.check(CHECK, createFile("<?php \n// NOK@+1\n$a = 1;"));
+  }
+
+  @Test
+  public void test_secondary_with_cost() throws Exception {
+    PhpCheckTestUtils.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[effortToFix=2;secondary=1,1]]"));
+    PhpCheckTestUtils.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[secondary=1,1;effortToFix=2]]"));
+  }
+
+  private ImmutableList<CheckIssue> createIssuesForLines(int... lines) {
     return createIssuesForLines("message", lines);
   }
 
-  public ImmutableList<CheckIssue> createIssuesForLines(String message, int... lines) {
+  private ImmutableList<CheckIssue> createIssuesForLines(String message, int... lines) {
     ImmutableList.Builder<CheckIssue> issueBuilder = ImmutableList.builder();
 
     for (int line : lines) {

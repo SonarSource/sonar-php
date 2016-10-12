@@ -20,27 +20,31 @@
 package org.sonar.plugins.php.api.tests;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 import com.sonar.sslr.api.typed.ActionParser;
-import org.apache.commons.lang.StringUtils;
-import org.sonar.php.api.CharsetAwareVisitor;
-import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.tree.visitors.PHPIssue;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
-import org.sonar.plugins.php.api.visitors.FileIssue;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
-import org.sonar.plugins.php.api.visitors.LineIssue;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.plugins.php.api.tests.TestIssue.Location;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.FileIssue;
+import org.sonar.plugins.php.api.visitors.IssueLocation;
+import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
+
+import static org.sonar.plugins.php.api.tests.ExpectedIssuesParser.parseExpectedIssues;
+
 
 /**
  * Helper class for checks unit test.
@@ -73,15 +77,8 @@ public class PhpCheckTestUtils {
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
     check.init();
     List<CheckIssue> actualIssues = getActualIssues(check, file, tree);
-    List<CheckIssue> expectedIssues = getExpectedIssues(check, file, tree);
+    List<TestIssue> expectedIssues = parseExpectedIssues(file, tree);
     compare(actualIssues, expectedIssues);
-  }
-
-  private static List<CheckIssue> getActualIssues(PHPCheck check, File file, CompilationUnitTree tree) {
-    if (check instanceof CharsetAwareVisitor) {
-      ((CharsetAwareVisitor) check).setCharset(charset);
-    }
-    return check.analyze(file, tree);
   }
 
   /**
@@ -95,10 +92,27 @@ public class PhpCheckTestUtils {
     CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
     check.init();
     List<CheckIssue> actualIssues = getActualIssues(check, file, tree);
-    compare(actualIssues, expectedIssues);
+    compare(actualIssues, toTestIssues(expectedIssues));
   }
 
-  private static void compare(List<CheckIssue> actualIssues, List<CheckIssue> expectedIssues) {
+  private static List<CheckIssue> getActualIssues(PHPCheck check, File file, CompilationUnitTree tree) {
+    if (check instanceof CharsetAwareVisitor) {
+      ((CharsetAwareVisitor) check).setCharset(charset);
+    }
+    return check.analyze(file, tree);
+  }
+
+  private static List<TestIssue> toTestIssues(List<CheckIssue> checkIssues) {
+    Builder<TestIssue> builder = ImmutableList.builder();
+
+    for (CheckIssue checkIssue : checkIssues) {
+      builder.add(TestIssue.create(message(checkIssue), line(checkIssue)));
+    }
+
+    return builder.build();
+  }
+
+  private static void compare(List<CheckIssue> actualIssues, List<TestIssue> expectedIssues) {
     Map<Integer, Tuple> map = new HashMap<>();
 
     for (CheckIssue issue : actualIssues) {
@@ -112,8 +126,8 @@ public class PhpCheckTestUtils {
       }
     }
 
-    for (CheckIssue issue : expectedIssues) {
-      int line = line(issue);
+    for (TestIssue issue : expectedIssues) {
+      int line = issue.line();
       if (map.get(line) == null) {
         Tuple tuple = new Tuple();
         tuple.addExpected(issue);
@@ -132,58 +146,6 @@ public class PhpCheckTestUtils {
     if (!StringUtils.isEmpty(errorMessage)) {
       throw new AssertionError("\n\n" + errorMessage);
     }
-  }
-
-  // NOK {{message here}}
-  private static List<CheckIssue> getExpectedIssues(PHPCheck check, File file, CompilationUnitTree tree) {
-    IssueParser issueParser = new IssueParser(check);
-    return issueParser.analyze(file, tree);
-  }
-
-  private static class IssueParser extends PHPVisitorCheck {
-
-    private final PHPCheck check;
-
-    public IssueParser(PHPCheck check) {
-      this.check = check;
-    }
-
-    @Override
-    public void visitTrivia(SyntaxTrivia syntaxTrivia) {
-      String text = syntaxTrivia.text();
-
-      if (text.startsWith("// NOK")) {
-        String message = null;
-        Integer effortToFix = null;
-
-        int expectedMessageIndex = text.indexOf("{{");
-        if (expectedMessageIndex > -1) {
-          message = text.substring(expectedMessageIndex + 2, text.indexOf("}}"));
-        }
-
-        String effortToFixStartMarker = "[[effortToFix=";
-        int effortToFixIndex = text.indexOf(effortToFixStartMarker);
-        if (effortToFixIndex > -1) {
-          String remaining = text.substring(effortToFixIndex + effortToFixStartMarker.length());
-          int effortToFixEndIndex = remaining.indexOf("]]");
-          if (effortToFixEndIndex == -1) {
-            throw new IllegalStateException("No end marker for effortToFix in: " + text);
-          }
-          String effortToFixString = remaining.substring(0, effortToFixEndIndex);
-          try {
-            effortToFix = Integer.parseInt(effortToFixString, 10);
-          } catch (NumberFormatException e) {
-            throw new IllegalStateException("Could not parse effortToFix: " + effortToFixString, e);
-          }
-        }
-
-        CheckIssue issue = context().newIssue(check, message).line(syntaxTrivia.line());
-        if (effortToFix != null) {
-          issue.cost(effortToFix);
-        }
-      }
-    }
-
   }
 
   private static int line(CheckIssue issue) {
@@ -221,15 +183,18 @@ public class PhpCheckTestUtils {
     private static final String WRONG_COST = "* [WRONG_COST] Issue at line %s : \nExpected cost : %s\nActual cost : %s\n\n";
     private static final String UNEXPECTED_ISSUE = "* [UNEXPECTED_ISSUE] at line %s with a message: \"%s\"\n\n";
     private static final String WRONG_NUMBER = "* [WRONG_NUMBER] Line %s: Expecting %s issue, but actual issues number is %s\n\n";
+    private static final String WRONG_PRIMARY_LOCATION = "* [WRONG_PRIMARY_LOCATION] Line %s: actual %s column is %s\n\n";
+    private static final String NO_PRECISE_LOCATION = "* [NO_PRECISE_LOCATION] Line %s: issue with precise location is expected\n\n";
+    private static final String WRONG_SECONDARY_LOCATION = "* [WRONG_SECONDARY_LOCATION] Line %s: %s secondary location at line %s\n\n";
 
     List<CheckIssue> actual = new ArrayList<>();
-    List<CheckIssue> expected = new ArrayList<>();
+    List<TestIssue> expected = new ArrayList<>();
 
     void addActual(CheckIssue actual) {
       this.actual.add(actual);
     }
 
-    void addExpected(CheckIssue expected) {
+    void addExpected(TestIssue expected) {
       this.expected.add(expected);
     }
 
@@ -238,26 +203,20 @@ public class PhpCheckTestUtils {
         return String.format(UNEXPECTED_ISSUE, line(actual.get(0)), message(actual.get(0)));
 
       } else if (actual.isEmpty() && !expected.isEmpty()) {
-        return String.format(NO_ISSUE, line(expected.get(0)));
+        return String.format(NO_ISSUE, expected.get(0).line());
 
       } else if (actual.size() == 1 && expected.size() == 1) {
-        String expectedMessage = message(expected.get(0));
-        if (expectedMessage != null && !message(actual.get(0)).equals(expectedMessage)) {
-          return String.format(WRONG_MESSAGE, line(actual.get(0)), expectedMessage, message(actual.get(0)));
-        }
-
-        Double expectedCost = expected.get(0).cost();
-        if (expectedCost != null && !expectedCost.equals(actual.get(0).cost())) {
-          return String.format(WRONG_COST, line(actual.get(0)), expectedCost, actual.get(0).cost());
-        }
+        TestIssue expectedIssue = expected.get(0);
+        CheckIssue actualIssue = actual.get(0);
+        return compareIssues(expectedIssue, actualIssue);
 
       } else if (actual.size() != expected.size()) {
         return String.format(WRONG_NUMBER, line(actual.get(0)), expected.size(), actual.size());
 
       } else {
         for (int i = 0; i < actual.size(); i++) {
-          if (!message(actual.get(i)).equals(message(expected.get(i)))) {
-            return String.format(WRONG_MESSAGE, line(actual.get(i)), message(expected.get(i)), message(actual.get(i)));
+          if (!message(actual.get(i)).equals(expected.get(i).message())) {
+            return String.format(WRONG_MESSAGE, line(actual.get(i)), expected.get(i).message(), message(actual.get(i)));
           }
         }
       }
@@ -265,6 +224,72 @@ public class PhpCheckTestUtils {
       return "";
     }
 
+    private static String compareIssues(TestIssue expectedIssue, CheckIssue actualIssue) {
+      String expectedMessage = expectedIssue.message();
+
+      if (expectedMessage != null && !message(actualIssue).equals(expectedMessage)) {
+        return String.format(WRONG_MESSAGE, line(actualIssue), expectedMessage, message(actualIssue));
+      }
+
+      Double expectedCost = expectedIssue.effortToFix();
+      if (expectedCost != null && !expectedCost.equals(actualIssue.cost())) {
+        return String.format(WRONG_COST, line(actualIssue), expectedCost, actualIssue.cost());
+      }
+
+      if (expectedIssue.startColumn() != null) {
+        if (!(actualIssue instanceof PreciseIssue)) {
+          return String.format(NO_PRECISE_LOCATION, expectedIssue.line());
+        }
+
+        PreciseIssue actualPreciseIssue = (PreciseIssue) actualIssue;
+        int actualStart = actualPreciseIssue.primaryLocation().startLineOffset();
+        if (expectedIssue.startColumn() != actualStart) {
+          return String.format(WRONG_PRIMARY_LOCATION, expectedIssue.line(), "start", actualStart);
+        }
+
+        int actualEnd = actualPreciseIssue.primaryLocation().endLineOffset();
+        if (expectedIssue.endColumn() != actualEnd) {
+          return String.format(WRONG_PRIMARY_LOCATION, expectedIssue.line(), "end", actualEnd);
+        }
+      }
+
+      if (!expectedIssue.secondaryLocations().isEmpty()) {
+        return compareSecondary(actualIssue, expectedIssue);
+      }
+
+      return "";
+    }
+
+    private static String compareSecondary(CheckIssue actualIssue, TestIssue expectedIssue) {
+      List<Location> expectedLocations = expectedIssue.secondaryLocations();
+      List<IssueLocation> actualLocations = actualIssue instanceof PreciseIssue ? ((PreciseIssue) actualIssue).secondaryLocations() : new ArrayList<>();
+
+      for (Location expected : expectedLocations) {
+        IssueLocation actual = secondary(expected.line(), actualLocations);
+
+        if (actual != null) {
+          actualLocations.remove(actual);
+        } else {
+          return String.format(WRONG_SECONDARY_LOCATION, expectedIssue.line(), "missing", expected.line());
+        }
+      }
+
+      if (!actualLocations.isEmpty()) {
+        IssueLocation location = actualLocations.get(0);
+        return String.format(WRONG_SECONDARY_LOCATION, location.startLine(), "unexpected", line(actualIssue));
+      }
+
+      return "";
+    }
+
+    private static IssueLocation secondary(int line, List<IssueLocation> allSecondaryLocations) {
+      for (IssueLocation location : allSecondaryLocations) {
+        if (location.startLine() == line) {
+          return location;
+        }
+      }
+      return null;
+    }
   }
 
 }

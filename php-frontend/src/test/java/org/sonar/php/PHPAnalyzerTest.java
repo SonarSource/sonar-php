@@ -28,10 +28,10 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,9 +61,9 @@ public class PHPAnalyzerTest {
     analyzer.nextFile(file);
     List<CheckIssue> issues = analyzer.analyze();
     assertThat(issues).hasSize(1);
-    assertThat(((PHPIssue) issues.get(0)).line()).isEqualTo(1);
+    assertThat(((PreciseIssue) issues.get(0)).primaryLocation().startLine()).isEqualTo(1);
     assertThat(issues.get(0).check()).isEqualTo(check);
-    assertThat(((PHPIssue) issues.get(0)).message()).isEqualTo(DummyCheck.MESSAGE);
+    assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo(DummyCheck.MESSAGE);
   }
 
 }
