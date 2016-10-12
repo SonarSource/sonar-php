@@ -19,24 +19,26 @@
  */
 package org.sonar.php.utils;
 
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 /**
 
- * Dummy check for testing. Raises an issue on assignment expression.
+ * Dummy check for testing. Raises a precise issue on assignment expression and line issue on class declaration.
  * <p> Example:
  * <pre>
  *   {@literal<}?php
  *
- *     $a = 1;   // issue
+ *     $a = 1;   // precise issue with 2 secondary locations (lhs and rhs)
  *     $b += 1;  // no issue
+ *     class A{} // line issue
  * </pre>
  */
 public class DummyCheck extends PHPVisitorCheck {
 
-  public static final String KEY = "test";
   public static final String MESSAGE = "message";
 
   private final Integer cost;
@@ -52,7 +54,9 @@ public class DummyCheck extends PHPVisitorCheck {
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
     if (tree.is(Tree.Kind.ASSIGNMENT)) {
-      CheckIssue issue = context().newIssue(this, MESSAGE).tree(tree);
+      CheckIssue issue = context().newIssue(this, tree, MESSAGE)
+        .secondary(tree.value(), null)
+        .secondary(tree.variable(), null);
       if (cost != null) {
         issue.cost(cost);
       }
@@ -61,4 +65,9 @@ public class DummyCheck extends PHPVisitorCheck {
     super.visitAssignmentExpression(tree);
   }
 
+  @Override
+  public void visitClassDeclaration(ClassDeclarationTree tree) {
+    context().newLineIssue(this, ((PHPTree) tree).getLine(), MESSAGE);
+    super.visitClassDeclaration(tree);
+  }
 }
