@@ -61,7 +61,8 @@ public interface ClassDeclarationTree extends StatementTree, ClassTree {
    * Either {@link PHPKeyword#CLASS class}, {@link PHPKeyword#TRAIT trait}
    * or {@link PHPKeyword#INTERFACE interface}
    */
-  SyntaxToken classEntryTypeToken();
+  @Override
+  SyntaxToken classToken();
 
   NameIdentifierTree name();
 

@@ -78,7 +78,7 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
   }
 
   @Override
-  public SyntaxToken classEntryTypeToken() {
+  public SyntaxToken classToken() {
     return classEntryTypeToken;
   }
 

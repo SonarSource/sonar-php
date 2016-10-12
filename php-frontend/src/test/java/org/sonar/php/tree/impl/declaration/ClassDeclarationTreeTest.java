@@ -36,7 +36,7 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.CLASS_DECLARATION)).isTrue();
     assertThat(tree.modifierToken().text()).isEqualTo("final");
-    assertThat(tree.classEntryTypeToken().text()).isEqualTo("class");
+    assertThat(tree.classToken().text()).isEqualTo("class");
     assertThat(tree.name().text()).isEqualTo("A");
     assertThat(tree.extendsToken().text()).isEqualTo("extends");
     assertThat(tree.superClass().name().text()).isEqualTo("B");
@@ -64,7 +64,7 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.TRAIT_DECLARATION)).isTrue();
     assertThat(tree.modifierToken()).isNull();
-    assertThat(tree.classEntryTypeToken().text()).isEqualTo("trait");
+    assertThat(tree.classToken().text()).isEqualTo("trait");
     assertThat(tree.name().text()).isEqualTo("A");
     assertThat(tree.extendsToken()).isNull();
     assertThat(tree.superClass()).isNull();
@@ -79,7 +79,7 @@ public class ClassDeclarationTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.is(Kind.INTERFACE_DECLARATION)).isTrue();
     assertThat(tree.modifierToken()).isNull();
-    assertThat(tree.classEntryTypeToken().text()).isEqualTo("interface");
+    assertThat(tree.classToken().text()).isEqualTo("interface");
     assertThat(tree.name().text()).isEqualTo("A");
     assertThat(tree.extendsToken()).isNotNull();
     assertThat(tree.superClass()).isNull();
