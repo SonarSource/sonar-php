@@ -21,6 +21,7 @@ package org.sonar.php.tree.impl.lexical;
 
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -110,6 +111,16 @@ public class InternalSyntaxTrivia extends PHPTree implements SyntaxTrivia {
   @Override
   public void accept(VisitorCheck visitor) {
     visitor.visitTrivia(this);
+  }
+
+  @Override
+  public SyntaxToken getFirstToken() {
+    return this;
+  }
+
+  @Override
+  public SyntaxToken getLastToken() {
+    return this;
   }
 }
 
