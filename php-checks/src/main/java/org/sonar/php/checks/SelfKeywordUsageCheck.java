@@ -22,6 +22,8 @@ package org.sonar.php.checks;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -32,6 +34,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -51,10 +54,18 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Use \"static\" keyword instead of \"self\".";
 
   private Deque<Boolean> isFinalClassStack = new ArrayDeque<>();
+
   private Deque<Set<String>> finalMethodsStack = new ArrayDeque<>();
+
+  private List<String> privateProperties;
+
+  private List<String> privateMethods;
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
+    privateProperties = new LinkedList<>();
+    privateMethods = new LinkedList<>();
+
     isFinalClassStack.addLast(isFinalClass(tree));
     finalMethodsStack.addLast(getFinalMethods(tree));
 
@@ -83,7 +94,20 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
   }
 
   @Override
+  public void visitMethodDeclaration(MethodDeclarationTree tree) {
+    if (CheckUtils.hasModifier(tree.modifiers(), "private")) {
+      privateMethods.add(tree.name().text());
+    }
+
+    super.visitMethodDeclaration(tree);
+  }
+
+  @Override
   public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
+    if (tree.hasModifiers("private")) {
+      tree.declarations().forEach(varDec -> privateProperties.add(varDec.identifier().text()));
+    }
+
     // don't enter inside class property declarations
   }
 
@@ -105,6 +129,17 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   private boolean isFinalMethod(Tree member) {
     return member.is(Kind.NAME_IDENTIFIER) && finalMethodsStack.getLast().contains(((NameIdentifierTree) member).text());
+  }
+
+  private boolean isPrivate(Tree member) {
+    if (member.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      IdentifierTree identifier = (IdentifierTree) member;
+      return privateProperties.contains(identifier.text());
+    } else if (member.is(Tree.Kind.NAME_IDENTIFIER)) {
+      IdentifierTree identifier = (IdentifierTree) member;
+      return privateMethods.contains(identifier.text());
+    }
+    return false;
   }
 
 }
