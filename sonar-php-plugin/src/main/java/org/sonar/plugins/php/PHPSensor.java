@@ -270,7 +270,7 @@ public class PHPSensor implements Sensor {
   private RuleKey getParsingErrorRuleKey() {
     List<RuleKey> keys = checks.all().stream()
       .filter(check -> check instanceof ParsingErrorCheck)
-      .map(check -> checks.ruleKeyFor((ParsingErrorCheck) check))
+      .map(checks::ruleKeyFor)
       .collect(Collectors.toList());
 
     return keys.isEmpty() ? null : keys.get(0);

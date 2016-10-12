@@ -50,6 +50,7 @@ public class PHPAnalyzerTest {
     analyzer.nextFile(file);
   }
 
+  @Test
   public void test_analyze() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = new PHPAnalyzer(UTF_8, ImmutableList.of(check));

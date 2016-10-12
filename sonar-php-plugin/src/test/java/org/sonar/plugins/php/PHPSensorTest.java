@@ -115,10 +115,7 @@ public class PHPSensorTest {
   @Before
   public void setUp() {
     fileSystem = PhpTestUtils.getDefaultFileSystem();
-    FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
-    CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
-
-    sensor = new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    sensor = createSensor();
   }
 
   @Test
@@ -178,6 +175,9 @@ public class PHPSensorTest {
 
   @Test
   public void empty_file_should_raise_no_issue() throws Exception {
+    // replace sensor with sensor having one rule
+    sensor = createSensorWithParsingErrorCheckActivated();
+
     analyseSingleFile(context, "empty.php");
 
     assertThat(context.allIssues()).as("No issue must be raised").hasSize(0);
@@ -185,16 +185,8 @@ public class PHPSensorTest {
 
   @Test
   public void parsing_error_should_raise_an_issue_if_check_rule_is_activated() throws Exception {
-    // Add 1 rule, in order to active the rule of parsing errors
-    FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
-    String parsingErrorCheckKey = "S2260";
-    ActiveRules activeRules = (new ActiveRulesBuilder())
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey))
-      .setName(parsingErrorCheckKey)
-      .activate()
-      .build();
-    CheckFactory checkFactory = new CheckFactory(activeRules);
-    sensor = new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    // replace sensor with sensor having one rule
+    sensor = createSensorWithParsingErrorCheckActivated();
 
     analyseSingleFile(context, "parseError.php");
 
@@ -254,6 +246,31 @@ public class PHPSensorTest {
   public void cancelled_analysis_causing_recognition_exception() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new RecognitionException(42, "message", new InterruptedIOException()));
     analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "Analysis cancelled");
+  }
+
+  private PHPSensor createSensor() {
+    FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
+
+    CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
+
+    return new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+  }
+
+  /**
+   * Same as method <code>createSensor</code>, with one rule activated (the rule for parsing errors).
+   */
+  private PHPSensor createSensorWithParsingErrorCheckActivated() {
+    FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
+
+    String parsingErrorCheckKey = "S2260";
+    ActiveRules activeRules = (new ActiveRulesBuilder())
+      .create(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey))
+      .setName(parsingErrorCheckKey)
+      .activate()
+      .build();
+    CheckFactory checkFactory = new CheckFactory(activeRules);
+
+    return new PHPSensor(fileSystem, fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
   }
 
   private FileLinesContextFactory createFileLinesContextFactory() {

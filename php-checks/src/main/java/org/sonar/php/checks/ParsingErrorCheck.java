@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
 
 /**
  * This class does nothing. It exists only to be present in the SonarQube profile and GUI.
@@ -31,6 +30,5 @@ import org.sonar.squidbridge.annotations.ActivatedByDefault;
   key = "S2260",
   name = "Parsing error"
 )
-@ActivatedByDefault
 public class ParsingErrorCheck extends PHPVisitorCheck {
 }
