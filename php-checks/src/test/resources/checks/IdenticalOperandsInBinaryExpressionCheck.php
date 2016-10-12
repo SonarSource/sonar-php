@@ -1,6 +1,7 @@
 <?php
 $x = $a == $b;
-$x = $a == $a; // NOK {{Identical sub-expressions on both sides of operator "=="}}
+$x = $a == $a; // NOK [[secondary=+0]] {{Identical sub-expressions on both sides of operator "=="}}
+//         ^^
 $x = $a != $a; // NOK {{Identical sub-expressions on both sides of operator "!="}}
 $x = $a == $b && $a == $b; // NOK
 $x = $a == $b || $a == $b; // NOK

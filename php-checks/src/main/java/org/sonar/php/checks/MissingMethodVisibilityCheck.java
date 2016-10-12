@@ -81,7 +81,7 @@ public class MissingMethodVisibilityCheck extends PHPVisitorCheck {
     if (!hasVisibilityModifier(method)) {
       String methodName = method.name().text();
       String message = String.format(MESSAGE, getMethodKind(methodName, className), methodName);
-      context().newIssue(this, message).tree(method);
+      context().newIssue(this, method.name(), message);
     }
   }
 

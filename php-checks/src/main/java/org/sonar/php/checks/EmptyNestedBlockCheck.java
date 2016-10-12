@@ -61,25 +61,29 @@ public class EmptyNestedBlockCheck extends PHPVisitorCheck {
   @Override
   public void visitBlock(BlockTree tree) {
     super.visitBlock(tree);
-    check(tree.statements(), tree.closeCurlyBraceToken(), tree);
+    if (isEmpty(tree.statements(), tree.closeCurlyBraceToken())) {
+      context().newIssue(this, tree, MESSAGE);
+    }
   }
 
   @Override
   public void visitSwitchStatement(SwitchStatementTree tree) {
     super.visitSwitchStatement(tree);
-    check(tree.cases(), tree.closeCurlyBraceToken(), tree.openCurlyBraceToken());
+    if (isEmpty(tree.cases(), tree.closeCurlyBraceToken())) {
+      context().newIssue(this, tree.openCurlyBraceToken(), tree.closeCurlyBraceToken(), MESSAGE);
+    }
   }
 
   @Override
   public void visitUseTraitDeclaration(UseTraitDeclarationTree tree) {
     super.visitUseTraitDeclaration(tree);
-    check(tree.adaptations(), tree.closeCurlyBraceToken(), tree.openCurlyBraceToken());
+    if (isEmpty(tree.adaptations(), tree.closeCurlyBraceToken())) {
+      context().newIssue(this, tree.openCurlyBraceToken(), tree.closeCurlyBraceToken(), MESSAGE);
+    }
   }
 
-  private <T extends Tree> void check(List<T> statements, @Nullable SyntaxToken lastToken, Tree issueTree) {
-    if (statements.isEmpty() && lastToken != null && lastToken.trivias().isEmpty()) {
-      context().newIssue(this, MESSAGE).tree(issueTree);
-    }
+  private static <T extends Tree> boolean isEmpty(List<T> statements, @Nullable SyntaxToken lastToken) {
+    return statements.isEmpty() && lastToken != null && lastToken.trivias().isEmpty();
   }
 
 }

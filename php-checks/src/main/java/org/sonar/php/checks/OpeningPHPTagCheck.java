@@ -46,7 +46,7 @@ public class OpeningPHPTagCheck extends PHPVisitorCheck {
     String openingTagWithContentBefore = tree.fileOpeningTagToken().text();
 
     if (!isAuthorisedTag(openingTagWithContentBefore)) {
-      context().newIssue(this, MESSAGE).line(getLineToReport(openingTagWithContentBefore));
+      context().newLineIssue(this, getLineToReport(openingTagWithContentBefore), MESSAGE);
     }
   }
 

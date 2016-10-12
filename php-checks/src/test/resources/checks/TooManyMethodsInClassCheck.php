@@ -1,6 +1,7 @@
 <?php
 
-interface I {             // NOK {{Class "I" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.}}
+  interface I {             // NOK {{Class "I" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.}}
+//^^^^^^^^^
 
   public function f1();
 
@@ -9,7 +10,8 @@ interface I {             // NOK {{Class "I" has 3 methods, which is greater tha
   public function f3();
 }
 
-class C1 {       // NOK
+  class C1 {       // NOK
+//^^^^^
 
   public function f1() {
   }
@@ -31,6 +33,7 @@ class C1 {       // OK
 }
 
 $x = new class {       // NOK
+//       ^^^^^
 
   public function f1() {  }
 

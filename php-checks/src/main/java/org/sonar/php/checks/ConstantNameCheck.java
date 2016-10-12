@@ -96,13 +96,13 @@ public class ConstantNameCheck extends PHPVisitorCheck {
   private void checkDeclarations(SeparatedList<VariableDeclarationTree> declarations) {
     for (VariableDeclarationTree declaration : declarations) {
       String constantName = declaration.identifier().text();
-      checkConstantName(declaration, constantName);
+      checkConstantName(declaration.identifier(), constantName);
     }
   }
 
   private void checkConstantName(Tree tree, String constName) {
     if (!pattern.matcher(constName).matches()) {
-      context().newIssue(this, String.format(MESSAGE, constName, format)).tree(tree);
+      context().newIssue(this, tree, String.format(MESSAGE, constName, format));
     }
   }
 

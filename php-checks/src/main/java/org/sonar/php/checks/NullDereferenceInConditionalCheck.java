@@ -47,8 +47,7 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 @SqaleConstantRemediation("2min")
 public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE_FORMAT =
-    "Either reverse the equality operator in the \"%s\" null test, or reverse the logical operator that follows it.";
+  private static final String MESSAGE_FORMAT = "Either reverse the equality operator in the \"%s\" null test, or reverse the logical operator that follows it.";
 
   private static final List<Kind> AND_KINDS = ImmutableList.of(Kind.CONDITIONAL_AND, Kind.ALTERNATIVE_CONDITIONAL_AND);
   private static final List<Kind> OR_KINDS = ImmutableList.of(Kind.CONDITIONAL_OR, Kind.ALTERNATIVE_CONDITIONAL_OR);
@@ -163,7 +162,7 @@ public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
     @Override
     public void visitMemberAccess(MemberAccessTree tree) {
       if (Equality.areSyntacticallyEquivalent(removeParenthesis(tree.object()), nullExpression)) {
-        context.newIssue(check, String.format(MESSAGE_FORMAT, nullExpression.toString())).tree(nullExpression);
+        context.newIssue(check, nullExpression, String.format(MESSAGE_FORMAT, nullExpression.toString()));
       }
 
       super.visitMemberAccess(tree);

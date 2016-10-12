@@ -6,6 +6,7 @@ class A {
    *  @return boolean
    */
   public function getA() {    // NOK {{Rename this method to start with "is" or "has".}}
+//                ^^^^
   }
 
   /**

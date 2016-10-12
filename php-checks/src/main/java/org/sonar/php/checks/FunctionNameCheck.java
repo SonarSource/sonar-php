@@ -26,7 +26,6 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -64,21 +63,21 @@ public class FunctionNameCheck extends PHPVisitorCheck {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     if (!CheckUtils.isOverriding(tree)) {
-      check(tree, tree.name());
+      check(tree.name());
     }
     super.visitMethodDeclaration(tree);
   }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    check(tree, tree.name());
+    check(tree.name());
     super.visitFunctionDeclaration(tree);
   }
 
-  private void check(FunctionTree functionDeclaration, NameIdentifierTree name) {
+  private void check(NameIdentifierTree name) {
     String functionName = name.text();
     if (!pattern.matcher(functionName).matches() && !MAGIC_METHODS.contains(functionName)) {
-      context().newIssue(this, String.format(MESSAGE, functionName, format)).tree(functionDeclaration);
+      context().newIssue(this, name, String.format(MESSAGE, functionName, format));
     }
   }
 

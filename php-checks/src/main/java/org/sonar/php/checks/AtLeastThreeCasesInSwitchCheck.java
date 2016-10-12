@@ -40,9 +40,7 @@ public class AtLeastThreeCasesInSwitchCheck extends PHPVisitorCheck {
   @Override
   public void visitSwitchStatement(SwitchStatementTree switchTree) {
     if (switchTree.cases().size() < 3) {
-      context()
-        .newIssue(this, "Replace this \"switch\" statement with \"if\" statements to increase readability.")
-        .tree(switchTree);
+      context().newIssue(this, switchTree.switchToken(), "Replace this \"switch\" statement with \"if\" statements to increase readability.");
     }
 
     super.visitSwitchStatement(switchTree);

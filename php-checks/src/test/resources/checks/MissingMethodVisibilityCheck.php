@@ -3,6 +3,7 @@
 abstract class C1
 {
     static function f() { return; }          // NOK {{Explicitly mention the visibility of this method "f".}}
+//                  ^
     abstract function g();                   // NOK {{Explicitly mention the visibility of this method "g".}}
     function h() {return; }                  // NOK {{Explicitly mention the visibility of this method "h".}}
 

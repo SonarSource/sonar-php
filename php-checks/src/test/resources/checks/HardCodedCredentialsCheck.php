@@ -3,6 +3,7 @@ class A {
     
   public $fieldNameWithPasswordInIt = retrievePassword();
   public $fieldNameWithPasswordInIt = ""; // NOK {{Remove this hard-coded password.}}
+//       ^^^^^^^^^^^^^^^^^^^^^^^^^^
   public $fieldNameWithPasswordInIt = "$password";
   public $fieldNameWithPasswordInIt;
   public $otherFieldName = "";
@@ -10,12 +11,15 @@ class A {
   private function a() {
     $variable1 = "blabla";
     $variable2 = "login=a&password=xxx"; // NOK
+//               ^^^^^^^^^^^^^^^^^^^^^^
     $variable3 = "login=a&password=";
     $variable4 = "login=a&password=$password";
 
     $variableNameWithPasswordInIt = "xxx"; // NOK
+//  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     $otherVariableNameWithPasswordInIt;
     $this->fieldNameWithPasswordInIt = "xx"; // NOK
+//         ^^^^^^^^^^^^^^^^^^^^^^^^^
     $this->fieldNameWithPasswordInIt = retrievePassword(); 
   }
 

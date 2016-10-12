@@ -63,7 +63,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
 
   private static class ClassState {
 
-    private Map<String, Integer> classFields = Maps.newHashMap();
+    private Map<String, SyntaxToken> classFields = Maps.newHashMap();
     private Deque<Set<String>> checkedVariables = new ArrayDeque<>();
     private String className;
 
@@ -81,14 +81,14 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
     }
 
     public void declareField(SyntaxToken fieldToken) {
-      classFields.put(fieldToken.text(), fieldToken.line());
+      classFields.put(fieldToken.text(), fieldToken);
     }
 
     public boolean hasFieldNamed(String paramName) {
       return classFields.containsKey(paramName);
     }
 
-    public int getLineOfFieldNamed(String name) {
+    public SyntaxToken getFieldNamed(String name) {
       return classFields.get(name);
     }
 
@@ -192,8 +192,9 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   }
 
   private void reportIssue(Tree tree, String varName) {
-    String message = String.format(MESSAGE, varName, classState.getLineOfFieldNamed(varName));
-    context().newIssue(this, message).tree(tree);
+    SyntaxToken field = classState.getFieldNamed(varName);
+    String message = String.format(MESSAGE, varName, field.line());
+    context().newIssue(this, tree, message).secondary(field, null);
 
     classState.setAsCheckedVariable(varName);
   }

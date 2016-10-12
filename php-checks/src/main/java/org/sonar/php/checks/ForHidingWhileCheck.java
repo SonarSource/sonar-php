@@ -43,7 +43,7 @@ public class ForHidingWhileCheck extends PHPVisitorCheck {
     super.visitForStatement(tree);
 
     if (tree.init().isEmpty() && tree.update().isEmpty()) {
-      context().newIssue(this, MESSAGE).tree(tree);
+      context().newIssue(this, tree.forToken(), MESSAGE);
     }
   }
 

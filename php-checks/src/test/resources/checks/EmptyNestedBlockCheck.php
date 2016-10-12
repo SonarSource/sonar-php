@@ -1,6 +1,7 @@
 <?php
 
 for ($i = 0; i < 42; i++){}  // NOK {{Either remove or fill this block of code.}}
+//                       ^^
 
 for ($i = 0; i < 42; i++);   // OK
 
@@ -11,6 +12,7 @@ if ($a == 3)                 // OK
 
 class c {
  use A {}                    // NOK
+//     ^^
  use A { /*some comment*/}                    // OK
 }
 
@@ -23,7 +25,8 @@ try
 
 
 switch ($a)
-{   }                         // NOK
+  {   }                         // NOK
+//^^^^^
 
 
 switch ($a)

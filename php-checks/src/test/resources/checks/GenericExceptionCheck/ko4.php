@@ -6,6 +6,7 @@ namespace Package {
 
       function test2() {
           throw new \Exception();  // NOK {{Define and throw a dedicated exception instead of using a generic one.}}
+//                  ^^^^^^^^^^
       }
   }
 

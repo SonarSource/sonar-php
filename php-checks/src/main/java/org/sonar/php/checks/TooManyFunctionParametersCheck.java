@@ -64,7 +64,7 @@ public class TooManyFunctionParametersCheck extends PHPVisitorCheck {
     int numberOfParameters = parameterList.parameters().size();
     int maxValue = isConstructorParameterList(parameterList) ? constructorMax : max;
     if (numberOfParameters > maxValue) {
-      context().newIssue(this, String.format(MESSAGE, numberOfParameters, maxValue)).tree(parameterList);
+      context().newIssue(this, parameterList, String.format(MESSAGE, numberOfParameters, maxValue));
     }
     super.visitParameterList(parameterList);
   }

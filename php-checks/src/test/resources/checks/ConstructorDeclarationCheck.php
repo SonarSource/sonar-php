@@ -3,6 +3,7 @@
 class C {
 
   public function C() {             // NOK {{Replace this function name "C" with "__construct".}}
+//                ^
   }
 
   public function f() {

@@ -1,6 +1,7 @@
 <?php
 
 function f($p1, $p2 = 2, $p3) {           // NOK {{Move arguments "$p2" after arguments without default value}}
+//        ^^^^^^^^^^^^^^^^^^^
   return;
 }
 

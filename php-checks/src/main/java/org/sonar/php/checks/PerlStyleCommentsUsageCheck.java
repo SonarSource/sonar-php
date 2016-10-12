@@ -41,7 +41,7 @@ public class PerlStyleCommentsUsageCheck extends PHPVisitorCheck {
     super.visitTrivia(trivia);
 
     if (trivia.text().charAt(0) == '#') {
-      context().newIssue(this, MESSAGE).tree(trivia);
+      context().newIssue(this, trivia, MESSAGE);
     }
   }
 

@@ -3,6 +3,7 @@
 final class A {
 
   public final function f() {  // NOK {{Remove this "final" modifier.}}
+//       ^^^^^
   }
 
   public function g() {        // OK

@@ -127,7 +127,7 @@ public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
       int lastShouldBeNestedLine = ((PHPTree) statementsWhichShouldBeNested.get(statementsWhichShouldBeNested.size() - 1)).getLine();
       int blockSize = lastShouldBeNestedLine - firstInnerStatementLine + 1;
       String message = statements.get(nestingStatementNum).is(Kind.IF_STATEMENT) ? MESSAGE_IF : MESSAGE_LOOP;
-      context().newIssue(this, String.format(message, blockSize)).tree(statementsWhichShouldBeNested.get(0));
+      context().newIssue(this, statementsWhichShouldBeNested.get(0), String.format(message, blockSize));
     }
   }
 

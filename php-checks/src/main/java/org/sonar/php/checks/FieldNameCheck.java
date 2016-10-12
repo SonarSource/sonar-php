@@ -70,7 +70,7 @@ public class FieldNameCheck extends PHPSubscriptionCheck {
     for (VariableDeclarationTree variableDeclarationTree : property.declarations()) {
       String propertyName = variableDeclarationTree.identifier().text();
       if (!pattern.matcher(StringUtils.remove(propertyName, "$")).matches()) {
-        context().newIssue(this, String.format(MESSAGE, propertyName, format)).tree(property);
+        context().newIssue(this, variableDeclarationTree.identifier(), String.format(MESSAGE, propertyName, format));
       }
     }
   }

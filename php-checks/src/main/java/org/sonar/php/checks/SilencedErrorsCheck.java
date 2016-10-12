@@ -25,6 +25,7 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
@@ -46,7 +47,7 @@ public class SilencedErrorsCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    context().newIssue(this, MESSAGE).tree(tree);
+    context().newIssue(this, ((UnaryExpressionTree) tree).operator(), MESSAGE);
   }
 
 }

@@ -131,7 +131,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
   }
 
   private void reportIssue(String type, Tree tree, String varName) {
-    context().newIssue(this, String.format(MESSAGE, type, varName, format)).tree(tree);
+    context().newIssue(this, tree, String.format(MESSAGE, type, varName, format));
     setAsCheckedVariable(varName);
   }
 

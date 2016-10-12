@@ -68,7 +68,7 @@ public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
 
       if (currentStatement.is(JUMP_KINDS) && hasActionStatementAfter(statements, i)) {
         String message = String.format(MESSAGE, ((PHPTree) currentStatement).getFirstToken().text());
-        context().newIssue(this, message).tree(currentStatement);
+        context().newIssue(this, ((PHPTree) currentStatement).getFirstToken(), message);
       }
     }
 

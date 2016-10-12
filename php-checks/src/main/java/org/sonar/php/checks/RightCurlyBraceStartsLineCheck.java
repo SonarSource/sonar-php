@@ -109,7 +109,7 @@ public class RightCurlyBraceStartsLineCheck extends PHPVisitorCheck {
     }
 
     if (rightBraceLine == prevToken.line()) {
-      context().newIssue(this, MESSAGE).line(rightBraceLine);
+      context().newIssue(this, rBrace, MESSAGE);
     }
   }
 

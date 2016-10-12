@@ -14,7 +14,8 @@ function f() {
       while (false) {             // level 3
         if (true) {               // level 4
 
-          foreach ($arr as $v) {    // NOK
+          foreach ($arr as $v) {    // NOK [[secondary=-0,-2,-3,-4,-5]]
+//        ^^^^^^^
           }
 
           while (false) {           // NOK

@@ -58,7 +58,6 @@ public class LogicalWordOperatorUsageCheck extends PHPSubscriptionCheck {
       ? PHPPunctuator.ANDAND.getValue()
       : PHPPunctuator.OROR.getValue();
 
-    context().newIssue(this, String.format(MESSAGE, operator.text(), replacement))
-      .tree(operator);
+    context().newIssue(this, operator, String.format(MESSAGE, operator.text(), replacement));
   }
 }

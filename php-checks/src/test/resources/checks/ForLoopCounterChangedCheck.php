@@ -2,6 +2,7 @@
 
 for ($a = 0; $a < 42; $a++) {
   $a = 0;                                // NOK {{Refactor the code to avoid updating the loop counter "$a" within the loop body.}}
+//^^
 }
 
 for ($a = 0; $a < 42; $a++):

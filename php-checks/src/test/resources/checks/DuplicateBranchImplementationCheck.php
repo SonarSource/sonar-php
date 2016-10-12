@@ -3,9 +3,9 @@ if ($x == 1) {
 	doX();
 } elseif ($x == 2) {
 	doY();
-} elseif ($x == 3) {    // NOK {{This branch's code block is the same as the block for the branch on line 2.}}
-	doX();
-} else {                // NOK {{This branch's code block is the same as the block for the branch on line 2.}}
+} elseif ($x == 3) {  doX(); } // NOK  [[secondary=-4]] {{This branch's code block is the same as the block for the branch on line 2.}}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+else {                // NOK {{This branch's code block is the same as the block for the branch on line 2.}}
 	doX();
 }
 

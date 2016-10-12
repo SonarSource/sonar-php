@@ -1,7 +1,7 @@
 <?php
 
-class Foo {       // NOK {{Split this class into smaller and more specialized ones to reduce its dependencies on other classes from 15 to the maximum authorized 10 or less.}}
-
+  class Foo {       // NOK {{Split this class into smaller and more specialized ones to reduce its dependencies on other classes from 15 to the maximum authorized 10 or less.}}
+//^^^^^
     use MyTrait;
 
     /**
@@ -109,6 +109,7 @@ class Bar {       // OK - depends on 2 classes
 }
 
 $x = new class {       // NOK
+//       ^^^^^
   function foo() {
     new T1();
     new T2();

@@ -51,7 +51,7 @@ public class NonEmptyCaseWithoutBreakCheck extends PHPVisitorCheck {
     SwitchCaseClauseTree currentClause = null;
     for (SwitchCaseClauseTree nextClause : switchTree.cases()) {
       if (currentClause != null && !isEmpty(currentClause) && !hasJumpStatement(currentClause) && !hasNoBreakComment(nextClause)) {
-        context().newIssue(this, MESSAGE).tree(currentClause);
+        context().newIssue(this, currentClause.caseToken(), currentClause.caseSeparatorToken(), MESSAGE);
       }
       currentClause = nextClause;
     }

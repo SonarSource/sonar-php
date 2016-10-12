@@ -48,7 +48,7 @@ public class DirectlyAccessingSuperGlobalCheck extends PHPVisitorCheck {
     String name = variable.text();
 
     if (CheckUtils.PREDEFINED_VARIABLES.values().contains(name)) {
-      context().newIssue(this, String.format(MESSAGE, name)).tree(variable);
+      context().newIssue(this, variable, String.format(MESSAGE, name));
     }
   }
 

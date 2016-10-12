@@ -17,6 +17,7 @@ class A {
 
   public static function f1() {
     self::f2();                // NOK
+//  ^^^^
     self::f3();                // OK, "f3" can't be overridden
     return self::$field;       // NOK {{Use "static" keyword instead of "self".}}
   }

@@ -5,9 +5,11 @@ class A {
 }
 
 function x($obj){
-  if($obj == null && $obj->field == 0){}         // NOK
+  if($obj == null && $obj->field == 0){}         // NOK {{Either reverse the equality operator in the "$obj" null test, or reverse the logical operator that follows it.}}
+//   ^^^^
   if($obj == null and $obj->field == 0){}         // NOK
   if(is_null($obj) && $obj->field == 0){}        // NOK
+//           ^^^^
   if(!is_null($obj) || $obj->field == 0){}       // NOK
   if($obj == null && $obj::$staticField == 0){}  // NOK
   if($obj != null || $obj->field > 0){}          // NOK

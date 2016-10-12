@@ -11,8 +11,10 @@ function f1($param) {     // OK
 
 
 function f1($PARAM) {     // NOK {{Rename this parameter "$PARAM" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+//          ^^^^^^
 
   $LOCAL = function () {  // NOK {{Rename this local variable "$LOCAL" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+//^^^^^^
     $INNER_LOCAL = 1;     // NOK
     $LOCAL = 1;           // NOK
   };

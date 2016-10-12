@@ -3,10 +3,13 @@
 function sayHello() {
 
   if (true) doSomething();                // NOK {{Add curly braces around the nested statement(s).}}
+//^^
 
   for (i = 0; i < 10; i++) doSomething(); // NOK {{Add curly braces around the nested statement(s).}}
+//^^^
 
   while (true) doSomething();             // NOK {{Add curly braces around the nested statement(s).}}
+//^^^^^
 
   do something(); while (condition);      // NOK {{Add curly braces around the nested statement(s).}}
 

@@ -8,4 +8,4 @@ class C
   }
 }
 
-?>    // NOK {{Remove this closing tag "?>".}}
+  ?>

@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
@@ -49,7 +48,7 @@ public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
 
     if (!elseifClauses.isEmpty() && tree.elseClause() == null) {
       ElseifClauseTree lastElseIf = elseifClauses.get(elseifClauses.size() - 1);
-      raiseIssue(lastElseIf);
+      context().newIssue(this, lastElseIf.elseifToken(), MESSAGE);
     }
   }
 
@@ -61,13 +60,9 @@ public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
       IfStatementTree nestedIf = (IfStatementTree)tree.statements().get(0);
 
       if (nestedIf.elseClause() == null && nestedIf.elseifClauses().isEmpty()) {
-        raiseIssue(tree);
+        context().newIssue(this, tree.elseToken(), nestedIf.ifToken(), MESSAGE);
       }
     }
-  }
-
-  private void raiseIssue(Tree tree) {
-    context().newIssue(this, MESSAGE).tree(tree);
   }
 
 }

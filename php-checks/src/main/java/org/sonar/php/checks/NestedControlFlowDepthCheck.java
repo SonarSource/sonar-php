@@ -19,6 +19,8 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -36,6 +38,7 @@ import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
@@ -52,7 +55,7 @@ public class NestedControlFlowDepthCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Refactor this code to not nest more than %s \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.";
 
-  private int nestingLevel;
+  private Deque<Tree> nestingStack = new ArrayDeque<>();
 
   public static final int DEFAULT = 4;
 
@@ -63,13 +66,13 @@ public class NestedControlFlowDepthCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    nestingLevel = 0;
+    nestingStack.clear();
     super.visitCompilationUnit(tree);
   }
 
   @Override
   public void visitIfStatement(IfStatementTree tree) {
-    enterBlock(tree);
+    enterBlock(tree.ifToken());
     scanIf(tree);
     leaveBlock();
   }
@@ -91,55 +94,56 @@ public class NestedControlFlowDepthCheck extends PHPVisitorCheck {
 
   @Override
   public void visitDoWhileStatement(DoWhileStatementTree tree) {
-    enterBlock(tree);
+    enterBlock(tree.doToken());
     super.visitDoWhileStatement(tree);
     leaveBlock();
   }
 
   @Override
   public void visitForStatement(ForStatementTree tree) {
-    enterBlock(tree);
+    enterBlock(tree.forToken());
     super.visitForStatement(tree);
     leaveBlock();
   }
 
   @Override
   public void visitForEachStatement(ForEachStatementTree tree) {
-    enterBlock(tree);
+    enterBlock(tree.foreachToken());
     super.visitForEachStatement(tree);
     leaveBlock();
   }
 
   @Override
   public void visitSwitchStatement(SwitchStatementTree tree) {
-    enterBlock(tree);
+    enterBlock(tree.switchToken());
     super.visitSwitchStatement(tree);
     leaveBlock();
   }
 
   @Override
   public void visitTryStatement(TryStatementTree tree) {
-    enterBlock(tree);
+    enterBlock(tree.tryToken());
     super.visitTryStatement(tree);
     leaveBlock();
   }
 
   @Override
   public void visitWhileStatement(WhileStatementTree tree) {
-    enterBlock(tree);
+    enterBlock(tree.whileToken());
     super.visitWhileStatement(tree);
     leaveBlock();
   }
 
   private void enterBlock(Tree tree) {
-    nestingLevel++;
-    if (nestingLevel == max + 1) {
-      context().newIssue(this, String.format(MESSAGE, max)).tree(tree);
+    nestingStack.push(tree);
+    if (nestingStack.size() == max + 1) {
+      PreciseIssue issue = context().newIssue(this, tree, String.format(MESSAGE, max));
+      nestingStack.forEach(secondaryTree -> issue.secondary(secondaryTree, "Nesting +1"));
     }
   }
 
   private void leaveBlock() {
-    nestingLevel--;
+    nestingStack.pop();
   }
 
 }

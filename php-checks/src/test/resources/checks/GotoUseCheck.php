@@ -7,4 +7,5 @@ loop:
   $i++;
   if ($i < 10){
     goto loop;       // NOK {{Remove use of "goto" statement.}}
+//  ^^^^
   }

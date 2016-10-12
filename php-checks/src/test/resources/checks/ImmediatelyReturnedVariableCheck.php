@@ -5,6 +5,7 @@ function f() {
 
   $f = function() {
     $result = 1;               // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$result".}}
+//  ^^^^^^^
     return $result;
   };
 
@@ -44,6 +45,7 @@ function l($p) {
 
 function l() {
   list($a, $b) = array(1, 2);  // NOK $a
+//^^^^^^^^^^^^
   return $a;
 }
 

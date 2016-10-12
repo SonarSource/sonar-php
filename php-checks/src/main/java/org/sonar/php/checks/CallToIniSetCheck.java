@@ -44,7 +44,7 @@ public class CallToIniSetCheck extends FunctionUsageCheck {
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    context().newIssue(this, MESSAGE).tree(tree.callee());
+    context().newIssue(this, tree.callee(), MESSAGE);
   }
 
 }

@@ -51,7 +51,7 @@ public class TooManyFieldsInClassCheckTest {
 
     List<CheckIssue> issues = ImmutableList.<CheckIssue>of(
       new PHPIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(3),
-      new PHPIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(17)
+      new PHPIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(18)
     );
     PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), issues);
   }

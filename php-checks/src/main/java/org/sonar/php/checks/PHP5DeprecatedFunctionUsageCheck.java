@@ -84,10 +84,10 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     String functionName = ((NamespaceNameTree) tree.callee()).qualifiedName();
 
     if (SET_LOCALE_FUNCTION.equals(functionName)) {
-      checkLocalCategoryArgument(tree, tree.arguments());
+      checkLocalCategoryArgument(tree.arguments());
 
     } else {
-      context().newIssue(this, buildMessage(functionName)).tree(tree.callee());
+      context().newIssue(this, tree.callee(), buildMessage(functionName));
     }
 
   }
@@ -106,13 +106,13 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   /**
    * Raise an issue if the local category is passed as a String.
    */
-  private void checkLocalCategoryArgument(FunctionCallTree tree, SeparatedList<ExpressionTree> arguments) {
+  private void checkLocalCategoryArgument(SeparatedList<ExpressionTree> arguments) {
     if (!arguments.isEmpty() && arguments.get(0).is(Kind.REGULAR_STRING_LITERAL)) {
       String firstArg = ((LiteralTree) arguments.get(0)).value();
       String localCategory = firstArg.substring(1, firstArg.length() - 1);
 
       if (LOCALE_CATEGORY_CONSTANTS.contains(localCategory)) {
-        context().newIssue(this, String.format(MESSAGE_SET_LOCAL_ARG, localCategory)).tree(tree.callee());
+        context().newIssue(this, arguments.get(0), String.format(MESSAGE_SET_LOCAL_ARG, localCategory));
       }
     }
   }

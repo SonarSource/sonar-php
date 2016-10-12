@@ -52,7 +52,7 @@ public class SelfAssignmentCheck extends PHPVisitorCheck {
 
   private void check(ExpressionTree lhs, ExpressionTree rhs) {
     if (Equality.areSyntacticallyEquivalent(lhs, rhs)) {
-      context().newIssue(this, MESSAGE).tree(lhs);
+      context().newIssue(this, lhs, rhs, MESSAGE);
     }
   }
 }
