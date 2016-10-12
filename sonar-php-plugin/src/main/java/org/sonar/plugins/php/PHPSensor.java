@@ -223,11 +223,8 @@ public class PHPSensor implements Sensor {
 
       NewIssueLocation location = issue.newLocation()
         .message(e.getMessage())
-        .on(inputFile);
-
-      if (e.getLine() > 0) {
-        location.at(inputFile.selectLine(e.getLine()));
-      }
+        .on(inputFile)
+        .at(inputFile.selectLine(e.getLine()));
 
       issue
         .forRule(parsingErrorRuleKey)
