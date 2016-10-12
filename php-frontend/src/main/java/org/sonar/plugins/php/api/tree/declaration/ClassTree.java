@@ -38,6 +38,8 @@ public interface ClassTree extends Tree {
    */
   String PHP5_CONSTRUCTOR_NAME = "__construct";
 
+  SyntaxToken classToken();
+
   @Nullable
   SyntaxToken extendsToken();
 

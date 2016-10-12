@@ -138,7 +138,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     if (check.isInterfacesIndentation && classTree.is(Tree.Kind.CLASS_DECLARATION) && !classTree.superInterfaces().isEmpty()) {
 
       List<Tree> interfaceList = ImmutableList.<Tree>copyOf(classTree.superInterfaces());
-      SyntaxToken classToken = classTree.classEntryTypeToken();
+      SyntaxToken classToken = classTree.classToken();
       SyntaxToken lastInterfaceToken = ((PHPTree) Iterables.getLast(classTree.superInterfaces())).getFirstToken();
       int expectedColumn = classToken.column() + PSR2_INDENTATION;
 

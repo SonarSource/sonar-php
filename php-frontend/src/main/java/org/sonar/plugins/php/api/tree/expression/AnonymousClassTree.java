@@ -38,6 +38,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 @Beta
 public interface AnonymousClassTree extends ExpressionTree, ClassTree {
 
+  @Override
   SyntaxToken classToken();
 
   @Nullable
