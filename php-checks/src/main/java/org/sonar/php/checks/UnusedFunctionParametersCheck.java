@@ -23,7 +23,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -37,6 +36,7 @@ import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -51,7 +51,7 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1172";
-  private static final String MESSAGE = "Remove the unused function parameter%s \"%s\".";
+  private static final String MESSAGE = "Remove the unused function parameter \"%s\".";
 
   private Deque<Boolean> mayOverrideStack = new ArrayDeque<>();
 
@@ -100,17 +100,16 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   private void checkParameters(FunctionTree tree) {
     Scope scope = context().symbolTable().getScopeFor(tree);
     if (scope != null) {
-      List<String> unused = new ArrayList<>();
+      List<IdentifierTree> unused = new ArrayList<>();
 
       for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
         if (symbol.usages().isEmpty()) {
-          unused.add(symbol.name());
+          unused.add(symbol.declaration());
         }
       }
 
-      if (!unused.isEmpty()) {
-        String message = String.format(MESSAGE, unused.size() == 1 ? "" : "s", StringUtils.join(unused, ", "));
-        context().newIssue(this, message).tree(tree);
+      for (IdentifierTree unusedParameter : unused) {
+        context().newIssue(this, unusedParameter, String.format(MESSAGE, unusedParameter.text()));
       }
     }
   }
