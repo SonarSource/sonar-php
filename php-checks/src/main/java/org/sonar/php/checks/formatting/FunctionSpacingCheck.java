@@ -57,14 +57,14 @@ public class FunctionSpacingCheck extends PHPVisitorCheck implements FormattingC
 
   @Override
   public void visitParameterList(ParameterListTree tree) {
-    checkSpaceForComma(new TokenVisitor(tree), tree.parameters().getSeparators(), tree);
+    checkSpaceForComma(new TokenVisitor(tree), tree.parameters().getSeparators());
     super.visitParameterList(tree);
   }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (!check.isInternalFunction(tree.callee())) {
-      checkSpaceForComma(new TokenVisitor(tree), tree.arguments().getSeparators(), tree.openParenthesisToken());
+      checkSpaceForComma(new TokenVisitor(tree), tree.arguments().getSeparators());
       checkSpaceAfterFunctionName(((PHPTree) tree.callee()).getLastToken(), tree.openParenthesisToken());
     }
 
@@ -101,7 +101,7 @@ public class FunctionSpacingCheck extends PHPVisitorCheck implements FormattingC
         int spaceAfterUse = TokenUtils.getNbSpaceBetween(lexicalVars.useToken(), lexicalVars.openParenthesisToken());
 
         if (spaceBeforeUse != 1 || spaceAfterUse != 1) {
-          check.reportIssue(CLOSURE_LEXICAL_VARS_SPACES_MESSAGE, lexicalVars);
+          check.reportIssue(CLOSURE_LEXICAL_VARS_SPACES_MESSAGE, lexicalVars.useToken());
         }
       }
     }
@@ -119,10 +119,11 @@ public class FunctionSpacingCheck extends PHPVisitorCheck implements FormattingC
   /**
    * Check space around the arguments' comma.
    */
-  private void checkSpaceForComma(TokenVisitor tokenVisitor, List<SyntaxToken> commas, Tree tree) {
+  private void checkSpaceForComma(TokenVisitor tokenVisitor, List<SyntaxToken> commas) {
     if (check.isOneSpaceAfterComma) {
 
       int msgIndex = -1;
+      Tree firstWrongComma = null;
 
       for (SyntaxToken commaToken : commas) {
         SyntaxToken nextToken = tokenVisitor.nextToken(commaToken);
@@ -133,17 +134,20 @@ public class FunctionSpacingCheck extends PHPVisitorCheck implements FormattingC
           boolean isSpaceAfterOK = TokenUtils.getNbSpaceBetween(commaToken, nextToken) == 1;
 
           if (!isSpaceBeforeOK && isSpaceAfterOK && msgIndex < 0) {
+            firstWrongComma = commaToken;
             msgIndex = 0;
           } else if (isSpaceBeforeOK && !isSpaceAfterOK && msgIndex < 0) {
+            firstWrongComma = commaToken;
             msgIndex = 1;
           } else if (!isSpaceBeforeOK && !isSpaceAfterOK) {
+            firstWrongComma = commaToken;
             msgIndex = 2;
             break;
           }
         }
       }
       if (msgIndex > -1) {
-        check.reportIssue(COMMA_SPACES_MESSAGE[msgIndex], tree);
+        check.reportIssue(COMMA_SPACES_MESSAGE[msgIndex], firstWrongComma);
       }
 
     }

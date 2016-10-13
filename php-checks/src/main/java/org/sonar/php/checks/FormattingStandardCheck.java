@@ -38,6 +38,7 @@ import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 @Rule(
@@ -211,8 +212,11 @@ public class FormattingStandardCheck extends PHPVisitorCheck {
     }
   }
 
-  public void reportIssue(String msg, Tree tree) {
-    context().newIssue(this, msg).tree(tree);
+  public void reportIssue(String msg, Tree ... issueLocations) {
+    PreciseIssue issue = context().newIssue(this, issueLocations[0], msg);
+    for (int i = 1; i < issueLocations.length; i++) {
+      issue.secondary(issueLocations[i], null);
+    }
   }
 
 }

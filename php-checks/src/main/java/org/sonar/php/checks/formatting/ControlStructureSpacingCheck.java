@@ -20,6 +20,7 @@
 package org.sonar.php.checks.formatting;
 
 import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
@@ -91,19 +92,24 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
     boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isExactlyOneSpaceAround(tokenVisitor, doubleArrow);
 
     String messageDetail = null;
+    List<Tree> issueLocations = new ArrayList<>();
 
     if (!isSpaceCorrectAs && isSpaceCorrectDoubleArrow) {
       messageDetail = "\"as\"";
+      issueLocations.add(foreachLoop.asToken());
 
     } else if (isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
       messageDetail = "\"=>\"";
+      issueLocations.add(foreachLoop.doubleArrowToken());
 
     } else if (!isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
       messageDetail = "\"as\" and \"=>\"";
+      issueLocations.add(foreachLoop.asToken());
+      issueLocations.add(foreachLoop.doubleArrowToken());
     }
 
     if (messageDetail != null) {
-      check.reportIssue(String.format(FOREACH_MESSAGE, messageDetail), foreachLoop);
+      check.reportIssue(String.format(FOREACH_MESSAGE, messageDetail), issueLocations.toArray(new Tree[issueLocations.size()]));
     }
   }
 
@@ -129,7 +135,7 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
         int nbSpace = TokenUtils.getNbSpaceBetween(semicolonToken, nextToken);
 
         if (nbSpace != 1 && TokenUtils.isOnSameLine(semicolonToken, nextToken)) {
-          check.reportIssue(FOR_SEMICOLON_MESSAGE, tree);
+          check.reportIssue(FOR_SEMICOLON_MESSAGE, semicolonToken);
           break;
         }
       }

@@ -1,8 +1,11 @@
 <?php
 
-use my\space\AnotherClass;  // NOK {{Move the use declarations after the namespace declarations.}}
-use my\space\MyClass;       // NOK {{Add a blank line after this "use" declaration.}}
-namespace another\bar;      // NOK {{Add a blank line after this "namespace another\bar" declaration.}}
+  use my\space\AnotherClass;  // NOK {{Move the use declarations after the namespace declarations.}}
+//^^^
+  use my\space\MyClass;       // NOK {{Add a blank line after this "use" declaration.}}
+//^^^
+  namespace another\bar;      // NOK {{Add a blank line after this "namespace another\bar" declaration.}}
+//^^^^^^^^^
 {
 }
 
