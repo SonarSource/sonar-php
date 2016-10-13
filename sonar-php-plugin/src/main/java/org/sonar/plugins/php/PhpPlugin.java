@@ -54,6 +54,7 @@ public class PhpPlugin implements Plugin {
 
       // Sensor
       PHPSensor.class,
+      PhpIniSensor.class,
 
       // Rules and profiles
       PHPRulesDefinition.class,

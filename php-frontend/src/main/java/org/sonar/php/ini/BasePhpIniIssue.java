@@ -17,26 +17,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php;
+package org.sonar.php.ini;
 
-import org.junit.Test;
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.php.checks.CheckList;
+public class BasePhpIniIssue implements PhpIniIssue {
 
-import static org.assertj.core.api.Assertions.assertThat;
+  private final String message;
+  private int line = 0;
 
-public class PHPRulesDefinitionTest {
+  public BasePhpIniIssue(String message) {
+    this.message = message;
+  }
 
-  @Test
-  public void test() {
-    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition();
-    RulesDefinition.Context context = new RulesDefinition.Context();
-    rulesDefinition.define(context);
-    RulesDefinition.Repository repository = context.repository("php");
+  public static PhpIniIssue newIssue(String message) {
+    return new BasePhpIniIssue(message);
+  }
 
-    assertThat(repository.name()).isEqualTo("SonarAnalyzer");
-    assertThat(repository.language()).isEqualTo("php");
-    assertThat(repository.rules()).hasSize(CheckList.getAllChecks().size());
+  @Override
+  public int line() {
+    return line;
+  }
+
+  @Override
+  public String message() {
+    return message;
+  }
+
+  @Override
+  public PhpIniIssue line(int line) {
+    this.line = line;
+    return this;
   }
 
 }
