@@ -1,6 +1,7 @@
 <?php
 
 function f($p1, $p2, $p3) {              // NOK {{Remove the unused function parameter "$p1".}}
+//         ^^^
     $p2 = 1;
     call($p3);
 }
@@ -17,7 +18,8 @@ function f($p1, $p2) {                   // NOK {{Remove the unused function par
 
 class C {
 
-  public function f1($p1, $p2, $p3) {    // NOK {{Remove the unused function parameters "$p2, $p3".}}
+// NOK@+1 {{Remove the unused function parameter "$p2".}}
+  public function f1($p1, $p2, $p3) {    // NOK {{Remove the unused function parameter "$p3".}}
       return $p1;
   }
 
