@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-
 import java.util.List;
 
 public class CheckList {
@@ -144,6 +143,7 @@ public class CheckList {
       SleepFunctionUsageCheck.class,
       HardCodedCredentialsCheck.class,
       MultilineBlocksCurlyBracesCheck.class,
+      ParsingErrorCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 }
