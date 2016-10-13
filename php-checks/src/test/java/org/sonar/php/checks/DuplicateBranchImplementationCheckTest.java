@@ -21,12 +21,12 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class DuplicateBranchImplementationCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTestUtils.check(new DuplicateBranchImplementationCheck(), TestUtils.getCheckFile("DuplicateBranchImplementationCheck.php"));
+    PhpCheckTest.check(new DuplicateBranchImplementationCheck(), TestUtils.getCheckFile("DuplicateBranchImplementationCheck.php"));
   }
 }

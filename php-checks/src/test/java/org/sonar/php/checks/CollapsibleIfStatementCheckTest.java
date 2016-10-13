@@ -21,12 +21,12 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class CollapsibleIfStatementCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTestUtils.check(new CollapsibleIfStatementCheck(), TestUtils.getCheckFile("CollapsibleIfStatementCheck.php"));
+    PhpCheckTest.check(new CollapsibleIfStatementCheck(), TestUtils.getCheckFile("CollapsibleIfStatementCheck.php"));
   }
 }

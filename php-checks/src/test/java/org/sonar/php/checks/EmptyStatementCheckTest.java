@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class EmptyStatementCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTestUtils.check(new EmptyStatementCheck(), TestUtils.getCheckFile("EmptyStatementCheck.php"));
+    PhpCheckTest.check(new EmptyStatementCheck(), TestUtils.getCheckFile("EmptyStatementCheck.php"));
   }
 
 }

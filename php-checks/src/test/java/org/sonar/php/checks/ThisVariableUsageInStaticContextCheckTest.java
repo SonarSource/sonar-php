@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class ThisVariableUsageInStaticContextCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTestUtils.check(
+    PhpCheckTest.check(
       new ThisVariableUsageInStaticContextCheck(),
       TestUtils.getCheckFile("ThisVariableUsageInStaticContextCheck.php"));
   }

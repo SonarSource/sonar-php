@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class CharacterBeforeOpeningPHPTagCheckTest {
 
@@ -32,12 +32,12 @@ public class CharacterBeforeOpeningPHPTagCheckTest {
 
   @Test
   public void ok() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
   }
 
   @Test
   public void ko() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new PHPIssue(check, "Remove the extra characters before the open tag.").line(1)));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new PHPIssue(check, "Remove the extra characters before the open tag.").line(1)));
   }
 
 }

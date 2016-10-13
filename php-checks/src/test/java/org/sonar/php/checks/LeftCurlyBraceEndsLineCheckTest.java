@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class LeftCurlyBraceEndsLineCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTestUtils.check(new LeftCurlyBraceEndsLineCheck(), TestUtils.getCheckFile("LeftCurlyBraceEndsLineCheck.php"));
+    PhpCheckTest.check(new LeftCurlyBraceEndsLineCheck(), TestUtils.getCheckFile("LeftCurlyBraceEndsLineCheck.php"));
   }
 
 }

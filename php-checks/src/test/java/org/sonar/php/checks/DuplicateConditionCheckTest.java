@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import org.junit.Rule;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.squidbridge.checks.CheckMessagesVerifierRule;
 
 public class DuplicateConditionCheckTest {
@@ -32,7 +32,7 @@ public class DuplicateConditionCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTestUtils.check(new DuplicateConditionCheck(), TestUtils.getCheckFile("DuplicateConditionCheck.php"));
+    PhpCheckTest.check(new DuplicateConditionCheck(), TestUtils.getCheckFile("DuplicateConditionCheck.php"));
 
   }
 }

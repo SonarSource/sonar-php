@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
@@ -32,13 +32,13 @@ public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
   @Test
   public void defaultValue() throws Exception {
     activeOnly("isOpenCurlyBraceForClassAndFunction", "isOpenCurlyBraceForControlStructures", "isClosingCurlyNextToKeyword");
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"));
   }
 
   @Test
   public void custom() throws Exception {
     deactivateAll();
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"), ImmutableList.<CheckIssue>of());
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"), ImmutableList.<CheckIssue>of());
   }
 
 }
