@@ -20,7 +20,9 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import java.util.List;
+import java.util.Set;
 
 public class CheckList {
 
@@ -145,5 +147,16 @@ public class CheckList {
       MultilineBlocksCurlyBracesCheck.class,
       ParsingErrorCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
+  }
+
+  public static Iterable<Class> getPhpIniChecks() {
+    return ImmutableList.<Class>of();
+  }
+
+  public static Set<Class> getAllChecks() {
+    return ImmutableSet.<Class>builder()
+      .addAll(CheckList.getChecks())
+      .addAll(CheckList.getPhpIniChecks())
+      .build();
   }
 }

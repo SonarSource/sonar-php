@@ -35,7 +35,7 @@ public class PhpPluginTest {
     Plugin.Context context = new Plugin.Context(Version.create(5, 6));
     new PhpPlugin().define(context);
 
-    assertThat(context.getExtensions()).hasSize(14);
+    assertThat(context.getExtensions()).hasSize(15);
   }
 
 }
