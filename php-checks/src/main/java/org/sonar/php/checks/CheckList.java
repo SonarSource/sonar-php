@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import java.util.Set;
+import org.sonar.php.checks.phpini.EnableDlCheck;
 
 public class CheckList {
 
@@ -150,7 +151,7 @@ public class CheckList {
   }
 
   public static Iterable<Class> getPhpIniChecks() {
-    return ImmutableList.<Class>of();
+    return ImmutableList.<Class>of(EnableDlCheck.class);
   }
 
   public static Set<Class> getAllChecks() {
