@@ -9,6 +9,7 @@ doSomething($p1,             // NOK {{Either split this list into multiple lines
 
 doSomething(
     $p1, $p2                 // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "10".}}
+//  ^^^
 );
 
 doSomething(
@@ -47,13 +48,13 @@ doSomething(anotherThing(    // OK
 /**
  * Method declaration argument indentation
  */
-function f($p1,         // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "50".}}
+function f($p1,         // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "51".}}
            $p2
 ) {
 }
 
 function g(
-    $p1, $p2            // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "55".}}
+    $p1, $p2            // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "56".}}
 ) {
 }
 
@@ -77,12 +78,14 @@ function k(             // OK
  * Implement list indentation
  */
 
-class C1 implements A,    // NOK {{Either split this list into multiple lines or move it on the same line "80".}}
+class C1 implements A,    // NOK {{Either split this list into multiple lines or move it on the same line "81".}}
+//                  ^
                     B
 {}
 
 class C2 implements
-        A, B              // NOK {{Either split this list into multiple lines or move it on the same line "84".}}
+        A, B              // NOK {{Either split this list into multiple lines or move it on the same line "86".}}
+//      ^
 {}
 
 class C3 implements
@@ -109,14 +112,14 @@ doSomething($a, function () {      // OK
   // ...
   }, $b);
 
-doSomething(a, function () { // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "112".}}
+doSomething(a, function () { // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "115".}}
   // ...
   },
   b
 );
 
 // not an array or function
-doSomething($a, 1           // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "119".}}
+doSomething($a, 1           // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "122".}}
    + 2, $b
 );
 

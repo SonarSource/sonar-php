@@ -114,7 +114,7 @@ public class PunctuatorSpacingCheck extends PHPVisitorCheck implements Formattin
         check.reportIssue(CLOSE_PARENTHESIS_SPACES_MESSAGE, closeParen);
 
       } else if (!isLCurlyOK && !isRCurlyOK) {
-        check.reportIssue(BOTH_PARENTHESIS_SPACES_MESSAGE, openParen);
+        check.reportIssue(BOTH_PARENTHESIS_SPACES_MESSAGE, openParen, closeParen);
       }
     }
   }

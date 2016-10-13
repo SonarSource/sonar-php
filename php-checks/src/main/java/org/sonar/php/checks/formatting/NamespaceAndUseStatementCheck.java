@@ -73,7 +73,7 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
       String message = String.format(
         BLANK_LINE_NAMESPACE_MESSAGE,
         tree.namespaceName() == null ? "" : " " + tree.namespaceName().fullName());
-      reportIssue(message, tree);
+      reportIssue(message, tree.namespaceToken());
     }
   }
 
@@ -90,13 +90,13 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
 
   private void checkBlankLineAfterUses(UseStatementTree useStatement) {
     if (check.hasUseBlankLine && !isFollowedWithBlankLine(useStatement)) {
-      reportIssue(BLANK_LINE_USE_MESSAGE, Iterables.getLast(useStatements));
+      reportIssue(BLANK_LINE_USE_MESSAGE, Iterables.getLast(useStatements).useToken());
     }
   }
 
   private void checkUsesAreBeforeNamespace() {
     if (check.isUseAfterNamespace && nextStatement.is(Kind.NAMESPACE_STATEMENT)) {
-      reportIssue(USE_AFTER_NAMESPACE_MESSAGE, useStatements.get(0));
+      reportIssue(USE_AFTER_NAMESPACE_MESSAGE, useStatements.get(0).useToken());
     }
   }
 

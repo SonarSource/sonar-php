@@ -57,7 +57,7 @@ public class ExtendsImplementsLineCheck extends PHPVisitorCheck implements Forma
     String partialMessage = getIssuePartialMessage(isExtendsOnClassNameLine, isImplementsOnClassNameLine);
 
     if (partialMessage != null) {
-      check.reportIssue(String.format(MESSAGE, partialMessage, classNameToken.text()), tree);
+      check.reportIssue(String.format(MESSAGE, partialMessage, classNameToken.text()), tree.name());
     }
   }
 
