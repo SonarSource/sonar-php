@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import org.sonar.api.internal.apachecommons.lang.StringUtils;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.visitors.PHPIssue;
@@ -43,7 +43,7 @@ import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
-import static org.sonar.plugins.php.api.tests.ExpectedIssuesParser.parseExpectedIssues;
+import static org.sonar.php.utils.ExpectedIssuesParser.parseExpectedIssues;
 
 
 /**
@@ -58,13 +58,13 @@ import static org.sonar.plugins.php.api.tests.ExpectedIssuesParser.parseExpected
  *  $a = 2;  // NOK
  * </pre>
  */
-public class PhpCheckTestUtils {
+public class PhpCheckTest {
 
   private static final Charset charset = Charsets.UTF_8;
 
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(charset);
 
-  private PhpCheckTestUtils() {
+  private PhpCheckTest() {
   }
 
   /**
