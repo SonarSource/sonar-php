@@ -19,6 +19,7 @@
  */
 package org.sonar.php.metrics;
 
+import java.util.ArrayList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -45,71 +46,71 @@ import java.util.List;
 
 public class ComplexityVisitor extends PHPVisitorCheck {
 
-  private int complexity = 0;
+  private List<Tree> complexityTrees = new ArrayList<>();
 
   @Override
   public void visitCaseClause(CaseClauseTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.caseToken());
     super.visitCaseClause(tree);
   }
 
   @Override
   public void visitWhileStatement(WhileStatementTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.whileToken());
     super.visitWhileStatement(tree);
   }
 
   @Override
   public void visitDoWhileStatement(DoWhileStatementTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.doToken());
     super.visitDoWhileStatement(tree);
   }
 
   @Override
   public void visitIfStatement(IfStatementTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.ifToken());
     super.visitIfStatement(tree);
   }
 
   @Override
   public void visitForStatement(ForStatementTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.forToken());
     super.visitForStatement(tree);
   }
 
   @Override
   public void visitForEachStatement(ForEachStatementTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.foreachToken());
     super.visitForEachStatement(tree);
   }
 
   @Override
   public void visitThrowStatement(ThrowStatementTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.throwToken());
     super.visitThrowStatement(tree);
   }
 
   @Override
   public void visitReturnStatement(ReturnStatementTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.returnToken());
     super.visitReturnStatement(tree);
   }
 
   @Override
   public void visitCatchBlock(CatchBlockTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.catchToken());
     super.visitCatchBlock(tree);
   }
 
   @Override
   public void visitGotoStatement(GotoStatementTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.gotoToken());
     super.visitGotoStatement(tree);
   }
 
   @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
-    incrementComplexity();
+    incrementComplexity(tree.queryToken());
     super.visitConditionalExpression(tree);
   }
 
@@ -120,7 +121,7 @@ public class ComplexityVisitor extends PHPVisitorCheck {
       Kind.CONDITIONAL_OR,
       Kind.ALTERNATIVE_CONDITIONAL_AND,
       Kind.ALTERNATIVE_CONDITIONAL_OR)) {
-      incrementComplexity();
+      incrementComplexity(tree.operator());
     }
     super.visitBinaryExpression(tree);
   }
@@ -145,7 +146,7 @@ public class ComplexityVisitor extends PHPVisitorCheck {
 
   private void processFunction(FunctionTree tree) {
     if (tree.is(Kind.FUNCTION_EXPRESSION) || !endsWithReturn(tree)) {
-      incrementComplexity();
+      incrementComplexity(tree.functionToken());
     }
   }
 
@@ -162,20 +163,24 @@ public class ComplexityVisitor extends PHPVisitorCheck {
     return false;
   }
 
-  private void incrementComplexity() {
-    complexity++;
+  private void incrementComplexity(Tree tree) {
+    complexityTrees.add(tree);
   }
 
   public static int complexity(Tree tree) {
-    ComplexityVisitor visitor = new ComplexityVisitor();
-    tree.accept(visitor);
-    return visitor.complexity;
+    return complexityTrees(tree).size();
   }
 
-  public static int complexityWithoutNestedFunctions(Tree tree) {
+  public static List<Tree> complexityTrees(Tree tree) {
+    ComplexityVisitor visitor = new ComplexityVisitor();
+    tree.accept(visitor);
+    return visitor.complexityTrees;
+  }
+
+  public static List<Tree> complexityNodesWithoutNestedFunctions(Tree tree) {
     ComplexityVisitor visitor = new ShallowComplexityVisitor(tree);
     tree.accept(visitor);
-    return visitor.complexity;
+    return visitor.complexityTrees;
   }
 
   public static class ShallowComplexityVisitor extends ComplexityVisitor {

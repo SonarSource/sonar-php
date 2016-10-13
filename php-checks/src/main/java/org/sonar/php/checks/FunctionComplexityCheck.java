@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 
@@ -59,12 +60,14 @@ public class FunctionComplexityCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    int complexity = ComplexityVisitor.complexityWithoutNestedFunctions(tree);
+    List<Tree> complexityTrees = ComplexityVisitor.complexityNodesWithoutNestedFunctions(tree);
+    int complexity = complexityTrees.size();
     if (complexity > threshold) {
       String functionName = CheckUtils.getFunctionName((FunctionTree) tree);
       String message = String.format(MESSAGE, functionName, complexity, threshold);
       int cost = complexity - threshold;
-      context().newIssue(this, message).tree(tree).cost(cost);
+      PreciseIssue issue = context().newIssue(this, ((FunctionTree) tree).functionToken(), message).cost(cost);
+      complexityTrees.forEach(complexityTree -> issue.secondary(complexityTree, "+1"));
     }
   }
 

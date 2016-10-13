@@ -28,7 +28,9 @@ import org.sonar.php.metrics.ComplexityVisitor;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 
 @Rule(
@@ -58,10 +60,12 @@ public class ClassComplexityCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    int complexity = ComplexityVisitor.complexity(tree);
+    List<Tree> complexityTrees = ComplexityVisitor.complexityTrees(tree);
+    int complexity = complexityTrees.size();
     if (complexity > max) {
       int cost = complexity - max;
-      context().newIssue(this, message(tree, complexity)).tree(tree).cost(cost);
+      PreciseIssue issue = context().newIssue(this, ((ClassTree) tree).classToken(), message(tree, complexity)).cost(cost);
+      complexityTrees.forEach(complexityTree -> issue.secondary(complexityTree, "+1"));
     }
   }
 
