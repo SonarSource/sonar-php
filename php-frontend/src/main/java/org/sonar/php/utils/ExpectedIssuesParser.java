@@ -17,12 +17,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tests;
+package org.sonar.php.utils;
 
 import com.google.common.base.Splitter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.plugins.php.api.tests.TestIssue;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -31,7 +32,7 @@ public class ExpectedIssuesParser extends PHPVisitorCheck {
 
   private final List<TestIssue> expectedIssues = new ArrayList<>();
 
-  static List<TestIssue> parseExpectedIssues(File file, CompilationUnitTree tree) {
+  public static List<TestIssue> parseExpectedIssues(File file, CompilationUnitTree tree) {
     ExpectedIssuesParser expectedIssuesParser = new ExpectedIssuesParser();
     expectedIssuesParser.analyze(file, tree);
 
