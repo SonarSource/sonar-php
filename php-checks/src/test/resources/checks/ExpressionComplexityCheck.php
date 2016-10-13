@@ -1,6 +1,7 @@
 <?php
 
 $b = false ? (true ? (false ? (true ? 1 : 0) : 0) : 0) : 1;         // NOK {{Reduce the number of conditional operators (4) used in the expression (maximum allowed 3).}}
+//   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 $c = true || false || true || false || false;                       // NOK [[effortToFix=1]]
 

@@ -1,6 +1,7 @@
 <?php
 
-function ko() // NOK [[effortToFix=30]] {{The Cyclomatic Complexity of this function "ko" is 32 which is greater than 2 authorized.}}
+  function ko() // NOK [[effortToFix=30]] {{The Cyclomatic Complexity of this function "ko" is 32 which is greater than 2 authorized.}}
+//^^^^^^^^
 {
   switch (foo)
   {
@@ -62,7 +63,8 @@ class C {
   }
 }
 
-$f = function() { // NOK
+$f = function() { // NOK [[secondary=+0,+2,+3]]
+//   ^^^^^^^^
   if (true) {
     return;
   }

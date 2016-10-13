@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class ClassComplexityCheckTest {
 
@@ -32,7 +31,7 @@ public class ClassComplexityCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<CheckIssue>of());
+    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of());
   }
 
   @Test
