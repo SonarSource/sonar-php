@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class ConstantNameCheckTest {
@@ -34,13 +34,13 @@ public class ConstantNameCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
     check.format = "^[A-Z][a-z]*$";
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<CheckIssue>of(
+    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<CheckIssue>of(
       new PHPIssue(check, "Rename this constant \"FOO\" to match the regular expression " + check.format + ".").line(9),
       new PHPIssue(check, null).line(13),
       new PHPIssue(check, null).line(17)));

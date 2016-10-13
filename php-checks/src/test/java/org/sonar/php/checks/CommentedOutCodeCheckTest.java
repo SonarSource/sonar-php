@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
@@ -41,7 +41,7 @@ public class CommentedOutCodeCheckTest {
       newIssue(25)
     );
 
-    PhpCheckTestUtils.check(CHECK, TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
+    PhpCheckTest.check(CHECK, TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
   }
 
   private CheckIssue newIssue(int line) {

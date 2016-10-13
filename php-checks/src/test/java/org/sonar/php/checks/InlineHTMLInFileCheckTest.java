@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 
 public class InlineHTMLInFileCheckTest {
@@ -32,21 +32,21 @@ public class InlineHTMLInFileCheckTest {
 
   @Test
   public void ok() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
   }
 
   @Test
   public void ok_asp() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_asp.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_asp.php"));
   }
 
   @Test
   public void ok_excluded_file() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.phtml"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.phtml"));
   }
 
   @Test
   public void ko() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new FileIssue(check, "Remove the inline HTML in this file.")));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new FileIssue(check, "Remove the inline HTML in this file.")));
   }
 }

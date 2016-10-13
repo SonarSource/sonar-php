@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 public class FileWithSymbolsAndSideEffectsCheckTest {
@@ -36,42 +36,42 @@ public class FileWithSymbolsAndSideEffectsCheckTest {
 
   @Test
   public void ok() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
   }
 
   @Test
   public void ok_with_define_and_closing_html() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_define.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_define.php"));
   }
 
   @Test
   public void ok_no_symbol() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_no_symbol.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_no_symbol.php"));
   }
 
   @Test
   public void ko_echo() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_echo.php"), issue);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_echo.php"), issue);
   }
 
   @Test
   public void ko_expression_statement() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_expression_statement.php"), issue);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_expression_statement.php"), issue);
   }
 
   @Test
   public void ko_yield() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_yield.php"), issue);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_yield.php"), issue);
   }
 
   @Test
   public void ko_inline_html() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_inline_html.php"), issue);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_inline_html.php"), issue);
   }
 
   @Test
   public void ko_unset_variable() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_unset_variable.php"), issue);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_unset_variable.php"), issue);
   }
 
 }

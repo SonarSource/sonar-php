@@ -21,17 +21,17 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class UselessExpressionStatementCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTestUtils.check(new UselessExpressionStatementCheck(), TestUtils.getCheckFile("UselessExpressionStatementCheck.php"));
+    PhpCheckTest.check(new UselessExpressionStatementCheck(), TestUtils.getCheckFile("UselessExpressionStatementCheck.php"));
   }
 
   @Test
   public void test_no_issue_in_file_with_html() throws Exception {
-    PhpCheckTestUtils.check(new UselessExpressionStatementCheck(), TestUtils.getCheckFile("UselessExpressionStatementCheckHTML.php"));
+    PhpCheckTest.check(new UselessExpressionStatementCheck(), TestUtils.getCheckFile("UselessExpressionStatementCheckHTML.php"));
   }
 }

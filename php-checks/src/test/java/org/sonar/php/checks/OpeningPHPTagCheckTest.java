@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class OpeningPHPTagCheckTest {
 
@@ -30,23 +30,23 @@ public class OpeningPHPTagCheckTest {
 
   @Test
   public void ok_long_tag() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_long_tag.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_long_tag.php"));
   }
 
   @Test
   public void ok_short_echo_tag() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_short_echo_tag.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_short_echo_tag.php"));
   }
 
   @Test
   // SONARPHP-436
   public void ok_just_html() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_just_html.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_just_html.php"));
   }
 
   @Test
   public void ko() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"));
   }
 
 }

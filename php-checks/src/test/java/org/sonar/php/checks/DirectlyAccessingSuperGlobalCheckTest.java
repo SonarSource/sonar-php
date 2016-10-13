@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class DirectlyAccessingSuperGlobalCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTestUtils.check(new DirectlyAccessingSuperGlobalCheck(), TestUtils.getCheckFile("DirectlyAccessingSuperGlobalCheck.php"));
+    PhpCheckTest.check(new DirectlyAccessingSuperGlobalCheck(), TestUtils.getCheckFile("DirectlyAccessingSuperGlobalCheck.php"));
   }
 
 }

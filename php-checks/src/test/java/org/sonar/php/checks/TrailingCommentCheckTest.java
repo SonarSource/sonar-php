@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class TrailingCommentCheckTest {
       newIssue(5)
     );
 
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), issues);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 
   @Test
@@ -52,7 +52,7 @@ public class TrailingCommentCheckTest {
       newIssue(11),
       newIssue(12)
     );
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(fileName), issues);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 
   private CheckIssue newIssue(int line) {

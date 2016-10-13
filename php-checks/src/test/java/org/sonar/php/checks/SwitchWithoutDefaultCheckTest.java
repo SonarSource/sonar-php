@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
 public class SwitchWithoutDefaultCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTestUtils.check(new SwitchWithoutDefaultCheck(), TestUtils.getCheckFile("SwitchWithoutDefaultCheck.php"));
+    PhpCheckTest.check(new SwitchWithoutDefaultCheck(), TestUtils.getCheckFile("SwitchWithoutDefaultCheck.php"));
   }
 
 }

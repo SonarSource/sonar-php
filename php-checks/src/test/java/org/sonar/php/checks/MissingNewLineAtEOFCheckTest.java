@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.PHPIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTestUtils;
+import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 
 import java.util.List;
@@ -36,17 +36,17 @@ public class MissingNewLineAtEOFCheckTest {
 
   @Test
   public void noNewLine() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "MissingNewLineAtEOF.php"), issue);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "MissingNewLineAtEOF.php"), issue);
   }
 
   @Test
   public void emptyFile() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "EmptyFile.php"), issue);
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "EmptyFile.php"), issue);
   }
 
   @Test
   public void newLine() throws Exception {
-    PhpCheckTestUtils.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "NewLineAtEOF.php"));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_FILE_DIR + "NewLineAtEOF.php"));
   }
 
 }
