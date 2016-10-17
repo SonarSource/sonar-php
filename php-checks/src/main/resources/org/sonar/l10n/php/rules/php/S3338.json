@@ -1,0 +1,20 @@
+{
+  "title": "\"file_uploads\" should be disabled",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "cwe",
+    "security",
+    "sans-top25-insecure",
+    "php-ini"
+  ],
+  "standards": [
+    "CWE",
+    "SANS Top 25"
+  ],
+  "defaultSeverity": "Blocker"
+}

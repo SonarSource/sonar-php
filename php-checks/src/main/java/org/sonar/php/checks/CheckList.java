@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import java.util.Set;
 import org.sonar.php.checks.phpini.EnableDlCheck;
+import org.sonar.php.checks.phpini.FileUploadsCheck;
 
 public class CheckList {
 
@@ -151,7 +152,9 @@ public class CheckList {
   }
 
   public static Iterable<Class> getPhpIniChecks() {
-    return ImmutableList.<Class>of(EnableDlCheck.class);
+    return ImmutableList.<Class>of(
+      EnableDlCheck.class,
+      FileUploadsCheck.class);
   }
 
   public static Set<Class> getAllChecks() {
