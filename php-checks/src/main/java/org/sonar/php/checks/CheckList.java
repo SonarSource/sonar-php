@@ -26,6 +26,7 @@ import java.util.Set;
 import org.sonar.php.checks.phpini.CgiForceRedirectCheck;
 import org.sonar.php.checks.phpini.EnableDlCheck;
 import org.sonar.php.checks.phpini.FileUploadsCheck;
+import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 
 public class CheckList {
 
@@ -156,7 +157,8 @@ public class CheckList {
     return ImmutableList.<Class>of(
       CgiForceRedirectCheck.class,
       EnableDlCheck.class,
-      FileUploadsCheck.class);
+      FileUploadsCheck.class,
+      SessionUseTransSidCheck.class);
   }
 
   public static Set<Class> getAllChecks() {

@@ -631,6 +631,11 @@
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
+      <key>S3336</key> <!-- php.ini: session.use_trans_sid -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
       <key>S3337</key> <!-- php.ini: enable_dl -->
       <priority>INFO</priority>
     </rule>
