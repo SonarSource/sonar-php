@@ -90,5 +90,10 @@
       <key>S1788</key>  <!-- Method arguments with default value should be last -->
       <priority>CRITICAL</priority>
     </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1788</key>  <!-- Method arguments with default value should be last -->
+      <priority>CRITICAL</priority>
+    </rule>
   </rules>
 </profile>
