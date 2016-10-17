@@ -1,0 +1,20 @@
+{
+  "title": "\"cgi.force_redirect\" should be enabled",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "cwe",
+    "security",
+    "owasp-a5",
+    "php-ini"
+  ],
+  "standards": [
+    "CWE",
+    "OWASP Top Ten"
+  ],
+  "defaultSeverity": "Major"
+}
