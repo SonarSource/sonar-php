@@ -629,5 +629,10 @@
       <key>S3337</key> <!-- php.ini: enable_dl -->
       <priority>INFO</priority>
     </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S3338</key> <!-- php.ini: file_uploads -->
+      <priority>INFO</priority>
+    </rule>
   </rules>
 </profile>

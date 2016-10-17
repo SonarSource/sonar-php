@@ -1,0 +1,19 @@
+<p><code>file_uploads</code> is an on-by-default PHP configuration that allows files to be uploaded to your site. Since accepting <del>candy</del>
+files from strangers is inherently dangerous, this feature should be disabled unless it is absolutely necessary for your site.</p>
+<p>This rule raises an issue when <code>file_uploads</code> is not explicitly disabled.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+; php.ini
+file_uploads=1  ; Noncompliant
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+; php.ini
+file_uploads=0
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://cwe.mitre.org/data/definitions/434.html">MITRE, CWE-434</a> - Unrestricted Upload of File with Dangerous Type </li>
+  <li> <a href="http://www.sans.org/top25-software-errors/">SANS Top 25</a> - Insecure Interaction Between Components </li>
+</ul>
+
