@@ -29,7 +29,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 public class IssueLocationTest {
 
   private static final Tree TOKEN1 = createToken(5, 10, "token1");
-  private static final Tree TOKEN2 = createToken(10, 0, "token2");
+  private static final Tree TOKEN2 = createToken(12, 0, "token2");
 
   @Test
   public void test() throws Exception {
@@ -57,7 +57,7 @@ public class IssueLocationTest {
     assertThat(issueLocation.message()).isEqualTo("Test message");
     assertThat(issueLocation.startLine()).isEqualTo(5);
     assertThat(issueLocation.startLineOffset()).isEqualTo(10);
-    assertThat(issueLocation.endLine()).isEqualTo(10);
+    assertThat(issueLocation.endLine()).isEqualTo(12);
     assertThat(issueLocation.endLineOffset()).isEqualTo(6);
   }
 
