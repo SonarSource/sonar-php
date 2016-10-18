@@ -19,64 +19,78 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
-@Rule(
-        key = AliasFunctionUsageCheck.KEY,
-        name = "Alias functions should not be used",
-        priority = Priority.MAJOR,
-        tags = {Tags.OBSOLETE})
+/**
+ * @author Piotr Dawidiuk
+ */
+@Rule(key = AliasFunctionUsageCheck.KEY,
+  name = "Alias functions should not be used",
+  priority = Priority.MAJOR,
+  tags = {Tags.OBSOLETE})
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LANGUAGE_RELATED_PORTABILITY)
 @SqaleConstantRemediation("5min")
 public class AliasFunctionUsageCheck extends PHPVisitorCheck {
 
-    public static final String KEY = "S2050";
-    public static final String MESSAGE = "Remove this use of \"%s\"";
+  public static final String KEY = "S2050";
 
-    private static final String[] ALIAS_FUNCTIONS = {
-        "sizeof",
-        "delete",
-        "print",
-        "is_null",
-        "is_double",
-        "is_integer",
-        "is_long",
-        "is_real",
-        "create_function",
-        "chop",
-        "ini_alter",
-        "join",
-        "key_exists",
-        "fputs",
-        "is_writeable"
-    };
+  public static final String MESSAGE = "Replace this use of \"%s\" with \"%s\".";
 
-    @Override
-    public void visitFunctionCall(FunctionCallTree tree) {
-        String callee = tree.callee().toString();
+  private static final Map<String, String> ALIAS_FUNCTIONS = ImmutableMap.<String, String>builder()
+    .put("chop", "rtrim")
+    .put("close", "closedir")
+    .put("doubleval", "floatval")
+    .put("fputs", "fwrite")
+    .put("ini_alter", "ini_set")
+    .put("is_double", "is_float")
+    .put("is_integer", "is_int")
+    .put("is_long", "is_int")
+    .put("is_real", "is_float")
+    .put("is_writeable", "is_writable")
+    .put("join", "implode")
+    .put("key_exists", "array_key_exists")
+    .put("magic_quotes_runtime", "set_magic_quotes_runtime")
+    .put("pos", "current")
+    .put("show_source", "highlight_file")
+    .put("sizeof", "count")
+    .put("strchr", "strstr")
+    .build();
 
-        if (this.isAliasFunction(callee)) {
-            context().newIssue(this, String.format(MESSAGE, callee)).tree(tree);
-        }
-
-        super.visitFunctionCall(tree);
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    ExpressionTree callee = tree.callee();
+    if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
+      String name = ((NamespaceNameTree) callee).fullName();
+      String replacement = getAliasReplacement(name);
+      if (replacement != null) {
+        context().newIssue(this, callee, String.format(MESSAGE, name, replacement));
+      }
     }
 
-    private boolean isAliasFunction(String callee) {
-        for (String alias : ALIAS_FUNCTIONS) {
-            if (alias.equalsIgnoreCase(callee)) {
-                return true;
-            }
-        }
+    super.visitFunctionCall(tree);
+  }
 
-        return false;
+  private static String getAliasReplacement(String callee) {
+    for (Map.Entry<String, String> alias : ALIAS_FUNCTIONS.entrySet()) {
+      if (alias.getKey().equalsIgnoreCase(callee)) {
+        return alias.getValue();
+      }
     }
+
+    return null;
+  }
+
 }
