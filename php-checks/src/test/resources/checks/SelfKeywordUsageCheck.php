@@ -82,22 +82,22 @@ final class B {
 
 class D {
   public static function f1() {
-    self::f2();      // NOK
+    self::f2();                      // NOK
     class C {
       private static $field_private;
       public static $field_public;
 
       public static function f1() {
-        static::f2_public();         // OK, as always with "static"
-        self::f2_public();           // OK, function is final
-        self::f2_private();          // OK, function is final and private
+        static::f2();                // OK, as always with "static"
+        self::f2();                  // OK, function is final
+        self::f4();                  // OK, function is final and private
         self::f3();                  // NOK, function is public
         self::$field_private;        // OK, field is private
         return self::$field_public;  // NOK, field is public
       }
 
-      public static final function f2_public() {}
-      private static final function f2_private() {}
+      public static final function f2() {}
+      private static final function f4() {}
       public static function f3() {}
     }
   }
