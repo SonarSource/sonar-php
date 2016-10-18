@@ -1,0 +1,28 @@
+<p>The <code>open_basedir</code> configuration in <em>php.ini</em> limits the files the script can access using, for example, <code>include</code> and
+<code>fopen()</code>. Leave it out, and there is no default limit, meaning that any file can be accessed. Include it, and PHP will refuse to access
+files outside the allowed path.</p>
+<p><code>open_basedir</code> should be configured with a directory, which will then be accessible recursively. However, the use of <code>.</code>
+(current directory) as an <code>open_basedir</code> value should be avoided since it's resolved dynamically during script execution, so a
+<code>chdir('/')</code> command could lay the whole server open to the script.</p>
+<p>This is not a fool-proof configuration; it can be reset or overridden at the script level. But its use should be seen as a minimum due diligence
+step. This rule raises an issue when <code>open_basedir</code> is not present in <em>php.ini</em>, and when <code>open_basedir</code> contains root,
+or the current directory (<code>.</code>) symbol.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+; php.ini try 1
+; open_basedir="${USER}/scripts/data"  Noncompliant; commented out
+
+; php.ini try 2
+open_basedir="/:${USER}/scripts/data"  ; Noncompliant; root directory in the list
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+; php.ini try 1
+open_basedir="${USER}/scripts/data"
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://cwe.mitre.org/data/definitions/23.html">MITRE, CWE-23</a> - Relative Path Traversal </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/36.html">MITRE, CWE-36</a> - Absolute Path Traversal </li>
+</ul>
+
