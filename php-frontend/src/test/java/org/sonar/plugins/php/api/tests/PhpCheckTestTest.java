@@ -29,7 +29,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.php.utils.DummyCheck;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 public class PhpCheckTestTest {
@@ -237,12 +237,12 @@ public class PhpCheckTestTest {
     PhpCheckTest.check(new DummyCheck(2), createFile("<?php $a = 1; // NOK [[secondary=1,1;effortToFix=2]]"));
   }
 
-  private ImmutableList<CheckIssue> createIssuesForLines(int... lines) {
+  private ImmutableList<PhpIssue> createIssuesForLines(int... lines) {
     return createIssuesForLines("message", lines);
   }
 
-  private ImmutableList<CheckIssue> createIssuesForLines(String message, int... lines) {
-    ImmutableList.Builder<CheckIssue> issueBuilder = ImmutableList.builder();
+  private ImmutableList<PhpIssue> createIssuesForLines(String message, int... lines) {
+    ImmutableList.Builder<PhpIssue> issueBuilder = ImmutableList.builder();
 
     for (int line : lines) {
       issueBuilder.add(new LegacyIssue(CHECK, message).line(line));

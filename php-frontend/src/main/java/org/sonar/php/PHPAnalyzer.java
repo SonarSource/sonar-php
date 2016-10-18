@@ -40,7 +40,7 @@ import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 public class PHPAnalyzer {
@@ -70,8 +70,8 @@ public class PHPAnalyzer {
     currentFileSymbolTable = SymbolTableImpl.create(currentFileTree);
   }
 
-  public List<CheckIssue> analyze() {
-    ImmutableList.Builder<CheckIssue> issuesBuilder = ImmutableList.builder();
+  public List<PhpIssue> analyze() {
+    ImmutableList.Builder<PhpIssue> issuesBuilder = ImmutableList.builder();
     for (PHPCheck check : checks) {
       issuesBuilder.addAll(check.analyze(currentFile, currentFileTree, currentFileSymbolTable));
     }

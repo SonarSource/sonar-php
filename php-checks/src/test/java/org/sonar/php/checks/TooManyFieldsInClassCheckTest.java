@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class TooManyFieldsInClassCheckTest {
 
   @Test
   public void test_default() throws Exception {
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<CheckIssue>of());
+    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<PhpIssue>of());
   }
 
   @Test
@@ -49,7 +49,7 @@ public class TooManyFieldsInClassCheckTest {
     check.maximumFieldThreshold = 2;
     check.countNonpublicFields = false;
 
-    List<CheckIssue> issues = ImmutableList.<CheckIssue>of(
+    List<PhpIssue> issues = ImmutableList.<PhpIssue>of(
       new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(3),
       new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(18)
     );

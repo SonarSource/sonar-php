@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class TooManyLinesInFunctionCheckTest {
 
@@ -33,7 +33,7 @@ public class TooManyLinesInFunctionCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<CheckIssue>of());
+    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<PhpIssue>of());
   }
 
   @Test

@@ -36,7 +36,7 @@ import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tests.TestIssue.Location;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
@@ -76,7 +76,7 @@ public class PhpCheckTest {
   public static void check(PHPCheck check, File file) {
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
     check.init();
-    List<CheckIssue> actualIssues = getActualIssues(check, file, tree);
+    List<PhpIssue> actualIssues = getActualIssues(check, file, tree);
     List<TestIssue> expectedIssues = parseExpectedIssues(file, tree);
     compare(actualIssues, expectedIssues);
   }
@@ -88,34 +88,34 @@ public class PhpCheckTest {
    * @param file File containing the php code sample
    * @param expectedIssues expected issues that should be raise. Overrides the comments in the code sample.
    */
-  public static void check(PHPCheck check, File file, List<CheckIssue> expectedIssues) {
+  public static void check(PHPCheck check, File file, List<PhpIssue> expectedIssues) {
     CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
     check.init();
-    List<CheckIssue> actualIssues = getActualIssues(check, file, tree);
+    List<PhpIssue> actualIssues = getActualIssues(check, file, tree);
     compare(actualIssues, toTestIssues(expectedIssues));
   }
 
-  private static List<CheckIssue> getActualIssues(PHPCheck check, File file, CompilationUnitTree tree) {
+  private static List<PhpIssue> getActualIssues(PHPCheck check, File file, CompilationUnitTree tree) {
     if (check instanceof CharsetAwareVisitor) {
       ((CharsetAwareVisitor) check).setCharset(charset);
     }
     return check.analyze(file, tree);
   }
 
-  private static List<TestIssue> toTestIssues(List<CheckIssue> checkIssues) {
+  private static List<TestIssue> toTestIssues(List<PhpIssue> phpIssues) {
     Builder<TestIssue> builder = ImmutableList.builder();
 
-    for (CheckIssue checkIssue : checkIssues) {
-      builder.add(TestIssue.create(message(checkIssue), line(checkIssue)));
+    for (PhpIssue phpIssue : phpIssues) {
+      builder.add(TestIssue.create(message(phpIssue), line(phpIssue)));
     }
 
     return builder.build();
   }
 
-  private static void compare(List<CheckIssue> actualIssues, List<TestIssue> expectedIssues) {
+  private static void compare(List<PhpIssue> actualIssues, List<TestIssue> expectedIssues) {
     Map<Integer, Tuple> map = new HashMap<>();
 
-    for (CheckIssue issue : actualIssues) {
+    for (PhpIssue issue : actualIssues) {
       int line = line(issue);
       if (map.get(line) == null) {
         Tuple tuple = new Tuple();
@@ -148,7 +148,7 @@ public class PhpCheckTest {
     }
   }
 
-  private static int line(CheckIssue issue) {
+  private static int line(PhpIssue issue) {
     if (issue instanceof LegacyIssue) {
       return ((LegacyIssue) issue).line();
 
@@ -162,7 +162,7 @@ public class PhpCheckTest {
     return ((PreciseIssue) issue).primaryLocation().startLine();
   }
 
-  private static String message(CheckIssue issue) {
+  private static String message(PhpIssue issue) {
     if (issue instanceof LegacyIssue) {
       return ((LegacyIssue) issue).message();
 
@@ -187,10 +187,10 @@ public class PhpCheckTest {
     private static final String NO_PRECISE_LOCATION = "* [NO_PRECISE_LOCATION] Line %s: issue with precise location is expected\n\n";
     private static final String WRONG_SECONDARY_LOCATION = "* [WRONG_SECONDARY_LOCATION] Line %s: %s secondary location at line %s\n\n";
 
-    List<CheckIssue> actual = new ArrayList<>();
+    List<PhpIssue> actual = new ArrayList<>();
     List<TestIssue> expected = new ArrayList<>();
 
-    void addActual(CheckIssue actual) {
+    void addActual(PhpIssue actual) {
       this.actual.add(actual);
     }
 
@@ -207,7 +207,7 @@ public class PhpCheckTest {
 
       } else if (actual.size() == 1 && expected.size() == 1) {
         TestIssue expectedIssue = expected.get(0);
-        CheckIssue actualIssue = actual.get(0);
+        PhpIssue actualIssue = actual.get(0);
         return compareIssues(expectedIssue, actualIssue);
 
       } else if (actual.size() != expected.size()) {
@@ -224,7 +224,7 @@ public class PhpCheckTest {
       return "";
     }
 
-    private static String compareIssues(TestIssue expectedIssue, CheckIssue actualIssue) {
+    private static String compareIssues(TestIssue expectedIssue, PhpIssue actualIssue) {
       String expectedMessage = expectedIssue.message();
 
       if (expectedMessage != null && !message(actualIssue).equals(expectedMessage)) {
@@ -260,7 +260,7 @@ public class PhpCheckTest {
       return "";
     }
 
-    private static String compareSecondary(CheckIssue actualIssue, TestIssue expectedIssue) {
+    private static String compareSecondary(PhpIssue actualIssue, TestIssue expectedIssue) {
       List<Location> expectedLocations = expectedIssue.secondaryLocations();
       List<IssueLocation> actualLocations = actualIssue instanceof PreciseIssue ? ((PreciseIssue) actualIssue).secondaryLocations() : new ArrayList<>();
 

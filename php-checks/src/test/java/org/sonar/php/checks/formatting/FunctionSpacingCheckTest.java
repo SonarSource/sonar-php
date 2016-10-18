@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.io.File;
 
@@ -48,7 +48,7 @@ public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
   @Test
   public void custom() throws Exception {
     deactivateAll();
-    PhpCheckTest.check(check, TEST_FILE, ImmutableList.<CheckIssue>of());
+    PhpCheckTest.check(check, TEST_FILE, ImmutableList.<PhpIssue>of());
   }
 
 }

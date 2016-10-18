@@ -24,14 +24,14 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class FileWithSymbolsAndSideEffectsCheckTest {
 
   private final String TEST_DIR = "FileWithSymbolsAndSideEffectsCheck/";
   private final FileWithSymbolsAndSideEffectsCheck check = new FileWithSymbolsAndSideEffectsCheck();
 
-  private final ImmutableList<CheckIssue> issue = ImmutableList.<CheckIssue>of(new LegacyIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
+  private final ImmutableList<PhpIssue> issue = ImmutableList.<PhpIssue>of(new LegacyIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
 
 
   @Test

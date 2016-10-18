@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class TodoTagPresenceCheckTest {
   public void test() throws Exception {
     File file = TestUtils.getCheckFile("TodoTagPresenceCheck.php");
 
-    List<CheckIssue> issues = ImmutableList.of(
+    List<PhpIssue> issues = ImmutableList.of(
       newIssue(4),
       newIssue(8),
       newIssue(9),
@@ -50,7 +50,7 @@ public class TodoTagPresenceCheckTest {
     PhpCheckTest.check(CHECK, file, issues);
   }
 
-  private CheckIssue newIssue(int line) {
+  private PhpIssue newIssue(int line) {
     String message = "Complete the task associated to this \"TODO\" comment.";
     return new LegacyIssue(CHECK, message).line(line);
   }

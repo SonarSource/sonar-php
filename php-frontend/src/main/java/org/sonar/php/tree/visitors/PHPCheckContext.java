@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.FileIssue;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -40,7 +40,7 @@ public class PHPCheckContext implements CheckContext {
   private final File file;
   private final CompilationUnitTree tree;
   private final SymbolTable symbolTable;
-  private List<CheckIssue> issues;
+  private List<PhpIssue> issues;
 
   public PHPCheckContext(File file, CompilationUnitTree tree) {
     this(file, tree, SymbolTableImpl.create(tree));
@@ -105,7 +105,7 @@ public class PHPCheckContext implements CheckContext {
   }
 
   @Override
-  public ImmutableList<CheckIssue> getIssues() {
+  public ImmutableList<PhpIssue> getIssues() {
     return ImmutableList.copyOf(issues);
   }
 

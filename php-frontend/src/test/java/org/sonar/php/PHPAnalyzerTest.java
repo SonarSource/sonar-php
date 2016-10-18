@@ -29,7 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.php.utils.DummyCheck;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
@@ -59,7 +59,7 @@ public class PHPAnalyzerTest {
     FileUtils.write(file, "<?php $a = 1;", UTF_8);
 
     analyzer.nextFile(file);
-    List<CheckIssue> issues = analyzer.analyze();
+    List<PhpIssue> issues = analyzer.analyze();
     assertThat(issues).hasSize(1);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().startLine()).isEqualTo(1);
     assertThat(issues.get(0).check()).isEqualTo(check);
