@@ -626,6 +626,11 @@
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
+      <key>S3334</key> <!-- php.ini: allow_url_fopen and allow_url_include -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
       <key>S3335</key> <!-- php.ini: cgi.force_redirect -->
       <priority>INFO</priority>
     </rule>

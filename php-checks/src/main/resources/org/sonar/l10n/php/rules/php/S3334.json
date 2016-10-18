@@ -1,0 +1,22 @@
+{
+  "title": "\"allow_url_fopen\" and \"allow_url_include\" should be disabled",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "cwe",
+    "owasp-a1",
+    "security",
+    "sans-top25-risky",
+    "php-ini"
+  ],
+  "standards": [
+    "CWE",
+    "OWASP Top Ten",
+    "SANS Top 25"
+  ],
+  "defaultSeverity": "Blocker"
+}
