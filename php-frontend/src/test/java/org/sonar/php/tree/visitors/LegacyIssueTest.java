@@ -28,12 +28,12 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.util.Collections;
 
-public class PHPIssueTest {
+public class LegacyIssueTest {
 
   private static final PHPCheck CHECK = new DummyCheck();
   @Test
   public void test_no_line() throws Exception {
-    PHPIssue issue = new PHPIssue(CHECK, "message");
+    LegacyIssue issue = new LegacyIssue(CHECK, "message");
 
     Assertions.assertThat(issue.check()).isEqualTo(CHECK);
     Assertions.assertThat(issue.message()).isEqualTo("message");
@@ -44,7 +44,7 @@ public class PHPIssueTest {
   @Test
   public void test_with_line() throws Exception {
     final int line = 7;
-    PHPIssue issue = new PHPIssue(CHECK, "message").line(line);
+    LegacyIssue issue = new LegacyIssue(CHECK, "message").line(line);
 
     Assertions.assertThat(issue.check()).isEqualTo(CHECK);
     Assertions.assertThat(issue.message()).isEqualTo("message");
@@ -55,7 +55,7 @@ public class PHPIssueTest {
   @Test
   public void test_with_line_and_cost() throws Exception {
     final int cost = 7;
-    PHPIssue issue = new PHPIssue(CHECK, "message").cost(cost);
+    LegacyIssue issue = new LegacyIssue(CHECK, "message").cost(cost);
 
     Assertions.assertThat(issue.check()).isEqualTo(CHECK);
     Assertions.assertThat(issue.message()).isEqualTo("message");
@@ -67,7 +67,7 @@ public class PHPIssueTest {
   public void test_setting_line_from_tree() throws Exception {
     final int line = 3;
     NameIdentifierTreeImpl tree = new NameIdentifierTreeImpl(new InternalSyntaxToken(line, 1, "tree", Collections.EMPTY_LIST, 0, false));
-    PHPIssue issue = new PHPIssue(CHECK, "message").tree(tree);
+    LegacyIssue issue = new LegacyIssue(CHECK, "message").tree(tree);
 
     Assertions.assertThat(issue.check()).isEqualTo(CHECK);
     Assertions.assertThat(issue.message()).isEqualTo("message");

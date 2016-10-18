@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
 
@@ -38,6 +38,6 @@ public class NestedControlFlowDepthCheckTest {
   @Test
   public void custom() throws Exception {
     check.max = 5;
-    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of(new PHPIssue(check, null).line(32)));
+    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of(new LegacyIssue(check, null).line(32)));
   }
 }

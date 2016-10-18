@@ -55,7 +55,7 @@ import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.metrics.FileMeasures;
-import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
@@ -248,16 +248,16 @@ public class PHPSensor implements Sensor {
         .forRule(ruleKey)
         .gap(issue.cost());
 
-      if (issue instanceof PHPIssue) {
+      if (issue instanceof LegacyIssue) {
         // todo: this block should be removed as PHPIssue's usages will be removed
-        PHPIssue phpIssue = (PHPIssue) issue;
+        LegacyIssue legacyIssue = (LegacyIssue) issue;
 
         NewIssueLocation location = newIssue.newLocation()
-          .message(phpIssue.message())
+          .message(legacyIssue.message())
           .on(inputFile);
 
-        if (phpIssue.line() > 0) {
-          location.at(inputFile.selectLine(phpIssue.line()));
+        if (legacyIssue.line() > 0) {
+          location.at(inputFile.selectLine(legacyIssue.line()));
         }
 
         newIssue.at(location);

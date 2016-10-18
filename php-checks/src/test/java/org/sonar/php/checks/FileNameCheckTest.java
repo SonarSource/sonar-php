@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
@@ -60,7 +60,7 @@ public class FileNameCheckTest {
   }
 
   private void checkIssue(String fileName, String expectedIssueMessage) throws URISyntaxException {
-    check(fileName, ImmutableList.<CheckIssue>of(new PHPIssue(check, expectedIssueMessage)));
+    check(fileName, ImmutableList.<CheckIssue>of(new LegacyIssue(check, expectedIssueMessage)));
   }
 
   private void check(String fileName, ImmutableList<CheckIssue> expectedIssues) throws URISyntaxException {

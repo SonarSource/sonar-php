@@ -32,7 +32,7 @@ import java.util.Map;
 import org.sonar.api.internal.apachecommons.lang.StringUtils;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tests.TestIssue.Location;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -149,8 +149,8 @@ public class PhpCheckTest {
   }
 
   private static int line(CheckIssue issue) {
-    if (issue instanceof PHPIssue) {
-      return ((PHPIssue) issue).line();
+    if (issue instanceof LegacyIssue) {
+      return ((LegacyIssue) issue).line();
 
     } else if (issue instanceof LineIssue) {
       return ((LineIssue) issue).line();
@@ -163,8 +163,8 @@ public class PhpCheckTest {
   }
 
   private static String message(CheckIssue issue) {
-    if (issue instanceof PHPIssue) {
-      return ((PHPIssue) issue).message();
+    if (issue instanceof LegacyIssue) {
+      return ((LegacyIssue) issue).message();
 
     } else if (issue instanceof LineIssue) {
       return ((LineIssue) issue).message();

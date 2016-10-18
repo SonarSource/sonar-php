@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
@@ -46,6 +46,6 @@ public class CommentedOutCodeCheckTest {
 
   private CheckIssue newIssue(int line) {
     String message = "Remove this commented out code.";
-    return new PHPIssue(CHECK, message).line(line);
+    return new LegacyIssue(CHECK, message).line(line);
   }
 }

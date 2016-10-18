@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
@@ -48,8 +48,8 @@ public class TooManyMethodsInClassCheckTest {
     check.countNonpublicMethods = false;
 
     ImmutableList<CheckIssue> issues = ImmutableList.<CheckIssue>of(
-      new PHPIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3),
-      new PHPIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(35)
+      new LegacyIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3),
+      new LegacyIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(35)
     );
     PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }

@@ -28,7 +28,7 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 /**
  * This class is used to represent issue created by checks before feeding them to SonarQube.
  */
-public class PHPIssue implements Issue {
+public class LegacyIssue implements Issue {
 
   private final PHPCheck check;
   private final String message;
@@ -36,7 +36,7 @@ public class PHPIssue implements Issue {
   @Nullable
   private Double cost;
 
-  public PHPIssue(PHPCheck check, String message) {
+  public LegacyIssue(PHPCheck check, String message) {
     this.check = check;
     this.message = message;
     this.line = 0;
@@ -65,19 +65,19 @@ public class PHPIssue implements Issue {
   }
 
   @Override
-  public PHPIssue line(int line) {
+  public LegacyIssue line(int line) {
     this.line = line;
     return this;
   }
 
   @Override
-  public PHPIssue tree(Tree tree) {
+  public LegacyIssue tree(Tree tree) {
     this.line = ((PHPTree) tree).getLine();
     return this;
   }
 
   @Override
-  public PHPIssue cost(double cost) {
+  public LegacyIssue cost(double cost) {
     this.cost = cost;
     return this;
   }
