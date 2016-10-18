@@ -626,6 +626,11 @@
     </rule>
     <rule>
       <repositoryKey>php</repositoryKey>
+      <key>S3332</key> <!-- Session-management cookies should not be persistent -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
       <key>S3333</key> <!-- php.ini: open_basedir -->
       <priority>INFO</priority>
     </rule>

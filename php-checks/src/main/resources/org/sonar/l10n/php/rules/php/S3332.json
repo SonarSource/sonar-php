@@ -1,0 +1,18 @@
+{
+  "title": "Session-management cookies should not be persistent",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "security",
+    "php-ini",
+    "owasp-a3"
+  ],
+  "standards": [
+    "OWASP Top Ten"
+  ],
+  "defaultSeverity": "Critical"
+}
