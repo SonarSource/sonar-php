@@ -1,0 +1,85 @@
+<p>
+  Certain functions exist in PHP only as aliases of other functions. These aliases have been made available for backward compatibility, but should really be removed from code.
+</p>
+
+<p>
+  This rule looks for uses of the following aliases:
+</p>
+<table>
+  <tr>
+    <th>Alias</th>
+    <th>Replacement</th>
+  </tr>
+  <tr>
+    <td>sizeof</td>
+    <td>count</td>
+  </tr>
+  <tr>
+    <td>delete</td>
+    <td>unset</td>
+  </tr>
+  <tr>
+    <td>print</td>
+    <td>echo</td>
+  </tr>
+  <tr>
+    <td>is_null</td>
+    <td>null</td>
+  </tr>
+  <tr>
+    <td>is_double</td>
+    <td>is_float</td>
+  </tr>
+  <tr>
+    <td>is_integer</td>
+    <td>is_int</td>
+  </tr>
+  <tr>
+    <td>is_long</td>
+    <td>is_int</td>
+  </tr>
+  <tr>
+    <td>is_real</td>
+    <td>is_float</td>
+  </tr>
+  <tr>
+    <td>create_function</td>
+    <td>null</td>
+  </tr>
+  <tr>
+    <td>chop</td>
+    <td>rtrim</td>
+  </tr>
+  <tr>
+    <td>ini_alter</td>
+    <td>ini_set</td>
+  </tr>
+  <tr>
+    <td>join</td>
+    <td>implode</td>
+  </tr>
+  <tr>
+    <td>key_exists</td>
+    <td>array_key_exists</td>
+  </tr>
+  <tr>
+    <td>fputs</td>
+    <td>fwrite</td>
+  </tr>
+ <tr>
+    <td>is_writeable</td>
+    <td>is_writable</td>
+  </tr>
+</table>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+$arr=array("apple", "pear","banana");
+echo sizeof($arr);  // Noncompliant
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+$arr=array("apple", "pear","banana");
+echo count($arr);
+</pre>
