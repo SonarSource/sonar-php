@@ -38,6 +38,9 @@ class A {
   public static final function f3() {
   }
 
+  private static final function f4() {
+  }
+
   public static function f4() {
     self::$field_private;       // OK, as field is private
     self::$field_protected;     // NOK {{Use "static" keyword instead of "self".}}
@@ -53,6 +56,8 @@ class A {
     self::f2_protected();       // NOK {{Use "static" keyword instead of "self".}}
     self::f2_public();          // NOK
     self::f2_default();         // NOK
+    
+    self::f4();                 // OK, as function is private (and final as well)
 
     static::f2_private();       // OK, as always with "static"
     static::f2_protected();     // OK, as always with "static"
@@ -83,6 +88,7 @@ final class B {
 class D {
   public static function f1() {
     self::f2();                      // NOK
+    self::f3();                      // OK, function is private
     class C {
       private static $field_private;
       public static $field_public;
@@ -90,17 +96,21 @@ class D {
       public static function f1() {
         static::f2();                // OK, as always with "static"
         self::f2();                  // OK, function is final
-        self::f4();                  // OK, function is final and private
+        self::f4();                  // OK, function is private
         self::f3();                  // NOK, function is public
         self::$field_private;        // OK, field is private
         return self::$field_public;  // NOK, field is public
       }
 
       public static final function f2() {}
-      private static final function f4() {}
+      private static  function f4() {}
       public static function f3() {}
     }
+    self::f2();                      // NOK
+    self::f3();                      // OK, function is private
   }
+  
+  private static function f3() {}
 
   public static function f2() {}
 }
