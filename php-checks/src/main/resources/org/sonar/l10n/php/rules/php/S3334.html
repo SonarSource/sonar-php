@@ -1,0 +1,23 @@
+<p><code>allow_url_fopen</code> and <code>allow_url_include</code> allow code to be read into a script from URL's. The ability to suck in executable
+code from outside your site, coupled with imperfect input cleansing could lay your site bare to attackers. Even if your input filtering is perfect
+today, are you prepared to bet your site that it will always be perfect in the future?</p>
+<p>This rule raises an issue when either property is explicitly enabled in <em>php.ini</em> and when <code>allow_url_fopen</code>, which defaults to
+enabled, is not explicitly disabled.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+; php.ini  Noncompliant; allow_url_fopen not explicitly disabled
+allow_url_include=1  ; Noncompliant
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+; php.ini
+allow_url_fopen=0
+allow_url_include=0
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://cwe.mitre.org/data/definitions/829.html">MITRE, CWE-829</a> - Inclusion of Functionality from Untrusted Control Sphere </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection">OWASP Top Ten 2013 Category A1</a> - Injection </li>
+  <li> <a href="http://www.sans.org/top25-software-errors/">SANS Top 25</a> - Risky Resource Management </li>
+</ul>
+
