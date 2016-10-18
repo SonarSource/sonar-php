@@ -151,6 +151,7 @@ public class CheckList {
       SleepFunctionUsageCheck.class,
       HardCodedCredentialsCheck.class,
       MultilineBlocksCurlyBracesCheck.class,
+      SessionCookiePersistenceCheck.class,
       ParsingErrorCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
@@ -162,6 +163,7 @@ public class CheckList {
       EnableDlCheck.class,
       FileUploadsCheck.class,
       OpenBasedirCheck.class,
+      SessionCookiePersistenceCheck.class,
       SessionUseTransSidCheck.class);
   }
 
