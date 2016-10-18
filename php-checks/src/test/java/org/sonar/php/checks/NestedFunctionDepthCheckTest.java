@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class NestedFunctionDepthCheckTest {
 
@@ -45,7 +45,7 @@ public class NestedFunctionDepthCheckTest {
       issue(28)));
   }
 
-  private CheckIssue issue(int line) {
+  private PhpIssue issue(int line) {
     return new LegacyIssue(check, null).line(line);
   }
 }

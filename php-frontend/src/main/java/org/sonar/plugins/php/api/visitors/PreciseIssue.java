@@ -24,7 +24,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
-public class PreciseIssue implements CheckIssue {
+public class PreciseIssue implements PhpIssue {
 
   private final PHPCheck check;
   private Double cost;

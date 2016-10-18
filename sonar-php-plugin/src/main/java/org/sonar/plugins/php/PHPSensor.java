@@ -58,7 +58,7 @@ import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -241,8 +241,8 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void saveIssues(SensorContext context, List<CheckIssue> issues, InputFile inputFile) {
-    for (CheckIssue issue : issues) {
+  private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {
+    for (PhpIssue issue : issues) {
       RuleKey ruleKey = checks.ruleKeyFor(issue.check());
       NewIssue newIssue = context.newIssue()
         .forRule(ruleKey)

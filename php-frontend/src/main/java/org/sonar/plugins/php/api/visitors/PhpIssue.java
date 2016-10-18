@@ -24,13 +24,13 @@ import javax.annotation.Nullable;
 /**
  * This interface is used to represent issue created by checks before feeding them to SonarQube.
  */
-public interface CheckIssue {
+public interface PhpIssue {
 
   PHPCheck check();
 
   @Nullable
   Double cost();
 
-  CheckIssue cost(double cost);
+  PhpIssue cost(double cost);
 
 }

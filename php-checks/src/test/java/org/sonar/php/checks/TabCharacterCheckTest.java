@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class TabCharacterCheckTest {
   public void test() throws Exception {
     PHPCheck check = new TabCharacterCheck();
 
-    List<CheckIssue> issue = ImmutableList.<CheckIssue>of(new LegacyIssue(check, "Replace all tab characters in this file by sequences of white-spaces."));
+    List<PhpIssue> issue = ImmutableList.<PhpIssue>of(new LegacyIssue(check, "Replace all tab characters in this file by sequences of white-spaces."));
     PhpCheckTest.check(check, TestUtils.getCheckFile("TabCharacterCheck.php"), issue);
   }
 }

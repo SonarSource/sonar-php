@@ -122,7 +122,7 @@ public interface CheckContext {
    */
   File file();
 
-  List<CheckIssue> getIssues();
+  List<PhpIssue> getIssues();
 
   SymbolTable symbolTable();
 

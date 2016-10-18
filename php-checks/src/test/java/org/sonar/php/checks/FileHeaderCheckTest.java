@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
-import org.sonar.plugins.php.api.visitors.CheckIssue;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.util.List;
 
@@ -34,8 +34,8 @@ public class FileHeaderCheckTest {
 
   @Test
   public void test() throws Exception {
-    List<CheckIssue> issue = ImmutableList.<CheckIssue>of(new LegacyIssue(check, "Add or update the header of this file."));
-    List<CheckIssue> noIssue = ImmutableList.of();
+    List<PhpIssue> issue = ImmutableList.<PhpIssue>of(new LegacyIssue(check, "Add or update the header of this file."));
+    List<PhpIssue> noIssue = ImmutableList.of();
 
     check.headerFormat = "// copyright 2005";
     PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file1.php"), noIssue);

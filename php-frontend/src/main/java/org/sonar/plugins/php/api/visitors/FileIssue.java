@@ -21,7 +21,7 @@ package org.sonar.plugins.php.api.visitors;
 
 import javax.annotation.Nullable;
 
-public class FileIssue implements CheckIssue {
+public class FileIssue implements PhpIssue {
 
   private final PHPCheck check;
   private Double cost = null;

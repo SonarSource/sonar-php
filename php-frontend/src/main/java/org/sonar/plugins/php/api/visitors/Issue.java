@@ -22,7 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
-public interface Issue extends CheckIssue {
+public interface Issue extends PhpIssue {
 
   @Override
   PHPCheck check();
