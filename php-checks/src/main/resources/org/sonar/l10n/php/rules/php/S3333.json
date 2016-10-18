@@ -1,0 +1,18 @@
+{
+  "title": "\"open_basedir\" should limit file access",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "cwe",
+    "security",
+    "php-ini"
+  ],
+  "standards": [
+    "CWE"
+  ],
+  "defaultSeverity": "Blocker"
+}

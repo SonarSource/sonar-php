@@ -27,6 +27,7 @@ import org.sonar.php.checks.phpini.AllowUrlCheck;
 import org.sonar.php.checks.phpini.CgiForceRedirectCheck;
 import org.sonar.php.checks.phpini.EnableDlCheck;
 import org.sonar.php.checks.phpini.FileUploadsCheck;
+import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 
 public class CheckList {
@@ -160,6 +161,7 @@ public class CheckList {
       CgiForceRedirectCheck.class,
       EnableDlCheck.class,
       FileUploadsCheck.class,
+      OpenBasedirCheck.class,
       SessionUseTransSidCheck.class);
   }
 
