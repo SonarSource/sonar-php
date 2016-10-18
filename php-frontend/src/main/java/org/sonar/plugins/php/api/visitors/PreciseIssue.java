@@ -26,10 +26,10 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 public class PreciseIssue implements CheckIssue {
 
-  private PHPCheck check;
+  private final PHPCheck check;
   private Double cost;
-  private IssueLocation primaryLocation;
-  private List<IssueLocation> secondaryLocations;
+  private final IssueLocation primaryLocation;
+  private final List<IssueLocation> secondaryLocations;
 
   public PreciseIssue(PHPCheck check, IssueLocation primaryLocation) {
     this.check = check;

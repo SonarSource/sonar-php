@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
 
 public class FileIssue implements CheckIssue {
 
-  private PHPCheck check;
-  private Double cost;
-  private String message;
+  private final PHPCheck check;
+  private Double cost = null;
+  private final String message;
 
   public FileIssue(PHPCheck check, String message) {
     this.check = check;

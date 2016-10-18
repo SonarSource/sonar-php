@@ -23,10 +23,10 @@ import javax.annotation.Nullable;
 
 public class LineIssue implements CheckIssue {
 
-  private PHPCheck check;
-  private Double cost;
-  private String message;
-  private int line;
+  private final PHPCheck check;
+  private Double cost = null;
+  private final String message;
+  private final int line;
 
   public LineIssue(PHPCheck check, int line, String message) {
     this.message = message;
