@@ -60,8 +60,8 @@ public class PHPCheckContext implements CheckContext {
   }
 
   @Override
-  public PHPIssue newIssue(PHPCheck check, String message) {
-    PHPIssue issue = new PHPIssue(check, message);
+  public LegacyIssue newIssue(PHPCheck check, String message) {
+    LegacyIssue issue = new LegacyIssue(check, message);
     issues.add(issue);
 
     return issue;

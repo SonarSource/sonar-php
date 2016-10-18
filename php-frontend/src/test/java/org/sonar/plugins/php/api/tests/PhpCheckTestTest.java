@@ -27,7 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -245,7 +245,7 @@ public class PhpCheckTestTest {
     ImmutableList.Builder<CheckIssue> issueBuilder = ImmutableList.builder();
 
     for (int line : lines) {
-      issueBuilder.add(new PHPIssue(CHECK, message).line(line));
+      issueBuilder.add(new LegacyIssue(CHECK, message).line(line));
     }
 
     return issueBuilder.build();

@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.tree.visitors.PHPIssue;
+import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PhpCheckTest;
 import org.sonar.plugins.php.api.visitors.CheckIssue;
@@ -31,7 +31,7 @@ public class FileWithSymbolsAndSideEffectsCheckTest {
   private final String TEST_DIR = "FileWithSymbolsAndSideEffectsCheck/";
   private final FileWithSymbolsAndSideEffectsCheck check = new FileWithSymbolsAndSideEffectsCheck();
 
-  private final ImmutableList<CheckIssue> issue = ImmutableList.<CheckIssue>of(new PHPIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
+  private final ImmutableList<CheckIssue> issue = ImmutableList.<CheckIssue>of(new LegacyIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
 
 
   @Test
