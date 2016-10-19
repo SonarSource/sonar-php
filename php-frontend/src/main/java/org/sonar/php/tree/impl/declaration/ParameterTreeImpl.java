@@ -26,7 +26,7 @@ import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
-import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -36,7 +36,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   private static final Kind KIND = Kind.PARAMETER;
 
-  private final TypeNameTree type;
+  private final TypeTree type;
   private final InternalSyntaxToken referenceToken;
   private final InternalSyntaxToken ellipsisToken;
   private final VariableIdentifierTree variableIdentifier;
@@ -44,7 +44,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
   private final ExpressionTree initValue;
 
   public ParameterTreeImpl(
-    @Nullable TypeNameTree type,
+    @Nullable TypeTree type,
     @Nullable InternalSyntaxToken referenceToken,
     @Nullable InternalSyntaxToken ellipsisToken,
     VariableIdentifierTree variableIdentifier,
@@ -61,7 +61,7 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
 
   @Nullable
   @Override
-  public TypeNameTree type() {
+  public TypeTree type() {
     return type;
   }
 

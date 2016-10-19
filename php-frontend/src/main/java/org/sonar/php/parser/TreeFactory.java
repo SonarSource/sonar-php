@@ -50,6 +50,7 @@ import org.sonar.php.tree.impl.declaration.ReturnTypeClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitAliasTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitMethodReferenceTreeImpl;
 import org.sonar.php.tree.impl.declaration.TraitPrecedenceTreeImpl;
+import org.sonar.php.tree.impl.declaration.TypeTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
@@ -133,6 +134,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -407,7 +409,7 @@ public class TreeFactory {
   }
 
   public ParameterTree parameter(
-    Optional<TypeNameTree> type,
+    Optional<TypeTree> type,
     Optional<InternalSyntaxToken> ampersand,
     Optional<InternalSyntaxToken> ellipsis,
     InternalSyntaxToken identifier,
@@ -638,6 +640,9 @@ public class TreeFactory {
     }
   }
 
+  public TypeTree type(Optional<InternalSyntaxToken> questionMarkToken, TypeNameTree typeName) {
+    return new TypeTreeImpl(questionMarkToken.orNull(), typeName);
+  }
 
   public NamespaceNameTree namespaceName(List<Tuple<InternalSyntaxToken, InternalSyntaxToken>> tuples) {
     NameIdentifierTree lastPartIfOneTuple = new NameIdentifierTreeImpl(tuples.get(0).second());
@@ -1567,8 +1572,8 @@ public class TreeFactory {
     return new BuiltInTypeTreeImpl(token);
   }
 
-  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken token, TypeNameTree typeNameTree) {
-    return new ReturnTypeClauseTreeImpl(token, typeNameTree);
+  public ReturnTypeClauseTree returnTypeClause(InternalSyntaxToken colonToken, TypeTree typeTree) {
+    return new ReturnTypeClauseTreeImpl(colonToken, typeTree);
   }
 
   public SeparatedListImpl<ExpressionTree> arguments(Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> arguments) {
@@ -1897,4 +1902,5 @@ public class TreeFactory {
   public List<SyntaxToken> singleToken(SyntaxToken token) {
     return ImmutableList.of(token);
   }
+
 }

@@ -17,25 +17,30 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.plugins.php.api.tree.declaration;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+/**
+ * This interface represents type clause (appearing in function return type or parameter type),
+ * possibly prefixed with a <code>?</code> which stands for "optional".
+ */
+@Beta
+public interface TypeTree extends Tree {
 
-public class ParameterTest {
+  /**
+   * Optional leading <code>?</code> token, as in <code>?int</code>, to mark the object
+   * (parameter, returned value) as optional.
+   */
+  @Nullable
+  SyntaxToken questionMarkToken();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.PARAMETER)
-      .matches("callable $a")
-      .matches("array $a")
-      .matches("int $a")
-      .matches("Foo $a")
-      .matches("?int $a")
-      .matches("&$a")
-      .matches("...$a")
-      .matches("$a = \"foo\"");
-  }
+  /**
+   * The underlying type, e.g., <code>int</code> in <code>?int</code>.
+   */
+  TypeNameTree typeName();
+
 }
