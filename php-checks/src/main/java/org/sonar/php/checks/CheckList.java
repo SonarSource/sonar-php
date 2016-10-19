@@ -90,6 +90,7 @@ public class CheckList {
       CommentedOutCodeCheck.class,
       ElseIfSequenceKeywordUsageCheck.class,
       ExitOrDieUsageCheck.class,
+      AliasFunctionUsageCheck.class,
       VarKeywordUsageCheck.class,
       MissingMethodVisibilityCheck.class,
       KeywordsAndConstantsNotLowerCaseCheck.class,
