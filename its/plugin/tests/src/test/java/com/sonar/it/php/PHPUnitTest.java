@@ -31,12 +31,13 @@ import org.sonar.wsclient.services.Measure;
 import org.sonar.wsclient.services.Resource;
 import org.sonar.wsclient.services.ResourceQuery;
 
+import static com.sonar.it.php.Tests.ORCHESTRATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PHPUnitTest {
 
   @ClassRule
-  public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+  public static Orchestrator orchestrator = ORCHESTRATOR;
 
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("phpunit");
 
@@ -77,18 +78,15 @@ public class PHPUnitTest {
     assertThat(getProjectMeasure("uncovered_lines").getValue()).isEqualTo(2);
     assertThat(getProjectMeasure("conditions_to_cover")).isNull();
     assertThat(getProjectMeasure("uncovered_conditions")).isNull();
-  }
 
-  @Test
-  public void it_coverage() throws Exception {
-    assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(6);
-    assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(2);
-  }
+    // see MMF-345
+    if (is_before_sonar_6_2()) {
+      assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(6);
+      assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(2);
 
-  @Test
-  public void overall_coverage() throws Exception {
-    assertThat(getProjectMeasure("overall_lines_to_cover").getValue()).isEqualTo(6);
-    assertThat(getProjectMeasure("overall_uncovered_lines").getValue()).isEqualTo(2);
+      assertThat(getProjectMeasure("overall_lines_to_cover").getValue()).isEqualTo(6);
+      assertThat(getProjectMeasure("overall_uncovered_lines").getValue()).isEqualTo(2);
+    }
   }
 
   private Measure getProjectMeasure(String metricKey) {
@@ -124,4 +122,7 @@ public class PHPUnitTest {
       new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
   }
 
+  public static boolean is_before_sonar_6_2() {
+    return !orchestrator.getConfiguration().getSonarVersion().isGreaterThanOrEquals("6.2");
+  }
 }
