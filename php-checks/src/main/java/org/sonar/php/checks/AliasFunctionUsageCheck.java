@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
+import java.util.Locale;
 import java.util.Map;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
@@ -74,23 +75,13 @@ public class AliasFunctionUsageCheck extends PHPVisitorCheck {
     ExpressionTree callee = tree.callee();
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
       String name = ((NamespaceNameTree) callee).fullName();
-      String replacement = getAliasReplacement(name);
-      if (replacement != null) {
-        context().newIssue(this, callee, String.format(MESSAGE, name, replacement));
+      String replacementName = ALIAS_FUNCTIONS.get(name.toLowerCase(Locale.ROOT));
+      if (replacementName != null) {
+        context().newIssue(this, callee, String.format(MESSAGE, name, replacementName));
       }
     }
 
     super.visitFunctionCall(tree);
-  }
-
-  private static String getAliasReplacement(String callee) {
-    for (Map.Entry<String, String> alias : ALIAS_FUNCTIONS.entrySet()) {
-      if (alias.getKey().equalsIgnoreCase(callee)) {
-        return alias.getValue();
-      }
-    }
-
-    return null;
   }
 
 }
