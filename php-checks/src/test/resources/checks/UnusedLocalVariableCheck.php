@@ -242,3 +242,14 @@ class Foo{
      return $M; // OK
   }
 }
+
+/**
+ *  SONARPHP-402
+ */
+function heredoc_usage() {
+   $a = 1;
+   echo <<<EOF
+   {$a}
+EOF;
+
+}

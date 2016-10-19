@@ -58,3 +58,9 @@ $compactArray = compact("var", "unknown"); // use of $var
 
 new A();
 new A;
+
+$heredocVar = 1;
+echo <<<EOF
+  This is first usage of \$heredocVar: $heredocVar
+  This is second usage: {$heredocVar}
+EOF;

@@ -43,3 +43,17 @@ class B {
 
 
 }
+
+
+/**
+ *  SONARPHP-402
+ */
+class HeredocUsage {
+  private function foo() {}
+
+  function heredoc_usage() {
+    echo <<<EOF
+    {$this->foo()}
+EOF;
+  }
+}
