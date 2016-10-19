@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,6 +68,7 @@ import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.HeredocStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.LexicalVariablesTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
@@ -144,6 +146,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -237,6 +240,15 @@ public class TreeFactory {
     .put(PHPPunctuator.BANG.getValue(), Kind.LOGICAL_COMPLEMENT)
     .put(PHPPunctuator.AT.getValue(), Kind.ERROR_CONTROL)
     .build();
+
+  private final Charset charset;
+
+  public TreeFactory() {
+    this.charset = Charset.defaultCharset();
+  }
+  public TreeFactory(Charset charset) {
+    this.charset = charset;
+  }
 
   private static <T extends Tree> List<T> optionalList(Optional<List<T>> list) {
     if (list.isPresent()) {
@@ -1127,12 +1139,16 @@ public class TreeFactory {
     return new LiteralTreeImpl(Tree.Kind.MAGIC_CONSTANT, token);
   }
 
-  public LiteralTree heredocLiteral(InternalSyntaxToken token) {
-    return new LiteralTreeImpl(Tree.Kind.HEREDOC_LITERAL, token);
+  public LiteralTree nowdocLiteral(InternalSyntaxToken token) {
+    return new LiteralTreeImpl(Tree.Kind.NOWDOC_LITERAL, token);
   }
 
   public ExpandableStringCharactersTree expandableStringCharacters(InternalSyntaxToken token) {
-    return new ExpandableStringCharactersTreeImpl(token);
+    return new ExpandableStringCharactersTreeImpl(Kind.EXPANDABLE_STRING_CHARACTERS, token);
+  }
+
+  public ExpandableStringCharactersTree heredocStringCharacters(InternalSyntaxToken token) {
+    return new ExpandableStringCharactersTreeImpl(Kind.HEREDOC_STRING_CHARACTERS, token);
   }
 
   public NameIdentifierTree identifier(InternalSyntaxToken token) {
@@ -1600,6 +1616,10 @@ public class TreeFactory {
 
   private static SeparatedListImpl<NamespaceNameTree> superInterfaces(Optional<Tuple<InternalSyntaxToken, SeparatedListImpl<NamespaceNameTree>>> implementsClause) {
     return implementsClause.isPresent() ? implementsClause.get().second() : SeparatedListImpl.<NamespaceNameTree>empty();
+  }
+
+  public HeredocStringLiteralTree heredocStringLiteral(InternalSyntaxToken token) {
+    return new HeredocStringLiteralTreeImpl(token, charset);
   }
 
   /**

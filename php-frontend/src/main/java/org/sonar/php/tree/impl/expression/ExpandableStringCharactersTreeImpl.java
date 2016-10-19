@@ -30,16 +30,17 @@ import java.util.Iterator;
 
 public class ExpandableStringCharactersTreeImpl extends PHPTree implements ExpandableStringCharactersTree {
 
-  private static final Kind KIND = Kind.EXPANDABLE_STRING_CHARACTERS;
+  private final Kind kind;
   private final SyntaxToken token;
 
-  public ExpandableStringCharactersTreeImpl(SyntaxToken token) {
+  public ExpandableStringCharactersTreeImpl(Kind kind, SyntaxToken token) {
+    this.kind = kind;
     this.token = token;
   }
 
   @Override
   public Kind getKind() {
-    return KIND;
+    return kind;
   }
 
   @Override

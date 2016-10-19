@@ -48,6 +48,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -634,7 +635,9 @@ public interface Tree {
      * {@link LiteralTree}
      * {@code heredoc}
      */
-    HEREDOC_LITERAL(LiteralTree.class),
+    HEREDOC_LITERAL(HeredocStringLiteralTree.class),
+
+    NOWDOC_LITERAL(LiteralTree.class),
 
     /**
      * {@link ExpandableStringLiteralTree}
@@ -645,6 +648,11 @@ public interface Tree {
      * {@link ExpandableStringCharactersTree}
      */
     EXPANDABLE_STRING_CHARACTERS(ExpandableStringCharactersTree.class),
+
+    /**
+     * {@link ExpandableStringCharactersTree}
+     */
+    HEREDOC_STRING_CHARACTERS(ExpandableStringCharactersTree.class),
 
     /**
      * {@link LiteralTree}

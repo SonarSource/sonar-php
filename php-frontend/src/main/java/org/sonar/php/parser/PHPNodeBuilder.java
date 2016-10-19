@@ -40,6 +40,16 @@ import java.util.List;
 
 public class PHPNodeBuilder implements NodeBuilder {
 
+  private int lineOffset;
+
+  public PHPNodeBuilder(int lineOffset) {
+    this.lineOffset = lineOffset;
+  }
+
+  public PHPNodeBuilder() {
+    this.lineOffset = 0;
+  }
+
   @Override
   public Object createNonTerminal(GrammarRuleKey ruleKey, Rule rule, List<Object> children, int startIndex, int endIndex) {
     for (Object child : children) {
@@ -55,7 +65,7 @@ public class PHPNodeBuilder implements NodeBuilder {
     boolean isEof = GenericTokenType.EOF.equals(type);
     LineColumnValue lineColumnValue = tokenPosition(input, startIndex, endIndex);
     return new InternalSyntaxToken(
-      lineColumnValue.line,
+      lineColumnValue.line + lineOffset,
       lineColumnValue.column,
       lineColumnValue.value,
       createTrivias(trivias),

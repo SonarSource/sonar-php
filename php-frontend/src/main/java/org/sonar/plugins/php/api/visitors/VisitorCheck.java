@@ -49,6 +49,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -280,6 +281,8 @@ public interface VisitorCheck extends PHPCheck {
   void visitSkippedListElement(ExpressionTree tree);
 
   void visitAnonymousClass(AnonymousClassTree tree);
+
+  void visitHeredoc(HeredocStringLiteralTree tree);
   /**
    * [ END ] Expression
    */

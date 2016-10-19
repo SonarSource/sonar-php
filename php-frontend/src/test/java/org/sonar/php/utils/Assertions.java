@@ -54,7 +54,7 @@ public class Assertions {
       Charsets.UTF_8,
       b,
       PHPGrammar.class,
-      new TreeFactory(),
+      new TreeFactory(Charsets.UTF_8),
       new PHPNodeBuilder(),
       rule));
   }

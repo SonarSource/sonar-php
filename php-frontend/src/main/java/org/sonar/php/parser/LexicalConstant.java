@@ -78,6 +78,7 @@ public class LexicalConstant {
   private static final String PERMITTED_EMBEDDED_DOLAR = "(?:\\$(?!\\{|" + IDENTIFIER_START + "))";
   private static final String PERMITTED_OPEN_CURLY_BRACE = "(?:\\{(?!\\$))";
   private static final String NON_SPECIAL_CHARACTERS = "(?:[^\"\\\\$\\{])";
+  private static final String NON_SPECIAL_CHARACTERS_HEREDOC = "(?:[^\\\\$\\{])";
   private static final String ESCAPED_CHARACTERS = "(?:\\\\[\\s\\S])";
 
   public static final String STRING_WITH_ENCAPS_VAR_CHARACTERS = "(?:(?:"
@@ -86,15 +87,27 @@ public class LexicalConstant {
     + "|" + PERMITTED_OPEN_CURLY_BRACE
     + "|" + ESCAPED_CHARACTERS
     + ")++)";
+
+  public static final String HEREDOC_STRING_CHARACTERS = "(?:(?:"
+    + NON_SPECIAL_CHARACTERS_HEREDOC
+    + "|" + PERMITTED_EMBEDDED_DOLAR
+    + "|" + PERMITTED_OPEN_CURLY_BRACE
+    + "|" + ESCAPED_CHARACTERS
+    + ")++)";
+
   private static final String EXECUTION_OPERATOR = "`[^`]*+`";
 
   /**
    * Heredoc
    */
   public static final String HEREDOC = "(?s)"
-    + "<<<[" + WHITESPACE + "]*\"([^\r\n'\"]++)\".*?(?:\\r\\n?+|\\n)\\1"
-    + "|<<<[" + WHITESPACE + "]*'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\2"
-    + "|<<<[" + WHITESPACE + "]*([^\r\n'\"]++).*?(?:\\r\\n?+|\\n)\\3";
+    + "<<<[" + WHITESPACE + "]*(\"?([^\r\n'\"]++)\"?)(?:\\r\\n?+|\\n)(.*?)(?:\\r\\n?+|\\n)\\2";
+
+  /**
+   * Nowdoc
+   */
+  public static final String NOWDOC = "(?s)"
+    + "<<<[" + WHITESPACE + "]*'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\1";
 
   /**
    * String

@@ -20,6 +20,7 @@
 package org.sonar.php.parser;
 
 import com.sonar.sslr.api.typed.GrammarBuilder;
+import java.util.List;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedListImpl;
@@ -53,6 +54,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -1107,7 +1109,7 @@ public class PHPGrammar {
   public ExpressionTree COMMON_SCALAR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.COMMON_SCALAR).is(
       b.firstOf(
-        f.heredocLiteral(b.token(PHPLexicalGrammar.HEREDOC)),
+        f.nowdocLiteral(b.token(PHPLexicalGrammar.NOWDOC)),
         NUMERIC_LITERAL(),
         STRING_LITERAL(),
         f.booleanLiteral(b.token(PHPLexicalGrammar.BOOLEAN_LITERAL)),
@@ -1132,7 +1134,8 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal().is(
       b.firstOf(
         f.regularStringLiteral(b.token(PHPLexicalGrammar.REGULAR_STRING_LITERAL)),
-        EXPANDABLE_STRING_LITERAL()));
+        EXPANDABLE_STRING_LITERAL(),
+        HEREDOC_STRING_LITERAL()));
   }
 
   public ExpandableStringLiteralTree EXPANDABLE_STRING_LITERAL() {
@@ -1142,9 +1145,21 @@ public class PHPGrammar {
         b.token(PHPLexicalGrammar.DOUBLE_QUOTE),
         b.oneOrMore(
           b.firstOf(
-            ENCAPSULATED_STRING_VARIABLE(),
-            EXPANDABLE_STRING_CHARACTERS())),
+            EXPANDABLE_STRING_CHARACTERS(),
+            ENCAPSULATED_STRING_VARIABLE())),
         b.token(PHPLexicalGrammar.DOUBLE_QUOTE)));
+  }
+
+  public HeredocStringLiteralTree HEREDOC_STRING_LITERAL() {
+    return b.<HeredocStringLiteralTree>nonterminal(Kind.HEREDOC_LITERAL).is(
+      f.heredocStringLiteral(b.token(PHPLexicalGrammar.HEREDOC)));
+  }
+
+  public List<ExpressionTree> HEREDOC_BODY() {
+    return b.<List<ExpressionTree>>nonterminal(PHPLexicalGrammar.HEREDOC_BODY).is(
+      b.oneOrMore(b.firstOf(
+        HEREDOC_STRING_CHARACTERS(),
+        ENCAPSULATED_STRING_VARIABLE())));
   }
 
   public ExpressionTree ENCAPSULATED_STRING_VARIABLE() {
@@ -1202,6 +1217,11 @@ public class PHPGrammar {
   public ExpressionTree EXPANDABLE_STRING_CHARACTERS() {
     return b.<ExpandableStringCharactersTree>nonterminal(Kind.EXPANDABLE_STRING_CHARACTERS).is(
       f.expandableStringCharacters(b.token(PHPLexicalGrammar.STRING_WITH_ENCAPS_VAR_CHARACTERS)));
+  }
+
+  public ExpressionTree HEREDOC_STRING_CHARACTERS() {
+    return b.<ExpandableStringCharactersTree>nonterminal(Kind.HEREDOC_STRING_CHARACTERS).is(
+      f.heredocStringCharacters(b.token(PHPLexicalGrammar.HEREDOC_STRING_CHARACTERS)));
   }
 
   public YieldExpressionTree YIELD_EXPRESSION() {
