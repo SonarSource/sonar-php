@@ -46,13 +46,6 @@
 59,
 68,
 ],
-'project:symfony/Symfony/Component/Routing/Generator/Dumper/PhpGeneratorDumper.php':[
-83,
-109,
-],
-'project:symfony/Symfony/Component/Routing/Matcher/Dumper/PhpMatcherDumper.php':[
-88,
-],
 'project:symfony/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php':[
 99,
 139,
