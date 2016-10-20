@@ -1,20 +1,18 @@
-<p>
-  Sharing some naming conventions is a key point to make it possible for a team to efficiently collaborate. This rule allows to check that all function names match a provided regular expression.
-</p>
-
+<p>Shared naming conventions allow teams to collaborate efficiently. This rule checks that all function names match a provided regular expression.</p>
 <h2>Noncompliant Code Example</h2>
-<p>With default provided regular expression: ^[a-z][a-zA-Z0-9]*$</p>
+<p>With default provided regular expression: <code>^[a-z][_a-zA-Z0-9]*$</code>:</p>
 <pre>
 function DoSomething(){...}
 </pre>
-
 <h2>Compliant Solution</h2>
 <pre>
 function doSomething(){...}
 </pre>
-
 <h2>Exceptions</h2>
-<p>Methods with an <code>@inheritdoc</code> annotation,  as well as magic methods <code>(__construct(), __destruct(), __call(), __callStatic(), __get(), __set(), __isset(), __unset(), __sleep(), __wakeup(), __toString(), __invoke(), __set_state(), __clone(), __debugInfo())</code> are ignored.</p>
+<p>Methods with an <code>@inheritdoc</code> annotation, as well as magic methods (<code>__construct()</code>, <code>__destruct()</code>,
+<code>__call()</code>, <code>__callStatic()</code>, <code>__get()</code>, <code>__set()</code>, <code>__isset()</code>, <code>__unset()</code>,
+<code>__sleep()</code>, <code>__wakeup()</code>, <code>__toString()</code>, <code>__invoke()</code>, <code>__set_state()</code>,
+<code>__clone()</code>, <code>__debugInfo()</code>) are ignored.</p>
 <pre>
 function __construct(){...}
 function __destruct(){...}
@@ -24,3 +22,4 @@ function __destruct(){...}
  */
 function myFunc(){...}
 </pre>
+

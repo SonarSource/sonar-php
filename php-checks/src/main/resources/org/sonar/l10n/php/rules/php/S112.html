@@ -1,33 +1,26 @@
-<p>
-  If you throw a general exception type, such as ErrorException, RuntimeException, or Exception in a library or framework, it forces consumers to catch all exceptions, including unknown exceptions that they do not know how to handle.
-</p>
-<p>
-  Instead, either throw a subtype that already exists in the Standard PHP Library, or create your own type that derives from Exception.
-</p>
-
+<p>If you throw a general exception type, such as ErrorException, RuntimeException, or Exception in a library or framework, it forces consumers to
+catch all exceptions, including unknown exceptions that they do not know how to handle.</p>
+<p>Instead, either throw a subtype that already exists in the Standard PHP Library, or create your own type that derives from Exception.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 throw new Exception();  // Noncompliant
 </pre>
-
 <h2>Compliant Solution</h2>
 <pre>
 throw new InvalidArgumentException();
 // or
 throw new UnexpectedValueException();
 </pre>
-
-
 <h2>Exceptions</h2>
-<p>
-  Generic exceptions in the signatures of overriding methods are ignored.
-</p>
+<p>Generic exceptions in the signatures of overriding methods are ignored.</p>
 <pre>
 @Override
 public void myMethod() throws Exception {...}
 </pre>
-
 <h2>See</h2>
 <ul>
-  <li><a href="http://cwe.mitre.org/data/definitions/397.html">MITRE, CWE-397</a> - Declaration of Throws for Generic Exception</li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/397.html">MITRE, CWE-397</a> - Declaration of Throws for Generic Exception </li>
+  <li> <a href="https://www.securecoding.cert.org/confluence/x/BoB3AQ">CERT, ERR07-J.</a> - Do not throw RuntimeException, Exception, or Throwable
+  </li>
 </ul>
+

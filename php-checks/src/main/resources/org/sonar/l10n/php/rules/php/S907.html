@@ -1,27 +1,24 @@
-<p>
-  <code>goto</code> is an unstructured control flow statement. It makes code less readable and maintainable. Structured control flow statements such as <code>if</code>, <code>for</code>, <code>while</code>, <code>continue</code> or <code>break</code> should be used instead.
-</p>
-
+<p><code>goto</code> is an unstructured control flow statement. It makes code less readable and maintainable. Structured control flow statements such
+as <code>if</code>, <code>for</code>, <code>while</code>, <code>continue</code> or <code>break</code> should be used instead.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 $i = 0;
 loop:
   echo("i = $i");
   $i++;
-  if ($i < 10){
+  if ($i &lt; 10){
     goto loop;
   }
 </pre>
-
 <h2>Compliant Solution</h2>
 <pre>
-for ($i = 0; $i < 10; $i++){
+for ($i = 0; $i &lt; 10; $i++){
   echo("i = $i");
 }
 </pre>
-
 <h2>See</h2>
 <ul>
-  <li>MISRA C:2004, 14.4 - The goto statement shall not be used.</li>
-  <li>MISRA C:2012, 15.1 - The goto statement should not be used</li>
+  <li> MISRA C:2004, 14.4 - The goto statement shall not be used. </li>
+  <li> MISRA C:2012, 15.1 - The goto statement should not be used </li>
 </ul>
+

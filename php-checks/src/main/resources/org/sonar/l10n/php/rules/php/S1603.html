@@ -1,17 +1,17 @@
-<p>
-  In PHP 4, any function with the same name as the nesting class was considered a class constructor. In PHP 5, this mechanism has been deprecated and the "__construct" method name should be used instead.
-</p>
-
+<p>In PHP 4, any function with the same name as the nesting class was considered a class constructor. In PHP 5, this mechanism has been deprecated and
+the "__construct" method name should be used instead. If both styles are present in the same class, PHP 5 will treat the function named "__construct"
+as the class constructor. </p>
+<p>This rule rule raises an issue for each method with the same name as the enclosing class.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 class Foo {
   function Foo(){...}
 }
 </pre>
-
 <h2>Compliant Solution</h2>
 <pre>
 class Foo {
   function __construct(){...}
 }
 </pre>
+

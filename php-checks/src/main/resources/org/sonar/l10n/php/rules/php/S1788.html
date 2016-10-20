@@ -1,16 +1,17 @@
-<p>
-PHP is one of this powerful language allowing to define a default value for a method argument. But all method arguments with a default value should be declared after the method arguments without default value.
-</p>
-
+<p>The ability to define default values for method arguments can make a method easier to use. Default argument values allow callers to specify as many
+or as few arguments as they want while getting the same functionality and minimizing boilerplate, wrapper code. </p>
+<p>But all method arguments with default values should be declared after the method arguments without default values. Otherwise, it makes it
+impossible for callers to take advantage of defaults; they must re-specify the defaulted values in order to "get to" the non-default arguments.</p>
 <h2>Noncompliant Code Example</h2>
-<p>In the following case, calling <code>makeyogurt("raspberry")</code> won't lead to the expected result :</p>
 <pre>
-function makeyogurt($type = "acidophilus", $flavour){...}
-</pre>
-<p>The following warning will be generated at runtime: <code>Missing argument 2 in call to makeyogurt()</code></p>
+function makeyogurt($type = "acidophilus", $flavor){...}  // Noncompliant
 
+makeyogurt("raspberry")}}  // Runtime error: Missing argument 2 in call to makeyogurt()
+</pre>
 <h2>Compliant Solution</h2>
 <pre>
-function makeyogurt($flavour, $type = "acidophilus", ){...}
+function makeyogurt($flavor, $type = "acidophilus", ){...}
+
+makeyogurt("raspberry")}} // Works as expected
 </pre>
 

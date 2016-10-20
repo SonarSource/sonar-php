@@ -1,7 +1,4 @@
-<p>
-  Remove literal boolean values from conditional expressions to improve readability. Anything that can be tested for equality with a boolean value must itself be a boolean value, and boolean values can be tested atomically.
-</p>
-
+<p>Redundant Boolean literals should be removed from expressions to improve readability.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 if ($booleanVariable == true) { /* ... */ }
@@ -14,7 +11,6 @@ $booleanVariable = condition ? false : exp;
 $booleanVariable = condition ?  exp : true;
 $booleanVariable = condition ?  exp : false;
 </pre>
-
 <h2>Compliant Solution</h2>
 <pre>
 if ($booleanVariable) { /* ... */ }
@@ -23,10 +19,10 @@ if ($booleanVariable) { /* ... */ }
 doSomething(true);
 
 $booleanVariable = condition || exp;
-$booleanVariable = !condition && exp;
+$booleanVariable = !condition &amp;&amp; exp;
 $booleanVariable = !condition ||  exp;
-$booleanVariable = condition && exp;
+$booleanVariable = condition &amp;&amp; exp;
 </pre>
-
 <h2>Exceptions</h2>
 <p>The use of literal booleans in comparisons which use identity operators (<code>===</code> and <code>!==</code>) are ignored.</p>
+
