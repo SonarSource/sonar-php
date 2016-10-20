@@ -38,10 +38,8 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.issue.NoSonarFilter;
-import org.sonar.api.measures.CoreMetrics;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.squidbridge.measures.Metric;
 import org.sonar.squidbridge.recognizer.CamelCaseDetector;
 import org.sonar.squidbridge.recognizer.CodeRecognizer;
 import org.sonar.squidbridge.recognizer.ContainsDetector;
@@ -53,19 +51,19 @@ import org.sonar.squidbridge.text.Source;
 
 @Phase(name = Phase.Name.PRE)
 // The NoSonarFilter must be fed before launching the violation engines
-public class NoSonarAndCommentedOutLocSensor implements Sensor {
+public class NoSonarSensor implements Sensor {
 
   private static final double CODE_RECOGNIZER_SENSITIVITY = 0.9;
 
-  private static final Logger LOG = LoggerFactory.getLogger(NoSonarAndCommentedOutLocSensor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(NoSonarSensor.class);
 
-  private static final String NAME = "NoSonar and Commented out LOC Sensor";
+  private static final String NAME = "NoSonar Sensor";
 
   private final NoSonarFilter filter;
   private final FileSystem filesystem;
   private final FilePredicates filePredicates;
 
-  public NoSonarAndCommentedOutLocSensor(FileSystem filesystem, NoSonarFilter noSonarFilter) {
+  public NoSonarSensor(FileSystem filesystem, NoSonarFilter noSonarFilter) {
     this.filter = noSonarFilter;
     this.filesystem = filesystem;
     this.filePredicates = filesystem.predicates();
@@ -83,8 +81,6 @@ public class NoSonarAndCommentedOutLocSensor implements Sensor {
       Source source = analyseSourceCode(file.file(), filesystem.encoding());
       if (source != null) {
         filter.noSonarInFile(file, source.getNoSonarTagLines());
-        int measure = source.getMeasure(Metric.COMMENTED_OUT_CODE_LINES);
-        context.<Integer>newMeasure().on(file).withValue(measure).forMetric(CoreMetrics.COMMENTED_OUT_CODE_LINES).save();
       }
     }
   }
