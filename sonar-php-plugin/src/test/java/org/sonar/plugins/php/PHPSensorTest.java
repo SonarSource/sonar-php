@@ -27,6 +27,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.InputFile;
@@ -50,6 +51,7 @@ import org.sonar.api.scan.issue.filter.FilterableIssue;
 import org.sonar.api.scan.issue.filter.IssueFilterChain;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.duplications.internal.pmd.TokensLine;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.LeftCurlyBraceEndsLineCheck;
@@ -146,6 +148,29 @@ public class PHPSensorTest {
     // the .php file contains NOSONAR at line 34
     checkNoSonar(componentKey, 33, true, phpSensor);
     checkNoSonar(componentKey, 34, false, phpSensor);
+  }
+
+  @Test
+  public void test_cpd() throws NoSuchFieldException, IllegalAccessException {
+    String fileName = "cpd.php";
+    String componentKey = "moduleKey:" + fileName;
+
+    PHPSensor phpSensor = createSensor();
+    analyseSingleFile(phpSensor, fileName);
+
+    List<TokensLine> tokensLines = context.cpdTokens(componentKey);
+    assertThat(tokensLines).hasSize(10);
+
+    assertThat(tokensLines.get(0).getValue()).isEqualTo("<?php");
+    assertThat(tokensLines.get(1).getValue()).isEqualTo("require_once$CHARS;");
+    assertThat(tokensLines.get(2).getValue()).isEqualTo("classAextendsB");
+    assertThat(tokensLines.get(3).getValue()).isEqualTo("{");
+    assertThat(tokensLines.get(4).getValue()).isEqualTo("protected$a=$CHARS;");
+    assertThat(tokensLines.get(5).getValue()).isEqualTo("public$b=$NUMBER;");
+    assertThat(tokensLines.get(6).getValue()).isEqualTo("}");
+    assertThat(tokensLines.get(7).getValue()).isEqualTo("echo$CHARS");
+    assertThat(tokensLines.get(8).getValue()).isEqualTo(";");
+    assertThat(tokensLines.get(9).getValue()).isEqualTo("?>\n");
   }
 
   private void checkNoSonar(String componentKey, int line, boolean expected, PHPSensor phpSensor) throws NoSuchFieldException, IllegalAccessException {
