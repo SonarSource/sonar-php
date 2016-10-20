@@ -104,15 +104,6 @@ public class NoSonarSensorTest {
     assertEquals(0, source.getNoSonarTagLines().size());
   }
 
-  // TEST for SONARPLUGINS-662
-  @Test
-  public void testAnalyseSourceCodeWithMultiLineString() {
-    File file = new File(this.getClass().getResource("/Math4.php").getPath());
-    Source source = NoSonarSensor.analyseSourceCode(file, UTF_8);
-    assertEquals(1, source.getNoSonarTagLines().size());
-    assertEquals(91, (int) source.getNoSonarTagLines().iterator().next());
-  }
-
   @Test
   public void testAnalyseSourceCodeWithNonexistentFile() throws Exception {
     NoSonarSensor.analyseSourceCode(new File("xxx"), UTF_8);
