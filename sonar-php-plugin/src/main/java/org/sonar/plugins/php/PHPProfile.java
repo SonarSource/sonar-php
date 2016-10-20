@@ -19,6 +19,12 @@
  */
 package org.sonar.plugins.php;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+import com.google.gson.Gson;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Set;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.Rule;
@@ -26,8 +32,13 @@ import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.squidbridge.annotations.AnnotationBasedProfileBuilder;
 
+/**
+ * Sonar way profile.
+ * <p>
+ * We currently also define two other profiles, see {@link DrupalProfile} and {@link PSR2Profile}.
+ *
+ */
 public final class PHPProfile extends ProfileDefinition {
 
   private final RuleFinder ruleFinder;
@@ -38,11 +49,12 @@ public final class PHPProfile extends ProfileDefinition {
 
   @Override
   public RulesProfile createProfile(ValidationMessages validation) {
-    AnnotationBasedProfileBuilder annotationBasedProfileBuilder = new AnnotationBasedProfileBuilder(ruleFinder);
-    RulesProfile profile = annotationBasedProfileBuilder.build(CheckList.REPOSITORY_KEY, CheckList.SONAR_WAY_PROFILE, Php.KEY, CheckList.getChecks(), validation);
-    
+    RulesProfile profile = RulesProfile.create(CheckList.SONAR_WAY_PROFILE, Php.KEY);
+
     loadFromCommonRepository(profile);
     
+    loadFromJsonProfile(profile);
+
     return profile;
   }
 
@@ -53,6 +65,25 @@ public final class PHPProfile extends ProfileDefinition {
     if (duplicatedBlocksRule != null) {
       profile.activateRule(duplicatedBlocksRule, null);
     }
+  }
+
+  private void loadFromJsonProfile(RulesProfile profile) {
+    URL profileUrl = getClass().getResource("/org/sonar/l10n/php/rules/php/Sonar_way_profile.json");
+
+    try {
+      Gson gson = new Gson();
+      Profile jsonProfile = gson.fromJson(Resources.toString(profileUrl, Charsets.UTF_8), Profile.class);
+      for (String ruleKey : jsonProfile.ruleKeys) {
+        Rule rule = ruleFinder.findByKey(CheckList.REPOSITORY_KEY, ruleKey);
+        profile.activateRule(rule, null);
+      }
+    } catch (IOException e) {
+      throw new IllegalStateException("Failed to read: " + profileUrl, e);
+    }
+  }
+
+  private static class Profile {
+    Set<String> ruleKeys;
   }
 
 }

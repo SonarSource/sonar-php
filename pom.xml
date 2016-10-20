@@ -101,6 +101,7 @@
     <version.assertj>3.5.2</version.assertj>
     <version.commons-io>2.5</version.commons-io>
     <version.commons-lang>2.6</version.commons-lang>
+    <version.gson>2.7</version.gson>
     <version.junit>4.10</version.junit>
     <version.logback>0.9.30</version.logback>
     <version.maven-project>2.0.6</version.maven-project>
@@ -181,6 +182,11 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${version.commons-io}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>${version.gson}</version>
       </dependency>
 
       <!-- Test dependencies -->
