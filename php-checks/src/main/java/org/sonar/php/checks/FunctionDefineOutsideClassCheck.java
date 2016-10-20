@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.Sets;
 import java.util.Set;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -32,14 +31,8 @@ import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = FunctionDefineOutsideClassCheck.KEY,
-  name = "Functions and variables should not be defined outside of classes",
-  priority = Priority.MAJOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("15min")
+@Rule(key = FunctionDefineOutsideClassCheck.KEY)
 public class FunctionDefineOutsideClassCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2007";

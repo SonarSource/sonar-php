@@ -19,22 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = IfConditionAlwaysTrueOrFalseCheck.KEY,
-  name = "Useless \"if(true) {...}\" and \"if(false){...}\" blocks should be removed",
-  priority = Priority.MAJOR,
-  tags = {Tags.BUG, Tags.CWE, Tags.SECURITY, Tags.MISRA})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = IfConditionAlwaysTrueOrFalseCheck.KEY)
 public class IfConditionAlwaysTrueOrFalseCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1145";

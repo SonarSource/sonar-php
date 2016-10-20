@@ -24,19 +24,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = NonLFCharAsEOLCheck.KEY,
-  name = "Only LF character (Unix-like) should be used to end lines",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION, Tags.PSR2})
-@SqaleConstantRemediation("2min")
+@Rule(key = NonLFCharAsEOLCheck.KEY)
 public class NonLFCharAsEOLCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
 
   public static final String KEY = "S1779";

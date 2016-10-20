@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -33,14 +32,8 @@ import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = FileWithSymbolsAndSideEffectsCheck.KEY,
-  name = "Files that define symbols should not cause side-effects",
-  priority = Priority.CRITICAL,
-  tags = {Tags.PSR1, Tags.USER_EXPERIENCE})
-@SqaleConstantRemediation("5min")
+@Rule(key = FileWithSymbolsAndSideEffectsCheck.KEY)
 public class FileWithSymbolsAndSideEffectsCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2036";

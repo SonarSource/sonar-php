@@ -22,19 +22,13 @@ package org.sonar.php.checks;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ConcatenatedStringLiteralCheck.KEY,
-  name = "String literals should not be concatenated",
-  priority = Priority.MINOR)
-@SqaleConstantRemediation("5min")
+@Rule(key = ConcatenatedStringLiteralCheck.KEY)
 public class ConcatenatedStringLiteralCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2005";

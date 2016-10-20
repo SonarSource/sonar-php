@@ -23,7 +23,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.symbols.Scope;
@@ -38,16 +37,8 @@ import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = UnusedFunctionParametersCheck.KEY,
-  name = "Unused function parameters should be removed",
-  priority = Priority.MAJOR,
-  tags = {Tags.UNUSED, Tags.MISRA})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = UnusedFunctionParametersCheck.KEY)
 public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1172";

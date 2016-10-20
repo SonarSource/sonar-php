@@ -19,18 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ExitOrDieUsageCheck.KEY,
-  name = "\"exit(...)\" and \"die(...)\" statements should not be used",
-  priority = Priority.CRITICAL)
-@SqaleConstantRemediation("20min")
+@Rule(key = ExitOrDieUsageCheck.KEY)
 public class ExitOrDieUsageCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1799";

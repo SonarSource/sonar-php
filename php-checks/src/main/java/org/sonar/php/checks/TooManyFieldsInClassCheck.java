@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
@@ -33,14 +32,8 @@ import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = TooManyFieldsInClassCheck.KEY,
-  name = "Classes should not have too many fields",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@SqaleConstantRemediation("1h")
+@Rule(key = TooManyFieldsInClassCheck.KEY)
 public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1820";

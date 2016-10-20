@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractDuplicateBranchCheck;
 import org.sonar.php.checks.utils.Equality;
@@ -35,16 +34,8 @@ import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = DuplicateBranchImplementationCheck.KEY,
-  name = "Two branches in the same conditional structure should not have exactly the same implementation",
-  priority = Priority.MAJOR,
-  tags = {Tags.BUG})
-@ActivatedByDefault
-@SqaleConstantRemediation("10min")
+@Rule(key = DuplicateBranchImplementationCheck.KEY)
 public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchCheck {
 
   public static final String KEY = "S1871";

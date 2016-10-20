@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -32,14 +31,8 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = RedundantFinalCheck.KEY,
-  name = "\"final\" should not be used redundantly",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("2min")
+@Rule(key = RedundantFinalCheck.KEY)
 public class RedundantFinalCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S1990";

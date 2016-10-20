@@ -19,20 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ForHidingWhileCheck.KEY,
-  name = "A \"while\" loop should be used instead of a \"for\" loop",
-  priority = Priority.MINOR,
-  tags = Tags.CLUMSY)
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = ForHidingWhileCheck.KEY)
 public class ForHidingWhileCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1264";

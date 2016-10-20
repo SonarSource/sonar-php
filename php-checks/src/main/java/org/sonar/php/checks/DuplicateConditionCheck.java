@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractDuplicateBranchCheck;
 import org.sonar.php.checks.utils.Equality;
@@ -34,16 +33,8 @@ import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = DuplicateConditionCheck.KEY,
-  name = "Related \"if/else if\" statements and \"cases\" in a \"switch\" should not have the same condition",
-  priority = Priority.CRITICAL,
-  tags = {Tags.BUG, Tags.CERT, Tags.PITFALL, Tags.UNUSED})
-@ActivatedByDefault
-@SqaleConstantRemediation("10min")
+@Rule(key = DuplicateConditionCheck.KEY)
 public class DuplicateConditionCheck extends AbstractDuplicateBranchCheck {
 
   public static final String KEY = "S1862";

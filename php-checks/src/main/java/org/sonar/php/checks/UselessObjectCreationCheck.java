@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -27,16 +26,8 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = UselessObjectCreationCheck.KEY,
-  name = "Objects should not be created to be dropped immediately without being used",
-  tags = {"bug"},
-  priority = Priority.CRITICAL)
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = UselessObjectCreationCheck.KEY)
 public class UselessObjectCreationCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1848";

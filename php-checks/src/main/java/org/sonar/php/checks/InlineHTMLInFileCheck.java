@@ -19,21 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = "S1997",
-  name = "Files should not contain inline HTML",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION, Tags.BRAIN_OVERLOAD})
-@SqaleConstantRemediation("10min")
+@Rule(key = "S1997")
 public class InlineHTMLInFileCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1997";

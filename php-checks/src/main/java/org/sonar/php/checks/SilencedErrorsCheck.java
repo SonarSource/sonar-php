@@ -21,20 +21,13 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = SilencedErrorsCheck.KEY,
-  name = "Errors should not be silenced",
-  priority = Priority.MAJOR,
-  tags = {Tags.PITFALL})
-@SqaleConstantRemediation("30min")
+@Rule(key = SilencedErrorsCheck.KEY)
 public class SilencedErrorsCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S2002";

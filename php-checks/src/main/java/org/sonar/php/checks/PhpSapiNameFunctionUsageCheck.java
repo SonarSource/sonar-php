@@ -20,18 +20,11 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = PhpSapiNameFunctionUsageCheck.KEY,
-  name = "\"php_sapi_name()\" should not be used",
-  priority = Priority.MINOR,
-  tags = {Tags.PERFORMANCE})
-@SqaleConstantRemediation("5min")
+@Rule(key = PhpSapiNameFunctionUsageCheck.KEY)
 public class PhpSapiNameFunctionUsageCheck extends FunctionUsageCheck {
 
   public static final String KEY = "S2044";

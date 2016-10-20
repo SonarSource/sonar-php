@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -29,16 +28,8 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = TooManyLinesInFunctionCheck.KEY,
-  name = "Functions should not have too many lines",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleConstantRemediation("20min")
+@Rule(key = TooManyLinesInFunctionCheck.KEY)
 public class TooManyLinesInFunctionCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S138";

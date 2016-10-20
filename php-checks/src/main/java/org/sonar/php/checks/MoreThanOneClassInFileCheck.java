@@ -19,20 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleLinearRemediation;
 
-@Rule(
-  key = MoreThanOneClassInFileCheck.KEY,
-  name = "Files should contain only one class or interface each",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@SqaleLinearRemediation(coeff = "10min", effortToFixDescription = "per extra \"class\" or \"interface\"")
+@Rule(key = MoreThanOneClassInFileCheck.KEY)
 public class MoreThanOneClassInFileCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1996";

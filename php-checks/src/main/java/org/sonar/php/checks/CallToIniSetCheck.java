@@ -20,18 +20,11 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = CallToIniSetCheck.KEY,
-  name = "Configuration should not be changed dynamically",
-  priority = Priority.CRITICAL,
-  tags = {Tags.PITFALL})
-@SqaleConstantRemediation("5min")
+@Rule(key = CallToIniSetCheck.KEY)
 public class CallToIniSetCheck extends FunctionUsageCheck {
 
   public static final String KEY = "S2918";

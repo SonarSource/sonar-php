@@ -22,23 +22,14 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = InterfaceNameCheck.KEY,
-  name = "Interface names should comply with a naming convention",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@ActivatedByDefault
-@SqaleConstantRemediation("10min")
+@Rule(key = InterfaceNameCheck.KEY)
 public class InterfaceNameCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S114";

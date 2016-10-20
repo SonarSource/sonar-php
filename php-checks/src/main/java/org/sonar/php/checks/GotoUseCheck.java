@@ -19,20 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = GotoUseCheck.KEY,
-  name = "\"goto\" statement should not be used",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD, Tags.MISRA})
-@ActivatedByDefault
-@SqaleConstantRemediation("10min")
+@Rule(key = GotoUseCheck.KEY)
 public class GotoUseCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S907";

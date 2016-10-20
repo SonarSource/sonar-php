@@ -23,20 +23,13 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = LowerCaseColorCheck.KEY,
-  name = "Colors should be defined in upper case",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("2min")
+@Rule(key = LowerCaseColorCheck.KEY)
 public class LowerCaseColorCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S2038";

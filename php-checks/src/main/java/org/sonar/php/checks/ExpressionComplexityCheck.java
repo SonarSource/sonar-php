@@ -23,22 +23,13 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 
-@Rule(
-  key = ExpressionComplexityCheck.KEY,
-  name = "Expressions should not be too complex",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "5min", effortToFixDescription = "per complexity point above the threshold")
+@Rule(key = ExpressionComplexityCheck.KEY)
 public class ExpressionComplexityCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S1067";

@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -29,16 +28,8 @@ import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = IncrementDecrementInSubExpressionCheck.KEY,
-  name = "Increment (++) and decrement (--) operators should not be used in a method call or mixed with other operators in an expression",
-  priority = Priority.MAJOR,
-  tags = {Tags.CERT, Tags.MISRA})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = IncrementDecrementInSubExpressionCheck.KEY)
 public class IncrementDecrementInSubExpressionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S881";

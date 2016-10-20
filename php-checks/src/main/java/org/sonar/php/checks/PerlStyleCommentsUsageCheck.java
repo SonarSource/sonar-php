@@ -19,18 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = PerlStyleCommentsUsageCheck.KEY,
-  name = "Perl-style comments should not be used",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("2min")
+@Rule(key = PerlStyleCommentsUsageCheck.KEY)
 public class PerlStyleCommentsUsageCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2046";

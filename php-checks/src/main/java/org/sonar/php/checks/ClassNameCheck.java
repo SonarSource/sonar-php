@@ -22,23 +22,14 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ClassNameCheck.KEY,
-  name = "Class names should comply with a naming convention",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = ClassNameCheck.KEY)
 public class ClassNameCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S101";

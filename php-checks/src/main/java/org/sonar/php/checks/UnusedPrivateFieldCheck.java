@@ -19,22 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = UnusedPrivateFieldCheck.KEY,
-  name = "Unused private fields should be removed",
-  priority = Priority.MAJOR,
-  tags = {Tags.UNUSED})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = UnusedPrivateFieldCheck.KEY)
 public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1068";

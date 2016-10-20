@@ -20,23 +20,14 @@
 package org.sonar.php.checks;
 
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = CollapsibleIfStatementCheck.KEY,
-  name = "Collapsible \"if\" statements should be merged",
-  priority = Priority.MAJOR,
-  tags = Tags.CLUMSY)
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = CollapsibleIfStatementCheck.KEY)
 public class CollapsibleIfStatementCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1066";

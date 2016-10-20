@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.tree.impl.PHPTree;
@@ -33,16 +32,8 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = MultilineBlocksCurlyBracesCheck.KEY,
-  name = "Multiline blocks should be enclosed in curly braces",
-  priority = Priority.CRITICAL,
-  tags = {Tags.BUG, Tags.CWE})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = MultilineBlocksCurlyBracesCheck.KEY)
 public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
 
   public static final String KEY = "S2681";

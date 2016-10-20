@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -31,14 +30,8 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = FieldNameCheck.KEY,
-  name = "Field names should comply with a naming convention",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("2min")
+@Rule(key = FieldNameCheck.KEY)
 public class FieldNameCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S116";

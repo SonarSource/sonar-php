@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -34,16 +33,8 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = CallParentConstructorCheck.KEY,
-  name = "PHP 4 style calls to parent constructors should not be used in PHP5 \"__construct\" functions",
-  priority = Priority.MAJOR,
-  tags = {Tags.CONVENTION})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = CallParentConstructorCheck.KEY)
 public class CallParentConstructorCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1605";

@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -32,14 +31,8 @@ import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPTreeSubscriber;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = NonEmptyCaseWithoutBreakCheck.KEY,
-  name = "Switch cases should end with an unconditional \"break\" statement",
-  priority = Priority.CRITICAL,
-  tags = {Tags.CERT, Tags.CWE, Tags.PITFALL, Tags.MISRA})
-@SqaleConstantRemediation("10min")
+@Rule(key = NonEmptyCaseWithoutBreakCheck.KEY)
 public class NonEmptyCaseWithoutBreakCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S128";

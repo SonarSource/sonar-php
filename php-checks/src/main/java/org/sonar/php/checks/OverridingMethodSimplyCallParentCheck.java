@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -40,16 +39,8 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = OverridingMethodSimplyCallParentCheck.KEY,
-  name = "Overriding methods should do more than simply call the same method in the super class",
-  priority = Priority.MINOR,
-  tags = Tags.CLUMSY)
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = OverridingMethodSimplyCallParentCheck.KEY)
 public class OverridingMethodSimplyCallParentCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1185";

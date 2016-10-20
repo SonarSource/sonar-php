@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -28,14 +27,8 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = GlobalKeywordAndArrayUsageCheck.KEY,
-  name = "The \"global\" keyword should not be used",
-  priority = Priority.MAJOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("30min")
+@Rule(key = GlobalKeywordAndArrayUsageCheck.KEY)
 public class GlobalKeywordAndArrayUsageCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2011";

@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -31,14 +30,8 @@ import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ConstructorDependencyInversionCheck.KEY,
-  name = "Class constructors should not create other objects",
-  priority = Priority.MAJOR,
-  tags = {"design"})
-@SqaleConstantRemediation("10min")
+@Rule(key = ConstructorDependencyInversionCheck.KEY)
 public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2830";

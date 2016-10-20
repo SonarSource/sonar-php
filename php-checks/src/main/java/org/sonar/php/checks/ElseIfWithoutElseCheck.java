@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ElseIfWithoutElseCheck.KEY,
-  name = "\"if ... else if\" constructs shall be terminated with an \"else\" clause",
-  priority = Priority.MAJOR,
-  tags = {Tags.CERT, Tags.MISRA})
-@SqaleConstantRemediation("5min")
+@Rule(key = ElseIfWithoutElseCheck.KEY)
 public class ElseIfWithoutElseCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S126";

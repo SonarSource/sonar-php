@@ -19,20 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = VariableVariablesCheck.KEY,
-  name = "Variable variables should not be used",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleConstantRemediation("10min")
+@Rule(key = VariableVariablesCheck.KEY)
 public class VariableVariablesCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1599";

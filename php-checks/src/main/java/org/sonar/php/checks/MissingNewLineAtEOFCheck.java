@@ -19,19 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = MissingNewLineAtEOFCheck.KEY,
-  name = "Files should contain an empty new line at the end",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("1min")
+@Rule(key = MissingNewLineAtEOFCheck.KEY)
 public class MissingNewLineAtEOFCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S113";

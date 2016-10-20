@@ -26,9 +26,9 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
  * This class does nothing. It exists only to be present in the SonarQube profile and GUI.
  * Issues for this class are created upfront, during the parsing.
  */
-@Rule(
-  key = "S2260",
-  name = "Parsing error"
-)
+@Rule(key = ParsingErrorCheck.KEY)
 public class ParsingErrorCheck extends PHPVisitorCheck {
+  
+  public static final String KEY = "S2260";
+
 }

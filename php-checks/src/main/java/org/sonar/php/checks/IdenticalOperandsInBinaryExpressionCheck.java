@@ -21,23 +21,14 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.Equality;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = IdenticalOperandsInBinaryExpressionCheck.KEY,
-  name = "Identical expressions should not be used on both sides of a binary operator",
-  priority = Priority.CRITICAL,
-  tags = {Tags.BUG, Tags.CERT})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = IdenticalOperandsInBinaryExpressionCheck.KEY)
 public class IdenticalOperandsInBinaryExpressionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1764";

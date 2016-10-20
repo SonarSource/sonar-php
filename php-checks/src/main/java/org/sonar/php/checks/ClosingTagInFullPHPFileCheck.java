@@ -19,21 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ClosingTagInFullPHPFileCheck.KEY,
-  name = "Closing tag \"?>\" should be omitted on files containing only PHP",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION, Tags.PSR2})
-@SqaleConstantRemediation("2min")
+@Rule(key = ClosingTagInFullPHPFileCheck.KEY)
 public class ClosingTagInFullPHPFileCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1780";

@@ -25,20 +25,14 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = FileHeaderCheck.KEY,
-  name = "Copyright and license headers should be defined",
-  priority = Priority.BLOCKER)
-@SqaleConstantRemediation("5min")
+@Rule(key = FileHeaderCheck.KEY)
 public class FileHeaderCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
 
   public static final String KEY = "S1451";

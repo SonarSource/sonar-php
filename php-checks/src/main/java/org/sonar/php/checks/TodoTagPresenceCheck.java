@@ -19,18 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractCommentContainsPatternCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.NoSqale;
 
-@Rule(
-  key = TodoTagPresenceCheck.KEY,
-  name = "\"TODO\" tags should be handled",
-  priority = Priority.INFO)
-@ActivatedByDefault
-@NoSqale
+@Rule(key = TodoTagPresenceCheck.KEY)
 public class TodoTagPresenceCheck extends AbstractCommentContainsPatternCheck {
 
   public static final String KEY = "S1135";

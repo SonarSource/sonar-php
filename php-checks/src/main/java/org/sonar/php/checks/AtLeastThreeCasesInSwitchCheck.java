@@ -19,20 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = AtLeastThreeCasesInSwitchCheck.KEY,
-  name = "\"switch\" statements should have at least 3 \"case\" clauses",
-  priority = Priority.MINOR,
-  tags = {Tags.MISRA})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = AtLeastThreeCasesInSwitchCheck.KEY)
 public class AtLeastThreeCasesInSwitchCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1301";

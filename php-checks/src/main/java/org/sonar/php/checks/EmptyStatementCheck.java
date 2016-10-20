@@ -19,20 +19,11 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = EmptyStatementCheck.KEY,
-  name = "Empty statements should be removed",
-  priority = Priority.MINOR,
-  tags = {Tags.CERT, Tags.UNUSED, Tags.MISRA})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = EmptyStatementCheck.KEY)
 public class EmptyStatementCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1116";
