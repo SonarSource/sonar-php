@@ -52,8 +52,10 @@ public class PhpPlugin implements Plugin {
       // Duplications
       PhpCPDMapping.class,
 
+      // Sensor
       PHPSensor.class,
 
+      // Rules and profiles
       PHPRulesDefinition.class,
       PHPProfile.class,
       PSR2Profile.class,
