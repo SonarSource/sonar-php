@@ -1,0 +1,14 @@
+{
+  "title": "Errors should not be silenced",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "30min"
+  },
+  "tags": [
+    "bug",
+    "pitfall"
+  ],
+  "defaultSeverity": "Minor"
+}

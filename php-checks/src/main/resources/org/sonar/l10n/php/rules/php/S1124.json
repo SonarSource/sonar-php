@@ -1,0 +1,14 @@
+{
+  "title": "Modifiers should be declared in the correct order",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "convention",
+    "psr2"
+  ],
+  "defaultSeverity": "Minor"
+}

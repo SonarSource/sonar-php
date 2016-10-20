@@ -1,0 +1,18 @@
+{
+  "title": "Statements should end with a \"case default\" clause",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "cwe",
+    "misra",
+    "cert"
+  ],
+  "standards": [
+    "CWE"
+  ],
+  "defaultSeverity": "Critical"
+}

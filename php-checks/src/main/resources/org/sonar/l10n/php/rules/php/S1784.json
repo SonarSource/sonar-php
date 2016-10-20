@@ -1,0 +1,15 @@
+{
+  "title": "Method visibility should be explicitly declared",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "convention",
+    "bug",
+    "psr2"
+  ],
+  "defaultSeverity": "Minor"
+}

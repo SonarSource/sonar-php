@@ -1,0 +1,15 @@
+{
+  "title": "Closing tag \"?>\" should be omitted on files containing only PHP",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "bug",
+    "psr2",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Minor"
+}

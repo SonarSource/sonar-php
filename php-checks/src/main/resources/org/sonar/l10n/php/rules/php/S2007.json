@@ -1,0 +1,13 @@
+{
+  "title": "Functions and variables should not be defined outside of classes",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "design"
+  ],
+  "defaultSeverity": "Blocker"
+}

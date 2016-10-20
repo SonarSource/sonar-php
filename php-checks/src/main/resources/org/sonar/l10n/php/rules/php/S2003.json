@@ -1,0 +1,13 @@
+{
+  "title": "\"require_once\" and \"include_once\" should be used instead of \"require\" and \"include\"",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "bug"
+  ],
+  "defaultSeverity": "Minor"
+}

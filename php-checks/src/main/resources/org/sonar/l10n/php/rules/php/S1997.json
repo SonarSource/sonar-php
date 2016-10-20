@@ -1,0 +1,14 @@
+{
+  "title": "Files should not contain inline HTML",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "convention",
+    "brain-overload"
+  ],
+  "defaultSeverity": "Major"
+}

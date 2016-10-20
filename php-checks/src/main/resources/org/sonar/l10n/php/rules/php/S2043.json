@@ -1,0 +1,13 @@
+{
+  "title": "Superglobals should not be accessed directly",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "bad-practice"
+  ],
+  "defaultSeverity": "Minor"
+}

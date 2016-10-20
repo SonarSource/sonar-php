@@ -1,0 +1,15 @@
+{
+  "title": "Files that define symbols should not cause side-effects",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "bug",
+    "psr1",
+    "user-experience"
+  ],
+  "defaultSeverity": "Major"
+}

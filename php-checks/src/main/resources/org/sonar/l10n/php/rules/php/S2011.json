@@ -1,0 +1,13 @@
+{
+  "title": "\"global\" should not be used",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "30min"
+  },
+  "tags": [
+    "convention"
+  ],
+  "defaultSeverity": "Critical"
+}
