@@ -1,84 +1,89 @@
-<p>
-  Deprecated language features are those that have been retained temporarily for backward compatibility, but which will eventually be removed from the language. In effect, deprecation announces a grace period to allow the smooth transition from the old features to the new ones. In that period, no use of the deprecated features should be added to the code, and all existing uses should be gradually removed.
-</p>
-<p>
-  The following functions were deprecated in PHP 5:
-</p>
+<p>Deprecated language features are those that have been retained temporarily for backward compatibility, but which will eventually be removed from
+the language. In effect, deprecation announces a grace period to allow the smooth transition from the old features to the new ones. In that period, no
+use of the deprecated features should be added to the code, and all existing uses should be gradually removed.</p>
+<p>The following functions were deprecated in PHP 5:</p>
 <table>
-  <tr>
-    <th>Deprecated</th>
-    <th>Use Instead</th>
-  </tr>
-  <tr>
-    <td><code>call_user_method()</code></td>
-    <td><code>call_user_func()</code></td>
-  </tr>
-  <tr>
-    <td><code>call_user_method_array()</code></td>
-    <td><code>call_user_func_array()</code></td>
-  </tr>
-  <tr>
-    <td><code>define_syslog_variables()</code></td>
-  </tr>
-  <tr>
-    <td><code>dl()</code></td>
-  </tr>
-  <tr>
-    <td><code>ereg()</code></td>
-    <td><code>preg_match()</code></td>
-  </tr>
-  <tr>
-    <td><code>ereg_replace()</code></td>
-    <td><code>preg_replace()</code></td>
-  </tr>
-  <tr>
-    <td><code>eregi()</code></td>
-    <td><code>preg_match()</code> with 'i' modifier</td>
-  </tr>
-  <tr>
-    <td><code>eregi_replace()</code></td>
-    <td><code>preg_replace()</code> with 'i' modifier</td>
-  </tr>
-  <tr>
-    <td><code>set_magic_quotes_runtime()</code> and its alias, <code>magic_quotes_runtime()</code></td>
-  </tr>
-  <tr>
-    <td><code>session_register()</code></td>
-    <td><code>$_SESSION</code> superglobal</td>
-  </tr>
-  <tr>
-    <td><code>session_unregister()</code></td>
-    <td><code>$_SESSION</code> superglobal</td>
-  </tr>
-  <tr>
-    <td><code>session_is_registered()</code></td>
-    <td><code>$_SESSION</code> superglobal</td>
-  </tr>
-  <tr>
-    <td><code>set_socket_blocking()</code></td>
-    <td><code>stream_set_blocking()</code></td>
-  </tr>
-  <tr>
-    <td><code>split()</code></td>
-    <td><code>preg_split()</code></td>
-  </tr>
-  <tr>
-    <td><code>spliti()</code></td>
-    <td><code>preg_split()</code> with 'i' modifier</td>
-  </tr>
-  <tr>
-    <td><code>sql_regcase()</code></td>
-  </tr>
-  <tr>
-    <td><code>mysql_db_query()</code></td>
-    <td><code>mysql_select_db()</code> and <code>mysql_query()</code></td>
-  </tr>
-  <tr>
-    <td><code>mysql_escape_string()</code></td>
-    <td><code>mysql_real_escape_string()</code></td>
-  </tr>
-  <tr>
-    <td>Passing locale category names as strings</td>
-    <td>Use the LC_* family of constants</td>
-  </tr>
+  <tbody>
+    <tr>
+      <th>Deprecated</th>
+      <th>Use Instead</th>
+    </tr>
+    <tr>
+      <td><code>call_user_method()</code></td>
+      <td><code>call_user_func()</code></td>
+    </tr>
+    <tr>
+      <td><code>call_user_method_array()</code></td>
+      <td><code>call_user_func_array()</code></td>
+    </tr>
+    <tr>
+      <td><code>define_syslog_variables()</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>dl()</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>ereg()</code></td>
+      <td><code>preg_match()</code></td>
+    </tr>
+    <tr>
+      <td><code>ereg_replace()</code></td>
+      <td><code>preg_replace()</code> (note that this is deprecated in PHP 5.5)</td>
+    </tr>
+    <tr>
+      <td><code>eregi()</code></td>
+      <td><code>preg_match()</code> with 'i' modifier</td>
+    </tr>
+    <tr>
+      <td><code>eregi_replace()</code></td>
+      <td><code>preg_replace()</code> with 'i' modifier</td>
+    </tr>
+    <tr>
+      <td><code>set_magic_quotes_runtime()</code> and its alias, <code>magic_quotes_runtime()</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>session_register()</code></td>
+      <td><code>$_SESSION</code> superglobal</td>
+    </tr>
+    <tr>
+      <td><code>session_unregister()</code></td>
+      <td><code>$_SESSION</code> superglobal</td>
+    </tr>
+    <tr>
+      <td><code>session_is_registered()</code></td>
+      <td><code>$_SESSION</code> superglobal</td>
+    </tr>
+    <tr>
+      <td><code>set_socket_blocking()</code></td>
+      <td><code>stream_set_blocking()</code></td>
+    </tr>
+    <tr>
+      <td><code>split()</code></td>
+      <td><code>preg_split()</code></td>
+    </tr>
+    <tr>
+      <td><code>spliti()</code></td>
+      <td><code>preg_split()</code> with 'i' modifier</td>
+    </tr>
+    <tr>
+      <td><code>sql_regcase()</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>mysql_db_query()</code></td>
+      <td><code>mysql_select_db()</code> and <code>mysql_query()</code></td>
+    </tr>
+    <tr>
+      <td><code>mysql_escape_string()</code></td>
+      <td><code>mysql_real_escape_string()</code></td>
+    </tr>
+    <tr>
+      <td>Passing locale category names as strings</td>
+      <td>Use the LC_* family of constants</td>
+    </tr>
+  </tbody>
 </table>
+

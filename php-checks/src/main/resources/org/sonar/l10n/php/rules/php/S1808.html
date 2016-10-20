@@ -1,5 +1,191 @@
-<p>
-    Shared coding conventions make it possible for a team to collaborate efficiently. This rule allows to check compliance with a formatting standards. Default parameters value make this rule compliant with PSR2.
-</p>
+<p>Shared coding conventions make it possible for a team to collaborate efficiently. This rule raises issues for failures to comply with formatting
+standard. The default parameter values conform to the PSR2 standard.</p>
+<h2>Noncompliant Code Example</h2>
+<p>With the default PSR2 parameter values:</p>
+<pre>
+use FooClass;              // Noncompliant; the "use" declaration should be placed after the "namespace" declaration
 
-<p>Quotes below are from the PSR-2 Coding Style Guide or the PHP: Language Reference - Manual.</p>
+namespace Vendor\Package;
+use FooClass;              // Noncompliant; the "namespace" declaration should be followed by a blank line
+$foo = 1;                  // Noncompliant; the "use" declaration should be followed by a blank line
+
+class ClassA {             // Noncompliant; an open curly brace should be at the beginning of a new line for classes and functions
+  function my_function(){  // Noncompliant; curly brace on wrong line
+    if ($firstThing)       // Noncompliant; an open curly brace should be at the end of line for a control structure
+    {
+      ...
+    }
+
+    if ($secondThing)    { // Noncompliant; there should be exactly one space between the closing parenthesis and the opening curly brace
+      ...
+    }
+
+    if($thirdThing) {      // Noncompliant; there should be exactly one space between the control structure keyword and the opening parenthesis
+      ...
+    }
+    else {                 // Noncompliant; the close curly brace and the next "else" (or "catch" or "finally") keyword should be located on the same line
+      ...
+    }
+
+    try{                   // Noncompliant; there should be exactly one space between the control structure keyword and the curly brace
+      ...
+    } catch (Exception $e) {
+    }
+
+    analyse( $fruit ) ;    // Noncompliant; there should not be any space after the opening parenthesis and before the closing parenthesis
+
+    for ($i = 0;$i &lt; 10;   $i++) { // Nomcompliant; there should be exactly one space after each ";" in the {{for}} statement
+      ...
+    }
+
+    pressJuice($apply ,$orange);    // Noncompliant; the comma should be followed by one space and not preceded by any
+
+    do_something ();       // Noncompliant; there should not be any space after the method name
+
+    foreach ($fruits    as $fruit_key =&gt;     $fruit) {  // Noncompliant; in the foreach statement there should be one space before and after "as" keyword and "=&gt;" operator
+      ...
+    }
+  }
+}
+
+class ClassB
+extends ParentClass  // Noncompliant; the class name and the "extends" / "implements" keyword should be on the same line
+{
+  ...
+}
+
+class ClassC extends ParentClass implements \ArrayAccess, \Countable,
+    \Serializable    // Noncompliant; the list of implemented interfaces should be correctly indented
+{
+
+  public function aVeryLongMethodName(ClassTypeHint $arg1, // Noncompliant; the arguments in a method declaration should be correctly indented
+    &amp;$arg2, array $arg3 = []) {
+
+    $noArgs_longVars = function () use ($longVar1,         // Noncompliant; the arguments in a function declaration should be correctly indented
+        $longerVar2,
+        $muchLongerVar3
+    ) {
+      ...
+    };
+
+    $foo-&gt;bar($longArgument,    // Noncompliant; the arguments in a method call should be correctly indented
+      $longerArgument,
+      $muchLongerArgument);     // Noncompliant; the closing parenthesis should be placed on the next line
+
+    $closureWithArgsAndVars = function($arg1, $arg2)use   ($var1, $var2) {  // Noncompliant; the closure declaration should be correctly spaced - see (5)
+      ...
+    };
+  }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+namespace Vendor\Package; // Compliant; the "namespace" declaration is followed by a blank line
+
+use FooClass;             // Compliant; the "use" declaration is placed after the "namespace" declaration
+                          // Compliant; the "use" declaration is followed by a blank line
+$foo = 1;
+
+class ClassA
+{                         // Compliant; the open curly brace is at the beginning of a new line for the class
+  function my_function()
+  {                       // Compliant; the open curly brace is at the beginning of a new line for the function
+    if ($firstThing) {    // Compliant; the open curly brace is at the end of line for the control structure
+      ...
+    }
+
+    if ($secondThing) {   // Compliant; there is exactly one space between the closing parenthesis and the opening curly brace
+      ...
+    }
+
+    if ($thirdThing) {    // Compliant; there is exactly one space between the control structure keyword and the opening parenthesis
+      ...
+    } else {              // Compliant; the close curly brace and the next "else" (or "catch" or "finally") keyword are located on the same line
+      ...
+    }
+
+    try {                 // Compliant; there is exactly one space between the control structure keyword and the curly brace
+      ...
+    } catch (Exception $e) {
+      ...
+    }
+
+    analyse($fruit);      // Compliant: there is no space after the opening parenthesis, nor before the closing parenthesis
+
+    for ($i = 0; $i &lt; 10; $i++) { // Compliant: there is exactly one space after each ";" in the {{for}} statement
+      ...
+    }
+
+    pressJuice($apply, $orange);   // Compliant; the comma is followed by one space and is not preceded by any
+
+    do_something();       // Compliant; there is no space after the method name
+
+    foreach ($fruits as $fruit_key =&gt; $fruit) {  // Compliant; in the foreach statement there is one space before and after "as" keyword and "=&gt;" operator
+      ...
+    }
+  }
+}
+
+/* The idea here is to make it obvious at first glance that a class extends
+ * some other classes and/or implements some interfaces. The names of
+ * extended classes or implemented interfaces can be located on subsequent lines.
+ */
+class ClassB1 extends ParentClass // Compliant; the class name and the "extends" (or "implements") keyword are located on the same line
+{
+  ...
+}
+
+class ClassB2 extends             // Compliant; the class name and the "extends" (or "implements") keyword are located on the same line
+ParentClass {
+  ...
+}
+
+/* Lists of implements may be split across multiple lines, where each subsequent line
+ * is indented once. When doing so, the first item in the list should be on the next line,
+ * and there should be only one interface per line.
+ */
+class ClassC extends ParentClass implements
+    \ArrayAccess,         // Compliant; the list of implemented interfaces is correctly indented
+    \Countable,
+    \Serializable
+{
+  /* Argument lists may be split across multiple lines, where each subsequent line
+   * is indented once. When doing so, the first item in the list should be on the next line,
+   * and there should be only one argument per line. Also, when the argument list is
+   * split across multiple lines, the closing parenthesis and opening brace should be
+   * placed together on their own line with one space between them.
+   */
+  public function aVeryLongMethodName(
+    ClassTypeHint $arg1,  // Compliant; the arguments in a method/function declaration are correctly indented
+      &amp;$arg2,
+      array $arg3 = []
+    ) {
+      $noArgs_longVars = function () use (
+        $longVar1,        // Compliant; the arguments in a method/function declaration are correctly indented
+        $longerVar2,
+        $muchLongerVar3
+      ) {
+        ...
+      };
+
+
+    /* Argument lists may be split across multiple lines, where each subsequent line is
+     * indented once. When doing so, the first item in the list should be on the next line,
+     * and there should be only one argument per line.
+     */
+    $foo-&gt;bar(
+      $longArgument,       // Compliant; the arguments in the method call are be correctly indented
+      $longerArgument,
+      $muchLongerArgument
+    );                     // Compliant; the closing parenthesis is placed on a separate line
+
+    /* Closures should be declared with a space after the "function" keyword,
+     * and a space before and after the "use" keyword.
+     */
+    $closureWithArgsAndVars = function ($arg1, $arg2) use ($var1, $var2) { // Compliant; the closure declaration is correctly spaced
+      ...
+    };
+  }
+}
+</pre>
+

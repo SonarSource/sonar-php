@@ -1,7 +1,5 @@
-<p>
-  When the execution is not explicitly terminated at the end of a switch case, it continues to execute the statements of the following case. While this is sometimes intentional, it often is a mistake which leads to unexpected behavior.
-</p>
-
+<p>When the execution is not explicitly terminated at the end of a switch case, it continues to execute the statements of the following case. While
+this is sometimes intentional, it often is a mistake which leads to unexpected behavior. </p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 switch ($myVariable) {
@@ -15,7 +13,6 @@ switch ($myVariable) {
    break;
 }
 </pre>
-
 <h2>Compliant Solution</h2>
 <pre>
 switch ($myVariable) {
@@ -27,11 +24,10 @@ switch ($myVariable) {
     break;
   default:
     do_something_else();
-    break;
+   break;
 }
 </pre>
-
-<h2>Exception</h2>
+<h2>Exceptions</h2>
 <p>This rule is relaxed in following cases:</p>
 <pre>
 switch ($myVariable) {
@@ -41,25 +37,29 @@ switch ($myVariable) {
     break;
   case 2:                  // Use of continue statement
     continue;
-  case 3:                  // Case includes a jump statement (exit, return, break &etc)
+  case 3:                  // Case includes a jump statement (exit, return, break &amp;etc)
     exit(0);
   case 4:
     echo 'Second case, which falls through';
-    // no break        <- comment is used when fall-through is intentional in a non-empty case body
+    // no break        &lt;- comment is used when fall-through is intentional in a non-empty case body
   default:                 // For the last case, use of break statement is optional
     doSomethingElse();
 }
 </pre>
-
 <h2>See</h2>
 <ul>
-  <li>MISRA C:2004, 15.0 - The MISRA C switch syntax shall be used.</li>
-  <li>MISRA C:2004, 15.2 - An unconditional break statement shall terminate every non-empty switch clause</li>
-  <li>MISRA C++:2008, 6-4-3 - A switch statement shall be a well-formed switch statement.</li>
-  <li>MISRA C++:2008, 6-4-5 - An unconditional throw or break statement shall terminate every non-empty switch-clause</li>
-  <li>MISRA C:2012, 16.1 - All switch statements shall be well-formed</li>
-  <li>MISRA C:2012, 16.3 - An unconditional break statement shall terminate every switch-clause</li>
-  <li><a href="http://cwe.mitre.org/data/definitions/484.html">MITRE, CWE-484</a> - Omitted Break Statement in Switch</li>
-  <li><a href="https://www.securecoding.cert.org/confluence/x/YIFLAQ">CERT, MSC17-C</a> - Finish every set of statements associated with a case label with a break statement</li>
-  <li><a href="https://www.securecoding.cert.org/confluence/x/ZoFLAQ">CERT, MSC18-CPP</a> - Finish every set of statements associated with a case label with a break statement</li>
+  <li> MISRA C:2004, 15.0 - The MISRA C <em>switch</em> syntax shall be used. </li>
+  <li> MISRA C:2004, 15.2 - An unconditional break statement shall terminate every non-empty switch clause </li>
+  <li> MISRA C++:2008, 6-4-3 - A switch statement shall be a well-formed switch statement. </li>
+  <li> MISRA C++:2008, 6-4-5 - An unconditional throw or break statement shall terminate every non-empty switch-clause </li>
+  <li> MISRA C:2012, 16.1 - All switch statements shall be well-formed </li>
+  <li> MISRA C:2012, 16.3 - An unconditional break statement shall terminate every switch-clause </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/484.html">MITRE, CWE-484</a> - Omitted Break Statement in Switch </li>
+  <li> <a href="https://www.securecoding.cert.org/confluence/x/YIFLAQ">CERT, MSC17-C.</a> - Finish every set of statements associated with a case
+  label with a break statement </li>
+  <li> <a href="https://www.securecoding.cert.org/confluence/x/ZoFLAQ">CERT, MSC18-CPP.</a> - Finish every set of statements associated with a case
+  label with a break statement </li>
+  <li> <a href="https://www.securecoding.cert.org/confluence/x/ewHAAQ">CERT, MSC52-J.</a> - Finish every set of statements associated with a case
+  label with a break statement </li>
 </ul>
+

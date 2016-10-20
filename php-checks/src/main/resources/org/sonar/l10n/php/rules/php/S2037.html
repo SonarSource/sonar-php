@@ -1,7 +1,7 @@
-<p>
-  References in a class to static class members (fields or methods) can be made using either <code>self::$var</code> or <code>static::$var</code> (introduced in 5.3). The difference between the two is one of scope. Confusingly, in subclasses, the use of <code>self::</code> references the original definition of the member, i.e. the superclass version, rather than any override at the subclass level. <code>static::</code>, on the other hand, references the class that was called at runtime.
-</p>
-
+<p>References in a class to static class members (fields or methods) can be made using either <code>self::$var</code> or <code>static::$var</code>
+(introduced in 5.3). The difference between the two is one of scope. Confusingly, in subclasses, the use of <code>self::</code> references the
+original definition of the member, i.e. the superclass version, rather than any override at the subclass level. <code>static::</code>, on the other
+hand, references the class that was called at runtime.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 &lt;?php
@@ -9,7 +9,7 @@
 class Toy {
 
     public static function status() {
-        self::getStatus();                  // Noncompliant; will always print "Sticks are fun!" even when called from a subclass which overrides this method;
+        self::getStatus();  // Noncompliant; will always print "Sticks are fun!" even when called from a subclass which overrides this method;
     }
 
     protected static function getStatus() {
@@ -19,15 +19,14 @@ class Toy {
 
 class Ball extends Toy {
 
-    protected static function getStatus() { // Doesn't actually get called
+    protected static function getStatus() {  // Doesn't actually get called
         echo "Balls are fun!";
     }
 }
 
 $myBall = new Ball();
-$myBall::status();                          // Will print "Sticks are fun!"
+$myBall::status();  // Prints "Sticks are fun!"
 </pre>
-
 <h2>Compliant Solution</h2>
 <pre>
 &lt;?php
@@ -35,7 +34,7 @@ $myBall::status();                          // Will print "Sticks are fun!"
 class Toy {
 
     public static function status() {
-        static::getStatus();   // Compliant
+        static::getStatus();  // Compliant
     }
 
     protected static function getStatus() {
@@ -51,15 +50,13 @@ class Ball extends Toy {
 }
 
 $myBall = new Ball();
-$myBall::status();             // Will print "Balls are fun!"
+$myBall::status();  // Prints "Balls are fun!"
 </pre>
-
 <h2>Exceptions</h2>
-<p>
-  No issue is raised when <code>self</code> is used in a class field declaration
-</p>
+<p>No issue is raised when <code>self</code> is used in a class field declaration.</p>
 <pre>
-class A {
+class A
+{
    const CONSTANT;
 
    public $arr = array(
@@ -67,3 +64,17 @@ class A {
    );
 }
 </pre>
+<p>No issue is raised when <code>self</code> is used on a private field or a private method.</p>
+<pre>
+class A
+{
+    private static $somevar = "hello";
+
+    private static function foo()
+    {
+        $var = self::$somevar;  // Should be OK
+        self::foo();            // Should be OK
+    }
+}
+</pre>
+
