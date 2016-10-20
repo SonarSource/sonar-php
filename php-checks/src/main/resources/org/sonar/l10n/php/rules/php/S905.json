@@ -1,0 +1,20 @@
+{
+  "title": "Non-empty statements should change control flow or have at least one side-effect",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "cwe",
+    "bug",
+    "misra",
+    "cert",
+    "unused"
+  ],
+  "standards": [
+    "CWE"
+  ],
+  "defaultSeverity": "Major"
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Method arguments with default values should be last",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "20min"
+  },
+  "tags": [
+    "psr2"
+  ],
+  "defaultSeverity": "Major"
+}

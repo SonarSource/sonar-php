@@ -1,0 +1,14 @@
+{
+  "title": "\"elseif\" keyword should be used in place of \"else if\" keywords",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "convention",
+    "psr2"
+  ],
+  "defaultSeverity": "Minor"
+}

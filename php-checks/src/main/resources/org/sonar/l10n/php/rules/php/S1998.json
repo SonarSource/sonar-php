@@ -1,0 +1,19 @@
+{
+  "title": "References should not be passed to function calls",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "cwe",
+    "performance",
+    "obsolete",
+    "pitfall"
+  ],
+  "standards": [
+    "CWE"
+  ],
+  "defaultSeverity": "Critical"
+}

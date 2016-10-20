@@ -1,0 +1,13 @@
+{
+  "title": "\"$this\" should not be used in a static context",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "bug"
+  ],
+  "defaultSeverity": "Blocker"
+}

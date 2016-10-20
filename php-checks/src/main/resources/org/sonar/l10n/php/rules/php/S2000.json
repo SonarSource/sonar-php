@@ -1,0 +1,15 @@
+{
+  "title": "Files should not contain characters before \"<?php\"",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "bug",
+    "suspicious",
+    "user-experience"
+  ],
+  "defaultSeverity": "Minor"
+}

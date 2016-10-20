@@ -1,0 +1,13 @@
+{
+  "title": "\"sleep\" should not be called",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "security"
+  ],
+  "defaultSeverity": "Minor"
+}
