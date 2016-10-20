@@ -97,7 +97,7 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
 
   @Override
   public List<ExpressionTree> expressions() {
-    return ImmutableList.copyOf(Iterables.filter(elements, input -> input != null ? !input.is(Kind.HEREDOC_STRING_CHARACTERS) : false));
+    return ImmutableList.copyOf(Iterables.filter(elements, input -> !input.is(Kind.HEREDOC_STRING_CHARACTERS)));
   }
 
   @Override

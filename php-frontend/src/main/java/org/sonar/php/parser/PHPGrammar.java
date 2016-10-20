@@ -1109,7 +1109,6 @@ public class PHPGrammar {
   public ExpressionTree COMMON_SCALAR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.COMMON_SCALAR).is(
       b.firstOf(
-        f.nowdocLiteral(b.token(PHPLexicalGrammar.NOWDOC)),
         NUMERIC_LITERAL(),
         STRING_LITERAL(),
         f.booleanLiteral(b.token(PHPLexicalGrammar.BOOLEAN_LITERAL)),
@@ -1133,6 +1132,7 @@ public class PHPGrammar {
   public ExpressionTree STRING_LITERAL() {
     return b.<ExpressionTree>nonterminal().is(
       b.firstOf(
+        f.nowdocLiteral(b.token(PHPLexicalGrammar.NOWDOC)),
         f.regularStringLiteral(b.token(PHPLexicalGrammar.REGULAR_STRING_LITERAL)),
         EXPANDABLE_STRING_LITERAL(),
         HEREDOC_STRING_LITERAL()));
