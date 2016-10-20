@@ -19,18 +19,10 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractCommentContainsPatternCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.NoSqale;
 
-@Rule(
-  key = FixmeTagPresenceCheck.KEY,
-  name = "\"FIXME\" tags should be handled",
-  priority = Priority.MAJOR)
-@ActivatedByDefault
-@NoSqale
+@Rule(key = FixmeTagPresenceCheck.KEY)
 public class FixmeTagPresenceCheck extends AbstractCommentContainsPatternCheck {
 
   public static final String KEY = "S1134";

@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -28,16 +27,8 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = TooManyFunctionParametersCheck.KEY,
-  name = "Functions should not have too many parameters",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleConstantRemediation("20min")
+@Rule(key = TooManyFunctionParametersCheck.KEY)
 public class TooManyFunctionParametersCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S107";

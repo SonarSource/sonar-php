@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -31,14 +30,8 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = NestedFunctionDepthCheck.KEY,
-  name = "Functions should not be nested too deeply",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@SqaleConstantRemediation("20min")
+@Rule(key = NestedFunctionDepthCheck.KEY)
 public class NestedFunctionDepthCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2004";

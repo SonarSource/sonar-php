@@ -19,20 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ElseIfSequenceKeywordUsageCheck.KEY,
-  name = "\"elseif\" keyword should be used in place of \"else if\" keywords",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION, Tags.PSR2})
-@SqaleConstantRemediation("2min")
+@Rule(key = ElseIfSequenceKeywordUsageCheck.KEY)
 public class ElseIfSequenceKeywordUsageCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1793";

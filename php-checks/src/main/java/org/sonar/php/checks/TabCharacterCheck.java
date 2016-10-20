@@ -23,21 +23,12 @@ import com.google.common.io.Files;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = TabCharacterCheck.KEY,
-  name = "Tabulation characters should not be used",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION, Tags.PSR2})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = TabCharacterCheck.KEY)
 public class TabCharacterCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
 
   public static final String KEY = "S105";

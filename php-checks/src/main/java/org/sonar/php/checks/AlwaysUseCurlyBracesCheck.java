@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
@@ -31,16 +30,8 @@ import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = AlwaysUseCurlyBracesCheck.KEY,
-  name = "Control structures should always use curly braces",
-  priority = Priority.MAJOR,
-  tags = {Tags.CERT, Tags.CWE, Tags.MISRA, Tags.PITFALL})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = AlwaysUseCurlyBracesCheck.KEY)
 public class AlwaysUseCurlyBracesCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S121";

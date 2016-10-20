@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import java.util.regex.Pattern;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -30,16 +29,8 @@ import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = HardCodedCredentialsCheck.KEY,
-  name = "Credentials should not be hard-coded",
-  priority = Priority.CRITICAL,
-  tags = {Tags.CWE, Tags.OWASP_A2, Tags.SANS_TOP25_POROUS, Tags.SECURITY})
-@ActivatedByDefault
-@SqaleConstantRemediation("30min")
+@Rule(key = HardCodedCredentialsCheck.KEY)
 public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2068";

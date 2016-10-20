@@ -22,21 +22,12 @@ package org.sonar.php.checks;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
 import java.util.Set;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = DuplicatedFunctionArgumentCheck.KEY,
-  name = "Function argument names should be unique\n",
-  priority = Priority.CRITICAL,
-  tags = {Tags.PITFALL})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = DuplicatedFunctionArgumentCheck.KEY)
 public class DuplicatedFunctionArgumentCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1536";

@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -29,16 +28,8 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = LogicalWordOperatorUsageCheck.KEY,
-  name = "\"&&\" and \"||\" should be used",
-  priority = Priority.MAJOR,
-  tags = {Tags.SUSPICIOUS})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = LogicalWordOperatorUsageCheck.KEY)
 public class LogicalWordOperatorUsageCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S2010";

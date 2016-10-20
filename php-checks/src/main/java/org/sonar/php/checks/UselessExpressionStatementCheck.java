@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -31,16 +30,8 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = UselessExpressionStatementCheck.KEY,
-  name = "Non-empty statements should change control flow or have at least one side-effect",
-  priority = Priority.CRITICAL,
-  tags = {Tags.UNUSED, Tags.CWE, Tags.MISRA, Tags.BUG})
-@ActivatedByDefault
-@SqaleConstantRemediation("10min")
+@Rule(key = UselessExpressionStatementCheck.KEY)
 public class UselessExpressionStatementCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S905";

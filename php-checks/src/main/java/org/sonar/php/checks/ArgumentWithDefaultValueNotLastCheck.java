@@ -23,22 +23,13 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ArgumentWithDefaultValueNotLastCheck.KEY,
-  name = "Method arguments with default value should be last",
-  priority = Priority.CRITICAL,
-  tags = {Tags.BUG, Tags.PSR2})
-@ActivatedByDefault
-@SqaleConstantRemediation("20min")
+@Rule(key = ArgumentWithDefaultValueNotLastCheck.KEY)
 public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1788";

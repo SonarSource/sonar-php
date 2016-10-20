@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.List;
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -29,17 +28,8 @@ import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ReturnOfBooleanExpressionCheck.KEY,
-  name = "Return of boolean expressions should not be wrapped into an \"if-then-else\" statement",
-  priority = Priority.MINOR,
-  tags = Tags.CLUMSY)
-@ActivatedByDefault
-
-@SqaleConstantRemediation("2min")
+@Rule(key = ReturnOfBooleanExpressionCheck.KEY)
 public class ReturnOfBooleanExpressionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1126";

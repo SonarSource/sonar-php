@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -41,14 +40,8 @@ import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = LocalVariableAndParameterNameCheck.KEY,
-  name = "Local variable and function parameter names should comply with a naming convention",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("2min")
+@Rule(key = LocalVariableAndParameterNameCheck.KEY)
 public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S117";

@@ -20,21 +20,12 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = EvalUseCheck.KEY,
-  name = "Code should not be dynamically injected and executed to prevent Eval Injection vulnerability",
-  priority = Priority.CRITICAL,
-  tags = {Tags.SECURITY, Tags.CWE, Tags.OWASP_A3})
-@ActivatedByDefault
-@SqaleConstantRemediation("30min")
+@Rule(key = EvalUseCheck.KEY)
 public class EvalUseCheck extends FunctionUsageCheck {
 
   public static final String KEY = "S1523";

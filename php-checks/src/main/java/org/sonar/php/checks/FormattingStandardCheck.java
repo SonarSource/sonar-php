@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Locale;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
@@ -39,14 +38,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = FormattingStandardCheck.KEY,
-  name = "Source code should comply with formatting standards",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION, Tags.PSR2})
-@SqaleConstantRemediation("1min")
+@Rule(key = FormattingStandardCheck.KEY)
 public class FormattingStandardCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1808";

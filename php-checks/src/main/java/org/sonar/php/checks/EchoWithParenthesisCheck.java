@@ -20,21 +20,12 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = EchoWithParenthesisCheck.KEY,
-  name = "Parentheses should not be used for calls to \"echo\"",
-  priority = Priority.MAJOR,
-  tags = {Tags.PITFALL})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = EchoWithParenthesisCheck.KEY)
 public class EchoWithParenthesisCheck extends FunctionUsageCheck {
 
   public static final String KEY = "S2041";

@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.metrics.ComplexityVisitor;
@@ -31,14 +30,8 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 
-@Rule(
-  key = ClassComplexityCheck.KEY,
-  name = "Classes should not be too complex",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@SqaleLinearWithOffsetRemediation(coeff = "1min", offset = "10min", effortToFixDescription = "per complexity point over the threshold")
+@Rule(key = ClassComplexityCheck.KEY)
 public class ClassComplexityCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S1311";

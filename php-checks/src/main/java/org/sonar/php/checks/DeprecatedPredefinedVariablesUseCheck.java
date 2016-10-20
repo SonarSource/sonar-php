@@ -19,23 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = DeprecatedPredefinedVariablesUseCheck.KEY,
-  name = "Deprecated predefined variables should not be used",
-  priority = Priority.MAJOR,
-  tags = {Tags.PITFALL})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = DeprecatedPredefinedVariablesUseCheck.KEY)
 public class DeprecatedPredefinedVariablesUseCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1600";

@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.PHPKeyword;
@@ -31,16 +30,8 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = TooManyMethodsInClassCheck.KEY,
-  name = "Classes should not have too many methods",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleConstantRemediation("1h")
+@Rule(key = TooManyMethodsInClassCheck.KEY)
 public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1448";

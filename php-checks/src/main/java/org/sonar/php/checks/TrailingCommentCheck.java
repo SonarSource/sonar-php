@@ -20,23 +20,14 @@
 package org.sonar.php.checks;
 
 import java.util.regex.Pattern;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = TrailingCommentCheck.KEY,
-  name = "Comments should not be located at the end of lines of code",
-  priority = Priority.INFO,
-  tags = {Tags.CONVENTION})
-@ActivatedByDefault
-@SqaleConstantRemediation("1min")
+@Rule(key = TrailingCommentCheck.KEY)
 public class TrailingCommentCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S139";

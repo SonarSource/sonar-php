@@ -19,22 +19,13 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = SwitchWithoutDefaultCheck.KEY,
-  name = "\"switch\" statements should end with a \"case default\" clause",
-  priority = Priority.MAJOR,
-  tags = {Tags.CERT, Tags.CWE, Tags.MISRA})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = SwitchWithoutDefaultCheck.KEY)
 public class SwitchWithoutDefaultCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S131";

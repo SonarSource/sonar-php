@@ -20,20 +20,13 @@
 package org.sonar.php.checks;
 
 import java.util.regex.Pattern;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = "S2000",
-  name = "Files should not contain characters before \"<?php\"",
-  priority = Priority.CRITICAL,
-  tags = {Tags.USER_EXPERIENCE})
-@SqaleConstantRemediation("2min")
+@Rule(key = "S2000")
 public class CharacterBeforeOpeningPHPTagCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2000";

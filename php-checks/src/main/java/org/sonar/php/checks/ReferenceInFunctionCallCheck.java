@@ -19,23 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = "S1998",
-  name = "References should not be passed to function calls",
-  priority = Priority.CRITICAL,
-  tags = {Tags.OBSOLETE, Tags.PERFORMANCE, Tags.CWE})
-@ActivatedByDefault
-@SqaleConstantRemediation("15min")
+@Rule(key = ReferenceInFunctionCallCheck.KEY)
 public class ReferenceInFunctionCallCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1998";

@@ -23,20 +23,13 @@ import com.google.common.io.Files;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = LineLengthCheck.KEY,
-  name = "Lines should not be too long",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("1min")
+@Rule(key = LineLengthCheck.KEY)
 public class LineLengthCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
 
   public static final String KEY = "S103";

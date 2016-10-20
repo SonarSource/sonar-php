@@ -26,7 +26,6 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.LexicalConstant;
@@ -46,14 +45,8 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ClassCouplingCheck.KEY,
-  name = "Classes should not be coupled to too many other classes (Single Responsibility Principle)",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@SqaleConstantRemediation("2h")
+@Rule(key = ClassCouplingCheck.KEY)
 public class ClassCouplingCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1200";

@@ -22,18 +22,11 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Locale;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = RequireInsteadOfRequireOnceCheck.KEY,
-  name = "\"require_once\" and \"include_once\" should be used instead of \"require\" and \"include\"",
-  priority = Priority.CRITICAL,
-  tags = {Tags.BUG})
-@SqaleConstantRemediation("5min")
+@Rule(key = RequireInsteadOfRequireOnceCheck.KEY)
 public class RequireInsteadOfRequireOnceCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2003";

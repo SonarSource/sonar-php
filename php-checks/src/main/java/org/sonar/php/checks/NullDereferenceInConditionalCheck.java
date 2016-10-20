@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.Equality;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -35,16 +34,8 @@ import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = "S1697",
-  name = "Short-circuit logic should be used to prevent null pointer dereferences in conditionals",
-  priority = Priority.BLOCKER,
-  tags = {Tags.BUG})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = "S1697")
 public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE_FORMAT = "Either reverse the equality operator in the \"%s\" null test, or reverse the logical operator that follows it.";

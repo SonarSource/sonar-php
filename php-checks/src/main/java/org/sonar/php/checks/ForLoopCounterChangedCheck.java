@@ -23,7 +23,6 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -33,16 +32,8 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ForLoopCounterChangedCheck.KEY,
-  name = "\"for\" loop stop conditions should be invariant",
-  priority = Priority.MAJOR,
-  tags = {Tags.PITFALL, Tags.MISRA})
-@ActivatedByDefault
-@SqaleConstantRemediation("10min")
+@Rule(key = ForLoopCounterChangedCheck.KEY)
 public class ForLoopCounterChangedCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S127";

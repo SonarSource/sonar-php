@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.List;
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -31,16 +30,8 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = EmptyNestedBlockCheck.KEY,
-  name = "Nested blocks of code should not be left empty",
-  priority = Priority.MAJOR,
-  tags = Tags.BUG)
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = EmptyNestedBlockCheck.KEY)
 public class EmptyNestedBlockCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S108";

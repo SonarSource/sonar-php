@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
 import java.util.Set;
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -34,14 +33,8 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = MissingMethodVisibilityCheck.KEY,
-  name = "Method visibility should be explicitly declared",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION, Tags.PSR2})
-@SqaleConstantRemediation("2min")
+@Rule(key = MissingMethodVisibilityCheck.KEY)
 public class MissingMethodVisibilityCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1784";

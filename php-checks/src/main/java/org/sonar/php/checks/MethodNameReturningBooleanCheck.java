@@ -20,21 +20,14 @@
 package org.sonar.php.checks;
 
 import org.apache.commons.lang.StringUtils;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = MethodNameReturningBooleanCheck.KEY,
-  name = "The names of methods with boolean return values should start with \"is\" or \"has\"",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION})
-@SqaleConstantRemediation("15min")
+@Rule(key = MethodNameReturningBooleanCheck.KEY)
 public class MethodNameReturningBooleanCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2047";

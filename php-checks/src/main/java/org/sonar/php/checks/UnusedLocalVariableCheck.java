@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.symbols.Scope;
@@ -38,16 +37,8 @@ import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = UnusedLocalVariableCheck.KEY,
-  name = "Unused local variables should be removed",
-  priority = Priority.MAJOR,
-  tags = {Tags.UNUSED})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = UnusedLocalVariableCheck.KEY)
 public class UnusedLocalVariableCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1481";

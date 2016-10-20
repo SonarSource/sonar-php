@@ -24,7 +24,6 @@ import com.google.common.collect.ImmutableList.Builder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -38,16 +37,8 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ImmediatelyReturnedVariableCheck.KEY,
-  name = "Local variables should not be declared and then immediately returned or thrown",
-  priority = Priority.MINOR,
-  tags = {Tags.CLUMSY})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = ImmediatelyReturnedVariableCheck.KEY)
 public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
 
   public static final String KEY = "S1488";

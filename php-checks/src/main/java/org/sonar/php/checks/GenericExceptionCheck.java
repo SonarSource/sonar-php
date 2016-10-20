@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Set;
 import javax.annotation.Nullable;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -34,16 +33,8 @@ import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = GenericExceptionCheck.KEY,
-  name = "Generic exceptions ErrorException, RuntimeException and Exception should not be thrown",
-  priority = Priority.MAJOR,
-  tags = {Tags.CWE, Tags.ERROR_HANDLING, Tags.SECURITY})
-@ActivatedByDefault
-@SqaleConstantRemediation("20min")
+@Rule(key = GenericExceptionCheck.KEY)
 public class GenericExceptionCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S112";

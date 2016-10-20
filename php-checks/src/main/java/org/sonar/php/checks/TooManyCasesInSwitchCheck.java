@@ -19,21 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = TooManyCasesInSwitchCheck.KEY,
-  name = "\"switch\" statements should not have too many \"case\" clauses",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleConstantRemediation("30min")
+@Rule(key = TooManyCasesInSwitchCheck.KEY)
 public class TooManyCasesInSwitchCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1479";

@@ -19,23 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = ThisVariableUsageInStaticContextCheck.KEY,
-  name = "\"$this\" should not be used in a static context",
-  priority = Priority.BLOCKER,
-  tags = {Tags.BUG})
-@ActivatedByDefault
-@SqaleConstantRemediation("15min")
+@Rule(key = ThisVariableUsageInStaticContextCheck.KEY)
 public class ThisVariableUsageInStaticContextCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2014";

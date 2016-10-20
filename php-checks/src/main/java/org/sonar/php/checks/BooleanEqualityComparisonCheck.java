@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -28,16 +27,8 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = BooleanEqualityComparisonCheck.KEY,
-  name = "Literal boolean values should not be used in condition expressions",
-  priority = Priority.MINOR,
-  tags = Tags.CLUMSY)
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = BooleanEqualityComparisonCheck.KEY)
 public class BooleanEqualityComparisonCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1125";

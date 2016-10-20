@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -33,16 +32,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = TooManyReturnCheck.KEY,
-  name = "Functions should not contain too many return statements",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleConstantRemediation("20min")
+@Rule(key = TooManyReturnCheck.KEY)
 public class TooManyReturnCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1142";

@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -30,14 +29,8 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = PHP5DeprecatedFunctionUsageCheck.KEY,
-  name = "Functions deprecated in PHP 5 should not be used",
-  priority = Priority.MAJOR,
-  tags = {Tags.OBSOLETE})
-@SqaleConstantRemediation("15min")
+@Rule(key = PHP5DeprecatedFunctionUsageCheck.KEY)
 public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
   public static final String KEY = "S2001";

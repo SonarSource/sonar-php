@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -32,16 +31,8 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleLinearWithOffsetRemediation;
 
-@Rule(
-  key = StringLiteralDuplicatedCheck.KEY,
-  name = "String literals should not be duplicated",
-  priority = Priority.MINOR,
-  tags = {Tags.DESIGN})
-@ActivatedByDefault
-@SqaleLinearWithOffsetRemediation(coeff = "2min", offset = "2min", effortToFixDescription = "per duplicate instance")
+@Rule(key = StringLiteralDuplicatedCheck.KEY)
 public class StringLiteralDuplicatedCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1192";

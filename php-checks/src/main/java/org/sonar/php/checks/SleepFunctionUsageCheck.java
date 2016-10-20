@@ -20,18 +20,11 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = SleepFunctionUsageCheck.KEY,
-  name = "\"sleep\" should not be called",
-  priority = Priority.CRITICAL,
-  tags = {Tags.SECURITY})
-@SqaleConstantRemediation("15min")
+@Rule(key = SleepFunctionUsageCheck.KEY)
 public class SleepFunctionUsageCheck extends FunctionUsageCheck {
 
   public static final String KEY = "S2964";

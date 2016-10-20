@@ -25,22 +25,13 @@ import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = OneStatementPerLineCheck.KEY,
-  name = "Statements should be on separate lines",
-  priority = Priority.MINOR,
-  tags = {Tags.CONVENTION, Tags.PSR2})
-@ActivatedByDefault
-@SqaleConstantRemediation("1min")
+@Rule(key = OneStatementPerLineCheck.KEY)
 public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
 
   public static final String KEY = "S122";

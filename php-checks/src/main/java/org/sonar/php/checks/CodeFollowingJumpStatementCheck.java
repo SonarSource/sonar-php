@@ -20,22 +20,13 @@
 package org.sonar.php.checks;
 
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = CodeFollowingJumpStatementCheck.KEY,
-  name = "Jump statements should not be followed by other statements",
-  priority = Priority.MAJOR,
-  tags = {Tags.MISRA, Tags.CERT, Tags.CWE, Tags.UNUSED})
-@ActivatedByDefault
-@SqaleConstantRemediation("5min")
+@Rule(key = CodeFollowingJumpStatementCheck.KEY)
 public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
 
   public static final String KEY = "S1763";

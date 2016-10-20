@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -39,16 +38,8 @@ import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = NestedControlFlowDepthCheck.KEY,
-  name = "Control flow statements \"if\", \"for\", \"while\", \"switch\" and \"try\" should not be nested too deeply",
-  priority = Priority.MAJOR,
-  tags = {Tags.BRAIN_OVERLOAD})
-@ActivatedByDefault
-@SqaleConstantRemediation("10min")
+@Rule(key = NestedControlFlowDepthCheck.KEY)
 public class NestedControlFlowDepthCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S134";

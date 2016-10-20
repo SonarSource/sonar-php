@@ -19,23 +19,14 @@
  */
 package org.sonar.php.checks;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.Equality;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = SelfAssignmentCheck.KEY,
-  name = "Variables should not be self-assigned",
-  tags = {"bug", "cert"},
-  priority = Priority.MAJOR)
-@ActivatedByDefault
-@SqaleConstantRemediation("3min")
+@Rule(key = SelfAssignmentCheck.KEY)
 public class SelfAssignmentCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1656";

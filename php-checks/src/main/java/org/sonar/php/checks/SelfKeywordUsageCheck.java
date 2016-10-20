@@ -24,7 +24,6 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -38,16 +37,8 @@ import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-@Rule(
-  key = SelfKeywordUsageCheck.KEY,
-  name = "Static members should be referenced with \"static::\"",
-  priority = Priority.MAJOR,
-  tags = {Tags.PITFALL})
-@ActivatedByDefault
-@SqaleConstantRemediation("2min")
+@Rule(key = SelfKeywordUsageCheck.KEY)
 public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2037";
