@@ -64,3 +64,7 @@ echo <<<EOF
   This is first usage of \$heredocVar: $heredocVar
   This is second usage: {$heredocVar}
 EOF;
+echo <<<'EOF'
+  This is nowdoc. So this is not usage $heredocVar.
+  And this {$heredocVar}
+EOF;
