@@ -6384,6 +6384,7 @@
 340,
 ],
 'project:stackphp-0.5beta1-source/src/sql_cache.php':[
+8,
 48,
 49,
 51,
@@ -7209,6 +7210,8 @@
 ],
 'project:symfony/Symfony/Component/DependencyInjection/Tests/Fixtures/includes/createphar.php':[
 9,
+9,
+31,
 ],
 'project:symfony/Symfony/Component/DomCrawler/Tests/CrawlerTest.php':[
 136,

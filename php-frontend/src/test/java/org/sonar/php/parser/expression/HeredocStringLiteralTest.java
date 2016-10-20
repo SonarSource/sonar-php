@@ -17,21 +17,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tree.expression;
+package org.sonar.php.parser.expression;
 
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.junit.Test;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-/**
- * Characters within expandable string
- * <p>
- * This tree has kind {@link Kind.EXPANDABLE_STRING_CHARACTERS} or {@link Kind.HEREDOC_STRING_CHARACTERS}
- */
-@Beta
-public interface ExpandableStringCharactersTree extends ExpressionTree {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  String value();
+public class HeredocStringLiteralTest {
 
-  SyntaxToken token();
+  @Test
+  public void test() {
+    assertThat(Kind.HEREDOC_LITERAL)
+      .matches("<<<A\nSimple Content\nA")
+      .matches("<<<A\nSimple $var Content $var \nA")
+      .matches("<<<A\nSimple {$var->foo()} Content\nA")
+      .matches("<<<A\nSimple \" Content\nA")
 
+
+      .notMatches("<<<A\nSimple Content\nB")
+    ;
+
+  }
 }

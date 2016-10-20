@@ -20,18 +20,34 @@
 package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
+import java.util.List;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
- * Characters within expandable string
- * <p>
- * This tree has kind {@link Kind.EXPANDABLE_STRING_CHARACTERS} or {@link Kind.HEREDOC_STRING_CHARACTERS}
+ * <a href="http://php.net/manual/en/language.types.string.php#language.types.string.syntax.heredoc">Heredoc strings</a>
  */
 @Beta
-public interface ExpandableStringCharactersTree extends ExpressionTree {
+public interface HeredocStringLiteralTree extends ExpressionTree {
 
-  String value();
+  // <<< XYZ
+  SyntaxToken openingToken();
 
-  SyntaxToken token();
+  List<ExpandableStringCharactersTree> strings();
+
+  /**
+   * Expressions can be:
+   * <ul>
+   *   <li>{@link Kind#EXPANDABLE_STRING_CHARACTERS expandable string characters}
+   *   <li>{@link Kind#VARIABLE_IDENTIFIER variable identifier}
+   *   <li>{@link Kind#COMPUTED_VARIABLE_NAME computed variable name}
+   *   <li>{@link Kind#COMPOUND_VARIABLE_NAME compound variable name}
+   *   <li>{@link Kind#ARRAY_ACCESS array access}
+   *   <li>{@link Kind#COMPOUND_VARIABLE_NAME member access}
+   * </ul>
+   */
+  List<ExpressionTree> expressions();
+
+  // XYZ
+  SyntaxToken closingToken();
 
 }

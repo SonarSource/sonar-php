@@ -19,14 +19,14 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
 
@@ -68,6 +68,11 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
 
     assertFirstString(tree, "1st var: ");
     assertFirstExpression(tree, "$a", Kind.VARIABLE_IDENTIFIER);
+  }
+
+  @Test
+  public void test_pseudo_comment() throws Exception {
+    parse("\"/**/{$a}\"", Kind.EXPANDABLE_STRING_LITERAL);
   }
 
   private void assertExpandableStringLiteral(ExpandableStringLiteralTree tree, int stringsSize, int expressionsSize) {

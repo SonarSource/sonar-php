@@ -32,13 +32,7 @@ public class PHPParserBuilder {
   }
 
   public static ActionParser<Tree> createParser(Charset charset) {
-    return new ActionParser<>(
-        charset,
-        PHPLexicalGrammar.createGrammarBuilder(),
-        PHPGrammar.class,
-        new TreeFactory(),
-        new PHPNodeBuilder(),
-        PHPLexicalGrammar.COMPILATION_UNIT);
+    return createParser(PHPLexicalGrammar.COMPILATION_UNIT, charset);
   }
 
   /**
@@ -48,15 +42,20 @@ public class PHPParserBuilder {
    * @param charset
    */
   public static ActionParser<Tree> createParser(GrammarRuleKey rootRule, Charset charset) {
+    return createParser(rootRule, charset, 0);
+  }
+
+  /**
+   * This method should be used if required to shift line of tokens
+   */
+  public static ActionParser<Tree> createParser(GrammarRuleKey rootRule, Charset charset, int lineOffset) {
     return new ActionParser<>(
         charset,
         PHPLexicalGrammar.createGrammarBuilder(),
         PHPGrammar.class,
-        new TreeFactory(),
-        new PHPNodeBuilder(),
+        new TreeFactory(charset),
+        new PHPNodeBuilder(lineOffset),
         rootRule);
   }
-
-
 
 }

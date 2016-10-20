@@ -19,12 +19,12 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LiteralTreeTest extends PHPTreeModelTest {
 
@@ -34,8 +34,8 @@ public class LiteralTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void heredoc_literal() throws Exception {
-    assertLiteral("<<<EOD\n content \nEOD", Kind.HEREDOC_LITERAL);
+  public void nowdoc_literal() throws Exception {
+    assertLiteral("<<<'EOD'\n content \nEOD", Kind.NOWDOC_LITERAL);
   }
 
   @Test
