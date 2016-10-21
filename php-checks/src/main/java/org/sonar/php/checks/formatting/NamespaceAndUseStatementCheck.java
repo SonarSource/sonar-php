@@ -72,7 +72,7 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
     if (check.hasNamespaceBlankLine && !isFollowedWithBlankLine(tree)) {
       String message = String.format(
         BLANK_LINE_NAMESPACE_MESSAGE,
-        tree.namespaceName() == null ? "" : " " + tree.namespaceName().fullName());
+        tree.namespaceName() == null ? "" : (" " + tree.namespaceName().fullName()));
       reportIssue(message, tree.namespaceToken());
     }
   }
