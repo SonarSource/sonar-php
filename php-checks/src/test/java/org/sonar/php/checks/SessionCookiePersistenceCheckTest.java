@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import java.io.File;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.check;
 
@@ -44,7 +44,7 @@ public class SessionCookiePersistenceCheckTest {
 
   @Test
   public void programmatic() throws Exception {
-    Foo.check(check, TestUtils.getCheckFile("SessionCookiePersistence.php"));
+    PHPCheckTest.check(check, TestUtils.getCheckFile("SessionCookiePersistence.php"));
   }
 
 }

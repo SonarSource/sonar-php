@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class AtLeastThreeCasesInSwitchCheckTest {
 
   @Test
   public void test() throws Exception {
-    Foo.check(new AtLeastThreeCasesInSwitchCheck(), TestUtils.getCheckFile("AtLeastThreeCasesInSwitchCheck.php"));
+    PHPCheckTest.check(new AtLeastThreeCasesInSwitchCheck(), TestUtils.getCheckFile("AtLeastThreeCasesInSwitchCheck.php"));
   }
 
 }

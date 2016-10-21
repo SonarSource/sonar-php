@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class SilencedErrorsCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    Foo.check(new SilencedErrorsCheck(), TestUtils.getCheckFile("SilencedErrorsCheck.php"));
+    PHPCheckTest.check(new SilencedErrorsCheck(), TestUtils.getCheckFile("SilencedErrorsCheck.php"));
   }
 
 }

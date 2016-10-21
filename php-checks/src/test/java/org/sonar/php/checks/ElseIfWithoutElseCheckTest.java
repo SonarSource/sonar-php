@@ -21,12 +21,12 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class ElseIfWithoutElseCheckTest {
 
   @Test
   public void test() throws Exception {
-    Foo.check(new ElseIfWithoutElseCheck(), TestUtils.getCheckFile("ElseIfWithoutElseCheck.php"));
+    PHPCheckTest.check(new ElseIfWithoutElseCheck(), TestUtils.getCheckFile("ElseIfWithoutElseCheck.php"));
   }
 }

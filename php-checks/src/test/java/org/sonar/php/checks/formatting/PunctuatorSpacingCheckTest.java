@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.io.File;
@@ -41,13 +41,13 @@ public class PunctuatorSpacingCheckTest extends FormattingStandardCheckTest {
   @Test
   public void defaultValue() throws IllegalAccessException {
     activeOnly("isOneSpaceBetweenRParentAndLCurly", "isNoSpaceParenthesis");
-    Foo.check(check, TEST_FILE);
+    PHPCheckTest.check(check, TEST_FILE);
   }
 
   @Test
   public void custom() throws IllegalAccessException {
     deactivateAll();
-    Foo.check(check, TEST_FILE, ImmutableList.<PhpIssue>of());
+    PHPCheckTest.check(check, TEST_FILE, ImmutableList.<PhpIssue>of());
   }
 
 }

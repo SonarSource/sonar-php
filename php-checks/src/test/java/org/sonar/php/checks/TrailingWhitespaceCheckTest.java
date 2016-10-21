@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
@@ -34,6 +34,6 @@ public class TrailingWhitespaceCheckTest {
     PHPCheck check = new TrailingWhitespaceCheck();
 
     ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(new LegacyIssue(check, "Remove the useless trailing whitespaces at the end of this line.").line(5));
-    Foo.check(check, TestUtils.getCheckFile("TrailingWhitespaceCheck.php"), issues);
+    PHPCheckTest.check(check, TestUtils.getCheckFile("TrailingWhitespaceCheck.php"), issues);
   }
 }

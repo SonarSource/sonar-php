@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class GotoUseCheckTest {
 
   @Test
   public void test() throws Exception {
-    Foo.check(new GotoUseCheck(), TestUtils.getCheckFile("GotoUseCheck.php"));
+    PHPCheckTest.check(new GotoUseCheck(), TestUtils.getCheckFile("GotoUseCheck.php"));
   }
 
 }
