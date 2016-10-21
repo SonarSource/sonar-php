@@ -32,6 +32,13 @@ class A {
 
   public function __i() {           // OK - magic method
   }
+
+  function m() {                    // OK - default (=> not private)
+  }
+
+  static private function n() {     // NOK
+  }
+
 }
 
 class B {
@@ -73,5 +80,11 @@ $x = new class {
   }
 
   public function k() {             // OK - public
+  }
+
+  function m() {                    // OK - default (=> not private)
+  }
+
+  static private function n() {     // NOK
   }
 };
