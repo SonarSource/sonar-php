@@ -153,9 +153,14 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     }
   }
 
-  private void checkArgumentsIndentation(SeparatedList arguments, SyntaxToken functionName, int baseColumn, @Nullable SyntaxToken closeParenthesis, boolean isFunctionCall) {
+  private void checkArgumentsIndentation(
+    SeparatedList<? extends Tree> arguments,
+    SyntaxToken functionName, int baseColumn,
+    @Nullable SyntaxToken closeParenthesis,
+    boolean isFunctionCall
+  ) {
     if (arguments.size() > 1) {
-      Tree firstArg = (Tree) arguments.get(0);
+      Tree firstArg = arguments.get(0);
 
       int expectedIndentationColumn = baseColumn + PSR2_INDENTATION;
       int callingLine = functionName.line();
@@ -178,7 +183,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
   }
 
   // http://www.php-fig.org/psr/psr-2/meta/#3-1-multi-line-arguments-09-08-2013
-  private static boolean allArgumentsOnSameLine(SyntaxToken functionName, List<Tree> arguments) {
+  private static boolean allArgumentsOnSameLine(SyntaxToken functionName, List<? extends Tree> arguments) {
     int expectedLine = getLastLine(functionName);
     for (Tree argument : arguments) {
       if (getStartLine(argument) != expectedLine) {
@@ -202,7 +207,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     }
   }
 
-  private static boolean isCorrectlyIndented(int expectedColumn, List<Tree> items) {
+  private static boolean isCorrectlyIndented(int expectedColumn, List<? extends Tree> items) {
     for (Tree item : items) {
       if (((PHPTree) item).getFirstToken().column() != expectedColumn) {
         return false;
@@ -211,7 +216,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
     return true;
   }
 
-  private static boolean isCorrectlySplitOnLines(int referenceLine, List<Tree> items) {
+  private static boolean isCorrectlySplitOnLines(int referenceLine, List<? extends Tree> items) {
     int expectedLine = referenceLine + 1;
 
     for (Tree item : items) {

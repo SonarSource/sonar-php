@@ -146,7 +146,6 @@ public class PhpUnitCoverageResultParserTest {
   @Test
   public void shouldNotFailIfNoLineForFileNode() throws Exception {
     SensorContextTester context = setUpForSensorContextTester();
-    String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
     parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-filenode-without-line.xml"), context, numberOfLinesOfCode);
   }
