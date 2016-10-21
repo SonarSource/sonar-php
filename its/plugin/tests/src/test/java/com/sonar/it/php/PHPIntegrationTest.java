@@ -114,11 +114,11 @@ public class PHPIntegrationTest {
    * SONAR-3139
    */
   @Test
-  public void testFileDuplicationResults() throws Exception {
-    assertThat(getFileMeasure("duplicated_lines").getIntValue()).isEqualTo(16);
-    assertThat(getFileMeasure("duplicated_blocks").getIntValue()).isEqualTo(1);
-    assertThat(getFileMeasure("duplicated_files").getIntValue()).isEqualTo(1);
-    assertThat(getFileMeasure("duplicated_lines_density").getValue()).isEqualTo(17.8);
+  public void testDuplicationResults() throws Exception {
+    assertThat(getProjectMeasure("duplicated_lines").getIntValue()).isEqualTo(1595);
+    assertThat(getProjectMeasure("duplicated_blocks").getIntValue()).isEqualTo(54);
+    assertThat(getProjectMeasure("duplicated_files").getIntValue()).isEqualTo(32);
+    assertThat(getProjectMeasure("duplicated_lines_density").getValue()).isEqualTo(4.0);
   }
 
   /**

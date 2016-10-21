@@ -55,6 +55,7 @@ import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
 import org.sonar.php.metrics.FileMeasures;
+import org.sonar.php.metrics.CpdVisitor;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;
@@ -116,7 +117,7 @@ public class PHPSensor implements Sensor {
       this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
       this.fileSystem.predicates().hasLanguage(Php.KEY));
 
-    ImmutableList<PHPCheck> visitors = getCheckVisitors();
+    ImmutableList<PHPCheck> visitors = getVisitors(new CpdVisitor(context));
 
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors);
     ArrayList<InputFile> inputFiles = Lists.newArrayList(fileSystem.inputFiles(mainFilePredicate));
@@ -309,8 +310,10 @@ public class PHPSensor implements Sensor {
   }
 
 
-  private ImmutableList<PHPCheck> getCheckVisitors() {
-    return ImmutableList.copyOf(checks.all());
+  private ImmutableList<PHPCheck> getVisitors(PHPCheck additionalCheck) {
+    return ImmutableList.<PHPCheck>builder()
+      .addAll(checks.all())
+      .add(additionalCheck).build();
   }
 
   @Override

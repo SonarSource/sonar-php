@@ -24,7 +24,6 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarSensor;
-import org.sonar.plugins.php.duplications.PhpCPDMapping;
 import org.sonar.plugins.php.phpunit.PhpUnitService;
 
 public class PhpPlugin implements Plugin {
@@ -48,9 +47,6 @@ public class PhpPlugin implements Plugin {
 
       // Core extensions
       NoSonarSensor.class,
-
-      // Duplications
-      PhpCPDMapping.class,
 
       // Sensor
       PHPSensor.class,
