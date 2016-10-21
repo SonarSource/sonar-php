@@ -195,7 +195,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    * @return the coverage
    */
   private CoverageNode getCoverage(File coverageReportFile) {
-    try (InputStream inputStream = new FileInputStream(coverageReportFile);){
+    try (InputStream inputStream = new FileInputStream(coverageReportFile)) {
       XStream xstream = new XStream();
       xstream.setClassLoader(getClass().getClassLoader());
       xstream.aliasSystemAttribute("classType", "class");

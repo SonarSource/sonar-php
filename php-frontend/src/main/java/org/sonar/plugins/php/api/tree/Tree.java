@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.tree;
 
 import com.google.common.annotations.Beta;
-import com.sonar.sslr.api.AstNodeType;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -113,7 +112,7 @@ public interface Tree {
 
   Kind getKind();
 
-  enum Kind implements AstNodeType, GrammarRuleKey {
+  enum Kind implements GrammarRuleKey {
 
     /**
      * {@link CompilationUnitTree}
@@ -915,7 +914,7 @@ public interface Tree {
 
     final Class<? extends Tree> associatedInterface;
 
-    private Kind(Class<? extends Tree> associatedInterface) {
+    Kind(Class<? extends Tree> associatedInterface) {
       this.associatedInterface = associatedInterface;
     }
 

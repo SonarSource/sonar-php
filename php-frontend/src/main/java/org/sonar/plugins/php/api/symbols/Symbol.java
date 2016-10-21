@@ -21,12 +21,11 @@ package org.sonar.plugins.php.api.symbols;
 
 import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableList;
+import java.util.LinkedList;
+import java.util.List;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @Beta
 public class Symbol {
@@ -38,11 +37,12 @@ public class Symbol {
     CLASS("class"),
     FIELD("field");
 
+    private final String value;
+
     Kind(String value) {
       this.value = value;
     }
 
-    private final String value;
     public String getValue() {
       return value;
     }
