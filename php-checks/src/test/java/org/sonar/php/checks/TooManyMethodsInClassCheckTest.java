@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class TooManyMethodsInClassCheckTest {
@@ -33,13 +33,13 @@ public class TooManyMethodsInClassCheckTest {
 
   @Test
   public void defaultValue() throws Exception  {
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<PhpIssue>of());
+    Foo.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<PhpIssue>of());
   }
 
   @Test
   public void custom_maximum_method_threshold() throws Exception {
     check.maximumMethodThreshold = 2;
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName));
+    Foo.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
@@ -51,7 +51,7 @@ public class TooManyMethodsInClassCheckTest {
       new LegacyIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3),
       new LegacyIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(35)
     );
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
+    Foo.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 
 }

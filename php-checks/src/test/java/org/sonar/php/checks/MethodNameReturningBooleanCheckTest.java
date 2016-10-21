@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 
 public class MethodNameReturningBooleanCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTest.check(new MethodNameReturningBooleanCheck(), TestUtils.getCheckFile("MethodNameReturningBooleanCheck.php"));
+    Foo.check(new MethodNameReturningBooleanCheck(), TestUtils.getCheckFile("MethodNameReturningBooleanCheck.php"));
   }
 
 }

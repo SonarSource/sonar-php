@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
@@ -47,7 +47,7 @@ public class TodoTagPresenceCheckTest {
       newIssue(16)
     );
 
-    PhpCheckTest.check(CHECK, file, issues);
+    Foo.check(CHECK, file, issues);
   }
 
   private PhpIssue newIssue(int line) {

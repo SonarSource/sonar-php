@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 
 public class TooManyReturnCheckTest {
 
@@ -33,12 +33,12 @@ public class TooManyReturnCheckTest {
   @Test
   public void defaultValue() throws Exception {
     String message = "Reduce the number of returns of this function 4, down to the maximum allowed 3.";
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.of(new LegacyIssue(check, message).line(3)));
+    Foo.check(check, TestUtils.getCheckFile(fileName), ImmutableList.of(new LegacyIssue(check, message).line(3)));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 2;
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName));
+    Foo.check(check, TestUtils.getCheckFile(fileName));
   }
 }

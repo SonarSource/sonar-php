@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
@@ -39,7 +39,7 @@ public class PerlStyleCommentsUsageCheckTest {
     String message = "Use \"//\" instead of \"#\" to start this comment";
     ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(new LegacyIssue(CHECK, message).line(3));
 
-    PhpCheckTest.check(CHECK, file, issues);
+    Foo.check(CHECK, file, issues);
   }
 }
 

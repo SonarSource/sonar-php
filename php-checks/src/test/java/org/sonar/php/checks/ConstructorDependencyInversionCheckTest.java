@@ -21,12 +21,12 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 
 public class ConstructorDependencyInversionCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTest.check(new ConstructorDependencyInversionCheck(), TestUtils.getCheckFile("ConstructorDependencyInversion.php"));
+    Foo.check(new ConstructorDependencyInversionCheck(), TestUtils.getCheckFile("ConstructorDependencyInversion.php"));
   }
 }

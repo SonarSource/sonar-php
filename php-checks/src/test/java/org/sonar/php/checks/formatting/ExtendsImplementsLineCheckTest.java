@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class ExtendsImplementsLineCheckTest extends FormattingStandardCheckTest {
@@ -31,12 +31,12 @@ public class ExtendsImplementsLineCheckTest extends FormattingStandardCheckTest 
   @Test
   public void test() throws Exception {
     activeOnly("isExtendsAndImplementsLine");
-    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"));
+    Foo.check(check, TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"));
   }
 
   @Test
   public void custom() throws Exception {
     deactivateAll();
-    PhpCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"), ImmutableList.<PhpIssue>of());
+    Foo.check(check, TestUtils.getCheckFile(TEST_DIR + "ExtendsImplementsLineCheck.php"), ImmutableList.<PhpIssue>of());
   }
 }
