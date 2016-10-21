@@ -25,12 +25,10 @@ import org.sonar.check.Rule;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 import static org.sonar.php.checks.phpini.PhpIniFiles.checkRequiredBoolean;
 
 @Rule(key = "S3334")
-@SqaleConstantRemediation("15min")
 public class AllowUrlCheck implements PhpIniCheck {
 
   @Override
