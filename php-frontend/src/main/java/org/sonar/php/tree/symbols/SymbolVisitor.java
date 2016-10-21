@@ -37,12 +37,14 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.ConstantDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -149,7 +151,18 @@ public class SymbolVisitor extends PHPVisitorCheck {
     leaveScope();
   }
 
-  private void createMemberSymbols(ClassDeclarationTree tree) {
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+
+    enterScope(tree);
+    classScope = currentScope;
+    createMemberSymbols(tree);
+    super.visitAnonymousClass(tree);
+    classScope = null;
+    leaveScope();
+  }
+
+  private void createMemberSymbols(ClassTree tree) {
     for (ClassMemberTree member : tree.members()) {
       if (member.is(Kind.METHOD_DECLARATION)) {
         createSymbol(((MethodDeclarationTree) member).name(), Symbol.Kind.FUNCTION).addModifiers(((MethodDeclarationTree) member).modifiers());
