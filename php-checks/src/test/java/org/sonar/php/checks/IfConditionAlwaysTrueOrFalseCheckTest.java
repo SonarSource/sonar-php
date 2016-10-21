@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class IfConditionAlwaysTrueOrFalseCheckTest {
 
   @Test
   public void test() throws Exception {
-    Foo.check(new IfConditionAlwaysTrueOrFalseCheck(), TestUtils.getCheckFile("IfConditionAlwaysTrueOrFalseCheck.php"));
+    PHPCheckTest.check(new IfConditionAlwaysTrueOrFalseCheck(), TestUtils.getCheckFile("IfConditionAlwaysTrueOrFalseCheck.php"));
   }
 
 }

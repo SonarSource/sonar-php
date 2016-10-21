@@ -58,13 +58,13 @@ import static org.sonar.php.utils.ExpectedIssuesParser.parseExpectedIssues;
  *  $a = 2;  // NOK
  * </pre>
  */
-public class Foo {
+public class PHPCheckTest {
 
   private static final Charset charset = Charsets.UTF_8;
 
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(charset);
 
-  private Foo() {
+  private PHPCheckTest() {
   }
 
   /**

@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class FunctionComplexityCheckTest {
@@ -33,14 +33,14 @@ public class FunctionComplexityCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    Foo.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<PhpIssue>of(
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<PhpIssue>of(
       new LegacyIssue(check, "The Cyclomatic Complexity of this function \"ko\" is 32 which is greater than 20 authorized.").line(3)));
   }
 
   @Test
   public void custom() throws Exception {
     check.threshold = 2;
-    Foo.check(check, TestUtils.getCheckFile(FILE_NAME));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
 }

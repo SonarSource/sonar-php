@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class ClassCouplingCheckTest {
@@ -32,12 +32,12 @@ public class ClassCouplingCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    Foo.check(check, TestUtils.getCheckFile(filename), ImmutableList.<PhpIssue>of());
+    PHPCheckTest.check(check, TestUtils.getCheckFile(filename), ImmutableList.<PhpIssue>of());
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 10;
-    Foo.check(check, TestUtils.getCheckFile(filename));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(filename));
   }
 }

@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
 public class ClosingTagInFullPHPFileCheckTest {
 
@@ -32,11 +32,11 @@ public class ClosingTagInFullPHPFileCheckTest {
 
   @Test
   public void ok() throws Exception {
-    Foo.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
   }
 
   @Test
   public void ko() throws Exception {
-    Foo.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new LegacyIssue(check, "Remove this closing tag \"?>\".").line(11)));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), ImmutableList.of(new LegacyIssue(check, "Remove this closing tag \"?>\".").line(11)));
   }
 }

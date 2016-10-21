@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.net.URISyntaxException;
@@ -64,7 +64,7 @@ public class FileNameCheckTest {
   }
 
   private void check(String fileName, ImmutableList<PhpIssue> expectedIssues) throws URISyntaxException {
-    Foo.check(check, TestUtils.getCheckFile(TEST_DIR + fileName), expectedIssues);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + fileName), expectedIssues);
   }
 
 }

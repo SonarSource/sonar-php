@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.Foo;
+import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.util.List;
@@ -35,13 +35,13 @@ public class TooManyFieldsInClassCheckTest {
 
   @Test
   public void test_default() throws Exception {
-    Foo.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<PhpIssue>of());
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<PhpIssue>of());
   }
 
   @Test
   public void custom_maximum_field_threshold() throws Exception {
     check.maximumFieldThreshold = 4;
-    Foo.check(check, TestUtils.getCheckFile(fileName));
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
@@ -53,6 +53,6 @@ public class TooManyFieldsInClassCheckTest {
       new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(3),
       new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(18)
     );
-    Foo.check(check, TestUtils.getCheckFile(fileName), issues);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
   }
 }
