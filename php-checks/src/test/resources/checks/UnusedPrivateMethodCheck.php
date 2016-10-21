@@ -57,3 +57,21 @@ class HeredocUsage {
 EOF;
   }
 }
+
+$x = new class {
+
+  private function __construct() {  // OK - private constructor
+  }
+
+  private function f() {            // NOK {{Remove this unused private "f" method.}}
+//                 ^
+    $this->h();
+
+  }
+
+  private function h() {            // OK, used
+  }
+
+  public function k() {             // OK - public
+  }
+};

@@ -27,7 +27,9 @@ import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -46,19 +48,31 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
     super.visitClassDeclaration(tree);
 
     if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
-      Scope classScope = context().symbolTable().getScopeFor(tree);
-      for (Symbol methodSymbol : classScope.getSymbols(Kind.FUNCTION)) {
+      checkClass(tree);
+    }
+  }
 
-        boolean ruleConditions = methodSymbol.hasModifier("private") && methodSymbol.usages().isEmpty();
+  private void checkClass(ClassTree tree) {
+    Scope classScope = context().symbolTable().getScopeFor(tree);
+    for (Symbol methodSymbol : classScope.getSymbols(Kind.FUNCTION)) {
 
-        if (ruleConditions
-          && !isConstructor(methodSymbol.declaration(), tree)
-          && !isMagicMethod(methodSymbol.name())
-          && !isUsedInStringLiteral(methodSymbol)) {
-          context().newIssue(this, methodSymbol.declaration(), String.format(MESSAGE, methodSymbol.name()));
-        }
+      boolean ruleConditions = methodSymbol.hasModifier("private") && methodSymbol.usages().isEmpty();
+
+      if (ruleConditions
+        && !isConstructor(methodSymbol.declaration(), tree)
+        && !isMagicMethod(methodSymbol.name())
+        && !isUsedInStringLiteral(methodSymbol)) {
+        context().newIssue(this, methodSymbol.declaration(), String.format(MESSAGE, methodSymbol.name()));
       }
     }
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    stringLiterals.clear();
+    super.visitAnonymousClass(tree);
+
+    checkClass(tree);
   }
 
   @Override
@@ -79,7 +93,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private static boolean isConstructor(IdentifierTree methodName, ClassDeclarationTree classDec) {
+  private static boolean isConstructor(IdentifierTree methodName, ClassTree classDec) {
     MethodDeclarationTree constructor = classDec.fetchConstructor();
     return  constructor != null && constructor.name().equals(methodName);
   }
