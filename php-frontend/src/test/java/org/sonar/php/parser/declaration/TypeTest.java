@@ -24,18 +24,14 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ParameterTest {
+public class TypeTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.PARAMETER)
-      .matches("callable $a")
-      .matches("array $a")
-      .matches("int $a")
-      .matches("Foo $a")
-      .matches("?int $a")
-      .matches("&$a")
-      .matches("...$a")
-      .matches("$a = \"foo\"");
+    assertThat(PHPLexicalGrammar.TYPE)
+      .matches("int")
+      .matches("?int")
+    ;
   }
+
 }

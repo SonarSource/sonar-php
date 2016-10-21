@@ -30,7 +30,6 @@ import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -38,6 +37,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -134,9 +134,9 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
 
   private void retrieveTypeFromParameter(MethodDeclarationTree methodDeclaration) {
     for (ParameterTree parameter : methodDeclaration.parameters().parameters()) {
-      Tree type = parameter.type();
-      if (type != null && type.is(Kind.NAMESPACE_NAME)) {
-        addType(getTypeName((NamespaceNameTree) type));
+      TypeTree type = parameter.type();
+      if (type != null && type.typeName().is(Kind.NAMESPACE_NAME)) {
+        addType(getTypeName((NamespaceNameTree) type.typeName()));
       }
     }
   }

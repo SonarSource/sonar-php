@@ -42,6 +42,7 @@ import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
@@ -361,7 +362,7 @@ public class PHPGrammar {
 
   public ReturnTypeClauseTree RETURN_TYPE_CLAUSE() {
     return b.<ReturnTypeClauseTree>nonterminal(PHPLexicalGrammar.RETURN_TYPE_CLAUSE).is(
-      f.returnTypeClause(b.token(COLON), TYPE_NAME())
+      f.returnTypeClause(b.token(COLON), TYPE())
     );
   }
 
@@ -382,7 +383,7 @@ public class PHPGrammar {
   public ParameterTree PARAMETER() {
     return b.<ParameterTree>nonterminal(PHPLexicalGrammar.PARAMETER).is(
       f.parameter(
-        b.optional(TYPE_NAME()),
+        b.optional(TYPE()),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
         b.optional(b.token(PHPPunctuator.ELIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
@@ -456,6 +457,13 @@ public class PHPGrammar {
         NAMESPACE_NAME(),
         b.token(PHPPunctuator.DOUBLECOLON),
         b.token(PHPLexicalGrammar.IDENTIFIER)));
+  }
+
+  public TypeTree TYPE() {
+    return b.<TypeTree>nonterminal(PHPLexicalGrammar.TYPE).is(
+      f.type(
+        b.optional(b.token(PHPPunctuator.QUERY)),
+        TYPE_NAME()));
   }
 
   public TypeNameTree TYPE_NAME() {

@@ -42,7 +42,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 public interface ParameterTree extends Tree {
 
   @Nullable
-  TypeNameTree type();
+  TypeTree type();
 
   @Nullable
   SyntaxToken referenceToken();

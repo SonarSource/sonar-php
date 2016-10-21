@@ -17,25 +17,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.php.tree.impl.declaration;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParameterTest {
+public class TypeTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.PARAMETER)
-      .matches("callable $a")
-      .matches("array $a")
-      .matches("int $a")
-      .matches("Foo $a")
-      .matches("?int $a")
-      .matches("&$a")
-      .matches("...$a")
-      .matches("$a = \"foo\"");
+  public void non_optional() throws Exception {
+    TypeTree tree = parse("int", PHPLexicalGrammar.TYPE);
+
+    assertThat(tree.is(Kind.TYPE)).isTrue();
+    assertThat(tree.questionMarkToken()).isNull();
+    assertThat(tree.typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
   }
+
+  @Test
+  public void optional() throws Exception {
+    TypeTree tree = parse("?MyClass", PHPLexicalGrammar.TYPE);
+
+    assertThat(tree.is(Kind.TYPE)).isTrue();
+    assertThat(tree.questionMarkToken().text()).isEqualTo("?");
+    assertThat(tree.typeName().is(Kind.NAMESPACE_NAME)).isTrue();
+  }
+
 }

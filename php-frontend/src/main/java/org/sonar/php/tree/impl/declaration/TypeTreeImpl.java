@@ -21,23 +21,26 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClauseTree {
+public class TypeTreeImpl extends PHPTree implements TypeTree {
 
-  private static final Kind KIND = Kind.RETURN_TYPE_CLAUSE;
-  private final InternalSyntaxToken colonToken;
-  private final TypeTree type;
+  private static final Kind KIND = Kind.TYPE;
 
-  public ReturnTypeClauseTreeImpl(InternalSyntaxToken colonToken, TypeTree type) {
-    this.colonToken = colonToken;
-    this.type = type;
+  private final SyntaxToken questionMarkToken;
+
+  private final TypeNameTree typeName;
+
+  public TypeTreeImpl(@Nullable SyntaxToken questionMarkToken, TypeNameTree typeName) {
+    this.questionMarkToken = questionMarkToken;
+    this.typeName = typeName;
   }
 
   @Override
@@ -47,22 +50,23 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(colonToken, type);
+    return Iterators.forArray(questionMarkToken, typeName);
   }
 
   @Override
   public void accept(VisitorCheck visitor) {
-    visitor.visitReturnTypeClause(this);
+    visitor.visitType(this);
   }
 
   @Override
-  public SyntaxToken colonToken() {
-    return colonToken;
+  @Nullable
+  public SyntaxToken questionMarkToken() {
+    return questionMarkToken;
   }
 
   @Override
-  public TypeTree type() {
-    return type;
+  public TypeNameTree typeName() {
+    return typeName;
   }
 
 }
