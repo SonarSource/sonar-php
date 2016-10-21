@@ -1,0 +1,90 @@
+<p>Certain functions exist in PHP only as aliases of other functions. These aliases have been made available for backward compatibility, but should
+really be removed from code. </p>
+<p>This rule looks for uses of the following aliases:</p>
+<table>
+  <tbody>
+    <tr>
+      <th>Alias</th>
+      <th>Replacement</th>
+    </tr>
+    <tr>
+      <td><code>chop</code></td>
+      <td><code>rtrim</code></td>
+    </tr>
+    <tr>
+      <td><code>close</code></td>
+      <td><code>closedir</code></td>
+    </tr>
+    <tr>
+      <td><code>doubleval</code></td>
+      <td><code>floatval</code></td>
+    </tr>
+    <tr>
+      <td><code>fputs</code></td>
+      <td><code>fwrite</code></td>
+    </tr>
+    <tr>
+      <td><code>ini_alter</code></td>
+      <td><code>ini_set</code></td>
+    </tr>
+    <tr>
+      <td><code>is_double</code></td>
+      <td><code>is_float</code></td>
+    </tr>
+    <tr>
+      <td><code>is_integer</code></td>
+      <td><code>is_int</code></td>
+    </tr>
+    <tr>
+      <td><code>is_long</code></td>
+      <td><code>is_int</code></td>
+    </tr>
+    <tr>
+      <td><code>is_real</code></td>
+      <td><code>is_float</code></td>
+    </tr>
+    <tr>
+      <td><code>is_writeable</code></td>
+      <td><code>is_writable</code></td>
+    </tr>
+    <tr>
+      <td><code>join</code></td>
+      <td><code>implode</code></td>
+    </tr>
+    <tr>
+      <td><code>key_exists</code></td>
+      <td><code>array_key_exists</code></td>
+    </tr>
+    <tr>
+      <td><code>magic_quotes_runtime</code></td>
+      <td><code>set_magic_quotes_runtime</code></td>
+    </tr>
+    <tr>
+      <td><code>pos</code></td>
+      <td><code>current</code></td>
+    </tr>
+    <tr>
+      <td><code>show_source</code></td>
+      <td><code>highlight_file</code></td>
+    </tr>
+    <tr>
+      <td><code>sizeof</code></td>
+      <td><code>count</code></td>
+    </tr>
+    <tr>
+      <td><code>strchr</code></td>
+      <td><code>strstr</code></td>
+    </tr>
+  </tbody>
+</table>
+<h2>Noncompliant Code Example</h2>
+<pre>
+$arr=array("apple", "pear","banana");
+echo sizeof($arr);  // Noncompliant
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+$arr=array("apple", "pear","banana");
+echo count($arr);
+</pre>
+
