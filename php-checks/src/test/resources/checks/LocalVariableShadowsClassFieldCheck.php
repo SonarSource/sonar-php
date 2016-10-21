@@ -81,3 +81,42 @@ class B {
 
 $field = 0;                              // OK
 $f = function ($field) {};               // OK
+
+
+$a = new class {
+
+  public $field;
+
+  public function f1($param) {          // OK
+    $foo = 1;                           // OK
+    $field = 1;                         // NOK [[secondary=-4]] {{Rename "$field" which has the same name as the field declared at line 88.}}
+//  ^^^^^^
+  }
+
+  public function f3($field) {          // OK
+    if (empty($field)) {
+      $field = 1;
+    }
+    foo($field);
+  }
+
+  public function f2() {
+    $f1 = function ($field) {           // OK
+    };
+
+    $f2 = function () {
+      $field = 1;                       // NOK
+      $field = 2;                       // OK
+    };
+  }
+
+  public function __construct() {
+    $field = foo();                      // OK (Constructor)
+    $this->field = $field;
+  }
+
+};
+
+$x = new class {                        // OK
+  function foo();
+};

@@ -25,6 +25,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -36,9 +37,11 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
@@ -65,8 +68,8 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
       checkedVariables.clear();
     }
 
-    public void setClassName(ClassDeclarationTree classDeclaration) {
-      className = classDeclaration.name().text();
+    public void setClassName(@Nullable String name) {
+      className = name;
     }
 
     public boolean isInClass() {
@@ -111,6 +114,23 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
+    collectClassData(tree);
+
+    classState.setClassName(tree.name().text());
+    super.visitClassDeclaration(tree);
+    classState.clear();
+  }
+
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    collectClassData(tree);
+
+    classState.setClassName(null);
+    super.visitAnonymousClass(tree);
+    classState.clear();
+  }
+
+  private void collectClassData(ClassTree tree) {
     for (ClassMemberTree classMemberTree : tree.members()) {
       if (classMemberTree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
         for (VariableDeclarationTree declaration : ((ClassPropertyDeclarationTree) classMemberTree).declarations()) {
@@ -118,10 +138,6 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
         }
       }
     }
-
-    classState.setClassName(tree);
-    super.visitClassDeclaration(tree);
-    classState.clear();
   }
 
   @Override
@@ -150,8 +166,9 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
     if (classState.isInClass()) {
       checkLocalVariable(tree.variable());
-      super.visitAssignmentExpression(tree);
     }
+
+    super.visitAssignmentExpression(tree);
   }
 
   private void checkLocalVariable(ExpressionTree assignedExpression) {
@@ -181,7 +198,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   }
 
   private boolean isConstructor(String methodName) {
-    return classState.className.equalsIgnoreCase(methodName) || "__construct".equalsIgnoreCase(methodName);
+    return (classState.className != null && classState.className.equalsIgnoreCase(methodName)) || "__construct".equalsIgnoreCase(methodName);
   }
 
   private void reportIssue(Tree tree, String varName) {

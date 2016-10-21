@@ -21,6 +21,7 @@ package org.sonar.php.checks.utils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -32,12 +33,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 
-import java.util.List;
-
 public class CheckUtils {
-
-  private CheckUtils() {
-  }
 
   private static final Kind[] FUNCTION_KINDS_ARRAY = {
     Kind.METHOD_DECLARATION,
@@ -45,6 +41,18 @@ public class CheckUtils {
     Kind.FUNCTION_EXPRESSION};
 
   public static final ImmutableList<Kind> FUNCTION_KINDS = ImmutableList.copyOf(FUNCTION_KINDS_ARRAY);
+
+  public static final ImmutableMap<String, String> PREDEFINED_VARIABLES = ImmutableMap.<String, String>builder()
+    .put("$HTTP_SERVER_VARS", "$_SERVER")
+    .put("$HTTP_GET_VARS", "$_GET")
+    .put("$HTTP_POST_VARS", "$_POST")
+    .put("$HTTP_POST_FILES", "$_FILES")
+    .put("$HTTP_SESSION_VARS", "$_SESSION")
+    .put("$HTTP_ENV_VARS", "$_ENV")
+    .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
+
+  private CheckUtils() {
+  }
 
   public static boolean isFunction(Tree tree) {
     return tree.is(FUNCTION_KINDS_ARRAY);
@@ -79,15 +87,6 @@ public class CheckUtils {
     }
     return false;
   }
-
-  public static final ImmutableMap<String, String> PREDEFINED_VARIABLES = ImmutableMap.<String, String>builder()
-    .put("$HTTP_SERVER_VARS", "$_SERVER")
-    .put("$HTTP_GET_VARS", "$_GET")
-    .put("$HTTP_POST_VARS", "$_POST")
-    .put("$HTTP_POST_FILES", "$_FILES")
-    .put("$HTTP_SESSION_VARS", "$_SESSION")
-    .put("$HTTP_ENV_VARS", "$_ENV")
-    .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
 
   public static boolean isExitExpression(FunctionCallTree functionCallTree) {
     String callee = functionCallTree.callee().toString();

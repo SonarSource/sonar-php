@@ -29,18 +29,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.sonar.api.internal.apachecommons.lang.StringUtils;
 import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tests.TestIssue.Location;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.sonar.php.utils.ExpectedIssuesParser.parseExpectedIssues;
@@ -143,9 +142,13 @@ public class PHPCheckTest {
     }
 
     String errorMessage = errorBuilder.toString();
-    if (!StringUtils.isEmpty(errorMessage)) {
+    if (!isEmpty(errorMessage)) {
       throw new AssertionError("\n\n" + errorMessage);
     }
+  }
+
+  private static boolean isEmpty(String str) {
+    return str == null || str.isEmpty();
   }
 
   private static int line(PhpIssue issue) {

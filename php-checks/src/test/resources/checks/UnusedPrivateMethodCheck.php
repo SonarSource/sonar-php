@@ -32,6 +32,13 @@ class A {
 
   public function __i() {           // OK - magic method
   }
+
+  function m() {                    // OK - default (=> not private)
+  }
+
+  static private function n() {     // NOK
+  }
+
 }
 
 class B {
@@ -57,3 +64,27 @@ class HeredocUsage {
 EOF;
   }
 }
+
+$x = new class {
+
+  private function __construct() {  // OK - private constructor
+  }
+
+  private function f() {            // NOK {{Remove this unused private "f" method.}}
+//                 ^
+    $this->h();
+
+  }
+
+  private function h() {            // OK, used
+  }
+
+  public function k() {             // OK - public
+  }
+
+  function m() {                    // OK - default (=> not private)
+  }
+
+  static private function n() {     // NOK
+  }
+};

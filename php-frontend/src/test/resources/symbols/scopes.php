@@ -39,3 +39,17 @@ class A {
   }
 
 }
+
+/**
+ * ANONYMOUS CLASS SCOPE $field1, method
+ */
+
+$a = new class {
+
+  public $field1;
+
+  public function method() {
+    $g = 1;
+  }
+
+};

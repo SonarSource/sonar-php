@@ -67,7 +67,7 @@ public class PHPRulesDefinition implements RulesDefinition {
     }
   }
 
-  private void addMetadata(NewRule rule, String metadataKey) {
+  private static void addMetadata(NewRule rule, String metadataKey) {
     String json = readRuleDefinitionResource(metadataKey + ".json");
     if (json != null) {
       Gson gson = new Gson();

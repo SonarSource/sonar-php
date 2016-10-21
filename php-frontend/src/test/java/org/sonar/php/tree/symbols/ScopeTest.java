@@ -108,6 +108,14 @@ public class ScopeTest extends ParsingTestUtils {
   }
 
   @Test
+  public void anonymous_class_scope() throws Exception {
+    Scope classScope = getScopeFor(Kind.ANONYMOUS_CLASS);
+
+    assertThat(classScope.getSymbol("$field1")).isNotNull();
+    assertThat(classScope.getSymbol("method")).isNotNull();
+  }
+
+  @Test
   public void method_scope() throws Exception {
     Scope methodScope = getScopeFor(Kind.METHOD_DECLARATION);
 
