@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.util.List;
@@ -38,36 +38,36 @@ public class FileHeaderCheckTest {
     List<PhpIssue> noIssue = ImmutableList.of();
 
     check.headerFormat = "// copyright 2005";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file1.php"), noIssue);
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file4.php"), noIssue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file1.php"), noIssue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file4.php"), noIssue);
 
     check.headerFormat = "// copyright 20\\d\\d";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file1.php"), issue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file1.php"), issue);
 
     check.headerFormat = "// copyright 2012";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
 
     check.headerFormat = "// copyright 2012\n// foo";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
 
     check.headerFormat = "// copyright 2012\r\n// foo";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
 
     check.headerFormat = "// copyright 2012\r// foo";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
 
     check.headerFormat = "// copyright 2012\r\r// foo";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
 
     check.headerFormat = "// copyright 2012\n// foo\n\n\n\n\n\n\n\n\n\ngfoo";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
 
     check.headerFormat = "/*foo http://www.example.org*/";
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file3.php"), noIssue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/file3.php"), noIssue);
 
     check = new FileHeaderCheck();
-    PhpCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/empty.php"), noIssue);
+    Foo.check(check, TestUtils.getCheckFile("FileHeaderCheck/empty.php"), noIssue);
   }
 
 }

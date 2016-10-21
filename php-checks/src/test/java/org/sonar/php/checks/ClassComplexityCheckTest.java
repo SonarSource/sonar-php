@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 
 public class ClassComplexityCheckTest {
 
@@ -31,13 +31,13 @@ public class ClassComplexityCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of());
+    Foo.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.of());
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 5;
-    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
+    Foo.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
 }

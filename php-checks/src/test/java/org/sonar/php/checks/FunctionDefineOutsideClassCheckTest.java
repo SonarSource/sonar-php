@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 
 public class FunctionDefineOutsideClassCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTest.check(new FunctionDefineOutsideClassCheck(), TestUtils.getCheckFile("FunctionDefineOutsideClassCheck.php"));
+    Foo.check(new FunctionDefineOutsideClassCheck(), TestUtils.getCheckFile("FunctionDefineOutsideClassCheck.php"));
   }
 
 }

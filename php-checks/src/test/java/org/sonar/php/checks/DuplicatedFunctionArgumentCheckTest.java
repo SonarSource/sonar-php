@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 
 public class DuplicatedFunctionArgumentCheckTest {
 
   @Test
   public void test() throws Exception {
-    PhpCheckTest.check(new DuplicatedFunctionArgumentCheck(), TestUtils.getCheckFile("DuplicatedFunctionArgumentCheck.php"));
+    Foo.check(new DuplicatedFunctionArgumentCheck(), TestUtils.getCheckFile("DuplicatedFunctionArgumentCheck.php"));
   }
 
 }

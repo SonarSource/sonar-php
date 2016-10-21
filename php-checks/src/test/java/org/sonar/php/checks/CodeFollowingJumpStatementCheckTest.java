@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import org.junit.Test;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 
 public class CodeFollowingJumpStatementCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTest.check(new CodeFollowingJumpStatementCheck(), TestUtils.getCheckFile("CodeFollowingJumpStatementCheck.php"));
+    Foo.check(new CodeFollowingJumpStatementCheck(), TestUtils.getCheckFile("CodeFollowingJumpStatementCheck.php"));
   }
 
 }

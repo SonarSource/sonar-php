@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 
 public class FieldNameCheckTest {
 
@@ -33,14 +33,14 @@ public class FieldNameCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
+    Foo.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
   public void custom() throws Exception {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
     String message = "Rename this field \"$myVariable\" to match the regular expression " + check.format + ".";
-    PhpCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME),
+    Foo.check(check, TestUtils.getCheckFile(FILE_NAME),
       ImmutableList.of(new LegacyIssue(check, message).line(7)));
   }
 }

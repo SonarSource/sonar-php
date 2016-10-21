@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.util.LinkedList;
@@ -35,7 +35,7 @@ public class ClassNameCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName));
+    Foo.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
@@ -43,6 +43,6 @@ public class ClassNameCheckTest {
     check.format = "^[a-z][a-zA-Z0-9]*$";
     List<PhpIssue> expectedIssues = new LinkedList<>();
     expectedIssues.add(new LegacyIssue(check, "Rename class \"MyClass\" to match the regular expression " + check.format + ".").line(7));
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), expectedIssues);
+    Foo.check(check, TestUtils.getCheckFile(fileName), expectedIssues);
   }
 }

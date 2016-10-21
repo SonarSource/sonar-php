@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PhpCheckTest;
+import org.sonar.plugins.php.api.tests.Foo;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class TooManyLinesInFileCheckTest {
@@ -33,13 +33,13 @@ public class TooManyLinesInFileCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName));
+    Foo.check(check, TestUtils.getCheckFile(fileName));
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 7;
-    PhpCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<PhpIssue>of(new LegacyIssue(
+    Foo.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<PhpIssue>of(new LegacyIssue(
       check,
       "File \"TooManyLinesInFileCheck.php\" has 9 lines, which is greater than " + check.max + " authorized. Split it into smaller files.")));
   }
