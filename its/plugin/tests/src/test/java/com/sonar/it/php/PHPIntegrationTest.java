@@ -116,9 +116,9 @@ public class PHPIntegrationTest {
   @Test
   public void testDuplicationResults() throws Exception {
     assertThat(getProjectMeasure("duplicated_lines").getIntValue()).isEqualTo(1595);
-    assertThat(getFileMeasure("duplicated_blocks").getIntValue()).isEqualTo(54);
-    assertThat(getFileMeasure("duplicated_files").getIntValue()).isEqualTo(32);
-    assertThat(getFileMeasure("duplicated_lines_density").getValue()).isEqualTo(4.0);
+    assertThat(getProjectMeasure("duplicated_blocks").getIntValue()).isEqualTo(54);
+    assertThat(getProjectMeasure("duplicated_files").getIntValue()).isEqualTo(32);
+    assertThat(getProjectMeasure("duplicated_lines_density").getValue()).isEqualTo(4.0);
   }
 
   /**
