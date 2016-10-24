@@ -120,3 +120,14 @@ $a = new class {
 $x = new class {                        // OK
   function foo();
 };
+
+// nested classes
+
+class A {
+  function foo() {
+    $x = new class {
+      function foo() {}
+    };
+
+  }
+}

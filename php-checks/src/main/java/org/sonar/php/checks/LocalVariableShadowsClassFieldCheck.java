@@ -19,9 +19,9 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.Maps;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -54,26 +54,17 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   public static final String KEY = "S1117";
   private static final String MESSAGE = "Rename \"%s\" which has the same name as the field declared at line %s.";
 
-  private ClassState classState = new ClassState();
+  private Deque<ClassState> classStates = new ArrayDeque<>();
   private Deque<FunctionTree> functions = new ArrayDeque<>();
 
   private static class ClassState {
 
-    private Map<String, SyntaxToken> classFields = Maps.newHashMap();
+    private Map<String, SyntaxToken> classFields = new HashMap<>();
     private Deque<Set<String>> checkedVariables = new ArrayDeque<>();
-    private String className;
-
-    public void clear() {
-      classFields.clear();
-      checkedVariables.clear();
-    }
+    private String className = null;
 
     public void setClassName(@Nullable String name) {
       className = name;
-    }
-
-    public boolean isInClass() {
-      return !classFields.isEmpty();
     }
 
     public void declareField(SyntaxToken fieldToken) {
@@ -107,34 +98,35 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    classState.clear();
+    classStates.clear();
     functions.clear();
     super.visitCompilationUnit(tree);
   }
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    collectClassData(tree);
-
+    ClassState classState = new ClassState();
     classState.setClassName(tree.name().text());
+    classStates.push(classState);
+    collectClassData(tree);
     super.visitClassDeclaration(tree);
-    classState.clear();
+    classStates.pop();
   }
 
   @Override
   public void visitAnonymousClass(AnonymousClassTree tree) {
+    classStates.push(new ClassState());
     collectClassData(tree);
 
-    classState.setClassName(null);
     super.visitAnonymousClass(tree);
-    classState.clear();
+    classStates.pop();
   }
 
   private void collectClassData(ClassTree tree) {
     for (ClassMemberTree classMemberTree : tree.members()) {
       if (classMemberTree.is(Kind.CLASS_PROPERTY_DECLARATION)) {
         for (VariableDeclarationTree declaration : ((ClassPropertyDeclarationTree) classMemberTree).declarations()) {
-          classState.declareField(declaration.identifier().token());
+          classStates.peek().declareField(declaration.identifier().token());
         }
       }
     }
@@ -143,28 +135,28 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     if (!isExcluded(tree)) {
-      classState.newFunctionScope();
+      classStates.peek().newFunctionScope();
       functions.push(tree);
       super.visitMethodDeclaration(tree);
       functions.pop();
-      classState.leaveFunctionScope();
+      classStates.peek().leaveFunctionScope();
     }
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    if (classState.isInClass()) {
-      classState.newFunctionScope();
+    if (!classStates.isEmpty()) {
+      classStates.peek().newFunctionScope();
       functions.push(tree);
       super.visitFunctionExpression(tree);
       functions.pop();
-      classState.leaveFunctionScope();
+      classStates.peek().leaveFunctionScope();
     }
   }
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-    if (classState.isInClass()) {
+    if (!classStates.isEmpty()) {
       checkLocalVariable(tree.variable());
     }
 
@@ -174,7 +166,7 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   private void checkLocalVariable(ExpressionTree assignedExpression) {
     String varName = assignedExpression.toString();
 
-    if (isLocalVar(varName) && classState.hasFieldNamed(varName) && !classState.hasAlreadyBeenChecked(varName)) {
+    if (isLocalVar(varName) && classStates.peek().hasFieldNamed(varName) && !classStates.peek().hasAlreadyBeenChecked(varName)) {
       reportIssue(assignedExpression, varName);
     }
   }
@@ -198,14 +190,14 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   }
 
   private boolean isConstructor(String methodName) {
-    return (classState.className != null && classState.className.equalsIgnoreCase(methodName)) || "__construct".equalsIgnoreCase(methodName);
+    return (classStates.peek().className != null && classStates.peek().className.equalsIgnoreCase(methodName)) || "__construct".equalsIgnoreCase(methodName);
   }
 
   private void reportIssue(Tree tree, String varName) {
-    SyntaxToken field = classState.getFieldNamed(varName);
+    SyntaxToken field = classStates.peek().getFieldNamed(varName);
     String message = String.format(MESSAGE, varName, field.line());
     context().newIssue(this, tree, message).secondary(field, null);
 
-    classState.setAsCheckedVariable(varName);
+    classStates.peek().setAsCheckedVariable(varName);
   }
 }
