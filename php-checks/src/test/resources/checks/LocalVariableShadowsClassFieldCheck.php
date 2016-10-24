@@ -126,7 +126,7 @@ $x = new class {                        // OK
 class A {
   function foo() {
     $x = new class {
-      function foo();
+      function foo() {}
     };
 
   }
