@@ -49,8 +49,8 @@ public class TooManyFieldsInClassCheck extends PHPVisitorCheck {
 
   @RuleProperty(
     key = "countNonpublicFields",
-    type = "BOOLEAN",
-    defaultValue = "" + DEFAULT_COUNT_NON_PUBLIC)
+    defaultValue = "" + DEFAULT_COUNT_NON_PUBLIC,
+    type = "BOOLEAN")
   boolean countNonpublicFields = DEFAULT_COUNT_NON_PUBLIC;
 
   @Override

@@ -37,6 +37,7 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final String MESSAGE_SET_LOCAL_ARG = "Use the \"%s\" constant instead of a string literal.";
   private static final String MESSAGE_WITH_REPLACEMENT = "Replace this \"%s()\" call with a call to \"%s\".";
   private static final String MESSAGE_WITHOUT_REPLACEMENT = "Remove this \"%s()\" call.";
+  private static final String SESSION = "$_SESSION";
 
   private static final ImmutableMap<String, String> NEW_BY_DEPRECATED_FUNCTIONS = ImmutableMap.<String, String>builder()
     .put("call_user_method", "call_user_func()")
@@ -49,9 +50,9 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     .put("eregi_replace", "preg_replace() with 'i' modifier")
     .put("set_magic_quotes_runtime", "")
     .put("magic_quotes_runtime", "")
-    .put("session_register", "$_SESSION")
-    .put("session_unregister", "$_SESSION")
-    .put("session_is_registered", "$_SESSION")
+    .put("session_register", SESSION)
+    .put("session_unregister", SESSION)
+    .put("session_is_registered", SESSION)
     .put("set_socket_blocking", "stream_set_blocking")
     .put("split", "preg_split")
     .put("spliti", "preg_split")

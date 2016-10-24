@@ -54,10 +54,10 @@ public class MoreThanOneClassInFileCheck extends PHPVisitorCheck {
     super.visitScript(tree);
 
     if ((nbClass + nbInterface) > 1) {
-      String message = String.format(MESSAGE,
-        nbClass > 0 ? (nbClass + " independent classes ") : "",
-        nbClass > 0 && nbInterface > 0 ? "and " : "",
-        nbInterface > 0 ? (nbInterface + " independent interfaces ") : "");
+      String independentClasses = nbClass > 0 ? (nbClass + " independent classes ") : "";
+      String and = nbClass > 0 && nbInterface > 0 ? "and " : "";
+      String indendentInterfaces = nbInterface > 0 ? (nbInterface + " independent interfaces ") : ""; 
+      String message = String.format(MESSAGE, independentClasses, and, indendentInterfaces);
 
       int cost = nbClass + nbInterface - 1;
       context().newFileIssue(this, message).cost(cost);

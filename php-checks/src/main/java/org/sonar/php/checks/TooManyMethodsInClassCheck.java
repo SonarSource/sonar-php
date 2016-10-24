@@ -48,8 +48,8 @@ public class TooManyMethodsInClassCheck extends PHPVisitorCheck {
 
   @RuleProperty(
     key = "countNonpublicMethods",
-    type = "BOOLEAN",
-    defaultValue = "" + DEFAULT_NON_PUBLIC)
+    defaultValue = "" + DEFAULT_NON_PUBLIC,
+    type = "BOOLEAN")
   public boolean countNonpublicMethods = DEFAULT_NON_PUBLIC;
 
 
