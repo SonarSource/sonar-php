@@ -315,6 +315,16 @@ public class PHPSensorTest {
       tuple("S1124", 22));
   }
 
+  @Test
+  public void test_file_with_bom() throws Exception {
+    String fileName = "fileWithBom.php";
+
+    PHPSensor phpSensor = createSensor();
+    analyseSingleFile(phpSensor, fileName);
+
+    // should not fail
+  }
+
   private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.of(check));
     thrown.expect(AnalysisException.class);
