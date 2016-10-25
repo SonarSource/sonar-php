@@ -40,6 +40,7 @@ import java.util.List;
 
 public class PHPNodeBuilder implements NodeBuilder {
 
+  public static final char BYTE_ORDER_MARK = '\uFEFF';
   private int lineOffset;
 
   public PHPNodeBuilder(int lineOffset) {
@@ -62,22 +63,32 @@ public class PHPNodeBuilder implements NodeBuilder {
 
   @Override
   public Object createTerminal(Input input, int startIndex, int endIndex, List<Trivia> trivias, TokenType type) {
+    char[] fileChars = input.input();
+    boolean hasByteOrderMark = fileChars.length > 0 && fileChars[0] == BYTE_ORDER_MARK;
     boolean isEof = GenericTokenType.EOF.equals(type);
     LineColumnValue lineColumnValue = tokenPosition(input, startIndex, endIndex);
     return new InternalSyntaxToken(
       lineColumnValue.line + lineOffset,
-      lineColumnValue.column,
+      column(hasByteOrderMark, lineColumnValue.line, lineColumnValue.column),
       lineColumnValue.value,
-      createTrivias(trivias),
-      startIndex,
+      createTrivias(trivias, hasByteOrderMark),
+      startIndex - (hasByteOrderMark ? 1 : 0),
       isEof);
   }
 
-  private static List<SyntaxTrivia> createTrivias(List<Trivia> trivias) {
+  private static int column(boolean hasByteOrderMark, int line, int column) {
+    if (hasByteOrderMark && line == 1) {
+      return column - 1;
+    }
+    return column;
+  }
+
+  private static List<SyntaxTrivia> createTrivias(List<Trivia> trivias, boolean hasByteOrderMark) {
     List<SyntaxTrivia> result = Lists.newArrayList();
     for (Trivia trivia : trivias) {
       Token trivialToken = trivia.getToken();
-      result.add(InternalSyntaxTrivia.create(trivialToken.getValue(), trivialToken.getLine(), trivialToken.getColumn()));
+      int column = column(hasByteOrderMark, trivialToken.getLine(), trivialToken.getColumn());
+      result.add(InternalSyntaxTrivia.create(trivialToken.getValue(), trivialToken.getLine(), column));
     }
     return result;
   }
