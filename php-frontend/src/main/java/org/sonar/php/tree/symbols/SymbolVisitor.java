@@ -416,8 +416,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       symbol = symbolTable.declareSymbol(identifier, kind, currentScope);
 
     } else {
-      symbol = currentScope.getSymbol(identifier.text());
-      if (symbol != null && !symbol.is(Symbol.Kind.FIELD)) {
+      if (!symbol.is(Symbol.Kind.FIELD)) {
         symbol.addUsage(identifier);
       }
     }
