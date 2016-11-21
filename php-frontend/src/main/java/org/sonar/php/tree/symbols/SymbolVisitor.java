@@ -222,20 +222,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   @Override
   public void visitNameIdentifier(NameIdentifierTree tree) {
     if (classMemberUsageState != null && classScope != null) {
-
-      if (classMemberUsageState.isField) {
-        String dollar = classMemberUsageState.isConst ? "" : "$";
-        Symbol symbol = classScope.getSymbol(dollar + tree.text(), Symbol.Kind.FIELD);
-        if (symbol != null) {
-          symbol.addUsage(tree);
-        }
-
-      } else {
-        Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FUNCTION);
-        if (symbol != null) {
-          symbol.addUsage(tree);
-        }
-      }
+      resolveProperty(tree);
 
     } else {
       // fixme (Lena): class names are visible in function scopes, so may be globalScope.getSymbol(tree.text(), Symbol.Kind.CLASS) will work here
@@ -246,6 +233,22 @@ public class SymbolVisitor extends PHPVisitorCheck {
     }
 
     classMemberUsageState = null;
+  }
+
+  private void resolveProperty(NameIdentifierTree tree) {
+    if (classMemberUsageState.isField) {
+      String dollar = classMemberUsageState.isConst ? "" : "$";
+      Symbol symbol = classScope.getSymbol(dollar + tree.text(), Symbol.Kind.FIELD);
+      if (symbol != null) {
+        symbol.addUsage(tree);
+      }
+
+    } else {
+      Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FUNCTION);
+      if (symbol != null) {
+        symbol.addUsage(tree);
+      }
+    }
   }
 
   private static boolean isBuiltInVariable(VariableIdentifierTree tree) {

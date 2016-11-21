@@ -115,7 +115,7 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
 
   private static boolean isExactlyOneSpaceAround(TokenVisitor tokenVisitor, SyntaxToken token) {
     return TokenUtils.getNbSpaceBetween(tokenVisitor.prevToken(token), token) == 1
-      && TokenUtils.getNbSpaceBetween(token,tokenVisitor.nextToken(token)) == 1;
+      && TokenUtils.getNbSpaceBetween(token, tokenVisitor.nextToken(token)) == 1;
   }
 
   /**

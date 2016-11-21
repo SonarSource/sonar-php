@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.ExtensionPoint;
@@ -132,7 +133,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
     }
   }
 
-  private void parsePackagesNodes(List<PackageNode> packages, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+  private void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
     if (packages != null) {
       for (PackageNode packageNode : packages) {
         parseFileNodes(packageNode.getFiles(), unresolvedPaths, resolvedPaths, context);
@@ -140,7 +141,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
     }
   }
 
-  private void parseFileNodes(List<FileNode> fileNodes, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+  private void parseFileNodes(@Nullable List<FileNode> fileNodes, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
     if (fileNodes != null) {
       for (FileNode file : fileNodes) {
         saveCoverageMeasure(file, unresolvedPaths, resolvedPaths, context);

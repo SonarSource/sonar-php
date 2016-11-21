@@ -20,6 +20,7 @@
 package org.sonar.php.checks;
 
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -63,7 +64,7 @@ public class HardCodedCredentialsCheck extends PHPVisitorCheck {
     super.visitAssignmentExpression(assignment);
   }
 
-  private void checkVariable(Tree tree, String identifier, Tree value) {
+  private void checkVariable(Tree tree, String identifier, @Nullable Tree value) {
     if (value != null && value.is(Kind.REGULAR_STRING_LITERAL) && PASSWORD_VARIABLE_PATTERN.matcher(identifier).find()) {
       addIssue(tree);
     }

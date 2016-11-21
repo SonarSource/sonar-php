@@ -19,15 +19,15 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.apache.commons.lang.StringUtils;
-import org.sonar.plugins.php.phpunit.xml.TestCase;
-import org.sonar.plugins.php.phpunit.xml.TestSuite;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
+import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.php.phpunit.xml.TestCase;
+import org.sonar.plugins.php.phpunit.xml.TestSuite;
 
 /**
  * The PhpTestSuiteParser .
@@ -70,7 +70,7 @@ public class PhpTestSuiteReader {
    * @param testSuite the test suite
    * Method adds to the field <code>reportsPerClass</code> reports per php class
    */
-  public void readSuite(TestSuite testSuite, String parentFileName) {
+  public void readSuite(TestSuite testSuite, @Nullable String parentFileName) {
     List<TestSuite> testSuites = testSuite.getTestSuites();
     if (testSuites != null) {
       for (TestSuite childSuite : testSuites) {
@@ -80,35 +80,39 @@ public class PhpTestSuiteReader {
     // For all cases
     List<TestCase> testCases = testSuite.getTestCases();
     if (testCases != null) {
-      for (TestCase testCase : testCases) {
-        String testClassName = testCase.getClassName();
-        // For test cases with @dataProvider. we get the fileName in the enclosing testSuite in the name attribute before string "::"
-        if (testClassName == null) {
-          testClassName = StringUtils.substringBefore(testSuite.getName(), TESTSUITE_CLASS_NAME_SEPARATOR);
-        }
-        PhpUnitTestReport report = reportsPerClass.get(testClassName);
-        // If no reports exists for this class we create one
-        if (report == null) {
-          report = new PhpUnitTestReport();
-          report.setDetails(new ArrayList<TestCase>());
-          report.setClassKey(testClassName);
+      readTestCases(testSuite, parentFileName, testCases);
+    }
+  }
 
-          String file = testCase.getFile();
-          // test cases with @dataProvider, we get the file name in the parent test suite.
-          if (file == null) {
-            file = parentFileName;
-          }
-
-          if (file != null) {
-            report.setFile(file);
-            reportsPerClass.put(testClassName, report);
-          }
-        }
-        if (parentFileName == null) {
-          report.setTime(testSuite.getTime());
-        }
-        cumulateTestCaseDetails(testCase, report);
+  private void readTestCases(TestSuite testSuite, @Nullable String parentFileName, List<TestCase> testCases) {
+    for (TestCase testCase : testCases) {
+      String testClassName = testCase.getClassName();
+      // For test cases with @dataProvider. we get the fileName in the enclosing testSuite in the name attribute before string "::"
+      if (testClassName == null) {
+        testClassName = StringUtils.substringBefore(testSuite.getName(), TESTSUITE_CLASS_NAME_SEPARATOR);
       }
+      PhpUnitTestReport report = reportsPerClass.get(testClassName);
+      // If no reports exists for this class we create one
+      if (report == null) {
+        report = new PhpUnitTestReport();
+        report.setDetails(new ArrayList<TestCase>());
+        report.setClassKey(testClassName);
+
+        String file = testCase.getFile();
+        // test cases with @dataProvider, we get the file name in the parent test suite.
+        if (file == null) {
+          file = parentFileName;
+        }
+
+        if (file != null) {
+          report.setFile(file);
+          reportsPerClass.put(testClassName, report);
+        }
+      }
+      if (parentFileName == null) {
+        report.setTime(testSuite.getTime());
+      }
+      cumulateTestCaseDetails(testCase, report);
     }
   }
 

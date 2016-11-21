@@ -21,6 +21,7 @@ package org.sonar.php.checks.phpini;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
@@ -38,7 +39,7 @@ public class PhpIniFiles {
   }
 
   public static List<PhpIniIssue> checkRequiredBoolean(PhpIniFile phpIniFile, String directiveName, PhpIniBoolean requiredValue,
-    String directiveMessage, String fileMessage) {
+    String directiveMessage, @Nullable String fileMessage) {
 
     List<Directive> directives = phpIniFile.directivesForName(directiveName);
     List<PhpIniIssue> issues = new ArrayList<>();

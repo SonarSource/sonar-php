@@ -65,8 +65,6 @@ public class TokenUtils {
    * Returns number of space between the 2 tokens.
    */
   protected static int getNbSpaceBetween(SyntaxToken token1, SyntaxToken token2) {
-    Preconditions.checkArgument(token1 != null && token2 != null);
-
     int token1EndColumn = token1.column() + (token1.text().length() - 1);
     int tok2StartColumn = token2.column();
 

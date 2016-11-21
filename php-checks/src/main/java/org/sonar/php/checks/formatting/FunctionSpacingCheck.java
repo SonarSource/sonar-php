@@ -19,11 +19,12 @@
  */
 package org.sonar.php.checks.formatting;
 
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.checks.utils.TokenVisitor;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
@@ -32,9 +33,6 @@ import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class FunctionSpacingCheck extends PHPVisitorCheck implements FormattingCheck {
 
@@ -122,35 +120,34 @@ public class FunctionSpacingCheck extends PHPVisitorCheck implements FormattingC
   private void checkSpaceForComma(TokenVisitor tokenVisitor, List<SyntaxToken> commas) {
     if (check.isOneSpaceAfterComma) {
 
-      int msgIndex = -1;
-      Tree firstWrongComma = null;
-
       for (SyntaxToken commaToken : commas) {
-        SyntaxToken nextToken = tokenVisitor.nextToken(commaToken);
-        SyntaxToken previousToken = tokenVisitor.prevToken(commaToken);
-
-        if (TokenUtils.isOnSameLine(previousToken, commaToken, nextToken)) {
-          boolean isSpaceBeforeOK = TokenUtils.getNbSpaceBetween(previousToken, commaToken) == 0;
-          boolean isSpaceAfterOK = TokenUtils.getNbSpaceBetween(commaToken, nextToken) == 1;
-
-          if (!isSpaceBeforeOK && isSpaceAfterOK && msgIndex < 0) {
-            firstWrongComma = commaToken;
-            msgIndex = 0;
-          } else if (isSpaceBeforeOK && !isSpaceAfterOK && msgIndex < 0) {
-            firstWrongComma = commaToken;
-            msgIndex = 1;
-          } else if (!isSpaceBeforeOK && !isSpaceAfterOK) {
-            firstWrongComma = commaToken;
-            msgIndex = 2;
-            break;
-          }
+        if (checkComma(commaToken, tokenVisitor)) {
+          break;
         }
       }
-      if (msgIndex > -1) {
-        check.reportIssue(COMMA_SPACES_MESSAGE[msgIndex], firstWrongComma);
-      }
-
     }
   }
 
+  private boolean checkComma(SyntaxToken commaToken, TokenVisitor tokenVisitor) {
+    SyntaxToken nextToken = tokenVisitor.nextToken(commaToken);
+    SyntaxToken previousToken = tokenVisitor.prevToken(commaToken);
+
+    if (TokenUtils.isOnSameLine(previousToken, commaToken, nextToken)) {
+      boolean isSpaceBeforeOK = TokenUtils.getNbSpaceBetween(previousToken, commaToken) == 0;
+      boolean isSpaceAfterOK = TokenUtils.getNbSpaceBetween(commaToken, nextToken) == 1;
+
+      if (!isSpaceBeforeOK && isSpaceAfterOK) {
+        check.reportIssue(COMMA_SPACES_MESSAGE[0], commaToken);
+        return true;
+      } else if (isSpaceBeforeOK && !isSpaceAfterOK) {
+        check.reportIssue(COMMA_SPACES_MESSAGE[1], commaToken);
+        return true;
+      } else if (!isSpaceBeforeOK) {
+        check.reportIssue(COMMA_SPACES_MESSAGE[2], commaToken);
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
