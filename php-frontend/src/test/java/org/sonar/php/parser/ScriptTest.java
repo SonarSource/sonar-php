@@ -29,7 +29,11 @@ public class ScriptTest {
   public void test() {
     assertThat(PHPLexicalGrammar.SCRIPT)
       .matches("<?php")
-      .matches("<?php const A = 1; function foo(){}");
+      .matches("<?php const A = 1; function foo(){}")
+
+      .notMatches("\n")
+      .notMatches("")
+    ;
   }
 
 }

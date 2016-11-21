@@ -36,6 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PHPTest {
 
   private static final String MULTIMODULE_PROJET_KEY = "multimodule-php";
+  private static final String EMPTY_FILE_PROJET_KEY = "empty_file_project_key";
   private static final String SEVERAL_EXTENSIONS_PROJECT_KEY = "project-with-several-extensions";
   private static final String SRC_DIR_NAME = "src";
 
@@ -78,6 +79,23 @@ public class PHPTest {
     assertThat(getResourceMeasure(MULTIMODULE_PROJET_KEY + ":module1", "files").getValue()).isEqualTo(4);
     assertThat(getResourceMeasure(MULTIMODULE_PROJET_KEY + ":module2", "files").getValue()).isEqualTo(2);
     assertThat(getResourceMeasure(MULTIMODULE_PROJET_KEY, "files").getValue()).isEqualTo(4 + 2);
+  }
+
+  /**
+   * SONARPHP-667
+   */
+  @Test
+  public void should_not_fail_on_empty_file() {
+    SonarScanner build = SonarScanner.create()
+      .setProjectKey(EMPTY_FILE_PROJET_KEY)
+      .setProjectName("Empty file test project")
+      .setProjectVersion("1")
+      .setSourceEncoding("UTF-8")
+      .setSourceDirs(".")
+      .setProjectDir(Tests.projectDirectoryFor("empty_file"));
+    orchestrator.executeBuild(build);
+
+    assertThat(getResourceMeasure(EMPTY_FILE_PROJET_KEY, "files").getValue()).isEqualTo(3);
   }
 
   private String getResourceKey(String projectKey, String fileName) {

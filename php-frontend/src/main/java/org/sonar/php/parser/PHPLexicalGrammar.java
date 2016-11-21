@@ -81,6 +81,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   VARIABLE_IDENTIFIER,
   IDENTIFIER,
   FILE_OPENING_TAG,
+  ANYTHING_BUT_START_TAG,
   INLINE_HTML,
   KEYWORDS,
 
@@ -281,6 +282,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     // Tags & Inline HTML
     b.rule(FILE_OPENING_TAG).is(SPACING, b.regexp(LexicalConstant.PHP_START_TAG)).skip();
     b.rule(INLINE_HTML).is(SPACING, b.regexp(LexicalConstant.PHP_END_TAG)).skip();
+    b.rule(ANYTHING_BUT_START_TAG).is(SPACING, b.regexp(LexicalConstant.ANYTHING_BUT_START_TAG)).skip();
 
     b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
 
