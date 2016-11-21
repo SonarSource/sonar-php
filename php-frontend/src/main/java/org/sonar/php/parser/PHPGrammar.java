@@ -179,7 +179,9 @@ public class PHPGrammar {
 
   public ScriptTree SCRIPT() {
     return b.<ScriptTree>nonterminal(PHPLexicalGrammar.SCRIPT).is(
-      f.script(b.token(PHPLexicalGrammar.FILE_OPENING_TAG), b.zeroOrMore(TOP_STATEMENT())));
+      b.firstOf(
+        f.script(b.token(PHPLexicalGrammar.FILE_OPENING_TAG), b.zeroOrMore(TOP_STATEMENT())),
+        f.script(b.token(PHPLexicalGrammar.ANYTHING_BUT_START_TAG))));
   }
 
   /**
