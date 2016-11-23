@@ -113,7 +113,7 @@ public class PunctuatorSpacingCheck extends PHPVisitorCheck implements Formattin
       } else if (isLCurlyOK && !isRCurlyOK) {
         check.reportIssue(CLOSE_PARENTHESIS_SPACES_MESSAGE, closeParen);
 
-      } else if (!isLCurlyOK && !isRCurlyOK) {
+      } else if (!isLCurlyOK) {
         check.reportIssue(BOTH_PARENTHESIS_SPACES_MESSAGE, openParen, closeParen);
       }
     }

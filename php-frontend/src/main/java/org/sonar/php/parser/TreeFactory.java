@@ -272,7 +272,11 @@ public class TreeFactory {
     return separatedList(firstElement, tuples, null);
   }
 
-  private static <T extends Tree> SeparatedListImpl<T> separatedList(T firstElement, Optional<List<Tuple<InternalSyntaxToken, T>>> tuples, InternalSyntaxToken trailingSeparator) {
+  private static <T extends Tree> SeparatedListImpl<T> separatedList(
+    T firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, T>>> tuples,
+    @Nullable InternalSyntaxToken trailingSeparator
+  ) {
     ImmutableList.Builder<T> elements = ImmutableList.builder();
     ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
 

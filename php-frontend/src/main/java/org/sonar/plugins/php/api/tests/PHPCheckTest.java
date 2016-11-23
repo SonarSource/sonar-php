@@ -142,13 +142,9 @@ public class PHPCheckTest {
     }
 
     String errorMessage = errorBuilder.toString();
-    if (!isEmpty(errorMessage)) {
+    if (!errorMessage.isEmpty()) {
       throw new AssertionError("\n\n" + errorMessage);
     }
-  }
-
-  private static boolean isEmpty(String str) {
-    return str == null || str.isEmpty();
   }
 
   private static int line(PhpIssue issue) {
