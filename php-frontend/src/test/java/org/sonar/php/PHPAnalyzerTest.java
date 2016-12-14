@@ -69,7 +69,7 @@ public class PHPAnalyzerTest {
     assertThat(issues.get(0).check()).isEqualTo(check);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo(DummyCheck.MESSAGE);
 
-    FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class), new HashMap<File, Integer>());
+    FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class), new HashMap<File, Integer>(), true);
     assertThat(measures.getLinesOfCodeNumber()).isEqualTo(1);
   }
 
