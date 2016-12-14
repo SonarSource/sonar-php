@@ -39,7 +39,7 @@ public class PhpPlugin implements Plugin {
   public static final String GENERAL_SUBCATEGORY = "General";
   public static final String PHPUNIT_SUBCATEGORY = "PHPUnit";
 
-  public static final Version COVERAGE_USE_EXECUTABLE_LINES = Version.create(6, 2);
+  public static final Version SQ_VERSION_6_2 = Version.create(6, 2);
 
   @Override
   public void define(Context context) {

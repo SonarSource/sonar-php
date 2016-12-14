@@ -100,7 +100,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
       ProjectNode projectNode = projects.get(0);
       parseFileNodes(projectNode.getFiles(), unresolvedPaths, resolvedPaths, context);
       parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, resolvedPaths, context);
-      if (!context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.COVERAGE_USE_EXECUTABLE_LINES)) {
+      if (!context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)) {
         saveMeasureForMissingFiles(resolvedPaths, context, numberOfLinesOfCode);
       }
     }

@@ -177,7 +177,7 @@ public class PHPSensor implements Sensor {
       saveNewFileMeasures(context,
         phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile),
           numberOfLinesOfCode,
-          context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.COVERAGE_USE_EXECUTABLE_LINES)),
+          context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)),
         inputFile);
     } catch (RecognitionException e) {
       checkInterrupted(e);
