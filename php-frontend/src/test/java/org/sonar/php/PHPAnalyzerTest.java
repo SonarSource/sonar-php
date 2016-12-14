@@ -23,18 +23,22 @@ import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.measures.FileLinesContext;
+import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.utils.DummyCheck;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class PHPAnalyzerTest {
 
@@ -64,6 +68,9 @@ public class PHPAnalyzerTest {
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().startLine()).isEqualTo(1);
     assertThat(issues.get(0).check()).isEqualTo(check);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo(DummyCheck.MESSAGE);
+
+    FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class), new HashMap<File, Integer>());
+    assertThat(measures.getLinesOfCodeNumber()).isEqualTo(1);
   }
 
 }
