@@ -79,8 +79,8 @@ public class PHPAnalyzer {
     return issuesBuilder.build();
   }
 
-  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode) {
-    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode);
+  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
+    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode, saveExecutableLines);
   }
 
   public NewHighlighting getSyntaxHighlighting(SensorContext context, InputFile inputFile) {

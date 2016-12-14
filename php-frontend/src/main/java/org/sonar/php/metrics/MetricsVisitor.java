@@ -54,6 +54,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   private FileLinesContext fileLinesContext;
 
   private Map<File, Integer> numberOfLinesOfCode;
+  private boolean saveExecutableLines;
 
   public static Kind[] getClassNodes() {
     return CLASS_NODES;
@@ -84,7 +85,8 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     }
   }
 
-  public FileMeasures getFileMeasures(File file, CompilationUnitTree tree, FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode) {
+  public FileMeasures getFileMeasures(File file, CompilationUnitTree tree, FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
+    this.saveExecutableLines = saveExecutableLines;
     this.fileMeasures = new FileMeasures(LIMITS_COMPLEXITY_FUNCTIONS, FILES_DISTRIBUTION_BOTTOM_LIMITS);
     this.fileLinesContext = fileLinesContext;
     this.numberOfLinesOfCode = numberOfLinesOfCode;
@@ -121,6 +123,9 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     for (int line = 1; line <= linesNumber; line++) {
       fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, line, linesOfCode.contains(line) ? 1 : 0);
       fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, line, commentLines.contains(line) ? 1 : 0);
+      if (saveExecutableLines) {
+        fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, linesOfCode.contains(line) ? 1 : 0);
+      }
     }
 
     numberOfLinesOfCode.put(file, linesOfCode.size());
