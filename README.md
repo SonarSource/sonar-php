@@ -1,17 +1,10 @@
-# SonarQube PHP [![Build Status](https://travis-ci.org/SonarSource/sonar-php.svg?branch=master)](https://travis-ci.org/SonarSource/sonar-php)
+# SonarPHP [![Build Status](https://travis-ci.org/SonarSource/sonar-php.svg?branch=master)](https://travis-ci.org/SonarSource/sonar-php)
 
-This is the plugin for the [SonarQube](http://www.sonarqube.org/) platform which provides [static analysis](https://en.wikipedia.org/wiki/Static_program_analysis) of PHP code. It will allow you to produce stable and easily supported code by helping you find and correct bugs, vulnerabilities and smells in your code.
-
-# Features
-* 100+ rules
-* Support of PHP 7
-* Metrics (complexity, number of lines etc.)
-* Import of [unit test and coverage results](http://docs.sonarqube.org/display/PLUG/PHP+Unit+Test+and+Coverage+Results+Import)
-* Support of [custom rules](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP)
+SonarPHP is a code analyzer for PHP projects.
 
 # Useful links
 
-* [Project homepage](http://docs.sonarqube.org/display/PLUG/PHP+Plugin)
+* [Project homepage](https://www.sonarsource.com/why-us/products/languages/php.html)
 * [Issue tracking](http://jira.sonarsource.com/browse/SONARPHP)
 * [Available rules](https://sonarqube.com/coding_rules#languages=php)
 * [Google Group for feedback](https://groups.google.com/forum/#!forum/sonarqube)
