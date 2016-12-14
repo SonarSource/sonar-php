@@ -22,6 +22,7 @@ package org.sonar.plugins.php;
 import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
+import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarSensor;
 import org.sonar.plugins.php.phpunit.PhpUnitService;
@@ -37,6 +38,8 @@ public class PhpPlugin implements Plugin {
   public static final String PHP_CATEGORY = "PHP";
   public static final String GENERAL_SUBCATEGORY = "General";
   public static final String PHPUNIT_SUBCATEGORY = "PHPUnit";
+
+  public static final Version COVERAGE_USE_EXECUTABLE_LINES = Version.create(6, 2);
 
   @Override
   public void define(Context context) {
@@ -101,8 +104,7 @@ public class PhpPlugin implements Plugin {
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
         .category(PHP_CATEGORY)
         .subCategory(PHPUNIT_SUBCATEGORY)
-        .build()
-    );
+        .build());
   }
 
 }

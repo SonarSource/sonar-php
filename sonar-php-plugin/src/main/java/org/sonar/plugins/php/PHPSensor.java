@@ -54,16 +54,16 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
-import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.CpdVisitor;
+import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultParser;
@@ -86,12 +86,12 @@ public class PHPSensor implements Sensor {
   private FileSystem fileSystem;
 
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
-                   CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
+    CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
     this(fileLinesContextFactory, checkFactory, noSonarFilter, null);
   }
 
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
-                   CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRulesDefinition[] customRulesDefinitions) {
+    CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRulesDefinition[] customRulesDefinitions) {
 
     this.checks = PHPChecks.createPHPCheck(checkFactory)
       .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
@@ -124,14 +124,14 @@ public class PHPSensor implements Sensor {
 
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
-    
+
     Map<File, Integer> numberOLinesOfCode = new HashMap<>();
 
     analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
-    
+
     processCoverage(context, numberOLinesOfCode);
   }
-  
+
   private void processCoverage(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
     PhpUnitService phpUnitSensor = new PhpUnitService(
       fileSystem,
@@ -143,11 +143,11 @@ public class PHPSensor implements Sensor {
   }
 
   void analyseFiles(
-      SensorContext context, 
-      PHPAnalyzer phpAnalyzer, 
-      List<InputFile> inputFiles, 
-      ProgressReport progressReport,
-      Map<File, Integer> numberOfLinesOfCode) {
+    SensorContext context,
+    PHPAnalyzer phpAnalyzer,
+    List<InputFile> inputFiles,
+    ProgressReport progressReport,
+    Map<File, Integer> numberOfLinesOfCode) {
     boolean success = false;
     try {
       for (InputFile inputFile : inputFiles) {
@@ -174,7 +174,11 @@ public class PHPSensor implements Sensor {
       saveIssues(context, phpAnalyzer.analyze(), inputFile);
       saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
       saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
-      saveNewFileMeasures(context, phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile), numberOfLinesOfCode), inputFile);
+      saveNewFileMeasures(context,
+        phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile),
+          numberOfLinesOfCode,
+          context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.COVERAGE_USE_EXECUTABLE_LINES)),
+        inputFile);
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());
@@ -186,7 +190,7 @@ public class PHPSensor implements Sensor {
       throw new AnalysisException("Could not analyse " + inputFile.absolutePath(), e);
     }
   }
-  
+
   private static void checkInterrupted(Exception e) {
     Throwable cause = Throwables.getRootCause(e);
     if (cause instanceof InterruptedException || cause instanceof InterruptedIOException) {
@@ -201,7 +205,7 @@ public class PHPSensor implements Sensor {
   private static void saveSymbolHighlighting(NewSymbolTable newSymbolTable) {
     newSymbolTable.save();
   }
-  
+
   private void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesNumber()).forMetric(CoreMetrics.LINES).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesOfCodeNumber()).forMetric(CoreMetrics.NCLOC).save();
@@ -221,7 +225,6 @@ public class PHPSensor implements Sensor {
 
     noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }
-
 
   /**
    * Creates and saves an issue for a parsing error.
@@ -308,7 +311,6 @@ public class PHPSensor implements Sensor {
     }
     return newLocation;
   }
-
 
   private ImmutableList<PHPCheck> getVisitors(PHPCheck additionalCheck) {
     return ImmutableList.<PHPCheck>builder()

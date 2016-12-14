@@ -144,7 +144,7 @@ public class PHPSensorTest {
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=0;2=2;4=1;6=0;8=0;10=0;12=0");
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, "0=0;5=0;10=1;20=0;30=0;60=0;90=0");
-    
+
     // the .php file contains NOSONAR at line 34
     checkNoSonar(componentKey, 33, true, phpSensor);
     checkNoSonar(componentKey, 34, false, phpSensor);

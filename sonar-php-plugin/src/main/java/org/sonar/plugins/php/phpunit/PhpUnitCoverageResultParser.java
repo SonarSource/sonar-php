@@ -40,6 +40,7 @@ import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
+import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
@@ -99,7 +100,9 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
       ProjectNode projectNode = projects.get(0);
       parseFileNodes(projectNode.getFiles(), unresolvedPaths, resolvedPaths, context);
       parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, resolvedPaths, context);
-      saveMeasureForMissingFiles(resolvedPaths, context, numberOfLinesOfCode);
+      if (!context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.COVERAGE_USE_EXECUTABLE_LINES)) {
+        saveMeasureForMissingFiles(resolvedPaths, context, numberOfLinesOfCode);
+      }
     }
     if (!unresolvedPaths.isEmpty()) {
       LOG.warn(
@@ -156,7 +159,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    * @param resolvedPaths list of paths which can be mapped to imported files
    */
   protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
-    //PHP supports only absolute paths
+    // PHP supports only absolute paths
     String path = fileNode.getName();
     InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(path));
 
