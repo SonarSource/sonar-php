@@ -24,6 +24,8 @@ import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -94,11 +96,11 @@ public class PHPIntegrationTest {
     assertThat(getFileMeasure("files").getIntValue()).isEqualTo(1);
     assertThat(getFileMeasure("classes").getIntValue()).isEqualTo(1);
     assertThat(getFileMeasure("functions").getIntValue()).isEqualTo(3);
-    assertThat(getFileMeasure("ncloc_data").getData()).isEqualTo(
-      "12=1;14=1;21=1;22=1;32=1;33=1;34=1;35=1;37=1;39=1;41=1;42=1;44=1;46=1;47=1;48=1;50=1;52=1;53=1;54=1;56=1;58=1;59=1;60=1;62=1;64=1;66=1;67=1;68=1;70=1;72=1;73=1;75=1;76=1;77=1;78=1;85=1;86=1;87=1;88=1;89=1");
+    assertThat(lineNumbersInDataMeasure(getFileMeasure("ncloc_data").getData())).isEqualTo(lineNumbersInDataMeasure(
+      "12=1;14=1;21=1;22=1;32=1;33=1;34=1;35=1;37=1;39=1;41=1;42=1;44=1;46=1;47=1;48=1;50=1;52=1;53=1;54=1;56=1;58=1;59=1;60=1;62=1;64=1;66=1;67=1;68=1;70=1;72=1;73=1;75=1;76=1;77=1;78=1;85=1;86=1;87=1;88=1;89=1"));
     if (is_after_sonar_6_2()) {
-      assertThat(getFileMeasure("executable_lines_data").getData()).isEqualTo(
-        "12=1;14=1;21=1;22=1;32=1;33=1;34=1;35=1;37=1;39=1;41=1;42=1;44=1;46=1;47=1;48=1;50=1;52=1;53=1;54=1;56=1;58=1;59=1;60=1;62=1;64=1;66=1;67=1;68=1;70=1;72=1;73=1;75=1;76=1;77=1;78=1;85=1;86=1;87=1;88=1;89=1");
+      assertThat(lineNumbersInDataMeasure(getFileMeasure("executable_lines_data").getData())).isEqualTo(lineNumbersInDataMeasure(
+        "12=1;14=1;21=1;22=1;32=1;33=1;34=1;35=1;37=1;39=1;41=1;42=1;44=1;46=1;47=1;48=1;50=1;52=1;53=1;54=1;56=1;58=1;59=1;60=1;62=1;64=1;66=1;67=1;68=1;70=1;72=1;73=1;75=1;76=1;77=1;78=1;85=1;86=1;87=1;88=1;89=1"));
       assertThat(getFileMeasure("lines_to_cover").getIntValue()).isEqualTo(41);
       assertThat(getFileMeasure("uncovered_lines").getIntValue()).isEqualTo(41);
     }
@@ -116,6 +118,14 @@ public class PHPIntegrationTest {
     assertThat(getFileMeasure("class_complexity").getValue()).isEqualTo(9.0);
     assertThat(getFileMeasure("file_complexity").getValue()).isEqualTo(9.0);
     assertThat(getFileMeasure("complexity").getValue()).isEqualTo(9.0);
+  }
+
+  private Set<Integer> lineNumbersInDataMeasure(String data) {
+    Set<Integer> lineNumbers = new HashSet<>();
+    for (String lineData : data.split(";")) {
+      lineNumbers.add(Integer.valueOf(lineData.replace("=1", "")));
+    }
+    return lineNumbers;
   }
 
   /**
