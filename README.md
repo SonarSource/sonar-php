@@ -49,7 +49,11 @@ sonar.runtimeVersion=5.6
 
 orchestrator.updateCenterUrl=http://update.sonarsource.org/update-center-dev.properties
 ```
-
+Before running any of integration tests make sure the submodules are checked out:
+```
+  git submodule init
+  git submodule update
+```
 #### Plugin Test
 The "Plugin Test" is an additional integration test which verifies plugin features such as metric calculation, coverage etc. To launch it, execute this command from directory `its/plugin`:
 ```
@@ -57,14 +61,7 @@ mvn clean install
 ```
 
 #### Ruling Test
-The "Ruling Test" is a special integration test which launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as JSON files).
-
-* To run the test, first make sure the submodules are checked out:
-```
-  git submodule init
-  git submodule update
-```
-* Launch ruling test
+The "Ruling Test" is a special integration test which launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as JSON files). To launch ruling test:
 ```
 cd its/ruling
 mvn clean install
