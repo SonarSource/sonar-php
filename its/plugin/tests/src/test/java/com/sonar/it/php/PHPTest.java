@@ -21,16 +21,11 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.sonar.wsclient.Sonar;
-import org.sonar.wsclient.services.Measure;
-import org.sonar.wsclient.services.Resource;
-import org.sonar.wsclient.services.ResourceQuery;
 
+import static com.sonar.it.php.Tests.getComponent;
+import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PHPTest {
@@ -43,13 +38,6 @@ public class PHPTest {
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
 
-  private static Sonar sonar;
-
-  @BeforeClass
-  public static void startServer() throws IOException, URISyntaxException {
-    sonar = orchestrator.getServer().getWsClient();
-  }
-
   /**
    * SONARPLUGINS-1657
    */
@@ -61,9 +49,9 @@ public class PHPTest {
       .setProperty("sonar.php.file.suffixes", "php,php3,php4,myphp,html");
     orchestrator.executeBuild(build);
 
-    assertThat(getResourceMeasure(SEVERAL_EXTENSIONS_PROJECT_KEY, "files").getValue()).isEqualTo(3);
-    assertThat(getResourceMeasure(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math2.myphp"), "lines").getValue()).isGreaterThan(1);
-    assertThat(getResource(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math3.pgp"))).isNull();
+    assertThat(getMeasureAsInt(SEVERAL_EXTENSIONS_PROJECT_KEY, "files")).isEqualTo(3);
+    assertThat(getMeasureAsInt(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math2.myphp"), "lines")).isGreaterThan(1);
+    assertThat(getComponent(SEVERAL_EXTENSIONS_PROJECT_KEY, getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math3.pgp"))).isNull();
   }
 
   /**
@@ -76,9 +64,9 @@ public class PHPTest {
       .setProfile("it-profile");
     orchestrator.executeBuild(build);
 
-    assertThat(getResourceMeasure(MULTIMODULE_PROJET_KEY + ":module1", "files").getValue()).isEqualTo(4);
-    assertThat(getResourceMeasure(MULTIMODULE_PROJET_KEY + ":module2", "files").getValue()).isEqualTo(2);
-    assertThat(getResourceMeasure(MULTIMODULE_PROJET_KEY, "files").getValue()).isEqualTo(4 + 2);
+    assertThat(getMeasureAsInt(MULTIMODULE_PROJET_KEY + ":module1", "files")).isEqualTo(4);
+    assertThat(getMeasureAsInt(MULTIMODULE_PROJET_KEY + ":module2", "files")).isEqualTo(2);
+    assertThat(getMeasureAsInt(MULTIMODULE_PROJET_KEY, "files")).isEqualTo(4 + 2);
   }
 
   /**
@@ -95,20 +83,11 @@ public class PHPTest {
       .setProjectDir(Tests.projectDirectoryFor("empty_file"));
     orchestrator.executeBuild(build);
 
-    assertThat(getResourceMeasure(EMPTY_FILE_PROJET_KEY, "files").getValue()).isEqualTo(3);
+    assertThat(getMeasureAsInt(EMPTY_FILE_PROJET_KEY, "files")).isEqualTo(3);
   }
 
-  private String getResourceKey(String projectKey, String fileName) {
+  private static String getResourceKey(String projectKey, String fileName) {
     return projectKey + ":" + SRC_DIR_NAME + "/" + fileName;
-  }
-
-  private Resource getResource(String resourceKey) {
-    return sonar.find(ResourceQuery.create(resourceKey));
-  }
-
-  private Measure getResourceMeasure(String resourceKey, String metricKey) {
-    Resource resource = sonar.find(ResourceQuery.createForMetrics(resourceKey, metricKey.trim()));
-    return resource == null ? null : resource.getMeasure(metricKey.trim());
   }
 
 }

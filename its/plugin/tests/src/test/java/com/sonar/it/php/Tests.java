@@ -23,9 +23,21 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
+import java.util.List;
+import javax.annotation.CheckForNull;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.sonarqube.ws.WsComponents.Component;
+import org.sonarqube.ws.WsMeasures;
+import org.sonarqube.ws.WsMeasures.Measure;
+import org.sonarqube.ws.client.HttpConnector;
+import org.sonarqube.ws.client.WsClient;
+import org.sonarqube.ws.client.WsClientFactories;
+import org.sonarqube.ws.client.component.TreeWsRequest;
+import org.sonarqube.ws.client.measure.ComponentWsRequest;
+
+import static java.util.Collections.singletonList;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -51,12 +63,49 @@ public class Tests {
       .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
       // Custom rules plugin
-      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"),"php-custom-rules-plugin-*.jar"))
+      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile-php-custom-rules.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
   }
 
   public static final File projectDirectoryFor(String projectDirName) {
     return new File(Tests.PROJECT_ROOT_DIR + projectDirName + "/");
+  }
+
+  @CheckForNull
+  static Measure getMeasure(String componentKey, String metricKey) {
+    WsMeasures.ComponentWsResponse response = newWsClient().measures().component(new ComponentWsRequest()
+      .setComponentKey(componentKey)
+      .setMetricKeys(singletonList(metricKey)));
+    List<Measure> measures = response.getComponent().getMeasuresList();
+    return measures.size() == 1 ? measures.get(0) : null;
+  }
+
+  @CheckForNull
+  static Integer getMeasureAsInt(String componentKey, String metricKey) {
+    Measure measure = getMeasure(componentKey, metricKey);
+    return (measure == null) ? null : Integer.parseInt(measure.getValue());
+  }
+
+  @CheckForNull
+  static Double getMeasureAsDouble(String componentKey, String metricKey) {
+    Measure measure = getMeasure(componentKey, metricKey);
+    return (measure == null) ? null : Double.parseDouble(measure.getValue());
+  }
+
+  @CheckForNull
+  static Component getComponent(String projectKey, String componentKey) {
+    List<Component> components = newWsClient().components().tree(
+      new TreeWsRequest()
+        .setBaseComponentKey(projectKey)
+        .setQuery(componentKey))
+      .getComponentsList();
+    return components.size() == 1 ? components.get(0) : null;
+  }
+
+  static WsClient newWsClient() {
+    return WsClientFactories.getDefault().newClient(HttpConnector.newBuilder()
+      .url(ORCHESTRATOR.getServer().getUrl())
+      .build());
   }
 }
