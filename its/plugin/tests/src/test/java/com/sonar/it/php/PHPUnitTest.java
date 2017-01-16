@@ -27,11 +27,9 @@ import java.io.File;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.sonar.wsclient.services.Measure;
-import org.sonar.wsclient.services.Resource;
-import org.sonar.wsclient.services.ResourceQuery;
 
 import static com.sonar.it.php.Tests.ORCHESTRATOR;
+import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PHPUnitTest {
@@ -67,59 +65,56 @@ public class PHPUnitTest {
 
   @Test
   public void tests() throws Exception {
-    assertThat(getProjectMeasure("tests").getValue()).isEqualTo(3);
-    assertThat(getProjectMeasure("test_failures").getValue()).isEqualTo(1);
-    assertThat(getProjectMeasure("test_errors").getValue()).isEqualTo(0);
+    assertThat(getProjectMeasureAsInt("tests")).isEqualTo(3);
+    assertThat(getProjectMeasureAsInt("test_failures")).isEqualTo(1);
+    assertThat(getProjectMeasureAsInt("test_errors")).isEqualTo(0);
   }
 
   @Test
   public void coverage() throws Exception {
-    assertThat(getProjectMeasure("lines_to_cover").getValue()).isEqualTo(21);
-    assertThat(getProjectMeasure("uncovered_lines").getValue()).isEqualTo(17);
-    assertThat(getProjectMeasure("conditions_to_cover")).isNull();
-    assertThat(getProjectMeasure("uncovered_conditions")).isNull();
+    assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(21);
+    assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(17);
+    assertThat(getProjectMeasureAsInt("conditions_to_cover")).isNull();
+    assertThat(getProjectMeasureAsInt("uncovered_conditions")).isNull();
 
-    assertThat(getCoveredFileMeasure("lines_to_cover").getValue()).isEqualTo(6);
-    assertThat(getCoveredFileMeasure("uncovered_lines").getValue()).isEqualTo(2);
-    assertThat(getCoveredFileMeasure("conditions_to_cover")).isNull();
-    assertThat(getCoveredFileMeasure("uncovered_conditions")).isNull();
+    assertThat(getCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(6);
+    assertThat(getCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(2);
+    assertThat(getCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
+    assertThat(getCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
 
-    assertThat(getUnCoveredFileMeasure("lines_to_cover").getValue()).isEqualTo(15);
-    assertThat(getUnCoveredFileMeasure("uncovered_lines").getValue()).isEqualTo(15);
-    assertThat(getUnCoveredFileMeasure("conditions_to_cover")).isNull();
-    assertThat(getUnCoveredFileMeasure("uncovered_conditions")).isNull();
+    assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(15);
+    assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(15);
+    assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
+    assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
 
     // see MMF-345
     if (is_before_sonar_6_2()) {
-      assertThat(getProjectMeasure("it_lines_to_cover").getValue()).isEqualTo(21);
-      assertThat(getProjectMeasure("it_uncovered_lines").getValue()).isEqualTo(17);
-      assertThat(getCoveredFileMeasure("it_lines_to_cover").getValue()).isEqualTo(6);
-      assertThat(getCoveredFileMeasure("it_uncovered_lines").getValue()).isEqualTo(2);
-      assertThat(getUnCoveredFileMeasure("it_lines_to_cover").getValue()).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasure("it_uncovered_lines").getValue()).isEqualTo(15);
+      assertThat(getProjectMeasureAsInt("it_lines_to_cover")).isEqualTo(21);
+      assertThat(getProjectMeasureAsInt("it_uncovered_lines")).isEqualTo(17);
+      assertThat(getCoveredFileMeasureAsInt("it_lines_to_cover")).isEqualTo(6);
+      assertThat(getCoveredFileMeasureAsInt("it_uncovered_lines")).isEqualTo(2);
+      assertThat(getUnCoveredFileMeasureAsInt("it_lines_to_cover")).isEqualTo(15);
+      assertThat(getUnCoveredFileMeasureAsInt("it_uncovered_lines")).isEqualTo(15);
 
-      assertThat(getProjectMeasure("overall_lines_to_cover").getValue()).isEqualTo(21);
-      assertThat(getProjectMeasure("overall_uncovered_lines").getValue()).isEqualTo(17);
-      assertThat(getCoveredFileMeasure("overall_lines_to_cover").getValue()).isEqualTo(6);
-      assertThat(getCoveredFileMeasure("overall_uncovered_lines").getValue()).isEqualTo(2);
-      assertThat(getUnCoveredFileMeasure("overall_lines_to_cover").getValue()).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasure("overall_uncovered_lines").getValue()).isEqualTo(15);
+      assertThat(getProjectMeasureAsInt("overall_lines_to_cover")).isEqualTo(21);
+      assertThat(getProjectMeasureAsInt("overall_uncovered_lines")).isEqualTo(17);
+      assertThat(getCoveredFileMeasureAsInt("overall_lines_to_cover")).isEqualTo(6);
+      assertThat(getCoveredFileMeasureAsInt("overall_uncovered_lines")).isEqualTo(2);
+      assertThat(getUnCoveredFileMeasureAsInt("overall_lines_to_cover")).isEqualTo(15);
+      assertThat(getUnCoveredFileMeasureAsInt("overall_uncovered_lines")).isEqualTo(15);
     }
   }
 
-  private Measure getProjectMeasure(String metricKey) {
-    Resource resource = orchestrator.getServer().getWsClient().find(ResourceQuery.createForMetrics("project", metricKey));
-    return resource == null ? null : resource.getMeasure(metricKey);
+  private Integer getProjectMeasureAsInt(String metricKey) {
+    return getMeasureAsInt("project", metricKey);
   }
 
-  private Measure getCoveredFileMeasure(String metricKey) {
-    Resource resource = orchestrator.getServer().getWsClient().find(ResourceQuery.createForMetrics("project:src/Math.php", metricKey));
-    return resource == null ? null : resource.getMeasure(metricKey);
+  private Integer getCoveredFileMeasureAsInt(String metricKey) {
+    return getMeasureAsInt("project:src/Math.php", metricKey);
   }
 
-  private Measure getUnCoveredFileMeasure(String metricKey) {
-    Resource resource = orchestrator.getServer().getWsClient().find(ResourceQuery.createForMetrics("project:src/Math2.php", metricKey));
-    return resource == null ? null : resource.getMeasure(metricKey);
+  private Integer getUnCoveredFileMeasureAsInt(String metricKey) {
+    return getMeasureAsInt("project:src/Math2.php", metricKey);
   }
 
   /**

@@ -29,11 +29,10 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.sonar.wsclient.Sonar;
-import org.sonar.wsclient.services.Measure;
-import org.sonar.wsclient.services.Resource;
-import org.sonar.wsclient.services.ResourceQuery;
+import org.sonarqube.ws.WsMeasures.Measure;
 
+import static com.sonar.it.php.Tests.getMeasure;
+import static com.sonar.it.php.Tests.getMeasureAsDouble;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PHPIntegrationTest {
@@ -42,12 +41,10 @@ public class PHPIntegrationTest {
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
 
   public final static String FILE_TOKEN_PARSER = "project" + ":Bridge/Twig/TokenParser/TransChoiceTokenParser.php";
-  private static Sonar sonar;
 
   @BeforeClass
   public static void startServer() throws IOException, URISyntaxException, InterruptedException {
     orchestrator.resetData();
-    sonar = orchestrator.getServer().getWsClient();
 
     SonarScanner build = SonarScanner.create()
       .setProjectKey("project")
@@ -65,59 +62,59 @@ public class PHPIntegrationTest {
   @Test
   public void projectMetric() {
     // Size
-    assertThat(getProjectMeasure("ncloc").getIntValue()).isEqualTo(23108);
-    assertThat(getProjectMeasure("lines").getIntValue()).isEqualTo(39571);
-    assertThat(getProjectMeasure("files").getIntValue()).isEqualTo(425);
-    assertThat(getProjectMeasure("classes").getIntValue()).isEqualTo(405);
-    assertThat(getProjectMeasure("functions").getIntValue()).isEqualTo(1882);
+    assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(23108d);
+    assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(39571d);
+    assertThat(getProjectMeasureAsDouble("files")).isEqualTo(425d);
+    assertThat(getProjectMeasureAsDouble("classes")).isEqualTo(405d);
+    assertThat(getProjectMeasureAsDouble("functions")).isEqualTo(1882d);
 
     // Comments
-    assertThat(getProjectMeasure("comment_lines_density").getValue()).isEqualTo(17.3);
-    assertThat(getProjectMeasure("comment_lines").getIntValue()).isEqualTo(4836);
-    assertThat(getProjectMeasure("public_documented_api_density")).isNull();
-    assertThat(getProjectMeasure("public_undocumented_api")).isNull();
-    assertThat(getProjectMeasure("public_api")).isNull();
+    assertThat(getProjectMeasureAsDouble("comment_lines_density")).isEqualTo(17.3);
+    assertThat(getProjectMeasureAsDouble("comment_lines")).isEqualTo(4836d);
+    assertThat(getProjectMeasureAsDouble("public_documented_api_density")).isNull();
+    assertThat(getProjectMeasureAsDouble("public_undocumented_api")).isNull();
+    assertThat(getProjectMeasureAsDouble("public_api")).isNull();
 
     // Complexity
-    assertThat(getProjectMeasure("function_complexity").getValue()).isEqualTo(2.3);
-    assertThat(getProjectMeasure("class_complexity").getValue()).isEqualTo(10.1);
-    assertThat(getProjectMeasure("file_complexity").getValue()).isEqualTo(9.7);
-    assertThat(getProjectMeasure("complexity").getValue()).isEqualTo(4110.0);
-    assertThat(getProjectMeasure("function_complexity_distribution").getData()).isEqualTo("1=1236;2=353;4=132;6=71;8=34;10=20;12=36");
-    assertThat(getProjectMeasure("file_complexity_distribution").getData()).isEqualTo("0=198;5=97;10=78;20=29;30=11;60=10;90=2");
-    assertThat(getProjectMeasure("class_complexity_distribution")).isNull();
+    assertThat(getProjectMeasureAsDouble("function_complexity")).isEqualTo(2.3);
+    assertThat(getProjectMeasureAsDouble("class_complexity")).isEqualTo(10.1);
+    assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(9.7);
+    assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(4110.0);
+    assertThat(getProjectMeasure("function_complexity_distribution").getValue()).isEqualTo("1=1236;2=353;4=132;6=71;8=34;10=20;12=36");
+    assertThat(getProjectMeasure("file_complexity_distribution").getValue()).isEqualTo("0=198;5=97;10=78;20=29;30=11;60=10;90=2");
+    assertThat(getProjectMeasureAsDouble("class_complexity_distribution")).isNull();
   }
 
   @Test
   public void fileMetrics() {
     // Size
-    assertThat(getFileMeasure("ncloc").getIntValue()).isEqualTo(41);
-    assertThat(getFileMeasure("lines").getIntValue()).isEqualTo(90);
-    assertThat(getFileMeasure("files").getIntValue()).isEqualTo(1);
-    assertThat(getFileMeasure("classes").getIntValue()).isEqualTo(1);
-    assertThat(getFileMeasure("functions").getIntValue()).isEqualTo(3);
-    assertThat(lineNumbersInDataMeasure(getFileMeasure("ncloc_data").getData())).isEqualTo(lineNumbersInDataMeasure(
+    assertThat(getFileMeasureAsDouble("ncloc")).isEqualTo(41d);
+    assertThat(getFileMeasureAsDouble("lines")).isEqualTo(90d);
+    assertThat(getFileMeasureAsDouble("files")).isEqualTo(1d);
+    assertThat(getFileMeasureAsDouble("classes")).isEqualTo(1d);
+    assertThat(getFileMeasureAsDouble("functions")).isEqualTo(3d);
+    assertThat(lineNumbersInDataMeasure(getFileMeasure("ncloc_data").getValue())).isEqualTo(lineNumbersInDataMeasure(
       "12=1;14=1;21=1;22=1;32=1;33=1;34=1;35=1;37=1;39=1;41=1;42=1;44=1;46=1;47=1;48=1;50=1;52=1;53=1;54=1;56=1;58=1;59=1;60=1;62=1;64=1;66=1;67=1;68=1;70=1;72=1;73=1;75=1;76=1;77=1;78=1;85=1;86=1;87=1;88=1;89=1"));
     if (is_after_sonar_6_2()) {
-      assertThat(lineNumbersInDataMeasure(getFileMeasure("executable_lines_data").getData())).isEqualTo(lineNumbersInDataMeasure(
+      assertThat(lineNumbersInDataMeasure(getFileMeasure("executable_lines_data").getValue())).isEqualTo(lineNumbersInDataMeasure(
         "12=1;14=1;21=1;22=1;32=1;33=1;34=1;35=1;37=1;39=1;41=1;42=1;44=1;46=1;47=1;48=1;50=1;52=1;53=1;54=1;56=1;58=1;59=1;60=1;62=1;64=1;66=1;67=1;68=1;70=1;72=1;73=1;75=1;76=1;77=1;78=1;85=1;86=1;87=1;88=1;89=1"));
-      assertThat(getFileMeasure("lines_to_cover").getIntValue()).isEqualTo(41);
-      assertThat(getFileMeasure("uncovered_lines").getIntValue()).isEqualTo(41);
+      assertThat(getFileMeasureAsDouble("lines_to_cover")).isEqualTo(41d);
+      assertThat(getFileMeasureAsDouble("uncovered_lines")).isEqualTo(41d);
     }
 
     // Comments
-    assertThat(getFileMeasure("comment_lines_density").getValue()).isEqualTo(26.8);
-    assertThat(getFileMeasure("comment_lines").getIntValue()).isEqualTo(15);
-    assertThat(getFileMeasure("public_documented_api_density")).isNull();
-    assertThat(getFileMeasure("public_undocumented_api")).isNull();
+    assertThat(getFileMeasureAsDouble("comment_lines_density")).isEqualTo(26.8);
+    assertThat(getFileMeasureAsDouble("comment_lines")).isEqualTo(15d);
+    assertThat(getFileMeasureAsDouble("public_documented_api_density")).isEqualTo(100);
+    assertThat(getFileMeasureAsDouble("public_undocumented_api")).isZero();
 
-    assertThat(getFileMeasure("public_api")).isNull();
+    assertThat(getFileMeasureAsDouble("public_api")).isNull();
 
     // Complexity
-    assertThat(getFileMeasure("function_complexity").getValue()).isEqualTo(3.0);
-    assertThat(getFileMeasure("class_complexity").getValue()).isEqualTo(9.0);
-    assertThat(getFileMeasure("file_complexity").getValue()).isEqualTo(9.0);
-    assertThat(getFileMeasure("complexity").getValue()).isEqualTo(9.0);
+    assertThat(getFileMeasureAsDouble("function_complexity")).isEqualTo(3.0);
+    assertThat(getFileMeasureAsDouble("class_complexity")).isEqualTo(9.0);
+    assertThat(getFileMeasureAsDouble("file_complexity")).isEqualTo(9.0);
+    assertThat(getFileMeasureAsDouble("complexity")).isEqualTo(9.0);
   }
 
   private Set<Integer> lineNumbersInDataMeasure(String data) {
@@ -133,10 +130,10 @@ public class PHPIntegrationTest {
    */
   @Test
   public void testDuplicationResults() throws Exception {
-    assertThat(getProjectMeasure("duplicated_lines").getIntValue()).isEqualTo(1595);
-    assertThat(getProjectMeasure("duplicated_blocks").getIntValue()).isEqualTo(54);
-    assertThat(getProjectMeasure("duplicated_files").getIntValue()).isEqualTo(32);
-    assertThat(getProjectMeasure("duplicated_lines_density").getValue()).isEqualTo(4.0);
+    assertThat(getProjectMeasureAsDouble("duplicated_lines")).isEqualTo(1595d);
+    assertThat(getProjectMeasureAsDouble("duplicated_blocks")).isEqualTo(54d);
+    assertThat(getProjectMeasureAsDouble("duplicated_files")).isEqualTo(32d);
+    assertThat(getProjectMeasureAsDouble("duplicated_lines_density")).isEqualTo(4.0);
   }
 
   /**
@@ -144,18 +141,24 @@ public class PHPIntegrationTest {
    */
   @Test
   public void should_be_compatible_with_DevCockpit() {
-    assertThat(getFileMeasure("ncloc_data").getData()).isNotEmpty();
-    assertThat(getFileMeasure("comment_lines_data").getData()).isNotEmpty();
+    assertThat(getFileMeasure("ncloc_data").getValue()).isNotEmpty();
+    assertThat(getFileMeasure("comment_lines_data").getValue()).isNotEmpty();
   }
 
   private Measure getProjectMeasure(String metricKey) {
-    Resource resource = sonar.find(ResourceQuery.createForMetrics("project", metricKey.trim()));
-    return resource == null ? null : resource.getMeasure(metricKey.trim());
+    return getMeasure("project", metricKey.trim());
+  }
+
+  private Double getProjectMeasureAsDouble(String metricKey) {
+    return getMeasureAsDouble("project", metricKey.trim());
   }
 
   private Measure getFileMeasure(String metricKey) {
-    Resource resource = sonar.find(ResourceQuery.createForMetrics(FILE_TOKEN_PARSER, metricKey.trim()));
-    return resource == null ? null : resource.getMeasure(metricKey.trim());
+    return getMeasure(FILE_TOKEN_PARSER, metricKey.trim());
+  }
+
+  private Double getFileMeasureAsDouble(String metricKey) {
+    return getMeasureAsDouble(FILE_TOKEN_PARSER, metricKey.trim());
   }
 
   public static boolean is_after_sonar_6_2() {
