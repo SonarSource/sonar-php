@@ -30,6 +30,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.sonar.php.FileTestUtils;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
@@ -43,7 +46,8 @@ public class PhpIniCheckTestUtils {
   private static final Pattern LINE_END_COMMENT = Pattern.compile(".*;\\s*Noncompliant(?:\\s*\\{\\{(.*)\\}\\})?.*");
 
   public static void check(PhpIniCheck check, File file) {
-    PhpIniFile phpIniFile = new PhpIniParser().parse(file);
+    CompatibleInputFile inputFile = FileTestUtils.getFile(file);
+    PhpIniFile phpIniFile = new PhpIniParser().parse(inputFile);
     List<PhpIniIssue> actualIssues = check.analyze(phpIniFile);
     List<PhpIniIssue> expectedIssues = expectedIssues(file);
     compare(actualIssues, expectedIssues);
@@ -74,7 +78,8 @@ public class PhpIniCheckTestUtils {
   }
 
   public static void check(PhpIniCheck check, File file, List<PhpIniIssue> expectedIssues) {
-    PhpIniFile phpIniFile = new PhpIniParser().parse(file);
+    CompatibleInputFile inputFile = FileTestUtils.getFile(file);
+    PhpIniFile phpIniFile = new PhpIniParser().parse(inputFile);
     List<PhpIniIssue> actualIssues = check.analyze(phpIniFile);
     compare(actualIssues, expectedIssues);
   }

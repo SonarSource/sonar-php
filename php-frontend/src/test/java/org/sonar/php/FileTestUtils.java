@@ -58,4 +58,5 @@ public class FileTestUtils {
 
     return new CompatibleInputFile(inputFile);
   }
+
 }

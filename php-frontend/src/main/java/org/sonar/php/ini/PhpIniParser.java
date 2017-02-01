@@ -22,13 +22,13 @@ package org.sonar.php.ini;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
-import com.google.common.io.Files;
 import com.sonar.sslr.api.RecognitionException;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.sonar.php.compat.CompatibleInputFile;
+import org.sonar.php.compat.CompatibleInputFile.InputFileIOException;
 import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -36,14 +36,12 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 public class PhpIniParser {
 
-  public PhpIniFile parse(File file) {
-    String content;
+  public PhpIniFile parse(CompatibleInputFile file) {
     try {
-      content = Files.toString(file, StandardCharsets.UTF_8);
-    } catch (IOException e) {
-      throw new IllegalStateException("Could not parse " + file, e);
+      return parse(file.contents());
+    } catch (InputFileIOException e) {
+      throw new IllegalStateException("Could not parse " + file.absolutePath(), e);
     }
-    return parse(content);
   }
 
   public PhpIniFile parse(String content) {
@@ -52,7 +50,7 @@ public class PhpIniParser {
     int lineNumber = 1;
     for (String line : lines) {
       Directive directive = parseLine(line, lineNumber);
-      if(directive != null) {
+      if (directive != null) {
         directives.add(directive);
       }
       lineNumber++;
@@ -145,7 +143,7 @@ public class PhpIniParser {
     }
 
     private static int numberOfLeadingWhiteSpaces(String string) {
-      for(int i = 0; i < string.length(); i++) {
+      for (int i = 0; i < string.length(); i++) {
         if (!Character.isSpaceChar(string.charAt(i))) {
           return i;
         }

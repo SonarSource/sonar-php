@@ -21,9 +21,10 @@ package org.sonar.plugins.php;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.sonar.sslr.api.RecognitionException;
+
+import java.util.Collection;
 import java.util.List;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.batch.sensor.Sensor;
@@ -35,6 +36,8 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.checks.CheckList;
+import org.sonar.php.compat.CompatibilityHelper;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.PhpIniParser;
@@ -67,11 +70,11 @@ public class PhpIniSensor implements Sensor {
   protected void execute(SensorContext context, Checks<PhpIniCheck> checks) {
     PhpIniParser parser = new PhpIniParser();
     FileSystem fs = context.fileSystem();
-
-    for (InputFile inputFile : fs.inputFiles(fs.predicates().matchesPathPattern("**/php.ini"))) {
+    Collection<CompatibleInputFile> inputFiles = CompatibilityHelper.wrap(fs.inputFiles(fs.predicates().matchesPathPattern("**/php.ini")), context);
+    for (CompatibleInputFile inputFile : inputFiles) {
       PhpIniFile phpIni;
       try {
-        phpIni = parser.parse(inputFile.file());
+        phpIni = parser.parse(inputFile);
       } catch (RecognitionException e) {
         LOG.error("Unable to parse file: " + inputFile.absolutePath());
         LOG.error(e.getMessage());
@@ -84,13 +87,13 @@ public class PhpIniSensor implements Sensor {
     }
   }
 
-  private static void saveIssues(SensorContext context, InputFile inputFile, RuleKey ruleKey, List<PhpIniIssue> issues) {
+  private static void saveIssues(SensorContext context, CompatibleInputFile inputFile, RuleKey ruleKey, List<PhpIniIssue> issues) {
     for (PhpIniIssue phpIssue : issues) {
       NewIssue issue = context.newIssue();
 
       NewIssueLocation location = issue.newLocation()
         .message(phpIssue.message())
-        .on(inputFile);
+        .on(inputFile.wrapped());
 
       if (phpIssue.line() > 0) {
         location.at(inputFile.selectLine(phpIssue.line()));
