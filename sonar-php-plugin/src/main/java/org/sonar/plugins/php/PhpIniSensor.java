@@ -35,6 +35,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.checks.CheckList;
+import org.sonar.php.compat.CompatibilityHelper;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.PhpIniParser;
@@ -67,11 +68,11 @@ public class PhpIniSensor implements Sensor {
   protected void execute(SensorContext context, Checks<PhpIniCheck> checks) {
     PhpIniParser parser = new PhpIniParser();
     FileSystem fs = context.fileSystem();
-
-    for (InputFile inputFile : fs.inputFiles(fs.predicates().matchesPathPattern("**/php.ini"))) {
+    Iterable<InputFile> inputFiles = fs.inputFiles(fs.predicates().matchesPathPattern("**/php.ini"));
+    for (InputFile inputFile : inputFiles) {
       PhpIniFile phpIni;
       try {
-        phpIni = parser.parse(inputFile.file());
+        phpIni = parser.parse(CompatibilityHelper.phpFile(inputFile, context));
       } catch (RecognitionException e) {
         LOG.error("Unable to parse file: " + inputFile.absolutePath());
         LOG.error(e.getMessage());

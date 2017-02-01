@@ -21,7 +21,10 @@ package org.sonar.php.checks.utils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.List;
+import java.util.stream.Stream;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -32,6 +35,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class CheckUtils {
 
@@ -108,6 +112,10 @@ public class CheckUtils {
       return "?>".equals(text) || "%>".equals(text);
     }
     return false;
+  }
+
+  public static Stream<String> lines(PhpFile file) {
+    return new BufferedReader(new StringReader(file.contents())).lines();
   }
 
 }

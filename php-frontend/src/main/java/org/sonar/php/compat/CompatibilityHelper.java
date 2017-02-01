@@ -17,28 +17,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.compat;
 
-import com.google.common.collect.ImmutableList;
-import org.junit.Test;
-import org.sonar.php.tree.visitors.LegacyIssue;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.api.visitors.PhpFile;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-public class PerlStyleCommentsUsageCheckTest {
+/**
+ * {@link PhpFile} factory class using SQ runtime version to choose which class to instantiate.
+ */
+public class CompatibilityHelper {
 
-  private static final PHPCheck CHECK = new PerlStyleCommentsUsageCheck();
+  private static final Version V6_0 = Version.create(6, 0);
+  private static final Version V6_2 = Version.create(6, 2);
 
-  @Test
-  public void test() throws Exception {
-    PhpFile file = TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php");
-    String message = "Use \"//\" instead of \"#\" to start this comment";
-    ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(new LegacyIssue(CHECK, message).line(3));
+  private CompatibilityHelper() {
+    // utility class, forbidden constructor
+  }
 
-    PHPCheckTest.check(CHECK, file, issues);
+  public static PhpFile phpFile(InputFile inputFile, SensorContext context) {
+    Version version = context.getSonarQubeVersion();
+    if (version.isGreaterThanOrEqual(V6_2)) {
+      return new CompatibleInputFile(inputFile);
+    }
+    if (version.isGreaterThanOrEqual(V6_0)) {
+      return new InputFileV60Compat(inputFile);
+    }
+    return new InputFileV56Compat(inputFile, context);
   }
 }
-

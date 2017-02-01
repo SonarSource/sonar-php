@@ -19,24 +19,20 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.io.Files;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.List;
+import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = LineLengthCheck.KEY)
-public class LineLengthCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
+public class LineLengthCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S103";
   private static final String MESSAGE = "Split this %s characters long line (which is greater than %s authorized).";
 
   public static final int DEFAULT = 120;
-  private Charset charset;
 
   @RuleProperty(
     key = "maximumLineLength",
@@ -44,27 +40,16 @@ public class LineLengthCheck extends PHPVisitorCheck implements CharsetAwareVisi
   public int maximumLineLength = DEFAULT;
 
   @Override
-  public void setCharset(Charset charset) {
-    this.charset = charset;
-  }
-
-  @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    List<String> lines;
+    Stream<String> lines = CheckUtils.lines(context().getPhpFile());
 
-    try {
-      lines = Files.readLines(context().file(), charset);
-    } catch (IOException e) {
-      throw new IllegalStateException("Check S103: Can't read the file", e);
-    }
-
-    for (int i = 0; i < lines.size(); i++) {
-      String line = lines.get(i);
+    int[] idx = {0};
+    lines.forEach(line -> {
       if (line.length() > maximumLineLength) {
         String message = String.format(MESSAGE, line.length(), maximumLineLength);
-        context().newLineIssue(this, i + 1, message);
+        context().newLineIssue(this, idx[0] + 1, message);
       }
-    }
+      idx[0]++;
+    });
   }
-
 }

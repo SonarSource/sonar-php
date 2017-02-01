@@ -17,23 +17,27 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php;
+package org.sonar.php.compat;
 
-import com.sonar.sslr.api.typed.ActionParser;
-import java.io.File;
-import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
+import java.io.IOException;
+import java.nio.file.Files;
+import org.sonar.api.batch.fs.InputFile;
 
-public class ParsingTestUtils {
+/**
+ * Makes the wrapped API 6.0+ InputFile instance compatible with API 6.2,
+ * by providing contents() method.
+ */
+class InputFileV60Compat extends CompatibleInputFile {
+  InputFileV60Compat(InputFile wrapped) {
+    super(wrapped);
+  }
 
-  protected ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
-
-  protected CompilationUnitTree parse(String filename) {
-    File file = new File("src/test/resources/", filename);
-
-    ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    return (CompilationUnitTree) parser.parse(file);
+  @Override
+  public String contents() {
+    try {
+      return new String(Files.readAllBytes(this.path()), this.charset());
+    } catch (IOException e) {
+      throw new CompatibleInputFile.InputFileIOException(e);
+    }
   }
 }

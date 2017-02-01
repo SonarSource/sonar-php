@@ -59,7 +59,7 @@ public class PhpUnitResultParserTest {
   @Test(expected = XStreamException.class)
   public void shouldThrowAnExceptionWhenReportIsInvalid() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"), context, new HashMap<File, Integer>());
+    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"), context, new HashMap<String, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -67,7 +67,7 @@ public class PhpUnitResultParserTest {
   @Test
   public void shouldNotFailIfNoFileName() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-no-filename.xml"), context, new HashMap<File, Integer>());
+    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-no-filename.xml"), context, new HashMap<String, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -75,7 +75,7 @@ public class PhpUnitResultParserTest {
   @Test
   public void shouldNotFailWithEmptyTestSuites() {
     SensorContext context = setUpForMockedSensorContext();
-    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"), context, new HashMap<File, Integer>());
+    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"), context, new HashMap<String, Integer>());
 
     verify(context, never()).newMeasure();
   }
@@ -98,7 +98,7 @@ public class PhpUnitResultParserTest {
     String banana = "moduleKey:" + "Banana.php";
 
     parser = new PhpUnitResultParser(fs);
-    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<File, Integer>());
+    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<>());
 
     PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
     PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TESTS, 1);

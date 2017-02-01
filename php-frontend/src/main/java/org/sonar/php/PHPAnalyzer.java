@@ -21,8 +21,6 @@ package org.sonar.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
-import java.io.File;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import org.sonar.api.batch.fs.InputFile;
@@ -30,9 +28,10 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.measures.FileLinesContext;
-import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.highlighter.SymbolHighlighter;
 import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
+import org.sonar.php.metrics.CpdVisitor;
+import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -41,6 +40,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class PHPAnalyzer {
@@ -49,24 +49,21 @@ public class PHPAnalyzer {
   private final ImmutableList<PHPCheck> checks;
 
   private CompilationUnitTree currentFileTree;
-  private File currentFile;
+  private PhpFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
-  public PHPAnalyzer(Charset charset, ImmutableList<PHPCheck> checks) {
-    this.parser = PHPParserBuilder.createParser(charset);
+  public PHPAnalyzer(ImmutableList<PHPCheck> checks) {
+    this.parser = PHPParserBuilder.createParser();
     this.checks = checks;
 
     for (PHPCheck check : checks) {
-      if (check instanceof CharsetAwareVisitor) {
-        ((CharsetAwareVisitor) check).setCharset(charset);
-      }
       check.init();
     }
   }
 
-  public void nextFile(File file) {
+  public void nextFile(PhpFile file) {
     currentFile = file;
-    currentFileTree = (CompilationUnitTree) parser.parse(file);
+    currentFileTree = (CompilationUnitTree) parser.parse(file.contents());
     currentFileSymbolTable = SymbolTableImpl.create(currentFileTree);
   }
 
@@ -79,7 +76,7 @@ public class PHPAnalyzer {
     return issuesBuilder.build();
   }
 
-  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
+  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<String, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode, saveExecutableLines);
   }
 
@@ -95,4 +92,7 @@ public class PHPAnalyzer {
     return symbolTable;
   }
 
+  public List<CpdToken> computeCpdTokens() {
+    return new CpdVisitor().getCpdTokens(currentFile, currentFileTree);
+  }
 }

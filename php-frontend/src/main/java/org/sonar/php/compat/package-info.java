@@ -17,23 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php;
-
-import com.sonar.sslr.api.typed.ActionParser;
-import java.io.File;
-import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
-
-public class ParsingTestUtils {
-
-  protected ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
-
-  protected CompilationUnitTree parse(String filename) {
-    File file = new File("src/test/resources/", filename);
-
-    ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    return (CompilationUnitTree) parser.parse(file);
-  }
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.php.compat;

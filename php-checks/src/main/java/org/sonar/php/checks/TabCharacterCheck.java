@@ -19,42 +19,24 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.io.Files;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.List;
+import java.util.stream.Stream;
 import org.sonar.check.Rule;
-import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = TabCharacterCheck.KEY)
-public class TabCharacterCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
+public class TabCharacterCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S105";
   private static final String MESSAGE = "Replace all tab characters in this file by sequences of white-spaces.";
 
-  private Charset charset;
-
-  @Override
-  public void setCharset(Charset charset) {
-    this.charset = charset;
-  }
-
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    List<String> lines;
-    try {
-      lines = Files.readLines(context().file(), charset);
-    } catch (IOException e) {
-      throw new IllegalStateException("Check S105: Can't read the file", e);
-    }
-    for (String line : lines) {
-      if (line.contains("\t")) {
-        context().newFileIssue(this, MESSAGE);
-        break;
-      }
+    Stream<String> lines = CheckUtils.lines(context().getPhpFile());
+
+    if (lines.anyMatch(line -> line.contains("\t"))) {
+      context().newFileIssue(this, MESSAGE);
     }
   }
-
 }

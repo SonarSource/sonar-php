@@ -17,23 +17,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php;
+package org.sonar.plugins.php.api.visitors;
 
-import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
-import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
+import java.nio.file.Path;
 
-public class ParsingTestUtils {
+/**
+ * Class representing file being analysed by SonarPHP plugin.
+ */
+public interface PhpFile {
 
-  protected ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
+  /**
+   * @return path relative to project directory
+   */
+  Path relativePath();
 
-  protected CompilationUnitTree parse(String filename) {
-    File file = new File("src/test/resources/", filename);
+  String contents();
 
-    ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    return (CompilationUnitTree) parser.parse(file);
-  }
+  /**
+   * @deprecated since 2.10. Use {@link PhpFile#contents()} or {@link PhpFile#relativePath()}
+   */
+  @Deprecated
+  File file();
 }

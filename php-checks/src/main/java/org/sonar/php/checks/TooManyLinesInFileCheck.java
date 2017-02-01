@@ -42,7 +42,8 @@ public class TooManyLinesInFileCheck extends PHPVisitorCheck {
   public void visitCompilationUnit(CompilationUnitTree tree) {
     int numberOfLines = tree.eofToken().line();
     if (numberOfLines > max) {
-      context().newFileIssue(this, String.format(MESSAGE, context().file().getName(), numberOfLines, max));
+      String fileName = context().getPhpFile().relativePath().getFileName().toString();
+      context().newFileIssue(this, String.format(MESSAGE, fileName, numberOfLines, max));
     }
   }
 
