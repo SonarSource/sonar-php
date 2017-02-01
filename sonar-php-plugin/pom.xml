@@ -72,6 +72,7 @@
           <pluginName>PHP</pluginName>
           <pluginClass>org.sonar.plugins.php.PhpPlugin</pluginClass>
           <sonarLintSupported>true</sonarLintSupported>
+          <skipDependenciesPackaging>true</skipDependenciesPackaging>
           <sonarQubeMinVersion>5.6</sonarQubeMinVersion> <!-- allow to depend on API 6.2 but run on LTS -->
         </configuration>
       </plugin>
@@ -87,13 +88,29 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <minsize>3600000</minsize>
-                  <maxsize>3800000</maxsize>
+                  <minsize>2500000</minsize>
+                  <maxsize>2700000</maxsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>
                 </requireFilesSize>
               </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+            <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>false</shadedArtifactAttached>
+              <minimizeJar>true</minimizeJar>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
         </executions>

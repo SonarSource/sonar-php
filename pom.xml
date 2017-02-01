@@ -15,7 +15,7 @@
 
   <name>PHP</name>
   <description>Enables scanning of PHP source files</description>
-  <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
+  <url>http://redirect.sonarsource.com/plugins/php.html</url>
   <inceptionYear>2010</inceptionYear>
   <organization>
     <name>SonarSource and Akram Ben Aissi</name>
@@ -261,18 +261,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.sonar</groupId>
-          <artifactId>sonar-packaging-maven-plugin</artifactId>
-          <version>${version.sonar-packaging-maven-plugin}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 
   <profiles>
     <profile>
