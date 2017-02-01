@@ -19,9 +19,11 @@
  */
 package org.sonar.php;
 
-import com.google.common.base.Charsets;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+
+import java.nio.charset.StandardCharsets;
+
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -38,7 +40,7 @@ public class PHPTreeModelTest {
    * @return the node found for the given kind, null if not found.
    */
   protected <T extends Tree> T parse(String s, GrammarRuleKey rootRule) throws Exception {
-    p = PHPParserBuilder.createParser(rootRule, Charsets.UTF_8);
+    p = PHPParserBuilder.createParser(rootRule, StandardCharsets.UTF_8);
     Tree node = p.parse(s);
     checkFullFidelity(node, s.trim());
     return (T) node;

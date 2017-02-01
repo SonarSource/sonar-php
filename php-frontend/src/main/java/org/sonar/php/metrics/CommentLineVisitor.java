@@ -19,18 +19,18 @@
  */
 package org.sonar.php.metrics;
 
-import com.google.common.collect.Sets;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class CommentLineVisitor extends PHPVisitorCheck {
 
-  private Set<Integer> comments = Sets.newHashSet();
-  private Set<Integer> noSonarLines = Sets.newHashSet();
+  private Set<Integer> comments = new HashSet<>();
+  private Set<Integer> noSonarLines = new HashSet<>();
 
   public CommentLineVisitor(CompilationUnitTree tree) {
     super.visitCompilationUnit(tree);

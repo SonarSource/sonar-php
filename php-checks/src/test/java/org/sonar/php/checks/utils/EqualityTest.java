@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks.utils;
 
-import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -28,9 +27,11 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.nio.charset.StandardCharsets;
+
 public class EqualityTest {
 
-  private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT, Charsets.UTF_8);
+  private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT, StandardCharsets.UTF_8);
 
   @Test
   public void areSyntacticallyEquivalent() throws Exception {

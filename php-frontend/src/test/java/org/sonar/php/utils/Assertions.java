@@ -19,6 +19,8 @@
  */
 package org.sonar.php.utils;
 
+import java.nio.charset.StandardCharsets;
+
 import org.fest.assertions.GenericAssert;
 import org.sonar.php.parser.PHPGrammar;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -33,7 +35,6 @@ import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
 import org.sonar.sslr.tests.ParsingResultComparisonFailure;
 import org.sonar.sslr.tests.RuleAssert;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.Rule;
@@ -51,10 +52,10 @@ public class Assertions {
 
   public static ParserAssert assertThat(LexerlessGrammarBuilder b, GrammarRuleKey rule) {
     return new ParserAssert(new ActionParser<Tree>(
-      Charsets.UTF_8,
+      StandardCharsets.UTF_8,
       b,
       PHPGrammar.class,
-      new TreeFactory(Charsets.UTF_8),
+      new TreeFactory(StandardCharsets.UTF_8),
       new PHPNodeBuilder(),
       rule));
   }

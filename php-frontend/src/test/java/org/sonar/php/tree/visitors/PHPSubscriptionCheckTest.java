@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.visitors;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.junit.Test;
@@ -31,6 +30,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +39,7 @@ public class PHPSubscriptionCheckTest {
 
   @Test
   public void test() {
-    ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
+    ActionParser<Tree> parser = PHPParserBuilder.createParser(StandardCharsets.UTF_8);
     CompatibleInputFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
 
@@ -51,12 +51,10 @@ public class PHPSubscriptionCheckTest {
     assertThat(testVisitor.varIdentifierCounter).isEqualTo(2);
   }
 
-
   private class TestSubscription extends PHPSubscriptionCheck {
     int classCounter = 0;
     int namespaceNameCounter = 0;
     int varIdentifierCounter = 0;
-
 
     @Override
     public List<Tree.Kind> nodesToVisit() {

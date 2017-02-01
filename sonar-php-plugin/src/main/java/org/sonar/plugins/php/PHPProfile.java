@@ -19,11 +19,11 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
@@ -72,7 +72,7 @@ public final class PHPProfile extends ProfileDefinition {
 
     try {
       Gson gson = new Gson();
-      Profile jsonProfile = gson.fromJson(Resources.toString(profileUrl, Charsets.UTF_8), Profile.class);
+      Profile jsonProfile = gson.fromJson(Resources.toString(profileUrl, StandardCharsets.UTF_8), Profile.class);
       for (String ruleKey : jsonProfile.ruleKeys) {
         Rule rule = ruleFinder.findByKey(CheckList.REPOSITORY_KEY, ruleKey);
         profile.activateRule(rule, null);

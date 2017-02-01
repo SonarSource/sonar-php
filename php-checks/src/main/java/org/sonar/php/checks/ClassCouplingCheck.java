@@ -20,11 +20,12 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
+
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -58,7 +59,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
   private static final Set<String> DOC_TAGS = ImmutableSet.of(
     "@var", "@global", "@staticvar", "@throws", "@param", "@return");
 
-  private static final Set<String> EXCLUDED_TYPES = Sets.newTreeSet(String.CASE_INSENSITIVE_ORDER);
+  private static final Set<String> EXCLUDED_TYPES = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 
   static {
     EXCLUDED_TYPES.addAll(ImmutableSet.of(
@@ -124,7 +125,7 @@ public class ClassCouplingCheck extends PHPVisitorCheck {
           break;
         case METHOD_DECLARATION:
           retrieveTypeFromDoc(classMember);
-          retrieveTypeFromParameter((MethodDeclarationTree)classMember);
+          retrieveTypeFromParameter((MethodDeclarationTree) classMember);
           break;
         default:
           break;

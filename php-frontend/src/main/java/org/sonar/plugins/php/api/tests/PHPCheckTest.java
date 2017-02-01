@@ -19,11 +19,11 @@
  */
 package org.sonar.plugins.php.api.tests;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +58,7 @@ import static org.sonar.php.utils.ExpectedIssuesParser.parseExpectedIssues;
  */
 public class PHPCheckTest {
 
-  private static final Charset charset = Charsets.UTF_8;
+  private static final Charset charset = StandardCharsets.UTF_8;
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(charset);
 
   private PHPCheckTest() {

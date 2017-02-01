@@ -19,10 +19,11 @@
  */
 package org.sonar.php.highlighter;
 
-import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SyntaxHighlighterVisitorTest {
 
-  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(Charsets.UTF_8);
+  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(StandardCharsets.UTF_8);
 
   private File file;
 
@@ -56,7 +57,7 @@ public class SyntaxHighlighterVisitorTest {
   @Before
   public void setUp() throws IOException {
     DefaultFileSystem fileSystem = new DefaultFileSystem(tempFolder.getRoot());
-    fileSystem.setEncoding(Charsets.UTF_8);
+    fileSystem.setEncoding(StandardCharsets.UTF_8);
     file = tempFolder.newFile();
     inputFile = new DefaultInputFile("moduleKey",  file.getName())
       .setLanguage("php")

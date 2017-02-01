@@ -19,11 +19,11 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.sonar.api.rule.RuleStatus;
@@ -61,7 +61,7 @@ public class PHPRulesDefinition implements RulesDefinition {
       return null;
     }
     try {
-      return Resources.toString(resource, Charsets.UTF_8);
+      return Resources.toString(resource, StandardCharsets.UTF_8);
     } catch (IOException e) {
       throw new IllegalStateException("Failed to read: " + resource, e);
     }

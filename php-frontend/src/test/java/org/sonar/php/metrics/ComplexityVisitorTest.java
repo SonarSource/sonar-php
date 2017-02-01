@@ -19,8 +19,9 @@
  */
 package org.sonar.php.metrics;
 
-import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
+
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -32,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ComplexityVisitorTest {
 
-  private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT, Charsets.UTF_8);
+  private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT, StandardCharsets.UTF_8);
 
   @Test
   public void declarations() throws Exception {

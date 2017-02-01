@@ -22,6 +22,7 @@ package org.sonar.php;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.Rule;
@@ -35,7 +36,6 @@ import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
-import static com.google.common.base.Charsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -47,7 +47,7 @@ public class PHPAnalyzerTest {
   @Test(expected = RecognitionException.class)
   public void parsing_failure_should_raise_an_exception() throws IOException {
     PHPCheck check = new DummyCheck();
-    PHPAnalyzer analyzer = new PHPAnalyzer(UTF_8, ImmutableList.of(check));
+    PHPAnalyzer analyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.of(check));
     CompatibleInputFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php if(condition): ?>");
     analyzer.nextFile(file);
   }
@@ -55,7 +55,7 @@ public class PHPAnalyzerTest {
   @Test
   public void test_analyze() throws Exception {
     PHPCheck check = new DummyCheck();
-    PHPAnalyzer analyzer = new PHPAnalyzer(UTF_8, ImmutableList.of(check));
+    PHPAnalyzer analyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.of(check));
     CompatibleInputFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
