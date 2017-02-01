@@ -54,14 +54,14 @@ public class PhpUnitService {
     this.overallCoverageParser = overallCoverageParser;
   }
 
-  public void execute(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  public void execute(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, parser, "test", context, numberOfLinesOfCode);
     parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageParser, "unit test coverage", context, numberOfLinesOfCode);
     parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageParser, "integration test coverage", context, numberOfLinesOfCode);
     parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage", context, numberOfLinesOfCode);
   }
 
-  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     String reportPath = context.settings().getString(reportPathKey);
 
     if (reportPath != null) {

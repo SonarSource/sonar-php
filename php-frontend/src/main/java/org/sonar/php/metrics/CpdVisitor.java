@@ -19,12 +19,10 @@
  */
 package org.sonar.php.metrics;
 
-import java.io.File;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -37,7 +35,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class CpdVisitor extends PHPVisitorCheck {
 
   private final SensorContext sensorContext;
-  private InputFile inputFile;
+  private CompatibleInputFile inputFile;
   private NewCpdTokens cpdTokens;
 
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
@@ -49,10 +47,8 @@ public class CpdVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    File file = context().file();
-    FileSystem fileSystem = sensorContext.fileSystem();
-    inputFile = fileSystem.inputFile(fileSystem.predicates().is(file));
-    cpdTokens = sensorContext.newCpdTokens().onFile(inputFile);
+    inputFile = context().file();
+    cpdTokens = sensorContext.newCpdTokens().onFile(inputFile.wrapped());
 
     super.visitCompilationUnit(tree);
 

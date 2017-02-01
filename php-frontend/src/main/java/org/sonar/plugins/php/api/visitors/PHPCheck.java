@@ -20,11 +20,12 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
+
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.squidbridge.api.CodeVisitor;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public interface PHPCheck extends CodeVisitor {
    */
   void init();
 
-  List<PhpIssue> analyze(File file, CompilationUnitTree tree);
+  List<PhpIssue> analyze(CompatibleInputFile file, CompilationUnitTree tree);
 
-  List<PhpIssue> analyze(File file, CompilationUnitTree tree, SymbolTable symbolTable);
+  List<PhpIssue> analyze(CompatibleInputFile file, CompilationUnitTree tree, SymbolTable symbolTable);
 }

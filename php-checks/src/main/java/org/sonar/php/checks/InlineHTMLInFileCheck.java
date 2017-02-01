@@ -53,7 +53,7 @@ public class InlineHTMLInFileCheck extends PHPVisitorCheck {
   }
 
   private boolean isExcludedFile() {
-    return context().file().getName().endsWith(".phtml");
+    return context().file().path().getFileName().toString().endsWith(".phtml");
   }
 
 }

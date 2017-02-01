@@ -19,7 +19,6 @@
  */
 package org.sonar.php.metrics;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -53,7 +53,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
 
   private FileLinesContext fileLinesContext;
 
-  private Map<File, Integer> numberOfLinesOfCode;
+  private Map<String, Integer> numberOfLinesOfCode;
   private boolean saveExecutableLines;
 
   public static Kind[] getClassNodes() {
@@ -85,7 +85,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     }
   }
 
-  public FileMeasures getFileMeasures(File file, CompilationUnitTree tree, FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
+  public FileMeasures getFileMeasures(CompatibleInputFile file, CompilationUnitTree tree, FileLinesContext fileLinesContext, Map<String, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
     this.saveExecutableLines = saveExecutableLines;
     this.fileMeasures = new FileMeasures(LIMITS_COMPLEXITY_FUNCTIONS, FILES_DISTRIBUTION_BOTTOM_LIMITS);
     this.fileLinesContext = fileLinesContext;
@@ -105,7 +105,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     fileMeasures.setStatementNumber(counter.getStatementNumber());
   }
 
-  private void setLineAndCommentMeasures(File file) {
+  private void setLineAndCommentMeasures(CompatibleInputFile file) {
     LineVisitor lineVisitor = new LineVisitor(context().tree());
 
     CommentLineVisitor commentVisitor = new CommentLineVisitor(context().tree());
@@ -128,7 +128,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
       }
     }
 
-    numberOfLinesOfCode.put(file, linesOfCode.size());
+    numberOfLinesOfCode.put(file.relativePath(), linesOfCode.size());
 
     fileLinesContext.save();
   }

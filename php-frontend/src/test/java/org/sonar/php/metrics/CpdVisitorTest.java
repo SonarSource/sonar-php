@@ -19,20 +19,17 @@
  */
 package org.sonar.php.metrics;
 
-import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.internal.google.common.io.Files;
 import org.sonar.duplications.internal.pmd.TokensLine;
+import org.sonar.php.FileTestUtils;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -41,11 +38,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CpdVisitorTest {
 
-  private static final Charset CHARSET = Charsets.UTF_8;
+  private static final Charset CHARSET = Charset.defaultCharset();
 
   private final ActionParser<Tree> p = PHPParserBuilder.createParser(CHARSET);
 
-  private DefaultInputFile inputFile;
+  private CompatibleInputFile testFile;
   private SensorContextTester sensorContext;
 
   @Rule
@@ -54,7 +51,7 @@ public class CpdVisitorTest {
   @Test
   public void test() throws Exception {
     scan("<?php $x = 1;\n$y = 'str' + $x;\n");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + inputFile.file().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.file().getName());
     assertThat(cpdTokenLines).hasSize(2);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("<?php$x=$NUMBER;");
@@ -74,7 +71,7 @@ public class CpdVisitorTest {
   @Test
   public void test_use() throws Exception {
     scan("<?php use a\\b;\n");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + inputFile.file().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.file().getName());
     assertThat(cpdTokenLines).hasSize(1);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("<?php");
@@ -83,7 +80,7 @@ public class CpdVisitorTest {
   @Test
   public void test_expandable_string() throws Exception {
     scan("<?php \"abc$x!abc\";");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + inputFile.file().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.file().getName());
     assertThat(cpdTokenLines).hasSize(1);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("<?php\"$CHARS$x$CHARS\";");
@@ -96,7 +93,7 @@ public class CpdVisitorTest {
   @Test
   public void test_heredoc_string() throws Exception {
     scan("<?php <<<EOF\nabc$x!abc\nabc\nEOF;");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + inputFile.file().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.file().getName());
     assertThat(cpdTokenLines).hasSize(3);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("<?php<<<EOF");
@@ -121,17 +118,12 @@ public class CpdVisitorTest {
   }
 
   private void scan(String source) throws IOException {
-    File file = tempFolder.newFile();
-    Files.write(source, file, CHARSET);
-
-    inputFile = new DefaultInputFile("moduleKey", file.getName())
-      .initMetadata(new FileMetadata().readMetadata(file, CHARSET));
-
+    testFile = FileTestUtils.getFile( tempFolder.newFile(), source);
     sensorContext = SensorContextTester.create(tempFolder.getRoot().toPath());
-    sensorContext.fileSystem().add(inputFile);
+   // sensorContext.fileSystem().add(inputFile);
 
     CpdVisitor cpdVisitor = new CpdVisitor(sensorContext);
-    CompilationUnitTree tree = (CompilationUnitTree)p.parse(file);
-    cpdVisitor.analyze(file, tree);
+    CompilationUnitTree tree = (CompilationUnitTree)p.parse(testFile.contents());
+    cpdVisitor.analyze(testFile, tree);
   }
 }

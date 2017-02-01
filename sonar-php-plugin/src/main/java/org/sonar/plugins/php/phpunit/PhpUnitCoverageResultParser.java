@@ -80,7 +80,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    * @param coverageReportFile the coverage report file
    */
   @Override
-  public void parse(File coverageReportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  public void parse(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
     parseFile(coverageReportFile, context, numberOfLinesOfCode);
   }
@@ -90,7 +90,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    *
    * @param coverageReportFile the coverage report file
    */
-  private void parseFile(File coverageReportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  private void parseFile(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
     List<String> unresolvedPaths = new ArrayList<>();
@@ -116,7 +116,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    * Set default 0 value for files that do not have coverage metrics because they were not touched by any test,
    * and thus not present in the coverage report file.
    */
-  private void saveMeasureForMissingFiles(List<String> resolvedPaths, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  private void saveMeasureForMissingFiles(List<String> resolvedPaths, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     FilePredicate mainFilesPredicate = fileSystem.predicates().and(
       fileSystem.predicates().hasType(InputFile.Type.MAIN),
       fileSystem.predicates().hasLanguage(Php.KEY));
@@ -126,8 +126,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
         LOG.debug("Coverage metrics have not been set on '{}': default values will be inserted.", phpFile.file().getName());
 
         // for LINES_TO_COVER and UNCOVERED_LINES, we use NCLOC as an approximation
-        File file = phpFile.file();
-        Integer ncloc = numberOfLinesOfCode.get(file);
+        Integer ncloc = numberOfLinesOfCode.get(phpFile.relativePath());
         if (ncloc != null) {
           context.<Integer>newMeasure().on(phpFile).withValue(ncloc).forMetric(linesToCoverMetric).save();
           context.<Integer>newMeasure().on(phpFile).withValue(ncloc).forMetric(uncoveredLinesMetric).save();

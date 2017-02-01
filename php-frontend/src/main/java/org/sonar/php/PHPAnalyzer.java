@@ -21,16 +21,14 @@ package org.sonar.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
-import java.io.File;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.measures.FileLinesContext;
-import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.highlighter.SymbolHighlighter;
 import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
 import org.sonar.php.metrics.FileMeasures;
@@ -49,7 +47,7 @@ public class PHPAnalyzer {
   private final ImmutableList<PHPCheck> checks;
 
   private CompilationUnitTree currentFileTree;
-  private File currentFile;
+  private CompatibleInputFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
   public PHPAnalyzer(Charset charset, ImmutableList<PHPCheck> checks) {
@@ -57,16 +55,13 @@ public class PHPAnalyzer {
     this.checks = checks;
 
     for (PHPCheck check : checks) {
-      if (check instanceof CharsetAwareVisitor) {
-        ((CharsetAwareVisitor) check).setCharset(charset);
-      }
       check.init();
     }
   }
 
-  public void nextFile(File file) {
+  public void nextFile(CompatibleInputFile file) {
     currentFile = file;
-    currentFileTree = (CompilationUnitTree) parser.parse(file);
+    currentFileTree = (CompilationUnitTree) parser.parse(file.contents());
     currentFileSymbolTable = SymbolTableImpl.create(currentFileTree);
   }
 
@@ -79,18 +74,18 @@ public class PHPAnalyzer {
     return issuesBuilder.build();
   }
 
-  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<File, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
+  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<String, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
     return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode, saveExecutableLines);
   }
 
-  public NewHighlighting getSyntaxHighlighting(SensorContext context, InputFile inputFile) {
-    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
+  public NewHighlighting getSyntaxHighlighting(SensorContext context, CompatibleInputFile inputFile) {
+    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile.wrapped());
     SyntaxHighlighterVisitor.highlight(currentFileTree, highlighting);
     return highlighting;
   }
 
-  public NewSymbolTable getSymbolHighlighting(SensorContext context, InputFile inputFile) {
-    NewSymbolTable symbolTable = context.newSymbolTable().onFile(inputFile);
+  public NewSymbolTable getSymbolHighlighting(SensorContext context, CompatibleInputFile inputFile) {
+    NewSymbolTable symbolTable = context.newSymbolTable().onFile(inputFile.wrapped());
     new SymbolHighlighter().highlight(currentFileSymbolTable, symbolTable);
     return symbolTable;
   }

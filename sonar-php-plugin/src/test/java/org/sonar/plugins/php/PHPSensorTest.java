@@ -24,8 +24,10 @@ import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
 import java.io.InterruptedIOException;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.Test;
@@ -55,6 +57,7 @@ import org.sonar.duplications.internal.pmd.TokensLine;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.LeftCurlyBraceEndsLineCheck;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -224,23 +227,25 @@ public class PHPSensorTest {
   }
 
   private void analyseSingleFile(PHPSensor sensor, String fileName) {
-    context.fileSystem().add(inputFile(fileName));
+    context.fileSystem().add((DefaultInputFile) inputFile(fileName).wrapped());
     sensor.execute(context);
   }
 
-  private DefaultInputFile inputFile(String fileName) {
+  private CompatibleInputFile inputFile(String fileName) {
     DefaultInputFile inputFile = new DefaultInputFile("moduleKey", fileName)
       .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
       .setType(Type.MAIN)
+      .setCharset(Charset.defaultCharset())
       .setLanguage(Php.KEY);
     inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
-    return inputFile;
+
+    return new CompatibleInputFile(inputFile);
   }
 
   @Test
   public void progress_report_should_be_stopped() throws Exception {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.<PHPCheck>of());
-    createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.<InputFile>of(), progressReport, new HashMap<File, Integer>());
+    createSensor().analyseFiles(context, phpAnalyzer, Collections.emptyList(), progressReport, new HashMap<>());
     verify(progressReport).stop();
   }
 
@@ -325,12 +330,12 @@ public class PHPSensorTest {
     // should not fail
   }
 
-  private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
+  private void analyseFileWithException(PHPCheck check, CompatibleInputFile inputFile, String expectedMessageSubstring) {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.of(check));
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     try {
-      createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.of(inputFile), progressReport, new HashMap<File, Integer>());
+      createSensor().analyseFiles(context, phpAnalyzer, Collections.singletonList(inputFile), progressReport, new HashMap<>());
     } finally {
       verify(progressReport).cancel();
     }

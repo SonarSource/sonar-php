@@ -17,12 +17,27 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.api;
+package org.sonar.php.compat;
 
 import java.nio.charset.Charset;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
 
-public interface CharsetAwareVisitor {
+/**
+ * Makes the wrapped API 5.6+ InputFile instance compatible with API 6.0,
+ * by providing the charset() method.
+ */
+class InputFileV56Compat extends InputFileV60Compat {
 
-  void setCharset(Charset charset);
+  private final Charset charset;
 
+  InputFileV56Compat(InputFile wrapped, SensorContext context) {
+    super(wrapped);
+    this.charset = context.fileSystem().encoding();
+  }
+
+  @Override
+  public Charset charset() {
+    return charset;
+  }
 }

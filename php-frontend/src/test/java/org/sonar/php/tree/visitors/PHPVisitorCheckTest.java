@@ -22,6 +22,8 @@ package org.sonar.php.tree.visitors;
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.junit.Test;
+import org.sonar.php.FileTestUtils;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -43,8 +45,8 @@ public class PHPVisitorCheckTest {
   @Test
   public void test() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
-    File file = new File("src/test/resources/visitors/test.php");
-    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
+    CompatibleInputFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
 
     TestVisitor testVisitor = new TestVisitor();
     testVisitor.analyze(file, tree);
@@ -58,7 +60,6 @@ public class PHPVisitorCheckTest {
     assertThat(testVisitor.tokenCounter).isEqualTo(29);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
   }
-
 
   private class TestVisitor extends PHPVisitorCheck {
     int classCounter = 0;
@@ -74,7 +75,6 @@ public class PHPVisitorCheckTest {
       super.visitClassDeclaration(tree);
       classCounter++;
     }
-
 
     @Override
     public void visitNamespaceName(NamespaceNameTree tree) {
@@ -115,7 +115,6 @@ public class PHPVisitorCheckTest {
     public void visitTrivia(SyntaxTrivia trivia) {
       triviaCounter++;
     }
-
 
   }
 

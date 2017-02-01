@@ -21,13 +21,13 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
 
-import java.io.File;
 import java.util.List;
 
 public class TodoTagPresenceCheckTest {
@@ -36,7 +36,7 @@ public class TodoTagPresenceCheckTest {
 
   @Test
   public void test() throws Exception {
-    File file = TestUtils.getCheckFile("TodoTagPresenceCheck.php");
+    CompatibleInputFile file = TestUtils.getCheckFile("TodoTagPresenceCheck.php");
 
     List<PhpIssue> issues = ImmutableList.of(
       newIssue(4),
@@ -44,8 +44,7 @@ public class TodoTagPresenceCheckTest {
       newIssue(9),
       newIssue(12),
       newIssue(14),
-      newIssue(16)
-    );
+      newIssue(16));
 
     PHPCheckTest.check(CHECK, file, issues);
   }

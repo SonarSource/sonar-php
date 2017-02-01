@@ -20,13 +20,12 @@
 package org.sonar.plugins.php.api.tests;
 
 import com.google.common.collect.ImmutableList;
-import java.io.File;
-import java.nio.charset.Charset;
-import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.php.FileTestUtils;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -97,7 +96,7 @@ public class PhpCheckTestTest {
     thrown.expect(AssertionError.class);
     thrown.expectMessage("* [UNEXPECTED_ISSUE] at line 1 with a message: \"message\"");
 
-    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK {{message}}"), createIssuesForLines( /*None */));
+    PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK {{message}}"), createIssuesForLines( /* None */));
   }
 
   @Test
@@ -164,7 +163,7 @@ public class PhpCheckTestTest {
   @Test
   public void test_precise_location() throws Exception {
     PHPCheckTest.check(CHECK, createFile("<?php $a = 1; // NOK\n" +
-                                              "//    ^^^^^^      "));
+      "//    ^^^^^^      "));
   }
 
   @Test
@@ -191,7 +190,7 @@ public class PhpCheckTestTest {
     thrown.expectMessage("* [NO_PRECISE_LOCATION] Line 1: issue with precise location is expected");
 
     PHPCheckTest.check(CHECK, createFile("<?php class A {} // NOK\n" +
-                                              "//    ^^^^^      "));
+      "//    ^^^^^      "));
   }
 
   @Test
@@ -251,11 +250,8 @@ public class PhpCheckTestTest {
     return issueBuilder.build();
   }
 
-  private File createFile(String content) throws Exception {
-    File f = tmpFolder.newFile("test_check.php");
-    FileUtils.writeStringToFile(f, content, Charset.defaultCharset());
-
-    return f;
+  private CompatibleInputFile createFile(String content) throws Exception {
+    return FileTestUtils.getFile(tmpFolder.newFile("test_check.php"), content);
   }
 
 }

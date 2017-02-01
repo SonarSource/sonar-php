@@ -17,29 +17,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+package org.sonar.php.compat;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import org.sonar.api.batch.fs.InputFile;
+
 /**
- *
+ * Makes the wrapped API 6.0+ InputFile instance compatible with API 6.2,
+ * by providing the inputStream() and contents() methods.
  */
-package org.sonar.plugins.php;
-
-import org.junit.Test;
-import org.sonar.api.Plugin;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.SonarRuntime;
-import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.utils.Version;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class PhpPluginTest {
-
-  @Test
-  public void test() {
-    SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(5, 6), SonarQubeSide.SCANNER);
-    Plugin.Context context = new Plugin.Context(runtime);
-    new PhpPlugin().define(context);
-
-    assertThat(context.getExtensions()).hasSize(14);
+class InputFileV60Compat extends CompatibleInputFile {
+  InputFileV60Compat(InputFile wrapped) {
+    super(wrapped);
   }
 
+  @Override
+  public InputStream inputStream() throws IOException {
+    return Files.newInputStream(this.path());
+  }
+
+  @Override
+  public String contents() {
+    try {
+      return new String(Files.readAllBytes(this.path()), this.charset());
+    } catch (IOException e) {
+      throw new CompatibleInputFile.InputFileIOException(e);
+    }
+  }
 }

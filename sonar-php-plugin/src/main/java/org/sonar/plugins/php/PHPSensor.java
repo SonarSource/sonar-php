@@ -23,14 +23,14 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
-import java.io.File;
 import java.io.InterruptedIOException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +54,8 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
+import org.sonar.php.compat.CompatibilityHelper;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.metrics.CpdVisitor;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.tree.visitors.LegacyIssue;
@@ -120,19 +122,19 @@ public class PHPSensor implements Sensor {
     ImmutableList<PHPCheck> visitors = getVisitors(new CpdVisitor(context));
 
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors);
-    ArrayList<InputFile> inputFiles = Lists.newArrayList(fileSystem.inputFiles(mainFilePredicate));
+    Collection<CompatibleInputFile> inputFiles = CompatibilityHelper.wrap(fileSystem.inputFiles(mainFilePredicate), context);
 
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
-    Map<File, Integer> numberOLinesOfCode = new HashMap<>();
+    Map<String, Integer> numberOLinesOfCode = new HashMap<>();
 
     analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
 
     processCoverage(context, numberOLinesOfCode);
   }
 
-  private void processCoverage(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  private void processCoverage(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     PhpUnitService phpUnitSensor = new PhpUnitService(
       fileSystem,
       new PhpUnitResultParser(fileSystem),
@@ -145,12 +147,12 @@ public class PHPSensor implements Sensor {
   void analyseFiles(
     SensorContext context,
     PHPAnalyzer phpAnalyzer,
-    List<InputFile> inputFiles,
+    Collection<CompatibleInputFile> inputFiles,
     ProgressReport progressReport,
-    Map<File, Integer> numberOfLinesOfCode) {
+    Map<String, Integer> numberOfLinesOfCode) {
     boolean success = false;
     try {
-      for (InputFile inputFile : inputFiles) {
+      for (CompatibleInputFile inputFile : inputFiles) {
         progressReport.nextFile();
         analyseFile(context, phpAnalyzer, inputFile, numberOfLinesOfCode);
       }
@@ -168,17 +170,17 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile, Map<File, Integer> numberOfLinesOfCode) {
+  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, CompatibleInputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
     try {
-      phpAnalyzer.nextFile(inputFile.file());
+      phpAnalyzer.nextFile(inputFile);
       saveIssues(context, phpAnalyzer.analyze(), inputFile);
       saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
       saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
       saveNewFileMeasures(context,
-        phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile),
+        phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile.wrapped()),
           numberOfLinesOfCode,
           context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)),
-        inputFile);
+        inputFile.wrapped());
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());
@@ -229,13 +231,13 @@ public class PHPSensor implements Sensor {
   /**
    * Creates and saves an issue for a parsing error.
    */
-  private void saveParsingIssue(SensorContext context, RecognitionException e, InputFile inputFile) {
+  private void saveParsingIssue(SensorContext context, RecognitionException e, CompatibleInputFile inputFile) {
     if (parsingErrorRuleKey != null) {
       NewIssue issue = context.newIssue();
 
       NewIssueLocation location = issue.newLocation()
         .message(e.getMessage())
-        .on(inputFile)
+        .on(inputFile.wrapped())
         .at(inputFile.selectLine(e.getLine()));
 
       issue
@@ -245,7 +247,7 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {
+  private void saveIssues(SensorContext context, List<PhpIssue> issues, CompatibleInputFile inputFile) {
     for (PhpIssue issue : issues) {
       RuleKey ruleKey = checks.ruleKeyFor(issue.check());
       NewIssue newIssue = context.newIssue()
@@ -258,7 +260,7 @@ public class PHPSensor implements Sensor {
 
         NewIssueLocation location = newIssue.newLocation()
           .message(legacyIssue.message())
-          .on(inputFile);
+          .on(inputFile.wrapped());
 
         if (legacyIssue.line() > 0) {
           location.at(inputFile.selectLine(legacyIssue.line()));
@@ -272,7 +274,7 @@ public class PHPSensor implements Sensor {
 
         NewIssueLocation location = newIssue.newLocation()
           .message(lineIssue.message())
-          .on(inputFile)
+          .on(inputFile.wrapped())
           .at(inputFile.selectLine(lineIssue.line()));
 
         newIssue.at(location);
@@ -283,7 +285,7 @@ public class PHPSensor implements Sensor {
 
         NewIssueLocation location = newIssue.newLocation()
           .message(fileIssue.message())
-          .on(inputFile);
+          .on(inputFile.wrapped());
 
         newIssue.at(location);
 
@@ -299,11 +301,11 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {
+  private static NewIssueLocation newLocation(CompatibleInputFile inputFile, NewIssue issue, IssueLocation location) {
     TextRange range = inputFile.newRange(location.startLine(), location.startLineOffset(), location.endLine(), location.endLineOffset());
 
     NewIssueLocation newLocation = issue.newLocation()
-      .on(inputFile)
+      .on(inputFile.wrapped())
       .at(range);
 
     if (location.message() != null) {

@@ -129,7 +129,7 @@ public class PhpUnitResultParser implements PhpUnitParser {
    * @param reportFile the reports directories to be scan
    */
   @Override
-  public void parse(File reportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  public void parse(File reportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     Preconditions.checkNotNull(reportFile);
     LOG.debug("Parsing file: " + reportFile.getAbsolutePath());
     parseFile(reportFile, context);

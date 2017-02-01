@@ -23,6 +23,8 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.junit.Test;
+import org.sonar.php.FileTestUtils;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -38,8 +40,8 @@ public class PHPSubscriptionCheckTest {
   @Test
   public void test() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
-    File file = new File("src/test/resources/visitors/test.php");
-    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
+    CompatibleInputFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
 
     TestSubscription testVisitor = new TestSubscription();
     testVisitor.analyze(file, tree);

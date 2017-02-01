@@ -17,29 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- *
- */
-package org.sonar.plugins.php;
-
-import org.junit.Test;
-import org.sonar.api.Plugin;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.SonarRuntime;
-import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.utils.Version;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class PhpPluginTest {
-
-  @Test
-  public void test() {
-    SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(5, 6), SonarQubeSide.SCANNER);
-    Plugin.Context context = new Plugin.Context(runtime);
-    new PhpPlugin().define(context);
-
-    assertThat(context.getExtensions()).hasSize(14);
-  }
-
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.php.compat;

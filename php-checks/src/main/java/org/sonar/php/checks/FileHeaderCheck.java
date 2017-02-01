@@ -19,21 +19,21 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.io.Files;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.InputStreamReader;
 import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Pattern;
+
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = FileHeaderCheck.KEY)
-public class FileHeaderCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
+public class FileHeaderCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1451";
   private static final String MESSAGE = "Add or update the header of this file.";
@@ -47,13 +47,7 @@ public class FileHeaderCheck extends PHPVisitorCheck implements CharsetAwareVisi
     type = "TEXT")
   public String headerFormat = DEFAULT_HEADER_FORMAT;
 
-  private Charset charset;
   private String[] expectedLines;
-
-  @Override
-  public void setCharset(Charset charset) {
-    this.charset = charset;
-  }
 
   @Override
   public void init() {
@@ -62,41 +56,32 @@ public class FileHeaderCheck extends PHPVisitorCheck implements CharsetAwareVisi
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    List<String> lines;
-    try {
-      lines = Files.readLines(context().file(), charset);
+    CompatibleInputFile file = context().file();
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.inputStream(), file.charset()))) {
+      Iterator<String> it = reader.lines().iterator();
+      if (it.hasNext() && !matches(expectedLines, it)) {
+        context().newFileIssue(this, MESSAGE);
+      }
     } catch (IOException e) {
       throw new IllegalStateException("Check S1451: Can't read the file", e);
     }
-
-    if (!lines.isEmpty() && !matches(expectedLines, lines)) {
-      context().newFileIssue(this, MESSAGE);
-    }
   }
 
-  private static boolean matches(String[] expectedLines, List<String> lines) {
-    boolean result;
+  private static boolean matches(String[] expectedLines, Iterator<String> lines) {
+    String line = lines.next();
 
-    if (PHP_OPEN_TAG.matcher(lines.get(0)).matches()) {
-      lines.remove(0);
+    if (PHP_OPEN_TAG.matcher(line).matches()) {
+      line = lines.next();
     }
 
-    if (expectedLines.length <= lines.size()) {
-      result = true;
-
-      Iterator<String> it = lines.iterator();
-      for (String expectedLine : expectedLines) {
-        String line = it.next();
-        if (!line.equals(expectedLine)) {
-          result = false;
-          break;
-        }
+    for (String expectedLine : expectedLines) {
+      if (!line.equals(expectedLine)) {
+        return false;
       }
-    } else {
-      result = false;
+      line = lines.next();
     }
 
-    return result;
+    return true;
   }
 
 }

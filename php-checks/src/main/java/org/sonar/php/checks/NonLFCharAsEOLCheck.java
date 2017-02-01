@@ -19,39 +19,29 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.io.Files;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.InputStreamReader;
 import org.sonar.check.Rule;
-import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = NonLFCharAsEOLCheck.KEY)
-public class NonLFCharAsEOLCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
+public class NonLFCharAsEOLCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1779";
   private static final String MESSAGE = "Replace all non line feed end of line characters in this file \"%s\" by LF.";
 
-  private Charset charset;
-
-  @Override
-  public void setCharset(Charset charset) {
-    this.charset = charset;
-  }
-
-
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    File file = context().file();
-    try (BufferedReader reader = Files.newReader(file, charset)){
+    CompatibleInputFile file = context().file();
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.inputStream(), file.charset()))) {
       int c;
       while ((c = reader.read()) != -1) {
 
         if (c == '\r' || c == '\u2028' || c == '\u2029') {
-          String message = String.format(MESSAGE, file.getName());
+          String message = String.format(MESSAGE, file.path().getFileName());
           context().newFileIssue(this, message);
           break;
         }

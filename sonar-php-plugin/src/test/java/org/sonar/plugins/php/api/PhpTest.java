@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api;
 
 import org.junit.Test;
+import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 import org.sonar.plugins.php.PhpPlugin;
 
@@ -50,7 +51,7 @@ public class PhpTest {
 
   @Test
   public void shouldCheckCustomValidPhpExtensions() {
-    Settings settings = new Settings();
+    Settings settings = new MapSettings();
     settings.setProperty(PhpPlugin.FILE_SUFFIXES_KEY, " php6  , php7, , ");
 
     Php php = new Php(settings);

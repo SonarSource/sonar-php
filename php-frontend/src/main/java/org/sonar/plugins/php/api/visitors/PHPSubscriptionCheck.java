@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
-import java.io.File;
 import java.util.List;
 
 public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements PHPCheck {
@@ -45,7 +45,7 @@ public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements 
   }
 
   @Override
-  public final List<PhpIssue> analyze(File file, CompilationUnitTree tree) {
+  public final List<PhpIssue> analyze(CompatibleInputFile file, CompilationUnitTree tree) {
     this.context = new PHPCheckContext(file, tree);
     scanTree(context.tree());
 
@@ -53,11 +53,10 @@ public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements 
   }
 
   @Override
-  public List<PhpIssue> analyze(File file, CompilationUnitTree tree, SymbolTable symbolTable) {
+  public List<PhpIssue> analyze(CompatibleInputFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
     this.context = new PHPCheckContext(file, tree, symbolTable);
     scanTree(context.tree());
 
     return context().getIssues();
   }
 }
-

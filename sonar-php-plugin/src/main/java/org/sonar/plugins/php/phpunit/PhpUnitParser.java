@@ -26,6 +26,6 @@ import org.sonar.api.batch.sensor.SensorContext;
 @FunctionalInterface
 public interface PhpUnitParser {
 
-  void parse(File coverageReportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode);
+  void parse(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode);
 
 }

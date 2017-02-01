@@ -20,9 +20,10 @@
 package org.sonar.php.tree.visitors;
 
 import com.google.common.collect.ImmutableList;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -37,22 +38,21 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 public class PHPCheckContext implements CheckContext {
 
-  private final File file;
+  private final CompatibleInputFile file;
   private final CompilationUnitTree tree;
   private final SymbolTable symbolTable;
   private List<PhpIssue> issues;
 
-  public PHPCheckContext(File file, CompilationUnitTree tree) {
+  public PHPCheckContext(CompatibleInputFile file, CompilationUnitTree tree) {
     this(file, tree, SymbolTableImpl.create(tree));
   }
 
-  public PHPCheckContext(File file, CompilationUnitTree tree, SymbolTable symbolTable) {
+  public PHPCheckContext(CompatibleInputFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
     this.file = file;
     this.tree = tree;
     this.symbolTable = symbolTable;
     this.issues = new ArrayList<>();
   }
-
 
   @Override
   public CompilationUnitTree tree() {
@@ -100,7 +100,7 @@ public class PHPCheckContext implements CheckContext {
   }
 
   @Override
-  public File file() {
+  public CompatibleInputFile file() {
     return file;
   }
 

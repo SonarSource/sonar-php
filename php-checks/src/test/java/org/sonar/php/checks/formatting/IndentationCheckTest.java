@@ -23,15 +23,14 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
-import java.io.File;
-
 public class IndentationCheckTest extends FormattingStandardCheckTest {
 
-  private static File TEST_FILE;
+  private static CompatibleInputFile TEST_FILE;
 
   @Before
   public void setUp() throws Exception {

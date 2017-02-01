@@ -19,7 +19,6 @@
  */
 package org.sonar.php.metrics;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
@@ -27,6 +26,9 @@ import org.mockito.Mockito;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.ParsingTestUtils;
+import org.sonar.php.FileTestUtils;
+import org.sonar.php.compat.CompatibleInputFile;
+import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -38,8 +40,8 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   @Test
   public void test() {
     String filename = "metrics/lines_of_code.php";
-    File file = new File(filename);
-    Map<File, Integer> numberOfLinesOfCode = new HashMap<>();
+    CompatibleInputFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
+    Map<String, Integer> numberOfLinesOfCode = new HashMap<>();
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext, numberOfLinesOfCode, true);
@@ -70,8 +72,8 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   @Test
   public void dont_save_executable_lines() {
     String filename = "metrics/lines_of_code.php";
-    File file = new File(filename);
-    Map<File, Integer> numberOfLinesOfCode = new HashMap<>();
+    CompatibleInputFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
+    Map<String, Integer> numberOfLinesOfCode = new HashMap<>();
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext, numberOfLinesOfCode, false);

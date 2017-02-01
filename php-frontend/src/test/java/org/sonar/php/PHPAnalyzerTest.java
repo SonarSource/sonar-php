@@ -21,15 +21,14 @@ package org.sonar.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.measures.FileLinesContext;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
@@ -49,9 +48,7 @@ public class PHPAnalyzerTest {
   public void parsing_failure_should_raise_an_exception() throws IOException {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = new PHPAnalyzer(UTF_8, ImmutableList.of(check));
-    File file = tmpFolder.newFile();
-    FileUtils.write(file, "<?php if(condition): ?>", UTF_8);
-
+    CompatibleInputFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php if(condition): ?>");
     analyzer.nextFile(file);
   }
 
@@ -59,9 +56,7 @@ public class PHPAnalyzerTest {
   public void test_analyze() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = new PHPAnalyzer(UTF_8, ImmutableList.of(check));
-    File file = tmpFolder.newFile();
-    FileUtils.write(file, "<?php $a = 1;", UTF_8);
-
+    CompatibleInputFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
     assertThat(issues).hasSize(1);
@@ -69,7 +64,7 @@ public class PHPAnalyzerTest {
     assertThat(issues.get(0).check()).isEqualTo(check);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo(DummyCheck.MESSAGE);
 
-    FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class), new HashMap<File, Integer>(), true);
+    FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class), new HashMap<String, Integer>(), true);
     assertThat(measures.getLinesOfCodeNumber()).isEqualTo(1);
   }
 

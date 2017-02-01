@@ -23,13 +23,12 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.sonar.sslr.api.typed.ActionParser;
-import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.sonar.php.api.CharsetAwareVisitor;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.tests.TestIssue.Location;
@@ -60,7 +59,6 @@ import static org.sonar.php.utils.ExpectedIssuesParser.parseExpectedIssues;
 public class PHPCheckTest {
 
   private static final Charset charset = Charsets.UTF_8;
-
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(charset);
 
   private PHPCheckTest() {
@@ -72,8 +70,8 @@ public class PHPCheckTest {
    * @param check the tested check
    * @param file File containing the php code sample annotated with comment for expected issues.
    */
-  public static void check(PHPCheck check, File file) {
-    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
+  public static void check(PHPCheck check, CompatibleInputFile file) {
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
     check.init();
     List<PhpIssue> actualIssues = getActualIssues(check, file, tree);
     List<TestIssue> expectedIssues = parseExpectedIssues(file, tree);
@@ -87,17 +85,14 @@ public class PHPCheckTest {
    * @param file File containing the php code sample
    * @param expectedIssues expected issues that should be raise. Overrides the comments in the code sample.
    */
-  public static void check(PHPCheck check, File file, List<PhpIssue> expectedIssues) {
-    CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file);
+  public static void check(PHPCheck check, CompatibleInputFile file, List<PhpIssue> expectedIssues) {
+    CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file.contents());
     check.init();
     List<PhpIssue> actualIssues = getActualIssues(check, file, tree);
     compare(actualIssues, toTestIssues(expectedIssues));
   }
 
-  private static List<PhpIssue> getActualIssues(PHPCheck check, File file, CompilationUnitTree tree) {
-    if (check instanceof CharsetAwareVisitor) {
-      ((CharsetAwareVisitor) check).setCharset(charset);
-    }
+  private static List<PhpIssue> getActualIssues(PHPCheck check, CompatibleInputFile file, CompilationUnitTree tree) {
     return check.analyze(file, tree);
   }
 
