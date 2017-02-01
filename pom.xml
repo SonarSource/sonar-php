@@ -94,9 +94,6 @@
     <license.title>SonarQube PHP Plugin</license.title>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-    <!-- plugin versions -->
-    <version.sonar-packaging-maven-plugin>1.12.1</version.sonar-packaging-maven-plugin>
-
     <!-- JAR versions -->
     <version.assertj>3.5.2</version.assertj>
     <version.commons-io>2.5</version.commons-io>
@@ -107,7 +104,7 @@
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>1.9.0</version.mockito>
     <version.slf4j>1.6.2</version.slf4j>
-    <version.sonar>5.6</version.sonar>
+    <version.sonar>6.2</version.sonar>
     <version.sonar-orchestrator>3.13</version.sonar-orchestrator>
     <version.sslr>1.21</version.sslr>
     <version.sslr-squid-bridge>2.6.1</version.sslr-squid-bridge>
