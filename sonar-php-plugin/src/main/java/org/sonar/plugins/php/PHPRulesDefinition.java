@@ -25,11 +25,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.Set;
+
 import javax.annotation.Nullable;
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.utils.Version;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
@@ -37,6 +40,11 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 public class PHPRulesDefinition implements RulesDefinition {
 
   private static final String REPOSITORY_NAME = "SonarAnalyzer";
+  private final Version sonarRuntimeVersion;
+
+  public PHPRulesDefinition(Version sonarRuntimeVersion) {
+    this.sonarRuntimeVersion = sonarRuntimeVersion;
+  }
 
   @Override
   public void define(Context context) {
@@ -45,10 +53,19 @@ public class PHPRulesDefinition implements RulesDefinition {
 
     for (NewRule rule : repository.rules()) {
       String metadataKey = rule.key();
-      // Setting internal key is essential for rule templates (see SONAR-6162), and it is not done by AnnotationBasedRulesDefinition from sslr-squid-bridge version 2.5.1:
+      // Setting internal key is essential for rule templates (see SONAR-6162), and it is not done by AnnotationBasedRulesDefinition from
+      // sslr-squid-bridge version 2.5.1:
       rule.setInternalKey(metadataKey);
       rule.setHtmlDescription(readRuleDefinitionResource(metadataKey + ".html"));
       addMetadata(rule, metadataKey);
+    }
+
+    boolean shouldSetupSonarLintProfile = sonarRuntimeVersion.isGreaterThanOrEqual(Version.parse("6.0"));
+    if (shouldSetupSonarLintProfile) {
+      Set<String> activatedRuleKeys = PHPProfile.activatedRuleKeys();
+      for (NewRule rule : repository.rules()) {
+        rule.setActivatedByDefault(activatedRuleKeys.contains(rule.key()));
+      }
     }
 
     repository.done();

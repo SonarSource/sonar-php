@@ -21,15 +21,20 @@ package org.sonar.plugins.php;
 
 import org.junit.Test;
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.server.rule.RulesDefinition.Rule;
+import org.sonar.api.utils.Version;
 import org.sonar.php.checks.CheckList;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PHPRulesDefinitionTest {
 
   @Test
   public void test() {
-    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition();
+    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition(Version.create(6, 2));
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository("php");
@@ -37,6 +42,17 @@ public class PHPRulesDefinitionTest {
     assertThat(repository.name()).isEqualTo("SonarAnalyzer");
     assertThat(repository.language()).isEqualTo("php");
     assertThat(repository.rules()).hasSize(CheckList.getAllChecks().size());
+  }
+
+  @Test
+  public void testActivationSonarLint() {
+    PHPRulesDefinition rulesDefinition = new PHPRulesDefinition(Version.create(6, 2));
+    RulesDefinition.Context context = new RulesDefinition.Context();
+    rulesDefinition.define(context);
+    RulesDefinition.Repository repository = context.repository("php");
+
+    List<Rule> activated = repository.rules().stream().filter(r -> r.activatedByDefault()).collect(Collectors.toList());
+    assertThat(activated).isNotEmpty();
   }
 
 }

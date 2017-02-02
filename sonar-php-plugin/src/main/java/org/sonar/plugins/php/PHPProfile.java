@@ -19,10 +19,11 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import org.sonar.api.profiles.ProfileDefinition;
@@ -52,8 +53,8 @@ public final class PHPProfile extends ProfileDefinition {
     RulesProfile profile = RulesProfile.create(CheckList.SONAR_WAY_PROFILE, Php.KEY);
 
     loadFromCommonRepository(profile);
-    
-    loadFromJsonProfile(profile);
+
+    loadActiveKeysFromJsonProfile(profile);
 
     return profile;
   }
@@ -67,18 +68,21 @@ public final class PHPProfile extends ProfileDefinition {
     }
   }
 
-  private void loadFromJsonProfile(RulesProfile profile) {
-    URL profileUrl = getClass().getResource("/org/sonar/l10n/php/rules/php/Sonar_way_profile.json");
+  private void loadActiveKeysFromJsonProfile(RulesProfile profile) {
+    for (String ruleKey : activatedRuleKeys()) {
+      Rule rule = ruleFinder.findByKey(CheckList.REPOSITORY_KEY, ruleKey);
+      profile.activateRule(rule, null);
+    }
+  }
 
-    try {
+  public static Set<String> activatedRuleKeys() {
+    String location = "/org/sonar/l10n/php/rules/php/Sonar_way_profile.json";
+    InputStream stream = PHPProfile.class.getResourceAsStream(location);
+    try (Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
-      Profile jsonProfile = gson.fromJson(Resources.toString(profileUrl, StandardCharsets.UTF_8), Profile.class);
-      for (String ruleKey : jsonProfile.ruleKeys) {
-        Rule rule = ruleFinder.findByKey(CheckList.REPOSITORY_KEY, ruleKey);
-        profile.activateRule(rule, null);
-      }
+      return gson.fromJson(reader, Profile.class).ruleKeys;
     } catch (IOException e) {
-      throw new IllegalStateException("Failed to read: " + profileUrl, e);
+      throw new IllegalStateException("Failed to read: " + location, e);
     }
   }
 
