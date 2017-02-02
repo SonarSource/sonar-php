@@ -82,9 +82,10 @@ public class SonarLintTest {
       issues::add);
 
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
-      tuple("javascript:UnusedVariable", 2, inputFile.getPath(), "MINOR"),
-      tuple("javascript:UnusedVariable", 3, inputFile.getPath(), "MINOR"),
-      tuple("javascript:S1854", 3, inputFile.getPath(), "MAJOR"));
+      tuple("php:S101", 4, inputFile.getPath(), "MINOR"),
+      tuple("php:S1125", 20, inputFile.getPath(), "MINOR"),
+      tuple("php:S1125", 20, inputFile.getPath(), "MINOR"),
+      tuple("php:S2964", 9, inputFile.getPath(), "MINOR"));
   }
 
   private ClientInputFile prepareInputFile(Path filePath, final boolean isTest) throws IOException {
