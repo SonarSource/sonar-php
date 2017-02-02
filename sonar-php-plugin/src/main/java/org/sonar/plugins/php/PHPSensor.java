@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -74,11 +75,11 @@ import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitService;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
+import static org.sonar.plugins.php.PhpPlugin.SQ_VERSION_6_0;
 
 public class PHPSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
-
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
@@ -131,7 +132,9 @@ public class PHPSensor implements Sensor {
 
     analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
 
-    processCoverage(context, numberOLinesOfCode);
+    if (!context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT) {
+      processCoverage(context, numberOLinesOfCode);
+    }
   }
 
   private void processCoverage(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
@@ -170,17 +173,19 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, CompatibleInputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
+  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, CompatibleInputFile inputFile,
+    Map<String, Integer> numberOfLinesOfCode) {
     try {
       phpAnalyzer.nextFile(inputFile);
       saveIssues(context, phpAnalyzer.analyze(), inputFile);
-      saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
-      saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
-      saveNewFileMeasures(context,
-        phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile.wrapped()),
-          numberOfLinesOfCode,
-          context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)),
-        inputFile.wrapped());
+
+      if (!context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT) {
+        saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
+        saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
+        FileMeasures measures = phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile.wrapped()), numberOfLinesOfCode,
+          context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2));
+        saveNewFileMeasures(context, measures, inputFile.wrapped());
+      }
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());

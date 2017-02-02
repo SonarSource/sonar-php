@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api;
 
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.plugins.php.PhpPlugin;
@@ -46,13 +45,6 @@ public final class Php extends AbstractLanguage {
   public Php(Settings settings) {
     super(KEY, NAME);
     this.settings = settings;
-  }
-
-  /**
-   * Only for testing purposes.
-   */
-  public Php() {
-    this(new MapSettings());
   }
 
   /**

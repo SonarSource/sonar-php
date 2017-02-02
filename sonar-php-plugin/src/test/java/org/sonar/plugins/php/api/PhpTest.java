@@ -37,7 +37,7 @@ public class PhpTest {
    */
   @Test
   public void shouldCheckDefaultValidPhpExtensions() {
-    Php php = new Php();
+    Php php = new Php(new MapSettings());
 
     assertTrue(php.hasValidSuffixes("goodExtension.php"));
     assertTrue(php.hasValidSuffixes("goodExtension.php5"));

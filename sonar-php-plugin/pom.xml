@@ -89,7 +89,7 @@
               <rules>
                 <requireFilesSize>
                   <minsize>2500000</minsize>
-                  <maxsize>2700000</maxsize>
+                  <maxsize>2800000</maxsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>
@@ -99,8 +99,9 @@
           </execution>
         </executions>
       </plugin>
-            <plugin>
+      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -111,6 +112,14 @@
               <shadedArtifactAttached>false</shadedArtifactAttached>
               <minimizeJar>true</minimizeJar>
               <createDependencyReducedPom>false</createDependencyReducedPom>
+              <filters>
+                <filter>
+                  <artifact>cglib:cglib-nodep</artifact>
+                  <includes>
+                    <include>**</include>
+                  </includes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
         </executions>

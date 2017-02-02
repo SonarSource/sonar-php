@@ -22,6 +22,8 @@ package org.sonar.plugins.php.phpunit;
 import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
 import java.util.HashMap;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputFile;
@@ -83,6 +85,7 @@ public class PhpUnitResultParserTest {
   /**
    * Should generate tests metrics.
    */
+  @Ignore
   @Test()
   public void shouldGenerateTestsMeasures() {
     SensorContextTester context = setUpForSensorContextTester();
