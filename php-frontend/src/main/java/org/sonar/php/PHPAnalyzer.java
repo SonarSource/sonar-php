@@ -23,7 +23,6 @@ import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
@@ -74,8 +73,8 @@ public class PHPAnalyzer {
     return issuesBuilder.build();
   }
 
-  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<String, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
-    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode, saveExecutableLines);
+  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, boolean saveExecutableLines) {
+    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, saveExecutableLines);
   }
 
   public NewHighlighting getSyntaxHighlighting(SensorContext context, CompatibleInputFile inputFile) {

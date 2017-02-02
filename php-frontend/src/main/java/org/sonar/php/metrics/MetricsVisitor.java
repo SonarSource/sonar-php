@@ -22,7 +22,6 @@ package org.sonar.php.metrics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -53,7 +52,6 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
 
   private FileLinesContext fileLinesContext;
 
-  private Map<String, Integer> numberOfLinesOfCode;
   private boolean saveExecutableLines;
 
   public static Kind[] getClassNodes() {
@@ -85,11 +83,10 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     }
   }
 
-  public FileMeasures getFileMeasures(CompatibleInputFile file, CompilationUnitTree tree, FileLinesContext fileLinesContext, Map<String, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
+  public FileMeasures getFileMeasures(CompatibleInputFile file, CompilationUnitTree tree, FileLinesContext fileLinesContext, boolean saveExecutableLines) {
     this.saveExecutableLines = saveExecutableLines;
     this.fileMeasures = new FileMeasures(LIMITS_COMPLEXITY_FUNCTIONS, FILES_DISTRIBUTION_BOTTOM_LIMITS);
     this.fileLinesContext = fileLinesContext;
-    this.numberOfLinesOfCode = numberOfLinesOfCode;
 
     super.analyze(file, tree);
 
@@ -127,8 +124,6 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
         fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, linesOfCode.contains(line) ? 1 : 0);
       }
     }
-
-    numberOfLinesOfCode.put(file.relativePath(), linesOfCode.size());
 
     fileLinesContext.save();
   }

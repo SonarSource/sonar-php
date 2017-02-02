@@ -21,7 +21,6 @@ package org.sonar.plugins.php;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.InterruptedIOException;
 import java.util.Collection;
@@ -87,6 +86,7 @@ public class PHPSensor implements Sensor {
   private RuleKey parsingErrorRuleKey;
 
   private FileSystem fileSystem;
+  private SensorContext context;
 
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
     CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
@@ -115,29 +115,37 @@ public class PHPSensor implements Sensor {
   @Override
   public void execute(SensorContext context) {
     this.fileSystem = context.fileSystem();
+    this.context = context;
 
     FilePredicate mainFilePredicate = this.fileSystem.predicates().and(
       this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
       this.fileSystem.predicates().hasLanguage(Php.KEY));
 
-    ImmutableList<PHPCheck> visitors = getVisitors(new CpdVisitor(context));
+    ImmutableList.Builder<PHPCheck> visitors = ImmutableList.<PHPCheck>builder().addAll(checks.all());
+    if (inSonarQube()) {
+      visitors.add(new CpdVisitor(context));
+    }
 
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors);
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors.build());
     Collection<CompatibleInputFile> inputFiles = CompatibilityHelper.wrap(fileSystem.inputFiles(mainFilePredicate), context);
-
-    ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
-    progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
     Map<String, Integer> numberOLinesOfCode = new HashMap<>();
 
-    analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
-
-    if (!context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT) {
-      processCoverage(context, numberOLinesOfCode);
+    try {
+      analyseFiles(context, phpAnalyzer, inputFiles, numberOLinesOfCode);
+      if (inSonarQube()) {
+        processCoverage(numberOLinesOfCode);
+      }
+    } catch (CancellationException e) {
+      LOG.info(e.getMessage());
     }
   }
 
-  private void processCoverage(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  private boolean inSonarQube() {
+    return !context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT;
+  }
+
+  private void processCoverage(Map<String, Integer> numberOfLinesOfCode) {
     PhpUnitService phpUnitSensor = new PhpUnitService(
       fileSystem,
       new PhpUnitResultParser(fileSystem),
@@ -147,21 +155,25 @@ public class PHPSensor implements Sensor {
     phpUnitSensor.execute(context, numberOfLinesOfCode);
   }
 
-  void analyseFiles(
-    SensorContext context,
-    PHPAnalyzer phpAnalyzer,
-    Collection<CompatibleInputFile> inputFiles,
-    ProgressReport progressReport,
-    Map<String, Integer> numberOfLinesOfCode) {
+  void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Collection<CompatibleInputFile> inputFiles, Map<String, Integer> numberOfLinesOfCode) {
+    ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
+    progressReport.start(inputFiles.stream().map(CompatibleInputFile::file).collect(Collectors.toList()));
     boolean success = false;
     try {
       for (CompatibleInputFile inputFile : inputFiles) {
+        checkCancelled(context);
         progressReport.nextFile();
         analyseFile(context, phpAnalyzer, inputFile, numberOfLinesOfCode);
       }
       success = true;
     } finally {
       stopProgressReport(progressReport, success);
+    }
+  }
+
+  private void checkCancelled(SensorContext context) {
+    if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) && context.isCancelled()) {
+      throw new CancellationException("Analysis cancelled");
     }
   }
 
@@ -173,8 +185,7 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, CompatibleInputFile inputFile,
-    Map<String, Integer> numberOfLinesOfCode) {
+  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, CompatibleInputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
     try {
       phpAnalyzer.nextFile(inputFile);
       saveIssues(context, phpAnalyzer.analyze(), inputFile);
@@ -182,8 +193,9 @@ public class PHPSensor implements Sensor {
       if (!context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT) {
         saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
         saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
-        FileMeasures measures = phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile.wrapped()), numberOfLinesOfCode,
+        FileMeasures measures = phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile.wrapped()),
           context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2));
+        numberOfLinesOfCode.put(inputFile.relativePath(), measures.getLinesOfCodeNumber());
         saveNewFileMeasures(context, measures, inputFile.wrapped());
       }
     } catch (RecognitionException e) {
@@ -248,6 +260,14 @@ public class PHPSensor implements Sensor {
       issue
         .forRule(parsingErrorRuleKey)
         .at(location)
+        .save();
+    }
+
+    if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0)) {
+      context.newAnalysisError()
+        .onFile(inputFile.wrapped())
+        .at(inputFile.newPointer(e.getLine(), 0))
+        .message(e.getMessage())
         .save();
     }
   }
@@ -317,12 +337,6 @@ public class PHPSensor implements Sensor {
       newLocation.message(location.message());
     }
     return newLocation;
-  }
-
-  private ImmutableList<PHPCheck> getVisitors(PHPCheck additionalCheck) {
-    return ImmutableList.<PHPCheck>builder()
-      .addAll(checks.all())
-      .add(additionalCheck).build();
   }
 
   @Override

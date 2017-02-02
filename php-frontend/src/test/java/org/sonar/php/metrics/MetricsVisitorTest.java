@@ -19,8 +19,6 @@
  */
 package org.sonar.php.metrics;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.measures.CoreMetrics;
@@ -41,10 +39,9 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   public void test() {
     String filename = "metrics/lines_of_code.php";
     CompatibleInputFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
-    Map<String, Integer> numberOfLinesOfCode = new HashMap<>();
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext, numberOfLinesOfCode, true);
+    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext, true);
 
     assertThat(fileMeasures.getFileComplexity()).isEqualTo(1);
     assertThat(fileMeasures.getClassComplexity()).isEqualTo(1);
@@ -63,8 +60,6 @@ public class MetricsVisitorTest extends ParsingTestUtils {
     assertThat(fileMeasures.getNoSonarLines()).containsOnly(18);
     assertThat(fileMeasures.getCommentLinesNumber()).isEqualTo(5);
 
-    assertThat(numberOfLinesOfCode.values().iterator().next()).as("number of lines of code in the file").isEqualTo(7);
-
     verify(fileLinesContext).setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, 1, 0);
     verify(fileLinesContext).setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, 13, 1);
   }
@@ -73,10 +68,9 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   public void dont_save_executable_lines() {
     String filename = "metrics/lines_of_code.php";
     CompatibleInputFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
-    Map<String, Integer> numberOfLinesOfCode = new HashMap<>();
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext, numberOfLinesOfCode, false);
+    new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext,  false);
 
     verify(fileLinesContext, never()).setIntValue(Mockito.eq(CoreMetrics.EXECUTABLE_LINES_DATA_KEY), Mockito.anyInt(), Mockito.anyInt());
   }
