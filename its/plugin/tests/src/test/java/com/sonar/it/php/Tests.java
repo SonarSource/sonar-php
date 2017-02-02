@@ -22,6 +22,7 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
+
 import java.io.File;
 import java.util.List;
 import javax.annotation.CheckForNull;
@@ -54,13 +55,16 @@ public class Tests {
 
   private static final String RESOURCE_DIRECTORY = "/com/sonar/it/php/";
 
+  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"),
+    "sonar-php-plugin-*.jar");
+
   @ClassRule
   public static final Orchestrator ORCHESTRATOR;
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
       // PHP Plugin
-      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
+      .addPlugin(PHP_PLUGIN_LOCATION)
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
       // Custom rules plugin
       .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
