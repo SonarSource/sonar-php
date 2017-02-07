@@ -21,7 +21,6 @@ package org.sonar.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
-import java.nio.charset.Charset;
 import java.util.List;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
@@ -49,8 +48,8 @@ public class PHPAnalyzer {
   private CompatibleInputFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
-  public PHPAnalyzer(Charset charset, ImmutableList<PHPCheck> checks) {
-    this.parser = PHPParserBuilder.createParser(charset);
+  public PHPAnalyzer(ImmutableList<PHPCheck> checks) {
+    this.parser = PHPParserBuilder.createParser();
     this.checks = checks;
 
     for (PHPCheck check : checks) {

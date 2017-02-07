@@ -126,7 +126,7 @@ public class PHPSensor implements Sensor {
       visitors.add(new CpdVisitor(context));
     }
 
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors.build());
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(visitors.build());
     Collection<CompatibleInputFile> inputFiles = CompatibilityHelper.wrap(fileSystem.inputFiles(mainFilePredicate), context);
 
     Map<String, Integer> numberOLinesOfCode = new HashMap<>();

@@ -58,8 +58,7 @@ import static org.sonar.php.utils.ExpectedIssuesParser.parseExpectedIssues;
  */
 public class PHPCheckTest {
 
-  private static final Charset charset = StandardCharsets.UTF_8;
-  private static final ActionParser<Tree> parser = PHPParserBuilder.createParser(charset);
+  private static final ActionParser<Tree> parser = PHPParserBuilder.createParser();
 
   private PHPCheckTest() {
   }

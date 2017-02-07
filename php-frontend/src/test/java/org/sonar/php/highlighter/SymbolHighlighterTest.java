@@ -45,7 +45,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 public class SymbolHighlighterTest {
 
-  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(StandardCharsets.UTF_8);
+  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser();
 
   private File file;
 

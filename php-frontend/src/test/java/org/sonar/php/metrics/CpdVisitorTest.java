@@ -21,7 +21,6 @@ package org.sonar.php.metrics;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,9 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CpdVisitorTest {
 
-  private static final Charset CHARSET = Charset.defaultCharset();
-
-  private final ActionParser<Tree> p = PHPParserBuilder.createParser(CHARSET);
+  private final ActionParser<Tree> p = PHPParserBuilder.createParser();
 
   private CompatibleInputFile testFile;
   private SensorContextTester sensorContext;

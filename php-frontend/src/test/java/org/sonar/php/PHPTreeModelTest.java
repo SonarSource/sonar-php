@@ -40,7 +40,7 @@ public class PHPTreeModelTest {
    * @return the node found for the given kind, null if not found.
    */
   protected <T extends Tree> T parse(String s, GrammarRuleKey rootRule) throws Exception {
-    p = PHPParserBuilder.createParser(rootRule, StandardCharsets.UTF_8);
+    p = PHPParserBuilder.createParser(rootRule);
     Tree node = p.parse(s);
     checkFullFidelity(node, s.trim());
     return (T) node;

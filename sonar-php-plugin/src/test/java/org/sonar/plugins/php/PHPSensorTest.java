@@ -352,7 +352,7 @@ public class PHPSensorTest {
   }
 
   private void analyseFileWithException(PHPCheck check, CompatibleInputFile inputFile, String expectedMessageSubstring) {
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(StandardCharsets.UTF_8, ImmutableList.of(check));
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check));
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     createSensor().analyseFiles(context, phpAnalyzer, Collections.singletonList(inputFile), new HashMap<>());

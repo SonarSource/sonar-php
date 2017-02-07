@@ -51,11 +51,11 @@ public class Assertions {
   }
 
   public static ParserAssert assertThat(LexerlessGrammarBuilder b, GrammarRuleKey rule) {
-    return new ParserAssert(new ActionParser<Tree>(
+    return new ParserAssert(new ActionParser<>(
       StandardCharsets.UTF_8,
       b,
       PHPGrammar.class,
-      new TreeFactory(StandardCharsets.UTF_8),
+      new TreeFactory(),
       new PHPNodeBuilder(),
       rule));
   }

@@ -27,11 +27,9 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.nio.charset.StandardCharsets;
-
 public class EqualityTest {
 
-  private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT, StandardCharsets.UTF_8);
+  private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
 
   @Test
   public void areSyntacticallyEquivalent() throws Exception {

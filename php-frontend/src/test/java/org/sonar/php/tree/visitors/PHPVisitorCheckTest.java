@@ -20,6 +20,7 @@
 package org.sonar.php.tree.visitors;
 
 import com.sonar.sslr.api.typed.ActionParser;
+import java.io.File;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.compat.CompatibleInputFile;
@@ -35,16 +36,13 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PHPVisitorCheckTest {
 
   @Test
   public void test() {
-    ActionParser<Tree> parser = PHPParserBuilder.createParser(StandardCharsets.UTF_8);
+    ActionParser<Tree> parser = PHPParserBuilder.createParser();
     CompatibleInputFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
 

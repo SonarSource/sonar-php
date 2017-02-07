@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SyntaxHighlighterVisitorTest {
 
-  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(StandardCharsets.UTF_8);
+  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser();
 
   private File file;
 
