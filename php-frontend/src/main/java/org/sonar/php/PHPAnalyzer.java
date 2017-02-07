@@ -37,6 +37,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class PHPAnalyzer {
@@ -57,8 +58,8 @@ public class PHPAnalyzer {
     }
   }
 
-  public void nextFile(CompatibleInputFile file) {
-    currentFile = file;
+  public void nextFile(PhpFile file) {
+    currentFile = (CompatibleInputFile) file;
     currentFileTree = (CompilationUnitTree) parser.parse(file.contents());
     currentFileSymbolTable = SymbolTableImpl.create(currentFileTree);
   }

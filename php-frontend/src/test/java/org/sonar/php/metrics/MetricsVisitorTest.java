@@ -23,9 +23,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
-import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.FileTestUtils;
-import org.sonar.php.compat.CompatibleInputFile;
+import org.sonar.php.ParsingTestUtils;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +38,7 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   @Test
   public void test() {
     String filename = "metrics/lines_of_code.php";
-    CompatibleInputFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
+    PhpFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext, true);
@@ -67,7 +67,7 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   @Test
   public void dont_save_executable_lines() {
     String filename = "metrics/lines_of_code.php";
-    CompatibleInputFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
+    PhpFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext,  false);

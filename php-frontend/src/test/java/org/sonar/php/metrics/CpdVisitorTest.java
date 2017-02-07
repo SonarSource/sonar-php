@@ -28,10 +28,10 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.duplications.internal.pmd.TokensLine;
 import org.sonar.php.FileTestUtils;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,7 +39,7 @@ public class CpdVisitorTest {
 
   private final ActionParser<Tree> p = PHPParserBuilder.createParser();
 
-  private CompatibleInputFile testFile;
+  private PhpFile testFile;
   private SensorContextTester sensorContext;
 
   @Rule
@@ -48,7 +48,7 @@ public class CpdVisitorTest {
   @Test
   public void test() throws Exception {
     scan("<?php $x = 1;\n$y = 'str' + $x;\n");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.file().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.fileName());
     assertThat(cpdTokenLines).hasSize(2);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("<?php$x=$NUMBER;");
@@ -68,7 +68,7 @@ public class CpdVisitorTest {
   @Test
   public void test_use() throws Exception {
     scan("<?php use a\\b;\n");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.file().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.fileName());
     assertThat(cpdTokenLines).hasSize(1);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("<?php");
@@ -77,7 +77,7 @@ public class CpdVisitorTest {
   @Test
   public void test_expandable_string() throws Exception {
     scan("<?php \"abc$x!abc\";");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.file().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.fileName());
     assertThat(cpdTokenLines).hasSize(1);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("<?php\"$CHARS$x$CHARS\";");
@@ -90,7 +90,7 @@ public class CpdVisitorTest {
   @Test
   public void test_heredoc_string() throws Exception {
     scan("<?php <<<EOF\nabc$x!abc\nabc\nEOF;");
-    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.file().getName());
+    List<TokensLine> cpdTokenLines = sensorContext.cpdTokens("moduleKey:" + testFile.fileName());
     assertThat(cpdTokenLines).hasSize(3);
     TokensLine firstTokensLine = cpdTokenLines.get(0);
     assertThat(firstTokensLine.getValue()).isEqualTo("<?php<<<EOF");
@@ -115,7 +115,7 @@ public class CpdVisitorTest {
   }
 
   private void scan(String source) throws IOException {
-    testFile = FileTestUtils.getFile( tempFolder.newFile(), source);
+    testFile = FileTestUtils.getFile(tempFolder.newFile(), source);
     sensorContext = SensorContextTester.create(tempFolder.getRoot().toPath());
    // sensorContext.fileSystem().add(inputFile);
 

@@ -31,6 +31,7 @@ import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.utils.DummyCheck;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
@@ -46,7 +47,7 @@ public class PHPAnalyzerTest {
   public void parsing_failure_should_raise_an_exception() throws IOException {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check));
-    CompatibleInputFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php if(condition): ?>");
+    PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php if(condition): ?>");
     analyzer.nextFile(file);
   }
 
@@ -54,7 +55,7 @@ public class PHPAnalyzerTest {
   public void test_analyze() throws Exception {
     PHPCheck check = new DummyCheck();
     PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check));
-    CompatibleInputFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
+    PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
     assertThat(issues).hasSize(1);

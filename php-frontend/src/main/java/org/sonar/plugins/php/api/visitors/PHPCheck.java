@@ -20,13 +20,10 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
-
-import org.sonar.php.compat.CompatibleInputFile;
+import java.util.List;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.squidbridge.api.CodeVisitor;
-
-import java.util.List;
 
 /**
  * Marker interface for all PHP checks.
@@ -43,7 +40,7 @@ public interface PHPCheck extends CodeVisitor {
    */
   void init();
 
-  List<PhpIssue> analyze(CompatibleInputFile file, CompilationUnitTree tree);
+  List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree);
 
-  List<PhpIssue> analyze(CompatibleInputFile file, CompilationUnitTree tree, SymbolTable symbolTable);
+  List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable);
 }

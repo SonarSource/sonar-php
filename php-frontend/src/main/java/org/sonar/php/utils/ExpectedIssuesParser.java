@@ -23,17 +23,17 @@ import com.google.common.base.Splitter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.api.tests.TestIssue;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class ExpectedIssuesParser extends PHPVisitorCheck {
 
   private final List<TestIssue> expectedIssues = new ArrayList<>();
 
-  public static List<TestIssue> parseExpectedIssues(CompatibleInputFile file, CompilationUnitTree tree) {
+  public static List<TestIssue> parseExpectedIssues(PhpFile file, CompilationUnitTree tree) {
     ExpectedIssuesParser expectedIssuesParser = new ExpectedIssuesParser();
     expectedIssuesParser.analyze(file, tree);
 

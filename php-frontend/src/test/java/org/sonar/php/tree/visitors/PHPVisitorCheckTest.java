@@ -23,7 +23,6 @@ import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -35,6 +34,7 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,7 +43,7 @@ public class PHPVisitorCheckTest {
   @Test
   public void test() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    CompatibleInputFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
 
     TestVisitor testVisitor = new TestVisitor();

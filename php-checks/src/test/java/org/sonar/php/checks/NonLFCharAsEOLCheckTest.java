@@ -24,10 +24,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 import java.io.IOException;
@@ -38,8 +38,8 @@ public class NonLFCharAsEOLCheckTest {
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
   private NonLFCharAsEOLCheck check = new NonLFCharAsEOLCheck();
-  private CompatibleInputFile ok_file;
-  private CompatibleInputFile ko_file;
+  private PhpFile ok_file;
+  private PhpFile ko_file;
 
   @Before
   public void setUp() throws Exception {
@@ -55,7 +55,7 @@ public class NonLFCharAsEOLCheckTest {
   @Test
   public void ko() throws IOException {
     ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(
-      new LegacyIssue(check, "Replace all non line feed end of line characters in this file \"" + ko_file.path().getFileName() + "\" by LF."));
+      new LegacyIssue(check, "Replace all non line feed end of line characters in this file \"" + ko_file.fileName() + "\" by LF."));
     PHPCheckTest.check(check, ko_file, issues);
   }
 

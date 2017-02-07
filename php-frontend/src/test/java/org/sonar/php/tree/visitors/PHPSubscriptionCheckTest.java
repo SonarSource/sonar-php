@@ -25,11 +25,11 @@ import java.io.File;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,7 +38,7 @@ public class PHPSubscriptionCheckTest {
   @Test
   public void test() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    CompatibleInputFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
 
     TestSubscription testVisitor = new TestSubscription();

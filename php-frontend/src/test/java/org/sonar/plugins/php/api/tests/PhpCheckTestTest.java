@@ -25,11 +25,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.php.FileTestUtils;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.php.utils.DummyCheck;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class PhpCheckTestTest {
 
@@ -250,7 +250,7 @@ public class PhpCheckTestTest {
     return issueBuilder.build();
   }
 
-  private CompatibleInputFile createFile(String content) throws Exception {
+  private PhpFile createFile(String content) throws Exception {
     return FileTestUtils.getFile(tmpFolder.newFile("test_check.php"), content);
   }
 

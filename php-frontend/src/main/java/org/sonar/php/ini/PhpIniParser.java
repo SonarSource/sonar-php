@@ -23,24 +23,22 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
 import com.sonar.sslr.api.RecognitionException;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.compat.CompatibleInputFile.InputFileIOException;
 import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class PhpIniParser {
 
-  public PhpIniFile parse(CompatibleInputFile file) {
+  public PhpIniFile parse(PhpFile file) {
     try {
       return parse(file.contents());
     } catch (InputFileIOException e) {
-      throw new IllegalStateException("Could not parse " + file.absolutePath(), e);
+      throw new IllegalStateException("Could not parse " + file.relativePath(), e);
     }
   }
 

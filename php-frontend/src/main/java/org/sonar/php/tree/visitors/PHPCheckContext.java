@@ -45,12 +45,12 @@ public class PHPCheckContext implements CheckContext {
   private final SymbolTable symbolTable;
   private List<PhpIssue> issues;
 
-  public PHPCheckContext(CompatibleInputFile file, CompilationUnitTree tree) {
+  public PHPCheckContext(PhpFile file, CompilationUnitTree tree) {
     this(file, tree, SymbolTableImpl.create(tree));
   }
 
-  public PHPCheckContext(CompatibleInputFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
-    this.file = file;
+  public PHPCheckContext(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
+    this.file = (CompatibleInputFile) file;
     this.tree = tree;
     this.symbolTable = symbolTable;
     this.issues = new ArrayList<>();

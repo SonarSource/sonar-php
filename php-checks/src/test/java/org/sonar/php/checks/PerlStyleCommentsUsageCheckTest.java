@@ -21,12 +21,12 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class PerlStyleCommentsUsageCheckTest {
 
@@ -34,7 +34,7 @@ public class PerlStyleCommentsUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    CompatibleInputFile file = TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php");
+    PhpFile file = TestUtils.getCheckFile("PerlStyleCommentsUsageCheck.php");
     String message = "Use \"//\" instead of \"#\" to start this comment";
     ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(new LegacyIssue(CHECK, message).line(3));
 

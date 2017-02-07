@@ -38,6 +38,7 @@ import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
@@ -69,7 +70,7 @@ public class PHPCheckTest {
    * @param check the tested check
    * @param file File containing the php code sample annotated with comment for expected issues.
    */
-  public static void check(PHPCheck check, CompatibleInputFile file) {
+  public static void check(PHPCheck check, PhpFile file) {
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
     check.init();
     List<PhpIssue> actualIssues = getActualIssues(check, file, tree);
@@ -84,14 +85,14 @@ public class PHPCheckTest {
    * @param file File containing the php code sample
    * @param expectedIssues expected issues that should be raise. Overrides the comments in the code sample.
    */
-  public static void check(PHPCheck check, CompatibleInputFile file, List<PhpIssue> expectedIssues) {
+  public static void check(PHPCheck check, PhpFile file, List<PhpIssue> expectedIssues) {
     CompilationUnitTree tree = (CompilationUnitTree)parser.parse(file.contents());
     check.init();
     List<PhpIssue> actualIssues = getActualIssues(check, file, tree);
     compare(actualIssues, toTestIssues(expectedIssues));
   }
 
-  private static List<PhpIssue> getActualIssues(PHPCheck check, CompatibleInputFile file, CompilationUnitTree tree) {
+  private static List<PhpIssue> getActualIssues(PHPCheck check, PhpFile file, CompilationUnitTree tree) {
     return check.analyze(file, tree);
   }
 

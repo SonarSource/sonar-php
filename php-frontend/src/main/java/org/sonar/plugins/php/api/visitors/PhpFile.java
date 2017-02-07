@@ -19,6 +19,9 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
+/**
+ * Interface representing any file analysed by SonarPHP
+ */
 public interface PhpFile {
 
   String relativePath();

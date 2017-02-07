@@ -24,20 +24,20 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.php.compat.CompatibleInputFile;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class FileTestUtils {
 
   private FileTestUtils() {
   }
 
-  public static CompatibleInputFile getFile(String filename) throws URISyntaxException {
+  public static PhpFile getFile(String filename) throws URISyntaxException {
     return getFile(new File(FileTestUtils.class.getResource("/checks/" + filename).toURI()));
   }
 
-  public static CompatibleInputFile getFile(File file, String contents) {
+  public static PhpFile getFile(File file, String contents) {
     try {
       Files.write(file.toPath(), contents.getBytes());
     } catch (IOException e) {
@@ -46,7 +46,7 @@ public class FileTestUtils {
     return getFile(file);
   }
 
-  public static CompatibleInputFile getFile(File file) {
+  public static PhpFile getFile(File file) {
     DefaultInputFile inputFile = new DefaultInputFile("moduleKey", file.getName())
       .setModuleBaseDir(file.getParentFile().toPath())
       .setCharset(Charset.defaultCharset());

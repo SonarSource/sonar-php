@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class MetricsVisitor extends PHPSubscriptionCheck {
 
@@ -83,7 +83,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     }
   }
 
-  public FileMeasures getFileMeasures(CompatibleInputFile file, CompilationUnitTree tree, FileLinesContext fileLinesContext, boolean saveExecutableLines) {
+  public FileMeasures getFileMeasures(PhpFile file, CompilationUnitTree tree, FileLinesContext fileLinesContext, boolean saveExecutableLines) {
     this.saveExecutableLines = saveExecutableLines;
     this.fileMeasures = new FileMeasures(LIMITS_COMPLEXITY_FUNCTIONS, FILES_DISTRIBUTION_BOTTOM_LIMITS);
     this.fileLinesContext = fileLinesContext;
@@ -91,7 +91,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     super.analyze(file, tree);
 
     setCounterMeasures();
-    setLineAndCommentMeasures(file);
+    setLineAndCommentMeasures();
     return this.fileMeasures;
   }
 
@@ -102,7 +102,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     fileMeasures.setStatementNumber(counter.getStatementNumber());
   }
 
-  private void setLineAndCommentMeasures(CompatibleInputFile file) {
+  private void setLineAndCommentMeasures() {
     LineVisitor lineVisitor = new LineVisitor(context().tree());
 
     CommentLineVisitor commentVisitor = new CommentLineVisitor(context().tree());

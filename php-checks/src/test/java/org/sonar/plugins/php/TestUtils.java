@@ -22,22 +22,22 @@ package org.sonar.plugins.php;
 import java.io.File;
 import java.net.URISyntaxException;
 import org.sonar.php.FileTestUtils;
-import org.sonar.php.compat.CompatibleInputFile;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class TestUtils {
 
   private TestUtils() {
   }
 
-  public static CompatibleInputFile getCheckFile(String filename) throws URISyntaxException {
+  public static PhpFile getCheckFile(String filename) throws URISyntaxException {
     return getCheckFile(new File(TestUtils.class.getResource("/checks/" + filename).toURI()));
   }
 
-  public static CompatibleInputFile getCheckFile(File file, String contents) {
+  public static PhpFile getCheckFile(File file, String contents) {
     return FileTestUtils.getFile(file, contents);
   }
 
-  public static CompatibleInputFile getCheckFile(File file) {
+  public static PhpFile getCheckFile(File file) {
     return FileTestUtils.getFile(file);
 
   }

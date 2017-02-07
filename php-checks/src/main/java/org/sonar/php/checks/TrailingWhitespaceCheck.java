@@ -43,7 +43,7 @@ public class TrailingWhitespaceCheck extends PHPVisitorCheck {
       Iterator<String> it = reader.lines().iterator();
       int i = 0;
       while (it.hasNext()) {
-        if (test(it.next())) {
+        if (checkLine(it.next())) {
           context().newLineIssue(this, i + 1, MESSAGE);
         }
         i++;
@@ -53,7 +53,7 @@ public class TrailingWhitespaceCheck extends PHPVisitorCheck {
     }
   }
 
-  private static boolean test(String line) {
+  private static boolean checkLine(String line) {
     return line.length() > 0 && WHITESPACE_PATTERN.matcher(line.subSequence(line.length() - 1, line.length())).matches();
   }
 
