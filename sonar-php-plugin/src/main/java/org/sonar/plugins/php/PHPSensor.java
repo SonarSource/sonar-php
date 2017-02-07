@@ -132,7 +132,7 @@ public class PHPSensor implements Sensor {
     Map<String, Integer> numberOLinesOfCode = new HashMap<>();
 
     try {
-      analyseFiles(context, phpAnalyzer, inputFiles, numberOLinesOfCode);
+      analyseFiles(phpAnalyzer, inputFiles, numberOLinesOfCode);
       if (inSonarQube()) {
         processCoverage(numberOLinesOfCode);
       }
@@ -155,15 +155,15 @@ public class PHPSensor implements Sensor {
     phpUnitSensor.execute(context, numberOfLinesOfCode);
   }
 
-  void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Collection<CompatibleInputFile> inputFiles, Map<String, Integer> numberOfLinesOfCode) {
+  void analyseFiles(PHPAnalyzer phpAnalyzer, Collection<CompatibleInputFile> inputFiles, Map<String, Integer> numberOfLinesOfCode) {
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(inputFiles.stream().map(CompatibleInputFile::file).collect(Collectors.toList()));
     boolean success = false;
     try {
       for (CompatibleInputFile inputFile : inputFiles) {
-        checkCancelled(context);
+        checkCancelled();
         progressReport.nextFile();
-        analyseFile(context, phpAnalyzer, inputFile, numberOfLinesOfCode);
+        analyseFile(phpAnalyzer, inputFile, numberOfLinesOfCode);
       }
       success = true;
     } finally {
@@ -171,7 +171,7 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void checkCancelled(SensorContext context) {
+  private void checkCancelled() {
     if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) && context.isCancelled()) {
       throw new CancellationException("Analysis cancelled");
     }
@@ -185,12 +185,12 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, CompatibleInputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
+  private void analyseFile(PHPAnalyzer phpAnalyzer, CompatibleInputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
     try {
       phpAnalyzer.nextFile(inputFile);
       saveIssues(context, phpAnalyzer.analyze(), inputFile);
 
-      if (!context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT) {
+      if (inSonarQube()) {
         saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
         saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
         FileMeasures measures = phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile.wrapped()),

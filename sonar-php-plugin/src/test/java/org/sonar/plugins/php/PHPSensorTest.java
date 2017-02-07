@@ -355,7 +355,9 @@ public class PHPSensorTest {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check));
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
-    createSensor().analyseFiles(context, phpAnalyzer, Collections.singletonList(inputFile), new HashMap<>());
+    PHPSensor sensor = createSensor();
+    sensor.execute(context);
+    sensor.analyseFiles(phpAnalyzer, Collections.singletonList(inputFile), new HashMap<>());
   }
 
   private final class ExceptionRaisingCheck extends PHPVisitorCheck {
