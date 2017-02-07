@@ -20,6 +20,7 @@
 package org.sonar.php.tree.visitors;
 
 import com.google.common.collect.ImmutableList;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.FileIssue;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
@@ -100,7 +102,12 @@ public class PHPCheckContext implements CheckContext {
   }
 
   @Override
-  public CompatibleInputFile file() {
+  public File file() {
+    return file.file();
+  }
+
+  @Override
+  public PhpFile getPhpFile() {
     return file;
   }
 

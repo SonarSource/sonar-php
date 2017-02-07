@@ -21,13 +21,11 @@ package org.sonar.php.checks;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.Iterator;
 import java.util.regex.Pattern;
-
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -56,8 +54,7 @@ public class FileHeaderCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    CompatibleInputFile file = context().file();
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.inputStream(), file.charset()))) {
+    try (BufferedReader reader = new BufferedReader(new StringReader(context().getPhpFile().contents()))) {
       Iterator<String> it = reader.lines().iterator();
       if (it.hasNext() && !matches(expectedLines, it)) {
         context().newFileIssue(this, MESSAGE);

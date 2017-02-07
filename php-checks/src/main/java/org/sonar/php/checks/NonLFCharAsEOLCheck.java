@@ -21,9 +21,8 @@ package org.sonar.php.checks;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.StringReader;
 import org.sonar.check.Rule;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -35,13 +34,12 @@ public class NonLFCharAsEOLCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    CompatibleInputFile file = context().file();
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.inputStream(), file.charset()))) {
+    try (BufferedReader reader = new BufferedReader(new StringReader(context().getPhpFile().contents()))) {
       int c;
       while ((c = reader.read()) != -1) {
 
         if (c == '\r' || c == '\u2028' || c == '\u2029') {
-          String message = String.format(MESSAGE, file.path().getFileName());
+          String message = String.format(MESSAGE, context().getPhpFile().fileName());
           context().newFileIssue(this, message);
           break;
         }

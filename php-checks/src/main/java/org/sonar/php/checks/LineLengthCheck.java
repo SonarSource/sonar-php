@@ -21,11 +21,9 @@ package org.sonar.php.checks;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-
+import java.io.StringReader;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -44,8 +42,7 @@ public class LineLengthCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    CompatibleInputFile file = context().file();
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.inputStream(), file.charset()))) {
+    try (BufferedReader reader = new BufferedReader(new StringReader(context().getPhpFile().contents()))) {
       int[] idx = {0};
       reader.lines().forEach(line -> {
         if (line.length() > maximumLineLength) {

@@ -35,7 +35,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class CpdVisitor extends PHPVisitorCheck {
 
   private final SensorContext sensorContext;
-  private CompatibleInputFile inputFile;
+  private CompatibleInputFile compatibleInputFile;
   private NewCpdTokens cpdTokens;
 
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
@@ -47,8 +47,8 @@ public class CpdVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    inputFile = context().file();
-    cpdTokens = sensorContext.newCpdTokens().onFile(inputFile.wrapped());
+    compatibleInputFile = (CompatibleInputFile) context().getPhpFile();
+    cpdTokens = sensorContext.newCpdTokens().onFile(compatibleInputFile.wrapped());
 
     super.visitCompilationUnit(tree);
 
@@ -83,7 +83,7 @@ public class CpdVisitor extends PHPVisitorCheck {
   }
 
   private void addToken(SyntaxToken token, String text) {
-    TextRange range = inputFile.newRange(token.line(), token.column(), token.endLine(), token.endColumn());
+    TextRange range = compatibleInputFile.newRange(token.line(), token.column(), token.endLine(), token.endColumn());
     cpdTokens.addToken(range, text);
   }
 

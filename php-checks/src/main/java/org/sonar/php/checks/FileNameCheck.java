@@ -47,8 +47,7 @@ public class FileNameCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    String fileName = context().file().path().getFileName().toString();
-    if (!pattern.matcher(fileName).matches()) {
+    if (!pattern.matcher(context().getPhpFile().fileName()).matches()) {
       context().newFileIssue(this, String.format(MESSAGE, format));
     }
   }

@@ -27,13 +27,15 @@ import java.nio.file.Path;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.fs.TextRange;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 /**
  * A compatibility wrapper for InputFile. See class hierarchy.
  *
  * All methods of this class simply delegate to the wrapped instance, except `wrapped`.
  */
-public class CompatibleInputFile {
+public class CompatibleInputFile implements PhpFile {
+
   private final InputFile wrapped;
 
   public CompatibleInputFile(InputFile wrapped) {
@@ -52,7 +54,8 @@ public class CompatibleInputFile {
   public String absolutePath() {
     return wrapped.absolutePath();
   }
-  
+
+  @Override
   public String relativePath() {
     return wrapped.relativePath();
   }
@@ -75,12 +78,18 @@ public class CompatibleInputFile {
     }
   }
 
+  @Override
   public String contents() {
     try {
       return wrapped.contents();
     } catch (IOException e) {
       throw new InputFileIOException(e);
     }
+  }
+
+  @Override
+  public String fileName() {
+    return path().getFileName().toString();
   }
 
   public TextPointer newPointer(int line, int lineOffset) {
