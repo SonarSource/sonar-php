@@ -19,9 +19,10 @@
  */
 package org.sonar.php.tree.visitors;
 
-import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.io.File;
 import org.junit.Test;
+import org.sonar.php.FileTestUtils;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -33,8 +34,7 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.io.File;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,9 +42,9 @@ public class PHPVisitorCheckTest {
 
   @Test
   public void test() {
-    ActionParser<Tree> parser = PHPParserBuilder.createParser(Charsets.UTF_8);
-    File file = new File("src/test/resources/visitors/test.php");
-    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file);
+    ActionParser<Tree> parser = PHPParserBuilder.createParser();
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
 
     TestVisitor testVisitor = new TestVisitor();
     testVisitor.analyze(file, tree);
@@ -58,7 +58,6 @@ public class PHPVisitorCheckTest {
     assertThat(testVisitor.tokenCounter).isEqualTo(29);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
   }
-
 
   private class TestVisitor extends PHPVisitorCheck {
     int classCounter = 0;
@@ -74,7 +73,6 @@ public class PHPVisitorCheckTest {
       super.visitClassDeclaration(tree);
       classCounter++;
     }
-
 
     @Override
     public void visitNamespaceName(NamespaceNameTree tree) {
@@ -115,7 +113,6 @@ public class PHPVisitorCheckTest {
     public void visitTrivia(SyntaxTrivia trivia) {
       triviaCounter++;
     }
-
 
   }
 

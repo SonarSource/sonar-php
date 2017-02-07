@@ -50,7 +50,6 @@ public class PhpIniSensorTest {
   @org.junit.Rule
   public LogTester logTester = new LogTester();
 
-
   @Test
   public void describe() throws Exception {
     DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
@@ -85,6 +84,7 @@ public class PhpIniSensorTest {
 
   private DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {
     DefaultInputFile file1 = new DefaultInputFile("moduleKey", "php.ini")
+      .setCharset(StandardCharsets.UTF_8)
       .initMetadata(Files.toString(new File(baseDir, "php.ini"), StandardCharsets.UTF_8));
     context.fileSystem().add(file1);
     return file1;

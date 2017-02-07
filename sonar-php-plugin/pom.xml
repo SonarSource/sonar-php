@@ -23,8 +23,6 @@
   </scm>
 
   <properties>
-    <sonar.pluginClass>org.sonar.plugins.php.PhpPlugin</sonar.pluginClass>
-    <sonar.pluginName>PHP</sonar.pluginName>
     <!-- Those classes are excluded as they are just a temporary copy of Sonar core classes -->
     <sonar.exclusions>org/sonar/plugins/php/duplications/internal/*.java</sonar.exclusions>
   </properties>
@@ -67,6 +65,18 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>1.17</version>
+        <configuration>
+          <pluginName>PHP</pluginName>
+          <pluginClass>org.sonar.plugins.php.PhpPlugin</pluginClass>
+          <sonarLintSupported>true</sonarLintSupported>
+          <skipDependenciesPackaging>true</skipDependenciesPackaging>
+          <sonarQubeMinVersion>5.6</sonarQubeMinVersion> <!-- allow to depend on API 6.2 but run on LTS -->
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
           <execution>
@@ -78,13 +88,38 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <minsize>3600000</minsize>
-                  <maxsize>3800000</maxsize>
+                  <minsize>2500000</minsize>
+                  <maxsize>2800000</maxsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>
                 </requireFilesSize>
               </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>false</shadedArtifactAttached>
+              <minimizeJar>true</minimizeJar>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <filters>
+                <filter>
+                  <artifact>cglib:cglib-nodep</artifact>
+                  <includes>
+                    <include>**</include>
+                  </includes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
         </executions>

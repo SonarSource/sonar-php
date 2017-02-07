@@ -19,11 +19,11 @@
  */
 package org.sonar.php.highlighter;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Before;
@@ -45,7 +45,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 public class SymbolHighlighterTest {
 
-  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser(Charsets.UTF_8);
+  private static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser();
 
   private File file;
 
@@ -61,9 +61,9 @@ public class SymbolHighlighterTest {
   @Before
   public void setUp() throws IOException {
     DefaultFileSystem fileSystem = new DefaultFileSystem(tempFolder.getRoot());
-    fileSystem.setEncoding(Charsets.UTF_8);
+    fileSystem.setEncoding(StandardCharsets.UTF_8);
     file = tempFolder.newFile();
-    inputFile = new DefaultInputFile("moduleKey",  file.getName())
+    inputFile = new DefaultInputFile("moduleKey", file.getName())
       .setLanguage("php")
       .setType(Type.MAIN);
     fileSystem.add(inputFile);
@@ -77,17 +77,17 @@ public class SymbolHighlighterTest {
   public void test_empty_input() throws Exception {
     highlight("<?php ");
 
-    checkSymbolExistence(1, 1, false);
+    checkNoSymbolExists(1, 1);
   }
 
   @Test
   public void test_no_usages() throws Exception {
     highlight("<?php   $a = 1; ");
 
-    checkSymbolExistence(1, 7, false);   // (blank)
-    checkSymbolExistence(1, 8, true);    // $
-    checkSymbolExistence(1, 9, true);    // a
-    checkSymbolExistence(1, 10, false);  // (blank)
+    checkNoSymbolExists(1, 7); // (blank)
+    checkSymbolExistence(1, 8); // $
+    checkSymbolExistence(1, 9); // a
+    checkNoSymbolExists(1, 10); // (blank)
 
     checkSymbolReferences(1, 8, new LinkedList<>());
   }
@@ -98,8 +98,7 @@ public class SymbolHighlighterTest {
 
     checkSymbolReferences(1, 8, ImmutableList.of(
       textRange(1, 21, 1, 23),
-      textRange(1, 25, 1, 27)
-    ));
+      textRange(1, 25, 1, 27)));
   }
 
   @Test
@@ -114,10 +113,10 @@ public class SymbolHighlighterTest {
     highlight("<?php $b = 42; $f = function() use($b) { echo $b; };");
 
     // there are 3 symbols: global $b, local $b, $f
-    checkSymbolExistence(1, 15, true);                                         // $f
+    checkSymbolExistence(1, 15); // $f
 
-    checkSymbolReferences(1, 6, ImmutableList.of(textRange(1, 35, 1, 37)));    // global $b
-    checkSymbolReferences(1, 35, ImmutableList.of(textRange(1, 46, 1, 48)));   // local $b
+    checkSymbolReferences(1, 6, ImmutableList.of(textRange(1, 35, 1, 37))); // global $b
+    checkSymbolReferences(1, 35, ImmutableList.of(textRange(1, 46, 1, 48))); // local $b
   }
 
   private void highlight(String s) {
@@ -131,9 +130,14 @@ public class SymbolHighlighterTest {
     return new DefaultTextRange(new DefaultTextPointer(startLine, startColumn), new DefaultTextPointer(endLine, endColumn));
   }
 
-  private void checkSymbolExistence(int line, int column, boolean mustExist) {
+  private void checkSymbolExistence(int line, int column) {
     String componentKey = "moduleKey:" + file.getName();
-    new SymbolChecker(componentKey).checkSymbolExistence(context, line, column, mustExist);
+    new SymbolChecker(componentKey).checkSymbolExistence(context, line, column);
+  }
+
+  private void checkNoSymbolExists(int line, int column) {
+    String componentKey = "moduleKey:" + file.getName();
+    new SymbolChecker(componentKey).checkNoSymbolExists(context, line, column);
   }
 
   private void checkSymbolReferences(int line, int column, List<? extends TextRange> referenceRanges) {

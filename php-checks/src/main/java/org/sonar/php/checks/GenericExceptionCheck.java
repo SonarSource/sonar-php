@@ -20,7 +20,8 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
+
+import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
@@ -41,7 +42,7 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
   public static final String MESSAGE = "Define and throw a dedicated exception instead of using a generic one.";
 
   private static final Set<String> RAW_EXCEPTIONS = ImmutableSet.of("ErrorException", "RuntimeException", "Exception");
-  private Set<String> importedGenericExceptions = Sets.newHashSet();
+  private Set<String> importedGenericExceptions = new HashSet<>();
   private boolean inGlobalNamespace = true;
 
   @Override

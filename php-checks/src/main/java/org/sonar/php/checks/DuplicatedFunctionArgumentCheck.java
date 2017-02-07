@@ -20,8 +20,11 @@
 package org.sonar.php.checks;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Sets;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
@@ -36,8 +39,8 @@ public class DuplicatedFunctionArgumentCheck extends PHPVisitorCheck {
 
   @Override
   public void visitParameterList(ParameterListTree parameterList) {
-    Set<String> parameterNames = Sets.newHashSet();
-    Set<String> duplicatedParamNames = Sets.newTreeSet();
+    Set<String> parameterNames = new HashSet<>();
+    Set<String> duplicatedParamNames = new LinkedHashSet<>();
 
     for (ParameterTree parameter : parameterList.parameters()) {
       String name = parameter.variableIdentifier().variableExpression().text();

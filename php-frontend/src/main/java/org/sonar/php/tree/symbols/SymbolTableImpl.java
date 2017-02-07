@@ -21,7 +21,6 @@ package org.sonar.php.tree.symbols;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -30,13 +29,14 @@ import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class SymbolTableImpl implements SymbolTable {
 
   private List<Symbol> symbols = new ArrayList<>();
-  private Set<Scope> scopes = Sets.newHashSet();
+  private Set<Scope> scopes = new HashSet<>();
 
   private SymbolTableImpl(){
   }

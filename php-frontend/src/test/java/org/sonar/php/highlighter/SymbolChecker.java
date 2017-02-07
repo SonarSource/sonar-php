@@ -33,29 +33,26 @@ import static org.assertj.core.api.Assertions.tuple;
 public class SymbolChecker {
 
   private String componentKey;
-  
+
   public SymbolChecker(String componentKey) {
     this.componentKey = componentKey;
   }
+
   /**
    * Checks the existence of a symbol at the specified location.
    * @param line the line of the symbol
    * @param column any column of the symbol
-   * @param mustExist true if a symbol must exist at the specified location, false if it must not
    */
-  public void checkSymbolExistence(SensorContextTester context, int line, int column, boolean mustExist) {
+  public void checkSymbolExistence(SensorContextTester context, int line, int column) {
     Collection<TextRange> foundReferences = context.referencesForSymbolAt(componentKey, line, column);
+    String message = "a symbol is expected to exist and have references at line " + line + " and column " + column;
+    assertThat(foundReferences).as(message).isNotNull();
+  }
 
-    if (mustExist) {
-      String message = "a symbol is expected to exist at line " + line + " and column " + column;
-      assertThat(foundReferences).as(message).isNotNull();
-    } else {
-      // currently (Sonar API 5.6), there is no way to make the distinction between "no symbol" and "no reference to symbol".
-      // When upgrading to Sonar API 6.1+, we will have to change the code below and verify that foundReferences is null
-      // (or NoSuchElementException), see see https://jira.sonarsource.com/browse/SONAR-7850
-      String message = "no symbol is expected to exist at line " + line + " and column " + column;
-      assertThat(foundReferences).as(message).isEmpty();
-    }
+  public void checkNoSymbolExists(SensorContextTester context, int line, int column) {
+    Collection<TextRange> foundReferences = context.referencesForSymbolAt(componentKey, line, column);
+    String message = "no symbol is expected to exist at line " + line + " and column " + column;
+    assertThat(foundReferences).as(message).isNull();
   }
 
   /**

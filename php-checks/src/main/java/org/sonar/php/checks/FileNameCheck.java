@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import java.io.File;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -41,7 +40,6 @@ public class FileNameCheck extends PHPVisitorCheck {
     defaultValue = DEFAULT)
   String format = DEFAULT;
 
-
   @Override
   public void init() {
     pattern = Pattern.compile(format);
@@ -49,8 +47,7 @@ public class FileNameCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    File file = context().file();
-    if (!pattern.matcher(file.getName()).matches()) {
+    if (!pattern.matcher(context().getPhpFile().fileName()).matches()) {
       context().newFileIssue(this, String.format(MESSAGE, format));
     }
   }

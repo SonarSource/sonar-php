@@ -24,7 +24,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -242,15 +241,6 @@ public class TreeFactory {
     .put(PHPPunctuator.BANG.getValue(), Kind.LOGICAL_COMPLEMENT)
     .put(PHPPunctuator.AT.getValue(), Kind.ERROR_CONTROL)
     .build();
-
-  private final Charset charset;
-
-  public TreeFactory() {
-    this.charset = Charset.defaultCharset();
-  }
-  public TreeFactory(Charset charset) {
-    this.charset = charset;
-  }
 
   private static <T extends Tree> List<T> optionalList(Optional<List<T>> list) {
     if (list.isPresent()) {
@@ -1632,7 +1622,7 @@ public class TreeFactory {
   }
 
   public HeredocStringLiteralTree heredocStringLiteral(InternalSyntaxToken token) {
-    return new HeredocStringLiteralTreeImpl(token, charset);
+    return new HeredocStringLiteralTreeImpl(token);
   }
 
   /**

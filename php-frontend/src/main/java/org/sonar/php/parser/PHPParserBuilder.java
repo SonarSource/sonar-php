@@ -19,43 +19,41 @@
  */
 package org.sonar.php.parser;
 
-import java.nio.charset.Charset;
-
+import com.sonar.sslr.api.typed.ActionParser;
+import java.nio.charset.StandardCharsets;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.sslr.grammar.GrammarRuleKey;
-
-import com.sonar.sslr.api.typed.ActionParser;
 
 public class PHPParserBuilder {
 
   private PHPParserBuilder(){
   }
 
-  public static ActionParser<Tree> createParser(Charset charset) {
-    return createParser(PHPLexicalGrammar.COMPILATION_UNIT, charset);
+  public static ActionParser<Tree> createParser() {
+    return createParser(PHPLexicalGrammar.COMPILATION_UNIT);
   }
 
   /**
    * This method should be used by tests only.
    * Provides ability to start parsing from some rule other than PHPLexicalGrammar.COMPILATION_UNIT.
    * @param rootRule rule from which parsing starts
-   * @param charset
    */
-  public static ActionParser<Tree> createParser(GrammarRuleKey rootRule, Charset charset) {
-    return createParser(rootRule, charset, 0);
+  public static ActionParser<Tree> createParser(GrammarRuleKey rootRule) {
+    return createParser(rootRule, 0);
   }
 
   /**
    * This method should be used if required to shift line of tokens
    */
-  public static ActionParser<Tree> createParser(GrammarRuleKey rootRule, Charset charset, int lineOffset) {
+  public static ActionParser<Tree> createParser(GrammarRuleKey rootRule, int lineOffset) {
     return new ActionParser<>(
-        charset,
-        PHPLexicalGrammar.createGrammarBuilder(),
-        PHPGrammar.class,
-        new TreeFactory(charset),
-        new PHPNodeBuilder(lineOffset),
-        rootRule);
+      // we can pass any charset, it's not used. To parse file, we use sting content of it.
+      StandardCharsets.UTF_8,
+      PHPLexicalGrammar.createGrammarBuilder(),
+      PHPGrammar.class,
+      new TreeFactory(),
+      new PHPNodeBuilder(lineOffset),
+      rootRule);
   }
 
 }

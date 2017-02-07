@@ -19,17 +19,19 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.sonar.check.Rule;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+
+import com.google.common.collect.ImmutableList;
 
 @Rule(key = OneStatementPerLineCheck.KEY)
 public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
@@ -37,8 +39,8 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
   public static final String KEY = "S122";
   private static final String MESSAGE = "%s statements were found on this line. Reformat the code to have only one statement per line.";
 
-  private final Map<Integer, StatementCount> statementsPerLine = Maps.newHashMap();
-  private final Set<Integer> linesWithHtml = Sets.newHashSet();
+  private final Map<Integer, StatementCount> statementsPerLine = new HashMap<>();
+  private final Set<Integer> linesWithHtml = new HashSet<>();
   private boolean inFunctionExpression = false;
 
   private static class StatementCount {

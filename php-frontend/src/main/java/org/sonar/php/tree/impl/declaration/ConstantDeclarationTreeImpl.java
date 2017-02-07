@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
@@ -31,6 +30,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
 import java.util.Iterator;
+import java.util.function.Function;
 
 public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDeclarationTree {
 
@@ -40,10 +40,9 @@ public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDecl
   private final InternalSyntaxToken eosToken;
 
   public ConstantDeclarationTreeImpl(
-      SyntaxToken constToken,
-      SeparatedListImpl<VariableDeclarationTree> declarations,
-      InternalSyntaxToken eosToken
-  ) {
+    SyntaxToken constToken,
+    SeparatedListImpl<VariableDeclarationTree> declarations,
+    InternalSyntaxToken eosToken) {
     this.constToken = constToken;
     this.declarations = declarations;
     this.eosToken = eosToken;
@@ -73,7 +72,7 @@ public class ConstantDeclarationTreeImpl extends PHPTree implements ConstantDecl
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.singletonIterator(constToken),
-      declarations.elementsAndSeparators(Functions.<VariableDeclarationTree>identity()),
+      declarations.elementsAndSeparators(Function.identity()),
       Iterators.singletonIterator(eosToken));
   }
 

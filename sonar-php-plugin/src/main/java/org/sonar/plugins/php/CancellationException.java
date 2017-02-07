@@ -19,26 +19,16 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import org.sonar.php.FileTestUtils;
-import org.sonar.plugins.php.api.visitors.PhpFile;
+/**
+ * Exception thrown when the context is cancelled.
+ *
+ */
+class CancellationException extends RuntimeException {
 
-public class TestUtils {
+  private static final long serialVersionUID = 2694991398328066200L;
 
-  private TestUtils() {
+  CancellationException(String message) {
+    super(message);
   }
 
-  public static PhpFile getCheckFile(String filename) throws URISyntaxException {
-    return getCheckFile(new File(TestUtils.class.getResource("/checks/" + filename).toURI()));
-  }
-
-  public static PhpFile getCheckFile(File file, String contents) {
-    return FileTestUtils.getFile(file, contents);
-  }
-
-  public static PhpFile getCheckFile(File file) {
-    return FileTestUtils.getFile(file);
-
-  }
 }

@@ -19,46 +19,42 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.io.Files;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.List;
+import java.io.StringReader;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
-import org.sonar.php.api.CharsetAwareVisitor;
 import org.sonar.php.parser.LexicalConstant;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = TrailingWhitespaceCheck.KEY)
-public class TrailingWhitespaceCheck extends PHPVisitorCheck implements CharsetAwareVisitor {
+public class TrailingWhitespaceCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1131";
   private static final String MESSAGE = "Remove the useless trailing whitespaces at the end of this line.";
 
-  private Charset charset;
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[" + LexicalConstant.WHITESPACE + "]");
 
   @Override
-  public void setCharset(Charset charset) {
-    this.charset = charset;
-  }
-
-  @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    List<String> lines;
-    try {
-      lines = Files.readLines(context().file(), charset);
+    try (BufferedReader reader = new BufferedReader(new StringReader(context().getPhpFile().contents()))) {
+      Iterator<String> it = reader.lines().iterator();
+      int i = 0;
+      while (it.hasNext()) {
+        if (checkLine(it.next())) {
+          context().newLineIssue(this, i + 1, MESSAGE);
+        }
+        i++;
+      }
     } catch (IOException e) {
       throw new IllegalStateException("Check S1131: Can't read the file", e);
     }
-    for (int i = 0; i < lines.size(); i++) {
-      String line = lines.get(i);
-      if (line.length() > 0 && WHITESPACE_PATTERN.matcher(line.subSequence(line.length() - 1, line.length())).matches()) {
-        context().newLineIssue(this, i + 1, MESSAGE);
-      }
-    }
+  }
 
+  private static boolean checkLine(String line) {
+    return line.length() > 0 && WHITESPACE_PATTERN.matcher(line.subSequence(line.length() - 1, line.length())).matches();
   }
 
 }

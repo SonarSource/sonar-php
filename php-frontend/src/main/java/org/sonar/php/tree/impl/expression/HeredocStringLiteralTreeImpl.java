@@ -23,7 +23,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
-import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -48,12 +47,12 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
 
   private static final Pattern pattern = Pattern.compile(LexicalConstant.HEREDOC);
 
-  public HeredocStringLiteralTreeImpl(SyntaxToken tmpHeredocToken, Charset charset) {
+  public HeredocStringLiteralTreeImpl(SyntaxToken tmpHeredocToken) {
     Matcher matcher = pattern.matcher(tmpHeredocToken.text());
     Preconditions.checkArgument(matcher.matches());
     String heredocBody = matcher.group(3);
 
-    this.elements = (List<ExpressionTree>) PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, charset, tmpHeredocToken.line())
+    this.elements = (List<ExpressionTree>) PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, tmpHeredocToken.line())
       .parse(heredocBody);
 
 

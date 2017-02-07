@@ -19,11 +19,12 @@
  */
 package com.sonar.it.php;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -84,14 +85,14 @@ public class CommonRulesTest {
    */
   private static void createReportsWithAbsolutePath() throws Exception {
     Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.coverage.xml"), Charsets.UTF_8)
+      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.coverage.xml"), StandardCharsets.UTF_8)
         .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.coverage-with-absolute-path.xml"), Charsets.UTF_8);
+      new File(PROJECT_DIR, REPORTS_DIR + "/.coverage-with-absolute-path.xml"), StandardCharsets.UTF_8);
 
     Files.write(
-      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.xml"), Charsets.UTF_8)
+      Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.xml"), StandardCharsets.UTF_8)
         .replace("SomeTest.php", new File(PROJECT_DIR, TESTS_DIR + "/SomeTest.php").getAbsolutePath()),
-      new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
+      new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), StandardCharsets.UTF_8);
   }
 
 }

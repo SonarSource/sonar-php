@@ -21,8 +21,9 @@ package org.sonar.php.tree.impl.expression;
 
 import java.util.Iterator;
 import java.util.List;
-
-import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -32,11 +33,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 
 public class ExpandableStringLiteralTreeImpl extends PHPTree implements ExpandableStringLiteralTree {
 
@@ -65,17 +61,18 @@ public class ExpandableStringLiteralTreeImpl extends PHPTree implements Expandab
 
   @Override
   public List<ExpandableStringCharactersTree> strings() {
-    return ImmutableList.copyOf(Iterables.filter(elements, ExpandableStringCharactersTree.class));
+    return elements.stream()
+      .filter(ExpandableStringCharactersTree.class::isInstance)
+      .map(ExpandableStringCharactersTree.class::cast)
+      .collect(Collectors.toList());
   }
 
   @Override
   public List<ExpressionTree> expressions() {
-    return ImmutableList.copyOf(Iterables.filter(elements, new Predicate<ExpressionTree>() {
-      @Override
-      public boolean apply(@Nullable ExpressionTree input) {
-        return input != null ? !input.is(Kind.EXPANDABLE_STRING_CHARACTERS) : false;
-      }
-    }));
+    return elements.stream()
+      .filter(Objects::nonNull)
+      .filter(tree -> !tree.is(Kind.EXPANDABLE_STRING_CHARACTERS))
+      .collect(Collectors.toList());
   }
 
   @Override
@@ -85,10 +82,9 @@ public class ExpandableStringLiteralTreeImpl extends PHPTree implements Expandab
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.concat(
-      Iterators.singletonIterator(openDoubleQuote),
-      elements.iterator(),
-      Iterators.singletonIterator(closeDoubleQuote));
+    return Stream.concat(
+      Stream.concat(Stream.of(openDoubleQuote), elements.stream()),
+      Stream.of(closeDoubleQuote)).iterator();
   }
 
   @Override

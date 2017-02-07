@@ -17,28 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import org.sonar.php.FileTestUtils;
-import org.sonar.plugins.php.api.visitors.PhpFile;
-
-public class TestUtils {
-
-  private TestUtils() {
-  }
-
-  public static PhpFile getCheckFile(String filename) throws URISyntaxException {
-    return getCheckFile(new File(TestUtils.class.getResource("/checks/" + filename).toURI()));
-  }
-
-  public static PhpFile getCheckFile(File file, String contents) {
-    return FileTestUtils.getFile(file, contents);
-  }
-
-  public static PhpFile getCheckFile(File file) {
-    return FileTestUtils.getFile(file);
-
-  }
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.php.compat;

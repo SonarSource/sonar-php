@@ -17,28 +17,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php;
+package org.sonar.php.compat;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import org.sonar.php.FileTestUtils;
-import org.sonar.plugins.php.api.visitors.PhpFile;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import org.sonar.api.batch.fs.InputFile;
 
-public class TestUtils {
-
-  private TestUtils() {
+/**
+ * Makes the wrapped API 6.0+ InputFile instance compatible with API 6.2,
+ * by providing the inputStream() and contents() methods.
+ */
+class InputFileV60Compat extends CompatibleInputFile {
+  InputFileV60Compat(InputFile wrapped) {
+    super(wrapped);
   }
 
-  public static PhpFile getCheckFile(String filename) throws URISyntaxException {
-    return getCheckFile(new File(TestUtils.class.getResource("/checks/" + filename).toURI()));
+  @Override
+  public InputStream inputStream() throws IOException {
+    return Files.newInputStream(this.path());
   }
 
-  public static PhpFile getCheckFile(File file, String contents) {
-    return FileTestUtils.getFile(file, contents);
-  }
-
-  public static PhpFile getCheckFile(File file) {
-    return FileTestUtils.getFile(file);
-
+  @Override
+  public String contents() {
+    try {
+      return new String(Files.readAllBytes(this.path()), this.charset());
+    } catch (IOException e) {
+      throw new CompatibleInputFile.InputFileIOException(e);
+    }
   }
 }

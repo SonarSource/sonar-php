@@ -32,6 +32,7 @@ import org.mockito.MockitoAnnotations;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.PhpTestUtils;
@@ -68,7 +69,7 @@ public class PhpUnitServiceTest {
   private SensorContext context;
   
   @Mock
-  private Map<File, Integer> numberOfLinesOfCode;
+  private Map<String, Integer> numberOfLinesOfCode;
 
   private PhpUnitService phpUnitService;
   private static final File TEST_REPORT_FILE = TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME);
@@ -96,7 +97,7 @@ public class PhpUnitServiceTest {
   @SuppressWarnings("unchecked")
   @Test
   public void noReport() {
-    when(context.settings()).thenReturn(new Settings());
+    when(context.settings()).thenReturn(new MapSettings());
     phpUnitService = createService(fs);
     phpUnitService.execute(context, numberOfLinesOfCode);
 
@@ -140,13 +141,13 @@ public class PhpUnitServiceTest {
   private Settings settings(String path) {
     Properties props = new Properties();
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, path);
-    Settings settings = new Settings();
+    Settings settings = new MapSettings();
     settings.addProperties(props);
     return settings;
   }
 
   private static Settings newSettings() {
-    Settings settings = new Settings();
+    Settings settings = new MapSettings();
     Properties props = new Properties();
 
     props.put(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpUnitServiceTest.TEST_REPORT_FILE.getAbsolutePath());
