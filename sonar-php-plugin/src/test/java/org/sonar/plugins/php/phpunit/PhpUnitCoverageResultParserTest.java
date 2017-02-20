@@ -30,12 +30,15 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
+import org.sonar.api.SonarQubeSide;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
@@ -153,6 +156,7 @@ public class PhpUnitCoverageResultParserTest {
   @Test
   public void should_set_metrics_to_ncloc_for_missing_files() throws Exception {
     SensorContextTester context = setUpForSensorContextTester();
+    context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(6, 1), SonarQubeSide.SCANNER));
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
     numberOfLinesOfCode.put(MONKEY_FILE, 42);
@@ -161,6 +165,20 @@ public class PhpUnitCoverageResultParserTest {
 
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES_TO_COVER, 42);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES, 42);
+  }
+
+  @Test
+  public void should_not_set_metrics_to_ncloc_for_missing_files_sq_62() throws Exception {
+    SensorContextTester context = setUpForSensorContextTester();
+    String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
+
+    numberOfLinesOfCode.put(MONKEY_FILE, 42);
+
+    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
+
+    // since SQ 6.2 these are not saved
+    assertThat(context.measure(componentKey, CoreMetrics.LINES_TO_COVER)).isNull();
+    assertThat(context.measure(componentKey, CoreMetrics.UNCOVERED_LINES)).isNull();
   }
 
 //  @Test
@@ -192,7 +210,7 @@ public class PhpUnitCoverageResultParserTest {
   }
 
   private void assertCoverageLineHits(SensorContextTester context, String componentKey, int line, int expectedHits) {
-    assertThat(context.lineHits(componentKey, parser.coverageType, line)).as("coverage line hits for line: " + line).isEqualTo(expectedHits);
+    assertThat(context.lineHits(componentKey, line)).as("coverage line hits for line: " + line).isEqualTo(expectedHits);
   }
 
 }
