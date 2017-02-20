@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 import java.io.File;
@@ -40,6 +41,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.ParsingUtils;
+import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
@@ -143,7 +145,7 @@ public class PhpUnitResultParser implements PhpUnitParser {
   private void parseFile(File report, SensorContext context) {
     TestSuites testSuites = getTestSuites(report);
     List<PhpUnitTestReport> fileReports = readSuites(testSuites);
-    for (PhpUnitTestReport fileReport : fileReports) {
+    for (PhpUnitTestReport fileReport : Lists.reverse(fileReports)) {
       saveTestReportMeasures(fileReport, context);
     }
   }
@@ -180,16 +182,22 @@ public class PhpUnitResultParser implements PhpUnitParser {
         context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getSkipped()).forMetric(CoreMetrics.SKIPPED_TESTS).save();
       }
       double duration = Math.round(fileReport.getTime() * MILLISECONDS);
-      context.<Long>newMeasure().on(unitTestFile).withValue((long)duration).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
-      context.<Integer>newMeasure().on(unitTestFile).withValue((int)testsCount).forMetric(CoreMetrics.TESTS).save();
-      context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getErrors()).forMetric(CoreMetrics.TEST_ERRORS).save();
-      context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getFailures()).forMetric(CoreMetrics.TEST_FAILURES).save();
-      if (testsCount > 0) {
-        double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
-        double percentage = passedTests * PERCENT / testsCount;
-        context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
+
+      // fixme SONARPHP-684
+      try {
+        context.<Long>newMeasure().on(unitTestFile).withValue((long) duration).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
+        context.<Integer>newMeasure().on(unitTestFile).withValue((int) testsCount).forMetric(CoreMetrics.TESTS).save();
+        context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getErrors()).forMetric(CoreMetrics.TEST_ERRORS).save();
+        context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getFailures()).forMetric(CoreMetrics.TEST_FAILURES).save();
+        if (testsCount > 0) {
+          double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
+          double percentage = passedTests * PERCENT / testsCount;
+          context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
+        }
+        saveTestsDetails(fileReport);
+      } catch (SonarException e) {
+        LOG.error("There are several test suites for one file in unit test report.");
       }
-      saveTestsDetails(fileReport);
     } else {
       LOG.debug("Following file is not located in the test folder specified in the Sonar configuration: " + fileReport.getFile()
         + ". The test results won't be reported in Sonar.");
