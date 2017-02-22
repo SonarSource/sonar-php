@@ -227,6 +227,12 @@ public class PHPSensorTest {
   }
 
   @Test
+  public void parsing_error_should_raise_be_reported_in_sensor_context() throws Exception {
+    analyseSingleFile(createSensor(), "parseError.php");
+    assertThat(context.allAnalysisErrors()).hasSize(1);
+  }
+
+  @Test
   public void parsing_error_should_raise_no_issue_if_check_rule_is_not_activated() throws Exception {
     analyseSingleFile(createSensor(), "parseError.php");
     assertThat(context.allIssues()).as("One issue must be raised").isEmpty();

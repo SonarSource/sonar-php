@@ -238,6 +238,14 @@ public class PHPSensor implements Sensor {
         .at(location)
         .save();
     }
+
+    if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0)) {
+      context.newAnalysisError()
+        .onFile(inputFile)
+        .at(inputFile.newPointer(e.getLine(), 0))
+        .message(e.getMessage())
+        .save();
+    }
   }
 
   private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {
