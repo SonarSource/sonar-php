@@ -20,12 +20,12 @@
 package org.sonar.plugins.php;
 
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.core.NoSonarSensor;
-import org.sonar.plugins.php.phpunit.PhpUnitService;
 
 public class PhpPlugin implements Plugin {
 
@@ -40,6 +40,7 @@ public class PhpPlugin implements Plugin {
   public static final String PHPUNIT_SUBCATEGORY = "PHPUnit";
 
   public static final Version SQ_VERSION_6_2 = Version.create(6, 2);
+  public static final Version SQ_VERSION_6_0 = Version.create(6, 0);
 
   @Override
   public void define(Context context) {
@@ -61,9 +62,6 @@ public class PhpPlugin implements Plugin {
       PSR2Profile.class,
       DrupalProfile.class,
 
-      // PhpUnit
-      PhpUnitService.class,
-
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
         .defaultValue(Php.DEFAULT_FILE_SUFFIXES)
@@ -72,39 +70,42 @@ public class PhpPlugin implements Plugin {
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
         .category(PHP_CATEGORY)
         .subCategory(GENERAL_SUBCATEGORY)
-        .build(),
-
-      PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
-        .name("Unit Test Report")
-        .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
-        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-        .category(PHP_CATEGORY)
-        .subCategory(PHPUNIT_SUBCATEGORY)
-        .build(),
-
-      PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATH_KEY)
-        .name("Coverage Report")
-        .description("Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
-        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-        .category(PHP_CATEGORY)
-        .subCategory(PHPUNIT_SUBCATEGORY)
-        .build(),
-
-      PropertyDefinition.builder(PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY)
-        .name("IT Coverage Report")
-        .description("Path to the PHPUnit integration test code coverage report file. The path may be either absolute or relative to the project base directory.")
-        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-        .category(PHP_CATEGORY)
-        .subCategory(PHPUNIT_SUBCATEGORY)
-        .build(),
-
-      PropertyDefinition.builder(PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY)
-        .name("Overall Coverage Report")
-        .description("Path to the PHPUnit overall code coverage report file. The path may be either absolute or relative to the project base directory.")
-        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-        .category(PHP_CATEGORY)
-        .subCategory(PHPUNIT_SUBCATEGORY)
         .build());
+
+    if (!context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.getRuntime().getProduct() != SonarProduct.SONARLINT) {
+      context.addExtensions(
+        PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
+          .name("Unit Test Report")
+          .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
+          .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+          .category(PHP_CATEGORY)
+          .subCategory(PHPUNIT_SUBCATEGORY)
+          .build(),
+
+        PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATH_KEY)
+          .name("Coverage Report")
+          .description("Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
+          .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+          .category(PHP_CATEGORY)
+          .subCategory(PHPUNIT_SUBCATEGORY)
+          .build(),
+
+        PropertyDefinition.builder(PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY)
+          .name("IT Coverage Report")
+          .description("Path to the PHPUnit integration test code coverage report file. The path may be either absolute or relative to the project base directory.")
+          .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+          .category(PHP_CATEGORY)
+          .subCategory(PHPUNIT_SUBCATEGORY)
+          .build(),
+
+        PropertyDefinition.builder(PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY)
+          .name("Overall Coverage Report")
+          .description("Path to the PHPUnit overall code coverage report file. The path may be either absolute or relative to the project base directory.")
+          .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+          .category(PHP_CATEGORY)
+          .subCategory(PHPUNIT_SUBCATEGORY)
+          .build());
+    }
   }
 
 }

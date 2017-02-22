@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -72,6 +73,8 @@ import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
 import org.sonar.plugins.php.phpunit.PhpUnitService;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
+
+import static org.sonar.plugins.php.PhpPlugin.SQ_VERSION_6_0;
 
 public class PHPSensor implements Sensor {
 
@@ -117,9 +120,12 @@ public class PHPSensor implements Sensor {
       this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
       this.fileSystem.predicates().hasLanguage(Php.KEY));
 
-    ImmutableList<PHPCheck> visitors = getVisitors(new CpdVisitor(context));
+    ImmutableList.Builder<PHPCheck> visitorsBuilder = ImmutableList.<PHPCheck>builder().addAll(checks.all());
+    if (!isSonarLint(context)) {
+      visitorsBuilder.add(new CpdVisitor(context));
+    }
 
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitors);
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitorsBuilder.build());
     ArrayList<InputFile> inputFiles = Lists.newArrayList(fileSystem.inputFiles(mainFilePredicate));
 
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
@@ -129,7 +135,9 @@ public class PHPSensor implements Sensor {
 
     analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
 
-    processCoverage(context, numberOLinesOfCode);
+    if (!isSonarLint(context)) {
+      processCoverage(context, numberOLinesOfCode);
+    }
   }
 
   private void processCoverage(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
@@ -172,13 +180,17 @@ public class PHPSensor implements Sensor {
     try {
       phpAnalyzer.nextFile(inputFile.file());
       saveIssues(context, phpAnalyzer.analyze(), inputFile);
-      saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
-      saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
-      saveNewFileMeasures(context,
-        phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile),
-          numberOfLinesOfCode,
-          context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)),
-        inputFile);
+
+      if (!isSonarLint(context)) {
+        saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
+        saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
+        saveNewFileMeasures(context,
+          phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile),
+            numberOfLinesOfCode,
+            context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)),
+          inputFile);
+      }
+
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());
@@ -312,12 +324,6 @@ public class PHPSensor implements Sensor {
     return newLocation;
   }
 
-  private ImmutableList<PHPCheck> getVisitors(PHPCheck additionalCheck) {
-    return ImmutableList.<PHPCheck>builder()
-      .addAll(checks.all())
-      .add(additionalCheck).build();
-  }
-
   @Override
   public String toString() {
     return getClass().getSimpleName();
@@ -330,6 +336,10 @@ public class PHPSensor implements Sensor {
       .collect(Collectors.toList());
 
     return keys.isEmpty() ? null : keys.get(0);
+  }
+
+  private static boolean isSonarLint(SensorContext context) {
+    return context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) && context.runtime().getProduct() == SonarProduct.SONARLINT;
   }
 
 }

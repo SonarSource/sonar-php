@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.TextRange;
@@ -41,6 +43,7 @@ import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.internal.google.common.base.Charsets;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
@@ -49,6 +52,7 @@ import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.scan.issue.filter.FilterableIssue;
 import org.sonar.api.scan.issue.filter.IssueFilterChain;
+import org.sonar.api.utils.Version;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.duplications.internal.pmd.TokensLine;
@@ -77,6 +81,10 @@ public class PHPSensorTest {
   private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
 
   private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
+
+  private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 0);
+  private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
+  private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION, SonarQubeSide.SERVER);
 
   @org.junit.Rule
   public final ExpectedException thrown = ExpectedException.none();
@@ -323,6 +331,71 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, fileName);
 
     // should not fail
+  }
+
+  @Test
+  public void should_disable_unnecessary_features_for_sonarlint() throws Exception {
+    context.settings().setProperty(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_REPORT_NAME);
+    context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
+
+    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", "PHPSquidSensor.php")
+      .setModuleBaseDir(context.fileSystem().baseDirPath())
+      .setType(Type.MAIN)
+      .setLanguage(Php.KEY);
+    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+
+    DefaultInputFile testFile = new DefaultInputFile("moduleKey", "Monkey.php")
+      .setModuleBaseDir(context.fileSystem().baseDirPath())
+      .setType(InputFile.Type.TEST)
+      .setLanguage(Php.KEY);
+
+    String testFileKey = testFile.key();
+    String mainFileKey = inputFile.key();
+
+    context.fileSystem().add(inputFile);
+    context.fileSystem().add(testFile);
+
+    context.setRuntime(SONARLINT_RUNTIME);
+    createSensor().execute(context);
+
+    // no cpd tokens
+    assertThat(context.cpdTokens(mainFileKey)).isNull();
+
+    // no highlighting
+    assertThat(context.highlightingTypeAt(mainFileKey, 1, 0)).isEmpty();
+
+    // no tests
+    assertThat(context.measure(testFileKey, CoreMetrics.TESTS)).isNull();
+
+    // no coverage
+    assertThat(context.measure(testFileKey, CoreMetrics.LINES_TO_COVER)).isNull();
+
+    // metrics are not saved
+    assertThat(context.measure(mainFileKey, CoreMetrics.NCLOC)).isNull();
+
+    // no symbol highlighting
+    assertThat(context.referencesForSymbolAt(mainFileKey, 6, 7)).isNull();
+
+    context.setRuntime(NOT_SONARLINT_RUNTIME);
+    createSensor().execute(context);
+
+    // cpd tokens exist
+    assertThat(context.cpdTokens(mainFileKey)).isNotEmpty();
+
+    // highlighting exists
+    assertThat(context.highlightingTypeAt(mainFileKey, 2, 0)).isNotEmpty();
+
+    // tests exist
+    assertThat(context.measure(testFileKey, CoreMetrics.TESTS)).isNotNull();
+
+    // coverage exists
+    assertThat(context.measure(mainFileKey, CoreMetrics.LINES_TO_COVER)).isNotNull();
+
+    // metrics are saved
+    assertThat(context.measure(mainFileKey, CoreMetrics.NCLOC)).isNotNull();
+
+    // symbol highlighting is there
+    assertThat(context.referencesForSymbolAt(mainFileKey, 6, 7)).isNotNull();
   }
 
   private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
