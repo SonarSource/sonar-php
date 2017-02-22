@@ -88,7 +88,7 @@ public class PhpUnitCoverageResultParserTest {
   }
 
   @Test
-  public void shouldThrowAnExceptionWhenReportNotFound() {
+  public void should_throw_an_exception_when_report_not_found() {
     SensorContext context = setUpForMockedSensorContext();
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Can't read phpUnit report:");
@@ -100,7 +100,7 @@ public class PhpUnitCoverageResultParserTest {
    * Should parse even when there's a package node.
    */
   @Test
-  public void shouldParseEvenWithPackageNode() throws Exception {
+  public void should_parse_even_with_package_node() throws Exception {
     SensorContextTester context = setUpForSensorContextTester();
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
@@ -113,7 +113,7 @@ public class PhpUnitCoverageResultParserTest {
    * Should generate coverage metrics.
    */
    @Test
-   public void shouldGenerateCoverageMeasures() throws Exception {
+   public void should_generate_coverage_measures() throws Exception {
      SensorContextTester context = setUpForSensorContextTester();
      String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
@@ -134,7 +134,7 @@ public class PhpUnitCoverageResultParserTest {
    * SONARPLUGINS-1591
    */
   @Test
-  public void shouldNotFailIfNoStatementCount() throws Exception {
+  public void should_not_fail_if_no_statement_count() throws Exception {
     SensorContextTester context = setUpForSensorContextTester();
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
@@ -147,7 +147,7 @@ public class PhpUnitCoverageResultParserTest {
    * SONARPLUGINS-1675
    */
   @Test
-  public void shouldNotFailIfNoLineForFileNode() throws Exception {
+  public void should_not_fail_if_no_line_for_file_node() throws Exception {
     SensorContextTester context = setUpForSensorContextTester();
 
     parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-filenode-without-line.xml"), context, numberOfLinesOfCode);
@@ -180,16 +180,6 @@ public class PhpUnitCoverageResultParserTest {
     assertThat(context.measure(componentKey, CoreMetrics.LINES_TO_COVER)).isNull();
     assertThat(context.measure(componentKey, CoreMetrics.UNCOVERED_LINES)).isNull();
   }
-
-//  @Test
-//  public void should_skip_missing_files_with_no_ncloc() throws Exception {
-//    SensorContextTester context = setUpForSensorContextTester();
-//    String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
-//
-//    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
-//
-//    // verify(context, Mockito.never()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINES_TO_COVER), any(Double.class));
-//  }
 
   /**
    * Replace file name with absolute path in coverage report.
