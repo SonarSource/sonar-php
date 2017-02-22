@@ -194,7 +194,6 @@ public class PhpUnitResultParser implements PhpUnitParser {
           double percentage = passedTests * PERCENT / testsCount;
           context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
         }
-        saveTestsDetails(fileReport);
       } catch (SonarException e) {
         LOG.error("There are several test suites for one file in unit test report.");
       }
@@ -202,32 +201,6 @@ public class PhpUnitResultParser implements PhpUnitParser {
       LOG.debug("Following file is not located in the test folder specified in the Sonar configuration: " + fileReport.getFile()
         + ". The test results won't be reported in Sonar.");
     }
-  }
-
-  /**
-   * Save tests details.
-   *
-   * @param fileReport the file report
-   */
-  private static void saveTestsDetails(PhpUnitTestReport fileReport) {
-    StringBuilder details = new StringBuilder();
-    details.append("<tests-details>");
-    for (TestCase detail : fileReport.getDetails()) {
-      double time = ParsingUtils.scaleValue(detail.getTime() * MILLISECONDS, PRECISION);
-      details.append("<testcase status=\"").append(detail.getStatus()).append("\" time=\"");
-      details.append(time).append("\" name=\"").append(detail.getName().replaceAll(" ", "_")).append("\"");
-      boolean isError = TestCase.STATUS_ERROR.equals(detail.getStatus());
-      if (isError || TestCase.STATUS_FAILURE.equals(detail.getStatus())) {
-        details.append(">").append(isError ? "<error message=\"" : "<failure message=\"");
-        details.append(StringEscapeUtils.escapeXml(detail.getErrorMessage())).append("\"><![CDATA[");
-
-        details.append(StringEscapeUtils.escapeXml(detail.getStackTrace())).append("]]>");
-        details.append(isError ? "</error>" : "</failure>").append("</testcase>");
-      } else {
-        details.append("/>");
-      }
-    }
-    details.append("</tests-details>");
   }
 
 }
