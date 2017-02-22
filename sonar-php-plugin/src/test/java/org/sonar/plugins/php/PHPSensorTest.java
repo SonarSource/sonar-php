@@ -305,22 +305,7 @@ public class PHPSensorTest {
 
   @Test
   public void test_issues() throws Exception {
-    ActiveRules activeRules = (new ActiveRulesBuilder())
-      // class name check -> PreciseIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
-      .activate()
-      // inline html in file check -> FileIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1997"))
-      .activate()
-      // line size -> LineIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S103"))
-      .activate()
-      // Modifiers order -> PreciseIssue
-      .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1124"))
-      .activate()
-      .build();
-
-    checkFactory = new CheckFactory(activeRules);
+    checkFactory = new CheckFactory(getActiveRules());
     analyseSingleFile(createSensor(), "PHPSquidSensor.php");
 
     Collection<Issue> issues = context.allIssues();
@@ -330,6 +315,41 @@ public class PHPSensorTest {
       tuple("S1997", null),
       tuple("S103", 22),
       tuple("S1124", 22));
+  }
+
+  @Test
+  public void should_stop_if_cancel() throws Exception {
+    checkFactory = new CheckFactory(getActiveRules());
+
+    context.setCancelled(true);
+    analyseSingleFile(createSensor(), "PHPSquidSensor.php");
+
+    assertThat(context.allIssues()).as("Should have no issue").isEmpty();
+    assertThat(context.measures("moduleKey:PHPSquidSensor.php")).isEmpty();
+
+
+    context.setCancelled(false);
+    analyseSingleFile(createSensor(), "PHPSquidSensor.php");
+
+    assertThat(context.allIssues()).as("Should have no issue").isNotEmpty();
+    assertThat(context.measures("moduleKey:PHPSquidSensor.php")).isNotEmpty();
+  }
+
+  private static ActiveRules getActiveRules() {
+    return (new ActiveRulesBuilder())
+        // class name check -> PreciseIssue
+        .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S101"))
+        .activate()
+        // inline html in file check -> FileIssue
+        .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1997"))
+        .activate()
+        // line size -> LineIssue
+        .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S103"))
+        .activate()
+        // Modifiers order -> PreciseIssue
+        .create(RuleKey.of(CheckList.REPOSITORY_KEY, "S1124"))
+        .activate()
+        .build();
   }
 
   @Test
