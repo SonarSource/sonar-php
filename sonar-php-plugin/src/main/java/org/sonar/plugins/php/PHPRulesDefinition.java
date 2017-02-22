@@ -25,11 +25,13 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
+import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.utils.Version;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
@@ -37,6 +39,11 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 public class PHPRulesDefinition implements RulesDefinition {
 
   private static final String REPOSITORY_NAME = "SonarAnalyzer";
+  private final Version sonarRuntimeVersion;
+
+  public PHPRulesDefinition(Version sonarRuntimeVersion) {
+    this.sonarRuntimeVersion = sonarRuntimeVersion;
+  }
 
   @Override
   public void define(Context context) {
@@ -51,7 +58,24 @@ public class PHPRulesDefinition implements RulesDefinition {
       addMetadata(rule, metadataKey);
     }
 
+    activateRulesForSonarLint(repository);
     repository.done();
+  }
+
+  /**
+   * This method sets the rules which should be run in SonarLint in disconnected mode.
+   * Current implementation reuses Sonar Way profile.
+   */
+  private void activateRulesForSonarLint(NewRepository repository) {
+    // check if "setActivatedByDefault" is available
+    boolean isApiAvailable = sonarRuntimeVersion.isGreaterThanOrEqual(Version.parse("6.0"));
+
+    if (isApiAvailable) {
+      Set<String> activatedRuleKeys = PHPProfile.activatedRuleKeys();
+      for (NewRule rule : repository.rules()) {
+        rule.setActivatedByDefault(activatedRuleKeys.contains(rule.key()));
+      }
+    }
   }
 
   @Nullable
