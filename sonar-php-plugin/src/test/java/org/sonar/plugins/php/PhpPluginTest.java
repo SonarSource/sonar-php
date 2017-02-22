@@ -39,7 +39,16 @@ public class PhpPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     new PhpPlugin().define(context);
 
-    assertThat(context.getExtensions()).hasSize(14);
+    assertThat(context.getExtensions()).hasSize(13);
+  }
+
+  @Test
+  public void test_sonarlint() {
+    SonarRuntime runtime = SonarRuntimeImpl.forSonarLint(Version.create(6, 0));
+    Plugin.Context context = new Plugin.Context(runtime);
+    new PhpPlugin().define(context);
+
+    assertThat(context.getExtensions()).hasSize(9);
   }
 
 }
