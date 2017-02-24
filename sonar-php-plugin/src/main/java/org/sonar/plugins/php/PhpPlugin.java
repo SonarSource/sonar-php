@@ -58,9 +58,9 @@ public class PhpPlugin implements Plugin {
 
       // Rules and profiles
       new PHPRulesDefinition(context.getSonarQubeVersion()),
-      PHPProfile.class,
-      PSR2Profile.class,
-      DrupalProfile.class,
+      PHPProfileDefinition.class,
+      PSR2ProfileDefinition.class,
+      DrupalProfileDefinition.class,
 
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)

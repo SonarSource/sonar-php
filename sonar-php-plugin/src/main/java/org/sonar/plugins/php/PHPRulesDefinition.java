@@ -71,7 +71,7 @@ public class PHPRulesDefinition implements RulesDefinition {
     boolean isApiAvailable = sonarRuntimeVersion.isGreaterThanOrEqual(Version.parse("6.0"));
 
     if (isApiAvailable) {
-      Set<String> activatedRuleKeys = PHPProfile.activatedRuleKeys();
+      Set<String> activatedRuleKeys = PHPProfileDefinition.defaultProfileRuleKeys();
       for (NewRule rule : repository.rules()) {
         rule.setActivatedByDefault(activatedRuleKeys.contains(rule.key()));
       }

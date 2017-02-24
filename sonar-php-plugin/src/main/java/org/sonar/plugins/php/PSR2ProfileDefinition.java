@@ -19,21 +19,27 @@
  */
 package org.sonar.plugins.php;
 
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.ValidationMessages;
 
-public final class DrupalProfile extends ProfileDefinition {
+public final class PSR2ProfileDefinition extends ProfileDefinition {
 
   private final XMLProfileParser xmlProfileParser;
 
-  public DrupalProfile(XMLProfileParser xmlProfileParser) {
+  public PSR2ProfileDefinition(XMLProfileParser xmlProfileParser) {
     this.xmlProfileParser = xmlProfileParser;
   }
 
   @Override
   public RulesProfile createProfile(ValidationMessages validation) {
-    return xmlProfileParser.parseResource(getClass().getClassLoader(), "org/sonar/plugins/php/profile/drupal-profile.xml", validation);
+    InputStreamReader reader = new InputStreamReader(
+      getClass().getResourceAsStream("/org/sonar/plugins/php/profile/psr2-profile.xml"),
+      StandardCharsets.UTF_8);
+
+    return xmlProfileParser.parse(reader, validation);
   }
 }

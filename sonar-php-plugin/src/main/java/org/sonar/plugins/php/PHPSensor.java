@@ -163,7 +163,7 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void checkCancelled(SensorContext context) {
+  private static void checkCancelled(SensorContext context) {
     if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) && context.isCancelled()) {
       throw new CancellationException("Analysis cancelled");
     }
@@ -355,7 +355,7 @@ public class PHPSensor implements Sensor {
     newCpdTokens.save();
   }
 
-  private class CancellationException extends RuntimeException {
+  private static class CancellationException extends RuntimeException {
 
     CancellationException(String message) {
       super(message);
