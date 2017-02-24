@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import org.sonar.php.tree.impl.PHPTree;
@@ -546,7 +545,7 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
 
   @Override
-  public final List<PhpIssue> analyze(File file, CompilationUnitTree tree) {
+  public final List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree) {
     this.context = new PHPCheckContext(file, tree);
     visitCompilationUnit(tree);
 
@@ -554,7 +553,7 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
   }
 
   @Override
-  public List<PhpIssue> analyze(File file, CompilationUnitTree tree, SymbolTable symbolTable) {
+  public List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
     this.context = new PHPCheckContext(file, tree, symbolTable);
     visitCompilationUnit(tree);
 

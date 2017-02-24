@@ -25,13 +25,12 @@ import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
-
-import java.io.File;
 
 public class PunctuatorSpacingCheckTest extends FormattingStandardCheckTest {
 
-  private static File TEST_FILE;
+  private static PhpFile TEST_FILE;
 
   @Before
   public void setUp() throws Exception {

@@ -117,13 +117,19 @@ public interface CheckContext {
    */
   FileIssue newFileIssue(PHPCheck check, String message);
 
-  /**
-   * @return the current file
-   */
-  File file();
-
   List<PhpIssue> getIssues();
 
   SymbolTable symbolTable();
 
+  /**
+   * @return the current file
+   * @deprecated since 2.10. Use {@link CheckContext#getPhpFile()}
+   */
+  @Deprecated
+  File file();
+
+  /**
+   * @return the current file
+   */
+  PhpFile getPhpFile();
 }

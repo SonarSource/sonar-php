@@ -19,12 +19,8 @@
  */
 package org.sonar.php.metrics;
 
-import java.io.File;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -33,31 +29,15 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class CpdVisitor extends PHPVisitorCheck {
 
-  private final SensorContext sensorContext;
-  private InputFile inputFile;
-  private NewCpdTokens cpdTokens;
+  List<CpdToken> cpdTokens = new ArrayList<>();
 
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
   private static final String NORMALIZED_CHARACTER_LITERAL = "$CHARS";
 
-  public CpdVisitor(SensorContext sensorContext) {
-    this.sensorContext = sensorContext;
-  }
-
-  @Override
-  public void visitCompilationUnit(CompilationUnitTree tree) {
-    File file = context().file();
-    FileSystem fileSystem = sensorContext.fileSystem();
-    inputFile = fileSystem.inputFile(fileSystem.predicates().is(file));
-    cpdTokens = sensorContext.newCpdTokens().onFile(inputFile);
-
-    super.visitCompilationUnit(tree);
-
-    cpdTokens.save();
-  }
 
   @Override
   public void visitLiteral(LiteralTree tree) {
@@ -87,12 +67,35 @@ public class CpdVisitor extends PHPVisitorCheck {
   }
 
   private void addToken(SyntaxToken token, String text) {
-    TextRange range = inputFile.newRange(token.line(), token.column(), token.endLine(), token.endColumn());
-    cpdTokens.addToken(range, text);
+    cpdTokens.add(new CpdToken(token, text));
   }
 
   @Override
   public void visitUseStatement(UseStatementTree tree) {
     // do not enter (in order to avoid use statement tokens be considered in duplication detection)
+  }
+
+  public List<CpdToken> getCpdTokens(PhpFile file, CompilationUnitTree tree) {
+    super.analyze(file, tree);
+    return cpdTokens;
+  }
+
+  public static class CpdToken {
+
+    private SyntaxToken syntaxToken;
+    private String image;
+
+    public CpdToken(SyntaxToken syntaxToken, String image) {
+      this.syntaxToken = syntaxToken;
+      this.image = image;
+    }
+
+    public SyntaxToken syntaxToken() {
+      return syntaxToken;
+    }
+
+    public String image() {
+      return image;
+    }
   }
 }

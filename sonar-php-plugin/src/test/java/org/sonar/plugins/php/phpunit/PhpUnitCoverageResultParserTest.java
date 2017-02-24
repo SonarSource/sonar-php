@@ -19,9 +19,10 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
@@ -63,7 +64,7 @@ public class PhpUnitCoverageResultParserTest {
 
   private DefaultFileSystem fileSystem;
 
-  private Map<File, Integer> numberOfLinesOfCode;
+  private Map<String, Integer> numberOfLinesOfCode;
 
   private SensorContextTester setUpForSensorContextTester() {
     return SensorContextTester.create(new File("src/test/resources"));
@@ -79,10 +80,11 @@ public class PhpUnitCoverageResultParserTest {
     DefaultInputFile monkeyFile = new DefaultInputFile("moduleKey", MONKEY_FILE_NAME)
         .setType(InputFile.Type.MAIN)
         .setLanguage(Php.KEY)
+        .setCharset(Charset.defaultCharset())
         .setLines(50);
     fileSystem.add(monkeyFile);
 
-    numberOfLinesOfCode = new HashMap<File, Integer>();
+    numberOfLinesOfCode = new HashMap<>();
 
     parser = new PhpUnitCoverageResultParser(fileSystem);
   }
@@ -92,7 +94,6 @@ public class PhpUnitCoverageResultParserTest {
     SensorContext context = setUpForMockedSensorContext();
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Can't read phpUnit report:");
-
     parser.parse(new File("notfound.txt"), context, numberOfLinesOfCode);
   }
 
@@ -159,7 +160,7 @@ public class PhpUnitCoverageResultParserTest {
     context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(6, 1), SonarQubeSide.SCANNER));
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
-    numberOfLinesOfCode.put(MONKEY_FILE, 42);
+    numberOfLinesOfCode.put(MONKEY_FILE_NAME, 42);
 
     parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
 
@@ -172,7 +173,7 @@ public class PhpUnitCoverageResultParserTest {
     SensorContextTester context = setUpForSensorContextTester();
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
-    numberOfLinesOfCode.put(MONKEY_FILE, 42);
+    numberOfLinesOfCode.put(MONKEY_FILE_NAME, 42);
 
     parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
 
@@ -191,10 +192,10 @@ public class PhpUnitCoverageResultParserTest {
     File fileWIthAbsolutePaths = folder.newFile("report_with_absolute_paths.xml");
 
     Files.write(
-      Files.toString(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + reportName), Charsets.UTF_8)
+      Files.toString(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + reportName), StandardCharsets.UTF_8)
         .replace("/" + MONKEY_FILE_NAME, MONKEY_FILE.getAbsolutePath())
         .replace("/" + BANANA_FILE_NAME, BANANA_FILE.getAbsolutePath()),
-      fileWIthAbsolutePaths, Charsets.UTF_8);
+      fileWIthAbsolutePaths, StandardCharsets.UTF_8);
 
     return fileWIthAbsolutePaths;
   }

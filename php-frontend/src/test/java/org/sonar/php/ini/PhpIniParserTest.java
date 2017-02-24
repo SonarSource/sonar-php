@@ -25,9 +25,11 @@ import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.sonar.php.FileTestUtils;
 import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -144,7 +146,8 @@ public class PhpIniParserTest {
 
   @Test
   public void parse_file() throws Exception {
-    PhpIniFile phpIni = new PhpIniParser().parse(new File("src/test/resources/phpini/php.ini"));
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/phpini/php.ini"));
+    PhpIniFile phpIni = new PhpIniParser().parse(file);
     assertThat(phpIni.directives()).hasSize(1);
     assertThat(phpIni.directives().get(0).name().text()).isEqualTo("max_execution_time");
   }
@@ -152,10 +155,11 @@ public class PhpIniParserTest {
   @Test
   public void unknown_file() throws Exception {
     PhpIniParser parser = new PhpIniParser();
-    String fileName = "xxx.ini";
+    String fileName = "dir/xxx.ini";
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage(fileName);
-    parser.parse(new File(fileName));
+    PhpFile file = FileTestUtils.getFile(new File(fileName));
+    parser.parse(file);
   }
 
   @Test

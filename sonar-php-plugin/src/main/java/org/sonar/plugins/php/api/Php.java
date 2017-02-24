@@ -31,7 +31,6 @@ import org.sonar.plugins.php.PhpPlugin;
  */
 public final class Php extends AbstractLanguage {
 
-
   public static final String NAME = "PHP";
   public static final String KEY = "php";
 

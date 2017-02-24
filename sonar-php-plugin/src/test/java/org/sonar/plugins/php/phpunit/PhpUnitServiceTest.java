@@ -69,7 +69,7 @@ public class PhpUnitServiceTest {
   private SensorContext context;
   
   @Mock
-  private Map<File, Integer> numberOfLinesOfCode;
+  private Map<String, Integer> numberOfLinesOfCode;
 
   private PhpUnitService phpUnitService;
   private static final File TEST_REPORT_FILE = TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME);

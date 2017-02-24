@@ -23,9 +23,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
-import java.io.File;
 import java.io.InterruptedIOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +42,9 @@ import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
+import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContextFactory;
@@ -55,14 +52,14 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
-import org.sonar.php.metrics.CpdVisitor;
+import org.sonar.php.compat.CompatibilityHelper;
+import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
-import org.sonar.plugins.php.api.visitors.PHPCheck;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
@@ -79,7 +76,6 @@ import static org.sonar.plugins.php.PhpPlugin.SQ_VERSION_6_0;
 public class PHPSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(PHPSensor.class);
-
   private final FileLinesContextFactory fileLinesContextFactory;
   private final PHPChecks checks;
   private final NoSonarFilter noSonarFilter;
@@ -120,27 +116,25 @@ public class PHPSensor implements Sensor {
       this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
       this.fileSystem.predicates().hasLanguage(Php.KEY));
 
-    ImmutableList.Builder<PHPCheck> visitorsBuilder = ImmutableList.<PHPCheck>builder().addAll(checks.all());
-    if (!isSonarLint(context)) {
-      visitorsBuilder.add(new CpdVisitor(context));
-    }
-
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(fileSystem.encoding(), visitorsBuilder.build());
-    ArrayList<InputFile> inputFiles = Lists.newArrayList(fileSystem.inputFiles(mainFilePredicate));
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()));
+    Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
 
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
-    Map<File, Integer> numberOLinesOfCode = new HashMap<>();
+    Map<String, Integer> numberOLinesOfCode = new HashMap<>();
 
     analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
-
-    if (!isSonarLint(context)) {
-      processCoverage(context, numberOLinesOfCode);
+    if (inSonarQube(context)) {
+      processCoverage(numberOLinesOfCode, context);
     }
   }
 
-  private void processCoverage(SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  private static boolean inSonarQube(SensorContext context) {
+    return !context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT;
+  }
+
+  private void processCoverage(Map<String, Integer> numberOfLinesOfCode, SensorContext context) {
     PhpUnitService phpUnitSensor = new PhpUnitService(
       fileSystem,
       new PhpUnitResultParser(fileSystem),
@@ -150,12 +144,7 @@ public class PHPSensor implements Sensor {
     phpUnitSensor.execute(context, numberOfLinesOfCode);
   }
 
-  void analyseFiles(
-    SensorContext context,
-    PHPAnalyzer phpAnalyzer,
-    List<InputFile> inputFiles,
-    ProgressReport progressReport,
-    Map<File, Integer> numberOfLinesOfCode) {
+  void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Iterable<InputFile> inputFiles, ProgressReport progressReport, Map<String, Integer> numberOfLinesOfCode) {
     boolean success = false;
     try {
       for (InputFile inputFile : inputFiles) {
@@ -176,21 +165,23 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile, Map<File, Integer> numberOfLinesOfCode) {
+  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
     try {
-      phpAnalyzer.nextFile(inputFile.file());
+      phpAnalyzer.nextFile(CompatibilityHelper.phpFile(inputFile, context));
       saveIssues(context, phpAnalyzer.analyze(), inputFile);
 
-      if (!isSonarLint(context)) {
-        saveSyntaxHighlighting(phpAnalyzer.getSyntaxHighlighting(context, inputFile));
-        saveSymbolHighlighting(phpAnalyzer.getSymbolHighlighting(context, inputFile));
+      if (inSonarQube(context)) {
+        phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
+        phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
         saveNewFileMeasures(context,
           phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile),
             numberOfLinesOfCode,
             context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)),
           inputFile);
+        if (inSonarQube(context)) {
+          saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
+        }
       }
-
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());
@@ -208,14 +199,6 @@ public class PHPSensor implements Sensor {
     if (cause instanceof InterruptedException || cause instanceof InterruptedIOException) {
       throw new AnalysisException("Analysis cancelled", e);
     }
-  }
-
-  private static void saveSyntaxHighlighting(NewHighlighting highlighting) {
-    highlighting.save();
-  }
-
-  private static void saveSymbolHighlighting(NewSymbolTable newSymbolTable) {
-    newSymbolTable.save();
   }
 
   private void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
@@ -338,8 +321,17 @@ public class PHPSensor implements Sensor {
     return keys.isEmpty() ? null : keys.get(0);
   }
 
-  private static boolean isSonarLint(SensorContext context) {
-    return context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) && context.runtime().getProduct() == SonarProduct.SONARLINT;
-  }
+  private static void saveCpdData(List<CpdToken> cpdTokens, InputFile inputFile, SensorContext context) {
+    NewCpdTokens newCpdTokens = context.newCpdTokens().onFile(inputFile);
 
+    cpdTokens.forEach(cpdToken -> newCpdTokens.addToken(
+      inputFile.newRange(
+        cpdToken.syntaxToken().line(),
+        cpdToken.syntaxToken().column(),
+        cpdToken.syntaxToken().endLine(),
+        cpdToken.syntaxToken().endColumn()),
+      cpdToken.image()));
+
+    newCpdTokens.save();
+  }
 }

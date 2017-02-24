@@ -29,30 +29,30 @@ import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.FileIssue;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 public class PHPCheckContext implements CheckContext {
 
-  private final File file;
+  private final PhpFile file;
   private final CompilationUnitTree tree;
   private final SymbolTable symbolTable;
   private List<PhpIssue> issues;
 
-  public PHPCheckContext(File file, CompilationUnitTree tree) {
+  public PHPCheckContext(PhpFile file, CompilationUnitTree tree) {
     this(file, tree, SymbolTableImpl.create(tree));
   }
 
-  public PHPCheckContext(File file, CompilationUnitTree tree, SymbolTable symbolTable) {
+  public PHPCheckContext(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
     this.file = file;
     this.tree = tree;
     this.symbolTable = symbolTable;
     this.issues = new ArrayList<>();
   }
-
 
   @Override
   public CompilationUnitTree tree() {
@@ -101,6 +101,11 @@ public class PHPCheckContext implements CheckContext {
 
   @Override
   public File file() {
+    return file.file();
+  }
+
+  @Override
+  public PhpFile getPhpFile() {
     return file;
   }
 
