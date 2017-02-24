@@ -24,16 +24,12 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.sonar.plugins.php.phpunit.PhpTestSuiteReader;
+import org.sonar.plugins.php.phpunit.PhpUnitTestClassReport;
 
-/**
- * The Class TestSuites.
- */
 @XStreamAlias("testsuites")
 public final class TestSuites {
 
-  /**
-   * The test suites.
-   */
   @XStreamImplicit(itemFieldName = "testsuite")
   private List<TestSuite> testSuiteList = new ArrayList<>();
 
@@ -45,30 +41,25 @@ public final class TestSuites {
     // Empty constructor is required by xstream
   }
 
-  /**
-   * Gets the test suites.
-   *
-   * @return the test suites
-   */
   public List<TestSuite> getTestSuiteList() {
     return testSuiteList;
   }
 
-  /**
-   * Sets the test suites.
-   *
-   * @param testSuiteList the new test suites
-   */
   public void setTestSuiteList(final List<TestSuite> testSuiteList) {
     this.testSuiteList = testSuiteList;
   }
 
-  /**
-   * Adds the test suite.
-   *
-   * @param testSuite the test suite
-   */
   public void addTestSuite(final TestSuite testSuite) {
     testSuiteList.add(testSuite);
+  }
+
+  public List<PhpUnitTestClassReport> arrangeSuitesIntoTestClassReports() {
+    List<PhpUnitTestClassReport> result = new ArrayList<>();
+    for (TestSuite testSuite : getTestSuiteList()) {
+      PhpTestSuiteReader reader = new PhpTestSuiteReader();
+      reader.readSuite(testSuite, null);
+      result.addAll(reader.getReportsPerClass());
+    }
+    return result;
   }
 }

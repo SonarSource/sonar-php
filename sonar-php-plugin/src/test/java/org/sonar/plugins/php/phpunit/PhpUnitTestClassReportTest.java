@@ -19,28 +19,15 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
-import org.sonar.api.measures.CoreMetrics;
+import org.junit.Test;
 
-/**
- * The Class PhpUnitOverallCoverageResultParser.
- */
-public class PhpUnitOverallCoverageResultParser extends PhpUnitCoverageResultParser {
+import static org.junit.Assert.assertNotNull;
 
-  /**
-   * Instantiates a new PHPUnit coverage result parser.
-   */
-  public PhpUnitOverallCoverageResultParser(FileSystem fileSystem) {
-    super(fileSystem);
-    linesToCoverMetric = CoreMetrics.OVERALL_LINES_TO_COVER;
-    uncoveredLinesMetric = CoreMetrics.OVERALL_UNCOVERED_LINES;
-    coverageType = CoverageType.OVERALL;
+public class PhpUnitTestClassReportTest {
+
+  @Test
+  public void test() {
+    assertNotNull((new PhpUnitTestClassReport()).toString());
+
   }
-
-  @Override
-  public String toString() {
-    return "PHPUnit Overall Coverage Result Parser";
-  }
-
 }

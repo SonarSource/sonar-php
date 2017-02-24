@@ -23,15 +23,9 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.measures.CoreMetrics;
 
-/**
- * The Class PhpUnitItCoverageResultParser.
- */
-public class PhpUnitItCoverageResultParser extends PhpUnitCoverageResultParser {
+public class PhpUnitItCoverageResultImporter extends PhpUnitCoverageResultImporter {
 
-  /**
-   * Instantiates a new php unit coverage result parser.
-   */
-  public PhpUnitItCoverageResultParser(FileSystem fileSystem) {
+  public PhpUnitItCoverageResultImporter(FileSystem fileSystem) {
     super(fileSystem);
     linesToCoverMetric = CoreMetrics.IT_LINES_TO_COVER;
     uncoveredLinesMetric = CoreMetrics.IT_UNCOVERED_LINES;

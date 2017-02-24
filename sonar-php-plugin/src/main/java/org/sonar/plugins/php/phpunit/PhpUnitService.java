@@ -35,17 +35,17 @@ public class PhpUnitService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitService.class);
 
-  private final PhpUnitOverallCoverageResultParser overallCoverageParser;
-  private final PhpUnitItCoverageResultParser itCoverageParser;
-  private final PhpUnitCoverageResultParser coverageParser;
-  private final PhpUnitResultParser parser;
+  private final PhpUnitOverallCoverageResultImporter overallCoverageParser;
+  private final PhpUnitItCoverageResultImporter itCoverageParser;
+  private final PhpUnitCoverageResultImporter coverageParser;
+  private final PhpUnitResultImporter parser;
 
   private final FileSystem fileSystem;
 
-  public PhpUnitService(FileSystem fileSystem, PhpUnitResultParser parser,
-                       PhpUnitCoverageResultParser coverageParser,
-                       PhpUnitItCoverageResultParser itCoverageParser,
-                       PhpUnitOverallCoverageResultParser overallCoverageParser) {
+  public PhpUnitService(FileSystem fileSystem, PhpUnitResultImporter parser,
+                       PhpUnitCoverageResultImporter coverageParser,
+                       PhpUnitItCoverageResultImporter itCoverageParser,
+                       PhpUnitOverallCoverageResultImporter overallCoverageParser) {
 
     this.fileSystem = fileSystem;
     this.parser = parser;
@@ -61,7 +61,7 @@ public class PhpUnitService {
     parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage", context, numberOfLinesOfCode);
   }
 
-  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  private void parseReport(String reportPathKey, PhpUnitImporter parser, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     String reportPath = context.settings().getString(reportPathKey);
 
     if (reportPath != null) {
@@ -71,7 +71,7 @@ public class PhpUnitService {
         LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath + " with " + parser.toString());
 
         try {
-          parser.parse(xmlFile, context, numberOfLinesOfCode);
+          parser.importReport(xmlFile, context, numberOfLinesOfCode);
         } catch (XStreamException e) {
           throw new IllegalStateException("Report file is invalid, plugin will stop.", e);
         }

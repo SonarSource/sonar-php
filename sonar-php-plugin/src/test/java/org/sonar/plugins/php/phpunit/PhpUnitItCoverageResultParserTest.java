@@ -38,11 +38,11 @@ public class PhpUnitItCoverageResultParserTest {
   @Mock
   private SensorContext context;
 
-  private PhpUnitCoverageResultParser parser;
+  private PhpUnitCoverageResultImporter parser;
 
   @Before
   public void setUp() throws Exception {
-    parser = new PhpUnitItCoverageResultParser(PhpTestUtils.getDefaultFileSystem());
+    parser = new PhpUnitItCoverageResultImporter(PhpTestUtils.getDefaultFileSystem());
   }
 
   @Test

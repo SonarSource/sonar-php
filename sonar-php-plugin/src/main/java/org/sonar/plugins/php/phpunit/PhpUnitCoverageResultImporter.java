@@ -51,9 +51,9 @@ import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
 @BatchSide
 @ExtensionPoint
-public class PhpUnitCoverageResultParser implements PhpUnitParser {
+public class PhpUnitCoverageResultImporter implements PhpUnitImporter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultImporter.class);
 
   private final FileSystem fileSystem;
 
@@ -70,7 +70,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    *
    * @param context the context
    */
-  public PhpUnitCoverageResultParser(FileSystem fileSystem) {
+  public PhpUnitCoverageResultImporter(FileSystem fileSystem) {
     this.fileSystem = fileSystem;
   }
 
@@ -80,7 +80,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    * @param coverageReportFile the coverage report file
    */
   @Override
-  public void parse(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  public void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
     parseFile(coverageReportFile, context, numberOfLinesOfCode);
   }

@@ -79,7 +79,7 @@ public class PhpIniSensorTest {
     SensorContextTester context = SensorContextTester.create(baseDir);
     DefaultInputFile file = setupSingleFile(baseDir, context);
     sensor().execute(context, checks());
-    assertThat(logTester.logs()).contains("Unable to parse file: " + file.absolutePath());
+    assertThat(logTester.logs()).contains("Unable to importReport file: " + file.absolutePath());
   }
 
   private DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {

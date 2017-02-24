@@ -60,7 +60,7 @@ public class PhpUnitCoverageResultParserTest {
   @Rule
   public TemporaryFolder folder = new TemporaryFolder();
 
-  private PhpUnitCoverageResultParser parser;
+  private PhpUnitCoverageResultImporter parser;
 
   private DefaultFileSystem fileSystem;
 
@@ -86,7 +86,7 @@ public class PhpUnitCoverageResultParserTest {
 
     numberOfLinesOfCode = new HashMap<>();
 
-    parser = new PhpUnitCoverageResultParser(fileSystem);
+    parser = new PhpUnitCoverageResultImporter(fileSystem);
   }
 
   @Test
@@ -94,31 +94,26 @@ public class PhpUnitCoverageResultParserTest {
     SensorContext context = setUpForMockedSensorContext();
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Can't read phpUnit report:");
-    parser.parse(new File("notfound.txt"), context, numberOfLinesOfCode);
+    parser.importReport(new File("notfound.txt"), context, numberOfLinesOfCode);
   }
 
-  /**
-   * Should parse even when there's a package node.
-   */
+
   @Test
   public void should_parse_even_with_package_node() throws Exception {
     SensorContextTester context = setUpForSensorContextTester();
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
-    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-package.xml"), context, numberOfLinesOfCode);
+    parser.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-package.xml"), context, numberOfLinesOfCode);
 
     assertCoverageLineHits(context, componentKey, 34, 1);
   }
 
-  /**
-   * Should generate coverage metrics.
-   */
    @Test
    public void should_generate_coverage_measures() throws Exception {
      SensorContextTester context = setUpForSensorContextTester();
      String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
-     parser.parse(getReportsWithAbsolutePath("phpunit.coverage.xml"), context, numberOfLinesOfCode);
+     parser.importReport(getReportsWithAbsolutePath("phpunit.coverage.xml"), context, numberOfLinesOfCode);
 
      // UNCOVERED_LINES is implicitly stored in the NewCoverage
      PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES);
@@ -139,7 +134,7 @@ public class PhpUnitCoverageResultParserTest {
     SensorContextTester context = setUpForSensorContextTester();
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
-    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-no-statements-covered.xml"), context, numberOfLinesOfCode);
+    parser.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-no-statements-covered.xml"), context, numberOfLinesOfCode);
 
     assertCoverageLineHits(context, componentKey, 31, 0);
   }
@@ -151,7 +146,7 @@ public class PhpUnitCoverageResultParserTest {
   public void should_not_fail_if_no_line_for_file_node() throws Exception {
     SensorContextTester context = setUpForSensorContextTester();
 
-    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-with-filenode-without-line.xml"), context, numberOfLinesOfCode);
+    parser.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-filenode-without-line.xml"), context, numberOfLinesOfCode);
   }
 
   @Test
@@ -162,7 +157,7 @@ public class PhpUnitCoverageResultParserTest {
 
     numberOfLinesOfCode.put(MONKEY_FILE_NAME, 42);
 
-    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
+    parser.importReport(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
 
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES_TO_COVER, 42);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES, 42);
@@ -175,7 +170,7 @@ public class PhpUnitCoverageResultParserTest {
 
     numberOfLinesOfCode.put(MONKEY_FILE_NAME, 42);
 
-    parser.parse(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
+    parser.importReport(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context, numberOfLinesOfCode);
 
     // since SQ 6.2 these are not saved
     assertThat(context.measure(componentKey, CoreMetrics.LINES_TO_COVER)).isNull();

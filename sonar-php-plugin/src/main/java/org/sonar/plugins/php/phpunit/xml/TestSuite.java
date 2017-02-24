@@ -25,51 +25,27 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import java.util.List;
 
-/**
- * The Class TestSuite.
- */
 @XStreamAlias("testsuite")
 public final class TestSuite {
 
-  /**
-   * The name.
-   */
   @XStreamAsAttribute
   private String name;
 
-  /**
-   * The file.
-   */
   @XStreamAsAttribute
   private String file;
 
-  /**
-   * The tests.
-   */
   @XStreamAsAttribute
   private String tests;
 
-  /**
-   * The assertions.
-   */
   @XStreamAsAttribute
   private String assertions;
 
-  /**
-   * The time.
-   */
   @XStreamAsAttribute
   private double time;
 
-  /**
-   * The test suites.
-   */
   @XStreamImplicit(itemFieldName = "testsuite")
   private List<TestSuite> testSuites;
 
-  /**
-   * The test cases.
-   */
   @XStreamImplicit(itemFieldName = "testcase")
   private List<TestCase> testCases;
 
@@ -81,17 +57,6 @@ public final class TestSuite {
     // Empty constructor is required by xstream
   }
 
-  /**
-   * Instantiates a new test suite.
-   *
-   * @param name       the name
-   * @param file       the file
-   * @param tests      the tests
-   * @param assertions the assertions
-   * @param time       the time
-   * @param testSuites the test suites
-   * @param testCases  the test cases
-   */
   public TestSuite(final String name, final String file, final String tests, final String assertions,
                    final double time, final List<TestSuite> testSuites, final List<TestCase> testCases) {
     super();
@@ -104,101 +69,46 @@ public final class TestSuite {
     this.testCases = testCases;
   }
 
-  /**
-   * Gets the name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Sets the name.
-   *
-   * @param name the new name
-   */
   public void setName(final String name) {
     this.name = name;
   }
 
-  /**
-   * Gets the file.
-   *
-   * @return the file
-   */
   public String getFile() {
     return file;
   }
 
-  /**
-   * Sets the file.
-   *
-   * @param file the new file
-   */
   public void setFile(final String file) {
     this.file = file;
   }
 
-  /**
-   * Gets the tests.
-   *
-   * @return the tests
-   */
   public String getTests() {
     return tests;
   }
 
-  /**
-   * Sets the tests.
-   *
-   * @param tests the new tests
-   */
   public void setTests(final String tests) {
     this.tests = tests;
   }
 
-  /**
-   * Gets the assertions.
-   *
-   * @return the assertions
-   */
   public String getAssertions() {
     return assertions;
   }
 
-  /**
-   * Sets the assertions.
-   *
-   * @param assertions the new assertions
-   */
   public void setAssertions(final String assertions) {
     this.assertions = assertions;
   }
 
-  /**
-   * Gets the time.
-   *
-   * @return the time
-   */
   public double getTime() {
     return time;
   }
 
-  /**
-   * Gets the test suites.
-   *
-   * @return the test suites
-   */
   public List<TestSuite> getTestSuites() {
     return testSuites;
   }
 
-  /**
-   * Gets the test cases.
-   *
-   * @return the test cases
-   */
   public List<TestCase> getTestCases() {
     return testCases;
   }

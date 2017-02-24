@@ -19,15 +19,22 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.junit.Test;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.sensor.coverage.CoverageType;
+import org.sonar.api.measures.CoreMetrics;
 
-import static org.junit.Assert.assertNotNull;
+public class PhpUnitOverallCoverageResultImporter extends PhpUnitCoverageResultImporter {
 
-public class PhpUnitTestReportTest {
-
-  @Test
-  public void test() {
-    assertNotNull((new PhpUnitTestReport()).toString());
-
+  public PhpUnitOverallCoverageResultImporter(FileSystem fileSystem) {
+    super(fileSystem);
+    linesToCoverMetric = CoreMetrics.OVERALL_LINES_TO_COVER;
+    uncoveredLinesMetric = CoreMetrics.OVERALL_UNCOVERED_LINES;
+    coverageType = CoverageType.OVERALL;
   }
+
+  @Override
+  public String toString() {
+    return "PHPUnit Overall Coverage Result Parser";
+  }
+
 }

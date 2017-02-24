@@ -74,7 +74,7 @@ public class PhpIniSensor implements Sensor {
       try {
         phpIni = parser.parse(CompatibilityHelper.phpFile(inputFile, context));
       } catch (RecognitionException e) {
-        LOG.error("Unable to parse file: " + inputFile.absolutePath());
+        LOG.error("Unable to importReport file: " + inputFile.absolutePath());
         LOG.error(e.getMessage());
         continue;
       }

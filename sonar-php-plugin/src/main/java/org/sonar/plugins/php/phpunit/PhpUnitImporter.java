@@ -24,8 +24,8 @@ import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
 
 @FunctionalInterface
-public interface PhpUnitParser {
+public interface PhpUnitImporter {
 
-  void parse(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode);
+  void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode);
 
 }

@@ -20,202 +20,97 @@
 package org.sonar.plugins.php.phpunit;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.utils.ParsingUtils;
+import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
 import java.util.List;
 
-/**
- * The Class PhpUnitTestReport.
- */
-public class PhpUnitTestReport {
+public class PhpUnitTestClassReport {
 
-  /**
-   * The class key.
-   */
+  static final double PERCENT = 100d;
+  static final double MILLISECONDS = 1000d;
+  static final Logger THE_LOGGER = LoggerFactory.getLogger(PhpUnitResultImporter.class);
   private String classKey;
-
-  /**
-   * A list of all test cases.
-   */
   private List<TestCase> details;
-
-  /**
-   * The numbers of errors.
-   */
   private int errors = 0;
-
-  /**
-   * The numbers of failed tests.
-   */
   private int failures = 0;
-
-  /**
-   * The file.
-   */
   private String file;
-
-  /**
-   * The numbers of skipped.
-   */
   private int skipped = 0;
-
-  /**
-   * The numbers of tests.
-   */
   private int tests = 0;
-
-  /**
-   * The time.
-   */
   private double time = 0;
 
-  /**
-   * Gets the details.
-   *
-   * @return the details
-   */
   public List<TestCase> getDetails() {
     return details;
   }
 
-  /**
-   * Gets the number or errors.
-   *
-   * @return the errors
-   */
   public int getErrors() {
     return errors;
   }
 
-  /**
-   * Gets the number or failed tests.
-   *
-   * @return the failures
-   */
   public int getFailures() {
     return failures;
   }
 
-  /**
-   * Gets the file.
-   *
-   * @return the file
-   */
   public String getFile() {
     return file;
   }
 
-  /**
-   * Gets the numbers of skipped tests.
-   *
-   * @return the skipped
-   */
   public int getSkipped() {
     return skipped;
   }
 
-  /**
-   * Gets the numbers of tests.
-   *
-   * @return the tests
-   */
   public int getTests() {
     return tests;
   }
 
-  /**
-   * Gets the time.
-   *
-   * @return the time
-   */
   public double getTime() {
     return time;
   }
 
-  /**
-   * Checks if is valid.
-   *
-   * @return true, if is valid
-   */
   public boolean isValid() {
     return classKey != null;
   }
 
-  /**
-   * Sets the class key.
-   *
-   * @param classKey the new class key
-   */
   public void setClassKey(String classKey) {
     this.classKey = classKey;
   }
 
-  /**
-   * Sets the details.
-   *
-   * @param details the new details
-   */
   public void setDetails(List<TestCase> details) {
     this.details = details;
   }
 
-  /**
-   * Sets the numbers of errors.
-   *
-   * @param errors the new errors
-   */
   public void setErrors(int errors) {
     this.errors = errors;
   }
 
-  /**
-   * Sets the numbers of failures.
-   *
-   * @param failures the new failures
-   */
   public void setFailures(int failures) {
     this.failures = failures;
   }
 
-  /**
-   * Sets the file.
-   *
-   * @param file the new file
-   */
   public void setFile(String file) {
     this.file = file;
   }
 
-  /**
-   * Sets the numbers of skipped.
-   *
-   * @param skipped the new skipped
-   */
   public void setSkipped(int skipped) {
     this.skipped = skipped;
   }
 
-  /**
-   * Sets the numbers of tests.
-   *
-   * @param tests the new tests
-   */
   public void setTests(int tests) {
     this.tests = tests;
   }
 
-  /**
-   * Sets the time.
-   *
-   * @param time the new time
-   */
   public void setTime(double time) {
     this.time = time;
   }
 
-  /**
-   * @see java.lang.Object#toString()
-   */
   @Override
   public String toString() {
     ToStringBuilder builder = new ToStringBuilder(this);
@@ -230,4 +125,39 @@ public class PhpUnitTestReport {
     return builder.toString();
   }
 
+  InputFile getUnitTestInputFile(FileSystem fileSystem) {
+    FilePredicates predicates = fileSystem.predicates();
+    return fileSystem.inputFile(predicates.and(
+      predicates.hasPath(getFile()),
+      predicates.hasType(InputFile.Type.TEST),
+      predicates.hasLanguage(Php.KEY)));
+  }
+
+  void saveTestReportMeasures(SensorContext context, FileSystem fileSystem) {
+    if (!isValid()) {
+      return;
+    }
+    InputFile unitTestFile = getUnitTestInputFile(fileSystem);
+    if (unitTestFile != null) {
+      double testsCount = (double) getTests() - getSkipped();
+      if (getSkipped() > 0) {
+        context.<Integer>newMeasure().on(unitTestFile).withValue(getSkipped()).forMetric(CoreMetrics.SKIPPED_TESTS).save();
+      }
+      double duration = Math.round(getTime() * MILLISECONDS);
+
+      context.<Long>newMeasure().on(unitTestFile).withValue((long) duration).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue((int) testsCount).forMetric(CoreMetrics.TESTS).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue(getErrors()).forMetric(CoreMetrics.TEST_ERRORS).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue(getFailures()).forMetric(CoreMetrics.TEST_FAILURES).save();
+      if (testsCount > 0) {
+        double passedTests = testsCount - getErrors() - getFailures();
+        double percentage = passedTests * PERCENT / testsCount;
+        context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
+      }
+
+    } else {
+      THE_LOGGER.debug("Following file is not located in the test folder specified in the Sonar configuration: " + getFile()
+        + ". The test results won't be reported in Sonar.");
+    }
+  }
 }

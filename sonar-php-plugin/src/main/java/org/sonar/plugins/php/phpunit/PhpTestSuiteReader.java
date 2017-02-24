@@ -40,7 +40,7 @@ public class PhpTestSuiteReader {
   /**
    * The reports per class.
    */
-  private Map<String, PhpUnitTestReport> reportsPerClass = new HashMap<>();
+  private Map<String, PhpUnitTestClassReport> reportsPerClass = new HashMap<>();
 
   /**
    * Cumulates test case details.
@@ -48,7 +48,7 @@ public class PhpTestSuiteReader {
    * @param testCase the test case to analyse
    * @param report   the report in which results will be added
    */
-  private static void cumulateTestCaseDetails(TestCase testCase, PhpUnitTestReport report) {
+  private static void cumulateTestCaseDetails(TestCase testCase, PhpUnitTestClassReport report) {
 
     if (TestCase.STATUS_SKIPPED.equals(testCase.getStatus())) {
       report.setSkipped(report.getSkipped() + 1);
@@ -64,7 +64,7 @@ public class PhpTestSuiteReader {
   /**
    * Reads the given test suite.
    * <p/>
-   * Due to a inconsistent XML format in phpUnit, we have to parse enclosing testsuite name for generated testcases when a testcase holds
+   * Due to a inconsistent XML format in phpUnit, we have to importReport enclosing testsuite name for generated testcases when a testcase holds
    * the annotation dataProvider.
    *
    * @param testSuite the test suite
@@ -91,10 +91,10 @@ public class PhpTestSuiteReader {
       if (testClassName == null) {
         testClassName = StringUtils.substringBefore(testSuite.getName(), TESTSUITE_CLASS_NAME_SEPARATOR);
       }
-      PhpUnitTestReport report = reportsPerClass.get(testClassName);
+      PhpUnitTestClassReport report = reportsPerClass.get(testClassName);
       // If no reports exists for this class we create one
       if (report == null) {
-        report = new PhpUnitTestReport();
+        report = new PhpUnitTestClassReport();
         report.setDetails(new ArrayList<TestCase>());
         report.setClassKey(testClassName);
 
@@ -119,9 +119,9 @@ public class PhpTestSuiteReader {
   /**
    * Returns the collection of test results for the suite that has been analyzed.
    *
-   * @return the collection of {@link PhpUnitTestReport} objects
+   * @return the collection of {@link PhpUnitTestClassReport} objects
    */
-  public Collection<PhpUnitTestReport> getReportsPerClass() {
+  public Collection<PhpUnitTestClassReport> getReportsPerClass() {
     return reportsPerClass.values();
   }
 
