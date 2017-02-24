@@ -30,7 +30,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.ExtensionPoint;
@@ -41,7 +40,6 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.ParsingUtils;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
@@ -57,105 +55,39 @@ public class PhpUnitResultParser implements PhpUnitParser {
 
   private static final int PRECISION = 1;
 
-  /**
-   * The logger.
-   */
-  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitResultParser.class);
+  private static final Logger THE_LOGGER = LoggerFactory.getLogger(PhpUnitResultParser.class);
 
   private FileSystem fileSystem;
 
   private FilePredicates filePredicates;
 
-  /**
-   * Instantiates a new php unit result parser.
-   */
   public PhpUnitResultParser(FileSystem fileSystem) {
     this.fileSystem = fileSystem;
     this.filePredicates = fileSystem.predicates();
   }
 
-  /**
-   * Gets the test suites.
-   *
-   * @param report the report
-   * @return the test suites
-   */
-  protected TestSuites getTestSuites(File report) {
-    try (InputStream inputStream = new FileInputStream(report)){
-      XStream xstream = getXStream();
-      TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
-      LOG.debug("Tests suites: " + testSuites.getTestSuiteList());
-      return testSuites;
-    } catch (IOException e) {
-      throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
-    }
-  }
-
-  private XStream getXStream() {
-    XStream xstream = new XStream(){
-      // Trick to ignore unknown elements
-      @Override
-      protected MapperWrapper wrapMapper(MapperWrapper next) {
-        return new MapperWrapper(next) {
-          @Override
-          public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-            return definedIn != Object.class && super.shouldSerializeMember(definedIn, fieldName);
-          }
-        };
-      }
-    };
-    // Sonar 2.2 migration
-    xstream.setClassLoader(getClass().getClassLoader());
-    xstream.aliasSystemAttribute("fileName", "class");
-    xstream.processAnnotations(TestSuites.class);
-    xstream.processAnnotations(TestSuite.class);
-    xstream.processAnnotations(TestCase.class);
-    return xstream;
-  }
-
-  /**
-   * Gets the php file pointed by the report.
-   *
-   * @param report the unit test report
-   */
-  private InputFile getUnitTestInputFile(PhpUnitTestReport report) {
-    return fileSystem.inputFile(fileSystem.predicates().and(
-      filePredicates.hasPath(report.getFile()),
-      filePredicates.hasType(InputFile.Type.TEST),
-      filePredicates.hasLanguage(Php.KEY)));
-  }
-
-  /**
-   * Collect the metrics found.
-   *
-   * @param reportFile the reports directories to be scan
-   */
   @Override
   public void parse(File reportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     Preconditions.checkNotNull(reportFile);
-    LOG.debug("Parsing file: " + reportFile.getAbsolutePath());
-    parseFile(reportFile, context);
-  }
-
-  /**
-   * Parses the report file.
-   *
-   * @param report the report file
-   */
-  private void parseFile(File report, SensorContext context) {
-    TestSuites testSuites = getTestSuites(report);
+    THE_LOGGER.debug("Parsing file: " + reportFile.getAbsolutePath());
+    TestSuites testSuites = getTestSuites(reportFile);
     List<PhpUnitTestReport> fileReports = readSuites(testSuites);
     for (PhpUnitTestReport fileReport : Lists.reverse(fileReports)) {
       saveTestReportMeasures(fileReport, context);
     }
   }
 
-  /**
-   * Launches {@see PhpTestSuiteReader#readSuite(TestSuite)} for all its descendants.
-   *
-   * @param testSuites the test suites
-   * @return List<PhpUnitTestReport> A list of all test reports
-   */
+  TestSuites getTestSuites(File report) {
+    try (InputStream inputStream = new FileInputStream(report)) {
+      XStream xstream = getXStream();
+      TestSuites testSuites = (TestSuites) xstream.fromXML(inputStream);
+      THE_LOGGER.debug("Tests suites: " + testSuites.getTestSuiteList());
+      return testSuites;
+    } catch (IOException e) {
+      throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
+    }
+  }
+
   private static List<PhpUnitTestReport> readSuites(TestSuites testSuites) {
     List<PhpUnitTestReport> result = new ArrayList<>();
     for (TestSuite testSuite : testSuites.getTestSuiteList()) {
@@ -166,12 +98,7 @@ public class PhpUnitResultParser implements PhpUnitParser {
     return result;
   }
 
-  /**
-   * Saves the measures contained in the test report.
-   *
-   * @param fileReport the unit test report
-   */
-  protected void saveTestReportMeasures(PhpUnitTestReport fileReport, SensorContext context) {
+  private void saveTestReportMeasures(PhpUnitTestReport fileReport, SensorContext context) {
     if (!fileReport.isValid()) {
       return;
     }
@@ -183,24 +110,48 @@ public class PhpUnitResultParser implements PhpUnitParser {
       }
       double duration = Math.round(fileReport.getTime() * MILLISECONDS);
 
-      // fixme SONARPHP-684
-      try {
-        context.<Long>newMeasure().on(unitTestFile).withValue((long) duration).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
-        context.<Integer>newMeasure().on(unitTestFile).withValue((int) testsCount).forMetric(CoreMetrics.TESTS).save();
-        context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getErrors()).forMetric(CoreMetrics.TEST_ERRORS).save();
-        context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getFailures()).forMetric(CoreMetrics.TEST_FAILURES).save();
-        if (testsCount > 0) {
-          double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
-          double percentage = passedTests * PERCENT / testsCount;
-          context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
-        }
-      } catch (SonarException e) {
-        LOG.error("There are several test suites for one file in unit test report.");
+      context.<Long>newMeasure().on(unitTestFile).withValue((long) duration).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue((int) testsCount).forMetric(CoreMetrics.TESTS).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getErrors()).forMetric(CoreMetrics.TEST_ERRORS).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue(fileReport.getFailures()).forMetric(CoreMetrics.TEST_FAILURES).save();
+      if (testsCount > 0) {
+        double passedTests = testsCount - fileReport.getErrors() - fileReport.getFailures();
+        double percentage = passedTests * PERCENT / testsCount;
+        context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
       }
+
     } else {
-      LOG.debug("Following file is not located in the test folder specified in the Sonar configuration: " + fileReport.getFile()
+      THE_LOGGER.debug("Following file is not located in the test folder specified in the Sonar configuration: " + fileReport.getFile()
         + ". The test results won't be reported in Sonar.");
     }
+  }
+
+  private XStream getXStream() {
+    XStream xstream = new XStream() {
+      // Trick to ignore unknown elements
+      @Override
+      protected MapperWrapper wrapMapper(MapperWrapper next) {
+        return new MapperWrapper(next) {
+          @Override
+          public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+            return definedIn != Object.class && super.shouldSerializeMember(definedIn, fieldName);
+          }
+        };
+      }
+    };
+    xstream.setClassLoader(getClass().getClassLoader());
+    xstream.aliasSystemAttribute("fileName", "class");
+    xstream.processAnnotations(TestSuites.class);
+    xstream.processAnnotations(TestSuite.class);
+    xstream.processAnnotations(TestCase.class);
+    return xstream;
+  }
+
+  private InputFile getUnitTestInputFile(PhpUnitTestReport report) {
+    return fileSystem.inputFile(fileSystem.predicates().and(
+      filePredicates.hasPath(report.getFile()),
+      filePredicates.hasType(InputFile.Type.TEST),
+      filePredicates.hasLanguage(Php.KEY)));
   }
 
 }
