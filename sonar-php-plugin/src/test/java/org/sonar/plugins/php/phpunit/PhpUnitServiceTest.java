@@ -54,7 +54,7 @@ public class PhpUnitServiceTest {
   private DefaultFileSystem fs;
 
   @Mock
-  private PhpUnitResultImporter parser;
+  private PhpUnitTestResultImporter parser;
 
   @Mock
   private PhpUnitCoverageResultImporter coverageParser;

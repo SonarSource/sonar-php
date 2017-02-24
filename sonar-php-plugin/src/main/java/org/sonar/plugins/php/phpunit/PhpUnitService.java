@@ -38,11 +38,11 @@ public class PhpUnitService {
   private final PhpUnitOverallCoverageResultImporter overallCoverageParser;
   private final PhpUnitItCoverageResultImporter itCoverageParser;
   private final PhpUnitCoverageResultImporter coverageParser;
-  private final PhpUnitResultImporter parser;
+  private final PhpUnitTestResultImporter parser;
 
   private final FileSystem fileSystem;
 
-  public PhpUnitService(FileSystem fileSystem, PhpUnitResultImporter parser,
+  public PhpUnitService(FileSystem fileSystem, PhpUnitTestResultImporter parser,
                        PhpUnitCoverageResultImporter coverageParser,
                        PhpUnitItCoverageResultImporter itCoverageParser,
                        PhpUnitOverallCoverageResultImporter overallCoverageParser) {

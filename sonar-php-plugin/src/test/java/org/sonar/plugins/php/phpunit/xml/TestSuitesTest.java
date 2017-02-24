@@ -57,43 +57,6 @@ public class TestSuitesTest {
   }
 
   /**
-   * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#setTestSuiteList(java.util.List)}.
-   */
-  @Test
-  public void testSetTestSuites() {
-    List<TestSuite> testSuitesList = new ArrayList<TestSuite>();
-
-    testSuites.setTestSuiteList(testSuitesList);
-    assertSame(testSuitesList, testSuites.getTestSuiteList());
-  }
-
-  /**
-   * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#addTestSuite(org.sonar.plugins.php.phpunit.xml.TestSuite)}.
-   */
-  @Test
-  public void testAddTestSuite() {
-    TestSuite suite = getTestSuite("name");
-
-    testSuites.addTestSuite(suite);
-
-    assertThat(testSuites.getTestSuiteList(), hasItem(suite));
-  }
-
-  /**
-   * Test method for {@link org.sonar.plugins.php.phpunit.xml.TestSuites#addTestSuite(org.sonar.plugins.php.phpunit.xml.TestSuite)}.
-   */
-  @Test
-  public void testAddMultipleTestSuite() {
-    TestSuite suite1 = getTestSuite("name1");
-    TestSuite suite2 = getTestSuite("name2");
-
-    testSuites.addTestSuite(suite1);
-    testSuites.addTestSuite(suite2);
-
-    assertThat(testSuites.getTestSuiteList(), both(hasItem(suite1)).and(hasItem(suite2)));
-  }
-
-  /**
    * Empty constructors are required by xstream for TestSuite and TestSuite, in order to
    * be compatible with Java 7.
    */

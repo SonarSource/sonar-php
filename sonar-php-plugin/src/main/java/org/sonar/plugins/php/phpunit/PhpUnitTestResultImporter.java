@@ -32,23 +32,23 @@ import org.sonar.plugins.php.phpunit.xml.TestSuites;
 
 @BatchSide
 @ExtensionPoint
-public class PhpUnitResultImporter implements PhpUnitImporter {
+public class PhpUnitTestResultImporter implements PhpUnitImporter {
 
-  final PhpUnitJUnitLogParser parser;
+  final JUnitLogParserForPhpUnit parser;
 
   private FileSystem fileSystem;
 
-  public PhpUnitResultImporter(FileSystem fileSystem) {
+  public PhpUnitTestResultImporter(FileSystem fileSystem) {
     this.fileSystem = fileSystem;
-    this.parser = new PhpUnitJUnitLogParser();
+    this.parser = new JUnitLogParserForPhpUnit();
   }
 
   @Override
   public void importReport(File reportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
     Preconditions.checkNotNull(reportFile);
     TestSuites testSuites = parser.parse(reportFile);
-    List<PhpUnitTestClassReport> fileReports = testSuites.arrangeSuitesIntoTestClassReports();
-    for (PhpUnitTestClassReport fileReport : Lists.reverse(fileReports)) {
+    List<PhpUnitTestFileReport> fileReports = testSuites.arrangeSuitesIntoTestClassReports();
+    for (PhpUnitTestFileReport fileReport : Lists.reverse(fileReports)) {
       fileReport.saveTestReportMeasures(context, fileSystem);
     }
   }

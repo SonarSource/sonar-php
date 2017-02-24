@@ -37,19 +37,19 @@ import org.sonar.test.TestUtils;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-public class PhpUnitResultImporterTest {
+public class PhpUnitTestResultImporterTest {
 
-  private PhpUnitResultImporter parser;
+  private PhpUnitTestResultImporter parser;
 
   private SensorContextTester setUpForSensorContextTester() {
     SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
-    parser = new PhpUnitResultImporter(PhpTestUtils.getDefaultFileSystem());
+    parser = new PhpUnitTestResultImporter(PhpTestUtils.getDefaultFileSystem());
     return context;
   }
 
   private SensorContext setUpForMockedSensorContext() {
     SensorContext context = Mockito.mock(SensorContext.class);
-    parser = new PhpUnitResultImporter(PhpTestUtils.getDefaultFileSystem());
+    parser = new PhpUnitTestResultImporter(PhpTestUtils.getDefaultFileSystem());
     return context;
   }
 
@@ -97,13 +97,13 @@ public class PhpUnitResultImporterTest {
     String monkey = "moduleKey:" + "Monkey.php";
     String banana = "moduleKey:" + "Banana.php";
 
-    parser = new PhpUnitResultImporter(fs);
+    parser = new PhpUnitTestResultImporter(fs);
     parser.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<>());
 
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 7);
     PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TESTS, 1);
 
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_FAILURES, 2);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_FAILURES, 3);
     PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TEST_FAILURES, 0);
 
     PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
@@ -111,9 +111,9 @@ public class PhpUnitResultImporterTest {
 
     // Test execution time:
     PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_EXECUTION_TIME, 447L);
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 3);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 7);
     PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 0.0);
+    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 42.86);
     PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TEST_EXECUTION_TIME, 570L);
   }
 

@@ -27,7 +27,7 @@ public class PhpUnitTestClassReportTest {
 
   @Test
   public void test() {
-    assertNotNull((new PhpUnitTestClassReport()).toString());
+    assertNotNull((new PhpUnitTestFileReport("UnitTest.php", 0.0001)).toString());
 
   }
 }

@@ -47,7 +47,7 @@ import org.sonar.plugins.php.phpunit.xml.TestSuites;
  * This parser was built to support the subset of sample xml files that are used in the
  * tests and not a particular xsd. It will not raise any parsing error except basic xml syntax issues.
  */
-public class PhpUnitJUnitLogParser {
+public class JUnitLogParserForPhpUnit {
 
   public TestSuites parse(File report) {
     try (InputStream inputStream = new FileInputStream(report)) {
