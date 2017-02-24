@@ -57,10 +57,12 @@ public class Tests {
   @ClassRule
   public static final Orchestrator ORCHESTRATOR;
 
+  public static final FileLocation PHP_PLUGIN_LOCATION = FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar");
+
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
       // PHP Plugin
-      .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
+      .addPlugin(PHP_PLUGIN_LOCATION)
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
       // Custom rules plugin
       .addPlugin(FileLocation.byWildcardMavenFilename(new File("../plugins/php-custom-rules-plugin/target"), "php-custom-rules-plugin-*.jar"))
