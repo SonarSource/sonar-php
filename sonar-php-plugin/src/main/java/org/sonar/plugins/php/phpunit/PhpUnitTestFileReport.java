@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.util.ArrayList;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,62 +31,60 @@ import org.sonar.api.utils.ParsingUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
-import java.util.List;
-
 public class PhpUnitTestFileReport {
 
   private static final double PERCENT = 100d;
-  private static final double MILLISECONDS = 1000d;
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitTestResultImporter.class);
-  private List<TestCase> details;
   private int errors = 0;
   private int failures = 0;
   private String file;
   private int skipped = 0;
   private int tests = 0;
-  private double time = 0;
+  private double testDuration = 0;
 
-  public PhpUnitTestFileReport(String file, double time) {
+  /**
+   * The PhpUnitTestFileReport contains all the results of test cases appearing in a given test file.
+   * The reason why the report is file-based (as opposed to class-based) is that the SonarQube measures
+   * are stored per file.
+   *
+   * @param file the test file name
+   * @param testDuration the test file overall execution time
+   */
+  public PhpUnitTestFileReport(String file, double testDuration) {
     this.file = file;
-    this.time = time;
-    this.details = new ArrayList<>();
+    this.testDuration = testDuration;
   }
 
-  public List<TestCase> getDetails() {
-    return details;
-  }
-
-  public void setDetails(List<TestCase> details) {
-    this.details = details;
-  }
-
-  public void setFile(String file) {
-    this.file = file;
-  }
-
-  public void saveTestReportMeasures(SensorContext context, FileSystem fileSystem) {
-    InputFile unitTestFile = getUnitTestInputFile(fileSystem);
+  public void saveTestMeasures(SensorContext context) {
+    InputFile unitTestFile = getUnitTestInputFile(context.fileSystem());
     if (unitTestFile != null) {
-      double testsCount = (double) tests - skipped;
-      if (skipped > 0) {
-        context.<Integer>newMeasure().on(unitTestFile).withValue(skipped).forMetric(CoreMetrics.SKIPPED_TESTS).save();
-      }
-      double duration = Math.round(time * MILLISECONDS);
+      context.<Integer>newMeasure().on(unitTestFile).withValue(skipped).forMetric(CoreMetrics.SKIPPED_TESTS).save();
 
-      context.<Long>newMeasure().on(unitTestFile).withValue((long) duration).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
-      context.<Integer>newMeasure().on(unitTestFile).withValue((int) testsCount).forMetric(CoreMetrics.TESTS).save();
+      context.<Long>newMeasure().on(unitTestFile).withValue((long) testDurationSeconds()).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
+      context.<Integer>newMeasure().on(unitTestFile).withValue((int) liveTests()).forMetric(CoreMetrics.TESTS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(errors).forMetric(CoreMetrics.TEST_ERRORS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(failures).forMetric(CoreMetrics.TEST_FAILURES).save();
-      if (testsCount > 0) {
-        double passedTests = testsCount - errors - failures;
-        double percentage = passedTests * PERCENT / testsCount;
-        context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(percentage)).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
+      if (liveTests() > 0) {
+        context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(successPercentage())).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
       }
 
     } else {
       LOGGER.debug("Following file is not located in the test folder specified in the Sonar configuration: " + file
         + ". The test results won't be reported in Sonar.");
     }
+  }
+
+  private double liveTests() {
+    return (double) tests - skipped;
+  }
+
+  private double successPercentage() {
+    double passedTests = liveTests() - errors - failures;
+    return passedTests * PERCENT / liveTests();
+  }
+
+  private double testDurationSeconds() {
+    return testDuration * 1000d;
   }
 
   private InputFile getUnitTestInputFile(FileSystem fileSystem) {
@@ -107,19 +104,17 @@ public class PhpUnitTestFileReport {
       this.errors++;
     }
     this.tests++;
-    details.add(testCase);
   }
 
   @Override
   public String toString() {
     ToStringBuilder builder = new ToStringBuilder(this);
-    builder.append("details", details);
     builder.append("errors", errors);
     builder.append("failures", failures);
     builder.append("file", file);
     builder.append("skipped", skipped);
     builder.append("tests", tests);
-    builder.append("time", time);
+    builder.append("testDuration", testDuration);
     return builder.toString();
   }
 }

@@ -30,8 +30,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -49,8 +47,6 @@ import org.sonar.plugins.php.phpunit.xml.MetricsNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
-@BatchSide
-@ExtensionPoint
 public class PhpUnitCoverageResultImporter implements PhpUnitImporter {
 
   private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultImporter.class);

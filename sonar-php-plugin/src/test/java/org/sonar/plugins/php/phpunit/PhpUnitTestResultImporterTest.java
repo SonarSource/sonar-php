@@ -43,13 +43,13 @@ public class PhpUnitTestResultImporterTest {
 
   private SensorContextTester setUpForSensorContextTester() {
     SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
-    parser = new PhpUnitTestResultImporter(PhpTestUtils.getDefaultFileSystem());
+    parser = new PhpUnitTestResultImporter();
     return context;
   }
 
   private SensorContext setUpForMockedSensorContext() {
     SensorContext context = Mockito.mock(SensorContext.class);
-    parser = new PhpUnitTestResultImporter(PhpTestUtils.getDefaultFileSystem());
+    parser = new PhpUnitTestResultImporter();
     return context;
   }
 
@@ -93,11 +93,12 @@ public class PhpUnitTestResultImporterTest {
 
     fs.add(monkeyFile);
     fs.add(bananaFile);
+    context.setFileSystem(fs);
 
     String monkey = "moduleKey:" + "Monkey.php";
     String banana = "moduleKey:" + "Banana.php";
 
-    parser = new PhpUnitTestResultImporter(fs);
+    parser = new PhpUnitTestResultImporter();
     parser.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<>());
 
     PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 7);

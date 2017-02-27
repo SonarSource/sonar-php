@@ -1,6 +1,6 @@
 /*
- * SonarQube JavaScript Plugin
- * Copyright (C) 2011-2017 SonarSource SA
+ * SonarQube PHP Plugin
+ * Copyright (C) 2010-2017 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -33,19 +33,9 @@ import org.sonar.plugins.php.phpunit.xml.TestSuites;
  * PHPUnit can generate test result logs that comply with JUnit's test results xml format.
  * This parser understands that xml format and produces a TestSuites object.
  *
- * A note on the JUnit test results xml format : it's extremely poorly documented; there's
- * in fact no authoritative xsd provided by the JUnit project itself and many xsd provided
- * by third parties are wrong or partial and don't cover all possible xml outputs generated
- * by JUnit or other libraries (like PHPUnit). Few of them support nested testsuite elements
- * at all, which is an extremely frequent output of PHPUnit.
- * The most complete one seems the one allegedly proposed by the Apache Software Foundation
- * and used by Apache Ant, but somehow it's not provided in an ASF repository, continuing
- * the tradition of fuzziness around this format : http://windyroad.com.au/dl/Open%20Source/JUnit.xsd
- * Even this format is not sufficient to represent the PHPUnit-generated report, namely it
- * lacks the file attribute, which plays a key role in storing the metrics.
- *
  * This parser was built to support the subset of sample xml files that are used in the
- * tests and not a particular xsd. It will not raise any parsing error except basic xml syntax issues.
+ * tests and not a particular xsd since an authoritative one is not available.
+ * It will not raise any parsing error except basic xml syntax issues.
  */
 public class JUnitLogParserForPhpUnit {
 

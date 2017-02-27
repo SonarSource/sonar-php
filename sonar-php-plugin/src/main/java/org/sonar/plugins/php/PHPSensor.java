@@ -142,7 +142,7 @@ public class PHPSensor implements Sensor {
   private void processCoverage(Map<String, Integer> numberOfLinesOfCode, SensorContext context) {
     PhpUnitService phpUnitSensor = new PhpUnitService(
       fileSystem,
-      new PhpUnitTestResultImporter(fileSystem),
+      new PhpUnitTestResultImporter(),
       new PhpUnitCoverageResultImporter(fileSystem),
       new PhpUnitItCoverageResultImporter(fileSystem),
       new PhpUnitOverallCoverageResultImporter(fileSystem));

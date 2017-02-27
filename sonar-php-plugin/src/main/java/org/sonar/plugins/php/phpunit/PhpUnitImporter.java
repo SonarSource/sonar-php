@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
 
-@FunctionalInterface
 public interface PhpUnitImporter {
 
   void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode);

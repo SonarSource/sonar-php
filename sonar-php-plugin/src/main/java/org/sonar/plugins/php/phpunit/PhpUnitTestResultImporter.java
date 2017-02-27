@@ -24,32 +24,20 @@ import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.BatchSide;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
 
-@BatchSide
-@ExtensionPoint
 public class PhpUnitTestResultImporter implements PhpUnitImporter {
 
-  final JUnitLogParserForPhpUnit parser;
-
-  private FileSystem fileSystem;
-
-  public PhpUnitTestResultImporter(FileSystem fileSystem) {
-    this.fileSystem = fileSystem;
-    this.parser = new JUnitLogParserForPhpUnit();
-  }
+  final JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
 
   @Override
   public void importReport(File reportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     Preconditions.checkNotNull(reportFile);
     TestSuites testSuites = parser.parse(reportFile);
-    List<PhpUnitTestFileReport> fileReports = testSuites.arrangeSuitesIntoTestClassReports();
+    List<PhpUnitTestFileReport> fileReports = testSuites.arrangeSuitesIntoTestFileReports();
     for (PhpUnitTestFileReport fileReport : Lists.reverse(fileReports)) {
-      fileReport.saveTestReportMeasures(context, fileSystem);
+      fileReport.saveTestMeasures(context);
     }
   }
 

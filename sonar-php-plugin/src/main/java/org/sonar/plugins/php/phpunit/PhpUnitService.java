@@ -35,30 +35,30 @@ public class PhpUnitService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitService.class);
 
-  private final PhpUnitOverallCoverageResultImporter overallCoverageParser;
-  private final PhpUnitItCoverageResultImporter itCoverageParser;
-  private final PhpUnitCoverageResultImporter coverageParser;
-  private final PhpUnitTestResultImporter parser;
+  private final PhpUnitOverallCoverageResultImporter overallCoverageImporter;
+  private final PhpUnitItCoverageResultImporter itCoverageImporter;
+  private final PhpUnitCoverageResultImporter coverageImporter;
+  private final PhpUnitTestResultImporter importer;
 
   private final FileSystem fileSystem;
 
-  public PhpUnitService(FileSystem fileSystem, PhpUnitTestResultImporter parser,
-                       PhpUnitCoverageResultImporter coverageParser,
-                       PhpUnitItCoverageResultImporter itCoverageParser,
-                       PhpUnitOverallCoverageResultImporter overallCoverageParser) {
+  public PhpUnitService(FileSystem fileSystem, PhpUnitTestResultImporter importer,
+                       PhpUnitCoverageResultImporter coverageImporter,
+                       PhpUnitItCoverageResultImporter itCoverageImporter,
+                       PhpUnitOverallCoverageResultImporter overallCoverageImporter) {
 
     this.fileSystem = fileSystem;
-    this.parser = parser;
-    this.coverageParser = coverageParser;
-    this.itCoverageParser = itCoverageParser;
-    this.overallCoverageParser = overallCoverageParser;
+    this.importer = importer;
+    this.coverageImporter = coverageImporter;
+    this.itCoverageImporter = itCoverageImporter;
+    this.overallCoverageImporter = overallCoverageImporter;
   }
 
   public void execute(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
-    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, parser, "test", context, numberOfLinesOfCode);
-    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageParser, "unit test coverage", context, numberOfLinesOfCode);
-    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageParser, "integration test coverage", context, numberOfLinesOfCode);
-    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, importer, "test", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageImporter, "unit test coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageImporter, "integration test coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageImporter, "overall coverage", context, numberOfLinesOfCode);
   }
 
   private void parseReport(String reportPathKey, PhpUnitImporter parser, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {

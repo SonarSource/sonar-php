@@ -24,10 +24,10 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import javax.annotation.Nullable;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
@@ -53,19 +53,17 @@ public final class TestSuite {
   private double time;
 
   @XStreamImplicit(itemFieldName = "testsuite")
-  private List<TestSuite> testSuites;
+  private List<TestSuite> testSuites = new ArrayList<>();
 
   @XStreamImplicit(itemFieldName = "testcase")
-  private List<TestCase> testCases;
+  private List<TestCase> testCases = new ArrayList<>();
 
   /**
    * Empty constructor is required by xstream in order to
    * be compatible with Java 7.
    * */
   public TestSuite() {
-    // Empty constructor is required by xstream
-    this.testSuites = new ArrayList<>();
-    this.testCases = new ArrayList<>();
+    // Zero parameters constructor is required by xstream
   }
 
   public TestSuite(final String name, final String file, final String tests, final String assertions,
@@ -80,62 +78,49 @@ public final class TestSuite {
     this.testCases = testCases;
   }
 
-  public void setName(final String name) {
-    this.name = name;
+  public Collection<PhpUnitTestFileReport> generateReports() {
+    return collectAllFileBasedSuites().stream().map(TestSuite::createReport).collect(Collectors.toSet());
   }
 
-  public String getFile() {
-    return file;
+  private Collection<TestSuite> collectAllFileBasedSuites() {
+    final Set<TestSuite> fileBasedTestSuites = new HashSet<>();
+    if (this.isFileBased()) {
+      fileBasedTestSuites.add(this);
+    } else {
+      logMisplacedTestCases();
+    }
+    testSuites.forEach(childSuite -> fileBasedTestSuites.addAll(childSuite.collectAllFileBasedSuites()));
+    return fileBasedTestSuites;
   }
 
-  public void setFile(final String file) {
-    this.file = file;
-  }
-
-  public String getAssertions() {
-    return assertions;
-  }
-
-  public void setAssertions(final String assertions) {
-    this.assertions = assertions;
-  }
-
-  public double getTime() {
-    return time;
-  }
-
-  public List<TestCase> getTestCases() {
-    return testCases;
-  }
-
-  public boolean isFileBasedSuite() {
-    return getFile() != null;
+  private void logMisplacedTestCases() {
+    testCases.forEach(testCase -> LOGGER.warn("Test cases must always be descendants of a file-based suite, skipping : " + testCase.fullName() + " in " + name));
   }
 
   /**
-   * Reads the given test suite.
-   * <p/>
-   * Due to a inconsistent XML format in phpUnit, we have to importReport enclosing testsuite name for generated testcases when a testcase holds
-   * the annotation dataProvider.
+   * Four types of suites are known :
+   * - file-based (a suite generated out of all the tests listed in a PHPUnit test class
+   * - folder-based (a suite generated out of PHPUnit being run on a folder)
+   * - configuration-based (a suite explicitly defined in the phpunit.xml configuration file)
+   * - data-provider-based (a suite generated to contain all dataset variants of a test fed with a PHPUnit dataProvider)
    *
-   * @param activeReport
+   * Currently we only care about distinguishing between the file-based suite and all the others.
+   * @See PhpUnitTestFileReport
+   *
+   * @return true if the suite contains a file attribute
    */
-  public Collection<PhpUnitTestFileReport> generateReports(@Nullable PhpUnitTestFileReport activeReport) {
-    Map<String, PhpUnitTestFileReport> reportsPerFile = new HashMap<>();
-    if (isFileBasedSuite()) {
-      reportsPerFile.putIfAbsent(getFile(), new PhpUnitTestFileReport(getFile(), getTime()));
-      activeReport = reportsPerFile.get(getFile());
-    }
-    for (TestCase testCase : getTestCases()) {
-      if (activeReport != null) {
-        activeReport.addTestCase(testCase);
-      } else {
-        LOGGER.warn("Test cases must always be descendants of a file-based suite, skipping : " + testCase.fullName() + " in " + name);
-      }
-    }
-    for (TestSuite childSuite : this.testSuites) {
-      childSuite.generateReports(activeReport);
-    }
-    return reportsPerFile.values();
+  private boolean isFileBased() {
+    return file != null;
+  }
+
+  private PhpUnitTestFileReport createReport() {
+    final PhpUnitTestFileReport report = new PhpUnitTestFileReport(file, time);
+    collectTestCases(report);
+    return report;
+  }
+
+  private void collectTestCases(PhpUnitTestFileReport fileReport) {
+    testCases.forEach(fileReport::addTestCase);
+    testSuites.forEach(childSuite -> childSuite.collectTestCases(fileReport));
   }
 }

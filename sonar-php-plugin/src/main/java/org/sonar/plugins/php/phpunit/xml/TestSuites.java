@@ -33,13 +33,13 @@ public final class TestSuites {
   private List<TestSuite> testSuiteList = new ArrayList<>();
 
   public TestSuites() {
-    // Empty constructor is required by xstream
+    // Zero parameters constructor is required by xstream
   }
 
-  public List<PhpUnitTestFileReport> arrangeSuitesIntoTestClassReports() {
+  public List<PhpUnitTestFileReport> arrangeSuitesIntoTestFileReports() {
     List<PhpUnitTestFileReport> result = new ArrayList<>();
     for (TestSuite testSuite : testSuiteList) {
-      result.addAll(testSuite.generateReports(null));
+      result.addAll(testSuite.generateReports());
     }
     return result;
   }
