@@ -44,7 +44,7 @@ public class PhpUnitTestResultImporter implements PhpUnitImporter {
   }
 
   @Override
-  public void importReport(File reportFile, SensorContext context, Map<File, Integer> numberOfLinesOfCode) {
+  public void importReport(File reportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     Preconditions.checkNotNull(reportFile);
     TestSuites testSuites = parser.parse(reportFile);
     List<PhpUnitTestFileReport> fileReports = testSuites.arrangeSuitesIntoTestClassReports();
