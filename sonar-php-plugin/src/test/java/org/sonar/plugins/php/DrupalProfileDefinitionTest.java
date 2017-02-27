@@ -19,27 +19,27 @@
  */
 package org.sonar.plugins.php;
 
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import org.sonar.api.profiles.ProfileDefinition;
+import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.php.checks.CheckList;
+import org.sonar.plugins.php.api.Php;
 
-public final class PSR2Profile extends ProfileDefinition {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  private final XMLProfileParser xmlProfileParser;
+public class DrupalProfileDefinitionTest {
 
-  public PSR2Profile(XMLProfileParser xmlProfileParser) {
-    this.xmlProfileParser = xmlProfileParser;
+  @Test
+  public void profile_creation() {
+    ValidationMessages validation = ValidationMessages.create();
+
+    DrupalProfileDefinition definition = new DrupalProfileDefinition(new FakeProfileParser());
+    RulesProfile profile = definition.createProfile(validation);
+
+    assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
+    assertThat(profile.getName()).isEqualTo("Drupal");
+    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(20);
+    assertThat(validation.hasErrors()).isFalse();
   }
 
-  @Override
-  public RulesProfile createProfile(ValidationMessages validation) {
-    InputStreamReader reader = new InputStreamReader(
-      getClass().getResourceAsStream("/org/sonar/plugins/php/profile/psr2-profile.xml"),
-      StandardCharsets.UTF_8);
-
-    return xmlProfileParser.parse(reader, validation);
-  }
 }

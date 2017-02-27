@@ -57,10 +57,10 @@ public class PhpPlugin implements Plugin {
       PhpIniSensor.class,
 
       // Rules and profiles
-      PHPRulesDefinition.class,
-      PHPProfile.class,
-      PSR2Profile.class,
-      DrupalProfile.class,
+      new PHPRulesDefinition(context.getSonarQubeVersion()),
+      PHPProfileDefinition.class,
+      PSR2ProfileDefinition.class,
+      DrupalProfileDefinition.class,
 
       // Properties
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)

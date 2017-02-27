@@ -19,11 +19,12 @@
  */
 package org.sonar.plugins.php;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
@@ -36,29 +37,30 @@ import org.sonar.plugins.php.api.Php;
 /**
  * Sonar way profile.
  * <p>
- * We currently also define two other profiles, see {@link DrupalProfile} and {@link PSR2Profile}.
+ * We currently also define two other profiles, see {@link DrupalProfileDefinition} and {@link PSR2ProfileDefinition}.
  *
  */
-public final class PHPProfile extends ProfileDefinition {
+public final class PHPProfileDefinition extends ProfileDefinition {
+
+  public static final String SONAR_WAY_PROFILE = "Sonar way";
 
   private final RuleFinder ruleFinder;
 
-  public PHPProfile(RuleFinder ruleFinder) {
+  public PHPProfileDefinition(RuleFinder ruleFinder) {
     this.ruleFinder = ruleFinder;
   }
 
   @Override
   public RulesProfile createProfile(ValidationMessages validation) {
-    RulesProfile profile = RulesProfile.create(CheckList.SONAR_WAY_PROFILE, Php.KEY);
+    RulesProfile profile = RulesProfile.create(SONAR_WAY_PROFILE, Php.KEY);
 
-    loadFromCommonRepository(profile);
-    
-    loadFromJsonProfile(profile);
+    activateCommonRules(profile);
+    activateRulesFromDefaultProfile(profile);
 
     return profile;
   }
 
-  private void loadFromCommonRepository(RulesProfile profile) {
+  private void activateCommonRules(RulesProfile profile) {
     Rule duplicatedBlocksRule = ruleFinder.findByKey("common-" + Php.KEY, "DuplicatedBlocks");
 
     // in SonarLint duplicatedBlocksRule == null
@@ -67,18 +69,21 @@ public final class PHPProfile extends ProfileDefinition {
     }
   }
 
-  private void loadFromJsonProfile(RulesProfile profile) {
-    URL profileUrl = getClass().getResource("/org/sonar/l10n/php/rules/php/Sonar_way_profile.json");
+  private void activateRulesFromDefaultProfile(RulesProfile profile) {
+    for (String ruleKey : defaultProfileRuleKeys()) {
+      Rule rule = ruleFinder.findByKey(CheckList.REPOSITORY_KEY, ruleKey);
+      profile.activateRule(rule, null);
+    }
+  }
 
-    try {
+  static Set<String> defaultProfileRuleKeys() {
+    String location = "/org/sonar/l10n/php/rules/php/Sonar_way_profile.json";
+    InputStream stream = PHPProfileDefinition.class.getResourceAsStream(location);
+    try (Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
-      Profile jsonProfile = gson.fromJson(Resources.toString(profileUrl, Charsets.UTF_8), Profile.class);
-      for (String ruleKey : jsonProfile.ruleKeys) {
-        Rule rule = ruleFinder.findByKey(CheckList.REPOSITORY_KEY, ruleKey);
-        profile.activateRule(rule, null);
-      }
+      return gson.fromJson(reader, Profile.class).ruleKeys;
     } catch (IOException e) {
-      throw new IllegalStateException("Failed to read: " + profileUrl, e);
+      throw new IllegalStateException("Failed to read: " + location, e);
     }
   }
 

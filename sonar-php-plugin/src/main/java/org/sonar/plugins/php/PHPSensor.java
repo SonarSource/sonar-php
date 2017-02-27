@@ -124,9 +124,14 @@ public class PHPSensor implements Sensor {
 
     Map<String, Integer> numberOLinesOfCode = new HashMap<>();
 
-    analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
-    if (inSonarQube(context)) {
-      processCoverage(numberOLinesOfCode, context);
+
+    try {
+      analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
+      if (inSonarQube(context)) {
+        processCoverage(numberOLinesOfCode, context);
+      }
+    } catch (CancellationException e) {
+      LOG.info(e.getMessage());
     }
   }
 
@@ -148,12 +153,19 @@ public class PHPSensor implements Sensor {
     boolean success = false;
     try {
       for (InputFile inputFile : inputFiles) {
+        checkCancelled(context);
         progressReport.nextFile();
         analyseFile(context, phpAnalyzer, inputFile, numberOfLinesOfCode);
       }
       success = true;
     } finally {
       stopProgressReport(progressReport, success);
+    }
+  }
+
+  private static void checkCancelled(SensorContext context) {
+    if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) && context.isCancelled()) {
+      throw new CancellationException("Analysis cancelled");
     }
   }
 
@@ -236,6 +248,14 @@ public class PHPSensor implements Sensor {
       issue
         .forRule(parsingErrorRuleKey)
         .at(location)
+        .save();
+    }
+
+    if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0)) {
+      context.newAnalysisError()
+        .onFile(inputFile)
+        .at(inputFile.newPointer(e.getLine(), 0))
+        .message(e.getMessage())
         .save();
     }
   }
@@ -333,5 +353,12 @@ public class PHPSensor implements Sensor {
       cpdToken.image()));
 
     newCpdTokens.save();
+  }
+
+  private static class CancellationException extends RuntimeException {
+
+    CancellationException(String message) {
+      super(message);
+    }
   }
 }
