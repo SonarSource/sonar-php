@@ -19,28 +19,62 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
+import com.google.common.base.Objects;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
 
 @XStreamAlias("testsuites")
 public final class TestSuites {
 
   @XStreamImplicit(itemFieldName = "testsuite")
-  private List<TestSuite> testSuiteList = new ArrayList<>();
+  private List<TestSuite> testSuites = new ArrayList<>();
 
   public TestSuites() {
     // Zero parameters constructor is required by xstream
   }
 
+  @VisibleForTesting
+  TestSuites(TestSuite... testSuites) {
+    this.testSuites = Arrays.asList(testSuites);
+  }
+
   public List<PhpUnitTestFileReport> arrangeSuitesIntoTestFileReports() {
     List<PhpUnitTestFileReport> result = new ArrayList<>();
-    for (TestSuite testSuite : testSuiteList) {
+    for (TestSuite testSuite : testSuites) {
       result.addAll(testSuite.generateReports());
     }
     return result;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    TestSuites that = (TestSuites) o;
+
+    return new EqualsBuilder()
+      .append(testSuites, that.testSuites)
+      .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+      .append(testSuites)
+      .toHashCode();
   }
 }

@@ -19,110 +19,59 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
 import java.util.HashMap;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
 public class PhpUnitTestResultImporterTest {
 
-  private PhpUnitTestResultImporter parser;
+  private PhpUnitTestResultImporter importer;
 
   private SensorContextTester setUpForSensorContextTester() {
     SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
-    parser = new PhpUnitTestResultImporter();
+    importer = new PhpUnitTestResultImporter();
     return context;
   }
 
-  private SensorContext setUpForMockedSensorContext() {
-    SensorContext context = Mockito.mock(SensorContext.class);
-    parser = new PhpUnitTestResultImporter();
-    return context;
-  }
-
-  /**
-   * Should throw an exception when report is invalid.
-   */
-  @Test(expected = XStreamException.class)
-  public void shouldThrowAnExceptionWhenReportIsInvalid() {
-    SensorContext context = setUpForMockedSensorContext();
-    parser.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"), context, new HashMap<String, Integer>());
-
-    verify(context, never()).newMeasure();
-  }
-
-  @Test
-  public void shouldNotFailIfNoFileName() {
-    SensorContext context = setUpForMockedSensorContext();
-    parser.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-no-filename.xml"), context, new HashMap<String, Integer>());
-
-    verify(context, never()).newMeasure();
-  }
-
-  @Test
-  public void shouldNotFailWithEmptyTestSuites() {
-    SensorContext context = setUpForMockedSensorContext();
-    parser.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"), context, new HashMap<String, Integer>());
-
-    verify(context, never()).newMeasure();
-  }
-
-  /**
-   * Should generate tests metrics.
-   */
   @Test()
   public void shouldGenerateTestsMeasures() {
     SensorContextTester context = setUpForSensorContextTester();
     File baseDir = TestUtils.getResource("/org/sonar/plugins/php/phpunit/sensor/src/");
     DefaultFileSystem fs = new DefaultFileSystem(baseDir);
-    DefaultInputFile monkeyFile = new DefaultInputFile("moduleKey", "Monkey.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY);
-    DefaultInputFile bananaFile = new DefaultInputFile("moduleKey", "Banana.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY);
+    DefaultInputFile appTestFile = new DefaultInputFile("moduleKey", "src/AppTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY);
+    DefaultInputFile appSkippedTestFile = new DefaultInputFile("moduleKey", "src/AppSkipTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY);
 
-    fs.add(monkeyFile);
-    fs.add(bananaFile);
+    fs.add(appTestFile);
+    fs.add(appSkippedTestFile);
     context.setFileSystem(fs);
 
-    String monkey = "moduleKey:" + "Monkey.php";
-    String banana = "moduleKey:" + "Banana.php";
+    String appTest = "moduleKey:" + "src/AppTest.php";
+    String appSkipTest = "moduleKey:" + "src/AppSkipTest.php";
 
-    parser = new PhpUnitTestResultImporter();
-    parser.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<>());
+    importer = new PhpUnitTestResultImporter();
+    importer.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<>());
 
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 7);
-    PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TESTS, 1);
+    PhpTestUtils.assertMeasure(context, appTest, CoreMetrics.TESTS, 1);
+    PhpTestUtils.assertMeasure(context, appTest, CoreMetrics.TEST_FAILURES, 0);
+    PhpTestUtils.assertMeasure(context, appTest, CoreMetrics.TEST_ERRORS, 0);
+    PhpTestUtils.assertMeasure(context, appTest, CoreMetrics.SKIPPED_TESTS, 0);
+    PhpTestUtils.assertMeasure(context, appTest, CoreMetrics.TEST_EXECUTION_TIME, 0L);
+    PhpTestUtils.assertMeasure(context, appTest, CoreMetrics.TEST_SUCCESS_DENSITY, 100.00);
 
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_FAILURES, 3);
-    PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TEST_FAILURES, 0);
-
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
-    PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TEST_ERRORS, 1);
-
-    // Test execution time:
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_EXECUTION_TIME, 447L);
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TESTS, 7);
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_ERRORS, 1);
-    PhpTestUtils.assertMeasure(context, monkey, CoreMetrics.TEST_SUCCESS_DENSITY, 42.86);
-    PhpTestUtils.assertMeasure(context, banana, CoreMetrics.TEST_EXECUTION_TIME, 570L);
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void testGetTestSuitesWithUnexistingFile() throws Exception {
-    setUpForSensorContextTester();
-    // FIXME this test should happen at a lower level.
-    parser.parser.parse(new File("target/unexistingFile.xml"));
+    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TESTS, 1);
+    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TEST_FAILURES, 0);
+    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TEST_ERRORS, 0);
+    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.SKIPPED_TESTS, 1);
+    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TEST_EXECUTION_TIME, 0L);
+    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TEST_SUCCESS_DENSITY, 100.00);
   }
 
 }

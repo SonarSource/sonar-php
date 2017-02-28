@@ -19,6 +19,8 @@
  */
 package org.sonar.plugins.php.phpunit;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +35,6 @@ import org.sonar.plugins.php.phpunit.xml.TestCase;
 
 public class PhpUnitTestFileReport {
 
-  private static final double PERCENT = 100d;
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitTestResultImporter.class);
   private int errors = 0;
   private int failures = 0;
@@ -80,7 +81,7 @@ public class PhpUnitTestFileReport {
 
   private double successPercentage() {
     double passedTests = liveTests() - errors - failures;
-    return passedTests * PERCENT / liveTests();
+    return passedTests * 100d / liveTests();
   }
 
   private double testDurationSeconds() {
@@ -104,6 +105,40 @@ public class PhpUnitTestFileReport {
       this.errors++;
     }
     this.tests++;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    PhpUnitTestFileReport that = (PhpUnitTestFileReport) o;
+
+    return new EqualsBuilder()
+      .append(errors, that.errors)
+      .append(failures, that.failures)
+      .append(skipped, that.skipped)
+      .append(tests, that.tests)
+      .append(testDuration, that.testDuration)
+      .append(file, that.file)
+      .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+      .append(errors)
+      .append(failures)
+      .append(file)
+      .append(skipped)
+      .append(tests)
+      .append(testDuration)
+      .toHashCode();
   }
 
   @Override

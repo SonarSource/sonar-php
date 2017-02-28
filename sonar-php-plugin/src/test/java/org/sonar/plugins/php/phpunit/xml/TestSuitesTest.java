@@ -22,39 +22,16 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import org.junit.Before;
+import java.util.List;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
+import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.both;
-import static org.junit.matchers.JUnitMatchers.hasItem;
+import static org.junit.Assert.assertTrue;
 
-/**
- * Test for TestSuites.
- *
- * @author gennadiyl
- */
 public class TestSuitesTest {
-
-  private TestSuites testSuites;
-  private static final Logger LOG = LoggerFactory.getLogger(TestSuitesTest.class);
-
-  /**
-   * @throws java.lang.Exception
-   */
-  @Before
-  public void setUp() throws Exception {
-    testSuites = new TestSuites();
-  }
 
   /**
    * Empty constructors are required by xstream for TestSuite and TestSuite, in order to
@@ -62,38 +39,20 @@ public class TestSuitesTest {
    */
   @Test
   public void test_compatible_java_7() {
-    Constructor[] constructors1 = getConstructorForClass("org.sonar.plugins.php.phpunit.xml.TestSuite");
-    assertThat(constructors1).isNotEmpty();
-    assertThat(getNbParamPerConstructor(constructors1).first()).isEqualTo(0);
-
-    Constructor[] constructors2 = getConstructorForClass("org.sonar.plugins.php.phpunit.xml.TestSuites");
-    assertThat(constructors2).isNotEmpty();
-    assertThat(getNbParamPerConstructor(constructors2).first()).isEqualTo(0);
+    new TestSuites();
+    new TestSuite();
+    assertTrue(true);
   }
 
-  private Constructor[] getConstructorForClass(String className) {
-    Constructor[] constructors = new Constructor[0];
-    try {
-      Class testSuites = Class.forName(className);
-      constructors = testSuites.getConstructors();
-    } catch (ClassNotFoundException e) {
-      LOG.error("If TestSuite and TestSuites class does not exist any more, this test might be useless.", e);
-    }
-    return constructors;
+  @Test
+  public void shouldCollectReportsFromAllTestSuites() {
+    final String testFile1 = "one.php";
+    final String testFile2 = "two.php";
+    final TestSuites testSuites = new TestSuites(new TestSuite(testFile1), new TestSuite(testFile2));
+    final List<PhpUnitTestFileReport> reports = testSuites.arrangeSuitesIntoTestFileReports();
+    assertThat(reports.size()).isEqualTo(2);
+    assertThat(reports).contains(new PhpUnitTestFileReport(testFile1, 0d));
+    assertThat(reports).contains(new PhpUnitTestFileReport(testFile2, 0d));
   }
-
-  private TreeSet<Integer> getNbParamPerConstructor(Constructor[] constructors) {
-    TreeSet<Integer> nbParamPerConstructors = new TreeSet<Integer>();
-    for (Constructor c : constructors) {
-      nbParamPerConstructors.add(c.getParameterTypes().length);
-    }
-
-    return nbParamPerConstructors;
-  }
-
-  private TestSuite getTestSuite(String name) {
-    return new TestSuite(name, "file", "tests", "assertions", 0, null, null);
-  }
-
 
 }

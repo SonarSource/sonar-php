@@ -118,7 +118,7 @@ public class PhpUnitServiceTest {
   @Test
   public void xstream_exception() throws Exception {
     doThrow(new XStreamException("")).when(parser).importReport((File) any(), any(SensorContext.class), anyMap());
-    when(context.settings()).thenReturn(settings("phpunit.xml"));
+    when(context.settings()).thenReturn(settings("phpunit-junit-report.xml"));
     phpUnitService = createService(fs);
 
     expected.expect(IllegalStateException.class);
@@ -128,7 +128,7 @@ public class PhpUnitServiceTest {
   @Test
   public void should_parse_relative_path_report() {
     phpUnitService = createService(fs);
-    when(context.settings()).thenReturn(settings("phpunit.xml"));
+    when(context.settings()).thenReturn(settings("phpunit-junit-report.xml"));
     phpUnitService.execute(context, numberOfLinesOfCode);
 
     verify(parser, times(1)).importReport(TEST_REPORT_FILE, context, numberOfLinesOfCode);

@@ -23,10 +23,9 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 
-/**
- * The Class TestCase.
- */
 @XStreamAlias("testcase")
 public final class TestCase {
 
@@ -36,29 +35,14 @@ public final class TestCase {
   public static final String STATUS_SKIPPED = "skipped";
 
   @XStreamAsAttribute
-  private int assertions;
-
-  @XStreamAsAttribute
   @XStreamAlias("class")
   private String className;
-
-  @XStreamAsAttribute
-  private String errorMessage;
 
   @XStreamAsAttribute
   private String file;
 
   @XStreamAsAttribute
-  private int line;
-
-  @XStreamAsAttribute
   private String name;
-
-  @XStreamOmitField
-  private String status;
-
-  @XStreamAsAttribute
-  private double time;
 
   @XStreamAlias("error")
   private String error;
@@ -66,84 +50,56 @@ public final class TestCase {
   @XStreamAlias("failure")
   private String failure;
 
-  public int getAssertions() {
-    return assertions;
+  @XStreamOmitField
+  private String status;
+
+  public TestCase() {
+    // Zero parameters constructor is required by xstream
   }
 
-  public String getClassName() {
-    return className;
-  }
-
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-
-  public String getFile() {
-    return file;
-  }
-
-  public int getLine() {
-    return line;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getStackTrace() {
-    if (STATUS_ERROR.equals(getStatus())) {
-      return error;
+  @VisibleForTesting
+  public TestCase(String status) {
+    if(STATUS_OK.equals(status)) {
+      this.status = "";
     }
-    if (STATUS_FAILURE.equals(getStatus())) {
-      return failure;
+    if(STATUS_ERROR.equals(status)) {
+      this.error = STATUS_ERROR;
     }
-    return null;
+    if(STATUS_FAILURE.equals(status)) {
+      this.failure = STATUS_FAILURE;
+    }
+    this.status = status;
   }
 
   public String getStatus() {
-    if (StringUtils.isBlank(status)) {
-      status = STATUS_OK;
-    }
     if (StringUtils.isNotBlank(error)) {
-      status = STATUS_ERROR;
+      return STATUS_ERROR;
     }
     if (StringUtils.isNotBlank(failure)) {
-      status = STATUS_FAILURE;
+      return STATUS_FAILURE;
+    }
+    if (StringUtils.isBlank(status)) {
+      return STATUS_OK;
     }
     return status;
   }
 
-  public void setAssertions(final int assertions) {
-    this.assertions = assertions;
-  }
-
-  public void setFile(final String file) {
-    this.file = file;
-  }
-
-  public void setLine(final int line) {
-    this.line = line;
-  }
-
-  public void setName(final String name) {
-    this.name = name;
-  }
-
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("TestCase [assertions=").append(assertions).append(", fileName=").append(className).append(", errorMessage=")
-      .append(errorMessage).append(", file=").append(file).append(", line=").append(line).append(", name=").append(name)
-      .append(", status=").append(status).append(", time=").append(time).append(", error=").append(error).append(", failure=")
-      .append(failure).append("]");
-    return builder.toString();
+    return new ToStringBuilder(this)
+      .append("className", className)
+      .append("name", name)
+      .append("status", status)
+      .append("error", error)
+      .append("failure", failure)
+      .toString();
   }
 
   String fullName() {
-    if(getClassName() != null) {
-      return getClassName() + "." + getName();
+    if(className != null) {
+      return className + "." + name;
     } else {
-      return getName();
+      return name;
     }
   }
 }

@@ -38,17 +38,17 @@ public class PhpUnitItCoverageResultParserTest {
   @Mock
   private SensorContext context;
 
-  private PhpUnitCoverageResultImporter parser;
+  private PhpUnitCoverageResultImporter importer;
 
   @Before
   public void setUp() throws Exception {
-    parser = new PhpUnitItCoverageResultImporter(PhpTestUtils.getDefaultFileSystem());
+    importer = new PhpUnitItCoverageResultImporter(PhpTestUtils.getDefaultFileSystem());
   }
 
   @Test
   public void shouldSetMetrics() {
-    assertThat(parser.linesToCoverMetric).isEqualTo(CoreMetrics.IT_LINES_TO_COVER);
-    assertThat(parser.uncoveredLinesMetric).isEqualTo(CoreMetrics.IT_UNCOVERED_LINES);
+    assertThat(importer.linesToCoverMetric).isEqualTo(CoreMetrics.IT_LINES_TO_COVER);
+    assertThat(importer.uncoveredLinesMetric).isEqualTo(CoreMetrics.IT_UNCOVERED_LINES);
   }
 
 }

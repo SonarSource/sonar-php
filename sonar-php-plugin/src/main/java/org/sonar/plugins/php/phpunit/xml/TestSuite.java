@@ -23,6 +23,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
 
 @XStreamAlias("testsuite")
@@ -66,16 +68,10 @@ public final class TestSuite {
     // Zero parameters constructor is required by xstream
   }
 
-  public TestSuite(final String name, final String file, final String tests, final String assertions,
-    final double time, final List<TestSuite> testSuites, final List<TestCase> testCases) {
-    super();
-    this.name = name;
+  @VisibleForTesting
+  TestSuite(String file, TestCase... testCases) {
     this.file = file;
-    this.tests = tests;
-    this.assertions = assertions;
-    this.time = time;
-    this.testSuites = testSuites;
-    this.testCases = testCases;
+    this.testCases = Arrays.asList(testCases);
   }
 
   public Collection<PhpUnitTestFileReport> generateReports() {
@@ -122,5 +118,10 @@ public final class TestSuite {
   private void collectTestCases(PhpUnitTestFileReport fileReport) {
     testCases.forEach(fileReport::addTestCase);
     testSuites.forEach(childSuite -> childSuite.collectTestCases(fileReport));
+  }
+
+  @VisibleForTesting
+  void addNested(TestSuite child) {
+    testSuites.add(child);
   }
 }
