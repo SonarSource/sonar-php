@@ -78,9 +78,9 @@ public class PHPIntegrationTest {
     // Complexity
     assertThat(getProjectMeasureAsDouble("function_complexity")).isEqualTo(1.9);
     assertThat(getProjectMeasureAsDouble("class_complexity")).isEqualTo(8.6);
-    assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(8.3);
-    assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(3516.0);
-    assertThat(getProjectMeasure("function_complexity_distribution").getValue()).isEqualTo("1=1309;2=366;4=109;6=44;8=15;10=10;12=29");
+    assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(8.2);
+    assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(3505.0);
+    assertThat(getProjectMeasure("function_complexity_distribution").getValue()).isEqualTo("1=1309;2=370;4=105;6=44;8=15;10=10;12=29");
     assertThat(getProjectMeasure("file_complexity_distribution").getValue()).isEqualTo("0=212;5=108;10=66;20=18;30=16;60=4;90=1");
     assertThat(getProjectMeasureAsDouble("class_complexity_distribution")).isNull();
   }

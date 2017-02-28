@@ -95,7 +95,6 @@
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Chart/Renderer/jpgraph.php':[
 329,
 595,
-703,
 750,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/DocumentProperties.php':[
@@ -192,7 +191,6 @@
 63,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Shared/JAMA/Matrix.php':[
-66,
 171,
 460,
 546,
@@ -351,7 +349,6 @@
 1245,
 1453,
 1604,
-1711,
 1769,
 2068,
 2247,
@@ -433,9 +430,6 @@
 ],
 'project:PHP_CodeSniffer/CodeSniffer/Standards/Generic/Sniffs/Formatting/MultipleStatementAlignmentSniff.php':[
 92,
-],
-'project:PHP_CodeSniffer/CodeSniffer/Standards/Generic/Sniffs/Functions/CallTimePassByReferenceSniff.php':[
-56,
 ],
 'project:PHP_CodeSniffer/CodeSniffer/Standards/Generic/Sniffs/Functions/FunctionCallArgumentSpacingSniff.php':[
 55,
@@ -674,9 +668,6 @@
 'project:symfony/Symfony/Bridge/Propel1/Form/PropelTypeGuesser.php':[
 31,
 ],
-'project:symfony/Symfony/Bridge/Propel1/Logger/PropelLogger.php':[
-137,
-],
 'project:symfony/Symfony/Bridge/Twig/Form/TwigRendererEngine.php':[
 79,
 ],
@@ -770,9 +761,6 @@
 'project:symfony/Symfony/Component/Console/Helper/DialogHelper.php':[
 99,
 ],
-'project:symfony/Symfony/Component/Console/Helper/ProgressHelper.php':[
-184,
-],
 'project:symfony/Symfony/Component/Console/Input/ArgvInput.php':[
 210,
 ],
@@ -786,9 +774,6 @@
 ],
 'project:symfony/Symfony/Component/Debug/ErrorHandler.php':[
 116,
-],
-'project:symfony/Symfony/Component/Debug/ExceptionHandler.php':[
-125,
 ],
 'project:symfony/Symfony/Component/DependencyInjection/Compiler/CheckDefinitionValidityPass.php':[
 40,

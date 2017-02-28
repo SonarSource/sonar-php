@@ -58,7 +58,7 @@ public class ComplexityVisitorTest {
     assertOneComplexityToken("do {} while($a);", "do");
     assertThat(complexity("switch ($a) {}")).isEqualTo(0);
     assertOneComplexityToken("switch ($a) {case 1:}", "case");
-    assertOneComplexityToken("switch ($a) {default:}", "default");
+    assertThat(complexity("switch ($a) {default:}")).isEqualTo(0);
 
     assertThat(complexity("try {}")).isEqualTo(0);
     assertThat(complexity("try {} catch(E $s) {}")).isEqualTo(0);

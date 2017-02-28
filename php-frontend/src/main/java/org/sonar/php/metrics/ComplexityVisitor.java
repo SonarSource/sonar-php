@@ -29,7 +29,6 @@ import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
-import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -40,12 +39,6 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class ComplexityVisitor extends PHPVisitorCheck {
 
   private List<Tree> complexityTrees = new ArrayList<>();
-
-  @Override
-  public void visitDefaultClause(DefaultClauseTree tree) {
-    incrementComplexity(tree.caseToken());
-    super.visitDefaultClause(tree);
-  }
 
   @Override
   public void visitCaseClause(CaseClauseTree tree) {
