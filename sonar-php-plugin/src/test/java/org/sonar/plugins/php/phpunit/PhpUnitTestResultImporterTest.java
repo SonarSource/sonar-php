@@ -66,12 +66,12 @@ public class PhpUnitTestResultImporterTest {
     PhpTestUtils.assertMeasure(context, appTest, CoreMetrics.TEST_EXECUTION_TIME, 0L);
     PhpTestUtils.assertMeasure(context, appTest, CoreMetrics.TEST_SUCCESS_DENSITY, 100.00);
 
-    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TESTS, 1);
+    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TESTS, 0);
     PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TEST_FAILURES, 0);
     PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TEST_ERRORS, 0);
     PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.SKIPPED_TESTS, 1);
     PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TEST_EXECUTION_TIME, 0L);
-    PhpTestUtils.assertMeasure(context, appSkipTest, CoreMetrics.TEST_SUCCESS_DENSITY, 100.00);
+    PhpTestUtils.assertNoMeasure(context, appSkipTest, CoreMetrics.TEST_SUCCESS_DENSITY);
   }
 
 }

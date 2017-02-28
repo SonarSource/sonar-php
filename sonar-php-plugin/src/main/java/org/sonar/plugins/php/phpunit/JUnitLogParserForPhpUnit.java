@@ -42,8 +42,7 @@ public class JUnitLogParserForPhpUnit {
   public TestSuites parse(File report) {
     try (InputStream inputStream = new FileInputStream(report)) {
       final Object parsedObject = xstream().fromXML(inputStream);
-      TestSuites testSuites = (TestSuites) parsedObject;
-      return testSuites;
+      return (TestSuites) parsedObject;
     } catch (IOException e) {
       throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
     }

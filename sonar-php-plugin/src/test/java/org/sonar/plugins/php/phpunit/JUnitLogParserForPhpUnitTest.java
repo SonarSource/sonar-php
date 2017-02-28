@@ -57,6 +57,6 @@ public class JUnitLogParserForPhpUnitTest {
   @Test
   public void shouldParseComplexNestedSuites() throws Exception {
     final TestSuites suites = parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml"));
-    
+    assertThat(suites.arrangeSuitesIntoTestFileReports().size()).isEqualTo(8);
   }
 }

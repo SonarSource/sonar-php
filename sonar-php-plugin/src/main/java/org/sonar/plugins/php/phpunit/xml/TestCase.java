@@ -25,6 +25,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
+import org.sonar.plugins.php.api.Php;
 
 @XStreamAlias("testcase")
 public final class TestCase {
@@ -50,6 +51,9 @@ public final class TestCase {
   @XStreamAlias("failure")
   private String failure;
 
+  @XStreamAlias("skipped")
+  private String skipped;
+
   @XStreamOmitField
   private String status;
 
@@ -68,6 +72,9 @@ public final class TestCase {
     if(STATUS_FAILURE.equals(status)) {
       this.failure = STATUS_FAILURE;
     }
+    if(STATUS_SKIPPED.equals(status)) {
+      this.skipped = STATUS_SKIPPED;
+    }
     this.status = status;
   }
 
@@ -77,6 +84,9 @@ public final class TestCase {
     }
     if (StringUtils.isNotBlank(failure)) {
       return STATUS_FAILURE;
+    }
+    if (skipped != null) {
+      return STATUS_SKIPPED;
     }
     if (StringUtils.isBlank(status)) {
       return STATUS_OK;
