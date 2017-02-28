@@ -196,7 +196,7 @@ public class PHPSensor implements Sensor {
       }
     } catch (RecognitionException e) {
       checkInterrupted(e);
-      LOG.error("Unable to importReport file: " + inputFile.absolutePath());
+      LOG.error("Unable to parse file: " + inputFile.absolutePath());
       LOG.error(e.getMessage());
       saveParsingIssue(context, e, inputFile);
       return;

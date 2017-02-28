@@ -25,15 +25,13 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
-import org.sonar.plugins.php.api.Php;
 
 @XStreamAlias("testcase")
 public final class TestCase {
 
-  public static final String STATUS_ERROR = "error";
-  public static final String STATUS_FAILURE = "failure";
-  public static final String STATUS_OK = "ok";
-  public static final String STATUS_SKIPPED = "skipped";
+  public enum Status {
+    OK, SKIPPED, FAILURE, ERROR
+  }
 
   @XStreamAsAttribute
   @XStreamAlias("class")
@@ -62,36 +60,32 @@ public final class TestCase {
   }
 
   @VisibleForTesting
-  public TestCase(String status) {
-    if(STATUS_OK.equals(status)) {
-      this.status = "";
+  public TestCase(Status status) {
+    if (status == Status.OK) {
+      this.status = status.toString();
     }
-    if(STATUS_ERROR.equals(status)) {
-      this.error = STATUS_ERROR;
+    if (status == Status.ERROR) {
+      this.error = status.toString();
     }
-    if(STATUS_FAILURE.equals(status)) {
-      this.failure = STATUS_FAILURE;
+    if (status == Status.FAILURE) {
+      this.failure = status.toString();
     }
-    if(STATUS_SKIPPED.equals(status)) {
-      this.skipped = STATUS_SKIPPED;
+    if (status == Status.SKIPPED) {
+      this.skipped = Status.SKIPPED.toString();
     }
-    this.status = status;
   }
 
-  public String getStatus() {
+  public Status getStatus() {
     if (StringUtils.isNotBlank(error)) {
-      return STATUS_ERROR;
+      return Status.ERROR;
     }
     if (StringUtils.isNotBlank(failure)) {
-      return STATUS_FAILURE;
+      return Status.FAILURE;
     }
     if (skipped != null) {
-      return STATUS_SKIPPED;
+      return Status.SKIPPED;
     }
-    if (StringUtils.isBlank(status)) {
-      return STATUS_OK;
-    }
-    return status;
+    return Status.OK;
   }
 
   @Override
@@ -99,14 +93,12 @@ public final class TestCase {
     return new ToStringBuilder(this)
       .append("className", className)
       .append("name", name)
-      .append("status", status)
-      .append("error", error)
-      .append("failure", failure)
+      .append("status", getStatus())
       .toString();
   }
 
   String fullName() {
-    if(className != null) {
+    if (className != null) {
       return className + "." + name;
     } else {
       return name;

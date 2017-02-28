@@ -61,17 +61,17 @@ public class PhpUnitService {
     parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageImporter, "overall coverage", context, numberOfLinesOfCode);
   }
 
-  private void parseReport(String reportPathKey, PhpUnitImporter parser, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  private void parseReport(String reportPathKey, PhpUnitImporter importer, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     String reportPath = context.settings().getString(reportPathKey);
 
     if (reportPath != null) {
       File xmlFile = getIOFile(reportPath);
 
       if (xmlFile.exists()) {
-        LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath + " with " + parser.toString());
+        LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath + " with " + importer.toString());
 
         try {
-          parser.importReport(xmlFile, context, numberOfLinesOfCode);
+          importer.importReport(xmlFile, context, numberOfLinesOfCode);
         } catch (XStreamException e) {
           throw new IllegalStateException("Report file is invalid, plugin will stop.", e);
         }

@@ -53,10 +53,10 @@ public class PhpUnitTestFileReportTest {
   @Test
   public void shouldReportStatusCounts() throws Exception {
     final PhpUnitTestFileReport report = new PhpUnitTestFileReport(testFileName, 3d);
-    report.addTestCase(new TestCase(TestCase.STATUS_SKIPPED));
-    report.addTestCase(new TestCase(TestCase.STATUS_ERROR));
-    report.addTestCase(new TestCase(TestCase.STATUS_FAILURE));
-    report.addTestCase(new TestCase(TestCase.STATUS_FAILURE));
+    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report.addTestCase(new TestCase(TestCase.Status.ERROR));
+    report.addTestCase(new TestCase(TestCase.Status.FAILURE));
+    report.addTestCase(new TestCase(TestCase.Status.FAILURE));
     report.saveTestMeasures(context);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TEST_EXECUTION_TIME, 3000l);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.SKIPPED_TESTS, 1);
@@ -75,9 +75,9 @@ public class PhpUnitTestFileReportTest {
   public void shouldNotCountSkippedTests() throws Exception {
     final PhpUnitTestFileReport report = new PhpUnitTestFileReport(testFileName, 1d);
     report.addTestCase(new TestCase());
-    report.addTestCase(new TestCase(TestCase.STATUS_SKIPPED));
-    report.addTestCase(new TestCase(TestCase.STATUS_FAILURE));
-    report.addTestCase(new TestCase(TestCase.STATUS_ERROR));
+    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report.addTestCase(new TestCase(TestCase.Status.FAILURE));
+    report.addTestCase(new TestCase(TestCase.Status.ERROR));
     report.saveTestMeasures(context);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TESTS, 3);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TEST_SUCCESS_DENSITY, 33.33d);
@@ -86,9 +86,9 @@ public class PhpUnitTestFileReportTest {
   @Test
   public void shouldReportNoSuccessDensityIfNoLiveTests() throws Exception {
     final PhpUnitTestFileReport report = new PhpUnitTestFileReport(testFileName, 1d);
-    report.addTestCase(new TestCase(TestCase.STATUS_SKIPPED));
-    report.addTestCase(new TestCase(TestCase.STATUS_SKIPPED));
-    report.addTestCase(new TestCase(TestCase.STATUS_SKIPPED));
+    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
+    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
     report.saveTestMeasures(context);
     PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.TEST_SUCCESS_DENSITY);
   }

@@ -58,7 +58,7 @@ public class PhpUnitTestFileReport {
     if (unitTestFile != null) {
       context.<Integer>newMeasure().on(unitTestFile).withValue(skipped).forMetric(CoreMetrics.SKIPPED_TESTS).save();
 
-      context.<Long>newMeasure().on(unitTestFile).withValue((long) testDurationSeconds()).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
+      context.<Long>newMeasure().on(unitTestFile).withValue((long) testDurationMilliseconds()).forMetric(CoreMetrics.TEST_EXECUTION_TIME).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue((int) liveTests()).forMetric(CoreMetrics.TESTS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(errors).forMetric(CoreMetrics.TEST_ERRORS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(failures).forMetric(CoreMetrics.TEST_FAILURES).save();
@@ -81,7 +81,7 @@ public class PhpUnitTestFileReport {
     return passedTests * 100d / liveTests();
   }
 
-  private double testDurationSeconds() {
+  private double testDurationMilliseconds() {
     return testDuration * 1000d;
   }
 
@@ -94,11 +94,11 @@ public class PhpUnitTestFileReport {
   }
 
   public void addTestCase(TestCase testCase) {
-    if (TestCase.STATUS_SKIPPED.equals(testCase.getStatus())) {
+    if (testCase.getStatus() == TestCase.Status.SKIPPED) {
       this.skipped++;
-    } else if (TestCase.STATUS_FAILURE.equals(testCase.getStatus())) {
+    } else if (testCase.getStatus() == TestCase.Status.FAILURE) {
       this.failures++;
-    } else if (TestCase.STATUS_ERROR.equals(testCase.getStatus())) {
+    } else if (testCase.getStatus() == TestCase.Status.ERROR) {
       this.errors++;
     }
     this.tests++;
