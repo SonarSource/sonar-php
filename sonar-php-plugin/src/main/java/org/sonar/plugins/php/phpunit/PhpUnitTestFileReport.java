@@ -33,28 +33,25 @@ import org.sonar.api.utils.ParsingUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
+/**
+ * The PhpUnitTestFileReport contains all the results of test cases appearing in a given test file.
+ * The reason why the report is file-based (as opposed to class-based) is that the SonarQube measures
+ * are stored per file.
+ */
 public class PhpUnitTestFileReport {
 
+  public PhpUnitTestFileReport(String file, double testDuration) {
+    this.file = file;
+    this.testDuration = testDuration;
+  }
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitTestResultImporter.class);
   private int errors = 0;
   private int failures = 0;
   private String file;
   private int skipped = 0;
   private int tests = 0;
-  private double testDuration = 0;
 
-  /**
-   * The PhpUnitTestFileReport contains all the results of test cases appearing in a given test file.
-   * The reason why the report is file-based (as opposed to class-based) is that the SonarQube measures
-   * are stored per file.
-   *
-   * @param file the test file name
-   * @param testDuration the test file overall execution time
-   */
-  public PhpUnitTestFileReport(String file, double testDuration) {
-    this.file = file;
-    this.testDuration = testDuration;
-  }
+  private double testDuration = 0;
 
   public void saveTestMeasures(SensorContext context) {
     InputFile unitTestFile = getUnitTestInputFile(context.fileSystem());
