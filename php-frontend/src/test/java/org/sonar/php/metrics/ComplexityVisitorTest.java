@@ -41,7 +41,7 @@ public class ComplexityVisitorTest {
     assertOneComplexityToken("class A { public function f() {} }", "function");
 
     assertThat(complexity("function f() { f(); return; }")).isEqualTo(1);
-    assertThat(complexity("function f() { return; f(); }")).isEqualTo(2);
+    assertThat(complexity("function f() { return; f(); }")).isEqualTo(1);
     assertThat(complexity("class A { abstract function f(); }")).isEqualTo(1);
   }
 
@@ -58,11 +58,13 @@ public class ComplexityVisitorTest {
     assertOneComplexityToken("do {} while($a);", "do");
     assertThat(complexity("switch ($a) {}")).isEqualTo(0);
     assertOneComplexityToken("switch ($a) {case 1:}", "case");
+    assertThat(complexity("switch ($a) {default:}")).isEqualTo(0);
+
     assertThat(complexity("try {}")).isEqualTo(0);
-    assertOneComplexityToken("try {} catch(E $s) {}", "catch");
-    assertOneComplexityToken("return 1;", "return");
-    assertOneComplexityToken("throw e;", "throw");
-    assertOneComplexityToken("goto x;", "goto");
+    assertThat(complexity("try {} catch(E $s) {}")).isEqualTo(0);
+    assertThat(complexity("return 1;")).isEqualTo(0);
+    assertThat(complexity("throw e;")).isEqualTo(0);
+    assertThat(complexity("goto x;")).isEqualTo(0);
   }
 
   @Test

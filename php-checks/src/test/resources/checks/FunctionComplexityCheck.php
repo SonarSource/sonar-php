@@ -1,6 +1,6 @@
 <?php
 
-  function ko() // NOK [[effortToFix=30]] {{The Cyclomatic Complexity of this function "ko" is 32 which is greater than 2 authorized.}}
+  function ko() // NOK [[effortToFix=26]] {{The Cyclomatic Complexity of this function "ko" is 28 which is greater than 2 authorized.}}
 //^^^^^^^^
 {
   switch (foo)
@@ -15,18 +15,18 @@
   }
 
   if (true) { // +1
-    return $a && $b || $c && $d || $e && $f || $g && $h || $i && $j || $k && $l || $m && $n || $o; // +15
+    return $a && $b || $c && $d || $e && $f || $g && $h || $i && $j || $k && $l || $m && $n || $o; // +14
   } else {
-    return $a && $b || $c && $d || $e; // +5
+    return $a && $b || $c && $d || $e; // +4
   }
 
   if (true) { // +1
-    return 1; // +1
+    return 1; // +0
   }
 
   while ($a) { // +1
     if (false) { // +1
-      throw new Exception(); // +1
+      throw new Exception(); // +0
     }
   }
   return 1;
@@ -66,7 +66,7 @@ class C {
 $f = function() { // NOK [[secondary=+0,+2,+3]]
 //   ^^^^^^^^
   if (true) {
-    return;
+    return 1 && 2;
   }
 };
 

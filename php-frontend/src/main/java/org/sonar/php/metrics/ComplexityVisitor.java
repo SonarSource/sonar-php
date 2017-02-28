@@ -20,29 +20,21 @@
 package org.sonar.php.metrics;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
-import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
-import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
-import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
-import org.sonar.plugins.php.api.tree.statement.StatementTree;
-import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-
-import java.util.List;
 
 public class ComplexityVisitor extends PHPVisitorCheck {
 
@@ -85,30 +77,6 @@ public class ComplexityVisitor extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitThrowStatement(ThrowStatementTree tree) {
-    incrementComplexity(tree.throwToken());
-    super.visitThrowStatement(tree);
-  }
-
-  @Override
-  public void visitReturnStatement(ReturnStatementTree tree) {
-    incrementComplexity(tree.returnToken());
-    super.visitReturnStatement(tree);
-  }
-
-  @Override
-  public void visitCatchBlock(CatchBlockTree tree) {
-    incrementComplexity(tree.catchToken());
-    super.visitCatchBlock(tree);
-  }
-
-  @Override
-  public void visitGotoStatement(GotoStatementTree tree) {
-    incrementComplexity(tree.gotoToken());
-    super.visitGotoStatement(tree);
-  }
-
-  @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
     incrementComplexity(tree.queryToken());
     super.visitConditionalExpression(tree);
@@ -128,39 +96,20 @@ public class ComplexityVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    processFunction(tree);
+    incrementComplexity(tree.functionToken());
     super.visitMethodDeclaration(tree);
   }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    processFunction(tree);
+    incrementComplexity(tree.functionToken());
     super.visitFunctionDeclaration(tree);
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    processFunction(tree);
+    incrementComplexity(tree.functionToken());
     super.visitFunctionExpression(tree);
-  }
-
-  private void processFunction(FunctionTree tree) {
-    if (tree.is(Kind.FUNCTION_EXPRESSION) || !endsWithReturn(tree)) {
-      incrementComplexity(tree.functionToken());
-    }
-  }
-
-  private static boolean endsWithReturn(FunctionTree function) {
-    Tree body = function.body();
-    if (body.is(Kind.BLOCK)) {
-      BlockTree block = (BlockTree) body;
-      List<StatementTree> statements = block.statements();
-      if (statements.isEmpty()) {
-        return false;
-      }
-      return statements.get(statements.size() - 1).is(Kind.RETURN_STATEMENT);
-    }
-    return false;
   }
 
   private void incrementComplexity(Tree tree) {

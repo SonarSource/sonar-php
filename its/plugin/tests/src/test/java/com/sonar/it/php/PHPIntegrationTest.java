@@ -76,12 +76,12 @@ public class PHPIntegrationTest {
     assertThat(getProjectMeasureAsDouble("public_api")).isNull();
 
     // Complexity
-    assertThat(getProjectMeasureAsDouble("function_complexity")).isEqualTo(2.3);
-    assertThat(getProjectMeasureAsDouble("class_complexity")).isEqualTo(10.1);
-    assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(9.7);
-    assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(4110.0);
-    assertThat(getProjectMeasure("function_complexity_distribution").getValue()).isEqualTo("1=1236;2=353;4=132;6=71;8=34;10=20;12=36");
-    assertThat(getProjectMeasure("file_complexity_distribution").getValue()).isEqualTo("0=198;5=97;10=78;20=29;30=11;60=10;90=2");
+    assertThat(getProjectMeasureAsDouble("function_complexity")).isEqualTo(1.9);
+    assertThat(getProjectMeasureAsDouble("class_complexity")).isEqualTo(8.6);
+    assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(8.2);
+    assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(3505.0);
+    assertThat(getProjectMeasure("function_complexity_distribution").getValue()).isEqualTo("1=1309;2=370;4=105;6=44;8=15;10=10;12=29");
+    assertThat(getProjectMeasure("file_complexity_distribution").getValue()).isEqualTo("0=212;5=108;10=66;20=18;30=16;60=4;90=1");
     assertThat(getProjectMeasureAsDouble("class_complexity_distribution")).isNull();
   }
 
@@ -111,10 +111,10 @@ public class PHPIntegrationTest {
     assertThat(getFileMeasureAsDouble("public_api")).isNull();
 
     // Complexity
-    assertThat(getFileMeasureAsDouble("function_complexity")).isEqualTo(3.0);
-    assertThat(getFileMeasureAsDouble("class_complexity")).isEqualTo(9.0);
-    assertThat(getFileMeasureAsDouble("file_complexity")).isEqualTo(9.0);
-    assertThat(getFileMeasureAsDouble("complexity")).isEqualTo(9.0);
+    assertThat(getFileMeasureAsDouble("function_complexity")).isEqualTo(2.7);
+    assertThat(getFileMeasureAsDouble("class_complexity")).isEqualTo(8.0);
+    assertThat(getFileMeasureAsDouble("file_complexity")).isEqualTo(8.0);
+    assertThat(getFileMeasureAsDouble("complexity")).isEqualTo(8.0);
   }
 
   private Set<Integer> lineNumbersInDataMeasure(String data) {

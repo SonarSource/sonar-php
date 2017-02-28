@@ -13,7 +13,7 @@
     }
 
     if (true) { // +1
-      return 1; // +1
+      return 1 && 2; // +1
     }
     return 1;
   }
