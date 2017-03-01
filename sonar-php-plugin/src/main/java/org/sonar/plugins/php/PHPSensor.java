@@ -180,7 +180,6 @@ public class PHPSensor implements Sensor {
   private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
     try {
       phpAnalyzer.nextFile(CompatibilityHelper.phpFile(inputFile, context));
-      saveIssues(context, phpAnalyzer.analyze(), inputFile);
 
       if (inSonarQube(context)) {
         phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
@@ -194,6 +193,8 @@ public class PHPSensor implements Sensor {
           saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
         }
       }
+      saveIssues(context, phpAnalyzer.analyze(), inputFile);
+
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());

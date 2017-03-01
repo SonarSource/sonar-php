@@ -25,7 +25,6 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.core.NoSonarSensor;
 
 public class PhpPlugin implements Plugin {
 
@@ -48,9 +47,6 @@ public class PhpPlugin implements Plugin {
 
       // Language
       Php.class,
-
-      // Core extensions
-      NoSonarSensor.class,
 
       // Sensor
       PHPSensor.class,
