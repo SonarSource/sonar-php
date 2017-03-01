@@ -19,22 +19,26 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
-import org.sonar.api.measures.CoreMetrics;
+import java.io.File;
+import java.util.Map;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.plugins.php.PhpPlugin;
+import org.sonar.plugins.php.phpunit.xml.TestSuites;
 
-public class PhpUnitItCoverageResultImporter extends PhpUnitCoverageResultImporter {
+public class TestResultImporter extends SingleFileReportImporter {
 
-  public PhpUnitItCoverageResultImporter(FileSystem fileSystem) {
-    super(fileSystem);
-    linesToCoverMetric = CoreMetrics.IT_LINES_TO_COVER;
-    uncoveredLinesMetric = CoreMetrics.IT_UNCOVERED_LINES;
-    coverageType = CoverageType.IT;
+  private final JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
+
+  public TestResultImporter() {
+    super(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, "test");
   }
 
   @Override
-  public String toString() {
-    return "PHPUnit IT Coverage Result Parser";
+  protected void importReport(File reportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+    TestSuites testSuites = parser.parse(reportFile);
+    for (TestFileReport fileReport : testSuites.arrangeSuitesIntoTestFileReports()) {
+      fileReport.saveTestMeasures(context);
+    }
   }
 
 }

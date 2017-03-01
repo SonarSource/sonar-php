@@ -19,12 +19,37 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.io.File;
 import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
-public interface PhpUnitImporter {
 
-  void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode);
+public class MultiPathImporter implements ReportImporter {
 
+  private static final Logger LOG = Loggers.get(MultiPathImporter.class);
+
+  private final SingleFileReportImporter importer;
+  private final String pathsKey;
+  private final String msg;
+
+  public MultiPathImporter(SingleFileReportImporter importer, String pathsKey, String msg) {
+    this.importer = importer;
+    this.pathsKey = pathsKey;
+    this.msg = msg;
+  }
+
+  @Override
+  public void importReport(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+    final String[] paths = context.settings().getStringArray(pathsKey);
+    if (paths.length == 0) {
+      LOG.info("No PHPUnit {} reports provided (see '{}' property)", msg, pathsKey);
+      return;
+    }
+    for (String path : paths) {
+      if (!path.isEmpty()) {
+        importer.importReport(path, msg, context, numberOfLinesOfCode);
+      }
+    }
+  }
 }

@@ -35,6 +35,15 @@ public class PhpTestUtils {
   public static final String PHPUNIT_REPORT_NAME = PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml";
   public static final String PHPUNIT_COVERAGE_REPORT = PHPUNIT_REPORT_DIR + "phpunit.coverage.xml";
 
+  public static final String SENSOR_TEST_PHPUNIT_REPORT_DIR = "phpunit-reports/";
+  public static final String UT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/ut-coverage.xml";
+  public static final String IT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR +  "coverage/it-coverage.xml";
+  public static final String OVERALL_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR +  "coverage/overall-coverage.xml";
+
+  public static final String GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/generated-ut-coverage.xml";
+  public static final String GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/generated-it-coverage.xml";
+  public static final String GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH = SENSOR_TEST_PHPUNIT_REPORT_DIR + "coverage/generated-overall-coverage.xml";
+
   private PhpTestUtils() {
   }
   

@@ -38,9 +38,9 @@ import org.sonar.plugins.php.phpunit.xml.TestCase;
  * The reason why the report is file-based (as opposed to class-based) is that the SonarQube measures
  * are stored per file.
  */
-public class PhpUnitTestFileReport {
+public class TestFileReport {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitTestResultImporter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestResultImporter.class);
   private int errors = 0;
   private int failures = 0;
   private String file;
@@ -48,7 +48,7 @@ public class PhpUnitTestFileReport {
   private int tests = 0;
   private double testDuration = 0;
 
-  public PhpUnitTestFileReport(String file, double testDuration) {
+  public TestFileReport(String file, double testDuration) {
     this.file = file;
     this.testDuration = testDuration;
   }
@@ -114,7 +114,7 @@ public class PhpUnitTestFileReport {
       return false;
     }
 
-    PhpUnitTestFileReport that = (PhpUnitTestFileReport) o;
+    TestFileReport that = (TestFileReport) o;
 
     return new EqualsBuilder()
       .append(errors, that.errors)

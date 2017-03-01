@@ -24,7 +24,7 @@ package org.sonar.plugins.php.phpunit.xml;
 
 import java.util.List;
 import org.junit.Test;
-import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
+import org.sonar.plugins.php.phpunit.TestFileReport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,10 +45,10 @@ public class TestSuitesTest {
     final String testFile1 = "one.php";
     final String testFile2 = "two.php";
     final TestSuites testSuites = new TestSuites(new TestSuite(testFile1), new TestSuite(testFile2));
-    final List<PhpUnitTestFileReport> reports = testSuites.arrangeSuitesIntoTestFileReports();
+    final List<TestFileReport> reports = testSuites.arrangeSuitesIntoTestFileReports();
     assertThat(reports.size()).isEqualTo(2);
-    assertThat(reports).contains(new PhpUnitTestFileReport(testFile1, 0d));
-    assertThat(reports).contains(new PhpUnitTestFileReport(testFile2, 0d));
+    assertThat(reports).contains(new TestFileReport(testFile1, 0d));
+    assertThat(reports).contains(new TestFileReport(testFile2, 0d));
   }
 
 }

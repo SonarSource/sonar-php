@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,7 +44,7 @@ public class JUnitLogParserForPhpUnit {
     try (InputStream inputStream = new FileInputStream(report)) {
       final Object parsedObject = xstream().fromXML(inputStream);
       return (TestSuites) parsedObject;
-    } catch (IOException e) {
+    } catch (IOException | XStreamException e) {
       throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
     }
   }

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +43,7 @@ public class JUnitLogParserForPhpUnitTest {
     assertThat(suites).isEqualTo(new TestSuites());
   }
 
-  @Test(expected = XStreamException.class)
+  @Test(expected = IllegalStateException.class)
   public void shouldThrowAnExceptionWhenReportIsInvalid() {
     parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"));
   }

@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
-import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
+import org.sonar.plugins.php.phpunit.TestFileReport;
 
 @XStreamAlias("testsuites")
 public final class TestSuites {
@@ -45,8 +45,8 @@ public final class TestSuites {
     this.suites = Arrays.asList(suites);
   }
 
-  public List<PhpUnitTestFileReport> arrangeSuitesIntoTestFileReports() {
-    List<PhpUnitTestFileReport> result = new ArrayList<>();
+  public List<TestFileReport> arrangeSuitesIntoTestFileReports() {
+    List<TestFileReport> result = new ArrayList<>();
     for (TestSuite testSuite : suites) {
       result.addAll(testSuite.generateReports());
     }
