@@ -46,28 +46,35 @@ public class CpdVisitorTest {
   public void test() throws Exception {
     List<CpdToken> tokens = scan("<?php $x = 1;\n$y = 'str' + $x;\n");
 
-    assertThat(getImagesList(tokens)).containsExactly("<?php", "$x", "=", "$NUMBER", ";", "$y", "=", "$CHARS", "+", "$x", ";");
+    assertThat(getImagesList(tokens)).containsExactly("$x", "=", "$NUMBER", ";", "$y", "=", "$CHARS", "+", "$x", ";");
   }
 
   @Test
   public void test_use() throws Exception {
     List<CpdToken> tokens = scan("<?php use a\\b;\n");
 
-    assertThat(getImagesList(tokens)).containsExactly("<?php");
+    assertThat(getImagesList(tokens)).containsExactly();
   }
 
   @Test
   public void test_expandable_string() throws Exception {
     List<CpdToken> tokens = scan("<?php \"abc$x!abc\";");
 
-    assertThat(getImagesList(tokens)).containsExactly("<?php", "\"", "$CHARS", "$x", "$CHARS", "\"", ";");
+    assertThat(getImagesList(tokens)).containsExactly("\"", "$CHARS", "$x", "$CHARS", "\"", ";");
   }
 
   @Test
   public void test_heredoc_string() throws Exception {
     List<CpdToken> tokens = scan("<?php <<<EOF\nabc$x!abc\nabc\nEOF;");
 
-    assertThat(getImagesList(tokens)).containsExactly("<?php", "<<<EOF", "$CHARS", "$x", "$CHARS", "EOF", ";");
+    assertThat(getImagesList(tokens)).containsExactly("<<<EOF", "$CHARS", "$x", "$CHARS", "EOF", ";");
+  }
+
+  @Test
+  public void should_not_include_tags() throws Exception {
+    List<CpdToken> tokens = scan("<a/><?php $x; ?><b/>\n");
+
+    assertThat(getImagesList(tokens)).containsExactly("$x", ";");
   }
 
   private List<CpdToken> scan(String source) throws IOException {

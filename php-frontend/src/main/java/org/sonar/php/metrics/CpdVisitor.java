@@ -23,21 +23,33 @@ import java.util.ArrayList;
 import java.util.List;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class CpdVisitor extends PHPVisitorCheck {
 
-  List<CpdToken> cpdTokens = new ArrayList<>();
+  private List<CpdToken> cpdTokens = new ArrayList<>();
 
   private static final String NORMALIZED_NUMERIC_LITERAL = "$NUMBER";
   private static final String NORMALIZED_CHARACTER_LITERAL = "$CHARS";
 
+  @Override
+  public void visitScript(ScriptTree tree) {
+    // skip opening tag
+    this.scan(tree.statements());
+  }
+
+  @Override
+  public void visitInlineHTML(InlineHTMLTree tree) {
+    // skip
+  }
 
   @Override
   public void visitLiteral(LiteralTree tree) {

@@ -168,18 +168,16 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, fileName);
 
     List<TokensLine> tokensLines = context.cpdTokens(componentKey);
-    assertThat(tokensLines).hasSize(10);
+    assertThat(tokensLines).hasSize(8);
 
-    assertThat(tokensLines.get(0).getValue()).isEqualTo("<?php");
-    assertThat(tokensLines.get(1).getValue()).isEqualTo("require_once$CHARS;");
-    assertThat(tokensLines.get(2).getValue()).isEqualTo("classAextendsB");
-    assertThat(tokensLines.get(3).getValue()).isEqualTo("{");
-    assertThat(tokensLines.get(4).getValue()).isEqualTo("protected$a=$CHARS;");
-    assertThat(tokensLines.get(5).getValue()).isEqualTo("public$b=$NUMBER;");
-    assertThat(tokensLines.get(6).getValue()).isEqualTo("}");
-    assertThat(tokensLines.get(7).getValue()).isEqualTo("echo$CHARS");
-    assertThat(tokensLines.get(8).getValue()).isEqualTo(";");
-    assertThat(tokensLines.get(9).getValue()).isEqualTo("?>\n");
+    assertThat(tokensLines.get(0).getValue()).isEqualTo("require_once$CHARS;");
+    assertThat(tokensLines.get(1).getValue()).isEqualTo("classAextendsB");
+    assertThat(tokensLines.get(2).getValue()).isEqualTo("{");
+    assertThat(tokensLines.get(3).getValue()).isEqualTo("protected$a=$CHARS;");
+    assertThat(tokensLines.get(4).getValue()).isEqualTo("public$b=$NUMBER;");
+    assertThat(tokensLines.get(5).getValue()).isEqualTo("}");
+    assertThat(tokensLines.get(6).getValue()).isEqualTo("echo$CHARS");
+    assertThat(tokensLines.get(7).getValue()).isEqualTo(";");
   }
 
   private void checkNoSonar(String componentKey, int line, boolean expected, PHPSensor phpSensor) throws NoSuchFieldException, IllegalAccessException {
