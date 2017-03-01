@@ -30,8 +30,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -49,11 +47,9 @@ import org.sonar.plugins.php.phpunit.xml.MetricsNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
-@BatchSide
-@ExtensionPoint
-public class PhpUnitCoverageResultParser implements PhpUnitParser {
+public class PhpUnitCoverageResultImporter implements PhpUnitImporter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultImporter.class);
 
   private final FileSystem fileSystem;
 
@@ -70,7 +66,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    *
    * @param context the context
    */
-  public PhpUnitCoverageResultParser(FileSystem fileSystem) {
+  public PhpUnitCoverageResultImporter(FileSystem fileSystem) {
     this.fileSystem = fileSystem;
   }
 
@@ -80,7 +76,7 @@ public class PhpUnitCoverageResultParser implements PhpUnitParser {
    * @param coverageReportFile the coverage report file
    */
   @Override
-  public void parse(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  public void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
     parseFile(coverageReportFile, context, numberOfLinesOfCode);
   }

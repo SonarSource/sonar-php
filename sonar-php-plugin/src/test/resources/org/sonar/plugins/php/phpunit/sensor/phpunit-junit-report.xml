@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<!-- Paths have been changed from absolute to relative for testability purpose -->
+<testsuite name="DaTestSuite" tests="10" assertions="8" errors="1" failures="1" skipped="2" time="0.000430">
+    <testsuite name="App2Test" file="src/App2Test.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.000086">
+        <testcase name="testCanBeUsedAsString" class="App2Test" file="src/App2Test.php" line="26" assertions="1" time="0.000086"/>
+    </testsuite>
+    <testsuite name="App3Test" file="src/App3Test.php" tests="3" assertions="3" errors="0" failures="0" skipped="0" time="0.000082">
+        <testsuite name="App3Test::testCanBeUsedAsString" tests="2" assertions="2" errors="0" failures="0" skipped="0" time="0.000051">
+            <testcase name="testCanBeUsedAsString with data set #0" assertions="1" time="0.000029"/>
+            <testcase name="testCanBeUsedAsString with data set #1" assertions="1" time="0.000022"/>
+        </testsuite>
+        <testcase name="testJustOne" class="App3Test" file="src/App3Test.php" line="30" assertions="1" time="0.000031"/>
+    </testsuite>
+    <testsuite name="AppErrorTest" file="src/AppErrorTest.php" tests="1" assertions="0" errors="1" failures="0" skipped="0" time="0.000050">
+        <testcase name="testCanBeUsedAsString" class="AppErrorTest" file="src/AppErrorTest.php" line="11" assertions="0" time="0.000050">
+            <error type="Error">AppErrorTest::testCanBeUsedAsString
+                Error: Call to undefined method App::__toStrung()
+
+                src/AppErrorTest.php:16
+            </error>
+        </testcase>
+    </testsuite>
+    <testsuite name="AppFailTest" file="src/AppFailTest.php" tests="1" assertions="1" errors="0" failures="1" skipped="0" time="0.000091">
+        <testcase name="testCanBeUsedAsString" class="AppFailTest" file="src/AppFailTest.php" line="11" assertions="1" time="0.000091">
+            <failure type="PHPUnit\Framework\ExpectationFailedException">AppFailTest::testCanBeUsedAsString
+                Failed asserting that two strings are equal.
+                --- Expected
+                +++ Actual
+                @@ @@
+                -'pip'
+                +'lol'
+
+                src/AppFailTest.php:16
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="AppIncompleteTest" file="src/AppIncompleteTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="1" time="0.000040">
+        <testcase name="testCanBeUsedAsString" class="AppIncompleteTest" file="src/AppIncompleteTest.php" line="11" assertions="1" time="0.000040">
+            <skipped/>
+        </testcase>
+    </testsuite>
+    <testsuite name="AppSkipTest" file="src/AppSkipTest.php" tests="1" assertions="0" errors="0" failures="0" skipped="1" time="0.000030">
+        <testcase name="testCanBeUsedAsString" class="AppSkipTest" file="src/AppSkipTest.php" line="17" assertions="0" time="0.000030">
+            <skipped/>
+        </testcase>
+    </testsuite>
+    <testsuite name="AppTest" file="src/AppTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.000027">
+        <testcase name="testCanBeUsedAsString" class="AppTest" file="src/AppTest.php" line="11" assertions="1" time="0.000027"/>
+    </testsuite>
+    <testsuite name="MegaAppTest" file="MegaAppTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.000024">
+        <testcase name="testCanBeUsedAsString" class="MegaAppTest" file="MegaAppTest.php" line="11" assertions="1" time="0.000024"/>
+    </testsuite>
+</testsuite>
+</testsuites>

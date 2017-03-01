@@ -35,43 +35,43 @@ public class PhpUnitService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitService.class);
 
-  private final PhpUnitOverallCoverageResultParser overallCoverageParser;
-  private final PhpUnitItCoverageResultParser itCoverageParser;
-  private final PhpUnitCoverageResultParser coverageParser;
-  private final PhpUnitResultParser parser;
+  private final PhpUnitOverallCoverageResultImporter overallCoverageImporter;
+  private final PhpUnitItCoverageResultImporter itCoverageImporter;
+  private final PhpUnitCoverageResultImporter coverageImporter;
+  private final PhpUnitTestResultImporter importer;
 
   private final FileSystem fileSystem;
 
-  public PhpUnitService(FileSystem fileSystem, PhpUnitResultParser parser,
-                       PhpUnitCoverageResultParser coverageParser,
-                       PhpUnitItCoverageResultParser itCoverageParser,
-                       PhpUnitOverallCoverageResultParser overallCoverageParser) {
+  public PhpUnitService(FileSystem fileSystem, PhpUnitTestResultImporter importer,
+                       PhpUnitCoverageResultImporter coverageImporter,
+                       PhpUnitItCoverageResultImporter itCoverageImporter,
+                       PhpUnitOverallCoverageResultImporter overallCoverageImporter) {
 
     this.fileSystem = fileSystem;
-    this.parser = parser;
-    this.coverageParser = coverageParser;
-    this.itCoverageParser = itCoverageParser;
-    this.overallCoverageParser = overallCoverageParser;
+    this.importer = importer;
+    this.coverageImporter = coverageImporter;
+    this.itCoverageImporter = itCoverageImporter;
+    this.overallCoverageImporter = overallCoverageImporter;
   }
 
   public void execute(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
-    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, parser, "test", context, numberOfLinesOfCode);
-    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageParser, "unit test coverage", context, numberOfLinesOfCode);
-    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageParser, "integration test coverage", context, numberOfLinesOfCode);
-    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageParser, "overall coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, importer, "test", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, coverageImporter, "unit test coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, itCoverageImporter, "integration test coverage", context, numberOfLinesOfCode);
+    parseReport(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, overallCoverageImporter, "overall coverage", context, numberOfLinesOfCode);
   }
 
-  private void parseReport(String reportPathKey, PhpUnitParser parser, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  private void parseReport(String reportPathKey, PhpUnitImporter importer, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     String reportPath = context.settings().getString(reportPathKey);
 
     if (reportPath != null) {
       File xmlFile = getIOFile(reportPath);
 
       if (xmlFile.exists()) {
-        LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath + " with " + parser.toString());
+        LOGGER.info("Analyzing PHPUnit " + msg + " report: " + reportPath + " with " + importer.toString());
 
         try {
-          parser.parse(xmlFile, context, numberOfLinesOfCode);
+          importer.importReport(xmlFile, context, numberOfLinesOfCode);
         } catch (XStreamException e) {
           throw new IllegalStateException("Report file is invalid, plugin will stop.", e);
         }

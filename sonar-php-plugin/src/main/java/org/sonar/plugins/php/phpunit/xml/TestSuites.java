@@ -21,54 +21,59 @@ package org.sonar.plugins.php.phpunit.xml;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
+import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
 
-/**
- * The Class TestSuites.
- */
 @XStreamAlias("testsuites")
 public final class TestSuites {
 
-  /**
-   * The test suites.
-   */
+  @VisibleForTesting
   @XStreamImplicit(itemFieldName = "testsuite")
-  private List<TestSuite> testSuiteList = new ArrayList<>();
+  List<TestSuite> suites = new ArrayList<>();
 
-  /**
-   * Empty constructor is required by xstream in order to
-   * be compatible with Java 7.
-   * */
   public TestSuites() {
-    // Empty constructor is required by xstream
+    // Zero parameters constructor is required by xstream
   }
 
-  /**
-   * Gets the test suites.
-   *
-   * @return the test suites
-   */
-  public List<TestSuite> getTestSuiteList() {
-    return testSuiteList;
+  @VisibleForTesting
+  TestSuites(TestSuite... suites) {
+    this.suites = Arrays.asList(suites);
   }
 
-  /**
-   * Sets the test suites.
-   *
-   * @param testSuiteList the new test suites
-   */
-  public void setTestSuiteList(final List<TestSuite> testSuiteList) {
-    this.testSuiteList = testSuiteList;
+  public List<PhpUnitTestFileReport> arrangeSuitesIntoTestFileReports() {
+    List<PhpUnitTestFileReport> result = new ArrayList<>();
+    for (TestSuite testSuite : suites) {
+      result.addAll(testSuite.generateReports());
+    }
+    return result;
   }
 
-  /**
-   * Adds the test suite.
-   *
-   * @param testSuite the test suite
-   */
-  public void addTestSuite(final TestSuite testSuite) {
-    testSuiteList.add(testSuite);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    TestSuites that = (TestSuites) o;
+
+    return new EqualsBuilder()
+      .append(suites, that.suites)
+      .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+      .append(suites)
+      .toHashCode();
   }
 }

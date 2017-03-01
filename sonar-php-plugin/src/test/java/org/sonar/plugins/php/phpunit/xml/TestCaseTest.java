@@ -17,38 +17,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.phpunit;
+package org.sonar.plugins.php.phpunit.xml;
 
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpTestUtils;
+import org.sonar.plugins.php.phpunit.JUnitLogParserForPhpUnit;
+import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PhpUnitOverallCoverageResultParserTest {
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
-
-  @Mock
-  private SensorContext context;
-
-  private PhpUnitCoverageResultImporter importer;
-
-  @Before
-  public void setUp() throws Exception {
-    importer = new PhpUnitOverallCoverageResultImporter(PhpTestUtils.getDefaultFileSystem());
-  }
+public class TestCaseTest {
 
   @Test
-  public void shouldSetMetrics() {
-    assertThat(importer.linesToCoverMetric).isEqualTo(CoreMetrics.OVERALL_LINES_TO_COVER);
-    assertThat(importer.uncoveredLinesMetric).isEqualTo(CoreMetrics.OVERALL_UNCOVERED_LINES);
+  public void shouldResolveStatusFromXmlData() throws Exception {
+    JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
+    final TestSuites suites = parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "test-cases-status.xml"));
+    final TestSuite suite = suites.suites.get(0);
+    assertThat(suite.testCases.get(0).getStatus()).isEqualTo(TestCase.Status.OK);
+    assertThat(suite.testCases.get(1).getStatus()).isEqualTo(TestCase.Status.ERROR);
+    assertThat(suite.testCases.get(2).getStatus()).isEqualTo(TestCase.Status.FAILURE);
+    assertThat(suite.testCases.get(3).getStatus()).isEqualTo(TestCase.Status.SKIPPED);
   }
 
 }

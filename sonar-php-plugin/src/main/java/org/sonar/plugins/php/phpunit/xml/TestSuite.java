@@ -22,184 +22,102 @@ package org.sonar.plugins.php.phpunit.xml;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
+import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
 
-/**
- * The Class TestSuite.
- */
 @XStreamAlias("testsuite")
 public final class TestSuite {
 
-  /**
-   * The name.
-   */
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestSuite.class);
+
   @XStreamAsAttribute
   private String name;
 
-  /**
-   * The file.
-   */
   @XStreamAsAttribute
   private String file;
 
-  /**
-   * The tests.
-   */
-  @XStreamAsAttribute
-  private String tests;
-
-  /**
-   * The assertions.
-   */
-  @XStreamAsAttribute
-  private String assertions;
-
-  /**
-   * The time.
-   */
   @XStreamAsAttribute
   private double time;
 
-  /**
-   * The test suites.
-   */
   @XStreamImplicit(itemFieldName = "testsuite")
-  private List<TestSuite> testSuites;
+  private List<TestSuite> testSuites = new ArrayList<>();
 
-  /**
-   * The test cases.
-   */
+  @VisibleForTesting
   @XStreamImplicit(itemFieldName = "testcase")
-  private List<TestCase> testCases;
+  List<TestCase> testCases = new ArrayList<>();
 
   /**
    * Empty constructor is required by xstream in order to
    * be compatible with Java 7.
    * */
   public TestSuite() {
-    // Empty constructor is required by xstream
+    // Zero parameters constructor is required by xstream
   }
 
-  /**
-   * Instantiates a new test suite.
-   *
-   * @param name       the name
-   * @param file       the file
-   * @param tests      the tests
-   * @param assertions the assertions
-   * @param time       the time
-   * @param testSuites the test suites
-   * @param testCases  the test cases
-   */
-  public TestSuite(final String name, final String file, final String tests, final String assertions,
-                   final double time, final List<TestSuite> testSuites, final List<TestCase> testCases) {
-    super();
-    this.name = name;
+  @VisibleForTesting
+  TestSuite(@Nullable String file, TestCase... testCases) {
     this.file = file;
-    this.tests = tests;
-    this.assertions = assertions;
-    this.time = time;
-    this.testSuites = testSuites;
-    this.testCases = testCases;
+    this.testCases = Arrays.asList(testCases);
+  }
+
+  public Collection<PhpUnitTestFileReport> generateReports() {
+    return collectAllFileBasedSuites().stream().map(TestSuite::createReport).collect(Collectors.toSet());
+  }
+
+  private Collection<TestSuite> collectAllFileBasedSuites() {
+    final Set<TestSuite> fileBasedTestSuites = new HashSet<>();
+    if (this.isFileBased()) {
+      fileBasedTestSuites.add(this);
+    } else {
+      logMisplacedTestCases();
+    }
+    testSuites.forEach(childSuite -> fileBasedTestSuites.addAll(childSuite.collectAllFileBasedSuites()));
+    return fileBasedTestSuites;
+  }
+
+  private void logMisplacedTestCases() {
+    testCases.forEach(testCase -> LOGGER.warn("Test cases must always be descendants of a file-based suite, skipping : " + testCase.fullName() + " in " + name));
   }
 
   /**
-   * Gets the name.
+   * Four types of suites are known :
+   * - file-based (a suite generated out of all the tests listed in a PHPUnit test class
+   * - folder-based (a suite generated out of PHPUnit being run on a folder)
+   * - configuration-based (a suite explicitly defined in the phpunit.xml configuration file)
+   * - data-provider-based (a suite generated to contain all dataset variants of a test fed with a PHPUnit dataProvider)
    *
-   * @return the name
+   * Currently we only care about distinguishing between the file-based suite and all the others.
+   * @see PhpUnitTestFileReport
+   *
+   * @return true if the suite contains a file attribute
    */
-  public String getName() {
-    return name;
+  private boolean isFileBased() {
+    return file != null;
   }
 
-  /**
-   * Sets the name.
-   *
-   * @param name the new name
-   */
-  public void setName(final String name) {
-    this.name = name;
+  private PhpUnitTestFileReport createReport() {
+    final PhpUnitTestFileReport report = new PhpUnitTestFileReport(file, time);
+    collectTestCases(report);
+    return report;
   }
 
-  /**
-   * Gets the file.
-   *
-   * @return the file
-   */
-  public String getFile() {
-    return file;
+  private void collectTestCases(PhpUnitTestFileReport fileReport) {
+    testCases.forEach(fileReport::addTestCase);
+    testSuites.forEach(childSuite -> childSuite.collectTestCases(fileReport));
   }
 
-  /**
-   * Sets the file.
-   *
-   * @param file the new file
-   */
-  public void setFile(final String file) {
-    this.file = file;
-  }
-
-  /**
-   * Gets the tests.
-   *
-   * @return the tests
-   */
-  public String getTests() {
-    return tests;
-  }
-
-  /**
-   * Sets the tests.
-   *
-   * @param tests the new tests
-   */
-  public void setTests(final String tests) {
-    this.tests = tests;
-  }
-
-  /**
-   * Gets the assertions.
-   *
-   * @return the assertions
-   */
-  public String getAssertions() {
-    return assertions;
-  }
-
-  /**
-   * Sets the assertions.
-   *
-   * @param assertions the new assertions
-   */
-  public void setAssertions(final String assertions) {
-    this.assertions = assertions;
-  }
-
-  /**
-   * Gets the time.
-   *
-   * @return the time
-   */
-  public double getTime() {
-    return time;
-  }
-
-  /**
-   * Gets the test suites.
-   *
-   * @return the test suites
-   */
-  public List<TestSuite> getTestSuites() {
-    return testSuites;
-  }
-
-  /**
-   * Gets the test cases.
-   *
-   * @return the test cases
-   */
-  public List<TestCase> getTestCases() {
-    return testCases;
+  @VisibleForTesting
+  void addNested(TestSuite child) {
+    testSuites.add(child);
   }
 }

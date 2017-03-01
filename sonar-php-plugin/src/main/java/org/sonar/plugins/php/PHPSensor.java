@@ -63,10 +63,10 @@ import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultParser;
-import org.sonar.plugins.php.phpunit.PhpUnitResultParser;
+import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultImporter;
+import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultImporter;
+import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultImporter;
+import org.sonar.plugins.php.phpunit.PhpUnitTestResultImporter;
 import org.sonar.plugins.php.phpunit.PhpUnitService;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
@@ -142,10 +142,10 @@ public class PHPSensor implements Sensor {
   private void processCoverage(Map<String, Integer> numberOfLinesOfCode, SensorContext context) {
     PhpUnitService phpUnitSensor = new PhpUnitService(
       fileSystem,
-      new PhpUnitResultParser(fileSystem),
-      new PhpUnitCoverageResultParser(fileSystem),
-      new PhpUnitItCoverageResultParser(fileSystem),
-      new PhpUnitOverallCoverageResultParser(fileSystem));
+      new PhpUnitTestResultImporter(),
+      new PhpUnitCoverageResultImporter(fileSystem),
+      new PhpUnitItCoverageResultImporter(fileSystem),
+      new PhpUnitOverallCoverageResultImporter(fileSystem));
     phpUnitSensor.execute(context, numberOfLinesOfCode);
   }
 

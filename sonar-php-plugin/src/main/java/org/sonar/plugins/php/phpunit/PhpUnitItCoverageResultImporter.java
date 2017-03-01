@@ -19,13 +19,22 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.io.File;
-import java.util.Map;
-import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.sensor.coverage.CoverageType;
+import org.sonar.api.measures.CoreMetrics;
 
-@FunctionalInterface
-public interface PhpUnitParser {
+public class PhpUnitItCoverageResultImporter extends PhpUnitCoverageResultImporter {
 
-  void parse(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode);
+  public PhpUnitItCoverageResultImporter(FileSystem fileSystem) {
+    super(fileSystem);
+    linesToCoverMetric = CoreMetrics.IT_LINES_TO_COVER;
+    uncoveredLinesMetric = CoreMetrics.IT_UNCOVERED_LINES;
+    coverageType = CoverageType.IT;
+  }
+
+  @Override
+  public String toString() {
+    return "PHPUnit IT Coverage Result Parser";
+  }
 
 }

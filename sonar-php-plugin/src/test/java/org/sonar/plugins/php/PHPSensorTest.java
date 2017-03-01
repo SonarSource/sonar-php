@@ -374,7 +374,7 @@ public class PHPSensorTest {
       .setLanguage(Php.KEY);
     inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
 
-    DefaultInputFile testFile = new DefaultInputFile("moduleKey", "Monkey.php")
+    DefaultInputFile testFile = new DefaultInputFile("moduleKey", "src/AppTest.php")
       .setModuleBaseDir(context.fileSystem().baseDirPath())
       .setType(InputFile.Type.TEST)
       .setLanguage(Php.KEY);

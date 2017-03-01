@@ -54,16 +54,16 @@ public class PhpUnitServiceTest {
   private DefaultFileSystem fs;
 
   @Mock
-  private PhpUnitResultParser parser;
+  private PhpUnitTestResultImporter parser;
 
   @Mock
-  private PhpUnitCoverageResultParser coverageParser;
+  private PhpUnitCoverageResultImporter coverageParser;
 
   @Mock
-  private PhpUnitItCoverageResultParser itCoverageParser;
+  private PhpUnitItCoverageResultImporter itCoverageParser;
 
   @Mock
-  private PhpUnitOverallCoverageResultParser overallCoverageParser;
+  private PhpUnitOverallCoverageResultImporter overallCoverageParser;
 
   @Mock
   private SensorContext context;
@@ -88,10 +88,10 @@ public class PhpUnitServiceTest {
     phpUnitService = createService(fs);
     phpUnitService.execute(context, numberOfLinesOfCode);
 
-    verify(parser, times(1)).parse(TEST_REPORT_FILE, context, numberOfLinesOfCode);
-    verify(coverageParser, times(1)).parse(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
-    verify(itCoverageParser, times(1)).parse(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
-    verify(overallCoverageParser, times(1)).parse(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
+    verify(parser, times(1)).importReport(TEST_REPORT_FILE, context, numberOfLinesOfCode);
+    verify(coverageParser, times(1)).importReport(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
+    verify(itCoverageParser, times(1)).importReport(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
+    verify(overallCoverageParser, times(1)).importReport(COVERAGE_REPORT_FILE, context, numberOfLinesOfCode);
   }
 
   @SuppressWarnings("unchecked")
@@ -101,7 +101,7 @@ public class PhpUnitServiceTest {
     phpUnitService = createService(fs);
     phpUnitService.execute(context, numberOfLinesOfCode);
 
-    verify(parser, never()).parse(any(File.class), any(SensorContext.class), anyMap());
+    verify(parser, never()).importReport(any(File.class), any(SensorContext.class), anyMap());
   }
 
   @SuppressWarnings("unchecked")
@@ -111,14 +111,14 @@ public class PhpUnitServiceTest {
     phpUnitService = createService(fs);
     phpUnitService.execute(context, numberOfLinesOfCode);
 
-    verify(parser, never()).parse(any(File.class), any(SensorContext.class), anyMap());
+    verify(parser, never()).importReport(any(File.class), any(SensorContext.class), anyMap());
   }
 
   @SuppressWarnings("unchecked")
   @Test
   public void xstream_exception() throws Exception {
-    doThrow(new XStreamException("")).when(parser).parse((File) any(), any(SensorContext.class), anyMap());
-    when(context.settings()).thenReturn(settings("phpunit.xml"));
+    doThrow(new XStreamException("")).when(parser).importReport((File) any(), any(SensorContext.class), anyMap());
+    when(context.settings()).thenReturn(settings("phpunit-junit-report.xml"));
     phpUnitService = createService(fs);
 
     expected.expect(IllegalStateException.class);
@@ -128,10 +128,10 @@ public class PhpUnitServiceTest {
   @Test
   public void should_parse_relative_path_report() {
     phpUnitService = createService(fs);
-    when(context.settings()).thenReturn(settings("phpunit.xml"));
+    when(context.settings()).thenReturn(settings("phpunit-junit-report.xml"));
     phpUnitService.execute(context, numberOfLinesOfCode);
 
-    verify(parser, times(1)).parse(TEST_REPORT_FILE, context, numberOfLinesOfCode);
+    verify(parser, times(1)).importReport(TEST_REPORT_FILE, context, numberOfLinesOfCode);
   }
 
   private PhpUnitService createService(FileSystem fs) {
