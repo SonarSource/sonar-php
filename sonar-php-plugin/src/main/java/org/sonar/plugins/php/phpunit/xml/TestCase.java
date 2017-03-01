@@ -38,9 +38,6 @@ public final class TestCase {
   private String className;
 
   @XStreamAsAttribute
-  private String file;
-
-  @XStreamAsAttribute
   private String name;
 
   @XStreamAlias("error")
@@ -52,18 +49,12 @@ public final class TestCase {
   @XStreamAlias("skipped")
   private String skipped;
 
-  @XStreamOmitField
-  private String status;
-
   public TestCase() {
     // Zero parameters constructor is required by xstream
   }
 
   @VisibleForTesting
   public TestCase(Status status) {
-    if (status == Status.OK) {
-      this.status = status.toString();
-    }
     if (status == Status.ERROR) {
       this.error = status.toString();
     }

@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
@@ -46,19 +47,14 @@ public final class TestSuite {
   private String file;
 
   @XStreamAsAttribute
-  private String tests;
-
-  @XStreamAsAttribute
-  private String assertions;
-
-  @XStreamAsAttribute
   private double time;
 
   @XStreamImplicit(itemFieldName = "testsuite")
   private List<TestSuite> testSuites = new ArrayList<>();
 
+  @VisibleForTesting
   @XStreamImplicit(itemFieldName = "testcase")
-  private List<TestCase> testCases = new ArrayList<>();
+  List<TestCase> testCases = new ArrayList<>();
 
   /**
    * Empty constructor is required by xstream in order to
@@ -69,7 +65,7 @@ public final class TestSuite {
   }
 
   @VisibleForTesting
-  TestSuite(String file, TestCase... testCases) {
+  TestSuite(@Nullable String file, TestCase... testCases) {
     this.file = file;
     this.testCases = Arrays.asList(testCases);
   }
@@ -101,7 +97,7 @@ public final class TestSuite {
    * - data-provider-based (a suite generated to contain all dataset variants of a test fed with a PHPUnit dataProvider)
    *
    * Currently we only care about distinguishing between the file-based suite and all the others.
-   * @See PhpUnitTestFileReport
+   * @see PhpUnitTestFileReport
    *
    * @return true if the suite contains a file attribute
    */

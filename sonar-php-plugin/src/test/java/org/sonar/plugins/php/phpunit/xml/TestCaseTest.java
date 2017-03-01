@@ -17,40 +17,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-/**
- * @author gennadiyl
- */
 package org.sonar.plugins.php.phpunit.xml;
 
-import java.util.List;
 import org.junit.Test;
-import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
+import org.sonar.plugins.php.PhpTestUtils;
+import org.sonar.plugins.php.phpunit.JUnitLogParserForPhpUnit;
+import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
-public class TestSuitesTest {
-
-  /**
-   * Empty constructors are required by xstream for TestSuites, TestSuite and TestCase, in order to
-   * be compatible with Java 7.
-   */
-  @Test
-  public void test_compatible_java_7() {
-    new TestSuites();
-    new TestSuite();
-    new TestCase();
-  }
+public class TestCaseTest {
 
   @Test
-  public void shouldCollectReportsFromAllTestSuites() {
-    final String testFile1 = "one.php";
-    final String testFile2 = "two.php";
-    final TestSuites testSuites = new TestSuites(new TestSuite(testFile1), new TestSuite(testFile2));
-    final List<PhpUnitTestFileReport> reports = testSuites.arrangeSuitesIntoTestFileReports();
-    assertThat(reports.size()).isEqualTo(2);
-    assertThat(reports).contains(new PhpUnitTestFileReport(testFile1, 0d));
-    assertThat(reports).contains(new PhpUnitTestFileReport(testFile2, 0d));
+  public void shouldResolveStatusFromXmlData() throws Exception {
+    JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
+    final TestSuites suites = parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "test-cases-status.xml"));
+    final TestSuite suite = suites.suites.get(0);
+    assertThat(suite.testCases.get(0).getStatus()).isEqualTo(TestCase.Status.OK);
+    assertThat(suite.testCases.get(1).getStatus()).isEqualTo(TestCase.Status.ERROR);
+    assertThat(suite.testCases.get(2).getStatus()).isEqualTo(TestCase.Status.FAILURE);
+    assertThat(suite.testCases.get(3).getStatus()).isEqualTo(TestCase.Status.SKIPPED);
   }
 
 }

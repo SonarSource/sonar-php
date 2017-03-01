@@ -44,10 +44,10 @@ public class PhpUnitTestFileReportTest {
     DefaultFileSystem fs = new DefaultFileSystem(baseDir);
     testFileName = "testfile.php";
     DefaultInputFile testFile = new DefaultInputFile("moduleKey", testFileName).setType(InputFile.Type.TEST).setLanguage(Php.KEY);
-    fs.add(testFile);
+    context.fileSystem().add(testFile);
     context = SensorContextTester.create(new File("src/test/resources"));
     context.setFileSystem(fs);
-    componentKey = "moduleKey:" + testFileName;
+    componentKey = testFile.key();
   }
 
   @Test

@@ -43,7 +43,7 @@ public class TestSuiteTest {
     rootSuite.addNested(intermediateSuite);
     final TestSuite fileSuite = new TestSuite("file");
     intermediateSuite.addNested(fileSuite);
-    assertThat(rootSuite.generateReports()).contains(fileSuite.generateReports().iterator().next());
+    assertThat(rootSuite.generateReports()).containsOnly(fileSuite.generateReports().iterator().next());
   }
 
   @Test

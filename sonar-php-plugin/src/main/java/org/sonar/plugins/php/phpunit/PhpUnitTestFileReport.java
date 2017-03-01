@@ -40,18 +40,18 @@ import org.sonar.plugins.php.phpunit.xml.TestCase;
  */
 public class PhpUnitTestFileReport {
 
-  public PhpUnitTestFileReport(String file, double testDuration) {
-    this.file = file;
-    this.testDuration = testDuration;
-  }
   private static final Logger LOGGER = LoggerFactory.getLogger(PhpUnitTestResultImporter.class);
   private int errors = 0;
   private int failures = 0;
   private String file;
   private int skipped = 0;
   private int tests = 0;
-
   private double testDuration = 0;
+
+  public PhpUnitTestFileReport(String file, double testDuration) {
+    this.file = file;
+    this.testDuration = testDuration;
+  }
 
   public void saveTestMeasures(SensorContext context) {
     InputFile unitTestFile = getUnitTestInputFile(context.fileSystem());

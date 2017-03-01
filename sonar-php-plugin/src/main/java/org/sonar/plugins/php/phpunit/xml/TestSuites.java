@@ -19,10 +19,8 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.google.common.base.Objects;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,21 +32,22 @@ import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
 @XStreamAlias("testsuites")
 public final class TestSuites {
 
+  @VisibleForTesting
   @XStreamImplicit(itemFieldName = "testsuite")
-  private List<TestSuite> testSuites = new ArrayList<>();
+  List<TestSuite> suites = new ArrayList<>();
 
   public TestSuites() {
     // Zero parameters constructor is required by xstream
   }
 
   @VisibleForTesting
-  TestSuites(TestSuite... testSuites) {
-    this.testSuites = Arrays.asList(testSuites);
+  TestSuites(TestSuite... suites) {
+    this.suites = Arrays.asList(suites);
   }
 
   public List<PhpUnitTestFileReport> arrangeSuitesIntoTestFileReports() {
     List<PhpUnitTestFileReport> result = new ArrayList<>();
-    for (TestSuite testSuite : testSuites) {
+    for (TestSuite testSuite : suites) {
       result.addAll(testSuite.generateReports());
     }
     return result;
@@ -67,14 +66,14 @@ public final class TestSuites {
     TestSuites that = (TestSuites) o;
 
     return new EqualsBuilder()
-      .append(testSuites, that.testSuites)
+      .append(suites, that.suites)
       .isEquals();
   }
 
   @Override
   public int hashCode() {
     return new HashCodeBuilder(17, 37)
-      .append(testSuites)
+      .append(suites)
       .toHashCode();
   }
 }
