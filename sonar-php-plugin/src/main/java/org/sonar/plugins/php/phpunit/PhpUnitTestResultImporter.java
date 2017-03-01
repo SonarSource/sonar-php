@@ -19,10 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
