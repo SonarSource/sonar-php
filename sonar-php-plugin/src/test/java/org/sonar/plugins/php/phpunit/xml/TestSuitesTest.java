@@ -27,16 +27,14 @@ import org.junit.Test;
 import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class TestSuitesTest {
 
   /**
-   * Empty constructors are required by xstream for TestSuites, TestSuite and TestCase, in order to
-   * be compatible with Java 7.
+   * Empty constructors are required by xstream for TestSuites, TestSuite and TestCase
    */
   @Test
-  public void test_compatible_java_7() {
+  public void shouldHaveZeroArgumentsConstructor() {
     new TestSuites();
     new TestSuite();
     new TestCase();

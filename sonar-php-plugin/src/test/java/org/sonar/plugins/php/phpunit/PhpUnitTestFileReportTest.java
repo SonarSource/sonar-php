@@ -23,14 +23,12 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
-import org.sonar.test.TestUtils;
 
 public class PhpUnitTestFileReportTest {
 
@@ -40,13 +38,10 @@ public class PhpUnitTestFileReportTest {
 
   @Before
   public void setUp() throws Exception {
-    File baseDir = TestUtils.getResource("/org/sonar/plugins/php/phpunit/sensor/src/");
-    DefaultFileSystem fs = new DefaultFileSystem(baseDir);
     testFileName = "testfile.php";
     DefaultInputFile testFile = new DefaultInputFile("moduleKey", testFileName).setType(InputFile.Type.TEST).setLanguage(Php.KEY);
-    context.fileSystem().add(testFile);
     context = SensorContextTester.create(new File("src/test/resources"));
-    context.setFileSystem(fs);
+    context.fileSystem().add(testFile);
     componentKey = testFile.key();
   }
 
