@@ -130,3 +130,13 @@ doSomething(        // OK
     },
     $b
 );
+
+
+doSomething($a, array(      // OK
+  1,
+  2), $b);
+
+doSomething($a, array(      // OK
+  1,
+  2
+), $b);
