@@ -58,7 +58,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
   private CognitiveComplexity complexity = new CognitiveComplexity();
 
   private Set<IfStatementTree> ifStatementWithoutNesting = new HashSet<>();
-  private Set<ExpressionTree> logicalOperationsToIgnore = new HashSet<>();
+  private Set<ExpressionTree> nestedLogicalExpressions = new HashSet<>();
 
   public static CognitiveComplexity complexity(FunctionTree functionTree) {
     CognitiveComplexityVisitor cognitiveComplexityVisitor = new CognitiveComplexityVisitor();
@@ -208,28 +208,35 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
-    if (tree.is(CONDITIONAL_AND, CONDITIONAL_OR)) {
+    if (tree.is(CONDITIONAL_AND, CONDITIONAL_OR) && !nestedLogicalExpressions.contains(tree)) {
+      List<SyntaxToken> flatOperators = new ArrayList<>();
+      flattenLogicalExpression(0, flatOperators, tree);
 
-      ExpressionTree leftChild = removeParenthesis(tree.leftOperand());
-      ExpressionTree rightChild = removeParenthesis(tree.rightOperand());
+      complexity.addComplexityWithoutNesting(flatOperators.get(0));
 
-      boolean leftChildOfSameKind = leftChild.is(tree.getKind());
-      boolean rightChildOfSameKind = rightChild.is(tree.getKind());
-
-      // For expressions with same-kind operators like "a && (b && c)" we want to have secondary location on leftmost operator
-      // So we "ignore" right operand
-      if (rightChildOfSameKind) {
-        logicalOperationsToIgnore.add(rightChild);
+      for (int i = 1; i < flatOperators.size(); i++) {
+        if (!flatOperators.get(i).text().equals(flatOperators.get(i - 1).text())) {
+          complexity.addComplexityWithoutNesting(flatOperators.get(i));
+        }
       }
-
-      // And we add complexity for leftmost operator
-      if (!logicalOperationsToIgnore.contains(tree) && !leftChildOfSameKind) {
-        complexity.addComplexityWithoutNesting(tree.operator());
-      }
-
     }
 
     super.visitBinaryExpression(tree);
+  }
+
+  private void flattenLogicalExpression(int i, List<SyntaxToken> operators, ExpressionTree expression) {
+    if (expression.is(CONDITIONAL_AND, CONDITIONAL_OR)) {
+      nestedLogicalExpressions.add(expression);
+
+      BinaryExpressionTree binaryExpression = (BinaryExpressionTree) expression;
+      operators.add(i, binaryExpression.operator());
+
+      ExpressionTree leftChild = removeParenthesis(binaryExpression.leftOperand());
+      ExpressionTree rightChild = removeParenthesis(binaryExpression.rightOperand());
+
+      flattenLogicalExpression(i + 1, operators, rightChild);
+      flattenLogicalExpression(i, operators, leftChild);
+    }
   }
 
   private void visitWithNesting(@Nullable Tree tree) {

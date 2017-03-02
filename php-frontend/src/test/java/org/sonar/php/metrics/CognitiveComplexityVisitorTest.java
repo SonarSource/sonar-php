@@ -179,10 +179,12 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
     assertThat(complexity(" 1 && 2 || 3 || 4;")).isEqualTo(2);
     assertThat(complexity(" 1 || 2 || 3 && 4;")).isEqualTo(2);
     assertThat(complexity(" 1 && 2 || 3 && 4;")).isEqualTo(3);
-    // unexpected, should be 3
-    assertThat(complexity(" 1 || 2 && 3 || 4;")).isEqualTo(2);
+    assertThat(complexity(" 1 || 2 && 3 || 4;")).isEqualTo(3);
 
-    assertThat(components(" 1 && 2 || 3 || 4; ")).containsExactly(cc("||", 1), cc("&&", 1));
+    assertThat(complexity(" 1 || 2 && (3 || 4);")).isEqualTo(3);
+    assertThat(complexity(" 1 || 2 && foo(3 && 4);")).isEqualTo(3);
+
+    assertThat(components(" 1 && 2 || 3 || 4; ")).containsExactly(cc("&&", 1), cc("||", 1));
   }
 
   @Test

@@ -997,6 +997,9 @@
 'project:symfony/Symfony/Component/HttpKernel/Profiler/BaseMemcacheProfilerStorage.php':[
 43,
 ],
+'project:symfony/Symfony/Component/HttpKernel/Profiler/FileProfilerStorage.php':[
+51,
+],
 'project:symfony/Symfony/Component/HttpKernel/Profiler/RedisProfilerStorage.php':[
 54,
 ],

@@ -1,6 +1,6 @@
 <?php
 
-  function ko() // NOK [[effortToFix=12]] {{Refactor this function to reduce its Cognitive Complexity from 12 to the 0 allowed.}}
+  function ko() // NOK [[effortToFix=13]] {{Refactor this function to reduce its Cognitive Complexity from 13 to the 0 allowed.}}
 //^^^^^^^^
 {
   switch (foo) // +1
@@ -16,7 +16,7 @@
 
   if (true) { // +1
     return $a && $b || $c && $d || $e && $f ; // +5
-  } else {
+  } else {    // +1
     return $a && $b && $c && $d && $e; // +1
   }
 
