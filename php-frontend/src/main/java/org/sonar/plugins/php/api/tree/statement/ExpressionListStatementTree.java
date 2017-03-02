@@ -17,34 +17,21 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser;
+package org.sonar.plugins.php.api.tree.statement;
 
-import org.junit.Test;
+import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+/**
+ * {@link ExpressionListStatementTree} represents a comma-separated list of expressions following <code><?=</code>
+ */
+@Beta
+public interface ExpressionListStatementTree extends StatementTree {
 
-public class ScriptTest {
+  SeparatedList<ExpressionTree> expressions();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.SCRIPT)
-      .matches("<?php")
-      .matches("<?php const A = 1; function foo(){}")
+  SyntaxToken eosToken();
 
-      .notMatches("\n")
-      .notMatches("")
-    ;
-  }
-
-  @Test
-  public void should_parse_expression_list_statement() throws Exception {
-    assertThat(PHPLexicalGrammar.SCRIPT)
-      .matches("<?= $x, $x + 1 ?> <tag> <?= $x*2; echo 42 ?>")
-
-      // matches due our grammar permissiveness
-      // parsing error in interpreter
-      .matches("<?php $x ?>")
-      .matches("<?php echo 42; $x ?>")
-    ;
-  }
 }

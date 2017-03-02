@@ -119,6 +119,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   GROUP_USE_CLAUSE,
 
   EXPRESSION_STATEMENT,
+  EXPRESSION_LIST_STATEMENT,
   ECHO_STATEMENT,
 
   IF_STATEMENT,
