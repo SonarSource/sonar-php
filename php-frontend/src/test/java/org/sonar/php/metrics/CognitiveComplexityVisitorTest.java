@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.metrics.CognitiveComplexityVisitor.CognitiveComplexity;
-import org.sonar.php.metrics.CognitiveComplexityVisitor.CognitiveComplexity.ComplexityComponent;
+import org.sonar.php.metrics.CognitiveComplexityVisitor.ComplexityComponent;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 

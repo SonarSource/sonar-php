@@ -287,25 +287,24 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
       complexityComponents.add(new ComplexityComponent(secondaryLocationToken, addedComplexity));
     }
 
+  }
 
+  public static class ComplexityComponent {
 
-    public static class ComplexityComponent {
+    private Tree tree;
+    private int addedComplexity;
 
-      private Tree tree;
-      private int addedComplexity;
+    private ComplexityComponent(Tree tree, int addedComplexity) {
+      this.tree = tree;
+      this.addedComplexity = addedComplexity;
+    }
 
-      private ComplexityComponent(Tree tree, int addedComplexity) {
-        this.tree = tree;
-        this.addedComplexity = addedComplexity;
-      }
+    public Tree tree() {
+      return tree;
+    }
 
-      public Tree tree() {
-        return tree;
-      }
-
-      public int addedComplexity() {
-        return addedComplexity;
-      }
+    public int addedComplexity() {
+      return addedComplexity;
     }
   }
 
