@@ -105,9 +105,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
   public void visitSwitchStatement(SwitchStatementTree tree) {
     complexity.addComplexityWithNesting(tree.switchToken());
 
-    complexity.incNesting();
-    super.visitSwitchStatement(tree);
-    complexity.decNesting();
+    visitWithNesting(()-> super.visitSwitchStatement(tree));
   }
 
   @Override
@@ -150,30 +148,22 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
   public void visitCatchBlock(CatchBlockTree tree) {
     complexity.addComplexityWithNesting(tree.catchToken());
 
-    complexity.incNesting();
-    super.visitCatchBlock(tree);
-    complexity.decNesting();
+    visitWithNesting(()-> super.visitCatchBlock(tree));
   }
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    complexity.incNesting();
-    super.visitFunctionDeclaration(tree);
-    complexity.decNesting();
+    visitWithNesting(()-> super.visitFunctionDeclaration(tree));
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    complexity.incNesting();
-    super.visitFunctionExpression(tree);
-    complexity.decNesting();
+    visitWithNesting(()-> super.visitFunctionExpression(tree));
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    complexity.incNesting();
-    super.visitMethodDeclaration(tree);
-    complexity.decNesting();
+    visitWithNesting(()-> super.visitMethodDeclaration(tree));
   }
 
   @Override
@@ -241,15 +231,18 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
 
   private void visitWithNesting(@Nullable Tree tree) {
     if (tree != null) {
-      complexity.incNesting();
-      tree.accept(this);
-      complexity.decNesting();
+      visitWithNesting(() -> tree.accept(this));
     }
   }
 
   private void visitWithNesting(List<StatementTree> statements) {
+    visitWithNesting(() ->
+      statements.forEach(statementTree -> statementTree.accept(this)));
+  }
+
+  private void visitWithNesting(Runnable action) {
     complexity.incNesting();
-    statements.forEach(statementTree -> statementTree.accept(this));
+    action.run();
     complexity.decNesting();
   }
 
