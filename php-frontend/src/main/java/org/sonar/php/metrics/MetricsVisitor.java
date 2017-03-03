@@ -114,7 +114,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
 
   private void setLineAndCommentMeasures(PhpFile file) {
     LineVisitor lineVisitor = new LineVisitor(context().tree());
-
+    ExecutableLineVisitor executableLineVisitor = new ExecutableLineVisitor(context().tree());
     CommentLineVisitor commentVisitor = new CommentLineVisitor(context().tree());
 
     int linesNumber = lineVisitor.getLinesNumber();
@@ -129,9 +129,11 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     for (int line = 1; line <= linesNumber; line++) {
       fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, line, linesOfCode.contains(line) ? 1 : 0);
       fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, line, commentLines.contains(line) ? 1 : 0);
-      if (saveExecutableLines) {
-        fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, linesOfCode.contains(line) ? 1 : 0);
-      }
+    }
+
+    if (saveExecutableLines) {
+      executableLineVisitor.getExecutableLines().forEach(line ->
+        fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1));
     }
 
     numberOfLinesOfCode.put(file.relativePath().toString(), linesOfCode.size());
