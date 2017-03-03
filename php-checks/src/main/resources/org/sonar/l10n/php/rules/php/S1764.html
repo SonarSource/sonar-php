@@ -20,20 +20,6 @@ if ( $a == $b || $a == $b ) { // if the first one is true, the second one is too
 $j = 5 / 5; //always 1
 $k = 5 - 5; //always 0
 </pre>
-<h2>Compliant Solution</h2>
-<pre>
-doZ();
-
-if ( $a == $b ) {
-  doX();
-}
-if ( $a == $b ) {
-  doW();
-}
-
-$j = 1;
-$k = 0;
-</pre>
 <h2>Exceptions</h2>
 <p>Left-shifting 1 onto 1 is common in the construction of bit masks, and is ignored.</p>
 <pre>
@@ -45,6 +31,6 @@ $j = $a &lt;&lt; $a; // Noncompliant
   <li> <a href="https://www.securecoding.cert.org/confluence/x/NYA5">CERT, MSC12-C.</a> - Detect and remove code that has no effect or is never
   executed </li>
   <li> <a href="https://www.securecoding.cert.org/confluence/x/SIIyAQ">CERT, MSC12-CPP.</a> - Detect and remove code that has no effect </li>
-  <li> Rule {rule:php:S1656} - Implements a check on <code>=</code>. </li>
+  <li> {rule:php:S1656} - Implements a check on <code>=</code>. </li>
 </ul>
 
