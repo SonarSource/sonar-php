@@ -89,6 +89,11 @@ function f3() {
   $x;
 }
 
+function tagAfterReturn() {
+  return; // OK
+  ?><?php
+}
+
 return;         // NOK
 
 if (true) {}
