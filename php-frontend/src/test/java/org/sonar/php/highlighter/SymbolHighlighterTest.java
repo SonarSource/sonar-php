@@ -105,7 +105,7 @@ public class SymbolHighlighterTest {
   public void test_compound_variable() throws Exception {
     highlight("<?php   $a = 1; echo \"${a}\"; echo \"$a\";");
 
-    checkSymbolReferences(1, 8, ImmutableList.of(textRange(1, 35, 1, 37)));
+    checkSymbolReferences(1, 8, ImmutableList.of(textRange(1, 24, 1, 25), textRange(1, 35, 1, 37)));
   }
 
   @Test
