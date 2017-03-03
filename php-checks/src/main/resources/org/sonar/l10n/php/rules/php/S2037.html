@@ -53,27 +53,17 @@ $myBall = new Ball();
 $myBall::status();  // Prints "Balls are fun!"
 </pre>
 <h2>Exceptions</h2>
-<p>No issue is raised when <code>self</code> is used in a class field declaration.</p>
-<pre>
-class A
-{
-   const CONSTANT;
-
-   public $arr = array(
-        self::CONSTANT         // Compliant
-   );
-}
-</pre>
-<p>No issue is raised when <code>self</code> is used on a private field or a private method.</p>
+<p>No issue is raised when <code>self</code> is used on a constant field, a private field or a private method.</p>
 <pre>
 class A
 {
     private static $somevar = "hello";
+    const CONSTANT = 42;
 
     private static function foo()
     {
-        $var = self::$somevar;  // Should be OK
-        self::foo();            // Should be OK
+        $var = self::$somevar . self::CONSTANT;  // Should be OK
+        self::foo();                               // Should be OK
     }
 }
 </pre>

@@ -3,6 +3,7 @@
 class A {
 
   const CONSTANT = 0;
+  const CONSTANT1 = 1, CONSTANT2 = 2;
 
   private static $field_private;
 
@@ -13,16 +14,19 @@ class A {
   static $field_default;
 
   public $arr = array(
-    self::CONSTANT             // OK
+    self::CONSTANT             // OK, inside initializer (only constants can be used)
   );
 
   const ARRAY_CONST = array(
-    self::CONSTANT             // OK
+    self::CONSTANT             // OK, inside initializer
   );
 
   public static function f1() {
     self::f2();                // NOK
 //  ^^^^
+    self::CONSTANT;            // OK, constant
+    self::CONSTANT1;            // OK, constant
+    self::CONSTANT2;            // OK, constant
     self::f3();                // OK, "f3" can't be overridden
     return self::$field_public; // NOK {{Use "static" keyword instead of "self".}}
   }
