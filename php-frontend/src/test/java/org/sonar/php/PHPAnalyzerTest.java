@@ -67,4 +67,12 @@ public class PHPAnalyzerTest {
     assertThat(measures.getLinesOfCodeNumber()).isEqualTo(1);
   }
 
+  @Test
+  public void test_cpd() throws Exception {
+    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of());
+    PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
+    analyzer.nextFile(file);
+
+    assertThat(analyzer.computeCpdTokens()).hasSize(5);
+  }
 }

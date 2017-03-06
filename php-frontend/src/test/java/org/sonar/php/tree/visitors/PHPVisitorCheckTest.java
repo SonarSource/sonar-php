@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PHPVisitorCheckTest {
 
   @Test
-  public void test() {
+  public void should_visit_tree_elements() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
@@ -57,6 +57,22 @@ public class PHPVisitorCheckTest {
     assertThat(testVisitor.literalCounter).isEqualTo(3);
     assertThat(testVisitor.tokenCounter).isEqualTo(29);
     assertThat(testVisitor.triviaCounter).isEqualTo(2);
+  }
+
+  @Test
+  public void should_have_correct_context() throws Exception {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser();
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
+
+    ContextTestVisitor testVisitor = new ContextTestVisitor();
+    testVisitor.analyze(file, tree);
+    assertThat(testVisitor.context().file()).isEqualTo(file.file());
+    assertThat(testVisitor.context().getPhpFile()).isEqualTo(file);
+  }
+
+
+  private class ContextTestVisitor extends PHPVisitorCheck {
   }
 
   private class TestVisitor extends PHPVisitorCheck {
