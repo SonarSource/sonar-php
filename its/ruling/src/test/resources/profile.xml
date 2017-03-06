@@ -664,5 +664,10 @@
       <key>S3338</key> <!-- php.ini: file_uploads -->
       <priority>INFO</priority>
     </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S3776</key> <!-- cognitive complexity -->
+      <priority>INFO</priority>
+    </rule>
   </rules>
 </profile>
