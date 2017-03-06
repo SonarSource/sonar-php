@@ -193,6 +193,8 @@ public class PHPSensor implements Sensor {
           saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
         }
       }
+
+      noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
       saveIssues(context, phpAnalyzer.analyze(), inputFile);
 
     } catch (RecognitionException e) {
@@ -214,7 +216,7 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
+  private static void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesNumber()).forMetric(CoreMetrics.LINES).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesOfCodeNumber()).forMetric(CoreMetrics.NCLOC).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getCommentLinesNumber()).forMetric(CoreMetrics.COMMENT_LINES).save();
@@ -230,8 +232,6 @@ public class PHPSensor implements Sensor {
 
     String fileComplexityMeasure = fileMeasures.getFileComplexityDistribution().build();
     context.<String>newMeasure().on(inputFile).withValue(fileComplexityMeasure).forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION).save();
-
-    noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }
 
   /**

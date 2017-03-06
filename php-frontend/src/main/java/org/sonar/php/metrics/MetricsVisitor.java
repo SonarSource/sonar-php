@@ -122,7 +122,6 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     fileMeasures.setLinesNumber(linesNumber);
     fileMeasures.setLinesOfCodeNumber(lineVisitor.getLinesOfCodeNumber());
     fileMeasures.setCommentLinesNumber(commentVisitor.commentLineNumber());
-    fileMeasures.setNoSonarLines(commentVisitor.noSonarLines());
 
     Set<Integer> linesOfCode = lineVisitor.getLinesOfCode();
     Set<Integer> commentLines = commentVisitor.commentLines();
