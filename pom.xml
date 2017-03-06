@@ -13,8 +13,7 @@
   <version>2.10-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>PHP</name>
-  <description>Enables scanning of PHP source files</description>
+  <name>SonarPHP</name>
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
   <inceptionYear>2010</inceptionYear>
   <organization>
