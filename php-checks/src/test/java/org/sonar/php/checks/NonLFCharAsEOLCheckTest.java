@@ -25,8 +25,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.php.FileTestUtils;
 import org.sonar.php.tree.visitors.LegacyIssue;
+import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -42,8 +42,8 @@ public class NonLFCharAsEOLCheckTest {
 
   @Before
   public void setUp() throws Exception {
-    ok_file = FileTestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \n");
-    ko_file = FileTestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \r\n");
+    ok_file = TestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \n");
+    ko_file = TestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \r\n");
   }
 
   @Test
