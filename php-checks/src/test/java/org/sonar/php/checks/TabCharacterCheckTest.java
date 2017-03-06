@@ -36,6 +36,12 @@ public class TabCharacterCheckTest {
     PHPCheck check = new TabCharacterCheck();
 
     List<PhpIssue> issue = ImmutableList.<PhpIssue>of(new LegacyIssue(check, "Replace all tab characters in this file by sequences of white-spaces."));
-    PHPCheckTest.check(check, TestUtils.getCheckFile("TabCharacterCheck.php"), issue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile("TabCharacterCheck/TabCharacterCheck.php"), issue);
+  }
+
+  @Test
+  public void test_ok() throws Exception {
+    PHPCheck check = new TabCharacterCheck();
+    PHPCheckTest.check(check, TestUtils.getCheckFile("TabCharacterCheck/TabCharacterCheck_ok.php"), ImmutableList.of());
   }
 }
