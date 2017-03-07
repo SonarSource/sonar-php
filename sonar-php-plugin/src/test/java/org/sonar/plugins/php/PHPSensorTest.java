@@ -156,7 +156,6 @@ public class PHPSensorTest {
     PHPSensor phpSensor = createSensor();
     analyseSingleFile(phpSensor, fileName);
 
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.LINES, 62);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 6);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 8);

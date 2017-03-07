@@ -211,7 +211,6 @@ public class PHPSensor implements Sensor {
   }
 
   private static void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
-    context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesNumber()).forMetric(CoreMetrics.LINES).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesOfCodeNumber()).forMetric(CoreMetrics.NCLOC).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getCommentLinesNumber()).forMetric(CoreMetrics.COMMENT_LINES).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getClassNumber()).forMetric(CoreMetrics.CLASSES).save();

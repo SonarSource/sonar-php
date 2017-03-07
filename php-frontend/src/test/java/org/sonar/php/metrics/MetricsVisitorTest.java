@@ -57,7 +57,6 @@ public class MetricsVisitorTest extends ParsingTestUtils {
     assertThat(fileMeasures.getStatementNumber()).isEqualTo(2);
     assertThat(fileMeasures.getClassNumber()).isEqualTo(1);
 
-    assertThat(fileMeasures.getLinesNumber()).isEqualTo(29);
     assertThat(fileMeasures.getLinesOfCodeNumber()).isEqualTo(7);
 
     assertThat(fileMeasures.getCommentLinesNumber()).isEqualTo(5);
