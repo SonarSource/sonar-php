@@ -1,0 +1,4 @@
+<?php
+; # NOSONAR
+; // NOSONAR
+;

@@ -12,5 +12,6 @@ class A {
   //
   public function f() {
     // NOSONAR comment
+    # NOSONAR comment
   }
 }

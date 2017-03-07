@@ -17,6 +17,7 @@ class Example_Math
 
     public function check($v1) {
         // php:S1125:  Boolean literals should not be redundant
-        return $v1 > 1 ? true : false;
+        return $v1 > 1 ? true
+         : false; // NOSONAR
     }
 }

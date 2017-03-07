@@ -39,7 +39,7 @@ public class PhpPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     new PhpPlugin().define(context);
 
-    assertThat(context.getExtensions()).hasSize(13);
+    assertThat(context.getExtensions()).hasSize(12);
   }
 
   @Test
@@ -48,7 +48,7 @@ public class PhpPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     new PhpPlugin().define(context);
 
-    assertThat(context.getExtensions()).hasSize(9);
+    assertThat(context.getExtensions()).hasSize(8);
   }
 
 }

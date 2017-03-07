@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
@@ -30,6 +31,7 @@ import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.php.highlighter.SymbolHighlighter;
 import org.sonar.php.highlighter.SyntaxHighlighterVisitor;
+import org.sonar.php.metrics.CommentLineVisitor;
 import org.sonar.php.metrics.CpdVisitor;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
@@ -94,5 +96,9 @@ public class PHPAnalyzer {
 
   public List<CpdToken> computeCpdTokens() {
     return new CpdVisitor().getCpdTokens(currentFile, currentFileTree);
+  }
+
+  public Set<Integer> computeNoSonarLines() {
+    return new CommentLineVisitor(currentFileTree).noSonarLines();
   }
 }

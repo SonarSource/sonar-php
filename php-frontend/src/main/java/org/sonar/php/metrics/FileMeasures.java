@@ -19,7 +19,6 @@
  */
 package org.sonar.php.metrics;
 
-import java.util.Set;
 import org.sonar.api.ce.measure.RangeDistributionBuilder;
 
 public class FileMeasures {
@@ -34,8 +33,6 @@ public class FileMeasures {
   private int linesNumber;
   private int commentLinesNumber;
 
-  private Set<Integer> noSonarLines;
-
   private RangeDistributionBuilder functionComplexityDistribution;
 
   private RangeDistributionBuilder fileComplexityDistribution;
@@ -48,14 +45,6 @@ public class FileMeasures {
     functionComplexity = 0;
     functionComplexityDistribution = new RangeDistributionBuilder(limitsComplexityFunctions);
     fileComplexityDistribution = new RangeDistributionBuilder(filesDistributionBottomLimits);
-  }
-
-  public Set<Integer> getNoSonarLines() {
-    return noSonarLines;
-  }
-
-  public void setNoSonarLines(Set<Integer> noSonarLines) {
-    this.noSonarLines = noSonarLines;
   }
 
   public int getCommentLinesNumber() {

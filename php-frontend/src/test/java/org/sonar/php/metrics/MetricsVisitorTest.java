@@ -60,7 +60,6 @@ public class MetricsVisitorTest extends ParsingTestUtils {
     assertThat(fileMeasures.getLinesNumber()).isEqualTo(29);
     assertThat(fileMeasures.getLinesOfCodeNumber()).isEqualTo(7);
 
-    assertThat(fileMeasures.getNoSonarLines()).containsOnly(18);
     assertThat(fileMeasures.getCommentLinesNumber()).isEqualTo(5);
 
     assertThat(numberOfLinesOfCode.values().iterator().next()).as("number of lines of code in the file").isEqualTo(7);

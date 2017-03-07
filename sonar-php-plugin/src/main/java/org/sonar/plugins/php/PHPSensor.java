@@ -180,7 +180,6 @@ public class PHPSensor implements Sensor {
   private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
     try {
       phpAnalyzer.nextFile(CompatibilityHelper.phpFile(inputFile, context));
-      saveIssues(context, phpAnalyzer.analyze(), inputFile);
 
       if (inSonarQube(context)) {
         phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
@@ -194,6 +193,10 @@ public class PHPSensor implements Sensor {
           saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
         }
       }
+
+      noSonarFilter.noSonarInFile(inputFile, phpAnalyzer.computeNoSonarLines());
+      saveIssues(context, phpAnalyzer.analyze(), inputFile);
+
     } catch (RecognitionException e) {
       checkInterrupted(e);
       LOG.error("Unable to parse file: " + inputFile.absolutePath());
@@ -213,7 +216,7 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
+  private static void saveNewFileMeasures(SensorContext context, FileMeasures fileMeasures, InputFile inputFile) {
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesNumber()).forMetric(CoreMetrics.LINES).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getLinesOfCodeNumber()).forMetric(CoreMetrics.NCLOC).save();
     context.<Integer>newMeasure().on(inputFile).withValue(fileMeasures.getCommentLinesNumber()).forMetric(CoreMetrics.COMMENT_LINES).save();
@@ -229,8 +232,6 @@ public class PHPSensor implements Sensor {
 
     String fileComplexityMeasure = fileMeasures.getFileComplexityDistribution().build();
     context.<String>newMeasure().on(inputFile).withValue(fileComplexityMeasure).forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION).save();
-
-    noSonarFilter.noSonarInFile(inputFile, fileMeasures.getNoSonarLines());
   }
 
   /**

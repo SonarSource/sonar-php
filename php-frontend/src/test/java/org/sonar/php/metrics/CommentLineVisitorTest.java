@@ -33,7 +33,7 @@ public class CommentLineVisitorTest extends ParsingTestUtils {
 
     assertThat(comment.commentLineNumber()).isEqualTo(3);
     assertThat(comment.commentLines()).contains(3, 7, 11);
-    assertThat(comment.noSonarLines()).containsOnly(14);
+    assertThat(comment.noSonarLines()).containsOnly(14, 15);
   }
 
 }
