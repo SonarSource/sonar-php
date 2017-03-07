@@ -190,7 +190,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
         return false;
       }
 
-      if (argument.is(Kind.ARRAY_INITIALIZER_BRACKET, Kind.FUNCTION_EXPRESSION)) {
+      if (argument.is(Kind.ARRAY_INITIALIZER_BRACKET, Kind.ARRAY_INITIALIZER_FUNCTION, Kind.FUNCTION_EXPRESSION)) {
         expectedLine = getLastLine(argument);
       }
     }
