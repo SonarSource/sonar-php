@@ -43,7 +43,7 @@ import static java.util.Collections.singletonList;
 @Suite.SuiteClasses({
   PHPTest.class,
   PHPIntegrationTest.class,
-  PHPUnitTest.class,
+  PHPUnitLegacyTest.class,
   CommonRulesTest.class,
   CustomRulesTest.class,
   ReportWithUnresolvedPathTest.class
