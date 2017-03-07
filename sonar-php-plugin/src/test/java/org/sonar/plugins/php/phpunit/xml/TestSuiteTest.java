@@ -21,7 +21,7 @@ package org.sonar.plugins.php.phpunit.xml;
 
 import java.util.Collection;
 import org.junit.Test;
-import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
+import org.sonar.plugins.php.phpunit.TestFileReport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +31,7 @@ public class TestSuiteTest {
   public void shouldCreateReportOnlyIfFileBased() throws Exception {
     final TestSuite fileSuite = new TestSuite("file");
     assertThat(fileSuite.generateReports().size()).isEqualTo(1);
-    assertThat(fileSuite.generateReports().iterator().next()).isEqualTo(new PhpUnitTestFileReport("file", 0d));
+    assertThat(fileSuite.generateReports().iterator().next()).isEqualTo(new TestFileReport("file", 0d));
     final TestSuite notFileSuite = new TestSuite(null);
     assertThat(notFileSuite.generateReports().isEmpty()).isTrue();
   }
@@ -55,7 +55,7 @@ public class TestSuiteTest {
     final TestSuite fileSuite2 = new TestSuite("file2");
     intermediateSuite.addNested(fileSuite2);
     rootSuite.addNested(intermediateSuite);
-    final Collection<PhpUnitTestFileReport> reports = rootSuite.generateReports();
+    final Collection<TestFileReport> reports = rootSuite.generateReports();
     assertThat(reports).contains(fileSuite1.generateReports().iterator().next());
     assertThat(reports).contains(fileSuite2.generateReports().iterator().next());
   }

@@ -56,9 +56,9 @@ public class PHPUnitTest {
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
-      .setProperty("sonar.php.coverage.reportPath", REPORTS_DIR + "/.coverage-with-absolute-path.xml")
-      .setProperty("sonar.php.coverage.itReportPath", REPORTS_DIR + "/.it-coverage-with-absolute-path.xml")
-      .setProperty("sonar.php.coverage.overallReportPath", REPORTS_DIR + "/.overall-coverage-with-absolute-path.xml")
+      .setProperty("sonar.php.coverage.reportPaths", REPORTS_DIR + "/.coverage-with-absolute-path.xml,"
+        + REPORTS_DIR + "/.it-coverage-with-absolute-path.xml,"
+        + REPORTS_DIR + "/.overall-coverage-with-absolute-path.xml")
       .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml");
     orchestrator.executeBuild(build);
   }
@@ -72,36 +72,26 @@ public class PHPUnitTest {
 
   @Test
   public void coverage() throws Exception {
-    assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(21);
-    assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(17);
-    assertThat(getProjectMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getProjectMeasureAsInt("uncovered_conditions")).isNull();
+    if (!is_before_sonar_6_2()) {
+      assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(21);
+      assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(17);
+      assertThat(getProjectMeasureAsInt("conditions_to_cover")).isNull();
+      assertThat(getProjectMeasureAsInt("uncovered_conditions")).isNull();
 
-    assertThat(getCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(6);
-    assertThat(getCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(2);
-    assertThat(getCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
+      assertThat(getCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(6);
+      assertThat(getCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(2);
+      assertThat(getCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
+      assertThat(getCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
 
-    assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(15);
-    assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(15);
-    assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
+      assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(15);
+      assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(15);
+      assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
+      assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
 
-    // see MMF-345
-    if (is_before_sonar_6_2()) {
-      assertThat(getProjectMeasureAsInt("it_lines_to_cover")).isEqualTo(21);
-      assertThat(getProjectMeasureAsInt("it_uncovered_lines")).isEqualTo(17);
-      assertThat(getCoveredFileMeasureAsInt("it_lines_to_cover")).isEqualTo(6);
-      assertThat(getCoveredFileMeasureAsInt("it_uncovered_lines")).isEqualTo(2);
-      assertThat(getUnCoveredFileMeasureAsInt("it_lines_to_cover")).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasureAsInt("it_uncovered_lines")).isEqualTo(15);
-
-      assertThat(getProjectMeasureAsInt("overall_lines_to_cover")).isEqualTo(21);
-      assertThat(getProjectMeasureAsInt("overall_uncovered_lines")).isEqualTo(17);
-      assertThat(getCoveredFileMeasureAsInt("overall_lines_to_cover")).isEqualTo(6);
-      assertThat(getCoveredFileMeasureAsInt("overall_uncovered_lines")).isEqualTo(2);
-      assertThat(getUnCoveredFileMeasureAsInt("overall_lines_to_cover")).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasureAsInt("overall_uncovered_lines")).isEqualTo(15);
+    } else {
+      assertThat(getProjectMeasureAsInt("lines_to_cover")).isNull();
+      assertThat(getProjectMeasureAsInt("it_lines_to_cover")).isNull();
+      assertThat(getProjectMeasureAsInt("overall_lines_to_cover")).isNull();
     }
   }
 
@@ -123,7 +113,7 @@ public class PHPUnitTest {
    * This hack allow to have this integration test, as only absolute path
    * in report is supported.
    */
-  private static void createReportsWithAbsolutePath() throws Exception {
+  static void createReportsWithAbsolutePath() throws Exception {
     Files.write(
       Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.overall.coverage.xml"), Charsets.UTF_8)
         .replace("Math.php", new File(PROJECT_DIR, SOURCE_DIR + "/Math.php").getAbsolutePath()),
@@ -145,7 +135,7 @@ public class PHPUnitTest {
       new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
   }
 
-  public static boolean is_before_sonar_6_2() {
+  static boolean is_before_sonar_6_2() {
     return !orchestrator.getConfiguration().getSonarVersion().isGreaterThanOrEquals("6.2");
   }
 }

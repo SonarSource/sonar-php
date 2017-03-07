@@ -32,6 +32,7 @@ public class PhpPlugin implements Plugin {
   public static final String PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.overallReportPath";
   public static final String PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.itReportPath";
   public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.reportPath";
+  public static final String PHPUNIT_COVERAGE_REPORT_PATHS_KEY = "sonar.php.coverage.reportPaths";
   public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
 
   public static final String PHP_CATEGORY = "PHP";
@@ -40,6 +41,7 @@ public class PhpPlugin implements Plugin {
 
   public static final Version SQ_VERSION_6_2 = Version.create(6, 2);
   public static final Version SQ_VERSION_6_0 = Version.create(6, 0);
+  private static final String REPORT_PATH_DESCRIPTION_TEMPLATE = "%sPath to the PHPUnit %s report file. The path may be either absolute or relative to the project base directory.";
 
   @Override
   public void define(Context context) {
@@ -68,11 +70,11 @@ public class PhpPlugin implements Plugin {
         .subCategory(GENERAL_SUBCATEGORY)
         .build());
 
-    if (!context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.getRuntime().getProduct() != SonarProduct.SONARLINT) {
+    if (!versionSupportsProductInformation(context) || context.getRuntime().getProduct() != SonarProduct.SONARLINT) {
       context.addExtensions(
         PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
           .name("Unit Test Report")
-          .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
+          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, "", "unit test execution"))
           .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)
@@ -80,7 +82,7 @@ public class PhpPlugin implements Plugin {
 
         PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATH_KEY)
           .name("Coverage Report")
-          .description("Path to the PHPUnit code coverage report file. The path may be either absolute or relative to the project base directory.")
+          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, deprecationMessage(context), "code coverage"))
           .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)
@@ -88,7 +90,7 @@ public class PhpPlugin implements Plugin {
 
         PropertyDefinition.builder(PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY)
           .name("IT Coverage Report")
-          .description("Path to the PHPUnit integration test code coverage report file. The path may be either absolute or relative to the project base directory.")
+          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, deprecationMessage(context), "integration test code coverage"))
           .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)
@@ -96,12 +98,38 @@ public class PhpPlugin implements Plugin {
 
         PropertyDefinition.builder(PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY)
           .name("Overall Coverage Report")
-          .description("Path to the PHPUnit overall code coverage report file. The path may be either absolute or relative to the project base directory.")
+          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, deprecationMessage(context), "overall code coverage"))
           .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)
           .build());
     }
+    if (versionSupportsMultiPathCoverageReport(context)) {
+      context.addExtension(PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
+        .name("Coverage Reports")
+        .description("Comma-separated list of PHPUnit code coverage report files. Each path can be either absolute or relative.")
+        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+        .category(PHP_CATEGORY)
+        .subCategory(PHPUNIT_SUBCATEGORY)
+        .build());
+    }
+
+  }
+
+  private static String deprecationMessage(Context context) {
+    if (versionSupportsMultiPathCoverageReport(context)) {
+      return "DEPRECATED: use " + PHPUNIT_COVERAGE_REPORT_PATHS_KEY + ". ";
+    } else {
+      return "";
+    }
+  }
+
+  private static boolean versionSupportsMultiPathCoverageReport(Context context) {
+    return context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_2);
+  }
+
+  private static boolean versionSupportsProductInformation(Context context) {
+    return context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0);
   }
 
 }

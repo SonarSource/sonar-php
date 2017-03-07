@@ -31,13 +31,13 @@ import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
-public class PhpUnitTestResultImporterTest {
+public class TestResultImporterTest {
 
-  private PhpUnitTestResultImporter importer;
+  private TestResultImporter importer;
 
   private SensorContextTester setUpForSensorContextTester() {
     SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
-    importer = new PhpUnitTestResultImporter();
+    importer = new TestResultImporter();
     return context;
   }
 
@@ -56,7 +56,7 @@ public class PhpUnitTestResultImporterTest {
     String appTestFileKey = appTestFile.key();
     String appSkipTestFileKey = appSkippedTestFile.key();
 
-    importer = new PhpUnitTestResultImporter();
+    importer = new TestResultImporter();
     importer.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<>());
 
     PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.TESTS, 1);

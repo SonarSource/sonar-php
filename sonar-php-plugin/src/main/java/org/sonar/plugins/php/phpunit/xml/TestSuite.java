@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
-import org.sonar.plugins.php.phpunit.PhpUnitTestFileReport;
+import org.sonar.plugins.php.phpunit.TestFileReport;
 
 @XStreamAlias("testsuite")
 public final class TestSuite {
@@ -70,7 +70,7 @@ public final class TestSuite {
     this.testCases = Arrays.asList(testCases);
   }
 
-  public Collection<PhpUnitTestFileReport> generateReports() {
+  public Collection<TestFileReport> generateReports() {
     return collectAllFileBasedSuites().stream().map(TestSuite::createReport).collect(Collectors.toSet());
   }
 
@@ -97,7 +97,7 @@ public final class TestSuite {
    * - data-provider-based (a suite generated to contain all dataset variants of a test fed with a PHPUnit dataProvider)
    *
    * Currently we only care about distinguishing between the file-based suite and all the others.
-   * @see PhpUnitTestFileReport
+   * @see TestFileReport
    *
    * @return true if the suite contains a file attribute
    */
@@ -105,13 +105,13 @@ public final class TestSuite {
     return file != null;
   }
 
-  private PhpUnitTestFileReport createReport() {
-    final PhpUnitTestFileReport report = new PhpUnitTestFileReport(file, time);
+  private TestFileReport createReport() {
+    final TestFileReport report = new TestFileReport(file, time);
     collectTestCases(report);
     return report;
   }
 
-  private void collectTestCases(PhpUnitTestFileReport fileReport) {
+  private void collectTestCases(TestFileReport fileReport) {
     testCases.forEach(fileReport::addTestCase);
     testSuites.forEach(childSuite -> childSuite.collectTestCases(fileReport));
   }

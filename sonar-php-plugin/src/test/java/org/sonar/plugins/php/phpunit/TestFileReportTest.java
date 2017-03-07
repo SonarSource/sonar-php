@@ -30,7 +30,7 @@ import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
-public class PhpUnitTestFileReportTest {
+public class TestFileReportTest {
 
   private String componentKey;
   private String testFileName;
@@ -47,7 +47,7 @@ public class PhpUnitTestFileReportTest {
 
   @Test
   public void shouldReportStatusCounts() throws Exception {
-    final PhpUnitTestFileReport report = new PhpUnitTestFileReport(testFileName, 3d);
+    final TestFileReport report = new TestFileReport(testFileName, 3d);
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
     report.addTestCase(new TestCase(TestCase.Status.ERROR));
     report.addTestCase(new TestCase(TestCase.Status.FAILURE));
@@ -61,14 +61,14 @@ public class PhpUnitTestFileReportTest {
 
   @Test
   public void shouldReportZeroTestsIfEmpty() throws Exception {
-    final PhpUnitTestFileReport report = new PhpUnitTestFileReport(testFileName, 0d);
+    final TestFileReport report = new TestFileReport(testFileName, 0d);
     report.saveTestMeasures(context);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TESTS, 0);
   }
 
   @Test
   public void shouldNotCountSkippedTests() throws Exception {
-    final PhpUnitTestFileReport report = new PhpUnitTestFileReport(testFileName, 1d);
+    final TestFileReport report = new TestFileReport(testFileName, 1d);
     report.addTestCase(new TestCase());
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
     report.addTestCase(new TestCase(TestCase.Status.FAILURE));
@@ -80,7 +80,7 @@ public class PhpUnitTestFileReportTest {
 
   @Test
   public void shouldReportNoSuccessDensityIfNoLiveTests() throws Exception {
-    final PhpUnitTestFileReport report = new PhpUnitTestFileReport(testFileName, 1d);
+    final TestFileReport report = new TestFileReport(testFileName, 1d);
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));

@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.phpunit;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,16 +29,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
-import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
@@ -47,45 +47,29 @@ import org.sonar.plugins.php.phpunit.xml.MetricsNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
-public class PhpUnitCoverageResultImporter implements PhpUnitImporter {
+public class CoverageResultImporter extends SingleFileReportImporter {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PhpUnitCoverageResultImporter.class);
-
-  private final FileSystem fileSystem;
-
-  protected Metric<Integer> linesToCoverMetric = CoreMetrics.LINES_TO_COVER;
-
-  protected Metric<Integer> uncoveredLinesMetric = CoreMetrics.UNCOVERED_LINES;
-
-  protected CoverageType coverageType = CoverageType.UNIT;
+  private static final Logger LOG = Loggers.get(CoverageResultImporter.class);
 
   private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number %s doesn't belong to file %s";
 
-  /**
-   * Instantiates a new php unit coverage result parser.
-   *
-   * @param context the context
-   */
-  public PhpUnitCoverageResultImporter(FileSystem fileSystem) {
-    this.fileSystem = fileSystem;
+  protected Metric<Integer> linesToCoverMetric;
+  protected Metric<Integer> uncoveredLinesMetric;
+  protected CoverageType coverageType;
+
+  public CoverageResultImporter(String reportPathKey, String msg, Metric<Integer> linesToCoverMetric, Metric<Integer> uncoveredLinesMetric, CoverageType coverageType) {
+    super(reportPathKey, msg);
+    this.linesToCoverMetric = linesToCoverMetric;
+    this.uncoveredLinesMetric = uncoveredLinesMetric;
+    this.coverageType = coverageType;
   }
 
-  /**
-   * Parses PHPUnit coverage file.
-   *
-   * @param coverageReportFile the coverage report file
-   */
   @Override
-  public void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  protected void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
     parseFile(coverageReportFile, context, numberOfLinesOfCode);
   }
 
-  /**
-   * Parses the file.
-   *
-   * @param coverageReportFile the coverage report file
-   */
   private void parseFile(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
@@ -113,6 +97,7 @@ public class PhpUnitCoverageResultImporter implements PhpUnitImporter {
    * and thus not present in the coverage report file.
    */
   private void saveMeasureForMissingFiles(List<String> resolvedPaths, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+    final FileSystem fileSystem = context.fileSystem();
     FilePredicate mainFilesPredicate = fileSystem.predicates().and(
       fileSystem.predicates().hasType(InputFile.Type.MAIN),
       fileSystem.predicates().hasLanguage(Php.KEY));
@@ -154,6 +139,7 @@ public class PhpUnitCoverageResultImporter implements PhpUnitImporter {
    * @param resolvedPaths list of paths which can be mapped to imported files
    */
   protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+    FileSystem fileSystem = context.fileSystem();
     // PHP supports only absolute paths
     String path = fileNode.getName();
     InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(path));
@@ -205,14 +191,9 @@ public class PhpUnitCoverageResultImporter implements PhpUnitImporter {
       xstream.processAnnotations(LineNode.class);
 
       return (CoverageNode) xstream.fromXML(inputStream);
-    } catch (IOException e) {
+    } catch (IOException | XStreamException e) {
       throw new IllegalStateException("Can't read phpUnit report: " + coverageReportFile.getName(), e);
     }
-  }
-
-  @Override
-  public String toString() {
-    return "PHPUnit Unit Test Coverage Result Parser";
   }
 
 }

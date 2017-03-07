@@ -19,21 +19,9 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.io.File;
 import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.plugins.php.phpunit.xml.TestSuites;
 
-public class PhpUnitTestResultImporter implements PhpUnitImporter {
-
-  private final JUnitLogParserForPhpUnit parser = new JUnitLogParserForPhpUnit();
-
-  @Override
-  public void importReport(File reportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
-    TestSuites testSuites = parser.parse(reportFile);
-    for (PhpUnitTestFileReport fileReport : testSuites.arrangeSuitesIntoTestFileReports()) {
-      fileReport.saveTestMeasures(context);
-    }
-  }
-
+public interface ReportImporter {
+  void importReport(SensorContext context, Map<String, Integer> numberOfLinesOfCode);
 }

@@ -33,20 +33,21 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.Version;
+import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PhpUnitCoverageResultParserTest {
+public class CoverageResultImporterTest {
 
   private static final String BASE_DIR = "/org/sonar/plugins/php/phpunit/sensor/src/";
   private static final String MONKEY_FILE_NAME = "Monkey.php";
@@ -60,15 +61,10 @@ public class PhpUnitCoverageResultParserTest {
   @Rule
   public TemporaryFolder folder = new TemporaryFolder();
 
-  private PhpUnitCoverageResultImporter importer;
-
-  private DefaultFileSystem fileSystem;
+  private CoverageResultImporter importer;
 
   private Map<String, Integer> numberOfLinesOfCode;
-
-  private SensorContextTester setUpForSensorContextTester() {
-    return SensorContextTester.create(new File("src/test/resources"));
-  }
+  private SensorContextTester context;
 
   private SensorContext setUpForMockedSensorContext() {
     return Mockito.mock(SensorContext.class);
@@ -76,17 +72,22 @@ public class PhpUnitCoverageResultParserTest {
 
   @Before
   public void setUp() throws Exception {
-    fileSystem = new DefaultFileSystem(TestUtils.getResource(BASE_DIR));
+    context = SensorContextTester.create(TestUtils.getResource(BASE_DIR));
     DefaultInputFile monkeyFile = new DefaultInputFile("moduleKey", MONKEY_FILE_NAME)
         .setType(InputFile.Type.MAIN)
         .setLanguage(Php.KEY)
         .setCharset(Charset.defaultCharset())
         .setLines(50);
-    fileSystem.add(monkeyFile);
+    context.fileSystem().add(monkeyFile);
 
     numberOfLinesOfCode = new HashMap<>();
 
-    importer = new PhpUnitCoverageResultImporter(fileSystem);
+    importer = new CoverageResultImporter(
+      PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
+      "unit test coverage",
+      CoreMetrics.LINES_TO_COVER,
+      CoreMetrics.UNCOVERED_LINES,
+      CoverageType.UNIT);
   }
 
   @Test
@@ -100,7 +101,6 @@ public class PhpUnitCoverageResultParserTest {
 
   @Test
   public void should_parse_even_with_package_node() throws Exception {
-    SensorContextTester context = setUpForSensorContextTester();
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-package.xml"), context, numberOfLinesOfCode);
@@ -110,7 +110,6 @@ public class PhpUnitCoverageResultParserTest {
 
    @Test
    public void should_generate_coverage_measures() throws Exception {
-     SensorContextTester context = setUpForSensorContextTester();
      String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
      importer.importReport(getReportsWithAbsolutePath("phpunit.coverage.xml"), context, numberOfLinesOfCode);
@@ -131,7 +130,6 @@ public class PhpUnitCoverageResultParserTest {
    */
   @Test
   public void should_not_fail_if_no_statement_count() throws Exception {
-    SensorContextTester context = setUpForSensorContextTester();
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-no-statements-covered.xml"), context, numberOfLinesOfCode);
@@ -144,14 +142,11 @@ public class PhpUnitCoverageResultParserTest {
    */
   @Test
   public void should_not_fail_if_no_line_for_file_node() throws Exception {
-    SensorContextTester context = setUpForSensorContextTester();
-
     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-filenode-without-line.xml"), context, numberOfLinesOfCode);
   }
 
   @Test
   public void should_set_metrics_to_ncloc_for_missing_files() throws Exception {
-    SensorContextTester context = setUpForSensorContextTester();
     context.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(6, 1), SonarQubeSide.SCANNER));
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
@@ -165,7 +160,6 @@ public class PhpUnitCoverageResultParserTest {
 
   @Test
   public void should_not_set_metrics_to_ncloc_for_missing_files_sq_62() throws Exception {
-    SensorContextTester context = setUpForSensorContextTester();
     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
 
     numberOfLinesOfCode.put(MONKEY_FILE_NAME, 42);

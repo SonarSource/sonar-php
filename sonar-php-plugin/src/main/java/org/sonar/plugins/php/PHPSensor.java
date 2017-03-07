@@ -63,11 +63,9 @@ import org.sonar.plugins.php.api.visitors.LineIssue;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
-import org.sonar.plugins.php.phpunit.PhpUnitCoverageResultImporter;
-import org.sonar.plugins.php.phpunit.PhpUnitItCoverageResultImporter;
-import org.sonar.plugins.php.phpunit.PhpUnitOverallCoverageResultImporter;
-import org.sonar.plugins.php.phpunit.PhpUnitTestResultImporter;
-import org.sonar.plugins.php.phpunit.PhpUnitService;
+import org.sonar.plugins.php.phpunit.CompatibilityImportersFactory;
+import org.sonar.plugins.php.phpunit.ReportImporter;
+import org.sonar.plugins.php.phpunit.TestResultImporter;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
@@ -81,8 +79,6 @@ public class PHPSensor implements Sensor {
   private final NoSonarFilter noSonarFilter;
 
   private RuleKey parsingErrorRuleKey;
-
-  private FileSystem fileSystem;
 
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
     CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
@@ -110,11 +106,11 @@ public class PHPSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    this.fileSystem = context.fileSystem();
+    FileSystem fileSystem = context.fileSystem();
 
-    FilePredicate mainFilePredicate = this.fileSystem.predicates().and(
-      this.fileSystem.predicates().hasType(InputFile.Type.MAIN),
-      this.fileSystem.predicates().hasLanguage(Php.KEY));
+    FilePredicate mainFilePredicate = fileSystem.predicates().and(
+      fileSystem.predicates().hasType(InputFile.Type.MAIN),
+      fileSystem.predicates().hasLanguage(Php.KEY));
 
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()));
     Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
@@ -124,11 +120,10 @@ public class PHPSensor implements Sensor {
 
     Map<String, Integer> numberOLinesOfCode = new HashMap<>();
 
-
     try {
       analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
       if (inSonarQube(context)) {
-        processCoverage(numberOLinesOfCode, context);
+        processTestsAndCoverage(context, numberOLinesOfCode);
       }
     } catch (CancellationException e) {
       LOG.info(e.getMessage());
@@ -139,14 +134,13 @@ public class PHPSensor implements Sensor {
     return !context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT;
   }
 
-  private void processCoverage(Map<String, Integer> numberOfLinesOfCode, SensorContext context) {
-    PhpUnitService phpUnitSensor = new PhpUnitService(
-      fileSystem,
-      new PhpUnitTestResultImporter(),
-      new PhpUnitCoverageResultImporter(fileSystem),
-      new PhpUnitItCoverageResultImporter(fileSystem),
-      new PhpUnitOverallCoverageResultImporter(fileSystem));
-    phpUnitSensor.execute(context, numberOfLinesOfCode);
+  private static void processTestsAndCoverage(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+    new TestResultImporter().importReport(context, numberOfLinesOfCode);
+
+    final CompatibilityImportersFactory importersFactory = new CompatibilityImportersFactory(context);
+    importersFactory.deprecationWarnings().forEach(LOG::warn);
+    List<ReportImporter> importers = importersFactory.createCoverageImporters();
+    importers.forEach(phpUnitImporter -> phpUnitImporter.importReport(context, numberOfLinesOfCode));
   }
 
   void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Iterable<InputFile> inputFiles, ProgressReport progressReport, Map<String, Integer> numberOfLinesOfCode) {
