@@ -73,6 +73,6 @@ public class PHPAnalyzerTest {
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
 
-    assertThat(analyzer.computeCpdTokens()).hasSize(5);
+    assertThat(analyzer.computeCpdTokens()).hasSize(4);
   }
 }
