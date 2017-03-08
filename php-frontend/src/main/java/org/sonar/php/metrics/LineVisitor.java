@@ -32,7 +32,6 @@ import java.util.Set;
 public class LineVisitor extends PHPVisitorCheck {
 
   private Set<Integer> lines = Sets.newHashSet();
-  private int lastLine = 0;
 
   public LineVisitor(CompilationUnitTree tree) {
     this.visitCompilationUnit(tree);
@@ -55,10 +54,6 @@ public class LineVisitor extends PHPVisitorCheck {
       }
 
     }
-
-    if (isEOF) {
-      lastLine = token.line();
-    }
   }
 
   public int getLinesOfCodeNumber() {
@@ -67,10 +62,6 @@ public class LineVisitor extends PHPVisitorCheck {
 
   public Set<Integer> getLinesOfCode() {
     return lines;
-  }
-
-  public int getLinesNumber() {
-    return lastLine;
   }
 
 }

@@ -30,7 +30,6 @@ public class FileMeasures {
   private int fileComplexity;
 
   private int linesOfCodeNumber;
-  private int linesNumber;
   private int commentLinesNumber;
 
   private RangeDistributionBuilder functionComplexityDistribution;
@@ -53,14 +52,6 @@ public class FileMeasures {
 
   public void setCommentLinesNumber(int commentLinesNumber) {
     this.commentLinesNumber = commentLinesNumber;
-  }
-
-  public int getLinesNumber() {
-    return linesNumber;
-  }
-
-  public void setLinesNumber(int linesNumber) {
-    this.linesNumber = linesNumber;
   }
 
   public int getLinesOfCodeNumber() {

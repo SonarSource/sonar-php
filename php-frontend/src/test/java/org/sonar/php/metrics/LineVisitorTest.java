@@ -30,12 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LineVisitorTest extends ParsingTestUtils {
 
   @Test
-  public void test_lines_number() throws Exception {
-    LineVisitor lineVisitor = new LineVisitor(parse("metrics/lines.php"));
-    assertThat(lineVisitor.getLinesNumber()).isEqualTo(17);
-  }
-
-  @Test
   public void test_lines_of_code_number() throws Exception {
     LineVisitor lineVisitor = new LineVisitor(parse("metrics/lines_of_code.php"));
     assertThat(lineVisitor.getLinesOfCodeNumber()).isEqualTo(7);
