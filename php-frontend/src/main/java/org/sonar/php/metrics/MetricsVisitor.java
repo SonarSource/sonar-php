@@ -117,18 +117,14 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     ExecutableLineVisitor executableLineVisitor = new ExecutableLineVisitor(context().tree());
     CommentLineVisitor commentVisitor = new CommentLineVisitor(context().tree());
 
-    int linesNumber = lineVisitor.getLinesNumber();
-
     fileMeasures.setLinesOfCodeNumber(lineVisitor.getLinesOfCodeNumber());
     fileMeasures.setCommentLinesNumber(commentVisitor.commentLineNumber());
 
     Set<Integer> linesOfCode = lineVisitor.getLinesOfCode();
     Set<Integer> commentLines = commentVisitor.commentLines();
 
-    for (int line = 1; line <= linesNumber; line++) {
-      fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, line, linesOfCode.contains(line) ? 1 : 0);
-      fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, line, commentLines.contains(line) ? 1 : 0);
-    }
+    linesOfCode.forEach(lineOfCode -> fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, lineOfCode, 1));
+    commentLines.forEach(commentLine -> fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, commentLine, 1));
 
     if (saveExecutableLines) {
       executableLineVisitor.getExecutableLines().forEach(line ->
