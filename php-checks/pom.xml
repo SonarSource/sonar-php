@@ -10,7 +10,7 @@
 
   <artifactId>php-checks</artifactId>
 
-  <name>PHP :: Checks</name>
+  <name>SonarPHP :: Checks</name>
 
   <dependencies>
     <dependency>

@@ -11,8 +11,8 @@
   <artifactId>sonar-php-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
 
-  <name>PHP :: Sonar Plugin</name>
-  <description>Enables analysis of PHP projects.</description>
+  <name>SonarPHP :: Sonar Plugin</name>
+  <description>Code Analyzer for PHP</description>
   <url>http://redirect.sonarsource.com/plugins/php.html</url>
 
   <scm>
@@ -24,7 +24,7 @@
 
   <properties>
     <sonar.pluginClass>org.sonar.plugins.php.PhpPlugin</sonar.pluginClass>
-    <sonar.pluginName>PHP</sonar.pluginName>
+    <sonar.pluginName>SonarPHP</sonar.pluginName>
     <!-- Those classes are excluded as they are just a temporary copy of Sonar core classes -->
     <sonar.exclusions>org/sonar/plugins/php/duplications/internal/*.java</sonar.exclusions>
   </properties>

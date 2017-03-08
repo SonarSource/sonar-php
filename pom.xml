@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.sonarsource.parent</groupId>
     <artifactId>parent</artifactId>
-    <version>38</version>
+    <version>40</version>
   </parent>
 
   <groupId>org.sonarsource.php</groupId>
@@ -13,13 +13,11 @@
   <version>2.10-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>PHP</name>
-  <description>Enables scanning of PHP source files</description>
+  <name>SonarPHP</name>
   <url>http://docs.codehaus.org/display/SONAR/PHP+Plugin</url>
   <inceptionYear>2010</inceptionYear>
   <organization>
     <name>SonarSource and Akram Ben Aissi</name>
-    <url>http://www.sonarsource.com/</url>
   </organization>
   <licenses>
     <license>
@@ -37,40 +35,24 @@
 
   <developers>
     <developer>
-      <id>lindamartin</id>
-      <name>Linda Martin</name>
-      <email>linda.martin@sonarsource.com</email>
+      <id>inverno</id>
+      <name>Carlo Bottiglieri</name>
       <organization>SonarSource</organization>
     </developer>
     <developer>
-      <id>fabemn</id>
-      <name>Fabrice Bellingard</name>
-      <email>fabrice.bellingard@sonarsource.com</email>
+      <id>ivandalbosco</id>
+      <name>Yves Dubois-Pèlerin</name>
+      <organization>SonarSource</organization>
     </developer>
     <developer>
-      <id>proofek</id>
-      <name>Sebastian Marek</name>
-      <email>proofek@gmail.com</email>
+      <id>pynicolas</id>
+      <name>Pierre-Yves Nicolas</name>
+      <organization>SonarSource</organization>
     </developer>
     <developer>
-      <id>gennadiyl</id>
-      <name>Gennadiy Litvinyuk</name>
-      <email>gennadiy@gmail.com</email>
-    </developer>
-    <developer>
-      <id>akram</id>
-      <name>Akram Ben Aissi</name>
-      <email>akram.benaissi@free.fr</email>
-    </developer>
-    <developer>
-      <id>blacksun</id>
-      <name>Gabriele Santini</name>
-      <email>gab.santini@gmail.com</email>
-    </developer>
-    <developer>
-      <id>henryju</id>
-      <name>Julien Henry</name>
-      <email>julien.henry@sonarsource.com</email>
+      <id>vilchik-elena</id>
+      <name>Elena Vilchik</name>
+      <organization>SonarSource</organization>
     </developer>
   </developers>
 
