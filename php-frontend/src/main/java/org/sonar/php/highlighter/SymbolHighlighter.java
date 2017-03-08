@@ -33,10 +33,7 @@ public class SymbolHighlighter {
       SyntaxToken token = symbol.declaration().token();
       NewSymbol newSymbol = newSymbolTable.newSymbol(token.line(), token.column(), token.endLine(), token.endColumn());
       for (SyntaxToken usageToken : symbol.usages()) {
-        // we do not highlight cases like "${someVar}" as such usages are shorter and will cause incorrect highlighting
-        if (usageToken.text().length() == token.text().length()) {
-          newSymbol.newReference(usageToken.line(), usageToken.column(), usageToken.endLine(), usageToken.endColumn());
-        }
+        newSymbol.newReference(usageToken.line(), usageToken.column(), usageToken.endLine(), usageToken.endColumn());
       }
     }
   }
