@@ -78,6 +78,7 @@ import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -580,7 +581,8 @@ public class PHPGrammar {
         INLINE_HTML(),
         UNSET_VARIABLE_STATEMENT(),
         EXPRESSION_STATEMENT(),
-        LABEL()));
+        LABEL(),
+        EXPRESSION_LIST_STATEMENT()));
   }
 
   public ExpressionStatementTree ECHO_STATEMENT() {
@@ -927,6 +929,14 @@ public class PHPGrammar {
   public ExpressionStatementTree EXPRESSION_STATEMENT() {
     return b.<ExpressionStatementTree>nonterminal(PHPLexicalGrammar.EXPRESSION_STATEMENT).is(
       f.expressionStatement(EXPRESSION(), EOS()));
+  }
+
+  public ExpressionListStatementTree EXPRESSION_LIST_STATEMENT() {
+    return b.<ExpressionListStatementTree>nonterminal(PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT).is(
+      f.expressionListStatement(
+        EXPRESSION(),
+        b.zeroOrMore(f.newTuple88(b.token(PHPPunctuator.COMMA), EXPRESSION())),
+        EOS()));
   }
 
   public LabelTree LABEL() {

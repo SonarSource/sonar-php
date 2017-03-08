@@ -96,6 +96,7 @@ import org.sonar.php.tree.impl.statement.DoWhileStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseifClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
+import org.sonar.php.tree.impl.statement.ExpressionListStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ExpressionStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
@@ -172,6 +173,7 @@ import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -609,6 +611,22 @@ public class TreeFactory {
 
   public ExpressionStatementTree expressionStatement(ExpressionTree expression, InternalSyntaxToken eos) {
     return new ExpressionStatementTreeImpl(expression, eos);
+  }
+
+  public ExpressionListStatementTree expressionListStatement(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressions, InternalSyntaxToken eos) {
+    ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
+    ImmutableList.Builder<SyntaxToken> separators = ImmutableList.builder();
+
+    elements.add(exp1);
+
+    if (expressions.isPresent()) {
+      expressions.get().forEach(tuple -> {
+        separators.add(tuple.first);
+        elements.add(tuple.second);
+      });
+    }
+
+    return new ExpressionListStatementTreeImpl(new SeparatedListImpl<>(elements.build(), separators.build()), eos);
   }
 
   public LabelTree label(InternalSyntaxToken identifier, InternalSyntaxToken colon) {
@@ -1858,9 +1876,14 @@ public class TreeFactory {
     return newTuple(first, second);
   }
 
+  public <T, U> Tuple<T, U> newTuple88(T first, U second) {
+    return newTuple(first, second);
+  }
+
   public <T, U> Tuple<T, U> newTuple89(T first, U second) {
     return newTuple(first, second);
   }
+
   public <T, U> Tuple<T, U> newTuple90(T first, U second) {
     return newTuple(first, second);
   }

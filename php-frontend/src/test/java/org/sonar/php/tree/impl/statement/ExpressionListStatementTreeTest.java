@@ -17,34 +17,27 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser;
+package org.sonar.php.tree.impl.statement;
 
 import org.junit.Test;
+import org.sonar.php.PHPTreeModelTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class ScriptTest {
-
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.SCRIPT)
-      .matches("<?php")
-      .matches("<?php const A = 1; function foo(){}")
-
-      .notMatches("\n")
-      .notMatches("")
-    ;
-  }
+public class ExpressionListStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void should_parse_expression_list_statement() throws Exception {
-    assertThat(PHPLexicalGrammar.SCRIPT)
-      .matches("<?= $x, $x + 1 ?> <tag> <?= $x*2; echo 42 ?>")
+  public void test() throws Exception {
+    ExpressionListStatementTree tree = parse("$a, foo();", PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT);
 
-      // matches due our grammar permissiveness
-      // parsing error in interpreter
-      .matches("<?php $x ?>")
-      .matches("<?php echo 42; $x ?>")
-    ;
+    assertThat(tree.is(Kind.EXPRESSION_LIST_STATEMENT)).isTrue();
+    assertThat(tree.expressions()).hasSize(2);
+    assertThat(tree.expressions().get(0).is(Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(tree.expressions().get(1).is(Kind.FUNCTION_CALL)).isTrue();
+    assertThat(tree.eosToken().text()).isEqualTo(";");
   }
+
 }
