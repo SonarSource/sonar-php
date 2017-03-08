@@ -53,17 +53,33 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   private Deque<Set<String>> privatePropertiesStack = new ArrayDeque<>();
 
+  private Deque<Set<String>> constPropertiesStack = new ArrayDeque<>();
+
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     isFinalClassStack.addLast(isFinalClass(tree));
     finalOrPrivateMethodsStack.addLast(getFinalOrPrivateMethods(tree));
     privatePropertiesStack.addLast(getPrivateProperties(tree));
+    constPropertiesStack.addLast(getConstProperties(tree));
 
     super.visitClassDeclaration(tree);
 
     isFinalClassStack.removeLast();
     finalOrPrivateMethodsStack.removeLast();
     privatePropertiesStack.removeLast();
+    constPropertiesStack.removeLast();
+  }
+
+  private static Set<String> getConstProperties(ClassDeclarationTree tree) {
+    Set<String> constProperties = new HashSet<>();
+
+    for (ClassMemberTree classMemberTree : tree.members()) {
+      if (classMemberTree.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)) {
+        ClassPropertyDeclarationTree propertyDeclaration = (ClassPropertyDeclarationTree) classMemberTree;
+        propertyDeclaration.declarations().forEach(varDec -> constProperties.add(varDec.identifier().text()));
+      }
+    }
+    return constProperties;
   }
 
   private static Set<String> getFinalOrPrivateMethods(ClassDeclarationTree tree) {
@@ -101,11 +117,6 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitClassPropertyDeclaration(ClassPropertyDeclarationTree tree) {
-    // don't enter inside class property declarations
-  }
-
-  @Override
   public void visitMemberAccess(MemberAccessTree tree) {
     if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS) && "self".equals(tree.object().toString()) && !isException(tree)) {
       context().newIssue(this, tree.object(), MESSAGE);
@@ -118,8 +129,16 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
    * Return true if member can't be overridden
    */
   private boolean isException(MemberAccessTree tree) {
-    return !isFinalClassStack.isEmpty() &&
-      (isFinalClassStack.getLast() || isFinalOrPrivateMethod(tree.member()) || isPrivateProperty(tree.member()));
+    Tree member = tree.member();
+
+    if (!isFinalClassStack.isEmpty()) {
+      return isFinalClassStack.getLast()
+        || isFinalOrPrivateMethod(member)
+        || isPrivateProperty(member)
+        || isConstProperty(member);
+    }
+
+    return false;
   }
 
   private boolean isFinalOrPrivateMethod(Tree member) {
@@ -128,6 +147,10 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   private boolean isPrivateProperty(Tree member) {
     return member.is(Tree.Kind.VARIABLE_IDENTIFIER) && privatePropertiesStack.getLast().contains(((IdentifierTree) member).text());
+  }
+
+  private boolean isConstProperty(Tree member) {
+    return member.is(Kind.NAME_IDENTIFIER) && constPropertiesStack.getLast().contains(((IdentifierTree) member).text());
   }
 
 }
