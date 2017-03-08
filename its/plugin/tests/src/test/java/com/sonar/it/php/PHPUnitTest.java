@@ -72,26 +72,32 @@ public class PHPUnitTest {
 
   @Test
   public void coverage() throws Exception {
-    if (!is_before_sonar_6_2()) {
-      assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(21);
-      assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(17);
-      assertThat(getProjectMeasureAsInt("conditions_to_cover")).isNull();
-      assertThat(getProjectMeasureAsInt("uncovered_conditions")).isNull();
+    assertThat(getProjectMeasureAsInt("conditions_to_cover")).isNull();
+    assertThat(getProjectMeasureAsInt("uncovered_conditions")).isNull();
+
+    assertThat(getCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
+    assertThat(getCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
+
+    assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
+    assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
+
+    // see MMF-345
+    if (is_before_sonar_6_2()) {
+      // no coverage saved as new property is not supported
+      assertThat(getProjectMeasureAsInt("lines_to_cover")).isNull();
+      assertThat(getProjectMeasureAsInt("uncovered_lines")).isNull();
+      assertThat(getProjectMeasureAsInt("it_lines_to_cover")).isNull();
+      assertThat(getProjectMeasureAsInt("overall_lines_to_cover")).isNull();
+
+    } else {
+      assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(9);
+      assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(5);
 
       assertThat(getCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(6);
       assertThat(getCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(2);
-      assertThat(getCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
-      assertThat(getCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
 
-      assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
-      assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
-
-    } else {
-      assertThat(getProjectMeasureAsInt("lines_to_cover")).isNull();
-      assertThat(getProjectMeasureAsInt("it_lines_to_cover")).isNull();
-      assertThat(getProjectMeasureAsInt("overall_lines_to_cover")).isNull();
+      assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(3);
+      assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(3);
     }
   }
 
