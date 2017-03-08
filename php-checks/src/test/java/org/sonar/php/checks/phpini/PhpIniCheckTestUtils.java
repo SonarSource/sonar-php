@@ -30,12 +30,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.sonar.php.FileTestUtils;
 import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.PhpIniParser;
 import org.sonar.php.ini.tree.PhpIniFile;
+import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +45,7 @@ public class PhpIniCheckTestUtils {
   private static final Pattern LINE_END_COMMENT = Pattern.compile(".*;\\s*Noncompliant(?:\\s*\\{\\{(.*)\\}\\})?.*");
 
   public static void check(PhpIniCheck check, File file) {
-    PhpFile inputFile = FileTestUtils.getFile(file);
+    PhpFile inputFile = TestUtils.getFile(file);
     PhpIniFile phpIniFile = new PhpIniParser().parse(inputFile);
     List<PhpIniIssue> actualIssues = check.analyze(phpIniFile);
     List<PhpIniIssue> expectedIssues = expectedIssues(file);
@@ -77,7 +77,7 @@ public class PhpIniCheckTestUtils {
   }
 
   public static void check(PhpIniCheck check, File file, List<PhpIniIssue> expectedIssues) {
-    PhpFile inputFile = FileTestUtils.getFile(file);
+    PhpFile inputFile = TestUtils.getFile(file);
     PhpIniFile phpIniFile = new PhpIniParser().parse(inputFile);
     List<PhpIniIssue> actualIssues = check.analyze(phpIniFile);
     compare(actualIssues, expectedIssues);

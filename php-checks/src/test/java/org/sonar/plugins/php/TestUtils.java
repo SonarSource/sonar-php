@@ -20,8 +20,13 @@
 package org.sonar.plugins.php;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
-import org.sonar.php.FileTestUtils;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.php.compat.CompatibilityHelper;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class TestUtils {
@@ -30,7 +35,30 @@ public class TestUtils {
   }
 
   public static PhpFile getCheckFile(String filename) throws URISyntaxException {
-    return FileTestUtils.getFile(new File(TestUtils.class.getResource("/checks/" + filename).toURI()));
+    return getFile(new File(TestUtils.class.getResource("/checks/" + filename).toURI()));
   }
+
+  public static PhpFile getFile(File file, String contents) {
+    try {
+      Files.write(file.toPath(), contents.getBytes());
+    } catch (IOException e) {
+      throw new IllegalStateException("Failed to write test file: " + file.getAbsolutePath());
+    }
+    return getFile(file);
+  }
+
+  public static PhpFile getFile(File file) {
+    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", file.getName())
+      .setModuleBaseDir(file.getParentFile().toPath())
+      .setCharset(Charset.defaultCharset());
+    try {
+      inputFile.initMetadata(new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset()));
+    } catch (IOException e) {
+      throw new IllegalStateException("Failed to create test file from: " + file.getAbsolutePath());
+    }
+
+    return CompatibilityHelper.phpFile(inputFile, SensorContextTester.create(new File("")));
+  }
+
 
 }
