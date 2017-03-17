@@ -38,7 +38,7 @@ public class PHPRulingTest {
   @ClassRule
   public static Orchestrator ORCHESTRATOR = Orchestrator.builderEnv()
     .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
-    .setOrchestratorProperty("litsVersion", "0.5")
+    .setOrchestratorProperty("litsVersion", "0.6")
     .addPlugin("lits")
     .restoreProfileAtStartup(FileLocation.of("src/test/resources/profile.xml"))
     .build();
