@@ -1,6 +1,6 @@
 {
   "title": "Generic exceptions ErrorException, RuntimeException and Exception should not be thrown",
-  "type": "BUG",
+  "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
@@ -9,11 +9,11 @@
   "tags": [
     "cwe",
     "error-handling",
-    "bug",
     "cert"
   ],
   "standards": [
     "CWE"
   ],
-  "defaultSeverity": "Major"
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-112"
 }

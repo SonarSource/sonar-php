@@ -1,5 +1,5 @@
 {
-  "title": "Local Variables should not be declared and then immediately returned or thrown",
+  "title": "Local variables should not be declared and then immediately returned or thrown",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
@@ -9,5 +9,6 @@
   "tags": [
     "clumsy"
   ],
-  "defaultSeverity": "Minor"
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-1488"
 }

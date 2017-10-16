@@ -7,9 +7,9 @@
     "constantCost": "5min"
   },
   "tags": [
-    "bug",
     "psr1",
     "user-experience"
   ],
-  "defaultSeverity": "Major"
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-2036"
 }

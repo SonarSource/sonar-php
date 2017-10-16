@@ -7,8 +7,9 @@
     "constantCost": "1min"
   },
   "tags": [
-    "convention",
-    "psr2"
+    "psr2",
+    "style"
   ],
-  "defaultSeverity": "Major"
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-122"
 }
