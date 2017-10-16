@@ -46,9 +46,9 @@ public class PHPProfileDefinitionTest {
 
     assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
     assertThat(profile.getName()).isEqualTo(PHPProfileDefinition.SONAR_WAY_PROFILE);
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(62);
+    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(58);
     assertThat(validation.hasErrors()).isFalse();
-    assertThat(profile.getActiveRules()).hasSize(63);
+    assertThat(profile.getActiveRules()).hasSize(59);
     assertThat(profile.getActiveRules()).extracting("ruleKey").contains("DuplicatedBlocks");
   }
 
