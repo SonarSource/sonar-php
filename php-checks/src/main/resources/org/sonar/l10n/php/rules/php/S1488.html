@@ -4,14 +4,14 @@ variable is an internal implementation detail that is not exposed to the callers
 know exactly what will be returned.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-function compute_duration_in_milliseconds() {
+function computeDurationInMilliseconds() {
   $duration = ((($hours * 60) + $minutes) * 60 + $seconds ) * 1000 ;
   return $duration;
 }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-function compute_duration_in_milliseconds() {
+function computeDurationInMilliseconds() {
   return ((($hours * 60) + $minutes) * 60 + $seconds ) * 1000;
 }
 </pre>
