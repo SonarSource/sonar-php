@@ -7,12 +7,12 @@
     "constantCost": "5min"
   },
   "tags": [
-    "security",
     "php-ini",
     "owasp-a3"
   ],
   "standards": [
     "OWASP Top Ten"
   ],
-  "defaultSeverity": "Critical"
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-3332"
 }

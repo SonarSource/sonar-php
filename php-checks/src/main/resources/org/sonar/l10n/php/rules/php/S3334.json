@@ -9,7 +9,6 @@
   "tags": [
     "cwe",
     "owasp-a1",
-    "security",
     "sans-top25-risky",
     "php-ini"
   ],
@@ -18,5 +17,6 @@
     "OWASP Top Ten",
     "SANS Top 25"
   ],
-  "defaultSeverity": "Blocker"
+  "defaultSeverity": "Blocker",
+  "ruleSpecification": "RSPEC-3334"
 }

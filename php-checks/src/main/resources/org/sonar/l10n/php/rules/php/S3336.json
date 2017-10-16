@@ -7,12 +7,12 @@
     "constantCost": "5min"
   },
   "tags": [
-    "security",
     "owasp-a5",
     "php-ini"
   ],
   "standards": [
     "OWASP Top Ten"
   ],
-  "defaultSeverity": "Blocker"
+  "defaultSeverity": "Blocker",
+  "ruleSpecification": "RSPEC-3336"
 }

@@ -8,11 +8,11 @@
   },
   "tags": [
     "cwe",
-    "security",
     "php-ini"
   ],
   "standards": [
     "CWE"
   ],
-  "defaultSeverity": "Blocker"
+  "defaultSeverity": "Blocker",
+  "ruleSpecification": "RSPEC-3337"
 }
