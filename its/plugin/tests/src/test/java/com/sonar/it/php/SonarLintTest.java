@@ -19,7 +19,6 @@
  */
 package com.sonar.it.php;
 
-import com.beust.jcommander.internal.Lists;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -27,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.AfterClass;
@@ -78,7 +78,7 @@ public class SonarLintTest {
 
     List<Issue> issues = new ArrayList<>();
     sonarlintEngine.analyze(
-      new StandaloneAnalysisConfiguration(baseDir, temp.newFolder().toPath(), Lists.newArrayList(inputFile), new HashMap<>()),
+      new StandaloneAnalysisConfiguration(baseDir, temp.newFolder().toPath(), Collections.singleton(inputFile), new HashMap<>()),
       issues::add);
 
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
