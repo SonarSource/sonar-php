@@ -38,6 +38,7 @@ public class MethodDeclarationTest {
       .matches("final function f () {}")
       .matches("function f () : bool {}")
       .matches("function f () : ?bool {}")
+      .matches("function if() {}")
     ;
   }
 

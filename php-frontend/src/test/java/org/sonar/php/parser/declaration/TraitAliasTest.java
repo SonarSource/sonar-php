@@ -19,10 +19,10 @@
  */
 package org.sonar.php.parser.declaration;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class TraitAliasTest {
 
@@ -31,6 +31,7 @@ public class TraitAliasTest {
     assertThat(PHPLexicalGrammar.TRAIT_ALIAS)
       .matches("Foo as bar;")
       .matches("Foo as protected bar;")
-      .matches("Foo as private;");
+      .matches("Foo as private;")
+      .matches("if as private for;");
   }
 }

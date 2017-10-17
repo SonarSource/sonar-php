@@ -61,6 +61,7 @@ public class MemberExpressionTest {
     .matches("static::a")
     .matches("class1::a")
     .matches("class1::$a")
+    .matches("class1::if")
     .matches("namespace1\\class1::a")
     // static_member -> dereferencable :: simple_variable
     .matches("$a::$b")
@@ -68,6 +69,7 @@ public class MemberExpressionTest {
     // dereferencable T_OBJECT_OPERATOR member_name
     .matches("$a->b")
     .matches("$a->$b")
+    .matches("$a->if")
     .matches("$a->b->$c")
 
     .notMatches("(int) $a")

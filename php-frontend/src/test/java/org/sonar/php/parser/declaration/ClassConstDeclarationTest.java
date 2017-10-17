@@ -32,6 +32,7 @@ public class ClassConstDeclarationTest {
       .matches("const A = 1 ;")
       .matches("const A = 1, B = 2 ;")
       .matches("const A;")
-      .matches("const A, B;");
+      .matches("const A, B;")
+      .matches("const if = 1;");
   }
 }
