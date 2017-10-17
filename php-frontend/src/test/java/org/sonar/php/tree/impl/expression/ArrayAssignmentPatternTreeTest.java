@@ -17,41 +17,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.expression;
+package org.sonar.php.tree.impl.expression;
 
 import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.PHPTreeModelTest;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class AssignmentExpressionTest {
+public class ArrayAssignmentPatternTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION)
-      .matches("$a = $b")
-      .matches("$a **= $b")
-      .matches("$a *= $b")
-      .matches("$a /= $b")
-      .matches("$a %= $b")
-      .matches("$a += $b")
-      .matches("$a -= $b")
-      .matches("$a <<= $b")
-      .matches("$a >>= $b")
-      .matches("$a &= $b")
-      .matches("$a ^= $b")
-      .matches("$a |= $b")
-      .matches("$a -= $b")
-      .matches("$a -= $b")
+  public void simple() throws Exception {
+    ArrayAssignmentPatternTree tree = parse("[$a, $b]", Kind.ARRAY_ASSIGNMENT_PATTERN);
 
-      .matches("$a =& $b")
-      .matches("$a =& new X")
-      .matches("$a =& myFunction()")
+    assertThat(tree.is(Kind.ARRAY_ASSIGNMENT_PATTERN)).isTrue();
 
-      .matches("[$a, $b] = $array")
-
-      .notMatches("$a =& $b * $c")
-
-      .matches("$var = function () {}");
+    assertThat(tree.openBracketToken().text()).isEqualTo("[");
+    assertThat(tree.elements()).hasSize(2);
+    assertThat(expressionToString(tree.elements().get(0))).isEqualTo("$a");
+    assertThat(tree.closeBracketToken().text()).isEqualTo("]");
   }
+
+
 }

@@ -53,6 +53,7 @@ import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayPairTreeImpl;
@@ -137,6 +138,7 @@ import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -1291,6 +1293,10 @@ public class TreeFactory {
     return new AssignmentExpressionTreeImpl(Kind.ASSIGNMENT, listExpression, equalToken, expression);
   }
 
+  public AssignmentExpressionTree arrayDestructuringAssignment(ExpressionTree arrayAssignmentPattern, InternalSyntaxToken equalToken, ExpressionTree expression) {
+    return new AssignmentExpressionTreeImpl(Kind.ASSIGNMENT, arrayAssignmentPattern, equalToken, expression);
+  }
+
   public ComputedVariableTree computedVariableName(InternalSyntaxToken openCurly, ExpressionTree expression, InternalSyntaxToken closeCurly) {
     return new ComputedVariableTreeImpl(openCurly, expression, closeCurly);
   }
@@ -1660,6 +1666,15 @@ public class TreeFactory {
 
   public HeredocStringLiteralTree heredocStringLiteral(InternalSyntaxToken token) {
     return new HeredocStringLiteralTreeImpl(token);
+  }
+
+  public ArrayAssignmentPatternTree arrayAssignmentPattern(
+    InternalSyntaxToken lBracket,
+    Tree firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Tree>>> rest,
+    InternalSyntaxToken rBracket
+  ) {
+    return new ArrayAssignmentPatternTreeImpl(lBracket, separatedList(firstElement, rest), rBracket);
   }
 
   /**

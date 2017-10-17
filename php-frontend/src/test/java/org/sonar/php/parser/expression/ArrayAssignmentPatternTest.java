@@ -20,38 +20,21 @@
 package org.sonar.php.parser.expression;
 
 import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class AssignmentExpressionTest {
+public class ArrayAssignmentPatternTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION)
-      .matches("$a = $b")
-      .matches("$a **= $b")
-      .matches("$a *= $b")
-      .matches("$a /= $b")
-      .matches("$a %= $b")
-      .matches("$a += $b")
-      .matches("$a -= $b")
-      .matches("$a <<= $b")
-      .matches("$a >>= $b")
-      .matches("$a &= $b")
-      .matches("$a ^= $b")
-      .matches("$a |= $b")
-      .matches("$a -= $b")
-      .matches("$a -= $b")
-
-      .matches("$a =& $b")
-      .matches("$a =& new X")
-      .matches("$a =& myFunction()")
-
-      .matches("[$a, $b] = $array")
-
-      .notMatches("$a =& $b * $c")
-
-      .matches("$var = function () {}");
+    assertThat(Kind.ARRAY_ASSIGNMENT_PATTERN)
+      .matches("[$a]")
+      .matches("[$a, $b, $c]")
+      .matches("[$a, [$b, $c]]")
+      .notMatches("[]")
+      .notMatches("[42]")
+    ;
   }
+
 }
