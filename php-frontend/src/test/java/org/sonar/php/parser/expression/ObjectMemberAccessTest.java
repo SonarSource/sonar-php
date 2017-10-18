@@ -33,6 +33,7 @@ public class ObjectMemberAccessTest {
       .matches("->$a")
       .matches("->$b[$c]{'d'}")
       .matches("->$a[$a]")
-      .matches("->{'b'}");
+      .matches("->{'b'}")
+      .matches("->if");
   }
 }

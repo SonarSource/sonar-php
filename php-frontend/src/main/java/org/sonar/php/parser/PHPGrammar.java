@@ -192,7 +192,7 @@ public class PHPGrammar {
   public VariableDeclarationTree MEMBER_CONST_DECLARATION() {
     return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.MEMBER_CONST_DECLARATION).is(
       f.memberConstDeclaration(
-        b.token(PHPLexicalGrammar.IDENTIFIER),
+        b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD),
         b.optional(f.newTuple18(b.token(EQU), STATIC_SCALAR()))));
   }
 
@@ -344,7 +344,7 @@ public class PHPGrammar {
         b.zeroOrMore(MEMBER_MODIFIER()),
         b.token(PHPKeyword.FUNCTION),
         b.optional(b.token(PHPPunctuator.AMPERSAND)),
-        NAME_IDENTIFIER(),
+        NAME_IDENTIFIER_OR_KEYWORD(),
         PARAMETER_LIST(),
         b.optional(RETURN_TYPE_CLAUSE()),
         b.firstOf(
@@ -437,7 +437,7 @@ public class PHPGrammar {
           TRAIT_METHOD_REFERENCE(),
           b.token(PHPKeyword.AS),
           b.optional(MEMBER_MODIFIER()),
-          NAME_IDENTIFIER(),
+          NAME_IDENTIFIER_OR_KEYWORD(),
           EOS()),
         f.traitAlias(
           TRAIT_METHOD_REFERENCE(),
@@ -451,7 +451,7 @@ public class PHPGrammar {
       b.firstOf(
         TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED(),
         f.traitMethodReference(
-          b.token(PHPLexicalGrammar.IDENTIFIER))));
+          b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD))));
   }
 
   public TraitMethodReferenceTree TRAIT_METHOD_REFERENCE_FULLY_QUALIFIED() {
@@ -459,7 +459,7 @@ public class PHPGrammar {
       f.traitMethodReference(
         NAMESPACE_NAME(),
         b.token(PHPPunctuator.DOUBLECOLON),
-        b.token(PHPLexicalGrammar.IDENTIFIER)));
+        b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD)));
   }
 
   public TypeTree TYPE() {
@@ -1227,6 +1227,11 @@ public class PHPGrammar {
       f.identifier(b.token(PHPLexicalGrammar.IDENTIFIER)));
   }
 
+  public NameIdentifierTree NAME_IDENTIFIER_OR_KEYWORD() {
+    return b.<NameIdentifierTree>nonterminal(PHPGrammarRuleKey.NAME_IDENTIFIER_OR_KEYWORD).is(
+      f.identifierOrKeyword(b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD)));
+  }
+
   public VariableIdentifierTree ENCAPSULATED_VARIABLE_IDENTIFIER() {
     return b.<VariableIdentifierTree>nonterminal(PHPLexicalGrammar.ENCAPS_VAR_IDENTIFIER).is(
       // variable identifiers encapsulated into strings literal does not allowed line terminator spacing,
@@ -1431,7 +1436,7 @@ public class PHPGrammar {
         b.firstOf(
           VARIABLE_WITHOUT_OBJECTS(),
           OBJECT_DIMENSIONAL_LIST(),
-          NAME_IDENTIFIER())));
+          NAME_IDENTIFIER_OR_KEYWORD())));
   }
 
   public ExpressionTree OBJECT_DIMENSIONAL_LIST() {
@@ -1453,7 +1458,7 @@ public class PHPGrammar {
         b.token(DOUBLECOLON),
         b.firstOf(
           VARIABLE_WITHOUT_OBJECTS(),
-          NAME_IDENTIFIER(),
+          NAME_IDENTIFIER_OR_KEYWORD(),
           b.token(CLASS),
           COMPUTED_VARIABLE_NAME())));
   }

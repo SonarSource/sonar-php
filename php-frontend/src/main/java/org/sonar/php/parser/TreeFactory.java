@@ -1176,6 +1176,10 @@ public class TreeFactory {
     return new NameIdentifierTreeImpl(token);
   }
 
+  public NameIdentifierTree identifierOrKeyword(InternalSyntaxToken token) {
+    return identifier(token);
+  }
+
   public ArrayAccessTree expandableArrayAccess(InternalSyntaxToken openBracket, ExpressionTree offset, InternalSyntaxToken closeBracket) {
     return new ArrayAccessTreeImpl(openBracket, offset, closeBracket);
   }

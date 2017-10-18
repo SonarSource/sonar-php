@@ -17,20 +17,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.declaration;
+package org.sonar.php.parser;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.sslr.grammar.GrammarRuleKey;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+public enum PHPGrammarRuleKey implements GrammarRuleKey {
 
-public class TraitMethodReferenceTest {
+  NAME_IDENTIFIER_OR_KEYWORD;
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.TRAIT_METHOD_REFERENCE)
-      .matches("Foo")
-      .matches("Foo::bar")
-      .matches("Foo::if");
-  }
 }
