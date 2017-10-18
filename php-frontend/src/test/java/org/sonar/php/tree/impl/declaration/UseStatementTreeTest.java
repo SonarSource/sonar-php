@@ -76,4 +76,13 @@ public class UseStatementTreeTest extends PHPTreeModelTest {
     assertThat(tree.closeCurlyBraceToken()).isNotNull();
     assertThat(tree.clauses()).hasSize(2);
   }
+
+
+  @Test
+  public void with_trailing_comma() throws Exception {
+    UseStatementTree tree = parse("use ns1\\{A, B, C,};", Kind.GROUP_USE_STATEMENT);
+    assertThat(tree.is(Kind.GROUP_USE_STATEMENT)).isTrue();
+    assertThat(tree.prefix()).isNotNull();
+    assertThat(tree.clauses()).hasSize(3);
+  }
 }

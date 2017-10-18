@@ -574,10 +574,11 @@ public class TreeFactory {
     InternalSyntaxToken lCurlyBrace,
     UseClauseTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, UseClauseTree>>> additionalDeclarations,
+    Optional<InternalSyntaxToken> trailingComma,
     InternalSyntaxToken rCurlyBrace,
     InternalSyntaxToken eosToken
   ) {
-    SeparatedListImpl<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations);
+    SeparatedListImpl<UseClauseTree> declarations = separatedList(firstDeclaration, additionalDeclarations, trailingComma.orNull());
     return UseStatementTreeImpl.createGroupUseStatement(
       useToken,
       useTypeToken.orNull(),

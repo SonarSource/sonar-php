@@ -552,6 +552,7 @@ public class PHPGrammar {
         b.token(LCURLYBRACE),
         GROUP_USE_CLAUSE(),
         b.zeroOrMore(f.newTuple89(b.token(PHPPunctuator.COMMA), GROUP_USE_CLAUSE())),
+        b.optional(b.token(COMMA)),
         b.token(RCURLYBRACE),
         EOS()));
   }
