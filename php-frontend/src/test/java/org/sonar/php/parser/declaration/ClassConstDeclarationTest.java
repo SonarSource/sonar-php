@@ -33,6 +33,11 @@ public class ClassConstDeclarationTest {
       .matches("const A = 1, B = 2 ;")
       .matches("const A;")
       .matches("const A, B;")
-      .matches("const if = 1;");
+      .matches("const if = 1;")
+      .matches("public const A = 1;")
+      .matches("protected const A = 1;")
+      .matches("private const A = 1;")
+      .notMatches("static const A = 1;")
+      .notMatches("public protected const A = 1;");
   }
 }

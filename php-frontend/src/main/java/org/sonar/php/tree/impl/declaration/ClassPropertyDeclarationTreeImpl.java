@@ -21,6 +21,9 @@ package org.sonar.php.tree.impl.declaration;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
@@ -29,9 +32,6 @@ import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPropertyDeclarationTree {
 
@@ -56,8 +56,16 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION, modifierTokens, declarations, eosToken);
   }
 
-  public static ClassPropertyDeclarationTree constant(SyntaxToken constToken, SeparatedListImpl<VariableDeclarationTree> declarations, InternalSyntaxToken eosToken) {
-    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, ImmutableList.of(constToken), declarations, eosToken);
+  public static ClassPropertyDeclarationTree constant(@Nullable SyntaxToken visibility, SyntaxToken constToken, SeparatedListImpl<VariableDeclarationTree> declarations,
+    InternalSyntaxToken eosToken) {
+
+    List<SyntaxToken> modifierTokens;
+    if (visibility != null) {
+      modifierTokens = ImmutableList.of(visibility, constToken);
+    } else {
+      modifierTokens = ImmutableList.of(constToken);
+    }
+    return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION, modifierTokens, declarations, eosToken);
   }
 
   @Override
