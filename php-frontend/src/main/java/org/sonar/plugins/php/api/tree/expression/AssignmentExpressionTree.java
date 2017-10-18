@@ -26,6 +26,7 @@ import org.sonar.plugins.php.api.tree.Tree;
  * <a href="http://php.net/manual/fa/language.operators.assignment.php">Assignment Expression</a>
  * <pre>
  *   {@link #variable()} {@link Tree.Kind#ASSIGNMENT =} {@link #value()}
+ *   {@link #variable()} {@link Tree.Kind#POWER_ASSIGNMENT **=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#MULTIPLY_ASSIGNMENT *=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#DIVIDE_ASSIGNMENT /=} {@link #value()}
  *   {@link #variable()} {@link Tree.Kind#REMAINDER_ASSIGNMENT %=} {@link #value()}

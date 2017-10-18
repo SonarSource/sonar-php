@@ -154,6 +154,7 @@ import static org.sonar.php.api.PHPPunctuator.NOTEQUAL2;
 import static org.sonar.php.api.PHPPunctuator.NOTEQUALBIS;
 import static org.sonar.php.api.PHPPunctuator.NS_SEPARATOR;
 import static org.sonar.php.api.PHPPunctuator.PLUS;
+import static org.sonar.php.api.PHPPunctuator.POWER;
 import static org.sonar.php.api.PHPPunctuator.QUERY;
 import static org.sonar.php.api.PHPPunctuator.RBRACKET;
 import static org.sonar.php.api.PHPPunctuator.RCURLYBRACE;
@@ -1013,13 +1014,22 @@ public class PHPGrammar {
           UNARY_EXPR()))));
   }
 
+  public ExpressionTree POWER_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POWER_EXPR).is(
+      f.powerExpr(
+        b.zeroOrMore(f.newTuple73(
+          CONCATENATION_EXPR(),
+          b.token(POWER))),
+        CONCATENATION_EXPR()));
+  }
+
   public ExpressionTree MULTIPLICATIVE_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MULTIPLICATIVE_EXPR).is(
       f.multiplicativeExpr(
-        CONCATENATION_EXPR(),
+        POWER_EXPR(),
         b.zeroOrMore(f.newTuple61(
           b.firstOf(b.token(STAR), b.token(DIV), b.token(MOD)),
-          CONCATENATION_EXPR()))));
+          POWER_EXPR()))));
   }
 
   public ExpressionTree ADDITIVE_EXPR() {
@@ -1375,6 +1385,7 @@ public class PHPGrammar {
         b.token(PHPPunctuator.EQU),
 
         b.token(PHPPunctuator.STAR_EQU),
+        b.token(PHPPunctuator.STAR_STAR_EQU),
         b.token(PHPPunctuator.DIVEQUAL),
         b.token(PHPPunctuator.MOD_EQU),
         b.token(PHPPunctuator.PLUS_EQU),

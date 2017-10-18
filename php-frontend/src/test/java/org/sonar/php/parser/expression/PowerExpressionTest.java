@@ -24,32 +24,13 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class AssignmentExpressionTest {
+public class PowerExpressionTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION)
-      .matches("$a = $b")
-      .matches("$a **= $b")
-      .matches("$a *= $b")
-      .matches("$a /= $b")
-      .matches("$a %= $b")
-      .matches("$a += $b")
-      .matches("$a -= $b")
-      .matches("$a <<= $b")
-      .matches("$a >>= $b")
-      .matches("$a &= $b")
-      .matches("$a ^= $b")
-      .matches("$a |= $b")
-      .matches("$a -= $b")
-      .matches("$a -= $b")
-
-      .matches("$a =& $b")
-      .matches("$a =& new X")
-      .matches("$a =& myFunction()")
-
-      .notMatches("$a =& $b * $c")
-
-      .matches("$var = function () {}");
+    assertThat(PHPLexicalGrammar.POWER_EXPR)
+      .matches("$a")
+      .matches("$a ** $a");
   }
+
 }

@@ -38,6 +38,7 @@ public enum PHPPunctuator implements GrammarRuleKey {
   LE("<="),
   GE(">="),
   STAR_EQU("*="),
+  STAR_STAR_EQU("**="),
   MOD_EQU("%="),
   MINUS_EQU("-="),
   OR_EQU("|="),
@@ -51,6 +52,8 @@ public enum PHPPunctuator implements GrammarRuleKey {
   PLUS("+"),
   MINUS("-"),
   TILDA("~"),
+
+  STAR_STAR("**"),
 
   XOR("^"),
   STAR("*"),

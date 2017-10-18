@@ -206,6 +206,7 @@ public class TreeFactory {
 
   private static final Map<String, Kind> BINARY_EXPRESSION_KINDS_BY_OPERATOR = ImmutableMap.<String, Kind>builder()
     .put(PHPPunctuator.DOT.getValue(), Kind.CONCATENATION)
+    .put(PHPPunctuator.POWER.getValue(), Kind.POWER)
     .put(PHPPunctuator.STAR.getValue(), Kind.MULTIPLY)
     .put(PHPPunctuator.DIV.getValue(), Kind.DIVIDE)
     .put(PHPPunctuator.MOD.getValue(), Kind.REMAINDER)
@@ -1062,6 +1063,10 @@ public class TreeFactory {
     return new PrefixExpressionTreeImpl(kind, operator, expression);
   }
 
+  public ExpressionTree powerExpr(Optional<List<Tuple<ExpressionTree, InternalSyntaxToken>>> operatorsAndOperands, ExpressionTree exp1) {
+    return rightAssociativeBinaryExpression(operatorsAndOperands, exp1);
+  }
+
   public ExpressionTree concatenationExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
     return binaryExpression(exp1, operatorsAndOperands);
   }
@@ -1111,6 +1116,10 @@ public class TreeFactory {
   }
 
   public ExpressionTree nullCoalescingExpr(Optional<List<Tuple<ExpressionTree, InternalSyntaxToken>>> operatorsAndOperands, ExpressionTree exp1) {
+    return rightAssociativeBinaryExpression(operatorsAndOperands, exp1);
+  }
+
+  private static ExpressionTree rightAssociativeBinaryExpression(Optional<List<Tuple<ExpressionTree, InternalSyntaxToken>>> operatorsAndOperands, ExpressionTree exp1) {
     if (!operatorsAndOperands.isPresent()) {
       return exp1;
     }
@@ -1549,7 +1558,9 @@ public class TreeFactory {
     String operator = operatorToken.text();
     Kind kind = Kind.ASSIGNMENT;
 
-    if ("*=".equals(operator)) {
+    if ("**=".equals(operator)) {
+      kind = Kind.POWER_ASSIGNMENT;
+    } else if ("*=".equals(operator)) {
       kind = Kind.MULTIPLY_ASSIGNMENT;
     } else if ("/=".equals(operator)) {
       kind = Kind.DIVIDE_ASSIGNMENT;
@@ -1876,6 +1887,10 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple72(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple73(T first, U second) {
     return newTuple(first, second);
   }
 
