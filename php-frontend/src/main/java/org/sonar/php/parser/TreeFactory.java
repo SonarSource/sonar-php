@@ -347,12 +347,13 @@ public class TreeFactory {
   }
 
   public ClassPropertyDeclarationTree classConstantDeclaration(
+    Optional<SyntaxToken> visibility,
     InternalSyntaxToken constToken,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
     InternalSyntaxToken eosToken
   ) {
-    return ClassPropertyDeclarationTreeImpl.constant(constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
+    return ClassPropertyDeclarationTreeImpl.constant(visibility.orNull(), constToken, separatedList(firstDeclaration, additionalDeclarations), eosToken);
   }
 
   public ConstantDeclarationTree constantDeclaration(

@@ -54,4 +54,13 @@ public class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
     assertThat(tree.hasModifiers("const")).isTrue();
   }
 
+  @Test
+  public void private_constant_declaration() throws Exception {
+    ClassPropertyDeclarationTree tree = parse("private const A;", PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION);
+    assertThat(tree.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)).isTrue();
+    assertThat(tree.modifierTokens()).hasSize(2);
+    assertThat(tree.modifierTokens().get(0).text()).isEqualTo("private");
+    assertThat(tree.modifierTokens().get(1).text()).isEqualTo("const");
+  }
+
 }

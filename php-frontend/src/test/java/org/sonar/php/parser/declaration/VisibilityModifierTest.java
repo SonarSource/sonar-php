@@ -24,14 +24,18 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ConstantDeclarationTest {
+public class VisibilityModifierTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.CONSTANT_DECLARATION)
-      .matches("const A = 1 ;")
-      .matches("const A = 1, B = 2 ;")
-      .notMatches("public const A = 1 ;")
-      .notMatches("const A ;");
+    assertThat(PHPLexicalGrammar.VISIBILITY_MODIFIER)
+      .matches("public")
+      .matches("protected")
+      .matches("private")
+      .notMatches("static")
+      .notMatches("abstract")
+      .notMatches("final")
+      .notMatches("const");
   }
+
 }

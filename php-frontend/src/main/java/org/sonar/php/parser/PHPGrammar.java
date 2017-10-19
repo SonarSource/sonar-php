@@ -301,6 +301,7 @@ public class PHPGrammar {
   public ClassPropertyDeclarationTree CLASS_CONSTANT_DECLARATION() {
     return b.<ClassPropertyDeclarationTree>nonterminal(PHPLexicalGrammar.CLASS_CONSTANT_DECLARATION).is(
       f.classConstantDeclaration(
+        b.optional(VISIBILITY_MODIFIER()),
         b.token(PHPKeyword.CONST),
         MEMBER_CONST_DECLARATION(),
         b.zeroOrMore(f.newTuple97(b.token(COMMA), MEMBER_CONST_DECLARATION())),
@@ -327,12 +328,18 @@ public class PHPGrammar {
         EOS()));
   }
 
-  public SyntaxToken MEMBER_MODIFIER() {
-    return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.MEMBER_MODIFIER).is(
+  public SyntaxToken VISIBILITY_MODIFIER() {
+    return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.VISIBILITY_MODIFIER).is(
       b.firstOf(
         b.token(PHPKeyword.PUBLIC),
         b.token(PHPKeyword.PROTECTED),
-        b.token(PHPKeyword.PRIVATE),
+        b.token(PHPKeyword.PRIVATE)));
+  }
+
+  public SyntaxToken MEMBER_MODIFIER() {
+    return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.MEMBER_MODIFIER).is(
+      b.firstOf(
+        VISIBILITY_MODIFIER(),
         b.token(PHPKeyword.STATIC),
         b.token(PHPKeyword.ABSTRACT),
         b.token(PHPKeyword.FINAL)));
