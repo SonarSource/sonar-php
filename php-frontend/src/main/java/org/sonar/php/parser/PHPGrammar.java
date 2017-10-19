@@ -1329,7 +1329,12 @@ public class PHPGrammar {
     return b.<Tree>nonterminal(PHPLexicalGrammar.ARRAY_ASSIGNMENT_PATTERN_ELEMENT)
       .is(
         b.firstOf(
-          VARIABLE_IDENTIFIER(),
+          f.arrayAssignmentPatternElement(
+            b.optional(
+              f.newTuple6(
+                EXPRESSION(),
+                b.token(DOUBLEARROW))),
+            VARIABLE_IDENTIFIER()),
           ARRAY_ASSIGNMENT_PATTERN()));
   }
 

@@ -17,25 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.expression;
+package org.sonar.plugins.php.api.tree.expression;
 
-import org.junit.Test;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
+import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+public interface ArrayAssignmentPatternElementTree extends Tree {
 
-public class ArrayAssignmentPatternTest {
+  @Nullable
+  ExpressionTree key();
 
-  @Test
-  public void test() {
-    assertThat(Kind.ARRAY_ASSIGNMENT_PATTERN)
-      .matches("[$a]")
-      .matches("[$a, $b, $c]")
-      .matches("[$a, [$b, $c]]")
-      .matches("[\"a\" => $a, \"b\" => $b]")
-      .notMatches("[]")
-      .notMatches("[42]")
-    ;
-  }
+  @Nullable
+  SyntaxToken doubleArrowToken();
+
+  Tree variable();
 
 }

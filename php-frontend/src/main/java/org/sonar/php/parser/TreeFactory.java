@@ -53,6 +53,7 @@ import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternElementTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
@@ -138,6 +139,7 @@ import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
@@ -1676,6 +1678,14 @@ public class TreeFactory {
   ) {
     return new ArrayAssignmentPatternTreeImpl(lBracket, separatedList(firstElement, rest), rBracket);
   }
+
+  public ArrayAssignmentPatternElementTree arrayAssignmentPatternElement(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> key, VariableIdentifierTree variable) {
+    if (key.isPresent()) {
+      return new ArrayAssignmentPatternElementTreeImpl(key.get().first(), key.get().second(), variable);
+    }
+    return new ArrayAssignmentPatternElementTreeImpl(variable);
+  }
+
 
   /**
    * [ END ] Expression

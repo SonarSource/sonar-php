@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
@@ -297,6 +298,11 @@ public interface Tree {
      * {@link ArrayAssignmentPatternTree}
      */
     ARRAY_ASSIGNMENT_PATTERN(ArrayAssignmentPatternTree.class),
+
+    /**
+     * {@link ArrayAssignmentPatternElementTree}
+     */
+    ARRAY_ASSIGNMENT_PATTERN_ELEMENT(ArrayAssignmentPatternElementTree.class),
 
     /**
      * {@link NewExpressionTree}
