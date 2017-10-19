@@ -20,9 +20,11 @@
 package org.sonar.php.tree.impl.statement;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -31,15 +33,13 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.CatchBlockTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-import java.util.Iterator;
-
 public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
 
   private static final Kind KIND = Kind.CATCH_BLOCK;
 
   private final InternalSyntaxToken catchToken;
   private final InternalSyntaxToken lParenthesis;
-  private final NamespaceNameTree exceptionType;
+  private final SeparatedList<NamespaceNameTree> exceptionTypes;
   private final VariableIdentifierTreeImpl variable;
   private final InternalSyntaxToken rParenthsis;
   private final BlockTree block;
@@ -47,14 +47,14 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
   public CatchBlockTreeImpl(
       InternalSyntaxToken catchToken,
       InternalSyntaxToken lParenthesis,
-      NamespaceNameTree exceptionType,
+      SeparatedList<NamespaceNameTree> exceptionTypes,
       VariableIdentifierTreeImpl variable,
       InternalSyntaxToken rParenthsis,
       BlockTree block
   ) {
     this.catchToken = catchToken;
     this.lParenthesis = lParenthesis;
-    this.exceptionType = exceptionType;
+    this.exceptionTypes = exceptionTypes;
     this.variable = variable;
     this.rParenthsis = rParenthsis;
     this.block = block;
@@ -71,8 +71,8 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
   }
 
   @Override
-  public NamespaceNameTree exceptionType() {
-    return exceptionType;
+  public SeparatedList<NamespaceNameTree> exceptionTypes() {
+    return exceptionTypes;
   }
 
   @Override
@@ -102,7 +102,10 @@ public class CatchBlockTreeImpl extends PHPTree implements CatchBlockTree {
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.forArray(catchToken, lParenthesis, exceptionType, variable, rParenthsis, block);
+    return Iterators.concat(
+      Iterators.forArray(catchToken, lParenthesis),
+      exceptionTypes.elementsAndSeparators(),
+      Iterators.forArray(variable, rParenthsis, block));
   }
 
 }
