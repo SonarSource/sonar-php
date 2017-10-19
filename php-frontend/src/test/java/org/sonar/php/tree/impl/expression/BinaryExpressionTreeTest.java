@@ -100,6 +100,11 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void power() throws Exception {
+    testBinary(Kind.POWER, "**", PHPLexicalGrammar.POWER_EXPR);
+  }
+
+  @Test
   public void concatenation() throws Exception {
     testBinary(Kind.CONCATENATION, ".");
   }
@@ -154,6 +159,5 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.rightOperand().is(coalescingExpr)).isTrue();
     assertThat(expressionToString(tree.rightOperand())).isEqualTo("$b ?? $c");
   }
-
 
 }

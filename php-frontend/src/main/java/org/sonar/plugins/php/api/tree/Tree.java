@@ -322,6 +322,12 @@ public interface Tree {
 
     /**
      * {@link AssignmentExpressionTree}
+     * {@code **=}
+     */
+    POWER_ASSIGNMENT(AssignmentExpressionTree.class),
+
+    /**
+     * {@link AssignmentExpressionTree}
      * {@code /=}
      */
     DIVIDE_ASSIGNMENT(AssignmentExpressionTree.class),
@@ -385,6 +391,12 @@ public interface Tree {
      * {@code .}
      */
     CONCATENATION(BinaryExpressionTree.class),
+
+    /**
+     * {@link BinaryExpressionTree}
+     * {@code **}
+     */
+    POWER(BinaryExpressionTree.class),
 
     /**
      * {@link BinaryExpressionTree}

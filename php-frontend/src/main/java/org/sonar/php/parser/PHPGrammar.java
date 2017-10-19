@@ -162,6 +162,7 @@ import static org.sonar.php.api.PHPPunctuator.SL;
 import static org.sonar.php.api.PHPPunctuator.SPACESHIP;
 import static org.sonar.php.api.PHPPunctuator.SR;
 import static org.sonar.php.api.PHPPunctuator.STAR;
+import static org.sonar.php.api.PHPPunctuator.STAR_STAR;
 
 public class PHPGrammar {
 
@@ -1013,13 +1014,22 @@ public class PHPGrammar {
           UNARY_EXPR()))));
   }
 
+  public ExpressionTree POWER_EXPR() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POWER_EXPR).is(
+      f.powerExpr(
+        CONCATENATION_EXPR(),
+        b.zeroOrMore(f.newTuple73(
+          b.token(STAR_STAR),
+          CONCATENATION_EXPR()))));
+  }
+
   public ExpressionTree MULTIPLICATIVE_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MULTIPLICATIVE_EXPR).is(
       f.multiplicativeExpr(
-        CONCATENATION_EXPR(),
+        POWER_EXPR(),
         b.zeroOrMore(f.newTuple61(
           b.firstOf(b.token(STAR), b.token(DIV), b.token(MOD)),
-          CONCATENATION_EXPR()))));
+          POWER_EXPR()))));
   }
 
   public ExpressionTree ADDITIVE_EXPR() {
@@ -1115,10 +1125,10 @@ public class PHPGrammar {
   public ExpressionTree NULL_COALESCING_EXPRESSION() {
     return b.<ExpressionTree>nonterminal(Kind.NULL_COALESCING_EXPRESSION).is(
       f.nullCoalescingExpr(
+        CONDITIONAL_OR_EXPR(),
         b.zeroOrMore(f.newTuple72(
-          CONDITIONAL_OR_EXPR(),
-          b.token(PHPPunctuator.NULL_COALESCE))),
-        CONDITIONAL_OR_EXPR()));
+          b.token(PHPPunctuator.NULL_COALESCE),
+          CONDITIONAL_OR_EXPR()))));
   }
 
   public ExpressionTree CONDITIONAL_EXPR() {
@@ -1375,6 +1385,7 @@ public class PHPGrammar {
         b.token(PHPPunctuator.EQU),
 
         b.token(PHPPunctuator.STAR_EQU),
+        b.token(PHPPunctuator.STAR_STAR_EQU),
         b.token(PHPPunctuator.DIVEQUAL),
         b.token(PHPPunctuator.MOD_EQU),
         b.token(PHPPunctuator.PLUS_EQU),

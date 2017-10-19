@@ -22,7 +22,6 @@ package org.sonar.php.parser;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -206,6 +205,7 @@ public class TreeFactory {
 
   private static final Map<String, Kind> BINARY_EXPRESSION_KINDS_BY_OPERATOR = ImmutableMap.<String, Kind>builder()
     .put(PHPPunctuator.DOT.getValue(), Kind.CONCATENATION)
+    .put(PHPPunctuator.STAR_STAR.getValue(), Kind.POWER)
     .put(PHPPunctuator.STAR.getValue(), Kind.MULTIPLY)
     .put(PHPPunctuator.DIV.getValue(), Kind.DIVIDE)
     .put(PHPPunctuator.MOD.getValue(), Kind.REMAINDER)
@@ -1062,6 +1062,10 @@ public class TreeFactory {
     return new PrefixExpressionTreeImpl(kind, operator, expression);
   }
 
+  public ExpressionTree powerExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return rightAssociativeBinaryExpression(exp1, operatorsAndOperands);
+  }
+
   public ExpressionTree concatenationExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
     return binaryExpression(exp1, operatorsAndOperands);
   }
@@ -1110,17 +1114,23 @@ public class TreeFactory {
     return binaryExpression(exp1, operatorsAndOperands);
   }
 
-  public ExpressionTree nullCoalescingExpr(Optional<List<Tuple<ExpressionTree, InternalSyntaxToken>>> operatorsAndOperands, ExpressionTree exp1) {
-    if (!operatorsAndOperands.isPresent()) {
-      return exp1;
-    }
+  public ExpressionTree nullCoalescingExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    return rightAssociativeBinaryExpression(exp1, operatorsAndOperands);
+  }
 
-    // coalescing operator has right associativity
-    ExpressionTree result = exp1;
-    for (Tuple<ExpressionTree, InternalSyntaxToken> t : Lists.reverse(operatorsAndOperands.get())) {
-      result = new BinaryExpressionTreeImpl(binaryKind(t.second()), t.first(), t.second(), result);
+  private static ExpressionTree rightAssociativeBinaryExpression(ExpressionTree leftOperand, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+    if (!operatorsAndOperands.isPresent()) {
+      return leftOperand;
     }
-    return result;
+    Tuple<InternalSyntaxToken, ExpressionTree> firstOperatorAndRightOperand = operatorsAndOperands.get().get(0);
+    InternalSyntaxToken operator = firstOperatorAndRightOperand.first();
+    ExpressionTree rightOperand = firstOperatorAndRightOperand.second();
+    int size = operatorsAndOperands.get().size();
+    if (size > 1) {
+      List<Tuple<InternalSyntaxToken, ExpressionTree>> followingOperatorsAndOperands = operatorsAndOperands.get().subList(1, size);
+      rightOperand = rightAssociativeBinaryExpression(firstOperatorAndRightOperand.second(), Optional.of(followingOperatorsAndOperands));
+    }
+    return new BinaryExpressionTreeImpl(binaryKind(operator), leftOperand, operator, rightOperand);
   }
 
   private static ExpressionTree binaryExpression(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
@@ -1549,7 +1559,9 @@ public class TreeFactory {
     String operator = operatorToken.text();
     Kind kind = Kind.ASSIGNMENT;
 
-    if ("*=".equals(operator)) {
+    if ("**=".equals(operator)) {
+      kind = Kind.POWER_ASSIGNMENT;
+    } else if ("*=".equals(operator)) {
       kind = Kind.MULTIPLY_ASSIGNMENT;
     } else if ("/=".equals(operator)) {
       kind = Kind.DIVIDE_ASSIGNMENT;
@@ -1876,6 +1888,10 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple72(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple73(T first, U second) {
     return newTuple(first, second);
   }
 

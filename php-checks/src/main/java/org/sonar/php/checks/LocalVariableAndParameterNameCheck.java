@@ -72,6 +72,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
       .add(Kind.ASSIGNMENT_BY_REFERENCE)
       .add(
         Kind.ASSIGNMENT,
+        Kind.POWER_ASSIGNMENT,
         Kind.MULTIPLY_ASSIGNMENT,
         Kind.DIVIDE_ASSIGNMENT,
         Kind.REMAINDER_ASSIGNMENT,
