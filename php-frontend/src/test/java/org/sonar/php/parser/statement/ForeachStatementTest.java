@@ -35,6 +35,7 @@ public class ForeachStatementTest {
       .matches("foreach ($a as $b) ;")
       .matches("foreach ($a as $b => $c) {}")
       .matches("foreach ($a as $b => $c) : {} endforeach ;")
+      .matches("foreach ($a as [$b, $c]) {}")
 
       .notMatches("foreach ($a as $b) : {} endfor ;")
       .notMatches("foreach ($a as $b) : {} endforeach")

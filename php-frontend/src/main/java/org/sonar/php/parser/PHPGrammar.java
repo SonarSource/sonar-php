@@ -876,7 +876,7 @@ public class PHPGrammar {
 
   public ExpressionTree FOREACH_VARIABLE() {
     return b.<ExpressionTree>nonterminal().is(
-      b.firstOf(REFERENCE_VARIABLE(), MEMBER_EXPRESSION(), LIST_EXPRESSION()));
+      b.firstOf(REFERENCE_VARIABLE(), MEMBER_EXPRESSION(), LIST_EXPRESSION(), ARRAY_ASSIGNMENT_PATTERN()));
   }
 
   public ThrowStatementTree THROW_STATEMENT() {
