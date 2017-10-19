@@ -339,9 +339,7 @@ public class PHPGrammar {
   public SyntaxToken MEMBER_MODIFIER() {
     return b.<SyntaxToken>nonterminal(PHPLexicalGrammar.MEMBER_MODIFIER).is(
       b.firstOf(
-        b.token(PHPKeyword.PUBLIC),
-        b.token(PHPKeyword.PROTECTED),
-        b.token(PHPKeyword.PRIVATE),
+        VISIBILITY_MODIFIER(),
         b.token(PHPKeyword.STATIC),
         b.token(PHPKeyword.ABSTRACT),
         b.token(PHPKeyword.FINAL)));
