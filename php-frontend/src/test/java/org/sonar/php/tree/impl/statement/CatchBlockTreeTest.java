@@ -36,7 +36,23 @@ public class CatchBlockTreeTest extends PHPTreeModelTest {
     assertThat(tree.is(Kind.CATCH_BLOCK)).isTrue();
     assertThat(tree.catchToken().text()).isEqualTo("catch");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
-    assertThat(tree.exceptionType().fullName()).isEqualTo("ExceptionType");
+    assertThat(tree.exceptionTypes()).hasSize(1);
+    assertThat(tree.exceptionTypes().get(0).fullName()).isEqualTo("ExceptionType");
+    assertThat(tree.variable().variableExpression().text()).isEqualTo("$e");
+    assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
+    assertThat(expressionToString(tree.block())).isEqualTo("{}");
+  }
+
+  @Test
+  public void multi_catch() throws Exception {
+    CatchBlockTree tree = parse("catch (FirstException | SecondException | ThirdException $e) {}", PHPLexicalGrammar.CATCH_BLOCK);
+    assertThat(tree.is(Kind.CATCH_BLOCK)).isTrue();
+    assertThat(tree.catchToken().text()).isEqualTo("catch");
+    assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
+    assertThat(tree.exceptionTypes()).hasSize(3);
+    assertThat(tree.exceptionTypes().get(0).fullName()).isEqualTo("FirstException");
+    assertThat(tree.exceptionTypes().get(1).fullName()).isEqualTo("SecondException");
+    assertThat(tree.exceptionTypes().get(2).fullName()).isEqualTo("ThirdException");
     assertThat(tree.variable().variableExpression().text()).isEqualTo("$e");
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(expressionToString(tree.block())).isEqualTo("{}");

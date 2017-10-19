@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.tree.statement;
 
 import com.google.common.annotations.Beta;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
@@ -28,7 +29,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 /**
  * Catch block of <a href="http://php.net/manual/en/language.exceptions.php">try statement</a> (see {@link TryStatementTree}).
  * <pre>
- *   catch ( {@link #exceptionType()} {@link #variable()} ) {@link #block()}
+ *   catch ( {@link #exceptionTypes()} {@link #variable()} ) {@link #block()}
  * </pre>
  */
 @Beta
@@ -38,7 +39,7 @@ public interface CatchBlockTree extends Tree {
 
   SyntaxToken openParenthesisToken();
 
-  NamespaceNameTree exceptionType();
+  SeparatedList<NamespaceNameTree> exceptionTypes();
 
   VariableIdentifierTree variable();
 

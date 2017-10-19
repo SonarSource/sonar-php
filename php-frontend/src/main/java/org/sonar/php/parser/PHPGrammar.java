@@ -908,6 +908,7 @@ public class PHPGrammar {
         b.token(PHPKeyword.CATCH),
         b.token(PHPPunctuator.LPARENTHESIS),
         NAMESPACE_NAME(),
+        b.zeroOrMore(f.newTuple76(b.token(PHPPunctuator.OR), NAMESPACE_NAME())),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
         b.token(PHPPunctuator.RPARENTHESIS),
         BLOCK()));

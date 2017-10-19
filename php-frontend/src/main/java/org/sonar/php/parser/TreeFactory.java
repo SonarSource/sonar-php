@@ -704,13 +704,14 @@ public class TreeFactory {
 
   public CatchBlockTree catchBlock(
     InternalSyntaxToken catchToken, InternalSyntaxToken lParenthesis,
-    NamespaceNameTree exceptionType, InternalSyntaxToken variable,
-    InternalSyntaxToken rParenthsis, BlockTree block
+    NamespaceNameTree exceptionType, Optional<List<Tuple<InternalSyntaxToken, NamespaceNameTree>>> additionalTypes,
+    InternalSyntaxToken variable, InternalSyntaxToken rParenthsis, BlockTree block
   ) {
+    SeparatedListImpl<NamespaceNameTree> exceptionTypes = separatedList(exceptionType, additionalTypes);
     return new CatchBlockTreeImpl(
       catchToken,
       lParenthesis,
-      exceptionType,
+      exceptionTypes,
       new VariableIdentifierTreeImpl(variable),
       rParenthsis,
       block
@@ -1877,6 +1878,10 @@ public class TreeFactory {
   }
 
   public <T, U> Tuple<T, U> newTuple75(T first, U second) {
+    return newTuple(first, second);
+  }
+
+  public <T, U> Tuple<T, U> newTuple76(T first, U second) {
     return newTuple(first, second);
   }
 
