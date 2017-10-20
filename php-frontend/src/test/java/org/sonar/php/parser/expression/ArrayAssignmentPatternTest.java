@@ -31,6 +31,7 @@ public class ArrayAssignmentPatternTest {
     assertThat(Kind.ARRAY_ASSIGNMENT_PATTERN)
       .matches("[$a]")
       .matches("[$a, $b, $c]")
+      .matches("[$a, $b[0], $c->id]")
       .matches("[$a, [$b, $c]]")
       .matches("[\"a\" => $a, \"b\" => $b]")
       .notMatches("[]")

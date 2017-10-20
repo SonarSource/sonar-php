@@ -1334,7 +1334,7 @@ public class PHPGrammar {
               f.newTuple6(
                 EXPRESSION(),
                 b.token(DOUBLEARROW))),
-            VARIABLE_IDENTIFIER()),
+            MEMBER_EXPRESSION()),
           ARRAY_ASSIGNMENT_PATTERN()));
   }
 

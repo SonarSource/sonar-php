@@ -1679,7 +1679,7 @@ public class TreeFactory {
     return new ArrayAssignmentPatternTreeImpl(lBracket, separatedList(firstElement, rest), rBracket);
   }
 
-  public ArrayAssignmentPatternElementTree arrayAssignmentPatternElement(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> key, VariableIdentifierTree variable) {
+  public ArrayAssignmentPatternElementTree arrayAssignmentPatternElement(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> key, Tree variable) {
     if (key.isPresent()) {
       return new ArrayAssignmentPatternElementTreeImpl(key.get().first(), key.get().second(), variable);
     }

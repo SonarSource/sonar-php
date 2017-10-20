@@ -27,7 +27,6 @@ import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -36,15 +35,15 @@ public class ArrayAssignmentPatternElementTreeImpl extends PHPTree implements Ar
   private static final Kind KIND = Kind.ARRAY_ASSIGNMENT_PATTERN_ELEMENT;
   private final ExpressionTree key;
   private final InternalSyntaxToken doubleArrow;
-  private final VariableIdentifierTree variable;
+  private final Tree variable;
 
-  public ArrayAssignmentPatternElementTreeImpl(ExpressionTree key, InternalSyntaxToken doubleArrow, VariableIdentifierTree variable) {
+  public ArrayAssignmentPatternElementTreeImpl(ExpressionTree key, InternalSyntaxToken doubleArrow, Tree variable) {
     this.key = key;
     this.doubleArrow = doubleArrow;
     this.variable = variable;
   }
 
-  public ArrayAssignmentPatternElementTreeImpl(VariableIdentifierTree variable) {
+  public ArrayAssignmentPatternElementTreeImpl(Tree variable) {
     this(null, null, variable);
   }
 
