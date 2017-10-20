@@ -36,6 +36,7 @@ public class TypeNameTest {
       .matches("float")
       .matches("int")
       .matches("string")
+      .matches("object")
       .matches("MyClass")
       .matches("MyInterface")
       .matches("namespace\\MyInterface")
