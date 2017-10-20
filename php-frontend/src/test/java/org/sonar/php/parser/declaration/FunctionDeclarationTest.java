@@ -33,6 +33,7 @@ public class FunctionDeclarationTest {
       .matches("function &f() {}")
       .matches("function f() : bool {}")
       .matches("function f() : ?bool {}")
+      .matches("function f() : object {}")
     ;
   }
 }

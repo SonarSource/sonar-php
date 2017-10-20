@@ -32,6 +32,7 @@ public class ParameterTest {
       .matches("callable $a")
       .matches("array $a")
       .matches("int $a")
+      .matches("object $a")
       .matches("Foo $a")
       .matches("?int $a")
       .matches("&$a")
