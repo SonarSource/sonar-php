@@ -17,28 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.statement;
+package org.sonar.plugins.php.api.tree.expression;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+public interface ArrayAssignmentPatternElementTree extends Tree {
 
-public class ForeachStatementTest {
+  @Nullable
+  ExpressionTree key();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.FOREACH_STATEMENT)
-      .matches("foreach ($a as $b) {}")
-      .matches("foreach ($a as $b) : {} endforeach ;")
-      .matches("foreach ($a as $b) : {} {} endforeach ;")
-      .matches("foreach ($a as $b) ;")
-      .matches("foreach ($a as $b => $c) {}")
-      .matches("foreach ($a as $b => $c) : {} endforeach ;")
-      .matches("foreach ($a as [$b, $c]) {}")
+  @Nullable
+  SyntaxToken doubleArrowToken();
 
-      .notMatches("foreach ($a as $b) : {} endfor ;")
-      .notMatches("foreach ($a as $b) : {} endforeach")
-      .notMatches("foreach ($a as $b) {} {}");
-  }
+  Tree variable();
+
 }

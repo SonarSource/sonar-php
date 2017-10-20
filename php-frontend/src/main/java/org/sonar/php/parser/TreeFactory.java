@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
@@ -53,6 +54,8 @@ import org.sonar.php.tree.impl.declaration.UseClauseTreeImpl;
 import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternElementTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayPairTreeImpl;
@@ -137,6 +140,8 @@ import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -1291,6 +1296,10 @@ public class TreeFactory {
     return new AssignmentExpressionTreeImpl(Kind.ASSIGNMENT, listExpression, equalToken, expression);
   }
 
+  public AssignmentExpressionTree arrayDestructuringAssignment(ExpressionTree arrayAssignmentPattern, InternalSyntaxToken equalToken, ExpressionTree expression) {
+    return new AssignmentExpressionTreeImpl(Kind.ASSIGNMENT, arrayAssignmentPattern, equalToken, expression);
+  }
+
   public ComputedVariableTree computedVariableName(InternalSyntaxToken openCurly, ExpressionTree expression, InternalSyntaxToken closeCurly) {
     return new ComputedVariableTreeImpl(openCurly, expression, closeCurly);
   }
@@ -1660,6 +1669,46 @@ public class TreeFactory {
 
   public HeredocStringLiteralTree heredocStringLiteral(InternalSyntaxToken token) {
     return new HeredocStringLiteralTreeImpl(token);
+  }
+
+  public ArrayAssignmentPatternTree arrayAssignmentPattern(
+    InternalSyntaxToken lBracket,
+    Optional<Tree> firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Optional<Tree>>>> rest,
+    InternalSyntaxToken rBracket
+  ) {
+
+    List<Tuple<SyntaxToken, java.util.Optional<Tree>>> otherElements = Collections.emptyList();
+    if (rest.isPresent()) {
+      otherElements = rest.get().stream()
+        .map(t -> newTuple((SyntaxToken) t.first(), optional(t.second())))
+        .collect(Collectors.toList());
+    }
+    return new ArrayAssignmentPatternTreeImpl(lBracket, firstElement.orNull(), otherElements, rBracket);
+  }
+
+  private static <T> java.util.Optional<T> optional(Optional<T> sslrOptional) {
+    return java.util.Optional.ofNullable(sslrOptional.orNull());
+  }
+
+  public ArrayAssignmentPatternTree arrayAssignmentPattern(
+    InternalSyntaxToken lBracket,
+    Tree firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Optional<Tree>>>> rest,
+    InternalSyntaxToken rBracket
+  ) {
+    return arrayAssignmentPattern(lBracket, Optional.of(firstElement), rest, rBracket);
+  }
+
+  public ArrayAssignmentPatternTree arrayAssignmentPattern(InternalSyntaxToken lBracket, List<Tuple<InternalSyntaxToken, Optional<Tree>>> rest, InternalSyntaxToken rBracket) {
+    return arrayAssignmentPattern(lBracket, Optional.absent(), Optional.of(rest), rBracket);
+  }
+
+  public ArrayAssignmentPatternElementTree arrayAssignmentPatternElement(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> key, Tree variable) {
+    if (key.isPresent()) {
+      return new ArrayAssignmentPatternElementTreeImpl(key.get().first(), key.get().second(), variable);
+    }
+    return new ArrayAssignmentPatternElementTreeImpl(variable);
   }
 
   /**

@@ -17,28 +17,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.statement;
+package org.sonar.php.parser.expression;
 
 import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class ForeachStatementTest {
+public class ArrayAssignmentPatternTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.FOREACH_STATEMENT)
-      .matches("foreach ($a as $b) {}")
-      .matches("foreach ($a as $b) : {} endforeach ;")
-      .matches("foreach ($a as $b) : {} {} endforeach ;")
-      .matches("foreach ($a as $b) ;")
-      .matches("foreach ($a as $b => $c) {}")
-      .matches("foreach ($a as $b => $c) : {} endforeach ;")
-      .matches("foreach ($a as [$b, $c]) {}")
-
-      .notMatches("foreach ($a as $b) : {} endfor ;")
-      .notMatches("foreach ($a as $b) : {} endforeach")
-      .notMatches("foreach ($a as $b) {} {}");
+    assertThat(Kind.ARRAY_ASSIGNMENT_PATTERN)
+      .matches("[$a]")
+      .matches("[$a, $b, $c]")
+      .matches("[$a, $b[0], $c->id]")
+      .matches("[$a, [$b, $c]]")
+      .matches("[\"a\" => $a, \"b\" => $b]")
+      .matches("[,$a]")
+      .matches("[,,,$a,]")
+      .notMatches("[]")
+      .notMatches("[42]")
+    ;
   }
+
 }

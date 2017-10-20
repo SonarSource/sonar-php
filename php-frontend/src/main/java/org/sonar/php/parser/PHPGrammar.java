@@ -30,6 +30,7 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -46,6 +47,7 @@ import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -874,7 +876,7 @@ public class PHPGrammar {
 
   public ExpressionTree FOREACH_VARIABLE() {
     return b.<ExpressionTree>nonterminal().is(
-      b.firstOf(REFERENCE_VARIABLE(), MEMBER_EXPRESSION(), LIST_EXPRESSION()));
+      b.firstOf(REFERENCE_VARIABLE(), MEMBER_EXPRESSION(), LIST_EXPRESSION(), ARRAY_ASSIGNMENT_PATTERN()));
   }
 
   public ThrowStatementTree THROW_STATEMENT() {
@@ -1309,6 +1311,39 @@ public class PHPGrammar {
         LIST_EXPRESSION()));
   }
 
+  public AssignmentExpressionTree ARRAY_DESTRUCTURING_ASSIGNMENT() {
+    return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.ARRAY_DESTRUCTURING_ASSIGNMENT).is(
+      f.arrayDestructuringAssignment(ARRAY_ASSIGNMENT_PATTERN(), b.token(EQU), EXPRESSION()));
+  }
+
+  public ArrayAssignmentPatternTree ARRAY_ASSIGNMENT_PATTERN() {
+    return b.<ArrayAssignmentPatternTree>nonterminal(Kind.ARRAY_ASSIGNMENT_PATTERN)
+      .is(
+        b.firstOf(
+          f.arrayAssignmentPattern(
+            b.token(LBRACKET),
+            b.oneOrMore(f.newTuple1(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
+            b.token(RBRACKET)),
+          f.arrayAssignmentPattern(
+            b.token(LBRACKET),
+            ARRAY_ASSIGNMENT_PATTERN_ELEMENT(),
+            b.zeroOrMore(f.newTuple7(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
+            b.token(RBRACKET))));
+  }
+
+  public Tree ARRAY_ASSIGNMENT_PATTERN_ELEMENT() {
+    return b.<Tree>nonterminal(PHPLexicalGrammar.ARRAY_ASSIGNMENT_PATTERN_ELEMENT)
+      .is(
+        b.firstOf(
+          f.arrayAssignmentPatternElement(
+            b.optional(
+              f.newTuple6(
+                EXPRESSION(),
+                b.token(DOUBLEARROW))),
+            MEMBER_EXPRESSION()),
+          ARRAY_ASSIGNMENT_PATTERN()));
+  }
+
   public ComputedVariableTree COMPUTED_VARIABLE_NAME() {
     return b.<ComputedVariableTree>nonterminal(Kind.COMPUTED_VARIABLE_NAME).is(
       f.computedVariableName(
@@ -1375,7 +1410,8 @@ public class PHPGrammar {
   public AssignmentExpressionTree ASSIGNMENT_EXPRESSION() {
     return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION).is(b.firstOf(
       f.assignmentExpression(MEMBER_EXPRESSION(), ASSIGNMENT_OPERATOR(), EXPRESSION()),
-      ASSIGNMENT_BY_REFERENCE()
+      ASSIGNMENT_BY_REFERENCE(),
+      ARRAY_DESTRUCTURING_ASSIGNMENT()
     ));
   }
 

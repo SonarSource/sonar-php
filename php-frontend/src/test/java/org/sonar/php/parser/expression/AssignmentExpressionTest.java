@@ -48,6 +48,8 @@ public class AssignmentExpressionTest {
       .matches("$a =& new X")
       .matches("$a =& myFunction()")
 
+      .matches("[$a, $b] = $array")
+
       .notMatches("$a =& $b * $c")
 
       .matches("$var = function () {}");
