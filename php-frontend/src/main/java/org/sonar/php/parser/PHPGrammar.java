@@ -196,7 +196,7 @@ public class PHPGrammar {
     return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.MEMBER_CONST_DECLARATION).is(
       f.memberConstDeclaration(
         b.token(PHPLexicalGrammar.IDENTIFIER_OR_KEYWORD),
-        b.optional(f.newTuple18(b.token(EQU), STATIC_SCALAR()))));
+        b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR()))));
   }
 
   public VariableDeclarationTree CONST_VAR() {
@@ -211,19 +211,19 @@ public class PHPGrammar {
     return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.VARIABLE_DECLARATION).is(
       f.variableDeclaration(
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
-        b.optional(f.newTuple96(b.token(EQU), STATIC_SCALAR()))));
+        b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR()))));
   }
 
   public NamespaceNameTree NAMESPACE_NAME() {
     return b.<NamespaceNameTree>nonterminal(PHPLexicalGrammar.NAMESPACE_NAME).is(
       b.firstOf(
         f.namespaceName(
-          b.oneOrMore(f.newTuple75(
+          b.oneOrMore(f.newTuple(
             b.token(PHPPunctuator.NS_SEPARATOR),
             b.token(PHPLexicalGrammar.IDENTIFIER)))),
         f.namespaceName(
           b.firstOf(b.token(PHPLexicalGrammar.IDENTIFIER), b.token(PHPKeyword.NAMESPACE)),
-          b.zeroOrMore(f.newTuple4(
+          b.zeroOrMore(f.newTuple(
             b.token(PHPPunctuator.NS_SEPARATOR),
             b.token(PHPLexicalGrammar.IDENTIFIER))))));
   }
@@ -234,7 +234,7 @@ public class PHPGrammar {
         b.optional(USE_TYPE()),
         NAMESPACE_NAME(),
         b.optional(
-          f.newTuple55(
+          f.newTuple(
             b.token(PHPKeyword.AS),
             b.token(PHPLexicalGrammar.IDENTIFIER)))));
   }
@@ -252,7 +252,7 @@ public class PHPGrammar {
       f.useClause(
         NAMESPACE_NAME(),
         b.optional(
-          f.newTuple91(
+          f.newTuple(
             b.token(PHPKeyword.AS),
             b.token(PHPLexicalGrammar.IDENTIFIER)))));
   }
@@ -263,8 +263,8 @@ public class PHPGrammar {
         b.optional(b.firstOf(b.token(ABSTRACT), b.token(FINAL))),
         b.token(CLASS),
         NAME_IDENTIFIER(),
-        b.optional(f.newTuple50(b.token(EXTENDS), NAMESPACE_NAME())),
-        b.optional(f.newTuple30(b.token(IMPLEMENTS), INTERFACE_LIST())),
+        b.optional(f.newTuple(b.token(EXTENDS), NAMESPACE_NAME())),
+        b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
         b.token(RCURLYBRACE)));
@@ -285,7 +285,7 @@ public class PHPGrammar {
       f.interfaceDeclaration(
         b.token(INTERFACE),
         NAME_IDENTIFIER(),
-        b.optional(f.newTuple26(b.token(EXTENDS), INTERFACE_LIST())),
+        b.optional(f.newTuple(b.token(EXTENDS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
         b.token(RCURLYBRACE)));
@@ -307,7 +307,7 @@ public class PHPGrammar {
         b.optional(VISIBILITY_MODIFIER()),
         b.token(PHPKeyword.CONST),
         MEMBER_CONST_DECLARATION(),
-        b.zeroOrMore(f.newTuple97(b.token(COMMA), MEMBER_CONST_DECLARATION())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_CONST_DECLARATION())),
         EOS()));
   }
 
@@ -316,7 +316,7 @@ public class PHPGrammar {
       f.constantDeclaration(
         b.token(PHPKeyword.CONST),
         CONST_VAR(),
-        b.zeroOrMore(f.newTuple28(b.token(COMMA), CONST_VAR())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), CONST_VAR())),
         EOS()));
   }
 
@@ -327,7 +327,7 @@ public class PHPGrammar {
           f.singleToken(b.token(PHPKeyword.VAR)),
           b.oneOrMore(MEMBER_MODIFIER())),
         VARIABLE_DECLARATION(),
-        b.zeroOrMore(f.newTuple95(b.token(COMMA), VARIABLE_DECLARATION())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), VARIABLE_DECLARATION())),
         EOS()));
   }
 
@@ -384,10 +384,10 @@ public class PHPGrammar {
       f.parameterList(
         b.token(PHPPunctuator.LPARENTHESIS),
         b.optional(
-          f.newTuple94(
+          f.newTuple(
             PARAMETER(),
             b.zeroOrMore(
-              f.newTuple93(
+              f.newTuple(
                 b.token(PHPPunctuator.COMMA),
                 PARAMETER())))),
         b.token(PHPPunctuator.RPARENTHESIS)));
@@ -401,7 +401,7 @@ public class PHPGrammar {
         b.optional(b.token(PHPPunctuator.ELIPSIS)),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
         b.optional(
-          f.newTuple92(
+          f.newTuple(
             b.token(PHPPunctuator.EQU),
             STATIC_SCALAR()))));
   }
@@ -410,7 +410,7 @@ public class PHPGrammar {
     return b.<SeparatedListImpl<NamespaceNameTree>>nonterminal(PHPLexicalGrammar.INTERFACE_LIST).is(
       f.interfaceList(
         NAMESPACE_NAME(),
-        b.zeroOrMore(f.newTuple98(b.token(COMMA), NAMESPACE_NAME()))));
+        b.zeroOrMore(f.newTuple(b.token(COMMA), NAMESPACE_NAME()))));
   }
 
   public UseTraitDeclarationTree USE_TRAIT_DECLARATION() {
@@ -548,7 +548,7 @@ public class PHPGrammar {
         b.token(PHPKeyword.USE),
         b.optional(USE_TYPE()),
         USE_CLAUSE(),
-        b.zeroOrMore(f.newTuple90(b.token(PHPPunctuator.COMMA), USE_CLAUSE())),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), USE_CLAUSE())),
         EOS()));
   }
 
@@ -561,7 +561,7 @@ public class PHPGrammar {
         b.token(NS_SEPARATOR),
         b.token(LCURLYBRACE),
         GROUP_USE_CLAUSE(),
-        b.zeroOrMore(f.newTuple89(b.token(PHPPunctuator.COMMA), GROUP_USE_CLAUSE())),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), GROUP_USE_CLAUSE())),
         b.optional(b.token(COMMA)),
         b.token(RCURLYBRACE),
         EOS()));
@@ -609,7 +609,7 @@ public class PHPGrammar {
       f.staticStatement(
         b.token(STATIC),
         STATIC_VAR(),
-        b.zeroOrMore(f.newTuple22(b.token(COMMA), STATIC_VAR())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), STATIC_VAR())),
         EOS()));
   }
 
@@ -617,7 +617,7 @@ public class PHPGrammar {
     return b.<VariableDeclarationTree>nonterminal(PHPLexicalGrammar.STATIC_VAR).is(
       f.staticVar(
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
-        b.optional(f.newTuple24(b.token(EQU), STATIC_SCALAR()))));
+        b.optional(f.newTuple(b.token(EQU), STATIC_SCALAR()))));
   }
 
   public DeclareStatementTree DECLARE_STATEMENT() {
@@ -645,7 +645,7 @@ public class PHPGrammar {
         b.token(PHPKeyword.DECLARE),
         b.token(LPARENTHESIS),
         MEMBER_CONST_DECLARATION(),
-        b.zeroOrMore(f.newTuple20(b.token(COMMA), MEMBER_CONST_DECLARATION())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_CONST_DECLARATION())),
         b.token(RPARENTHESIS)));
   }
 
@@ -670,7 +670,7 @@ public class PHPGrammar {
       f.globalStatement(
         b.token(PHPKeyword.GLOBAL),
         GLOBAL_VAR(),
-        b.zeroOrMore(f.newTuple16(b.token(COMMA), GLOBAL_VAR())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), GLOBAL_VAR())),
         EOS()));
   }
 
@@ -687,7 +687,7 @@ public class PHPGrammar {
         b.token(PHPKeyword.UNSET),
         b.token(LPARENTHESIS),
         MEMBER_EXPRESSION(),
-        b.zeroOrMore(f.newTuple14(b.token(COMMA), MEMBER_EXPRESSION())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_EXPRESSION())),
         b.token(RPARENTHESIS),
         EOS()));
   }
@@ -848,7 +848,7 @@ public class PHPGrammar {
     return b.<SeparatedListImpl<ExpressionTree>>nonterminal(PHPLexicalGrammar.FOR_EXPR).is(
       f.forExpr(
         EXPRESSION(),
-        b.zeroOrMore(f.newTuple12(
+        b.zeroOrMore(f.newTuple(
           b.token(PHPPunctuator.COMMA),
           EXPRESSION()))));
   }
@@ -870,7 +870,7 @@ public class PHPGrammar {
       f.forEachStatementHeader(
         b.token(PHPKeyword.FOREACH), b.token(PHPPunctuator.LPARENTHESIS),
         EXPRESSION(), b.token(PHPKeyword.AS),
-        b.optional(f.newTuple10(FOREACH_VARIABLE(), b.token(PHPPunctuator.DOUBLEARROW))), FOREACH_VARIABLE(),
+        b.optional(f.newTuple(FOREACH_VARIABLE(), b.token(PHPPunctuator.DOUBLEARROW))), FOREACH_VARIABLE(),
         b.token(PHPPunctuator.RPARENTHESIS)));
   }
 
@@ -910,7 +910,7 @@ public class PHPGrammar {
         b.token(PHPKeyword.TRY),
         BLOCK(),
         b.zeroOrMore(CATCH_BLOCK()),
-        b.optional(f.newTuple2(b.token(PHPKeyword.FINALLY), BLOCK()))));
+        b.optional(f.newTuple(b.token(PHPKeyword.FINALLY), BLOCK()))));
   }
 
   public CatchBlockTree CATCH_BLOCK() {
@@ -919,7 +919,7 @@ public class PHPGrammar {
         b.token(PHPKeyword.CATCH),
         b.token(PHPPunctuator.LPARENTHESIS),
         NAMESPACE_NAME(),
-        b.zeroOrMore(f.newTuple76(b.token(PHPPunctuator.OR), NAMESPACE_NAME())),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.OR), NAMESPACE_NAME())),
         b.token(PHPLexicalGrammar.REGULAR_VAR_IDENTIFIER),
         b.token(PHPPunctuator.RPARENTHESIS),
         BLOCK()));
@@ -947,7 +947,7 @@ public class PHPGrammar {
     return b.<ExpressionListStatementTree>nonterminal(PHPLexicalGrammar.EXPRESSION_LIST_STATEMENT).is(
       f.expressionListStatement(
         EXPRESSION(),
-        b.zeroOrMore(f.newTuple88(b.token(PHPPunctuator.COMMA), EXPRESSION())),
+        b.zeroOrMore(f.newTuple(b.token(PHPPunctuator.COMMA), EXPRESSION())),
         EOS()));
   }
 
@@ -1011,7 +1011,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.CONCATENATION).is(
       f.concatenationExpr(
         UNARY_EXPR(),
-        b.zeroOrMore(f.newTuple60(
+        b.zeroOrMore(f.newTuple(
           b.token(DOT),
           UNARY_EXPR()))));
   }
@@ -1020,7 +1020,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POWER_EXPR).is(
       f.powerExpr(
         CONCATENATION_EXPR(),
-        b.zeroOrMore(f.newTuple73(
+        b.zeroOrMore(f.newTuple(
           b.token(STAR_STAR),
           CONCATENATION_EXPR()))));
   }
@@ -1029,7 +1029,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MULTIPLICATIVE_EXPR).is(
       f.multiplicativeExpr(
         POWER_EXPR(),
-        b.zeroOrMore(f.newTuple61(
+        b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(STAR), b.token(DIV), b.token(MOD)),
           POWER_EXPR()))));
   }
@@ -1038,7 +1038,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.ADDITIVE_EXPR).is(
       f.additiveExpr(
         MULTIPLICATIVE_EXPR(),
-        b.zeroOrMore(f.newTuple62(
+        b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(PLUS), b.token(MINUS)),
           MULTIPLICATIVE_EXPR()))));
   }
@@ -1047,7 +1047,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SHIFT_EXPR).is(
       f.shiftExpr(
         ADDITIVE_EXPR(),
-        b.zeroOrMore(f.newTuple63(
+        b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(SL), b.token(SR)),
           ADDITIVE_EXPR()))));
   }
@@ -1056,7 +1056,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.RELATIONAL_EXPR).is(
       f.relationalExpr(
         SHIFT_EXPR(),
-        b.zeroOrMore(f.newTuple64(
+        b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(LE), b.token(GE), b.token(LT), b.token(GT)),
           SHIFT_EXPR()))));
   }
@@ -1065,7 +1065,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EQUALITY_EXPR).is(
       f.equalityExpr(
         RELATIONAL_EXPR(),
-        b.zeroOrMore(f.newTuple65(
+        b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(NOTEQUAL2), b.token(NOTEQUAL), b.token(EQUAL2), b.token(EQUAL), b.token(NOTEQUALBIS), b.token(SPACESHIP)),
           RELATIONAL_EXPR()))));
   }
@@ -1074,7 +1074,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.BITWISE_AND).is(
       f.bitwiseAndExpr(
         EQUALITY_EXPR(),
-        b.zeroOrMore(f.newTuple66(
+        b.zeroOrMore(f.newTuple(
           b.token(PHPPunctuator.AMPERSAND),
           EQUALITY_EXPR()))));
   }
@@ -1083,7 +1083,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.BITWISE_XOR).is(
       f.bitwiseXorExpr(
         BITWISE_AND_EXPR(),
-        b.zeroOrMore(f.newTuple67(
+        b.zeroOrMore(f.newTuple(
           b.token(PHPPunctuator.XOR),
           BITWISE_AND_EXPR()))));
   }
@@ -1092,7 +1092,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.BITWISE_OR).is(
       f.bitwiseOrExpr(
         BITWISE_XOR_EXPR(),
-        b.zeroOrMore(f.newTuple68(
+        b.zeroOrMore(f.newTuple(
           b.token(PHPPunctuator.OR),
           BITWISE_XOR_EXPR()))));
   }
@@ -1101,7 +1101,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_AND).is(
       f.logicalAndExpr(
         BITWISE_OR_EXPR(),
-        b.zeroOrMore(f.newTuple69(
+        b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(PHPPunctuator.ANDAND), b.token(PHPKeyword.AND)),
           BITWISE_OR_EXPR()))));
   }
@@ -1110,7 +1110,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.ALTERNATIVE_CONDITIONAL_XOR).is(
       f.logicalXorExpr(
         CONDITIONAL_AND_EXPR(),
-        b.zeroOrMore(f.newTuple70(
+        b.zeroOrMore(f.newTuple(
           b.token(PHPKeyword.XOR),
           CONDITIONAL_AND_EXPR()))));
   }
@@ -1119,7 +1119,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_OR).is(
       f.logicalOrExpr(
         CONDITIONAL_XOR_EXPR(),
-        b.zeroOrMore(f.newTuple71(
+        b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(PHPPunctuator.OROR), b.token(PHPKeyword.OR)),
           CONDITIONAL_XOR_EXPR()))));
   }
@@ -1128,7 +1128,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.NULL_COALESCING_EXPRESSION).is(
       f.nullCoalescingExpr(
         CONDITIONAL_OR_EXPR(),
-        b.zeroOrMore(f.newTuple72(
+        b.zeroOrMore(f.newTuple(
           b.token(PHPPunctuator.NULL_COALESCE),
           CONDITIONAL_OR_EXPR()))));
   }
@@ -1299,7 +1299,7 @@ public class PHPGrammar {
           b.token(LIST),
           b.token(LPARENTHESIS),
           b.optional(LIST_ELEMENT()),
-          b.zeroOrMore(f.newTuple3(b.token(COMMA), b.optional(LIST_ELEMENT()))),
+          b.zeroOrMore(f.newTuple(b.token(COMMA), b.optional(LIST_ELEMENT()))),
           b.token(RPARENTHESIS))
       );
   }
@@ -1322,12 +1322,12 @@ public class PHPGrammar {
         b.firstOf(
           f.arrayAssignmentPattern(
             b.token(LBRACKET),
-            b.oneOrMore(f.newTuple1(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
+            b.oneOrMore(f.newTuple(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
             b.token(RBRACKET)),
           f.arrayAssignmentPattern(
             b.token(LBRACKET),
             ARRAY_ASSIGNMENT_PATTERN_ELEMENT(),
-            b.zeroOrMore(f.newTuple7(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
+            b.zeroOrMore(f.newTuple(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
             b.token(RBRACKET))));
   }
 
@@ -1337,7 +1337,7 @@ public class PHPGrammar {
         b.firstOf(
           f.arrayAssignmentPatternElement(
             b.optional(
-              f.newTuple6(
+              f.newTuple(
                 EXPRESSION(),
                 b.token(DOUBLEARROW))),
             MEMBER_EXPRESSION()),
@@ -1459,8 +1459,8 @@ public class PHPGrammar {
 
   public SeparatedListImpl<ExpressionTree> ARGUMENTS() {
     return b.<SeparatedListImpl<ExpressionTree>>nonterminal().is(
-      f.arguments(b.optional(f.newTuple9(
-        FUNCTION_CALL_ARGUMENT(), b.zeroOrMore(f.newTuple5(b.token(COMMA), FUNCTION_CALL_ARGUMENT())))))
+      f.arguments(b.optional(f.newTuple(
+        FUNCTION_CALL_ARGUMENT(), b.zeroOrMore(f.newTuple(b.token(COMMA), FUNCTION_CALL_ARGUMENT())))))
     );
   }
 
@@ -1525,7 +1525,7 @@ public class PHPGrammar {
         b.token(USE),
         b.token(LPARENTHESIS),
         LEXICAL_VARIABLE(),
-        b.zeroOrMore(f.newTuple11(b.token(COMMA), LEXICAL_VARIABLE())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), LEXICAL_VARIABLE())),
         b.token(RPARENTHESIS)));
   }
 
@@ -1546,7 +1546,7 @@ public class PHPGrammar {
   public FunctionCallTree INTERNAL_FUNCTION() {
     return b.<FunctionCallTree>nonterminal(PHPLexicalGrammar.INTERNAL_FUNCTION).is(
       b.firstOf(
-        f.internalFunction(b.token(PHPLexicalGrammar.ISSET), b.token(LPARENTHESIS), EXPRESSION(), b.zeroOrMore(f.newTuple15(b.token(COMMA), EXPRESSION())), b.token(RPARENTHESIS)),
+        f.internalFunction(b.token(PHPLexicalGrammar.ISSET), b.token(LPARENTHESIS), EXPRESSION(), b.zeroOrMore(f.newTuple(b.token(COMMA), EXPRESSION())), b.token(RPARENTHESIS)),
 
         f.internalFunction(
           b.firstOf(
@@ -1576,14 +1576,14 @@ public class PHPGrammar {
     return b.<SeparatedListImpl<ArrayPairTree>>nonterminal(PHPLexicalGrammar.ARRAY_PAIR_LIST).is(
       f.arrayInitializerList(
         ARRAY_PAIR(),
-        b.zeroOrMore(f.newTuple17(b.token(COMMA), ARRAY_PAIR())),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), ARRAY_PAIR())),
         b.optional(b.token(COMMA))));
   }
 
   public ArrayPairTree ARRAY_PAIR() {
     return b.<ArrayPairTree>nonterminal(Kind.ARRAY_PAIR).is(
       b.firstOf(
-        f.arrayPair1(EXPRESSION(), b.optional(f.newTuple13(b.token(DOUBLEARROW), b.firstOf(REFERENCE_VARIABLE(), EXPRESSION())))),
+        f.arrayPair1(EXPRESSION(), b.optional(f.newTuple(b.token(DOUBLEARROW), b.firstOf(REFERENCE_VARIABLE(), EXPRESSION())))),
         f.arrayPair2(REFERENCE_VARIABLE())));
   }
 
@@ -1611,8 +1611,8 @@ public class PHPGrammar {
         b.optional(b.token(PHPPunctuator.LPARENTHESIS)),
         ARGUMENTS(),
         b.optional(b.token(PHPPunctuator.RPARENTHESIS)),
-        b.optional(f.newTuple51(b.token(EXTENDS), NAMESPACE_NAME())),
-        b.optional(f.newTuple31(b.token(IMPLEMENTS), INTERFACE_LIST())),
+        b.optional(f.newTuple(b.token(EXTENDS), NAMESPACE_NAME())),
+        b.optional(f.newTuple(b.token(IMPLEMENTS), INTERFACE_LIST())),
         b.token(LCURLYBRACE),
         b.zeroOrMore(CLASS_MEMBER()),
         b.token(RCURLYBRACE))
@@ -1646,7 +1646,7 @@ public class PHPGrammar {
         b.optional(b.firstOf(
           b.token(INC),
           b.token(DEC),
-          f.newTuple19(b.token(INSTANCEOF), MEMBER_EXPRESSION())))));
+          f.newTuple(b.token(INSTANCEOF), MEMBER_EXPRESSION())))));
   }
 
   /**
