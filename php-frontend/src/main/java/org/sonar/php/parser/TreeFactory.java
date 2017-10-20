@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
@@ -1672,11 +1673,35 @@ public class TreeFactory {
 
   public ArrayAssignmentPatternTree arrayAssignmentPattern(
     InternalSyntaxToken lBracket,
-    Tree firstElement,
-    Optional<List<Tuple<InternalSyntaxToken, Tree>>> rest,
+    Optional<Tree> firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Optional<Tree>>>> rest,
     InternalSyntaxToken rBracket
   ) {
-    return new ArrayAssignmentPatternTreeImpl(lBracket, separatedList(firstElement, rest), rBracket);
+
+    List<Tuple<SyntaxToken, java.util.Optional<Tree>>> otherElements = Collections.emptyList();
+    if (rest.isPresent()) {
+      otherElements = rest.get().stream()
+        .map(t -> newTuple((SyntaxToken) t.first(), optional(t.second())))
+        .collect(Collectors.toList());
+    }
+    return new ArrayAssignmentPatternTreeImpl(lBracket, firstElement.orNull(), otherElements, rBracket);
+  }
+
+  private static <T> java.util.Optional<T> optional(Optional<T> sslrOptional) {
+    return java.util.Optional.ofNullable(sslrOptional.orNull());
+  }
+
+  public ArrayAssignmentPatternTree arrayAssignmentPattern(
+    InternalSyntaxToken lBracket,
+    Tree firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Optional<Tree>>>> rest,
+    InternalSyntaxToken rBracket
+  ) {
+    return arrayAssignmentPattern(lBracket, Optional.of(firstElement), rest, rBracket);
+  }
+
+  public ArrayAssignmentPatternTree arrayAssignmentPattern(InternalSyntaxToken lBracket, List<Tuple<InternalSyntaxToken, Optional<Tree>>> rest, InternalSyntaxToken rBracket) {
+    return arrayAssignmentPattern(lBracket, Optional.absent(), Optional.of(rest), rBracket);
   }
 
   public ArrayAssignmentPatternElementTree arrayAssignmentPatternElement(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> key, Tree variable) {
@@ -1685,7 +1710,6 @@ public class TreeFactory {
     }
     return new ArrayAssignmentPatternElementTreeImpl(variable);
   }
-
 
   /**
    * [ END ] Expression

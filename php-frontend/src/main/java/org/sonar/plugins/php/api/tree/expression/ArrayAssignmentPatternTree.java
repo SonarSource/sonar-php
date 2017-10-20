@@ -19,7 +19,8 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import org.sonar.plugins.php.api.tree.SeparatedList;
+import java.util.List;
+import java.util.Optional;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
@@ -29,7 +30,7 @@ public interface ArrayAssignmentPatternTree extends ExpressionTree {
 
   SyntaxToken openBracketToken();
 
-  SeparatedList<Tree> elements();
+  List<Optional<Tree>> elements();
 
   SyntaxToken closeBracketToken();
 

@@ -30,15 +30,16 @@ public class ArrayAssignmentPatternTreeTest extends PHPTreeModelTest {
 
   @Test
   public void simple() throws Exception {
-    ArrayAssignmentPatternTree tree = parse("[$a, $b]", Kind.ARRAY_ASSIGNMENT_PATTERN);
+    ArrayAssignmentPatternTree tree = parse("[$a, , $b]", Kind.ARRAY_ASSIGNMENT_PATTERN);
 
     assertThat(tree.is(Kind.ARRAY_ASSIGNMENT_PATTERN)).isTrue();
 
     assertThat(tree.openBracketToken().text()).isEqualTo("[");
-    assertThat(tree.elements()).hasSize(2);
-    assertThat(expressionToString(tree.elements().get(0))).isEqualTo("$a");
+    assertThat(tree.elements()).hasSize(3);
+    assertThat(expressionToString(tree.elements().get(0).get())).isEqualTo("$a");
+    assertThat(tree.elements().get(1)).isEmpty();
+    assertThat(expressionToString(tree.elements().get(2).get())).isEqualTo("$b");
     assertThat(tree.closeBracketToken().text()).isEqualTo("]");
   }
-
 
 }

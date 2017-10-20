@@ -20,10 +20,13 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import javax.annotation.Nullable;
+import org.sonar.php.parser.TreeFactory.Tuple;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -32,14 +35,27 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ArrayAssignmentPatternTreeImpl extends PHPTree implements ArrayAssignmentPatternTree {
 
   private static final Kind KIND = Kind.ARRAY_ASSIGNMENT_PATTERN;
-  private final InternalSyntaxToken openBracket;
-  private final SeparatedList<Tree> elements;
-  private final InternalSyntaxToken closeBracket;
+  private final SyntaxToken openBracket;
+  private final List<Tree> elementsAndSeparators = new ArrayList<>();
+  private final List<Optional<Tree>> elements = new ArrayList<>();
+  private final SyntaxToken closeBracket;
 
-  public ArrayAssignmentPatternTreeImpl(InternalSyntaxToken openBracket, SeparatedList<Tree> elements, InternalSyntaxToken closeBracket) {
+  public ArrayAssignmentPatternTreeImpl(SyntaxToken openBracket, @Nullable Tree firstElement, List<Tuple<SyntaxToken,Optional<Tree>>> rest, SyntaxToken closeBracket) {
     this.openBracket = openBracket;
-    this.elements = elements;
     this.closeBracket = closeBracket;
+
+    elements.add(Optional.ofNullable(firstElement));
+    if (firstElement != null) {
+      elementsAndSeparators.add(firstElement);
+    }
+    for (Tuple<SyntaxToken, Optional<Tree>> tuple : rest) {
+      elementsAndSeparators.add(tuple.first());
+      Optional<Tree> second = tuple.second();
+      elements.add(second);
+      if (second.isPresent()) {
+        elementsAndSeparators.add(second.get());
+      }
+    }
   }
 
   @Override
@@ -48,7 +64,7 @@ public class ArrayAssignmentPatternTreeImpl extends PHPTree implements ArrayAssi
   }
 
   @Override
-  public SeparatedList<Tree> elements() {
+  public List<Optional<Tree>> elements() {
     return elements;
   }
 
@@ -61,7 +77,7 @@ public class ArrayAssignmentPatternTreeImpl extends PHPTree implements ArrayAssi
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.singletonIterator(openBracket),
-      elements.elementsAndSeparators(),
+      elementsAndSeparators.iterator(),
       Iterators.singletonIterator(closeBracket));
   }
 
@@ -74,4 +90,5 @@ public class ArrayAssignmentPatternTreeImpl extends PHPTree implements ArrayAssi
   public Kind getKind() {
     return KIND;
   }
+
 }

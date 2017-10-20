@@ -34,6 +34,8 @@ public class ArrayAssignmentPatternTest {
       .matches("[$a, $b[0], $c->id]")
       .matches("[$a, [$b, $c]]")
       .matches("[\"a\" => $a, \"b\" => $b]")
+      .matches("[,$a]")
+      .matches("[,,,$a,]")
       .notMatches("[]")
       .notMatches("[42]")
     ;

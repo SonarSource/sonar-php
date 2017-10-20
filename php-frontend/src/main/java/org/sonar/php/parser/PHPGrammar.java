@@ -1318,11 +1318,17 @@ public class PHPGrammar {
 
   public ArrayAssignmentPatternTree ARRAY_ASSIGNMENT_PATTERN() {
     return b.<ArrayAssignmentPatternTree>nonterminal(Kind.ARRAY_ASSIGNMENT_PATTERN)
-      .is(f.arrayAssignmentPattern(
-        b.token(LBRACKET),
-        ARRAY_ASSIGNMENT_PATTERN_ELEMENT(),
-        b.zeroOrMore(f.newTuple1(b.token(COMMA), ARRAY_ASSIGNMENT_PATTERN_ELEMENT())),
-        b.token(RBRACKET)));
+      .is(
+        b.firstOf(
+          f.arrayAssignmentPattern(
+            b.token(LBRACKET),
+            b.oneOrMore(f.newTuple1(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
+            b.token(RBRACKET)),
+          f.arrayAssignmentPattern(
+            b.token(LBRACKET),
+            ARRAY_ASSIGNMENT_PATTERN_ELEMENT(),
+            b.zeroOrMore(f.newTuple7(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
+            b.token(RBRACKET))));
   }
 
   public Tree ARRAY_ASSIGNMENT_PATTERN_ELEMENT() {
