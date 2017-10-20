@@ -44,8 +44,8 @@ function l($p) {
 }
 
 function l() {
-  list($a, $b) = array(1, 2);  // NOK $a
-//^^^^^^^^^^^^
+  list($a,, $b) = array(1, 2);  // NOK $a
+//^^^^^^^^^^^^^
   return $a;
 }
 

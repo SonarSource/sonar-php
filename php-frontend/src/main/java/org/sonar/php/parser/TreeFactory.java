@@ -81,7 +81,6 @@ import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.PostfixExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.PrefixExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
-import org.sonar.php.tree.impl.expression.SkippedListElementTreeImpl;
 import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
 import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.YieldExpressionTreeImpl;
@@ -1269,33 +1268,15 @@ public class TreeFactory {
 
   public ListExpressionTree listExpression(
     InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
-    Optional<ExpressionTree> firstElement,
-    Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> restElements,
+    Optional<ArrayAssignmentPatternElementTree> firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest,
     InternalSyntaxToken closeParenthesis
   ) {
-    ImmutableList.Builder<SyntaxToken> commas = ImmutableList.builder();
-    ImmutableList.Builder<ExpressionTree> listElements = ImmutableList.builder();
-
-    if (firstElement.isPresent()) {
-      listElements.add(firstElement.get());
-
-      // if omitted element at the beginning
-    } else if (restElements.isPresent()) {
-      listElements.add(new SkippedListElementTreeImpl());
-    }
-
-    // Remaining elements
-    if (restElements.isPresent()) {
-      for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> rest : restElements.get()) {
-        commas.add(rest.first());
-        listElements.add(rest.second().isPresent() ? rest.second().get() : new SkippedListElementTreeImpl());
-      }
-    }
-
     return new ListExpressionTreeImpl(
       listToken,
       openParenthesis,
-      new SeparatedListImpl<>(listElements.build(), commas.build()),
+      firstElement.orNull(),
+      arrayAssignmentPatternRestElements(rest),
       closeParenthesis);
   }
 
@@ -1680,18 +1661,24 @@ public class TreeFactory {
 
   public ArrayAssignmentPatternTree arrayAssignmentPattern(
     InternalSyntaxToken lBracket,
-    Optional<Tree> firstElement,
-    Optional<List<Tuple<InternalSyntaxToken, Optional<Tree>>>> rest,
+    Optional<ArrayAssignmentPatternElementTree> firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest,
     InternalSyntaxToken rBracket
   ) {
 
-    List<Tuple<SyntaxToken, java.util.Optional<Tree>>> otherElements = Collections.emptyList();
+    return new ArrayAssignmentPatternTreeImpl(lBracket, firstElement.orNull(), arrayAssignmentPatternRestElements(rest), rBracket);
+  }
+
+  private List<Tuple<SyntaxToken, java.util.Optional<ArrayAssignmentPatternElementTree>>> arrayAssignmentPatternRestElements(
+    Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest
+  ) {
+    List<Tuple<SyntaxToken, java.util.Optional<ArrayAssignmentPatternElementTree>>> otherElements = Collections.emptyList();
     if (rest.isPresent()) {
       otherElements = rest.get().stream()
         .map(t -> newTuple((SyntaxToken) t.first(), optional(t.second())))
         .collect(Collectors.toList());
     }
-    return new ArrayAssignmentPatternTreeImpl(lBracket, firstElement.orNull(), otherElements, rBracket);
+    return otherElements;
   }
 
   private static <T> java.util.Optional<T> optional(Optional<T> sslrOptional) {
@@ -1700,14 +1687,16 @@ public class TreeFactory {
 
   public ArrayAssignmentPatternTree arrayAssignmentPattern(
     InternalSyntaxToken lBracket,
-    Tree firstElement,
-    Optional<List<Tuple<InternalSyntaxToken, Optional<Tree>>>> rest,
+    ArrayAssignmentPatternElementTree firstElement,
+    Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest,
     InternalSyntaxToken rBracket
   ) {
     return arrayAssignmentPattern(lBracket, Optional.of(firstElement), rest, rBracket);
   }
 
-  public ArrayAssignmentPatternTree arrayAssignmentPattern(InternalSyntaxToken lBracket, List<Tuple<InternalSyntaxToken, Optional<Tree>>> rest, InternalSyntaxToken rBracket) {
+  public ArrayAssignmentPatternTree arrayAssignmentPattern(
+    InternalSyntaxToken lBracket, List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>> rest, InternalSyntaxToken rBracket
+  ) {
     return arrayAssignmentPattern(lBracket, Optional.absent(), Optional.of(rest), rBracket);
   }
 
@@ -1716,6 +1705,10 @@ public class TreeFactory {
       return new ArrayAssignmentPatternElementTreeImpl(key.get().first(), key.get().second(), variable);
     }
     return new ArrayAssignmentPatternElementTreeImpl(variable);
+  }
+
+  public ArrayAssignmentPatternElementTree arrayAssignmentPatternElement2(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> key, Tree variable) {
+    return arrayAssignmentPatternElement(key, variable);
   }
 
   /**

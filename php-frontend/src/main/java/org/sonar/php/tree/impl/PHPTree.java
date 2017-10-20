@@ -79,7 +79,7 @@ public abstract class PHPTree implements Tree {
       } else {
         throw new IllegalStateException("Tree has no non-null children " + getKind());
       }
-    } while (child == null || child.is(Kind.SKIPPED_LIST_ELEMENT));
+    } while (child == null);
     return ((PHPTree) child).getFirstToken();
   }
 
@@ -96,7 +96,7 @@ public abstract class PHPTree implements Tree {
       while (treeIterator.hasNext()) {
         Tree child = treeIterator.next();
 
-        if (child != null && !child.is(Kind.SKIPPED_LIST_ELEMENT)) {
+        if (child != null) {
           appendChild(sb, prevToken, child);
           prevToken = ((PHPTree) child).getLastToken();
         }

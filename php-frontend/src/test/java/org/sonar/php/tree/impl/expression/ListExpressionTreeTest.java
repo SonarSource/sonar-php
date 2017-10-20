@@ -20,10 +20,12 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterables;
+import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,10 +53,10 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
   public void omitted_element() throws Exception {
     ListExpressionTree tree = parse("list (, $a, , ,$b)", Kind.LIST_EXPRESSION);
 
-    assertListExpression(tree, 5, 4);
+    assertListExpression(tree, 2, 4);
     assertThat(tree.toString()).isEqualTo("list (, $a, , ,$b)");
-    assertFirstElement(tree, Kind.SKIPPED_LIST_ELEMENT, "");
-    assertThat(expressionToString(Iterables.getLast(tree.elements()))).isEqualTo("$b");
+    assertThat(tree.elements().get(0)).isNotPresent();
+    assertThat(expressionToString(Iterables.getLast(tree.elements()).get())).isEqualTo("$b");
   }
 
   @Test
@@ -66,8 +68,8 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
   }
 
   private void assertFirstElement(ListExpressionTree tree, Kind kind, String string) {
-    ExpressionTree element = tree.elements().get(0);
-    assertThat(element.is(kind)).isTrue();
+    Tree element = tree.elements().get(0).get();
+    assertThat(((ArrayAssignmentPatternElementTree) element).variable().is(kind)).isTrue();
     assertThat(expressionToString(element)).isEqualTo(string);
   }
 
@@ -76,8 +78,8 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.listToken().text()).isEqualTo("list");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
-    assertThat(tree.elements()).hasSize(nbElement);
-    assertThat(tree.elements().getSeparators()).hasSize(nbSeparators);
+    assertThat(tree.elements().stream().filter(Optional::isPresent)).hasSize(nbElement);
+    assertThat(tree.separators()).hasSize(nbSeparators);
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
   }
 

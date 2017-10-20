@@ -23,12 +23,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
@@ -117,9 +119,9 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
 
   private static List<String> getVariablesFromList(ListExpressionTree listExpressionTree) {
     List<String> names = new ArrayList<>();
-    for (ExpressionTree element : listExpressionTree.elements()) {
-      if (element.is(Kind.VARIABLE_IDENTIFIER)) {
-        names.add(((VariableIdentifierTree) element).variableExpression().text());
+    for (Optional<ArrayAssignmentPatternElementTree> element : listExpressionTree.elements()) {
+      if (element.isPresent() && element.get().variable().is(Kind.VARIABLE_IDENTIFIER)) {
+        names.add(((VariableIdentifierTree) element.get().variable()).variableExpression().text());
       }
     }
     return names;

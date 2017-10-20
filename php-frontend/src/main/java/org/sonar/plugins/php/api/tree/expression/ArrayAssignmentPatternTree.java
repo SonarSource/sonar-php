@@ -21,7 +21,6 @@ package org.sonar.plugins.php.api.tree.expression;
 
 import java.util.List;
 import java.util.Optional;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 // https://wiki.php.net/rfc/short_list_syntax
@@ -30,7 +29,7 @@ public interface ArrayAssignmentPatternTree extends ExpressionTree {
 
   SyntaxToken openBracketToken();
 
-  List<Optional<Tree>> elements();
+  List<Optional<ArrayAssignmentPatternElementTree>> elements();
 
   SyntaxToken closeBracketToken();
 

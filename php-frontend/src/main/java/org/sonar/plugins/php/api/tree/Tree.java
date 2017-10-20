@@ -47,7 +47,6 @@ import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
@@ -916,11 +915,6 @@ public interface Tree {
      * {@link SyntaxToken}
      */
     INLINE_HTML_TOKEN(SyntaxToken.class),
-
-    /**
-     * {@link ExpressionTree}
-     */
-    SKIPPED_LIST_ELEMENT(ExpressionTree.class),
 
     /**
      * {@link SyntaxToken}
