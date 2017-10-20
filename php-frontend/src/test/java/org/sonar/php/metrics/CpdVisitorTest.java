@@ -67,7 +67,7 @@ public class CpdVisitorTest {
   public void test_heredoc_string() throws Exception {
     List<CpdToken> tokens = scan("<?php <<<EOF\nabc$x!abc\nabc\nEOF;");
 
-    assertThat(getImagesList(tokens)).containsExactly("<<<EOF", "$CHARS", "$x", "$CHARS", "EOF", ";");
+    assertThat(getImagesList(tokens)).containsExactly("<<<EOF\n", "$CHARS", "$x", "$CHARS", "\nEOF", ";");
   }
 
   @Test

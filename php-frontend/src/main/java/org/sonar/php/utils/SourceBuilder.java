@@ -65,6 +65,7 @@ public class SourceBuilder extends PHPSubscriptionCheck {
     String text = token.text();
     stringBuilder.append(text);
     column += text.length();
+    line += text.replaceAll("\r\n","\n").replaceAll("[^\r\n]","").length();
   }
 
 }

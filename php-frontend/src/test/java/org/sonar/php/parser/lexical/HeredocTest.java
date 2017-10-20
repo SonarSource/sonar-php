@@ -33,6 +33,17 @@ public class HeredocTest {
         "<html> content </html>\n" +
         "\n" +
         "<p> content </p>\n" +
-        "EOF");
+        "EOF")
+      .matches("<<< \"EOD\"\n"
+        + "  content\n"
+        + "EOD")
+      .matches("<<<EOD\n"
+        + "EOD")
+      .matches("<<<EOD\n"
+        + "\n"
+        + "EOD")
+      .notMatches("<<<EOD \n"
+        + "\n"
+        + "EOD");
   }
 }
