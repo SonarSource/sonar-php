@@ -36,6 +36,8 @@ public class LiteralTreeTest extends PHPTreeModelTest {
   @Test
   public void nowdoc_literal() throws Exception {
     assertLiteral("<<<'EOD'\n content \nEOD", Kind.NOWDOC_LITERAL);
+    assertLiteral("<<< 'EOD'\n content \nEOD", Kind.NOWDOC_LITERAL);
+    assertLiteral("<<<'EOD'\nEOD", Kind.NOWDOC_LITERAL);
   }
 
   @Test
