@@ -1555,8 +1555,14 @@ public class TreeFactory {
     return new ConditionalExpressionTreeImpl(queryToken, trueExpression.orNull(), colonToken, falseExpression);
   }
 
-  public ExpressionTree completeConditionalExpr(ExpressionTree expression, Optional<ConditionalExpressionTreeImpl> partial) {
-    return partial.isPresent() ? partial.get().complete(expression) : expression;
+  public ExpressionTree completeConditionalExpr(ExpressionTree expression, Optional<List<ConditionalExpressionTreeImpl>> partial) {
+    ExpressionTree result = expression;
+    if (partial.isPresent()) {
+      for (ConditionalExpressionTreeImpl conditionalExpressionTree : partial.get()) {
+        result = conditionalExpressionTree.complete(result);
+      }
+    }
+    return result;
   }
 
   public BuiltInTypeTree builtInType(InternalSyntaxToken token) {

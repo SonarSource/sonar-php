@@ -40,8 +40,8 @@ switch($i) {
 $condition ? foo1() : foo1();   // NOK {{This conditional operation returns the same value whether the condition is "true" or "false".}}
 
 
-$condition ? $nestedCondition ? foo1() : foo2() : $nestedCondition ? foo1() : foo2(); // NOK
-$condition ? $nestedCondition ? foo1() : foo1() : foo2(); // NOK
+$condition ? ($nestedCondition ? foo1() : foo2()) : ($nestedCondition ? foo1() : foo2()); // NOK
+$condition ? ($nestedCondition ? foo1() : foo1()) : foo2(); // NOK
 
 false ? false ? foo(3) : foo(4) : foo(5);   // OK
 false ? false ? foo(1) : foo(1) : foo(5);   // NOK
