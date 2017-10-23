@@ -1071,54 +1071,6 @@ public class TreeFactory {
     return rightAssociativeBinaryExpression(exp1, operatorsAndOperands);
   }
 
-  public ExpressionTree concatenationExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree multiplicativeExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree additiveExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree shiftExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree relationalExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree equalityExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree bitwiseAndExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree bitwiseXorExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree bitwiseOrExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree logicalAndExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree logicalXorExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
-  public ExpressionTree logicalOrExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
-    return binaryExpression(exp1, operatorsAndOperands);
-  }
-
   public ExpressionTree nullCoalescingExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
     return rightAssociativeBinaryExpression(exp1, operatorsAndOperands);
   }
@@ -1138,7 +1090,7 @@ public class TreeFactory {
     return new BinaryExpressionTreeImpl(binaryKind(operator), leftOperand, operator, rightOperand);
   }
 
-  private static ExpressionTree binaryExpression(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
+  public ExpressionTree binaryExpression(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
     if (!operatorsAndOperands.isPresent()) {
       return exp1;
     }

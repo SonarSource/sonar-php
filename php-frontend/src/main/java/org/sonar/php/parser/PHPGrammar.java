@@ -1009,7 +1009,7 @@ public class PHPGrammar {
 
   public ExpressionTree CONCATENATION_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.CONCATENATION).is(
-      f.concatenationExpr(
+      f.binaryExpression(
         UNARY_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.token(DOT),
@@ -1027,7 +1027,7 @@ public class PHPGrammar {
 
   public ExpressionTree MULTIPLICATIVE_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MULTIPLICATIVE_EXPR).is(
-      f.multiplicativeExpr(
+      f.binaryExpression(
         POWER_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(STAR), b.token(DIV), b.token(MOD)),
@@ -1036,7 +1036,7 @@ public class PHPGrammar {
 
   public ExpressionTree ADDITIVE_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.ADDITIVE_EXPR).is(
-      f.additiveExpr(
+      f.binaryExpression(
         MULTIPLICATIVE_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(PLUS), b.token(MINUS)),
@@ -1045,7 +1045,7 @@ public class PHPGrammar {
 
   public ExpressionTree SHIFT_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.SHIFT_EXPR).is(
-      f.shiftExpr(
+      f.binaryExpression(
         ADDITIVE_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(SL), b.token(SR)),
@@ -1054,7 +1054,7 @@ public class PHPGrammar {
 
   public ExpressionTree RELATIONAL_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.RELATIONAL_EXPR).is(
-      f.relationalExpr(
+      f.binaryExpression(
         SHIFT_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(LE), b.token(GE), b.token(LT), b.token(GT)),
@@ -1063,7 +1063,7 @@ public class PHPGrammar {
 
   public ExpressionTree EQUALITY_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EQUALITY_EXPR).is(
-      f.equalityExpr(
+      f.binaryExpression(
         RELATIONAL_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(NOTEQUAL2), b.token(NOTEQUAL), b.token(EQUAL2), b.token(EQUAL), b.token(NOTEQUALBIS), b.token(SPACESHIP)),
@@ -1072,7 +1072,7 @@ public class PHPGrammar {
 
   public ExpressionTree BITWISE_AND_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.BITWISE_AND).is(
-      f.bitwiseAndExpr(
+      f.binaryExpression(
         EQUALITY_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.token(PHPPunctuator.AMPERSAND),
@@ -1081,7 +1081,7 @@ public class PHPGrammar {
 
   public ExpressionTree BITWISE_XOR_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.BITWISE_XOR).is(
-      f.bitwiseXorExpr(
+      f.binaryExpression(
         BITWISE_AND_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.token(PHPPunctuator.XOR),
@@ -1090,7 +1090,7 @@ public class PHPGrammar {
 
   public ExpressionTree BITWISE_OR_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.BITWISE_OR).is(
-      f.bitwiseOrExpr(
+      f.binaryExpression(
         BITWISE_XOR_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.token(PHPPunctuator.OR),
@@ -1099,7 +1099,7 @@ public class PHPGrammar {
 
   public ExpressionTree CONDITIONAL_AND_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_AND).is(
-      f.logicalAndExpr(
+      f.binaryExpression(
         BITWISE_OR_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(PHPPunctuator.ANDAND), b.token(PHPKeyword.AND)),
@@ -1108,7 +1108,7 @@ public class PHPGrammar {
 
   public ExpressionTree CONDITIONAL_XOR_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.ALTERNATIVE_CONDITIONAL_XOR).is(
-      f.logicalXorExpr(
+      f.binaryExpression(
         CONDITIONAL_AND_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.token(PHPKeyword.XOR),
@@ -1117,7 +1117,7 @@ public class PHPGrammar {
 
   public ExpressionTree CONDITIONAL_OR_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_OR).is(
-      f.logicalOrExpr(
+      f.binaryExpression(
         CONDITIONAL_XOR_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(PHPPunctuator.OROR), b.token(PHPKeyword.OR)),
