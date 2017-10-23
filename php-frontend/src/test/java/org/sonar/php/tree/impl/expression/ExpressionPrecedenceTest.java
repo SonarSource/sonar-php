@@ -145,10 +145,8 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     assertPrecedence("$x &&  $y ? $a : $b", "($x && $y) ? $a : $b");
     // TODO wrong precedence, should be: ($x and ($y ? $a : $b)), see SONARPHP-730
     assertPrecedence("$x and $y ? $a : $b", "($x and $y) ? $a : $b");
-    // TODO wrong precedence, should be: - (3 ** 2), see SONARPHP-731
-    assertPrecedence("- 3 ** 2", "(- 3) ** 2");
-    // TODO wrong precedence, should be: ( int ) ($a ** 2), see SONARPHP-732
-    assertPrecedence("(int) $a ** 2", "(( int ) $a) ** 2");
+    assertPrecedence("- 3 ** 2", "- (3 ** 2)");
+    assertPrecedence("(int) $a ** 2", "( int ) ($a ** 2)");
   }
 
   private void assertPrecedence(String code, String extected) throws Exception {

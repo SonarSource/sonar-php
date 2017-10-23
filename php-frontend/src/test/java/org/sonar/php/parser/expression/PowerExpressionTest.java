@@ -30,7 +30,9 @@ public class PowerExpressionTest {
   public void test() {
     assertThat(PHPLexicalGrammar.POWER_EXPR)
       .matches("$a")
-      .matches("$a ** $a");
+      .matches("$a ** $a")
+      .matches("$a ** -2")
+      .matches("$a ** (int) $a");
   }
 
 }

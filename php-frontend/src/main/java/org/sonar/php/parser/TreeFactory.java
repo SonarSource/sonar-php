@@ -22,6 +22,7 @@ package org.sonar.php.parser;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -1059,12 +1060,18 @@ public class TreeFactory {
     return new CastExpressionTreeImpl(leftParenthesis, type, rightParenthesis, expression);
   }
 
-  public ExpressionTree prefixExpr(InternalSyntaxToken operator, ExpressionTree expression) {
-    Kind kind = UNARY_EXPRESSION_KINDS_BY_OPERATOR.get(operator.text());
-    if (kind == null) {
-      throw new IllegalArgumentException("Mapping not found for unary operator " + operator.text());
+  public ExpressionTree prefixExpr(Optional<List<InternalSyntaxToken>> operators, ExpressionTree expression) {
+    ExpressionTree result = expression;
+    if (operators.isPresent()) {
+      for (InternalSyntaxToken operator : Lists.reverse(operators.get())) {
+        Kind kind = UNARY_EXPRESSION_KINDS_BY_OPERATOR.get(operator.text());
+        if (kind == null) {
+          throw new IllegalArgumentException("Mapping not found for unary operator " + operator.text());
+        }
+        result = new PrefixExpressionTreeImpl(kind, operator, result);
+      }
     }
-    return new PrefixExpressionTreeImpl(kind, operator, expression);
+    return result;
   }
 
   public ExpressionTree powerExpr(ExpressionTree exp1, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorsAndOperands) {
