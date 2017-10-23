@@ -991,8 +991,8 @@ public class PHPGrammar {
 
   public ExpressionTree UNARY_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.UNARY_EXPR).is(
-      b.firstOf(
         f.prefixExpr(
+          b.zeroOrMore(
           b.firstOf(
             b.token(PHPPunctuator.INC),
             b.token(PHPPunctuator.DEC),
@@ -1000,17 +1000,17 @@ public class PHPGrammar {
             b.token(PHPPunctuator.MINUS),
             b.token(PHPPunctuator.TILDA),
             b.token(PHPPunctuator.BANG),
-            b.token(PHPPunctuator.AT)),
-          UNARY_EXPR()),
-        CAST_EXPR(),
-        ASSIGNMENT_EXPRESSION(),
-        POSTFIX_EXPRESSION()));
+            b.token(PHPPunctuator.AT))),
+          POWER_EXPR()));
   }
 
   public ExpressionTree POWER_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POWER_EXPR).is(
       f.powerExpr(
-        UNARY_EXPR(),
+        b.firstOf(
+          CAST_EXPR(),
+          ASSIGNMENT_EXPRESSION(),
+          POSTFIX_EXPRESSION()),
         b.zeroOrMore(f.newTuple(
           b.token(STAR_STAR),
           UNARY_EXPR()))));
@@ -1019,10 +1019,10 @@ public class PHPGrammar {
   public ExpressionTree MULTIPLICATIVE_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MULTIPLICATIVE_EXPR).is(
       f.binaryExpression(
-        POWER_EXPR(),
+        UNARY_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(STAR), b.token(DIV), b.token(MOD)),
-          POWER_EXPR()))));
+          UNARY_EXPR()))));
   }
 
   public ExpressionTree ADDITIVE_EXPR() {
