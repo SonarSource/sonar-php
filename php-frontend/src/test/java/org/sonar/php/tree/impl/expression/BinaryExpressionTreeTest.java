@@ -33,7 +33,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
   @Test
   public void conditional_or() throws Exception {
     testBinary(Kind.CONDITIONAL_OR, "||");
-    testBinary(Kind.ALTERNATIVE_CONDITIONAL_OR, "or", Kind.CONDITIONAL_OR);
+    testBinary(Kind.ALTERNATIVE_CONDITIONAL_OR, "or");
   }
 
   @Test
@@ -44,7 +44,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
   @Test
   public void conditional_and() throws Exception {
     testBinary(Kind.CONDITIONAL_AND, "&&");
-    testBinary(Kind.ALTERNATIVE_CONDITIONAL_AND, "and", Kind.CONDITIONAL_AND);
+    testBinary(Kind.ALTERNATIVE_CONDITIONAL_AND, "and");
   }
 
   @Test

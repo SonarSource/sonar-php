@@ -143,8 +143,7 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     // TODO wrong associativity, should be $a = ((true ? 0 : true) ? 1 : 2), see SONARPHP-729
     assertPrecedence("$a = true ? 0 : true ? 1 : 2", "$a = (true ? 0 : (true ? 1 : 2))");
     assertPrecedence("$x &&  $y ? $a : $b", "($x && $y) ? $a : $b");
-    // TODO wrong precedence, should be: ($x and ($y ? $a : $b)), see SONARPHP-730
-    assertPrecedence("$x and $y ? $a : $b", "($x and $y) ? $a : $b");
+    assertPrecedence("$x and $y ? $a : $b", "$x and ($y ? $a : $b)");
     assertPrecedence("- 3 ** 2", "- (3 ** 2)");
     assertPrecedence("(int) $a ** 2", "( int ) ($a ** 2)");
   }
