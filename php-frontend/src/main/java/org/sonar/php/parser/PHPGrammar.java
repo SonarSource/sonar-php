@@ -1093,26 +1093,17 @@ public class PHPGrammar {
       f.binaryExpression(
         BITWISE_OR_EXPR(),
         b.zeroOrMore(f.newTuple(
-          b.firstOf(b.token(PHPPunctuator.ANDAND), b.token(PHPKeyword.AND)),
+          b.token(PHPPunctuator.ANDAND),
           BITWISE_OR_EXPR()))));
-  }
-
-  public ExpressionTree CONDITIONAL_XOR_EXPR() {
-    return b.<ExpressionTree>nonterminal(Kind.ALTERNATIVE_CONDITIONAL_XOR).is(
-      f.binaryExpression(
-        CONDITIONAL_AND_EXPR(),
-        b.zeroOrMore(f.newTuple(
-          b.token(PHPKeyword.XOR),
-          CONDITIONAL_AND_EXPR()))));
   }
 
   public ExpressionTree CONDITIONAL_OR_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_OR).is(
       f.binaryExpression(
-        CONDITIONAL_XOR_EXPR(),
+        CONDITIONAL_AND_EXPR(),
         b.zeroOrMore(f.newTuple(
-          b.firstOf(b.token(PHPPunctuator.OROR), b.token(PHPKeyword.OR)),
-          CONDITIONAL_XOR_EXPR()))));
+          b.token(PHPPunctuator.OROR),
+          CONDITIONAL_AND_EXPR()))));
   }
 
   public ExpressionTree NULL_COALESCING_EXPRESSION() {
@@ -1133,9 +1124,36 @@ public class PHPGrammar {
         )));
   }
 
+  public ExpressionTree ALTERNATIVE_CONDITIONAL_AND_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.ALTERNATIVE_CONDITIONAL_AND).is(
+      f.binaryExpression(
+        CONDITIONAL_EXPR(),
+        b.zeroOrMore(f.newTuple(
+          b.firstOf(b.token(PHPKeyword.AND)),
+          CONDITIONAL_EXPR()))));
+  }
+
+  public ExpressionTree CONDITIONAL_XOR_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.ALTERNATIVE_CONDITIONAL_XOR).is(
+      f.binaryExpression(
+        ALTERNATIVE_CONDITIONAL_AND_EXPR(),
+        b.zeroOrMore(f.newTuple(
+          b.token(PHPKeyword.XOR),
+          ALTERNATIVE_CONDITIONAL_AND_EXPR()))));
+  }
+
+  public ExpressionTree ALTERNATIVE_CONDITIONAL_OR_EXPR() {
+    return b.<ExpressionTree>nonterminal(Kind.ALTERNATIVE_CONDITIONAL_OR).is(
+      f.binaryExpression(
+        CONDITIONAL_XOR_EXPR(),
+        b.zeroOrMore(f.newTuple(
+          b.firstOf(b.token(PHPKeyword.OR)),
+          CONDITIONAL_XOR_EXPR()))));
+  }
+
   public ExpressionTree EXPRESSION() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.EXPRESSION).is(
-      CONDITIONAL_EXPR());
+      ALTERNATIVE_CONDITIONAL_OR_EXPR());
   }
 
   public ExpressionTree COMMON_SCALAR() {
