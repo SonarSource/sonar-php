@@ -1007,22 +1007,13 @@ public class PHPGrammar {
         POSTFIX_EXPRESSION()));
   }
 
-  public ExpressionTree CONCATENATION_EXPR() {
-    return b.<ExpressionTree>nonterminal(Kind.CONCATENATION).is(
-      f.binaryExpression(
-        UNARY_EXPR(),
-        b.zeroOrMore(f.newTuple(
-          b.token(DOT),
-          UNARY_EXPR()))));
-  }
-
   public ExpressionTree POWER_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POWER_EXPR).is(
       f.powerExpr(
-        CONCATENATION_EXPR(),
+        UNARY_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.token(STAR_STAR),
-          CONCATENATION_EXPR()))));
+          UNARY_EXPR()))));
   }
 
   public ExpressionTree MULTIPLICATIVE_EXPR() {
@@ -1039,7 +1030,7 @@ public class PHPGrammar {
       f.binaryExpression(
         MULTIPLICATIVE_EXPR(),
         b.zeroOrMore(f.newTuple(
-          b.firstOf(b.token(PLUS), b.token(MINUS)),
+          b.firstOf(b.token(PLUS), b.token(MINUS), b.token(DOT)),
           MULTIPLICATIVE_EXPR()))));
   }
 

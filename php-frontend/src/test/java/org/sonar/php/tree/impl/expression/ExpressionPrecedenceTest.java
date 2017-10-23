@@ -52,8 +52,7 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     assertPrecedence("2 + 3 + 4", "(2 + 3) + 4");
     assertPrecedence("2 + 3 - 4", "(2 + 3) - 4");
     assertPrecedence("2 - 3 + 4", "(2 - 3) + 4");
-    // TODO wrong precedence, should be ((2 - 3) . 4), see SONARPHP-728
-    assertPrecedence("2 - 3 . 4", "2 - (3 . 4)");
+    assertPrecedence("2 - 3 . 4", "(2 - 3) . 4");
     assertPrecedence("2 . 3 - 4", "(2 . 3) - 4");
     assertPrecedence("2 + 3 << 4", "(2 + 3) << 4");
     assertPrecedence("2 << 3 + 4", "2 << (3 + 4)");

@@ -106,7 +106,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
   public void concatenation() throws Exception {
-    testBinary(Kind.CONCATENATION, ".");
+    testBinary(Kind.CONCATENATION, ".", PHPLexicalGrammar.ADDITIVE_EXPR);
   }
 
   @Test
