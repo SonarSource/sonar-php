@@ -1119,8 +1119,8 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(Kind.CONDITIONAL_EXPRESSION).is(
       f.completeConditionalExpr(
         NULL_COALESCING_EXPRESSION(),
-        b.optional(
-          f.newConditionalExpr(b.token(QUERY), b.optional(CONDITIONAL_EXPR()), b.token(COLON), CONDITIONAL_EXPR())
+        b.zeroOrMore(
+          f.newConditionalExpr(b.token(QUERY), b.optional(CONDITIONAL_EXPR()), b.token(COLON), NULL_COALESCING_EXPRESSION())
         )));
   }
 
