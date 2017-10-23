@@ -270,6 +270,7 @@
           <configuration>
             <sonarLintSupported>true</sonarLintSupported>
             <sonarQubeMinVersion>5.6</sonarQubeMinVersion> <!-- allow to depend on API 6.2 but run on LTS -->
+            <skipDependenciesPackaging>true</skipDependenciesPackaging>
           </configuration>
         </plugin>
       </plugins>
