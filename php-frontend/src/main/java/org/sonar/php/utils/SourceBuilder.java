@@ -20,12 +20,12 @@
 package org.sonar.php.utils;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import java.util.List;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
-
-import java.util.List;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
 public class SourceBuilder extends PHPSubscriptionCheck {
 
@@ -47,9 +47,29 @@ public class SourceBuilder extends PHPSubscriptionCheck {
   @Override
   public void visitNode(Tree tree) {
     SyntaxToken token = (SyntaxToken) tree;
-    int linesToInsert = token.line() - line;
+    for (SyntaxTrivia trivia : token.trivias()) {
+      appendToken(trivia);
+    }
+    appendToken(token);
+  }
+
+  private void appendToken(SyntaxToken token) {
+    insertMissingSpaceBefore(token.line(), token.column());
+    String text = token.text();
+    stringBuilder.append(text);
+    String[] lines = text.split("\r\n|\n|\r", -1);
+    if (lines.length > 1) {
+      line += lines.length - 1;
+      column = lines[lines.length - 1].length();
+    } else {
+      column += text.length();
+    }
+  }
+
+  private void insertMissingSpaceBefore(int tokenLine, int tokenColumn) {
+    int linesToInsert = tokenLine - line;
     if (linesToInsert < 0) {
-      throw new IllegalStateException("Illegal token line for " + token);
+      throw new IllegalStateException("Illegal token line for " + tokenLine);
     } else if (linesToInsert > 0) {
       for (int i = 0; i < linesToInsert; i++) {
         stringBuilder.append("\n");
@@ -57,14 +77,11 @@ public class SourceBuilder extends PHPSubscriptionCheck {
       }
       column = 0;
     }
-    int spacesToInsert = token.column() - column;
+    int spacesToInsert = tokenColumn - column;
     for (int i = 0; i < spacesToInsert; i++) {
       stringBuilder.append(' ');
       column++;
     }
-    String text = token.text();
-    stringBuilder.append(text);
-    column += text.length();
   }
 
 }

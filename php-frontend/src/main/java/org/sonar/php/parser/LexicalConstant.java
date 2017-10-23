@@ -100,16 +100,11 @@ public class LexicalConstant {
   private static final String EXECUTION_OPERATOR = "`[^`]*+`";
 
   /**
-   * Heredoc
+   * Heredoc / Nowdoc
    */
-  public static final String HEREDOC = "(?s)"
-    + "<<<[" + WHITESPACE + "]*(\"?([^\r\n'\"]++)\"?)(?:\\r\\n?+|\\n)(.*?)(?:\\r\\n?+|\\n)\\2";
-
-  /**
-   * Nowdoc
-   */
-  public static final String NOWDOC = "(?s)"
-    + "<<<[" + WHITESPACE + "]*'([^\r\n'\"]++)'.*?(?:\\r\\n?+|\\n)\\1";
+  public static final String NEW_LINE = "(?:\r\n?+|\n)";
+  public static final String HEREDOC = "(?s)(<<<[ \t\u000B\f]*\"?([^\r\n'\"]++)\"?" + NEW_LINE + ")(?:(.*?)" + NEW_LINE + ")?\\2";
+  public static final String NOWDOC = "(?s)<<<[ \t\u000B\f]*'([^\r\n'\"]++)'" + NEW_LINE + "(?:.*?" + NEW_LINE + ")?\\1";
 
   /**
    * String
