@@ -52,10 +52,10 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
     String tokenText = tmpHeredocToken.text();
     Matcher matcher = pattern.matcher(tokenText);
     Preconditions.checkArgument(matcher.matches());
-    int openingEnd = matcher.end(1);
+    int openingTagEndIndex = matcher.end(1);
     String content = matcher.group(3);
-    int contentStart = matcher.start(3);
-    int contentEnd = contentStart == -1 ? openingEnd : matcher.end(3);
+    int contentStartIndex = matcher.start(3);
+    int contentEndIndex = contentStartIndex == -1 ? openingTagEndIndex : matcher.end(3);
     if (content != null && content.length() > 0) {
       this.elements = (List<ExpressionTree>) PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, tmpHeredocToken.line()).parse(content);
     } else {
@@ -65,7 +65,7 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
     this.openingToken = new InternalSyntaxToken(
       tmpHeredocToken.line(),
       tmpHeredocToken.column(),
-      tokenText.substring(0, openingEnd),
+      tokenText.substring(0, openingTagEndIndex),
       tmpHeredocToken.trivias(),
       startIndex,
       false);
@@ -74,7 +74,7 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
     if (!this.elements.isEmpty()) {
       tokenBeforeClosingToken = ((PHPTree) this.elements.get(this.elements.size() - 1)).getLastToken();
     }
-    String closingTag = tokenText.substring(contentEnd);
+    String closingTag = tokenText.substring(contentEndIndex);
     this.closingToken = new InternalSyntaxToken(
       tokenBeforeClosingToken.endLine(),
       tokenBeforeClosingToken.endColumn(),
