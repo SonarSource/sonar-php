@@ -1707,10 +1707,6 @@ public class TreeFactory {
     return new ArrayAssignmentPatternElementTreeImpl(variable);
   }
 
-  public ArrayAssignmentPatternElementTree arrayAssignmentPatternElement2(Optional<Tuple<ExpressionTree, InternalSyntaxToken>> key, Tree variable) {
-    return arrayAssignmentPatternElement(key, variable);
-  }
-
   /**
    * [ END ] Expression
    */

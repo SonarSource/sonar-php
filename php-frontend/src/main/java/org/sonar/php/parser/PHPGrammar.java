@@ -1311,7 +1311,7 @@ public class PHPGrammar {
 
   public ArrayAssignmentPatternElementTree LIST_ELEMENT() {
     return b.<ArrayAssignmentPatternElementTree>nonterminal().is(
-      f.arrayAssignmentPatternElement2(
+      f.arrayAssignmentPatternElement(
         b.optional(
           f.newTuple(
             EXPRESSION(),
