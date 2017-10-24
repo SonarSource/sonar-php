@@ -24,18 +24,17 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import org.sonar.php.parser.TreeFactory.Tuple;
-import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-public abstract class AbstractArrayAssignmentPatternTreeImpl extends PHPTree {
+public class ArrayAssignmentPatternElements {
 
   private final List<Tree> elementsAndSeparators = new ArrayList<>();
   private final List<Optional<ArrayAssignmentPatternElementTree>> elements = new ArrayList<>();
   private final List<SyntaxToken> separators = new ArrayList<>();
 
-  public AbstractArrayAssignmentPatternTreeImpl(
+  public ArrayAssignmentPatternElements(
     @Nullable ArrayAssignmentPatternElementTree firstElement,
     List<Tuple<SyntaxToken,Optional<ArrayAssignmentPatternElementTree>>> rest
   ) {

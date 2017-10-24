@@ -79,7 +79,7 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
     assertThat(tree.listToken().text()).isEqualTo("list");
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.elements().stream().filter(Optional::isPresent)).hasSize(nbElement);
-    assertThat(tree.separators()).hasSize(nbSeparators);
+    assertThat(((ListExpressionTreeImpl) tree).separators()).hasSize(nbSeparators);
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
   }
 

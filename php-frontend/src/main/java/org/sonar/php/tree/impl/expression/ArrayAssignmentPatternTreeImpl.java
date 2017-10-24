@@ -23,34 +23,38 @@ import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Nullable;
-import org.sonar.php.parser.TreeFactory.Tuple;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class ArrayAssignmentPatternTreeImpl extends AbstractArrayAssignmentPatternTreeImpl implements ArrayAssignmentPatternTree {
+public class ArrayAssignmentPatternTreeImpl extends PHPTree implements ArrayAssignmentPatternTree {
 
   private static final Kind KIND = Kind.ARRAY_ASSIGNMENT_PATTERN;
   private final SyntaxToken openBracket;
+  private final ArrayAssignmentPatternElements elements;
   private final SyntaxToken closeBracket;
 
   public ArrayAssignmentPatternTreeImpl(
     SyntaxToken openBracket,
-    @Nullable ArrayAssignmentPatternElementTree firstElement,
-    List<Tuple<SyntaxToken,Optional<ArrayAssignmentPatternElementTree>>> rest,
+    ArrayAssignmentPatternElements elements,
     SyntaxToken closeBracket
   ) {
-    super(firstElement, rest);
     this.openBracket = openBracket;
+    this.elements = elements;
     this.closeBracket = closeBracket;
   }
 
   @Override
   public SyntaxToken openBracketToken() {
     return openBracket;
+  }
+
+  @Override
+  public List<Optional<ArrayAssignmentPatternElementTree>> elements() {
+    return elements.elements();
   }
 
   @Override
@@ -62,7 +66,7 @@ public class ArrayAssignmentPatternTreeImpl extends AbstractArrayAssignmentPatte
   public Iterator<Tree> childrenIterator() {
     return Iterators.concat(
       Iterators.singletonIterator(openBracket),
-      elementsAndSeparators().iterator(),
+      elements.elementsAndSeparators().iterator(),
       Iterators.singletonIterator(closeBracket));
   }
 

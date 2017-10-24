@@ -55,6 +55,7 @@ import org.sonar.php.tree.impl.declaration.UseTraitDeclarationTreeImpl;
 import org.sonar.php.tree.impl.expression.AnonymousClassTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAccessTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternElementTreeImpl;
+import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternElements;
 import org.sonar.php.tree.impl.expression.ArrayAssignmentPatternTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerBracketTreeImpl;
 import org.sonar.php.tree.impl.expression.ArrayInitializerFunctionTreeImpl;
@@ -1275,8 +1276,7 @@ public class TreeFactory {
     return new ListExpressionTreeImpl(
       listToken,
       openParenthesis,
-      firstElement.orNull(),
-      arrayAssignmentPatternRestElements(rest),
+      arrayAssignmentPatternElements(firstElement, rest),
       closeParenthesis);
   }
 
@@ -1666,10 +1666,11 @@ public class TreeFactory {
     InternalSyntaxToken rBracket
   ) {
 
-    return new ArrayAssignmentPatternTreeImpl(lBracket, firstElement.orNull(), arrayAssignmentPatternRestElements(rest), rBracket);
+    return new ArrayAssignmentPatternTreeImpl(lBracket, arrayAssignmentPatternElements(firstElement, rest), rBracket);
   }
 
-  private List<Tuple<SyntaxToken, java.util.Optional<ArrayAssignmentPatternElementTree>>> arrayAssignmentPatternRestElements(
+  private ArrayAssignmentPatternElements arrayAssignmentPatternElements(
+    Optional<ArrayAssignmentPatternElementTree> firstElement,
     Optional<List<Tuple<InternalSyntaxToken, Optional<ArrayAssignmentPatternElementTree>>>> rest
   ) {
     List<Tuple<SyntaxToken, java.util.Optional<ArrayAssignmentPatternElementTree>>> otherElements = Collections.emptyList();
@@ -1678,7 +1679,7 @@ public class TreeFactory {
         .map(t -> newTuple((SyntaxToken) t.first(), optional(t.second())))
         .collect(Collectors.toList());
     }
-    return otherElements;
+    return new ArrayAssignmentPatternElements(firstElement.orNull(), otherElements);
   }
 
   private static <T> java.util.Optional<T> optional(Optional<T> sslrOptional) {

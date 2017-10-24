@@ -23,8 +23,7 @@ import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Nullable;
-import org.sonar.php.parser.TreeFactory.Tuple;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
@@ -32,20 +31,21 @@ import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-public class ListExpressionTreeImpl extends AbstractArrayAssignmentPatternTreeImpl implements ListExpressionTree {
+public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTree {
 
   private static final Kind KIND = Kind.LIST_EXPRESSION;
   private final InternalSyntaxToken listToken;
   private final InternalSyntaxToken openParenthesis;
+  private final ArrayAssignmentPatternElements elements;
   private final InternalSyntaxToken closeParenthesis;
 
   public ListExpressionTreeImpl(
     InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
-    @Nullable ArrayAssignmentPatternElementTree firstElement, List<Tuple<SyntaxToken,Optional<ArrayAssignmentPatternElementTree>>> rest, InternalSyntaxToken closeParenthesis
+    ArrayAssignmentPatternElements elements, InternalSyntaxToken closeParenthesis
   ) {
-    super(firstElement, rest);
     this.listToken = listToken;
     this.openParenthesis = openParenthesis;
+    this.elements = elements;
     this.closeParenthesis = closeParenthesis;
   }
 
@@ -65,6 +65,20 @@ public class ListExpressionTreeImpl extends AbstractArrayAssignmentPatternTreeIm
   }
 
   @Override
+  public List<Optional<ArrayAssignmentPatternElementTree>> elements() {
+    return elements.elements();
+  }
+
+  @Override
+  public List<Tree> elementsAndSeparators() {
+    return elements.elementsAndSeparators();
+  }
+
+  public List<SyntaxToken> separators() {
+    return elements.separators();
+  }
+
+  @Override
   public SyntaxToken closeParenthesisToken() {
     return closeParenthesis;
   }
@@ -74,7 +88,7 @@ public class ListExpressionTreeImpl extends AbstractArrayAssignmentPatternTreeIm
     return Iterators.concat(
       Iterators.singletonIterator(listToken),
       Iterators.singletonIterator(openParenthesis),
-      elementsAndSeparators().iterator(),
+      elements.elementsAndSeparators().iterator(),
       Iterators.singletonIterator(closeParenthesis));
   }
 

@@ -22,6 +22,7 @@ package org.sonar.plugins.php.api.tree.expression;
 import com.google.common.annotations.Beta;
 import java.util.List;
 import java.util.Optional;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -39,7 +40,7 @@ public interface ListExpressionTree extends ExpressionTree {
 
   List<Optional<ArrayAssignmentPatternElementTree>> elements();
 
-  List<SyntaxToken> separators();
+  List<Tree> elementsAndSeparators();
 
   SyntaxToken closeParenthesisToken();
 
