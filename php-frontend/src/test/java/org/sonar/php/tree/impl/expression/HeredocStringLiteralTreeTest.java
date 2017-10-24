@@ -32,24 +32,17 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
   @Test
   public void test() throws Exception {
     String code = "<<<ABC\nHello $name!{$foo->bar}!\nABC";
-    HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
-
-    assertThat(expressionToString(tree)).isEqualTo(code);
-    assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
+    HeredocStringLiteralTree tree = parseHeredoc(code);
     assertThat(tree.openingToken().text()).isEqualTo("<<<ABC\n");
     assertThat(tree.closingToken().text()).isEqualTo("\nABC");
     assertThat(tree.expressions()).hasSize(2);
     assertThat(tree.strings()).hasSize(3);
-
   }
 
   @Test
   public void label_with_quotes() throws Exception {
     String code = "<<<\"ABC\"\nHello $name!{$foo->bar}!\nABC";
-    HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
-
-    assertThat(expressionToString(tree)).isEqualTo(code);
-    assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
+    HeredocStringLiteralTree tree = parseHeredoc(code);
     assertThat(tree.openingToken().text()).isEqualTo("<<<\"ABC\"\n");
     assertThat(tree.closingToken().text()).isEqualTo("\nABC");
     assertThat(tree.expressions()).hasSize(2);
@@ -59,10 +52,7 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
   @Test
   public void with_double_quotes_inside() throws Exception {
     String code = "<<<ABC\nHello \"John\"!\nABC";
-    HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
-
-    assertThat(expressionToString(tree)).isEqualTo(code);
-    assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
+    HeredocStringLiteralTree tree = parseHeredoc(code);
     assertThat(tree.expressions()).hasSize(0);
     assertThat(tree.strings()).hasSize(1);
     assertThat(tree.strings().get(0).value()).isEqualTo("Hello \"John\"!");
@@ -73,10 +63,7 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     String code = "<<<EOF\n" +
       "/**/{$a}\n" +
       "EOF";
-    HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
-
-    assertThat(expressionToString(tree)).isEqualTo(code);
-    assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
+    HeredocStringLiteralTree tree = parseHeredoc(code);
     assertThat(tree.strings().get(0).value()).isEqualTo("/**/");
   }
 
@@ -84,10 +71,7 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
   public void no_content_token_location() throws Exception {
     String code = "<<<EOD\n"
       + "EOD";
-    HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
-
-    assertThat(expressionToString(tree)).isEqualTo(code);
-    assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
+    HeredocStringLiteralTree tree = parseHeredoc(code);
 
     SyntaxToken openingToken = tree.openingToken();
     assertThat(openingToken.text()).isEqualTo("<<<EOD\n");
@@ -111,10 +95,7 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     String code = "/**/<<<EOD\n"
       + "\n"
       + "EOD";
-    HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
-
-    assertThat(expressionToString(tree)).isEqualTo(code);
-    assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
+    HeredocStringLiteralTree tree = parseHeredoc(code);
 
     SyntaxToken openingToken = tree.openingToken();
     assertThat(openingToken.text()).isEqualTo("<<<EOD\n");
@@ -139,10 +120,7 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
       + "  ABC\n"
       + "  DEF\n"
       + "EOD";
-    HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
-
-    assertThat(expressionToString(tree)).isEqualTo(code);
-    assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
+    HeredocStringLiteralTree tree = parseHeredoc(code);
 
     SyntaxToken openingToken = tree.openingToken();
     assertThat(openingToken.text()).isEqualTo("<<<EOD\n");
@@ -159,6 +137,12 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     assertThat(closingToken.endLine()).isEqualTo(4);
     assertThat(closingToken.column()).isEqualTo(5);
     assertThat(closingToken.endColumn()).isEqualTo(3);
+  }
+
+  private HeredocStringLiteralTree parseHeredoc(String code) throws Exception {
+    HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
+    assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
+    return tree;
   }
 
 }
