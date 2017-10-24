@@ -30,8 +30,8 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
-@Rule(key = PHP5DeprecatedFunctionUsageCheck.KEY)
-public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
+@Rule(key = PHPDeprecatedFunctionUsageCheck.KEY)
+public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
   public static final String KEY = "S2001";
   private static final String MESSAGE_SET_LOCAL_ARG = "Use the \"%s\" constant instead of a string literal.";
@@ -59,9 +59,15 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     .put("sql_regcase", "")
     .put("mysql_db_query", "mysql_select_db() and mysql_query()")
     .put("mysql_escape_string", "mysql_real_escape_string")
+    .put("__autoload", "spl_autoload_register")
+    .put("create_function", "")
+    .put("gmp_random", "gmp_random_bits")
+    .put("each", "")
     .build();
 
   private static final String SET_LOCALE_FUNCTION = "setlocale";
+  private static final String PARSE_STR_FUNCTION = "parse_str";
+  private static final String ASSERT_FUNCTION = "assert";
   private static final ImmutableSet<String> LOCALE_CATEGORY_CONSTANTS = ImmutableSet.of(
     "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
 
@@ -70,6 +76,8 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     return ImmutableSet.<String>builder()
       .addAll(NEW_BY_DEPRECATED_FUNCTIONS.keySet())
       .add(SET_LOCALE_FUNCTION)
+      .add(PARSE_STR_FUNCTION)
+      .add(ASSERT_FUNCTION)
       .build();
   }
 
@@ -79,6 +87,12 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
     if (SET_LOCALE_FUNCTION.equals(functionName)) {
       checkLocalCategoryArgument(tree.arguments());
+
+    } else if (PARSE_STR_FUNCTION.equals(functionName)) {
+      checkParseStrArguments(tree);
+
+    } else if (ASSERT_FUNCTION.equals(functionName)) {
+      checkAssertArguments(tree);
 
     } else {
       context().newIssue(this, tree.callee(), buildMessage(functionName));
@@ -108,6 +122,19 @@ public class PHP5DeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       if (LOCALE_CATEGORY_CONSTANTS.contains(localCategory)) {
         context().newIssue(this, arguments.get(0), String.format(MESSAGE_SET_LOCAL_ARG, localCategory));
       }
+    }
+  }
+
+  private void checkParseStrArguments(FunctionCallTree tree) {
+    if (tree.arguments().size() < 2) {
+      context().newIssue(this, tree, "Add a second argument to this call to \"parse_str\".");
+    }
+  }
+
+  private void checkAssertArguments(FunctionCallTree tree) {
+    SeparatedList<ExpressionTree> arguments = tree.arguments();
+    if (!arguments.isEmpty() && arguments.get(0).is(Kind.REGULAR_STRING_LITERAL, Kind.EXPANDABLE_STRING_LITERAL)) {
+      context().newIssue(this, tree, "Change this call to \"assert\" to not pass a string argument.");
     }
   }
 

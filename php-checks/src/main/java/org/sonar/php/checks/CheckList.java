@@ -138,7 +138,7 @@ public class CheckList {
       FileNameCheck.class,
       GenericExceptionCheck.class,
       ConstructorDependencyInversionCheck.class,
-      PHP5DeprecatedFunctionUsageCheck.class,
+      PHPDeprecatedFunctionUsageCheck.class,
       OverridingMethodSimplyCallParentCheck.class,
       TooManyFunctionParametersCheck.class,
       UselessExpressionStatementCheck.class,

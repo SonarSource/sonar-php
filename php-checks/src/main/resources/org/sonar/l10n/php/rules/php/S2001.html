@@ -86,4 +86,37 @@ use of the deprecated features should be added to the code, and all existing use
     </tr>
   </tbody>
 </table>
+<p>The following functions were deprecated in PHP 7:</p>
+<table>
+  <tbody>
+    <tr>
+      <th>Deprecated</th>
+      <th>Use Instead</th>
+    </tr>
+    <tr>
+      <td><code>__autoload()</code></td>
+      <td><code>spl_autoload_register()</code></td>
+    </tr>
+    <tr>
+      <td><code>create_function()</code></td>
+      <td>anonymous function</td>
+    </tr>
+    <tr>
+      <td><code>parse_str()</code> without second argument</td>
+      <td><code>parse_str()</code> with second argument</td>
+    </tr>
+    <tr>
+      <td><code>gmp_random()</code></td>
+      <td><code>gmp_random_bits()</code> or <code>gmp_random_range()</code></td>
+    </tr>
+    <tr>
+      <td><code>each()</code></td>
+      <td><code>foreach</code></td>
+    </tr>
+    <tr>
+      <td><code>assert()</code> with string argument</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
 

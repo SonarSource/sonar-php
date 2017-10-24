@@ -13,6 +13,17 @@ namespace {
   setlocale("LC_ALL", "") ;    // NOK {{Use the "LC_ALL" constant instead of a string literal.}}
 //          ^^^^^^^^
 
+  __autoload();                // NOK
+  create_function('', 'echo 42;'); // NOK
+  parse_str($str);             // NOK
+  parse_str($str, $array);     // OK
+  gmp_random(4);               // NOK
+  each($foo);                  // NOK
+  assert();                    // OK
+  assert($foo);                // OK
+  assert("$foo");              // NOK
+  assert('foo()');             // NOK
+
   \A\call_user_method();       // OK
 
   call_user_func();            // OK
