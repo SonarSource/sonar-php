@@ -1303,22 +1303,10 @@ public class PHPGrammar {
       .is(f.listExpression(
           b.token(LIST),
           b.token(LPARENTHESIS),
-          b.optional(LIST_ELEMENT()),
-          b.zeroOrMore(f.newTuple(b.token(COMMA), b.optional(LIST_ELEMENT()))),
+          b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()),
+          b.zeroOrMore(f.newTuple(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
           b.token(RPARENTHESIS))
       );
-  }
-
-  public ArrayAssignmentPatternElementTree LIST_ELEMENT() {
-    return b.<ArrayAssignmentPatternElementTree>nonterminal().is(
-      f.arrayAssignmentPatternElement(
-        b.optional(
-          f.newTuple(
-            EXPRESSION(),
-            b.token(DOUBLEARROW))),
-        b.firstOf(
-          MEMBER_EXPRESSION(),
-          LIST_EXPRESSION())));
   }
 
   public AssignmentExpressionTree ARRAY_DESTRUCTURING_ASSIGNMENT() {
@@ -1351,6 +1339,7 @@ public class PHPGrammar {
               b.token(DOUBLEARROW))),
           b.firstOf(
             MEMBER_EXPRESSION(),
+            LIST_EXPRESSION(),
             ARRAY_ASSIGNMENT_PATTERN())));
   }
 
