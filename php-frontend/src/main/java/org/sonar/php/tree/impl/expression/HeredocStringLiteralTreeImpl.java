@@ -23,6 +23,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -48,31 +49,38 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
   private static final Pattern pattern = Pattern.compile(LexicalConstant.HEREDOC);
 
   public HeredocStringLiteralTreeImpl(SyntaxToken tmpHeredocToken) {
-    Matcher matcher = pattern.matcher(tmpHeredocToken.text());
+    String tokenText = tmpHeredocToken.text();
+    Matcher matcher = pattern.matcher(tokenText);
     Preconditions.checkArgument(matcher.matches());
-    String heredocBody = matcher.group(3);
-
-    this.elements = (List<ExpressionTree>) PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, tmpHeredocToken.line())
-      .parse(heredocBody);
-
-
+    int openingTagEndIndex = matcher.end(1);
+    String content = matcher.group(3);
+    int contentStartIndex = matcher.start(3);
+    int contentEndIndex = contentStartIndex == -1 ? openingTagEndIndex : matcher.end(3);
+    if (content != null && content.length() > 0) {
+      this.elements = (List<ExpressionTree>) PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, tmpHeredocToken.line()).parse(content);
+    } else {
+      this.elements = Collections.emptyList();
+    }
     int startIndex = ((InternalSyntaxToken) tmpHeredocToken).startIndex();
-    String openingLabel = matcher.group(2);
-
     this.openingToken = new InternalSyntaxToken(
       tmpHeredocToken.line(),
       tmpHeredocToken.column(),
-      tmpHeredocToken.text().substring(0, matcher.end(1)),
+      tokenText.substring(0, openingTagEndIndex),
       tmpHeredocToken.trivias(),
       startIndex,
       false);
 
+    SyntaxToken tokenBeforeClosingToken = openingToken;
+    if (!this.elements.isEmpty()) {
+      tokenBeforeClosingToken = ((PHPTree) this.elements.get(this.elements.size() - 1)).getLastToken();
+    }
+    String closingTag = tokenText.substring(contentEndIndex);
     this.closingToken = new InternalSyntaxToken(
-      tmpHeredocToken.endLine(),
-      0,
-      openingLabel,
+      tokenBeforeClosingToken.endLine(),
+      tokenBeforeClosingToken.endColumn(),
+      closingTag,
       ImmutableList.of(),
-      startIndex + tmpHeredocToken.text().length() - openingLabel.length(),
+      startIndex + tokenText.length() - closingTag.length(),
       false);
   }
 
