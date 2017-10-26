@@ -46,7 +46,7 @@ public class CheckUtils {
 
   public static final ImmutableList<Kind> FUNCTION_KINDS = ImmutableList.copyOf(FUNCTION_KINDS_ARRAY);
 
-  public static final ImmutableMap<String, String> PREDEFINED_VARIABLES = ImmutableMap.<String, String>builder()
+  public static final ImmutableMap<String, String> SUPERGLOBALS_BY_OLD_NAME = ImmutableMap.<String, String>builder()
     .put("$HTTP_SERVER_VARS", "$_SERVER")
     .put("$HTTP_GET_VARS", "$_GET")
     .put("$HTTP_POST_VARS", "$_POST")
