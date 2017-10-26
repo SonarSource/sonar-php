@@ -41,10 +41,17 @@ public class DeprecatedPredefinedVariablesUseCheck extends PHPVisitorCheck {
   private void checkVariable(SyntaxToken variable) {
     String name = variable.text();
 
-    if (CheckUtils.PREDEFINED_VARIABLES.containsKey(name)) {
-      String message = String.format(MESSAGE, name, CheckUtils.PREDEFINED_VARIABLES.get(name));
-      context().newIssue(this, variable, message);
+    if (CheckUtils.SUPERGLOBALS_BY_OLD_NAME.containsKey(name)) {
+      String replacement = CheckUtils.SUPERGLOBALS_BY_OLD_NAME.get(name);
+      raiseIssue(variable, name, replacement);
+    } else if ("$php_errormsg".equals(name)) {
+      raiseIssue(variable, name, "error_get_last()");
     }
+  }
+
+  private void raiseIssue(SyntaxToken variable, String deprecatedName, String suggestedReplacement) {
+    String message = String.format(MESSAGE, deprecatedName, suggestedReplacement);
+    context().newIssue(this, variable, message);
   }
 
   @Override

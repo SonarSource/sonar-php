@@ -16,3 +16,4 @@ $var::$HTTP_POST_FILES["name"]; // OK
 
 $var->$HTTP_POST_FILES["name"]; // OK
 
+echo $php_errormsg; // NOK
