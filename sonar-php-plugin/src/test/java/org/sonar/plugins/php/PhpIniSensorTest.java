@@ -20,6 +20,7 @@
 package org.sonar.plugins.php;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,7 +35,6 @@ import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.api.internal.google.common.io.Files;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.check.Rule;

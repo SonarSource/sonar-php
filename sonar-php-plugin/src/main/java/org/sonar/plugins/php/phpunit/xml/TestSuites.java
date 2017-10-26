@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.plugins.php.phpunit.TestFileReport;
 
 @XStreamAlias("testsuites")

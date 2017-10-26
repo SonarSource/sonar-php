@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
@@ -32,7 +33,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.plugins.php.phpunit.TestFileReport;
 
 @XStreamAlias("testsuite")

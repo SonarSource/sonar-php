@@ -51,7 +51,6 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.config.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.internal.google.common.base.Charsets;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -260,7 +259,7 @@ public class PHPSensorTest {
       .setType(Type.MAIN)
       .setCharset(Charset.defaultCharset())
       .setLanguage(Php.KEY);
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
 
     return inputFile;
   }
@@ -382,7 +381,7 @@ public class PHPSensorTest {
       .setType(Type.MAIN)
       .setCharset(Charset.defaultCharset())
       .setLanguage(Php.KEY);
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
 
     DefaultInputFile testFile = new DefaultInputFile("moduleKey", "src/AppTest.php")
       .setModuleBaseDir(context.fileSystem().baseDirPath())
@@ -453,7 +452,7 @@ public class PHPSensorTest {
       .setType(Type.MAIN)
       .setCharset(Charset.defaultCharset())
       .setLanguage(Php.KEY);
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
 
     createReportWithAbsolutePath(PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.UT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
     createReportWithAbsolutePath(PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.IT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
@@ -483,7 +482,7 @@ public class PHPSensorTest {
       .setType(Type.MAIN)
       .setCharset(Charset.defaultCharset())
       .setLanguage(Php.KEY);
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
 
     createReportWithAbsolutePath(PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.UT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
     createReportWithAbsolutePath(PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.IT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
