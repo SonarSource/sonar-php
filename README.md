@@ -12,7 +12,7 @@ SonarPHP is a [static code analyser](https://en.wikipedia.org/wiki/Static_progra
 
 # Useful links
 
-* [Project homepage](https://www.sonarsource.com/why-us/products/languages/php.html)
+* [Project homepage](https://redirect.sonarsource.com/plugins/php.html)
 * [Documentation](https://docs.sonarqube.org/display/PLUG/SonarPHP)
 * [Issue tracking](http://jira.sonarsource.com/browse/SONARPHP)
 * [Available rules](https://sonarqube.com/coding_rules#languages=php)
