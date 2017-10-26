@@ -1166,6 +1166,13 @@ public class TreeFactory {
     return new LiteralTreeImpl(Tree.Kind.REGULAR_STRING_LITERAL, token);
   }
 
+  public ExpressionTree stringLiteral(ExpressionTree literal, Optional<ArrayAccessTree> arrayAccess) {
+    if (arrayAccess.isPresent()) {
+      return ((ArrayAccessTreeImpl) arrayAccess.get()).complete(literal);
+    }
+    return literal;
+  }
+
   public LiteralTree booleanLiteral(InternalSyntaxToken token) {
     return new LiteralTreeImpl(Tree.Kind.BOOLEAN_LITERAL, token);
   }

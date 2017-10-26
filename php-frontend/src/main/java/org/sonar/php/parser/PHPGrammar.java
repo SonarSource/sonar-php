@@ -1152,6 +1152,8 @@ public class PHPGrammar {
       b.firstOf(
         NUMERIC_LITERAL(),
         STRING_LITERAL(),
+        f.nowdocLiteral(b.token(PHPLexicalGrammar.NOWDOC)),
+        HEREDOC_STRING_LITERAL(),
         f.booleanLiteral(b.token(PHPLexicalGrammar.BOOLEAN_LITERAL)),
         f.nullLiteral(b.token(PHPLexicalGrammar.NULL)),
         f.magicConstantLiteral(b.firstOf(
@@ -1172,11 +1174,14 @@ public class PHPGrammar {
 
   public ExpressionTree STRING_LITERAL() {
     return b.<ExpressionTree>nonterminal().is(
-      b.firstOf(
-        f.nowdocLiteral(b.token(PHPLexicalGrammar.NOWDOC)),
-        f.regularStringLiteral(b.token(PHPLexicalGrammar.REGULAR_STRING_LITERAL)),
-        EXPANDABLE_STRING_LITERAL(),
-        HEREDOC_STRING_LITERAL()));
+      f.stringLiteral(
+        b.firstOf(
+          f.regularStringLiteral(b.token(PHPLexicalGrammar.REGULAR_STRING_LITERAL)),
+          EXPANDABLE_STRING_LITERAL()),
+        b.optional(
+          b.firstOf(
+            DIMENSIONAL_OFFSET(),
+            ALTERNATIVE_DIMENSIONAL_OFFSET()))));
   }
 
   public ExpandableStringLiteralTree EXPANDABLE_STRING_LITERAL() {
