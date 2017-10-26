@@ -23,7 +23,6 @@ import com.google.common.collect.Iterables;
 import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
@@ -68,8 +67,8 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
   }
 
   private void assertFirstElement(ListExpressionTree tree, Kind kind, String string) {
-    Tree element = tree.elements().get(0).get();
-    assertThat(((ArrayAssignmentPatternElementTree) element).variable().is(kind)).isTrue();
+    ArrayAssignmentPatternElementTree element = tree.elements().get(0).get();
+    assertThat(element.variable().is(kind)).isTrue();
     assertThat(expressionToString(element)).isEqualTo(string);
   }
 
