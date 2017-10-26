@@ -17,33 +17,19 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.tree.impl.expression;
+package org.sonar.plugins.php.api.tree.expression;
 
-import com.google.common.collect.Iterators;
-import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
-import org.sonar.plugins.php.api.visitors.VisitorCheck;
+import com.google.common.annotations.Beta;
+import java.util.List;
+import java.util.Optional;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import java.util.Iterator;
+// This interface extends ExpressionTree only because AssignmentExpressionTree wants its left-hand side to be an ExpressionTree
+@Beta
+public interface ArrayDestructuringTree extends ExpressionTree {
 
-public class SkippedListElementTreeImpl extends PHPTree implements ExpressionTree {
+  List<Optional<ArrayAssignmentPatternElementTree>> elements();
 
-  private static final Kind KIND = Kind.SKIPPED_LIST_ELEMENT;
-
-  @Override
-  public Kind getKind() {
-    return KIND;
-  }
-
-  @Override
-  public Iterator<Tree> childrenIterator() {
-    return Iterators.emptyIterator();
-  }
-
-  @Override
-  public void accept(VisitorCheck visitor) {
-    visitor.visitSkippedListElement(this);
-  }
+  List<SyntaxToken> separators();
 
 }

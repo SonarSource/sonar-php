@@ -20,28 +20,28 @@
 package org.sonar.php.tree.impl.expression;
 
 import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import org.sonar.php.tree.impl.PHPTree;
-import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ListExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
-
-import java.util.Iterator;
 
 public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTree {
 
   private static final Kind KIND = Kind.LIST_EXPRESSION;
   private final InternalSyntaxToken listToken;
   private final InternalSyntaxToken openParenthesis;
-  private final SeparatedListImpl<ExpressionTree> elements;
+  private final ArrayAssignmentPatternElements elements;
   private final InternalSyntaxToken closeParenthesis;
 
   public ListExpressionTreeImpl(
     InternalSyntaxToken listToken, InternalSyntaxToken openParenthesis,
-    SeparatedListImpl<ExpressionTree> elements, InternalSyntaxToken closeParenthesis
+    ArrayAssignmentPatternElements elements, InternalSyntaxToken closeParenthesis
   ) {
     this.listToken = listToken;
     this.openParenthesis = openParenthesis;
@@ -65,8 +65,13 @@ public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTre
   }
 
   @Override
-  public SeparatedListImpl<ExpressionTree> elements() {
-    return elements;
+  public List<Optional<ArrayAssignmentPatternElementTree>> elements() {
+    return elements.elements();
+  }
+
+  @Override
+  public List<SyntaxToken> separators() {
+    return elements.separators();
   }
 
   @Override
@@ -79,7 +84,7 @@ public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTre
     return Iterators.concat(
       Iterators.singletonIterator(listToken),
       Iterators.singletonIterator(openParenthesis),
-      elements.elementsAndSeparators(),
+      elements.elementsAndSeparators().iterator(),
       Iterators.singletonIterator(closeParenthesis));
   }
 

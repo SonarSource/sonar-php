@@ -30,7 +30,6 @@ import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStateme
 import org.sonar.php.tree.impl.statement.ForStatementTreeImpl.ForStatementHeader;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -47,6 +46,7 @@ import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
@@ -1303,17 +1303,10 @@ public class PHPGrammar {
       .is(f.listExpression(
           b.token(LIST),
           b.token(LPARENTHESIS),
-          b.optional(LIST_ELEMENT()),
-          b.zeroOrMore(f.newTuple(b.token(COMMA), b.optional(LIST_ELEMENT()))),
+          b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()),
+          b.zeroOrMore(f.newTuple(b.token(COMMA), b.optional(ARRAY_ASSIGNMENT_PATTERN_ELEMENT()))),
           b.token(RPARENTHESIS))
       );
-  }
-
-  public ExpressionTree LIST_ELEMENT() {
-    return b.<ExpressionTree>nonterminal().is(
-      b.firstOf(
-        MEMBER_EXPRESSION(),
-        LIST_EXPRESSION()));
   }
 
   public AssignmentExpressionTree ARRAY_DESTRUCTURING_ASSIGNMENT() {
@@ -1336,17 +1329,18 @@ public class PHPGrammar {
             b.token(RBRACKET))));
   }
 
-  public Tree ARRAY_ASSIGNMENT_PATTERN_ELEMENT() {
-    return b.<Tree>nonterminal(PHPLexicalGrammar.ARRAY_ASSIGNMENT_PATTERN_ELEMENT)
+  public ArrayAssignmentPatternElementTree ARRAY_ASSIGNMENT_PATTERN_ELEMENT() {
+    return b.<ArrayAssignmentPatternElementTree>nonterminal(PHPLexicalGrammar.ARRAY_ASSIGNMENT_PATTERN_ELEMENT)
       .is(
-        b.firstOf(
-          f.arrayAssignmentPatternElement(
-            b.optional(
-              f.newTuple(
-                EXPRESSION(),
-                b.token(DOUBLEARROW))),
-            MEMBER_EXPRESSION()),
-          ARRAY_ASSIGNMENT_PATTERN()));
+        f.arrayAssignmentPatternElement(
+          b.optional(
+            f.newTuple(
+              EXPRESSION(),
+              b.token(DOUBLEARROW))),
+          b.firstOf(
+            MEMBER_EXPRESSION(),
+            LIST_EXPRESSION(),
+            ARRAY_ASSIGNMENT_PATTERN())));
   }
 
   public ComputedVariableTree COMPUTED_VARIABLE_NAME() {

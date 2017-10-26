@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 /**
@@ -30,13 +29,11 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  * </pre>
  */
 @Beta
-public interface ListExpressionTree extends ExpressionTree {
+public interface ListExpressionTree extends ArrayDestructuringTree {
 
   SyntaxToken listToken();
 
   SyntaxToken openParenthesisToken();
-
-  SeparatedList<ExpressionTree> elements();
 
   SyntaxToken closeParenthesisToken();
 

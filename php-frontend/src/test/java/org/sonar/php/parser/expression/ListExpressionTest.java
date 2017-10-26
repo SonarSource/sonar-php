@@ -34,6 +34,8 @@ public class ListExpressionTest {
       .matches("list ($a)")
       .matches("list ($a, $b)")
       .matches("list ($a, ,)")
-      .matches("list (list($a), $b)");
+      .matches("list (list($a), $b)")
+      .matches("list (\"a\" => $a, \"b\" => $b)")
+      .matches("list (\"a\" => $a, \"b\" => list($b, $c))");
   }
 }
