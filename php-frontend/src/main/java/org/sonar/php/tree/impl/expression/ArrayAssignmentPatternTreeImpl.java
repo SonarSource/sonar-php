@@ -58,6 +58,11 @@ public class ArrayAssignmentPatternTreeImpl extends PHPTree implements ArrayAssi
   }
 
   @Override
+  public List<SyntaxToken> separators() {
+    return elements.separators();
+  }
+
+  @Override
   public SyntaxToken closeBracketToken() {
     return closeBracket;
   }

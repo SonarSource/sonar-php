@@ -19,17 +19,14 @@
  */
 package org.sonar.plugins.php.api.tree.expression;
 
-import java.util.List;
-import java.util.Optional;
+import com.google.common.annotations.Beta;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 // https://wiki.php.net/rfc/short_list_syntax
-// This interface extends ExpressionTree only because AssignmentExpressionTree wants its left-hand side to be an ExpressionTree
-public interface ArrayAssignmentPatternTree extends ExpressionTree {
+@Beta
+public interface ArrayAssignmentPatternTree extends ArrayDestructuringTree {
 
   SyntaxToken openBracketToken();
-
-  List<Optional<ArrayAssignmentPatternElementTree>> elements();
 
   SyntaxToken closeBracketToken();
 

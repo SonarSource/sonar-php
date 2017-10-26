@@ -36,6 +36,7 @@ public class ArrayAssignmentPatternTreeTest extends PHPTreeModelTest {
 
     assertThat(tree.openBracketToken().text()).isEqualTo("[");
     assertThat(tree.elements()).hasSize(3);
+    assertThat(tree.separators()).hasSize(2);
     assertThat(expressionToString(tree.elements().get(0).get())).isEqualTo("$a");
     assertThat(tree.elements().get(1)).isEmpty();
     assertThat(expressionToString(tree.elements().get(2).get())).isEqualTo("$b");

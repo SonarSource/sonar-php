@@ -70,10 +70,6 @@ public class ListExpressionTreeImpl extends PHPTree implements ListExpressionTre
   }
 
   @Override
-  public List<Tree> elementsAndSeparators() {
-    return elements.elementsAndSeparators();
-  }
-
   public List<SyntaxToken> separators() {
     return elements.separators();
   }

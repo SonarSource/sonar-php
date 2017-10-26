@@ -20,21 +20,16 @@
 package org.sonar.plugins.php.api.tree.expression;
 
 import com.google.common.annotations.Beta;
+import java.util.List;
+import java.util.Optional;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-/**
- * <a href="http://php.net/manual/en/function.list.php">List</a>
- * <pre>
- *   list ( {@link #elements()} )
- * </pre>
- */
+// This interface extends ExpressionTree only because AssignmentExpressionTree wants its left-hand side to be an ExpressionTree
 @Beta
-public interface ListExpressionTree extends ArrayDestructuringTree {
+public interface ArrayDestructuringTree extends ExpressionTree {
 
-  SyntaxToken listToken();
+  List<Optional<ArrayAssignmentPatternElementTree>> elements();
 
-  SyntaxToken openParenthesisToken();
-
-  SyntaxToken closeParenthesisToken();
+  List<SyntaxToken> separators();
 
 }
