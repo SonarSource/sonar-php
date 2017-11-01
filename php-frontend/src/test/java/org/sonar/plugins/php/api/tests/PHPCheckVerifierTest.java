@@ -118,6 +118,17 @@ public class PHPCheckVerifierTest {
       });
   }
 
+  @Test(expected = ComparisonFailure.class)
+  public void file_issue_wrong_message() throws Exception {
+    PHPCheckVerifier.verify(new File("src/test/resources/tests/file-issue.php"),
+      new PHPVisitorCheck() {
+        @Override
+        public void visitCompilationUnit(CompilationUnitTree tree) {
+          context().newFileIssue(this, "Wrong message").cost(2.5d);
+        }
+      });
+  }
+
   @Test
   public void line_issue() throws Exception {
     PHPCheckVerifier.verify(new File("src/test/resources/tests/line-issue.php"),
@@ -125,6 +136,17 @@ public class PHPCheckVerifierTest {
         @Override
         public void visitCompilationUnit(CompilationUnitTree tree) {
           context().newLineIssue(this, 2, "Line issue");
+        }
+      });
+  }
+
+  @Test(expected = ComparisonFailure.class)
+  public void line_issue_wrong_message() throws Exception {
+    PHPCheckVerifier.verify(new File("src/test/resources/tests/line-issue.php"),
+      new PHPVisitorCheck() {
+        @Override
+        public void visitCompilationUnit(CompilationUnitTree tree) {
+          context().newLineIssue(this, 2, "Wrong message");
         }
       });
   }
@@ -139,6 +161,21 @@ public class PHPCheckVerifierTest {
           SyntaxToken literalToken = ((LiteralTree) tree.arguments().get(0)).token();
           context().newIssue(this, echoToken, "Precise issue")
             .secondary(literalToken, "Secondary");
+          super.visitFunctionCall(tree);
+        }
+      });
+  }
+
+  @Test(expected = ComparisonFailure.class)
+  public void precise_issue_wrong_secondary_message() throws Exception {
+    PHPCheckVerifier.verify(new File("src/test/resources/tests/precise-issue.php"),
+      new PHPVisitorCheck() {
+        @Override
+        public void visitFunctionCall(FunctionCallTree tree) {
+          SyntaxToken echoToken = ((NamespaceNameTree) tree.callee()).name().token();
+          SyntaxToken literalToken = ((LiteralTree) tree.arguments().get(0)).token();
+          context().newIssue(this, echoToken, "Precise issue")
+            .secondary(literalToken, "Wrong message");
           super.visitFunctionCall(tree);
         }
       });

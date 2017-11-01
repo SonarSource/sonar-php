@@ -1,20 +1,20 @@
 <?php
 
-  function f() {           // NOK {{This function "f" has 7 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
+  function f() {           // Noncompliant {{This function "f" has 7 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
 //^^^^^^^^^^^^
-  function f() {         // NOK
+  function f() {         // Noncompliant
     // comment
     return 1;
   }
 }
 
-$f = function () {       // NOK {{This function expression has 5 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
+$f = function () {       // Noncompliant {{This function expression has 5 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
 //   ^^^^^^^^^^^
   // comment
   return 1;
 };
 
-function f() {           // NOK
+function f() {           // Noncompliant
   // comment
   return 1;
   function f() {         // OK
@@ -22,7 +22,7 @@ function f() {           // NOK
 }
 
 abstract class C {
-  public function f() {  // NOK {{This function "f" has 6 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
+  public function f() {  // Noncompliant {{This function "f" has 6 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
 //       ^^^^^^^^^^^^
     // comment
     doSomething();
