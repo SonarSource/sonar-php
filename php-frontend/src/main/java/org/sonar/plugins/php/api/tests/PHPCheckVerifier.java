@@ -43,13 +43,13 @@ public class PHPCheckVerifier {
 
   private static final ActionParser<Tree> parser = PHPParserBuilder.createParser();
 
-  private final boolean parseExpected;
+  private final boolean readExpectedIssuesFromComments;
 
   /**
    * Internal use only. Subject to changes.
    */
-  protected PHPCheckVerifier(boolean parseExpected) {
-    this.parseExpected = parseExpected;
+  protected PHPCheckVerifier(boolean readExpectedIssuesFromComments) {
+    this.readExpectedIssuesFromComments = readExpectedIssuesFromComments;
   }
 
   public static void verify(File sourceFile, PHPCheck check) {
@@ -81,7 +81,7 @@ public class PHPCheckVerifier {
       }
       addIssue(verifier, issue).withGap(issue.cost());
     }
-    if (parseExpected) {
+    if (readExpectedIssuesFromComments) {
       PHPVisitorCheck commentVisitor = new PHPVisitorCheck() {
         @Override
         public void visitTrivia(SyntaxTrivia trivia) {

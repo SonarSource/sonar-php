@@ -1,23 +1,23 @@
 <?php
 
 $a = 1;
-  $a == 1;   // NOK {{Remove or refactor this statement.}}
+  $a == 1;   // Noncompliant {{Remove or refactor this statement.}}
 //^^^^^^^^
 
 $b = $a < 2;
-$a < 2;    // NOK
+$a < 2;    // Noncompliant
 
 $funcExpr = function() {};
-function() {};    // NOK
+function() {};    // Noncompliant
 
 echo "str";
-"str";            // NOK
-"str{$a}";        // NOK
+"str";            // Noncompliant
+"str{$a}";        // Noncompliant
 
-$a."str";         // NOK
+$a."str";         // Noncompliant
 
-$a != 1;  // NOK
-$a === 1; // NOK
-$a !== 1; // NOK
+$a != 1;  // Noncompliant
+$a === 1; // Noncompliant
+$a !== 1; // Noncompliant
 
 ?>
