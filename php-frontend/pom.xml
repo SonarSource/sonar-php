@@ -45,6 +45,11 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-test-commons</artifactId>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>

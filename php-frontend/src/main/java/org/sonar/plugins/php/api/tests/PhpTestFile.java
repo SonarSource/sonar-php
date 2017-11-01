@@ -17,37 +17,43 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php;
+package org.sonar.plugins.php.api.tests;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
-import org.sonar.plugins.php.api.tests.PhpTestFile;
+import java.nio.file.Path;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public final class TestUtils {
+public class PhpTestFile implements PhpFile {
 
-  private TestUtils() {
-  }
+  private final Path relativePath;
 
-  public static PhpFile getCheckFile(String filename) throws URISyntaxException {
-    return getFile(new File("src/test/resources/checks/" + filename));
-  }
+  private final String contents;
 
-  public static PhpFile getFile(File file, String contents) {
+  public PhpTestFile(File file) {
     try {
-      Files.write(file.toPath(), contents.getBytes(UTF_8));
+      relativePath = file.toPath();
+      contents = new String(Files.readAllBytes(file.toPath()), UTF_8);
     } catch (IOException e) {
-      throw new IllegalStateException("Failed to write test file: " + file.getAbsolutePath());
+      throw new IllegalArgumentException("Invalid file: " + file, e);
     }
-    return getFile(file);
   }
 
-  public static PhpFile getFile(File file) {
-    return new PhpTestFile(file);
+  @Override
+  public Path relativePath() {
+    return relativePath;
   }
 
+  @Override
+  public String contents() {
+    return contents;
+  }
+
+  @Override
+  public File file() {
+    return relativePath.toFile();
+  }
 }
