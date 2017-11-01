@@ -4,9 +4,9 @@
  *  Class and function
  */
 
-abstract class C1 { // NOK {{Move this open curly brace to the beginning of the next line.}}
+abstract class C1 { // Noncompliant {{Move this open curly brace to the beginning of the next line.}}
 //                ^
-    function f() {  // NOK
+    function f() {  // Noncompliant
     }
 
     function g()    // OK
@@ -26,13 +26,13 @@ class C2            // OK
 {
 }
 
-interface I {       // NOK
+interface I {       // Noncompliant
 }
 
-trait T {           // NOK
+trait T {           // Noncompliant
 }
 
-function f() {      // NOK
+function f() {      // Noncompliant
 }
 
 function g($p1, $p2,
@@ -45,35 +45,35 @@ function g($p1, $p2,
  */
 
 if ($a)
-  {                         // NOK {{Move this open curly brace to the end of the previous line.}}
+  {                         // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 //^
 }
 
 do
-{                         // NOK
+{                         // Noncompliant
 
 } while ($a);
 
 while ($a)
-{                         // NOK
+{                         // Noncompliant
 }
 
 for ($i = 0; $i < 3; $i++)
-{                         // NOK
+{                         // Noncompliant
 }
 
 foreach ($array as $val)
-{                         // NOK
+{                         // Noncompliant
 }
 
 switch ($a)
-{                         // NOK
+{                         // Noncompliant
 }
 
 try
-{                         // NOK
+{                         // Noncompliant
 } catch (Exception $e)
-{                         // NOK
+{                         // Noncompliant
 }
 
 try {                     // OK
@@ -89,15 +89,15 @@ if ($aVeryLongConditionalExpression
  */
 if ($a) {
 }
-  else {                  // NOK {{Move this "else" to the same line as the previous closing curly brace.}}
+  else {                  // Noncompliant {{Move this "else" to the same line as the previous closing curly brace.}}
 //^^^^
 }
 
 try {
 }
-catch (Exception $e) {  // NOK
+catch (Exception $e) {  // Noncompliant
 }
-finally {               // NOK
+finally {               // Noncompliant
 }
 
 if ($a) {

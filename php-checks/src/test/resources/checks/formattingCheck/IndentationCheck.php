@@ -3,20 +3,20 @@
 /**
  * Function calls arguments indentation
  */
-doSomething($p1,             // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "6".}}
+doSomething($p1,             // Noncompliant {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "6".}}
     $p2
 );
 
 doSomething(
-    $p1, $p2                 // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "10".}}
+    $p1, $p2                 // Noncompliant {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "10".}}
 //  ^^^
 );
 
 doSomething(
-    $p1,                     // NOK {{Align all arguments in this list at column "4".}}
-   $p2);                     // NOK {{Move the closing parenthesis on the next line.}}
+    $p1,                     // Noncompliant {{Align all arguments in this list at column "4".}}
+   $p2);                     // Noncompliant {{Move the closing parenthesis on the next line.}}
 
-doSomething($p1, something(  // NOK
+doSomething($p1, something(  // Noncompliant
     $p1,
     $p2,
     $p3,
@@ -48,19 +48,19 @@ doSomething(anotherThing(    // OK
 /**
  * Method declaration argument indentation
  */
-function f($p1,         // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "51".}}
+function f($p1,         // Noncompliant {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "51".}}
            $p2
 ) {
 }
 
 function g(
-    $p1, $p2            // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "56".}}
+    $p1, $p2            // Noncompliant {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "56".}}
 ) {
 }
 
 function h(
-   $p1,                 // NOK {{Align all arguments in this list at column "4".}}
-    $p2)                // NOK {{Move the closing parenthesis with the opening brace on the next line.}}
+   $p1,                 // Noncompliant {{Align all arguments in this list at column "4".}}
+    $p2)                // Noncompliant {{Move the closing parenthesis with the opening brace on the next line.}}
 {
 }
 
@@ -78,18 +78,18 @@ function k(             // OK
  * Implement list indentation
  */
 
-class C1 implements A,    // NOK {{Either split this list into multiple lines or move it on the same line "81".}}
+class C1 implements A,    // Noncompliant {{Either split this list into multiple lines or move it on the same line "81".}}
 //                  ^
                     B
 {}
 
 class C2 implements
-        A, B              // NOK {{Either split this list into multiple lines or move it on the same line "86".}}
+        A, B              // Noncompliant {{Either split this list into multiple lines or move it on the same line "86".}}
 //      ^
 {}
 
 class C3 implements
-    A,                    // NOK {{Align all interfaces in this list at column "4".}}
+    A,                    // Noncompliant {{Align all interfaces in this list at column "4".}}
      B
 {}
 
@@ -112,14 +112,14 @@ doSomething($a, function () {      // OK
   // ...
   }, $b);
 
-doSomething(a, function () { // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "115".}}
+doSomething(a, function () { // Noncompliant {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "115".}}
   // ...
   },
   b
 );
 
 // not an array or function
-doSomething($a, 1           // NOK {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "122".}}
+doSomething($a, 1           // Noncompliant {{Either split this list into multiple lines, aligned at column "4" or put all arguments on line "122".}}
    + 2, $b
 );
 
