@@ -19,33 +19,23 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.google.common.collect.ImmutableList;
-import org.junit.Before;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpFile;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class ControlStructureSpacingTest extends FormattingStandardCheckTest {
 
-  private static PhpFile TEST_FILE;
-
-  @Before
-  public void setUp() throws Exception {
-    TEST_FILE = TestUtils.getCheckFile(TEST_DIR + "ControlStructureSpacingCheck.php");
-  }
+  private static String TEST_FILE = TEST_DIR + "ControlStructureSpacingCheck.php";
 
   @Test
   public void defaultValue() throws IllegalAccessException {
     activeOnly("isOneSpaceBetweenKeywordAndNextToken", "isOneSpaceAfterForLoopSemicolon", "isSpaceForeachStatement");
-    PHPCheckTest.check(check, TEST_FILE);
+    CheckVerifier.verify(check, TEST_FILE);
   }
 
   @Test
   public void custom() throws IllegalAccessException {
     deactivateAll();
-    PHPCheckTest.check(check, TEST_FILE, ImmutableList.<PhpIssue>of());
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, TEST_FILE);
   }
 }

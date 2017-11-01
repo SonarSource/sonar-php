@@ -19,26 +19,22 @@
  */
 package org.sonar.php.checks.formatting;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.checks.FormattingStandardCheckTest;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
-
 
   @Test
   public void defaultValue() throws Exception {
     activeOnly("isOpenCurlyBraceForClassAndFunction", "isOpenCurlyBraceForControlStructures", "isClosingCurlyNextToKeyword");
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"));
+    CheckVerifier.verify(check, TEST_DIR + "CurlyBraceCheck.php");
   }
 
   @Test
   public void custom() throws Exception {
     deactivateAll();
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "CurlyBraceCheck.php"), ImmutableList.<PhpIssue>of());
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, TEST_DIR + "CurlyBraceCheck.php");
   }
 
 }
