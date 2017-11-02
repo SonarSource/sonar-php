@@ -1,24 +1,24 @@
 <?php
 
-  if ($a) {       // NOK {{Replace this "if-then-else" statement by a single "return" statement.}}
+  if ($a) {       // Noncompliant {{Replace this "if-then-else" statement by a single "return" statement.}}
 //^^^^^^^
   return true;
 } else {
   return false;
 }
 
-if ($a) {       // NOK
+if ($a) {       // Noncompliant
   return false;
 } else {
   return true;
 }
 
-if ($a)         // NOK
+if ($a)         // Noncompliant
   return true;
 else
   return false;
 
-if ($a):         // NOK
+if ($a):         // Noncompliant
   return true;
 else:
   return false;

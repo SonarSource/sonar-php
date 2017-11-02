@@ -1,6 +1,6 @@
 <?php
 
-define(NAME, "value");   // define is exlusion
+define(NAME, "value");   // define is exclusion
 
 class A {
 

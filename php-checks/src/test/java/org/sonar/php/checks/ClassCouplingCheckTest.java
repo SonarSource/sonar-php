@@ -19,11 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class ClassCouplingCheckTest {
 
@@ -32,12 +29,12 @@ public class ClassCouplingCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(filename), ImmutableList.<PhpIssue>of());
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, filename);
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 10;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(filename));
+    CheckVerifier.verify(check, filename);
   }
 }

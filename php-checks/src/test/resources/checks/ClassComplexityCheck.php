@@ -1,6 +1,6 @@
 <?php
 
-  class KO { // NOK [[effortToFix=1]] {{The Cyclomatic Complexity of this class "KO" is 6 which is greater than 5 authorized, split this class.}}
+  class KO { // Noncompliant {{The Cyclomatic Complexity of this class "KO" is 6 which is greater than 5 authorized, split this class.}} [[effortToFix=1]]
 //^^^^^
   function f() // +1
   {
@@ -23,7 +23,7 @@
   }
 }
 
-class KO2 { // NOK [[effortToFix=2]]
+class KO2 { // Noncompliant [[effortToFix=2]]
   function f() {  // +1
     return true && true && true && true && true && true && true; // +6
   }
@@ -49,12 +49,18 @@ class OK {
 class OK {
 }
 
-$x = new class {        // NOK [[secondary=+2,+3,+4,+5,+6,+7]] {{The Cyclomatic Complexity of this anonymous class is 6 which is greater than 5 authorized, split this class.}}
+$x = new class {        // Noncompliant {{The Cyclomatic Complexity of this anonymous class is 6 which is greater than 5 authorized, split this class.}}
 //       ^^^^^
-  function f1() {}// +1
-  function f2() {}// +1
-  function f3() {}// +1
-  function f4() {}// +1
-  function f5() {}// +1
-  function f6() {}// +1
+  function f1() {}
+//^^^^^^^^< {{+1}}
+  function f2() {}
+//^^^^^^^^< {{+1}}
+  function f3() {}
+//^^^^^^^^< {{+1}}
+  function f4() {}
+//^^^^^^^^< {{+1}}
+  function f5() {}
+//^^^^^^^^< {{+1}}
+  function f6() {}
+//^^^^^^^^< {{+1}}
 };

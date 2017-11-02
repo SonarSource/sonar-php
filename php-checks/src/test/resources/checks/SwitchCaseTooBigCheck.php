@@ -5,14 +5,14 @@ switch ($a) {
     echo "";
     echo "";
     break;
-  case 1:      // NOK {{Reduce this "switch/case" number of lines from 6 to at most 4, for example by extracting code into function.}}
+  case 1:      // Noncompliant {{Reduce this "switch/case" number of lines from 6 to at most 4, for example by extracting code into function.}}
 //^^^^
     echo "";
     echo "";
     echo "";
     break;
   case 2:
-  default:     // NOK
+  default:     // Noncompliant
     echo "";
     echo "";
     echo "";
@@ -27,7 +27,7 @@ switch ($a):
     echo "";
     echo "";
     break;
-  default:     // NOK
+  default:     // Noncompliant
 //^^^^^^^
     echo "";
     echo "";

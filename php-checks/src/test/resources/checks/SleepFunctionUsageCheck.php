@@ -1,7 +1,7 @@
 <?php
 
 if (true) {
-    sleep(5);         // NOK {{Remove this call to "sleep".}}
+    sleep(5);         // Noncompliant {{Remove this call to "sleep".}}
 //  ^^^^^^^^
 }
 

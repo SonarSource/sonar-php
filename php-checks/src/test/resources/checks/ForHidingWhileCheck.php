@@ -1,13 +1,13 @@
 <?php
 
-  for(;condition;) {             // NOK {{Replace this "for" loop with a "while" loop.}}
+  for(;condition;) {             // Noncompliant {{Replace this "for" loop with a "while" loop.}}
 //^^^
 }
 
-for(;;) {                      // NOK
+for(;;) {                      // Noncompliant
 }
 
-for (;condition;):             // NOK
+for (;condition;):             // Noncompliant
 endfor;
 
 for($i = 0; condition;) {      // OK

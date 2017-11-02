@@ -1,8 +1,8 @@
 <?php
 
-  include "file.php";       // NOK {{Replace "include" with "include_once".}}
+  include "file.php";       // Noncompliant {{Replace "include" with "include_once".}}
 //^^^^^^^
-  require "file.php";       // NOK {{Replace "require" with "require_once".}}
+  require "file.php";       // Noncompliant {{Replace "require" with "require_once".}}
 //^^^^^^^
 
 include_once "file.php";  // OK

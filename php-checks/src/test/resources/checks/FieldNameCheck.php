@@ -1,8 +1,8 @@
 <?php
 
 class myClass {
-  public $MyVariable;      // NOK {{Rename this field "$MyVariable" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+  public $MyVariable;      // Noncompliant {{Rename this field "$MyVariable" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
 //       ^^^^^^^^^^^
-  public $MyVariable = 1;  // NOK
+  public $MyVariable = 1;  // Noncompliant
   public $myVariable;      // OK
 }

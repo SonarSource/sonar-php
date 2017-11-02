@@ -4,7 +4,7 @@ function f() {
   $result = 1;                 // OK
 
   $f = function() {
-    $result = 1;               // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$result".}}
+    $result = 1;               // Noncompliant {{Immediately return this expression instead of assigning it to the temporary variable "$result".}}
 //  ^^^^^^^
     return $result;
   };
@@ -13,38 +13,38 @@ function f() {
 }
 
 function h() {
-  $e = new Exception();        // NOK {{Immediately throw this expression instead of assigning it to the temporary variable "$e".}}
+  $e = new Exception();        // Noncompliant {{Immediately throw this expression instead of assigning it to the temporary variable "$e".}}
   throw $e;
 }
 
 function l($p) {
 
-  $a =& $p;                    // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
+  $a =& $p;                    // Noncompliant {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
   return $a;
 }
 
 function l($p) {
   if (true) {
-    $a = $p;                    // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
+    $a = $p;                    // Noncompliant {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
     return $a;
   }
 }
 function l($p) {
   doSomething();
   if (true) {
-    $a = $p;                    // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
+    $a = $p;                    // Noncompliant {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
     return $a;
   }
 }
 
 function l($p) {
   $a = 1;
-  $a += $p;                    // NOK {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
+  $a += $p;                    // Noncompliant {{Immediately return this expression instead of assigning it to the temporary variable "$a".}}
   return $a;
 }
 
 function l() {
-  list($a,, $b) = array(1, 2);  // NOK $a
+  list($a,, $b) = array(1, 2);  /* Noncompliant */ // $a
 //^^^^^^^^^^^^^
   return $a;
 }

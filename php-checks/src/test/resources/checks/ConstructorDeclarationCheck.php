@@ -2,7 +2,7 @@
 
 class C {
 
-  public function C() {             // NOK {{Replace this function name "C" with "__construct".}}
+  public function C() {             // Noncompliant {{Replace this function name "C" with "__construct".}}
 //                ^
   }
 
@@ -12,7 +12,7 @@ class C {
 
 class C {
 
-  public function C() {             // NOK {{Replace this function name "C", since a "__construct" method has already been defined in this class.}}
+  public function C() {             // Noncompliant {{Replace this function name "C", since a "__construct" method has already been defined in this class.}}
   }
 
   public function __construct() {

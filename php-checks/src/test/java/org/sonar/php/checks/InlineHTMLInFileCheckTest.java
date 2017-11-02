@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
+import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.FileIssue;
@@ -32,17 +33,17 @@ public class InlineHTMLInFileCheckTest {
 
   @Test
   public void ok() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
+    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
   public void ok_asp() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_asp.php"));
+    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_asp.php");
   }
 
   @Test
   public void ok_excluded_file() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.phtml"));
+    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.phtml");
   }
 
   @Test

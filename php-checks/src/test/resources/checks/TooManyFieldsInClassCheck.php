@@ -1,6 +1,6 @@
 <?php
 
-  class A {        // NOK {{Refactor this class so it has no more than 4 fields, rather than the 5 it currently has.}}
+  class A {        // Noncompliant {{Refactor this class so it has no more than 4 fields, rather than the 5 it currently has.}}
 //^^^^^
   public $f1;
   public $f2;
@@ -15,7 +15,7 @@ class B {
   public $f2;
 }
 
-$x = new class {        // NOK {{Refactor this class so it has no more than 4 fields, rather than the 5 it currently has.}}
+$x = new class {        // Noncompliant {{Refactor this class so it has no more than 4 fields, rather than the 5 it currently has.}}
 //       ^^^^^
   public $f1;
   public $f2;

@@ -1,6 +1,6 @@
 <?php
 
-function f() {           // NOK {{Move this function into a class.}}
+function f() {           // Noncompliant {{Move this function into a class.}}
 //       ^
   $x = 1;                // OK
   function nested() {}   // OK
@@ -22,7 +22,7 @@ class A {
 
 }
 
-  $foo = 1;  // NOK {{Move this variable into a class.}}
+  $foo = 1;  // Noncompliant {{Move this variable into a class.}}
 //^^^^
 $foo = 1;  // OK, already reported on previous line
 $x->y = 1; // OK

@@ -1,17 +1,17 @@
 <?php
 
 function f () {
-  doSomthing();}               // NOK {{Move this closing curly brace to the next line.}}
+  doSomthing();}               // Noncompliant {{Move this closing curly brace to the next line.}}
 //             ^
 
 if (true){
-  doSomething();}              // NOK {{Move this closing curly brace to the next line.}}
+  doSomething();}              // Noncompliant {{Move this closing curly brace to the next line.}}
 
 $a = function () {
-  doSomething;};               // NOK {{Move this closing curly brace to the next line.}}
+  doSomething;};               // Noncompliant {{Move this closing curly brace to the next line.}}
 
 {
-  echo $a;}                    // NOK {{Move this closing curly brace to the next line.}}
+  echo $a;}                    // Noncompliant {{Move this closing curly brace to the next line.}}
 
 function f() {
   doSomething();
@@ -31,22 +31,22 @@ class A {
   }
 
   use SomeTrait, OtherTrait {
-    Foo as bar; }                    // NOK {{Move this closing curly brace to the next line.}}
+    Foo as bar; }                    // Noncompliant {{Move this closing curly brace to the next line.}}
 
-  use SomeTrait; }                   // NOK {{Move this closing curly brace to the next line.}}
+  use SomeTrait; }                   // Noncompliant {{Move this closing curly brace to the next line.}}
 
 switch (a) {
   case 1 :
-      break; }                        // NOK {{Move this closing curly brace to the next line.}}
+      break; }                        // Noncompliant {{Move this closing curly brace to the next line.}}
 
 switch (a) {
-  ; }                        // NOK {{Move this closing curly brace to the next line.}}
+  ; }                        // Noncompliant {{Move this closing curly brace to the next line.}}
 
 $x = new class {
   use SomeTrait, OtherTrait{         // OK
   }
 
   use SomeTrait, OtherTrait {
-    Foo as bar; }                    // NOK {{Move this closing curly brace to the next line.}}
+    Foo as bar; }                    // Noncompliant {{Move this closing curly brace to the next line.}}
 
-  use SomeTrait; };                   // NOK {{Move this closing curly brace to the next line.}}
+  use SomeTrait; };                   // Noncompliant {{Move this closing curly brace to the next line.}}

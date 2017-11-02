@@ -3,11 +3,11 @@ declare(ticks=1);                              // OK
 
 function f() {
   doSomething();                               // OK
-  doSomethingElse();;                          // NOK {{Remove this empty statement.}}
+  doSomethingElse();;                          // Noncompliant {{Remove this empty statement.}}
 //                  ^
-  ;                                            // NOK
+  ;                                            // Noncompliant
 }
 
-for ($i = 1; $i <= 10; doSomething(), $i++);   // NOK
+for ($i = 1; $i <= 10; doSomething(), $i++);   // Noncompliant
 
 

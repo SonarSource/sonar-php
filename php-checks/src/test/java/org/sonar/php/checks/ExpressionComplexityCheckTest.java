@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class ExpressionComplexityCheckTest {
 
@@ -32,7 +33,7 @@ public class ExpressionComplexityCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
+    CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test

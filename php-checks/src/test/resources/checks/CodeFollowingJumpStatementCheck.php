@@ -1,22 +1,22 @@
 <?php
 
 function f() {
-  return;            // NOK {{Remove the code after this "return".}}
+  return;            // Noncompliant {{Remove the code after this "return".}}
 //^^^^^^
   $a;
 
   if (true) {
-    return;          // NOK
+    return;          // Noncompliant
     $b;
   } else {
     $c;
   }
 
   while (true) {
-    break;            // NOK {{Remove the code after this "break".}}
+    break;            // Noncompliant {{Remove the code after this "break".}}
     $d;
 
-    continue;         // NOK {{Remove the code after this "continue".}}
+    continue;         // Noncompliant {{Remove the code after this "continue".}}
 //  ^^^^^^^^
     $e;
 
@@ -38,7 +38,7 @@ function f() {
 
   switch (a) {
   case 1: {
-    break;            // NOK
+    break;            // Noncompliant
     $e;
   }
   case 2:
@@ -51,7 +51,7 @@ function f() {
 
   try {
     $h;
-    throw ("MyException");          // NOK
+    throw ("MyException");          // Noncompliant
     $i;
   } catch (Exception $e) {
     $j;
@@ -85,7 +85,7 @@ function f2() {
 }
 
 function f3() {
-  return;;            // NOK
+  return;;            // Noncompliant
   $x;
 }
 
@@ -94,6 +94,6 @@ function tagAfterReturn() {
   ?><?php
 }
 
-return;         // NOK
+return;         // Noncompliant
 
 if (true) {}

@@ -5,7 +5,7 @@ class A {
   private $field = 1;
 
   public static function f() {
-    return $this->field;       // NOK {{Remove this use of "$this".}}
+    return $this->field;       // Noncompliant {{Remove this use of "$this".}}
 //         ^^^^^
   }
 

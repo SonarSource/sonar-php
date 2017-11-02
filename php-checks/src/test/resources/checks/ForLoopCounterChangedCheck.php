@@ -1,36 +1,36 @@
 <?php
 
 for ($a = 0; $a < 42; $a++) {
-  $a = 0;                                // NOK {{Refactor the code to avoid updating the loop counter "$a" within the loop body.}}
+  $a = 0;                                // Noncompliant {{Refactor the code to avoid updating the loop counter "$a" within the loop body.}}
 //^^
 }
 
 for ($a = 0; $a < 42; $a++):
-  $a = 0;                                // NOK
+  $a = 0;                                // Noncompliant
 endfor;
 
 for ($d = 0, $e = 0; $d < 42; $d++) {
-  $d = 0;                                // NOK
-  $e = 0;                                // NOK
+  $d = 0;                                // Noncompliant
+  $e = 0;                                // Noncompliant
 }
 
 $g;
 for ($f = 0; $f < 42; $f++) {
-  $f = 0;                                // NOK
+  $f = 0;                                // Noncompliant
   $g = 0;                                // OK
   for ($g = 0; $g < 42; $g++) {
-    $g = 0;                              // NOK
-    $f = 0;                              // NOK
+    $g = 0;                              // Noncompliant
+    $f = 0;                              // Noncompliant
   }
-  $f = 0;                                // NOK
+  $f = 0;                                // Noncompliant
   $g = 0;                                // OK
 }
 
 $g = 0;                                  // OK
 
 for ($h = 0; $h < 42; $h++) {
-  $h =                                   // NOK
-      $h =                               // NOK
+  $h =                                   // Noncompliant
+      $h =                               // Noncompliant
           0;
 }
 
@@ -40,14 +40,14 @@ $g = 0;                                  // OK
 doSomething($i);                         // OK
 
 for ($i = 0; 0 < 42; $i++) {
-  $i++;                                  // NOK
-  ++$i;                                  // NOK
-  --$i;                                  // NOK
-  $i--;                                  // NOK
+  $i++;                                  // Noncompliant
+  ++$i;                                  // Noncompliant
+  --$i;                                  // Noncompliant
+  $i--;                                  // Noncompliant
 }
 
 for ($j = 0; $j < 42; $j++) {            // OK
-  for ($k = 0; $j++ < 42; $k++) {        // NOK
+  for ($k = 0; $j++ < 42; $k++) {        // Noncompliant
   }
 }
 
@@ -56,15 +56,15 @@ for ($i = 0; $i < 42; $i++) {
 }
 
 for ($i = 0; $i < 10; $i++) {
-  for ($k = 0; $k < 20; $i++) {           // NOK
+  for ($k = 0; $k < 20; $i++) {           // Noncompliant
     echo "Hello";
-    doSomething($i = 0);                  // NOK
+    doSomething($i = 0);                  // Noncompliant
   }
 }
 
 
 for ($a->i++; $a->i < 3; $a->i++) {
-  $a->i = 1;                              // NOK {{Refactor the code to avoid updating the loop counter "$a->i" within the loop body.}}
+  $a->i = 1;                              // Noncompliant {{Refactor the code to avoid updating the loop counter "$a->i" within the loop body.}}
 }
 
 for ($a->i++; $a->i < 3; $a->i++) {
@@ -77,7 +77,7 @@ for ( ; $i > 0; $i++) {
 }
 
 for (++$i ; $i > 0; $i++) {
- $i = 1;                                  // NOK
+ $i = 1;                                  // Noncompliant
 }
 
 foreach ($myArray as $i) {
@@ -85,5 +85,5 @@ foreach ($myArray as $i) {
 }
 
 for ($a = 0; $a < 42; $a++) {
-  $a =& $b;                                // NOK
+  $a =& $b;                                // Noncompliant
 }

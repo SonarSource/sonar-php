@@ -20,15 +20,14 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class PHPDeprecatedFunctionUsageCheckTest {
 
   @Test
   public void test() throws Exception {
     // FIXME (SONARPHP-552): FP line 27, should be OK
-    PHPCheckTest.check(new PHPDeprecatedFunctionUsageCheck(), TestUtils.getCheckFile("PHPDeprecatedFunctionUsageCheck.php"));
+    CheckVerifier.verify(new PHPDeprecatedFunctionUsageCheck(), "PHPDeprecatedFunctionUsageCheck.php");
   }
 
 }

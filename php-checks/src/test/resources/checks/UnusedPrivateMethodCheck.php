@@ -5,7 +5,7 @@ class A {
   private function __construct() {  // OK - private constructor
   }
 
-  private function f() {            // NOK {{Remove this unused private "f" method.}}
+  private function f() {            // Noncompliant {{Remove this unused private "f" method.}}
 //                 ^
     $foo = clone $this;
 
@@ -36,7 +36,7 @@ class A {
   function m() {                    // OK - default (=> not private)
   }
 
-  static private function n() {     // NOK
+  static private function n() {     // Noncompliant
   }
 
 }
@@ -70,7 +70,7 @@ $x = new class {
   private function __construct() {  // OK - private constructor
   }
 
-  private function f() {            // NOK {{Remove this unused private "f" method.}}
+  private function f() {            // Noncompliant {{Remove this unused private "f" method.}}
 //                 ^
     $this->h();
 
@@ -85,6 +85,6 @@ $x = new class {
   function m() {                    // OK - default (=> not private)
   }
 
-  static private function n() {     // NOK
+  static private function n() {     // Noncompliant
   }
 };

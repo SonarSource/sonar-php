@@ -2,20 +2,20 @@
 
 abstract class B extends A {
 
-  public function f() {      // NOK {{Remove this method "f" to simply inherit it.}}
+  public function f() {      // Noncompliant {{Remove this method "f" to simply inherit it.}}
 //                ^
     parent::f();
   }
 
-  public function f() {      // NOK
+  public function f() {      // Noncompliant
     return Parent::f();
   }
 
-  public function g($p1) {   // NOK
+  public function g($p1) {   // Noncompliant
     parent::g($p1);
   }
 
-  public function g($p1, $p2, $p3) {   // NOK
+  public function g($p1, $p2, $p3) {   // Noncompliant
     parent::g($p1, $p2, $p3);
   }
 
@@ -23,11 +23,11 @@ abstract class B extends A {
     parent::g2($p1, $p3, $p2);
   }
 
-  public function e() {      // NOK
+  public function e() {      // Noncompliant
     A::e();
   }
 
-  public function h() {      // NOK
+  public function h() {      // Noncompliant
     a::h();
   }
 
@@ -42,11 +42,11 @@ abstract class B extends A {
 
   public function j() {      // OK
     new class extends B {
-      public function f() {      // NOK
+      public function f() {      // Noncompliant
         parent::f();
       }
 
-      public function g() {      // NOK
+      public function g() {      // Noncompliant
         B::g();
       }
 

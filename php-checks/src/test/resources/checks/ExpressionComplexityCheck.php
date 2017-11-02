@@ -1,26 +1,26 @@
 <?php
 
-$b = false ? (true ? (false ? (true ? 1 : 0) : 0) : 0) : 1;         // NOK {{Reduce the number of conditional operators (4) used in the expression (maximum allowed 3).}}
+$b = false ? (true ? (false ? (true ? 1 : 0) : 0) : 0) : 1;         // Noncompliant {{Reduce the number of conditional operators (4) used in the expression (maximum allowed 3).}}
 //   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-$c = true || false || true || false || false;                       // NOK [[effortToFix=1]]
+$c = true || false || true || false || false;                       // Noncompliant [[effortToFix=1]]
 
-$d = true && false && true && false && true && true;                // NOK [[effortToFix=2]]
+$d = true && false && true && false && true && true;                // Noncompliant [[effortToFix=2]]
 
 function f() {
-  if ((true ? 0 : 1) || false || true && false && true || false) {  // NOK {{Reduce the number of conditional operators (6) used in the expression (maximum allowed 3).}}
+  if ((true ? 0 : 1) || false || true && false && true || false) {  // Noncompliant {{Reduce the number of conditional operators (6) used in the expression (maximum allowed 3).}}
   }
 }
 
-for ($i = a ? (b ? (c ? (d ? 1 : 1) : 1) : 1) : 1; i < a; i++) {}   // NOK
+for ($i = a ? (b ? (c ? (d ? 1 : 1) : 1) : 1) : 1; i < a; i++) {}   // Noncompliant
 
-$a = $a ? $b : $c                                                   // NOK
+$a = $a ? $b : $c                                                   // Noncompliant
 .$a ? $b : $c
 .$a ? $b : $c
 .$a ? $b : $c;
 
 $foo =  [                                                           // OK
-  true && true && true && true && true,                             // NOK
+  true && true && true && true && true,                             // Noncompliant
   true && true && true && true                                      // OK
 ];
 
@@ -42,7 +42,7 @@ function g() {
 }
 
 $a && 
-f($d && $e && $f && $g && $h) &&                                    // NOK
+f($d && $e && $f && $g && $h) &&                                    // Noncompliant
 $b &&
 $c;
 

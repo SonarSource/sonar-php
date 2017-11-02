@@ -1,7 +1,7 @@
 <?php
 
 class C {
-  private $field1;            // NOK {{Remove this unused "$field1" private field.}}
+  private $field1;            // Noncompliant {{Remove this unused "$field1" private field.}}
 //        ^^^^^^^
   private $field2;            // OK
   public $field3;             // OK
@@ -20,7 +20,7 @@ class C {
 
 class D {
   private $field1;  // OK
-  private $field2;  // NOK
+  private $field2;  // Noncompliant
 
   public function f($field2) {
     return $field2 + $this->field1;

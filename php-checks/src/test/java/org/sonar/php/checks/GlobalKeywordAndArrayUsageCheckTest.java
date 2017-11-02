@@ -20,14 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class GlobalKeywordAndArrayUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(new GlobalKeywordAndArrayUsageCheck(), TestUtils.getCheckFile("GlobalKeywordAndArrayUsageCheck.php"));
+    CheckVerifier.verify(new GlobalKeywordAndArrayUsageCheck(), "GlobalKeywordAndArrayUsageCheck.php");
   }
 
 }

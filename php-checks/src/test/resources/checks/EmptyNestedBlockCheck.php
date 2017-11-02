@@ -1,6 +1,6 @@
 <?php
 
-for ($i = 0; i < 42; i++){}  // NOK {{Either remove or fill this block of code.}}
+for ($i = 0; i < 42; i++){}  // Noncompliant {{Either remove or fill this block of code.}}
 //                       ^^
 
 for ($i = 0; i < 42; i++);   // OK
@@ -11,21 +11,21 @@ if ($a == 3)                 // OK
 }
 
 class c {
- use A {}                    // NOK
+ use A {}                    // Noncompliant
 //     ^^
  use A { /*some comment*/}                    // OK
 }
 
 try
-{ }                           // NOK
+{ }                           // Noncompliant
  catch (Error $e)           // OK
 {
   // Ignore
-} finally { }                  // NOK
+} finally { }                  // Noncompliant
 
 
 switch ($a)
-  {   }                         // NOK
+  {   }                         // Noncompliant
 //^^^^^
 
 

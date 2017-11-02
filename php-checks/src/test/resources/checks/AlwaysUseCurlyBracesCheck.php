@@ -2,27 +2,27 @@
 
 function sayHello() {
 
-  if (true) doSomething();                // NOK {{Add curly braces around the nested statement(s).}}
+  if (true) doSomething();                // Noncompliant {{Add curly braces around the nested statement(s).}}
 //^^
 
-  for (i = 0; i < 10; i++) doSomething(); // NOK {{Add curly braces around the nested statement(s).}}
+  for (i = 0; i < 10; i++) doSomething(); // Noncompliant {{Add curly braces around the nested statement(s).}}
 //^^^
 
-  while (true) doSomething();             // NOK {{Add curly braces around the nested statement(s).}}
+  while (true) doSomething();             // Noncompliant {{Add curly braces around the nested statement(s).}}
 //^^^^^
 
-  do something(); while (condition);      // NOK {{Add curly braces around the nested statement(s).}}
+  do something(); while (condition);      // Noncompliant {{Add curly braces around the nested statement(s).}}
 
-  if (true)                               // NOK {{Add curly braces around the nested statement(s).}}
+  if (true)                               // Noncompliant {{Add curly braces around the nested statement(s).}}
     if (true) {
     }
 
   if (true) {
-  } else if (true)                        // NOK {{Add curly braces around the nested statement(s).}}
+  } else if (true)                        // Noncompliant {{Add curly braces around the nested statement(s).}}
       doSomething();
 
   if (true) {                             // OK
-  } else doSomething();                   // NOK {{Add curly braces around the nested statement(s).}}
+  } else doSomething();                   // Noncompliant {{Add curly braces around the nested statement(s).}}
 
   if (condition) {                        // OK
   }
@@ -66,7 +66,7 @@ function sayHello() {
   foreach ($a as $b) {                    // OK
   }
 
-  foreach ($a as $b)                      // NOK {{Add curly braces around the nested statement(s).}}
+  foreach ($a as $b)                      // Noncompliant {{Add curly braces around the nested statement(s).}}
     doSomething();
 
   foreach ($a as $b) :                    // OK

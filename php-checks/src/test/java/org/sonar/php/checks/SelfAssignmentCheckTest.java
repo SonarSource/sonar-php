@@ -20,13 +20,12 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class SelfAssignmentCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(new SelfAssignmentCheck(), TestUtils.getCheckFile("SelfAssignmentCheck.php"));
+    CheckVerifier.verify(new SelfAssignmentCheck(), "SelfAssignmentCheck.php");
   }
 }

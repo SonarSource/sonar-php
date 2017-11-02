@@ -2,33 +2,33 @@
 
 if ($a) {
 } elseif ($a) {
-} elseif ($a) {      // NOK {{Add the missing "else" clause.}}
+} elseif ($a) {      // Noncompliant {{Add the missing "else" clause.}}
 //^^^^^^
 }
 
 if ($a):
-  elseif ($a):         // NOK
+  elseif ($a):         // Noncompliant
 //^^^^^^
 endif;
 
 if ($a) {
-} else if ($a) {     // NOK
+} else if ($a) {     // Noncompliant
 //^^^^^^^
 }
 
 if ($a) {
 } elseif ($a) {
-} else if ($a) {     // NOK
+} else if ($a) {     // Noncompliant
 }
 
 if ($a) {
 } else if ($a) {
-} elseif ($a) {      // NOK
+} elseif ($a) {      // Noncompliant
 }
 
 if (true) {
  } else if (true) {
- } else if (true) {  // NOK
+ } else if (true) {  // Noncompliant
  }
 
 if (true) {

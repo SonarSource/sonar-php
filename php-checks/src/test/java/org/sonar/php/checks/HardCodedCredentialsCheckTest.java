@@ -20,14 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class HardCodedCredentialsCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PHPCheckTest.check(new HardCodedCredentialsCheck(), TestUtils.getCheckFile("HardCodedCredentialsCheck.php"));
+    CheckVerifier.verify(new HardCodedCredentialsCheck(), "HardCodedCredentialsCheck.php");
   }
 
 }

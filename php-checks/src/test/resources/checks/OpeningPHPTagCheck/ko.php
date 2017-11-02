@@ -1,6 +1,6 @@
 <html>
 
-<?          // NOK {{Change this opening tag to either "<?php" or "<?=".}}
+<?          // Noncompliant {{Change this opening tag to either "<?php" or "<?=".}}
 
 $foo = 1;
 

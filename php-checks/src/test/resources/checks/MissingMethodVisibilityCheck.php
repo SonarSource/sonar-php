@@ -2,10 +2,10 @@
 
 abstract class C1
 {
-    static function f() { return; }          // NOK {{Explicitly mention the visibility of this method "f".}}
+    static function f() { return; }          // Noncompliant {{Explicitly mention the visibility of this method "f".}}
 //                  ^
-    abstract function g();                   // NOK {{Explicitly mention the visibility of this method "g".}}
-    function h() {return; }                  // NOK {{Explicitly mention the visibility of this method "h".}}
+    abstract function g();                   // Noncompliant {{Explicitly mention the visibility of this method "g".}}
+    function h() {return; }                  // Noncompliant {{Explicitly mention the visibility of this method "h".}}
 
     private static function i() { return; }  // OK
     protected abstract function j();         // OK
@@ -14,15 +14,15 @@ abstract class C1
 
 class C2 {
 
-  function C2 () { return; }                  // NOK {{Explicitly mention the visibility of this constructor "C2".}}
-  function __destruct() { return; }           // NOK {{Explicitly mention the visibility of this destructor "__destruct".}}
+  function C2 () { return; }                  // Noncompliant {{Explicitly mention the visibility of this constructor "C2".}}
+  function __destruct() { return; }           // Noncompliant {{Explicitly mention the visibility of this destructor "__destruct".}}
 }
 
 class C3 {
-  function __construct() { return; }          // NOK {{Explicitly mention the visibility of this constructor "__construct".}}
+  function __construct() { return; }          // Noncompliant {{Explicitly mention the visibility of this constructor "__construct".}}
 }
 
 $x = new class {
-  static function f() { return; }             // NOK {{Explicitly mention the visibility of this method "f".}}
-  function __construct() { return; }          // NOK {{Explicitly mention the visibility of this constructor "__construct".}}
+  static function f() { return; }             // Noncompliant {{Explicitly mention the visibility of this method "f".}}
+  function __construct() { return; }          // Noncompliant {{Explicitly mention the visibility of this constructor "__construct".}}
 };

@@ -22,13 +22,13 @@ class A {
   );
 
   public static function f1() {
-    self::f2();                // NOK
+    self::f2();                // Noncompliant
 //  ^^^^
     self::CONSTANT;            // OK, constant
     self::CONSTANT1;            // OK, constant
     self::CONSTANT2;            // OK, constant
     self::f3();                // OK, "f3" can't be overridden
-    return self::$field_public; // NOK {{Use "static" keyword instead of "self".}}
+    return self::$field_public; // Noncompliant {{Use "static" keyword instead of "self".}}
   }
 
   private static function f2_private() {}
@@ -47,9 +47,9 @@ class A {
 
   public static function f4() {
     self::$field_private;       // OK, as field is private
-    self::$field_protected;     // NOK {{Use "static" keyword instead of "self".}}
-    self::$field_public;        // NOK
-    self::$field_default;       // NOK
+    self::$field_protected;     // Noncompliant {{Use "static" keyword instead of "self".}}
+    self::$field_public;        // Noncompliant
+    self::$field_default;       // Noncompliant
 
     static::$field_private;     // OK, as always with "static"
     static::$field_protected;   // OK, as always with "static"
@@ -57,9 +57,9 @@ class A {
     static::$field_default;     // OK, as always with "static"
 
     self::f2_private();         // OK, as function is private
-    self::f2_protected();       // NOK {{Use "static" keyword instead of "self".}}
-    self::f2_public();          // NOK
-    self::f2_default();         // NOK
+    self::f2_protected();       // Noncompliant {{Use "static" keyword instead of "self".}}
+    self::f2_public();          // Noncompliant
+    self::f2_default();         // Noncompliant
     
     self::f4();                 // OK, as function is private (and final as well)
 
@@ -91,7 +91,7 @@ final class B {
 
 class D {
   public static function f1() {
-    self::f2();                      // NOK
+    self::f2();                      // Noncompliant
     self::f3();                      // OK, function is private
     class C {
       private static $field_private;
@@ -101,16 +101,16 @@ class D {
         static::f2();                // OK, as always with "static"
         self::f2();                  // OK, function is final
         self::f4();                  // OK, function is private
-        self::f3();                  // NOK, function is public
+        self::f3();                  /* Noncompliant */ // function is public
         self::$field_private;        // OK, field is private
-        return self::$field_public;  // NOK, field is public
+        return self::$field_public;  /* Noncompliant */ // field is public
       }
 
       public static final function f2() {}
       private static  function f4() {}
       public static function f3() {}
     }
-    self::f2();                      // NOK
+    self::f2();                      // Noncompliant
     self::f3();                      // OK, function is private
   }
   

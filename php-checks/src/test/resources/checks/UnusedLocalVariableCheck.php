@@ -6,9 +6,9 @@
 function f() {
   $a = 1;    // OK
   $b = 1;    // OK
-  $c = 1;    // NOK {{Remove this unused "$c" local variable.}}
+  $c = 1;    // Noncompliant {{Remove this unused "$c" local variable.}}
 //^^
-  $d =& $a;  // NOK {{Remove this unused "$d" local variable.}}
+  $d =& $a;  // Noncompliant {{Remove this unused "$d" local variable.}}
   $a[$b];
 }
 
@@ -19,7 +19,7 @@ function g($p) {
   global $a;
 
   $a = 1;         // OK - global var
-  $b = 1;         // NOK
+  $b = 1;         // Noncompliant
   $c = $p->a;     // OK
 
   return $c;
@@ -29,7 +29,7 @@ function g($p) {
  *  STATIC
  */
 function h() {
-  static $a, $b = 1;  // NOK - $b
+  static $a, $b = 1;  /* Noncompliant */ // $b
 //           ^^
 
   return $a;
@@ -39,7 +39,7 @@ function h() {
  *  PARAMETER
  */
 function i($p) {  // OK - not a local variable
-   $a = 1;        // NOK
+   $a = 1;        // Noncompliant
 
    return $p;
 }
@@ -55,9 +55,9 @@ function j($p) {               // OK
   $a = 1;                      // OK - use in anonymous function
   $b = 1;                      // OK - use in anonymous function
 
-  call(function () use ($a, $b,   // NOK
+  call(function () use ($a, $b,   // Noncompliant
 //                          ^^
-                            $p) { // NOK
+                            $p) { // Noncompliant
     return $a;
   });
 }
@@ -68,9 +68,9 @@ function j($p) {               // OK
 function j() {
   $a = 1;                                 // OK - use in anonymous function
 
-  call(function () use (&$a,             // NOK - $a (not use in outer, reference not needed )
+  call(function () use (&$a,             /* Noncompliant */ // $a (not use in outer, reference not needed )
 //                       ^^
-                            &$b, &$c) {  // NOK - $c (not use in outer, reference not needed )
+                            &$b, &$c) {  /* Noncompliant */ // $c (not use in outer, reference not needed )
     $b = 1 ;
     $c = 1;
   });
@@ -129,9 +129,9 @@ function m($p){
  */
 function n(){
 
-  list($a, $b) = array();             // NOK - $a
+  list($a, $b) = array();             /* Noncompliant */ // $a
   list(static::$d) = array();         // OK
-  list(list($c)) = array();           // NOK {{Remove this unused "$c" local variable.}}
+  list(list($c)) = array();           // Noncompliant {{Remove this unused "$c" local variable.}}
 //          ^^
 
   doSomething($b);
