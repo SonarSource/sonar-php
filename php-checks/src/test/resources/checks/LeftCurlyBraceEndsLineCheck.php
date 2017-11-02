@@ -16,11 +16,11 @@ $var->{'user_' . $id};
 // --- FUNCTION DECLARATION ----
 
 function f ()
-  {                                // NOK {{Move this open curly brace to the end of the previous line.}}
+  {                                // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 //^
 }
 
-$a = function () { doSomething;  // NOK {{Move this open curly brace to the end of the previous line.}}
+$a = function () { doSomething;  // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 //               ^
 };
 
@@ -43,16 +43,16 @@ class A extends B {              // OK
 }
 
 class A extends B
-{                                // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   function foo();
 
   function bar()
-  {                              // NOK {{Move this open curly brace to the end of the previous line.}}
+  {                              // Noncompliant {{Move this open curly brace to the end of the previous line.}}
     foo();
   }
 }
 
-class A extends B { function foo();  // NOK {{Move this open curly brace to the end of the previous line.}}
+class A extends B { function foo();  // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 }
 
 
@@ -68,12 +68,12 @@ try {
 }
 
 try
-{                                    // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                    // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   foo();
-} catch (Type $e) { bar();           // NOK {{Move this open curly brace to the end of the previous line.}}
+} catch (Type $e) { bar();           // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 }
 finally
-{                                    // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                    // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   foobar();
 }
 
@@ -81,10 +81,10 @@ finally
 // --- IF STATEMENT ----
 
 if (true)
-{                                // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 } elseif (true)
-{                                // NOK {{Move this open curly brace to the end of the previous line.}}
-} else { foo();                  // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                // Noncompliant {{Move this open curly brace to the end of the previous line.}}
+} else { foo();                  // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 }
 
 if (true) { doSomething(); }     // OK
@@ -99,7 +99,7 @@ if (true) { ?> html <? }         // OK
 
 // --- LOOPS ----
 
-for (i = 0; i < 10; i++) { doSomething();  // NOK {{Move this open curly brace to the end of the previous line.}}
+for (i = 0; i < 10; i++) { doSomething();  // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 }
 
 for (i = 0; i < 10; i++) {        // OK
@@ -107,7 +107,7 @@ for (i = 0; i < 10; i++) {        // OK
 }
 
 foreach ($a as $b)
-{                                // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 }
 
 foreach ($a as $b) {             // OK
@@ -120,17 +120,17 @@ do {                              // OK
   something();
 } while (true);
 
-while (true) { foo();              // NOK {{Move this open curly brace to the end of the previous line.}}
+while (true) { foo();              // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 }
 
-do {   something();                // NOK {{Move this open curly brace to the end of the previous line.}}
+do {   something();                // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 } while (true);
 
 
 // --- DECLARE STATEMENT ----
 
 declare (a)
-{                                 // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                 // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   foo();
 }
 
@@ -139,11 +139,11 @@ declare (a)
 
 class A {
   use SomeTrait, OtherTrait
-  {                                  // NOK {{Move this open curly brace to the end of the previous line.}}
+  {                                  // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   }
 
   use SomeTrait, OtherTrait
-  {                                  // NOK {{Move this open curly brace to the end of the previous line.}}
+  {                                  // Noncompliant {{Move this open curly brace to the end of the previous line.}}
     Foo as bar;
   }
 }
@@ -151,16 +151,16 @@ class A {
 // --- SWITCH STATEMENT ----
 
 switch (a)
-{                                   // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                   // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   case 1 :
       break;
 }
 
 switch (a)
-{                                   // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                   // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 }
 
-switch (a) { ;                      // NOK {{Move this open curly brace to the end of the previous line.}}
+switch (a) { ;                      // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   case 1 :
       break;
 }
@@ -168,12 +168,12 @@ switch (a) { ;                      // NOK {{Move this open curly brace to the e
 // --- NAMESPACE ----
 
 namespace Some\NS
-{                                   // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                   // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   foo();
 }
 
 namespace
-{                                   // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                   // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   foo();
 }
 
@@ -197,14 +197,14 @@ $x = new class extends B {              // OK
 };
 
 $x = new class extends B
-{                                // NOK {{Move this open curly brace to the end of the previous line.}}
+{                                // Noncompliant {{Move this open curly brace to the end of the previous line.}}
   function foo();
 
   function bar()
-  {                              // NOK {{Move this open curly brace to the end of the previous line.}}
+  {                              // Noncompliant {{Move this open curly brace to the end of the previous line.}}
     foo();
   }
 };
 
-$x = new class extends B { function foo();  // NOK {{Move this open curly brace to the end of the previous line.}}
+$x = new class extends B { function foo();  // Noncompliant {{Move this open curly brace to the end of the previous line.}}
 };

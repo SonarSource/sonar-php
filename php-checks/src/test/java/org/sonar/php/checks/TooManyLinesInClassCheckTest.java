@@ -19,11 +19,8 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class TooManyLinesInClassCheckTest {
 
@@ -31,12 +28,12 @@ public class TooManyLinesInClassCheckTest {
 
   @Test
   public void test_default() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile("TooManyLinesInClassCheck.php"), ImmutableList.<PhpIssue>of());
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, "TooManyLinesInClassCheck.php");
   }
 
   @Test
   public void custom() throws Exception {
     check.maximumLinesThreshold = 7;
-    PHPCheckTest.check(check, TestUtils.getCheckFile("TooManyLinesInClassCheck.php"));
+    CheckVerifier.verify(check, "TooManyLinesInClassCheck.php");
   }
 }

@@ -2,10 +2,10 @@
 
 switch ($a) {
   case 0:
-  case 1:     // NOK {{End this switch case with an unconditional break, continue, return or throw statement.}}
+  case 1:     // Noncompliant {{End this switch case with an unconditional break, continue, return or throw statement.}}
 //^^^^^^^
     doSomething();
-  case 2:     // NOK
+  case 2:     // Noncompliant
     halt();
   case 3:     // OK
     echo "";
@@ -15,7 +15,7 @@ switch ($a) {
 }
 
 switch ($a) {
-  default:     // NOK
+  default:     // Noncompliant
     doSomething();
   case 2:      // OK
     doSomethingElse();
@@ -42,9 +42,9 @@ switch ($a) {
 //Support alternate switch syntax
 switch ($a):
   case 0:
-  case 1:     // NOK
+  case 1:     // Noncompliant
     doSomething();
-  case 2:     // NOK
+  case 2:     // Noncompliant
     halt();
   case 3:     // OK
     echo "";

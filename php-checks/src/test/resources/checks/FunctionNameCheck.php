@@ -9,7 +9,7 @@ function __destruct() {   // OK
 function doSomething() {  // OK
 }
 
-function DoSomething() {  // NOK {{Rename function "DoSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+function DoSomething() {  // Noncompliant {{Rename function "DoSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
 //       ^^^^^^^^^^^
 }
 
@@ -21,7 +21,7 @@ class A {
   public function DoSomething() {  // OK
   }
 
-  function DoSomething() {  // NOK {{Rename function "DoSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
+  function DoSomething() {  // Noncompliant {{Rename function "DoSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$.}}
 //         ^^^^^^^^^^^
   }
 

@@ -20,14 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class DirectlyAccessingSuperGlobalCheckTest {
 
   @Test
   public void defaultValue() throws Exception {
-    PHPCheckTest.check(new DirectlyAccessingSuperGlobalCheck(), TestUtils.getCheckFile("DirectlyAccessingSuperGlobalCheck.php"));
+    CheckVerifier.verify(new DirectlyAccessingSuperGlobalCheck(), "DirectlyAccessingSuperGlobalCheck.php");
   }
 
 }

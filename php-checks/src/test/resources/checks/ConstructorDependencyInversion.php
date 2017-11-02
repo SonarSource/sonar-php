@@ -5,10 +5,10 @@ class C {
   public function __construct($a, $b) {
     if ($a) {
       if ($b) {
-        $object = new \SomeClass();                    // NOK {{Remove this creation of object in constructor. Use dependency injection instead.}}
-        $object = new SomeClass();                     // NOK
+        $object = new \SomeClass();                    // Noncompliant {{Remove this creation of object in constructor. Use dependency injection instead.}}
+        $object = new SomeClass();                     // Noncompliant
 //                ^^^
-        $object = new Package\SomeOtherClass();        // NOK
+        $object = new Package\SomeOtherClass();        // Noncompliant
       } else {
         throw new InvalidArgumentException();
       }
@@ -23,7 +23,7 @@ class C {
 class D {
 
   public function D($a, $b) {
-        $object = new SomeClass();                     // NOK
+        $object = new SomeClass();                     // Noncompliant
   }
 
   public function f() {
@@ -42,13 +42,13 @@ $object = new SomeClass();                             // OK
 
 class A {
   function __construct() {
-    $x = new class {                // NOK
+    $x = new class {                // Noncompliant
       function foo() {
         new Foo();                  // OK
       }
 
       function __construct() {
-        new Foo();                  // NOK
+        new Foo();                  // Noncompliant
       }
 
       function bar() {
@@ -60,7 +60,7 @@ class A {
   function foo() {
     $x = new class {                // OK
       function __construct() {
-        new Foo();                  // NOK
+        new Foo();                  // Noncompliant
       }
 
       function bar() {

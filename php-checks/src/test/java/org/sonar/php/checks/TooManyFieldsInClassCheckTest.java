@@ -20,13 +20,13 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
+import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
-
-import java.util.List;
 
 public class TooManyFieldsInClassCheckTest {
 
@@ -35,13 +35,13 @@ public class TooManyFieldsInClassCheckTest {
 
   @Test
   public void test_default() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), ImmutableList.<PhpIssue>of());
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, fileName);
   }
 
   @Test
   public void custom_maximum_field_threshold() throws Exception {
     check.maximumFieldThreshold = 4;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName));
+    CheckVerifier.verify(check, fileName);
   }
 
   @Test

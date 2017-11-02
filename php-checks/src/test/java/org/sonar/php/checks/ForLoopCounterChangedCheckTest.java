@@ -20,14 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class ForLoopCounterChangedCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(new ForLoopCounterChangedCheck(), TestUtils.getCheckFile("ForLoopCounterChangedCheck.php"));
+    CheckVerifier.verify(new ForLoopCounterChangedCheck(), "ForLoopCounterChangedCheck.php");
   }
 
 }

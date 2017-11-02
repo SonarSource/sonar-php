@@ -20,8 +20,7 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class FunctionCognitiveComplexityCheckTest {
 
@@ -30,12 +29,12 @@ public class FunctionCognitiveComplexityCheckTest {
   @Test
   public void test() throws Exception {
     check.setThreshold(0);
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FunctionCognitiveComplexityCheck/zeroThreshold.php"));
+    CheckVerifier.verify(check, "FunctionCognitiveComplexityCheck/zeroThreshold.php");
   }
 
   @Test
   public void default_threshold() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FunctionCognitiveComplexityCheck/default.php"));
+    CheckVerifier.verify(check, "FunctionCognitiveComplexityCheck/default.php");
   }
 
 }

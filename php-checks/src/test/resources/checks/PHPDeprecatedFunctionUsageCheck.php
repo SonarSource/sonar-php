@@ -3,26 +3,26 @@
 // Global namespace
 namespace {
 
-  call_user_method();          // NOK {{Replace this "call_user_method()" call with a call to "call_user_func()".}}
+  call_user_method();          // Noncompliant {{Replace this "call_user_method()" call with a call to "call_user_func()".}}
 //^^^^^^^^^^^^^^^^
-  define_syslog_variables();   // NOK {{Remove this "define_syslog_variables()" call.}}
+  define_syslog_variables();   // Noncompliant {{Remove this "define_syslog_variables()" call.}}
 
-  if (sql_regcase());          // NOK
+  if (sql_regcase());          // Noncompliant
 
-  setlocale('LC_ALL', "");     // NOK
-  setlocale("LC_ALL", "") ;    // NOK {{Use the "LC_ALL" constant instead of a string literal.}}
+  setlocale('LC_ALL', "");     // Noncompliant
+  setlocale("LC_ALL", "") ;    // Noncompliant {{Use the "LC_ALL" constant instead of a string literal.}}
 //          ^^^^^^^^
 
-  __autoload();                // NOK
-  create_function('', 'echo 42;'); // NOK
-  parse_str($str);             // NOK {{Add a second argument to this call to "parse_str".}}
+  __autoload();                // Noncompliant
+  create_function('', 'echo 42;'); // Noncompliant
+  parse_str($str);             // Noncompliant {{Add a second argument to this call to "parse_str".}}
   parse_str($str, $array);     // OK
-  gmp_random(4);               // NOK
-  each($foo);                  // NOK
+  gmp_random(4);               // Noncompliant
+  each($foo);                  // Noncompliant
   assert();                    // OK
   assert($foo);                // OK
-  assert("$foo");              // NOK {{Change this call to "assert" to not pass a string argument.}}
-  assert('foo()');             // NOK
+  assert("$foo");              // Noncompliant {{Change this call to "assert" to not pass a string argument.}}
+  assert('foo()');             // Noncompliant
 
   \A\call_user_method();       // OK
 
@@ -38,6 +38,6 @@ namespace A {
   function call_user_method() {
   }
 
-  call_user_method();             // NOK FIXME (SONARPHP-552) False-Positive
-  \call_user_method();            // NOK
+  call_user_method();             /* Noncompliant */ // FIXME (SONARPHP-552) False-Positive
+  \call_user_method();            // Noncompliant
 }

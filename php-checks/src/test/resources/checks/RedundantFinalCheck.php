@@ -2,7 +2,7 @@
 
 final class A {
 
-  public final function f() {  // NOK {{Remove this "final" modifier.}}
+  public final function f() {  // Noncompliant {{Remove this "final" modifier.}}
 //       ^^^^^
   }
 

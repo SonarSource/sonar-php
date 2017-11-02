@@ -10,7 +10,7 @@ class A {
     }
 
     if (false) {        // OK
-      if (false) {      // NOK {{Merge this if statement with the enclosing one.}}
+      if (false) {      // Noncompliant {{Merge this if statement with the enclosing one.}}
 //    ^^
       }
     }
@@ -41,12 +41,12 @@ class A {
 
     if (false) {        // OK
     } else if (false) { // OK
-      if (false) {      // NOK
+      if (false) {      // Noncompliant
       }
     }
 
     if (false)          // OK
-      if (true) {       // NOK
+      if (true) {       // Noncompliant
       }
 
     if (true)           // OK
@@ -71,7 +71,7 @@ class A {
     }
 
     if (true):
-      if (false):       // NOK
+      if (false):       // Noncompliant
         doSomething();
       endif;
     endif;

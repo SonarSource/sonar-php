@@ -20,8 +20,7 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 /**
  * @author Piotr Dawidiuk
@@ -30,7 +29,7 @@ public class AliasFunctionUsageCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(new AliasFunctionUsageCheck(), TestUtils.getCheckFile("AliasFunctionUsageCheck.php"));
+    CheckVerifier.verify(new AliasFunctionUsageCheck(), "AliasFunctionUsageCheck.php");
   }
 
 }

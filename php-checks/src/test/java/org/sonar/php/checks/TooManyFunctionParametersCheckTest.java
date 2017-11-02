@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
+import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -41,7 +42,7 @@ public class TooManyFunctionParametersCheckTest {
   @Test
   public void custom_value_for_max() throws Exception {
     check.max = 2;
-    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
+    CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test

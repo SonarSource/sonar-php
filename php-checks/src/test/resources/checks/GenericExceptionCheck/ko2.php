@@ -4,13 +4,13 @@ namespace Package;
 
 class ClassName {
     function test() {
-        throw new \Exception();         // NOK {{Define and throw a dedicated exception instead of using a generic one.}}
+        throw new \Exception();         // Noncompliant {{Define and throw a dedicated exception instead of using a generic one.}}
 //                ^^^^^^^^^^
     }
     function test() {
-        throw new \RuntimeException();  // NOK
+        throw new \RuntimeException();  // Noncompliant
     }
     function test() {
-        throw new \ErrorException();    // NOK
+        throw new \ErrorException();    // Noncompliant
     }
 }

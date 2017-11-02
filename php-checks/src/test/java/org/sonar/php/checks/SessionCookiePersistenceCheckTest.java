@@ -22,8 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import java.io.File;
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 import static org.sonar.php.checks.phpini.PhpIniCheckTestUtils.check;
 
@@ -44,7 +43,7 @@ public class SessionCookiePersistenceCheckTest {
 
   @Test
   public void programmatic() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile("SessionCookiePersistence.php"));
+    CheckVerifier.verify(check, "SessionCookiePersistence.php");
   }
 
 }

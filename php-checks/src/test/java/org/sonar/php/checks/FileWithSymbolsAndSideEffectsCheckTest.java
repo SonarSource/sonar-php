@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
+import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
@@ -36,17 +37,17 @@ public class FileWithSymbolsAndSideEffectsCheckTest {
 
   @Test
   public void ok() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
+    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
   public void ok_with_define_and_closing_html() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_define.php"));
+    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_define.php");
   }
 
   @Test
   public void ok_no_symbol() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok_no_symbol.php"));
+    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_no_symbol.php");
   }
 
   @Test

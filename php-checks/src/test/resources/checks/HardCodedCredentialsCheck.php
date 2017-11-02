@@ -2,7 +2,7 @@
 class A {
     
   public $fieldNameWithPasswordInIt = retrievePassword();
-  public $fieldNameWithPasswordInIt = ""; // NOK {{Remove this hard-coded password.}}
+  public $fieldNameWithPasswordInIt = ""; // Noncompliant {{Remove this hard-coded password.}}
 //       ^^^^^^^^^^^^^^^^^^^^^^^^^^
   public $fieldNameWithPasswordInIt = "$password";
   public $fieldNameWithPasswordInIt;
@@ -10,30 +10,30 @@ class A {
   
   private function a() {
     $variable1 = "blabla";
-    $variable2 = "login=a&password=xxx"; // NOK
+    $variable2 = "login=a&password=xxx"; // Noncompliant
 //               ^^^^^^^^^^^^^^^^^^^^^^
     $variable3 = "login=a&password=";
     $variable4 = "login=a&password=$password";
 
-    $variableNameWithPasswordInIt = "xxx"; // NOK
+    $variableNameWithPasswordInIt = "xxx"; // Noncompliant
 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     $otherVariableNameWithPasswordInIt;
-    $this->fieldNameWithPasswordInIt = "xx"; // NOK
+    $this->fieldNameWithPasswordInIt = "xx"; // Noncompliant
 //         ^^^^^^^^^^^^^^^^^^^^^^^^^
     $this->fieldNameWithPasswordInIt = retrievePassword(); 
   }
 
 }
 
-const secretPassword = "xxx"; // NOK
+const secretPassword = "xxx"; // Noncompliant
 const otherConstant = "xxx";
 
 class A {
-  const constFieldNameWithPasswordInIt = ""; // NOK
+  const constFieldNameWithPasswordInIt = ""; // Noncompliant
   const otherConstFieldName = "";
 }
 
 function foo() {
-  static $staticVariableNameWithPasswordInIt = "xxx"; // NOK
+  static $staticVariableNameWithPasswordInIt = "xxx"; // Noncompliant
   static $otherStaticVariableName = "xxx";
 }

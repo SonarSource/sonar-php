@@ -5,14 +5,14 @@ class A {
   /**
    *  @return boolean
    */
-  public function getA() {    // NOK {{Rename this method to start with "is" or "has".}}
+  public function getA() {    // Noncompliant {{Rename this method to start with "is" or "has".}}
 //                ^^^^
   }
 
   /**
    *  @return bool
    */
-  public function getB() {    // NOK
+  public function getB() {    // Noncompliant
   }
 
   public function getC() {    // OK

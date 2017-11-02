@@ -1,6 +1,6 @@
 <?php
 
-$$$$$$a;  // NOK {{Remove the use of this variable variable "$$$$$$a".}}
-  $$a = 1;  // NOK
+$$$$$$a;  // Noncompliant {{Remove the use of this variable variable "$$$$$$a".}}
+  $$a = 1;  // Noncompliant
 //^^^
 $a;       // OK

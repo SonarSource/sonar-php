@@ -20,14 +20,14 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
+import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-
-import java.util.List;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class TabCharacterCheckTest {
 
@@ -42,6 +42,6 @@ public class TabCharacterCheckTest {
   @Test
   public void test_ok() throws Exception {
     PHPCheck check = new TabCharacterCheck();
-    PHPCheckTest.check(check, TestUtils.getCheckFile("TabCharacterCheck/TabCharacterCheck_ok.php"), ImmutableList.of());
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, "TabCharacterCheck/TabCharacterCheck_ok.php");
   }
 }

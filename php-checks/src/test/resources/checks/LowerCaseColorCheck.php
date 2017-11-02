@@ -1,10 +1,10 @@
 <?php
 
-$white = '#fffffF';    // NOK {{Replace "#fffffF" with "#FFFFFF".}}
+$white = '#fffffF';    // Noncompliant {{Replace "#fffffF" with "#FFFFFF".}}
 //       ^^^^^^^^^
 $dkgray = '#006400';   // OK
-$aqua = '#00ffff';     // NOK
-$aqua = '#0ff';        // NOK {{Replace "#0ff" with "#0FF".}}
+$aqua = '#00ffff';     // Noncompliant
+$aqua = '#0ff';        // Noncompliant {{Replace "#0ff" with "#0FF".}}
 
 $white = '#FFFFFF';    // OK
 $aqua = '#00FFFF';     // OK

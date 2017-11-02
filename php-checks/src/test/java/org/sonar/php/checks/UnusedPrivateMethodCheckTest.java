@@ -20,14 +20,13 @@
 package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.plugins.php.TestUtils;
-import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.CheckVerifier;
 
 public class UnusedPrivateMethodCheckTest {
 
   @Test
   public void test() throws Exception {
-    PHPCheckTest.check(new UnusedPrivateMethodCheck(), TestUtils.getCheckFile("UnusedPrivateMethodCheck.php"));
+    CheckVerifier.verify(new UnusedPrivateMethodCheck(), "UnusedPrivateMethodCheck.php");
   }
 
 }

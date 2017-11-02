@@ -14,20 +14,20 @@ function f() {
       while (false) {             // level 3
         if (true) {               // level 4
 
-          foreach ($arr as $v) {    // NOK [[secondary=-0,-2,-3,-4,-5]]
+          foreach ($arr as $v) {    // Noncompliant [[secondary=-0,-2,-3,-4,-5]]
 //        ^^^^^^^
           }
 
-          while (false) {           // NOK
+          while (false) {           // Noncompliant
           }
 
-          do {                      // NOK
+          do {                      // Noncompliant
           } while (false);
 
-          switch ($a) {             // NOK
+          switch ($a) {             // Noncompliant
           }
 
-          try {                     // NOK {{Refactor this code to not nest more than 4 "if", "for", "while", "switch" and "try" statements.}}
+          try {                     // Noncompliant {{Refactor this code to not nest more than 4 "if", "for", "while", "switch" and "try" statements.}}
           } catch (Exception $e) {
             if ($a) {               // level 6 - OK
             }

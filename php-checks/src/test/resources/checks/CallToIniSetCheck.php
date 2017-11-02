@@ -1,7 +1,7 @@
 <?php
-  ini_set($name, $value);        // NOK {{Move this configuration into a configuration file.}}
+  ini_set($name, $value);        // Noncompliant {{Move this configuration into a configuration file.}}
 //^^^^^^^
-  \ini_set($name, $value);       // NOK
+  \ini_set($name, $value);       // Noncompliant
 //^^^^^^^^
 UseNS\ini_set($name, $value);  // OK
 ini_set;                       // OK

@@ -1,8 +1,8 @@
 <?php
 
-doSomething(); doSomething();                   // NOK {{2 statements were found on this line. Reformat the code to have only one statement per line.}}
+doSomething(); doSomething();                   // Noncompliant {{2 statements were found on this line. Reformat the code to have only one statement per line.}}
 
-if ($a) doSomething();                          // NOK
+if ($a) doSomething();                          // Noncompliant
 
 if ($a) {}                                      // OK
 
@@ -14,9 +14,9 @@ label: while ($a) {                             // OK
 
 $a = function () { return 1; };                 // OK
 
-$a = call(function($a) { return 1; }, function($a) { return 1; });  // NOK {{3 statements were found on this line. Reformat the code to have only one statement per line.}}
+$a = call(function($a) { return 1; }, function($a) { return 1; });  // Noncompliant {{3 statements were found on this line. Reformat the code to have only one statement per line.}}
 
-$a = function () { doSomething(); return 1; };  // NOK - more than one statement nested in anonymous function.
+$a = function () { doSomething(); return 1; };  /* Noncompliant */ // more than one statement nested in anonymous function.
 
 
 if (true) {

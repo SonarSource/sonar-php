@@ -1,16 +1,16 @@
 <?php
 
-function f($p1, $p2, $p3) {              // NOK {{Remove the unused function parameter "$p1".}}
+function f($p1, $p2, $p3) {              // Noncompliant {{Remove the unused function parameter "$p1".}}
 //         ^^^
     $p2 = 1;
     call($p3);
 }
 
-$a = function($p1, $p2) { return $p1; }; // NOK {{Remove the unused function parameter "$p2".}}
+$a = function($p1, $p2) { return $p1; }; // Noncompliant {{Remove the unused function parameter "$p2".}}
 
 
-function f($p1, $p2) {                   // NOK {{Remove the unused function parameter "$p1".}}
-  function nestedF($p1, $p2) {           // NOK {{Remove the unused function parameter "$p2".}}
+function f($p1, $p2) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
+  function nestedF($p1, $p2) {           // Noncompliant {{Remove the unused function parameter "$p2".}}
     $p1 = 1;
   }
   return $p2;
@@ -18,8 +18,8 @@ function f($p1, $p2) {                   // NOK {{Remove the unused function par
 
 class C {
 
-// NOK@+1 {{Remove the unused function parameter "$p2".}}
-  public function f1($p1, $p2, $p3) {    // NOK {{Remove the unused function parameter "$p3".}}
+// Noncompliant@+1 {{Remove the unused function parameter "$p2".}}
+  public function f1($p1, $p2, $p3) {    // Noncompliant {{Remove the unused function parameter "$p3".}}
       return $p1;
   }
 
@@ -39,7 +39,7 @@ function f($p1, $p2) {                   // OK
 
 class D extends A {
   public function f1($p1) {} // OK
-  private function f2($p1) {}               // NOK {{Remove the unused function parameter "$p1".}}
+  private function f2($p1) {}               // Noncompliant {{Remove the unused function parameter "$p1".}}
 }
 
 class E implements B {
@@ -47,7 +47,7 @@ class E implements B {
   public function f1($p1) {} // OK
 
   public function f2() {
-    $f = function($p1) {};    // NOK
+    $f = function($p1) {};    // Noncompliant
   }
 }
 
@@ -71,10 +71,10 @@ function foo($variable) {  // OK
 }
 
 class Foo {
-  public function f1($p1) {                   // NOK {{Remove the unused function parameter "$p1".}}
+  public function f1($p1) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
     $x = new class extends A {
      public function f1($p1) {}                 // OK
-     private function f2($p1) {}               // NOK {{Remove the unused function parameter "$p1".}}
+     private function f2($p1) {}               // Noncompliant {{Remove the unused function parameter "$p1".}}
     };
  }
 }

@@ -22,6 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
+import org.sonar.plugins.php.CheckVerifier;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
 
@@ -32,7 +33,7 @@ public class CharacterBeforeOpeningPHPTagCheckTest {
 
   @Test
   public void ok() throws Exception {
-    PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ok.php"));
+    CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test

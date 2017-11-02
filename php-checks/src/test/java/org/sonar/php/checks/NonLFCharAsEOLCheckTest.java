@@ -28,6 +28,7 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
+import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 
@@ -48,7 +49,7 @@ public class NonLFCharAsEOLCheckTest {
 
   @Test
   public void ok() throws IOException {
-    PHPCheckTest.check(check, ok_file);
+    PHPCheckVerifier.verifyNoIssue(ok_file, check);
   }
 
   @Test

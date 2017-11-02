@@ -1,6 +1,6 @@
 <?php
 
-  function ko() // NOK [[effortToFix=26]] {{The Cyclomatic Complexity of this function "ko" is 28 which is greater than 2 authorized.}}
+  function ko() // Noncompliant {{The Cyclomatic Complexity of this function "ko" is 28 which is greater than 2 authorized.}} [[effortToFix=26]]
 //^^^^^^^^
 {
   switch (foo)
@@ -32,7 +32,7 @@
   return 1;
 }
 
-function ko() // NOK [[effortToFix=1]]
+function ko() // Noncompliant [[effortToFix=1]]
 {
   switch (foo)
   {
@@ -48,7 +48,7 @@ function ok() {
 
 class C {
 
-  public function ko() // NOK
+  public function ko() // Noncompliant
   {
     switch (foo)
     {
@@ -63,7 +63,7 @@ class C {
   }
 }
 
-$f = function() { // NOK [[secondary=+0,+2,+3]]
+$f = function() { // Noncompliant [[secondary=+0,+2,+3]]
 //   ^^^^^^^^
   if (true) {
     return 1 && 2;
