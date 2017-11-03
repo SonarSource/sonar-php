@@ -9,6 +9,11 @@ if ($condition)
   secondAction();  // Noncompliant; executed unconditionally
 thirdAction();
 
+if($condition) firstActionInBlock(); secondAction();  // Noncompliant; secondAction executed unconditionally
+
+if($condition) firstActionInBlock();  // Noncompliant
+  secondAction();  // Executed unconditionally
+
 $str = null;
 for ($i = 0; $i &lt; count($array); $i++)
   $str = $array[$i];

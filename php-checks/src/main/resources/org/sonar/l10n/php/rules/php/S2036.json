@@ -11,5 +11,6 @@
     "user-experience"
   ],
   "defaultSeverity": "Major",
-  "ruleSpecification": "RSPEC-2036"
+  "ruleSpecification": "RSPEC-2036",
+  "sqKey": "S2036"
 }

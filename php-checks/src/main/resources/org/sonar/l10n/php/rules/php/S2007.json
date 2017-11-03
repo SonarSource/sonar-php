@@ -10,5 +10,6 @@
     "design"
   ],
   "defaultSeverity": "Blocker",
-  "ruleSpecification": "RSPEC-2007"
+  "ruleSpecification": "RSPEC-2007",
+  "sqKey": "S2007"
 }
