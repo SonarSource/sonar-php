@@ -11,5 +11,6 @@
     "style"
   ],
   "defaultSeverity": "Minor",
-  "ruleSpecification": "RSPEC-1808"
+  "ruleSpecification": "RSPEC-1808",
+  "sqKey": "S1808"
 }

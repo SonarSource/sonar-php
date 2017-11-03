@@ -1,0 +1,7 @@
+{
+  "rules-metadata-path": "./php-checks/src/main/resources/org/sonar/l10n/php/rules/php",
+  "languages": [
+    "PHP"
+  ],
+  "latest-update": "2017-11-03T13:57:38.449Z"
+}

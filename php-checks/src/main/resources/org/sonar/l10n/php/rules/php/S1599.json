@@ -10,5 +10,6 @@
     "brain-overload"
   ],
   "defaultSeverity": "Blocker",
-  "ruleSpecification": "RSPEC-1599"
+  "ruleSpecification": "RSPEC-1599",
+  "sqKey": "S1599"
 }

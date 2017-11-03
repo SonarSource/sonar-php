@@ -11,5 +11,6 @@
     "psr2"
   ],
   "defaultSeverity": "Minor",
-  "ruleSpecification": "RSPEC-1131"
+  "ruleSpecification": "RSPEC-1131",
+  "sqKey": "S1131"
 }

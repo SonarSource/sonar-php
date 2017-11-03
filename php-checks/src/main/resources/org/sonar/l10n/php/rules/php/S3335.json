@@ -16,5 +16,6 @@
     "OWASP Top Ten"
   ],
   "defaultSeverity": "Major",
-  "ruleSpecification": "RSPEC-3335"
+  "ruleSpecification": "RSPEC-3335",
+  "sqKey": "S3335"
 }
