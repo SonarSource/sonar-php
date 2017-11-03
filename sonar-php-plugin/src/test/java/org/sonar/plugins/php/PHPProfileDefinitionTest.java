@@ -46,14 +46,15 @@ public class PHPProfileDefinitionTest {
 
     assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
     assertThat(profile.getName()).isEqualTo(PHPProfileDefinition.SONAR_WAY_PROFILE);
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(58);
+    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(59);
     assertThat(validation.hasErrors()).isFalse();
-    assertThat(profile.getActiveRules()).hasSize(59);
+    assertThat(profile.getActiveRules()).hasSize(60);
     assertThat(profile.getActiveRules()).extracting("ruleKey").contains("DuplicatedBlocks");
   }
 
   static RuleFinder ruleFinder() {
     return when(mock(RuleFinder.class).findByKey(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
+      @Override
       public Rule answer(InvocationOnMock invocation) {
         Object[] arguments = invocation.getArguments();
         return Rule.create((String) arguments[0], (String) arguments[1], (String) arguments[1]);

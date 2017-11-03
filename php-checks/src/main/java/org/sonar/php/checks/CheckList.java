@@ -120,6 +120,7 @@ public class CheckList {
       DuplicatedFunctionArgumentCheck.class,
       CodeFollowingJumpStatementCheck.class,
       RedundantFinalCheck.class,
+      RedundantParenthesesCheck.class,
       UnusedPrivateMethodCheck.class,
       FunctionDefineOutsideClassCheck.class,
       SelfKeywordUsageCheck.class,

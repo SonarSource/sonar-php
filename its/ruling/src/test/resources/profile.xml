@@ -669,5 +669,10 @@
       <key>S3776</key> <!-- cognitive complexity -->
       <priority>INFO</priority>
     </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S1110</key> <!-- redundant parenthesis -->
+      <priority>INFO</priority>
+    </rule>
   </rules>
 </profile>
