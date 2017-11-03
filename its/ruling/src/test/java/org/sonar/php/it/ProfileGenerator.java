@@ -45,24 +45,13 @@ public class ProfileGenerator {
       .append("<profile>")
       .append("<name>rules</name>")
       .append("<language>").append(LANGUAGE).append("</language>")
-      .append("<alerts>")
-      .append("<alert>")
-      .append("<metric>blocker_violations</metric>")
-      .append("<operator>&gt;</operator>")
-      .append("<warning></warning>")
-      .append("<error>0</error>")
-      .append("</alert>")
-      .append("<alert>")
-      .append("<metric>info_violations</metric>")
-      .append("<operator>&gt;</operator>")
-      .append("<warning></warning>")
-      .append("<error>0</error>")
-      .append("</alert>")
-      .append("</alerts>")
       .append("<rules>");
 
     String json = new HttpRequestFactory(orchestrator.getServer().getUrl())
-      .get("/api/rules/search", ImmutableMap.<String, Object>of("languages", LANGUAGE, "repositories", REPOSITORY, "ps", "1000"));
+      .get("/api/rules/search", ImmutableMap.<String, Object>of(
+        "languages", LANGUAGE,
+        "repositories", REPOSITORY,
+        "ps", "1000"));
     @SuppressWarnings("unchecked")
     List<Map> jsonRules = (List<Map>) ((Map) JSONValue.parse(json)).get("rules");
     jsonRules.stream()
@@ -76,12 +65,12 @@ public class ProfileGenerator {
           .append("<priority>INFO</priority>");
         if (rulesConfiguration.configurationbyRuleKey.containsKey(key)) {
           sb.append("<parameters>");
-          for (Map.Entry<String, String> parameter : rulesConfiguration.configurationbyRuleKey.get(key).entrySet()) {
-            sb.append("<parameter>")
+          rulesConfiguration.configurationbyRuleKey.get(key).entrySet()
+            .forEach(parameter -> sb
+              .append("<parameter>")
               .append("<key>").append(parameter.getKey()).append("</key>")
               .append("<value>").append(parameter.getValue()).append("</value>")
-              .append("</parameter>");
-          }
+              .append("</parameter>"));
           sb.append("</parameters>");
         }
         sb.append("</rule>");
