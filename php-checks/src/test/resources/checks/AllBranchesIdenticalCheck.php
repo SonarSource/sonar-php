@@ -4,6 +4,15 @@ function ternary() {
   echo($a ? foo() : bar());
   echo($a ? foo() : foo()); // Noncompliant
 //     ^^^^
+
+  $condition ? ($nestedCondition ? foo1() : foo2()) : ($nestedCondition ? foo1() : foo2()); // Noncompliant
+  $condition ? ($nestedCondition ? foo1() : foo1()) : foo2(); // Noncompliant
+
+  false
+     ? false       // Noncompliant
+        ? foo($b)
+        : foo($b)
+     : foo(5);
 }
 
 function if_statements() {

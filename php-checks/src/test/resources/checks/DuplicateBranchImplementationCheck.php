@@ -16,6 +16,12 @@ if ($x == 1) {
 	doY();
 }
 
+if ($a) { // OK, covered by S3923
+  foo();
+} else {
+  foo();
+}
+
 switch($i) {
   case 1:
     doX();
@@ -24,7 +30,7 @@ switch($i) {
   	doY();
     break;
   case 3:
-  	doX();               // Noncompliant {{This case's code block is the same as the block for the case on line 21.}}
+  	doX();               // Noncompliant {{This case's code block is the same as the block for the case on line 27.}}
     break;
   case 4:
   case 5:
@@ -36,18 +42,16 @@ switch($i) {
     break;
 }
 
-$condition ? foo1() : foo1();   // Noncompliant {{This conditional operation returns the same value whether the condition is "true" or "false".}}
+switch($a) { // OK, covered by S3923
+  case 1:
+    foo();
+    break;
+  case 2:
+    foo();
+    break;
+  default:
+    foo();
+    break;
+}
 
-
-$condition ? ($nestedCondition ? foo1() : foo2()) : ($nestedCondition ? foo1() : foo2()); // Noncompliant
-$condition ? ($nestedCondition ? foo1() : foo1()) : foo2(); // Noncompliant
-
-false ? false ? foo(3) : foo(4) : foo(5);   // OK
-false ? false ? foo(1) : foo(1) : foo(5);   // Noncompliant
-
-
-false
-   ? false       // Noncompliant
-      ? foo($b)
-      : foo($b)
-   : foo(5);
+$condition ? foo1() : foo1();   // OK, covered by S3923
