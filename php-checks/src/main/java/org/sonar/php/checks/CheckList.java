@@ -65,6 +65,7 @@ public class CheckList {
       FunctionComplexityCheck.class,
       TabCharacterCheck.class,
       FileHeaderCheck.class,
+      IgnoredReturnValueCheck.class,
       LeftCurlyBraceEndsLineCheck.class,
       AlwaysUseCurlyBracesCheck.class,
       RightCurlyBraceStartsLineCheck.class,
