@@ -32,7 +32,9 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -116,6 +118,13 @@ public class CheckUtils {
 
   public static Stream<String> lines(PhpFile file) {
     return new BufferedReader(new StringReader(file.contents())).lines();
+  }
+
+  public static ExpressionTree skipParenthesis(ExpressionTree expr) {
+    if (expr.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
+      return skipParenthesis(((ParenthesisedExpressionTree) expr).expression());
+    }
+    return expr;
   }
 
 }
