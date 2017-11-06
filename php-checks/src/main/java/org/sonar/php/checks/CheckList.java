@@ -106,6 +106,7 @@ public class CheckList {
       ClosingTagInFullPHPFileCheck.class,
       NonLFCharAsEOLCheck.class,
       ArgumentWithDefaultValueNotLastCheck.class,
+      ArrayCountableCountCheck.class,
       FormattingStandardCheck.class,
       OpeningPHPTagCheck.class,
       PerlStyleCommentsUsageCheck.class,

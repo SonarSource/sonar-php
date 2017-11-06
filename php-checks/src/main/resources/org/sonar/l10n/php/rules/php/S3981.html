@@ -1,0 +1,20 @@
+<p>The count of elements from an array or Countable object is always greater than or equal to zero. So testing that the count is greater than or equal
+to zero doesn't make sense, since the result is always <code>true</code>. Similarly testing that it is less than zero will always return
+<code>false</code>. Perhaps the intent was to check the non-emptiness of the object or array instead. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+if (count($arr) &gt;= 0) { ... }
+
+if (count($arr) &lt; 0) { ... }
+
+$result = count($arr) &gt;= 0;
+
+if (0 &gt; count($arr)) { ... }
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+if (count($arr) != 0) { ... }
+
+if (count($arr) &gt; 0) { ... }
+</pre>
+
