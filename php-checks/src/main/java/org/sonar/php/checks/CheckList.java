@@ -155,6 +155,7 @@ public class CheckList {
       MultilineBlocksCurlyBracesCheck.class,
       SessionCookiePersistenceCheck.class,
       ParsingErrorCheck.class,
+      UnusedExceptionCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 
