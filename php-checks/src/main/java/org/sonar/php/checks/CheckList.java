@@ -148,6 +148,7 @@ public class CheckList {
       UselessObjectCreationCheck.class,
       DuplicateConditionCheck.class,
       DuplicateBranchImplementationCheck.class,
+      AllBranchesIdenticalCheck.class,
       InterfaceNameCheck.class,
       CallToIniSetCheck.class,
       SleepFunctionUsageCheck.class,

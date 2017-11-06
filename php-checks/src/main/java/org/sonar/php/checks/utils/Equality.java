@@ -53,6 +53,10 @@ public class Equality {
     return areSyntacticallyEquivalent(iterator1, iterator2);
   }
 
+  public static boolean areSyntacticallyEquivalent(Iterable<? extends Tree> iterable1, Iterable<? extends Tree> iterable2) {
+    return areSyntacticallyEquivalent(iterable1.iterator(), iterable2.iterator());
+  }
+
   public static boolean areSyntacticallyEquivalent(Iterator<? extends Tree> iterator1, Iterator<? extends Tree> iterator2) {
     while (iterator1.hasNext() && iterator2.hasNext()) {
       if (!areSyntacticallyEquivalent(iterator1.next(), iterator2.next())) {
