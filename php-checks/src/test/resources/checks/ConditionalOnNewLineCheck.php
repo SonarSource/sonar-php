@@ -1,20 +1,21 @@
 <?php
-  if ($x == 1) {
-  } if ($x == 1) { // Noncompliant {{Move this "if" to a new line or add the missing "else".}}
-//  ^^
+  if ($x) {
+  }  if ($x) { // Noncompliant {{Move this "if" to a new line or add the missing "else".}}
+//^> ^^
   }
 
-  if ($x == 1) {
+  if ($x) {
   } else {
-  } if ($x == 1) { // Noncompliant {{Move this "if" to a new line or add the missing "else".}}
-//  ^^
+  }  if ($x) { // Noncompliant {{Move this "if" to a new line or add the missing "else".}}
+//^> ^^
   }
 
-  if ($x == 1) {
-  } elseif ($x == 2) {
-  } if ($x == 1) { // Noncompliant {{Move this "if" to a new line or add the missing "else".}}
-//  ^^
+  if ($x) {
+  } elseif ($y) {
+  }  if ($x) { // Noncompliant {{Move this "if" to a new line or add the missing "else".}}
+//^> ^^
+
   }
 
-  if ($x == 1)
-    doSomething(); if ($x == 1) { } // Compliant
+  if ($x) doSomething(); if ($x) { } // Compliant
+  if ($x) { } if ($x) { } // Compliant

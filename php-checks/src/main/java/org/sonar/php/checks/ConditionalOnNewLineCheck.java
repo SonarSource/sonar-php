@@ -63,10 +63,17 @@ public class ConditionalOnNewLineCheck extends PHPSubscriptionCheck {
   private void setPreviousToken(Tree tree) {
     StatementTree statementTree = getConditionalStatement(tree);
     if (statementTree.is(Tree.Kind.BLOCK)) {
-      previousClosingBracketToken = ((BlockTree) statementTree).closeCurlyBraceToken();
-    } else {
-      previousClosingBracketToken = null;
+      BlockTree blockTree = (BlockTree) statementTree;
+      if (isMultilineBlock(blockTree)) {
+        previousClosingBracketToken = blockTree.closeCurlyBraceToken();
+        return;
+      }
     }
+    previousClosingBracketToken = null;
+  }
+
+  private static boolean isMultilineBlock(BlockTree blockTree) {
+    return blockTree.openCurlyBraceToken().line() != blockTree.closeCurlyBraceToken().line();
   }
 
   private static StatementTree getConditionalStatement(Tree tree) {
