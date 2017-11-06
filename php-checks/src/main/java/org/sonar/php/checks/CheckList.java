@@ -133,6 +133,7 @@ public class CheckList {
       RequireInsteadOfRequireOnceCheck.class,
       InlineHTMLInFileCheck.class,
       ConcatenatedStringLiteralCheck.class,
+      ConditionalOnNewLineCheck.class,
       NestedFunctionDepthCheck.class,
       CharacterBeforeOpeningPHPTagCheck.class,
       MethodNameReturningBooleanCheck.class,
