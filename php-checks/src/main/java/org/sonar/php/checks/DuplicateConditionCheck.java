@@ -86,8 +86,7 @@ public class DuplicateConditionCheck extends AbstractDuplicateBranchCheck {
     }
   }
 
-  @Override
-  protected void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree) {
+  private void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree) {
     String message = String.format(MESSAGE, branchType, ((PHPTree) duplicatedTree).getLine());
     context().newIssue(this, duplicatingTree, message).secondary(duplicatedTree, null);
   }

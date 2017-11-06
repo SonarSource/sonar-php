@@ -41,8 +41,6 @@ public abstract class AbstractDuplicateBranchCheck extends PHPVisitorCheck {
     super.visitScript(tree);
   }
 
-  protected abstract void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree);
-
   protected List<Tree> getClauses(IfStatementTree ifStatement) {
     Preconditions.checkArgument(ifStatement.is(Kind.IF_STATEMENT));
 
