@@ -51,6 +51,11 @@ public class PreciseIssue implements PhpIssue {
     return this;
   }
 
+  public PreciseIssue secondary(Tree startTree, Tree endTree, @Nullable String message) {
+    this.secondaryLocations.add(new IssueLocation(startTree, endTree, message));
+    return this;
+  }
+
   @Override
   public PHPCheck check() {
     return check;

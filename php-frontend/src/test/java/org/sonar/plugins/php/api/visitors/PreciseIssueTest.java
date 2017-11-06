@@ -55,13 +55,18 @@ public class PreciseIssueTest {
     PreciseIssue preciseIssue = new PreciseIssue(CHECK, PRIMARY_LOCATION);
     preciseIssue.secondary(createToken(142, 0, "someValue"), "Secondary message");
     preciseIssue.secondary(createToken(242, 0, "someValue"), null);
+    preciseIssue.secondary(createToken(342, 0, "someValue"), createToken(352, 0, "someValue"), null);
 
-    assertThat(preciseIssue.secondaryLocations()).hasSize(2);
+    assertThat(preciseIssue.secondaryLocations()).hasSize(3);
     assertThat(preciseIssue.secondaryLocations().get(0).message()).isEqualTo("Secondary message");
     assertThat(preciseIssue.secondaryLocations().get(1).message()).isNull();
 
     assertThat(preciseIssue.secondaryLocations().get(0).startLine()).isEqualTo(142);
+    assertThat(preciseIssue.secondaryLocations().get(0).endLine()).isEqualTo(142);
     assertThat(preciseIssue.secondaryLocations().get(1).startLine()).isEqualTo(242);
+    assertThat(preciseIssue.secondaryLocations().get(1).endLine()).isEqualTo(242);
+    assertThat(preciseIssue.secondaryLocations().get(2).startLine()).isEqualTo(342);
+    assertThat(preciseIssue.secondaryLocations().get(2).endLine()).isEqualTo(352);
   }
 
   private static Tree createToken(int line, int column, String tokenValue) {

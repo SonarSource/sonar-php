@@ -109,7 +109,7 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
     for (int i = 1; i < list.size(); i++) {
       for (int j = 0; j < i; j++) {
         if (areSyntacticallyEquivalent(list.get(i).body, list.get(j).body)) {
-          raiseIssue(branchType, list.get(j).clause, list.get(i).clause);
+          raiseIssue(branchType, list.get(j).body, list.get(i).body);
           break;
         }
       }
@@ -121,9 +121,10 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchC
     return !bothEmpty && Equality.areSyntacticallyEquivalent(list1.iterator(), list2.iterator());
   }
 
-  @Override
-  protected void raiseIssue(String branchType, Tree duplicatedTree, Tree duplicatingTree) {
-    String message = String.format(MESSAGE, branchType, branchType, ((PHPTree) duplicatedTree).getLine());
-    context().newIssue(this, duplicatingTree, message).secondary(duplicatedTree, null);
+  private void raiseIssue(String branchType, List<StatementTree> duplicatedTree, List<StatementTree> duplicatingTree) {
+    String message = String.format(MESSAGE, branchType, branchType, ((PHPTree) duplicatedTree.get(0)).getLine());
+    context()
+      .newIssue(this, duplicatingTree.get(0), duplicatingTree.get(duplicatingTree.size() - 1), message)
+      .secondary(duplicatedTree.get(0), duplicatedTree.get(duplicatedTree.size() - 1), null);
   }
 }
