@@ -19,12 +19,15 @@
  */
 package org.sonar.php.it;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -40,8 +43,26 @@ public class PHPRulingTest {
     .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
     .setOrchestratorProperty("litsVersion", "0.6")
     .addPlugin("lits")
-    .restoreProfileAtStartup(FileLocation.of("src/test/resources/profile.xml"))
     .build();
+
+  @BeforeClass
+  public static void prepare_quality_profile() {
+    ProfileGenerator.RulesConfiguration rulesConfiguration = ProfileGenerator.RulesConfiguration.create()
+      .addRule("S103", "maximumLineLength", "140")
+      .addRule("S138", "max", "100")
+      .addRule("S1192", "threshold", "10")
+      .addRule("S1479", "max", "100")
+      .addRule("S1541", "threshold", "10")
+      // force start with capital letter
+      .addRule("S1578", "format", "[A-Z][A-Za-z0-9]+.php")
+      .addRule("S2004", "max", "2")
+      .addRule("S2042", "maximumLinesThreshold", "500");
+    Set<String> disabledRules = ImmutableSet.of(
+      // platform dependent
+      "S1779");
+
+    ProfileGenerator.generate(ORCHESTRATOR, rulesConfiguration, disabledRules);
+  }
 
   @Test
   public void test() throws Exception {
