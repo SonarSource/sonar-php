@@ -20,7 +20,7 @@
 package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.Equality;
+import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -42,7 +42,7 @@ public class SelfAssignmentCheck extends PHPVisitorCheck {
   }
 
   private void check(ExpressionTree lhs, ExpressionTree rhs) {
-    if (Equality.areSyntacticallyEquivalent(lhs, rhs)) {
+    if (SyntacticEquivalence.areSyntacticallyEquivalent(lhs, rhs)) {
       context().newIssue(this, lhs, rhs, MESSAGE);
     }
   }

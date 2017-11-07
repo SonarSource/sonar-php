@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.Equality;
+import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -152,7 +152,7 @@ public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
 
     @Override
     public void visitMemberAccess(MemberAccessTree tree) {
-      if (Equality.areSyntacticallyEquivalent(removeParenthesis(tree.object()), nullExpression)) {
+      if (SyntacticEquivalence.areSyntacticallyEquivalent(removeParenthesis(tree.object()), nullExpression)) {
         context.newIssue(check, nullExpression, String.format(MESSAGE_FORMAT, nullExpression.toString()));
       }
 

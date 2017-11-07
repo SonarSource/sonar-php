@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.Equality;
+import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -47,7 +47,7 @@ public class IdenticalOperandsInBinaryExpressionCheck extends PHPVisitorCheck {
   }
 
   private static boolean hasIdenticalOperands(BinaryExpressionTree binaryExp) {
-    return Equality.areSyntacticallyEquivalent(binaryExp.leftOperand(), binaryExp.rightOperand());
+    return SyntacticEquivalence.areSyntacticallyEquivalent(binaryExp.leftOperand(), binaryExp.rightOperand());
   }
 
   private static boolean isLeftShiftBy1(BinaryExpressionTree binaryExp) {

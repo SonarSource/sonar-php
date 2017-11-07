@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractDuplicateBranchCheck;
-import org.sonar.php.checks.utils.Equality;
+import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -78,7 +78,7 @@ public class DuplicateConditionCheck extends AbstractDuplicateBranchCheck {
   private void checkForEquality(List<ExpressionTree> list, String branchType) {
     for (int i = 1; i < list.size(); i++) {
       for (int j = 0; j < i; j++) {
-        if (Equality.areSyntacticallyEquivalent(list.get(i), list.get(j))) {
+        if (SyntacticEquivalence.areSyntacticallyEquivalent(list.get(i), list.get(j))) {
           raiseIssue(branchType, list.get(j), list.get(i));
           break;
         }

@@ -118,7 +118,7 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
 
   private static boolean areAllEquivalent(List<List<StatementTree>> branches) {
     List<StatementTree> firstBranch = branches.get(0);
-    return branches.stream().allMatch(branch -> Equality.areSyntacticallyEquivalent(firstBranch, branch));
+    return branches.stream().allMatch(branch -> SyntacticEquivalence.areSyntacticallyEquivalent(firstBranch, branch));
   }
 
   protected abstract void onAllEquivalentBranches(SyntaxToken keyword);
