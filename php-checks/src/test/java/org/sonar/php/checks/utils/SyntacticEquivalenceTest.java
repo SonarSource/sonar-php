@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EqualityTest {
+public class SyntacticEquivalenceTest {
 
   private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
 
@@ -45,7 +45,7 @@ public class EqualityTest {
   }
 
   private boolean areSyntacticallyEquivalent(String toParse1, String toParse2) throws Exception {
-    return Equality.areSyntacticallyEquivalent(parse(toParse1), parse(toParse2));
+    return SyntacticEquivalence.areSyntacticallyEquivalent(parse(toParse1), parse(toParse2));
   }
 
   private Tree parse(String toParse) {

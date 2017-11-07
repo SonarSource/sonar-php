@@ -25,9 +25,9 @@ import org.sonar.plugins.php.api.tree.Tree;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class Equality {
+public class SyntacticEquivalence {
 
-  private Equality() {
+  private SyntacticEquivalence() {
   }
 
   public static boolean areSyntacticallyEquivalent(@Nullable Tree tree1, @Nullable Tree tree2) {

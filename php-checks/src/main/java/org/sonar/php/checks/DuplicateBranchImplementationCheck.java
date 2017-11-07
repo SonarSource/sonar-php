@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractDuplicateBranchImplementationCheck;
-import org.sonar.php.checks.utils.Equality;
+import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -52,7 +52,7 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchI
 
   private static boolean areSyntacticallyEquivalent(List<StatementTree> list1, List<StatementTree> list2) {
     boolean bothEmpty = list1.isEmpty() && list2.isEmpty();
-    return !bothEmpty && Equality.areSyntacticallyEquivalent(list1.iterator(), list2.iterator());
+    return !bothEmpty && SyntacticEquivalence.areSyntacticallyEquivalent(list1.iterator(), list2.iterator());
   }
 
   private void raiseIssue(String branchType, List<StatementTree> duplicatedTree, List<StatementTree> duplicatingTree) {

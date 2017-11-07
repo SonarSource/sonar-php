@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractDuplicateBranchImplementationCheck;
-import org.sonar.php.checks.utils.Equality;
+import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -34,7 +34,7 @@ public class AllBranchesIdenticalCheck extends AbstractDuplicateBranchImplementa
 
   @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
-    if (Equality.areSyntacticallyEquivalent(tree.trueExpression(), tree.falseExpression())) {
+    if (SyntacticEquivalence.areSyntacticallyEquivalent(tree.trueExpression(), tree.falseExpression())) {
       context().newIssue(this, tree.condition(), tree.queryToken(), MESSAGE);
     }
     super.visitConditionalExpression(tree);
