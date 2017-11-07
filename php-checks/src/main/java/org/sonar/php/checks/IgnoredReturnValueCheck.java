@@ -21,17 +21,15 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
-import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -147,6 +145,7 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
     "array_pad",
     "array_product",
     "array_rand",
+    "array_reduce",
     "array_replace_recursive",
     "array_replace",
     "array_reverse",
@@ -206,12 +205,10 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
     "get_declared_traits",
     "get_object_vars",
     "get_parent_class",
-    "interface_exists",
     "is_a",
     "is_subclass_of",
     "method_exists",
     "property_exists",
-    "trait_exists",
 
     // Ctype Functions
     "ctype_alnum",
@@ -239,7 +236,8 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
     "func_get_arg",
     "func_get_args",
     "func_num_args",
-    "function_exists"
+    "function_exists",
+    "get_defined_functions"
   ));
 
   @Override
@@ -255,14 +253,11 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
     super.visitForStatement(tree);
   }
 
-  private void checkExpression(ExpressionTree expression) {
-    while (expression instanceof ParenthesisedExpressionTree) {
-      expression = ((ParenthesisedExpressionTree) expression).expression();
-    }
+  private void checkExpression(ExpressionTree expressionTree) {
+    ExpressionTree expression = CheckUtils.skipParenthesis(expressionTree);
     if (expression.is(Tree.Kind.FUNCTION_CALL)) {
-      ExpressionTree callee = ((FunctionCallTree) expression).callee();
-      String name = nameOf(callee);
-      checkName(callee, name);
+      FunctionCallTree functionCall = (FunctionCallTree) expression;
+      checkName(functionCall.callee(), CheckUtils.getFunctionName(functionCall));
     } else if (expression.is(Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
       ArrayInitializerFunctionTree initializer = (ArrayInitializerFunctionTree) expression;
       checkName(initializer, "array");
@@ -270,25 +265,9 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
   }
 
   private void checkName(Tree issueLocation, @Nullable String name) {
-    if (name != null && PURE_FUNCTIONS.contains(name)) {
+    if (name != null && PURE_FUNCTIONS.contains(name.toLowerCase(Locale.ROOT))) {
       context().newIssue(this, issueLocation, "The return value of \"" + name + "\" must be used.");
     }
   }
 
-  @Nullable
-  private static String nameOf(Tree tree) {
-    if (tree.is(Tree.Kind.NAMESPACE_NAME)) {
-      return ((NamespaceNameTree) tree).qualifiedName();
-    } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
-      return ((NameIdentifierTree) tree).text();
-    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)) {
-      MemberAccessTree memberAccess = (MemberAccessTree) tree;
-      String className = nameOf(memberAccess.object());
-      String memberName = nameOf(memberAccess.member());
-      if (className != null && memberName != null) {
-        return className + "::" + memberName;
-      }
-    }
-    return null;
-  }
 }

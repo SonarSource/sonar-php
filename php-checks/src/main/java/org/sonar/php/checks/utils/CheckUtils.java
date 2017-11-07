@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.List;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -32,8 +33,11 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
@@ -77,6 +81,31 @@ public class CheckUtils {
       return "\"" + ((MethodDeclarationTree) functionDec).name().text() + "\"";
     }
     return "expression";
+  }
+
+  /**
+   * @return Returns function or static method's name, like "f" or "A::f". Warning, use case insensitive comparison of the result.
+   */
+  @Nullable
+  public static String getFunctionName(FunctionCallTree functionCall) {
+    return nameOf(functionCall.callee());
+  }
+
+  @Nullable
+  private static String nameOf(Tree tree) {
+    if (tree.is(Tree.Kind.NAMESPACE_NAME)) {
+      return ((NamespaceNameTree) tree).qualifiedName();
+    } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
+      return ((NameIdentifierTree) tree).text();
+    } else if (tree.is(Tree.Kind.CLASS_MEMBER_ACCESS)) {
+      MemberAccessTree memberAccess = (MemberAccessTree) tree;
+      String className = nameOf(memberAccess.object());
+      String memberName = nameOf(memberAccess.member());
+      if (className != null && memberName != null) {
+        return className + "::" + memberName;
+      }
+    }
+    return null;
   }
 
   /**

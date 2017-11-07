@@ -25,6 +25,7 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
@@ -48,6 +49,22 @@ public class CheckUtilsTest {
     expr = expressionFromStatement("((((((42))))));");
     assertThat(CheckUtils.skipParenthesis(expr).is(Tree.Kind.NUMERIC_LITERAL)).isTrue();
     assertThat(((LiteralTree) CheckUtils.skipParenthesis(expr)).value()).isEqualTo("42");
+  }
+
+  @Test
+  public void function_name() throws Exception {
+    ExpressionTree root = expressionFromStatement("A::run(2);");
+    assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
+    FunctionCallTree call = (FunctionCallTree) root;
+    assertThat(CheckUtils.getFunctionName(call)).isEqualTo("A::run");
+  }
+
+  @Test
+  public void no_function_name() throws Exception {
+    ExpressionTree root = expressionFromStatement("$name(2);");
+    assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
+    FunctionCallTree call = (FunctionCallTree) root;
+    assertThat(CheckUtils.getFunctionName(call)).isNull();
   }
 
   private ExpressionTree expressionFromStatement(String statement) {
