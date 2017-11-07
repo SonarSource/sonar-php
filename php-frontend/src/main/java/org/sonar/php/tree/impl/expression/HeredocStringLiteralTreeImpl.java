@@ -57,7 +57,8 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
     int contentStartIndex = matcher.start(3);
     int contentEndIndex = contentStartIndex == -1 ? openingTagEndIndex : matcher.end(3);
     if (content != null && content.length() > 0) {
-      this.elements = (List<ExpressionTree>) PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, tmpHeredocToken.line()).parse(content);
+      HeredocBody heredoc = (HeredocBody) PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, tmpHeredocToken.line()).parse(content);
+      this.elements = heredoc.expressions();
     } else {
       this.elements = Collections.emptyList();
     }
@@ -120,5 +121,35 @@ public class HeredocStringLiteralTreeImpl extends PHPTree implements HeredocStri
   @Override
   public Kind getKind() {
     return Kind.HEREDOC_LITERAL;
+  }
+
+  public static class HeredocBody extends PHPTree {
+
+    private final List<ExpressionTree> expressions;
+
+    public HeredocBody(List<ExpressionTree> expressions) {
+      this.expressions = expressions;
+    }
+
+    @Override
+    public Kind getKind() {
+      throw new UnsupportedOperationException("Used only internally for building the tree");
+    }
+
+    public List<ExpressionTree> expressions() {
+      return expressions;
+    }
+
+    @Override
+    public Iterator<Tree> childrenIterator() {
+      // parsing utility class, it does not really have children
+      return Collections.<Tree>emptyList().iterator();
+    }
+
+    @Override
+    public void accept(VisitorCheck visitor) {
+      throw new UnsupportedOperationException("Used only internally for building the tree");
+    }
+
   }
 }

@@ -162,7 +162,7 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
   /**
    * Utility class hidden from API (it's mainly created to avoid duplication in grammar)
    */
-  public static class ForStatementHeader implements Tree {
+  public static class ForStatementHeader {
 
     private final InternalSyntaxToken forToken;
     private final InternalSyntaxToken openParenthesisToken;
@@ -187,21 +187,6 @@ public class ForStatementTreeImpl extends PHPTree implements ForStatementTree {
       this.secondSemicolonToken = secondSemicolonToken;
       this.update = update;
       this.closeParenthesisToken = closeParenthesisToken;
-    }
-
-    @Override
-    public boolean is(Kind... kind) {
-      return false;
-    }
-
-    @Override
-    public Kind getKind() {
-      throw new IllegalStateException("class ForStatementHeader is used only internally for building the tree and should not be used to tree visiting.");
-    }
-
-    @Override
-    public void accept(VisitorCheck visitor) {
-      throw new IllegalStateException("class ForStatementHeader is used only internally for building the tree and should not be used to tree visiting.");
     }
 
     public InternalSyntaxToken forToken() {

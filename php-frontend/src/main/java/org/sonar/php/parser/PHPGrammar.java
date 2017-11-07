@@ -20,10 +20,10 @@
 package org.sonar.php.parser;
 
 import com.sonar.sslr.api.typed.GrammarBuilder;
-import java.util.List;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedListImpl;
+import org.sonar.php.tree.impl.expression.HeredocStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStatementHead;
 import org.sonar.php.tree.impl.statement.ForEachStatementTreeImpl.ForEachStatementHeader;
@@ -1210,11 +1210,11 @@ public class PHPGrammar {
       f.heredocStringLiteral(b.token(PHPLexicalGrammar.HEREDOC)));
   }
 
-  public List<ExpressionTree> HEREDOC_BODY() {
-    return b.<List<ExpressionTree>>nonterminal(PHPLexicalGrammar.HEREDOC_BODY).is(
-      b.oneOrMore(b.firstOf(
+  public HeredocStringLiteralTreeImpl.HeredocBody HEREDOC_BODY() {
+    return b.<HeredocStringLiteralTreeImpl.HeredocBody>nonterminal(PHPLexicalGrammar.HEREDOC_BODY).is(
+      f.heredocBodyTree(b.oneOrMore(b.firstOf(
         HEREDOC_STRING_CHARACTERS(),
-        ENCAPSULATED_STRING_VARIABLE())));
+        ENCAPSULATED_STRING_VARIABLE()))));
   }
 
   public ExpressionTree ENCAPSULATED_STRING_VARIABLE() {

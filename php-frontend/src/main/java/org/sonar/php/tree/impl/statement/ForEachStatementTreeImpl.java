@@ -155,7 +155,7 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
   /**
    * Utility class hidden from API (it's mainly created to avoid duplication in grammar)
    */
-  public static class ForEachStatementHeader implements Tree {
+  public static class ForEachStatementHeader {
 
     private final InternalSyntaxToken foreachToken;
     private final InternalSyntaxToken openParenthesisToken;
@@ -179,21 +179,6 @@ public class ForEachStatementTreeImpl extends PHPTree implements ForEachStatemen
       this.doubleArrowToken = doubleArrowToken;
       this.value = value;
       this.closeParenthesisToken = closeParenthesisToken;
-    }
-
-    @Override
-    public boolean is(Kind... kind) {
-      return false;
-    }
-
-    @Override
-    public void accept(VisitorCheck visitor) {
-      throw new IllegalStateException("class ForEachStatementHeader is used only internally for building the tree and should not be used to tree visiting.");
-    }
-
-    @Override
-    public Kind getKind() {
-      throw new IllegalStateException("class ForEachStatementHeader is used only internally for building the tree and should not be used to tree visiting.");
     }
 
     public InternalSyntaxToken foreachToken() {
