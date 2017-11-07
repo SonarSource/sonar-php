@@ -161,7 +161,9 @@ public class CheckList {
       UnusedExceptionCheck.class,
       UseOfEmptyReturnValueCheck.class,
       WrongAssignmentOperatorCheck.class,
-      IdenticalOperandsInBinaryExpressionCheck.class);
+      IdenticalOperandsInBinaryExpressionCheck.class,
+      DuplicatedMethodCheck.class
+      );
   }
 
   public static Iterable<Class> getPhpIniChecks() {
