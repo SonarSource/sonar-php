@@ -20,7 +20,6 @@
 package org.sonar.php.parser;
 
 import com.sonar.sslr.api.typed.ActionParser;
-import java.nio.charset.StandardCharsets;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
@@ -46,14 +45,7 @@ public class PHPParserBuilder {
    * This method should be used if required to shift line of tokens
    */
   public static ActionParser<Tree> createParser(GrammarRuleKey rootRule, int lineOffset) {
-    return new ActionParser<>(
-      // we can pass any charset, it's not used. To parse file, we use sting content of it.
-      StandardCharsets.UTF_8,
-      PHPLexicalGrammar.createGrammarBuilder(),
-      PHPGrammar.class,
-      new TreeFactory(),
-      new PHPNodeBuilder(lineOffset),
-      rootRule);
+    return new PHPParser(rootRule, lineOffset);
   }
 
 }

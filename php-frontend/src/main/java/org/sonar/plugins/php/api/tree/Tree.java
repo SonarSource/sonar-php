@@ -114,6 +114,8 @@ public interface Tree {
 
   Kind getKind();
 
+  Tree getParent();
+
   enum Kind implements GrammarRuleKey {
 
     /**

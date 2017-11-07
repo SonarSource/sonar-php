@@ -19,13 +19,24 @@
  */
 package org.sonar.php.tree.impl;
 
+import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-
 public abstract class PHPTree implements Tree {
+
+  @Nullable
+  private Tree parent;
+
+  public void setParent(Tree parent) {
+    this.parent = parent;
+  }
+
+  @Nullable
+  public Tree getParent() {
+    return parent;
+  }
 
   public int getLine() {
     return getFirstToken().line();

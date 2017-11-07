@@ -19,7 +19,6 @@
  */
 package org.sonar.php.parser;
 
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -1622,6 +1621,10 @@ public class TreeFactory {
 
   public HeredocStringLiteralTree heredocStringLiteral(InternalSyntaxToken token) {
     return new HeredocStringLiteralTreeImpl(token);
+  }
+
+  public HeredocStringLiteralTreeImpl.HeredocBody heredocBodyTree(List<ExpressionTree> expressions) {
+    return new HeredocStringLiteralTreeImpl.HeredocBody(expressions);
   }
 
   public ArrayAssignmentPatternTree arrayAssignmentPattern(

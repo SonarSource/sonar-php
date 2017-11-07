@@ -19,11 +19,18 @@
  */
 package org.sonar.php.tree.impl.expression;
 
+import com.sonar.sslr.api.typed.ActionParser;
+import java.util.Collections;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.impl.expression.HeredocStringLiteralTreeImpl.HeredocBody;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -143,6 +150,30 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
     HeredocStringLiteralTree tree = parse(code, Kind.HEREDOC_LITERAL);
     assertThat(tree.is(Kind.HEREDOC_LITERAL)).isTrue();
     return tree;
+  }
+
+  @Test
+  public void heredoc_body() throws Exception {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.HEREDOC_BODY, 0);
+    HeredocBody heredoc = (HeredocBody) parser.parse("Start $name End");
+    assertThat(heredoc.expressions()).hasSize(3);
+    assertThat(heredoc.childrenIterator().hasNext()).isFalse();
+    assertThat(heredoc.expressions().get(0).is(Tree.Kind.HEREDOC_STRING_CHARACTERS)).isTrue();
+    assertThat(heredoc.expressions().get(1).is(Tree.Kind.VARIABLE_IDENTIFIER)).isTrue();
+    assertThat(heredoc.expressions().get(2).is(Tree.Kind.HEREDOC_STRING_CHARACTERS)).isTrue();
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void unsupported_kind() throws Exception {
+    HeredocBody tree = new HeredocBody(Collections.emptyList());
+    tree.getKind();
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void unsupported_accept() throws Exception {
+    HeredocBody tree = new HeredocBody(Collections.emptyList());
+    tree.accept(new PHPVisitorCheck() {
+    });
   }
 
 }
