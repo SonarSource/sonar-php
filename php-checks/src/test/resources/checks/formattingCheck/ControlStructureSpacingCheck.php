@@ -56,3 +56,13 @@ foreach ($tokens as $token) {
      );
 
 }
+
+
+// case-sensitivity of keywords
+
+If ($x) {}
+If($x) {} // Noncompliant
+If ($x) {} Else {}
+If ($x) {} Else{} // Noncompliant
+For ($i = 0; $i < 3; $i++) {}
+For ($i = 0;$i < 3; $i++) {} // Noncompliant
