@@ -1,0 +1,15 @@
+{
+  "title": "\"=+\" should not be used instead of \"+=\"",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-2757",
+  "sqKey": "S2757"
+}
