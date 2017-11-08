@@ -160,6 +160,7 @@ public class CheckList {
       ParsingErrorCheck.class,
       UnusedExceptionCheck.class,
       UseOfEmptyReturnValueCheck.class,
+      WrongAssignmentOperatorCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class);
   }
 
