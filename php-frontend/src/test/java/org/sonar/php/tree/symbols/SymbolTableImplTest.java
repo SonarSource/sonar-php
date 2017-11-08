@@ -19,9 +19,12 @@
  */
 package org.sonar.php.tree.symbols;
 
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,13 +34,13 @@ public class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   public void symbols_filtering() {
-    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(16);
+    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(18);
 
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).hasSize(2);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.CLASS)).hasSize(1);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FIELD)).hasSize(3);
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PARAMETER)).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.VARIABLE)).hasSize(9);
+    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.VARIABLE)).hasSize(11);
 
     assertThat(SYMBOL_MODEL.getSymbols("$a")).hasSize(2);
     // Case insensitive
@@ -78,7 +81,30 @@ public class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   public void static_variable() throws Exception {
-    assertThat(SYMBOL_MODEL.getSymbols("$static")).hasSize(1);
+    List<Symbol> symbols = SYMBOL_MODEL.getSymbols("$static");
+    assertThat(symbols).hasSize(1);
+    Symbol symbol = symbols.get(0);
+    assertThat(symbol.hasModifier("static")).isTrue();
+  }
+
+  @Test
+  public void global_variable() throws Exception {
+    List<Symbol> symbols = SYMBOL_MODEL.getSymbols("$global");
+    assertThat(symbols).hasSize(2);
+
+    Symbol globalGlobal = symbols.get(0);
+    assertThat(globalGlobal.scope().tree().is(Tree.Kind.COMPILATION_UNIT)).isTrue();
+    assertThat(((PHPTree) globalGlobal.declaration()).getLine()).isEqualTo(4);
+    assertThat(globalGlobal.usages().stream().map(st -> st.line())).containsExactly(15);
+    assertThat(globalGlobal.hasModifier("global")).isTrue();
+
+    Symbol localGlobal = symbols.get(1);
+    assertThat(localGlobal.scope().tree().is(Tree.Kind.FUNCTION_DECLARATION)).isTrue();
+    assertThat(localGlobal.modifiers()).isEmpty();
+    assertThat(localGlobal.usages()).isEmpty();
+    assertThat(((PHPTree) localGlobal.declaration()).getLine()).isEqualTo(13);
+    // not able to retrieve the symbol '$global' from the scope itself, as it is ambiguous : there is the local and global one
+    assertThat(localGlobal.scope().getSymbol("$global", Symbol.Kind.VARIABLE)).isNull();
   }
 
 }

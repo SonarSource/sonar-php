@@ -23,6 +23,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Locale;
 import java.util.Set;
@@ -59,6 +60,7 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class SymbolVisitor extends PHPVisitorCheck {
@@ -286,9 +288,26 @@ public class SymbolVisitor extends PHPVisitorCheck {
           symbol.addUsage(identifier);
           currentScope.addSymbol(symbol);
         } else {
-          createSymbol(identifier, Symbol.Kind.VARIABLE);
+          symbol = createSymbol(identifier, Symbol.Kind.VARIABLE);
         }
+        // consider 'global' has being a modifier for the variable
+        symbol.addModifiers(Collections.singletonList(tree.globalToken()));
 
+      }
+    }
+  }
+
+  @Override
+  public void visitStaticStatement(StaticStatementTree tree) {
+    // first visit declarations to create symbols which may not have been used yet
+    super.visitStaticStatement(tree);
+    // consider 'static' has being a modifier for the variables
+    for (VariableDeclarationTree variable : tree.variables()) {
+      // FIXME SONARPHP-741: can generate inconsistencies if the variable has already
+      // been declared static in another statement, or if its global
+      Symbol symbol = currentScope.getSymbol(variable.identifier().text(), Symbol.Kind.VARIABLE);
+      if (symbol != null) {
+        symbol.addModifiers(Collections.singletonList(tree.staticToken()));
       }
     }
   }
