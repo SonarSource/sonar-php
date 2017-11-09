@@ -20,16 +20,21 @@
 package org.sonar.php.checks.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.annotation.Nullable;
-import org.apache.commons.lang.ArrayUtils;
+import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class TokenVisitor extends PHPVisitorCheck {
+
+  private static final Set<String> PHP_KEYWORD_VALUES = new HashSet<>(Arrays.asList(PHPKeyword.getKeywordValues()));
 
   List<SyntaxToken> tokens = new ArrayList<>();
 
@@ -55,13 +60,11 @@ public class TokenVisitor extends PHPVisitorCheck {
   }
 
   @Nullable
-  public SyntaxToken tokenByValue(String... tokenValues) {
-    for (SyntaxToken token : tokens) {
-      if (ArrayUtils.contains(tokenValues, token.text().toLowerCase(Locale.ROOT))) {
-        return token;
-      }
-    }
-    return null;
+  public SyntaxToken firstKeyword() {
+    return tokens.stream()
+      .filter(t -> PHP_KEYWORD_VALUES.contains(t.text().toLowerCase(Locale.ROOT)))
+      .findFirst()
+      .orElse(null);
   }
 
   public SyntaxToken prevToken(SyntaxToken token) {
