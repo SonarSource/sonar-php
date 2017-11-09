@@ -21,7 +21,9 @@ package org.sonar.php.checks.formatting;
 
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
-import org.sonar.php.api.PHPKeyword;
+import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.checks.FormattingStandardCheck;
 import org.sonar.php.checks.utils.TokenVisitor;
@@ -33,10 +35,6 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implements FormattingCheck {
 
@@ -150,7 +148,7 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
   }
 
   private void checkSpaceBetweenKeywordAndNextNode(TokenVisitor tokenVisitor, Tree tree) {
-    SyntaxToken keyword = tokenVisitor.tokenByValue(PHPKeyword.getKeywordValues());
+    SyntaxToken keyword = tokenVisitor.firstKeyword();
 
     if (tree.is(Kind.TRY_STATEMENT)) {
       TryStatementTree tryStatement = (TryStatementTree) tree;
