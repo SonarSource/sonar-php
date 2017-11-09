@@ -119,6 +119,7 @@ public class CheckList {
       ThisVariableUsageInStaticContextCheck.class,
       ReferenceInFunctionCallCheck.class,
       LogicalWordOperatorUsageCheck.class,
+      ConditionalIndentationCheck.class,
       DuplicatedFunctionArgumentCheck.class,
       CodeFollowingJumpStatementCheck.class,
       RedundantFinalCheck.class,
