@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -154,6 +155,45 @@ public class CheckUtils {
       return skipParenthesis(((ParenthesisedExpressionTree) expr).expression());
     }
     return expr;
+  }
+
+  @Nullable
+  public static Tree findPreviousSibling(Tree tree) {
+    Tree parent = tree.getParent();
+    if (parent == null) {
+      return null;
+    }
+    Tree previousSibling = null;
+    Iterator<Tree> childrenIterator = ((PHPTree) parent).childrenIterator();
+    while (childrenIterator.hasNext()) {
+      Tree child = childrenIterator.next();
+      if (child == tree) {
+        break;
+      }
+      previousSibling = child;
+    }
+    return previousSibling;
+  }
+
+  @Nullable
+  public static SyntaxToken findPreviousToken(Tree tree) {
+    Tree previousSibling = findPreviousSibling(tree);
+    if (previousSibling != null) {
+      return ((PHPTree) previousSibling).getLastToken();
+    }
+    return null;
+  }
+
+  public static boolean isDisguisedShortEchoStatement(Tree tree) {
+    if (!tree.is(Kind.EXPRESSION_STATEMENT, Kind.EXPRESSION_LIST_STATEMENT)) {
+      return false;
+    }
+    SyntaxToken previousToken = findPreviousToken(tree);
+    if (previousToken == null) {
+      return false;
+    }
+    boolean isFileOpeningTagToken = previousToken.line() == 1 && previousToken.column() == 0;
+    return (isFileOpeningTagToken || previousToken.is(Kind.INLINE_HTML_TOKEN)) && previousToken.text().endsWith("<?=");
   }
 
 }

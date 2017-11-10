@@ -237,8 +237,7 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
     "func_get_args",
     "func_num_args",
     "function_exists",
-    "get_defined_functions"
-  ));
+    "get_defined_functions"));
 
   @Override
   public void visitExpressionStatement(ExpressionStatementTree tree) {
@@ -257,15 +256,16 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
     ExpressionTree expression = CheckUtils.skipParenthesis(expressionTree);
     if (expression.is(Tree.Kind.FUNCTION_CALL)) {
       FunctionCallTree functionCall = (FunctionCallTree) expression;
-      checkName(functionCall.callee(), CheckUtils.getFunctionName(functionCall));
+      checkName(expressionTree, functionCall.callee(), CheckUtils.getFunctionName(functionCall));
     } else if (expression.is(Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
       ArrayInitializerFunctionTree initializer = (ArrayInitializerFunctionTree) expression;
-      checkName(initializer, "array");
+      checkName(expressionTree, initializer.arrayToken(), "array");
     }
   }
 
-  private void checkName(Tree issueLocation, @Nullable String name) {
-    if (name != null && PURE_FUNCTIONS.contains(name.toLowerCase(Locale.ROOT))) {
+  private void checkName(ExpressionTree expressionTree, Tree issueLocation, @Nullable String name) {
+    boolean isPureFunction = name != null && PURE_FUNCTIONS.contains(name.toLowerCase(Locale.ROOT));
+    if (isPureFunction && !CheckUtils.isDisguisedShortEchoStatement(expressionTree.getParent())) {
       context().newIssue(this, issueLocation, "The return value of \"" + name + "\" must be used.");
     }
   }
