@@ -20,15 +20,22 @@
 package org.sonar.php.checks.utils;
 
 import com.sonar.sslr.api.typed.ActionParser;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,6 +72,75 @@ public class CheckUtilsTest {
     assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
     FunctionCallTree call = (FunctionCallTree) root;
     assertThat(CheckUtils.getFunctionName(call)).isNull();
+  }
+
+  @Test
+  public void previous_sibling() throws Exception {
+    BinaryExpressionTree expression = (BinaryExpressionTree) expressionFromStatement("1 + 1;");
+    assertThat(CheckUtils.findPreviousSibling(expression.rightOperand())).isSameAs(expression.operator());
+    assertThat(CheckUtils.findPreviousSibling(expression.operator())).isSameAs(expression.leftOperand());
+    assertThat(CheckUtils.findPreviousSibling(expression.leftOperand())).isNull();
+    assertThat(CheckUtils.findPreviousSibling(null)).isNull();
+    assertThat(CheckUtils.findPreviousSibling(expression.getParent())).isNull();
+  }
+
+  @Test
+  public void previous_token() throws Exception {
+    BinaryExpressionTree expression = (BinaryExpressionTree) expressionFromStatement("1 + 1;");
+    assertThat(CheckUtils.findPreviousToken(expression.rightOperand())).isSameAs(expression.operator());
+    assertThat(CheckUtils.findPreviousToken(null)).isNull();
+  }
+
+  @Test
+  public void echo_tag() throws Exception {
+    Map<String, Boolean> actual = new HashMap<>();
+    PHPParserBuilder.createParser().parse(
+      "<?php\n"
+        + " ?>Title <?= 'A' ?><?= 'B', 'C' ?> <?php\n"
+        + " echo 'D';\n"
+        + " ?><?= 'E' ?> <?php\n"
+        + " echo 'F', 'G';\n"
+        + " 'H';"
+        + "")
+      .accept(new PHPVisitorCheck() {
+        @Override
+        public void visitLiteral(LiteralTree tree) {
+          actual.put(tree.token().text(), CheckUtils.isAfterEchoTag(tree));
+          super.visitLiteral(tree);
+        }
+      });
+    Map<String, Boolean> expected = new HashMap<>();
+    expected.put("'A'", true);
+    expected.put("'B'", true);
+    expected.put("'C'", true);
+    expected.put("'D'", false);
+    expected.put("'E'", true);
+    expected.put("'F'", false);
+    expected.put("'G'", false);
+    expected.put("'H'", false);
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  public void not_after_echo_tag() throws Exception {
+    Tree tree = PHPParserBuilder.createParser().parse("<?php ?><?php 'str'; return 0;");
+    List<StatementTree> statements = ((CompilationUnitTree) tree).script().statements();
+    assertThat(CheckUtils.isAfterEchoTag(statements.get(0))).isEqualTo(false);
+    assertThat(CheckUtils.isAfterEchoTag(statements.get(1))).isEqualTo(false);
+
+    tree = PHPParserBuilder.createParser(PHPLexicalGrammar.STATEMENT).parse("'str';");
+    assertThat(CheckUtils.isAfterEchoTag((StatementTree) tree)).isEqualTo(false);
+  }
+
+  @Test
+  public void start_with_echo_tag() throws Exception {
+    Tree tree = PHPParserBuilder.createParser().parse("<?= 2 ?>");
+    List<StatementTree> statements = ((CompilationUnitTree) tree).script().statements();
+    assertThat(CheckUtils.isAfterEchoTag(statements.get(0))).isEqualTo(true);
+
+    tree = PHPParserBuilder.createParser().parse("<?php 2 ?>");
+    statements = ((CompilationUnitTree) tree).script().statements();
+    assertThat(CheckUtils.isAfterEchoTag(statements.get(0))).isEqualTo(false);
   }
 
   private ExpressionTree expressionFromStatement(String statement) {
