@@ -165,7 +165,8 @@ public class CheckList {
       UseOfEmptyReturnValueCheck.class,
       WrongAssignmentOperatorCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class,
-      DuplicatedMethodCheck.class
+      DuplicatedMethodCheck.class,
+      HardCodedUriCheck.class
       );
   }
 
