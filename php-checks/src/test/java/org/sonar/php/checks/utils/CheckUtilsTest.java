@@ -80,7 +80,6 @@ public class CheckUtilsTest {
     assertThat(CheckUtils.findPreviousSibling(expression.rightOperand())).isSameAs(expression.operator());
     assertThat(CheckUtils.findPreviousSibling(expression.operator())).isSameAs(expression.leftOperand());
     assertThat(CheckUtils.findPreviousSibling(expression.leftOperand())).isNull();
-    assertThat(CheckUtils.findPreviousSibling(null)).isNull();
     assertThat(CheckUtils.findPreviousSibling(expression.getParent())).isNull();
   }
 
@@ -88,7 +87,6 @@ public class CheckUtilsTest {
   public void previous_token() throws Exception {
     BinaryExpressionTree expression = (BinaryExpressionTree) expressionFromStatement("1 + 1;");
     assertThat(CheckUtils.findPreviousToken(expression.rightOperand())).isSameAs(expression.operator());
-    assertThat(CheckUtils.findPreviousToken(null)).isNull();
   }
 
   @Test
@@ -105,7 +103,7 @@ public class CheckUtilsTest {
       .accept(new PHPVisitorCheck() {
         @Override
         public void visitLiteral(LiteralTree tree) {
-          actual.put(tree.token().text(), CheckUtils.isAfterEchoTag(tree));
+          actual.put(tree.token().text(), CheckUtils.isDisguisedShortEchoStatement(tree.getParent()));
           super.visitLiteral(tree);
         }
       });
@@ -125,22 +123,22 @@ public class CheckUtilsTest {
   public void not_after_echo_tag() throws Exception {
     Tree tree = PHPParserBuilder.createParser().parse("<?php ?><?php 'str'; return 0;");
     List<StatementTree> statements = ((CompilationUnitTree) tree).script().statements();
-    assertThat(CheckUtils.isAfterEchoTag(statements.get(0))).isEqualTo(false);
-    assertThat(CheckUtils.isAfterEchoTag(statements.get(1))).isEqualTo(false);
+    assertThat(CheckUtils.isDisguisedShortEchoStatement(statements.get(0))).isEqualTo(false);
+    assertThat(CheckUtils.isDisguisedShortEchoStatement(statements.get(1))).isEqualTo(false);
 
     tree = PHPParserBuilder.createParser(PHPLexicalGrammar.STATEMENT).parse("'str';");
-    assertThat(CheckUtils.isAfterEchoTag((StatementTree) tree)).isEqualTo(false);
+    assertThat(CheckUtils.isDisguisedShortEchoStatement(tree)).isEqualTo(false);
   }
 
   @Test
   public void start_with_echo_tag() throws Exception {
     Tree tree = PHPParserBuilder.createParser().parse("<?= 2 ?>");
     List<StatementTree> statements = ((CompilationUnitTree) tree).script().statements();
-    assertThat(CheckUtils.isAfterEchoTag(statements.get(0))).isEqualTo(true);
+    assertThat(CheckUtils.isDisguisedShortEchoStatement(statements.get(0))).isEqualTo(true);
 
     tree = PHPParserBuilder.createParser().parse("<?php 2 ?>");
     statements = ((CompilationUnitTree) tree).script().statements();
-    assertThat(CheckUtils.isAfterEchoTag(statements.get(0))).isEqualTo(false);
+    assertThat(CheckUtils.isDisguisedShortEchoStatement(statements.get(0))).isEqualTo(false);
   }
 
   private ExpressionTree expressionFromStatement(String statement) {

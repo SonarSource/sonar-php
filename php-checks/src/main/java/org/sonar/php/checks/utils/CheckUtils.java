@@ -42,7 +42,6 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
-import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class CheckUtils {
@@ -159,10 +158,7 @@ public class CheckUtils {
   }
 
   @Nullable
-  public static Tree findPreviousSibling(@Nullable Tree tree) {
-    if (tree == null) {
-      return null;
-    }
+  public static Tree findPreviousSibling(Tree tree) {
     Tree parent = tree.getParent();
     if (parent == null) {
       return null;
@@ -180,7 +176,7 @@ public class CheckUtils {
   }
 
   @Nullable
-  public static SyntaxToken findPreviousToken(@Nullable Tree tree) {
+  public static SyntaxToken findPreviousToken(Tree tree) {
     Tree previousSibling = findPreviousSibling(tree);
     if (previousSibling != null) {
       return ((PHPTree) previousSibling).getLastToken();
@@ -188,16 +184,11 @@ public class CheckUtils {
     return null;
   }
 
-  public static boolean isAfterEchoTag(ExpressionTree expression) {
-    Tree parent = expression.getParent();
-    return parent instanceof StatementTree && isAfterEchoTag(((StatementTree) parent));
-  }
-
-  public static boolean isAfterEchoTag(StatementTree statement) {
-    if (!statement.is(Kind.EXPRESSION_STATEMENT, Kind.EXPRESSION_LIST_STATEMENT)) {
+  public static boolean isDisguisedShortEchoStatement(Tree tree) {
+    if (!tree.is(Kind.EXPRESSION_STATEMENT, Kind.EXPRESSION_LIST_STATEMENT)) {
       return false;
     }
-    SyntaxToken previousToken = findPreviousToken(statement);
+    SyntaxToken previousToken = findPreviousToken(tree);
     if (previousToken == null) {
       return false;
     }

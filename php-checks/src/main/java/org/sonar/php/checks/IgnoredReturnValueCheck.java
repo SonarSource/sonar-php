@@ -265,7 +265,7 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
 
   private void checkName(ExpressionTree expressionTree, Tree issueLocation, @Nullable String name) {
     boolean isPureFunction = name != null && PURE_FUNCTIONS.contains(name.toLowerCase(Locale.ROOT));
-    if (isPureFunction && !CheckUtils.isAfterEchoTag(expressionTree)) {
+    if (isPureFunction && !CheckUtils.isDisguisedShortEchoStatement(expressionTree.getParent())) {
       context().newIssue(this, issueLocation, "The return value of \"" + name + "\" must be used.");
     }
   }
