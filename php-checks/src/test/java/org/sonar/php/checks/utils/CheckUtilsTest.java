@@ -20,6 +20,7 @@
 package org.sonar.php.checks.utils;
 
 import com.sonar.sslr.api.typed.ActionParser;
+import com.sonarsource.checks.coverage.UtilityClass;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CheckUtilsTest {
 
   private ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
+
+  @Test
+  public void utility_class() throws Exception {
+    UtilityClass.assertGoodPractice(CheckUtils.class);
+  }
 
   @Test
   public void skipParenthesis() throws Exception {

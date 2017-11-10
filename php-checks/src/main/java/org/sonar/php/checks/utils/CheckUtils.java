@@ -44,7 +44,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
-public class CheckUtils {
+public final class CheckUtils {
 
   private static final Kind[] FUNCTION_KINDS_ARRAY = {
     Kind.METHOD_DECLARATION,
