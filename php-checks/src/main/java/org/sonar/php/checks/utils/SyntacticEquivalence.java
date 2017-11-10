@@ -25,7 +25,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class SyntacticEquivalence {
+public final class SyntacticEquivalence {
 
   private SyntacticEquivalence() {
   }
