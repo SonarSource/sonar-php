@@ -28,6 +28,7 @@ public class FileMeasures {
   private int classComplexity;
   private int functionComplexity;
   private int fileComplexity;
+  private int fileCognitiveComplexity;
 
   private int linesOfCodeNumber;
   private int commentLinesNumber;
@@ -77,6 +78,14 @@ public class FileMeasures {
 
   public RangeDistributionBuilder getFunctionComplexityDistribution() {
     return functionComplexityDistribution;
+  }
+
+  public int getFileCognitiveComplexity() {
+    return fileCognitiveComplexity;
+  }
+
+  public void setFileCognitiveComplexity(int fileCognitiveComplexity) {
+    this.fileCognitiveComplexity = fileCognitiveComplexity;
   }
 
   public int getFunctionComplexity() {

@@ -42,6 +42,7 @@ public class MetricsVisitorTest extends ParsingTestUtils {
     FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext);
 
     assertThat(fileMeasures.getFileComplexity()).isEqualTo(1);
+    assertThat(fileMeasures.getFileCognitiveComplexity()).isEqualTo(0);
     assertThat(fileMeasures.getClassComplexity()).isEqualTo(1);
     assertThat(fileMeasures.getFunctionComplexity()).isEqualTo(1);
 

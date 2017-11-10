@@ -157,6 +157,7 @@ public class PHPSensorTest {
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 6);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 8);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
+    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COGNITIVE_COMPLEXITY, 6);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 9);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
