@@ -76,6 +76,7 @@ public class CheckList {
       ExpressionComplexityCheck.class,
       ForLoopCounterChangedCheck.class,
       FunctionCognitiveComplexityCheck.class,
+      ConsistentFunctionReturnCheck.class,
       ConstantNameCheck.class,
       TooManyLinesInFunctionCheck.class,
       TooManyMethodsInClassCheck.class,
