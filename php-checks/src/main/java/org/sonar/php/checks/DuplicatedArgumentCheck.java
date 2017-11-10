@@ -26,6 +26,7 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -66,21 +67,16 @@ public class DuplicatedArgumentCheck extends PHPVisitorCheck {
     return isLiteral(arg)
       || isVariable(arg)
       || isAccessedVariable(arg)
-      || isArrayConstructor(arg)
-      || isNewObject(arg)
-      || isFunctionCallWithoutArg(arg);
+      || isEmptyArrayConstructor(arg)
+      || isNewObject(arg);
   }
 
   private static boolean isNewObject(ExpressionTree arg) {
     return arg.is(Tree.Kind.NEW_EXPRESSION);
   }
 
-  private static boolean isArrayConstructor(ExpressionTree arg) {
-    return arg.is(Tree.Kind.ARRAY_INITIALIZER_FUNCTION);
-  }
-
-  private static boolean isFunctionCallWithoutArg(ExpressionTree arg) {
-    return arg.is(Tree.Kind.FUNCTION_CALL) && ((FunctionCallTree) arg).arguments().isEmpty();
+  private static boolean isEmptyArrayConstructor(ExpressionTree arg) {
+    return arg.is(Tree.Kind.ARRAY_INITIALIZER_FUNCTION) && ((ArrayInitializerFunctionTree) arg).arrayPairs().isEmpty();
   }
 
   private static boolean isAccessedVariable(ExpressionTree arg) {

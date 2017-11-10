@@ -25,6 +25,6 @@ foo("hello", "hello");
 foo($this->$a, $this->$a);
 foo($this->a, $this->a);
 foo(array(), array());
+foo(array('foo' => 'bar'), array('foo' => 'bar')); // Noncompliant
 foo(new A(), new A());
-foo(bar(), bar());
 foo($a+1, $a+2);
