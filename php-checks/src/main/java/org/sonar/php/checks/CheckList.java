@@ -121,6 +121,7 @@ public class CheckList {
       LogicalWordOperatorUsageCheck.class,
       ConditionalIndentationCheck.class,
       DuplicatedFunctionArgumentCheck.class,
+      DuplicatedArgumentCheck.class,
       CodeFollowingJumpStatementCheck.class,
       RedundantFinalCheck.class,
       RedundantParenthesesCheck.class,

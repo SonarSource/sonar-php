@@ -1,0 +1,25 @@
+<p>There are valid cases for passing a variable multiple times into the same method call, but usually doing so is a mistake, and something else was
+intended for one of the arguments.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+if (compare($a+$x, $a+$x) != 0) { // Noncompliant
+&nbsp;&nbsp;//...
+}
+
+if (compare(getValue($a), getValue($a)) != 0) { // Noncompliant
+&nbsp;&nbsp;// ...
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+if (compare($a+$y, $a+$x) != 0) {
+&nbsp;&nbsp;//...
+}
+
+$v1 = getValue($a);
+$v2 = getValue($a);
+if (compare($v1, $v2) != 0) {
+&nbsp;&nbsp;// ...
+}
+</pre>
+
