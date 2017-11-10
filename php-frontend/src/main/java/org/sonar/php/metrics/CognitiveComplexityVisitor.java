@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -64,6 +65,43 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
     CognitiveComplexityVisitor cognitiveComplexityVisitor = new CognitiveComplexityVisitor();
     cognitiveComplexityVisitor.scan(functionTree);
     return cognitiveComplexityVisitor.complexity;
+  }
+
+  public static int complexity(CompilationUnitTree cut) {
+    // Only explicitly visit functions, methods and function expressions.
+    // Rest of the compilation unit is based on CognitiveComplexityVisitor computation
+    class CompilationUnitVisitor extends CognitiveComplexityVisitor {
+
+      private int functionsComplexity = 0;
+
+      @Override
+      public void visitMethodDeclaration(MethodDeclarationTree tree) {
+        sumComplexity(tree);
+      }
+
+      @Override
+      public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+        sumComplexity(tree);
+      }
+
+      @Override
+      public void visitFunctionExpression(FunctionExpressionTree tree) {
+        sumComplexity(tree);
+      }
+
+      private void sumComplexity(FunctionTree tree) {
+        functionsComplexity += complexity(tree).getValue();
+      }
+
+      private int complexityWithFunctionsAndRestOfSript() {
+        int scriptComplexity = super.complexity.value;
+        return functionsComplexity + scriptComplexity;
+      }
+    }
+
+    CompilationUnitVisitor compilationUnitVisitor = new CompilationUnitVisitor();
+    cut.accept(compilationUnitVisitor);
+    return compilationUnitVisitor.complexityWithFunctionsAndRestOfSript();
   }
 
   @Override

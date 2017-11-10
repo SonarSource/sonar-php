@@ -19,6 +19,8 @@
  */
 package org.sonar.php.metrics;
 
+import com.sonar.sslr.api.typed.ActionParser;
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.Test;
@@ -26,6 +28,9 @@ import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.metrics.CognitiveComplexityVisitor.CognitiveComplexity;
 import org.sonar.php.metrics.CognitiveComplexityVisitor.ComplexityComponent;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -202,6 +207,22 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   @Test
   public void no_complexity() throws Exception {
     assertThat(complexity(" foo(); ")).isEqualTo(0);
+  }
+
+  @Test
+  public void file_complexity_is_sum_of_functions() throws Exception {
+    File file = new File("src/test/resources/metrics/file_cognitive_complexity.php");
+    ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
+    CompilationUnitTree cut = (CompilationUnitTree) p.parse(file);
+    int complexity = CognitiveComplexityVisitor.complexity(cut);
+    assertThat(complexity).isEqualTo(
+      1 // foo
+        + 3 // bar (incl. qix)
+        + 2 // gul (incl. function expression)
+        + 1 // dom
+        + 1 // $func function expression
+        + 4 // rest of the script
+    );
   }
 
   private int complexity(String functionBody) throws Exception {
