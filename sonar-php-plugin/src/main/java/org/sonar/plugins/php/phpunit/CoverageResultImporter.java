@@ -31,7 +31,6 @@ import javax.annotation.Nullable;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.utils.log.Logger;
@@ -51,13 +50,11 @@ public class CoverageResultImporter extends SingleFileReportImporter {
 
   protected Metric<Integer> linesToCoverMetric;
   protected Metric<Integer> uncoveredLinesMetric;
-  protected CoverageType coverageType;
 
-  public CoverageResultImporter(String reportPathKey, String msg, Metric<Integer> linesToCoverMetric, Metric<Integer> uncoveredLinesMetric, CoverageType coverageType) {
+  public CoverageResultImporter(String reportPathKey, String msg, Metric<Integer> linesToCoverMetric, Metric<Integer> uncoveredLinesMetric) {
     super(reportPathKey, msg);
     this.linesToCoverMetric = linesToCoverMetric;
     this.uncoveredLinesMetric = uncoveredLinesMetric;
-    this.coverageType = coverageType;
   }
 
   @Override
@@ -124,7 +121,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
   }
 
   private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
-    NewCoverage newCoverage = context.newCoverage().onFile(inputFile).ofType(coverageType);
+    NewCoverage newCoverage = context.newCoverage().onFile(inputFile);
 
     if (fileNode.getLines() != null) {
       for (LineNode line : fileNode.getLines()) {

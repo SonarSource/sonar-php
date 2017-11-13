@@ -20,8 +20,6 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.SonarQubeSide;
@@ -43,7 +41,6 @@ public class CompatibilityImportersFactoryTest {
   private static final String COVERAGE_KEY = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY;
   private static final String OVERALL_COVERAGE_KEY = PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY;
   private static final String IT_COVERAGE_KEY = PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY;
-  private static final Class[] CURRENT_IMPORTERS = {MultiPathImporter.class};
 
   private SensorContextTester context;
   private CompatibilityImportersFactory importersFactory;
@@ -58,7 +55,7 @@ public class CompatibilityImportersFactoryTest {
   public void should_create_test_result_and_multi_coverage_importer_starting_from_6_2() throws Exception {
     context.setRuntime(SONARQUBE_6_7);
     context.settings().setProperty(COVERAGES_KEY, "coverage report");
-    assertThat(importerClasses(importersFactory.createCoverageImporters())).containsExactly(CURRENT_IMPORTERS);
+    assertThat(importersFactory.createCoverageImporter()).isInstanceOf(MultiPathImporter.class);
   }
 
   @Test
@@ -66,13 +63,13 @@ public class CompatibilityImportersFactoryTest {
     context.setRuntime(SONARQUBE_6_7);
     context.settings().setProperty(COVERAGE_KEY, "coverage report");
 
-    assertLegacyImporters(importerClasses(importersFactory.createCoverageImporters()));
+    assertThat(importersFactory.createCoverageImporter()).isInstanceOf(CoverageResultImporter.class);
   }
 
   @Test
   public void should_use_importers_appropriate_to_sonarqube_version_when_no_properties_at_all_are_used() throws Exception {
     context.setRuntime(SONARQUBE_6_7);
-    assertThat(importerClasses(importersFactory.createCoverageImporters())).containsExactly(CURRENT_IMPORTERS);
+    assertThat(importersFactory.createCoverageImporter()).isInstanceOf(MultiPathImporter.class);
   }
 
   @Test
@@ -118,15 +115,6 @@ public class CompatibilityImportersFactoryTest {
     context.settings().setProperty(COVERAGES_KEY, "new coverage report");
     assertThat(importersFactory.deprecationWarnings())
       .containsExactly("Ignoring " + COVERAGE_KEY + " since you are already using " + COVERAGES_KEY + ". Please remove " + COVERAGE_KEY);
-  }
-
-  private void assertLegacyImporters(List<Class> importers) {
-    assertThat(importers).hasSize(3);
-    assertThat(importers).containsOnly(CoverageResultImporter.class);
-  }
-
-  private List<Class> importerClasses(List<ReportImporter> importers) {
-    return importers.stream().map(ReportImporter::getClass).collect(Collectors.toList());
   }
 
 }

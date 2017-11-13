@@ -19,13 +19,10 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpPlugin;
 
@@ -41,7 +38,7 @@ public class CompatibilityImportersFactory {
     this.context = context;
   }
 
-  public List<ReportImporter> createCoverageImporters() {
+  public ReportImporter createCoverageImporter() {
     if (LEGACY_PATH_KEYS.stream().anyMatch(this::isPropertyUsed) && !multiPathCoverageUsed()) {
       return createLegacyImporters();
     }
@@ -52,44 +49,24 @@ public class CompatibilityImportersFactory {
     return context.config().getStringArray(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY).length > 0;
   }
 
-  private static List<ReportImporter> createMultiCoverageImporter() {
+  private static ReportImporter createMultiCoverageImporter() {
     String msg = "coverage";
     String propertyKey = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
 
     CoverageResultImporter singleReportImporter = new CoverageResultImporter(propertyKey,
       msg,
       CoreMetrics.LINES_TO_COVER,
-      CoreMetrics.UNCOVERED_LINES,
-      CoverageType.UNIT);
+      CoreMetrics.UNCOVERED_LINES);
 
-    return Collections.singletonList(new MultiPathImporter(singleReportImporter, propertyKey, msg));
+    return new MultiPathImporter(singleReportImporter, propertyKey, msg);
   }
 
-  private static List<ReportImporter> createLegacyImporters() {
-    List<ReportImporter> importers = new ArrayList<>();
-
-    importers.add(new CoverageResultImporter(
+  private static ReportImporter createLegacyImporters() {
+    return new CoverageResultImporter(
       PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
       "unit test coverage",
       CoreMetrics.LINES_TO_COVER,
-      CoreMetrics.UNCOVERED_LINES,
-      CoverageType.UNIT));
-
-    importers.add(new CoverageResultImporter(
-      PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY,
-      "integration test coverage",
-      CoreMetrics.IT_LINES_TO_COVER,
-      CoreMetrics.IT_UNCOVERED_LINES,
-      CoverageType.IT));
-
-    importers.add(new CoverageResultImporter(
-      PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY,
-      "overall coverage",
-      CoreMetrics.OVERALL_LINES_TO_COVER,
-      CoreMetrics.OVERALL_UNCOVERED_LINES,
-      CoverageType.OVERALL));
-
-    return importers;
+      CoreMetrics.UNCOVERED_LINES);
   }
 
   public List<String> deprecationWarnings() {

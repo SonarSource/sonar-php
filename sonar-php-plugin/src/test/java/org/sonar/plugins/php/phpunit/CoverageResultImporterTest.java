@@ -33,7 +33,6 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpPlugin;
@@ -80,8 +79,7 @@ public class CoverageResultImporterTest {
       PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
       "unit test coverage",
       CoreMetrics.LINES_TO_COVER,
-      CoreMetrics.UNCOVERED_LINES,
-      CoverageType.UNIT);
+      CoreMetrics.UNCOVERED_LINES);
   }
 
   @Test

@@ -62,7 +62,6 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.CompatibilityImportersFactory;
-import org.sonar.plugins.php.phpunit.ReportImporter;
 import org.sonar.plugins.php.phpunit.TestResultImporter;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
@@ -133,8 +132,7 @@ public class PHPSensor implements Sensor {
 
     final CompatibilityImportersFactory importersFactory = new CompatibilityImportersFactory(context);
     importersFactory.deprecationWarnings().forEach(LOG::warn);
-    List<ReportImporter> importers = importersFactory.createCoverageImporters();
-    importers.forEach(phpUnitImporter -> phpUnitImporter.importReport(context));
+    importersFactory.createCoverageImporter().importReport(context);
   }
 
   void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Iterable<InputFile> inputFiles, ProgressReport progressReport) {
