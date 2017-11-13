@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
-import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
@@ -34,7 +33,7 @@ public class TestResultImporter extends SingleFileReportImporter {
   }
 
   @Override
-  protected void importReport(File reportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  protected void importReport(File reportFile, SensorContext context) {
     TestSuites testSuites = parser.parse(reportFile);
     for (TestFileReport fileReport : testSuites.arrangeSuitesIntoTestFileReports()) {
       fileReport.saveTestMeasures(context);

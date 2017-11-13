@@ -20,6 +20,7 @@
 package org.sonar.php.metrics;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +30,6 @@ import org.junit.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.visitors.PhpFile;
-import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,7 +38,7 @@ public class ExecutableLineVisitorTest extends ParsingTestUtils {
   @Test
   public void test() throws Exception {
     String filename = "metrics/executable_lines.php";
-    PhpFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/"+filename));
     Set<Integer> executableLines = new ExecutableLineVisitor(parse(filename)).getExecutableLines();
     assertThat(executableLines).containsExactlyElementsOf(expectedExecutableLines(file));
   }

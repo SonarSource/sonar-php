@@ -19,20 +19,16 @@
  */
 package org.sonar.php.metrics;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
-import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.FileTestUtils;
+import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.visitors.PhpFile;
-import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class MetricsVisitorTest extends ParsingTestUtils {
@@ -40,11 +36,10 @@ public class MetricsVisitorTest extends ParsingTestUtils {
   @Test
   public void test() {
     String filename = "metrics/lines_of_code.php";
-    PhpFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
-    Map<String, Integer> numberOfLinesOfCode = new HashMap<>();
+    PhpFile file = FileTestUtils.getFile(new File("src/test/resources/"+filename));
 
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext, numberOfLinesOfCode, true);
+    FileMeasures fileMeasures = new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext);
 
     assertThat(fileMeasures.getFileComplexity()).isEqualTo(1);
     assertThat(fileMeasures.getClassComplexity()).isEqualTo(1);
@@ -61,21 +56,7 @@ public class MetricsVisitorTest extends ParsingTestUtils {
 
     assertThat(fileMeasures.getCommentLinesNumber()).isEqualTo(5);
 
-    assertThat(numberOfLinesOfCode.values().iterator().next()).as("number of lines of code in the file").isEqualTo(7);
-
     verify(fileLinesContext).setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, 21, 1);
-  }
-
-  @Test
-  public void dont_save_executable_lines() {
-    String filename = "metrics/lines_of_code.php";
-    PhpFile file = FileTestUtils.getFile(TestUtils.getResource(filename));
-    Map<String, Integer> numberOfLinesOfCode = new HashMap<>();
-
-    FileLinesContext fileLinesContext = mock(FileLinesContext.class);
-    new MetricsVisitor().getFileMeasures(file, parse(filename), fileLinesContext, numberOfLinesOfCode, false);
-
-    verify(fileLinesContext, never()).setIntValue(Mockito.eq(CoreMetrics.EXECUTABLE_LINES_DATA_KEY), Mockito.anyInt(), Mockito.anyInt());
   }
 
 }

@@ -22,7 +22,6 @@ package org.sonar.php;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
@@ -63,7 +62,7 @@ public class PHPAnalyzerTest {
     assertThat(issues.get(0).check()).isEqualTo(check);
     assertThat(((PreciseIssue) issues.get(0)).primaryLocation().message()).isEqualTo(DummyCheck.MESSAGE);
 
-    FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class), new HashMap<String, Integer>(), true);
+    FileMeasures measures = analyzer.computeMeasures(mock(FileLinesContext.class));
     assertThat(measures.getLinesOfCodeNumber()).isEqualTo(1);
   }
 

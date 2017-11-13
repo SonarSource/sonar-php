@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
-import org.sonar.test.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,13 +38,13 @@ public class JUnitLogParserForPhpUnitTest {
 
   @Test
   public void shouldGenerateEmptyTestSuites() {
-    final TestSuites suites = parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"));
+    final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"));
     assertThat(suites).isEqualTo(new TestSuites());
   }
 
   @Test(expected = IllegalStateException.class)
   public void shouldThrowAnExceptionWhenReportIsInvalid() {
-    parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"));
+    parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-invalid.xml"));
   }
 
   @Test(expected = IllegalStateException.class)
@@ -55,7 +54,7 @@ public class JUnitLogParserForPhpUnitTest {
 
   @Test
   public void shouldParseComplexNestedSuites() throws Exception {
-    final TestSuites suites = parser.parse(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml"));
+    final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-junit-report.xml"));
     assertThat(suites.arrangeSuitesIntoTestFileReports().size()).isEqualTo(8);
   }
 }

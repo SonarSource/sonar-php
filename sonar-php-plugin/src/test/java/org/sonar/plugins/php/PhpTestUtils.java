@@ -24,7 +24,6 @@ package org.sonar.plugins.php;
 
 import java.io.File;
 import java.io.Serializable;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,10 +46,6 @@ public class PhpTestUtils {
   private PhpTestUtils() {
   }
   
-  public static DefaultFileSystem getDefaultFileSystem() {
-    return new DefaultFileSystem(getModuleBaseDir());
-  }
-
   public static File getModuleBaseDir() {
     return new File("src/test/resources");
   }

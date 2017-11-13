@@ -20,8 +20,7 @@
 package org.sonar.plugins.php.api;
 
 import org.junit.Test;
-import org.sonar.api.config.MapSettings;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.internal.MapSettings;
 import org.sonar.plugins.php.PhpPlugin;
 
 import static org.junit.Assert.assertFalse;
@@ -37,7 +36,7 @@ public class PhpTest {
    */
   @Test
   public void shouldCheckDefaultValidPhpExtensions() {
-    Php php = new Php(new MapSettings());
+    Php php = new Php(new MapSettings().asConfig());
 
     assertTrue(php.hasValidSuffixes("goodExtension.php"));
     assertTrue(php.hasValidSuffixes("goodExtension.php5"));
@@ -51,10 +50,10 @@ public class PhpTest {
 
   @Test
   public void shouldCheckCustomValidPhpExtensions() {
-    Settings settings = new MapSettings();
+    MapSettings settings = new MapSettings();
     settings.setProperty(PhpPlugin.FILE_SUFFIXES_KEY, " php6  , php7, , ");
 
-    Php php = new Php(settings);
+    Php php = new Php(settings.asConfig());
     assertTrue(php.hasValidSuffixes("goodExtension.php6"));
     assertTrue(php.hasValidSuffixes("goodExtension.php7"));
   }

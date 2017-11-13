@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpTestUtils;
@@ -39,7 +40,7 @@ public class TestFileReportTest {
   @Before
   public void setUp() throws Exception {
     testFileName = "testfile.php";
-    DefaultInputFile testFile = new DefaultInputFile("moduleKey", testFileName).setType(InputFile.Type.TEST).setLanguage(Php.KEY);
+    DefaultInputFile testFile = TestInputFileBuilder.create("moduleKey", testFileName).setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
     context = SensorContextTester.create(new File("src/test/resources"));
     context.fileSystem().add(testFile);
     componentKey = testFile.key();

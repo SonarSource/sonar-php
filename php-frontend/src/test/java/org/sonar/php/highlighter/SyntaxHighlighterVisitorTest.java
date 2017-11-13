@@ -23,7 +23,6 @@ import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,6 +30,7 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
@@ -45,28 +45,17 @@ public class SyntaxHighlighterVisitorTest {
 
   private File file;
 
-  private DefaultInputFile inputFile;
-
   private SensorContextTester context;
-
-  private NewHighlighting highlighting;
 
   @Rule
   public TemporaryFolder tempFolder = new TemporaryFolder();
+  private DefaultFileSystem fileSystem;
 
   @Before
   public void setUp() throws IOException {
-    DefaultFileSystem fileSystem = new DefaultFileSystem(tempFolder.getRoot());
+    fileSystem = new DefaultFileSystem(tempFolder.getRoot());
     fileSystem.setEncoding(StandardCharsets.UTF_8);
     file = tempFolder.newFile();
-    inputFile = new DefaultInputFile("moduleKey",  file.getName())
-      .setLanguage("php")
-      .setType(Type.MAIN);
-    fileSystem.add(inputFile);
-
-    context = SensorContextTester.create(tempFolder.getRoot());
-
-    highlighting = context.newHighlighting().onFile(inputFile);
   }
 
   @Test
@@ -164,7 +153,16 @@ public class SyntaxHighlighterVisitorTest {
   }
 
   private void highlight(String s) {
-    inputFile.initMetadata(s);
+    DefaultInputFile inputFile = TestInputFileBuilder.create("moduleKey", file.getName())
+      .setLanguage("php")
+      .setType(Type.MAIN)
+      .initMetadata(s)
+      .build();
+    fileSystem.add(inputFile);
+
+    context = SensorContextTester.create(tempFolder.getRoot());
+
+    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
     Tree tree = PARSER.parse(s);
     SyntaxHighlighterVisitor.highlight(tree, highlighting);
     highlighting.save();

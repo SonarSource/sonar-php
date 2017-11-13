@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.php.compat.CompatibilityHelper;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -43,16 +44,16 @@ public class FileTestUtils {
   }
 
   public static PhpFile getFile(File file) {
-    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", file.getName())
-      .setModuleBaseDir(file.getParentFile().toPath())
-      .setCharset(Charset.defaultCharset());
     try {
-      inputFile.initMetadata(new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset()));
+      DefaultInputFile inputFile = TestInputFileBuilder.create("moduleKey", file.getName())
+        .setModuleBaseDir(file.getParentFile().toPath())
+        .setCharset(Charset.defaultCharset())
+        .initMetadata(new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset())).build();
+      return CompatibilityHelper.phpFile(inputFile, SensorContextTester.create(new File("")));
     } catch (IOException e) {
       throw new IllegalStateException("Failed to create test file from: " + file.getAbsolutePath());
     }
 
-    return CompatibilityHelper.phpFile(inputFile, SensorContextTester.create(new File("")));
   }
 
 }

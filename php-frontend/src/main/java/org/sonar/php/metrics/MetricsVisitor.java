@@ -22,7 +22,6 @@ package org.sonar.php.metrics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
@@ -52,9 +51,6 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   private FileMeasures fileMeasures;
 
   private FileLinesContext fileLinesContext;
-
-  private Map<String, Integer> numberOfLinesOfCode;
-  private boolean saveExecutableLines;
 
   public static Kind[] getClassNodes() {
     return CLASS_NODES;
@@ -88,20 +84,16 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
   public FileMeasures getFileMeasures(
     PhpFile file,
     CompilationUnitTree tree,
-    FileLinesContext fileLinesContext,
-    Map<String, Integer> numberOfLinesOfCode,
-    boolean saveExecutableLines
+    FileLinesContext fileLinesContext
   ) {
 
-    this.saveExecutableLines = saveExecutableLines;
     this.fileMeasures = new FileMeasures(LIMITS_COMPLEXITY_FUNCTIONS, FILES_DISTRIBUTION_BOTTOM_LIMITS);
     this.fileLinesContext = fileLinesContext;
-    this.numberOfLinesOfCode = numberOfLinesOfCode;
 
     super.analyze(file, tree);
 
     setCounterMeasures();
-    setLineAndCommentMeasures(file);
+    setLineAndCommentMeasures();
     return this.fileMeasures;
   }
 
@@ -112,7 +104,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     fileMeasures.setStatementNumber(counter.getStatementNumber());
   }
 
-  private void setLineAndCommentMeasures(PhpFile file) {
+  private void setLineAndCommentMeasures() {
     LineVisitor lineVisitor = new LineVisitor(context().tree());
     ExecutableLineVisitor executableLineVisitor = new ExecutableLineVisitor(context().tree());
     CommentLineVisitor commentVisitor = new CommentLineVisitor(context().tree());
@@ -126,12 +118,8 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     linesOfCode.forEach(lineOfCode -> fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, lineOfCode, 1));
     commentLines.forEach(commentLine -> fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, commentLine, 1));
 
-    if (saveExecutableLines) {
       executableLineVisitor.getExecutableLines().forEach(line ->
         fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1));
-    }
-
-    numberOfLinesOfCode.put(file.relativePath().toString(), linesOfCode.size());
 
     fileLinesContext.save();
   }

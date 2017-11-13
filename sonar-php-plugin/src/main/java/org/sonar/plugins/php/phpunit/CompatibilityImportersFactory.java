@@ -27,14 +27,12 @@ import java.util.stream.Collectors;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.PhpPlugin;
 
 public class CompatibilityImportersFactory {
 
   public static final String DEPRECATION_WARNING_TEMPLATE = "%s is deprecated as of SonarQube 6.2. Please consider using " + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
   public static final String SKIPPED_WARNING_TEMPLATE = "Ignoring %s since you are already using " + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY + ". Please remove %<s";
-  public static final String NOT_YET_SUPPORTED_WARNING = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY + " is only supported by SonarQube 6.2 and above";
   private static final List<String> LEGACY_PATH_KEYS = Arrays.asList(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY,
     PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY);
   private final SensorContext context;
@@ -44,17 +42,10 @@ public class CompatibilityImportersFactory {
   }
 
   public List<ReportImporter> createCoverageImporters() {
-    if (!supportsMultiPathCoverage()) {
-      return createLegacyImporters();
-    }
     if (LEGACY_PATH_KEYS.stream().anyMatch(this::isPropertyUsed) && !multiPathCoverageUsed()) {
       return createLegacyImporters();
     }
     return createMultiCoverageImporter();
-  }
-
-  private boolean supportsMultiPathCoverage() {
-    return context.getSonarQubeVersion().isGreaterThanOrEqual(Version.create(6, 2));
   }
 
   private boolean multiPathCoverageUsed() {
@@ -102,18 +93,11 @@ public class CompatibilityImportersFactory {
   }
 
   public List<String> deprecationWarnings() {
-    if (supportsMultiPathCoverage()) {
-      if (multiPathCoverageUsed()) {
-        return printWarningForUsedLegacyPaths(SKIPPED_WARNING_TEMPLATE);
-      } else {
-        return printWarningForUsedLegacyPaths(DEPRECATION_WARNING_TEMPLATE);
-      }
-
-    } else if (multiPathCoverageUsed()) {
-      return Collections.singletonList(NOT_YET_SUPPORTED_WARNING);
+    if (multiPathCoverageUsed()) {
+      return printWarningForUsedLegacyPaths(SKIPPED_WARNING_TEMPLATE);
+    } else {
+      return printWarningForUsedLegacyPaths(DEPRECATION_WARNING_TEMPLATE);
     }
-
-    return new ArrayList<>();
   }
 
   private List<String> printWarningForUsedLegacyPaths(String warningTemplate) {

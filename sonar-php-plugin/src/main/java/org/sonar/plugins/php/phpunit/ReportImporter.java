@@ -19,9 +19,8 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
 
 public interface ReportImporter {
-  void importReport(SensorContext context, Map<String, Integer> numberOfLinesOfCode);
+  void importReport(SensorContext context);
 }
