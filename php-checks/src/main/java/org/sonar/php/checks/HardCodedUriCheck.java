@@ -19,6 +19,8 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
@@ -26,8 +28,6 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -39,49 +39,110 @@ import static org.sonar.plugins.php.api.tree.Tree.Kind.REGULAR_STRING_LITERAL;
 
 @Rule(key = "S1075")
 public class HardCodedUriCheck extends PHPVisitorCheck {
-  private static final String SCHEME = "[a-zA-Z][a-zA-Z\\+\\.\\-]+";
-  private static final String FOLDER_NAME = "[^/?%*:\\\\|\"<>]+";
-  private static final String URI_REGEX = String.format("^%s://.+", SCHEME);
-  private static final String LOCAL_URI = String.format("^(~/|/|//[\\w-]+/|%s:/)(%s/)*%s/?", SCHEME, FOLDER_NAME, FOLDER_NAME);
-  private static final String BACKSLASH_LOCAL_URI = String.format("^(~\\\\\\\\|\\\\\\\\\\\\\\\\[\\w-]+\\\\\\\\|%s:\\\\\\\\)(%s\\\\\\\\)*%s(\\\\\\\\)?",
-    SCHEME, FOLDER_NAME, FOLDER_NAME);
-  private static final String DISK_URI = "^[A-Za-z]:(/|\\\\)";
-
-  private static final Pattern URI_PATTERN = Pattern.compile(URI_REGEX + "|" + LOCAL_URI + "|" + DISK_URI + "|" + BACKSLASH_LOCAL_URI);
+  // Don't match scheme starting with php://
+  private static final String SCHEME = "^(?!.*php)[a-zA-Z\\+\\.\\-]+";
+  private static final String URI_REGEX = SCHEME + "://[^\\$]+";
+  private static final Pattern URI_PATTERN = Pattern.compile(URI_REGEX);
   private static final Pattern VARIABLE_NAME_PATTERN = Pattern.compile("filename|path", Pattern.CASE_INSENSITIVE);
-  private static final Pattern PATH_DELIMETERS_PATTERN = Pattern.compile("\"/\"|\"//\"|\"\\\\\\\\\"|\"\\\\\\\\\\\\\\\\\"");
+  private static final Set<String> WHITELIST = ImmutableSet.<String>builder()
+    .add("basename")
+    .add("chgrp")
+    .add("chmod")
+    .add("chown")
+    .add("clearstatcache")
+    .add("copy")
+    .add("delete")
+    .add("dirname")
+    .add("disk_​free_​space")
+    .add("disk_​total_​space")
+    .add("diskfreespace")
+    .add("fclose")
+    .add("feof")
+    .add("fflush")
+    .add("fgetc")
+    .add("fgetcsv")
+    .add("fgets")
+    .add("fgetss")
+    .add("file_​exists")
+    .add("file_​get_​contents")
+    .add("file_​put_​contents")
+    .add("file")
+    .add("fileatime")
+    .add("filectime")
+    .add("filegroup")
+    .add("fileinode")
+    .add("filemtime")
+    .add("fileowner")
+    .add("fileperms")
+    .add("filesize")
+    .add("filetype")
+    .add("flock")
+    .add("fnmatch")
+    .add("fopen")
+    .add("fpassthru")
+    .add("fputcsv")
+    .add("fputs")
+    .add("fread")
+    .add("fscanf")
+    .add("fseek")
+    .add("fstat")
+    .add("ftell")
+    .add("ftruncate")
+    .add("fwrite")
+    .add("glob")
+    .add("is_​dir")
+    .add("is_​executable")
+    .add("is_​file")
+    .add("is_​link")
+    .add("is_​readable")
+    .add("is_​uploaded_​file")
+    .add("is_​writable")
+    .add("is_​writeable")
+    .add("lchgrp")
+    .add("lchown")
+    .add("link")
+    .add("linkinfo")
+    .add("lstat")
+    .add("mkdir")
+    .add("move_​uploaded_​file")
+    .add("parse_​ini_​file")
+    .add("parse_​ini_​string")
+    .add("pathinfo")
+    .add("pclose")
+    .add("popen")
+    .add("readfile")
+    .add("readlink")
+    .add("realpath_​cache_​get")
+    .add("realpath_​cache_​size")
+    .add("realpath")
+    .add("rename")
+    .add("rewind")
+    .add("rmdir")
+    .add("set_​file_​buffer")
+    .add("stat")
+    .add("symlink")
+    .add("tempnam")
+    .add("tmpfile")
+    .add("touch")
+    .add("umask")
+    .add("unlink").build();
 
+  private static boolean isFileNameVariable(@Nullable IdentifierTree variable) {
+    return variable != null && VARIABLE_NAME_PATTERN.matcher(variable.text()).find();
+  }
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getFunctionName(tree);
-    if (functionName != null && (functionName.startsWith("preg_") || functionName.equals("define"))) {
-      return;
+    if (functionName != null && (functionName.startsWith("http_") || WHITELIST.contains(functionName))) {
+      tree.arguments().forEach(this::checkExpression);
     }
     super.visitFunctionCall(tree);
   }
 
   @Override
-  public void visitLiteral(LiteralTree tree) {
-    String value = trimQuotes(tree.value());
-    if (value.length() > 2 && tree.is(REGULAR_STRING_LITERAL) && URI_PATTERN.matcher(value).find()) {
-      reportHardcodedURI(tree);
-    }
-    super.visitLiteral(tree);
-  }
-
-  @Override
-  public void visitExpandableStringCharacters(ExpandableStringCharactersTree tree) {
-    if(URI_PATTERN.matcher(trimQuotes(tree.value())).find()) {
-      reportHardcodedURI(tree);
-    }
-    super.visitExpandableStringCharacters(tree);
-  }
-
-
-  @Override
   public void visitVariableDeclaration(VariableDeclarationTree tree) {
-    if(isFileNameVariable(tree.identifier())) {
+    if (isFileNameVariable(tree.identifier())) {
       checkExpression(tree.initValue());
     }
     super.visitVariableDeclaration(tree);
@@ -89,23 +150,15 @@ public class HardCodedUriCheck extends PHPVisitorCheck {
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-    if(tree.variable().is(Tree.Kind.VARIABLE_IDENTIFIER) && isFileNameVariable(((VariableIdentifierTree) tree.variable()).variableExpression())) {
+    if (tree.variable().is(Tree.Kind.VARIABLE_IDENTIFIER) && isFileNameVariable(((VariableIdentifierTree) tree.variable()).variableExpression())) {
       checkExpression(tree.value());
     }
     super.visitAssignmentExpression(tree);
   }
 
-  private static boolean isFileNameVariable(@Nullable IdentifierTree variable) {
-    return variable != null && VARIABLE_NAME_PATTERN.matcher(variable.text()).find();
-  }
-
   private void checkExpression(@Nullable ExpressionTree expr) {
-    if (expr != null) {
-      if (isHardcodedURI(expr)) {
-        reportHardcodedURI(expr);
-      } else {
-        reportStringConcatenationWithPathDelimiter(expr);
-      }
+    if (expr != null && isHardcodedURI(expr)) {
+      reportHardcodedURI(expr);
     }
   }
 
@@ -115,7 +168,7 @@ public class HardCodedUriCheck extends PHPVisitorCheck {
       return false;
     }
     String stringLiteral = trimQuotes(((LiteralTree) newExpr).value());
-    return stringLiteral.length() > 2 && URI_PATTERN.matcher(stringLiteral).find();
+    return URI_PATTERN.matcher(stringLiteral).find();
   }
 
   private static String trimQuotes(String value) {
@@ -126,26 +179,5 @@ public class HardCodedUriCheck extends PHPVisitorCheck {
     context().newIssue(this, hardcodedURI, "Refactor your code to get this URI from a customizable parameter.");
   }
 
-  private void reportStringConcatenationWithPathDelimiter(ExpressionTree expr) {
-    expr.accept(new StringConcatenationVisitor());
-  }
-
-  private class StringConcatenationVisitor extends PHPVisitorCheck {
-    @Override
-    public void visitBinaryExpression(BinaryExpressionTree tree) {
-      if (tree.is(Tree.Kind.CONCATENATION)) {
-        checkPathDelimiter(tree.leftOperand());
-        checkPathDelimiter(tree.rightOperand());
-      }
-      super.visitBinaryExpression(tree);
-    }
-
-    private void checkPathDelimiter(ExpressionTree expr) {
-      ExpressionTree newExpr = CheckUtils.skipParenthesis(expr);
-      if (newExpr.is(REGULAR_STRING_LITERAL) && PATH_DELIMETERS_PATTERN.matcher(((LiteralTree) newExpr).value()).find()) {
-        HardCodedUriCheck.this.context().newIssue(HardCodedUriCheck.this, newExpr, "Remove this hard-coded path-delimiter.");
-      }
-    }
-  }
 
 }
