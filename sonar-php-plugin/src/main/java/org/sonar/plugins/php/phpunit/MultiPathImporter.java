@@ -40,7 +40,7 @@ public class MultiPathImporter implements ReportImporter {
 
   @Override
   public void importReport(SensorContext context) {
-    final String[] paths = context.settings().getStringArray(pathsKey);
+    final String[] paths = context.config().getStringArray(pathsKey);
     if (paths.length == 0) {
       LOG.info("No PHPUnit {} reports provided (see '{}' property)", msg, pathsKey);
       return;

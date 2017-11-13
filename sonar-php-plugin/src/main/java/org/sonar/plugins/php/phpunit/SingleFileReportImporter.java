@@ -39,9 +39,9 @@ public abstract class SingleFileReportImporter implements ReportImporter {
 
   @Override
   public final void importReport(SensorContext context) {
-    String reportPath = context.settings().getString(reportPathKey);
-    if (reportPath != null) {
-      importReport(reportPath, msg, context);
+    Optional<String> reportPath = context.config().get(reportPathKey);
+    if (reportPath.isPresent()) {
+      importReport(reportPath.get(), msg, context);
     } else {
       LOG.info("No PHPUnit {} report provided (see '{}' property)", msg, reportPathKey);
     }

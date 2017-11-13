@@ -60,7 +60,7 @@ public class PHPRulesDefinition implements RulesDefinition {
    * This method sets the rules which should be run in SonarLint in disconnected mode.
    * Current implementation reuses Sonar Way profile.
    */
-  private void activateRulesForSonarLint(NewRepository repository) {
+  private static void activateRulesForSonarLint(NewRepository repository) {
     Set<String> activatedRuleKeys = PHPProfileDefinition.defaultProfileRuleKeys();
     for (NewRule rule : repository.rules()) {
       rule.setActivatedByDefault(activatedRuleKeys.contains(rule.key()));

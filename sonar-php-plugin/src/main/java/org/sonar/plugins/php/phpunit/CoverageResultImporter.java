@@ -120,7 +120,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     }
   }
 
-  private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
+  private static void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
     NewCoverage newCoverage = context.newCoverage().onFile(inputFile);
 
     if (fileNode.getLines() != null) {
