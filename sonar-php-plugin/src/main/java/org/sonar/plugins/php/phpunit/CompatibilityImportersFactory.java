@@ -49,7 +49,7 @@ public class CompatibilityImportersFactory {
   }
 
   private boolean multiPathCoverageUsed() {
-    return context.settings().getStringArray(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY).length > 0;
+    return context.config().getStringArray(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY).length > 0;
   }
 
   private static List<ReportImporter> createMultiCoverageImporter() {
@@ -105,6 +105,6 @@ public class CompatibilityImportersFactory {
   }
 
   private boolean isPropertyUsed(String legacyPathKey) {
-    return context.settings().getString(legacyPathKey) != null;
+    return context.config().get(legacyPathKey).isPresent();
   }
 }

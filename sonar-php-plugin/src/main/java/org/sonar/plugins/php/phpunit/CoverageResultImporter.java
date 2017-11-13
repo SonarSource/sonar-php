@@ -70,12 +70,11 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
     List<String> unresolvedPaths = new ArrayList<>();
-    List<String> resolvedPaths = new ArrayList<>();
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      parseFileNodes(projectNode.getFiles(), unresolvedPaths, resolvedPaths, context);
-      parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, resolvedPaths, context);
+      parseFileNodes(projectNode.getFiles(), unresolvedPaths, context);
+      parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, context);
     }
     if (!unresolvedPaths.isEmpty()) {
       LOG.warn(
@@ -86,18 +85,18 @@ public class CoverageResultImporter extends SingleFileReportImporter {
   }
 
 
-  private void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+  private void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, SensorContext context) {
     if (packages != null) {
       for (PackageNode packageNode : packages) {
-        parseFileNodes(packageNode.getFiles(), unresolvedPaths, resolvedPaths, context);
+        parseFileNodes(packageNode.getFiles(), unresolvedPaths, context);
       }
     }
   }
 
-  private void parseFileNodes(@Nullable List<FileNode> fileNodes, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+  private void parseFileNodes(@Nullable List<FileNode> fileNodes, List<String> unresolvedPaths, SensorContext context) {
     if (fileNodes != null) {
       for (FileNode file : fileNodes) {
-        saveCoverageMeasure(file, unresolvedPaths, resolvedPaths, context);
+        saveCoverageMeasure(file, unresolvedPaths, context);
       }
     }
   }
@@ -106,9 +105,8 @@ public class CoverageResultImporter extends SingleFileReportImporter {
    * Saves the required metrics found on the fileNode
    * @param fileNode the file
    * @param unresolvedPaths list of paths which cannot be mapped to imported files
-   * @param resolvedPaths list of paths which can be mapped to imported files
    */
-  protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+  protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
     // PHP supports only absolute paths
     String path = fileNode.getName();
@@ -117,7 +115,6 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
     if (inputFile != null) {
-      resolvedPaths.add(inputFile.relativePath());
       saveCoverageLineHitsData(fileNode, inputFile, context);
 
       // Saving the uncovered statements (lines) is no longer needed because coverage metrics are internally derived by the NewCoverage
@@ -135,7 +132,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
         if (lineNum > 0 && lineNum <= inputFile.lines()) {
           newCoverage.lineHits(line.getNum(), line.getCount());
         } else {
-          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, inputFile.file()));
+          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, inputFile.filename()));
         }
       }
     }

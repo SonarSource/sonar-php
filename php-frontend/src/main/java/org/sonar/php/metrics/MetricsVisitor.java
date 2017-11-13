@@ -118,8 +118,8 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     linesOfCode.forEach(lineOfCode -> fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, lineOfCode, 1));
     commentLines.forEach(commentLine -> fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, commentLine, 1));
 
-      executableLineVisitor.getExecutableLines().forEach(line ->
-        fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1));
+    executableLineVisitor.getExecutableLines().forEach(line ->
+      fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1));
 
     fileLinesContext.save();
   }
