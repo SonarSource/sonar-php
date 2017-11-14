@@ -27,7 +27,6 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import static com.sonar.it.php.PHPUnitTest.createReportsWithAbsolutePath;
-import static com.sonar.it.php.PHPUnitTest.is_before_sonar_6_2;
 import static com.sonar.it.php.Tests.ORCHESTRATOR;
 import static com.sonar.it.php.Tests.getMeasureAsInt;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,35 +82,11 @@ public class PHPUnitLegacyTest {
     assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
     assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
 
-    // see MMF-345
-    if (is_before_sonar_6_2()) {
-      assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(21);
-      assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(17);
+    assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(9);
+    assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(5);
 
-      assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(15);
-
-      assertThat(getProjectMeasureAsInt("it_lines_to_cover")).isEqualTo(21);
-      assertThat(getProjectMeasureAsInt("it_uncovered_lines")).isEqualTo(17);
-      assertThat(getCoveredFileMeasureAsInt("it_lines_to_cover")).isEqualTo(6);
-      assertThat(getCoveredFileMeasureAsInt("it_uncovered_lines")).isEqualTo(2);
-      assertThat(getUnCoveredFileMeasureAsInt("it_lines_to_cover")).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasureAsInt("it_uncovered_lines")).isEqualTo(15);
-
-      assertThat(getProjectMeasureAsInt("overall_lines_to_cover")).isEqualTo(21);
-      assertThat(getProjectMeasureAsInt("overall_uncovered_lines")).isEqualTo(17);
-      assertThat(getCoveredFileMeasureAsInt("overall_lines_to_cover")).isEqualTo(6);
-      assertThat(getCoveredFileMeasureAsInt("overall_uncovered_lines")).isEqualTo(2);
-      assertThat(getUnCoveredFileMeasureAsInt("overall_lines_to_cover")).isEqualTo(15);
-      assertThat(getUnCoveredFileMeasureAsInt("overall_uncovered_lines")).isEqualTo(15);
-
-    } else {
-      assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(9);
-      assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(5);
-
-      assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(3);
-      assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(3);
-    }
+    assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(3);
+    assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(3);
   }
 
   private Integer getProjectMeasureAsInt(String metricKey) {

@@ -81,24 +81,14 @@ public class PHPUnitTest {
     assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
     assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
 
-    // see MMF-345
-    if (is_before_sonar_6_2()) {
-      // no coverage saved as new property is not supported
-      assertThat(getProjectMeasureAsInt("lines_to_cover")).isNull();
-      assertThat(getProjectMeasureAsInt("uncovered_lines")).isNull();
-      assertThat(getProjectMeasureAsInt("it_lines_to_cover")).isNull();
-      assertThat(getProjectMeasureAsInt("overall_lines_to_cover")).isNull();
+    assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(9);
+    assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(5);
 
-    } else {
-      assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(9);
-      assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(5);
+    assertThat(getCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(6);
+    assertThat(getCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(2);
 
-      assertThat(getCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(6);
-      assertThat(getCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(2);
-
-      assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(3);
-      assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(3);
-    }
+    assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(3);
+    assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(3);
   }
 
   private Integer getProjectMeasureAsInt(String metricKey) {
@@ -139,9 +129,5 @@ public class PHPUnitTest {
       Files.toString(new File(PROJECT_DIR, REPORTS_DIR + "/phpunit.xml"), Charsets.UTF_8)
         .replace("SomeTest.php", new File(PROJECT_DIR, TESTS_DIR + "/SomeTest.php").getAbsolutePath()),
       new File(PROJECT_DIR, REPORTS_DIR + "/.tests-with-absolute-path.xml"), Charsets.UTF_8);
-  }
-
-  static boolean is_before_sonar_6_2() {
-    return !orchestrator.getConfiguration().getSonarVersion().isGreaterThanOrEquals("6.2");
   }
 }
