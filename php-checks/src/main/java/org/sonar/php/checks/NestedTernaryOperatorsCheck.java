@@ -19,11 +19,15 @@
  */
 package org.sonar.php.checks;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 @Rule(key = "S3358")
 public class NestedTernaryOperatorsCheck extends PHPVisitorCheck {
@@ -31,29 +35,28 @@ public class NestedTernaryOperatorsCheck extends PHPVisitorCheck {
   @Override
   public void visitConditionalExpression(ConditionalExpressionTree tree) {
     TernaryVisitor visitor = new TernaryVisitor();
-    tree.condition().accept(visitor);
+    tree.falseExpression().accept(visitor);
     ExpressionTree trueExpression = tree.trueExpression();
     if (trueExpression != null) {
       trueExpression.accept(visitor);
     }
-    tree.falseExpression().accept(visitor);
-    if (visitor.childTernary != null) {
-      context()
-        .newIssue(this, visitor.childTernary, "Extract this nested ternary operation into an independent statement.")
-        .secondary(tree.queryToken(), "Parent ternary operator");
+    tree.condition().accept(visitor);
+    if (!visitor.descendantTernaries.isEmpty()) {
+      ConditionalExpressionTree first = visitor.descendantTernaries.get(0);
+      PreciseIssue issue = context().newIssue(this, first, "Extract this nested ternary operation into an independent statement.");
+      visitor.descendantTernaries.stream().skip(1).forEach(ternary -> issue.secondary(ternary, "Other nested ternary"));
+      issue.secondary(tree.queryToken(), "Parent ternary operator");
     }
     // skip nested
   }
 
   private static class TernaryVisitor extends PHPVisitorCheck {
 
-    ConditionalExpressionTree childTernary = null;
+    List<ConditionalExpressionTree> descendantTernaries = new ArrayList<>();
 
     @Override
     public void visitConditionalExpression(ConditionalExpressionTree tree) {
-      if (childTernary == null) {
-        childTernary = tree;
-      }
+      descendantTernaries.add(tree);
       // skip nested
     }
 
@@ -61,6 +64,12 @@ public class NestedTernaryOperatorsCheck extends PHPVisitorCheck {
     public void visitFunctionExpression(FunctionExpressionTree tree) {
       // skip nested
     }
+
+    @Override
+    public void visitAnonymousClass(AnonymousClassTree tree) {
+      // skip nested
+    }
+
   }
 
 }
