@@ -26,19 +26,25 @@ import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 @Rule(key = MultilineBlocksCurlyBracesCheck.KEY)
 public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
 
   public static final String KEY = "S2681";
-  private static final String MESSAGE_LOOP = "Only the first line of this %s-line block will be executed in a loop. The rest will execute only once.";
-  private static final String MESSAGE_IF = "Only the first line of this %s-line block will be executed conditionally. The rest will execute unconditionally.";
+
+  private static final String MESSAGE_LOOP = "This statement will not be executed in a loop; only the first statement of this %s-statement block will be."
+    + " The rest will execute only once.";
+
+  private static final String MESSAGE_IF = "This statement will not be executed conditionally; only the first statement of this %s-statement block will be."
+    + " The rest will execute unconditionally.";
 
   @Override
   public void visitNode(Tree tree) {
@@ -46,84 +52,136 @@ public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
 
     for (int i = 0; i < statements.size() - 1; i++) {
       StatementTree currentStatement = statements.get(i);
-
       if (currentStatement.is(Kind.IF_STATEMENT)) {
-        checkStatement(getLastStatement((IfStatementTree)currentStatement), i, statements);
-
+        IfStatementTree ifStatement = (IfStatementTree) currentStatement;
+        checkStatement(ifStatement.ifToken(), ifStatement.condition(), getLastStatementOfIf(ifStatement), i, statements);
       } else if (currentStatement.is(Kind.FOR_STATEMENT)) {
-        checkStatement(((ForStatementTree) currentStatement).statements().get(0), i, statements);
-
+        ForStatementTree forStatement = (ForStatementTree) currentStatement;
+        checkStatement(forStatement.forToken(), forStatement.closeParenthesisToken(), forStatement.statements().get(0), i, statements);
       } else if (currentStatement.is(Kind.FOREACH_STATEMENT)) {
-        checkStatement(((ForEachStatementTree) currentStatement).statements().get(0), i, statements);
-
+        ForEachStatementTree forStatement = (ForEachStatementTree) currentStatement;
+        checkStatement(forStatement.foreachToken(), forStatement.closeParenthesisToken(), forStatement.statements().get(0), i, statements);
       } else if (currentStatement.is(Kind.WHILE_STATEMENT)) {
-        checkStatement(((WhileStatementTree) currentStatement).statements().get(0), i, statements);
-
+        WhileStatementTree whileStatement = (WhileStatementTree) currentStatement;
+        checkStatement(whileStatement.whileToken(), whileStatement.condition(), whileStatement.statements().get(0), i, statements);
       }
-
     }
   }
 
-  private static StatementTree getLastStatement(IfStatementTree ifStatement) {
-    if (ifStatement.elseClause() == null && ifStatement.elseifClauses().isEmpty()) {
-      return ifStatement.statements().get(0);
+  private static StatementTree getLastStatementOfIf(StatementTree statement) {
+    if (!statement.is(Kind.IF_STATEMENT)) {
+      return statement;
     }
-
-    StatementTree statement = ifStatement;
-
-    do {
-      IfStatementTree nestedIfStatement = (IfStatementTree) statement;
-
-      if (nestedIfStatement.elseClause() != null) {
-        statement = nestedIfStatement.elseClause().statements().get(0);
-
-      } else {
-        List<ElseifClauseTree> elseifClauses = nestedIfStatement.elseifClauses();
-        if (elseifClauses.isEmpty()) {
-          statement = nestedIfStatement.statements().get(0);
-
-        } else {
-          statement = elseifClauses.get(elseifClauses.size() - 1).statements().get(0);
-        }
-      }
-    } while (statement.is(Kind.IF_STATEMENT));
-
-    return statement;
+    List<StatementTree> childStatements;
+    IfStatementTree ifStatement = (IfStatementTree) statement;
+    ElseClauseTree elseClause = ifStatement.elseClause();
+    List<ElseifClauseTree> elseifClause = ifStatement.elseifClauses();
+    if (elseClause != null) {
+      childStatements = elseClause.statements();
+    } else if (!elseifClause.isEmpty()) {
+      childStatements = elseifClause.get(elseifClause.size() - 1).statements();
+    } else {
+      childStatements = ifStatement.statements();
+    }
+    return getLastStatementOfIf(childStatements.get(childStatements.size() - 1));
   }
 
-  private void checkStatement(StatementTree firstInnerStatement, int nestingStatementNum, List<StatementTree> statements) {
+  private void checkStatement(Tree parentStart, Tree parentEnd, StatementTree firstInnerStatement, int nestingStatementNum, List<StatementTree> statements) {
     if (firstInnerStatement.is(Kind.BLOCK)) {
       return;
     }
+    int parentLine = ((PHPTree) parentEnd).getLastToken().line();
+    int parentColumn = ((PHPTree) parentStart).getFirstToken().column();
+    StatementBlock statementBlock = findBlock(parentLine, parentColumn, firstInnerStatement, nestingStatementNum, statements);
+    if (!statementBlock.otherStatement.isEmpty()) {
+      boolean isIfStatement = statements.get(nestingStatementNum).is(Kind.IF_STATEMENT);
+      String message = String.format(isIfStatement ? MESSAGE_IF : MESSAGE_LOOP, statementBlock.size());
+      PreciseIssue issue = context().newIssue(this, statementBlock.otherStatement.get(0), message);
+      issue.secondary(firstInnerStatement, isIfStatement ? "Executed conditionally" : "Executed in a loop");
+      String secondaryMessage = isIfStatement ? "Always executed" : "Executed once";
+      statementBlock.otherStatement.stream().skip(1).forEach(statement -> issue.secondary(statement, secondaryMessage));
+    }
+  }
 
-    int firstIndent = column(firstInnerStatement);
-    List<StatementTree> statementsWhichShouldBeNested = new ArrayList<>();
-
+  private static StatementBlock findBlock(int parentLine, int parentColumn, StatementTree firstInnerStatement, int nestingStatementNum,
+    List<StatementTree> statements) {
+    StatementBlock statementBlock = new StatementBlock(firstInnerStatement, parentColumn, parentLine);
     for (int i = nestingStatementNum + 1; i < statements.size(); i++) {
-      StatementTree nextStatement = statements.get(i);
+      StatementTree statement = statements.get(i);
+      if (!statementBlock.add(statement)) {
+        break;
+      }
+    }
+    return statementBlock;
+  }
 
-      if (!nextStatement.is(Kind.INLINE_HTML)) {
+  private static class StatementBlock {
 
-        if (column(nextStatement) == firstIndent) {
-          statementsWhichShouldBeNested.add(nextStatement);
+    static final int MAX_STATEMENT_DISTANCE_IN_THE_SAME_BLOCK = 4;
 
-        } else {
-          break;
-        }
+    final StatementTree firstStatement;
+
+    final List<StatementTree> otherStatement = new ArrayList<>();
+
+    final int parentMarginColumn;
+
+    int lastStatementLine;
+
+    int lastStatementColumn;
+
+    boolean firstStatementOneLiner;
+
+    StatementBlock(StatementTree firstStatement, int parentMarginColumn, int parentLastLine) {
+      this.firstStatement = firstStatement;
+      lastStatementLine = line(firstStatement);
+      this.firstStatementOneLiner = lastStatementLine == parentLastLine;
+      lastStatementColumn = column(firstStatement);
+      this.parentMarginColumn = parentMarginColumn;
+    }
+
+    int size() {
+      return 1 + otherStatement.size();
+    }
+
+    /**
+     * @return false if the statement is not part of the group
+     */
+    boolean add(StatementTree statement) {
+      if (statement.is(Kind.INLINE_HTML)) {
+        // ignore and continue
+        return true;
+      }
+      int line = line(statement);
+      int column = column(statement);
+      if (column < parentMarginColumn || !isLineCloseToPreviousStatement(line)) {
+        return false;
+      } else if (column == parentMarginColumn &&
+        (firstStatementOneLiner || column != lastStatementColumn || !isOneLineAfterPreviousStatement(line))) {
+        return false;
+      } else {
+        otherStatement.add(statement);
+        lastStatementLine = line;
+        lastStatementColumn = column;
+        return true;
       }
     }
 
-    if (!statementsWhichShouldBeNested.isEmpty()) {
-      int firstInnerStatementLine = ((PHPTree) firstInnerStatement).getLine();
-      int lastShouldBeNestedLine = ((PHPTree) statementsWhichShouldBeNested.get(statementsWhichShouldBeNested.size() - 1)).getLine();
-      int blockSize = lastShouldBeNestedLine - firstInnerStatementLine + 1;
-      String message = statements.get(nestingStatementNum).is(Kind.IF_STATEMENT) ? MESSAGE_IF : MESSAGE_LOOP;
-      context().newIssue(this, statementsWhichShouldBeNested.get(0), String.format(message, blockSize));
+    private boolean isLineCloseToPreviousStatement(int line) {
+      return line < (lastStatementLine + MAX_STATEMENT_DISTANCE_IN_THE_SAME_BLOCK);
     }
+
+    private boolean isOneLineAfterPreviousStatement(int line) {
+      return line == (lastStatementLine + 1);
+    }
+
+    private static int column(Tree tree) {
+      return ((PHPTree) tree).getFirstToken().column();
+    }
+
+    private static int line(Tree tree) {
+      return ((PHPTree) tree).getFirstToken().line();
+    }
+
   }
 
-
-  private static int column(Tree tree) {
-    return ((PHPTree) tree).getFirstToken().column();
-  }
 }
