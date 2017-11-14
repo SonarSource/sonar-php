@@ -153,6 +153,7 @@ public class CheckList {
       SelfAssignmentCheck.class,
       UselessObjectCreationCheck.class,
       DuplicateConditionCheck.class,
+      NestedTernaryOperatorsCheck.class,
       DuplicateBranchImplementationCheck.class,
       AllBranchesIdenticalCheck.class,
       InterfaceNameCheck.class,
