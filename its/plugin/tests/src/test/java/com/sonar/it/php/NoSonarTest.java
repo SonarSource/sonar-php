@@ -24,9 +24,11 @@ import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.sonar.wsclient.issue.IssueClient;
 import org.sonar.wsclient.issue.IssueQuery;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,6 +38,7 @@ public class NoSonarTest {
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
 
+  private static IssueClient issueClient;
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("nosonar");
 
   @BeforeClass
@@ -54,10 +57,19 @@ public class NoSonarTest {
     orchestrator.executeBuild(build);
   }
 
+  @Before
+  public void setUp() {
+    issueClient = orchestrator.getServer().wsClient().issueClient();
+  }
+
   @Test
   public void test() {
-    assertThat(orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots("nosonar-project").severities("INFO").rules("php:S1116")).list())
-      .hasSize(1);
+    assertThat(countIssues("php:S1116")).isEqualTo(1);
+    assertThat(countIssues("php:NoSonar")).isEqualTo(2);
+  }
+
+  private static int countIssues(String issueKey) {
+    return issueClient.find(IssueQuery.create().componentRoots("nosonar-project").severities("INFO").rules(issueKey)).list().size();
   }
 
 }
