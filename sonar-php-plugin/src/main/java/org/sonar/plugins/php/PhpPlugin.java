@@ -38,6 +38,7 @@ public class PhpPlugin implements Plugin {
   public static final String GENERAL_SUBCATEGORY = "General";
   public static final String PHPUNIT_SUBCATEGORY = "PHPUnit";
 
+  private static final String DEPRECATION_MESSAGE = "DEPRECATED: use " + PHPUNIT_COVERAGE_REPORT_PATHS_KEY + ". ";
   private static final String REPORT_PATH_DESCRIPTION_TEMPLATE = "%sPath to the PHPUnit %s report file. The path may be either absolute or relative to the project base directory.";
 
   @Override
@@ -79,7 +80,7 @@ public class PhpPlugin implements Plugin {
 
         PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATH_KEY)
           .name("Coverage Report")
-          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, deprecationMessage(), "code coverage"))
+          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, DEPRECATION_MESSAGE, "code coverage"))
           .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)
@@ -87,7 +88,7 @@ public class PhpPlugin implements Plugin {
 
         PropertyDefinition.builder(PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY)
           .name("IT Coverage Report")
-          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, deprecationMessage(), "integration test code coverage"))
+          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, DEPRECATION_MESSAGE, "integration test code coverage"))
           .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)
@@ -95,7 +96,7 @@ public class PhpPlugin implements Plugin {
 
         PropertyDefinition.builder(PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY)
           .name("Overall Coverage Report")
-          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, deprecationMessage(), "overall code coverage"))
+          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, DEPRECATION_MESSAGE, "overall code coverage"))
           .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)
@@ -109,10 +110,6 @@ public class PhpPlugin implements Plugin {
       .subCategory(PHPUNIT_SUBCATEGORY)
       .build());
 
-  }
-
-  private static String deprecationMessage() {
-    return "DEPRECATED: use " + PHPUNIT_COVERAGE_REPORT_PATHS_KEY + ". ";
   }
 
 }

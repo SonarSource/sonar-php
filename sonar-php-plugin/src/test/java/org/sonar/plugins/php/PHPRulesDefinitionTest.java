@@ -36,6 +36,9 @@ public class PHPRulesDefinitionTest {
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository("php");
+    assertThat(repository.name()).isEqualTo("SonarAnalyzer");
+    assertThat(repository.language()).isEqualTo("php");
+    assertThat(repository.rules()).hasSize(CheckList.getAllChecks().size());
 
     List<Rule> activated = repository.rules().stream().filter(Rule::activatedByDefault).collect(Collectors.toList());
     assertThat(activated).isNotEmpty();
