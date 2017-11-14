@@ -49,51 +49,38 @@ public class PhpPluginTest {
 
   @Test
   public void test() {
-    Plugin.Context context = qubeContext(Version.create(5, 6));
+    Plugin.Context context = qubeContext(Version.create(6, 7));
     plugin.define(context);
 
-    assertThat(context.getExtensions()).hasSize(12);
+    assertThat(context.getExtensions()).hasSize(13);
   }
 
   @Test
   public void test_sonarlint() {
-    SonarRuntime runtime = SonarRuntimeImpl.forSonarLint(Version.create(6, 0));
+    SonarRuntime runtime = SonarRuntimeImpl.forSonarLint(Version.create(6, 7));
     Plugin.Context context = new Plugin.Context(runtime);
     plugin.define(context);
 
-    assertThat(context.getExtensions()).hasSize(8);
+    assertThat(context.getExtensions()).hasSize(9);
   }
 
   @Test
   public void should_contain_REPORT_PATHS_from_6_2() throws Exception {
-    Plugin.Context context6_2 = qubeContext(Version.create(6, 2));
-    plugin.define(context6_2);
+    Plugin.Context context6_7 = qubeContext(Version.create(6, 7));
+    plugin.define(context6_7);
 
-    assertThat(extensionKeysOf(context6_2)).contains(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY);
-    assertThat(extensionKeysOf(context6_2)).contains(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY);
-
-    Plugin.Context context6_1 = qubeContext(Version.create(6, 1));
-    plugin.define(context6_1);
-
-    assertThat(extensionKeysOf(context6_1)).doesNotContain(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY);
-    assertThat(extensionKeysOf(context6_1)).contains(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY);
+    assertThat(extensionKeysOf(context6_7)).contains(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY);
+    assertThat(extensionKeysOf(context6_7)).contains(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY);
   }
 
   @Test
   public void should_add_deprecation_warning_to_legacy_coverage_report_path_keys_from_6_2() throws Exception {
-    Plugin.Context context6_2 = qubeContext(Version.create(6, 2));
-    plugin.define(context6_2);
+    Plugin.Context context6_7 = qubeContext(Version.create(6, 7));
+    plugin.define(context6_7);
 
-    assertThat(property(context6_2, PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
-    assertThat(property(context6_2, PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
-    assertThat(property(context6_2, PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
-
-    final Plugin.Context context6_1 = qubeContext(Version.create(6, 1));
-    plugin.define(context6_1);
-
-    assertThat(property(context6_1, PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY).description()).doesNotStartWith(DEPRECATION_NOTICE);
-    assertThat(property(context6_1, PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY).description()).doesNotStartWith(DEPRECATION_NOTICE);
-    assertThat(property(context6_1, PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY).description()).doesNotStartWith(DEPRECATION_NOTICE);
+    assertThat(property(context6_7, PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
+    assertThat(property(context6_7, PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
+    assertThat(property(context6_7, PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
   }
 
   private PropertyDefinition property(Plugin.Context context, String propertyKey) {

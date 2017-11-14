@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.util.Map;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -40,15 +39,15 @@ public class MultiPathImporter implements ReportImporter {
   }
 
   @Override
-  public void importReport(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
-    final String[] paths = context.settings().getStringArray(pathsKey);
+  public void importReport(SensorContext context) {
+    final String[] paths = context.config().getStringArray(pathsKey);
     if (paths.length == 0) {
       LOG.info("No PHPUnit {} reports provided (see '{}' property)", msg, pathsKey);
       return;
     }
     for (String path : paths) {
       if (!path.isEmpty()) {
-        importer.importReport(path, msg, context, numberOfLinesOfCode);
+        importer.importReport(path, msg, context);
       }
     }
   }

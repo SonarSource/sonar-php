@@ -24,9 +24,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.InterruptedIOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
@@ -64,12 +62,9 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.CompatibilityImportersFactory;
-import org.sonar.plugins.php.phpunit.ReportImporter;
 import org.sonar.plugins.php.phpunit.TestResultImporter;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
-
-import static org.sonar.plugins.php.PhpPlugin.SQ_VERSION_6_0;
 
 public class PHPSensor implements Sensor {
 
@@ -118,12 +113,10 @@ public class PHPSensor implements Sensor {
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
 
-    Map<String, Integer> numberOLinesOfCode = new HashMap<>();
-
     try {
-      analyseFiles(context, phpAnalyzer, inputFiles, progressReport, numberOLinesOfCode);
+      analyseFiles(context, phpAnalyzer, inputFiles, progressReport);
       if (inSonarQube(context)) {
-        processTestsAndCoverage(context, numberOLinesOfCode);
+        processTestsAndCoverage(context);
       }
     } catch (CancellationException e) {
       LOG.info(e.getMessage());
@@ -131,25 +124,24 @@ public class PHPSensor implements Sensor {
   }
 
   private static boolean inSonarQube(SensorContext context) {
-    return !context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) || context.runtime().getProduct() != SonarProduct.SONARLINT;
+    return context.runtime().getProduct() != SonarProduct.SONARLINT;
   }
 
-  private static void processTestsAndCoverage(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
-    new TestResultImporter().importReport(context, numberOfLinesOfCode);
+  private static void processTestsAndCoverage(SensorContext context) {
+    new TestResultImporter().importReport(context);
 
     final CompatibilityImportersFactory importersFactory = new CompatibilityImportersFactory(context);
     importersFactory.deprecationWarnings().forEach(LOG::warn);
-    List<ReportImporter> importers = importersFactory.createCoverageImporters();
-    importers.forEach(phpUnitImporter -> phpUnitImporter.importReport(context, numberOfLinesOfCode));
+    importersFactory.createCoverageImporter().importReport(context);
   }
 
-  void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Iterable<InputFile> inputFiles, ProgressReport progressReport, Map<String, Integer> numberOfLinesOfCode) {
+  void analyseFiles(SensorContext context, PHPAnalyzer phpAnalyzer, Iterable<InputFile> inputFiles, ProgressReport progressReport) {
     boolean success = false;
     try {
       for (InputFile inputFile : inputFiles) {
         checkCancelled(context);
         progressReport.nextFile();
-        analyseFile(context, phpAnalyzer, inputFile, numberOfLinesOfCode);
+        analyseFile(context, phpAnalyzer, inputFile);
       }
       success = true;
     } finally {
@@ -158,7 +150,7 @@ public class PHPSensor implements Sensor {
   }
 
   private static void checkCancelled(SensorContext context) {
-    if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0) && context.isCancelled()) {
+    if (context.isCancelled()) {
       throw new CancellationException("Analysis cancelled");
     }
   }
@@ -171,7 +163,7 @@ public class PHPSensor implements Sensor {
     }
   }
 
-  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile, Map<String, Integer> numberOfLinesOfCode) {
+  private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile) {
     try {
       phpAnalyzer.nextFile(CompatibilityHelper.phpFile(inputFile, context));
 
@@ -179,9 +171,7 @@ public class PHPSensor implements Sensor {
         phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();
         phpAnalyzer.getSymbolHighlighting(context, inputFile).save();
         saveNewFileMeasures(context,
-          phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile),
-            numberOfLinesOfCode,
-            context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)),
+          phpAnalyzer.computeMeasures(fileLinesContextFactory.createFor(inputFile)),
           inputFile);
         if (inSonarQube(context)) {
           saveCpdData(phpAnalyzer.computeCpdTokens(), inputFile, context);
@@ -193,13 +183,13 @@ public class PHPSensor implements Sensor {
 
     } catch (RecognitionException e) {
       checkInterrupted(e);
-      LOG.error("Unable to parse file: " + inputFile.absolutePath());
+      LOG.error("Unable to parse file: " + inputFile.filename());
       LOG.error(e.getMessage());
       saveParsingIssue(context, e, inputFile);
       return;
     } catch (Exception e) {
       checkInterrupted(e);
-      throw new AnalysisException("Could not analyse " + inputFile.absolutePath(), e);
+      throw new AnalysisException("Could not analyse " + inputFile.filename(), e);
     }
   }
 
@@ -245,13 +235,11 @@ public class PHPSensor implements Sensor {
         .save();
     }
 
-    if (context.getSonarQubeVersion().isGreaterThanOrEqual(SQ_VERSION_6_0)) {
-      context.newAnalysisError()
-        .onFile(inputFile)
-        .at(inputFile.newPointer(e.getLine(), 0))
-        .message(e.getMessage())
-        .save();
-    }
+    context.newAnalysisError()
+      .onFile(inputFile)
+      .at(inputFile.newPointer(e.getLine(), 0))
+      .message(e.getMessage())
+      .save();
   }
 
   private void saveIssues(SensorContext context, List<PhpIssue> issues, InputFile inputFile) {

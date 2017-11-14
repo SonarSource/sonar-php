@@ -20,16 +20,15 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
-import java.util.HashMap;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.test.TestUtils;
 
 public class TestResultImporterTest {
 
@@ -44,10 +43,10 @@ public class TestResultImporterTest {
   @Test()
   public void shouldGenerateTestsMeasures() {
     SensorContextTester context = setUpForSensorContextTester();
-    File baseDir = TestUtils.getResource("/org/sonar/plugins/php/phpunit/sensor/src/");
-    DefaultFileSystem fs = new DefaultFileSystem(baseDir);
-    DefaultInputFile appTestFile = new DefaultInputFile("moduleKey", "src/AppTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY);
-    DefaultInputFile appSkippedTestFile = new DefaultInputFile("moduleKey", "src/AppSkipTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY);
+    File baseDir = new File("src/test/resources/org/sonar/plugins/php/phpunit/sensor/src/");
+    DefaultFileSystem fs = new DefaultFileSystem(baseDir.getAbsoluteFile());
+    DefaultInputFile appTestFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
+    DefaultInputFile appSkippedTestFile = TestInputFileBuilder.create("moduleKey", "src/AppSkipTest.php").setType(InputFile.Type.TEST).setLanguage(Php.KEY).build();
 
     fs.add(appTestFile);
     fs.add(appSkippedTestFile);
@@ -57,7 +56,7 @@ public class TestResultImporterTest {
     String appSkipTestFileKey = appSkippedTestFile.key();
 
     importer = new TestResultImporter();
-    importer.importReport(TestUtils.getResource(PhpTestUtils.PHPUNIT_REPORT_NAME), context, new HashMap<>());
+    importer.importReport(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_NAME), context);
 
     PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.TESTS, 1);
     PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.TEST_FAILURES, 0);

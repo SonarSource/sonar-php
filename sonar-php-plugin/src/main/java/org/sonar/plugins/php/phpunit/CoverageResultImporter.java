@@ -27,19 +27,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.Nullable;
-import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.php.PhpPlugin;
-import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
 import org.sonar.plugins.php.phpunit.xml.LineNode;
@@ -55,34 +50,28 @@ public class CoverageResultImporter extends SingleFileReportImporter {
 
   protected Metric<Integer> linesToCoverMetric;
   protected Metric<Integer> uncoveredLinesMetric;
-  protected CoverageType coverageType;
 
-  public CoverageResultImporter(String reportPathKey, String msg, Metric<Integer> linesToCoverMetric, Metric<Integer> uncoveredLinesMetric, CoverageType coverageType) {
+  public CoverageResultImporter(String reportPathKey, String msg, Metric<Integer> linesToCoverMetric, Metric<Integer> uncoveredLinesMetric) {
     super(reportPathKey, msg);
     this.linesToCoverMetric = linesToCoverMetric;
     this.uncoveredLinesMetric = uncoveredLinesMetric;
-    this.coverageType = coverageType;
   }
 
   @Override
-  protected void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  protected void importReport(File coverageReportFile, SensorContext context) {
     LOG.debug("Parsing file: " + coverageReportFile.getAbsolutePath());
-    parseFile(coverageReportFile, context, numberOfLinesOfCode);
+    parseFile(coverageReportFile, context);
   }
 
-  private void parseFile(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  private void parseFile(File coverageReportFile, SensorContext context) {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
     List<String> unresolvedPaths = new ArrayList<>();
-    List<String> resolvedPaths = new ArrayList<>();
     List<ProjectNode> projects = coverage.getProjects();
     if (projects != null && !projects.isEmpty()) {
       ProjectNode projectNode = projects.get(0);
-      parseFileNodes(projectNode.getFiles(), unresolvedPaths, resolvedPaths, context);
-      parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, resolvedPaths, context);
-      if (!context.getSonarQubeVersion().isGreaterThanOrEqual(PhpPlugin.SQ_VERSION_6_2)) {
-        saveMeasureForMissingFiles(resolvedPaths, context, numberOfLinesOfCode);
-      }
+      parseFileNodes(projectNode.getFiles(), unresolvedPaths, context);
+      parsePackagesNodes(projectNode.getPackages(), unresolvedPaths, context);
     }
     if (!unresolvedPaths.isEmpty()) {
       LOG.warn(
@@ -92,42 +81,19 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     }
   }
 
-  /**
-   * Set default 0 value for files that do not have coverage metrics because they were not touched by any test,
-   * and thus not present in the coverage report file.
-   */
-  private void saveMeasureForMissingFiles(List<String> resolvedPaths, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
-    final FileSystem fileSystem = context.fileSystem();
-    FilePredicate mainFilesPredicate = fileSystem.predicates().and(
-      fileSystem.predicates().hasType(InputFile.Type.MAIN),
-      fileSystem.predicates().hasLanguage(Php.KEY));
 
-    for (InputFile phpFile : fileSystem.inputFiles(mainFilesPredicate)) {
-      if (!resolvedPaths.contains(phpFile.relativePath())) {
-        LOG.debug("Coverage metrics have not been set on '{}': default values will be inserted.", phpFile.file().getName());
-
-        // for LINES_TO_COVER and UNCOVERED_LINES, we use NCLOC as an approximation
-        Integer ncloc = numberOfLinesOfCode.get(phpFile.relativePath());
-        if (ncloc != null) {
-          context.<Integer>newMeasure().on(phpFile).withValue(ncloc).forMetric(linesToCoverMetric).save();
-          context.<Integer>newMeasure().on(phpFile).withValue(ncloc).forMetric(uncoveredLinesMetric).save();
-        }
-      }
-    }
-  }
-
-  private void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+  private void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, SensorContext context) {
     if (packages != null) {
       for (PackageNode packageNode : packages) {
-        parseFileNodes(packageNode.getFiles(), unresolvedPaths, resolvedPaths, context);
+        parseFileNodes(packageNode.getFiles(), unresolvedPaths, context);
       }
     }
   }
 
-  private void parseFileNodes(@Nullable List<FileNode> fileNodes, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+  private void parseFileNodes(@Nullable List<FileNode> fileNodes, List<String> unresolvedPaths, SensorContext context) {
     if (fileNodes != null) {
       for (FileNode file : fileNodes) {
-        saveCoverageMeasure(file, unresolvedPaths, resolvedPaths, context);
+        saveCoverageMeasure(file, unresolvedPaths, context);
       }
     }
   }
@@ -136,9 +102,8 @@ public class CoverageResultImporter extends SingleFileReportImporter {
    * Saves the required metrics found on the fileNode
    * @param fileNode the file
    * @param unresolvedPaths list of paths which cannot be mapped to imported files
-   * @param resolvedPaths list of paths which can be mapped to imported files
    */
-  protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, List<String> resolvedPaths, SensorContext context) {
+  protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
     // PHP supports only absolute paths
     String path = fileNode.getName();
@@ -147,7 +112,6 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
     if (inputFile != null) {
-      resolvedPaths.add(inputFile.relativePath());
       saveCoverageLineHitsData(fileNode, inputFile, context);
 
       // Saving the uncovered statements (lines) is no longer needed because coverage metrics are internally derived by the NewCoverage
@@ -156,8 +120,8 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     }
   }
 
-  private void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
-    NewCoverage newCoverage = context.newCoverage().onFile(inputFile).ofType(coverageType);
+  private static void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
+    NewCoverage newCoverage = context.newCoverage().onFile(inputFile);
 
     if (fileNode.getLines() != null) {
       for (LineNode line : fileNode.getLines()) {
@@ -165,7 +129,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
         if (lineNum > 0 && lineNum <= inputFile.lines()) {
           newCoverage.lineHits(line.getNum(), line.getCount());
         } else {
-          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, inputFile.file()));
+          LOG.warn(String.format(WRONG_LINE_EXCEPTION_MESSAGE, lineNum, inputFile.filename()));
         }
       }
     }

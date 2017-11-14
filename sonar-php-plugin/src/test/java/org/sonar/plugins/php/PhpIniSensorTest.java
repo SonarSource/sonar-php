@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.Checks;
@@ -83,9 +84,10 @@ public class PhpIniSensorTest {
   }
 
   private DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {
-    DefaultInputFile file1 = new DefaultInputFile("moduleKey", "php.ini")
+    DefaultInputFile file1 = TestInputFileBuilder.create("moduleKey", baseDir, new File(baseDir, "php.ini"))
       .setCharset(StandardCharsets.UTF_8)
-      .initMetadata(Files.toString(new File(baseDir, "php.ini"), StandardCharsets.UTF_8));
+      .initMetadata(Files.toString(new File(baseDir, "php.ini"), StandardCharsets.UTF_8))
+      .build();
     context.fileSystem().add(file1);
     return file1;
   }

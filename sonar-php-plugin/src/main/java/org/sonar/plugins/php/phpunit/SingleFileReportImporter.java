@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
-import java.util.Map;
 import java.util.Optional;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
@@ -39,24 +38,24 @@ public abstract class SingleFileReportImporter implements ReportImporter {
   }
 
   @Override
-  public final void importReport(SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
-    String reportPath = context.settings().getString(reportPathKey);
-    if (reportPath != null) {
-      importReport(reportPath, msg, context, numberOfLinesOfCode);
+  public final void importReport(SensorContext context) {
+    Optional<String> reportPath = context.config().get(reportPathKey);
+    if (reportPath.isPresent()) {
+      importReport(reportPath.get(), msg, context);
     } else {
       LOG.info("No PHPUnit {} report provided (see '{}' property)", msg, reportPathKey);
     }
   }
 
-  final void importReport(String reportPath, String msg, SensorContext context, Map<String, Integer> numberOfLinesOfCode) {
+  final void importReport(String reportPath, String msg, SensorContext context) {
     Optional<File> maybeFile = getIOFile(reportPath, context);
     maybeFile.ifPresent(file -> {
       LOG.info("Analyzing PHPUnit {} report: {}", msg, reportPath);
-      importReport(file, context, numberOfLinesOfCode);
+      importReport(file, context);
     });
   }
 
-  protected abstract void importReport(File coverageReportFile, SensorContext context, Map<String, Integer> numberOfLinesOfCode);
+  protected abstract void importReport(File coverageReportFile, SensorContext context);
 
   /*
    * Returns a java.io.File for the given path.

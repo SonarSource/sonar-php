@@ -36,6 +36,7 @@ import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.fs.internal.DefaultTextRange;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -49,28 +50,17 @@ public class SymbolHighlighterTest {
 
   private File file;
 
-  private DefaultInputFile inputFile;
-
   private SensorContextTester context;
-
-  private NewSymbolTable newSymbolTable;
 
   @Rule
   public TemporaryFolder tempFolder = new TemporaryFolder();
+  private DefaultFileSystem fileSystem;
 
   @Before
   public void setUp() throws IOException {
-    DefaultFileSystem fileSystem = new DefaultFileSystem(tempFolder.getRoot());
+    fileSystem = new DefaultFileSystem(tempFolder.getRoot());
     fileSystem.setEncoding(StandardCharsets.UTF_8);
     file = tempFolder.newFile();
-    inputFile = new DefaultInputFile("moduleKey", file.getName())
-      .setLanguage("php")
-      .setType(Type.MAIN);
-    fileSystem.add(inputFile);
-
-    context = SensorContextTester.create(tempFolder.getRoot());
-
-    newSymbolTable = context.newSymbolTable().onFile(inputFile);
   }
 
   @Test
@@ -120,7 +110,16 @@ public class SymbolHighlighterTest {
   }
 
   private void highlight(String s) {
-    inputFile.initMetadata(s);
+    DefaultInputFile inputFile = TestInputFileBuilder.create("moduleKey", file.getName())
+      .setLanguage("php")
+      .setType(Type.MAIN)
+      .initMetadata(s)
+      .build();
+    fileSystem.add(inputFile);
+
+    context = SensorContextTester.create(tempFolder.getRoot());
+
+    NewSymbolTable newSymbolTable = context.newSymbolTable().onFile(inputFile);
     Tree tree = PARSER.parse(s);
     new SymbolHighlighter().highlight(SymbolTableImpl.create((CompilationUnitTree) tree), newSymbolTable);
     newSymbolTable.save();

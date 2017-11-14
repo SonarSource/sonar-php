@@ -21,7 +21,6 @@ package org.sonar.php.compat;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 /**
@@ -29,21 +28,11 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
  */
 public class CompatibilityHelper {
 
-  private static final Version V6_0 = Version.create(6, 0);
-  private static final Version V6_2 = Version.create(6, 2);
-
   private CompatibilityHelper() {
     // utility class, forbidden constructor
   }
 
   public static PhpFile phpFile(InputFile inputFile, SensorContext context) {
-    Version version = context.getSonarQubeVersion();
-    if (version.isGreaterThanOrEqual(V6_2)) {
-      return new CompatibleInputFile(inputFile);
-    }
-    if (version.isGreaterThanOrEqual(V6_0)) {
-      return new InputFileV60Compat(inputFile);
-    }
-    return new InputFileV56Compat(inputFile, context);
+    return new CompatibleInputFile(inputFile);
   }
 }

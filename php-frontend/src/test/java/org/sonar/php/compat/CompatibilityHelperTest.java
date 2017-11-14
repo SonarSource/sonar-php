@@ -20,7 +20,6 @@
 package org.sonar.php.compat;
 
 import java.io.File;
-import java.nio.charset.Charset;
 import org.junit.Test;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.batch.fs.InputFile;
@@ -43,8 +42,8 @@ public class CompatibilityHelperTest {
 
 
   @Test
-  public void test_6_2() throws Exception {
-    setSqVersion(6, 2);
+  public void test_6_7() throws Exception {
+    setSqVersion(6, 7);
 
     when(inputFile.contents()).thenReturn("Input file content");
     when(inputFile.relativePath()).thenReturn("path/to/file.php");
@@ -55,39 +54,6 @@ public class CompatibilityHelperTest {
     assertThat(phpFile).isExactlyInstanceOf(CompatibleInputFile.class);
     assertThat(phpFile.contents()).isEqualTo("Input file content");
     assertThat(phpFile.relativePath()).isEqualTo(new File("path/to/file.php").toPath());
-    assertThat(phpFile.file()).isEqualTo(file);
-  }
-
-  @Test
-  public void test_6_1() throws Exception {
-    setSqVersion(6, 1);
-
-    when(inputFile.charset()).thenReturn(Charset.defaultCharset());
-    when(inputFile.path()).thenReturn(new File("src/test/resources/compatibility/file.php").toPath());
-    when(inputFile.relativePath()).thenReturn(path);
-    when(inputFile.file()).thenReturn(file);
-
-    PhpFile phpFile = CompatibilityHelper.phpFile(inputFile, sensorContext);
-
-    assertThat(phpFile).isExactlyInstanceOf(InputFileV60Compat.class);
-    assertThat(phpFile.contents()).isEqualTo("<?php $x = 1;");
-    assertThat(phpFile.relativePath()).isEqualTo(file.toPath());
-    assertThat(phpFile.file()).isEqualTo(file);
-  }
-
-  @Test
-  public void test_5_6() throws Exception {
-    setSqVersion(5, 6);
-
-    when(inputFile.path()).thenReturn(new File("src/test/resources/compatibility/file.php").toPath());
-    when(inputFile.relativePath()).thenReturn(path);
-    when(inputFile.file()).thenReturn(file);
-
-    PhpFile phpFile = CompatibilityHelper.phpFile(inputFile, sensorContext);
-
-    assertThat(phpFile).isExactlyInstanceOf(InputFileV56Compat.class);
-    assertThat(phpFile.contents()).isEqualTo("<?php $x = 1;");
-    assertThat(phpFile.relativePath()).isEqualTo(file.toPath());
     assertThat(phpFile.file()).isEqualTo(file);
   }
 

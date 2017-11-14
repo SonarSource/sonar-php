@@ -29,7 +29,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,14 +41,14 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.api.config.MapSettings;
+import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
@@ -88,15 +87,14 @@ public class PHPSensorTest {
 
   private ProgressReport progressReport = mock(ProgressReport.class);
 
-  private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources"));
+  private final SensorContextTester context = SensorContextTester.create(new File("src/test/resources").getAbsoluteFile());
 
   private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
 
-  private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 0);
+  private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 7);
   private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
   private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION, SonarQubeSide.SERVER);
-  private static final SonarRuntime SONARQUBE_6_2 = SonarRuntimeImpl.forSonarQube(Version.create(6, 2), SonarQubeSide.SCANNER);
-  private static final SonarRuntime SONARQUBE_6_1 = SonarRuntimeImpl.forSonarQube(Version.create(6, 1), SonarQubeSide.SCANNER);
+  private static final SonarRuntime SONARQUBE_6_7 = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER);
 
   private Set<File> tempReportFiles = new HashSet<>();
 
@@ -254,20 +252,23 @@ public class PHPSensorTest {
   }
 
   private DefaultInputFile inputFile(String fileName) {
-    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", fileName)
-      .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
-      .setType(Type.MAIN)
-      .setCharset(Charset.defaultCharset())
-      .setLanguage(Php.KEY);
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
+    try {
+      return TestInputFileBuilder.create("moduleKey", fileName)
+        .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
+        .setType(Type.MAIN)
+        .setCharset(Charset.defaultCharset())
+        .setLanguage(Php.KEY)
+        .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/"+fileName).toPath()), StandardCharsets.UTF_8)).build();
+    } catch (java.io.IOException e) {
+      throw new IllegalStateException("File not found", e);
+    }
 
-    return inputFile;
   }
 
   @Test
   public void progress_report_should_be_stopped() throws Exception {
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.<PHPCheck>of());
-    createSensor().analyseFiles(context, phpAnalyzer, Collections.emptyList(), progressReport, new HashMap<>());
+    createSensor().analyseFiles(context, phpAnalyzer, Collections.emptyList(), progressReport);
     verify(progressReport).stop();
   }
 
@@ -374,19 +375,13 @@ public class PHPSensorTest {
   @Test
   public void should_disable_unnecessary_features_for_sonarlint() throws Exception {
     context.settings().setProperty(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_REPORT_NAME);
-    context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
+    context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY, PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
+    DefaultInputFile inputFile = inputFile("PHPSquidSensor.php");
 
-    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", "PHPSquidSensor.php")
-      .setModuleBaseDir(context.fileSystem().baseDirPath())
-      .setType(Type.MAIN)
-      .setCharset(Charset.defaultCharset())
-      .setLanguage(Php.KEY);
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
-
-    DefaultInputFile testFile = new DefaultInputFile("moduleKey", "src/AppTest.php")
+    DefaultInputFile testFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php")
       .setModuleBaseDir(context.fileSystem().baseDirPath())
       .setType(InputFile.Type.TEST)
-      .setLanguage(Php.KEY);
+      .setLanguage(Php.KEY).build();
 
     String testFileKey = testFile.key();
     String mainFileKey = inputFile.key();
@@ -427,9 +422,6 @@ public class PHPSensorTest {
     // tests exist
     assertThat(context.measure(testFileKey, CoreMetrics.TESTS)).isNotNull();
 
-    // coverage exists
-    assertThat(context.measure(mainFileKey, CoreMetrics.LINES_TO_COVER)).isNotNull();
-
     // metrics are saved
     assertThat(context.measure(mainFileKey, CoreMetrics.NCLOC)).isNotNull();
 
@@ -439,7 +431,7 @@ public class PHPSensorTest {
 
   @Test
   public void should_use_multi_path_coverage() throws Exception {
-    context.setRuntime(SONARQUBE_6_2);
+    context.setRuntime(SONARQUBE_6_7);
 
     context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY,
       String.join(",", PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH,
@@ -447,42 +439,7 @@ public class PHPSensorTest {
         " ",
         PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH));
 
-    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", "src/App.php")
-      .setModuleBaseDir(context.fileSystem().baseDirPath())
-      .setType(Type.MAIN)
-      .setCharset(Charset.defaultCharset())
-      .setLanguage(Php.KEY);
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
-
-    createReportWithAbsolutePath(PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.UT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
-    createReportWithAbsolutePath(PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.IT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
-    createReportWithAbsolutePath(PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.OVERALL_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
-
-    String mainFileKey = inputFile.key();
-    context.fileSystem().add(inputFile);
-
-    createSensor().execute(context);
-
-    assertThat(context.lineHits(mainFileKey, 3)).isEqualTo(3);
-    assertThat(context.lineHits(mainFileKey, 6)).isEqualTo(2);
-    assertThat(context.lineHits(mainFileKey, 7)).isEqualTo(1);
-  }
-
-  @Test
-  public void should_use_legacy_coverage_with_6_1() throws Exception {
-    context.setRuntime(SONARQUBE_6_1);
-
-    context.settings()
-      .setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH)
-      .setProperty(PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY, PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH)
-      .setProperty(PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY, PhpTestUtils.GENERATED_OVERALL_COVERAGE_REPORT_RELATIVE_PATH);
-
-    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", "src/App.php")
-      .setModuleBaseDir(context.fileSystem().baseDirPath())
-      .setType(Type.MAIN)
-      .setCharset(Charset.defaultCharset())
-      .setLanguage(Php.KEY);
-    inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), StandardCharsets.UTF_8));
+    DefaultInputFile inputFile = inputFile("src/App.php");
 
     createReportWithAbsolutePath(PhpTestUtils.GENERATED_UT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.UT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
     createReportWithAbsolutePath(PhpTestUtils.GENERATED_IT_COVERAGE_REPORT_RELATIVE_PATH, PhpTestUtils.IT_COVERAGE_REPORT_RELATIVE_PATH, inputFile);
@@ -502,21 +459,13 @@ public class PHPSensorTest {
   public void should_log_message_when_no_coverage_and_test_property() throws Exception {
     context.setSettings(new MapSettings());
 
-    context.setRuntime(SONARQUBE_6_2);
+    context.setRuntime(SONARQUBE_6_7);
     createSensor().execute(context);
     assertThat(logTester.logs()).contains(
       "No PHPUnit test report provided (see '" + PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY + "' property)",
       "No PHPUnit coverage reports provided (see '" + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY + "' property)");
 
     logTester.clear();
-
-    context.setRuntime(SONARQUBE_6_1);
-    createSensor().execute(context);
-    assertThat(logTester.logs()).contains(
-      "No PHPUnit test report provided (see '" + PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY + "' property)",
-      "No PHPUnit unit test coverage report provided (see '" + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY + "' property)",
-      "No PHPUnit integration test coverage report provided (see '" + PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY + "' property)",
-      "No PHPUnit overall coverage report provided (see '" + PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY + "' property)");
   }
 
   @After
@@ -548,7 +497,7 @@ public class PHPSensorTest {
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     try {
-      createSensor().analyseFiles(context, phpAnalyzer, Collections.singletonList(inputFile), progressReport, new HashMap<>());
+      createSensor().analyseFiles(context, phpAnalyzer, Collections.singletonList(inputFile), progressReport);
     } finally {
       verify(progressReport).cancel();
     }

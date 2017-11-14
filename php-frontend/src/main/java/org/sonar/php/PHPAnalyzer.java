@@ -22,7 +22,6 @@ package org.sonar.php;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -78,8 +77,8 @@ public class PHPAnalyzer {
     return issuesBuilder.build();
   }
 
-  public FileMeasures computeMeasures(FileLinesContext fileLinesContext, Map<String, Integer> numberOfLinesOfCode, boolean saveExecutableLines) {
-    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext, numberOfLinesOfCode, saveExecutableLines);
+  public FileMeasures computeMeasures(FileLinesContext fileLinesContext) {
+    return new MetricsVisitor().getFileMeasures(currentFile, currentFileTree, fileLinesContext);
   }
 
   public NewHighlighting getSyntaxHighlighting(SensorContext context, InputFile inputFile) {
