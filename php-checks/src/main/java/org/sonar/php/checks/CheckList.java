@@ -107,6 +107,7 @@ public class CheckList {
       ModifiersOrderCheck.class,
       ClosingTagInFullPHPFileCheck.class,
       NonLFCharAsEOLCheck.class,
+      NoSonarCheck.class,
       ArgumentWithDefaultValueNotLastCheck.class,
       ArrayCountableCountCheck.class,
       FormattingStandardCheck.class,
