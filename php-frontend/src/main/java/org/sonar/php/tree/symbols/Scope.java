@@ -34,6 +34,7 @@ public class Scope {
   private final Scope outer;
   private final Tree tree;
   protected List<Symbol> symbols = new ArrayList<>();
+  Scope superClassScope;
 
   public Scope(Scope outer, Tree tree) {
     this.outer = outer;
@@ -82,6 +83,9 @@ public class Scope {
       if (s.called(name) && (kindList.isEmpty() || kindList.contains(s.kind()))) {
         result.add(s);
       }
+    }
+    if(result.isEmpty() && superClassScope != null) {
+      return superClassScope.getSymbol(name, kinds);
     }
 
     return result.size() == 1 ? result.get(0) : null;

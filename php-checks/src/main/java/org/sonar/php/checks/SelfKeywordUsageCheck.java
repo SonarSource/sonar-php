@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -53,33 +54,17 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
 
   private Deque<Set<String>> privatePropertiesStack = new ArrayDeque<>();
 
-  private Deque<Set<String>> constPropertiesStack = new ArrayDeque<>();
-
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     isFinalClassStack.addLast(isFinalClass(tree));
     finalOrPrivateMethodsStack.addLast(getFinalOrPrivateMethods(tree));
     privatePropertiesStack.addLast(getPrivateProperties(tree));
-    constPropertiesStack.addLast(getConstProperties(tree));
 
     super.visitClassDeclaration(tree);
 
     isFinalClassStack.removeLast();
     finalOrPrivateMethodsStack.removeLast();
     privatePropertiesStack.removeLast();
-    constPropertiesStack.removeLast();
-  }
-
-  private static Set<String> getConstProperties(ClassDeclarationTree tree) {
-    Set<String> constProperties = new HashSet<>();
-
-    for (ClassMemberTree classMemberTree : tree.members()) {
-      if (classMemberTree.is(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)) {
-        ClassPropertyDeclarationTree propertyDeclaration = (ClassPropertyDeclarationTree) classMemberTree;
-        propertyDeclaration.declarations().forEach(varDec -> constProperties.add(varDec.identifier().text()));
-      }
-    }
-    return constProperties;
   }
 
   private static Set<String> getFinalOrPrivateMethods(ClassDeclarationTree tree) {
@@ -150,7 +135,8 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
   }
 
   private boolean isConstProperty(Tree member) {
-    return member.is(Kind.NAME_IDENTIFIER) && constPropertiesStack.getLast().contains(((IdentifierTree) member).text());
+    Symbol symbol = context().symbolTable().getSymbol(member);
+    return symbol != null && symbol.hasModifier("const");
   }
 
 }

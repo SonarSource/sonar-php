@@ -216,3 +216,15 @@ class RRR {
 
 
 new A("someStaticMethod");
+
+
+// --- test lookup parent class ---
+class Parent {
+   const A_CONST = 'a';
+}
+
+class Children extends Parent {
+  public $arr = [
+         self::A_CONST,
+      ];
+}

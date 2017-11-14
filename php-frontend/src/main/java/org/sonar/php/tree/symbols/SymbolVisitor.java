@@ -25,7 +25,9 @@ import com.google.common.collect.Lists;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.tree.impl.PHPTree;
@@ -85,6 +87,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   private Scope classScope = null;
   private Deque<Boolean> insideCallee = new ArrayDeque<>();
+  private Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
 
   static class ClassMemberUsageState {
     boolean isStatic = false;
@@ -144,11 +147,20 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    createSymbol(tree.name(), Symbol.Kind.CLASS);
+    Symbol classSymbol = createSymbol(tree.name(), Symbol.Kind.CLASS);
     enterScope(tree);
     classScope = currentScope;
+    scopeBySymbol.put(classSymbol, classScope);
+    scan(tree.name());
+    NamespaceNameTree superClass = tree.superClass();
+    if(superClass != null) {
+      scan(superClass.namespaces());
+      Symbol superClassSymbol = resolveSymbol(superClass.name());
+      classScope.superClassScope = scopeBySymbol.get(superClassSymbol);
+    }
+    scan(tree.superInterfaces());
     createMemberSymbols(tree);
-    super.visitClassDeclaration(tree);
+    scan(tree.members());
     classScope = null;
     leaveScope();
   }
@@ -173,6 +185,10 @@ public class SymbolVisitor extends PHPVisitorCheck {
         ClassPropertyDeclarationTree classPropertyDeclaration = (ClassPropertyDeclarationTree) member;
         for (VariableDeclarationTree field : classPropertyDeclaration.declarations()) {
           createSymbol(field.identifier(), Symbol.Kind.FIELD).addModifiers(classPropertyDeclaration.modifierTokens());
+          ExpressionTree initValue = field.initValue();
+          if(initValue != null) {
+            initValue.accept(this);
+          }
         }
       }
 
@@ -198,6 +214,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
           Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FIELD);
           if (symbol != null) {
             symbol.addUsage(tree);
+            symbolTable.associateSymbol(tree, symbol);
           }
         }
 
@@ -205,6 +222,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
         Symbol symbol = currentScope.getSymbol(tree.text(), Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
         if (symbol != null) {
           symbol.addUsage(tree);
+          symbolTable.associateSymbol(tree, symbol);
         }
 
         classMemberUsageState = null;
@@ -225,16 +243,25 @@ public class SymbolVisitor extends PHPVisitorCheck {
   public void visitNameIdentifier(NameIdentifierTree tree) {
     if (classMemberUsageState != null && classScope != null) {
       resolveProperty(tree);
-
     } else {
-      // fixme (Lena): class names are visible in function scopes, so may be globalScope.getSymbol(tree.text(), Symbol.Kind.CLASS) will work here
-      Symbol symbol = currentScope.getSymbol(tree.text(), Symbol.Kind.CLASS);
+      resolveSymbol(tree);
+    }
+    classMemberUsageState = null;
+  }
+
+  private Symbol resolveSymbol(IdentifierTree tree) {
+    Symbol symbol = null;
+    Scope outer = currentScope;
+    while (outer != null) {
+      symbol = outer.getSymbol(tree.text(), Symbol.Kind.CLASS);
       if (symbol != null) {
         symbol.addUsage(tree);
+        symbolTable.associateSymbol(tree, symbol);
+        break;
       }
+      outer = outer.outer();
     }
-
-    classMemberUsageState = null;
+    return symbol;
   }
 
   private void resolveProperty(NameIdentifierTree tree) {
@@ -243,12 +270,14 @@ public class SymbolVisitor extends PHPVisitorCheck {
       Symbol symbol = classScope.getSymbol(dollar + tree.text(), Symbol.Kind.FIELD);
       if (symbol != null) {
         symbol.addUsage(tree);
+        symbolTable.associateSymbol(tree, symbol);
       }
 
     } else {
       Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FUNCTION);
       if (symbol != null) {
         symbol.addUsage(tree);
+        symbolTable.associateSymbol(tree, symbol);
       }
     }
   }
@@ -264,6 +293,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       Symbol symbol = currentScope.getSymbol("$" + firstExpressionToken.text());
       if (symbol != null) {
         symbol.addUsage(firstExpressionToken);
+        symbolTable.associateSymbol(firstExpressionToken, symbol);
       }
     }
 
@@ -287,6 +317,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
           // actually this identifier in global statement is not usage, but we do this for the symbol highlighting
           symbol.addUsage(identifier);
           currentScope.addSymbol(symbol);
+          symbolTable.associateSymbol(identifier, symbol);
         } else {
           symbol = createSymbol(identifier, Symbol.Kind.VARIABLE);
         }
@@ -326,6 +357,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
         Symbol symbol = currentScope.outer().getSymbol(identifier.text());
         if (symbol != null) {
           symbol.addUsage(identifier);
+          symbolTable.associateSymbol(identifier, symbol);
         } else if (variable.is(Kind.REFERENCE_VARIABLE)) {
           symbolTable.declareSymbol(identifier, Symbol.Kind.VARIABLE, currentScope.outer());
         }
@@ -370,6 +402,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
         if (symbol != null) {
           symbol.addUsage(((LiteralTree) argument).token());
+          symbolTable.associateSymbol(((LiteralTree) argument).token(), symbol);
+
         }
       }
     }
@@ -381,6 +415,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       Symbol symbol = currentScope.getSymbol(usageIdentifier.text(), kind);
       if (symbol != null) {
         symbol.addUsage(usageIdentifier);
+        symbolTable.associateSymbol(usageIdentifier, symbol);
       }
 
     }
@@ -427,7 +462,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     } else if (!symbol.is(Symbol.Kind.FIELD)) {
       symbol.addUsage(identifier);
     }
-
+    symbolTable.associateSymbol(identifier, symbol);
     return symbol;
   }
 
@@ -440,7 +475,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     } else {
       symbol.addUsage(identifier);
     }
-
+    symbolTable.associateSymbol(identifier, symbol);
     return symbol;
   }
 

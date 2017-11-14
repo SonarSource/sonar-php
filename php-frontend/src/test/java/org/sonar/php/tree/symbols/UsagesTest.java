@@ -126,7 +126,7 @@ public class UsagesTest extends ParsingTestUtils {
     Symbol classSymbol = scope.getSymbol("A");
     assertThat(classSymbol).isNotNull();
     assertThat(classSymbol.is(Kind.CLASS)).isTrue();
-    assertThat(classSymbol.usages()).hasSize(2);
+    assertThat(classSymbol.usages()).hasSize(3);
 
   }
 

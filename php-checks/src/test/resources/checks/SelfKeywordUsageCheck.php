@@ -118,3 +118,14 @@ class D {
 
   public static function f2() {}
 }
+
+class E {
+    const A_CONST = 'a';
+}
+class F extends E {
+    const B_CONST = 'b';
+    public $arr = [
+       self::B_CONST,
+       self::A_CONST,
+    ];
+}
