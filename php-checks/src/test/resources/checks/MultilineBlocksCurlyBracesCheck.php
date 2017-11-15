@@ -170,4 +170,19 @@ function compliant() {
 if ($condition)
 doSomething();
 
+if ($condition)
+  if ($condition)
+    firstActionInBlock();
+    secondAction(); // Noncompliant
+
+if ($condition)
+  if ($condition)
+    firstActionInBlock();
+  secondAction(); // Noncompliant
+
+if ($condition)
+  if ($condition)
+    firstActionInBlock();
+secondAction();
+
 ?>

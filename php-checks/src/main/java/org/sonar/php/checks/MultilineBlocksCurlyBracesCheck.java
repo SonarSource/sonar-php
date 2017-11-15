@@ -90,8 +90,8 @@ public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
     if (firstInnerStatement.is(Kind.BLOCK)) {
       return;
     }
-    int parentLine = ((PHPTree) parentEnd).getLastToken().line();
-    int parentColumn = ((PHPTree) parentStart).getFirstToken().column();
+    int parentLine = lastTokenLine(parentEnd);
+    int parentColumn = column(parentStart);
     StatementBlock statementBlock = findBlock(parentLine, parentColumn, firstInnerStatement, nestingStatementNum, statements);
     if (!statementBlock.otherStatement.isEmpty()) {
       boolean isIfStatement = statements.get(nestingStatementNum).is(Kind.IF_STATEMENT);
@@ -174,14 +174,18 @@ public class MultilineBlocksCurlyBracesCheck extends AbstractStatementsCheck {
       return line == (lastStatementLine + 1);
     }
 
-    private static int column(Tree tree) {
-      return ((PHPTree) tree).getFirstToken().column();
-    }
-
     private static int line(Tree tree) {
       return ((PHPTree) tree).getFirstToken().line();
     }
 
+  }
+
+  private static int column(Tree tree) {
+    return ((PHPTree) tree).getFirstToken().column();
+  }
+
+  private static int lastTokenLine(Tree tree) {
+    return ((PHPTree) tree).getLastToken().line();
   }
 
 }
