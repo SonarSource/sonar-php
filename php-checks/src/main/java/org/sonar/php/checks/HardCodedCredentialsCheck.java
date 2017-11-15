@@ -19,9 +19,13 @@
  */
 package org.sonar.php.checks;
 
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -35,43 +39,79 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class HardCodedCredentialsCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2068";
+  private static final String MESSAGE = "'%s' detected in this variable name, review this potentially hardcoded credential.";
+  private static final String DEFAULT_CREDENTIAL_WORDS = "password,passwd,pwd";
 
-  private static final String MESSAGE = "Remove this hard-coded password.";
+  @RuleProperty(
+    key = "credentialWords",
+    description = "Comma separated list of words identifying potential credentials",
+    defaultValue = DEFAULT_CREDENTIAL_WORDS)
+  public String credentialWords = DEFAULT_CREDENTIAL_WORDS;
 
-  private static final Pattern PASSWORD_LITERAL_PATTERN = Pattern.compile("password=..", Pattern.CASE_INSENSITIVE);
-  private static final Pattern PASSWORD_VARIABLE_PATTERN = Pattern.compile("password", Pattern.CASE_INSENSITIVE);
+  private List<Pattern> variablePatterns = null;
+  private List<Pattern> literalPatterns = null;
+
+  private Stream<Pattern> variablePatterns() {
+    if (variablePatterns == null) {
+      variablePatterns = toPatterns("");
+    }
+    return variablePatterns.stream();
+  }
+
+  private Stream<Pattern> literalPatterns() {
+    if (literalPatterns == null) {
+      literalPatterns = toPatterns("=..");
+    }
+    return literalPatterns.stream();
+  }
+
+  private List<Pattern> toPatterns(String suffix) {
+    return Stream.of(credentialWords.split(","))
+      .map(String::trim)
+      .map(word -> Pattern.compile(word + suffix, Pattern.CASE_INSENSITIVE))
+      .collect(Collectors.toList());
+  }
 
   @Override
   public void visitLiteral(LiteralTree literal) {
-    if (literal.is(Kind.REGULAR_STRING_LITERAL) && PASSWORD_LITERAL_PATTERN.matcher(literal.token().text()).find()) {
-      addIssue(literal);
+    if (literal.is(Kind.REGULAR_STRING_LITERAL)) {
+      checkCredential(literal, literal.token().text(), literalPatterns());
     }
     super.visitLiteral(literal);
   }
 
   @Override
   public void visitVariableDeclaration(VariableDeclarationTree declaration) {
-    String identifier = declaration.identifier().text();
-    checkVariable(declaration.identifier(), identifier, declaration.initValue());
+    checkVariable((declaration.identifier()).token(), declaration.initValue());
     super.visitVariableDeclaration(declaration);
   }
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree assignment) {
-    SyntaxToken lastToken = ((PHPTree) assignment.variable()).getLastToken();
-    String variableName = lastToken.text();
-    checkVariable(lastToken, variableName, assignment.value());
+    checkVariable(((PHPTree) assignment.variable()).getLastToken(), assignment.value());
     super.visitAssignmentExpression(assignment);
   }
 
-  private void checkVariable(Tree tree, String identifier, @Nullable Tree value) {
-    if (value != null && value.is(Kind.REGULAR_STRING_LITERAL) && PASSWORD_VARIABLE_PATTERN.matcher(identifier).find()) {
-      addIssue(tree);
+  private void checkVariable(SyntaxToken reportTree, @Nullable Tree assignedValue) {
+    if (assignedValue != null && assignedValue.is(Kind.REGULAR_STRING_LITERAL)) {
+      checkCredential(reportTree, reportTree.text(), variablePatterns());
     }
   }
 
-  private void addIssue(Tree tree) {
-    context().newIssue(this, tree, MESSAGE);
+  private void checkCredential(Tree reportTree, String target, Stream<Pattern> patterns) {
+    patterns.filter(pattern -> pattern.matcher(target).find()).findAny().ifPresent(pattern -> addIssue(pattern, reportTree));
+
+  }
+
+  private void addIssue(Pattern pattern, Tree tree) {
+    context().newIssue(this, tree, String.format(MESSAGE, cleanedPattern(pattern.pattern())));
+  }
+
+  private static String cleanedPattern(String pattern) {
+    if (pattern.endsWith("=..")) {
+      return pattern.substring(0, pattern.length() - 3);
+    }
+    return pattern;
   }
 
 }
