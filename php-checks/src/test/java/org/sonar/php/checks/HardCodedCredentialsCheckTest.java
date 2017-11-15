@@ -29,4 +29,11 @@ public class HardCodedCredentialsCheckTest {
     CheckVerifier.verify(new HardCodedCredentialsCheck(), "HardCodedCredentialsCheck.php");
   }
 
+  @Test
+  public void custom() throws Exception {
+    HardCodedCredentialsCheck check = new HardCodedCredentialsCheck();
+    check.credentialWords = "marmalade,bazooka";
+    CheckVerifier.verify(check, "HardCodedCredentialsCheckCustom.php");
+  }
+
 }
