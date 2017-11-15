@@ -228,3 +228,5 @@ class Children extends Parent {
          self::A_CONST,
       ];
 }
+// class that verifies that no stackoverflow is thrown when name is considered the same symbol in class and extension
+class BadMethodCallException extends \BadMethodCallException implements ExceptionInterface { }

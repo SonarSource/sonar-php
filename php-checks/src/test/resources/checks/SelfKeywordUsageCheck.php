@@ -129,3 +129,55 @@ class F extends E {
        self::A_CONST,
     ];
 }
+
+class RegionBundleTest extends \PHPUnit_Framework_TestCase
+{
+    const RES_DIR = '/base/region';
+
+    /**
+     * @var RegionBundle
+     */
+    private $bundle;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $reader;
+
+    protected function setUp()
+    {
+        $this->reader = $this->getMock('Symfony\Component\Intl\ResourceBundle\Reader\StructuredBundleReaderInterface');
+        $this->bundle = new RegionBundle(self::RES_DIR, $this->reader);
+    }
+
+    public function testGetCountryName()
+    {
+        $this->reader->expects($this->once())
+            ->method('readEntry')
+            ->with(self::RES_DIR, 'en', array('Countries', 'AT'), true)
+            ->will($this->returnValue('Austria'));
+
+        $this->assertSame('Austria', $this->bundle->getCountryName('AT', 'en'));
+    }
+
+    public function testGetCountryNames()
+    {
+        $sortedCountries = array(
+            'AT' => 'Austria',
+            'DE' => 'Germany',
+        );
+
+        $this->reader->expects($this->once())
+            ->method('readEntry')
+            ->with(self::RES_DIR, 'en', array('Countries'), true)
+            ->will($this->returnValue($sortedCountries));
+
+        $this->assertSame($sortedCountries, $this->bundle->getCountryNames('en'));
+    }
+}
+
+class constantInParams {
+ const DATASERIES_TYPE_STRING	= 'String';
+ public function setDataType($dataType = self::DATASERIES_TYPE_STRING) {
+ }
+}

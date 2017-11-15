@@ -22,9 +22,7 @@ package org.sonar.php.tree.symbols;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -86,8 +84,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
   );
 
   private Scope classScope = null;
-  private Deque<Boolean> insideCallee = new ArrayDeque<>();
   private Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
+  private static final ImmutableSet<String> SELF_OBJECTS = ImmutableSet.of("$this", "self", "static");
 
   static class ClassMemberUsageState {
     boolean isStatic = false;
@@ -150,7 +148,6 @@ public class SymbolVisitor extends PHPVisitorCheck {
     Symbol classSymbol = createSymbol(tree.name(), Symbol.Kind.CLASS);
     enterScope(tree);
     classScope = currentScope;
-    scopeBySymbol.put(classSymbol, classScope);
     scan(tree.name());
     NamespaceNameTree superClass = tree.superClass();
     if(superClass != null) {
@@ -158,6 +155,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       Symbol superClassSymbol = resolveSymbol(superClass.name());
       classScope.superClassScope = scopeBySymbol.get(superClassSymbol);
     }
+    scopeBySymbol.put(classSymbol, classScope);
     scan(tree.superInterfaces());
     createMemberSymbols(tree);
     scan(tree.members());
@@ -303,6 +301,10 @@ public class SymbolVisitor extends PHPVisitorCheck {
   @Override
   public void visitParameter(ParameterTree tree) {
     createSymbol(tree.variableIdentifier(), Symbol.Kind.PARAMETER);
+    ExpressionTree initValue = tree.initValue();
+    if(initValue != null) {
+      initValue.accept(this);
+    }
     // do not scan the children to not pass through variableIdentifier
   }
 
@@ -375,9 +377,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
     }
 
-    this.insideCallee.push(true);
     tree.callee().accept(this);
-    this.insideCallee.pop();
 
     String callee = SourceBuilder.build(tree.callee()).trim();
     if ("compact".equals(callee)) {
@@ -423,18 +423,21 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
+    boolean functionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
     tree.object().accept(this);
-
-    final ImmutableSet<String> selfObjects = ImmutableSet.of("$this", "self", "static");
-    String strObject = SourceBuilder.build(tree.object()).trim();
 
     classMemberUsageState = new ClassMemberUsageState();
     classMemberUsageState.isStatic = tree.isStatic();
-    classMemberUsageState.isSelfMember = selfObjects.contains(strObject.toLowerCase(Locale.ENGLISH));
-    classMemberUsageState.isField = insideCallee.isEmpty();
+    classMemberUsageState.isSelfMember = isSelfMember(tree);
+    classMemberUsageState.isField = !functionCall;
     classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
 
     tree.member().accept(this);
+  }
+
+  private static boolean isSelfMember(MemberAccessTree tree) {
+    String strObject = SourceBuilder.build(tree.object()).trim();
+    return SELF_OBJECTS.contains(strObject.toLowerCase(Locale.ENGLISH));
   }
 
   @Override
