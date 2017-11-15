@@ -35,6 +35,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -145,6 +146,21 @@ public class CheckUtilsTest {
     tree = PHPParserBuilder.createParser().parse("<?php 2 ?>");
     statements = ((CompilationUnitTree) tree).script().statements();
     assertThat(CheckUtils.isDisguisedShortEchoStatement(statements.get(0))).isEqualTo(false);
+  }
+
+  @Test
+  public void for_condition() throws Exception {
+    Tree tree = PHPParserBuilder.createParser().parse("<?= for(;;) {} ?>");
+    ForStatementTree forStatement = (ForStatementTree) ((CompilationUnitTree) tree).script().statements().get(0);
+    assertThat(CheckUtils.getForCondition(forStatement)).isNull();
+
+    tree = PHPParserBuilder.createParser().parse("<?= for(;true;) {} ?>");
+    forStatement = (ForStatementTree) ((CompilationUnitTree) tree).script().statements().get(0);
+    assertThat(CheckUtils.getForCondition(forStatement).getKind()).isEqualTo(Tree.Kind.BOOLEAN_LITERAL);
+
+    tree = PHPParserBuilder.createParser().parse("<?= for(;$a == 0, true;) {} ?>");
+    forStatement = (ForStatementTree) ((CompilationUnitTree) tree).script().statements().get(0);
+    assertThat(CheckUtils.getForCondition(forStatement).getKind()).isEqualTo(Tree.Kind.BOOLEAN_LITERAL);
   }
 
   private ExpressionTree expressionFromStatement(String statement) {

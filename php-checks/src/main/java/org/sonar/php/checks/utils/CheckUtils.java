@@ -42,6 +42,7 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public final class CheckUtils {
@@ -194,6 +195,15 @@ public final class CheckUtils {
     }
     boolean isFileOpeningTagToken = previousToken.line() == 1 && previousToken.column() == 0;
     return (isFileOpeningTagToken || previousToken.is(Kind.INLINE_HTML_TOKEN)) && previousToken.text().endsWith("<?=");
+  }
+
+  @Nullable
+  public static ExpressionTree getForCondition(ForStatementTree tree) {
+    if (tree.condition().isEmpty()) {
+      return null;
+    }
+    // in a loop, all conditions are evaluated but only the last one is used as the result
+    return tree.condition().get(tree.condition().size() - 1);
   }
 
 }

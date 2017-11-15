@@ -25,6 +25,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
@@ -34,45 +35,90 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S2251")
 public class ForLoopIncrementSignCheck extends PHPVisitorCheck {
 
+  private enum UpdateKind {
+    PLUS, MINUS, UNKNOWN
+  }
+
   @Override
   public void visitForStatement(ForStatementTree tree) {
-    List<UnaryExpressionTree> unaryOperations = tree.update().stream()
-      .filter(expression -> expression.is(Kind.PREFIX_INCREMENT, Kind.PREFIX_DECREMENT, Kind.POSTFIX_INCREMENT, Kind.POSTFIX_DECREMENT))
-      .map(UnaryExpressionTree.class::cast)
+    List<ExpressionTree> updates = tree.update().stream()
+      .filter(expression -> updateKind(expression) != UpdateKind.UNKNOWN)
       .collect(Collectors.toList());
 
-    if (!unaryOperations.isEmpty() && !tree.condition().isEmpty()) {
-      checkCondition(tree.condition().get(tree.condition().size() - 1), unaryOperations);
+    ExpressionTree forCondition = CheckUtils.getForCondition(tree);
+    if (forCondition != null && !updates.isEmpty()) {
+      checkCondition(forCondition, updates);
     }
     super.visitForStatement(tree);
   }
 
-  private void checkCondition(ExpressionTree tree, List<UnaryExpressionTree> unaryOperations) {
+  private void checkCondition(ExpressionTree tree, List<ExpressionTree> updates) {
     ExpressionTree condition = CheckUtils.skipParenthesis(tree);
     if (condition.is(Kind.CONDITIONAL_OR)) {
       BinaryExpressionTree conditionalOr = (BinaryExpressionTree) condition;
-      checkCondition(conditionalOr.leftOperand(), unaryOperations);
-      checkCondition(conditionalOr.rightOperand(), unaryOperations);
+      checkCondition(conditionalOr.leftOperand(), updates);
+      checkCondition(conditionalOr.rightOperand(), updates);
     } else if (condition.is(Kind.LESS_THAN, Kind.LESS_THAN_OR_EQUAL_TO, Kind.GREATER_THAN, Kind.GREATER_THAN_OR_EQUAL_TO)) {
       BinaryExpressionTree comparison = (BinaryExpressionTree) condition;
       boolean isLessThan = condition.is(Kind.LESS_THAN, Kind.LESS_THAN_OR_EQUAL_TO);
 
-      unaryOperations.stream()
-        .filter(operation -> operation.is(Kind.PREFIX_INCREMENT, Kind.POSTFIX_INCREMENT))
-        .forEach(operation -> checkOperand(operation, comparison, isLessThan ? comparison.rightOperand() : comparison.leftOperand()));
+      updates.stream()
+        .filter(update -> updateKind(update) == UpdateKind.PLUS)
+        .forEach(update -> checkOperand(update, comparison, isLessThan ? comparison.rightOperand() : comparison.leftOperand()));
 
-      unaryOperations.stream()
-        .filter(operation -> operation.is(Kind.PREFIX_DECREMENT, Kind.POSTFIX_DECREMENT))
-        .forEach(operation -> checkOperand(operation, comparison, isLessThan ? comparison.leftOperand() : comparison.rightOperand()));
+      updates.stream()
+        .filter(update -> updateKind(update) == UpdateKind.MINUS)
+        .forEach(update -> checkOperand(update, comparison, isLessThan ? comparison.leftOperand() : comparison.rightOperand()));
     }
   }
 
-  private void checkOperand(UnaryExpressionTree operation, BinaryExpressionTree binaryExpression, ExpressionTree operandToCheck) {
+  private void checkOperand(ExpressionTree update, BinaryExpressionTree binaryExpression, ExpressionTree operandToCheck) {
     ExpressionTree operand = CheckUtils.skipParenthesis(operandToCheck);
-    if (SyntacticEquivalence.areSyntacticallyEquivalent(operation.expression(), operand)) {
-      String type = operation.is(Kind.PREFIX_INCREMENT, Kind.POSTFIX_INCREMENT) ? "incremented" : "decremented";
-      context().newIssue(this, operation, "\"" + operand.toString() + "\" is " + type + " and will never reach \"stop condition\".")
+    if (SyntacticEquivalence.areSyntacticallyEquivalent(variable(update), operand)) {
+      String type = updateKind(update) == UpdateKind.PLUS ? "incremented" : "decremented";
+      context().newIssue(this, update, "\"" + operand.toString() + "\" is " + type + " and will never reach \"stop condition\".")
         .secondary(binaryExpression, "Stop condition");
+    }
+  }
+
+  private static ExpressionTree variable(ExpressionTree expression) {
+    if (expression.is(Kind.PLUS_ASSIGNMENT, Kind.MINUS_ASSIGNMENT)) {
+      return ((AssignmentExpressionTree) expression).variable();
+    }
+    return ((UnaryExpressionTree) expression).expression();
+  }
+
+  private static UpdateKind updateKind(ExpressionTree expression) {
+    if (expression.is(Kind.PREFIX_INCREMENT, Kind.POSTFIX_INCREMENT)) {
+      return UpdateKind.PLUS;
+    } else if (expression.is(Kind.PREFIX_DECREMENT, Kind.POSTFIX_DECREMENT)) {
+      return UpdateKind.MINUS;
+    } else if (expression.is(Kind.PLUS_ASSIGNMENT)) {
+      return valueKind(((AssignmentExpressionTree) expression).value());
+    } else if (expression.is(Kind.MINUS_ASSIGNMENT)) {
+      return minus(valueKind(((AssignmentExpressionTree) expression).value()));
+    }
+    return UpdateKind.UNKNOWN;
+  }
+
+  private static UpdateKind valueKind(ExpressionTree value) {
+    if (value.is(Kind.NUMERIC_LITERAL)) {
+      return UpdateKind.PLUS;
+    } else if (value.is(Kind.UNARY_MINUS)) {
+      return minus(valueKind(((UnaryExpressionTree) value).expression()));
+    } else if (value.is(Kind.UNARY_PLUS)) {
+      return valueKind(((UnaryExpressionTree) value).expression());
+    }
+    return UpdateKind.UNKNOWN;
+  }
+
+  private static UpdateKind minus(UpdateKind kind) {
+    if (kind == UpdateKind.PLUS) {
+      return UpdateKind.MINUS;
+    } else if (kind == UpdateKind.MINUS) {
+      return UpdateKind.PLUS;
+    } else {
+      return UpdateKind.UNKNOWN;
     }
   }
 }
