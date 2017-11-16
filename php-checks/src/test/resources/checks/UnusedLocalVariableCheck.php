@@ -31,6 +31,7 @@ function g($p) {
 function h() {
   static $a, $b = 1;  /* Noncompliant */ // $b
 //           ^^
+  static $c; // Noncompliant
 
   return $a;
 }
@@ -53,7 +54,7 @@ $a = function($p) use ($u) {   // OK - $u exclusion as it's not defined
 
 function j($p) {               // OK
   $a = 1;                      // OK - use in anonymous function
-  $b = 1;                      // OK - use in anonymous function
+  $b = 1;                      // Noncompliant
 
   call(function () use ($a, $b,   // Noncompliant
 //                          ^^
@@ -66,16 +67,25 @@ function j($p) {               // OK
  *  USE WITH REFERENCE
  */
 function j() {
-  $a = 1;                                 // OK - use in anonymous function
+  $a = 1;                       // Noncompliant
 
-  call(function () use (&$a,             /* Noncompliant */ // $a (not use in outer, reference not needed )
-//                       ^^
-                            &$b, &$c) {  /* Noncompliant */ // $c (not use in outer, reference not needed )
+  call(function () use (&$a,    /* Noncompliant */ // $a (not use in outer, reference not needed )
+                        &$b,
+                        &$c) {  /* Noncompliant */ // $c (not use in outer, reference not needed )
     $b = 1 ;
     $c = 1;
   });
 
   return $b;
+}
+
+function j2() {
+  $a = 1;
+
+  $foo = function () use (&$a) {
+    echo $a;
+  };
+  $foo();
 }
 
 /**
@@ -161,11 +171,11 @@ function o(){
   }
 
   foreach ($arr as $key1 => $value1) { // OK - cannot have the key without defining the value
-      $key1 = 3;
+      foo($key1);
   }
 
   foreach ($arr as $key2 => &$value2) { // OK - cannot have the key without defining the value
-      $key2 = 3;
+      foo($key2);
   }
 }
 
@@ -221,7 +231,8 @@ function catch_exception() {
 
 function foreach_key_declared_twice($arr) {
 
-  foreach([1, 2] as $key => $val) {    // Should be NOK (FN, SONARPHP-587)
+  foreach([1, 2] as $key => $val) {    // Noncompliant
+//                  ^^^^
     echo "hello";
   }
 
@@ -252,4 +263,16 @@ function heredoc_usage() {
    {$a}
 EOF;
 
+}
+
+function compact_function() {
+  $a = foo();
+  $b = bar();
+  return compact("a", "b");
+}
+
+function extract_function() {
+  $var_array = array("color" => "blue");
+  extract($var_array);
+  echo "$color";
 }
