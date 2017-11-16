@@ -20,6 +20,7 @@
 package org.sonar.php.metrics;
 
 import com.google.common.collect.Sets;
+import java.util.Set;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -27,14 +28,20 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import java.util.Set;
-
 public class LineVisitor extends PHPVisitorCheck {
 
   private Set<Integer> lines = Sets.newHashSet();
 
+  private LineVisitor(Tree tree) {
+    tree.accept(this);
+  }
+
   public LineVisitor(CompilationUnitTree tree) {
     this.visitCompilationUnit(tree);
+  }
+
+  public static int linesOfCode(Tree tree) {
+    return new LineVisitor(tree).getLinesOfCodeNumber();
   }
 
   @Override
