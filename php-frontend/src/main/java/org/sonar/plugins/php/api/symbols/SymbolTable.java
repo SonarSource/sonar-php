@@ -41,4 +41,6 @@ public interface SymbolTable {
 
   @Nullable
   Scope getScopeFor(Tree tree);
+
+  Symbol getSymbol(Tree tree);
 }

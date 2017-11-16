@@ -24,13 +24,19 @@ import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SymbolTableImplTest extends ParsingTestUtils {
 
-  private SymbolTableImpl SYMBOL_MODEL = SymbolTableImpl.create(parse("symbols/symbolTable.php"));
+  private CompilationUnitTree cut = parse("symbols/symbolTable.php");
+  private SymbolTableImpl SYMBOL_MODEL = SymbolTableImpl.create(cut);
 
   @Test
   public void symbols_filtering() {
@@ -107,4 +113,12 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(localGlobal.scope().getSymbol("$global", Symbol.Kind.VARIABLE)).isNull();
   }
 
+  @Test
+  public void retrieve_symbol_by_tree() throws Exception {
+    ExpressionTree dollarAUsage = ((AssignmentExpressionTree) ((ExpressionStatementTree)
+      ((FunctionDeclarationTree) cut.script().statements().get(5)).body().statements().get(3)).expression()).variable();
+    Symbol symbol = SYMBOL_MODEL.getSymbol(dollarAUsage);
+    assertThat(symbol).isNotNull();
+    assertThat(symbol.name()).isEqualTo("$a");
+  }
 }

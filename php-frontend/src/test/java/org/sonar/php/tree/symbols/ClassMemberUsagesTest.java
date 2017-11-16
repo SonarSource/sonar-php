@@ -132,6 +132,13 @@ public class ClassMemberUsagesTest extends ParsingTestUtils {
 
   }
 
+  @Test
+  public void test_inheritance_constant_lookup() throws Exception {
+    Symbol variable = getSymbol("A_CONST", Kind.FIELD);
+    assertThat(variable).isNotNull();
+    assertThat(variable.usages()).hasSize(1);
+  }
+
   private Symbol getSymbol(String name, Kind kind) {
     Symbol result = null;
     for (Symbol symbol : SYMBOL_TABLE.getSymbols(name)) {
