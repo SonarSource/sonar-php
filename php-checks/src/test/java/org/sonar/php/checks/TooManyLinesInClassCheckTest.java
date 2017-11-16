@@ -33,7 +33,7 @@ public class TooManyLinesInClassCheckTest {
 
   @Test
   public void custom() throws Exception {
-    check.maximumLinesThreshold = 7;
+    check.maximumLinesThreshold = 5;
     CheckVerifier.verify(check, "TooManyLinesInClassCheck.php");
   }
 }

@@ -21,7 +21,8 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.php.metrics.LineVisitor;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
@@ -39,6 +40,7 @@ public class TooManyLinesInClassCheck extends PHPVisitorCheck {
 
   @RuleProperty(
     key = "maximumLinesThreshold",
+    description = "The maximum number of lines of code",
     defaultValue = "" + DEFAULT)
   public int maximumLinesThreshold = DEFAULT;
 
@@ -48,24 +50,23 @@ public class TooManyLinesInClassCheck extends PHPVisitorCheck {
     super.visitClassDeclaration(declaration);
   }
 
+  @Override
+  public void visitAnonymousClass(AnonymousClassTree tree) {
+    checkClass(tree);
+    super.visitAnonymousClass(tree);
+  }
+
   private void checkClass(ClassTree tree) {
-    int numberOfLines = tree.closeCurlyBraceToken().line() - tree.openCurlyBraceToken().line() + 1;
+    int numberOfLines = LineVisitor.linesOfCode(tree);
     if (numberOfLines > maximumLinesThreshold) {
 
       String message;
-      if (tree.is(Kind.ANONYMOUS_CLASS)) {
+      if (tree.is(Tree.Kind.ANONYMOUS_CLASS)) {
         message = String.format(MESSAGE_ANONYMOUS_CLASS, numberOfLines, maximumLinesThreshold);
-
       } else {
         message = String.format(MESSAGE, ((ClassDeclarationTree) tree).name().text(), numberOfLines, maximumLinesThreshold);
       }
       context().newIssue(this, tree.classToken(), message);
     }
-  }
-
-  @Override
-  public void visitAnonymousClass(AnonymousClassTree tree) {
-    checkClass(tree);
-    super.visitAnonymousClass(tree);
   }
 }
