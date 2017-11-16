@@ -39,10 +39,8 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
-@Rule(key = FormattingStandardCheck.KEY)
+@Rule(key = "S1808")
 public class FormattingStandardCheck extends PHPVisitorCheck {
-
-  public static final String KEY = "S1808";
 
   private static final FormattingCheck[] SUB_CHECKS = {
     new NamespaceAndUseStatementCheck(),

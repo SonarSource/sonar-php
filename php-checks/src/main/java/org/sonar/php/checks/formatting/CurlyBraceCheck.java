@@ -122,6 +122,9 @@ public class CurlyBraceCheck extends PHPVisitorCheck implements FormattingCheck 
     if (elseClause != null) {
       checkCloseCurlyNextToKeyword(new TokenVisitor(tree).prevToken(elseClause.elseToken()), elseClause.elseToken());
     }
+    tree.elseifClauses().stream()
+      .map(ElseifClauseTree::elseifToken)
+      .forEach(elseIfClause -> checkCloseCurlyNextToKeyword(new TokenVisitor(tree).prevToken(elseIfClause), elseIfClause));
     super.visitIfStatement(tree);
   }
 
