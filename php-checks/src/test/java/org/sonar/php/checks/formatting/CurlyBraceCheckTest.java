@@ -37,4 +37,9 @@ public class CurlyBraceCheckTest extends FormattingStandardCheckTest {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, TEST_DIR + "CurlyBraceCheck.php");
   }
 
+  @Test
+  public void closing_curly() throws Exception {
+    activeOnly("isClosingCurlyNextToKeyword");
+    CheckVerifier.verify(check, TEST_DIR + "ClosingCurlyBraceCheck.php");
+  }
 }
