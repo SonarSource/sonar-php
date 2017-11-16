@@ -43,7 +43,9 @@ public class StatementTest {
     .matches("global $a;")
     .matches("echo \"Hi\";")
     .matches("unset($a);")
-    .matches("$var = function () {};");
+    .matches("$var = function () {};")
+    .matches("[A::fun, $arg]();")
+    ;
   }
 
   @Test
