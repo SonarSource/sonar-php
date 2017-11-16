@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.php.metrics.LineVisitor;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -35,12 +36,13 @@ public class TooManyLinesInFileCheck extends PHPVisitorCheck {
 
   @RuleProperty(
     key = "max",
+    description = "Maximum authorized lines of code in a file.",
     defaultValue = "" + DEFAULT)
   public int max = DEFAULT;
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    int numberOfLines = tree.eofToken().line();
+    int numberOfLines = LineVisitor.linesOfCode(tree);
     if (numberOfLines > max) {
       String fileName = context().getPhpFile().relativePath().getFileName().toString();
       context().newFileIssue(this, String.format(MESSAGE, fileName, numberOfLines, max));
