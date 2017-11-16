@@ -205,28 +205,35 @@ public class SymbolVisitor extends PHPVisitorCheck {
     if (!isBuiltInVariable(tree)) {
       if (classMemberUsageState == null) {
         createOrUseVariableIdentifierSymbol(tree);
-
       } else {
 
         if (classMemberUsageState.isSelfMember && classScope != null && classMemberUsageState.isStatic) {
           Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FIELD);
           if (symbol != null) {
-            symbol.addUsage(tree);
-            symbolTable.associateSymbol(tree, symbol);
+            associateSymbol(tree, symbol);
           }
         }
 
         // see test_property_name_in_variable and case $this->$key ($key stores the name of field)
         Symbol symbol = currentScope.getSymbol(tree.text(), Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
         if (symbol != null) {
-          symbol.addUsage(tree);
-          symbolTable.associateSymbol(tree, symbol);
+          associateSymbol(tree, symbol);
         }
 
         classMemberUsageState = null;
       }
     }
   }
+
+  private void createOrUseVariableIdentifierSymbol(VariableIdentifierTree identifier) {
+    Symbol symbol = currentScope.getSymbol(identifier.text(), Symbol.Kind.PARAMETER);
+    if (symbol == null) {
+      createSymbol(identifier, Symbol.Kind.VARIABLE);
+      return;
+    }
+    associateSymbol(identifier, symbol);
+  }
+
 
   @Override
   public void visitToken(SyntaxToken token) {
@@ -253,8 +260,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     while (outer != null) {
       symbol = outer.getSymbol(tree.text(), Symbol.Kind.CLASS);
       if (symbol != null) {
-        symbol.addUsage(tree);
-        symbolTable.associateSymbol(tree, symbol);
+        associateSymbol(tree, symbol);
         break;
       }
       outer = outer.outer();
@@ -263,20 +269,15 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   private void resolveProperty(NameIdentifierTree tree) {
+    String name = tree.text();
+    Symbol.Kind kind = Symbol.Kind.FUNCTION;
     if (classMemberUsageState.isField) {
-      String dollar = classMemberUsageState.isConst ? "" : "$";
-      Symbol symbol = classScope.getSymbol(dollar + tree.text(), Symbol.Kind.FIELD);
-      if (symbol != null) {
-        symbol.addUsage(tree);
-        symbolTable.associateSymbol(tree, symbol);
-      }
-
-    } else {
-      Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FUNCTION);
-      if (symbol != null) {
-        symbol.addUsage(tree);
-        symbolTable.associateSymbol(tree, symbol);
-      }
+      name = (classMemberUsageState.isConst ? "" : "$") + name;
+      kind = Symbol.Kind.FIELD;
+    }
+    Symbol symbol = classScope.getSymbol(name, kind);
+    if (symbol != null) {
+      associateSymbol(tree, symbol);
     }
   }
 
@@ -290,8 +291,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     if (firstExpressionToken.text().charAt(0) != '$') {
       Symbol symbol = currentScope.getSymbol("$" + firstExpressionToken.text());
       if (symbol != null) {
-        symbol.addUsage(firstExpressionToken);
-        symbolTable.associateSymbol(firstExpressionToken, symbol);
+        associateSymbol(firstExpressionToken, symbol);
       }
     }
 
@@ -317,9 +317,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
         Symbol symbol = globalScope.getSymbol(identifier.text(), Symbol.Kind.VARIABLE);
         if (symbol != null) {
           // actually this identifier in global statement is not usage, but we do this for the symbol highlighting
-          symbol.addUsage(identifier);
+          associateSymbol(identifier, symbol);
           currentScope.addSymbol(symbol);
-          symbolTable.associateSymbol(identifier, symbol);
         } else {
           symbol = createSymbol(identifier, Symbol.Kind.VARIABLE);
         }
@@ -358,8 +357,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       if (identifier != null) {
         Symbol symbol = currentScope.outer().getSymbol(identifier.text());
         if (symbol != null) {
-          symbol.addUsage(identifier);
-          symbolTable.associateSymbol(identifier, symbol);
+          associateSymbol(identifier, symbol);
         } else if (variable.is(Kind.REFERENCE_VARIABLE)) {
           symbolTable.declareSymbol(identifier, Symbol.Kind.VARIABLE, currentScope.outer());
         }
@@ -401,9 +399,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
         Symbol symbol = currentScope.getSymbol(variableName, Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
 
         if (symbol != null) {
-          symbol.addUsage(((LiteralTree) argument).token());
-          symbolTable.associateSymbol(((LiteralTree) argument).token(), symbol);
-
+          associateSymbol(((LiteralTree) argument).token(), symbol);
         }
       }
     }
@@ -414,8 +410,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       NameIdentifierTree usageIdentifier = (NameIdentifierTree) namespaceName.name();
       Symbol symbol = currentScope.getSymbol(usageIdentifier.text(), kind);
       if (symbol != null) {
-        symbol.addUsage(usageIdentifier);
-        symbolTable.associateSymbol(usageIdentifier, symbol);
+        associateSymbol(usageIdentifier, symbol);
       }
 
     }
@@ -456,30 +451,26 @@ public class SymbolVisitor extends PHPVisitorCheck {
     symbolTable.addScope(currentScope);
   }
 
-  private Symbol createOrUseVariableIdentifierSymbol(IdentifierTree identifier) {
-    Symbol symbol = currentScope.getSymbol(identifier.text(), Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
-
-    if (symbol == null) {
-      symbol = symbolTable.declareSymbol(identifier, Symbol.Kind.VARIABLE, currentScope);
-
-    } else if (!symbol.is(Symbol.Kind.FIELD)) {
-      symbol.addUsage(identifier);
-    }
-    symbolTable.associateSymbol(identifier, symbol);
-    return symbol;
-  }
-
   private Symbol createSymbol(IdentifierTree identifier, Symbol.Kind kind) {
     Symbol symbol = currentScope.getSymbol(identifier.text(), kind);
 
     if (symbol == null) {
       symbol = symbolTable.declareSymbol(identifier, kind, currentScope);
-
+      symbolTable.associateSymbol(identifier, symbol);
     } else {
-      symbol.addUsage(identifier);
+      associateSymbol(identifier, symbol);
     }
-    symbolTable.associateSymbol(identifier, symbol);
     return symbol;
   }
+
+  private void associateSymbol(IdentifierTree tree, Symbol symbol) {
+    symbol.addUsage(tree);
+    symbolTable.associateSymbol(tree, symbol);
+  }
+  private void associateSymbol(SyntaxToken token, Symbol symbol) {
+    symbol.addUsage(token);
+    symbolTable.associateSymbol(token, symbol);
+  }
+
 
 }
