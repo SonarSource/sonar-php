@@ -20,9 +20,12 @@
 package org.sonar.php.checks;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.ReadWriteUsages;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -45,6 +48,8 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Remove this unused \"%s\" local variable.";
 
   private List<IdentifierTree> exclusions = new ArrayList<>();
+  private Set<Tree> raisedIssueLocations = new HashSet<>();
+  private ReadWriteUsages usages;
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
@@ -99,6 +104,8 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     exclusions.clear();
+    raisedIssueLocations.clear();
+    usages = new ReadWriteUsages(tree, context().symbolTable());
     super.visitCompilationUnit(tree);
     for (Scope scope : context().symbolTable().getScopes()) {
       if (CheckUtils.isFunction(scope.tree())) {
@@ -110,8 +117,11 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
   private void checkScope(Scope scope) {
     for (Symbol symbol : scope.getSymbols(Symbol.Kind.VARIABLE)) {
       // symbol should be declared in this scope
-      if (symbol.scope().equals(scope) && symbol.usages().isEmpty() && !exclusions.contains(symbol.declaration())) {
+      if (symbol.scope().equals(scope) && !usages.isRead(symbol) && !exclusions.contains(symbol.declaration())
+        && !raisedIssueLocations.contains(symbol.declaration())) {
+
         context().newIssue(this, symbol.declaration(), String.format(MESSAGE, symbol.name()));
+        raisedIssueLocations.add(symbol.declaration());
       }
     }
   }
