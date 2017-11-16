@@ -21,7 +21,7 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.php.metrics.LineVisitor;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -37,30 +37,18 @@ public class SwitchCaseTooBigCheck extends PHPVisitorCheck {
 
   @RuleProperty(
     key = "max",
+    description = "Maximum number of lines of code",
     defaultValue = "" + DEFAULT)
   int max = DEFAULT;
 
   @Override
   public void visitSwitchStatement(SwitchStatementTree tree) {
-    SwitchCaseClauseTree previousClause = null;
-
-    for (SwitchCaseClauseTree clause : tree.cases()) {
-      if (previousClause != null) {
-        checkCaseClause(previousClause, clause.caseToken().line());
-      }
-      previousClause = clause;
-    }
-
-    if (previousClause != null) {
-      SyntaxToken nextToken = tree.closeCurlyBraceToken() == null ? tree.endswitchToken() : tree.closeCurlyBraceToken();
-      checkCaseClause(previousClause, nextToken.line());
-    }
-
+    tree.cases().forEach(this::checkCaseClause);
     super.visitSwitchStatement(tree);
   }
 
-  private void checkCaseClause(SwitchCaseClauseTree clause, int nextNodeLine) {
-    int lines = nextNodeLine - clause.caseToken().line();
+  private void checkCaseClause(SwitchCaseClauseTree clause) {
+    int lines = LineVisitor.linesOfCode(clause);
     if (lines > max) {
       context().newIssue(this, clause.caseToken(), String.format(MESSAGE, lines, max));
     }
