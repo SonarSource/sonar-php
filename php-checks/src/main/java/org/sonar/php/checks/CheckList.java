@@ -171,7 +171,8 @@ public class CheckList {
       WrongAssignmentOperatorCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class,
       DuplicatedMethodCheck.class,
-      HardCodedUriCheck.class
+      HardCodedUriCheck.class,
+      AssignmentInSubExpressionCheck.class
       );
   }
 
