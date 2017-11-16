@@ -19,10 +19,13 @@
  */
 package org.sonar.php.metrics;
 
+import java.util.Optional;
+import java.util.Set;
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
-
-import java.util.Set;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,6 +36,17 @@ public class LineVisitorTest extends ParsingTestUtils {
   public void test_lines_of_code_number() throws Exception {
     LineVisitor lineVisitor = new LineVisitor(parse("metrics/lines_of_code.php"));
     assertThat(lineVisitor.getLinesOfCodeNumber()).isEqualTo(7);
+  }
+
+  @Test
+  public void test_lines_of_code_number_on_tree() throws Exception {
+    CompilationUnitTree cut = parse("metrics/lines_of_code.php");
+    Optional<ClassDeclarationTree> firstClassTree = cut.script().statements().stream()
+      .filter(statement -> statement.is(Tree.Kind.CLASS_DECLARATION))
+      .map(ClassDeclarationTree.class::cast)
+      .findFirst();
+    assertThat(firstClassTree).isPresent();
+    assertThat(LineVisitor.linesOfCode(firstClassTree.get())).isEqualTo(4);
   }
 
   @Test
