@@ -159,6 +159,7 @@ public class CheckList {
       DuplicateBranchImplementationCheck.class,
       AllBranchesIdenticalCheck.class,
       InterfaceNameCheck.class,
+      CatchRethrowingCheck.class,
       CallToIniSetCheck.class,
       SleepFunctionUsageCheck.class,
       HardCodedCredentialsCheck.class,
