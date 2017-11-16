@@ -1,15 +1,17 @@
 <?php
 
-  function f() {           // Noncompliant {{This function "f" has 7 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
+  function f() {           // Noncompliant {{This function "f" has 6 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
 //^^^^^^^^^^^^
   function f() {         // Noncompliant
+    echo 'hello';
     // comment
     return 1;
   }
 }
 
-$f = function () {       // Noncompliant {{This function expression has 5 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
+$f = function () {       // Noncompliant {{This function expression has 4 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
 //   ^^^^^^^^^^^
+  echo 'hello';
   // comment
   return 1;
 };
@@ -22,7 +24,7 @@ function f() {           // Noncompliant
 }
 
 abstract class C {
-  public function f() {  // Noncompliant {{This function "f" has 6 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
+  public function f() {  // Noncompliant {{This function "f" has 4 lines, which is greater than the 3 lines authorized. Split it into smaller functions.}}
 //       ^^^^^^^^^^^^
     // comment
     doSomething();

@@ -23,10 +23,10 @@ import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.metrics.LineVisitor;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
-import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
 @Rule(key = TooManyLinesInFunctionCheck.KEY)
@@ -40,6 +40,7 @@ public class TooManyLinesInFunctionCheck extends PHPSubscriptionCheck {
 
   @RuleProperty(
     key = "max",
+    description = "Maximum authorized lines of code in a function",
     defaultValue = "" + DEFAULT)
   public int max = DEFAULT;
 
@@ -59,15 +60,10 @@ public class TooManyLinesInFunctionCheck extends PHPSubscriptionCheck {
   }
 
   public static int getNumberOfLines(FunctionTree declaration) {
-    Tree body = declaration.body();
-    if (!body.is(Kind.BLOCK)) {
+    if (!declaration.body().is(Kind.BLOCK)) {
       return 0;
     }
-
-    BlockTree block = (BlockTree) body;
-    int firstLine = block.openCurlyBraceToken().line();
-    int lastLine = block.closeCurlyBraceToken().line();
-    return lastLine - firstLine + 1;
+    return LineVisitor.linesOfCode(declaration);
   }
 
 }
