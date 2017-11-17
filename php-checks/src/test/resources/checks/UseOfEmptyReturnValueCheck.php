@@ -50,6 +50,10 @@ for ($i = 1; flush(), $i < 5; $i++) {
   echo $i;
 }
 
+for ($i = 1; ; flush(), $i++) {
+  echo $i;
+}
+
 for ($i = 1; $i < 5, flush(); $i++) { // Noncompliant
   echo $i;
 }
