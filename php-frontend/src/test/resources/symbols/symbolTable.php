@@ -20,7 +20,7 @@ class A {                                     // A
   public $field1, $field2 = 1;                // $field1, $field2
   const CONSTANT_FIELD;                       // $constantField
 
-  public function f($p) {                     // f, $p
+  public function f($p = 12) {                     // f, $p
   }
 }
 
