@@ -91,4 +91,9 @@ class C {
     public function isYprop() { // Noncompliant
        return $x == 0;
     }
+
+    public function emptyMethod() {
+    }
+    public function isEmptyMethod() {
+    }
 }
