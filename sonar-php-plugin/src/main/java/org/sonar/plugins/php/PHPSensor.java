@@ -50,7 +50,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.php.PHPAnalyzer;
 import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.ParsingErrorCheck;
-import org.sonar.php.compat.CompatibilityHelper;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.tree.visitors.LegacyIssue;
@@ -165,7 +165,7 @@ public class PHPSensor implements Sensor {
 
   private void analyseFile(SensorContext context, PHPAnalyzer phpAnalyzer, InputFile inputFile) {
     try {
-      phpAnalyzer.nextFile(CompatibilityHelper.phpFile(inputFile, context));
+      phpAnalyzer.nextFile(new CompatibleInputFile(inputFile));
 
       if (inSonarQube(context)) {
         phpAnalyzer.getSyntaxHighlighting(context, inputFile).save();

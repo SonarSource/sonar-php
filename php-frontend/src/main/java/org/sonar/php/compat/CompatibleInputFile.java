@@ -30,11 +30,11 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 /**
  * A compatibility wrapper for InputFile. See class hierarchy.
  */
-class CompatibleInputFile implements PhpFile {
+public class CompatibleInputFile implements PhpFile {
 
   private final InputFile wrapped;
 
-  CompatibleInputFile(InputFile wrapped) {
+  public CompatibleInputFile(InputFile wrapped) {
     this.wrapped = wrapped;
   }
 
