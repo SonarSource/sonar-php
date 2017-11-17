@@ -34,10 +34,18 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class AssignmentInSubExpressionCheck extends PHPVisitorCheck {
 
 
+  private static final Tree.Kind[] ALLOWED_PARENTS = new Tree.Kind[]{
+    Tree.Kind.IF_STATEMENT,
+    Tree.Kind.ELSEIF_CLAUSE,
+    Tree.Kind.FUNCTION_CALL,
+    Tree.Kind.EXPRESSION_STATEMENT,
+    Tree.Kind.ASSIGNMENT_BY_REFERENCE,
+    Tree.Kind.ASSIGNMENT};
+
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-
-    if(!getParent(tree).is(Tree.Kind.EXPRESSION_STATEMENT, Tree.Kind.ASSIGNMENT_BY_REFERENCE, Tree.Kind.ASSIGNMENT)){
+    Tree parent = getParent(tree);
+    if (!parent.is(ALLOWED_PARENTS)) {
       SyntaxToken toReport = getToken(tree);
       context().newIssue(this, toReport, String.format("Extract the assignment of \"%s\" from this expression.", tree.variable().toString()));
     }
