@@ -37,7 +37,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S2201")
 public class IgnoredReturnValueCheck extends PHPVisitorCheck {
 
-  public static final Set<String> PURE_FUNCTIONS = new HashSet<>(Arrays.asList(
+  protected static final Set<String> PURE_FUNCTIONS = new HashSet<>(Arrays.asList(
     // String Functions
     "addcslashes",
     "addslashes",

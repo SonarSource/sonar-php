@@ -38,6 +38,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -58,28 +59,12 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     Kind.PARAMETER,
     Kind.GLOBAL_STATEMENT,
     Kind.VARIABLE_DECLARATION,
-    Kind.EXPRESSION_STATEMENT,
     Kind.REFERENCE_VARIABLE,
     Kind.ARRAY_ASSIGNMENT_PATTERN_ELEMENT,
     Kind.UNSET_VARIABLE_STATEMENT,
     // CatchBlockTree#variable
     Kind.CATCH_BLOCK,
     Kind.ASSIGNMENT_BY_REFERENCE);
-
-  private static final Set<Kind> ASSIGNMENT_KIND = EnumSet.of(
-    Kind.AND_ASSIGNMENT,
-    Kind.ASSIGNMENT,
-    Kind.CONCATENATION_ASSIGNMENT,
-    Kind.DIVIDE_ASSIGNMENT,
-    Kind.LEFT_SHIFT_ASSIGNMENT,
-    Kind.MINUS_ASSIGNMENT,
-    Kind.MULTIPLY_ASSIGNMENT,
-    Kind.OR_ASSIGNMENT,
-    Kind.PLUS_ASSIGNMENT,
-    Kind.POWER_ASSIGNMENT,
-    Kind.REMAINDER_ASSIGNMENT,
-    Kind.RIGHT_SHIFT_ASSIGNMENT,
-    Kind.XOR_ASSIGNMENT);
 
   private static final Set<String> FUNCTION_CHANGING_CURRENT_SCOPE = new HashSet<>(Arrays.asList(
     "eval",
@@ -94,16 +79,16 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
   // Note: "$argc" and "$argv" are not available in the function scope without using "global"
   private static final Set<String> PREDEFINED_VARIABLES = new HashSet<>(Arrays.asList(
-    "$_cookie",
-    "$_env",
-    "$_files",
-    "$_get",
-    "$_post",
-    "$_request",
-    "$_server",
-    "$_session",
-    "$globals",
-    "$http_raw_post_data",
+    "$_COOKIE",
+    "$_ENV",
+    "$_FILES",
+    "$_GET",
+    "$_POST",
+    "$_REQUEST",
+    "$_SERVER",
+    "$_SESSION",
+    "$GLOBALS",
+    "$HTTP_RAW_POST_DATA",
     "$http_response_header",
     "$php_errormsg",
     // "$this" is defined only in method, but rule S2014 raises issues when it's used elsewhere
@@ -115,12 +100,13 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     FUNCTION_ALLOWING_ARGUMENT_CHECK.remove("isset");
   }
 
-  private static final Map<Kind, Predicate<Tree>> IS_READ_ACCESS_BY_PARENT_KIND;
-  static {
+  private static final Map<Kind, Predicate<Tree>> IS_READ_ACCESS_BY_PARENT_KIND = initializeReadPredicate();
+
+  private static Map<Kind, Predicate<Tree>> initializeReadPredicate() {
     Map<Kind, Predicate<Tree>> map = new EnumMap<>(Kind.class);
 
     PARENT_INITIALIZATION_KIND.forEach(kind -> map.put(kind, tree -> false));
-    ASSIGNMENT_KIND.forEach(kind -> map.put(kind, tree -> tree == ((AssignmentExpressionTree) tree.getParent()).value()));
+    map.put(Kind.ASSIGNMENT, tree -> tree == ((AssignmentExpressionTree) tree.getParent()).value());
     map.put(Kind.FUNCTION_CALL, tree -> {
       FunctionCallTree functionCall = (FunctionCallTree) tree.getParent();
       return tree == functionCall.callee() || FUNCTION_ALLOWING_ARGUMENT_CHECK.contains(lowerCaseFunctionName(functionCall));
@@ -129,7 +115,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     map.put(Kind.ARRAY_ACCESS, tree -> !isArrayAssignment(tree));
     map.put(Kind.PARENTHESISED_EXPRESSION, tree -> isReadAccess(tree.getParent()));
 
-    IS_READ_ACCESS_BY_PARENT_KIND = map;
+    return map;
   }
 
   @Override
@@ -182,17 +168,17 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
     @Override
     public void visitVariableIdentifier(VariableIdentifierTree tree) {
-      if (isMemberAccess(tree)) {
+      if (isClassMemberAccess(tree) || uninitializedVariableDeclaration(tree)) {
         return;
       }
-      String lowerCaseName = tree.text().toLowerCase(Locale.ROOT);
-      if (!PREDEFINED_VARIABLES.contains(lowerCaseName)) {
+      String name = tree.text();
+      if (!PREDEFINED_VARIABLES.contains(name)) {
         if (isReadAccess(tree)) {
-          if (!firstVariableReadAccess.containsKey(lowerCaseName)) {
-            firstVariableReadAccess.put(lowerCaseName, tree);
+          if (!firstVariableReadAccess.containsKey(name)) {
+            firstVariableReadAccess.put(name, tree);
           }
         } else {
-          initializedVariables.add(lowerCaseName);
+          initializedVariables.add(name);
         }
       }
     }
@@ -221,7 +207,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
           lexicalVars.variables().stream()
             .map(VariableTree::variableExpression)
             .filter(variable -> variable.is(Kind.VARIABLE_IDENTIFIER))
-            .map(variable -> ((VariableIdentifierTree) variable).text().toLowerCase(Locale.ROOT))
+            .map(variable -> ((VariableIdentifierTree) variable).text())
             .forEach(initializedVariables::add);
         }
         super.visitFunctionExpression(tree);
@@ -243,10 +229,15 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       // skip nested
     }
 
-    private static boolean isMemberAccess(Tree tree) {
+    private static boolean isClassMemberAccess(Tree tree) {
       Tree child = skipParentArrayAccess(tree);
-      return (child.getParent().is(Kind.CLASS_MEMBER_ACCESS, Kind.OBJECT_MEMBER_ACCESS) &&
+      return (child.getParent().is(Kind.CLASS_MEMBER_ACCESS) &&
         ((MemberAccessTree) child.getParent()).member() == child);
+    }
+
+    private static boolean uninitializedVariableDeclaration(Tree tree) {
+      return (tree.getParent().is(Kind.VARIABLE_DECLARATION) &&
+        ((VariableDeclarationTree) tree.getParent()).equalToken() == null);
     }
 
   }
@@ -264,7 +255,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
   private static boolean isArrayAssignment(Tree tree) {
     Tree child = skipParentArrayAccess(tree);
-    return ASSIGNMENT_KIND.contains(child.getParent().getKind()) &&
+    return child.getParent().is(Kind.ASSIGNMENT) &&
       ((AssignmentExpressionTree) child.getParent()).variable() == child;
   }
 

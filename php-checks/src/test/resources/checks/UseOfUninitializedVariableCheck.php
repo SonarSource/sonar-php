@@ -58,7 +58,9 @@ function f1() {
   }
 
   $v80->m(); // Noncompliant
-  $v80->$v81();
+  $a = new A();
+  $a->v81();
+  $a->$v81(); // Noncompliant
   $$v82->m(); // Noncompliant
   ${$v83}->m(); // Noncompliant
 
@@ -85,12 +87,13 @@ function f4() {
 }
 
 function f5() {
-  static $a;
-  return $a;
+  static $a = 3, $b;
+  if ($a) {}
+  return $b; // Noncompliant
 }
 
 function f6() {
-  $a; // EXPRESSION_STATEMENT, not initialized but explicitly declared
+  $a; // Noncompliant
   return $a;
 }
 
@@ -213,8 +216,8 @@ function f25() {
 }
 
 function predefined_variables() {
-  return $_cOOKie . $_env . $_filES . $_Get . $_pOST . $_REquest . $_SeRvEr . $_SESSION. $globals .
-  $HTTP_raw_post_data . $http_RESPONSE_HEADER . $php_ERRORmsg . $unknown_name; // Noncompliant
+  return $_COOKIE . $_ENV . $_FILES . $_GET . $_POST . $_REQUEST . $_SERVER . $_SESSION . $GLOBALS .
+  $HTTP_RAW_POST_DATA . $http_response_header . $php_errormsg . $unknown_name; // Noncompliant
 //                                                              ^^^^^^^^^^^^^
 }
 
@@ -226,10 +229,10 @@ class A {
   public static $static_v1;
   public $v = 3;
 
-  public function __construct($pVaLUE1, $pVaLUE2 = 3) {
-    $this->v = $PVAlue1;
-    $this->v = $PVAlue2;
-    $this->v = $PVAlue3; // Noncompliant
+  public function __construct($pvalue1, $pvalue2 = 3) {
+    $this->v = $pvalue1;
+    $this->v = $pvalue2;
+    $this->v = $pvalue3; // Noncompliant
     self::$static_v1++;
     A::$static_v1++;
     self::$static_v1['a'] + A::$static_v1['a'] + A::$static_v1['a']['a'];
