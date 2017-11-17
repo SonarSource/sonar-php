@@ -127,8 +127,8 @@ public class HardCodedUriCheck extends PHPVisitorCheck {
     .add("umask")
     .add("unlink").build();
 
-  private static boolean isFileNameVariable(@Nullable IdentifierTree variable) {
-    return variable != null && VARIABLE_NAME_PATTERN.matcher(variable.text()).find();
+  private static boolean isFileNameVariable(IdentifierTree variable) {
+    return VARIABLE_NAME_PATTERN.matcher(variable.text()).find();
   }
 
   @Override
