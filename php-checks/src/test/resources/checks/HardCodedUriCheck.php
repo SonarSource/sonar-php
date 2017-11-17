@@ -1,7 +1,7 @@
 <?php
 $filepath = "http://www.mywebsite.com";  // Noncompliant {{Refactor your code to get this URI from a customizable parameter.}}
 //          ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+$filepath = $someVar;
 $y = "ftp://myserver.com";
 
 $z = "~/a";
@@ -37,3 +37,7 @@ class A {
  private $filepath = "http://www.mywebsite.com"; // Noncompliant
  private $someVariable = "http://www.mywebsite.com"; // compliant
 }
+class B {
+ private static $filepath;
+}
+B::$filepath = 12;
