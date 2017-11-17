@@ -1,0 +1,19 @@
+{
+  "title": "Variables should be initialized before use",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "cwe",
+    "misra"
+  ],
+  "standards": [
+    "CWE"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-836",
+  "sqKey": "S836"
+}

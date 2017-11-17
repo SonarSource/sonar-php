@@ -1,0 +1,28 @@
+<p>When a variable is not initialized before its use, it's a sign that the developer made a mistake.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+function fun($condition) {
+  $res = 1;
+  if ($condition) {
+    $res++;
+  }
+  return $result; // Noncompliant, "$result" instead of "$res"
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+function fun($condition) {
+  $res = 1;
+  if ($condition) {
+    $res++;
+  }
+  return $res;
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="http://cwe.mitre.org/data/definitions/457.html">MITRE, CWE-457</a> - Use of Uninitialized Variable </li>
+  <li> MISRA C:2004, 9.1 - All automatic variables shall have been assigned a value before being used. </li>
+  <li> MISRA C++:2008, 8-5-1 - All variables shall have a defined value before they are used. </li>
+</ul>
+
