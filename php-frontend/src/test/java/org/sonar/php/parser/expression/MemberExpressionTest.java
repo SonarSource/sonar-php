@@ -95,6 +95,9 @@ public class MemberExpressionTest {
     .matches("f()->$a")
     .matches("$a->{'b'}")
 
-    .matches("A::class");
+    .matches("A::class")
+    .matches("A::fun()")
+    .matches("[A::fun, $arg]()")
+    ;
   }
 }
