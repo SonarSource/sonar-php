@@ -3,6 +3,20 @@
 $a = 42;
 $b = 0;
 
+class A {
+  private $a = 42;
+
+  public function foo() {
+    $this->$a = -1;
+    return $this->$a++;
+  }
+
+  public function bar() {
+    $a = 0;
+    return $a++; // Noncompliant
+  }
+}
+
 function pickNumber() {
   global $b;
   static $k = 0;
