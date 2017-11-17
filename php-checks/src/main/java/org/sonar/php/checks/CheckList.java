@@ -158,6 +158,7 @@ public class CheckList {
       NestedTernaryOperatorsCheck.class,
       DuplicateBranchImplementationCheck.class,
       AllBranchesIdenticalCheck.class,
+      UseOfUninitializedVariableCheck.class,
       InterfaceNameCheck.class,
       CatchRethrowingCheck.class,
       CallToIniSetCheck.class,
