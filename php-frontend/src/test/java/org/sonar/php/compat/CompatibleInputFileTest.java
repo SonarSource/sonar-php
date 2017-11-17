@@ -21,43 +21,31 @@ package org.sonar.php.compat;
 
 import java.io.File;
 import org.junit.Test;
-import org.sonar.api.SonarQubeSide;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.internal.SonarRuntimeImpl;
-import org.sonar.api.utils.Version;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CompatibilityHelperTest {
+public class CompatibleInputFileTest {
 
   private InputFile inputFile = mock(InputFile.class);
-  private SensorContextTester sensorContext = SensorContextTester.create(new File("src/test/resources"));
 
   private String path = "path/to/file.php";
   private File file = new File(path);
 
-
   @Test
-  public void test_6_7() throws Exception {
-    setSqVersion(6, 7);
-
+  public void test() throws Exception {
     when(inputFile.contents()).thenReturn("Input file content");
     when(inputFile.relativePath()).thenReturn("path/to/file.php");
     when(inputFile.file()).thenReturn(file);
 
-    PhpFile phpFile = CompatibilityHelper.phpFile(inputFile, sensorContext);
+    PhpFile phpFile = new CompatibleInputFile(inputFile);
 
     assertThat(phpFile).isExactlyInstanceOf(CompatibleInputFile.class);
     assertThat(phpFile.contents()).isEqualTo("Input file content");
     assertThat(phpFile.relativePath()).isEqualTo(new File("path/to/file.php").toPath());
     assertThat(phpFile.file()).isEqualTo(file);
-  }
-
-  private void setSqVersion(int major, int minor) {
-    sensorContext.setRuntime(SonarRuntimeImpl.forSonarQube(Version.create(major, minor), SonarQubeSide.SCANNER));
   }
 }

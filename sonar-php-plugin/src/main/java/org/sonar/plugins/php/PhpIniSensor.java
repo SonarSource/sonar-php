@@ -35,7 +35,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.php.checks.CheckList;
-import org.sonar.php.compat.CompatibilityHelper;
+import org.sonar.php.compat.CompatibleInputFile;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.PhpIniParser;
@@ -72,7 +72,7 @@ public class PhpIniSensor implements Sensor {
     for (InputFile inputFile : inputFiles) {
       PhpIniFile phpIni;
       try {
-        phpIni = parser.parse(CompatibilityHelper.phpFile(inputFile, context));
+        phpIni = parser.parse(new CompatibleInputFile(inputFile));
       } catch (RecognitionException e) {
         LOG.error("Unable to parse file: " + inputFile.absolutePath());
         LOG.error(e.getMessage());
