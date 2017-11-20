@@ -41,12 +41,15 @@ import static java.util.Collections.singletonList;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-  PHPTest.class,
-  PHPIntegrationTest.class,
-  PHPUnitLegacyTest.class,
   CommonRulesTest.class,
   CustomRulesTest.class,
-  ReportWithUnresolvedPathTest.class
+  NoSonarTest.class,
+  PHPIntegrationTest.class,
+  PHPTest.class,
+  PHPUnitLegacyTest.class,
+  PHPUnitTest.class,
+  ReportWithUnresolvedPathTest.class,
+  SonarLintTest.class,
 })
 public class Tests {
 
