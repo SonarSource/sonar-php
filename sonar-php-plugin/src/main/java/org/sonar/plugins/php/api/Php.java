@@ -22,7 +22,7 @@ package org.sonar.plugins.php.api;
 import com.google.common.collect.Lists;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.config.Configuration;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.AbstractLanguage;
 import org.sonar.plugins.php.PhpPlugin;
 
@@ -36,12 +36,12 @@ public final class Php extends AbstractLanguage {
 
   public static final String DEFAULT_FILE_SUFFIXES = "php,php3,php4,php5,phtml,inc";
 
-  private Configuration settings;
+  private Settings settings;
 
   /**
    * Construct the PHP language.
    */
-  public Php(Configuration settings) {
+  public Php(Settings settings) {
     super(KEY, NAME);
     this.settings = settings;
   }

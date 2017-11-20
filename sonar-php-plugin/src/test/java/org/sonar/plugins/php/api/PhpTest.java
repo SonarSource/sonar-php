@@ -36,7 +36,7 @@ public class PhpTest {
    */
   @Test
   public void shouldCheckDefaultValidPhpExtensions() {
-    Php php = new Php(new MapSettings().asConfig());
+    Php php = new Php(new MapSettings());
 
     assertTrue(php.hasValidSuffixes("goodExtension.php"));
     assertTrue(php.hasValidSuffixes("goodExtension.php5"));
@@ -53,7 +53,7 @@ public class PhpTest {
     MapSettings settings = new MapSettings();
     settings.setProperty(PhpPlugin.FILE_SUFFIXES_KEY, " php6  , php7, , ");
 
-    Php php = new Php(settings.asConfig());
+    Php php = new Php(settings);
     assertTrue(php.hasValidSuffixes("goodExtension.php6"));
     assertTrue(php.hasValidSuffixes("goodExtension.php7"));
   }
