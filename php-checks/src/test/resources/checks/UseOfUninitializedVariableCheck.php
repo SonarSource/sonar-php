@@ -197,6 +197,7 @@ function f22() {
 function f23() {
   list($extractA, $extractB) = array(1, 2);
   [$extractC, ,$extractD] = array(4, 5, 6);
+  [$extractE ,$extractF] = array(4, 5, 6);
   return $extractA + $extractB + $extractC + $extractD;
 }
 

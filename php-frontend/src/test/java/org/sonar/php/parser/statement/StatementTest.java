@@ -45,6 +45,7 @@ public class StatementTest {
     .matches("unset($a);")
     .matches("$var = function () {};")
     .matches("[A::fun, $arg]();")
+    .notMatches("[A::class, $method_name]() = 1;")
     ;
   }
 

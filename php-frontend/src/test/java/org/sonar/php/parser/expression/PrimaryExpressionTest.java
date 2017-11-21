@@ -31,7 +31,6 @@ public class PrimaryExpressionTest {
     assertThat(PHPLexicalGrammar.PRIMARY_EXPRESSION)
       .matches("static")
       .matches("a")
-      .matches("[a, b]")
       .matches("$a")
       .matches("($a)");
   }

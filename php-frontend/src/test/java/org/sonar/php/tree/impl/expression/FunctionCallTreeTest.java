@@ -19,19 +19,19 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class FunctionCallTreeTest extends PHPTreeModelTest {
 
   @Test
   public void without_argument() throws Exception {
-    FunctionCallTree tree = parse("f()", PHPLexicalGrammar.MEMBER_EXPRESSION);
+    FunctionCallTree tree = parse("f()", PHPLexicalGrammar.FUNCTION_CALL);
 
     assertThat(tree.is(Kind.FUNCTION_CALL)).isTrue();
     assertThat(expressionToString(tree.callee())).isEqualTo("f");
@@ -42,7 +42,7 @@ public class FunctionCallTreeTest extends PHPTreeModelTest {
 
   @Test
   public void with_argument() throws Exception {
-    FunctionCallTree tree = parse("f($p1, $p2)", PHPLexicalGrammar.MEMBER_EXPRESSION);
+    FunctionCallTree tree = parse("f($p1, $p2)", PHPLexicalGrammar.FUNCTION_CALL);
 
     assertThat(tree.is(Kind.FUNCTION_CALL)).isTrue();
     assertThat(expressionToString(tree.callee())).isEqualTo("f");

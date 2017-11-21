@@ -29,7 +29,7 @@ public class MemberExpressionTest {
   @Test
   public void test() {
     // callable_variable -> simple_variable
-    assertThat(PHPLexicalGrammar.MEMBER_EXPRESSION)
+    assertThat(PHPLexicalGrammar.FUNCTION_CALL)
       .matches("${3 + 2}")
       .matches("$a")
       .matches("a")
