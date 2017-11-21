@@ -1404,7 +1404,6 @@ public class PHPGrammar {
         f.newStaticIdentifier(b.token(STATIC)),
         NAMESPACE_NAME(),
         VARIABLE_WITHOUT_OBJECTS(),
-        ARRAY_INITIALIZER(),
         PARENTHESIZED_EXPRESSION()));
   }
 
@@ -1644,10 +1643,10 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.POSTFIX_EXPR).is(
       f.postfixExpression(
         b.firstOf(
+          f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
           FUNCTION_EXPRESSION(),
           COMMON_SCALAR(),
           MEMBER_EXPRESSION(),
-          f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
           NEW_EXPRESSION(),
           EXIT_EXPRESSION(),
           LIST_EXPRESSION_ASSIGNMENT(),
