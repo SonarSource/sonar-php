@@ -876,7 +876,7 @@ public class PHPGrammar {
 
   public ExpressionTree FOREACH_VARIABLE() {
     return b.<ExpressionTree>nonterminal().is(
-      b.firstOf(REFERENCE_VARIABLE(), MEMBER_EXPRESSION(), LIST_EXPRESSION(), ARRAY_ASSIGNMENT_PATTERN()));
+      b.firstOf(REFERENCE_VARIABLE(), FUNCTION_CALL(), LIST_EXPRESSION(), ARRAY_ASSIGNMENT_PATTERN()));
   }
 
   public ThrowStatementTree THROW_STATEMENT() {
@@ -1404,7 +1404,6 @@ public class PHPGrammar {
         f.newStaticIdentifier(b.token(STATIC)),
         NAMESPACE_NAME(),
         VARIABLE_WITHOUT_OBJECTS(),
-        ARRAY_INITIALIZER(),
         PARENTHESIZED_EXPRESSION()));
   }
 
@@ -1413,7 +1412,7 @@ public class PHPGrammar {
       f.assignmentByReference(
         MEMBER_EXPRESSION(),
         b.token(PHPPunctuator.EQU), b.token(AMPERSAND),
-        b.firstOf(NEW_EXPRESSION(), MEMBER_EXPRESSION())));
+        b.firstOf(NEW_EXPRESSION(), FUNCTION_CALL())));
   }
 
   public AssignmentExpressionTree ASSIGNMENT_EXPRESSION() {
@@ -1486,6 +1485,19 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.MEMBER_EXPRESSION).is(
       f.memberExpression(
         PRIMARY_EXPRESSION(),
+        b.zeroOrMore(
+          b.firstOf(
+            OBJECT_MEMBER_ACCESS(),
+            CLASS_MEMBER_ACCESS(),
+            DIMENSIONAL_OFFSET()))));
+  }
+
+  public ExpressionTree FUNCTION_CALL() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.FUNCTION_CALL).is(
+      f.memberExpression(
+        b.firstOf(
+          PRIMARY_EXPRESSION(),
+          ARRAY_INITIALIZER()),
         b.zeroOrMore(
           b.firstOf(
             OBJECT_MEMBER_ACCESS(),
@@ -1610,7 +1622,7 @@ public class PHPGrammar {
 
   public NewExpressionTree NEW_EXPRESSION() {
     return b.<NewExpressionTree>nonterminal(Kind.NEW_EXPRESSION).is(
-      f.newExpression(b.token(NEW), b.firstOf(MEMBER_EXPRESSION(), ANONYMOUS_CLASS())));
+      f.newExpression(b.token(NEW), b.firstOf(FUNCTION_CALL(), ANONYMOUS_CLASS())));
   }
 
   public AnonymousClassTree ANONYMOUS_CLASS() {
@@ -1646,7 +1658,7 @@ public class PHPGrammar {
         b.firstOf(
           FUNCTION_EXPRESSION(),
           COMMON_SCALAR(),
-          MEMBER_EXPRESSION(),
+          FUNCTION_CALL(),
           f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
           NEW_EXPRESSION(),
           EXIT_EXPRESSION(),
@@ -1655,7 +1667,7 @@ public class PHPGrammar {
         b.optional(b.firstOf(
           b.token(INC),
           b.token(DEC),
-          f.newTuple(b.token(INSTANCEOF), MEMBER_EXPRESSION())))));
+          f.newTuple(b.token(INSTANCEOF), FUNCTION_CALL())))));
   }
 
   /**
