@@ -26,7 +26,7 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ArrayInitializerFunctionTree;
+import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
@@ -76,7 +76,8 @@ public class DuplicatedArgumentCheck extends PHPVisitorCheck {
   }
 
   private static boolean isEmptyArrayConstructor(ExpressionTree arg) {
-    return arg.is(Tree.Kind.ARRAY_INITIALIZER_FUNCTION) && ((ArrayInitializerFunctionTree) arg).arrayPairs().isEmpty();
+    return (arg.is(Tree.Kind.ARRAY_INITIALIZER_FUNCTION, Tree.Kind.ARRAY_INITIALIZER_BRACKET) &&
+      ((ArrayInitializerTree) arg).arrayPairs().isEmpty());
   }
 
   private static boolean isAccessedVariable(ExpressionTree arg) {

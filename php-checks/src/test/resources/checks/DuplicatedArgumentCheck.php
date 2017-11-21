@@ -19,6 +19,8 @@ foo($a);
 foo($a, $a);
 foo(null, null);
 foo(false, false);
+foo([], []);
+foo([2], [2]); // Noncompliant
 foo(true, true);
 foo(0, 0);
 foo("hello", "hello");
