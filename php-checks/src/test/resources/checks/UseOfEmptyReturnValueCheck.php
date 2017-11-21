@@ -82,3 +82,5 @@ $a = MongoLog::setLevel(MongoLog::ALL); // Noncompliant
 
 $converter = new UConverter();
 $a = $converter->setSourceEncoding("UTF8"); // SONARPHP-739 False-negative due to lack of semantic on function call
+
+$a = hex2bin("AF");
