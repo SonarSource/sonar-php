@@ -79,7 +79,7 @@ public class SonarLintTest {
     List<Issue> issues = new ArrayList<>();
     sonarlintEngine.analyze(
       new StandaloneAnalysisConfiguration(baseDir, temp.newFolder().toPath(), Collections.singleton(inputFile), new HashMap<>()),
-      issues::add);
+      issues::add, null, null);
 
     assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
       tuple("php:S101", 4, inputFile.getPath(), "MINOR"),
