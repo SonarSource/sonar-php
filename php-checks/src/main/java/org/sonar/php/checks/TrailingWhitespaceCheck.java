@@ -34,7 +34,7 @@ public class TrailingWhitespaceCheck extends PHPVisitorCheck {
   public static final String KEY = "S1131";
   private static final String MESSAGE = "Remove the useless trailing whitespaces at the end of this line.";
 
-  private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[" + LexicalConstant.WHITESPACE + "]");
+  private static final Pattern WHITESPACE_PATTERN = Pattern.compile("[^" + LexicalConstant.WHITESPACE + "]+[" + LexicalConstant.WHITESPACE + "]+$");
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
@@ -51,7 +51,7 @@ public class TrailingWhitespaceCheck extends PHPVisitorCheck {
   }
 
   private static boolean test(String line) {
-    return line.length() > 0 && WHITESPACE_PATTERN.matcher(line.subSequence(line.length() - 1, line.length())).matches();
+    return line.length() > 0 && WHITESPACE_PATTERN.matcher(line).find();
   }
 
 }
