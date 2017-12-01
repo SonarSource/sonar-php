@@ -19,44 +19,23 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The Class FileNode.
  */
-@XStreamAlias("file")
 public class FileNode {
 
   /**
    * The name.
    */
-  @XStreamAsAttribute
   private String name;
 
   /**
    * The lines.
    */
-  @XStreamImplicit(itemFieldName = "line")
-  private List<LineNode> lines;
-
-  /**
-   * The ignored nodes.
-   */
-  @XStreamOmitField
-  @XStreamImplicit(itemFieldName = "class")
-  private List<ClassNode> ignoredNodes;
-
-  /**
-   * The metrics.
-   */
-  @XStreamAlias("metrics")
-  private MetricsNode metrics;
-
+  private List<LineNode> lines = new ArrayList<>();
 
   /**
    * Gets the lines.
@@ -65,24 +44,6 @@ public class FileNode {
    */
   public List<LineNode> getLines() {
     return lines;
-  }
-
-  /**
-   * Gets the metrics.
-   *
-   * @return the metrics
-   */
-  public MetricsNode getMetrics() {
-    return metrics;
-  }
-
-  /**
-   * Sets the metrics.
-   *
-   * @param metrics the new metrics
-   */
-  public void setMetrics(MetricsNode metrics) {
-    this.metrics = metrics;
   }
 
   /**

@@ -19,16 +19,18 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
+import org.sonar.plugins.php.phpunit.xml.XmlUtils;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * PHPUnit can generate test result logs that comply with JUnit's test results xml format.
@@ -41,32 +43,46 @@ import org.sonar.plugins.php.phpunit.xml.TestSuites;
 public class JUnitLogParserForPhpUnit {
 
   public TestSuites parse(File report) {
-    try (InputStream inputStream = new FileInputStream(report)) {
-      final Object parsedObject = xstream().fromXML(inputStream);
-      return (TestSuites) parsedObject;
-    } catch (IOException | XStreamException e) {
+    try {
+      return processRoot(report, XmlUtils.documentBuilder());
+    } catch (IOException | SAXException | ParserConfigurationException e) {
       throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
     }
   }
 
-  private XStream xstream() {
-    XStream xstream = new XStream() {
-      // Trick to ignore unknown elements
-      @Override
-      protected MapperWrapper wrapMapper(MapperWrapper next) {
-        return new MapperWrapper(next) {
-          @Override
-          public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-            return definedIn != Object.class && super.shouldSerializeMember(definedIn, fieldName);
-          }
-        };
-      }
-    };
-    xstream.setClassLoader(this.getClass().getClassLoader());
-    xstream.aliasSystemAttribute("fileName", "class");
-    xstream.processAnnotations(TestSuites.class);
-    xstream.processAnnotations(TestSuite.class);
-    xstream.processAnnotations(TestCase.class);
-    return xstream;
+  private static TestSuites processRoot(File file, DocumentBuilder documentBuilder) throws IOException, SAXException {
+    Element root = documentBuilder.parse(file).getDocumentElement();
+    if (root == null || !"testsuites".equals(root.getNodeName())) {
+      throw new IOException("Report should start with <testsuites>");
+    }
+    List<TestSuite> testSuites = new ArrayList<>();
+    XmlUtils.elements(root, "testsuite")
+      .forEach(testSuiteNode -> testSuites.add(processTestSuite(testSuiteNode)));
+    return new TestSuites(testSuites);
   }
+
+  private static TestSuite processTestSuite(Element testSuiteNode) {
+    String name = testSuiteNode.getAttribute("name");
+    String file = testSuiteNode.getAttribute("file");
+    double time = Double.parseDouble(testSuiteNode.getAttribute("time"));
+
+    TestSuite testSuite = new TestSuite(name, file, time);
+    XmlUtils.elements(testSuiteNode, "testsuite")
+      .forEach(child -> testSuite.addNested(processTestSuite(child)));
+    XmlUtils.elements(testSuiteNode, "testcase")
+      .forEach(child -> testSuite.addTestCase(processTestCase(child)));
+    return testSuite;
+  }
+
+  private static TestCase processTestCase(Element testCase) {
+    String className = testCase.getAttribute("class");
+    String name = testCase.getAttribute("name");
+    return new TestCase(
+      className,
+      name,
+      XmlUtils.elementText(testCase, "error"),
+      XmlUtils.elementText(testCase, "failure"),
+      XmlUtils.elementText(testCase, "skipped"));
+  }
+  
 }

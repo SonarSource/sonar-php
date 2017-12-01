@@ -19,32 +19,31 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-
 /**
  * The Class LineNode.
  */
-@XStreamAlias("line")
 public class LineNode {
 
   /**
    * The count.
    */
-  @XStreamAsAttribute
   private int count;
 
   /**
    * The num.
    */
-  @XStreamAsAttribute
   private int num;
 
   /**
    * The type.
    */
-  @XStreamAsAttribute
   private String type;
+
+  public LineNode(int count, int num, String type) {
+    this.count = count;
+    this.num = num;
+    this.type = type;
+  }
 
   /**
    * Gets the count.

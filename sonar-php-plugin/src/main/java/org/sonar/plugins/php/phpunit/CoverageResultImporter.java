@@ -19,15 +19,13 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -38,9 +36,11 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
 import org.sonar.plugins.php.phpunit.xml.LineNode;
-import org.sonar.plugins.php.phpunit.xml.MetricsNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
+import org.sonar.plugins.php.phpunit.xml.XmlUtils;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 public class CoverageResultImporter extends SingleFileReportImporter {
 
@@ -80,7 +80,6 @@ public class CoverageResultImporter extends SingleFileReportImporter {
           unresolvedPaths.size(), coverageReportFile.getName(), unresolvedPaths.get(0)));
     }
   }
-
 
   private void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, SensorContext context) {
     if (packages != null) {
@@ -143,21 +142,57 @@ public class CoverageResultImporter extends SingleFileReportImporter {
    * @param coverageReportFile the coverage report file
    * @return the coverage
    */
-  private CoverageNode getCoverage(File coverageReportFile) {
-    try (InputStream inputStream = new FileInputStream(coverageReportFile)) {
-      XStream xstream = new XStream();
-      xstream.setClassLoader(getClass().getClassLoader());
-      xstream.aliasSystemAttribute("classType", "class");
-      xstream.processAnnotations(CoverageNode.class);
-      xstream.processAnnotations(ProjectNode.class);
-      xstream.processAnnotations(FileNode.class);
-      xstream.processAnnotations(MetricsNode.class);
-      xstream.processAnnotations(LineNode.class);
-
-      return (CoverageNode) xstream.fromXML(inputStream);
-    } catch (IOException | XStreamException e) {
+  private static CoverageNode getCoverage(File coverageReportFile) {
+    try {
+      DocumentBuilder documentBuilder = XmlUtils.documentBuilder();
+      Element coverage = documentBuilder.parse(coverageReportFile).getDocumentElement();
+      if (coverage == null || !"coverage".equals(coverage.getNodeName())) {
+        throw new IOException("Report should start with <coverage>");
+      }
+      return parseCoverageNode(coverage);
+    } catch (IOException | SAXException | ParserConfigurationException e) {
       throw new IllegalStateException("Can't read phpUnit report: " + coverageReportFile.getName(), e);
     }
+  }
+
+  private static CoverageNode parseCoverageNode(Element coverage) {
+    CoverageNode result = new CoverageNode();
+    XmlUtils.elements(coverage, "project")
+      .forEach(project -> result.getProjects().add(parseProjectNode(project)));
+    return result;
+  }
+
+  private static ProjectNode parseProjectNode(Element project) {
+    ProjectNode result = new ProjectNode();
+    result.setName(project.getAttribute("name"));
+    XmlUtils.elements(project, "package")
+      .forEach(packageElement -> result.getPackages().add(parsePackageNode(packageElement)));
+    XmlUtils.elements(project, "file")
+      .forEach(file -> result.getFiles().add(parseFileNode(file)));
+    return result;
+  }
+
+  private static PackageNode parsePackageNode(Element packageElement) {
+    PackageNode result = new PackageNode();
+    result.setName(packageElement.getAttribute("name"));
+    XmlUtils.elements(packageElement, "file")
+      .forEach(file -> result.getFiles().add(parseFileNode(file)));
+    return result;
+  }
+
+  private static FileNode parseFileNode(Element file) {
+    FileNode result = new FileNode();
+    result.setName(file.getAttribute("name"));
+    XmlUtils.elements(file, "line")
+      .forEach(line -> result.getLines().add(parseLineNode(line)));
+    return result;
+  }
+
+  private static LineNode parseLineNode(Element line) {
+    int count = Integer.parseInt(line.getAttribute("count"));
+    int num = Integer.parseInt(line.getAttribute("num"));
+    String type = line.getAttribute("type");
+    return new LineNode(count, num, type);
   }
 
 }

@@ -19,29 +19,22 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The PackageNode represents the analyzed packages in the PhpUnit coverage report file.
  */
-@XStreamAlias("project")
 public class PackageNode {
 
   /**
    * The project files.
    */
-  @XStreamImplicit
-  @XStreamAlias("file")
-  private List<FileNode> files;
+  private List<FileNode> files = new ArrayList<>();
 
   /**
    * The project name.
    */
-  @XStreamAsAttribute
   private String name;
 
   /**

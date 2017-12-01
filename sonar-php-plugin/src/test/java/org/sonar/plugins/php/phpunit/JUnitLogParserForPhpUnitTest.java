@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.php.PhpTestUtils;
@@ -39,7 +40,7 @@ public class JUnitLogParserForPhpUnitTest {
   @Test
   public void shouldGenerateEmptyTestSuites() {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"));
-    assertThat(suites).isEqualTo(new TestSuites());
+    assertThat(suites).isEqualTo(new TestSuites(Collections.emptyList()));
   }
 
   @Test(expected = IllegalStateException.class)

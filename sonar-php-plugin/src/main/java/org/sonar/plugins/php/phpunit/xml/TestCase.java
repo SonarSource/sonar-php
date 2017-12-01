@@ -20,36 +20,35 @@
 package org.sonar.plugins.php.phpunit.xml;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-@XStreamAlias("testcase")
 public final class TestCase {
 
   public enum Status {
     OK, SKIPPED, FAILURE, ERROR
   }
 
-  @XStreamAsAttribute
-  @XStreamAlias("class")
   private String className;
 
-  @XStreamAsAttribute
   private String name;
 
-  @XStreamAlias("error")
   private String error;
 
-  @XStreamAlias("failure")
   private String failure;
 
-  @XStreamAlias("skipped")
   private String skipped;
 
   public TestCase() {
     // Zero parameters constructor is required by xstream
+  }
+
+  public TestCase(String className, String name, String error, String failure, String skipped) {
+    this.className = className;
+    this.name = name;
+    this.error = error;
+    this.failure = failure;
+    this.skipped = skipped;
   }
 
   @VisibleForTesting

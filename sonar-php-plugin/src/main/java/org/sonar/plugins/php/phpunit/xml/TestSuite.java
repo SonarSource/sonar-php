@@ -20,11 +20,7 @@
 package org.sonar.plugins.php.phpunit.xml;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -35,39 +31,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.plugins.php.phpunit.TestFileReport;
 
-@XStreamAlias("testsuite")
 public final class TestSuite {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TestSuite.class);
 
-  @XStreamAsAttribute
   private String name;
 
-  @XStreamAsAttribute
   private String file;
 
-  @XStreamAsAttribute
   private double time;
 
-  @XStreamImplicit(itemFieldName = "testsuite")
   private List<TestSuite> testSuites = new ArrayList<>();
 
   @VisibleForTesting
-  @XStreamImplicit(itemFieldName = "testcase")
   List<TestCase> testCases = new ArrayList<>();
 
-  /**
-   * Empty constructor is required by xstream in order to
-   * be compatible with Java 7.
-   * */
-  public TestSuite() {
-    // Zero parameters constructor is required by xstream
+  public TestSuite(@Nullable String name, @Nullable String file, double time) {
+    this.name = name;
+    this.file = file;
+    this.time = time;
   }
 
-  @VisibleForTesting
-  TestSuite(@Nullable String file, TestCase... testCases) {
-    this.file = file;
-    this.testCases = Arrays.asList(testCases);
+  public TestSuite(String file) {
+    this(null, file, 0);
   }
 
   public Collection<TestFileReport> generateReports() {
@@ -102,7 +88,7 @@ public final class TestSuite {
    * @return true if the suite contains a file attribute
    */
   private boolean isFileBased() {
-    return file != null;
+    return file != null && file.length() > 0;
   }
 
   private TestFileReport createReport() {
@@ -116,8 +102,11 @@ public final class TestSuite {
     testSuites.forEach(childSuite -> childSuite.collectTestCases(fileReport));
   }
 
-  @VisibleForTesting
-  void addNested(TestSuite child) {
+  public void addNested(TestSuite child) {
     testSuites.add(child);
+  }
+
+  public void addTestCase(TestCase child) {
+    testCases.add(child);
   }
 }
