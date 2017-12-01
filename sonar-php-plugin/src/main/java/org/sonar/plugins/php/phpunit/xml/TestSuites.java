@@ -20,29 +20,19 @@
 package org.sonar.plugins.php.phpunit.xml;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.sonar.plugins.php.phpunit.TestFileReport;
 
-@XStreamAlias("testsuites")
 public final class TestSuites {
 
   @VisibleForTesting
-  @XStreamImplicit(itemFieldName = "testsuite")
   List<TestSuite> suites = new ArrayList<>();
 
-  public TestSuites() {
-    // Zero parameters constructor is required by xstream
-  }
-
-  @VisibleForTesting
-  TestSuites(TestSuite... suites) {
-    this.suites = Arrays.asList(suites);
+  public TestSuites(List<TestSuite> suites) {
+    this.suites = suites;
   }
 
   public List<TestFileReport> arrangeSuitesIntoTestFileReports() {

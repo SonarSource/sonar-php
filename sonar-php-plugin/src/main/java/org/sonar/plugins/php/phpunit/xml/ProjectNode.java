@@ -19,61 +19,28 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The ProjectNode represent the analyzed project in the PhpUnit coverage report file.
  */
-@XStreamAlias("project")
 public class ProjectNode {
 
   /**
    * The project files.
    */
-  @XStreamImplicit
-  @XStreamAlias("file")
-  private List<FileNode> files;
+  private List<FileNode> files = new ArrayList<>();
 
   /**
    * The project files.
    */
-  @XStreamImplicit
-  @XStreamAlias("package")
-  private List<PackageNode> packages;
+  private List<PackageNode> packages = new ArrayList<>();
 
   /**
    * The project name.
    */
-  @XStreamAsAttribute
   private String name;
-
-  /**
-   * The project metrics.
-   */
-  @XStreamAlias("metrics")
-  private MetricsNode metrics;
-
-  /**
-   * Gets the metrics.
-   *
-   * @return the metrics
-   */
-  public MetricsNode getMetrics() {
-    return metrics;
-  }
-
-  /**
-   * Sets the metrics.
-   *
-   * @param metrics the new metrics
-   */
-  public void setMetrics(MetricsNode metrics) {
-    this.metrics = metrics;
-  }
 
   /**
    * Gets the name.

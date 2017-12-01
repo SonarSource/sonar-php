@@ -19,13 +19,16 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import org.codehaus.staxmate.SMInputFactory;
+import org.codehaus.staxmate.in.SMHierarchicCursor;
+import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
@@ -41,32 +44,78 @@ import org.sonar.plugins.php.phpunit.xml.TestSuites;
 public class JUnitLogParserForPhpUnit {
 
   public TestSuites parse(File report) {
-    try (InputStream inputStream = new FileInputStream(report)) {
-      final Object parsedObject = xstream().fromXML(inputStream);
-      return (TestSuites) parsedObject;
-    } catch (IOException | XStreamException e) {
+    try {
+      return processRoot(report, inputFactory());
+    } catch (XMLStreamException e) {
       throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
     }
   }
 
-  private XStream xstream() {
-    XStream xstream = new XStream() {
-      // Trick to ignore unknown elements
-      @Override
-      protected MapperWrapper wrapMapper(MapperWrapper next) {
-        return new MapperWrapper(next) {
-          @Override
-          public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-            return definedIn != Object.class && super.shouldSerializeMember(definedIn, fieldName);
-          }
-        };
-      }
-    };
-    xstream.setClassLoader(this.getClass().getClassLoader());
-    xstream.aliasSystemAttribute("fileName", "class");
-    xstream.processAnnotations(TestSuites.class);
-    xstream.processAnnotations(TestSuite.class);
-    xstream.processAnnotations(TestCase.class);
-    return xstream;
+  public static SMInputFactory inputFactory() {
+    XMLInputFactory xmlFactory = XMLInputFactory.newInstance();
+    xmlFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.TRUE);
+    xmlFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
+    xmlFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
+    xmlFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
+    // just so it won't try to load DTD in if there's DOCTYPE
+    xmlFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+    xmlFactory.setProperty(XMLInputFactory.IS_VALIDATING, Boolean.FALSE);
+    return new SMInputFactory(xmlFactory);
   }
+
+  private static TestSuites processRoot(File file, SMInputFactory inputFactory) throws XMLStreamException {
+    SMHierarchicCursor rootCursor = inputFactory.rootElementCursor(file);
+    rootCursor.advance();
+    if (!"testsuites".equals(rootCursor.getLocalName())) {
+      throw new XMLStreamException("Report should start with <testsuites>");
+    }
+    SMInputCursor childCursor = rootCursor.childElementCursor("testsuite");
+    List<TestSuite> testSuites = new ArrayList<>();
+    while (childCursor.getNext() != null) {
+      testSuites.add(processTestSuite(childCursor));
+    }
+    return new TestSuites(testSuites);
+  }
+
+  private static TestSuite processTestSuite(SMInputCursor cursor) throws XMLStreamException {
+    String name = cursor.getAttrValue("name");
+    String file = cursor.getAttrValue("file");
+    double time = Double.parseDouble(cursor.getAttrValue("time"));
+
+    List<TestCase> testCases = new ArrayList<>();
+    List<TestSuite> nestedSuites = new ArrayList<>();
+    SMInputCursor childCursor = cursor.childCursor();
+    while (childCursor.getNext() != null) {
+      String childName = childCursor.getLocalName();
+      if ("testsuite".equals(childName)) {
+        nestedSuites.add(processTestSuite(childCursor));
+      } else if ("testcase".equals(childName)) {
+        testCases.add(processTestCase(childCursor));
+      }
+    }
+    TestSuite testSuite = new TestSuite(name, file, time, testCases);
+    nestedSuites.forEach(testSuite::addNested);
+    return testSuite;
+  }
+
+  private static TestCase processTestCase(SMInputCursor cursor) throws XMLStreamException {
+    String className = cursor.getAttrValue("class");
+    String name = cursor.getAttrValue("name");
+
+    SMInputCursor childCursor = cursor.childCursor();
+    Map<String,String> childValues = new HashMap<>();
+    while (childCursor.getNext() != null) {
+      if(childCursor.getLocalName() != null) {
+        childValues.put(childCursor.getLocalName(), childCursor.collectDescendantText(false));
+      }
+    }
+
+    return new TestCase(
+      className,
+      name,
+      childValues.get("error"),
+      childValues.get("failure"),
+      childValues.get("skipped"));
+  }
+  
 }
