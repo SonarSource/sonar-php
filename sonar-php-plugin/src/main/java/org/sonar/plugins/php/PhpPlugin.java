@@ -62,9 +62,10 @@ public class PhpPlugin implements Plugin {
       PropertyDefinition.builder(FILE_SUFFIXES_KEY)
         .defaultValue(Php.DEFAULT_FILE_SUFFIXES)
         .name("File Suffixes")
-        .description("Comma-separated list of suffixes of PHP files to analyze.")
+        .description("List of suffixes of PHP files to analyze.")
         .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
         .category(PHP_CATEGORY)
+        .multiValues(true)
         .subCategory(GENERAL_SUBCATEGORY)
         .build());
 
@@ -104,9 +105,10 @@ public class PhpPlugin implements Plugin {
     }
     context.addExtension(PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATHS_KEY)
       .name("Coverage Reports")
-      .description("Comma-separated list of PHPUnit code coverage report files. Each path can be either absolute or relative.")
+      .description("List of PHPUnit code coverage report files. Each path can be either absolute or relative.")
       .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
       .category(PHP_CATEGORY)
+      .multiValues(true)
       .subCategory(PHPUNIT_SUBCATEGORY)
       .build());
 
