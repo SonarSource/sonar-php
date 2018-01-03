@@ -31,14 +31,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.phpunit.TestFileReport;
 
 @XStreamAlias("testsuite")
 public final class TestSuite {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(TestSuite.class);
+  private static final Logger LOGGER = Loggers.get(TestSuite.class);
 
   @XStreamAsAttribute
   private String name;

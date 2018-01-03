@@ -22,14 +22,14 @@ package org.sonar.plugins.php.phpunit;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.utils.ParsingUtils;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 
@@ -40,7 +40,7 @@ import org.sonar.plugins.php.phpunit.xml.TestCase;
  */
 public class TestFileReport {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(TestResultImporter.class);
+  private static final Logger LOGGER = Loggers.get(TestResultImporter.class);
   private int errors = 0;
   private int failures = 0;
   private String file;
