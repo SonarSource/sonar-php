@@ -8,11 +8,12 @@ function cleanPhpInMavenRepository {
 
 function configureTravis {
   mkdir -p ~/.local
-  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v38 | tar zx --strip-components 1 -C ~/.local
+  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v43 | tar zx --strip-components 1 -C ~/.local
   source ~/.local/bin/install
 }
 
 configureTravis
+source ~/.local/bin/installMaven35
 
 case "$TEST" in
 
