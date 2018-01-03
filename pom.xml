@@ -85,10 +85,8 @@
     <version.commons-lang>2.6</version.commons-lang>
     <version.gson>2.7</version.gson>
     <version.junit>4.10</version.junit>
-    <version.logback>0.9.30</version.logback>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>1.9.0</version.mockito>
-    <version.slf4j>1.6.2</version.slf4j>
     <version.sonar>6.7</version.sonar>
     <version.sonar-orchestrator>3.14.0.887</version.sonar-orchestrator>
     <version.sslr>1.22</version.sslr>
@@ -250,18 +248,6 @@
             <artifactId>xstream</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${version.logback}</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${version.slf4j}</version>
-        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
