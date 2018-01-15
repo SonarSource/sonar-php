@@ -388,6 +388,9 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
   private static boolean parentUseValue(Tree child) {
     Tree parent = child.getParent();
     Preconditions.checkNotNull(parent);
+    if (parent.is(Tree.Kind.NEW_EXPRESSION)) {
+    	  return false;
+    }
     if (parent.is(Tree.Kind.PARENTHESISED_EXPRESSION, Tree.Kind.ERROR_CONTROL)) {
       return parentUseValue(parent);
     } else if (parent.is(Tree.Kind.EXPRESSION_STATEMENT)) {
