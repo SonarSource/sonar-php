@@ -40,6 +40,7 @@ import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.PhpIniParser;
 import org.sonar.php.ini.tree.PhpIniFile;
+import org.sonar.plugins.php.api.Php;
 
 public class PhpIniSensor implements Sensor {
 
@@ -53,7 +54,10 @@ public class PhpIniSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.name("Analyzer for \"php.ini\" files");
+    descriptor
+      .name("Analyzer for \"php.ini\" files")
+      // don't target ".php" files, but it makes no sense to invoke this sensor for project without ".php" files
+      .onlyOnLanguage(Php.KEY);
   }
 
   @Override
