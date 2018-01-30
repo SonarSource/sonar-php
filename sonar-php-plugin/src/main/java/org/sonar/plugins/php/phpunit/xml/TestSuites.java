@@ -20,24 +20,27 @@
 package org.sonar.plugins.php.phpunit.xml;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.sonar.plugins.php.phpunit.TestFileReport;
 
-@XStreamAlias("testsuites")
+@XmlRootElement(name = "testsuites")
+@XmlAccessorType(XmlAccessType.FIELD)
 public final class TestSuites {
 
   @VisibleForTesting
-  @XStreamImplicit(itemFieldName = "testsuite")
+  @XmlElement(name = "testsuite")
   List<TestSuite> suites = new ArrayList<>();
 
   public TestSuites() {
-    // Zero parameters constructor is required by xstream
+    // Zero parameters constructor is required by JAXB
   }
 
   @VisibleForTesting

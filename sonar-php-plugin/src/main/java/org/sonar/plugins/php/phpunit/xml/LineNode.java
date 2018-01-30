@@ -19,66 +19,31 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 
-/**
- * The Class LineNode.
- */
-@XStreamAlias("line")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class LineNode {
 
-  /**
-   * The count.
-   */
-  @XStreamAsAttribute
+  @XmlAttribute
   private int count;
 
-  /**
-   * The num.
-   */
-  @XStreamAsAttribute
+  @XmlAttribute
   private int num;
 
-  /**
-   * The type.
-   */
-  @XStreamAsAttribute
+  @XmlAttribute
   private String type;
 
-  /**
-   * Gets the count.
-   *
-   * @return the count
-   */
   public int getCount() {
     return count;
   }
 
-  /**
-   * Gets the num.
-   *
-   * @return the num
-   */
   public int getNum() {
     return num;
   }
 
-  /**
-   * Gets the type.
-   *
-   * @return the type
-   */
   public String getType() {
     return type;
-  }
-
-  /**
-   * Sets the type.
-   *
-   * @param type the new type
-   */
-  public void setType(String type) {
-    this.type = type;
   }
 }

@@ -20,9 +20,6 @@
 package org.sonar.plugins.php.phpunit.xml;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,37 +28,37 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.phpunit.TestFileReport;
 
-@XStreamAlias("testsuite")
+@XmlAccessorType(XmlAccessType.FIELD)
 public final class TestSuite {
 
   private static final Logger LOGGER = Loggers.get(TestSuite.class);
 
-  @XStreamAsAttribute
+  @XmlAttribute
   private String name;
 
-  @XStreamAsAttribute
+  @XmlAttribute
   private String file;
 
-  @XStreamAsAttribute
+  @XmlAttribute
   private double time;
 
-  @XStreamImplicit(itemFieldName = "testsuite")
+  @XmlElement(name = "testsuite")
   private List<TestSuite> testSuites = new ArrayList<>();
 
   @VisibleForTesting
-  @XStreamImplicit(itemFieldName = "testcase")
+  @XmlElement(name = "testcase")
   List<TestCase> testCases = new ArrayList<>();
 
-  /**
-   * Empty constructor is required by xstream in order to
-   * be compatible with Java 7.
-   * */
   public TestSuite() {
-    // Zero parameters constructor is required by xstream
+    // Zero parameters constructor is required by JAXB
   }
 
   @VisibleForTesting

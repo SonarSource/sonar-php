@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestSuitesTest {
 
   /**
-   * Empty constructors are required by xstream for TestSuites, TestSuite and TestCase
+   * Empty constructors are required by JAXB for TestSuites, TestSuite and TestCase
    */
   @Test
   public void shouldHaveZeroArgumentsConstructor() {

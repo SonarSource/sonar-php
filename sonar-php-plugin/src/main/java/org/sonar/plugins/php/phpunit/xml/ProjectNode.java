@@ -19,103 +19,32 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
-/**
- * The ProjectNode represent the analyzed project in the PhpUnit coverage report file.
- */
-@XStreamAlias("project")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ProjectNode {
 
-  /**
-   * The project files.
-   */
-  @XStreamImplicit
-  @XStreamAlias("file")
+  @XmlElement(name = "file")
   private List<FileNode> files;
 
-  /**
-   * The project files.
-   */
-  @XStreamImplicit
-  @XStreamAlias("package")
+  @XmlElement(name = "package")
   private List<PackageNode> packages;
 
-  /**
-   * The project name.
-   */
-  @XStreamAsAttribute
+  @XmlAttribute
   private String name;
 
-  /**
-   * The project metrics.
-   */
-  @XStreamAlias("metrics")
-  private MetricsNode metrics;
-
-  /**
-   * Gets the metrics.
-   *
-   * @return the metrics
-   */
-  public MetricsNode getMetrics() {
-    return metrics;
-  }
-
-  /**
-   * Sets the metrics.
-   *
-   * @param metrics the new metrics
-   */
-  public void setMetrics(MetricsNode metrics) {
-    this.metrics = metrics;
-  }
-
-  /**
-   * Gets the name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Sets the name.
-   *
-   * @param name the new name
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
-   * Gets the files.
-   *
-   * @return the files
-   */
   public List<FileNode> getFiles() {
     return files;
   }
 
-  /**
-   * Sets the files.
-   *
-   * @param files the new files
-   */
-  public void setFiles(List<FileNode> files) {
-    this.files = files;
-  }
-
-  /**
-   * Gets the packages.
-   *
-   * @return the packages
-   */
   public List<PackageNode> getPackages() {
     return packages;
   }

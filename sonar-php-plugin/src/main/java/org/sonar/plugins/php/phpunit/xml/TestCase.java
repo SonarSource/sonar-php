@@ -20,36 +20,37 @@
 package org.sonar.plugins.php.phpunit.xml;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-@XStreamAlias("testcase")
+@XmlAccessorType(XmlAccessType.FIELD)
 public final class TestCase {
 
   public enum Status {
     OK, SKIPPED, FAILURE, ERROR
   }
 
-  @XStreamAsAttribute
-  @XStreamAlias("class")
+  @XmlAttribute(name = "class")
   private String className;
 
-  @XStreamAsAttribute
+  @XmlAttribute
   private String name;
 
-  @XStreamAlias("error")
+  @XmlElement
   private String error;
 
-  @XStreamAlias("failure")
+  @XmlElement
   private String failure;
 
-  @XStreamAlias("skipped")
+  @XmlElement
   private String skipped;
 
   public TestCase() {
-    // Zero parameters constructor is required by xstream
+    // Zero parameters constructor is required by JAXB
   }
 
   @VisibleForTesting

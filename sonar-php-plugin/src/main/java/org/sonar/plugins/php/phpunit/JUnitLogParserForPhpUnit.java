@@ -19,15 +19,9 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import org.sonar.plugins.php.phpunit.xml.TestCase;
-import org.sonar.plugins.php.phpunit.xml.TestSuite;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
 
 /**
@@ -41,32 +35,12 @@ import org.sonar.plugins.php.phpunit.xml.TestSuites;
 public class JUnitLogParserForPhpUnit {
 
   public TestSuites parse(File report) {
-    try (InputStream inputStream = new FileInputStream(report)) {
-      final Object parsedObject = xstream().fromXML(inputStream);
-      return (TestSuites) parsedObject;
-    } catch (IOException | XStreamException e) {
+    try {
+      return (TestSuites) JAXBContext.newInstance(TestSuites.class)
+        .createUnmarshaller().unmarshal(report);
+    } catch (JAXBException e) {
       throw new IllegalStateException("Can't read PhpUnit report : " + report.getAbsolutePath(), e);
     }
   }
 
-  private XStream xstream() {
-    XStream xstream = new XStream() {
-      // Trick to ignore unknown elements
-      @Override
-      protected MapperWrapper wrapMapper(MapperWrapper next) {
-        return new MapperWrapper(next) {
-          @Override
-          public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-            return definedIn != Object.class && super.shouldSerializeMember(definedIn, fieldName);
-          }
-        };
-      }
-    };
-    xstream.setClassLoader(this.getClass().getClassLoader());
-    xstream.aliasSystemAttribute("fileName", "class");
-    xstream.processAnnotations(TestSuites.class);
-    xstream.processAnnotations(TestSuite.class);
-    xstream.processAnnotations(TestCase.class);
-    return xstream;
-  }
 }
