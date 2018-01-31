@@ -74,6 +74,9 @@ public class CommonRulesTest {
     assertThat(
       orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots("project").severities("INFO").rules("common-php:InsufficientLineCoverage")).list())
       .hasSize(1);
+    assertThat(
+      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots("project").severities("BLOCKER").rules("php:S3334")).list())
+      .hasSize(1);
   }
 
   /**

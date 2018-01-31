@@ -62,9 +62,9 @@ public class Tests {
 
   private static final String RESOURCE_DIRECTORY = "/com/sonar/it/php/";
 
-  private static final String PHP_SENSOR_NAME = "PHP sensor";
+  public static final String PHP_SENSOR_NAME = "PHP sensor";
 
-  private static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
+  public static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
   @ClassRule
   public static final Orchestrator ORCHESTRATOR;
