@@ -47,7 +47,7 @@ public class PHPTest {
       .setProjectDir(Tests.projectDirectoryFor("project-with-several-extensions"))
       .setProfile("it-profile")
       .setProperty("sonar.php.file.suffixes", "php,php3,php4,myphp,html");
-    orchestrator.executeBuild(build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     assertThat(getMeasureAsInt(SEVERAL_EXTENSIONS_PROJECT_KEY, "files")).isEqualTo(3);
     assertThat(getMeasureAsInt(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math2.myphp"), "lines")).isGreaterThan(1);
@@ -62,7 +62,7 @@ public class PHPTest {
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("multimodule"))
       .setProfile("it-profile");
-    orchestrator.executeBuild(build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     assertThat(getMeasureAsInt(MULTIMODULE_PROJET_KEY + ":module1", "files")).isEqualTo(4);
     assertThat(getMeasureAsInt(MULTIMODULE_PROJET_KEY + ":module2", "files")).isEqualTo(2);
@@ -81,7 +81,7 @@ public class PHPTest {
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProjectDir(Tests.projectDirectoryFor("empty_file"));
-    orchestrator.executeBuild(build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     assertThat(getMeasureAsInt(EMPTY_FILE_PROJET_KEY, "files")).isEqualTo(3);
   }

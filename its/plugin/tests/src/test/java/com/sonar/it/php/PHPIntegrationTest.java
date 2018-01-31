@@ -56,7 +56,7 @@ public class PHPIntegrationTest {
       .setProfile("it-profile")
       .setProperty("sonar.exclusions", "**/Component/**/*.php");
 
-    orchestrator.executeBuild(build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 
   @Test

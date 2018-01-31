@@ -60,7 +60,7 @@ public class PHPUnitTest {
         + REPORTS_DIR + "/.it-coverage-with-absolute-path.xml,"
         + REPORTS_DIR + "/.overall-coverage-with-absolute-path.xml")
       .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml");
-    orchestrator.executeBuild(build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 
   @Test

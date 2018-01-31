@@ -49,7 +49,7 @@ public class CustomRulesTest {
       .setSourceDirs("src");
     orchestrator.getServer().provisionProject("custom-rules", "Custom Rules");
     orchestrator.getServer().associateProjectToQualityProfile("custom-rules", "php", "php-custom-rules-profile");
-    orchestrator.executeBuild(build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     issueClient = orchestrator.getServer().wsClient().issueClient();
   }

@@ -59,7 +59,7 @@ public class CommonRulesTest {
       .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml")
       .setProfile("it-profile");
 
-    orchestrator.executeBuild(build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 
   @Test
