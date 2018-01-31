@@ -144,7 +144,6 @@ public class Tests {
     List<String> unexpectedLogs = logWithTimePrefixRemoved.stream()
       .filter(line -> !line.startsWith("INFO "))
       .filter(line -> !line.startsWith("WARN  - Ability to set quality profile from command line using 'sonar.profile' is deprecated"))
-      .filter(line -> !line.startsWith("WARN  - Metric 'test_success_density' is an internal metric computed by SonarQube"))
       .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.reportPath is deprecated as of SonarQube 6.2"))
       .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.itReportPath is deprecated as of SonarQube 6.2"))
       .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.overallReportPath is deprecated as of SonarQube 6.2"))
