@@ -21,9 +21,13 @@ package com.sonar.it.php;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
+import com.sonar.orchestrator.build.BuildResult;
+import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.CheckForNull;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -38,6 +42,7 @@ import org.sonarqube.ws.client.component.TreeWsRequest;
 import org.sonarqube.ws.client.measure.ComponentWsRequest;
 
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -56,6 +61,10 @@ public class Tests {
   public static final String PROJECT_ROOT_DIR = "../projects/";
 
   private static final String RESOURCE_DIRECTORY = "/com/sonar/it/php/";
+
+  private static final String PHP_SENSOR_NAME = "PHP sensor";
+
+  private static final String PHP_INI_SENSOR_NAME = "Analyzer for \"php.ini\" files";
 
   @ClassRule
   public static final Orchestrator ORCHESTRATOR;
@@ -113,5 +122,36 @@ public class Tests {
     return WsClientFactories.getDefault().newClient(HttpConnector.newBuilder()
       .url(ORCHESTRATOR.getServer().getUrl())
       .build());
+  }
+
+  public static void executeBuildWithExpectedWarnings(Orchestrator orchestrator, SonarScanner build) {
+    BuildResult result = orchestrator.executeBuild(build);
+    assertAnalyzerLogs(result.getLogs());
+  }
+
+  private static void assertAnalyzerLogs(String logs) {
+    assertThat(logs).contains(PHP_SENSOR_NAME);
+    assertThat(logs).contains(PHP_INI_SENSOR_NAME);
+
+    List<String> logWithTimePrefixRemoved = Arrays.stream(logs.split("[\r\n]+"))
+      .filter(line -> line.matches("^[0-9:.]+ +.*"))
+      .map(line -> line.replaceAll("^[0-9:.]+ +", ""))
+      .filter(line -> !line.isEmpty())
+      .collect(Collectors.toList());
+
+    assertThat(logWithTimePrefixRemoved.size()).isBetween(25, 150);
+
+    List<String> unexpectedLogs = logWithTimePrefixRemoved.stream()
+      .filter(line -> !line.startsWith("INFO "))
+      .filter(line -> !line.startsWith("WARN  - Ability to set quality profile from command line using 'sonar.profile' is deprecated"))
+      .filter(line -> !line.startsWith("WARN  - Metric 'test_success_density' is an internal metric computed by SonarQube"))
+      .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.reportPath is deprecated as of SonarQube 6.2"))
+      .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.itReportPath is deprecated as of SonarQube 6.2"))
+      .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.overallReportPath is deprecated as of SonarQube 6.2"))
+      .filter(line -> !line.startsWith("WARN  - Line with number 0 doesn't belong to file Math.php"))
+      .filter(line -> !line.startsWith("WARN  - Line with number 100 doesn't belong to file Math.php"))
+      .collect(Collectors.toList());
+
+    assertThat(unexpectedLogs).isEmpty();
   }
 }

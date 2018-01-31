@@ -54,7 +54,7 @@ public class NoSonarTest {
       .setProjectDir(PROJECT_DIR)
       .setProfile("nosonar-profile");
 
-    orchestrator.executeBuild(build);
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
 
   @Before
