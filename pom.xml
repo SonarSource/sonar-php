@@ -10,7 +10,7 @@
 
   <groupId>org.sonarsource.php</groupId>
   <artifactId>php</artifactId>
-  <version>2.13-SNAPSHOT</version>
+  <version>2.12.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>SonarPHP</name>
