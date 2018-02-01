@@ -39,10 +39,6 @@ public final class TestCase {
 
   private String skipped;
 
-  public TestCase() {
-    // Zero parameters constructor is required by xstream
-  }
-
   public TestCase(String className, String name, String error, String failure, String skipped) {
     this.className = className;
     this.name = name;

@@ -63,13 +63,4 @@ public class PackageNode {
   public List<FileNode> getFiles() {
     return files;
   }
-
-  /**
-   * Sets the files.
-   *
-   * @param files the new files
-   */
-  public void setFiles(List<FileNode> files) {
-    this.files = files;
-  }
 }

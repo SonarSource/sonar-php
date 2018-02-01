@@ -70,7 +70,7 @@ public class TestFileReportTest {
   @Test
   public void shouldNotCountSkippedTests() throws Exception {
     final TestFileReport report = new TestFileReport(testFileName, 1d);
-    report.addTestCase(new TestCase());
+    report.addTestCase(new TestCase(null, null, null, null, null));
     report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
     report.addTestCase(new TestCase(TestCase.Status.FAILURE));
     report.addTestCase(new TestCase(TestCase.Status.ERROR));

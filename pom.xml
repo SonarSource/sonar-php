@@ -88,6 +88,7 @@
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>1.9.0</version.mockito>
     <version.sonar>6.7</version.sonar>
+    <version.staxmate>2.0.1</version.staxmate>
     <version.sonar-orchestrator>3.14.0.887</version.sonar-orchestrator>
     <version.sslr>1.22</version.sslr>
     <version.sslr-squid-bridge>2.6.1</version.sslr-squid-bridge>
@@ -235,13 +236,13 @@
         <artifactId>sonar-plugin-api</artifactId>
         <version>${version.sonar}</version>
         <scope>provided</scope>
-        <exclusions>
-          <!-- allows to package dependencies into plugin -->
-          <exclusion>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-          </exclusion>
-        </exclusions>
+      </dependency>
+      <!-- for now, staxmate is provided because sonar-plugin-api requires it  -->
+      <dependency>
+        <groupId>org.codehaus.staxmate</groupId>
+        <artifactId>staxmate</artifactId>
+        <version>${version.staxmate}</version>
+        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
