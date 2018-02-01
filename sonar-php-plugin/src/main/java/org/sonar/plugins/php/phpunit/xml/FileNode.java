@@ -19,87 +19,26 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
-/**
- * The Class FileNode.
- */
-@XStreamAlias("file")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FileNode {
 
-  /**
-   * The name.
-   */
-  @XStreamAsAttribute
+  @XmlAttribute
   private String name;
 
-  /**
-   * The lines.
-   */
-  @XStreamImplicit(itemFieldName = "line")
+  @XmlElement(name = "line")
   private List<LineNode> lines;
 
-  /**
-   * The ignored nodes.
-   */
-  @XStreamOmitField
-  @XStreamImplicit(itemFieldName = "class")
-  private List<ClassNode> ignoredNodes;
-
-  /**
-   * The metrics.
-   */
-  @XStreamAlias("metrics")
-  private MetricsNode metrics;
-
-
-  /**
-   * Gets the lines.
-   *
-   * @return the lines
-   */
   public List<LineNode> getLines() {
     return lines;
   }
 
-  /**
-   * Gets the metrics.
-   *
-   * @return the metrics
-   */
-  public MetricsNode getMetrics() {
-    return metrics;
-  }
-
-  /**
-   * Sets the metrics.
-   *
-   * @param metrics the new metrics
-   */
-  public void setMetrics(MetricsNode metrics) {
-    this.metrics = metrics;
-  }
-
-  /**
-   * Gets the name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Sets the name.
-   *
-   * @param name the new name
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 }

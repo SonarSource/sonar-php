@@ -19,15 +19,12 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -38,7 +35,6 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
 import org.sonar.plugins.php.phpunit.xml.LineNode;
-import org.sonar.plugins.php.phpunit.xml.MetricsNode;
 import org.sonar.plugins.php.phpunit.xml.PackageNode;
 import org.sonar.plugins.php.phpunit.xml.ProjectNode;
 
@@ -143,19 +139,11 @@ public class CoverageResultImporter extends SingleFileReportImporter {
    * @param coverageReportFile the coverage report file
    * @return the coverage
    */
-  private CoverageNode getCoverage(File coverageReportFile) {
-    try (InputStream inputStream = new FileInputStream(coverageReportFile)) {
-      XStream xstream = new XStream();
-      xstream.setClassLoader(getClass().getClassLoader());
-      xstream.aliasSystemAttribute("classType", "class");
-      xstream.processAnnotations(CoverageNode.class);
-      xstream.processAnnotations(ProjectNode.class);
-      xstream.processAnnotations(FileNode.class);
-      xstream.processAnnotations(MetricsNode.class);
-      xstream.processAnnotations(LineNode.class);
-
-      return (CoverageNode) xstream.fromXML(inputStream);
-    } catch (IOException | XStreamException e) {
+  private static CoverageNode getCoverage(File coverageReportFile) {
+    try {
+      return (CoverageNode) JAXBContext.newInstance(CoverageNode.class)
+        .createUnmarshaller().unmarshal(coverageReportFile);
+    } catch (JAXBException e) {
       throw new IllegalStateException("Can't read phpUnit report: " + coverageReportFile.getName(), e);
     }
   }

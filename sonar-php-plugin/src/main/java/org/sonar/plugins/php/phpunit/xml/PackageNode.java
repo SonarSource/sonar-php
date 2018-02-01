@@ -19,64 +19,27 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
-/**
- * The PackageNode represents the analyzed packages in the PhpUnit coverage report file.
- */
-@XStreamAlias("project")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PackageNode {
 
-  /**
-   * The project files.
-   */
-  @XStreamImplicit
-  @XStreamAlias("file")
+  @XmlElement(name = "file")
   private List<FileNode> files;
 
-  /**
-   * The project name.
-   */
-  @XStreamAsAttribute
+  @XmlAttribute
   private String name;
 
-  /**
-   * Gets the name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Sets the name.
-   *
-   * @param name the new name
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
-   * Gets the files.
-   *
-   * @return the files
-   */
   public List<FileNode> getFiles() {
     return files;
   }
 
-  /**
-   * Sets the files.
-   *
-   * @param files the new files
-   */
-  public void setFiles(List<FileNode> files) {
-    this.files = files;
-  }
 }

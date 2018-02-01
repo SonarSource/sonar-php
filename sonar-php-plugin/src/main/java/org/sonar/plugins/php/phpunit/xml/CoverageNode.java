@@ -19,29 +19,22 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The php unit report root node..
  */
-@XStreamAlias("coverage")
+@XmlRootElement(name = "coverage")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CoverageNode {
 
-  /**
-   * The projects.
-   */
-  @XStreamImplicit
-  @XStreamAlias("project")
+  @XmlElement(name = "project")
   private List<ProjectNode> projects;
 
-  /**
-   * Gets the projects.
-   *
-   * @return the projects
-   */
   public List<ProjectNode> getProjects() {
     return projects;
   }
