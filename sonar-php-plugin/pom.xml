@@ -55,16 +55,16 @@
       <artifactId>assertj-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
-      <artifactId>xstream</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.staxmate</groupId>
+      <artifactId>staxmate</artifactId>
     </dependency>
   </dependencies>
 
@@ -85,7 +85,6 @@
               <filters>
                 <filter>
                   <artifact>cglib:cglib-nodep</artifact>
-                  <artifact>com.thoughtworks.xstream:xstream</artifact>
                   <includes>
                     <include>**</include>
                   </includes>
@@ -107,8 +106,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <minsize>3100000</minsize>
-                  <maxsize>3200000</maxsize>
+                  <minsize>2700000</minsize>
+                  <maxsize>2800000</maxsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>

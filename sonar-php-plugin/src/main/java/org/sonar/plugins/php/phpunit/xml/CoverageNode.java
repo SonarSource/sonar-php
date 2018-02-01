@@ -19,23 +19,18 @@
  */
 package org.sonar.plugins.php.phpunit.xml;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The php unit report root node..
  */
-@XStreamAlias("coverage")
 public class CoverageNode {
 
   /**
    * The projects.
    */
-  @XStreamImplicit
-  @XStreamAlias("project")
-  private List<ProjectNode> projects;
+  private List<ProjectNode> projects = new ArrayList<>();
 
   /**
    * Gets the projects.
