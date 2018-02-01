@@ -63,14 +63,12 @@ public class TestResultImporterTest {
     PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.TEST_ERRORS, 0);
     PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.SKIPPED_TESTS, 0);
     PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.TEST_EXECUTION_TIME, 0L);
-    PhpTestUtils.assertMeasure(context, appTestFileKey, CoreMetrics.TEST_SUCCESS_DENSITY, 100.00);
 
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.TESTS, 0);
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.TEST_FAILURES, 0);
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.TEST_ERRORS, 0);
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.SKIPPED_TESTS, 1);
     PhpTestUtils.assertMeasure(context, appSkipTestFileKey, CoreMetrics.TEST_EXECUTION_TIME, 0L);
-    PhpTestUtils.assertNoMeasure(context, appSkipTestFileKey, CoreMetrics.TEST_SUCCESS_DENSITY);
   }
 
 }

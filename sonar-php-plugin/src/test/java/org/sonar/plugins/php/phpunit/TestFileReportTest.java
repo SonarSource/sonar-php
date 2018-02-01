@@ -76,17 +76,6 @@ public class TestFileReportTest {
     report.addTestCase(new TestCase(TestCase.Status.ERROR));
     report.saveTestMeasures(context);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TESTS, 3);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.TEST_SUCCESS_DENSITY, 33.33d);
-  }
-
-  @Test
-  public void shouldReportNoSuccessDensityIfNoLiveTests() throws Exception {
-    final TestFileReport report = new TestFileReport(testFileName, 1d);
-    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
-    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
-    report.addTestCase(new TestCase(TestCase.Status.SKIPPED));
-    report.saveTestMeasures(context);
-    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.TEST_SUCCESS_DENSITY);
   }
 
 }

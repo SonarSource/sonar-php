@@ -27,7 +27,6 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.utils.ParsingUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.api.Php;
@@ -62,10 +61,6 @@ public class TestFileReport {
       context.<Integer>newMeasure().on(unitTestFile).withValue((int) liveTests()).forMetric(CoreMetrics.TESTS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(errors).forMetric(CoreMetrics.TEST_ERRORS).save();
       context.<Integer>newMeasure().on(unitTestFile).withValue(failures).forMetric(CoreMetrics.TEST_FAILURES).save();
-      if (liveTests() > 0) {
-        context.<Double>newMeasure().on(unitTestFile).withValue(ParsingUtils.scaleValue(successPercentage())).forMetric(CoreMetrics.TEST_SUCCESS_DENSITY).save();
-      }
-
     } else {
       LOGGER.debug("Following file is not located in the test folder specified in the Sonar configuration: " + file
         + ". The test results won't be reported in Sonar.");
@@ -74,11 +69,6 @@ public class TestFileReport {
 
   private double liveTests() {
     return (double) tests - skipped;
-  }
-
-  private double successPercentage() {
-    double passedTests = liveTests() - errors - failures;
-    return passedTests * 100d / liveTests();
   }
 
   private double testDurationMilliseconds() {
