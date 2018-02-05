@@ -30,6 +30,7 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -47,21 +48,23 @@ public class PHPRulingTest {
 
   @BeforeClass
   public static void prepare_quality_profile() {
-    ProfileGenerator.RulesConfiguration rulesConfiguration = ProfileGenerator.RulesConfiguration.create()
-      .addRule("S103", "maximumLineLength", "140")
-      .addRule("S138", "max", "100")
-      .addRule("S1192", "threshold", "10")
-      .addRule("S1479", "max", "100")
-      .addRule("S1541", "threshold", "10")
+    ProfileGenerator.RulesConfiguration parameters = new ProfileGenerator.RulesConfiguration()
+      .add("S103", "maximumLineLength", "140")
+      .add("S138", "max", "100")
+      .add("S1192", "threshold", "10")
+      .add("S1479", "max", "100")
+      .add("S1541", "threshold", "10")
       // force start with capital letter
-      .addRule("S1578", "format", "[A-Z][A-Za-z0-9]+.php")
-      .addRule("S2004", "max", "2")
-      .addRule("S2042", "maximumLinesThreshold", "500");
+      .add("S1578", "format", "[A-Z][A-Za-z0-9]+.php")
+      .add("S2004", "max", "2")
+      .add("S2042", "maximumLinesThreshold", "500");
     Set<String> disabledRules = ImmutableSet.of(
       // platform dependent
       "S1779");
 
-    ProfileGenerator.generate(ORCHESTRATOR, rulesConfiguration, disabledRules);
+    String serverUrl = ORCHESTRATOR.getServer().getUrl();
+    File profileFile = ProfileGenerator.generateProfile(serverUrl, "php", "php", parameters, disabledRules);
+    ORCHESTRATOR.getServer().restoreProfile(FileLocation.of(profileFile));
   }
 
   @Test

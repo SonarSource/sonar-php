@@ -94,7 +94,7 @@
     <version.sslr-squid-bridge>2.6.1</version.sslr-squid-bridge>
     <version.guava>18.0</version.guava>
     <version.sonarlint>3.0.0.1140</version.sonarlint>
-    <version.analyzer-commons>1.3.0.116</version.analyzer-commons>
+    <version.analyzer-commons>1.5.0.178</version.analyzer-commons>
 
     <!-- Release: enable publication to Bintray -->
     <artifactsToPublish>${project.groupId}:sonar-php-plugin:jar</artifactsToPublish>
@@ -203,6 +203,11 @@
       <dependency>
         <groupId>org.sonarsource.analyzer-commons</groupId>
         <artifactId>sonar-analyzer-test-commons</artifactId>
+        <version>${version.analyzer-commons}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.sonarsource.analyzer-commons</groupId>
+        <artifactId>sonar-analyzer-commons</artifactId>
         <version>${version.analyzer-commons}</version>
       </dependency>
       <dependency>
