@@ -83,7 +83,6 @@
     <version.assertj>3.5.2</version.assertj>
     <version.commons-io>2.5</version.commons-io>
     <version.commons-lang>2.6</version.commons-lang>
-    <version.gson>2.7</version.gson>
     <version.junit>4.10</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
     <version.mockito>1.9.0</version.mockito>
@@ -152,6 +151,14 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -168,11 +175,6 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>${version.guava}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>
-        <version>${version.gson}</version>
       </dependency>
 
       <!-- Test dependencies -->
