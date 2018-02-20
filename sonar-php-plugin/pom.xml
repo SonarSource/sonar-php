@@ -51,12 +51,12 @@
       <artifactId>sslr-testing-harness</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-analyzer-commons</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -106,8 +106,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <minsize>2700000</minsize>
-                  <maxsize>2800000</maxsize>
+                  <minsize>2500000</minsize>
+                  <maxsize>2600000</maxsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>

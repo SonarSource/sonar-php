@@ -64,7 +64,6 @@ import org.sonar.plugins.php.api.visitors.PreciseIssue;
 import org.sonar.plugins.php.phpunit.CompatibilityImportersFactory;
 import org.sonar.plugins.php.phpunit.TestResultImporter;
 import org.sonar.squidbridge.ProgressReport;
-import org.sonar.squidbridge.api.AnalysisException;
 
 public class PHPSensor implements Sensor {
 
