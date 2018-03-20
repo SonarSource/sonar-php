@@ -112,7 +112,7 @@ public class PHPSensor implements Sensor {
     fileSystem.inputFiles(mainFilePredicate).forEach(inputFiles::add);
 
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
-    progressReport.start(inputFiles.stream().map(InputFile::filename).collect(Collectors.toList()));
+    progressReport.start(inputFiles.stream().map(InputFile::toString).collect(Collectors.toList()));
 
     try {
       analyseFiles(context, phpAnalyzer, inputFiles, progressReport);
