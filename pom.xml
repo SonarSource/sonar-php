@@ -90,7 +90,7 @@
     <version.staxmate>2.0.1</version.staxmate>
     <version.sonar-orchestrator>3.14.0.887</version.sonar-orchestrator>
     <version.sslr>1.22</version.sslr>
-    <version.sslr-squid-bridge>2.6.1</version.sslr-squid-bridge>
+    <version.sslr-squid-bridge>2.7.0.377</version.sslr-squid-bridge>
     <version.guava>18.0</version.guava>
     <version.sonarlint>3.0.0.1140</version.sonarlint>
     <version.analyzer-commons>1.5.0.178</version.analyzer-commons>
@@ -128,28 +128,12 @@
         <version>${version.sslr-squid-bridge}</version>
         <exclusions>
           <exclusion>
-            <groupId>org.codehaus.sonar.sslr</groupId>
-            <artifactId>sslr-core</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.codehaus.sonar.sslr</groupId>
-            <artifactId>sslr-xpath</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.codehaus.sonar</groupId>
-            <artifactId>sonar-plugin-api</artifactId>
-          </exclusion>
-          <exclusion>
             <groupId>org.picocontainer</groupId>
             <artifactId>picocontainer</artifactId>
           </exclusion>
           <exclusion>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
           </exclusion>
           <exclusion>
             <groupId>com.google.guava</groupId>
