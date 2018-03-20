@@ -21,9 +21,9 @@ package org.sonar.plugins.php;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.InterruptedIOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -107,10 +107,12 @@ public class PHPSensor implements Sensor {
       fileSystem.predicates().hasLanguage(Php.KEY));
 
     PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()));
-    Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
+
+    List<InputFile> inputFiles = new ArrayList<>();
+    fileSystem.inputFiles(mainFilePredicate).forEach(inputFiles::add);
 
     ProgressReport progressReport = new ProgressReport("Report about progress of PHP analyzer", TimeUnit.SECONDS.toMillis(10));
-    progressReport.start(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
+    progressReport.start(inputFiles.stream().map(InputFile::filename).collect(Collectors.toList()));
 
     try {
       analyseFiles(context, phpAnalyzer, inputFiles, progressReport);
