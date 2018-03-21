@@ -40,7 +40,7 @@ public class DirectlyAccessingSuperGlobalCheck extends PHPVisitorCheck {
   private void checkVariable(SyntaxToken variable) {
     String name = variable.text();
 
-    if (CheckUtils.SUPERGLOBALS_BY_OLD_NAME.values().contains(name)) {
+    if (CheckUtils.SUPERGLOBALS_BY_OLD_NAME.values().contains(name) && !"$_SESSION".equals(name)) {
       context().newIssue(this, variable, String.format(MESSAGE, name));
     }
   }
