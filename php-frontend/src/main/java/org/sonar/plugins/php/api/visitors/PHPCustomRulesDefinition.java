@@ -28,11 +28,14 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
 /**
  * Extension point to create custom rule repository for PHP.
+ *
+ * @deprecated Implement @{@link PHPCustomRuleRepository} and @{@link RulesDefinition} instead.
  */
 @Beta
 @BatchSide
 @ExtensionPoint
-public abstract class PHPCustomRulesDefinition implements RulesDefinition {
+@Deprecated
+public abstract class PHPCustomRulesDefinition implements RulesDefinition, PHPCustomRuleRepository {
 
   /**
    * PHP language key
@@ -60,12 +63,8 @@ public abstract class PHPCustomRulesDefinition implements RulesDefinition {
   public abstract String repositoryName();
 
   /**
-   * Key of the custom rule repository.
+   * List of the custom rules classes.
    */
-  public abstract String repositoryKey();
-
-  /**
-   * Array of the custom rules classes.
-   */
+  @Override
   public abstract ImmutableList<Class> checkClasses();
 }
