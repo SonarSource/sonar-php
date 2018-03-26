@@ -7,8 +7,8 @@
     "constantCost": "5min"
   },
   "tags": [
-    "php-ini",
-    "owasp-a3"
+    "owasp-a7",
+    "php-ini"
   ],
   "standards": [
     "OWASP Top Ten"
