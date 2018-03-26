@@ -26,26 +26,24 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 @Rule(
   key = "subscription",
   priority = Priority.MINOR,
   name = "PHP subscription visitor check",
   description = "desc")
-@SqaleConstantRemediation("10min")
 public class CustomPHPSubscriptionCheck extends PHPSubscriptionCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
     return ImmutableList.of(
-      Tree.Kind.FOR_STATEMENT
+      Kind.FOR_STATEMENT
     );
   }
 
   @Override
   public void visitNode(Tree tree) {
-    context().newIssue(this, "For statement.").tree(tree);
+    context().newIssue(this, tree, "For statement.");
   }
 
 }

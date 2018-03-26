@@ -26,6 +26,7 @@ public class CustomPHPRulesPlugin implements Plugin {
   @Override
   public void define(Context context) {
     context.addExtension(CustomPHPRulesDefinition.class);
+    context.addExtension(CustomPHPRuleRepository.class);
   }
 
 }

@@ -19,22 +19,33 @@
  */
 package org.sonar.samples.php;
 
+import com.google.common.collect.ImmutableList;
+import java.util.List;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 @Rule(
-  key = "visitor",
+  key = "subscription",
   priority = Priority.MINOR,
-  name = "PHP visitor check",
+  name = "PHP subscription visitor check",
   description = "desc")
-public class CustomPHPVisitorCheck extends PHPVisitorCheck {
+@SqaleConstantRemediation("10min")
+public class LegacyCustomPHPSubscriptionCheck extends PHPSubscriptionCheck {
 
   @Override
-  public void visitFunctionExpression(FunctionExpressionTree tree) {
-    context().newIssue(this, tree, "Function expression.");
-    super.visitFunctionExpression(tree);
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(
+      Tree.Kind.FOR_STATEMENT
+    );
+  }
+
+  @Override
+  public void visitNode(Tree tree) {
+    context().newIssue(this, "For statement.").tree(tree);
   }
 
 }

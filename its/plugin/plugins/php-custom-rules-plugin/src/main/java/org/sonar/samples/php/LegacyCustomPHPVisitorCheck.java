@@ -23,17 +23,19 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 @Rule(
   key = "visitor",
   priority = Priority.MINOR,
   name = "PHP visitor check",
   description = "desc")
-public class CustomPHPVisitorCheck extends PHPVisitorCheck {
+@SqaleConstantRemediation("5min")
+public class LegacyCustomPHPVisitorCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    context().newIssue(this, tree, "Function expression.");
+    context().newIssue(this, "Function expression.").tree(tree);
     super.visitFunctionExpression(tree);
   }
 

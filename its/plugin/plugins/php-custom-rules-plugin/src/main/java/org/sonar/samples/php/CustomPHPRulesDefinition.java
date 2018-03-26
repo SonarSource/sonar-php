@@ -32,13 +32,13 @@ public class CustomPHPRulesDefinition extends PHPCustomRulesDefinition {
 
   @Override
   public String repositoryKey() {
-    return "php-custom-rules";
+    return "deprecated-php-custom-rules";
   }
 
   @Override
   public ImmutableList<Class> checkClasses() {
       return ImmutableList.<Class>of(
-      CustomPHPVisitorCheck.class,
-      CustomPHPSubscriptionCheck.class);
+      LegacyCustomPHPVisitorCheck.class,
+      LegacyCustomPHPSubscriptionCheck.class);
   }
 }
