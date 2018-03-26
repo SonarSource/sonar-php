@@ -1,5 +1,5 @@
 {
-  "title": "Jump statements should not be followed by other statements",
+  "title": "Jump statements should not be followed by dead code",
   "type": "BUG",
   "status": "ready",
   "remediation": {

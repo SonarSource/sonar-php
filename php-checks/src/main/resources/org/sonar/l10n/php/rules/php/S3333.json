@@ -8,10 +8,12 @@
   },
   "tags": [
     "cwe",
+    "owasp-a6",
     "php-ini"
   ],
   "standards": [
-    "CWE"
+    "CWE",
+    "OWASP Top Ten"
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-3333",

@@ -1,27 +1,11 @@
-<p>Jump statements (<code>return</code>, <code>break</code>, <code>continue</code>, and <code>goto</code>) and <code>throw</code> expressions move
-control flow out of the current code block. Typically, any statements in a block that come after a jump or <code>throw</code> are simply wasted
-keystrokes lying in wait to confuse the unwary. </p>
-<p>Rarely, as illustrated below, code after a jump or <code>throw</code> is reachable. However, such code is difficult to understand, and should be
-refactored. </p>
+<p>Jump statements (<code>return</code>, <code>break</code>, <code>continue</code>, <code>goto</code>) and <code>throw</code> expressions move control
+flow out of the current code block. So any unlabelled statements that come after a jump are dead code. </p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 function fun($a) {
   $i = 10;
   return $i + $a;
-  $i++;             // this is never executed
-}
-
-function foo($a) {
-  if ($a == 5) {
-    goto error;
-  } else {
-    // do the job
-  }
-  return;
-
-  error:
-    printf("don't use 5"); // this is reachable but unreadable
-
+  $i++;             // dead code
 }
 </pre>
 <h2>Compliant Solution</h2>
@@ -29,15 +13,6 @@ function foo($a) {
 function fun($a) {
   $i = 10;
   return $i + $a;
-}
-
-function foo($a) {
-  if ($a == 5) {
-    handleError();
-  } else {
-    // do the job
-  }
-  return;
 }
 </pre>
 <h2>See</h2>
