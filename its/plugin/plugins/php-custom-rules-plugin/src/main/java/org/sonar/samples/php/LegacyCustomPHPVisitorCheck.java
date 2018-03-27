@@ -19,26 +19,24 @@
  */
 package org.sonar.samples.php;
 
+import org.sonar.check.Priority;
+import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
-import com.google.common.collect.ImmutableList;
-import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
-
-public class CustomPHPRulesDefinition extends PHPCustomRulesDefinition {
-
-  @Override
-  public String repositoryName() {
-    return "Custom Repository";
-  }
-
-  @Override
-  public String repositoryKey() {
-    return "php-custom-rules";
-  }
+@Rule(
+  key = "visitor",
+  priority = Priority.MINOR,
+  name = "PHP visitor check",
+  description = "desc")
+@SqaleConstantRemediation("5min")
+public class LegacyCustomPHPVisitorCheck extends PHPVisitorCheck {
 
   @Override
-  public ImmutableList<Class> checkClasses() {
-      return ImmutableList.<Class>of(
-      CustomPHPVisitorCheck.class,
-      CustomPHPSubscriptionCheck.class);
+  public void visitFunctionExpression(FunctionExpressionTree tree) {
+    context().newIssue(this, "Function expression.").tree(tree);
+    super.visitFunctionExpression(tree);
   }
+
 }

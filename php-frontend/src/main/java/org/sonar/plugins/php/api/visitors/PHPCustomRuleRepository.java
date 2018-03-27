@@ -1,6 +1,6 @@
 /*
  * SonarQube PHP Plugin
- * Copyright (C) 2011-2018 SonarSource SA
+ * Copyright (C) 2010-2018 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -17,24 +17,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.samples.php;
+package org.sonar.plugins.php.api.visitors;
 
-import org.sonar.check.Priority;
-import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import com.google.common.annotations.Beta;
+import java.util.List;
+import org.sonar.api.ExtensionPoint;
+import org.sonar.api.batch.ScannerSide;
 
-@Rule(
-  key = "visitor",
-  priority = Priority.MINOR,
-  name = "PHP visitor check",
-  description = "desc")
-public class CustomPHPVisitorCheck extends PHPVisitorCheck {
+/**
+ * Extension point to create a custom rule repository for PHP.
+ */
+@Beta
+@ScannerSide
+@ExtensionPoint
+public interface PHPCustomRuleRepository {
 
-  @Override
-  public void visitFunctionExpression(FunctionExpressionTree tree) {
-    context().newIssue(this, tree, "Function expression.");
-    super.visitFunctionExpression(tree);
-  }
+  /**
+   * Key of the custom rule repository.
+   */
+  String repositoryKey();
+
+  /**
+   * List of the custom rules classes.
+   */
+  List<Class> checkClasses();
 
 }

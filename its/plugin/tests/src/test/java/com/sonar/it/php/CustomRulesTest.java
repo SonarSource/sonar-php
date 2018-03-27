@@ -57,25 +57,33 @@ public class CustomRulesTest {
   @Test
   public void base_tree_visitor_check() {
     List<Issue> issues = issueClient.find(IssueQuery.create().rules("php-custom-rules:visitor")).list();
-
-    assertThat(issues).hasSize(1);
-
-    Issue issue = issues.get(0);
-    assertThat(issue.line()).isEqualTo(5);
-    assertThat(issue.message()).isEqualTo("Function expression.");
-    assertThat(issue.debt()).isEqualTo("5min");
+    assertSingleIssue(issues, 5, "Function expression.", "5min");
   }
 
   @Test
   public void subscription_base_visitor_check() {
     List<Issue> issues = issueClient.find(IssueQuery.create().rules("php-custom-rules:subscription")).list();
+    assertSingleIssue(issues, 8, "For statement.", "10min");
+  }
 
+  @Test
+  public void legacy_base_tree_visitor_check() {
+    List<Issue> issues = issueClient.find(IssueQuery.create().rules("deprecated-php-custom-rules:visitor")).list();
+    assertSingleIssue(issues, 5, "Function expression.", "5min");
+  }
+
+  @Test
+  public void legacy_subscription_base_visitor_check() {
+    List<Issue> issues = issueClient.find(IssueQuery.create().rules("deprecated-php-custom-rules:subscription")).list();
+    assertSingleIssue(issues, 8, "For statement.", "10min");
+  }
+
+  private void assertSingleIssue(List<Issue> issues, int expectedLine, String expectedMessage, String expectedDebt) {
     assertThat(issues).hasSize(1);
-
     Issue issue = issues.get(0);
-    assertThat(issue.line()).isEqualTo(8);
-    assertThat(issue.message()).isEqualTo("For statement.");
-    assertThat(issue.debt()).isEqualTo("10min");
+    assertThat(issue.line()).isEqualTo(expectedLine);
+    assertThat(issue.message()).isEqualTo(expectedMessage);
+    assertThat(issue.debt()).isEqualTo(expectedDebt);
   }
 
 }

@@ -19,22 +19,28 @@
  */
 package org.sonar.samples.php;
 
-import org.sonar.check.Priority;
-import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(
-  key = "visitor",
-  priority = Priority.MINOR,
-  name = "PHP visitor check",
-  description = "desc")
-public class CustomPHPVisitorCheck extends PHPVisitorCheck {
+import com.google.common.collect.ImmutableList;
+import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
+
+// PHPCustomRulesDefinition is deprecated.
+// Until we drop PHPCustomRulesDefinition, we want to check that it's still possible to use it.
+public class DeprecatedCustomPHPRulesDefinition extends PHPCustomRulesDefinition {
 
   @Override
-  public void visitFunctionExpression(FunctionExpressionTree tree) {
-    context().newIssue(this, tree, "Function expression.");
-    super.visitFunctionExpression(tree);
+  public String repositoryName() {
+    return "Custom Repository";
   }
 
+  @Override
+  public String repositoryKey() {
+    return "deprecated-php-custom-rules";
+  }
+
+  @Override
+  public ImmutableList<Class> checkClasses() {
+      return ImmutableList.<Class>of(
+      LegacyCustomPHPVisitorCheck.class,
+      LegacyCustomPHPSubscriptionCheck.class);
+  }
 }

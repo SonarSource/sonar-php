@@ -21,15 +21,14 @@ package org.sonar.plugins.php;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Wrapper around Checks Object to ease the manipulation of the different PHP rule repositories.
@@ -55,11 +54,11 @@ public class PHPChecks {
     return this;
   }
 
-  public PHPChecks addCustomChecks(@Nullable PHPCustomRulesDefinition[] customRulesDefinitions) {
-    if (customRulesDefinitions != null) {
+  public PHPChecks addCustomChecks(@Nullable PHPCustomRuleRepository[] customRuleRepositories) {
+    if (customRuleRepositories != null) {
 
-      for (PHPCustomRulesDefinition rulesDefinition : customRulesDefinitions) {
-        addChecks(rulesDefinition.repositoryKey(), Lists.newArrayList(rulesDefinition.checkClasses()));
+      for (PHPCustomRuleRepository ruleRepository : customRuleRepositories) {
+        addChecks(ruleRepository.repositoryKey(), Lists.newArrayList(ruleRepository.checkClasses()));
       }
     }
 

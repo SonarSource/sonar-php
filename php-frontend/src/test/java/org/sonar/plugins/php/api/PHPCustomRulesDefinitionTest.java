@@ -39,7 +39,7 @@ public class PHPCustomRulesDefinitionTest {
 
   @Test
   public void test() {
-    MyCustomJavaScriptRulesDefinition rulesDefinition = new MyCustomJavaScriptRulesDefinition();
+    MyCustomPhpRulesDefinition rulesDefinition = new MyCustomPhpRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository(REPOSITORY_KEY);
@@ -75,7 +75,7 @@ public class PHPCustomRulesDefinitionTest {
     public String customParam = "value";
   }
 
-  public static class MyCustomJavaScriptRulesDefinition extends PHPCustomRulesDefinition {
+  public static class MyCustomPhpRulesDefinition extends PHPCustomRulesDefinition {
 
     @Override
     public String repositoryName() {

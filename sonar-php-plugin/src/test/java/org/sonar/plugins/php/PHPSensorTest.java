@@ -67,8 +67,8 @@ import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.LeftCurlyBraceEndsLineCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
+import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.ProgressReport;
 
@@ -100,12 +100,7 @@ public class PHPSensorTest {
   @org.junit.Rule
   public final ExpectedException thrown = ExpectedException.none();
 
-  private final PHPCustomRulesDefinition[] CUSTOM_RULES = {new PHPCustomRulesDefinition() {
-    @Override
-    public String repositoryName() {
-      return "custom name";
-    }
-
+  private final PHPCustomRuleRepository[] CUSTOM_RULES = {new PHPCustomRuleRepository() {
     @Override
     public String repositoryKey() {
       return "customKey";
