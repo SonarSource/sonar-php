@@ -24,6 +24,9 @@ import java.util.List;
 import org.sonar.api.ExtensionPoint;
 import org.sonar.api.batch.ScannerSide;
 
+/**
+ * Extension point to create a custom rule repository for PHP.
+ */
 @Beta
 @ScannerSide
 @ExtensionPoint

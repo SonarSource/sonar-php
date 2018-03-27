@@ -80,11 +80,11 @@ public class PHPSensor implements Sensor {
   }
 
   public PHPSensor(FileLinesContextFactory fileLinesContextFactory,
-    CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRuleRepository[] customRulesDefinitions) {
+    CheckFactory checkFactory, NoSonarFilter noSonarFilter, @Nullable PHPCustomRuleRepository[] customRuleRepositories) {
 
     this.checks = PHPChecks.createPHPCheck(checkFactory)
       .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
-      .addCustomChecks(customRulesDefinitions);
+      .addCustomChecks(customRuleRepositories);
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.noSonarFilter = noSonarFilter;
     this.parsingErrorRuleKey = getParsingErrorRuleKey();

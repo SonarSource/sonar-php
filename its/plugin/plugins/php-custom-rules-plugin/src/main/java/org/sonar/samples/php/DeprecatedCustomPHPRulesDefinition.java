@@ -23,7 +23,9 @@ package org.sonar.samples.php;
 import com.google.common.collect.ImmutableList;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 
-public class CustomPHPRulesDefinition extends PHPCustomRulesDefinition {
+// PHPCustomRulesDefinition is deprecated.
+// Until we drop PHPCustomRulesDefinition, we want to check that it's still possible to use it.
+public class DeprecatedCustomPHPRulesDefinition extends PHPCustomRulesDefinition {
 
   @Override
   public String repositoryName() {

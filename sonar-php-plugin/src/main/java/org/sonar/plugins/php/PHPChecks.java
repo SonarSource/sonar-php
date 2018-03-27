@@ -54,10 +54,10 @@ public class PHPChecks {
     return this;
   }
 
-  public PHPChecks addCustomChecks(@Nullable PHPCustomRuleRepository[] customRuleRepository) {
-    if (customRuleRepository != null) {
+  public PHPChecks addCustomChecks(@Nullable PHPCustomRuleRepository[] customRuleRepositories) {
+    if (customRuleRepositories != null) {
 
-      for (PHPCustomRuleRepository ruleRepository : customRuleRepository) {
+      for (PHPCustomRuleRepository ruleRepository : customRuleRepositories) {
         addChecks(ruleRepository.repositoryKey(), Lists.newArrayList(ruleRepository.checkClasses()));
       }
     }
