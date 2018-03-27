@@ -89,20 +89,6 @@
                     <include>**</include>
                   </includes>
                 </filter>
-                <!-- Required so that PHPCustomRulesDefinition is included -->
-                <filter>
-                  <artifact>${project.groupId}:php-frontend</artifact>
-                  <includes>
-                    <include>**</include>
-                  </includes>
-                </filter>
-                <!-- Required so that PHPCustomRulesDefinition can load AnnotationBasedRulesDefinition -->
-                <filter>
-                  <artifact>org.sonarsource.sslr-squid-bridge:sslr-squid-bridge</artifact>
-                  <includes>
-                    <include>**</include>
-                  </includes>
-                </filter>
               </filters>
             </configuration>
           </execution>
@@ -120,8 +106,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <minsize>2400000</minsize>
-                  <maxsize>2500000</maxsize>
+                  <minsize>2500000</minsize>
+                  <maxsize>2600000</maxsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>
