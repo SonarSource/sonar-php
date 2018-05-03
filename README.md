@@ -4,7 +4,7 @@ SonarPHP is a [static code analyser](https://en.wikipedia.org/wiki/Static_progra
 
 
 # Features
-* 120+ rules
+* 140+ rules
 * Support of PHP 7
 * Metrics (complexity, number of lines etc.)
 * Import of [unit test and coverage results](http://docs.sonarqube.org/display/PLUG/PHP+Unit+Test+and+Coverage+Results+Import)
@@ -15,9 +15,9 @@ SonarPHP is a [static code analyser](https://en.wikipedia.org/wiki/Static_progra
 * [Project homepage](https://redirect.sonarsource.com/plugins/php.html)
 * [Documentation](https://docs.sonarqube.org/display/PLUG/SonarPHP)
 * [Issue tracking](http://jira.sonarsource.com/browse/SONARPHP)
-* [Available rules](https://sonarqube.com/coding_rules#languages=php)
+* [Available rules](https://rules.sonarsource.com/php)
 * [Google Group for feedback](https://groups.google.com/forum/#!forum/sonarqube) (sonarqube@googlegroups.com)
-* [Demo project analysis](https://sonarqube.com/overview?id=drupal)
+* [Demo project analysis](https://sonarcloud.io/dashboard?id=drupal)
 
 # Have question or feedback?
 To provide feedback (request a feature, report a bug etc.) send an email to sonarqube@googlegroups.com, the [SonarQube Google Group](https://groups.google.com/forum/#!forum/sonarqube). Please do not forget to specify the language (PHP!), plugin version and SonarQube version.
@@ -85,6 +85,6 @@ sonar-php/its/ruling/src/test/resources/expected/
 
 ### License
 
-Copyright 2010-2017 SonarSource.
+Copyright 2010-2018 SonarSource.
 
 Licensed under the [GNU Lesser General Public License, Version 3.0](http://www.gnu.org/licenses/lgpl.txt)
