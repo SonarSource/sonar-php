@@ -73,6 +73,7 @@ public class Tests {
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
+      .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE[6.7]"))
       // PHP Plugin
       .addPlugin(PHP_PLUGIN_LOCATION)
       .restoreProfileAtStartup(FileLocation.ofClasspath(RESOURCE_DIRECTORY + "profile.xml"))
@@ -133,22 +134,18 @@ public class Tests {
     assertThat(logs).contains(PHP_SENSOR_NAME);
     assertThat(logs).contains(PHP_INI_SENSOR_NAME);
 
-    List<String> logWithTimePrefixRemoved = Arrays.stream(logs.split("[\r\n]+"))
-      .filter(line -> line.matches("^[0-9:.]+ +.*"))
-      .map(line -> line.replaceAll("^[0-9:.]+ +", ""))
-      .filter(line -> !line.isEmpty())
-      .collect(Collectors.toList());
+    List<String> lines = Arrays.asList(logs.split("[\r\n]+"));
 
-    assertThat(logWithTimePrefixRemoved.size()).isBetween(25, 150);
+    assertThat(lines.size()).isBetween(25, 150);
 
-    List<String> unexpectedLogs = logWithTimePrefixRemoved.stream()
-      .filter(line -> !line.startsWith("INFO "))
-      .filter(line -> !line.startsWith("WARN  - Ability to set quality profile from command line using 'sonar.profile' is deprecated"))
-      .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.reportPath is deprecated as of SonarQube 6.2"))
-      .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.itReportPath is deprecated as of SonarQube 6.2"))
-      .filter(line -> !line.startsWith("WARN  - sonar.php.coverage.overallReportPath is deprecated as of SonarQube 6.2"))
-      .filter(line -> !line.startsWith("WARN  - Line with number 0 doesn't belong to file Math.php"))
-      .filter(line -> !line.startsWith("WARN  - Line with number 100 doesn't belong to file Math.php"))
+    List<String> unexpectedLogs = lines.stream()
+      .filter(line -> !line.startsWith("INFO: "))
+      .filter(line -> !line.startsWith("WARN: Ability to set quality profile from command line using 'sonar.profile' is deprecated"))
+      .filter(line -> !line.startsWith("WARN: sonar.php.coverage.reportPath is deprecated as of SonarQube 6.2"))
+      .filter(line -> !line.startsWith("WARN: sonar.php.coverage.itReportPath is deprecated as of SonarQube 6.2"))
+      .filter(line -> !line.startsWith("WARN: sonar.php.coverage.overallReportPath is deprecated as of SonarQube 6.2"))
+      .filter(line -> !line.startsWith("WARN: Line with number 0 doesn't belong to file Math.php"))
+      .filter(line -> !line.startsWith("WARN: Line with number 100 doesn't belong to file Math.php"))
       .collect(Collectors.toList());
 
     assertThat(unexpectedLogs).isEmpty();

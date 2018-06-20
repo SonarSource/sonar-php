@@ -19,13 +19,13 @@
  */
 package org.sonar.php.it;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
+import com.sonar.orchestrator.locator.MavenLocation;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.HashSet;
 import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -33,7 +33,6 @@ import org.junit.Test;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class PHPRulingTest {
 
@@ -41,9 +40,9 @@ public class PHPRulingTest {
 
   @ClassRule
   public static Orchestrator ORCHESTRATOR = Orchestrator.builderEnv()
+    .setSonarVersion(System.getProperty("sonar.runtimeVersion", "LATEST_RELEASE[6.7]"))
     .addPlugin(FileLocation.byWildcardMavenFilename(new File("../../sonar-php-plugin/target"), "sonar-php-plugin-*.jar"))
-    .setOrchestratorProperty("litsVersion", "0.6")
-    .addPlugin("lits")
+    .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin","sonar-lits-plugin", "0.6"))
     .build();
 
   @BeforeClass
@@ -58,9 +57,9 @@ public class PHPRulingTest {
       .add("S1578", "format", "[A-Z][A-Za-z0-9]+.php")
       .add("S2004", "max", "2")
       .add("S2042", "maximumLinesThreshold", "500");
-    Set<String> disabledRules = ImmutableSet.of(
-      // platform dependent
-      "S1779");
+    Set<String> disabledRules = new HashSet<>();
+    // platform dependent
+    disabledRules.add("S1779");
 
     String serverUrl = ORCHESTRATOR.getServer().getUrl();
     File profileFile = ProfileGenerator.generateProfile(serverUrl, "php", "php", parameters, disabledRules);
@@ -69,9 +68,6 @@ public class PHPRulingTest {
 
   @Test
   public void test() throws Exception {
-    assertTrue(
-      "SonarQube 5.1 is the minimum version to generate the issues report, change your orchestrator.properties",
-      ORCHESTRATOR.getConfiguration().getSonarVersion().isGreaterThanOrEquals("5.1"));
     ORCHESTRATOR.getServer().provisionProject("project", "project");
     ORCHESTRATOR.getServer().associateProjectToQualityProfile("project", "php", "rules");
     SonarScanner build = SonarScanner.create(FileLocation.of("../sources/src").getFile())
@@ -90,7 +86,7 @@ public class PHPRulingTest {
       build.setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1000m");
     ORCHESTRATOR.executeBuild(build);
 
-    assertThat(Files.toString(LITS_DIFFERENCES_FILE, StandardCharsets.UTF_8)).isEmpty();
+    assertThat(new String(Files.readAllBytes(LITS_DIFFERENCES_FILE.toPath()))).isEmpty();
   }
 
 }

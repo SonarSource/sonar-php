@@ -39,7 +39,7 @@ public class NonPhpProjectTest {
   private static BuildResult buildResult;
 
   @BeforeClass
-  public static void startServer() throws Exception {
+  public static void startServer() {
     orchestrator.resetData();
 
     SonarScanner build = SonarScanner.create()
@@ -53,7 +53,7 @@ public class NonPhpProjectTest {
   }
 
   @Test
-  public void test_execution_of_sensors() throws Exception {
+  public void test_execution_of_sensors() {
     assertThat(buildResult.getLogs()).doesNotContain(Tests.PHP_SENSOR_NAME);
     assertThat(buildResult.getLogs()).doesNotContain(Tests.PHP_INI_SENSOR_NAME);
     assertThat(buildResult.getLogs()).contains("1 file indexed");
