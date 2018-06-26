@@ -16,17 +16,21 @@ SonarPHP is a [static code analyser](https://en.wikipedia.org/wiki/Static_progra
 * [Documentation](https://docs.sonarqube.org/display/PLUG/SonarPHP)
 * [Issue tracking](http://jira.sonarsource.com/browse/SONARPHP)
 * [Available rules](https://rules.sonarsource.com/php)
-* [Google Group for feedback](https://groups.google.com/forum/#!forum/sonarqube) (sonarqube@googlegroups.com)
+* [SonarSource Community Forum](https://community.sonarsource.com/)
 * [Demo project analysis](https://sonarcloud.io/dashboard?id=drupal)
 
-# Have question or feedback?
-To provide feedback (request a feature, report a bug etc.) send an email to sonarqube@googlegroups.com, the [SonarQube Google Group](https://groups.google.com/forum/#!forum/sonarqube). Please do not forget to specify the language (PHP!), plugin version and SonarQube version.
-If you have a question on how to use the plugin (and the [docs](https://docs.sonarqube.org/display/PLUG/SonarPHP) don't help you), direct it to [StackOverflow](http://stackoverflow.com/questions/tagged/sonarqube+php) tagged both `sonarqube` and `php`.
+Have question or feedback?
+--------------------------
+
+To provide feedback (request a feature, report a bug etc.) use the [SonarSource Community Forum](https://community.sonarsource.com/). Please do not forget to specify the language (PHP!), plugin version and SonarQube version.
+
+If you have a question on how to use plugin (and the [docs](https://docs.sonarqube.org/display/PLUG/SonarPHP) don't help you), we also encourage you to use the community forum.
 
 # Contributing
 
-### Topic in SonarQube Google Group
-To request a new feature, please send an email to sonarqube@googlegroups.com, the [SonarQube Google Group](https://groups.google.com/forum/#!forum/sonarqube). Even if you plan to implement it yourself and submit it back to the community, please start a new Google Group thread first to be sure that we can follow up on it.
+### Topic in SonarQube Community Forum
+
+To request a new feature, please create a new thread in [SonarQube Community Forum](https://community.sonarsource.com/). Even if you plan to implement it yourself and submit it back to the community, please start a new thread first to be sure that we can follow up on it.
 
 ### Pull Request (PR)
 To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and all [tests](#testing) are passing (Travis build is created for each PR).
