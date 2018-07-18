@@ -98,6 +98,7 @@ public class CheckList {
       GotoUseCheck.class,
       HardCodedCredentialsCheck.class,
       HardCodedUriCheck.class,
+      HttpOnlyCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class,
       IfConditionAlwaysTrueOrFalseCheck.class,
       IgnoredReturnValueCheck.class,
@@ -183,6 +184,7 @@ public class CheckList {
       CgiForceRedirectCheck.class,
       EnableDlCheck.class,
       FileUploadsCheck.class,
+      HttpOnlyCheck.class,
       OpenBasedirCheck.class,
       SessionCookiePersistenceCheck.class,
       SessionUseTransSidCheck.class);
