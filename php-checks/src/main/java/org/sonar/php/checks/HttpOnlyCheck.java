@@ -55,7 +55,7 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (isSetCookie(tree) && httpOnlySetToFalse(tree)) {
-      context().newIssue(this, tree.callee(), MESSAGE);
+      context().newIssue(this, tree.callee(), MESSAGE).secondary(tree.arguments().get(HTTP_ONLY_PARAMETER_INDEX), null);
     }
 
     super.visitFunctionCall(tree);

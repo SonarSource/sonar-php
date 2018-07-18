@@ -1,6 +1,6 @@
 <?php
   setcookie($name, $value, $expire, $path, $domain, $secure, false); // Noncompliant {{Set the last argument of "setcookie()" function to "true".}}
-//^^^^^^^^^
+//^^^^^^^^^                                                  ^^^^^ <
 
 
 setcookie($name, $value, $expire, $path, $domain, $secure, foo(false));
