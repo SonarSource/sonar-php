@@ -97,6 +97,7 @@ public class CheckList {
       GlobalKeywordAndArrayUsageCheck.class,
       GotoUseCheck.class,
       HardCodedCredentialsCheck.class,
+      HardCodedIpAddressCheck.class,
       HardCodedUriCheck.class,
       HttpOnlyCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class,

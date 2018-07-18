@@ -1,0 +1,20 @@
+<p>Hardcoding an IP address into source code is a bad idea for several reasons:</p>
+<ul>
+  <li> it forces the same address to be used in every environment (dev, sys, qa, prod) </li>
+  <li> it places the responsibility of setting the value to use in production on the shoulders of the developer </li>
+</ul>
+<h2>Noncompliant Code Example</h2>
+<pre>
+$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+socket_connect($socket, '8.8.8.8', 23);  // Noncompliant
+</pre>
+<h2>Exceptions</h2>
+<ul>
+  <li> No issue is reported for 127.0.0.1 because loopback is not considered as sensitive </li>
+</ul>
+<h2>See</h2>
+<ul>
+  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
+  <li> <a href="https://www.securecoding.cert.org/confluence/x/qQCHAQ">CERT, MSC03-J.</a> - Never hard code sensitive information </li>
+</ul>
+
