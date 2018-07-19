@@ -29,7 +29,7 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.sonarqube.ws.WsMeasures.Measure;
+import org.sonarqube.ws.Measures;
 
 import static com.sonar.it.php.Tests.getMeasure;
 import static com.sonar.it.php.Tests.getMeasureAsDouble;
@@ -145,7 +145,7 @@ public class PHPIntegrationTest {
     assertThat(getFileMeasure("comment_lines_data").getValue()).isNotEmpty();
   }
 
-  private Measure getProjectMeasure(String metricKey) {
+  private Measures.Measure getProjectMeasure(String metricKey) {
     return getMeasure("project", metricKey.trim());
   }
 
@@ -153,7 +153,7 @@ public class PHPIntegrationTest {
     return getMeasureAsDouble("project", metricKey.trim());
   }
 
-  private Measure getFileMeasure(String metricKey) {
+  private Measures.Measure getFileMeasure(String metricKey) {
     return getMeasure(FILE_TOKEN_PARSER, metricKey.trim());
   }
 

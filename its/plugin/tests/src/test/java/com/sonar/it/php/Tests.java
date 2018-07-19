@@ -32,14 +32,13 @@ import javax.annotation.CheckForNull;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.sonarqube.ws.WsComponents.Component;
-import org.sonarqube.ws.WsMeasures;
-import org.sonarqube.ws.WsMeasures.Measure;
+import org.sonarqube.ws.Components;
+import org.sonarqube.ws.Measures;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
-import org.sonarqube.ws.client.component.TreeWsRequest;
-import org.sonarqube.ws.client.measure.ComponentWsRequest;
+import org.sonarqube.ws.client.components.TreeRequest;
+import org.sonarqube.ws.client.measures.ComponentRequest;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -89,32 +88,31 @@ public class Tests {
   }
 
   @CheckForNull
-  static Measure getMeasure(String componentKey, String metricKey) {
-    WsMeasures.ComponentWsResponse response = newWsClient().measures().component(new ComponentWsRequest()
-      .setComponentKey(componentKey)
+  static Measures.Measure getMeasure(String componentKey, String metricKey) {
+    Measures.ComponentWsResponse response = newWsClient().measures().component(new ComponentRequest()
+      .setComponent(componentKey)
       .setMetricKeys(singletonList(metricKey)));
-    List<Measure> measures = response.getComponent().getMeasuresList();
+    List<Measures.Measure> measures = response.getComponent().getMeasuresList();
     return measures.size() == 1 ? measures.get(0) : null;
   }
 
   @CheckForNull
   static Integer getMeasureAsInt(String componentKey, String metricKey) {
-    Measure measure = getMeasure(componentKey, metricKey);
+    Measures.Measure measure = getMeasure(componentKey, metricKey);
     return (measure == null) ? null : Integer.parseInt(measure.getValue());
   }
 
   @CheckForNull
   static Double getMeasureAsDouble(String componentKey, String metricKey) {
-    Measure measure = getMeasure(componentKey, metricKey);
+    Measures.Measure measure = getMeasure(componentKey, metricKey);
     return (measure == null) ? null : Double.parseDouble(measure.getValue());
   }
 
   @CheckForNull
-  static Component getComponent(String projectKey, String componentKey) {
-    List<Component> components = newWsClient().components().tree(
-      new TreeWsRequest()
-        .setBaseComponentKey(projectKey)
-        .setQuery(componentKey))
+  static Components.Component getComponent(String projectKey, String componentKey) {
+    List<Components.Component> components = newWsClient().components().tree(new TreeRequest()
+      .setComponent(projectKey)
+      .setQ(componentKey))
       .getComponentsList();
     return components.size() == 1 ? components.get(0) : null;
   }

@@ -20,19 +20,16 @@
 package org.sonar.plugins.php;
 
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.internal.SonarRuntimeImpl;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.utils.Version;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class PHPProfileDefinitionTest {
 
@@ -40,26 +37,17 @@ public class PHPProfileDefinitionTest {
   public void should_create_sonar_way_profile() {
     ValidationMessages validation = ValidationMessages.create();
 
-    RuleFinder ruleFinder = ruleFinder();
-    PHPProfileDefinition definition = new PHPProfileDefinition(ruleFinder);
-    RulesProfile profile = definition.createProfile(validation);
-
-    assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
-    assertThat(profile.getName()).isEqualTo(PHPProfileDefinition.SONAR_WAY_PROFILE);
+    SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(7, 3), SonarQubeSide.SERVER);
+    BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();
+    PHPProfileDefinition definition = new PHPProfileDefinition(sonarRuntime);
+    definition.define(context);
+    BuiltInQualityProfilesDefinition.BuiltInQualityProfile profile = context.profile("php", "Sonar way");
+    assertThat(profile.language()).isEqualTo(Php.KEY);
+    assertThat(profile.name()).isEqualTo(PHPProfileDefinition.SONAR_WAY_PROFILE);
+    assertThat(profile.rules().size()).isGreaterThan(50);
+    assertThat(profile.rules().size()).isLessThan(CheckList.getAllChecks().size());
+    assertThat(profile.rules()).extracting("ruleKey").contains("DuplicatedBlocks");
     assertThat(validation.hasErrors()).isFalse();
-    assertThat(profile.getActiveRules().size()).isGreaterThan(50);
-    assertThat(profile.getActiveRules().size()).isLessThan(CheckList.getAllChecks().size());
-    assertThat(profile.getActiveRules()).extracting("ruleKey").contains("DuplicatedBlocks");
-  }
-
-  static RuleFinder ruleFinder() {
-    return when(mock(RuleFinder.class).findByKey(anyString(), anyString())).thenAnswer(new Answer<Rule>() {
-      @Override
-      public Rule answer(InvocationOnMock invocation) {
-        Object[] arguments = invocation.getArguments();
-        return Rule.create((String) arguments[0], (String) arguments[1], (String) arguments[1]);
-      }
-    }).getMock();
   }
 
 }
