@@ -16,5 +16,14 @@
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-1523",
-  "sqKey": "S1523"
+  "sqKey": "S1523",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      95
+    ],
+    "OWASP": [
+      "A7"
+    ]
+  }
 }

@@ -17,5 +17,15 @@
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-3333",
-  "sqKey": "S3333"
+  "sqKey": "S3333",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      23,
+      36
+    ],
+    "OWASP": [
+      "A6"
+    ]
+  }
 }

@@ -15,5 +15,11 @@
   ],
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-3332",
-  "sqKey": "S3332"
+  "sqKey": "S3332",
+  "scope": "Main",
+  "securityStandards": {
+    "OWASP": [
+      "A7"
+    ]
+  }
 }
