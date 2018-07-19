@@ -206,4 +206,11 @@ public final class CheckUtils {
     return tree.condition().get(tree.condition().size() - 1);
   }
 
+  public static String trimQuotes(String value) {
+    if (value.length() > 1 && (value.startsWith("'") || value.startsWith("\""))) {
+      return value.substring(1, value.length() - 1);
+    }
+    return value;
+  }
+
 }
