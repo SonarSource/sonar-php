@@ -42,7 +42,6 @@ public class PhpTestFile implements PhpFile {
     }
   }
 
-  @Override
   public Path relativePath() {
     return relativePath;
   }
@@ -53,7 +52,12 @@ public class PhpTestFile implements PhpFile {
   }
 
   @Override
-  public File file() {
-    return relativePath.toFile();
+  public String filename() {
+    return relativePath.getFileName().toString();
+  }
+
+  @Override
+  public String toString() {
+    return relativePath.toString();
   }
 }

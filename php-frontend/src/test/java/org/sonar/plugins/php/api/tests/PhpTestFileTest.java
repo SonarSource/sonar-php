@@ -37,7 +37,8 @@ public class PhpTestFileTest {
     PhpTestFile file = new PhpTestFile(new File("src/test/resources/tests/testfile.php"));
     assertThat(file.relativePath().toString().replace('\\', '/')).isEqualTo("src/test/resources/tests/testfile.php");
     assertThat(file.contents()).isEqualTo("<?php echo \"Hello\";\n");
-    assertThat(file.file().toPath()).isEqualTo(file.relativePath());
+    assertThat(file.filename()).isEqualTo("testfile.php");
+    assertThat(file.toString()).isEqualTo("src/test/resources/tests/testfile.php");
   }
 
   @Test

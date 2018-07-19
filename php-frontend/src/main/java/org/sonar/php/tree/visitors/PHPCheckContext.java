@@ -20,7 +20,6 @@
 package org.sonar.php.tree.visitors;
 
 import com.google.common.collect.ImmutableList;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
@@ -97,11 +96,6 @@ public class PHPCheckContext implements CheckContext {
     issues.add(issue);
 
     return issue;
-  }
-
-  @Override
-  public File file() {
-    return file.file();
   }
 
   @Override

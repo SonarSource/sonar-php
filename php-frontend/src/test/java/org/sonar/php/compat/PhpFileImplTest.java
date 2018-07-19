@@ -19,7 +19,7 @@
  */
 package org.sonar.php.compat;
 
-import java.io.File;
+import java.nio.file.Paths;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -28,24 +28,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CompatibleInputFileTest {
-
+public class PhpFileImplTest {
   private InputFile inputFile = mock(InputFile.class);
-
-  private String path = "path/to/file.php";
-  private File file = new File(path);
 
   @Test
   public void test() throws Exception {
     when(inputFile.contents()).thenReturn("Input file content");
+    when(inputFile.filename()).thenReturn("file.php");
+    when(inputFile.toString()).thenReturn("to string");
     when(inputFile.relativePath()).thenReturn("path/to/file.php");
-    when(inputFile.file()).thenReturn(file);
 
-    PhpFile phpFile = new CompatibleInputFile(inputFile);
+    PhpFile phpFile = new PhpFileImpl(inputFile);
 
-    assertThat(phpFile).isExactlyInstanceOf(CompatibleInputFile.class);
+    assertThat(phpFile).isExactlyInstanceOf(PhpFileImpl.class);
     assertThat(phpFile.contents()).isEqualTo("Input file content");
-    assertThat(phpFile.relativePath()).isEqualTo(new File("path/to/file.php").toPath());
-    assertThat(phpFile.file()).isEqualTo(file);
+    assertThat(phpFile.filename()).isEqualTo("file.php");
+    assertThat(phpFile.relativePath()).isEqualTo(Paths.get("path/to/file.php"));
+    assertThat(phpFile.toString()).isEqualTo("to string");
   }
 }

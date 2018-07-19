@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.php.api.visitors;
 
-import java.io.File;
 import java.nio.file.Path;
 
 /**
@@ -29,14 +28,14 @@ public interface PhpFile {
 
   /**
    * @return path relative to project directory
+   * @deprecated since 2.14. Use {@link PhpFile#filename()} or {@link PhpFile#toString()} (returning a string to identify this file suitable for logs).
    */
   Path relativePath();
 
   String contents();
 
   /**
-   * @deprecated since 2.10. Use {@link PhpFile#contents()} or {@link PhpFile#relativePath()}
+   * @return Filename for this file (inclusing extension). For example: MyFile.php.
    */
-  @Deprecated
-  File file();
+  String filename();
 }

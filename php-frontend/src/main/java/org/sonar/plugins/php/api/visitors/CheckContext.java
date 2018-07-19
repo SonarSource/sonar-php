@@ -20,7 +20,6 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
-import java.io.File;
 import java.util.List;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -120,13 +119,6 @@ public interface CheckContext {
   List<PhpIssue> getIssues();
 
   SymbolTable symbolTable();
-
-  /**
-   * @return the current file
-   * @deprecated since 2.10. Use {@link CheckContext#getPhpFile()}
-   */
-  @Deprecated
-  File file();
 
   /**
    * @return the current file

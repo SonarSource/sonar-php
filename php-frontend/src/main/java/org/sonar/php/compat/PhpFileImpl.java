@@ -19,33 +19,23 @@
  */
 package org.sonar.php.compat;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
-/**
- * A compatibility wrapper for InputFile. See class hierarchy.
- */
-public class CompatibleInputFile implements PhpFile {
+public class PhpFileImpl implements PhpFile {
 
   private final InputFile wrapped;
 
-  public CompatibleInputFile(InputFile wrapped) {
+  public PhpFileImpl(InputFile wrapped) {
     this.wrapped = wrapped;
   }
 
   @Override
   public Path relativePath() {
     return Paths.get(wrapped.relativePath());
-  }
-
-  @Override
-  public File file() {
-    return wrapped.file();
   }
 
   Path path() {
@@ -67,7 +57,13 @@ public class CompatibleInputFile implements PhpFile {
     }
   }
 
-  Charset charset() {
-    return wrapped.charset();
+  @Override
+  public String filename() {
+    return wrapped.filename();
+  }
+
+  @Override
+  public String toString() {
+    return wrapped.toString();
   }
 }

@@ -67,7 +67,6 @@ public class PHPVisitorCheckTest {
 
     ContextTestVisitor testVisitor = new ContextTestVisitor();
     testVisitor.analyze(file, tree);
-    assertThat(testVisitor.context().file()).isEqualTo(file.file());
     assertThat(testVisitor.context().getPhpFile()).isEqualTo(file);
   }
 
