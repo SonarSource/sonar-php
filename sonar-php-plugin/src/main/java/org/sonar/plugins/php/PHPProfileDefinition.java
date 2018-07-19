@@ -19,14 +19,13 @@
  */
 package org.sonar.plugins.php;
 
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.php.checks.CheckList;
 import org.sonar.plugins.php.api.Php;
-import org.sonarsource.analyzer.commons.ProfileDefinitionReader;
+import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
+
+import static org.sonar.plugins.php.PHPRulesDefinition.RESOURCE_BASE_PATH;
 
 /**
  * Sonar way profile.
@@ -34,35 +33,22 @@ import org.sonarsource.analyzer.commons.ProfileDefinitionReader;
  * We currently also define two other profiles, see {@link DrupalProfileDefinition} and {@link PSR2ProfileDefinition}.
  *
  */
-public final class PHPProfileDefinition extends ProfileDefinition {
+public final class PHPProfileDefinition implements BuiltInQualityProfilesDefinition {
 
   public static final String SONAR_WAY_PROFILE = "Sonar way";
   public static final String SONAR_WAY_PATH = "org/sonar/l10n/php/rules/php/Sonar_way_profile.json";
 
-  private final RuleFinder ruleFinder;
+  private final SonarRuntime sonarRuntime;
 
-  public PHPProfileDefinition(RuleFinder ruleFinder) {
-    this.ruleFinder = ruleFinder;
+  public PHPProfileDefinition(SonarRuntime sonarRuntime) {
+    this.sonarRuntime = sonarRuntime;
   }
 
   @Override
-  public RulesProfile createProfile(ValidationMessages validation) {
-    RulesProfile profile = RulesProfile.create(SONAR_WAY_PROFILE, Php.KEY);
-
-    activateCommonRules(profile);
-
-    ProfileDefinitionReader definitionReader = new ProfileDefinitionReader(ruleFinder);
-    definitionReader.activateRules(profile, CheckList.REPOSITORY_KEY, SONAR_WAY_PATH);
-
-    return profile;
-  }
-
-  private void activateCommonRules(RulesProfile profile) {
-    Rule duplicatedBlocksRule = ruleFinder.findByKey("common-" + Php.KEY, "DuplicatedBlocks");
-
-    // in SonarLint duplicatedBlocksRule == null
-    if (duplicatedBlocksRule != null) {
-      profile.activateRule(duplicatedBlocksRule, null);
-    }
+  public void define(Context context) {
+    NewBuiltInQualityProfile sonarWay = context.createBuiltInQualityProfile(SONAR_WAY_PROFILE, Php.KEY);
+    sonarWay.activateRule("common-" + Php.KEY, "DuplicatedBlocks");
+    BuiltInQualityProfileJsonLoader.load(sonarWay, CheckList.REPOSITORY_KEY, SONAR_WAY_PATH, RESOURCE_BASE_PATH, sonarRuntime);
+    sonarWay.done();
   }
 }

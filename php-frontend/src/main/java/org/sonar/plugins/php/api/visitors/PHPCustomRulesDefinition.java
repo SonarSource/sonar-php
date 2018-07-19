@@ -22,7 +22,7 @@ package org.sonar.plugins.php.api.visitors;
 import com.google.common.annotations.Beta;
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.BatchSide;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
@@ -32,9 +32,9 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
  * @deprecated since 2.13 Implement @{@link PHPCustomRuleRepository} and @{@link RulesDefinition} instead.
  */
 @Beta
-@BatchSide
 @ExtensionPoint
 @Deprecated
+@ScannerSide
 public abstract class PHPCustomRulesDefinition implements RulesDefinition, PHPCustomRuleRepository {
 
   /**
