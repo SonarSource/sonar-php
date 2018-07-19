@@ -15,5 +15,11 @@
   ],
   "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-836",
-  "sqKey": "S836"
+  "sqKey": "S836",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      457
+    ]
+  }
 }

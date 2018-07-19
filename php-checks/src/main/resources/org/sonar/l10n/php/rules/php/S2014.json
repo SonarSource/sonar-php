@@ -11,5 +11,6 @@
   ],
   "defaultSeverity": "Blocker",
   "ruleSpecification": "RSPEC-2014",
-  "sqKey": "S2014"
+  "sqKey": "S2014",
+  "scope": "Main"
 }

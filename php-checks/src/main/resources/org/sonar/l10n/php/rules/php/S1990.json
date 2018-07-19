@@ -11,5 +11,6 @@
   ],
   "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-1990",
-  "sqKey": "S1990"
+  "sqKey": "S1990",
+  "scope": "Main"
 }
