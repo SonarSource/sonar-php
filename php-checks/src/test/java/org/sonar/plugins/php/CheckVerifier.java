@@ -21,9 +21,7 @@ package org.sonar.plugins.php;
 
 import java.io.File;
 import org.sonar.plugins.php.api.tests.PHPCheckVerifier;
-import org.sonar.plugins.php.api.tests.PhpTestFile;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public final class CheckVerifier extends PHPCheckVerifier {
 
@@ -43,8 +41,8 @@ public final class CheckVerifier extends PHPCheckVerifier {
     new CheckVerifier(false).createVerifier(checkFile(relativePath), check).assertNoIssues();
   }
 
-  private static PhpFile checkFile(String relativePath) {
-    return new PhpTestFile(new File("src/test/resources/checks/" + relativePath));
+  private static File checkFile(String relativePath) {
+    return new File("src/test/resources/checks/" + relativePath);
   }
 
 }

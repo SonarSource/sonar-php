@@ -53,29 +53,52 @@ public class PHPCheckVerifier {
   }
 
   public static void verify(File sourceFile, PHPCheck check) {
-    verify(new PhpTestFile(sourceFile), check);
+    new PHPCheckVerifier(true).createVerifier(sourceFile, check).assertOneOrMoreIssues();
   }
 
   public static void verifyNoIssue(File sourceFile, PHPCheck check) {
-    verifyNoIssue(new PhpTestFile(sourceFile), check);
+    new PHPCheckVerifier(true).createVerifier(sourceFile, check).assertNoIssues();
   }
 
+  /**
+   * @deprecated since 2.14. Use {@link PHPCheckVerifier#verify(File, PHPCheck)}}
+   */
+  @Deprecated
   public static void verify(PhpFile sourceFile, PHPCheck check) {
     new PHPCheckVerifier(true).createVerifier(sourceFile, check).assertOneOrMoreIssues();
   }
 
+  /**
+   * @deprecated since 2.14. Use {@link PHPCheckVerifier#verifyNoIssue(File, PHPCheck)}}
+   */
+  @Deprecated
   public static void verifyNoIssue(PhpFile sourceFile, PHPCheck check) {
     new PHPCheckVerifier(true).createVerifier(sourceFile, check).assertNoIssues();
   }
 
   /**
    * Internal use only. Subject to changes.
+   * @deprecated since 2.14
    */
+  @Deprecated
   protected SingleFileVerifier createVerifier(PhpFile file, PHPCheck check) {
     SingleFileVerifier verifier = SingleFileVerifier.create(file.relativePath(), UTF_8);
-    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
+    return getSingleFileVerifier(check, verifier, file);
+  }
+
+  /**
+   * Internal use only. Subject to changes.
+   */
+  protected SingleFileVerifier createVerifier(File file, PHPCheck check) {
+    SingleFileVerifier verifier = SingleFileVerifier.create(file.toPath(), UTF_8);
+    PhpTestFile phpFile = new PhpTestFile(file);
+    return getSingleFileVerifier(check, verifier, phpFile);
+  }
+
+  private SingleFileVerifier getSingleFileVerifier(PHPCheck check, SingleFileVerifier verifier, PhpFile phpFile) {
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse(phpFile.contents());
     check.init();
-    for (PhpIssue issue : check.analyze(file, tree)) {
+    for (PhpIssue issue : check.analyze(phpFile, tree)) {
       if (!issue.check().equals(check)) {
         throw new IllegalStateException("Verifier support only one kind of issue " + issue.check() + " != " + check);
       }
@@ -90,7 +113,7 @@ public class PHPCheckVerifier {
           verifier.addComment(trivia.line(), trivia.column() + 1, trivia.text(), 2, suffixLength);
         }
       };
-      commentVisitor.analyze(file, tree);
+      commentVisitor.analyze(phpFile, tree);
     }
     return verifier;
   }
