@@ -38,10 +38,6 @@ public class PhpFileImpl implements PhpFile {
     return Paths.get(wrapped.relativePath());
   }
 
-  Path path() {
-    return wrapped.path();
-  }
-
   static class InputFileIOException extends RuntimeException {
     InputFileIOException(Throwable cause) {
       super(cause);

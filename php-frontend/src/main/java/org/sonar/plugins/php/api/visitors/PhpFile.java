@@ -30,6 +30,7 @@ public interface PhpFile {
    * @return path relative to project directory
    * @deprecated since 2.14. Use {@link PhpFile#filename()} or {@link PhpFile#toString()} (returning a string to identify this file suitable for logs).
    */
+  @Deprecated
   Path relativePath();
 
   String contents();
