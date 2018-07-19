@@ -40,6 +40,7 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
 public class CheckUtilsTest {
 
@@ -161,6 +162,17 @@ public class CheckUtilsTest {
     tree = PHPParserBuilder.createParser().parse("<?= for(;$a == 0, true;) {} ?>");
     forStatement = (ForStatementTree) ((CompilationUnitTree) tree).script().statements().get(0);
     assertThat(CheckUtils.getForCondition(forStatement).getKind()).isEqualTo(Tree.Kind.BOOLEAN_LITERAL);
+  }
+
+  @Test
+  public void trim_quotes() throws Exception {
+    assertThat(trimQuotes("")).isEqualTo("");
+    assertThat(trimQuotes("'")).isEqualTo("'");
+    assertThat(trimQuotes("''")).isEqualTo("");
+    assertThat(trimQuotes("\"\"")).isEqualTo("");
+    assertThat(trimQuotes("\"abc\"")).isEqualTo("abc");
+    assertThat(trimQuotes("'abc'")).isEqualTo("abc");
+    assertThat(trimQuotes("abc")).isEqualTo("abc");
   }
 
   private ExpressionTree expressionFromStatement(String statement) {

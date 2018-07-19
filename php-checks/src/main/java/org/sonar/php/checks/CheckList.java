@@ -46,6 +46,7 @@ public class CheckList {
       ArrayCountableCountCheck.class,
       AssignmentInSubExpressionCheck.class,
       AtLeastThreeCasesInSwitchCheck.class,
+      AvoidDESCheck.class,
       BooleanEqualityComparisonCheck.class,
       CallParentConstructorCheck.class,
       CallToIniSetCheck.class,
