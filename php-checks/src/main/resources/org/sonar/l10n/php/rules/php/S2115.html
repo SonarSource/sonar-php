@@ -1,0 +1,32 @@
+<p>Failure to password-protect a database is so careless or naive as to be almost negligent. Databases should always be password protected, but the
+use of a database connection with an empty password is a clear indication of a database that is not protected.</p>
+<p>This rule flags database connections with empty passwords.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+&lt;?php
+  $servername = "localhost";
+  $username = "AppLogin";
+  $password = "";
+
+  // MySQL
+  $conn = new mysqli($servername, $username, $password);
+  // MySQL
+  $conn = mysqli_connect($servername, $username, $password);
+  // PDO way
+  $conn = new PDO("mysql:host=$servername;dbname=myDB", $username, $password);
+  // Oracle
+  $conn = oci_connect($username, $password, "//localhost/orcl");
+  // MS SQL Server
+  $sqlsrvName = "serverName\sqlexpress";
+  $sqlsrvConnInfo = array( "Database"=&gt;"myDB", "UID"=&gt;$username, "PWD"=&gt;$password);
+  $conn = sqlsrv_connect( $sqlsrvName, $sqlsrvConnInfo);
+  // PosgreSQL
+  $pgConnInfo = "host=localhost port=5432 dbname=test user=" . $username . " password=" . $password;
+  $conn = pg_connect($pgConnInfo);
+?&gt;
+</pre>
+<h2>See</h2>
+<ul>
+  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
+</ul>
+
