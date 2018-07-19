@@ -105,6 +105,7 @@ public class CheckList {
       ImmediatelyReturnedVariableCheck.class,
       IncrementDecrementInSubExpressionCheck.class,
       InlineHTMLInFileCheck.class,
+      InsecureHashCheck.class,
       InterfaceNameCheck.class,
       KeywordsAndConstantsNotLowerCaseCheck.class,
       LeftCurlyBraceEndsLineCheck.class,
