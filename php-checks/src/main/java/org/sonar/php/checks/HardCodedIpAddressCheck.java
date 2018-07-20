@@ -27,6 +27,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
+import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
+
 @Rule(key = "S1313")
 public class HardCodedIpAddressCheck extends PHPVisitorCheck {
 
@@ -51,10 +53,6 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
 
   private static boolean isLocalhost(String literalValue) {
     return "127.0.0.1".equals(literalValue);
-  }
-
-  private static String trimQuotes(String value) {
-    return value.substring(1, value.length() - 1);
   }
 
 }
