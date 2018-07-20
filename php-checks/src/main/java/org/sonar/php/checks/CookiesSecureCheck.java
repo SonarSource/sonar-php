@@ -22,15 +22,13 @@ package org.sonar.php.checks;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.phpini.PhpIniBoolean;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.PhpIniFile;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
-import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.sonar.php.checks.phpini.PhpIniFiles.checkRequiredBoolean;
 import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
@@ -39,10 +37,12 @@ import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
 public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
 
   private static final String MESSAGE_PHP_INI = "Set the \"session.cookie_secure\" property to \"true\".";
-  private static final String MESSAGE = "Set the 6th argument of \"setcookie()\" function to \"true\".";
+  private static final String MESSAGE = "Make sure creating this cookie without the \"secure\" flag is safe here.";
 
   private static final String SET_COOKIE_FUNC = "setcookie";
-  private static final int SECURE_PARAMETER_INDEX = 5;
+  private static final int SET_COOKIE_SECURE_PARAMETER = 5;
+  private static final String SESSION_COOKIE_FUNC = "session_set_cookie_params";
+  private static final int SESSION_COOKIE_SECURE_PARAMETER = 3;
 
   @Override
   public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
@@ -55,27 +55,22 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (isSetCookie(tree) && secureSetToFalse(tree)) {
-      PreciseIssue issue = context().newIssue(this, tree.callee(), MESSAGE);
-      if (tree.arguments().size() > SECURE_PARAMETER_INDEX) {
-        issue.secondary(tree.arguments().get(SECURE_PARAMETER_INDEX), null);
-      }
+    String functionName = getFunctionName(tree);
+    if ((SET_COOKIE_FUNC.equals(functionName) && argumentSetToFalse(tree, SET_COOKIE_SECURE_PARAMETER))
+      || (SESSION_COOKIE_FUNC.equals(functionName) && argumentSetToFalse(tree, SESSION_COOKIE_SECURE_PARAMETER))) {
+      context().newIssue(this, tree.callee(), MESSAGE);
     }
 
     super.visitFunctionCall(tree);
   }
 
-  private static boolean isSetCookie(FunctionCallTree tree) {
-    String functionName = getFunctionName(tree);
-    return functionName != null && functionName.equals(SET_COOKIE_FUNC);
-  }
-
-  private static boolean secureSetToFalse(FunctionCallTree tree) {
-    if (tree.arguments().size() > SECURE_PARAMETER_INDEX) {
-      ExpressionTree secureArgument = tree.arguments().get(SECURE_PARAMETER_INDEX);
-      return secureArgument.is(Kind.BOOLEAN_LITERAL) && ((LiteralTree) secureArgument).value().equals("false");
+  private static boolean argumentSetToFalse(FunctionCallTree tree, int argumentIndex) {
+    if (tree.arguments().size() > argumentIndex) {
+      ExpressionTree secureArgument = tree.arguments().get(argumentIndex);
+      return CheckUtils.isFalseValue(secureArgument);
     }
 
     return true;
   }
+
 }
