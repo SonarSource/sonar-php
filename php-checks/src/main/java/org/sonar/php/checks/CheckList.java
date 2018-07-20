@@ -76,6 +76,7 @@ public class CheckList {
       EchoWithParenthesisCheck.class,
       ElseIfSequenceKeywordUsageCheck.class,
       ElseIfWithoutElseCheck.class,
+      EmptyDatabasePasswordCheck.class,
       EmptyNestedBlockCheck.class,
       EmptyStatementCheck.class,
       EvalUseCheck.class,

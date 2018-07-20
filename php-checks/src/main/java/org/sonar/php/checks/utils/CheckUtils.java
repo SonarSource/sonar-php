@@ -37,6 +37,7 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
@@ -206,11 +207,20 @@ public final class CheckUtils {
     return tree.condition().get(tree.condition().size() - 1);
   }
 
+
   public static String trimQuotes(String value) {
     if (value.length() > 1 && (value.startsWith("'") || value.startsWith("\""))) {
       return value.substring(1, value.length() - 1);
     }
     return value;
+  }
+
+  public static String trimQuotes(LiteralTree literalTree) {
+    if (literalTree.is(Kind.REGULAR_STRING_LITERAL)) {
+      String value = literalTree.value();
+      return value.substring(1, value.length() - 1);
+    }
+    throw new IllegalArgumentException("Cannot trim quotes from non-string literal");
   }
 
 }

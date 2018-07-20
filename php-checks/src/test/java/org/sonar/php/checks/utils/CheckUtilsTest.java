@@ -175,6 +175,18 @@ public class CheckUtilsTest {
     assertThat(trimQuotes("abc")).isEqualTo("abc");
   }
 
+  @Test
+  public void trim_quotes_literal() {
+    assertThat(trimQuotes((LiteralTree) expressionFromStatement("\"abc\";"))).isEqualTo("abc");
+    assertThat(trimQuotes((LiteralTree) expressionFromStatement("'abc';"))).isEqualTo("abc");
+    assertThat(trimQuotes((LiteralTree) expressionFromStatement("'';"))).isEqualTo("");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void trim_quotes_literal_on_non_string() {
+    trimQuotes((LiteralTree) expressionFromStatement("42;"));
+  }
+
   private ExpressionTree expressionFromStatement(String statement) {
     return ((ExpressionStatementTree) parse(statement)).expression();
   }
