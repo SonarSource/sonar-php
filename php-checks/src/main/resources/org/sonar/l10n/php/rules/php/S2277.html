@@ -1,0 +1,29 @@
+<p>Without OAEP in RSA encryption, it takes less work for an attacker to decrypt the data or infer patterns from the ciphertext. This rule logs an
+issue as soon as a literal value starts with <code>OPENSSL_NO_PADDING</code> or <code>OPENSSL_PKCS1_PADDING</code> or
+<code>OPENSSL_SSLV23_PADDING</code>.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+function encrypt($data, $key) {
+  $crypted='';
+  openssl_public_encrypt($data, $crypted, $key, OPENSSL_NO_PADDING); // Noncompliant
+  return $crypted;
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+function encrypt($data, $key) {
+  $crypted='';
+  openssl_public_encrypt($data, $crypted, $key, OPENSSL_PKCS1_OAEP_PADDING);
+  return $crypted;
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="http://cwe.mitre.org/data/definitions/780.html">MITRE CWE-780</a> - Use of RSA Algorithm without OAEP </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/327.html">MITRE CWE-327</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
+  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
+  <li> OWASP Top 10 2017 Category A6 - Security Misconfiguration </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
+  <li> Derived from FindSecBugs rule <a href="http://h3xstream.github.io/find-sec-bugs/bugs.htm#RSA_NO_PADDING">RSA NoPadding Unsafe</a> </li>
+</ul>
+

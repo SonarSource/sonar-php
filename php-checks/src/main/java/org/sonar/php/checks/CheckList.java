@@ -129,6 +129,7 @@ public class CheckList {
       NestedTernaryOperatorsCheck.class,
       NonEmptyCaseWithoutBreakCheck.class,
       NonLFCharAsEOLCheck.class,
+      NoPaddingRsaCheck.class,
       NoSonarCheck.class,
       NullDereferenceInConditionalCheck.class,
       OnePropertyDeclarationPerStatementCheck.class,
