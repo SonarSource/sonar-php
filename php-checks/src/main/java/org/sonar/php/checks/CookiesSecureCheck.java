@@ -30,6 +30,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 import static org.sonar.php.checks.phpini.PhpIniFiles.checkRequiredBoolean;
 import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
@@ -55,7 +56,10 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (isSetCookie(tree) && secureSetToFalse(tree)) {
-      context().newIssue(this, tree.callee(), MESSAGE).secondary(tree.arguments().get(SECURE_PARAMETER_INDEX), null);
+      PreciseIssue issue = context().newIssue(this, tree.callee(), MESSAGE);
+      if (tree.arguments().size() > SECURE_PARAMETER_INDEX) {
+        issue.secondary(tree.arguments().get(SECURE_PARAMETER_INDEX), null);
+      }
     }
 
     super.visitFunctionCall(tree);
@@ -72,6 +76,6 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
       return secureArgument.is(Kind.BOOLEAN_LITERAL) && ((LiteralTree) secureArgument).value().equals("false");
     }
 
-    return false;
+    return true;
   }
 }

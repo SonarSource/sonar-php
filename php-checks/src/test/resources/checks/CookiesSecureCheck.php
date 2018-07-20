@@ -9,4 +9,4 @@ setcookie($name, $value, $expire, $path, $domain, $secure, false);
 setcookie($name, $value, $expire, $path, $domain, true);
 setcookie($name, $value, $expire, $path, $domain, foo(false));
 setcookie($name, $value, $expire, $path, $domain, $secure);
-setcookie($name, $value, $expire, $path);
+setcookie($name, $value, $expire, $path); // Noncompliant
