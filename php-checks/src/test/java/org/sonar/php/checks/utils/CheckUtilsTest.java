@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -195,32 +194,26 @@ public class CheckUtilsTest {
 
   @Test
   public void is_false_value() throws Exception {
-    List<Boolean> falseValues = createLiterals(Tree.Kind.BOOLEAN_LITERAL, "false", "False", "FALSE")
-      .map(CheckUtils::isFalseValue).collect(Collectors.toList());
-    assertThat(falseValues).containsOnly(true);
+    assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "false", "False", "FALSE")
+      .allMatch(CheckUtils::isFalseValue)).isTrue();
 
-    falseValues = createLiterals(Tree.Kind.NUMERIC_LITERAL, "0", "0.0")
-      .map(CheckUtils::isFalseValue).collect(Collectors.toList());
-    assertThat(falseValues).containsOnly(true);
+    assertThat(createLiterals(Tree.Kind.NUMERIC_LITERAL, "0", "0.0")
+      .allMatch(CheckUtils::isFalseValue)).isTrue();
 
-    falseValues = createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"0\"", "'0'", "''")
-      .map(CheckUtils::isFalseValue).collect(Collectors.toList());
-    assertThat(falseValues).containsOnly(true);
+    assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"0\"", "'0'", "''")
+      .allMatch(CheckUtils::isFalseValue)).isTrue();
   }
 
   @Test
   public void is_true_value() throws Exception {
-    List<Boolean> trueValues = createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true", "True", "TRUE")
-      .map(CheckUtils::isTrueValue).collect(Collectors.toList());
-    assertThat(trueValues).containsOnly(true);
+    assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true", "True", "TRUE")
+      .allMatch(CheckUtils::isTrueValue)).isTrue();
 
-    trueValues = createLiterals(Tree.Kind.NUMERIC_LITERAL, "1", "-1", "3.14")
-      .map(CheckUtils::isTrueValue).collect(Collectors.toList());
-    assertThat(trueValues).containsOnly(true);
+    assertThat(createLiterals(Tree.Kind.NUMERIC_LITERAL, "1", "-1", "3.14")
+      .allMatch(CheckUtils::isTrueValue)).isTrue();
 
-    trueValues = createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"abc\"", "'1'", "'false'", "'0.0'")
-      .map(CheckUtils::isTrueValue).collect(Collectors.toList());
-    assertThat(trueValues).containsOnly(true);
+    assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"abc\"", "'1'", "'false'", "'0.0'")
+      .allMatch(CheckUtils::isTrueValue)).isTrue();
   }
 
   private Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
