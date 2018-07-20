@@ -29,7 +29,7 @@ import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 /**
  * Extension point to create custom rule repository for PHP.
  *
- * @deprecated Implement @{@link PHPCustomRuleRepository} and @{@link RulesDefinition} instead.
+ * @deprecated since 2.13 Implement @{@link PHPCustomRuleRepository} and @{@link RulesDefinition} instead.
  */
 @Beta
 @BatchSide

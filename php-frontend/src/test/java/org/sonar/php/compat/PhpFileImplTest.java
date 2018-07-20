@@ -19,55 +19,31 @@
  */
 package org.sonar.php.compat;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
-/**
- * A compatibility wrapper for InputFile. See class hierarchy.
- */
-public class CompatibleInputFile implements PhpFile {
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-  private final InputFile wrapped;
+public class PhpFileImplTest {
+  private InputFile inputFile = mock(InputFile.class);
 
-  public CompatibleInputFile(InputFile wrapped) {
-    this.wrapped = wrapped;
-  }
+  @Test
+  public void test() throws Exception {
+    when(inputFile.contents()).thenReturn("Input file content");
+    when(inputFile.filename()).thenReturn("file.php");
+    when(inputFile.toString()).thenReturn("to string");
+    when(inputFile.relativePath()).thenReturn("path/to/file.php");
 
-  @Override
-  public Path relativePath() {
-    return Paths.get(wrapped.relativePath());
-  }
+    PhpFile phpFile = new PhpFileImpl(inputFile);
 
-  @Override
-  public File file() {
-    return wrapped.file();
-  }
-
-  Path path() {
-    return wrapped.path();
-  }
-
-  static class InputFileIOException extends RuntimeException {
-    InputFileIOException(Throwable cause) {
-      super(cause);
-    }
-  }
-
-  @Override
-  public String contents() {
-    try {
-      return wrapped.contents();
-    } catch (IOException e) {
-      throw new InputFileIOException(e);
-    }
-  }
-
-  Charset charset() {
-    return wrapped.charset();
+    assertThat(phpFile).isExactlyInstanceOf(PhpFileImpl.class);
+    assertThat(phpFile.contents()).isEqualTo("Input file content");
+    assertThat(phpFile.filename()).isEqualTo("file.php");
+    assertThat(phpFile.relativePath()).isEqualTo(Paths.get("path/to/file.php"));
+    assertThat(phpFile.toString()).isEqualTo("to string");
   }
 }

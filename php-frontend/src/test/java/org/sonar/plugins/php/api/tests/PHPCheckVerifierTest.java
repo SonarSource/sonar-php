@@ -189,7 +189,7 @@ public class PHPCheckVerifierTest {
       }
 
       private void verifyNoIssueIgnoringExpected(File sourceFile, PHPCheck check) {
-        createVerifier(new PhpTestFile(sourceFile), check).assertNoIssues();
+        createVerifier(sourceFile, check).assertNoIssues();
       }
     }
     new CustomVerifier().verifyNoIssueIgnoringExpected(new File("src/test/resources/tests/precise-issue.php"),

@@ -19,33 +19,47 @@
  */
 package org.sonar.php.compat;
 
-import java.io.File;
-import org.junit.Test;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+public class PhpFileImpl implements PhpFile {
 
-public class CompatibleInputFileTest {
+  private final InputFile wrapped;
 
-  private InputFile inputFile = mock(InputFile.class);
+  public PhpFileImpl(InputFile wrapped) {
+    this.wrapped = wrapped;
+  }
 
-  private String path = "path/to/file.php";
-  private File file = new File(path);
+  @Override
+  public Path relativePath() {
+    return Paths.get(wrapped.relativePath());
+  }
 
-  @Test
-  public void test() throws Exception {
-    when(inputFile.contents()).thenReturn("Input file content");
-    when(inputFile.relativePath()).thenReturn("path/to/file.php");
-    when(inputFile.file()).thenReturn(file);
+  static class InputFileIOException extends RuntimeException {
+    InputFileIOException(Throwable cause) {
+      super(cause);
+    }
+  }
 
-    PhpFile phpFile = new CompatibleInputFile(inputFile);
+  @Override
+  public String contents() {
+    try {
+      return wrapped.contents();
+    } catch (IOException e) {
+      throw new InputFileIOException(e);
+    }
+  }
 
-    assertThat(phpFile).isExactlyInstanceOf(CompatibleInputFile.class);
-    assertThat(phpFile.contents()).isEqualTo("Input file content");
-    assertThat(phpFile.relativePath()).isEqualTo(new File("path/to/file.php").toPath());
-    assertThat(phpFile.file()).isEqualTo(file);
+  @Override
+  public String filename() {
+    return wrapped.filename();
+  }
+
+  @Override
+  public String toString() {
+    return wrapped.toString();
   }
 }

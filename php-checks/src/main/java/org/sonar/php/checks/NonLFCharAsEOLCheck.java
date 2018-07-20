@@ -37,7 +37,7 @@ public class NonLFCharAsEOLCheck extends PHPVisitorCheck {
       char c = contents.charAt(i);
 
       if (c == '\r' || c == '\u2028' || c == '\u2029') {
-        String message = String.format(MESSAGE, context().getPhpFile().relativePath().getFileName());
+        String message = String.format(MESSAGE, context().getPhpFile().filename());
         context().newFileIssue(this, message);
         break;
       }
