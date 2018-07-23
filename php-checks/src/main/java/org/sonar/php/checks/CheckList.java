@@ -81,6 +81,7 @@ public class CheckList {
       EmptyNestedBlockCheck.class,
       EmptyStatementCheck.class,
       EvalUseCheck.class,
+      ExecCallCheck.class,
       ExitOrDieUsageCheck.class,
       ExpressionComplexityCheck.class,
       FieldNameCheck.class,

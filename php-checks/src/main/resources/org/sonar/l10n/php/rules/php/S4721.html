@@ -1,0 +1,16 @@
+<p>OS commands are security-sensitive. For example, their use has led in the past to the following vulnerabilities:</p>
+<ul>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-12465">CVE-2018-12465</a> </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-7187">CVE-2018-7187</a> </li>
+</ul>
+<p>Applications that execute operating system commands or execute commands that interact with the underlying system should neutralize any
+externally-provided input used to construct those commands. Failure to do so could allow an attacker to execute unexpected or dangerous commands,
+potentially leading to loss of confidentiality, integrity or availability.</p>
+<p> </p>
+<h2>See</h2>
+<ul>
+  <li> <a href="http://cwe.mitre.org/data/definitions/78">MITRE, CWE-78</a> - Improper Neutralization of Special Elements used in an OS Command </li>
+  <li> OWASP Top 10 2017 Category A1 - Injection </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat1">SANS Top 25</a> - Insecure Interaction Between Components </li>
+</ul>
+
