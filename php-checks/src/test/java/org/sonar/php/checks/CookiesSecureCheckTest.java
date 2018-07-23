@@ -33,12 +33,12 @@ public class CookiesSecureCheckTest {
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  public void test_php_file() throws Exception {
+  public void test_php_file() {
     CheckVerifier.verify(new CookiesSecureCheck(), "CookiesSecureCheck.php");
   }
 
   @Test
-  public void test_php_ini() throws Exception {
+  public void test_php_ini() {
     check(check, new File(dir, "cookie_secure.ini"));
     check(check, new File(dir, "empty.ini"),
       ImmutableList.of(issue("Make sure creating the session cookie without the \"secure\" flag is safe here.")));

@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.phpini.PhpIniBoolean;
@@ -39,7 +40,7 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static final String MESSAGE_PHP_INI = "Make sure creating the session cookie without the \"secure\" flag is safe here.";
   private static final String MESSAGE = "Make sure creating this cookie without the \"secure\" flag is safe here.";
 
-  private static final String SET_COOKIE_FUNC = "setcookie";
+  private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
   private static final int SET_COOKIE_SECURE_PARAMETER = 5;
   private static final String SESSION_COOKIE_FUNC = "session_set_cookie_params";
   private static final int SESSION_COOKIE_SECURE_PARAMETER = 3;
@@ -56,7 +57,7 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getFunctionName(tree);
-    if ((SET_COOKIE_FUNC.equals(functionName) && argumentSetToFalse(tree, SET_COOKIE_SECURE_PARAMETER))
+    if ((SET_COOKIE_FUNCTIONS.contains(functionName) && argumentSetToFalse(tree, SET_COOKIE_SECURE_PARAMETER))
       || (SESSION_COOKIE_FUNC.equals(functionName) && argumentSetToFalse(tree, SESSION_COOKIE_SECURE_PARAMETER))) {
       context().newIssue(this, tree.callee(), MESSAGE);
     }

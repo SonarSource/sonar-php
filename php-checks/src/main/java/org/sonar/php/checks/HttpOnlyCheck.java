@@ -19,6 +19,7 @@
  */
 package org.sonar.php.checks;
 
+import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.phpini.PhpIniBoolean;
@@ -40,7 +41,7 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   private static final String MESSAGE_PHP_INI = "Set the \"session.cookie_httponly\" property to \"true\".";
   private static final String MESSAGE = "Set the last argument of \"setcookie()\" function to \"true\".";
 
-  private static final String SET_COOKIE_FUNC = "setcookie";
+  private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
   private static final int HTTP_ONLY_PARAMETER_INDEX = 6;
 
   @Override
@@ -63,7 +64,7 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
 
   private static boolean isSetCookie(FunctionCallTree tree) {
     String functionName = getFunctionName(tree);
-    return functionName != null && functionName.equals(SET_COOKIE_FUNC);
+    return functionName != null && SET_COOKIE_FUNCTIONS.contains(functionName);
   }
 
   private static boolean httpOnlySetToFalse(FunctionCallTree tree) {

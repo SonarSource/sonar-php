@@ -33,12 +33,12 @@ public class HttpOnlyCheckTest {
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  public void test_php_file() throws Exception {
+  public void test_php_file() {
     CheckVerifier.verify(new HttpOnlyCheck(), "HttpOnlyCheck.php");
   }
 
   @Test
-  public void test_php_ini() throws Exception {
+  public void test_php_ini() {
     check(check, new File(dir, "http_only.ini"));
     check(check, new File(dir, "empty.ini"), ImmutableList.of(issue("Set the \"session.cookie_httponly\" property to \"true\".")));
   }
