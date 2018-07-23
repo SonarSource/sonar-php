@@ -20,19 +20,16 @@
 package org.sonar.php.checks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -47,50 +44,28 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
   public static final String KEY = "S2115";
 
   private static final String MESSAGE = "Add password protection to this database.";
-
-  private Map<Symbol, List<ExpressionTree>> assignedValuesBySymbol = new HashMap<>();
-  private List<FunctionCallTree> functionCalls = new ArrayList<>();
+  private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    assignedValuesBySymbol.clear();
-    functionCalls.clear();
+    this.assignmentExpressionVisitor = new AssignmentExpressionVisitor(context().symbolTable());
+    tree.accept(assignmentExpressionVisitor);
     super.visitCompilationUnit(tree);
-    checkFunctionCalls();
   }
 
   @Override
-  public void visitAssignmentExpression(AssignmentExpressionTree assignment) {
-    ExpressionTree variable = assignment.variable();
-    Symbol symbol = context().symbolTable().getSymbol(variable);
-    if (symbol != null) {
-      if (!assignedValuesBySymbol.containsKey(symbol)) {
-        assignedValuesBySymbol.put(symbol, new ArrayList<>());
-      }
-      assignedValuesBySymbol.get(symbol).add(assignment.value());
+  public void visitFunctionCall(FunctionCallTree functionCall) {
+    String functionName = CheckUtils.getFunctionName(functionCall);
+    if ("mysqli".equals(functionName) || "mysqli_connect".equals(functionName) || "PDO".equals(functionName)) {
+      checkPasswordArgument(functionCall, 2);
+    } else if ("oci_connect".equals(functionName)) {
+      checkPasswordArgument(functionCall, 1);
+    } else if ("sqlsrv_connect".equals(functionName)) {
+      checkSqlServer(functionCall);
+    } else if ("pg_connect".equals(functionName)) {
+      checkPostgresql(functionCall);
     }
-    super.visitAssignmentExpression(assignment);
-  }
-
-  @Override
-  public void visitFunctionCall(FunctionCallTree tree) {
-    functionCalls.add(tree);
-    super.visitFunctionCall(tree);
-  }
-
-  private void checkFunctionCalls() {
-    for (FunctionCallTree functionCall : functionCalls) {
-      String functionName = CheckUtils.getFunctionName(functionCall);
-      if ("mysqli".equals(functionName) || "mysqli_connect".equals(functionName) || "PDO".equals(functionName)) {
-        checkPasswordArgument(functionCall, 2);
-      } else if ("oci_connect".equals(functionName)) {
-        checkPasswordArgument(functionCall, 1);
-      } else if ("sqlsrv_connect".equals(functionName)) {
-        checkSqlServer(functionCall);
-      } else if ("pg_connect".equals(functionName)) {
-        checkPostgresql(functionCall);
-      }
-    }
+    super.visitFunctionCall(functionCall);
   }
 
   private void checkPasswordArgument(FunctionCallTree functionCall, int argumentIndex) {
@@ -115,9 +90,10 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
     if (isEmptyLiteral(expression)) {
       return true;
     } else if (expression.is(Kind.VARIABLE_IDENTIFIER)) {
-      Symbol symbol = context().symbolTable().getSymbol(expression);
-      List<ExpressionTree> assignedValues = assignedValuesBySymbol.get(symbol);
-      return assignedValues != null && assignedValues.stream().allMatch(EmptyDatabasePasswordCheck::isEmptyLiteral);
+      return assignmentExpressionVisitor
+        .getAssignmentValue(expression)
+        .map(EmptyDatabasePasswordCheck::isEmptyLiteral)
+        .orElse(false);
     }
     return false;
   }
@@ -144,12 +120,10 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
       }
       return null;
     }
-    Symbol symbol = context().symbolTable().getSymbol(connectionInfo);
-    List<ExpressionTree> assignedValues = assignedValuesBySymbol.get(symbol);
-    if (assignedValues == null || assignedValues.size() != 1) {
-      return null;
-    }
-    return sqlServerPassword(assignedValues.get(0));
+    return assignmentExpressionVisitor
+      .getAssignmentValue(connectionInfo)
+      .map(this::sqlServerPassword)
+      .orElse(null);
   }
 
   private void checkPostgresql(FunctionCallTree functionCall) {
@@ -158,11 +132,9 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
       return;
     }
     ExpressionTree connectionString = arguments.get(0);
-    Symbol symbol = context().symbolTable().getSymbol(connectionString);
-    List<ExpressionTree> assignedValues = assignedValuesBySymbol.get(symbol);
-    if (assignedValues != null && assignedValues.size() == 1) {
-      connectionString = assignedValues.get(0);
-    }
+    connectionString = assignmentExpressionVisitor
+      .getAssignmentValue(connectionString)
+      .orElse(connectionString);
     checkPostgresqlConnectionString(connectionString);
   }
 
