@@ -66,6 +66,7 @@ public class CheckList {
       ConstantNameCheck.class,
       ConstructorDeclarationCheck.class,
       ConstructorDependencyInversionCheck.class,
+      CookiesSecureCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
       DirectlyAccessingSuperGlobalCheck.class,
       DuplicateBranchImplementationCheck.class,
@@ -186,6 +187,7 @@ public class CheckList {
   public static Iterable<Class> getPhpIniChecks() {
     return ImmutableList.<Class>of(
       AllowUrlCheck.class,
+      CookiesSecureCheck.class,
       CgiForceRedirectCheck.class,
       EnableDlCheck.class,
       FileUploadsCheck.class,

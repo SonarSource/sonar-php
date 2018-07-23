@@ -21,12 +21,17 @@ package org.sonar.php.checks.utils;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import com.sonarsource.checks.coverage.UtilityClass;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
+import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
@@ -185,6 +190,35 @@ public class CheckUtilsTest {
   @Test(expected = IllegalArgumentException.class)
   public void trim_quotes_literal_on_non_string() {
     trimQuotes((LiteralTree) expressionFromStatement("42;"));
+  }
+
+  @Test
+  public void is_false_value() throws Exception {
+    assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "false", "False", "FALSE")
+      .allMatch(CheckUtils::isFalseValue)).isTrue();
+
+    assertThat(createLiterals(Tree.Kind.NUMERIC_LITERAL, "0", "0.0")
+      .allMatch(CheckUtils::isFalseValue)).isTrue();
+
+    assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"0\"", "'0'", "''")
+      .allMatch(CheckUtils::isFalseValue)).isTrue();
+  }
+
+  @Test
+  public void is_true_value() throws Exception {
+    assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true", "True", "TRUE")
+      .allMatch(CheckUtils::isTrueValue)).isTrue();
+
+    assertThat(createLiterals(Tree.Kind.NUMERIC_LITERAL, "1", "-1", "3.14")
+      .allMatch(CheckUtils::isTrueValue)).isTrue();
+
+    assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"abc\"", "'1'", "'false'", "'0.0'")
+      .allMatch(CheckUtils::isTrueValue)).isTrue();
+  }
+
+  private Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
+    return Arrays.stream(values).map(value -> new LiteralTreeImpl(kind,
+      new InternalSyntaxToken(1, 1, value, Collections.emptyList(), 0, false)));
   }
 
   private ExpressionTree expressionFromStatement(String statement) {

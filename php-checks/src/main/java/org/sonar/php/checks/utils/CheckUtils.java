@@ -223,4 +223,31 @@ public final class CheckUtils {
     throw new IllegalArgumentException("Cannot trim quotes from non-string literal");
   }
 
+  /**
+   * <a href="http://php.net/manual/en/language.types.boolean.php">PHP boolean</a>
+   *
+   * @param tree
+   * @return true if {@code tree} represents false boolean value
+   */
+  public static boolean isFalseValue(ExpressionTree tree) {
+    if (tree.is(Tree.Kind.BOOLEAN_LITERAL, Kind.NUMERIC_LITERAL)) {
+      String value = ((LiteralTree) tree).value();
+      return value.equalsIgnoreCase("false")
+        || value.equals("0")
+        || value.equals("0.0");
+    }
+    if (tree.is(Kind.REGULAR_STRING_LITERAL)) {
+      String value = trimQuotes(((LiteralTree) tree).value());
+      return value.isEmpty() || value.equals("0");
+    }
+    return false;
+  }
+
+  /**
+   * @see #isFalseValue(ExpressionTree)
+   */
+  public static boolean isTrueValue(ExpressionTree tree) {
+    return !isFalseValue(tree);
+  }
+
 }
