@@ -48,6 +48,7 @@ public class CheckList {
       AtLeastThreeCasesInSwitchCheck.class,
       AvoidDESCheck.class,
       BooleanEqualityComparisonCheck.class,
+      CakePhpDebugModeCheck.class,
       CallParentConstructorCheck.class,
       CallToIniSetCheck.class,
       CatchRethrowingCheck.class,

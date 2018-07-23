@@ -1,0 +1,39 @@
+<p>CakePHP's debug mode is useful during development and debugging, but could expose sensitive information to attackers such as request parameters,
+passwords, tokens or headers and should not be included in production code. Only the value "0" or "false" for CakePHP 3.x is suitable (production
+mode) to not leak sensitive data on the logs.</p>
+<p>As a Security Auditor, you have to:</p>
+<p>- check if in the release process there is a step deactivating this debug mode before building the final package</p>
+<p>- check that the code that is going to be actually released in production is not having the debug mode activated</p>
+<h2>Noncompliant Code Example</h2>
+<p>CakePHP 1.x, 2.x:</p>
+<pre>
+Configure::write('debug', 1); // Noncompliant; development mode
+or
+Configure::write('debug', 2); // Noncompliant; development mode
+or
+Configure::write('debug', 3); // Noncompliant; development mode
+</pre>
+<p>CakePHP 3.0:</p>
+<pre>
+use Cake\Core\Configure;
+
+Configure::config('debug', true);
+</pre>
+<h2>Compliant Solution</h2>
+<p>CakePHP 1.2:</p>
+<pre>
+Configure::write('debug', 0); // Compliant; this is the production mode
+</pre>
+<p>CakePHP 3.0:</p>
+<pre>
+use Cake\Core\Configure;
+
+Configure::config('debug', false);
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="http://cwe.mitre.org/data/definitions/489.html">MITRE, CWE-489</a> - Leftover Debug Code </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/215.html">MITRE, CWE-215</a> - Information Exposure Through Debug Information </li>
+  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
+</ul>
+
