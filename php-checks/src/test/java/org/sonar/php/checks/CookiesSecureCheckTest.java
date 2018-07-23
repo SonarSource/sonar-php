@@ -40,7 +40,8 @@ public class CookiesSecureCheckTest {
   @Test
   public void test_php_ini() throws Exception {
     check(check, new File(dir, "cookie_secure.ini"));
-    check(check, new File(dir, "empty.ini"), ImmutableList.of(issue("Set the \"session.cookie_secure\" property to \"true\".")));
+    check(check, new File(dir, "empty.ini"),
+      ImmutableList.of(issue("Make sure creating the session cookie without the \"secure\" flag is safe here.")));
   }
 
 }

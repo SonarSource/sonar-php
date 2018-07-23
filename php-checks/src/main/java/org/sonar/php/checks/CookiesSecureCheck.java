@@ -36,7 +36,7 @@ import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
 @Rule(key = "S2092")
 public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
 
-  private static final String MESSAGE_PHP_INI = "Set the \"session.cookie_secure\" property to \"true\".";
+  private static final String MESSAGE_PHP_INI = "Make sure creating the session cookie without the \"secure\" flag is safe here.";
   private static final String MESSAGE = "Make sure creating this cookie without the \"secure\" flag is safe here.";
 
   private static final String SET_COOKIE_FUNC = "setcookie";
