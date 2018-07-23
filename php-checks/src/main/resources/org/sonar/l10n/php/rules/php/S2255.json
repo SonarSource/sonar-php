@@ -1,0 +1,31 @@
+{
+  "title": "Storing personal data in cookies is security-sensitive",
+  "type": "SECURITY_HOTSPOT",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "cwe",
+    "cert",
+    "owasp-a3"
+  ],
+  "standards": [
+    "CWE",
+    "OWASP Top Ten"
+  ],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-2255",
+  "sqKey": "S2255",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      315,
+      312
+    ],
+    "OWASP": [
+      "A3"
+    ]
+  }
+}
