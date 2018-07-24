@@ -172,6 +172,7 @@ public class CheckList {
       TooManyReturnCheck.class,
       TrailingCommentCheck.class,
       TrailingWhitespaceCheck.class,
+      UnserializeCallCheck.class,
       UnusedExceptionCheck.class,
       UnusedFunctionParametersCheck.class,
       UnusedLocalVariableCheck.class,

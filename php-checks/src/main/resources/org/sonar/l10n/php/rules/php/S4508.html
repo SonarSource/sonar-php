@@ -1,0 +1,20 @@
+<p>Deserializing objects is security-sensitive. For example, it has led in the past to the following vulnerabilities:</p>
+<ul>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2012-0694">CVE-2012-0694</a>: SugarCRM: Unserialize PHP Code Execution </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1000058">CVE-2018-1000058</a>: Jenkins Pipeline: arbitrary code execution
+  vulnerability </li>
+</ul>
+<p>Object deserialization from an untrusted source can lead to unexpected code execution. Deserialization takes a stream of bits and turns it into an
+object. If the stream contains the type of object you expect, all is well. But if you're deserializing untrusted input, and an attacker has inserted
+some other type of object, you're in trouble. Why? There are a few different attack scenarios, but one widely-documented one goes like this:
+Deserialization first instantiates the <code>Object</code>, then PHP will automatically attempt to call the <code>__wakeup()</code> member to
+reconstruct any resources that the object may have. If the attacker has overridden <code>__wakeup()</code> then he is entirely in control of what code
+executes during that process.</p>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://cwe.mitre.org/data/definitions/502.html">MITRE, CWE-502</a> - Deserialization of Untrusted Data </li>
+  <li> OWASP Top 10 2017 Category A8 - Insecure Deserialization </li>
+  <li> <a href="https://www.owasp.org/index.php/Deserialization_of_untrusted_data">OWASP Deserialization of untrusted data</a> </li>
+  <li> Derived from FindSecBugs rule <a href="https://find-sec-bugs.github.io/bugs.htm#OBJECT_DESERIALIZATION">OBJECT_DESERIALIZATION </a> </li>
+</ul>
+
