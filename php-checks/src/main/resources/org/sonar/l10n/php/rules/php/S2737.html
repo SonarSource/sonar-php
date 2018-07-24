@@ -16,7 +16,7 @@ $s = "";
 try {
   $s = readMyFile($fileName);
 } catch (Exception $e) {
-  error_log($e.getMessage());
+  error_log($e->getMessage());
   throw $e;  // Compliant
 }
 </pre>
@@ -26,7 +26,7 @@ $s = "";
 try {
   $s = readMyFile($fileName);
 } catch (Exception $e) {
-  error_log($e.getMessage());
+  error_log($e->getMessage());
   throw new MyException("an exception occurred", 2, $e);  // Compliant
 }
 </pre>

@@ -7,7 +7,7 @@ try {
 
 try {
 } catch (Exception $e) {
-  throw new Exception($e.getMessage());  // Compliant - using $e
+  throw new Exception($e->getMessage());  // Compliant - using $e
 }
 
 try {
@@ -27,7 +27,7 @@ try {
 } catch (Exception1 $e) {
   throw $e;  // Compliant - multiple catches, one is not simply retrowing
 } catch (Exception2 $e) {
-  throw new Exception($e.getMessage());
+  throw new Exception($e->getMessage());
 }
 
 try {
