@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -72,7 +73,8 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
       int size = Integer.parseInt(literal.value());
       return size < MIN_KEY_LENGTH;
     } else if (keySize.is(Kind.VARIABLE_IDENTIFIER)) {
-      return assignmentExpressionVisitor.getAssignmentValue(keySize)
+      Symbol keySizeSymbol = context().symbolTable().getSymbol(keySize);
+      return assignmentExpressionVisitor.getUniqueAssignedValue(keySizeSymbol)
         .map(this::lessThanMinKeyLength)
         .orElse(false);
     }
@@ -82,28 +84,31 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
   private Optional<ExpressionTree> getKeySize(ExpressionTree config) {
     if (config.is(Kind.ARRAY_INITIALIZER_FUNCTION, Kind.ARRAY_INITIALIZER_BRACKET) && isRSA((ArrayInitializerTree) config)) {
       return ((ArrayInitializerTree) config).arrayPairs().stream()
-        .filter(pair -> pair.key() != null && pair.key().is(Kind.REGULAR_STRING_LITERAL) && "private_key_bits".equals(trimQuotes((LiteralTree) pair.key())))
+        .filter(pair -> hasKey(pair, "private_key_bits"))
         .map(ArrayPairTree::value)
         .findFirst();
     }
+    Symbol configSymbol = context().symbolTable().getSymbol(config);
     return assignmentExpressionVisitor
-      .getAssignmentValue(config)
+      .getUniqueAssignedValue(configSymbol)
       .flatMap(this::getKeySize);
   }
 
-  private boolean isRSA(ArrayInitializerTree config) {
-    return config.arrayPairs().stream()
-      .filter(pair -> {
-        if (!"private_key_type".equals(trimQuotes((LiteralTree) pair.key()))) {
-          return false;
-        }
-        if (pair.value().is(Kind.NAMESPACE_NAME)) {
-          NamespaceNameTree value = (NamespaceNameTree) pair.value();
-          return "OPENSSL_KEYTYPE_RSA".equals(value.name().text());
-        }
+  private static boolean hasKey(ArrayPairTree pair, String keyName) {
+    return pair.key() != null && pair.key().is(Kind.REGULAR_STRING_LITERAL) && keyName.equals(trimQuotes((LiteralTree) pair.key()));
+  }
+
+  private static boolean isRSA(ArrayInitializerTree config) {
+    return config.arrayPairs().stream().anyMatch(pair -> {
+      if (!hasKey(pair, "private_key_type")) {
         return false;
-      })
-      .count() > 0;
+      }
+      if (pair.value().is(Kind.NAMESPACE_NAME)) {
+        NamespaceNameTree value = (NamespaceNameTree) pair.value();
+        return "OPENSSL_KEYTYPE_RSA".equals(value.name().text());
+      }
+      return false;
+    });
   }
 
 }

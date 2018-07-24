@@ -19,10 +19,12 @@
  */
 package org.sonar.php.tree.visitors;
 
+import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -31,47 +33,56 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AssignmentExpressionVisitorTest extends PHPTreeModelTest {
+public class AssignmentExpressionVisitorTest {
 
   @Test
   public void getAssignmentValue() throws Exception {
-    CompilationUnitTree tree = parse("<?php function foo() { $a = 1; }", PHPLexicalGrammar.COMPILATION_UNIT);
-    SymbolTable symbolTable = SymbolTableImpl.create(tree);
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.Of("$a").from("<?php function foo() { $a = 1; }");
 
-    AssignmentExpressionVisitor assignmentExpressionVisitor = new AssignmentExpressionVisitor(symbolTable);
-    tree.accept(assignmentExpressionVisitor);
-    IdentifierTree var = ((SymbolTableImpl) symbolTable).getSymbols("$a").get(0).declaration();
-
-    ExpressionTree value = assignmentExpressionVisitor.getAssignmentValue(var).get();
+    assertThat(uniqueAssignedValue).isPresent();
+    ExpressionTree value = uniqueAssignedValue.get();
     assertThat(value).isInstanceOf(LiteralTree.class);
     assertThat(((LiteralTree) value).value()).isEqualTo("1");
   }
 
   @Test
   public void getAssignmentValue_global() throws Exception {
-    CompilationUnitTree tree = parse("<?php $a = 1;", PHPLexicalGrammar.COMPILATION_UNIT);
-    SymbolTable symbolTable = SymbolTableImpl.create(tree);
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.Of("$a").from("<?php $a = 1;");
 
-    AssignmentExpressionVisitor assignmentExpressionVisitor = new AssignmentExpressionVisitor(symbolTable);
-    tree.accept(assignmentExpressionVisitor);
-    IdentifierTree var = ((SymbolTableImpl) symbolTable).getSymbols("$a").get(0).declaration();
-
-    ExpressionTree value = assignmentExpressionVisitor.getAssignmentValue(var).get();
+    assertThat(uniqueAssignedValue).isPresent();
+    ExpressionTree value = uniqueAssignedValue.get();
     assertThat(value).isInstanceOf(LiteralTree.class);
     assertThat(((LiteralTree) value).value()).isEqualTo("1");
   }
 
   @Test
   public void getAssignmentValue_multiple() throws Exception {
-    CompilationUnitTree tree = parse("<?php $a = 1;\n$a = 2;", PHPLexicalGrammar.COMPILATION_UNIT);
-    SymbolTable symbolTable = SymbolTableImpl.create(tree);
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.Of("$a").from("<?php $a = 1;\n$a = 2;");
 
-    AssignmentExpressionVisitor assignmentExpressionVisitor = new AssignmentExpressionVisitor(symbolTable);
-    tree.accept(assignmentExpressionVisitor);
-    IdentifierTree var = ((SymbolTableImpl) symbolTable).getSymbols("$a").get(0).declaration();
+    assertThat(uniqueAssignedValue).isNotPresent();
+  }
 
-    assertThat(assignmentExpressionVisitor.getAssignmentValue(var).isPresent()).isFalse();
+  private static class UniqueAssignedValue extends PHPTreeModelTest {
+    private String name;
 
+    UniqueAssignedValue(String name) {
+      this.name = name;
+    }
+
+    static UniqueAssignedValue Of(String name) {
+      return new UniqueAssignedValue(name);
+    }
+
+    Optional<ExpressionTree> from(String code) throws Exception {
+      CompilationUnitTree tree = parse(code, PHPLexicalGrammar.COMPILATION_UNIT);
+      SymbolTable symbolTable = SymbolTableImpl.create(tree);
+
+      AssignmentExpressionVisitor assignmentExpressionVisitor = new AssignmentExpressionVisitor(symbolTable);
+      tree.accept(assignmentExpressionVisitor);
+      IdentifierTree var = ((SymbolTableImpl) symbolTable).getSymbols(name).get(0).declaration();
+      Symbol symbol = symbolTable.getSymbol(var);
+      return assignmentExpressionVisitor.getUniqueAssignedValue(symbol);
+    }
   }
 
 }

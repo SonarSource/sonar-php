@@ -19,14 +19,13 @@
  */
 package org.sonar.php.tree.visitors;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -53,8 +52,7 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
     super.visitAssignmentExpression(assignment);
   }
 
-  public Optional<ExpressionTree> getAssignmentValue(Tree expression) {
-    Symbol symbol = symbolTable.getSymbol(expression);
+  public Optional<ExpressionTree> getUniqueAssignedValue(Symbol symbol) {
     List<ExpressionTree> values = assignedValuesBySymbol.get(symbol);
     return values != null && values.size() == 1 ? Optional.of(values.get(0)) : Optional.empty();
   }

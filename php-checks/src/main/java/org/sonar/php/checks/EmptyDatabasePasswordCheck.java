@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -90,8 +91,9 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
     if (isEmptyLiteral(expression)) {
       return true;
     } else if (expression.is(Kind.VARIABLE_IDENTIFIER)) {
+      Symbol expressionSymbol = context().symbolTable().getSymbol(expression);
       return assignmentExpressionVisitor
-        .getAssignmentValue(expression)
+        .getUniqueAssignedValue(expressionSymbol)
         .map(EmptyDatabasePasswordCheck::isEmptyLiteral)
         .orElse(false);
     }
@@ -120,8 +122,9 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
       }
       return null;
     }
+    Symbol connectionInfoSymbol = context().symbolTable().getSymbol(connectionInfo);
     return assignmentExpressionVisitor
-      .getAssignmentValue(connectionInfo)
+      .getUniqueAssignedValue(connectionInfoSymbol)
       .map(this::sqlServerPassword)
       .orElse(null);
   }
@@ -132,8 +135,9 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
       return;
     }
     ExpressionTree connectionString = arguments.get(0);
+    Symbol connectionStringSymbol = context().symbolTable().getSymbol(connectionString);
     connectionString = assignmentExpressionVisitor
-      .getAssignmentValue(connectionString)
+      .getUniqueAssignedValue(connectionStringSymbol)
       .orElse(connectionString);
     checkPostgresqlConnectionString(connectionString);
   }

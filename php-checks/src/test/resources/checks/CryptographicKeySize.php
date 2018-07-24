@@ -48,3 +48,25 @@ function noRsa() {
       );
   $res = openssl_pkey_new($config);
 }
+
+function noNumericLiteralOrVariable() {
+    $config = array(
+            "private_key_bits" => "1024",
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        );
+    $res = openssl_pkey_new($config);
+
+    $configFromFunctionCall = array(
+                "private_key_bits" => getKeyLength(),
+                "private_key_type" => OPENSSL_KEYTYPE_RSA,
+            );
+    $res = openssl_pkey_new($configFromFunctionCall);
+}
+
+function unknownKeyType() {
+    $config = array(
+            "private_key_bits" => 2048,
+            "private_key_type" => getKeyType(),
+        );
+    $res = openssl_pkey_new($config);
+}
