@@ -21,6 +21,7 @@ package org.sonar.php.checks.utils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.Iterator;
@@ -63,6 +64,9 @@ public final class CheckUtils {
     .put("$HTTP_SESSION_VARS", "$_SESSION")
     .put("$HTTP_ENV_VARS", "$_ENV")
     .put("$HTTP_COOKIE_VARS", "$_COOKIE").build();
+
+  public static final ImmutableSet<String> SUPERGLOBALS = ImmutableSet.of(
+      "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
 
   private CheckUtils() {
   }

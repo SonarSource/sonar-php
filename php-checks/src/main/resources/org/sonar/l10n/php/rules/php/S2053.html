@@ -1,0 +1,27 @@
+<p>In cryptography, "salt" is extra data that's included in a hashing algorithm to make dictionary attacks more difficult. Using a cryptographic hash
+function without an unpredictable salt increases the likelihood that an attacker will be able to successfully guess a hashed value such as a password
+with a dictionary attack.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+function createMyAccount() {
+  $email = $_GET['email'];
+  $name = $_GET['name'];
+  $password = $_GET['password'];
+
+  $hash = hash_pbkdf2('sha256', $password, $email, 100000); // Noncompliant; salt (3rd argument) is predictable because initialized with the provided $email
+
+  $hash = hash_pbkdf2('sha256', $password, '', 100000); // Noncompliant; salt is empty
+
+  $hash = hash_pbkdf2('sha256', $password, 'D8VxSmTZt2E2YV454mkqAY5e', 100000); // Noncompliant; salt is hardcoded
+
+  // store the $hash in the DB
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="http://cwe.mitre.org/data/definitions/759.html">MITRE, CWE-759</a> - Use of a One-Way Hash without a Salt </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/760.html">MITRE, CWE-760</a> - Use of a One-Way Hash with a Predictable Salt </li>
+  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
+</ul>
+
