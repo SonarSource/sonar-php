@@ -185,6 +185,7 @@ public class CheckList {
       UseOfUninitializedVariableCheck.class,
       VariableVariablesCheck.class,
       VarKeywordUsageCheck.class,
+      WeakSSLProtocolCheck.class,
       WrongAssignmentOperatorCheck.class
       );
   }
