@@ -1,6 +1,6 @@
 {
   "title": "Executing OS commands is security-sensitive",
-  "type": "CODE_SMELL",
+  "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
@@ -17,5 +17,10 @@
   "defaultSeverity": "Critical",
   "ruleSpecification": "RSPEC-4721",
   "sqKey": "S4721",
-  "scope": "All"
+  "scope": "All",
+  "securityStandards": {
+    "CWE": [
+      78
+    ]
+  }
 }
