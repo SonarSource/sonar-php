@@ -55,6 +55,7 @@ ${compoundVar} = 1;     // use of $compoundVar
 $var = "str";
 echo "${var}";          // use of $var
 $compactArray = compact("var", "unknown"); // use of $var
+$compactArray = \compact("var", "unknown"); // use of $var
 
 new A();
 new A;
