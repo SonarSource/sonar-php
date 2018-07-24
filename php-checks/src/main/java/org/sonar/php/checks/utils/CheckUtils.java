@@ -240,14 +240,15 @@ public final class CheckUtils {
       String value = trimQuotes(((LiteralTree) tree).value());
       return value.isEmpty() || value.equals("0");
     }
-    return false;
+    return tree.is(Kind.NULL_LITERAL);
   }
 
   /**
    * @see #isFalseValue(ExpressionTree)
    */
   public static boolean isTrueValue(ExpressionTree tree) {
-    return !isFalseValue(tree);
+    return tree.is(Kind.BOOLEAN_LITERAL, Kind.NUMERIC_LITERAL, Kind.REGULAR_STRING_LITERAL, Kind.NULL_LITERAL)
+      && !isFalseValue(tree);
   }
 
 }

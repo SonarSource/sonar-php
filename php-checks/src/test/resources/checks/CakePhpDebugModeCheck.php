@@ -25,3 +25,6 @@ Configure::config('xxx', true);
 Configure::write($var, 1);
 Configure::write('debug', $var);
 Configure::xxx('debug', 1);
+
+$debug3 = doSomething();
+Configure::config('debug', $debug3);
