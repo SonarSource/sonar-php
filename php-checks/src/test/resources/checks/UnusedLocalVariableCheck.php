@@ -271,6 +271,11 @@ function compact_function() {
   return compact("a", "b");
 }
 
+function compact_function_with_backslash() {
+  $a = foo();
+  return \compact("a");
+}
+
 function extract_function() {
   $var_array = array("color" => "blue");
   extract($var_array);

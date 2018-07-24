@@ -121,7 +121,7 @@ public class UsagesTest extends ParsingTestUtils {
 
     assertThat(scope.getSymbol("$compoundVar").usages()).hasSize(2);
     assertThat(scope.getSymbol("$heredocVar").usages()).hasSize(2);
-    assertThat(scope.getSymbol("$var").usages()).hasSize(2);
+    assertThat(scope.getSymbol("$var").usages()).hasSize(3);
 
     Symbol classSymbol = scope.getSymbol("A");
     assertThat(classSymbol).isNotNull();

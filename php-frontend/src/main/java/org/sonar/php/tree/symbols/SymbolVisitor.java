@@ -378,7 +378,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     tree.callee().accept(this);
 
     String callee = SourceBuilder.build(tree.callee()).trim();
-    if ("compact".equals(callee)) {
+    if ("compact".equals(callee) || "\\compact".equals(callee)) {
       visitCompactFunctionCall(tree.arguments());
     }
 
