@@ -143,6 +143,7 @@ public class CheckList {
       PerlStyleCommentsUsageCheck.class,
       PHPDeprecatedFunctionUsageCheck.class,
       PhpSapiNameFunctionUsageCheck.class,
+      RandomGeneratorCheck.class,
       RedundantFinalCheck.class,
       RedundantParenthesesCheck.class,
       ReferenceInFunctionCallCheck.class,
