@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
 import org.sonar.php.tree.impl.expression.LiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -202,6 +203,13 @@ public class CheckUtilsTest {
 
     assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"0\"", "'0'", "''")
       .allMatch(CheckUtils::isFalseValue)).isTrue();
+
+    assertThat((createLiterals(Tree.Kind.NULL_LITERAL, "NULL"))
+      .allMatch(CheckUtils::isFalseValue)).isTrue();
+
+    VariableIdentifierTreeImpl variableIdentifierTree = new VariableIdentifierTreeImpl(
+      new InternalSyntaxToken(1, 1, "var", Collections.emptyList(), 1, false));
+    assertThat(CheckUtils.isFalseValue(variableIdentifierTree)).isFalse();
   }
 
   @Test
@@ -214,6 +222,13 @@ public class CheckUtilsTest {
 
     assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"abc\"", "'1'", "'false'", "'0.0'")
       .allMatch(CheckUtils::isTrueValue)).isTrue();
+
+    assertThat((createLiterals(Tree.Kind.NULL_LITERAL, "NULL"))
+      .allMatch(CheckUtils::isTrueValue)).isFalse();
+
+    VariableIdentifierTreeImpl variableIdentifierTree = new VariableIdentifierTreeImpl(
+      new InternalSyntaxToken(1, 1, "var", Collections.emptyList(), 1, false));
+    assertThat(CheckUtils.isTrueValue(variableIdentifierTree)).isFalse();
   }
 
   private Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
