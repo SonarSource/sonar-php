@@ -67,6 +67,7 @@ public class CheckList {
       ConstructorDeclarationCheck.class,
       ConstructorDependencyInversionCheck.class,
       CookiesSecureCheck.class,
+      CryptographicKeySizeCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
       DirectlyAccessingSuperGlobalCheck.class,
       DuplicateBranchImplementationCheck.class,
