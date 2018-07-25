@@ -19,17 +19,17 @@
  */
 package org.sonar.php.checks;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-
-import java.io.File;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class CheckListTest {
-
 
   /**
    * Enforces that each check declared in list.
@@ -37,22 +37,24 @@ public class CheckListTest {
   @Test
   public void count() {
     int count = 0;
-    List<File> files = (List<File>) FileUtils.listFiles(new File("src/main/java/org/sonar/php/checks/"), new String[]{"java"}, false);
+    List<File> files = new ArrayList<>();
+    for (String folder : new String[] { "src/main/java/org/sonar/php/checks/", "src/main/java/org/sonar/php/checks/security" }) {
+      files.addAll(FileUtils.listFiles(new File(folder), new String[]{"java"}, false));
+    }
     for (File file : files) {
       if (file.getName().endsWith("Check.java")) {
         count++;
       }
     }
-    assertThat(CheckList.getChecks().size()).isEqualTo(count);
+    assertThat(CheckList.getChecks()).hasSize(count);
   }
-
 
   /**
    * Enforces that each check has test
    */
   @Test
   public void test() {
-    List<Class> checks = CheckList.getChecks();
+    Set<Class> checks = CheckList.getAllChecks();
 
     for (Class<?> cls : checks) {
       if (cls != ParsingErrorCheck.class) {
