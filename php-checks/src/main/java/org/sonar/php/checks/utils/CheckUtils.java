@@ -251,4 +251,8 @@ public final class CheckUtils {
       && !isFalseValue(tree);
   }
 
+  public static boolean isStringLiteralWithValue(@Nullable Tree tree, String s) {
+    return tree != null && tree.is(Kind.REGULAR_STRING_LITERAL) && s.equalsIgnoreCase(trimQuotes((LiteralTree) tree));
+  }
+
 }

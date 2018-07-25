@@ -46,6 +46,7 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonar.php.checks.utils.CheckUtils.isStringLiteralWithValue;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
 public class CheckUtilsTest {
@@ -229,6 +230,20 @@ public class CheckUtilsTest {
     VariableIdentifierTreeImpl variableIdentifierTree = new VariableIdentifierTreeImpl(
       new InternalSyntaxToken(1, 1, "var", Collections.emptyList(), 1, false));
     assertThat(CheckUtils.isTrueValue(variableIdentifierTree)).isFalse();
+  }
+
+  @Test
+  public void is_string_literal_with_value() throws Exception {
+    assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"foo\"", "\"Foo\"", "\"FOO\"")
+      .allMatch(literalTree -> isStringLiteralWithValue(literalTree, "foo"))).isTrue();
+
+    assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "\"foo\"")
+      .allMatch(literalTree -> isStringLiteralWithValue(literalTree, "bar"))).isFalse();
+
+    assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true")
+      .allMatch(literalTree -> isStringLiteralWithValue(literalTree, "bar"))).isFalse();
+
+    assertThat(isStringLiteralWithValue(null, "foo")).isFalse();
   }
 
   private Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {

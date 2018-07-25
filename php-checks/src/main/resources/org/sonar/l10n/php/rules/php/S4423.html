@@ -1,0 +1,30 @@
+<p>Not all SSL protocols are created equal and some legacy ones like "SSL", have been proven to be insecure.</p>
+<p>This rule raises an issue when an SSL context is created with an insecure protocol (ie: a protocol different from "TLSv1.2" or "DTLSv1.2").</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+$ctx = stream_context_create([
+  'ssl' =&gt; [
+    'crypto_method' =&gt;
+      STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT | // Noncompliant
+      STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+  ],
+]);
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+$ctx = stream_context_create([
+    'ssl' =&gt; [
+        'crypto_method' =&gt; STREAM_CRYPTO_METHOD_SSLv3_CLIENT
+    ],
+]);
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="http://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-327</a> - Inadequate Encryption Strength </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-326</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
+  <li> OWASP Top 10 2017 Category A3 - Sensitive Data Exposure </li>
+  <li> OWASP Top 10 2017 Category A6 - Security Misconfiguration </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
+  <li> <a href="https://blogs.oracle.com/java-platform-group/diagnosing-tls,-ssl,-and-https">Diagnosing TLS, SSL, and HTTPS</a> </li>
+</ul>
+
