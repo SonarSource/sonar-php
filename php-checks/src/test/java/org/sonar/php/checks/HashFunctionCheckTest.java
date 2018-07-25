@@ -29,4 +29,9 @@ public class HashFunctionCheckTest {
     CheckVerifier.verify(new HashFunctionCheck(), "HashFunctionCheck.php");
   }
 
+  @Test
+  public void test_no_issue() {
+    CheckVerifier.verifyNoIssue(new HashFunctionCheck(), "HashFunctionCheckNoIssue.php");
+  }
+
 }
