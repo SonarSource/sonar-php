@@ -38,6 +38,7 @@ import static org.sonar.php.checks.utils.CheckUtils.SUPERGLOBALS;
 public class HashFunctionCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Use an unpredictable salt value.";
+  private static final String MESSAGE_MISSING_SALT = "Provide cryptographically strong salt parameter.";
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
@@ -47,6 +48,15 @@ public class HashFunctionCheck extends PHPVisitorCheck {
       ExpressionTree saltArgument = tree.arguments().get(2);
       if (isPredictable(saltArgument)) {
         context().newIssue(this, saltArgument, MESSAGE);
+      }
+    } else if ("crypt".equals(functionName)) {
+      if (tree.arguments().size() < 2) {
+        context().newIssue(this, tree, MESSAGE_MISSING_SALT);
+      } else {
+        ExpressionTree saltArgument = tree.arguments().get(1);
+        if (isPredictable(saltArgument)) {
+          context().newIssue(this, saltArgument, MESSAGE);
+        }
       }
     }
     super.visitFunctionCall(tree);

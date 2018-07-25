@@ -14,8 +14,8 @@ $hash = hash_pbkdf2('sha256', $password, 'D8VxSmTZt2E2YV454mkqAY5e', 100000); //
 $salt = 'salt';
 $hash = hash_pbkdf2('sha256', $password, $salt, 100000); // Noncompliant
 
-$salt2 = openssl_random_pseudo_bytes(16);
-$hash = hash_pbkdf2("sha256", $password, $salt2, $iterations, 20);
+$cryptoSalt = openssl_random_pseudo_bytes(16);
+$hash = hash_pbkdf2("sha256", $password, $cryptoSalt, $iterations, 20);
 
 $salt3 = $arr['email'];
 $hash = hash_pbkdf2("sha256", $password, $salt3, $iterations, 20);
@@ -26,4 +26,12 @@ $hash = hash_pbkdf2("sha256", $password, $salt4, $iterations, 20); // Noncomplia
 $salt5 = 'salt';
 $salt5 = 'salt';
 $hash = hash_pbkdf2("sha256", $password, $salt5, $iterations, 20); // FN
+
+$hash = crypt($password); // Noncompliant {{Provide cryptographically strong salt parameter.}}
+
+$hash = crypt($password, 'xxxx'); // Noncompliant {{Use an unpredictable salt value.}}
+
+$hash = crypt($password, $email); // Noncompliant
+
+$hash = crypt($password, $cryptoSalt);
 
