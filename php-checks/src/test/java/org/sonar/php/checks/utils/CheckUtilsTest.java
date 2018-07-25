@@ -246,6 +246,21 @@ public class CheckUtilsTest {
     assertThat(isStringLiteralWithValue(null, "foo")).isFalse();
   }
 
+  @Test
+  public void is_null_or_empty_string() {
+    assertThat(createLiterals(Tree.Kind.NULL_LITERAL, "NULL")
+        .allMatch(CheckUtils::isNullOrEmptyString)).isTrue();
+
+    assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "", "   ")
+        .allMatch(CheckUtils::isNullOrEmptyString)).isTrue();
+
+    assertThat(createLiterals(Tree.Kind.REGULAR_STRING_LITERAL, "x", "  .  ")
+        .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
+
+    assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true", "false")
+        .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
+  }
+
   private Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
     return Arrays.stream(values).map(value -> new LiteralTreeImpl(kind,
       new InternalSyntaxToken(1, 1, value, Collections.emptyList(), 0, false)));
