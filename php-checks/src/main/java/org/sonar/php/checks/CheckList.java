@@ -30,6 +30,7 @@ import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
+import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 
 public class CheckList {
 
@@ -117,6 +118,7 @@ public class CheckList {
       InsecureHashCheck.class,
       InterfaceNameCheck.class,
       KeywordsAndConstantsNotLowerCaseCheck.class,
+      LDAPAuthenticatedConnectionCheck.class,
       LeftCurlyBraceEndsLineCheck.class,
       LeftCurlyBraceStartsLineCheck.class,
       LineLengthCheck.class,
