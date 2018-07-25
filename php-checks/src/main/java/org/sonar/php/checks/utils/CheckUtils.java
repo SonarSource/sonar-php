@@ -255,4 +255,15 @@ public final class CheckUtils {
     return tree != null && tree.is(Kind.REGULAR_STRING_LITERAL) && s.equalsIgnoreCase(trimQuotes((LiteralTree) tree));
   }
 
+  public static boolean isNullOrEmptyString(ExpressionTree tree) {
+    if (tree.is(Kind.NULL_LITERAL)) {
+      return true;
+    }
+    if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+      String value = CheckUtils.trimQuotes(((LiteralTree) tree).value());
+      return value.trim().isEmpty();
+    }
+    return false;
+  }
+
 }
