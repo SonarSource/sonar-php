@@ -74,7 +74,7 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
     )
   );
 
-  private static final String MESSAGE = "Change this code to use a stronger protocol";
+  private static final String MESSAGE = "Change this code to use a stronger protocol.";
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
@@ -88,7 +88,7 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getFunctionName(tree);
     if (STREAM_CONTEXT_CREATE.equals(functionName)) {
-      SeparatedList<ExpressionTree> arguments = tree.arguments();
+      List<ExpressionTree> arguments = tree.arguments();
       if (!arguments.isEmpty()) {
         checkSSLConfig(arguments.get(0));
       }
@@ -103,14 +103,13 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   }
 
   private void checkSSLConfig(ExpressionTree expressionTree) {
-    ExpressionTree param = getAssignedValue(expressionTree);
-    if (!param.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
+    ExpressionTree config = getAssignedValue(expressionTree);
+    if (!isArrayInitializer(config)) {
       return;
     }
-    ArrayInitializerTree config = (ArrayInitializerTree) param;
-    getProperty(config, "SSL")
+    getProperty((ArrayInitializerTree) config, "SSL")
       .flatMap(sslConfig -> {
-        if (sslConfig.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
+        if (isArrayInitializer(sslConfig)) {
           return getProperty((ArrayInitializerTree) sslConfig, "crypto_method");
         }
         return Optional.empty();
@@ -118,26 +117,32 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
       .ifPresent(value -> checkWeakProtocol(value, STREAM_CONTEXT_CREATE));
   }
 
+  private static boolean isArrayInitializer(ExpressionTree param) {
+    return param.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION);
+  }
+
   private void checkWeakProtocol(ExpressionTree expressionTree, String functionName) {
-    Stream<ExpressionTree> expressionTrees = expressionTree.is(Tree.Kind.BITWISE_OR)
+    Stream<ExpressionTree> protocols = expressionTree.is(Tree.Kind.BITWISE_OR)
       ? getOperands((BinaryExpressionTree) expressionTree)
       : Stream.of(expressionTree);
-    expressionTrees.forEach(value -> {
-      if (value.is(Tree.Kind.NAMESPACE_NAME)) {
-        NamespaceNameTree cryptoMethod = (NamespaceNameTree) value;
-        List<String> weakProtocols = WEAK_PROTOCOLS.get(functionName);
-        if (weakProtocols != null && weakProtocols.contains(cryptoMethod.name().text())) {
-          context().newIssue(this, cryptoMethod, MESSAGE);
+    List<String> weakProtocols = WEAK_PROTOCOLS.get(functionName);
+    if (weakProtocols != null) {
+      protocols.forEach(protocol -> {
+        if (protocol.is(Tree.Kind.NAMESPACE_NAME)) {
+          NamespaceNameTree cryptoMethod = (NamespaceNameTree) protocol;
+          if (weakProtocols.contains(cryptoMethod.name().text())) {
+            context().newIssue(this, cryptoMethod, MESSAGE);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   private static Stream<ExpressionTree> getOperands(BinaryExpressionTree binaryExpressionTree) {
-    if (binaryExpressionTree.rightOperand().is(Tree.Kind.BITWISE_OR)) {
+    if (binaryExpressionTree.leftOperand().is(Tree.Kind.BITWISE_OR)) {
       return Stream.concat(
-        Stream.of(binaryExpressionTree.leftOperand()),
-        getOperands((BinaryExpressionTree) binaryExpressionTree.rightOperand()));
+        Stream.of(binaryExpressionTree.rightOperand()),
+        getOperands((BinaryExpressionTree) binaryExpressionTree.leftOperand()));
     }
     return Stream.of(binaryExpressionTree.leftOperand(), binaryExpressionTree.rightOperand());
   }

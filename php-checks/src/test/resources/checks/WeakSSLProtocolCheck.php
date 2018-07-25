@@ -45,7 +45,7 @@ stream_context_create([
 
 $ctx = stream_context_create([
     'ssl' => [
-        'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT, // Noncompliant{{Change this code to use a stronger protocol}}
+        'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT, // Noncompliant{{Change this code to use a stronger protocol.}}
 //                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     ],
 ]);
@@ -122,7 +122,15 @@ $ctx = stream_context_create([
 $ctx = stream_context_create([
     'ssl' => [
         'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT | // Noncompliant
-                            getOthers()
+                            STREAM_CRYPTO_METHOD_TLSv1_1_SERVER | // Noncompliant
+                            STREAM_CRYPTO_METHOD_TLSv1_2_SERVER
+    ],
+]);
+
+$ctx = stream_context_create([
+    'ssl' => [
+        'crypto_method' => getOthers() |
+                           STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT // Noncompliant
     ],
 ]);
 

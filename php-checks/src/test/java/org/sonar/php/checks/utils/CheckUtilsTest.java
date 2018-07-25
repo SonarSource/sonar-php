@@ -242,6 +242,8 @@ public class CheckUtilsTest {
 
     assertThat(createLiterals(Tree.Kind.BOOLEAN_LITERAL, "true")
       .allMatch(literalTree -> isStringLiteralWithValue(literalTree, "bar"))).isFalse();
+
+    assertThat(isStringLiteralWithValue(null, "foo")).isFalse();
   }
 
   private Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {

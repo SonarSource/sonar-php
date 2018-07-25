@@ -10,6 +10,14 @@ $ctx = stream_context_create([
   ],
 ]);
 </pre>
+<h2>Compliant Solution</h2>
+<pre>
+$ctx = stream_context_create([
+    'ssl' =&gt; [
+        'crypto_method' =&gt; STREAM_CRYPTO_METHOD_SSLv3_CLIENT
+    ],
+]);
+</pre>
 <h2>See</h2>
 <ul>
   <li> <a href="http://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-327</a> - Inadequate Encryption Strength </li>
