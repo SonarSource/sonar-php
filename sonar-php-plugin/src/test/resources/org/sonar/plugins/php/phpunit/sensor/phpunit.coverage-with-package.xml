@@ -2,7 +2,7 @@
 <coverage generated="1234543251" phpunit="3.3.1">
   <project name="AllTests" timestamp="1234543251">
     <package name="api">
-      <file name="/Monkey.php">
+      <file name="src/Monkey.php">
         <class name="Monkey" namespace="global" fullPackage="Animals.Monkey" category="Monkey" package="Animals">
           <metrics methods="2" coveredmethods="0" statements="3" coveredstatements="0" elements="6" coveredelements="3"/>
         </class>

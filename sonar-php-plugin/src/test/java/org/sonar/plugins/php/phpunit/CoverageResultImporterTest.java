@@ -23,6 +23,7 @@ import com.google.common.io.Files;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,9 +44,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CoverageResultImporterTest {
 
-  private static final String BASE_DIR = "/org/sonar/plugins/php/phpunit/sensor/src/";
-  private static final String MONKEY_FILE_NAME = "Monkey.php";
-  private static final String BANANA_FILE_NAME = "Banana.php";
+  private static final String BASE_DIR = "/org/sonar/plugins/php/phpunit/sensor/";
+  private static final String MONKEY_FILE_NAME = "src/Monkey.php";
+  private static final String BANANA_FILE_NAME = "src/Banana.php";
   private static final String SRC_TEST_RESOURCES = "src/test/resources/";
   private static final File MONKEY_FILE = new File(SRC_TEST_RESOURCES + BASE_DIR + MONKEY_FILE_NAME);
   private static final File BANANA_FILE = new File(SRC_TEST_RESOURCES + BASE_DIR + BANANA_FILE_NAME);
@@ -93,7 +94,7 @@ public class CoverageResultImporterTest {
 
   @Test
   public void should_parse_even_with_package_node() throws Exception {
-    String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
+    String componentKey = "moduleKey:" + MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
 
     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-package.xml"), context);
 
@@ -102,27 +103,60 @@ public class CoverageResultImporterTest {
 
    @Test
    public void should_generate_coverage_measures() throws Exception {
-     String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
+     String componentKey = "moduleKey:"+ MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
 
      importer.importReport(getReportsWithAbsolutePath("phpunit.coverage.xml"), context);
 
-     // UNCOVERED_LINES is implicitly stored in the NewCoverage
-     PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES);
-
-     assertCoverageLineHits(context, componentKey, 34, 1);
-     assertCoverageLineHits(context, componentKey, 35, 1);
-     assertCoverageLineHits(context, componentKey, 38, 1);
-     assertCoverageLineHits(context, componentKey, 40, 0);
-     assertCoverageLineHits(context, componentKey, 45, 1);
-     assertCoverageLineHits(context, componentKey, 46, 1);
+     assertReport(componentKey);
    }
+
+  @Test
+  public void should_work_with_relative_paths() throws Exception {
+    String componentKey = "moduleKey:" + MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
+
+    String reportName = "phpunit.coverage.xml";
+    File reportFile = Paths.get(SRC_TEST_RESOURCES, PhpTestUtils.PHPUNIT_REPORT_DIR, reportName).toFile();
+    importer.importReport(reportFile, context);
+    assertReport(componentKey);
+  }
+
+  @Test
+  public void should_work_with_wrong_absolute_path() throws Exception {
+    String componentKey = "moduleKey:" + MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
+
+    String reportName = "phpunit.coverage.xml";
+    File reportFile = Paths.get(SRC_TEST_RESOURCES, PhpTestUtils.PHPUNIT_REPORT_DIR, reportName).toFile();
+    File newReportFile = folder.newFile("report_with_wrong_paths.xml");
+
+    String fakeRoot = "c:\\test\\";
+    String newReport = Files.toString(reportFile, StandardCharsets.UTF_8)
+      .replace(MONKEY_FILE_NAME, fakeRoot + MONKEY_FILE_NAME)
+      .replace(BANANA_FILE_NAME, fakeRoot + BANANA_FILE_NAME);
+
+    Files.write(newReport, newReportFile, StandardCharsets.UTF_8);
+
+    importer.importReport(reportFile, context);
+    assertReport(componentKey);
+  }
+
+  private void assertReport(String componentKey) {
+    // UNCOVERED_LINES is implicitly stored in the NewCoverage
+    PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES);
+
+    assertCoverageLineHits(context, componentKey, 34, 1);
+    assertCoverageLineHits(context, componentKey, 35, 1);
+    assertCoverageLineHits(context, componentKey, 38, 1);
+    assertCoverageLineHits(context, componentKey, 40, 0);
+    assertCoverageLineHits(context, componentKey, 45, 1);
+    assertCoverageLineHits(context, componentKey, 46, 1);
+  }
 
   /**
    * SONARPLUGINS-1591
    */
   @Test
   public void should_not_fail_if_no_statement_count() throws Exception {
-    String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
+    String componentKey = "moduleKey:" + MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
 
     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-no-statements-covered.xml"), context);
 
@@ -159,8 +193,8 @@ public class CoverageResultImporterTest {
 
     Files.write(
       Files.toString(new File(SRC_TEST_RESOURCES + PhpTestUtils.PHPUNIT_REPORT_DIR + reportName), StandardCharsets.UTF_8)
-        .replace("/" + MONKEY_FILE_NAME, MONKEY_FILE.getAbsolutePath())
-        .replace("/" + BANANA_FILE_NAME, BANANA_FILE.getAbsolutePath()),
+        .replace(MONKEY_FILE_NAME, MONKEY_FILE.getAbsolutePath())
+        .replace(BANANA_FILE_NAME, BANANA_FILE.getAbsolutePath()),
       fileWIthAbsolutePaths, StandardCharsets.UTF_8);
 
     return fileWIthAbsolutePaths;

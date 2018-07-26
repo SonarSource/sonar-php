@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <coverage generated="1234543251" phpunit="3.3.1">
   <project name="AllTests" timestamp="1234543251">
-    <file name="/Monkey.php">
+    <file name="src/Monkey.php">
       <class name="IndexControllerTest" namespace="global">
         <metrics methods="5" coveredmethods="4" statements="7" coveredstatements="11" elements="12" coveredelements="15"/>
       </class>
