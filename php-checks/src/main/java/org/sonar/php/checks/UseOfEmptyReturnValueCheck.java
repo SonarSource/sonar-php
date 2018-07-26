@@ -28,6 +28,9 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -388,14 +391,23 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
   private static boolean parentUseValue(Tree child) {
     Tree parent = child.getParent();
     Preconditions.checkNotNull(parent);
-    if (parent.is(Tree.Kind.NEW_EXPRESSION)) {
-    	  return false;
-    }
-    if (parent.is(Tree.Kind.PARENTHESISED_EXPRESSION, Tree.Kind.ERROR_CONTROL)) {
-      return parentUseValue(parent);
-    } else if (parent.is(Tree.Kind.EXPRESSION_STATEMENT)) {
+
+    if (parent.is(Kind.NEW_EXPRESSION)) {
       return false;
-    } else if (parent.is(Tree.Kind.FOR_STATEMENT)) {
+
+    } else if (parent.is(Kind.PARENTHESISED_EXPRESSION, Kind.ERROR_CONTROL)) {
+      return parentUseValue(parent);
+
+    } else if (parent.is(Kind.CONDITIONAL_AND, Kind.ALTERNATIVE_CONDITIONAL_AND, Kind.CONDITIONAL_OR, Kind.ALTERNATIVE_CONDITIONAL_OR)) {
+      return child == ((BinaryExpressionTree) parent).leftOperand() || parentUseValue(parent);
+
+    } else if (parent.is(Kind.CONDITIONAL_EXPRESSION)) {
+      return child == ((ConditionalExpressionTree) parent).condition() || parentUseValue(parent);
+
+    } else if (parent.is(Kind.EXPRESSION_STATEMENT)) {
+      return false;
+
+    } else if (parent.is(Kind.FOR_STATEMENT)) {
       SeparatedList<ExpressionTree> conditions = ((ForStatementTree) parent).condition();
       ExpressionTree lastCondition = conditions.isEmpty() ? null : conditions.get(conditions.size() - 1);
       return child.equals(lastCondition);

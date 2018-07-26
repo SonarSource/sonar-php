@@ -86,3 +86,18 @@ $a = $converter->setSourceEncoding("UTF8"); // SONARPHP-739 False-negative due t
 $a = hex2bin("AF");
 
 $header = new Header($preseller);
+
+exit(0) || $foo; // Noncompliant
+exit(0) && $foo; // Noncompliant
+exit(0) or $foo; // Noncompliant
+exit(0) and $foo; // Noncompliant
+$foo || exit('There was an error');
+$foo && exit('There was an error');
+$foo or exit('There was an error');
+$foo and exit('There was an error');
+fun($foo and exit('There was an error')); // Noncompliant
+
+exit(0) ? 0 : 1; // Noncompliant
+$foo ? exit(0) : 42;
+$foo ? 42 : exit(0);
+
