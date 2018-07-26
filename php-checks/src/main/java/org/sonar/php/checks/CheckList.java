@@ -162,6 +162,7 @@ public class CheckList {
       SleepFunctionUsageCheck.class,
       StringLiteralDuplicatedCheck.class,
       SwitchCaseTooBigCheck.class,
+      SwitchDefaultPositionCheck.class,
       SwitchWithoutDefaultCheck.class,
       TabCharacterCheck.class,
       ThisVariableUsageInStaticContextCheck.class,
