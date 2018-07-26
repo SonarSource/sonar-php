@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 @Rule(key = "S2245")
 public class RandomGeneratorCheck extends FunctionUsageCheck {
 
-  private static final String MESSAGE = "Use a cryptographically strong random number generator instead.";
+  private static final String MESSAGE = "Make sure that using this pseudorandom number generator is safe here.";
 
   @Override
   protected ImmutableSet<String> functionNames() {
