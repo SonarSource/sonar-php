@@ -34,8 +34,11 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchI
   private static final String MESSAGE = "This %s's code block is the same as the block for the %s on line %s.";
 
   @Override
-  protected void onAllEquivalentBranches(SyntaxToken keyword) {
-    // do nothing, case handled by S3923
+  protected void onAllEquivalentBranches(SyntaxToken keyword, List<List<StatementTree>> branches, boolean hasDefault, boolean hasFallthrough) {
+    if (!hasDefault) {
+      branches.stream().skip(1).forEach(branch -> raiseIssue("branch", branches.get(0), branch));
+    }
+    // otherwise do nothing, case handled by S3923
   }
 
   @Override

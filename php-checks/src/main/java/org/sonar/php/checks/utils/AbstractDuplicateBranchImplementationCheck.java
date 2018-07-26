@@ -21,9 +21,11 @@ package org.sonar.php.checks.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
@@ -61,10 +63,10 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
       }
     }
 
-    if (hasElse && areAllEquivalent(branches)) {
-      onAllEquivalentBranches(tree.ifToken());
+    if (areAllEquivalent(branches)) {
+      onAllEquivalentBranches(tree.ifToken(), branches, hasElse, false);
     } else {
-      checkForDuplication("branch", branches);
+      checkForDuplication("branch", getNonTrivialBranches(branches));
     }
 
     super.visitIfStatement(tree);
@@ -96,10 +98,10 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
       normalizedBranches.add(normalize(statements));
     }
 
-    if (hasDefault && !hasFallthrough && areAllEquivalent(normalizedBranches)) {
-      onAllEquivalentBranches(tree.switchToken());
+    if (areAllEquivalent(normalizedBranches)) {
+      onAllEquivalentBranches(tree.switchToken(), caseBranches, hasDefault, hasFallthrough);
     } else {
-      checkForDuplication("case", caseBranches);
+      checkForDuplication("case", getNonTrivialBranches(caseBranches));
     }
 
     super.visitSwitchStatement(tree);
@@ -117,11 +119,32 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
   }
 
   private static boolean areAllEquivalent(List<List<StatementTree>> branches) {
+    if (branches.isEmpty()) {
+      return false;
+    }
     List<StatementTree> firstBranch = branches.get(0);
     return branches.stream().allMatch(branch -> SyntacticEquivalence.areSyntacticallyEquivalent(firstBranch, branch));
   }
 
-  protected abstract void onAllEquivalentBranches(SyntaxToken keyword);
+  private static List<List<StatementTree>> getNonTrivialBranches(List<List<StatementTree>> branches) {
+    return branches.stream()
+      .filter(AbstractDuplicateBranchImplementationCheck::isNontrivial)
+      .collect(Collectors.toList());
+  }
+
+  private static boolean isNontrivial(List<StatementTree> statements) {
+    List<StatementTree> normalizedStatements = normalize(statements);
+    if (normalizedStatements.isEmpty()) {
+      return false;
+    }
+    if (normalizedStatements.size() == 1 && normalizedStatements.get(0).is(Tree.Kind.BLOCK)) {
+      BlockTree block = (BlockTree) normalizedStatements.get(0);
+      return block.statements().size() > 1;
+    }
+    return normalizedStatements.size() > 1;
+  }
+
+  protected abstract void onAllEquivalentBranches(SyntaxToken keyword, List<List<StatementTree>> branchesList, boolean containsDefault, boolean hasFallthrough);
 
   protected abstract void checkForDuplication(String branchType, List<List<StatementTree>> branchesList);
 }

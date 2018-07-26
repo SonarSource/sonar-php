@@ -62,6 +62,17 @@ function if_statements() {
   } else {
     foo();
   }
+  
+  // SONARPHP-782
+
+  if(a == 1) { // OK, raised by S1871
+    doSomething();
+  } else if (a == 2) {
+    doSomething();
+  } else if (a == 3) {
+    doSomething();
+  }
+
 }
 
 function switch_statements() {
@@ -115,6 +126,28 @@ function switch_statements() {
       foo();
     default:
       foo();
+  }
+  // SONARPHP-782
+
+  switch($a) { // OK, raised by S1871
+    case 1:
+      doTheThing();
+      break;
+    case 2:
+      doTheThing();
+      break;
+    case 3:
+      doTheThing();
+      break;  
+  }
+
+  switch($a) { // OK, raised by S1871
+    case 1:
+      doTheThing();
+    case 2:
+      doTheThing();
+    case 3:
+      doTheThing();
   }
 
 }
