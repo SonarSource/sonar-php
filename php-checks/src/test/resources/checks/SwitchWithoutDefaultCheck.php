@@ -16,9 +16,11 @@ switch ($a) {
   switch ($a) {
   case 0:
     break;
-  default:    // Noncompliant {{Move this "case default" clause to the end of this "switch" statement.}}
-//^^^^^^^
+  default:
     break;
   case 1:
     break;
+}
+
+switch ($a) { // Noncompliant
 }

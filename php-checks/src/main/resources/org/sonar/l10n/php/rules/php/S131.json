@@ -1,5 +1,5 @@
 {
-  "title": "Statements should end with a \"case default\" clause",
+  "title": "\"switch\" statements should have \"default\" clauses",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
