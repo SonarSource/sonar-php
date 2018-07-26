@@ -173,11 +173,12 @@ public class SymbolVisitor extends PHPVisitorCheck {
     createMemberSymbols(tree);
 
     // we've already scanned the arguments
-    scan(tree.members());
-    scan(tree.superInterfaces());
-    if (tree.superClass() != null) {
-      scan(tree.superClass());
+    NamespaceNameTree superClass = tree.superClass();
+    if (superClass != null) {
+      scan(superClass);
     }
+    scan(tree.superInterfaces());
+    scan(tree.members());
 
     classScope = null;
     leaveScope();
