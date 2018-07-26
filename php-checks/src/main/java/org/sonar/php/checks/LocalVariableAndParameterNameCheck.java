@@ -20,7 +20,6 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
@@ -47,9 +46,6 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
   public static final String KEY = "S117";
 
   private static final String MESSAGE = "Rename this %s \"%s\" to match the regular expression %s.";
-
-  private static final ImmutableSet<String> SUPERGLOBALS = ImmutableSet.of(
-    "$GLOBALS", "$_SERVER", "$_GET", "$_POST", "$_FILES", "$_COOKIE", "$_SESSION", "$_REQUEST", "$_ENV");
 
   public static final String DEFAULT = "^[a-z][a-zA-Z0-9]*$";
   private Deque<Set<String>> checkedVariables = new ArrayDeque<>();
@@ -143,7 +139,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
   }
 
   private static boolean isSuperGlobal(String varName) {
-    return SUPERGLOBALS.contains(varName);
+    return CheckUtils.SUPERGLOBALS.contains(varName);
   }
 
   private void setAsCheckedVariable(String varName) {

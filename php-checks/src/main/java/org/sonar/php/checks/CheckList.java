@@ -105,6 +105,7 @@ public class CheckList {
       GenericExceptionCheck.class,
       GlobalKeywordAndArrayUsageCheck.class,
       GotoUseCheck.class,
+      HashFunctionCheck.class,
       HardCodedCredentialsCheck.class,
       HardCodedIpAddressCheck.class,
       HardCodedUriCheck.class,
