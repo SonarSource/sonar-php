@@ -1,6 +1,6 @@
 <?php
 
-$random = rand(); // Noncompliant {{Use a cryptographically strong random number generator instead.}}
+$random = rand(); // Noncompliant {{Make sure that using this pseudorandom number generator is safe here.}}
 //        ^^^^^^
 $random = rand(1, 2); // Noncompliant
 

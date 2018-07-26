@@ -1,13 +1,28 @@
-<p>As the <code>rand()</code> function relies on a pseudorandom number generator, it should not be used for security-critical applications or for
-protecting sensitive data. In such context, the methods <code>random_int()</code> or <code>random_bytes()</code> or
-<code>openssl_random_pseudo_bytes()</code> which relies on a cryptographically strong random number generator (RNG) should be used in place.</p>
+<p>As the <code>rand()</code> and <code>mt_rand</code> functions rely on a pseudorandom number generator, it should not be used for security-critical
+applications or for protecting sensitive data.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> the code using the generated value requires it to be unpredictable. It is the case for all encryption mechanisms or when a secret value, such
+  as a password, is hashed. </li>
+  <li> the function you use generates a value which can be predicted (pseudo-random). </li>
+  <li> the generated value is used multiple times. </li>
+  <li> an attacker can access the generated value. </li>
+</ul>
+<p>You are at risk if you answered yes to the first question and any of the following ones.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li> Use functions which rely on a cryptographically strong random number generator such as <code>random_int()</code> or <code>random_bytes()</code>
+  or <code>openssl_random_pseudo_bytes()</code> </li>
+  <li> When using <code>openssl_random_pseudo_bytes()</code>, provide and check the <code>crypto_strong</code> parameter </li>
+</ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
 $random = rand();
+$random2 = mt_rand(0, 99);
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-$randomInt = random_int(); // Compliant; generates a cryptographically secure pseudo-random integer
+$randomInt = random_int(0,99); // Compliant; generates a cryptographically secure random integer
 </pre>
 <h2>See</h2>
 <ul>
