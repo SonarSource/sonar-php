@@ -1,6 +1,22 @@
 <p>In cryptography, "salt" is extra data that's included in a hashing algorithm to make dictionary attacks more difficult. Using a cryptographic hash
 function without an unpredictable salt increases the likelihood that an attacker will be able to successfully guess a hashed value such as a password
 with a dictionary attack.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> the salt is not randomly generated </li>
+  <li> the salt is hard-coded </li>
+  <li> the salt is reused </li>
+</ul>
+<p>You are at risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li> generate a long random salt </li>
+  <li> the salt is at least as long as the resulting hash value </li>
+  <li> append the value being hashed to the salt and pass the whole thing into a standard hash function such as SHA256 </li>
+  <li> save both the salt and the hashed value in the relevant database record; during future validation operations, the salt and hash can then be
+  retrieved from the database. The hash is recalculated with the stored salt and the value being validated, and the result compared to the stored
+  hash. </li>
+</ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
 function createMyAccount() {
@@ -23,6 +39,11 @@ function createMyAccount() {
   ];
   echo password_hash("rasmuslerdorf", PASSWORD_BCRYPT, $options);
 }
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+$salt = openssl_random_pseudo_bytes(16);
+$hash = hash_pbkdf2("sha256", $password, $salt, $iterations, 20);
 </pre>
 <h2>See</h2>
 <ul>
