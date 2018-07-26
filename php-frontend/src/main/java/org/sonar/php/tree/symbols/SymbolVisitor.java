@@ -165,11 +165,21 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitAnonymousClass(AnonymousClassTree tree) {
+    // the arguments are passed from the outer scope
+    scan(tree.arguments());
 
     enterScope(tree);
     classScope = currentScope;
     createMemberSymbols(tree);
-    super.visitAnonymousClass(tree);
+
+    // we've already scanned the arguments
+    NamespaceNameTree superClass = tree.superClass();
+    if (superClass != null) {
+      scan(superClass);
+    }
+    scan(tree.superInterfaces());
+    scan(tree.members());
+
     classScope = null;
     leaveScope();
   }

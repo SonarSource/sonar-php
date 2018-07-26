@@ -69,3 +69,24 @@ echo <<<'EOF'
   This is nowdoc. So this is not usage $heredocVar.
   And this {$heredocVar}
 EOF;
+
+class SomeClass {}
+interface SomeInterface {}
+trait SomeTrait {}
+$fooBar = "fooBar";
+
+new class($fooBar, 10) extends SomeClass implements SomeInterface {
+    private $qux;
+    private $num;
+
+    public function __construct($string, $num)
+    {
+        $this->qux = $string;
+        $this->num = $num;
+        $this->num = "x";
+    }
+
+    use SomeTrait;
+};
+
+new class() { }; // no parameter, super-class or super-interface
