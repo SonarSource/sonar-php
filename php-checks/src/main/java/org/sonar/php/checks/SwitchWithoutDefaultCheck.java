@@ -21,7 +21,6 @@ package org.sonar.php.checks;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -32,25 +31,9 @@ public class SwitchWithoutDefaultCheck extends PHPVisitorCheck {
 
   @Override
   public void visitSwitchStatement(SwitchStatementTree switchTree) {
-    SwitchCaseClauseTree defaultClause = null;
-    int defaultClauseIndex = 0;
-
-    for (SwitchCaseClauseTree clause : switchTree.cases()) {
-      if (clause.is(Kind.DEFAULT_CLAUSE)) {
-        defaultClause = clause;
-        break;
-      }
-      defaultClauseIndex++;
+    if (switchTree.cases().stream().noneMatch(clause -> clause.is(Kind.DEFAULT_CLAUSE))) {
+      context().newIssue(this, switchTree.switchToken(), "Add a \"case default\" clause to this \"switch\" statement.");
     }
-
-    if (defaultClause == null) {
-      context()
-        .newIssue(this, switchTree.switchToken(), "Add a \"case default\" clause to this \"switch\" statement.");
-    } else if (defaultClauseIndex < switchTree.cases().size() - 1) {
-      context()
-        .newIssue(this, defaultClause.caseToken(), "Move this \"case default\" clause to the end of this \"switch\" statement.");
-    }
-
     super.visitSwitchStatement(switchTree);
   }
 }
