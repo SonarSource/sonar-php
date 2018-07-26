@@ -281,3 +281,27 @@ function extract_function() {
   extract($var_array);
   echo "$color";
 }
+
+/**
+ * SONARPHP-760
+ */
+function anonymous_class() {
+
+  $foo760 = "..."; // used as anonymous class argument
+  $bar760 = "..."; // used as anonymous class argument
+  $qux760 = "..."; // used as function call argument
+  $qix760 = "..."; // Noncompliant
+
+  new class($foo760) {
+    private $bar;
+    public function __construct($bar) { $this->bar = $bar; }
+  };
+
+  new class($bar760) { };
+  new class($unknown760) { };
+
+  new class(strtolower($qux760)) {
+    public $b;
+    public function __construct($b) { $this->b = $b; }
+  };
+}

@@ -43,7 +43,10 @@ import org.sonar.php.ParsingTestUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,6 +56,10 @@ public class UsagesTest extends ParsingTestUtils {
 
   private final Symbol globalSymbolA = getGlobalScopeSymbol("$a");
   private final Symbol globalSymbolB = getGlobalScopeSymbol("$b");
+  private final Symbol globalSymbolFooBar = getGlobalScopeSymbol("$fooBar");
+  private final Symbol globalSymbolSomeTrait = getGlobalScopeSymbol("SomeTrait");
+  private final Symbol globalSymbolSomeClass = getGlobalScopeSymbol("SomeClass");
+  private final Symbol globalSymbolSomeInterface = getGlobalScopeSymbol("SomeInterface");
 
   @Test
   public void test() throws Exception {
@@ -78,13 +85,38 @@ public class UsagesTest extends ParsingTestUtils {
         }
 
       } else if (tree.is(Tree.Kind.CLASS_DECLARATION)) {
-        test_class(scope);
-
+        String className = ((ClassDeclarationTree)tree).name().text();
+        if ("A".equals(className)) {
+          test_class(scope);
+        }
       } else if (tree.is(Tree.Kind.METHOD_DECLARATION)) {
-        test_method(scope);
+        String methodName = ((MethodDeclarationTree)tree).name().text();
+        if ("method".equals(methodName)) {
+          test_method(scope);
+        } else if ("__construct".equals(methodName)) {
+          test_anonymous_class_method(scope);
+        }
+      } else if (tree.is(Tree.Kind.ANONYMOUS_CLASS)) {
+        if (((AnonymousClassTree)tree).arguments().size() == 2) {
+          test_anonymous_class(scope);
+        }
       }
     }
 
+  }
+
+  private void test_anonymous_class(Scope scope) {
+    assertThat(globalSymbolFooBar.usages()).hasSize(1);
+    assertThat(globalSymbolSomeTrait.usages()).hasSize(1);
+    assertThat(globalSymbolSomeClass.usages()).hasSize(1);
+    assertThat(globalSymbolSomeInterface.usages()).hasSize(1);
+    assertThat(scope.getSymbol("$qux").usages()).hasSize(1);
+    assertThat(scope.getSymbol("$num").usages()).hasSize(2);
+  }
+
+  private void test_anonymous_class_method(Scope scope) {
+    assertThat(scope.getSymbol("$string").usages()).hasSize(1);
+    assertThat(scope.getSymbol("$num").usages()).hasSize(1);
   }
 
   private void test_class(Scope scope) {
