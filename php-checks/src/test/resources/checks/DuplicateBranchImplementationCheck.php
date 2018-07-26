@@ -1,20 +1,26 @@
 <?php
-if ($x == 1) { doX(); doY(); }
-//           ^^^^^^^^^^^^^^^^^>
+if ($x == 1) {
+//           ^[el=+4;ec=1]>
+  doX();
+  doY(); 
+}
 elseif ($x == 2) { doY(); }
-elseif ($x == 3) { doX(); doY(); } // Noncompliant  {{This branch's code block is the same as the block for the branch on line 2.}}
-//               ^^^^^^^^^^^^^^^^^
-else {                // Noncompliant {{This branch's code block is the same as the block for the branch on line 2.}}
-	doX();
-	doY();
+elseif ($x == 3) { // Noncompliant {{This branch's code block is the same as the block for the branch on line 2.}}
+//               ^[el=+4;ec=1]
+  doX();
+  doY();
+}
+else {  // Noncompliant {{This branch's code block is the same as the block for the branch on line 2.}}
+  doX();
+  doY();
 }
 
 if ($x == 1) {
   doX();
   doZ();
 } else if ($x == 2) {
-	doY();
-} else if ($x == 3) { // Noncompliant {{This branch's code block is the same as the block for the branch on line 12.}}
+  doY();
+} else if ($x == 3) { // Noncompliant {{This branch's code block is the same as the block for the branch on line 18.}}
   doX();
   doZ();
 }
@@ -31,10 +37,10 @@ switch($i) {
     doZ();
     break;
   case 2:
-  	doY();
+    doY();
     break;
   case 3:
-    doX();               // Noncompliant {{This case's code block is the same as the block for the case on line 30.}}
+    doX();               // Noncompliant {{This case's code block is the same as the block for the case on line 36.}}
     doZ();
     break;
   case 4:

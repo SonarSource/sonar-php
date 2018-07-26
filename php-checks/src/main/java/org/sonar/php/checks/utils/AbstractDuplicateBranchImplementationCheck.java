@@ -22,6 +22,8 @@ package org.sonar.php.checks.utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.sonar.php.metrics.LineVisitor;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -66,7 +68,7 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
     if (areAllEquivalent(branches)) {
       onAllEquivalentBranches(tree.ifToken(), branches, hasElse, false);
     } else {
-      checkForDuplication("branch", getNonTrivialBranches(branches));
+      checkForDuplication("branch", getNonTrivialBranches(branches, false));
     }
 
     super.visitIfStatement(tree);
@@ -101,7 +103,7 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
     if (areAllEquivalent(normalizedBranches)) {
       onAllEquivalentBranches(tree.switchToken(), caseBranches, hasDefault, hasFallthrough);
     } else {
-      checkForDuplication("case", getNonTrivialBranches(caseBranches));
+      checkForDuplication("case", getNonTrivialBranches(caseBranches, true));
     }
 
     super.visitSwitchStatement(tree);
@@ -126,22 +128,18 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
     return branches.stream().allMatch(branch -> SyntacticEquivalence.areSyntacticallyEquivalent(firstBranch, branch));
   }
 
-  private static List<List<StatementTree>> getNonTrivialBranches(List<List<StatementTree>> branches) {
+  private static List<List<StatementTree>> getNonTrivialBranches(List<List<StatementTree>> branches, boolean isSwitchClause) {
     return branches.stream()
-      .filter(AbstractDuplicateBranchImplementationCheck::isNontrivial)
+      .filter(branch -> isNontrivial(branch, isSwitchClause))
       .collect(Collectors.toList());
   }
 
-  private static boolean isNontrivial(List<StatementTree> statements) {
-    List<StatementTree> normalizedStatements = normalize(statements);
-    if (normalizedStatements.isEmpty()) {
-      return false;
-    }
-    if (normalizedStatements.size() == 1 && normalizedStatements.get(0).is(Tree.Kind.BLOCK)) {
-      BlockTree block = (BlockTree) normalizedStatements.get(0);
-      return block.statements().size() > 1;
-    }
-    return normalizedStatements.size() > 1;
+  private static boolean isNontrivial(List<StatementTree> statements, boolean isSwitchClause) {
+    List<StatementTree> normalizedStatements = isSwitchClause ? normalize(statements) : statements;
+    return normalizedStatements.stream()
+      .flatMap(statement -> statement.is(Kind.BLOCK) ? ((BlockTree) statement).statements().stream() : Stream.of(statement))
+      .mapToInt(LineVisitor::linesOfCode)
+      .sum() > 1;
   }
 
   protected abstract void onAllEquivalentBranches(SyntaxToken keyword, List<List<StatementTree>> branchesList, boolean containsDefault, boolean hasFallthrough);

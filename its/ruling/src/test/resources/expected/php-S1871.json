@@ -9,6 +9,7 @@
 183,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Reader/Excel2007/Chart.php':[
+90,
 114,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/ReferenceHelper.php':[
@@ -58,6 +59,12 @@
 ],
 'project:PHP_CodeSniffer/CodeSniffer/Standards/Generic/Sniffs/CodeAnalysis/UselessOverridingMethodSniff.php':[
 91,
+],
+'project:PHP_CodeSniffer/CodeSniffer/Standards/Generic/Tests/Commenting/FixmeUnitTest.php':[
+62,
+],
+'project:PHP_CodeSniffer/CodeSniffer/Standards/Generic/Tests/Commenting/TodoUnitTest.php':[
+77,
 ],
 'project:PHP_CodeSniffer/CodeSniffer/Tokenizers/JS.php':[
 892,
