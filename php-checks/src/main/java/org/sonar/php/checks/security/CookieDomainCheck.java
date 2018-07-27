@@ -21,17 +21,16 @@ package org.sonar.php.checks.security;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.php.ini.BasePhpIniIssue;
 import org.sonar.php.ini.PhpIniCheck;
 import org.sonar.php.ini.PhpIniIssue;
-import org.sonar.php.ini.tree.Directive;
 import org.sonar.php.ini.tree.PhpIniFile;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
@@ -87,23 +86,17 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
 
   @Override
   public List<PhpIniIssue> analyze(PhpIniFile phpIniFile) {
-    List<PhpIniIssue> issues = new ArrayList<>();
-    for (Directive directive : phpIniFile.directivesForName("session.cookie_domain")) {
-      if (isFirstLevelDomain(directive.value().text())) {
-        issues.add(BasePhpIniIssue.newIssue(MESSAGE).line(directive.name().line()));
-      }
-    }
-    return issues;
+    return phpIniFile.directivesForName("session.cookie_domain").stream()
+        .filter(d -> isFirstLevelDomain(d.value().text()))
+        .map(d -> BasePhpIniIssue.newIssue(MESSAGE).line(d.name().line()))
+        .collect(Collectors.toList());
   }
 
   private ExpressionTree getAssignedValue(ExpressionTree value) {
-    if (value.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
-      Symbol valueSymbol = context().symbolTable().getSymbol(value);
-      return assignmentExpressionVisitor
-        .getUniqueAssignedValue(valueSymbol)
-        .orElse(value);
-    }
-    return value;
+    Symbol valueSymbol = context().symbolTable().getSymbol(value);
+    return assignmentExpressionVisitor
+      .getUniqueAssignedValue(valueSymbol)
+      .orElse(value);
   }
 
   private static boolean isFirstLevelDomain(String domain) {
