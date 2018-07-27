@@ -41,8 +41,10 @@ public class AllBranchesIdenticalCheck extends AbstractDuplicateBranchImplementa
   }
 
   @Override
-  protected void onAllEquivalentBranches(SyntaxToken keyword) {
-    context().newIssue(this, keyword, MESSAGE);
+  protected void onAllEquivalentBranches(SyntaxToken keyword, List<List<StatementTree>> branches, boolean hasDefault, boolean hasFallthrough) {
+    if (!hasFallthrough && hasDefault) {
+      context().newIssue(this, keyword, MESSAGE);
+    }
   }
 
   @Override
