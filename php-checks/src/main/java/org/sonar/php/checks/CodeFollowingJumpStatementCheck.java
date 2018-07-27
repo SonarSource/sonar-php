@@ -72,7 +72,9 @@ public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
       return false;
     }
     for (StatementTree statement : statements) {
-      if (!statement.is(NO_ACTION_KINDS)) {
+      if (statement.is(Kind.LABEL)) {
+        return false;
+      } else if (!statement.is(NO_ACTION_KINDS)) {
         return true;
       }
     }
