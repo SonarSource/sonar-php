@@ -118,25 +118,6 @@ public class CoverageResultImporterTest {
     assertReport(componentKey);
   }
 
-  @Test
-  public void should_work_with_wrong_absolute_path() throws Exception {
-    String componentKey = "moduleKey:" + MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
-
-    String reportName = "phpunit.coverage.xml";
-    File reportFile = Paths.get(SRC_TEST_RESOURCES, PhpTestUtils.PHPUNIT_REPORT_DIR, reportName).toFile();
-    File newReportFile = folder.newFile("report_with_wrong_paths.xml");
-
-    String fakeRoot = "c:\\test\\";
-    String newReport = Files.toString(reportFile, StandardCharsets.UTF_8)
-      .replace(MONKEY_FILE_NAME, fakeRoot + MONKEY_FILE_NAME)
-      .replace(BANANA_FILE_NAME, fakeRoot + BANANA_FILE_NAME);
-
-    Files.write(newReport, newReportFile, StandardCharsets.UTF_8);
-
-    importer.importReport(reportFile, context);
-    assertReport(componentKey);
-  }
-
   private void assertReport(String componentKey) {
     // UNCOVERED_LINES is implicitly stored in the NewCoverage
     PhpTestUtils.assertNoMeasure(context, componentKey, CoreMetrics.UNCOVERED_LINES);

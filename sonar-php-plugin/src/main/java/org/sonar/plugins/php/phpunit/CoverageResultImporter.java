@@ -20,8 +20,6 @@
 package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -29,7 +27,6 @@ import javax.xml.stream.XMLStreamException;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
-import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -103,7 +100,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     FileSystem fileSystem = context.fileSystem();
     // PHP supports only absolute paths
     String path = fileNode.getName();
-    InputFile inputFile = findInputFile(path, fileSystem);
+    InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasPath(path));
 
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
@@ -114,28 +111,6 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     } else {
       unresolvedPaths.add(path);
     }
-  }
-
-  /**
-   * It is possible that path references a file that does not exist in the file system.
-   * It happens when tests where executed on a different computer or in a docker container
-   * Even when absolute path does not match a file of the project, this method try to find a valid
-   * mach using a shorter relative path.
-   */
-  private static InputFile findInputFile(String file, FileSystem fileSystem) {
-    FilePredicates predicates = fileSystem.predicates();
-    InputFile inputFile = fileSystem.inputFile(predicates.hasAbsolutePath(file));
-    if (inputFile != null) {
-      return inputFile;
-    }
-    LOG.debug("Resolving file {} using relative path", file);
-    Path path = Paths.get(file);
-    inputFile = fileSystem.inputFile(predicates.hasRelativePath(path.toString()));
-    while (inputFile == null && path.getNameCount() > 1) {
-      path = path.subpath(1, path.getNameCount());
-      inputFile = fileSystem.inputFile(predicates.hasRelativePath(path.toString()));
-    }
-    return inputFile;
   }
 
   private static void saveCoverageLineHitsData(FileNode fileNode, InputFile inputFile, SensorContext context) {
