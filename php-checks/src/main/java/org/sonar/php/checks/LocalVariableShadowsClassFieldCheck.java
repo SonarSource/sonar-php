@@ -40,6 +40,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -115,10 +116,17 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
 
   @Override
   public void visitAnonymousClass(AnonymousClassTree tree) {
+    scan(tree.arguments());
     classStates.push(new ClassState());
     collectClassData(tree);
 
-    super.visitAnonymousClass(tree);
+    NamespaceNameTree superClass = tree.superClass();
+    if (superClass != null) {
+      scan(superClass);
+    }
+    scan(tree.superInterfaces());
+    scan(tree.members());
+
     classStates.pop();
   }
 
