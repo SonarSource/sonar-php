@@ -133,9 +133,9 @@ class A {
 }
 
 // https://github.com/opencart/opencart/blob/fff9f5522c3b9176d6a23445f9f8f2b25c08712f/upload/system/library/template/twig.php#L42
-class Twig {
-  public function render() {
-    $cache = new class($options = 0) extends \Twig_Cache_Filesystem {
+class Foo {
+  public function qix() {
+    $bar = new class($options = 0) extends Bar {
       private $options;
     };
   }
