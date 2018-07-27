@@ -78,9 +78,7 @@ public class CoverageResultImporterTest {
 
     importer = new CoverageResultImporter(
       PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
-      "unit test coverage",
-      CoreMetrics.LINES_TO_COVER,
-      CoreMetrics.UNCOVERED_LINES);
+      "unit test coverage");
   }
 
   @Test
