@@ -19,8 +19,10 @@ setcookie($name, "x"); // Noncompliant {{Make sure storing this data in this coo
 setrawcookie($name, "x"); // Noncompliant {{Make sure storing this data in this cookie is safe here.}}
 
 setcookie($name); // Ok
+setcookie($name, NULL); // Ok
 setcookie($name, ""); // Ok
 setcookie($name, "   "); // Ok
 setrawcookie($name); // Ok
+setrawcookie($name, NULL); // Ok
 setrawcookie($name, ""); // Ok
 setrawcookie($name, "   "); // Ok

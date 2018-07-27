@@ -23,10 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
@@ -37,31 +34,21 @@ public class CookieSensitiveDataCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Make sure storing this data in this cookie is safe here.";
 
   private static final List<String> SET_COOKIE_FUNCTIONS = Arrays.asList("setcookie", "setrawcookie");
-  private static final int SET_COOKIE_VALUE_PARAMETER = 1;
+  private static final int VALUE_PARAMETER_INDEX = 1;
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = getFunctionName(tree);
-    if (SET_COOKIE_FUNCTIONS.contains(functionName) && !argumentIsNullOrEmpty(tree, SET_COOKIE_VALUE_PARAMETER)) {
+    if (SET_COOKIE_FUNCTIONS.contains(functionName) && hasCookieValue(tree)) {
       context().newIssue(this, tree.callee(), MESSAGE);
     }
 
     super.visitFunctionCall(tree);
   }
 
-  private static boolean argumentIsNullOrEmpty(FunctionCallTree tree, int argumentIndex) {
-    if (tree.arguments().size() > argumentIndex) {
-      ExpressionTree valueArgument = tree.arguments().get(argumentIndex);
-      return isEmpty(valueArgument);
-    }
-    return true;
+  private static boolean hasCookieValue(FunctionCallTree tree) {
+    return tree.arguments().size() > VALUE_PARAMETER_INDEX
+        && !CheckUtils.isNullOrEmptyString(tree.arguments().get(VALUE_PARAMETER_INDEX));
   }
 
-  private static boolean isEmpty(ExpressionTree tree) {
-    if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      String value = CheckUtils.trimQuotes(((LiteralTree) tree).value());
-      return value.trim().isEmpty();
-    }
-    return false;
-  }
 }
