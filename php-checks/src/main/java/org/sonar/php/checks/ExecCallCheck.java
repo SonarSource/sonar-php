@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
 @Rule(key = ExecCallCheck.KEY)
 public class ExecCallCheck extends FunctionUsageCheck {
@@ -32,11 +33,20 @@ public class ExecCallCheck extends FunctionUsageCheck {
 
   @Override
   protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("exec");
+    return ImmutableSet.of("exec", "passthru", "proc_open", "popen", "shell_exec", "system", "pcntl_exec");
   }
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
     context().newIssue(this, tree.callee(), MESSAGE);
+  }
+
+  @Override
+  public void visitLiteral(LiteralTree tree) {
+    // http://php.net/manual/en/language.operators.execution.php
+    if (tree.value().startsWith("`")) {
+      context().newIssue(this, tree, MESSAGE);
+    }
+    super.visitLiteral(tree);
   }
 }
