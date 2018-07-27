@@ -111,13 +111,11 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
   private static boolean isExactlyOneSpaceAroundOrLineSplit(TokenVisitor tokenVisitor, SyntaxToken token) {
     SyntaxToken prevToken = tokenVisitor.prevToken(token);
     SyntaxToken nextToken = tokenVisitor.nextToken(token);
-    if (TokenUtils.isOnSameLine(prevToken, token) && TokenUtils.getNbSpaceBetween(prevToken, token) != 1) {
-      return false;
-    }
-    if (TokenUtils.isOnSameLine(token, nextToken) && TokenUtils.getNbSpaceBetween(token, nextToken) != 1) {
-      return false;
-    }
-    return true;
+    return isExactlyOneSpaceBetweenOrLineSplit(prevToken, token) && isExactlyOneSpaceBetweenOrLineSplit(token, nextToken);
+  }
+
+  private static boolean isExactlyOneSpaceBetweenOrLineSplit(SyntaxToken leftToken, SyntaxToken rightToken) {
+    return TokenUtils.getNbSpaceBetween(leftToken, rightToken) == 1 || !TokenUtils.isOnSameLine(leftToken, rightToken);
   }
 
   /**

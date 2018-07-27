@@ -78,6 +78,18 @@ foreach (
 ) {
 }
 
+foreach (
+    $x as $y
+=> $z
+) {
+}
+
+foreach ( // side-effect of allowing foreach arguments to be on separate lines
+    $x
+              as $y
+                         => $z
+) {
+}
 
 // case-sensitivity of keywords
 
