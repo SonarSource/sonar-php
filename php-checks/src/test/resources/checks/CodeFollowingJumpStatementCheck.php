@@ -109,6 +109,17 @@ function breakAfterJump() {
   }
 }
 
+function labeledStatement() {
+  if ($a == 5) {
+    goto error;
+  }
+  doSomething();
+  return;
+  error:
+    print("don't use 5");
+    somethingElse();
+}
+
 return;         // Noncompliant
 
 if (true) {}
