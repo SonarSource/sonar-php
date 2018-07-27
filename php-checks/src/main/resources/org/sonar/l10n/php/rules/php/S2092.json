@@ -1,6 +1,6 @@
 {
   "title": "Creating cookies without the \"secure\" flag is security-sensitive",
-  "type": "VULNERABILITY",
+  "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

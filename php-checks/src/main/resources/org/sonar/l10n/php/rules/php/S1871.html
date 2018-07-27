@@ -5,12 +5,14 @@ be combined, or for a <code>switch</code>, one should fall through to the other.
 <pre>
 switch ($i) {
   case 1:
+    doFirst();
     doSomething();
     break;
   case 2:
     doSomethingDifferent();
     break;
   case 3:  // Noncompliant; duplicates case 1's implementation
+    doFirst();
     doSomething();
     break;
   default:
@@ -18,91 +20,40 @@ switch ($i) {
 }
 
 if ($a &gt;= 0 &amp;&amp; $a &lt; 10) {
+  doFirst();
   doTheThing();
+}
 else if ($a &gt;= 10 &amp;&amp; $a &lt; 20) {
   doTheOtherThing();
 }
 else if ($a &gt;= 20 &amp;&amp; $a &lt; 50) {
+  doFirst();
   doTheThing();  // Noncompliant; duplicates first condition
 }
-else {
-  doTheRest();
-}
-
-if ($b == 0) {
-  doOneMoreThing();
-}
-else {
-  doOneMoreThing(); // Noncompliant; duplicates then-branch
-}
-
-var b = a ? 12 &gt; 4 : 4;  // Noncompliant; always results in the same value
-</pre>
-<h2>Compliant Solution</h2>
-<pre>
-switch ($i) {
-  case 1:
-  case 3:
-    doSomething();
-    break;
-  case 2:
-    doSomethingDifferent();
-    break;
-  default:
-    doTheRest();
-}
-
-if (($a &gt;= 0 &amp;&amp; $a &lt; 10) || ($a &gt;= 20 &amp;&amp; $a &lt; 50)) {
-  doTheThing();
-else if ($a &gt;= 10 &amp;&amp; $a &lt; 20) {
-  doTheOtherThing();
-}
-else {
-  doTheRest();
-}
-
-doOneMoreThing();
-
-b = 4;
-</pre>
-<p>or </p>
-<pre>
-switch ($i) {
-  case 1:
-    doSomething();
-    break;
-  case 2:
-    doSomethingDifferent();
-    break;
-  case 3:
-    doThirdThing();
-    break;
-  default:
-    doTheRest();
-}
-
-if ($a &gt;= 0 &amp;&amp; $a &lt; 10) {
-  doTheThing();
-else if ($a &gt;= 10 &amp;&amp; $a &lt; 20) {
-  doTheOtherThing();
-}
-else if ($a &gt;= 20 &amp;&amp; $a &lt; 50) {
-  doTheThirdThing();
-}
-else {
-  doTheRest();
-}
-
-if ($b == 0) {
-  doOneMoreThing();
-}
-else {
-  doTheRest();
-}
-
-int b = a ? 12 &gt; 4 : 8;
 </pre>
 <h2>Exceptions</h2>
 <p>Blocks in an <code>if</code> chain that contain a single line of code are ignored, as are blocks in a <code>switch</code> statement that contain a
 single line of code with or without a following <code>break</code>.</p>
+<pre>
+if ($a &gt;= 0 &amp;&amp; $a &lt; 10) {
+  doTheThing();
+}
+else if ($a &gt;= 10 &amp;&amp; $a &lt; 20) {
+  doTheOtherThing();
+}
+else if ($a &gt;= 20 &amp;&amp; $a &lt; 50) {
+  doTheThing();  // no issue, usually this is done on purpose to increase the readability
+}
+</pre>
+<p>But this exception does not apply to <code>if</code> chains without <code>else</code>-s, or to <code>switch</code>-es without default clauses when
+all branches have the same single line of code. In case of <code>if</code> chains with <code>else</code>-s, or of <code>switch</code>-es with default
+clauses, rule {rule:php:S3923} raises a bug. </p>
+<pre>
+if ($a &gt;= 0 &amp;&amp; $a &lt; 10) {
+  doTheThing();
+}
+else if ($a &gt;= 20 &amp;&amp; $a &lt; 50) {
+  doTheThing();   //Noncompliant; this might have been done on purpose but probably not
+}
+</pre>
 

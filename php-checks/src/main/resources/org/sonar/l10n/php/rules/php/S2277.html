@@ -1,6 +1,6 @@
 <p>Without OAEP in RSA encryption, it takes less work for an attacker to decrypt the data or infer patterns from the ciphertext. This rule logs an
-issue as soon as a literal value starts with <code>OPENSSL_NO_PADDING</code> or <code>OPENSSL_PKCS1_PADDING</code> or
-<code>OPENSSL_SSLV23_PADDING</code>.</p>
+issue when <code>openssl_public_encrypt</code> is used with one the following padding constants: <code>OPENSSL_NO_PADDING</code> or
+<code>OPENSSL_PKCS1_PADDING</code> or <code>OPENSSL_SSLV23_PADDING</code>.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 function encrypt($data, $key) {

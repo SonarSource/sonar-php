@@ -3,6 +3,10 @@
   <li> it forces the same address to be used in every environment (dev, sys, qa, prod) </li>
   <li> it places the responsibility of setting the value to use in production on the shoulders of the developer </li>
 </ul>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li> make the IP address configurable. </li>
+</ul>
 <h2>Noncompliant Code Example</h2>
 <pre>
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
