@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.measures.CoreMetrics;
 import org.sonar.plugins.php.PhpPlugin;
 
 public class CompatibilityImportersFactory {
@@ -53,10 +52,7 @@ public class CompatibilityImportersFactory {
     String msg = "coverage";
     String propertyKey = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
 
-    CoverageResultImporter singleReportImporter = new CoverageResultImporter(propertyKey,
-      msg,
-      CoreMetrics.LINES_TO_COVER,
-      CoreMetrics.UNCOVERED_LINES);
+    CoverageResultImporter singleReportImporter = new CoverageResultImporter(propertyKey, msg);
 
     return new MultiPathImporter(singleReportImporter, propertyKey, msg);
   }
@@ -64,9 +60,7 @@ public class CompatibilityImportersFactory {
   private static ReportImporter createLegacyImporters() {
     return new CoverageResultImporter(
       PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
-      "unit test coverage",
-      CoreMetrics.LINES_TO_COVER,
-      CoreMetrics.UNCOVERED_LINES);
+      "unit test coverage");
   }
 
   public List<String> deprecationWarnings() {

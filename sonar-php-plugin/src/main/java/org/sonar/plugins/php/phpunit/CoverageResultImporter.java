@@ -31,7 +31,6 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
-import org.sonar.api.measures.Metric;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
@@ -46,13 +45,8 @@ public class CoverageResultImporter extends SingleFileReportImporter {
 
   private static final String WRONG_LINE_EXCEPTION_MESSAGE = "Line with number %s doesn't belong to file %s";
 
-  protected Metric<Integer> linesToCoverMetric;
-  protected Metric<Integer> uncoveredLinesMetric;
-
-  public CoverageResultImporter(String reportPathKey, String msg, Metric<Integer> linesToCoverMetric, Metric<Integer> uncoveredLinesMetric) {
+  CoverageResultImporter(String reportPathKey, String msg) {
     super(reportPathKey, msg);
-    this.linesToCoverMetric = linesToCoverMetric;
-    this.uncoveredLinesMetric = uncoveredLinesMetric;
   }
 
   @Override
@@ -61,7 +55,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     parseFile(coverageReportFile, context);
   }
 
-  private void parseFile(File coverageReportFile, SensorContext context) {
+  private static void parseFile(File coverageReportFile, SensorContext context) {
     CoverageNode coverage = getCoverage(coverageReportFile);
 
     List<String> unresolvedPaths = new ArrayList<>();
@@ -80,7 +74,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
   }
 
 
-  private void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, SensorContext context) {
+  private static void parsePackagesNodes(@Nullable List<PackageNode> packages, List<String> unresolvedPaths, SensorContext context) {
     if (packages != null) {
       for (PackageNode packageNode : packages) {
         parseFileNodes(packageNode.getFiles(), unresolvedPaths, context);
@@ -88,7 +82,7 @@ public class CoverageResultImporter extends SingleFileReportImporter {
     }
   }
 
-  private void parseFileNodes(@Nullable List<FileNode> fileNodes, List<String> unresolvedPaths, SensorContext context) {
+  private static void parseFileNodes(@Nullable List<FileNode> fileNodes, List<String> unresolvedPaths, SensorContext context) {
     if (fileNodes != null) {
       for (FileNode file : fileNodes) {
         saveCoverageMeasure(file, unresolvedPaths, context);
@@ -98,14 +92,15 @@ public class CoverageResultImporter extends SingleFileReportImporter {
 
   /**
    * Saves the required metrics found on the fileNode
-   * @param fileNode the file
+   *
+   * @param fileNode        the file
    * @param unresolvedPaths list of paths which cannot be mapped to imported files
    */
-  protected void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, SensorContext context) {
+  private static void saveCoverageMeasure(FileNode fileNode, List<String> unresolvedPaths, SensorContext context) {
     FileSystem fileSystem = context.fileSystem();
     // PHP supports only absolute paths
     String path = fileNode.getName();
-    InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(path));
+    InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasPath(path));
 
     // Due to an unexpected behaviour in phpunit.coverage.xml containing references to covered source files, we have to check that the
     // targeted file for coverage is not null.
