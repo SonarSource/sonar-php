@@ -29,6 +29,7 @@ import org.sonar.php.checks.phpini.EnableDlCheck;
 import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
+import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 
@@ -69,6 +70,7 @@ public class CheckList {
       ConstantNameCheck.class,
       ConstructorDeclarationCheck.class,
       ConstructorDependencyInversionCheck.class,
+      CookieDomainCheck.class,
       CookieSensitiveDataCheck.class,
       CookiesSecureCheck.class,
       CryptographicKeySizeCheck.class,
