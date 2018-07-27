@@ -1,6 +1,6 @@
 <p>Deserializing objects is security-sensitive. For example, it has led in the past to the following vulnerabilities:</p>
 <ul>
-  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2012-0694">CVE-2012-0694</a>: SugarCRM: Unserialize PHP Code Execution </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-17672">CVE-2017-17672</a>: vBulletin: Unserialize PHP Code Execution </li>
   <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1000058">CVE-2018-1000058</a>: Jenkins Pipeline: arbitrary code execution
   vulnerability </li>
 </ul>
@@ -10,6 +10,20 @@ some other type of object, you're in trouble. Why? There are a few different att
 Deserialization first instantiates the <code>Object</code>, then PHP will automatically attempt to call the <code>__wakeup()</code> member to
 reconstruct any resources that the object may have. If the attacker has overridden <code>__wakeup()</code> then he is entirely in control of what code
 executes during that process.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> an attacker could have tampered with the source provided to the deserialization function </li>
+  <li> you are using an unsafe deserialization function </li>
+</ul>
+<p>You are at risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<p>To prevent insecure deserialization, it is recommended to use a standard data interchange format such as JSON instead of relying on objects
+serialization.</p>
+<p>You should also limit access to the serialized source. For example:</p>
+<ul>
+  <li> if it is a file, restrict the access to it. </li>
+  <li> if it comes from the network, restrict who has access to the process, such as with a Firewall or by authenticating the sender first. </li>
+</ul>
 <h2>See</h2>
 <ul>
   <li> <a href="https://cwe.mitre.org/data/definitions/502.html">MITRE, CWE-502</a> - Deserialization of Untrusted Data </li>
