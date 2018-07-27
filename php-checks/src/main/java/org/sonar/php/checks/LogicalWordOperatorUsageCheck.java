@@ -23,9 +23,12 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPPunctuator;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
@@ -44,11 +47,20 @@ public class LogicalWordOperatorUsageCheck extends PHPSubscriptionCheck {
 
   @Override
   public void visitNode(Tree tree) {
-    SyntaxToken operator = ((BinaryExpressionTree) tree).operator();
+    BinaryExpressionTree binaryExpressionTree = (BinaryExpressionTree) tree;
+    if (isCallToDie(binaryExpressionTree.rightOperand())) {
+      return;
+    }
+
+    SyntaxToken operator = binaryExpressionTree.operator();
     String replacement = tree.is(Kind.ALTERNATIVE_CONDITIONAL_AND)
       ? PHPPunctuator.ANDAND.getValue()
       : PHPPunctuator.OROR.getValue();
 
     context().newIssue(this, operator, String.format(MESSAGE, operator.text(), replacement));
+  }
+
+  private static boolean isCallToDie(ExpressionTree tree) {
+    return tree.is(Kind.FUNCTION_CALL) && "die".equals(CheckUtils.getFunctionName((FunctionCallTree) tree));
   }
 }
