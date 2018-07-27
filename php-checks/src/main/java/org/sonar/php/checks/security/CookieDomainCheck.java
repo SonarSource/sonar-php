@@ -75,7 +75,7 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
     }
     ExpressionTree argumentVariable = args.get(domainIndex);
     ExpressionTree domainValue = getAssignedValue(argumentVariable);
-    if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
+    if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL, Tree.Kind.NULL_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
       if (argumentVariable == domainValue) {
         context().newIssue(this, domainValue, MESSAGE);
       } else {

@@ -25,6 +25,12 @@ $domain3 = "foo.bar";
 setcookie("TestCookie", $value, time()+3600, "/~path/", $domain3, 1);
 session_set_cookie_params(3600, "/~path/", $domain3);
 
+// special values
+session_set_cookie_params(3600, "/~path/", "................."); // Noncompliant
+session_set_cookie_params(3600, "/~path/", ""); // Noncompliant
+session_set_cookie_params(3600, "/~path/", "-1"); // Noncompliant
+session_set_cookie_params(3600, "/~path/", NULL); // Noncompliant
+
 // no domain parameter
 setcookie("TestCookie");
 session_set_cookie_params(3600);
