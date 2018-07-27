@@ -24,6 +24,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractStatementsCheck;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
 @Rule(key = CodeFollowingJumpStatementCheck.KEY)
@@ -32,23 +33,23 @@ public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
   public static final String KEY = "S1763";
   private static final String MESSAGE = "Remove the code after this \"%s\".";
 
-  private static final Tree.Kind[] JUMP_KINDS = {
-    Tree.Kind.BREAK_STATEMENT,
-    Tree.Kind.RETURN_STATEMENT,
-    Tree.Kind.CONTINUE_STATEMENT,
-    Tree.Kind.THROW_STATEMENT
+  private static final Kind[] JUMP_KINDS = {
+    Kind.BREAK_STATEMENT,
+    Kind.RETURN_STATEMENT,
+    Kind.CONTINUE_STATEMENT,
+    Kind.THROW_STATEMENT
   };
 
-  private static final Tree.Kind[] NO_ACTION_KINDS = {
-    Tree.Kind.EMPTY_STATEMENT,
-    Tree.Kind.CLASS_DECLARATION,
-    Tree.Kind.FUNCTION_DECLARATION,
-    Tree.Kind.INTERFACE_DECLARATION,
-    Tree.Kind.TRAIT_DECLARATION,
-    Tree.Kind.NAMESPACE_STATEMENT,
-    Tree.Kind.USE_STATEMENT,
-    Tree.Kind.CONSTANT_DECLARATION,
-    Tree.Kind.INLINE_HTML
+  private static final Kind[] NO_ACTION_KINDS = {
+    Kind.EMPTY_STATEMENT,
+    Kind.CLASS_DECLARATION,
+    Kind.FUNCTION_DECLARATION,
+    Kind.INTERFACE_DECLARATION,
+    Kind.TRAIT_DECLARATION,
+    Kind.NAMESPACE_STATEMENT,
+    Kind.USE_STATEMENT,
+    Kind.CONSTANT_DECLARATION,
+    Kind.INLINE_HTML
   };
 
   @Override
@@ -58,7 +59,7 @@ public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
     for (int i = 0; i < statements.size() - 1; i++) {
       StatementTree currentStatement = statements.get(i);
 
-      if (currentStatement.is(JUMP_KINDS) && hasActionStatementAfter(statements, i)) {
+      if (currentStatement.is(JUMP_KINDS) && hasActionStatement(statements.subList(i + 1, statements.size()), tree)) {
         String message = String.format(MESSAGE, ((PHPTree) currentStatement).getFirstToken().text());
         context().newIssue(this, ((PHPTree) currentStatement).getFirstToken(), message);
       }
@@ -66,9 +67,12 @@ public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
 
   }
 
-  private static boolean hasActionStatementAfter(List<StatementTree> statements, int currentStatementNumber) {
-    for (int i = currentStatementNumber + 1; i < statements.size(); i++) {
-      if (!statements.get(i).is(NO_ACTION_KINDS)) {
+  private static boolean hasActionStatement(List<StatementTree> statements, Tree parent) {
+    if (parent.is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE) && statements.get(0).is(Kind.BREAK_STATEMENT)) {
+      return false;
+    }
+    for (StatementTree statement : statements) {
+      if (!statement.is(NO_ACTION_KINDS)) {
         return true;
       }
     }
