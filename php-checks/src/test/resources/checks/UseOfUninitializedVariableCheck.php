@@ -268,3 +268,25 @@ function parentFunc() {
   if ($b) {} // Noncompliant
   if ($a) {}
 }
+
+// SONARPHP-756
+
+function alternativeForeach() {
+    $values = array(1, 2, 3);
+    foreach ($values as $key => $val) : // OK, $key and $value initialized by foreach
+      return $key . $val;
+    endforeach;
+
+    foreach ($values as $value) :
+          return $key . $val;
+    endforeach;
+
+    $array = [
+        [1, 2],
+        [3, 4],
+    ];
+
+    foreach ($array as list($a, $b)) :
+        echo "$a\n";
+    endforeach;
+}
