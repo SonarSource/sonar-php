@@ -85,24 +85,21 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
    * Check there is exactly one space around "as" keyword and "=>" punctuator in foreach statement.
    */
   private void checkForeachStatement(TokenVisitor tokenVisitor, ForEachStatementTree foreachLoop, SyntaxToken asKeyword, @Nullable SyntaxToken doubleArrow) {
-
-    boolean isSpaceCorrectAs = isExactlyOneSpaceAround(tokenVisitor, asKeyword);
-    boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isExactlyOneSpaceAround(tokenVisitor, doubleArrow);
+    boolean isSpaceCorrectAs = isExactlyOneSpaceAroundOrLineSplit(tokenVisitor, asKeyword);
+    boolean isSpaceCorrectDoubleArrow = doubleArrow == null || isExactlyOneSpaceAroundOrLineSplit(tokenVisitor, doubleArrow);
 
     String messageDetail = null;
     List<Tree> issueLocations = new ArrayList<>();
 
-    if (!isSpaceCorrectAs && isSpaceCorrectDoubleArrow) {
-      messageDetail = "\"as\"";
-      issueLocations.add(foreachLoop.asToken());
-
-    } else if (isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
-      messageDetail = "\"=>\"";
-      issueLocations.add(foreachLoop.doubleArrowToken());
-
-    } else if (!isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
+    if (!isSpaceCorrectAs && !isSpaceCorrectDoubleArrow) {
       messageDetail = "\"as\" and \"=>\"";
       issueLocations.add(foreachLoop.asToken());
+      issueLocations.add(foreachLoop.doubleArrowToken());
+    } else if (!isSpaceCorrectAs) {
+      messageDetail = "\"as\"";
+      issueLocations.add(foreachLoop.asToken());
+    } else if (!isSpaceCorrectDoubleArrow) {
+      messageDetail = "\"=>\"";
       issueLocations.add(foreachLoop.doubleArrowToken());
     }
 
@@ -111,9 +108,16 @@ public class ControlStructureSpacingCheck extends PHPSubscriptionCheck implement
     }
   }
 
-  private static boolean isExactlyOneSpaceAround(TokenVisitor tokenVisitor, SyntaxToken token) {
-    return TokenUtils.getNbSpaceBetween(tokenVisitor.prevToken(token), token) == 1
-      && TokenUtils.getNbSpaceBetween(token, tokenVisitor.nextToken(token)) == 1;
+  private static boolean isExactlyOneSpaceAroundOrLineSplit(TokenVisitor tokenVisitor, SyntaxToken token) {
+    SyntaxToken prevToken = tokenVisitor.prevToken(token);
+    SyntaxToken nextToken = tokenVisitor.nextToken(token);
+    if (TokenUtils.isOnSameLine(prevToken, token) && TokenUtils.getNbSpaceBetween(prevToken, token) != 1) {
+      return false;
+    }
+    if (TokenUtils.isOnSameLine(token, nextToken) && TokenUtils.getNbSpaceBetween(token, nextToken) != 1) {
+      return false;
+    }
+    return true;
   }
 
   /**

@@ -57,6 +57,27 @@ foreach ($tokens as $token) {
 
 }
 
+foreach (
+    $varXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX
+    as $keyXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX
+=> $valueXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX
+) {
+}
+
+foreach (
+    $varXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX
+    as  $keyXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX // Noncompliant
+    => $valueXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX
+) {
+}
+
+foreach (
+    $varXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX
+    as $keyXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX
+=>  $valueXXXXXXXXXXXXXXXXXXXXX_long_variable_XXXXXXXXXXXXXXXXXXXXX  // Noncompliant
+) {
+}
+
 
 // case-sensitivity of keywords
 
