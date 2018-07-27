@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.tests;
 
 import java.io.File;
+import java.nio.file.Paths;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.matchers.JUnitMatchers;
@@ -38,7 +39,8 @@ public class PhpTestFileTest {
     assertThat(file.relativePath().toString().replace('\\', '/')).isEqualTo("src/test/resources/tests/testfile.php");
     assertThat(file.contents()).isEqualTo("<?php echo \"Hello\";\n");
     assertThat(file.filename()).isEqualTo("testfile.php");
-    assertThat(file.toString()).isEqualTo("src/test/resources/tests/testfile.php");
+    String expectedPath = Paths.get("src", "test", "resources", "tests", "testfile.php").toString();
+    assertThat(file.toString()).isEqualTo(expectedPath);
   }
 
   @Test
