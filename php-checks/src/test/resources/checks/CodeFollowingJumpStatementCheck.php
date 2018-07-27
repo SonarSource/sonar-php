@@ -94,6 +94,21 @@ function tagAfterReturn() {
   ?><?php
 }
 
+function breakAfterJump() {
+  switch($a) {
+    case 0:
+      return "x";
+      break;
+    case 1:
+      return "y";
+      break; // Noncompliant
+      foo();
+    default:
+      return "z";
+      break;
+  }
+}
+
 return;         // Noncompliant
 
 if (true) {}
