@@ -142,7 +142,6 @@ public class PHPIntegrationTest {
   @Test
   public void should_be_compatible_with_DevCockpit() {
     assertThat(getFileMeasure("ncloc_data").getValue()).isNotEmpty();
-    assertThat(getFileMeasure("comment_lines_data").getValue()).isNotEmpty();
   }
 
   private Measures.Measure getProjectMeasure(String metricKey) {
