@@ -85,7 +85,7 @@
     <version.commons-lang>2.6</version.commons-lang>
     <version.junit>4.10</version.junit>
     <version.maven-project>2.0.6</version.maven-project>
-    <version.mockito>1.9.0</version.mockito>
+    <version.mockito>2.21.0</version.mockito>
     <version.sonar>7.3-alpha1</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
     <version.sonar-orchestrator>3.21.0.1721</version.sonar-orchestrator>
@@ -210,7 +210,7 @@
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
-        <artifactId>mockito-all</artifactId>
+        <artifactId>mockito-core</artifactId>
         <version>${version.mockito}</version>
         <scope>test</scope>
       </dependency>
