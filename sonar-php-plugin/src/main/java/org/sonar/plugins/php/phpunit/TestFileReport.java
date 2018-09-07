@@ -71,7 +71,7 @@ public class TestFileReport {
     return (double) tests - skipped;
   }
 
-  private double testDurationMilliseconds() {
+  public double testDurationMilliseconds() {
     return testDuration * 1000d;
   }
 

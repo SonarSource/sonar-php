@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<!-- Paths have been changed from absolute to relative for testability purpose -->
+<testsuite name="DaTestSuite" tests="10" assertions="8" errors="1" failures="1" skipped="2">
+    <testsuite name="App2Test" file="src/App2Test.php" tests="1" assertions="1" errors="0" failures="0" skipped="0">
+        <testcase name="testCanBeUsedAsString" class="App2Test" file="src/App2Test.php" line="26" assertions="1"/>
+    </testsuite>
+    <testsuite name="InvalidTime" file="src/InvalidTime.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="xxx">
+      <testcase name="testCanBeUsedAsString" class="App2Test" file="src/App2Test.php" line="26" assertions="1"/>
+    </testsuite>
+</testsuite>
+</testsuites>

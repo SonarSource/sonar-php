@@ -80,7 +80,15 @@ public class JUnitLogParserForPhpUnit {
   private static TestSuite processTestSuite(SMInputCursor cursor) throws XMLStreamException {
     String name = cursor.getAttrValue("name");
     String file = cursor.getAttrValue("file");
-    double time = Double.parseDouble(cursor.getAttrValue("time"));
+    double time = 0;
+    String timeAttributeValue = cursor.getAttrValue("time");
+    if (timeAttributeValue != null) {
+      try {
+        time = Double.parseDouble(timeAttributeValue);
+      } catch (NumberFormatException ex) {
+        // ignore
+      }
+    }
 
     List<TestCase> testCases = new ArrayList<>();
     List<TestSuite> nestedSuites = new ArrayList<>();
