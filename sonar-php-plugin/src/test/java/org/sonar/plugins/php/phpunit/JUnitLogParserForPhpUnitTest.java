@@ -21,6 +21,7 @@ package org.sonar.plugins.php.phpunit;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.plugins.php.PhpTestUtils;
@@ -41,6 +42,16 @@ public class JUnitLogParserForPhpUnitTest {
   public void shouldGenerateEmptyTestSuites() {
     final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-with-empty-testsuites.xml"));
     assertThat(suites).isEqualTo(new TestSuites(Collections.emptyList()));
+  }
+
+  @Test
+  public void shouldParseTestSuitesWithoutTime() {
+    final TestSuites suites = parser.parse(new File("src/test/resources/" + PhpTestUtils.PHPUNIT_REPORT_DIR + "phpunit-junit-report-no-time.xml"));
+    assertThat(suites).isNotNull();
+    List<TestFileReport> reports = suites.arrangeSuitesIntoTestFileReports();
+    assertThat(reports).hasSize(2);
+    assertThat(reports.get(0).testDurationMilliseconds()).isEqualTo(0);
+    assertThat(reports.get(1).testDurationMilliseconds()).isEqualTo(0);
   }
 
   @Test(expected = IllegalStateException.class)
