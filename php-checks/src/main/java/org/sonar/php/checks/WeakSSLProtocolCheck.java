@@ -20,10 +20,14 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -47,8 +51,10 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
 
   private static final String STREAM_CONTEXT_CREATE = "stream_context_create";
   private static final String STREAM_SOCKET_ENABLE_CRYPTO = "stream_socket_enable_crypto";
+  private static final String CURL_SETOPT = "curl_setopt";
+  private static final Set<String> CURLOPT_SSL_KEYS = ImmutableSet.of("CURLOPT_SSLVERSION", "CURLOPT_SSL_CIPHER_LIST");
 
-  private static final Map<String, List<String>> WEAK_PROTOCOLS = ImmutableMap.of(
+  private static final Map<String, List<String>> STREAM_WEAK_PROTOCOLS = ImmutableMap.of(
     STREAM_CONTEXT_CREATE, Arrays.asList(
       "STREAM_CRYPTO_METHOD_ANY_CLIENT",
       "STREAM_CRYPTO_METHOD_ANY_SERVER",
@@ -70,9 +76,14 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
       "STREAM_CRYPTO_METHOD_ANY_SERVER",
       "STREAM_CRYPTO_METHOD_TLS_SERVER",
       "STREAM_CRYPTO_METHOD_TLSv1_0_SERVER",
-      "STREAM_CRYPTO_METHOD_TLSv1_1_SERVER"
-    )
-  );
+      "STREAM_CRYPTO_METHOD_TLSv1_1_SERVER"));
+
+  private static final List<String> CURL_WEAK_PROTOCOLS = ImmutableList.of(
+    "CURL_SSLVERSION_TLSv1",
+    "CURL_SSLVERSION_SSLv2",
+    "CURL_SSLVERSION_SSLv3",
+    "CURL_SSLVERSION_TLSv1_0",
+    "CURL_SSLVERSION_TLSv1_1");
 
   private static final String MESSAGE = "Change this code to use a stronger protocol.";
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
@@ -90,19 +101,25 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
     if (STREAM_CONTEXT_CREATE.equals(functionName)) {
       List<ExpressionTree> arguments = tree.arguments();
       if (!arguments.isEmpty()) {
-        checkSSLConfig(arguments.get(0));
+        checkStreamSSLConfig(arguments.get(0));
       }
     }
     if (STREAM_SOCKET_ENABLE_CRYPTO.equals(functionName)) {
       SeparatedList<ExpressionTree> arguments = tree.arguments();
       if (arguments.size() > 2) {
-        checkWeakProtocol(getAssignedValue(arguments.get(2)), STREAM_SOCKET_ENABLE_CRYPTO);
+        checkStreamWeakProtocol(getAssignedValue(arguments.get(2)), STREAM_SOCKET_ENABLE_CRYPTO);
+      }
+    }
+    if (CURL_SETOPT.equals(functionName)) {
+      SeparatedList<ExpressionTree> arguments = tree.arguments();
+      if (arguments.size() > 2) {
+        checkCURLWeakProtocol(getAssignedValue(arguments.get(2)));
       }
     }
     super.visitFunctionCall(tree);
   }
 
-  private void checkSSLConfig(ExpressionTree expressionTree) {
+  private void checkStreamSSLConfig(ExpressionTree expressionTree) {
     ExpressionTree config = getAssignedValue(expressionTree);
     if (!isArrayInitializer(config)) {
       return;
@@ -114,18 +131,18 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
         }
         return Optional.empty();
       })
-      .ifPresent(value -> checkWeakProtocol(value, STREAM_CONTEXT_CREATE));
+      .ifPresent(value -> checkStreamWeakProtocol(value, STREAM_CONTEXT_CREATE));
   }
 
   private static boolean isArrayInitializer(ExpressionTree param) {
     return param.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION);
   }
 
-  private void checkWeakProtocol(ExpressionTree expressionTree, String functionName) {
+  private void checkStreamWeakProtocol(ExpressionTree expressionTree, String functionName) {
     Stream<ExpressionTree> protocols = expressionTree.is(Tree.Kind.BITWISE_OR)
       ? getOperands((BinaryExpressionTree) expressionTree)
       : Stream.of(expressionTree);
-    List<String> weakProtocols = WEAK_PROTOCOLS.get(functionName);
+    List<String> weakProtocols = STREAM_WEAK_PROTOCOLS.get(functionName);
     if (weakProtocols != null) {
       protocols.forEach(protocol -> {
         if (protocol.is(Tree.Kind.NAMESPACE_NAME)) {
@@ -133,6 +150,18 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
           if (weakProtocols.contains(cryptoMethod.name().text())) {
             context().newIssue(this, cryptoMethod, MESSAGE);
           }
+        }
+      });
+    }
+  }
+
+  private void checkCURLWeakProtocol(ExpressionTree expressionTree) {
+
+    if (expressionTree.is(Tree.Kind.NAMESPACE_NAME)) {
+      NamespaceNameTree protocol = (NamespaceNameTree) expressionTree;
+      CURL_WEAK_PROTOCOLS.forEach(weakProtocol -> {
+        if (weakProtocol.equals(protocol.name().text())) {
+          context().newIssue(this, protocol, MESSAGE);
         }
       });
     }
