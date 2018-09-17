@@ -1,4 +1,7 @@
 <?php
+
+// Stream socket
+
 // Recent SSL Protocol Versions
 
 $ctx = stream_context_create([
@@ -135,3 +138,26 @@ $ctx = stream_context_create([
 ]);
 
 stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLSv1_2_SERVER | STREAM_CRYPTO_METHOD_TLSv1_1_SERVER); // Noncompliant
+
+// Curl
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, 'https://www.sonarsource.com/');
+curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+
+curl_setopt($ch, CURLOPT_SSLVERSION);
+
+$tlsv1_2 = CURL_SSLVERSION_TLSv1_2;
+curl_setopt($ch, CURLOPT_SSLVERSION, $tlsv1_2);
+
+$unused_sslv2 = CURL_SSLVERSION_SSLv2;
+
+curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1); // Noncompliant
+curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv2); // Noncompliant
+curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv3); // Noncompliant
+curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_0); // Noncompliant
+curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_1); // Noncompliant
+
+$sslv3 = CURL_SSLVERSION_SSLv3; // Noncompliant
+
+curl_setopt($ch, CURLOPT_SSLVERSION, $sslv3);
