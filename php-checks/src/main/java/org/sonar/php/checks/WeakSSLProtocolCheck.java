@@ -101,7 +101,10 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
       checkStreamWeakProtocol(getAssignedValue(arguments.get(2)), STREAM_SOCKET_ENABLE_CRYPTO);
     }
     if (CURL_SETOPT.equals(functionName) && arguments.size() > 2) {
-      checkCURLWeakProtocol(getAssignedValue(arguments.get(2)));
+      ExpressionTree optionArgument = arguments.get(1);
+      if (optionArgument.is(Tree.Kind.NAMESPACE_NAME) && "CURLOPT_SSLVERSION".equals(((NamespaceNameTree) optionArgument).name().text())) {
+        checkCURLWeakProtocol(getAssignedValue(arguments.get(2)));
+      }
     }
     super.visitFunctionCall(tree);
   }
