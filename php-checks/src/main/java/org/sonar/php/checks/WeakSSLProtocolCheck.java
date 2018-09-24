@@ -31,7 +31,6 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
@@ -94,23 +93,15 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     String functionName = CheckUtils.getFunctionName(tree);
-    if (STREAM_CONTEXT_CREATE.equals(functionName)) {
-      List<ExpressionTree> arguments = tree.arguments();
-      if (!arguments.isEmpty()) {
-        checkStreamSSLConfig(arguments.get(0));
-      }
+    List<ExpressionTree> arguments = tree.arguments();
+    if (STREAM_CONTEXT_CREATE.equals(functionName) && !arguments.isEmpty()) {
+      checkStreamSSLConfig(arguments.get(0));
     }
-    if (STREAM_SOCKET_ENABLE_CRYPTO.equals(functionName)) {
-      SeparatedList<ExpressionTree> arguments = tree.arguments();
-      if (arguments.size() > 2) {
-        checkStreamWeakProtocol(getAssignedValue(arguments.get(2)), STREAM_SOCKET_ENABLE_CRYPTO);
-      }
+    if (STREAM_SOCKET_ENABLE_CRYPTO.equals(functionName) && arguments.size() > 2) {
+      checkStreamWeakProtocol(getAssignedValue(arguments.get(2)), STREAM_SOCKET_ENABLE_CRYPTO);
     }
-    if (CURL_SETOPT.equals(functionName)) {
-      SeparatedList<ExpressionTree> arguments = tree.arguments();
-      if (arguments.size() > 2) {
-        checkCURLWeakProtocol(getAssignedValue(arguments.get(2)));
-      }
+    if (CURL_SETOPT.equals(functionName) && arguments.size() > 2) {
+      checkCURLWeakProtocol(getAssignedValue(arguments.get(2)));
     }
     super.visitFunctionCall(tree);
   }
