@@ -19,15 +19,12 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
+import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -52,7 +49,6 @@ public class WeakSSLProtocolCheck extends PHPVisitorCheck {
   private static final String STREAM_CONTEXT_CREATE = "stream_context_create";
   private static final String STREAM_SOCKET_ENABLE_CRYPTO = "stream_socket_enable_crypto";
   private static final String CURL_SETOPT = "curl_setopt";
-  private static final Set<String> CURLOPT_SSL_KEYS = ImmutableSet.of("CURLOPT_SSLVERSION", "CURLOPT_SSL_CIPHER_LIST");
 
   private static final Map<String, List<String>> STREAM_WEAK_PROTOCOLS = ImmutableMap.of(
     STREAM_CONTEXT_CREATE, Arrays.asList(
