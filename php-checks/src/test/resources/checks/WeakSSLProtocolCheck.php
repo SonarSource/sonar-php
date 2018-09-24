@@ -161,3 +161,6 @@ curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_1); // Noncompliant
 $sslv3 = CURL_SSLVERSION_SSLv3; // Noncompliant
 
 curl_setopt($ch, CURLOPT_SSLVERSION, $sslv3);
+
+curl_setopt($ch, CURLOPT_OTHER_KEY, CURL_SSLVERSION_SSLv3);
+curl_setopt($ch, foo(), CURL_SSLVERSION_SSLv3);
