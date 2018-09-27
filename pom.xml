@@ -89,7 +89,7 @@
     <version.sonar>7.3-alpha1</version.sonar>
     <version.staxmate>2.0.1</version.staxmate>
     <version.sonar-orchestrator>3.21.0.1721</version.sonar-orchestrator>
-    <version.sslr>1.22</version.sslr>
+    <version.sslr>1.23</version.sslr>
     <version.sslr-squid-bridge>2.7.0.377</version.sslr-squid-bridge>
     <version.guava>18.0</version.guava>
     <version.sonarlint>3.0.0.1140</version.sonarlint>
