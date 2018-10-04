@@ -1,0 +1,31 @@
+{
+  "title": "Weak SSL protocols should not be used",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "cwe",
+    "owasp-a6",
+    "owasp-a3"
+  ],
+  "standards": [
+    "CWE",
+    "OWASP Top Ten",
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-4830",
+  "sqKey": "S4830",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      295
+    ],
+    "OWASP": [
+      "A3",
+      "A6"
+    ]
+  }
+}

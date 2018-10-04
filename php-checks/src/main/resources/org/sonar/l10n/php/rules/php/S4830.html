@@ -1,0 +1,28 @@
+<p>Disabling SSL/TLS certificates chain of trust verification is similar to trust every one in the chain and so to expose the application to man-in-the-middle (MITM) attacks.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, TRUE); // Noncompliant; TRUE is casted to 1 which is not a secure configuration
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, '0');
+
+// and/or
+
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, '0');
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, '2'); // Compliant; default value is 2 to "check the existence of a common name and also verify that it matches the hostname provided" according to PHP's documentation
+
+// and/or
+
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, TRUE); // Compliant; default value is TRUE
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, '1');
+</pre>
+<h2>See</h2>
+<ul>
+    <li> <a href="http://cwe.mitre.org/data/definitions/295.html">MITRE CWE-295</a> - Improper Certificate Validation </li>
+    <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure </li>
+    <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security Misconfiguration</li>
+</ul>
+

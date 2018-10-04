@@ -98,8 +98,11 @@ public final class CheckUtils {
     return nameOf(functionCall.callee());
   }
 
+  /**
+   * @return Returns the name of a tree.
+   */
   @Nullable
-  private static String nameOf(Tree tree) {
+  public static String nameOf(Tree tree) {
     if (tree.is(Tree.Kind.NAMESPACE_NAME)) {
       return ((NamespaceNameTree) tree).qualifiedName();
     } else if (tree.is(Tree.Kind.NAME_IDENTIFIER)) {
