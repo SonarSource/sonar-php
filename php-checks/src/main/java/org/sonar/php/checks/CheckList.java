@@ -163,6 +163,7 @@ public class CheckList {
       SessionCookiePersistenceCheck.class,
       SilencedErrorsCheck.class,
       SleepFunctionUsageCheck.class,
+      SSLCertificatesVerificationDisabledCheck.class,
       StringLiteralDuplicatedCheck.class,
       SwitchCaseTooBigCheck.class,
       SwitchDefaultPositionCheck.class,
