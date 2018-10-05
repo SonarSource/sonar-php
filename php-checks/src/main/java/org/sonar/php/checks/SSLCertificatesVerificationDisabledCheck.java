@@ -42,7 +42,7 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
   private static final String CURLOPT_SSL_VERIFYHOST = "CURLOPT_SSL_VERIFYHOST";
   private static final String CURLOPT_SSL_VERIFYPEER = "CURLOPT_SSL_VERIFYPEER";
 
-  private static final String MESSAGE = "Change this code to enable trust chain verification.";
+  private static final String MESSAGE = "Activate SSL/TLS certificates chain of trust verification.";
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
