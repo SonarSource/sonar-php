@@ -68,6 +68,7 @@ public class FileHeaderCheckTest {
 
     check = new FileHeaderCheck();
     PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/empty.php"), noIssue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/emptyWithTag.php"), noIssue);
   }
 
 }
