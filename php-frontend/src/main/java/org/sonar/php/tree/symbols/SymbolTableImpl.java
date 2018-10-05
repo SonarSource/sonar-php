@@ -109,7 +109,7 @@ public class SymbolTableImpl implements SymbolTable {
   public List<Symbol> getSymbols(String name) {
     List<Symbol> result = new ArrayList<>();
     for (Symbol symbol : getSymbols()){
-      if (name.equalsIgnoreCase(symbol.name())){
+      if (symbol.called(name)) {
         result.add(symbol);
       }
     }

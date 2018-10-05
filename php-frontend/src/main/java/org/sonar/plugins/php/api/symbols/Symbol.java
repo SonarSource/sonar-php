@@ -108,7 +108,11 @@ public class Symbol {
   }
 
   public boolean called(String name) {
-    return name.equalsIgnoreCase(this.name);
+    if (kind == Kind.VARIABLE || kind == Kind.PARAMETER) {
+      return name.equals(this.name);
+    } else {
+      return name.equalsIgnoreCase(this.name);
+    }
   }
 
   public Kind kind() {

@@ -5,11 +5,15 @@
  */
 function f() {
   $a = 1;    // OK
+  $A = 1;    // OK
   $b = 1;    // OK
+  $B = 1;    // Noncompliant {{Remove this unused "$B" local variable.}}
+//^^
   $c = 1;    // Noncompliant {{Remove this unused "$c" local variable.}}
 //^^
   $d =& $a;  // Noncompliant {{Remove this unused "$d" local variable.}}
   $a[$b];
+  echo $A;
 }
 
 /**

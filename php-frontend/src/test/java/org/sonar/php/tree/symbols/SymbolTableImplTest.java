@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -39,6 +40,32 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   private SymbolTableImpl SYMBOL_MODEL = SymbolTableImpl.create(cut);
 
   @Test
+  public void case_sensitivity() throws Exception {
+    CompilationUnitTree cut = parse("symbols/symbolCase.php");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+
+    Symbol myFunc = getUniqueSymbol("myFunc", symbolTable);
+    assertThat(myFunc.kind()).isEqualTo(Kind.FUNCTION);
+    assertThat(myFunc.usages()).extracting("value").containsExactlyInAnyOrder("MyFunc", "MYFUNC");
+
+    Symbol constLow = getUniqueSymbol("myconst", symbolTable);
+    Symbol constUp = getUniqueSymbol("MYCONST", symbolTable);
+
+    assertThat(constLow).isNotEqualTo(constUp);
+    assertThat(constUp.usages()).hasSize(0); // FIXME should be 1
+    assertThat(constLow.usages()).hasSize(0);
+
+    Symbol variableLow = getUniqueSymbol("$myvar", symbolTable);
+    Symbol variableUp = getUniqueSymbol("$MYVAR", symbolTable);
+
+    assertThat(variableLow).isNotEqualTo(variableUp);
+    assertThat(variableLow.usages()).hasSize(1);
+    assertThat(variableUp.usages()).hasSize(0);
+
+    assertThat(symbolTable.getSymbols("$MyVar")).isEmpty();
+  }
+
+  @Test
   public void symbols_filtering() {
     assertThat(SYMBOL_MODEL.getSymbols()).hasSize(18);
 
@@ -49,8 +76,12 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.VARIABLE)).hasSize(11);
 
     assertThat(SYMBOL_MODEL.getSymbols("$a")).hasSize(2);
-    // Case insensitive
-    assertThat(SYMBOL_MODEL.getSymbols("$A")).hasSize(2);
+    // Case sensitive for variables
+    assertThat(SYMBOL_MODEL.getSymbols("$A")).hasSize(0);
+
+    assertThat(SYMBOL_MODEL.getSymbols("f")).hasSize(2);
+    // Case in-sensitive for functions
+    assertThat(SYMBOL_MODEL.getSymbols("F")).hasSize(2);
   }
 
   @Test
@@ -120,5 +151,12 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     Symbol symbol = SYMBOL_MODEL.getSymbol(dollarAUsage);
     assertThat(symbol).isNotNull();
     assertThat(symbol.name()).isEqualTo("$a");
+  }
+
+  private static Symbol getUniqueSymbol(String name, SymbolTableImpl table) {
+    List<Symbol> symbols = table.getSymbols(name);
+    assertThat(symbols).hasSize(1);
+
+    return symbols.get(0);
   }
 }
