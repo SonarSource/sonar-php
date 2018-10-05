@@ -84,7 +84,7 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
   private void checkCURLSSLVerifyHost(ExpressionTree expressionTree) {
 
     ExpressionTree curlOptValue = getAssignedValue(expressionTree);
-    Boolean verifyHostEnabled = false;
+    boolean verifyHostEnabled = false;
     if (curlOptValue.is(Kind.NUMERIC_LITERAL)) {
       // Detect 2 integer value
       String value = ((LiteralTree) curlOptValue).value();
@@ -103,7 +103,7 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
   private void checkCURLSSLVerifyPeer(ExpressionTree expressionTree) {
 
     ExpressionTree curlOptValue = getAssignedValue(expressionTree);
-    Boolean verifyPeerEnabled = false;
+    boolean verifyPeerEnabled = false;
     if (curlOptValue.is(Tree.Kind.BOOLEAN_LITERAL)) {
       // Detect true or TRUE boolean values
       ImmutableSet trueStringLiteral = ImmutableSet.of("true", "TRUE");
