@@ -53,6 +53,7 @@ public class FileHeaderCheck extends PHPVisitorCheck {
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
     Iterator<String> it = CheckUtils.lines(context().getPhpFile()).iterator();
+
     if (it.hasNext() && !matches(expectedLines, it)) {
       context().newFileIssue(this, MESSAGE);
     }
@@ -62,7 +63,12 @@ public class FileHeaderCheck extends PHPVisitorCheck {
     String line = lines.next();
 
     if (PHP_OPEN_TAG.matcher(line).matches()) {
-      line = lines.next();
+      if (lines.hasNext()) {
+        line = lines.next();
+      } else {
+        // actually empty file, no issue is raised
+        return true;
+      }
     }
 
     for (String expectedLine : expectedLines) {
