@@ -19,9 +19,13 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
@@ -44,6 +48,21 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Activate SSL/TLS certificates chain of trust verification.";
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
+  private HashMap<Kind, Set<String>> verifyHostCompliantValues;
+  private HashMap<Kind, Set<String>> verifyPeerCompliantValues;
+
+  @Override
+  public void init() {
+    verifyHostCompliantValues = new HashMap<>();
+    verifyHostCompliantValues.put(Kind.NUMERIC_LITERAL, ImmutableSet.of("2"));
+    verifyHostCompliantValues.put(Kind.REGULAR_STRING_LITERAL, ImmutableSet.of("\'2\'", "\"2\""));
+
+
+    verifyPeerCompliantValues = new HashMap<>();
+    verifyPeerCompliantValues.put(Kind.BOOLEAN_LITERAL, ImmutableSet.of("true", "TRUE"));
+    verifyPeerCompliantValues.put(Kind.NUMERIC_LITERAL, ImmutableSet.of("1"));
+    verifyPeerCompliantValues.put(Kind.REGULAR_STRING_LITERAL, ImmutableSet.of("\'1\'", "\"1\""));
+  }
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
@@ -62,11 +81,12 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
     if (CURL_SETOPT.equals(functionName) && arguments.size() > 2) {
       ExpressionTree optionArgument = arguments.get(1);
       ExpressionTree valueArgument = arguments.get(2);
+
       this.nameOf(optionArgument).ifPresent(name -> {
           if(name.equals(CURLOPT_SSL_VERIFYHOST)) {
-            this.checkCURLSSLVerifyHost(valueArgument);
+            this.checkCURLSSLVerify(valueArgument, verifyHostCompliantValues);
           } else if(name.equals(CURLOPT_SSL_VERIFYPEER)) {
-            this.checkCURLSSLVerifyPeer(valueArgument);
+            this.checkCURLSSLVerify(valueArgument, verifyPeerCompliantValues);
           }
         }
       );
@@ -79,6 +99,24 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
   private Optional<String> nameOf(Tree tree) {
     String name = CheckUtils.nameOf(tree);
     return name != null ? Optional.of(name) : Optional.empty();
+  }
+
+  private void checkCURLSSLVerify(ExpressionTree expressionTree, HashMap<Kind, Set<String>> compliantValues) {
+
+    boolean isCompliant = false;
+    ExpressionTree curlOptValue = getAssignedValue(expressionTree);
+    for(Map.Entry<Kind, Set<String>> entry: compliantValues.entrySet()) {
+      Kind kind = entry.getKey();
+      Set<String> values = entry.getValue();
+      if(curlOptValue.is(kind) && curlOptValue instanceof LiteralTree) {
+        String value = ((LiteralTree) curlOptValue).value();
+        isCompliant = values.contains(value);
+      }
+    }
+
+    if (!isCompliant) {
+      context().newIssue(this, expressionTree, MESSAGE);
+    }
   }
 
   private void checkCURLSSLVerifyHost(ExpressionTree expressionTree) {
