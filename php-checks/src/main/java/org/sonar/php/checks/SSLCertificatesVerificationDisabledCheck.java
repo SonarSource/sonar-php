@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.List;
+import java.util.Optional;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.visitors.AssignmentExpressionVisitor;
@@ -28,7 +29,6 @@ import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
@@ -61,17 +61,24 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
     // http://php.net/manual/fr/function.curl-setopt.php
     if (CURL_SETOPT.equals(functionName) && arguments.size() > 2) {
       ExpressionTree optionArgument = arguments.get(1);
-      if (optionArgument.is(Tree.Kind.NAMESPACE_NAME) &&
-        CURLOPT_SSL_VERIFYHOST.equals(((NamespaceNameTree) optionArgument).name().text())) {
-        checkCURLSSLVerifyHost(arguments.get(2));
-      } else if (optionArgument.is(Tree.Kind.NAMESPACE_NAME) &&
-        CURLOPT_SSL_VERIFYPEER.equals(((NamespaceNameTree) optionArgument).name().text())) {
-        checkCURLSSLVerifyPeer(arguments.get(2));
-      }
+      ExpressionTree valueArgument = arguments.get(2);
+      this.nameOf(optionArgument).ifPresent(name -> {
+          if(name.equals(CURLOPT_SSL_VERIFYHOST)) {
+            this.checkCURLSSLVerifyHost(valueArgument);
+          } else if(name.equals(CURLOPT_SSL_VERIFYPEER)) {
+            this.checkCURLSSLVerifyPeer(valueArgument);
+          }
+        }
+      );
     }
 
     // super method must be called in order to visit function call node's children
     super.visitFunctionCall(tree);
+  }
+
+  private Optional<String> nameOf(Tree tree) {
+    String name = CheckUtils.nameOf(tree);
+    return name != null ? Optional.of(name) : Optional.empty();
   }
 
   private void checkCURLSSLVerifyHost(ExpressionTree expressionTree) {
