@@ -100,7 +100,7 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
     if (curlOptValue.is(Tree.Kind.BOOLEAN_LITERAL)) {
       // Detect true or TRUE boolean values
       ImmutableSet trueStringLiteral = ImmutableSet.of("true", "TRUE");
-      verifyPeerEnabled = Boolean.parseBoolean(((LiteralTree) curlOptValue).value());
+      verifyPeerEnabled = trueStringLiteral.contains(((LiteralTree) curlOptValue).value());
 
     } else if (curlOptValue.is(Kind.NUMERIC_LITERAL)) {
       // Detect 1 integer value
