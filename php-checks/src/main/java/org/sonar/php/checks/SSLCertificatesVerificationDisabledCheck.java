@@ -63,10 +63,10 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
       ExpressionTree optionArgument = arguments.get(1);
       if (optionArgument.is(Tree.Kind.NAMESPACE_NAME) &&
         CURLOPT_SSL_VERIFYHOST.equals(((NamespaceNameTree) optionArgument).name().text())) {
-        checkCURLSSLVerifyHost(getAssignedValue(arguments.get(2)));
+        checkCURLSSLVerifyHost(arguments.get(2));
       } else if (optionArgument.is(Tree.Kind.NAMESPACE_NAME) &&
         CURLOPT_SSL_VERIFYPEER.equals(((NamespaceNameTree) optionArgument).name().text())) {
-        checkCURLSSLVerifyPeer(getAssignedValue(arguments.get(2)));
+        checkCURLSSLVerifyPeer(arguments.get(2));
       }
     }
 
@@ -74,8 +74,9 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
   }
 
-  private void checkCURLSSLVerifyHost(ExpressionTree curlOptValue) {
+  private void checkCURLSSLVerifyHost(ExpressionTree expressionTree) {
 
+    ExpressionTree curlOptValue = getAssignedValue(expressionTree);
     Boolean verifyHostEnabled = false;
     if (curlOptValue.is(Kind.NUMERIC_LITERAL)) {
       // Detect 2 integer value
@@ -88,12 +89,13 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
     }
 
     if (!verifyHostEnabled) {
-      context().newIssue(this, curlOptValue, MESSAGE);
+      context().newIssue(this, expressionTree, MESSAGE);
     }
   }
 
-  private void checkCURLSSLVerifyPeer(ExpressionTree curlOptValue) {
+  private void checkCURLSSLVerifyPeer(ExpressionTree expressionTree) {
 
+    ExpressionTree curlOptValue = getAssignedValue(expressionTree);
     Boolean verifyPeerEnabled = false;
     if (curlOptValue.is(Tree.Kind.BOOLEAN_LITERAL)) {
       // Detect true or TRUE boolean values
@@ -111,7 +113,7 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
     }
 
     if (!verifyPeerEnabled) {
-      context().newIssue(this, curlOptValue, MESSAGE);
+      context().newIssue(this, expressionTree, MESSAGE);
     }
   }
 
