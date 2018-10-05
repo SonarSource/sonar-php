@@ -81,7 +81,7 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
     if (curlOptValue.is(Kind.NUMERIC_LITERAL)) {
       // Detect 2 integer value
       String value = ((LiteralTree) curlOptValue).value();
-      verifyHostEnabled = (value == "2");
+      verifyHostEnabled = value.equals("2");
     } else if (curlOptValue.is(Kind.REGULAR_STRING_LITERAL)) {
       // Detect '2' or "2" string characters
       ImmutableSet twoStringLiteral = ImmutableSet.of("\'2\'", "\"2\"");
@@ -105,7 +105,7 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
     } else if (curlOptValue.is(Kind.NUMERIC_LITERAL)) {
       // Detect 1 integer value
       String value = ((LiteralTree) curlOptValue).value();
-      verifyPeerEnabled = (value == "1");
+      verifyPeerEnabled = value.equals("1");
     } else if (curlOptValue.is(Kind.REGULAR_STRING_LITERAL)) {
       // Detect '1' or "1" string characters
       ImmutableSet twoStringLiteral = ImmutableSet.of("\'1\'", "\"1\"");
