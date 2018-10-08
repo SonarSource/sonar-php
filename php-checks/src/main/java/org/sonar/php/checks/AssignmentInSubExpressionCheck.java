@@ -40,7 +40,8 @@ public class AssignmentInSubExpressionCheck extends PHPVisitorCheck {
     Tree.Kind.FUNCTION_CALL,
     Tree.Kind.EXPRESSION_STATEMENT,
     Tree.Kind.ASSIGNMENT_BY_REFERENCE,
-    Tree.Kind.ASSIGNMENT};
+    Tree.Kind.ASSIGNMENT,
+    Tree.Kind.ALTERNATIVE_CONDITIONAL_OR};
 
   @Override
   public void visitAssignmentExpression(AssignmentExpressionTree tree) {

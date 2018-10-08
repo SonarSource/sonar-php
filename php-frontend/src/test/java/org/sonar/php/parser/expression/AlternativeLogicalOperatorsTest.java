@@ -20,18 +20,33 @@
 package org.sonar.php.parser.expression;
 
 import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.Tree;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class StaticScalarTest {
+public class AlternativeLogicalOperatorsTest {
 
   @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.STATIC_SCALAR)
-      .matches("Foo")
-      .matches("array()")
-      .matches("$a = 1")
-      .matches("1 or 2");
+  public void test_and() {
+    assertThat(Tree.Kind.ALTERNATIVE_CONDITIONAL_AND)
+      .matches("$a = $b and $b")
+      .matches("$a = $b and $b")
+      .matches("$a = $b and $a = $b");
+  }
+
+  @Test
+  public void test_or() {
+    assertThat(Tree.Kind.ALTERNATIVE_CONDITIONAL_OR)
+      .matches("$a = $b or $b")
+      .matches("$a = $b or $b xor $b")
+      .matches("$a = $b or $a = $b");
+  }
+
+  @Test
+  public void test_xor() {
+    assertThat(Tree.Kind.ALTERNATIVE_CONDITIONAL_XOR)
+      .matches("$a = $b xor $b")
+      .matches("$a = $b xor $b and $b")
+      .matches("$a = $b xor $a = $b");
   }
 }

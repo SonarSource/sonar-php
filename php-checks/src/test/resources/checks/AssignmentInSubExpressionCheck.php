@@ -33,3 +33,9 @@ switch ($i = $toto) { // Noncompliant
         echo "i est un gateau";
         break;
 }
+
+function foo() {
+    return 42;
+}
+
+$f = foo() or die();
