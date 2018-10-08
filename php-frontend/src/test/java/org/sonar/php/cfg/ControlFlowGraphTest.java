@@ -55,7 +55,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
    * The predecessors are constructed based on the successors, so we should not test them all the time
    */
   @Test
-  public void if_then_test_predecessors() throws Exception {
+  public void if_then_test_predecessors() {
     ControlFlowGraph cfg = build(functionTree(
       BlockString.withId(0).withSuccessorIds(1, 2).withPredecessorIds().build() +
         "$x = 1;" +
@@ -67,7 +67,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     assertThat(cfg.blocks()).hasSize(4);
 
-    Map<String, BlockMetadata> data = CfgTestUtils.buildMetadata(cfg.blocks());
+    Map<String, BlockMetadata> data = MetadataParser.parse(cfg.blocks());
 
     CfgBlock startBlock = data.get("0").getBlock();
     assertThat(startBlock).isEqualTo(cfg.start());
@@ -78,11 +78,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     assertThat(ifBlock.falseSuccessor()).isEqualTo(data.get("2").getBlock());
 
     assertThat(data.get("END").getBlock().predecessors()).hasSize(1);
-    CfgTestUtils.assertCfgStructure(data, CfgPrinter.toDot(cfg), true);
+    Validator.assertCfgStructure(data, CfgPrinter.toDot(cfg), true);
   }
 
   @Test
-  public void if_nested() throws Exception {
+  public void if_nested() {
     ControlFlowGraph cfg = build(functionTree(
       BlockString.withId(0).withSuccessorIds(1, 6).build() +
         "if (a?b:c) {" +
@@ -100,14 +100,14 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     assertThat(cfg.blocks()).hasSize(8);
 
-    Map<String, BlockMetadata> data = CfgTestUtils.buildMetadata(cfg.blocks());
+    Map<String, BlockMetadata> data = MetadataParser.parse(cfg.blocks());
     assertThat(data.get("0").getBlock()).isEqualTo(cfg.start());
     assertThat(data.get("END").getBlock().predecessors()).hasSize(1);
-    CfgTestUtils.assertCfgStructure(data, CfgPrinter.toDot(cfg), false);
+    Validator.assertCfgStructure(data, CfgPrinter.toDot(cfg), false);
   }
 
   @Test
-  public void if_multiple() throws Exception {
+  public void if_multiple() {
     ControlFlowGraph cfg = build(functionTree(
       BlockString.withId(0).withSuccessorIds(1, 2).build() +
         "if (a) {" +
@@ -121,10 +121,10 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     assertThat(cfg.blocks()).hasSize(6);
 
-    Map<String, BlockMetadata> data = CfgTestUtils.buildMetadata(cfg.blocks());
+    Map<String, BlockMetadata> data = MetadataParser.parse(cfg.blocks());
     assertThat(data.get("0").getBlock()).isEqualTo(cfg.start());
     assertThat(data.get("END").getBlock().predecessors()).hasSize(1);
-    CfgTestUtils.assertCfgStructure(data, CfgPrinter.toDot(cfg), false);
+    Validator.assertCfgStructure(data, CfgPrinter.toDot(cfg), false);
   }
 
   private ControlFlowGraph build(FunctionTree functionTree) {

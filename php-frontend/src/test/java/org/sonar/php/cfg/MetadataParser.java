@@ -19,14 +19,11 @@
  */
 package org.sonar.php.cfg;
 
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringJoiner;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -36,36 +33,13 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
-import static org.assertj.core.api.Assertions.assertThat;
+class MetadataParser {
 
-class CfgTestUtils {
-
-  private CfgTestUtils() {
+  private MetadataParser() {
     // this is an utility class and should not be instantiated
   }
 
-  static void assertCfgStructure(Map<String, BlockMetadata> data, String dotNotation, boolean testPredecessors) {
-
-    for (BlockMetadata metadata : data.values()) {
-      if (metadata.isEnd()) {
-        continue;
-      }
-
-      if (testPredecessors) {
-        Set<CfgBlock> expectedPred = getCfgBlocks(metadata.getExpectedPredecessorIds(), data);
-        Set<CfgBlock> actualPred = metadata.getBlock().predecessors();
-        assertAreTheSame(expectedPred, actualPred,
-            buildErrorMessage(metadata.getId(), dotNotation, "predecessors"));
-      }
-
-      Set<CfgBlock> expectedSucc = getCfgBlocks(metadata.getExpectedSuccessorIds(), data);
-      Set<CfgBlock> actualSucc = metadata.getBlock().successors();
-      assertAreTheSame(expectedSucc, actualSucc,
-        buildErrorMessage(metadata.getId(), dotNotation, "successors"));
-    }
-  }
-
-  static Map<String, BlockMetadata> buildMetadata(Set<CfgBlock> blocks) {
+  static Map<String, BlockMetadata> parse(Set<CfgBlock> blocks) {
     Map<String, BlockMetadata> result = new HashMap<>();
     for (CfgBlock block : blocks) {
       if (block instanceof PhpCfgEndBlock) {
@@ -119,24 +93,6 @@ class CfgTestUtils {
       return null;
     }
     return (ArrayInitializerBracketTree) function.arguments().get(0);
-  }
-
-  private static String buildErrorMessage(String id, String dotNotation, String hint) {
-    StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
-    stringJoiner.add("CFG structure is not the expected one for block " + id + " " + hint);
-    stringJoiner.add("Use use a tool like http://www.webgraphviz.com/ to visualize the below graph in dot notation");
-    stringJoiner.add("==========================================");
-    stringJoiner.add(dotNotation);
-    stringJoiner.add("==========================================");
-    return stringJoiner.toString();
-  }
-
-  private static void assertAreTheSame(Set<CfgBlock> left, Set<CfgBlock> right, String errorMessage) {
-    assertThat(Sets.symmetricDifference(left, right)).withFailMessage(errorMessage).isEmpty();
-  }
-
-  private static Set<CfgBlock> getCfgBlocks(Set<String> ids, Map<String, BlockMetadata> data) {
-    return ids.stream().map(id -> data.get(id).getBlock()).collect(Collectors.toSet());
   }
 
   private static String[] getStrings(Tree tree) {

@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 public class PhpCfgEndBlockTest extends PHPTreeModelTest {
 
   @Test(expected = UnsupportedOperationException.class)
-  public void cannot_add_element() throws Exception {
+  public void cannot_add_element() {
     PhpCfgEndBlock endBlock = new PhpCfgEndBlock();
     Tree tree = parse("array()", PHPLexicalGrammar.ARRAY_INIALIZER);
     endBlock.addElement(tree);
