@@ -29,6 +29,10 @@ import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 
 class CfgPrinter {
 
+  private CfgPrinter() {
+    // this is an utility class and should not be instantiated
+  }
+
   static String toDot(ControlFlowGraph cfg) {
     StringBuilder sb = new StringBuilder();
     int blockId = 0;

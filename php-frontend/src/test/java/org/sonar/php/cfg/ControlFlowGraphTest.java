@@ -139,7 +139,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     assertThat(cfg.end().elements()).isEmpty();
   }
 
-  private FunctionTree functionTree(String functionBody) throws Exception {
+  private FunctionTree functionTree(String functionBody) {
     return parse("function f() { " + functionBody + " }", PHPLexicalGrammar.FUNCTION_DECLARATION);
   }
 
@@ -155,15 +155,15 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     }
 
     BlockString withSuccessorIds(Object... successorIds) {
-      for (Object id : successorIds) {
-        this.succ.add(id.toString());
+      for (Object successorId : successorIds) {
+        this.succ.add(successorId.toString());
       }
       return this;
     }
 
     BlockString withPredecessorIds(Object... predecessorIds) {
-      for (Object id : predecessorIds) {
-        this.pred.add(id.toString());
+      for (Object predecessorId : predecessorIds) {
+        this.pred.add(predecessorId.toString());
       }
       return this;
     }

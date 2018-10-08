@@ -40,6 +40,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CfgTestUtils {
 
+  private CfgTestUtils() {
+    // this is an utility class and should not be instantiated
+  }
+
   static void assertCfgStructure(Map<String, BlockMetadata> data, String dotNotation, boolean testPredecessors) {
 
     for (BlockMetadata metadata : data.values()) {

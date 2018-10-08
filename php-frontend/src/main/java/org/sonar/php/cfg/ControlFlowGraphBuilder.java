@@ -21,14 +21,12 @@
 package org.sonar.php.cfg;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
@@ -43,7 +41,6 @@ class ControlFlowGraphBuilder {
   private final Set<PhpCfgBlock> blocks = new HashSet<>();
   private final PhpCfgEndBlock end = new PhpCfgEndBlock();
   private PhpCfgBlock currentBlock = createSimpleBlock(end);
-  private PhpCfgBlock start;
 
   ControlFlowGraph createGraph(BlockTree body) {
     return createGraph(body.statements());
@@ -52,7 +49,7 @@ class ControlFlowGraphBuilder {
   private ControlFlowGraph createGraph(List<? extends Tree> items) {
     // TODO add end to throw targets
     build(items);
-    start = currentBlock;
+    PhpCfgBlock start = currentBlock;
     // TODO removeEmptyBlocks
     blocks.add(end);
     return new ControlFlowGraph(blocks, start, end);

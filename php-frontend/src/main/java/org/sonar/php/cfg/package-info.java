@@ -17,26 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
+@javax.annotation.ParametersAreNonnullByDefault
 package org.sonar.php.cfg;
-
-import com.google.common.collect.ImmutableSet;
-import org.sonar.plugins.php.api.tree.Tree;
-
-
-/**
- * The end node of a {@link ControlFlowGraph}.
- */
-class PhpCfgEndBlock extends PhpCfgBlock {
-
-  @Override
-  public ImmutableSet<CfgBlock> successors() {
-    return ImmutableSet.of();
-  }
-
-  @Override
-  public void addElement(Tree element) {
-    throw new UnsupportedOperationException("Cannot add element to end block");
-  }
-
-}
