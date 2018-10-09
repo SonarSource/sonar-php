@@ -99,6 +99,29 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     assertPrecedence("2 || 3 ?? 4", "(2 || 3) ?? 4");
     assertPrecedence("2 ?? 3 || 4", "2 ?? (3 || 4)");
     assertPrecedence("2 ?? 3 ?? 4", "2 ?? (3 ?? 4)");
+    assertPrecedence("2 and $a = 4", "2 and ($a = 4)");
+    assertPrecedence("2 and 3 and 4", "(2 and 3) and 4");
+    assertPrecedence("2 and 3 xor 4", "(2 and 3) xor 4");
+    assertPrecedence("2 xor 3 and 4", "2 xor (3 and 4)");
+    assertPrecedence("2 xor 3 xor 4", "(2 xor 3) xor 4");
+    assertPrecedence("2 xor 3 or 4", "(2 xor 3) or 4");
+    assertPrecedence("2 or 3 xor 4", "2 or (3 xor 4)");
+    assertPrecedence("2 or 3 or 4", "(2 or 3) or 4");
+    assertPrecedence("$a ?? $b = 4", "$a ?? ($b = 4)");
+    assertPrecedence("!!$a", "! (! $a)");
+    assertPrecedence("++ $a --", "++ ($a --)");
+    assertPrecedence("++ -- $a", "++ (-- $a)");
+    assertPrecedence("(int) $a ++", "( int ) ($a ++)");
+    assertPrecedence("! $a instanceof B", "! ($a instanceof B)");
+    assertPrecedence("$a = true ? 0 : true ? 1 : 2", "$a = ((true ? 0 : true) ? 1 : 2)");
+    assertPrecedence("$x &&  $y ? $a : $b", "($x && $y) ? $a : $b");
+    assertPrecedence("$x and $y ? $a : $b", "$x and ($y ? $a : $b)");
+    assertPrecedence("- 3 ** 2", "- (3 ** 2)");
+    assertPrecedence("(int) $a ** 2", "( int ) ($a ** 2)");
+  }
+
+  @Test
+  public void assignment() throws Exception {
     assertPrecedence("$a = 3 ?? 4", "$a = (3 ?? 4)");
     assertPrecedence("$a = $b = 4", "$a = ($b = 4)");
     assertPrecedence("$a = $b += 4", "$a = ($b += 4)");
@@ -125,32 +148,17 @@ public class ExpressionPrecedenceTest extends PHPTreeModelTest {
     assertPrecedence("$a <<= $b ^= 4", "$a <<= ($b ^= 4)");
     assertPrecedence("$a <<= $b >>= 4", "$a <<= ($b >>= 4)");
     assertPrecedence("$a >>= $b <<= 4", "$a >>= ($b <<= 4)");
-    assertPrecedence("$a = 3 and 4", "$a = (3 and 4)");
-    assertPrecedence("2 and $a = 4", "2 and ($a = 4)");
-    assertPrecedence("2 and 3 and 4", "(2 and 3) and 4");
-    assertPrecedence("2 and 3 xor 4", "(2 and 3) xor 4");
-    assertPrecedence("2 xor 3 and 4", "2 xor (3 and 4)");
-    assertPrecedence("2 xor 3 xor 4", "(2 xor 3) xor 4");
-    assertPrecedence("2 xor 3 or 4", "(2 xor 3) or 4");
-    assertPrecedence("2 or 3 xor 4", "2 or (3 xor 4)");
-    assertPrecedence("2 or 3 or 4", "(2 or 3) or 4");
-    assertPrecedence("$a ?? $b = 4", "$a ?? ($b = 4)");
-    assertPrecedence("!!$a", "! (! $a)");
-    assertPrecedence("++ $a --", "++ ($a --)");
-    assertPrecedence("++ -- $a", "++ (-- $a)");
-    assertPrecedence("(int) $a ++", "( int ) ($a ++)");
-    assertPrecedence("! $a instanceof B", "! ($a instanceof B)");
-    assertPrecedence("$a = true ? 0 : true ? 1 : 2", "$a = ((true ? 0 : true) ? 1 : 2)");
-    assertPrecedence("$x &&  $y ? $a : $b", "($x && $y) ? $a : $b");
-    assertPrecedence("$x and $y ? $a : $b", "$x and ($y ? $a : $b)");
-    assertPrecedence("- 3 ** 2", "- (3 ** 2)");
-    assertPrecedence("(int) $a ** 2", "( int ) ($a ** 2)");
+    assertPrecedence("$a = 3 and 4", "($a = 3) and 4");
+    assertPrecedence("4 and $a = 3", "4 and ($a = 3)");
+    assertPrecedence("4 && $a = 3", "4 && ($a = 3)");
+    assertPrecedence("$a = 3 && 4", "$a = (3 && 4)");
+    assertPrecedence("$x and $a = $a ? 1 : 2", "$x and ($a = ($a ? 1 : 2))");
   }
 
-  private void assertPrecedence(String code, String extected) throws Exception {
+  private void assertPrecedence(String code, String expected) throws Exception {
     ExpressionTree expression = parse(code, PHPLexicalGrammar.EXPRESSION);
     String actual = dumpWithParentheses(expression).stream().collect(Collectors.joining(" "));
-    assertThat(actual).isEqualTo(extected);
+    assertThat(actual).isEqualTo(expected);
   }
 
   private static List<String> dumpWithParentheses(@Nullable Tree tree) {

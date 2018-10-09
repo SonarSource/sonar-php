@@ -1127,6 +1127,9 @@ public class PHPGrammar {
   public ExpressionTree ALTERNATIVE_CONDITIONAL_AND_EXPR() {
     return b.<ExpressionTree>nonterminal(Kind.ALTERNATIVE_CONDITIONAL_AND).is(
       f.binaryExpression(
+        // note that ASSIGNMENT_EXPRESSION is skipped even though it has lower priority than CONDITIONAL_EXPR,
+        // this is because ASSIGNMENT_EXPRESSION can only have variable on lhs
+        // so $a && $b = 1 is parsed as $a && ($b = 1) despite && having higher priority than =
         CONDITIONAL_EXPR(),
         b.zeroOrMore(f.newTuple(
           b.firstOf(b.token(PHPKeyword.AND)),
@@ -1417,7 +1420,7 @@ public class PHPGrammar {
 
   public AssignmentExpressionTree ASSIGNMENT_EXPRESSION() {
     return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION).is(b.firstOf(
-      f.assignmentExpression(MEMBER_EXPRESSION(), ASSIGNMENT_OPERATOR(), EXPRESSION()),
+      f.assignmentExpression(MEMBER_EXPRESSION(), ASSIGNMENT_OPERATOR(), CONDITIONAL_EXPR()),
       ASSIGNMENT_BY_REFERENCE(),
       ARRAY_DESTRUCTURING_ASSIGNMENT()
     ));
@@ -1548,7 +1551,7 @@ public class PHPGrammar {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(
       b.firstOf(
         ARRAY_INITIALIZER(),
-        CONDITIONAL_EXPR()));
+        EXPRESSION()));
   }
 
   public FunctionCallTree INTERNAL_FUNCTION() {

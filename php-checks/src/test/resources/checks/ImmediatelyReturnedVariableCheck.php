@@ -108,10 +108,6 @@ function l() {
   return $result;
 }
 
-function l() {
-  ++$result = 1 ;              // OK - not covered
-  return $result;
-}
 
 $result = 1;
 return $result;               // OK, global
