@@ -38,7 +38,6 @@ class Validator {
     ExpectedCfgStructure expectedCfg = ExpectedCfgStructure.parse(actualCfg.blocks());
     String debugDotNotation = CfgPrinter.toDot(actualCfg);
 
-    assertThat(actualCfg.start()).isEqualTo(expectedCfg.cfgBlock("0"));
     assertThat(actualCfg.end().successors())
       .withFailMessage("END block should not have successors")
       .isEmpty();
@@ -54,7 +53,8 @@ class Validator {
         continue;
       }
 
-      String debugMessage = buildDebugMessage(expectedCfg.testId(actualBlock), debugDotNotation);
+      String blockTestId = expectedCfg.testId(actualBlock);
+      String debugMessage = buildDebugMessage(blockTestId, debugDotNotation);
       assertSuccessors(actualBlock, expectedCfg, debugMessage);
 
       if (expectedCfg.hasNonEmptyPredecessors()) {
@@ -62,6 +62,16 @@ class Validator {
         assertThat(actualBlock.predecessors())
           .withFailMessage(debugMessage)
           .containsExactlyElementsOf(expectedPred);
+      }
+
+      if (expectedCfg.hasNonEmptyElementNumbers()) {
+        int actualElementNumber = actualBlock.elements().size();
+        int expectedElementNumber = expectedCfg.expectedNumberOfElements(actualBlock);
+        String message = String.format("Expecting %d elements instead of %d for %s",
+          expectedElementNumber, actualElementNumber, blockTestId);
+        assertThat(actualBlock.elements().size())
+          .withFailMessage(message)
+          .isEqualTo(expectedCfg.expectedNumberOfElements(actualBlock));
       }
     }
   }
@@ -105,7 +115,7 @@ class Validator {
 
   private static String buildDebugMessage(String blockTestId, String cfgDotNotation) {
     StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
-    stringJoiner.add("Not expected CFG structure. There is a problem with block " + blockTestId);
+    stringJoiner.add("Not expected CFG structure. There is a problem with " + blockTestId);
     stringJoiner.add("Use a tool like http://www.webgraphviz.com/ to visualize the below graph in dot notation");
     stringJoiner.add("==========================================");
     stringJoiner.add("digraph G {");

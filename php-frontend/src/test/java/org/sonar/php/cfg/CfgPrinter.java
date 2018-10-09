@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
-import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 
 class CfgPrinter {
 
@@ -35,19 +34,19 @@ class CfgPrinter {
 
   static String toDot(ControlFlowGraph cfg) {
     StringBuilder sb = new StringBuilder();
-    int blockId = 0;
-    Map<CfgBlock, Integer> blockIds = new HashMap<>();
+    int graphNodeId = 0;
+    Map<CfgBlock, Integer> graphNodeIds = new HashMap<>();
     for (CfgBlock block : cfg.blocks()) {
-      blockIds.put(block, blockId);
-      blockId++;
+      graphNodeIds.put(block, graphNodeId);
+      graphNodeId++;
     }
     sb.append("cfg{");
     for (CfgBlock block : cfg.blocks()) {
-      int id = blockIds.get(block);
+      int id = graphNodeIds.get(block);
       sb.append(id + "[label=\"" + blockLabel(cfg, block) + "\"];");
     }
     for (CfgBlock block : cfg.blocks()) {
-      int id = blockIds.get(block);
+      int id = graphNodeIds.get(block);
       Set<CfgBlock> successors = block.successors();
       for (CfgBlock successor : successors) {
         String edgeLabel = "";
@@ -57,7 +56,7 @@ class CfgPrinter {
           boolean branchingValue = successor.equals(branching.trueSuccessor());
           edgeLabel = "[label=" + branchingValue + "]";
         }
-        sb.append(id + "->" + blockIds.get(successor) + edgeLabel + ";");
+        sb.append(id + "->" + graphNodeIds.get(successor) + edgeLabel + ";");
       }
     }
     sb.append("}");
@@ -69,17 +68,13 @@ class CfgPrinter {
     if (cfg.end().equals(block)) {
       return "<END>";
     }
-    String extraInfo = "";
+    String extraInfo = "Expected: ";
 
     if (!block.elements().isEmpty()) {
       Tree firstElement = block.elements().get(0);
       if (firstElement.is(Tree.Kind.EXPRESSION_STATEMENT)) {
-        extraInfo += " { " + ((ExpressionStatementTree) firstElement).expression().toString() + " } ";
+        extraInfo += ((ExpressionStatementTree) firstElement).expression().toString();
       }
-    }
-    if (block instanceof PhpCfgBranchingBlock) {
-      IfStatementTree ifTree = (IfStatementTree) ((PhpCfgBranchingBlock) block).branchingTree();
-      extraInfo += " (IF " + ifTree.condition().expression().toString() + " ) ";
     }
 
     return extraInfo;

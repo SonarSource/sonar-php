@@ -33,14 +33,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * Convention:
  *
- * 1. the metadata is specified as a 'block' function call with the form:
- * {@code block( [ id => 0, succ => [1,2], pred => [3] ] ); }
+ * 1. the metadata is specified as a function call with the form:
+ * {@code foo( [ succ = [1,2], pred = [3] ); }
  * where the argument is a bracketed array with 3 elements:
- * - 'id' is the test id of the basic block
  * - 'succ' is a bracketed array of expected successor ids
  * - 'pred' [optional] is a bracketed array of expected predecessor ids
+ * - 'elem' [optional] is the number of expected elements in the block
  *
- * 2. each basic block must contain the 'block' function call as the first statement
+ * 2. each basic block must contain a function call with this structure as the first statement
  *
  * Also check {@link ExpectedCfgStructure}
  */
@@ -61,11 +61,12 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   @Test
   public void test_with_script_tree() {
     verifyScriptTreeCfg("" +
-      "block( [ id => 0, succ => [1,2] ] );" +
+      "b0( succ = [b1, b2], elem = 3 );" +
+      "foo();" +
       "if (a) {" +
-      "  block( [ id => 1, succ => [2] ] );" +
+      "  b1( succ = [b2], elem = 1 );" +
       "}" +
-      "block( [ id => 2, succ => [END] ] );");
+      "b2( succ = [END], elem = 1 );");
   }
 
   /**
@@ -74,44 +75,44 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   @Test
   public void if_then_test_predecessors() {
     verifyBlockCfg("" +
-      "block( [ id => 0, succ => [1,2], pred => [] ] );" +
+      "b0( succ = [b1, b2], pred = [] );" +
       "foo();" +
       "if (a) {" +
-      "  block( [ id => 1, succ => [2], pred => [0] ] );" +
+      "  b1( succ = [b2], pred = [b0] );" +
       "}" +
-      "block( [ id => 2, succ => [END], pred => [0,1] ] );");
+      "b2( succ = [END], pred = [b0, b1] );");
   }
 
   @Test
   public void if_nested() {
     verifyBlockCfg("" +
-      "block( [ id => 0, succ => [1,6] ] );" +
+      "b0( succ = [b1, b6] );" +
       "if (a?b:c) {" +
-      "  block( [ id => 1, succ => [2,5] ] );" +
+      "  b1( succ = [b2, b5] );" +
       "  if (b) {" +
-      "    block( [ id => 2, succ => [3,4] ] );" +
+      "    b2( succ = [b3, b4] );" +
       "    if (c) {" +
-      "      block( [ id => 3, succ => [4] ] );" +
+      "      b3( succ = [b4] );" +
       "    }" +
-      "    block( [ id => 4, succ => [5] ] );" +
+      "    b4( succ = [b5] );" +
       "  }" +
-      "  block( [ id => 5, succ => [6] ] );" +
+      "  b5( succ = [b6] );" +
       "}" +
-      "block( [ id => 6, succ => [END] ] );");
+      "b6( succ = [END] );");
   }
 
   @Test
   public void if_multiple() {
     verifyBlockCfg("" +
-      "block( [ id => 0, succ => [1,2] ] );" +
+      "b0( succ = [b1, b2] );" +
       "if (a) {" +
-      "  block( [ id => 1, succ => [2] ] );" +
+      "  b1( succ = [b2] );" +
       "}" +
-      "block( [ id => 2, succ => [3,4] ] );" +
+      "b2( succ = [b3, b4] );" +
       "if (b) {" +
-      "  block( [ id => 3, succ => [4] ] );" +
+      "  b3( succ = [b4] );" +
       "}" +
-      "block( [ id => 4, succ => [END] ] );");
+      "b4( succ = [END] );");
   }
 
   private void verifyBlockCfg(String functionBody) {

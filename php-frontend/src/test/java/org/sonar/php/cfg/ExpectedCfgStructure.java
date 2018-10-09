@@ -32,6 +32,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayInitializerBracketTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
@@ -69,6 +71,11 @@ class ExpectedCfgStructure {
       .anyMatch(expectation -> !expectation.expectedPredecessorIds.isEmpty());
   }
 
+  boolean hasNonEmptyElementNumbers() {
+    return expectations.values().stream()
+      .anyMatch(expectation -> expectation.expectedNumberOfElements != -1);
+  }
+
   String testId(CfgBlock block) {
     return testIds.get(block);
   }
@@ -85,6 +92,10 @@ class ExpectedCfgStructure {
     return getExpectation(block).expectedPredecessorIds;
   }
 
+  int expectedNumberOfElements(CfgBlock block) {
+    return getExpectation(block).expectedNumberOfElements;
+  }
+
   private BlockExpectation getExpectation(CfgBlock block) {
     return expectations.get(testId(block));
   }
@@ -92,6 +103,7 @@ class ExpectedCfgStructure {
   private class BlockExpectation {
     private final List<String> expectedSuccessorIds = new ArrayList<>();
     private final List<String> expectedPredecessorIds = new ArrayList<>();
+    private int expectedNumberOfElements = -1;
 
     BlockExpectation withSuccessorsIds(String... ids) {
       Collections.addAll(expectedSuccessorIds, ids);
@@ -100,6 +112,11 @@ class ExpectedCfgStructure {
 
     BlockExpectation withPredecessorIds(String... ids) {
       Collections.addAll(expectedPredecessorIds, ids);
+      return this;
+    }
+
+    BlockExpectation withElementNumber(int elementNumber) {
+      expectedNumberOfElements = elementNumber;
       return this;
     }
 
@@ -120,26 +137,35 @@ class ExpectedCfgStructure {
           continue;
         }
 
-        ArrayInitializerBracketTree bracketTree = getMetadataArray(block.elements().get(0));
-        if (bracketTree == null) {
+        FunctionCallTree blockFunction = getBlockFunctionCall(block.elements().get(0));
+        if (blockFunction == null) {
           throw new UnsupportedOperationException("CFG Block metadata must be the first statement in the block");
         }
 
-        String id = null;
+        String id = getValue(blockFunction.callee());
         String[] pred = {};
         String[] succ = {};
-        for (ArrayPairTree arrayPair : bracketTree.arrayPairs()) {
-          if (isNamespaceTreeWithValue(arrayPair.key(), "id")) {
-            id = getValue(arrayPair.value());
-          } else if (isNamespaceTreeWithValue(arrayPair.key(), "succ")) {
-            succ = getStrings(arrayPair.value());
-          } else if (isNamespaceTreeWithValue(arrayPair.key(), "pred")) {
-            pred = getStrings(arrayPair.value());
+        int elem = -1;
+        for (ExpressionTree argument : blockFunction.arguments()) {
+          if (!argument.is(Tree.Kind.ASSIGNMENT)) {
+            throw new UnsupportedOperationException("The arguments of must be assignments");
+          }
+          AssignmentExpressionTree assignment = (AssignmentExpressionTree) argument;
+          Tree name = assignment.variable();
+          if (isNamespaceTreeWithValue(name, "succ")) {
+            succ = getStrings(assignment.value());
+          } else if (isNamespaceTreeWithValue(name, "pred")) {
+            pred = getStrings(assignment.value());
+          } else if (isNamespaceTreeWithValue(name, "elem")) {
+            elem = Integer.parseInt(getValue(assignment.value()));
           }
         }
 
         if (id != null) {
-          result.createExpectation(block, id).withSuccessorsIds(succ).withPredecessorIds(pred);
+          result.createExpectation(block, id)
+            .withSuccessorsIds(succ)
+            .withPredecessorIds(pred)
+            .withElementNumber(elem);
         } else {
           throw new UnsupportedOperationException("CFG Block metadata is not in expected format");
         }
@@ -148,7 +174,7 @@ class ExpectedCfgStructure {
       return result;
     }
 
-    private static ArrayInitializerBracketTree getMetadataArray(Tree firstElement) {
+    private static FunctionCallTree getBlockFunctionCall(Tree firstElement) {
       if (!(firstElement instanceof ExpressionStatementTree)) {
         return null;
       }
@@ -157,15 +183,11 @@ class ExpectedCfgStructure {
         return null;
       }
       FunctionCallTree function = (FunctionCallTree) statement.expression();
-      if (function.arguments().size() != 1 ||
-        !(function.arguments().get(0) instanceof ArrayInitializerBracketTree) ||
+      if (function.arguments().isEmpty() ||
         !(function.callee() instanceof NamespaceNameTree)) {
         return null;
       }
-      if (!((NamespaceNameTree) function.callee()).name().text().equalsIgnoreCase("block")) {
-        return null;
-      }
-      return (ArrayInitializerBracketTree) function.arguments().get(0);
+      return function;
     }
 
     private static String[] getStrings(Tree tree) {
