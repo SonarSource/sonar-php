@@ -21,6 +21,7 @@
 package org.sonar.php.cfg;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Map;
 import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
@@ -56,4 +57,9 @@ class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
     return ImmutableSet.of(trueSuccessor, falseSuccessor);
   }
 
+  @Override
+  public void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
+    this.trueSuccessor = replacement(this.trueSuccessor, replacements);
+    this.falseSuccessor = replacement(this.falseSuccessor, replacements);
+  }
 }

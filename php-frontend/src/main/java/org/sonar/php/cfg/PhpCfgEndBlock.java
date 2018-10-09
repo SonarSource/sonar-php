@@ -21,6 +21,7 @@
 package org.sonar.php.cfg;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Map;
 import org.sonar.plugins.php.api.tree.Tree;
 
 
@@ -39,4 +40,8 @@ class PhpCfgEndBlock extends PhpCfgBlock {
     throw new UnsupportedOperationException("Cannot add element to end block");
   }
 
+  @Override
+  public void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
+    // nothing to replace
+  }
 }

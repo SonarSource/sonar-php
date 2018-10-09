@@ -21,8 +21,10 @@
 package org.sonar.php.cfg;
 
 import com.google.common.collect.Lists;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -53,9 +55,25 @@ class ControlFlowGraphBuilder {
     // TODO add end to throw targets
     build(items);
     PhpCfgBlock start = currentBlock;
-    // TODO removeEmptyBlocks
+    removeEmptyBlocks();
     blocks.add(end);
     return new ControlFlowGraph(blocks, start, end);
+  }
+
+  private void removeEmptyBlocks() {
+    Map<PhpCfgBlock, PhpCfgBlock> emptyBlockReplacements = new HashMap<>();
+    for (PhpCfgBlock block : blocks) {
+      if (block.elements().isEmpty()) {
+        PhpCfgBlock firstNonEmptySuccessor = block.skipEmptyBlocks();
+        emptyBlockReplacements.put(block, firstNonEmptySuccessor);
+      }
+    }
+
+    blocks.removeAll(emptyBlockReplacements.keySet());
+
+    for (PhpCfgBlock block : blocks) {
+      block.replaceSuccessors(emptyBlockReplacements);
+    }
   }
 
   private void build(List<? extends Tree> trees) {
@@ -71,10 +89,8 @@ class ControlFlowGraphBuilder {
       visitBlock((BlockTree) tree);
     } else if (tree.is(Kind.EXPRESSION_STATEMENT)) {
       currentBlock.addElement(tree);
-    } else if (tree.is(Kind.EMPTY_STATEMENT)) {
-      // ignore
     } else {
-      throw new UnsupportedOperationException("Not supported statement kind " + tree.getKind());
+      throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
   }
 

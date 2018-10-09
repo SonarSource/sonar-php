@@ -19,10 +19,8 @@
  */
 package org.sonar.php.cfg;
 
-import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -36,56 +34,44 @@ class Validator {
     // this is an utility class and should not be instantiated
   }
 
-  static void assertCfgStructureWithPredecessors(ControlFlowGraph cfg, Map<String, ExpectedBlockStructure> expectedStructure, int numberOfBlocks) {
-    assertCfgStructure(cfg, expectedStructure, numberOfBlocks, true);
-  }
+  static void assertCfgStructure(ControlFlowGraph actualCfg) {
+    ExpectedCfgStructure expectedCfg = ExpectedCfgStructure.parse(actualCfg.blocks());
+    String debugDotNotation = CfgPrinter.toDot(actualCfg);
 
-  static void assertCfgStructure(ControlFlowGraph cfg, Map<String, ExpectedBlockStructure> expectedStructure, int numberOfBlocks) {
-    assertCfgStructure(cfg, expectedStructure, numberOfBlocks, false);
-  }
+    assertThat(actualCfg.start()).isEqualTo(expectedCfg.cfgBlock("0"));
+    assertThat(actualCfg.end().successors())
+      .withFailMessage("END block should not have successors")
+      .isEmpty();
+    assertThat(actualCfg.end().elements())
+      .withFailMessage("END block should not have elements")
+      .isEmpty();
+    assertThat(actualCfg.blocks())
+      .withFailMessage(buildDebugMessage("size", debugDotNotation))
+      .hasSize(expectedCfg.size());
 
-  private static void assertCfgStructure(ControlFlowGraph cfg, Map<String, ExpectedBlockStructure> expectedStructure, int numberOfBlocks, boolean testPredecessors) {
-
-    String debugDotNotation = CfgPrinter.toDot(cfg);
-
-    assertThat(cfg.end().successors())
-        .withFailMessage("END block should not have successors")
-        .isEmpty();
-    assertThat(cfg.end().elements())
-        .withFailMessage("END block should not have elements")
-        .isEmpty();
-    assertThat(cfg.blocks())
-        .withFailMessage(buildDebugMessage("size", debugDotNotation))
-        .hasSize(numberOfBlocks);
-
-    for (ExpectedBlockStructure expected : expectedStructure.values()) {
-      if (expected.isEnd()) {
+    for (CfgBlock actualBlock : actualCfg.blocks()) {
+      if (actualBlock.equals(actualCfg.end())) {
         continue;
       }
 
-      String debugMessage = buildDebugMessage(expected.testId(), debugDotNotation);
-      assertSuccessors(expected, expectedStructure, debugMessage);
+      String debugMessage = buildDebugMessage(expectedCfg.testId(actualBlock), debugDotNotation);
+      assertSuccessors(actualBlock, expectedCfg, debugMessage);
 
-      if (testPredecessors) {
-        Set<CfgBlock> expectedPred = getCfgBlocksSet(expected.expectedPredIds(), expectedStructure);
-        Set<CfgBlock> actualPred = expected.actualBlock().predecessors();
-        assertThat(Sets.symmetricDifference(expectedPred, actualPred))
+      if (expectedCfg.hasNonEmptyPredecessors()) {
+        Set<CfgBlock> expectedPred = getCfgBlocksSet(expectedCfg.expectedPred(actualBlock), expectedCfg);
+        assertThat(actualBlock.predecessors())
           .withFailMessage(debugMessage)
-          .isEmpty();
+          .containsExactlyElementsOf(expectedPred);
       }
     }
   }
 
-  private static void assertSuccessors(ExpectedBlockStructure expected,
-    Map<String, ExpectedBlockStructure> expectedStructure,
-    String debugMessage) {
-
-    CfgBlock actualBlock = expected.actualBlock();
+  private static void assertSuccessors(CfgBlock actualBlock, ExpectedCfgStructure expectedCfg, String debugMessage) {
 
     if (actualBlock instanceof PhpCfgBranchingBlock) {
 
       PhpCfgBranchingBlock actualIfBlock = (PhpCfgBranchingBlock) actualBlock;
-      List<CfgBlock> expectedSucc = getCfgBlocksList(expected.expectedSuccIds(), expectedStructure);
+      List<CfgBlock> expectedSucc = getCfgBlocksList(expectedCfg.expectedSucc(actualBlock), expectedCfg);
       assertThat(expectedSucc)
         .withFailMessage(debugMessage)
         .hasSize(2);
@@ -98,32 +84,33 @@ class Validator {
 
     } else {
 
-      Set<CfgBlock> expectedSucc = getCfgBlocksSet(expected.expectedSuccIds(), expectedStructure);
-      Set<CfgBlock> actualSucc = actualBlock.successors();
-      assertThat(Sets.symmetricDifference(expectedSucc, actualSucc))
+      Set<CfgBlock> expectedSucc = getCfgBlocksSet(expectedCfg.expectedSucc(actualBlock), expectedCfg);
+      assertThat(actualBlock.successors())
         .withFailMessage(debugMessage)
-        .isEmpty();
+        .containsExactlyElementsOf(expectedSucc);
     }
   }
 
-  private static Set<CfgBlock> getCfgBlocksSet(Collection<String> ids, Map<String, ExpectedBlockStructure> data) {
-    return getCfgBlocksStream(ids, data).collect(Collectors.toSet());
+  private static Set<CfgBlock> getCfgBlocksSet(Collection<String> testIds, ExpectedCfgStructure expectedCfg) {
+    return getCfgBlocksStream(testIds, expectedCfg).collect(Collectors.toSet());
   }
 
-  private static List<CfgBlock> getCfgBlocksList(Collection<String> ids, Map<String, ExpectedBlockStructure> data) {
-    return getCfgBlocksStream(ids, data).collect(Collectors.toList());
+  private static List<CfgBlock> getCfgBlocksList(Collection<String> testIds, ExpectedCfgStructure expectedCfg) {
+    return getCfgBlocksStream(testIds, expectedCfg).collect(Collectors.toList());
   }
 
-  private static Stream<CfgBlock> getCfgBlocksStream(Collection<String> ids, Map<String, ExpectedBlockStructure> data) {
-    return ids.stream().map(id -> data.get(id).actualBlock());
+  private static Stream<CfgBlock> getCfgBlocksStream(Collection<String> testIds, ExpectedCfgStructure expectedCfg) {
+    return testIds.stream().map(expectedCfg::cfgBlock);
   }
 
   private static String buildDebugMessage(String blockTestId, String cfgDotNotation) {
     StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
     stringJoiner.add("Not expected CFG structure. There is a problem with block " + blockTestId);
-    stringJoiner.add("Use use a tool like http://www.webgraphviz.com/ to visualize the below graph in dot notation");
+    stringJoiner.add("Use a tool like http://www.webgraphviz.com/ to visualize the below graph in dot notation");
     stringJoiner.add("==========================================");
+    stringJoiner.add("digraph G {");
     stringJoiner.add(cfgDotNotation);
+    stringJoiner.add("}");
     stringJoiner.add("==========================================");
     return stringJoiner.toString();
   }
