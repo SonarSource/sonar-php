@@ -22,6 +22,7 @@ package org.sonar.php.cfg;
 
 import java.util.Collections;
 import java.util.Set;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 
 /**
@@ -62,6 +63,10 @@ public class ControlFlowGraph {
     return new ControlFlowGraphBuilder().createGraph(body);
   }
 
+  public static ControlFlowGraph build(ScriptTree scriptTree) {
+    return new ControlFlowGraphBuilder().createGraph(scriptTree);
+  }
+
   public CfgBlock start() {
     return start;
   }
@@ -70,6 +75,9 @@ public class ControlFlowGraph {
     return end;
   }
 
+  /**
+   * Includes start and end blocks
+   */
   public Set<CfgBlock> blocks() {
     return Collections.unmodifiableSet(blocks);
   }

@@ -19,12 +19,11 @@
  */
 package org.sonar.php.cfg;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 
@@ -32,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * This CFG Test uses a meta-language to specify the expected structure of the CFG.
- * See {@link BlockMetadata} for per-basic-block metadata
+ * See {@link ExpectedBlockStructure} for per-basic-block metadata
  *
  * Convention:
  *
@@ -46,133 +45,128 @@ import static org.assertj.core.api.Assertions.assertThat;
  * -- 'pred' is a bracketed array of expected predecessor ids
  *
  * 2. each basic block must contain the 'block' function call as the first statement
- *
- * 3. the metadata string is constructed with the {@link BlockString}
  */
 public class ControlFlowGraphTest extends PHPTreeModelTest {
+
+  @Test
+  public void test_parsing_for_start_block() {
+    // this is a test for the ExpectedStructureParser
+    ControlFlowGraph cfg = cfgForFunctionBody(
+      "block( [ id => 0, succ => [1,2], pred => [] ] );" +
+        "if (a) {" +
+        "  block( [ id => 1, succ => [2], pred => [0] ] );" +
+        "}" +
+        "block( [ id => 2, succ => [END], pred => [0,1] ] );");
+
+    Map<String, ExpectedBlockStructure> expected = ExpectedStructureParser.parse(cfg.blocks());
+    assertThat(cfg.start()).isEqualTo(expected.get("0").actualBlock());
+  }
+
+  @Test
+  public void test_end_predecessors() {
+    ControlFlowGraph cfg = cfgForFunctionBody(
+      "foo();" +
+        "if (a) {" +
+        "  bar();" +
+        "  if (b) {" +
+        "    qix();" +
+        "  }" +
+        "}");
+
+    assertThat(cfg.end().predecessors()).hasSize(1);
+  }
 
   /**
    * The predecessors are constructed based on the successors, so we should not test them all the time
    */
   @Test
   public void if_then_test_predecessors() {
-    ControlFlowGraph cfg = build(functionTree(
-      BlockString.withId(0).withSuccessorIds(1, 2).withPredecessorIds().build() +
-        "$x = 1;" +
-        "1 + 1;" +
+    ControlFlowGraph cfg = cfgForFunctionBody(
+      "block( [ id => 0, succ => [1,2], pred => [] ] );" +
+        "foo();" +
         "if (a) {" +
-        BlockString.withId(1).withSuccessorIds(2).withPredecessorIds(0).build() +
+        "  block( [ id => 1, succ => [2], pred => [0] ] );" +
         "}" +
-        BlockString.withId(2).withSuccessorIds("END").withPredecessorIds(0, 1).build()));
+        "block( [ id => 2, succ => [END], pred => [0,1] ] );");
 
-    assertThat(cfg.blocks()).hasSize(4);
-
-    Map<String, BlockMetadata> data = MetadataParser.parse(cfg.blocks());
-
-    CfgBlock startBlock = data.get("0").getBlock();
-    assertThat(startBlock).isEqualTo(cfg.start());
-    assertThat(startBlock).isExactlyInstanceOf(PhpCfgBranchingBlock.class);
-
-    PhpCfgBranchingBlock ifBlock = (PhpCfgBranchingBlock) startBlock;
-    assertThat(ifBlock.trueSuccessor()).isEqualTo(data.get("1").getBlock());
-    assertThat(ifBlock.falseSuccessor()).isEqualTo(data.get("2").getBlock());
-
-    assertThat(data.get("END").getBlock().predecessors()).hasSize(1);
-    Validator.assertCfgStructure(data, CfgPrinter.toDot(cfg), true);
+    Map<String, ExpectedBlockStructure> expected = ExpectedStructureParser.parse(cfg.blocks());
+    int expectedCfgSize = 4;
+    Validator.assertCfgStructureWithPredecessors(cfg, expected, expectedCfgSize);
   }
 
   @Test
   public void if_nested() {
-    ControlFlowGraph cfg = build(functionTree(
-      BlockString.withId(0).withSuccessorIds(1, 6).build() +
+    ControlFlowGraph cfg = cfgForFunctionBody(
+      "block( [ id => 0, succ => [1,6] ] );" +
         "if (a?b:c) {" +
-        BlockString.withId(1).withSuccessorIds(2, 5).build() +
+        "  block( [ id => 1, succ => [2,5] ] );" +
         "  if (b) {" +
-        BlockString.withId(2).withSuccessorIds(3, 4).build() +
+        "    block( [ id => 2, succ => [3,4] ] );" +
         "    if (c) {" +
-        BlockString.withId(3).withSuccessorIds(4).build() +
+        "      block( [ id => 3, succ => [4] ] );" +
         "    }" +
-        BlockString.withId(4).withSuccessorIds(5).build() +
+        "    block( [ id => 4, succ => [5] ] );" +
         "  }" +
-        BlockString.withId(5).withSuccessorIds(6).build() +
+        "  block( [ id => 5, succ => [6] ] );" +
         "}" +
-        BlockString.withId(6).withSuccessorIds("END").build()));
+        "block( [ id => 6, succ => [END] ] );");
 
-    assertThat(cfg.blocks()).hasSize(8);
-
-    Map<String, BlockMetadata> data = MetadataParser.parse(cfg.blocks());
-    assertThat(data.get("0").getBlock()).isEqualTo(cfg.start());
-    assertThat(data.get("END").getBlock().predecessors()).hasSize(1);
-    Validator.assertCfgStructure(data, CfgPrinter.toDot(cfg), false);
+    Map<String, ExpectedBlockStructure> expected = ExpectedStructureParser.parse(cfg.blocks());
+    int expectedCfgSize = 8;
+    Validator.assertCfgStructure(cfg, expected, expectedCfgSize);
   }
 
   @Test
-  public void if_multiple() {
-    ControlFlowGraph cfg = build(functionTree(
-      BlockString.withId(0).withSuccessorIds(1, 2).build() +
-        "if (a) {" +
-        BlockString.withId(1).withSuccessorIds(2).build() +
-        "};" +
-        BlockString.withId(2).withSuccessorIds(3, 4).build() +
-        " if (b) {" +
-        BlockString.withId(3).withSuccessorIds(4).build() +
-        " };" +
-        BlockString.withId(4).withSuccessorIds("END").build()));
+  public void if_nested_in_script() {
+    ControlFlowGraph cfg = cfgForScriptTree(
+      "block( [ id => 0, succ => [1,6] ] );" +
+        "if (a?b:c) {" +
+        "  block( [ id => 1, succ => [2,5] ] );" +
+        "  if (b) {" +
+        "    block( [ id => 2, succ => [3,4] ] );" +
+        "    if (c) {" +
+        "      block( [ id => 3, succ => [4] ] );" +
+        "    }" +
+        "    block( [ id => 4, succ => [5] ] );" +
+        "  }" +
+        "  block( [ id => 5, succ => [6] ] );" +
+        "}" +
+        "block( [ id => 6, succ => [END] ] );");
 
-    assertThat(cfg.blocks()).hasSize(6);
-
-    Map<String, BlockMetadata> data = MetadataParser.parse(cfg.blocks());
-    assertThat(data.get("0").getBlock()).isEqualTo(cfg.start());
-    assertThat(data.get("END").getBlock().predecessors()).hasSize(1);
-    Validator.assertCfgStructure(data, CfgPrinter.toDot(cfg), false);
+    Map<String, ExpectedBlockStructure> expected = ExpectedStructureParser.parse(cfg.blocks());
+    int expectedCfgSize = 8;
+    Validator.assertCfgStructure(cfg, expected, expectedCfgSize);
   }
 
-  private ControlFlowGraph build(FunctionTree functionTree) {
-    ControlFlowGraph cfg = ControlFlowGraph.build((BlockTree) functionTree.body());
 
-    assertEndBlock(cfg);
+  @Test
+  public void if_multiple() {
+    ControlFlowGraph cfg = cfgForFunctionBody(
+      "block( [ id => 0, succ => [1,2] ] );" +
+        "if (a) {" +
+        "  block( [ id => 1, succ => [2] ] );" +
+        "};" +
+        "block( [ id => 2, succ => [3,4] ] );" +
+        "if (b) {" +
+        "  block( [ id => 3, succ => [4] ] );" +
+        "};" +
+        "block( [ id => 4, succ => [END] ] );");
+
+    Map<String, ExpectedBlockStructure> expected = ExpectedStructureParser.parse(cfg.blocks());
+    int expectedCfgSize = 6;
+    Validator.assertCfgStructure(cfg, expected, expectedCfgSize);
+  }
+
+  private ControlFlowGraph cfgForFunctionBody(String functionBody) {
+    FunctionTree functionTree = parse("function f() { " + functionBody + " }", PHPLexicalGrammar.FUNCTION_DECLARATION);
+    ControlFlowGraph cfg = ControlFlowGraph.build((BlockTree) functionTree.body());
     return cfg;
   }
 
-  private void assertEndBlock(ControlFlowGraph cfg) {
-    assertThat(cfg.end().successors()).isEmpty();
-    assertThat(cfg.end().elements()).isEmpty();
+  private ControlFlowGraph cfgForScriptTree(String body) {
+    ScriptTree tree = parse("<?php " + body, PHPLexicalGrammar.SCRIPT);
+    ControlFlowGraph cfg = ControlFlowGraph.build(tree);
+    return cfg;
   }
 
-  private FunctionTree functionTree(String functionBody) {
-    return parse("function f() { " + functionBody + " }", PHPLexicalGrammar.FUNCTION_DECLARATION);
-  }
-
-  private static class BlockString {
-    int id;
-    List<String> succ = new ArrayList<>();
-    List<String> pred = new ArrayList<>();
-
-    static BlockString withId(int id) {
-      BlockString builder = new BlockString();
-      builder.id = id;
-      return builder;
-    }
-
-    BlockString withSuccessorIds(Object... successorIds) {
-      for (Object successorId : successorIds) {
-        this.succ.add(successorId.toString());
-      }
-      return this;
-    }
-
-    BlockString withPredecessorIds(Object... predecessorIds) {
-      for (Object predecessorId : predecessorIds) {
-        this.pred.add(predecessorId.toString());
-      }
-      return this;
-    }
-
-    String build() {
-      return String.format("block([ id => %s, succ => [%s], pred => [%s] ]);",
-        id,
-        String.join(",", succ),
-        String.join(",", pred));
-    }
-  }
 }

@@ -19,64 +19,67 @@
  */
 package org.sonar.php.cfg;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
- * This contains metadata extracted from a {@link ControlFlowGraph}
+ * Contains the expected structure of a {@link CfgBlock}.
  */
-class BlockMetadata {
-  private final CfgBlock block;
-  private final String id;
-  private final Set<String> successorIds;
-  private final Set<String> predecessorIds;
+class ExpectedBlockStructure {
+  private final CfgBlock actualBlock;
+  private final String testId;
+  // for if branches, we care about the order in which the ids are declared in the test cases
+  private final List<String> expectedSuccessorIds;
+  private final Set<String> expectedPredecessorIds;
 
-  private BlockMetadata(String id, CfgBlock block) {
-    this.id = id;
-    this.block = block;
-    this.successorIds = new HashSet<>();
-    this.predecessorIds = new HashSet<>();
+  private ExpectedBlockStructure(String id, CfgBlock actualBlock) {
+    this.testId = id;
+    this.actualBlock = actualBlock;
+    this.expectedSuccessorIds = new ArrayList<>();
+    this.expectedPredecessorIds = new HashSet<>();
   }
 
-  String getId() {
-    return id;
+  String testId() {
+    return testId;
   }
 
-  CfgBlock getBlock() {
-    return block;
+  CfgBlock actualBlock() {
+    return actualBlock;
   }
 
-  Set<String> getExpectedSuccessorIds() {
-    return successorIds;
+  List<String> expectedSuccIds() {
+    return expectedSuccessorIds;
   }
 
-  Set<String> getExpectedPredecessorIds() {
-    return predecessorIds;
+  Set<String> expectedPredIds() {
+    return expectedPredecessorIds;
   }
 
   boolean isEnd() {
-    return id.equalsIgnoreCase("end");
+    return testId.equalsIgnoreCase("end");
   }
 
   static class Builder {
-    BlockMetadata instance;
+    ExpectedBlockStructure instance;
 
     Builder(String id, CfgBlock block) {
-      instance = new BlockMetadata(id, block);
+      instance = new ExpectedBlockStructure(id, block);
     }
 
     Builder withSuccessorsIds(String... ids) {
-      Collections.addAll(instance.successorIds, ids);
+      Collections.addAll(instance.expectedSuccessorIds, ids);
       return this;
     }
 
     Builder withPredecessorIds(String... ids) {
-      Collections.addAll(instance.predecessorIds, ids);
+      Collections.addAll(instance.expectedPredecessorIds, ids);
       return this;
     }
 
-    BlockMetadata build() {
+    ExpectedBlockStructure build() {
       return instance;
     }
   }

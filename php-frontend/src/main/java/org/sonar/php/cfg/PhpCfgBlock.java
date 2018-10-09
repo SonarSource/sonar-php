@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBlock implements CfgBlock {
@@ -36,22 +37,23 @@ class PhpCfgBlock implements CfgBlock {
 
   private LinkedList<Tree> elements = new LinkedList<>();
 
-  PhpCfgBlock(PhpCfgBlock successor) {
+  PhpCfgBlock(@Nullable PhpCfgBlock successor) {
     Preconditions.checkArgument(successor != null, "Successor cannot be null");
     this.successor = successor;
   }
 
   PhpCfgBlock() {
+    // needed by inheriting classes
   }
 
   @Override
   public Set<CfgBlock> predecessors() {
-    return Collections.<CfgBlock>unmodifiableSet(predecessors);
+    return Collections.unmodifiableSet(predecessors);
   }
 
   @Override
   public Set<CfgBlock> successors() {
-    return ImmutableSet.<CfgBlock>of(successor);
+    return ImmutableSet.of(successor);
   }
 
   @Override
@@ -59,13 +61,13 @@ class PhpCfgBlock implements CfgBlock {
     return Collections.unmodifiableList(elements);
   }
 
-  public void addElement(Tree element) {
+  public void addElement(@Nullable Tree element) {
     Preconditions.checkArgument(element != null, "Cannot add a null element to a block");
     elements.addFirst(element);
   }
 
   void addPredecessor(PhpCfgBlock predecessor) {
-    this.predecessors.add(predecessor);
+    predecessors.add(predecessor);
   }
 
 }

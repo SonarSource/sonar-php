@@ -33,17 +33,21 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
-class MetadataParser {
+class ExpectedStructureParser {
 
-  private MetadataParser() {
+  private ExpectedStructureParser() {
     // this is an utility class and should not be instantiated
   }
 
-  static Map<String, BlockMetadata> parse(Set<CfgBlock> blocks) {
-    Map<String, BlockMetadata> result = new HashMap<>();
+  /**
+   * The expected structure for each basic block is contained in the first element of the {@link CfgBlock}
+   * See {@link ControlFlowGraphTest} for details
+   */
+  static Map<String, ExpectedBlockStructure> parse(Set<CfgBlock> blocks) {
+    Map<String, ExpectedBlockStructure> result = new HashMap<>();
     for (CfgBlock block : blocks) {
       if (block instanceof PhpCfgEndBlock) {
-        result.put("END", new BlockMetadata.Builder("END", block).build());
+        result.put("END", new ExpectedBlockStructure.Builder("END", block).build());
         continue;
       }
 
@@ -66,7 +70,7 @@ class MetadataParser {
       }
 
       if (id != null) {
-        result.put(id, new BlockMetadata.Builder(id, block).withSuccessorsIds(succ).withPredecessorIds(pred).build());
+        result.put(id, new ExpectedBlockStructure.Builder(id, block).withSuccessorsIds(succ).withPredecessorIds(pred).build());
       } else {
         throw new UnsupportedOperationException("CFG Block metadata is not in expected format");
       }

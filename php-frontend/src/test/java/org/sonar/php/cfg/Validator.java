@@ -20,10 +20,13 @@
 package org.sonar.php.cfg;
 
 import com.google.common.collect.Sets;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,43 +36,95 @@ class Validator {
     // this is an utility class and should not be instantiated
   }
 
-  static void assertCfgStructure(Map<String, BlockMetadata> data, String dotNotation, boolean testPredecessors) {
+  static void assertCfgStructureWithPredecessors(ControlFlowGraph cfg, Map<String, ExpectedBlockStructure> expectedStructure, int numberOfBlocks) {
+    assertCfgStructure(cfg, expectedStructure, numberOfBlocks, true);
+  }
 
-    for (BlockMetadata metadata : data.values()) {
-      if (metadata.isEnd()) {
+  static void assertCfgStructure(ControlFlowGraph cfg, Map<String, ExpectedBlockStructure> expectedStructure, int numberOfBlocks) {
+    assertCfgStructure(cfg, expectedStructure, numberOfBlocks, false);
+  }
+
+  private static void assertCfgStructure(ControlFlowGraph cfg, Map<String, ExpectedBlockStructure> expectedStructure, int numberOfBlocks, boolean testPredecessors) {
+
+    String debugDotNotation = CfgPrinter.toDot(cfg);
+
+    assertThat(cfg.end().successors())
+        .withFailMessage("END block should not have successors")
+        .isEmpty();
+    assertThat(cfg.end().elements())
+        .withFailMessage("END block should not have elements")
+        .isEmpty();
+    assertThat(cfg.blocks())
+        .withFailMessage(buildDebugMessage("size", debugDotNotation))
+        .hasSize(numberOfBlocks);
+
+    for (ExpectedBlockStructure expected : expectedStructure.values()) {
+      if (expected.isEnd()) {
         continue;
       }
 
-      if (testPredecessors) {
-        Set<CfgBlock> expectedPred = getCfgBlocks(metadata.getExpectedPredecessorIds(), data);
-        Set<CfgBlock> actualPred = metadata.getBlock().predecessors();
-        assertAreTheSame(expectedPred, actualPred,
-            buildErrorMessage(metadata.getId(), dotNotation, "predecessors"));
-      }
+      String debugMessage = buildDebugMessage(expected.testId(), debugDotNotation);
+      assertSuccessors(expected, expectedStructure, debugMessage);
 
-      Set<CfgBlock> expectedSucc = getCfgBlocks(metadata.getExpectedSuccessorIds(), data);
-      Set<CfgBlock> actualSucc = metadata.getBlock().successors();
-      assertAreTheSame(expectedSucc, actualSucc,
-        buildErrorMessage(metadata.getId(), dotNotation, "successors"));
+      if (testPredecessors) {
+        Set<CfgBlock> expectedPred = getCfgBlocksSet(expected.expectedPredIds(), expectedStructure);
+        Set<CfgBlock> actualPred = expected.actualBlock().predecessors();
+        assertThat(Sets.symmetricDifference(expectedPred, actualPred))
+          .withFailMessage(debugMessage)
+          .isEmpty();
+      }
     }
   }
 
-  private static String buildErrorMessage(String id, String dotNotation, String hint) {
+  private static void assertSuccessors(ExpectedBlockStructure expected,
+    Map<String, ExpectedBlockStructure> expectedStructure,
+    String debugMessage) {
+
+    CfgBlock actualBlock = expected.actualBlock();
+
+    if (actualBlock instanceof PhpCfgBranchingBlock) {
+
+      PhpCfgBranchingBlock actualIfBlock = (PhpCfgBranchingBlock) actualBlock;
+      List<CfgBlock> expectedSucc = getCfgBlocksList(expected.expectedSuccIds(), expectedStructure);
+      assertThat(expectedSucc)
+        .withFailMessage(debugMessage)
+        .hasSize(2);
+      assertThat(actualIfBlock.trueSuccessor())
+        .withFailMessage(debugMessage)
+        .isEqualTo(expectedSucc.get(0));
+      assertThat(actualIfBlock.falseSuccessor())
+        .withFailMessage(debugMessage)
+        .isEqualTo(expectedSucc.get(1));
+
+    } else {
+
+      Set<CfgBlock> expectedSucc = getCfgBlocksSet(expected.expectedSuccIds(), expectedStructure);
+      Set<CfgBlock> actualSucc = actualBlock.successors();
+      assertThat(Sets.symmetricDifference(expectedSucc, actualSucc))
+        .withFailMessage(debugMessage)
+        .isEmpty();
+    }
+  }
+
+  private static Set<CfgBlock> getCfgBlocksSet(Collection<String> ids, Map<String, ExpectedBlockStructure> data) {
+    return getCfgBlocksStream(ids, data).collect(Collectors.toSet());
+  }
+
+  private static List<CfgBlock> getCfgBlocksList(Collection<String> ids, Map<String, ExpectedBlockStructure> data) {
+    return getCfgBlocksStream(ids, data).collect(Collectors.toList());
+  }
+
+  private static Stream<CfgBlock> getCfgBlocksStream(Collection<String> ids, Map<String, ExpectedBlockStructure> data) {
+    return ids.stream().map(id -> data.get(id).actualBlock());
+  }
+
+  private static String buildDebugMessage(String blockTestId, String cfgDotNotation) {
     StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
-    stringJoiner.add("CFG structure is not the expected one for block " + id + " " + hint);
+    stringJoiner.add("Not expected CFG structure. There is a problem with block " + blockTestId);
     stringJoiner.add("Use use a tool like http://www.webgraphviz.com/ to visualize the below graph in dot notation");
     stringJoiner.add("==========================================");
-    stringJoiner.add(dotNotation);
+    stringJoiner.add(cfgDotNotation);
     stringJoiner.add("==========================================");
     return stringJoiner.toString();
   }
-
-  private static void assertAreTheSame(Set<CfgBlock> left, Set<CfgBlock> right, String errorMessage) {
-    assertThat(Sets.symmetricDifference(left, right)).withFailMessage(errorMessage).isEmpty();
-  }
-
-  private static Set<CfgBlock> getCfgBlocks(Set<String> ids, Map<String, BlockMetadata> data) {
-    return ids.stream().map(id -> data.get(id).getBlock()).collect(Collectors.toSet());
-  }
-
 }

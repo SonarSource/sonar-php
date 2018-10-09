@@ -28,7 +28,6 @@ import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 
@@ -44,6 +43,10 @@ class ControlFlowGraphBuilder {
 
   ControlFlowGraph createGraph(BlockTree body) {
     return createGraph(body.statements());
+  }
+
+  ControlFlowGraph createGraph(ScriptTree scriptTree) {
+    return createGraph(scriptTree.statements());
   }
 
   private ControlFlowGraph createGraph(List<? extends Tree> items) {
@@ -67,13 +70,11 @@ class ControlFlowGraphBuilder {
     } else if (tree.is(Kind.BLOCK)) {
       visitBlock((BlockTree) tree);
     } else if (tree.is(Kind.EXPRESSION_STATEMENT)) {
-      buildExpression((ExpressionStatementTree) tree);
-    }
-  }
-
-  private void buildExpression(ExpressionStatementTree tree) {
-    if (!tree.is(Kind.PARENTHESISED_EXPRESSION)) {
       currentBlock.addElement(tree);
+    } else if (tree.is(Kind.EMPTY_STATEMENT)) {
+      // ignore
+    } else {
+      throw new UnsupportedOperationException("Not supported statement kind " + tree.getKind());
     }
   }
 
@@ -86,8 +87,8 @@ class ControlFlowGraphBuilder {
     PhpCfgBlock elseBlock = currentBlock;
     buildSubFlow(tree.statements(), successor);
     PhpCfgBlock thenBlock = currentBlock;
-    PhpCfgBranchingBlock branchingBlock = createBranchingBlock(tree, thenBlock, elseBlock);
-    currentBlock = branchingBlock;
+    currentBlock = createBranchingBlock(tree, thenBlock, elseBlock);
+    currentBlock.addElement(tree.condition().expression());
   }
 
   private void buildSubFlow(List<StatementTree> subFlowTree, PhpCfgBlock successor) {
