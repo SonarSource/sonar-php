@@ -175,19 +175,25 @@ class ExpectedCfgStructure {
     }
 
     private static FunctionCallTree getBlockFunctionCall(Tree firstElement) {
-      if (!(firstElement instanceof ExpressionStatementTree)) {
+      ExpressionTree expressionTree;
+      if (firstElement instanceof ExpressionStatementTree) {
+        expressionTree = ((ExpressionStatementTree) firstElement).expression();
+      } else if (firstElement instanceof ExpressionTree) {
+        expressionTree = (ExpressionTree) firstElement;
+      } else {
         return null;
       }
-      ExpressionStatementTree statement = (ExpressionStatementTree) firstElement;
-      if (!(statement.expression() instanceof FunctionCallTree)) {
+
+      if (!(expressionTree instanceof FunctionCallTree)) {
         return null;
       }
-      FunctionCallTree function = (FunctionCallTree) statement.expression();
+      FunctionCallTree function = (FunctionCallTree) expressionTree;
       if (function.arguments().isEmpty() ||
         !(function.callee() instanceof NamespaceNameTree)) {
         return null;
       }
       return function;
+
     }
 
     private static String[] getStrings(Tree tree) {
@@ -198,7 +204,7 @@ class ExpectedCfgStructure {
           result.add(getValue(pair.value()));
         }
       }
-      return result.toArray(new String[] {});
+      return result.toArray(new String[]{});
     }
 
     private static boolean isNamespaceTreeWithValue(@Nullable Tree tree, String s) {

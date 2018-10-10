@@ -52,6 +52,49 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test
+  public void simple_while() {
+    verifyBlockCfg("" +
+      "before( succ = [cond] );" +
+      "while (cond( succ = [body, after] )) {" +
+      "  body( succ = [cond] );" +
+      "}" +
+      "after( succ = [END] );");
+
+    verifyBlockCfg("" +
+      "before( succ = [cond] );" +
+      "while (cond( succ = [body, after] )) :" +
+      "  body( succ = [cond] );" +
+      "endwhile;" +
+      "after( succ = [END] );");
+  }
+
+  @Test
+  public void while_with_nested_if() {
+    verifyBlockCfg("" +
+      "before( succ = [whileCond] );" +
+      "while (whileCond( succ = [ifCond, after] )) {" +
+      "  if (ifCond( succ = [ifBody, whileCond] )) {" +
+      "    ifBody( succ = [whileCond] );" +
+      "  }" +
+      "}" +
+      "after( succ = [END] );");
+  }
+
+  @Test
+  public void if_with_nested_while() {
+    verifyBlockCfg("" +
+      "before( succ = [ifBody, after], elem = 2 );" +
+      "if (condition) {" +
+      "  ifBody( succ = [whileCond], elem = 1 );" +
+      "  while (whileCond( succ = [whileBody, ifBodyTail], elem = 1 )) {" +
+      "    whileBody( succ = [whileCond], elem = 1 );" +
+      "  }" +
+      "  ifBodyTail( succ = [after], elem = 1 );" +
+      "}" +
+      "after( succ = [END], elem = 1 );");
+  }
+
+  @Test
   public void test_start_is_first_block() {
     ControlFlowGraph cfg = cfgForBlock("" +
       "foo();" +

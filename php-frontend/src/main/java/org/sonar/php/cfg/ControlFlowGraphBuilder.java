@@ -20,6 +20,8 @@
 
 package org.sonar.php.cfg;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +33,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 /**
  * Builder of a {@link ControlFlowGraph} for a given {@link ScriptTree} or for the body of a function.
@@ -82,7 +85,12 @@ class ControlFlowGraphBuilder {
   }
 
   private void build(Tree tree) {
+
     switch (tree.getKind()) {
+      case WHILE_STATEMENT:
+      case ALTERNATIVE_WHILE_STATEMENT:
+        visitWhileStatement((WhileStatementTree) tree);
+        break;
       case IF_STATEMENT:
         visitIfStatement((IfStatementTree) tree);
         break;
@@ -95,6 +103,24 @@ class ControlFlowGraphBuilder {
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
+  }
+
+  private void visitWhileStatement(WhileStatementTree tree) {
+    PhpCfgBlock successor = currentBlock;
+    ForwardingBlock linkToCondition = createForwardingBlock();
+    buildSubFlow(tree.statements(), linkToCondition);
+
+    PhpCfgBlock loopBodyBlock = currentBlock;
+    currentBlock = createBranchingBlock(tree, loopBodyBlock, successor);
+    currentBlock.addElement(tree.condition().expression());
+    linkToCondition.setSuccessor(currentBlock);
+    currentBlock = createSimpleBlock(currentBlock);
+  }
+
+  private ForwardingBlock createForwardingBlock() {
+    ForwardingBlock block = new ForwardingBlock();
+    blocks.add(block);
+    return block;
   }
 
   private void visitBlock(BlockTree block) {
@@ -125,6 +151,31 @@ class ControlFlowGraphBuilder {
     PhpCfgBlock block = new PhpCfgBlock(successor);
     blocks.add(block);
     return block;
+  }
+
+  private static class ForwardingBlock extends PhpCfgBlock {
+
+    private PhpCfgBlock successor;
+
+    @Override
+    public ImmutableSet<CfgBlock> successors() {
+      Preconditions.checkState(successor != null, "No successor was set on %s", this);
+      return ImmutableSet.of(successor);
+    }
+
+    @Override
+    public void addElement(Tree element) {
+      throw new UnsupportedOperationException("Cannot add an element to a forwarding block");
+    }
+
+    void setSuccessor(PhpCfgBlock successor) {
+      this.successor = successor;
+    }
+
+    @Override
+    public void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
+      throw new UnsupportedOperationException("Cannot replace successors for a forwarding block");
+    }
   }
 
 }
