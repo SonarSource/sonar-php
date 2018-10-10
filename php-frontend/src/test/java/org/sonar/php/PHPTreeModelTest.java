@@ -26,7 +26,7 @@ import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
-public class PHPTreeModelTest {
+public abstract class PHPTreeModelTest {
   protected ActionParser<Tree> p;
 
   /**
@@ -36,7 +36,7 @@ public class PHPTreeModelTest {
    * @param rootRule the rule to start parsing from
    * @return the node found for the given kind, null if not found.
    */
-  protected <T extends Tree> T parse(String s, GrammarRuleKey rootRule) throws Exception {
+  protected <T extends Tree> T parse(String s, GrammarRuleKey rootRule) {
     p = PHPParserBuilder.createParser(rootRule);
     Tree node = p.parse(s);
     checkFullFidelity(node, s.trim());
