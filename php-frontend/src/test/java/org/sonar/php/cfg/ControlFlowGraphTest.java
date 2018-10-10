@@ -538,7 +538,116 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "}");
   }
 
-  private void verifyBlockCfg(String functionBody) {
+  @Test
+  public void empty_switch_statement() {
+    verifyBlockCfg("" +
+      "before(succ = [after]);" +
+      "switch ($expr) {" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+  @Test
+  public void switch_statement_single_case() {
+    verifyBlockCfg("" +
+      "before(succ = [c1]);" +
+      "switch ($expr) {" +
+      "    case c1(succ = [case1,after]):" +
+      "        case1(succ = [after]);" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+  @Test
+  public void switch_statement_more_case() {
+    verifyBlockCfg("" +
+      "before(succ = [case1]);" +
+      "switch ($expr) {" +
+      "    case case1(succ = [case1Body, case2]):" +
+      "        case1Body(succ = [case2Body]);" +
+      "    case case2(succ = [case2Body,case3]):" +
+      "        case2Body(succ = [case3Body]);" +
+      "    case case3(succ = [case3Body,after]):" +
+      "        case3Body(succ = [after]);" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+  @Test
+  public void switch_statement_with_default() {
+    verifyBlockCfg("" +
+      "before(succ = [default_]);" +
+      "switch ($expr) {" +
+      "    default: " +
+      "        default_(succ = [after]);" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+  @Test
+  public void switch_statement_with_default_and_case() {
+    verifyBlockCfg("" +
+      "before(succ = [case1]);" +
+      "switch ($expr) {" +
+      "    case case1(succ = [case1Body,case2]):" +
+      "        case1Body(succ = [case2Body]);" +
+      "    case case2(succ = [case2Body,default_]):" +
+      "        case2Body(succ = [default_]);" +
+      "    default: " +
+      "        default_(succ = [after]);" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+  @Test
+  public void switch_statement_with_default_first() {
+    verifyBlockCfg("" +
+      "before(succ = [case1]);" +
+      "switch ($expr) {" +
+      "    default: " +
+      "        default_(succ = [case1Body]);" +
+      "    case case1(succ = [case1Body, case2]):" +
+      "        case1Body(succ = [case2Body]);" +
+      "    case case2(succ = [case2Body,default_]):" +
+      "        case2Body(succ = [after]);" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+  @Test
+  public void switch_statement_case_without_body() {
+    verifyBlockCfg("" +
+      "before(succ = [case1]);" +
+      "switch ($expr) {" +
+      "    case case1(succ = [case2Body, case2]):" +
+      "    case case2(succ = [case2Body,after]):" +
+      "        case2Body(succ = [after]);" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+  @Test
+  public void switch_with_case_using_same_block_as_default() throws Exception {
+    verifyBlockCfg("" +
+      "before(succ = [case1]);" +
+      "switch ($expr) {" +
+      "    case case1(succ = [default_, case2]):" +
+      "    default: " +
+      "        default_(succ = [case2Body]);" +
+      "    case case2(succ = [case2Body,default_]):" +
+      "        case2Body(succ = [after]);" +
+      "}" +
+      "after(succ = [END]);");
+  }
+
+    private void verifyBlockCfg(String functionBody) {
     Validator.assertCfgStructure(cfgForBlock(functionBody));
   }
 
