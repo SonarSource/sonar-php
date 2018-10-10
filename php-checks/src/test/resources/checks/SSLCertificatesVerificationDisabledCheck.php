@@ -8,6 +8,7 @@ other_func($curl, CURLOPT_SSL_VERIFYHOST, 0);
 
 $verify_peer_on = TRUE;
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $verify_peer_on);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, '1');
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
 other_func($curl, CURLOPT_SSL_VERIFYPEER, 0);
