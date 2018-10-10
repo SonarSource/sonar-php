@@ -21,6 +21,7 @@
 package org.sonar.php.cfg;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import java.util.Set;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
@@ -85,8 +87,10 @@ class ControlFlowGraphBuilder {
   }
 
   private void build(Tree tree) {
-
     switch (tree.getKind()) {
+      case DO_WHILE_STATEMENT:
+        visitDoWhileStatement((DoWhileStatementTree) tree);
+        break;
       case WHILE_STATEMENT:
       case ALTERNATIVE_WHILE_STATEMENT:
         visitWhileStatement((WhileStatementTree) tree);
@@ -103,6 +107,18 @@ class ControlFlowGraphBuilder {
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
+  }
+
+  private void visitDoWhileStatement(DoWhileStatementTree tree) {
+    PhpCfgBlock successor = currentBlock;
+    ForwardingBlock linkToCondition = createForwardingBlock();
+    buildSubFlow(ImmutableList.of(tree.statement()), linkToCondition);
+
+    PhpCfgBlock loopBodyBlock = currentBlock;
+    currentBlock = createBranchingBlock(tree, loopBodyBlock, successor);
+    currentBlock.addElement(tree.condition().expression());
+    linkToCondition.setSuccessor(currentBlock);
+    currentBlock = createSimpleBlock(loopBodyBlock);
   }
 
   private void visitWhileStatement(WhileStatementTree tree) {
