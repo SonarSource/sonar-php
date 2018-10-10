@@ -30,6 +30,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class Validator {
 
+  private static final String DEBUG_MESSAGE_TEMPLATE;
+
+  static {
+    StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
+    stringJoiner.add("Not expected CFG structure. Hint: %s for '%s'.");
+    stringJoiner.add("Use a tool like http://www.webgraphviz.com/ to visualize the below graph in dot notation");
+    stringJoiner.add("==========================================");
+    stringJoiner.add("digraph G { %s }");
+    stringJoiner.add("==========================================");
+    DEBUG_MESSAGE_TEMPLATE = stringJoiner.toString();
+  }
+
   private Validator() {
     // this is an utility class and should not be instantiated
   }
@@ -45,7 +57,7 @@ class Validator {
       .withFailMessage("END block should not have elements")
       .isEmpty();
     assertThat(actualCfg.blocks())
-      .withFailMessage(buildDebugMessage("size", debugDotNotation))
+      .withFailMessage(buildDebugMessage("size", "CFG", debugDotNotation))
       .hasSize(expectedCfg.size());
 
     for (CfgBlock actualBlock : actualCfg.blocks()) {
@@ -54,20 +66,19 @@ class Validator {
       }
 
       String blockTestId = expectedCfg.testId(actualBlock);
-      String debugMessage = buildDebugMessage(blockTestId, debugDotNotation);
-      assertSuccessors(actualBlock, expectedCfg, debugMessage);
+      assertSuccessors(actualBlock, expectedCfg, debugDotNotation);
 
       if (expectedCfg.hasNonEmptyPredecessors()) {
         Set<CfgBlock> expectedPred = getCfgBlocksSet(expectedCfg.expectedPred(actualBlock), expectedCfg);
         assertThat(actualBlock.predecessors())
-          .withFailMessage(debugMessage)
-          .containsExactlyElementsOf(expectedPred);
+          .withFailMessage(buildDebugMessage("predecessors", blockTestId, debugDotNotation))
+          .containsOnlyElementsOf(expectedPred);
       }
 
       if (expectedCfg.hasNonEmptyElementNumbers()) {
         int actualElementNumber = actualBlock.elements().size();
         int expectedElementNumber = expectedCfg.expectedNumberOfElements(actualBlock);
-        String message = String.format("Expecting %d elements instead of %d for %s",
+        String message = String.format("Expecting %d elements instead of %d for '%s'",
           expectedElementNumber, actualElementNumber, blockTestId);
         assertThat(actualBlock.elements().size())
           .withFailMessage(message)
@@ -76,28 +87,29 @@ class Validator {
     }
   }
 
-  private static void assertSuccessors(CfgBlock actualBlock, ExpectedCfgStructure expectedCfg, String debugMessage) {
+  private static void assertSuccessors(CfgBlock actualBlock, ExpectedCfgStructure expectedCfg, String debugDotNotation) {
+    String blockTestId = expectedCfg.testId(actualBlock);
 
     if (actualBlock instanceof PhpCfgBranchingBlock) {
 
       PhpCfgBranchingBlock actualIfBlock = (PhpCfgBranchingBlock) actualBlock;
       List<CfgBlock> expectedSucc = getCfgBlocksList(expectedCfg.expectedSucc(actualBlock), expectedCfg);
       assertThat(expectedSucc)
-        .withFailMessage(debugMessage)
+        .withFailMessage(buildDebugMessage("branching block must have 2 elements", blockTestId, debugDotNotation))
         .hasSize(2);
       assertThat(actualIfBlock.trueSuccessor())
-        .withFailMessage(debugMessage)
+        .withFailMessage(buildDebugMessage("'true' branch successor", blockTestId, debugDotNotation))
         .isEqualTo(expectedSucc.get(0));
       assertThat(actualIfBlock.falseSuccessor())
-        .withFailMessage(debugMessage)
+        .withFailMessage(buildDebugMessage("'false' branch successor", blockTestId, debugDotNotation))
         .isEqualTo(expectedSucc.get(1));
 
     } else {
 
       Set<CfgBlock> expectedSucc = getCfgBlocksSet(expectedCfg.expectedSucc(actualBlock), expectedCfg);
       assertThat(actualBlock.successors())
-        .withFailMessage(debugMessage)
-        .containsExactlyElementsOf(expectedSucc);
+        .withFailMessage(buildDebugMessage("successors", blockTestId, debugDotNotation))
+        .containsOnlyElementsOf(expectedSucc);
     }
   }
 
@@ -113,15 +125,8 @@ class Validator {
     return testIds.stream().map(expectedCfg::cfgBlock);
   }
 
-  private static String buildDebugMessage(String blockTestId, String cfgDotNotation) {
-    StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
-    stringJoiner.add("Not expected CFG structure. There is a problem with " + blockTestId);
-    stringJoiner.add("Use a tool like http://www.webgraphviz.com/ to visualize the below graph in dot notation");
-    stringJoiner.add("==========================================");
-    stringJoiner.add("digraph G {");
-    stringJoiner.add(cfgDotNotation);
-    stringJoiner.add("}");
-    stringJoiner.add("==========================================");
-    return stringJoiner.toString();
+  private static String buildDebugMessage(String hint, String blockId, String debugDotNotation) {
+    return String.format(DEBUG_MESSAGE_TEMPLATE, hint, blockId, debugDotNotation);
   }
+
 }
