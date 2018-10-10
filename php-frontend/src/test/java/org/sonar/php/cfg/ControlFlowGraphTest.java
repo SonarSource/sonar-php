@@ -23,8 +23,10 @@ import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,17 +36,47 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Convention:
  *
  * 1. the metadata is specified as a function call with the form:
- * {@code foo( [ succ = [1,2], pred = [3] ); }
+ *
+ * {@code blockId( succ = [1,2], pred = [3], elem = 1 ); }
  * where the argument is a bracketed array with 3 elements:
- * - 'succ' is a bracketed array of expected successor ids
+ * - 'succ' is a bracketed array of expected successor ids. For branching blocks, the true successor must be first.
  * - 'pred' [optional] is a bracketed array of expected predecessor ids
  * - 'elem' [optional] is the number of expected elements in the block
  *
  * 2. each basic block must contain a function call with this structure as the first statement
  *
+ * 3. the name of the function is the identifier of the basic block
+ *
  * Also check {@link ExpectedCfgStructure}
  */
 public class ControlFlowGraphTest extends PHPTreeModelTest {
+
+  @Test
+  public void test_start_is_first_block() {
+    ControlFlowGraph cfg = cfgForBlock("" +
+      "foo();" +
+      "if (a) {" +
+      "  $x = 1;" +
+      "}");
+    CfgBlock startBlock = cfg.start();
+    assertThat(startBlock.elements()).isNotEmpty();
+    Tree firstElement = startBlock.elements().get(0);
+    assertThat(firstElement.getKind()).isEqualTo(Tree.Kind.EXPRESSION_STATEMENT);
+    ExpressionStatementTree statement = (ExpressionStatementTree) firstElement;
+    assertThat(statement.expression().getKind()).isEqualTo(Tree.Kind.FUNCTION_CALL);
+  }
+
+  @Test
+  public void test_branching_tree() {
+    ControlFlowGraph cfg = cfgForBlock("" +
+      "if (a) {" +
+      "  qix();" +
+      "}");
+    CfgBlock block = cfg.start();
+    assertThat(block instanceof PhpCfgBranchingBlock).isTrue();
+    PhpCfgBranchingBlock ifBlock = (PhpCfgBranchingBlock) block;
+    assertThat(ifBlock.branchingTree().getKind()).isEqualTo(Tree.Kind.IF_STATEMENT);
+  }
 
   @Test
   public void test_empty_block_removal() {

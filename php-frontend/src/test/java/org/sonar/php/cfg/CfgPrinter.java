@@ -40,7 +40,6 @@ class CfgPrinter {
       graphNodeIds.put(block, graphNodeId);
       graphNodeId++;
     }
-    sb.append("cfg{");
     for (CfgBlock block : cfg.blocks()) {
       int id = graphNodeIds.get(block);
       sb.append(id + "[label=\"" + blockLabel(cfg, block) + "\"];");
@@ -59,7 +58,6 @@ class CfgPrinter {
         sb.append(id + "->" + graphNodeIds.get(successor) + edgeLabel + ";");
       }
     }
-    sb.append("}");
 
     return sb.toString();
   }

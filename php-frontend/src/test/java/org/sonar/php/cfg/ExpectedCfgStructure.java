@@ -55,13 +55,6 @@ class ExpectedCfgStructure {
     return Parser.parse(blocks);
   }
 
-  BlockExpectation createExpectation(CfgBlock cfgBlock, String testId) {
-    testIds.put(cfgBlock, testId);
-    BlockExpectation expectation = new BlockExpectation();
-    expectations.put(testId, expectation);
-    return expectation;
-  }
-
   int size() {
     return expectations.size();
   }
@@ -98,6 +91,13 @@ class ExpectedCfgStructure {
 
   private BlockExpectation getExpectation(CfgBlock block) {
     return expectations.get(testId(block));
+  }
+
+  private BlockExpectation createExpectation(CfgBlock cfgBlock, String testId) {
+    testIds.put(cfgBlock, testId);
+    BlockExpectation expectation = new BlockExpectation();
+    expectations.put(testId, expectation);
+    return expectation;
   }
 
   private class BlockExpectation {
