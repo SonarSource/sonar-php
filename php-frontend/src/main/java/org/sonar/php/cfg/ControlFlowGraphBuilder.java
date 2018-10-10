@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -83,14 +82,18 @@ class ControlFlowGraphBuilder {
   }
 
   private void build(Tree tree) {
-    if (tree.is(Kind.IF_STATEMENT)) {
-      visitIfStatement((IfStatementTree) tree);
-    } else if (tree.is(Kind.BLOCK)) {
-      visitBlock((BlockTree) tree);
-    } else if (tree.is(Kind.EXPRESSION_STATEMENT)) {
-      currentBlock.addElement(tree);
-    } else {
-      throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
+    switch (tree.getKind()) {
+      case IF_STATEMENT:
+        visitIfStatement((IfStatementTree) tree);
+        break;
+      case BLOCK:
+        visitBlock((BlockTree) tree);
+        break;
+      case EXPRESSION_STATEMENT:
+        currentBlock.addElement(tree);
+        break;
+      default:
+        throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
   }
 
