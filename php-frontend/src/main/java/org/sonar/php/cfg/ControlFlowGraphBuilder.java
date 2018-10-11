@@ -45,7 +45,6 @@ class ControlFlowGraphBuilder {
 
   private final Set<PhpCfgBlock> blocks = new HashSet<>();
   private final PhpCfgEndBlock end = new PhpCfgEndBlock();
-  private PhpCfgBlock currentBlock = createSimpleBlock(end);
 
   ControlFlowGraph createGraph(BlockTree body) {
     return createGraph(body.statements());
@@ -57,8 +56,7 @@ class ControlFlowGraphBuilder {
 
   private ControlFlowGraph createGraph(List<? extends Tree> items) {
     // TODO add end to throw targets
-    build(items);
-    PhpCfgBlock start = currentBlock;
+    PhpCfgBlock start = build(items, createSimpleBlock(end));
     removeEmptyBlocks();
     blocks.add(end);
     return new ControlFlowGraph(blocks, start, end);
@@ -80,57 +78,50 @@ class ControlFlowGraphBuilder {
     }
   }
 
-  private void build(List<? extends Tree> trees) {
+  private PhpCfgBlock build(List<? extends Tree> trees, PhpCfgBlock successor) {
+    PhpCfgBlock currentBlock = successor;
     for (Tree tree : Lists.reverse(trees)) {
-      build(tree);
+      currentBlock = build(tree, currentBlock);
     }
+
+    return currentBlock;
   }
 
-  private void build(Tree tree) {
+  private PhpCfgBlock build(Tree tree, PhpCfgBlock currentBlock) {
     switch (tree.getKind()) {
       case DO_WHILE_STATEMENT:
-        visitDoWhileStatement((DoWhileStatementTree) tree);
-        break;
+        return buildDoWhileStatement((DoWhileStatementTree) tree, currentBlock);
       case WHILE_STATEMENT:
       case ALTERNATIVE_WHILE_STATEMENT:
-        visitWhileStatement((WhileStatementTree) tree);
-        break;
+        return buildWhileStatement((WhileStatementTree) tree, currentBlock);
       case IF_STATEMENT:
-        visitIfStatement((IfStatementTree) tree);
-        break;
+        return buildIfStatement((IfStatementTree) tree, currentBlock);
       case BLOCK:
-        visitBlock((BlockTree) tree);
-        break;
+        return buildBlock((BlockTree) tree, currentBlock);
       case EXPRESSION_STATEMENT:
         currentBlock.addElement(tree);
-        break;
+        return currentBlock;
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
   }
 
-  private void visitDoWhileStatement(DoWhileStatementTree tree) {
-    PhpCfgBlock successor = currentBlock;
+  private PhpCfgBlock buildDoWhileStatement(DoWhileStatementTree tree, PhpCfgBlock successor) {
     ForwardingBlock linkToCondition = createForwardingBlock();
-    buildSubFlow(ImmutableList.of(tree.statement()), linkToCondition);
-
-    PhpCfgBlock loopBodyBlock = currentBlock;
-    currentBlock = createBranchingBlock(tree, loopBodyBlock, successor);
-    currentBlock.addElement(tree.condition().expression());
-    linkToCondition.setSuccessor(currentBlock);
-    currentBlock = createSimpleBlock(loopBodyBlock);
+    PhpCfgBlock loopBodyBlock = buildSubFlow(ImmutableList.of(tree.statement()), linkToCondition);
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
+    conditionBlock.addElement(tree.condition().expression());
+    linkToCondition.setSuccessor(conditionBlock);
+    return createSimpleBlock(loopBodyBlock);
   }
 
-  private void visitWhileStatement(WhileStatementTree tree) {
-    PhpCfgBlock successor = currentBlock;
+  private PhpCfgBlock buildWhileStatement(WhileStatementTree tree, PhpCfgBlock successor) {
     ForwardingBlock linkToCondition = createForwardingBlock();
-    buildSubFlow(tree.statements(), linkToCondition);
-
-    PhpCfgBlock loopBodyBlock = currentBlock;
-    currentBlock = createBranchingBlock(tree, loopBodyBlock, successor);
-    currentBlock.addElement(tree.condition().expression());
-    linkToCondition.setSuccessor(currentBlock);
-    currentBlock = createSimpleBlock(currentBlock);
+    PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), linkToCondition);
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
+    conditionBlock.addElement(tree.condition().expression());
+    linkToCondition.setSuccessor(conditionBlock);
+    return createSimpleBlock(conditionBlock);
   }
 
   private ForwardingBlock createForwardingBlock() {
@@ -139,22 +130,19 @@ class ControlFlowGraphBuilder {
     return block;
   }
 
-  private void visitBlock(BlockTree block) {
-    build(block.statements());
+  private PhpCfgBlock buildBlock(BlockTree block, PhpCfgBlock successor) {
+    return build(block.statements(), successor);
   }
 
-  private void visitIfStatement(IfStatementTree tree) {
-    PhpCfgBlock successor = currentBlock;
-    PhpCfgBlock elseBlock = currentBlock;
-    buildSubFlow(tree.statements(), successor);
-    PhpCfgBlock thenBlock = currentBlock;
-    currentBlock = createBranchingBlock(tree, thenBlock, elseBlock);
-    currentBlock.addElement(tree.condition().expression());
+  private PhpCfgBlock buildIfStatement(IfStatementTree tree, PhpCfgBlock successor) {
+    PhpCfgBlock thenBlock = buildSubFlow(tree.statements(), successor);
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, thenBlock, successor);
+    conditionBlock.addElement(tree.condition().expression());
+    return conditionBlock;
   }
 
-  private void buildSubFlow(List<StatementTree> subFlowTree, PhpCfgBlock successor) {
-    currentBlock = createSimpleBlock(successor);
-    build(subFlowTree);
+  private PhpCfgBlock buildSubFlow(List<StatementTree> subFlowTree, PhpCfgBlock successor) {
+    return build(subFlowTree, createSimpleBlock(successor));
   }
 
   private PhpCfgBranchingBlock createBranchingBlock(Tree branchingTree, PhpCfgBlock trueSuccessor, PhpCfgBlock falseSuccessor) {
