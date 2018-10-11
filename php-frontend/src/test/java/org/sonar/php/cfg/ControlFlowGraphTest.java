@@ -181,6 +181,20 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "    break;" +
       "  }" +
       "}");
+
+    verifyBlockCfg("" +
+      "before(succ = [cond], elem = 1);" +
+      "for ($i=1 ; cond( succ = [body, END], elem = 1); $i++) {" +
+      "  body( succ = [END], elem = 2 );" +
+      "  break;" +
+      "}");
+
+    verifyBlockCfg("" +
+      "before(succ = [cond], elem = 1);" +
+      "foreach ( cond(succ = [body, END], elem = 1) as $key) {" +
+      "  body( succ = [END], elem = 2 );" +
+      "  break;" +
+      "}");
   }
 
   @Test
@@ -197,6 +211,22 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "  body( succ = [cond] );" +
       "  continue;" +
       "} while (cond( succ = [body, END] ));");
+
+    verifyBlockCfg("" +
+      "before(succ = [cond], elem = 1);" +
+      "for ($i=1 ; cond( succ = [body, END], elem = 1); $i++) {" +
+      "  body( succ = [cond], elem = 2 );" +
+      "  continue;" +
+      "  dead( succ = [cond], elem = 1);" +
+      "}");
+
+    verifyBlockCfg("" +
+      "before(succ = [cond], elem = 1);" +
+      "foreach ( cond(succ = [body, END], elem = 1) as $key) {" +
+      "  body( succ = [cond], elem = 2 );" +
+      "  continue;" +
+      "  dead( succ = [cond], elem = 1);" +
+      "}");
   }
 
   @Test
@@ -223,6 +253,29 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "    }" +
       "  }" +
       "}");
+
+    verifyBlockCfg("" +
+      "startBlock(succ = [outerCond]);" +
+      "for ($i=1 ; outerCond( succ = [forBody, END]); $i++) {" +
+      "  forBody(succ = [doBody]);" +
+      "  do {" +
+      "    doBody( succ = [END]);" +
+      "    break 2;" +
+      "    doDead( succ = [innerCond]);" +
+      "  } while (innerCond( succ = [doBody, afterDo] ));" +
+      "  afterDo( succ = [outerCond]);" +
+      "}");
+
+    verifyBlockCfg("" +
+      "do {" +
+      "  doBody( succ = [innerCond]);" +
+      "  foreach ( innerCond(succ = [forBody, afterForeach]) as $key) {" +
+      "    forBody( succ = [END]);" +
+      "    break 2;" +
+      "    dead( succ = [innerCond]);" +
+      "  }" +
+      "  afterForeach( succ = [outerCond]);" +
+      "} while (outerCond( succ = [doBody, END] ));");
   }
 
   @Test
@@ -259,6 +312,31 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "      continue 2;" +
       "    }" +
       "  }" +
+      "} while (outerCond( succ = [doBody, END] ));");
+
+    verifyBlockCfg("" +
+      "startBlock(succ = [outerCond]);" +
+      "for ($i=1 ; outerCond( succ = [forBody, END]); $i++) {" +
+      "  forBody(succ = [doBody]);" +
+      "  do {" +
+      "    doBody( succ = [outerCond] );" +
+      "    continue 2;" +
+      "    doDead( succ = [innerCond]);" +
+      "  } while (innerCond( succ = [doBody, afterDo] ));" +
+      "  afterDo( succ = [outerCond]);" +
+      "}");
+
+    verifyBlockCfg("" +
+      "do {" +
+      "  doBody( succ = [innerCond]);" +
+      "  foreach ( innerCond(succ = [ifCond, afterForeach]) as $key) {" +
+      "    if (ifCond( succ = [ifBody, afterIf] )) {" +
+      "      ifBody(succ = [outerCond]);" +
+      "      continue 2;" +
+      "    }" +
+      "    afterIf( succ = [innerCond]);" +
+      "  }" +
+      "  afterForeach( succ = [outerCond]);" +
       "} while (outerCond( succ = [doBody, END] ));");
   }
 
@@ -382,6 +460,130 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     assertThat(block instanceof PhpCfgBranchingBlock).isTrue();
     PhpCfgBranchingBlock ifBlock = (PhpCfgBranchingBlock) block;
     assertThat(ifBlock.branchingTree().getKind()).isEqualTo(Tree.Kind.IF_STATEMENT);
+  }
+
+  @Test
+  public void simple_for() {
+    verifyBlockCfg("" +
+      "before(succ = [forCond], elem = 1);" +
+      "for ($i=1 ; forCond( succ = [forBody, END], elem = 1); $i++) {" +
+      "  forBody( succ = [forCond], elem = 1 );" +
+      "}");
+    verifyBlockCfg("" +
+      "for ( ; forCond( succ = [forBody, END]); ) :" +
+      "  forBody( succ = [forCond] );" +
+      "endfor;");
+  }
+
+  @Test
+  public void for_with_nested_if() {
+    verifyBlockCfg("" +
+      "for ( ; forCond( succ = [ifCond, END]); ) {" +
+      "  if (ifCond( succ = [ifBody, forCond] )) {" +
+      "    ifBody( succ = [forCond] );" +
+      "  }" +
+      "}");
+  }
+
+  @Test
+  public void for_with_nested_ifs() {
+    verifyBlockCfg("" +
+      "for ( ; forCond( succ = [ifCondOne, END]); ) {" +
+      "  if (ifCondOne( succ = [ifBodyOne, ifCondTwo] )) {" +
+      "    ifBodyOne( succ = [ifCondTwo] );" +
+      "  }" +
+      "ifCondTwo( succ = [ifBodyTwo, forCond]);" +
+      "foo();" +
+      "if (a) {" +
+      "    ifBodyTwo( succ = [forCond] );" +
+      "  }" +
+      "}");
+  }
+
+  @Test
+  public void if_with_nested_for() {
+    verifyBlockCfg("" +
+      "ifCond(succ = [forCond, END]);" +
+      "if (a) {" +
+      "  for ( ; forCond( succ = [innerIfCond, END]); ) {" +
+      "    innerIfCond(succ = [body, forCond]);" +
+      "    if (a) {" +
+      "      body( succ = [forCond] );" +
+      "    }" +
+      "  }" +
+      "}");
+  }
+
+  @Test
+  public void if_with_nested_for_nested_do_while() {
+    verifyBlockCfg("" +
+      "ifCond(succ = [forCond, END]);" +
+      "if (a) {" +
+      "  for ( ; forCond( succ = [innerIfCond, END]); ) {" +
+      "    innerIfCond(succ = [ifBody, doBody]);" +
+      "    if (a) {" +
+      "      ifBody( succ = [doBody] );" +
+      "    }" +
+      "    do {" +
+      "      doBody( succ = [doCond] );" +
+      "    } while (doCond( succ = [doBody, forCond] ));" +
+      "  }" +
+      "}");
+  }
+
+  @Test
+  public void simple_foreach() {
+    verifyBlockCfg("" +
+      "before(succ = [cond], elem = 1);" +
+      "foreach ( cond(succ = [body, END], elem = 1) as $key) {" +
+      "  body( succ = [cond], elem = 1 );" +
+      "}");
+    verifyBlockCfg("" +
+      "foreach ( cond(succ = [body, END]) as $key => $value):" +
+      "  body( succ = [cond] );" +
+      "endforeach;");
+  }
+
+  @Test
+  public void foreach_with_nested_if() {
+    verifyBlockCfg("" +
+      "before(succ = [cond]);" +
+      "foreach ( cond(succ = [ifCond, END]) as $key) {" +
+      "  if (ifCond( succ = [ifBody, cond] )) {" +
+      "    ifBody( succ = [cond] );" +
+      "  }" +
+      "}");
+  }
+
+  @Test
+  public void if_with_nested_foreach() {
+    verifyBlockCfg("" +
+      "ifCond(succ = [forCond, END]);" +
+      "if (a) {" +
+      "  foreach ( forCond(succ = [innerIfCond, END]) as $key) {" +
+      "    innerIfCond(succ = [body, forCond]);" +
+      "    if (a) {" +
+      "      body( succ = [forCond] );" +
+      "    }" +
+      "  }" +
+      "}");
+  }
+
+  @Test
+  public void if_with_nested_foreach_nested_do_while() {
+    verifyBlockCfg("" +
+      "ifCond(succ = [forCond, END]);" +
+      "if (a) {" +
+      "  foreach ( forCond(succ = [innerIfCond, END]) as $key) {" +
+      "    innerIfCond(succ = [ifBody, doBody]);" +
+      "    if (a) {" +
+      "      ifBody( succ = [doBody] );" +
+      "    }" +
+      "    do {" +
+      "      doBody( succ = [doCond] );" +
+      "    } while (doCond( succ = [doBody, forCond] ));" +
+      "  }" +
+      "}");
   }
 
   @Test

@@ -203,6 +203,8 @@ class ExpectedCfgStructure {
         for (ArrayPairTree pair : initializer.arrayPairs()) {
           result.add(getValue(pair.value()));
         }
+      } else {
+        throw new UnsupportedOperationException("Expecting array, got '" + tree.toString() + "'");
       }
       return result.toArray(new String[]{});
     }
