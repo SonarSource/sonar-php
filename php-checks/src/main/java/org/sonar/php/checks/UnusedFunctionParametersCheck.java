@@ -90,7 +90,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   private void checkParameters(FunctionTree tree) {
     Scope scope = context().symbolTable().getScopeFor(tree);
-    if (scope != null) {
+    if (scope != null && !scope.hasUnresolvedCompact()) {
       List<IdentifierTree> unused = new ArrayList<>();
 
       for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
