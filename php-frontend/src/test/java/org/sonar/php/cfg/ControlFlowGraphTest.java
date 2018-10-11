@@ -332,6 +332,21 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "  b5( succ = [b6] );" +
       "}" +
       "b6( succ = [END] );");
+
+    verifyBlockCfg("" +
+      "b0( succ = [b1, b6] );" +
+      "if (a?b:c) :" +
+      "  b1( succ = [b2, b5] );" +
+      "  if (b) :" +
+      "    b2( succ = [b3, b4] );" +
+      "    if (c) :" +
+      "      b3( succ = [b4] );" +
+      "    endif;" +
+      "    b4( succ = [b5] );" +
+      "  endif;" +
+      "  b5( succ = [b6] );" +
+      "endif;" +
+      "b6( succ = [END] );");
   }
 
   @Test
@@ -346,6 +361,76 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "  b3( succ = [b4] );" +
       "}" +
       "b4( succ = [END] );");
+  }
+
+  @Test
+  public void if_else() {
+    verifyBlockCfg("" +
+      "before( succ = [insideIf, insideElse] );" +
+      "if (a) {" +
+      "  insideIf( succ = [END] );" +
+      "} else {" +
+      "  insideElse( succ = [END] );" +
+      "}");
+  }
+
+  @Test
+  public void if_elseif() {
+    verifyBlockCfg("" +
+      "beforeIf( succ = [insideIf, elseIfCond] );" +
+      "if (a) {" +
+      "  insideIf( succ = [END] );" +
+      "} elseif ( elseIfCond( succ = [insideElseIf, END] )) {" +
+      "  insideElseIf( succ = [END] );" +
+      "}");
+    verifyBlockCfg("" +
+      "beforeIf( succ = [insideIf, elseIfCond] );" +
+      "if (a) :" +
+      "  insideIf( succ = [END] );" +
+      "elseif ( elseIfCond( succ = [insideElseIf, END] )) :" +
+      "  insideElseIf( succ = [END] );" +
+      "endif;");
+  }
+
+  @Test
+  public void if_else_if() {
+    verifyBlockCfg("" +
+      "beforeIf( succ = [insideIf, else_if] );" +
+      "if (a) {" +
+      "  insideIf( succ = [END] );" +
+      "} else if ( else_if( succ = [inside_else_if, END] )) {" +
+      "  inside_else_if( succ = [END] );" +
+      "}");
+  }
+
+  @Test
+  public void if_elseif_else() {
+    verifyBlockCfg("" +
+      "beforeIf( succ = [insideIf, firstElseIf] );" +
+      "if (a) {" +
+      "  insideIf( succ = [END] );" +
+      "} elseif ( firstElseIf( succ = [insideFirstElseIf, secondElseIf] )) {" +
+      "  insideFirstElseIf( succ = [END] );" +
+      "} elseif ( secondElseIf( succ = [insideSecondElseIf, insideElse] )) {" +
+      "  insideSecondElseIf( succ = [END] );" +
+      "} else {" +
+      "  insideElse( succ = [END] );" +
+      "}");
+  }
+
+  @Test
+  public void if_elseif_with_nested_while() {
+    verifyBlockCfg("" +
+      "before( succ = [ifBody, else_if] );" +
+      "if (condition) {" +
+      "  ifBody( succ = [END] );" +
+      "} elseif ( else_if( succ = [whileCond, insideElse] )) {" +
+      "  while (whileCond( succ = [whileBody, END] )) {" +
+      "    whileBody( succ = [whileCond] );" +
+      "  }" +
+      "} else {" +
+      "  insideElse( succ = [END] );" +
+      "}");
   }
 
   private void verifyBlockCfg(String functionBody) {
