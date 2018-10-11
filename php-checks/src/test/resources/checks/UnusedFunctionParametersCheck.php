@@ -70,6 +70,17 @@ function foo($variable) {  // OK
     return $array;
 }
 
+function bar($p) {
+    $vars = 'p';
+    return compact($vars);
+}
+
+function bar2($p) { // Noncompliant
+    $vars = 'p';
+    return compact('a');
+}
+
+
 class Foo {
   public function f1($p1) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
     $x = new class extends A {

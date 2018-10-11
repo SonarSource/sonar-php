@@ -411,6 +411,9 @@ public class SymbolVisitor extends PHPVisitorCheck {
         if (symbol != null) {
           associateSymbol(((LiteralTree) argument).token(), symbol);
         }
+      } else {
+        // argument is array which can contain references to any variable
+        currentScope.setUnresolvedCompact(true);
       }
     }
   }

@@ -280,6 +280,27 @@ function compact_function_with_backslash() {
   return \compact("a");
 }
 
+function compact_function_with_array() {
+    $city  = "San Francisco"; // Compliant
+    $location_vars = array("city");
+    $result = compact($location_vars);
+    var_dump($result);
+}
+
+class A {
+
+    function foo() {
+        $unused = 1; // Compliant
+        $vars = 'unused';
+        compact($vars);
+    }
+
+    function bar() {
+        $unused = 1; // Noncompliant
+    }
+}
+
+
 function extract_function() {
   $var_array = array("color" => "blue");
   extract($var_array);

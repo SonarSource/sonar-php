@@ -108,7 +108,7 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
     usages = new ReadWriteUsages(tree, context().symbolTable());
     super.visitCompilationUnit(tree);
     for (Scope scope : context().symbolTable().getScopes()) {
-      if (CheckUtils.isFunction(scope.tree())) {
+      if (CheckUtils.isFunction(scope.tree()) && !scope.hasUnresolvedCompact()) {
         checkScope(scope);
       }
     }

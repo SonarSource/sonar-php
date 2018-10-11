@@ -19,15 +19,14 @@
  */
 package org.sonar.php.tree.symbols;
 
-import org.sonar.plugins.php.api.symbols.Symbol;
-import org.sonar.plugins.php.api.symbols.Symbol.Kind;
-import org.sonar.plugins.php.api.tree.Tree;
-
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.plugins.php.api.symbols.Symbol.Kind;
+import org.sonar.plugins.php.api.tree.Tree;
 
 public class Scope {
 
@@ -35,6 +34,7 @@ public class Scope {
   private final Tree tree;
   protected List<Symbol> symbols = new ArrayList<>();
   Scope superClassScope;
+  private boolean unresolvedCompact;
 
   public Scope(Scope outer, Tree tree) {
     this.outer = outer;
@@ -89,5 +89,13 @@ public class Scope {
     }
 
     return result.size() == 1 ? result.get(0) : null;
+  }
+
+  void setUnresolvedCompact(boolean unresolvedCompact) {
+    this.unresolvedCompact = unresolvedCompact;
+  }
+
+  public boolean hasUnresolvedCompact() {
+    return unresolvedCompact;
   }
 }
