@@ -53,6 +53,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test
+  public void try_stmt() {
+    verifyBlockCfg("" +
+      "try {" +
+      "  tryBody( succ = [catchBody1, catchBody2, finallyBody] );" +
+      "} catch (Type1 $e) {" +
+      "  catchBody1( succ = [finallyBody] );" +
+      "} catch (Type2 $e) {" +
+      "  catchBody2( succ = [finallyBody] );" +
+      "} finally {" +
+      "  finallyBody( succ = [END] );" +
+      "}");
+  }
+
+  @Test
   public void throw_outside_try() {
     verifyBlockCfg("body( succ = [END], elem = 2 ); throw new Exception();");
 
@@ -69,6 +83,57 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "  throw e;" +
       "}" +
       "after( succ = [END]);");
+
+    verifyBlockCfg("" +
+      "block0( succ = [finallyBody] );" +
+      "try {" +
+      "} finally {" +
+      "  finallyBody( succ = [throwBlock] );" +
+      "}" +
+      "throwBlock( succ = [END]);" +
+      "throw $e;" +
+      "dead( succ = [END]);");
+
+    verifyBlockCfg("" +
+      "block0( succ = [END] );" +
+      "throw $e;" +
+      "try {" +
+      "  tryBody( succ = [finallyBody]);" +
+      "} finally {" +
+      "  finallyBody( succ = [END] );" +
+      "}");
+  }
+
+  @Test
+  public void throw_inside_try() {
+    verifyBlockCfg("" +
+      "try {" +
+      "  tryBody( succ = [catchBody1] );" +
+      "  throw $e;" +
+      "  dead( succ = [catchBody1, catchBody2, finallyBody] );" +
+      "} catch (Type1 $e) {" +
+      "  catchBody1( succ = [END] );" +
+      "  throw $e;" +
+      "} catch (Type2 $e) {" +
+      "  catchBody2( succ = [finallyBody] );" +
+      "} finally {" +
+      "  finallyBody( succ = [END] );" +
+      "  throw $e;" +
+      "}" +
+      "after( succ = [END]);");
+
+    verifyBlockCfg("" +
+      "try {" +
+      "  try {" +
+      "    innerTryBody( succ = [catchBody1] );" +
+      "    throw $e;" +
+      "  } catch (Type $e) {" +
+      "    catchBody1( succ = [outerTryBody] );" +
+      "  }" +
+      "  outerTryBody( succ = [catchBody2, END] );" +
+      "} catch (Type $e) {" +
+      "  catchBody2( succ = [END] );" +
+      "}");
   }
 
   @Test

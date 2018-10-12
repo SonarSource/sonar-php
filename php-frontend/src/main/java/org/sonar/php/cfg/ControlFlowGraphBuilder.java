@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -48,6 +50,7 @@ import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 /**
@@ -59,7 +62,8 @@ class ControlFlowGraphBuilder {
   private final Set<PhpCfgBlock> blocks = new HashSet<>();
   private final PhpCfgEndBlock end = new PhpCfgEndBlock();
 
-  private ArrayDeque<Breakable> breakables = new ArrayDeque<>();
+  private final ArrayDeque<Breakable> breakables = new ArrayDeque<>();
+  private final Deque<PhpCfgBlock> throwTargets = new ArrayDeque<>();
 
   ControlFlowGraph createGraph(BlockTree body) {
     return createGraph(body.statements());
@@ -70,8 +74,9 @@ class ControlFlowGraphBuilder {
   }
 
   private ControlFlowGraph createGraph(List<? extends Tree> items) {
-    // TODO add end to throw targets
     breakables.clear();
+    throwTargets.clear();
+    throwTargets.push(end);
     PhpCfgBlock start = build(items, createSimpleBlock(end));
     removeEmptyBlocks();
     blocks.add(end);
@@ -105,6 +110,8 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock build(Tree tree, PhpCfgBlock currentBlock) {
     switch (tree.getKind()) {
+      case TRY_STATEMENT:
+        return buildTryStatement((TryStatementTree) tree, currentBlock);
       case THROW_STATEMENT:
         return buildThrowStatement((ThrowStatementTree) tree);
       case RETURN_STATEMENT:
@@ -130,8 +137,35 @@ class ControlFlowGraphBuilder {
     }
   }
 
+  private PhpCfgBlock buildTryStatement(TryStatementTree tree, PhpCfgBlock successor) {
+    PhpCfgBlock finallyOrSuccessor;
+    if (tree.finallyBlock() != null) {
+      finallyOrSuccessor = buildSubFlow(tree.finallyBlock().statements(), successor);
+    } else {
+      finallyOrSuccessor = successor;
+    }
+
+    List<PhpCfgBlock> catchBlocks = tree.catchBlocks().stream()
+      .map(catchBlockTree -> buildSubFlow(catchBlockTree.block().statements(), finallyOrSuccessor))
+      .collect(Collectors.toList());
+
+    if (catchBlocks.isEmpty()) {
+      throwTargets.push(finallyOrSuccessor);
+    } else {
+      throwTargets.push(catchBlocks.get(0));
+    }
+    Set<PhpCfgBlock> bodySuccessors = new HashSet<>(catchBlocks);
+    bodySuccessors.add(finallyOrSuccessor);
+    PhpCfgBlock tryBodyStartingBlock = build(tree.block().statements(), createMultiSuccessorBlock(bodySuccessors));
+    throwTargets.pop();
+
+    return tryBodyStartingBlock;
+  }
+
   private PhpCfgBlock buildThrowStatement(ThrowStatementTree tree) {
-    PhpCfgBlock simpleBlock = createSimpleBlock(end);
+    // taking "latest" throw target is an estimation
+    // In real a matching `catch` clause should be found (by exception type)
+    PhpCfgBlock simpleBlock = createSimpleBlock(throwTargets.peek());
     simpleBlock.addElement(tree);
     return simpleBlock;
   }
@@ -249,6 +283,12 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBranchingBlock createBranchingBlock(Tree branchingTree, PhpCfgBlock trueSuccessor, PhpCfgBlock falseSuccessor) {
     PhpCfgBranchingBlock block = new PhpCfgBranchingBlock(branchingTree, trueSuccessor, falseSuccessor);
+    blocks.add(block);
+    return block;
+  }
+
+  private PhpCfgMultiSuccessorBlock createMultiSuccessorBlock(Set<PhpCfgBlock> successors) {
+    PhpCfgMultiSuccessorBlock block = new PhpCfgMultiSuccessorBlock(successors);
     blocks.add(block);
     return block;
   }
