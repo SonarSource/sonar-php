@@ -89,7 +89,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg("" +
       "do {" +
-      "  body( succ = [body] );" +
+      "  body( succ = [cond] );" +
       "  continue;" +
       "} while (cond( succ = [body, END] ));");
   }
@@ -147,13 +147,14 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg("" +
       "do {" +
+      "  doBody( succ = [innerCond]);" +
       "  while (innerCond( succ = [ifCond, outerCond] )) {" +
-      "    if (ifCond( succ = [body, innerCond] )) {" +
-      "      body( succ = [innerCond] );" +
+      "    if (ifCond( succ = [whileBody, innerCond] )) {" +
+      "      whileBody( succ = [outerCond] );" +
       "      continue 2;" +
       "    }" +
       "  }" +
-      "} while (outerCond( succ = [innerCond, END] ));");
+      "} while (outerCond( succ = [doBody, END] ));");
   }
 
   // supported by PHP <5.4
@@ -167,8 +168,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test(expected = RecognitionException.class)
   public void break_outside_loop() {
-    cfgForBlock("" +
-      "  break 2;");
+    cfgForBlock("break 2;");
   }
 
   @Test(expected = RecognitionException.class)

@@ -142,12 +142,9 @@ class ControlFlowGraphBuilder {
         if (!argument.is(Kind.NUMERIC_LITERAL)) {
           throw exception(jumpStmp);
         }
+        int breakLevels = getBreakLevels((LiteralTree) argument);
         Iterator<Breakable> breakableIterator = breakables.iterator();
         Breakable breakable = breakableIterator.next();
-        int breakLevels = Integer.parseInt(((LiteralTree) argument).value());
-        if (breakLevels == 0) {
-          breakLevels = 1;
-        }
         while (breakLevels > 1) {
           breakable = breakableIterator.next();
           breakLevels--;
@@ -163,6 +160,14 @@ class ControlFlowGraphBuilder {
     }
   }
 
+  private int getBreakLevels(LiteralTree argument) {
+    int breakLevels = Integer.parseInt(argument.value());
+    if (breakLevels == 0) {
+      breakLevels = 1;
+    }
+    return breakLevels;
+  }
+
   private static RecognitionException exception(Tree tree) {
     return new RecognitionException(((PHPTree) tree).getLine(), "Failed to build CFG");
   }
@@ -176,7 +181,7 @@ class ControlFlowGraphBuilder {
     PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, linkToBody, successor);
     conditionBlock.addElement(tree.condition().expression());
 
-    addBreakable(successor, linkToBody);
+    addBreakable(successor, conditionBlock);
     PhpCfgBlock loopBodyBlock = buildSubFlow(ImmutableList.of(tree.statement()), conditionBlock);
     removeBreakable();
 
