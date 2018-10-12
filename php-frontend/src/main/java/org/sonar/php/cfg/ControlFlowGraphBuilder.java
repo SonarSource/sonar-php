@@ -44,6 +44,7 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
@@ -113,6 +114,7 @@ class ControlFlowGraphBuilder {
       case ALTERNATIVE_WHILE_STATEMENT:
         return buildWhileStatement((WhileStatementTree) tree, currentBlock);
       case IF_STATEMENT:
+      case ALTERNATIVE_IF_STATEMENT:
         return buildIfStatement((IfStatementTree) tree, currentBlock);
       case BLOCK:
         return buildBlock((BlockTree) tree, currentBlock);
@@ -219,8 +221,24 @@ class ControlFlowGraphBuilder {
   }
 
   private PhpCfgBlock buildIfStatement(IfStatementTree tree, PhpCfgBlock successor) {
-    PhpCfgBlock thenBlock = buildSubFlow(tree.statements(), successor);
-    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, thenBlock, successor);
+    PhpCfgBlock falseBlock = successor;
+    if (tree.elseClause() != null) {
+      falseBlock = buildSubFlow(tree.elseClause().statements(), successor);
+    }
+    if (!tree.elseifClauses().isEmpty()) {
+      for (ElseifClauseTree elseifClause : Lists.reverse(tree.elseifClauses())) {
+        falseBlock = buildElseIfStatement(elseifClause, successor, falseBlock);
+      }
+    }
+    PhpCfgBlock trueBlock = buildSubFlow(tree.statements(), successor);
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, trueBlock, falseBlock);
+    conditionBlock.addElement(tree.condition().expression());
+    return conditionBlock;
+  }
+
+  private PhpCfgBlock buildElseIfStatement(ElseifClauseTree tree, PhpCfgBlock ifSuccessor, PhpCfgBlock nextCondition) {
+    PhpCfgBlock thenBlock = buildSubFlow(tree.statements(), ifSuccessor);
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, thenBlock, nextCondition);
     conditionBlock.addElement(tree.condition().expression());
     return conditionBlock;
   }

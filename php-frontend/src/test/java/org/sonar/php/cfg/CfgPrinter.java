@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 class CfgPrinter {
@@ -66,16 +67,18 @@ class CfgPrinter {
     if (cfg.end().equals(block)) {
       return "<END>";
     }
-    String extraInfo = "Expected: ";
 
+    String stringTree = "<not supported Tree; update CfgPrinter>";
     if (!block.elements().isEmpty()) {
       Tree firstElement = block.elements().get(0);
       if (firstElement.is(Tree.Kind.EXPRESSION_STATEMENT)) {
-        extraInfo += ((ExpressionStatementTree) firstElement).expression().toString();
+        stringTree = ((ExpressionStatementTree) firstElement).expression().toString();
+      } else if (firstElement.is(Tree.Kind.FUNCTION_CALL)) {
+        stringTree = firstElement.toString();
       }
     }
 
-    return extraInfo;
+    return "Expected: " + stringTree;
   }
 
 }
