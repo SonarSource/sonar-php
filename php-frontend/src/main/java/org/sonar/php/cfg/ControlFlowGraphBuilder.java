@@ -221,19 +221,17 @@ class ControlFlowGraphBuilder {
   }
 
   private PhpCfgBlock buildIfStatement(IfStatementTree tree, PhpCfgBlock successor) {
-    PhpCfgBlock elseBlock = successor;
+    PhpCfgBlock falseBlock = successor;
     if (tree.elseClause() != null) {
-      elseBlock = buildSubFlow(tree.elseClause().statements(), successor);
+      falseBlock = buildSubFlow(tree.elseClause().statements(), successor);
     }
-    PhpCfgBlock falseSuccessor = elseBlock;
     if (!tree.elseifClauses().isEmpty()) {
-      List<ElseifClauseTree> elseIfs = tree.elseifClauses();
-      for (int i = elseIfs.size() - 1; i >= 0; i--) {
-        falseSuccessor = buildElseIfStatement(elseIfs.get(i), successor, falseSuccessor);
+      for (ElseifClauseTree elseifClause : Lists.reverse(tree.elseifClauses())) {
+        falseBlock = buildElseIfStatement(elseifClause, successor, falseBlock);
       }
     }
-    PhpCfgBlock thenBlock = buildSubFlow(tree.statements(), successor);
-    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, thenBlock, falseSuccessor);
+    PhpCfgBlock trueBlock = buildSubFlow(tree.statements(), successor);
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, trueBlock, falseBlock);
     conditionBlock.addElement(tree.condition().expression());
     return conditionBlock;
   }
