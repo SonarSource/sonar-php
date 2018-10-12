@@ -50,7 +50,9 @@ import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
+import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.LabelTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
@@ -70,6 +72,8 @@ class ControlFlowGraphBuilder {
 
   private final ArrayDeque<Breakable> breakables = new ArrayDeque<>();
   private final Deque<PhpCfgBlock> throwTargets = new ArrayDeque<>();
+  private final Map<String, PhpCfgBlock> labelledBlocks = new HashMap<>();
+  private final Map<String, PhpCfgBlock> gotosWithoutTarget = new HashMap<>();
 
   ControlFlowGraph createGraph(BlockTree body) {
     return createGraph(body.statements());
@@ -83,6 +87,7 @@ class ControlFlowGraphBuilder {
     breakables.clear();
     throwTargets.clear();
     throwTargets.push(end);
+    labelledBlocks.clear();
     PhpCfgBlock start = build(items, createSimpleBlock(end));
     removeEmptyBlocks();
     blocks.add(end);
@@ -126,6 +131,8 @@ class ControlFlowGraphBuilder {
         return buildBreakStatement((BreakStatementTree) tree);
       case CONTINUE_STATEMENT:
         return buildContinueStatement((ContinueStatementTree) tree);
+      case GOTO_STATEMENT:
+        return buildGotoStatement((GotoStatementTree) tree);
       case DO_WHILE_STATEMENT:
         return buildDoWhileStatement((DoWhileStatementTree) tree, currentBlock);
       case WHILE_STATEMENT:
@@ -144,6 +151,8 @@ class ControlFlowGraphBuilder {
         return buildBlock((BlockTree) tree, currentBlock);
       case SWITCH_STATEMENT:
         return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
+      case LABEL:
+        return createLabelBlock((LabelTree) tree, currentBlock);
       case EXPRESSION_STATEMENT:
         currentBlock.addElement(tree);
         return currentBlock;
@@ -210,6 +219,32 @@ class ControlFlowGraphBuilder {
     PhpCfgBlock simpleBlock = createSimpleBlock(end);
     simpleBlock.addElement(tree);
     return simpleBlock;
+  }
+
+  private PhpCfgBlock createLabelBlock(LabelTree tree, PhpCfgBlock currentBlock) {
+    String label = tree.label().text();
+    labelledBlocks.put(label, currentBlock);
+    currentBlock.addElement(tree);
+    PhpCfgBlock gotoWithoutTarget = gotosWithoutTarget.get(label);
+    if (gotoWithoutTarget != null) {
+      gotoWithoutTarget.replaceSuccessor(end, currentBlock);
+    }
+    // create the block for the code above the label
+    return createSimpleBlock(currentBlock);
+  }
+
+  private PhpCfgBlock buildGotoStatement(GotoStatementTree tree) {
+    String label = tree.identifier().text();
+    PhpCfgBlock gotoTarget = labelledBlocks.get(label);
+    PhpCfgBlock newBlock;
+    if (gotoTarget == null) {
+      newBlock = createSimpleBlock(end);
+      gotosWithoutTarget.put(label, newBlock);
+    } else {
+      newBlock = createSimpleBlock(gotoTarget);
+    }
+    newBlock.addElement(tree);
+    return newBlock;
   }
 
   private PhpCfgBlock buildBreakStatement(BreakStatementTree tree) {

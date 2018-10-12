@@ -137,7 +137,7 @@ class ExpectedCfgStructure {
           continue;
         }
 
-        FunctionCallTree blockFunction = getBlockFunctionCall(block.elements().get(0));
+        FunctionCallTree blockFunction = getBlockFunctionCall(block.elements());
         if (blockFunction == null) {
           throw new UnsupportedOperationException("CFG Block metadata must be the first statement in the block.");
         }
@@ -174,7 +174,12 @@ class ExpectedCfgStructure {
       return result;
     }
 
-    private static FunctionCallTree getBlockFunctionCall(Tree firstElement) {
+    private static FunctionCallTree getBlockFunctionCall(List<Tree> elements) {
+      Tree firstElement = elements.get(0);
+      if (firstElement.is(Tree.Kind.LABEL)) {
+        firstElement = elements.get(1);
+      }
+
       ExpressionTree expressionTree;
       if (firstElement instanceof ExpressionStatementTree) {
         expressionTree = ((ExpressionStatementTree) firstElement).expression();
