@@ -45,6 +45,7 @@ import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
@@ -103,6 +104,8 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock build(Tree tree, PhpCfgBlock currentBlock) {
     switch (tree.getKind()) {
+      case RETURN_STATEMENT:
+        return buildReturnStatement((ReturnStatementTree) tree);
       case BREAK_STATEMENT:
         return buildBreakStatement((BreakStatementTree) tree);
       case CONTINUE_STATEMENT:
@@ -122,6 +125,12 @@ class ControlFlowGraphBuilder {
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
+  }
+
+  private PhpCfgBlock buildReturnStatement(ReturnStatementTree tree) {
+    PhpCfgBlock simpleBlock = createSimpleBlock(end);
+    simpleBlock.addElement(tree);
+    return simpleBlock;
   }
 
   private PhpCfgBlock buildBreakStatement(BreakStatementTree tree) {
@@ -160,7 +169,7 @@ class ControlFlowGraphBuilder {
     }
   }
 
-  private int getBreakLevels(LiteralTree argument) {
+  private static int getBreakLevels(LiteralTree argument) {
     int breakLevels = Integer.parseInt(argument.value());
     if (breakLevels == 0) {
       breakLevels = 1;
