@@ -253,13 +253,16 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock buildForStatement(ForStatementTree tree, PhpCfgBlock successor) {
     ForwardingBlock linkToCondition = createForwardingBlock();
+    PhpCfgBlock updateBlock = createSimpleBlock(linkToCondition);
+    tree.update().forEach(updateBlock::addElement);
 
-    addBreakable(successor, linkToCondition);
-    PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), linkToCondition);
+    addBreakable(successor, updateBlock);
+    PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), updateBlock);
     removeBreakable();
 
     PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
     tree.condition().forEach(conditionBlock::addElement);
+    tree.init().forEach(conditionBlock::addElement);
     linkToCondition.setSuccessor(conditionBlock);
     return createSimpleBlock(conditionBlock);
   }

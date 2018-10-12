@@ -183,15 +183,15 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "}");
 
     verifyBlockCfg("" +
-      "before(succ = [cond], elem = 1);" +
-      "for ($i=1 ; cond( succ = [body, END], elem = 1); $i++) {" +
-      "  body( succ = [END], elem = 2 );" +
+      "before(succ = [cond]);" +
+      "for (cond( succ = [body, END]); ; updateBlock(succ=[cond])) {" +
+      "  body( succ = [END]);" +
       "  break;" +
       "}");
 
     verifyBlockCfg("" +
       "before(succ = [cond], elem = 1);" +
-      "foreach ( cond(succ = [body, END], elem = 1) as $key) {" +
+      "foreach ( cond(succ = [body, END], elem = 1) as $foo) {" +
       "  body( succ = [END], elem = 2 );" +
       "  break;" +
       "}");
@@ -213,16 +213,16 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "} while (cond( succ = [body, END] ));");
 
     verifyBlockCfg("" +
-      "before(succ = [cond], elem = 1);" +
-      "for ($i=1 ; cond( succ = [body, END], elem = 1); $i++) {" +
-      "  body( succ = [cond], elem = 2 );" +
+      "before(succ = [cond]);" +
+      "for (; cond( succ = [body, END]); update( succ=[cond])) {" +
+      "  body( succ = [update]);" +
       "  continue;" +
-      "  dead( succ = [cond], elem = 1);" +
+      "  dead( succ = [update]);" +
       "}");
 
     verifyBlockCfg("" +
       "before(succ = [cond], elem = 1);" +
-      "foreach ( cond(succ = [body, END], elem = 1) as $key) {" +
+      "foreach ( cond(succ = [body, END], elem = 1) as $foo) {" +
       "  body( succ = [cond], elem = 2 );" +
       "  continue;" +
       "  dead( succ = [cond], elem = 1);" +
@@ -256,20 +256,20 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg("" +
       "startBlock(succ = [outerCond]);" +
-      "for ($i=1 ; outerCond( succ = [forBody, END]); $i++) {" +
+      "for ($i=1 ; outerCond( succ = [forBody, END]); update(succ=[outerCond])) {" +
       "  forBody(succ = [doBody]);" +
       "  do {" +
       "    doBody( succ = [END]);" +
       "    break 2;" +
       "    doDead( succ = [innerCond]);" +
       "  } while (innerCond( succ = [doBody, afterDo] ));" +
-      "  afterDo( succ = [outerCond]);" +
+      "  afterDo( succ = [update]);" +
       "}");
 
     verifyBlockCfg("" +
       "do {" +
       "  doBody( succ = [innerCond]);" +
-      "  foreach ( innerCond(succ = [forBody, afterForeach]) as $key) {" +
+      "  foreach ( innerCond(succ = [forBody, afterForeach]) as $foo) {" +
       "    forBody( succ = [END]);" +
       "    break 2;" +
       "    dead( succ = [innerCond]);" +
@@ -316,20 +316,20 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg("" +
       "startBlock(succ = [outerCond]);" +
-      "for ($i=1 ; outerCond( succ = [forBody, END]); $i++) {" +
+      "for ($i=1 ; outerCond( succ = [forBody, END]); outerUpdate(succ=[outerCond])) {" +
       "  forBody(succ = [doBody]);" +
       "  do {" +
-      "    doBody( succ = [outerCond] );" +
+      "    doBody( succ = [outerUpdate] );" +
       "    continue 2;" +
       "    doDead( succ = [innerCond]);" +
       "  } while (innerCond( succ = [doBody, afterDo] ));" +
-      "  afterDo( succ = [outerCond]);" +
+      "  afterDo( succ = [outerUpdate]);" +
       "}");
 
     verifyBlockCfg("" +
       "do {" +
       "  doBody( succ = [innerCond]);" +
-      "  foreach ( innerCond(succ = [ifCond, afterForeach]) as $key) {" +
+      "  foreach ( innerCond(succ = [ifCond, afterForeach]) as $foo) {" +
       "    if (ifCond( succ = [ifBody, afterIf] )) {" +
       "      ifBody(succ = [outerCond]);" +
       "      continue 2;" +
@@ -465,13 +465,13 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   @Test
   public void simple_for() {
     verifyBlockCfg("" +
-      "before(succ = [forCond], elem = 1);" +
-      "for ($i=1 ; forCond( succ = [forBody, END], elem = 1); $i++) {" +
-      "  forBody( succ = [forCond], elem = 1 );" +
+      "before(succ = [cond], elem = 1);" +
+      "for ($i=1, $j=1 ; $i < 1, $j < 1, cond(succ=[forBody, END], elem=5); update(succ=[cond], elem=2), $i++) {" +
+      "  forBody( succ = [update], elem = 1 );" +
       "}");
     verifyBlockCfg("" +
-      "for ( ; forCond( succ = [forBody, END]); ) :" +
-      "  forBody( succ = [forCond] );" +
+      "for ($i=1 ; cond(succ=[forBody, END], elem=2); $i++, $i++, update(succ=[cond], elem=3)) :" +
+      "  forBody(succ=[update], elem=1 );" +
       "endfor;");
   }
 
@@ -535,7 +535,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   public void simple_foreach() {
     verifyBlockCfg("" +
       "before(succ = [cond], elem = 1);" +
-      "foreach ( cond(succ = [body, END], elem = 1) as $key) {" +
+      "foreach ( cond(succ = [body, END], elem = 1) as $foo) {" +
       "  body( succ = [cond], elem = 1 );" +
       "}");
     verifyBlockCfg("" +
@@ -548,7 +548,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   public void foreach_with_nested_if() {
     verifyBlockCfg("" +
       "before(succ = [cond]);" +
-      "foreach ( cond(succ = [ifCond, END]) as $key) {" +
+      "foreach ( cond(succ = [ifCond, END]) as $foo) {" +
       "  if (ifCond( succ = [ifBody, cond] )) {" +
       "    ifBody( succ = [cond] );" +
       "  }" +
@@ -560,7 +560,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     verifyBlockCfg("" +
       "ifCond(succ = [forCond, END]);" +
       "if (a) {" +
-      "  foreach ( forCond(succ = [innerIfCond, END]) as $key) {" +
+      "  foreach ( forCond(succ = [innerIfCond, END]) as $foo) {" +
       "    innerIfCond(succ = [body, forCond]);" +
       "    if (a) {" +
       "      body( succ = [forCond] );" +
@@ -572,9 +572,8 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   @Test
   public void if_with_nested_foreach_nested_do_while() {
     verifyBlockCfg("" +
-      "ifCond(succ = [forCond, END]);" +
-      "if (a) {" +
-      "  foreach ( forCond(succ = [innerIfCond, END]) as $key) {" +
+      "if (ifCond(succ = [forCond, END])) {" +
+      "  foreach ( forCond(succ = [innerIfCond, END]) as $foo) {" +
       "    innerIfCond(succ = [ifBody, doBody]);" +
       "    if (a) {" +
       "      ifBody( succ = [doBody] );" +
