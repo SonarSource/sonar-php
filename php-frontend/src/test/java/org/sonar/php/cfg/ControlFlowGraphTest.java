@@ -53,6 +53,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test
+  public void throw_outside_try() {
+    verifyBlockCfg("body( succ = [END], elem = 2 ); throw new Exception();");
+
+    verifyBlockCfg("" +
+      "while (cond( succ = [body, END])) {" +
+      "  body( succ = [END] );" +
+      "  throw e;" +
+      "}");
+
+    verifyBlockCfg("" +
+      "before( succ = [body, after]);" +
+      "if (condition) {" +
+      "  body( succ = [END] );" +
+      "  throw e;" +
+      "}" +
+      "after( succ = [END]);");
+  }
+
+  @Test
   public void return_stmt() {
     verifyBlockCfg("body( succ = [END], elem = 1 );");
     verifyBlockCfg("body( succ = [END], elem = 2 ); return;");

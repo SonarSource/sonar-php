@@ -47,6 +47,7 @@ import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 
 /**
@@ -104,6 +105,8 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock build(Tree tree, PhpCfgBlock currentBlock) {
     switch (tree.getKind()) {
+      case THROW_STATEMENT:
+        return buildThrowStatement((ThrowStatementTree) tree);
       case RETURN_STATEMENT:
         return buildReturnStatement((ReturnStatementTree) tree);
       case BREAK_STATEMENT:
@@ -125,6 +128,12 @@ class ControlFlowGraphBuilder {
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
+  }
+
+  private PhpCfgBlock buildThrowStatement(ThrowStatementTree tree) {
+    PhpCfgBlock simpleBlock = createSimpleBlock(end);
+    simpleBlock.addElement(tree);
+    return simpleBlock;
   }
 
   private PhpCfgBlock buildReturnStatement(ReturnStatementTree tree) {
