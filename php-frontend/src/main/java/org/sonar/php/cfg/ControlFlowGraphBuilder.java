@@ -24,14 +24,25 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.sonar.sslr.api.RecognitionException;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
+import javax.annotation.Nullable;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -46,6 +57,8 @@ class ControlFlowGraphBuilder {
   private final Set<PhpCfgBlock> blocks = new HashSet<>();
   private final PhpCfgEndBlock end = new PhpCfgEndBlock();
 
+  private ArrayDeque<Breakable> breakables = new ArrayDeque<>();
+
   ControlFlowGraph createGraph(BlockTree body) {
     return createGraph(body.statements());
   }
@@ -56,6 +69,7 @@ class ControlFlowGraphBuilder {
 
   private ControlFlowGraph createGraph(List<? extends Tree> items) {
     // TODO add end to throw targets
+    breakables.clear();
     PhpCfgBlock start = build(items, createSimpleBlock(end));
     removeEmptyBlocks();
     blocks.add(end);
@@ -89,6 +103,10 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock build(Tree tree, PhpCfgBlock currentBlock) {
     switch (tree.getKind()) {
+      case BREAK_STATEMENT:
+        return buildBreakStatement((BreakStatementTree) tree);
+      case CONTINUE_STATEMENT:
+        return buildContinueStatement((ContinueStatementTree) tree);
       case DO_WHILE_STATEMENT:
         return buildDoWhileStatement((DoWhileStatementTree) tree, currentBlock);
       case WHILE_STATEMENT:
@@ -106,22 +124,88 @@ class ControlFlowGraphBuilder {
     }
   }
 
+  private PhpCfgBlock buildBreakStatement(BreakStatementTree tree) {
+    PhpCfgBlock newBlock = createSimpleBlock(getBreakable(tree.argument(), tree).breakTarget);
+    newBlock.addElement(tree);
+    return newBlock;
+  }
+
+  private PhpCfgBlock buildContinueStatement(ContinueStatementTree tree) {
+    PhpCfgBlock newBlock = createSimpleBlock(getBreakable(tree.argument(), tree).continueTarget);
+    newBlock.addElement(tree);
+    return newBlock;
+  }
+
+  private Breakable getBreakable(@Nullable ExpressionTree argument, StatementTree jumpStmp) {
+    try {
+      if (argument != null) {
+        if (!argument.is(Kind.NUMERIC_LITERAL)) {
+          throw exception(jumpStmp);
+        }
+        int breakLevels = getBreakLevels((LiteralTree) argument);
+        Iterator<Breakable> breakableIterator = breakables.iterator();
+        Breakable breakable = breakableIterator.next();
+        while (breakLevels > 1) {
+          breakable = breakableIterator.next();
+          breakLevels--;
+        }
+        return breakable;
+
+      } else {
+        return breakables.element();
+      }
+
+    } catch (NumberFormatException | NoSuchElementException e) {
+      throw exception(jumpStmp, e);
+    }
+  }
+
+  private int getBreakLevels(LiteralTree argument) {
+    int breakLevels = Integer.parseInt(argument.value());
+    if (breakLevels == 0) {
+      breakLevels = 1;
+    }
+    return breakLevels;
+  }
+
+  private static RecognitionException exception(Tree tree) {
+    return new RecognitionException(((PHPTree) tree).getLine(), "Failed to build CFG");
+  }
+
+  private static RecognitionException exception(Tree tree, Throwable cause) {
+    return new RecognitionException(((PHPTree) tree).getLine(), "Failed to build CFG", cause);
+  }
+
   private PhpCfgBlock buildDoWhileStatement(DoWhileStatementTree tree, PhpCfgBlock successor) {
-    ForwardingBlock linkToCondition = createForwardingBlock();
-    PhpCfgBlock loopBodyBlock = buildSubFlow(ImmutableList.of(tree.statement()), linkToCondition);
-    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
+    ForwardingBlock linkToBody = createForwardingBlock();
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, linkToBody, successor);
     conditionBlock.addElement(tree.condition().expression());
-    linkToCondition.setSuccessor(conditionBlock);
+
+    addBreakable(successor, conditionBlock);
+    PhpCfgBlock loopBodyBlock = buildSubFlow(ImmutableList.of(tree.statement()), conditionBlock);
+    removeBreakable();
+
+    linkToBody.setSuccessor(loopBodyBlock);
     return createSimpleBlock(loopBodyBlock);
   }
 
   private PhpCfgBlock buildWhileStatement(WhileStatementTree tree, PhpCfgBlock successor) {
     ForwardingBlock linkToCondition = createForwardingBlock();
+    addBreakable(successor, linkToCondition);
     PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), linkToCondition);
+    removeBreakable();
     PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
     conditionBlock.addElement(tree.condition().expression());
     linkToCondition.setSuccessor(conditionBlock);
     return createSimpleBlock(conditionBlock);
+  }
+
+  private void removeBreakable() {
+    breakables.pop();
+  }
+
+  private void addBreakable(PhpCfgBlock breakTarget, PhpCfgBlock continueTarget) {
+    breakables.push(new Breakable(breakTarget, continueTarget));
   }
 
   private ForwardingBlock createForwardingBlock() {
@@ -182,4 +266,13 @@ class ControlFlowGraphBuilder {
     }
   }
 
+  private static class Breakable {
+    PhpCfgBlock breakTarget;
+    PhpCfgBlock continueTarget;
+
+    Breakable(PhpCfgBlock breakTarget, PhpCfgBlock continueTarget) {
+      this.breakTarget = breakTarget;
+      this.continueTarget = continueTarget;
+    }
+  }
 }

@@ -19,6 +19,7 @@
  */
 package org.sonar.php.cfg;
 
+import com.sonar.sslr.api.RecognitionException;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
@@ -50,6 +51,141 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Also check {@link ExpectedCfgStructure}
  */
 public class ControlFlowGraphTest extends PHPTreeModelTest {
+
+  @Test
+  public void break_without_argument() {
+    verifyBlockCfg("" +
+      "while (cond( succ = [body, END], elem = 1 )) {" +
+      "  body( succ = [END], elem = 2 );" +
+      "  break;" +
+      "}");
+
+    verifyBlockCfg("" +
+      "do {" +
+      "  body( succ = [END] );" +
+      "  break;" +
+      "} while (cond( succ = [body, END] ));");
+
+    verifyBlockCfg("" +
+      "while (outerCond( succ = [innerCond, END] )) {" +
+      "  while (innerCond( succ = [bodyInner, ifCond] )) {" +
+      "    bodyInner( succ = [innerCond] );" +
+      "  }" +
+      "  if (ifCond( succ = [bodyIf, outerCond] )) {" +
+      "    bodyIf( succ = [END] );" +
+      "    break;" +
+      "  }" +
+      "}");
+  }
+
+  @Test
+  public void continue_without_argument() {
+    verifyBlockCfg("" +
+      "while (cond( succ = [body, END], elem = 1 )) {" +
+      "  body( succ = [cond], elem = 2 );" +
+      "  continue;" +
+      "  dead( succ = [cond], elem = 1);" +
+      "}");
+
+    verifyBlockCfg("" +
+      "do {" +
+      "  body( succ = [cond] );" +
+      "  continue;" +
+      "} while (cond( succ = [body, END] ));");
+  }
+
+  @Test
+  public void break_with_argument() {
+    String breakInnerLoop = "" +
+      "while (outerCond( succ = [innerCond, END] )) {" +
+      "  while (innerCond( succ = [ifCond, outerCond] )) {" +
+      "    if (ifCond( succ = [body, innerCond] )) {" +
+      "      body( succ = [outerCond] );" +
+      "      break %s;" +
+      "    }" +
+      "  }" +
+      "}";
+
+    verifyBlockCfg(String.format(breakInnerLoop, "0"));
+    verifyBlockCfg(String.format(breakInnerLoop, "1"));
+
+    verifyBlockCfg("" +
+      "while (outerCond( succ = [innerCond, END] )) {" +
+      "  while (innerCond( succ = [ifCond, outerCond] )) {" +
+      "    if (ifCond( succ = [body, innerCond] )) {" +
+      "      body( succ = [END] );" +
+      "      break 2;" +
+      "    }" +
+      "  }" +
+      "}");
+  }
+
+  @Test
+  public void continue_with_argument() {
+    String continueInnerLoop = "" +
+      "while (outerCond( succ = [innerCond, END] )) {" +
+      "  while (innerCond( succ = [ifCond, outerCond] )) {" +
+      "    if (ifCond( succ = [body, innerCond] )) {" +
+      "      body( succ = [innerCond] );" +
+      "      continue %s;" +
+      "    }" +
+      "  }" +
+      "}";
+
+    verifyBlockCfg(String.format(continueInnerLoop, "0"));
+    verifyBlockCfg(String.format(continueInnerLoop, "1"));
+
+    verifyBlockCfg("" +
+      "while (outerCond( succ = [innerCond, END] )) {" +
+      "  while (innerCond( succ = [ifCond, outerCond] )) {" +
+      "    if (ifCond( succ = [body, innerCond] )) {" +
+      "      body( succ = [outerCond] );" +
+      "      continue 2;" +
+      "    }" +
+      "  }" +
+      "}");
+
+    verifyBlockCfg("" +
+      "do {" +
+      "  doBody( succ = [innerCond]);" +
+      "  while (innerCond( succ = [ifCond, outerCond] )) {" +
+      "    if (ifCond( succ = [whileBody, innerCond] )) {" +
+      "      whileBody( succ = [outerCond] );" +
+      "      continue 2;" +
+      "    }" +
+      "  }" +
+      "} while (outerCond( succ = [doBody, END] ));");
+  }
+
+  // supported by PHP <5.4
+  @Test(expected = RecognitionException.class)
+  public void break_unsupported_with_expression() {
+    cfgForBlock("" +
+      "while (cond) {" +
+      "  break 2 - 1;" +
+      "}");
+  }
+
+  @Test(expected = RecognitionException.class)
+  public void break_outside_loop() {
+    cfgForBlock("break 2;");
+  }
+
+  @Test(expected = RecognitionException.class)
+  public void break_invalid_level() {
+    cfgForBlock("" +
+      "while (cond) {" +
+      "  break 2;" +
+      "}");
+  }
+
+  @Test(expected = RecognitionException.class)
+  public void break_invalid_argument() {
+    cfgForBlock("" +
+      "while (cond) {" +
+      "  break 2.1;" +
+      "}");
+  }
 
   @Test
   public void do_while() {
