@@ -155,6 +155,7 @@ public class CheckList {
       RedundantFinalCheck.class,
       RedundantParenthesesCheck.class,
       ReferenceInFunctionCallCheck.class,
+      RequireIncludeInstructionsUsageCheck.class,
       RequireInsteadOfRequireOnceCheck.class,
       ReturnOfBooleanExpressionCheck.class,
       RightCurlyBraceStartsLineCheck.class,
