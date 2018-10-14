@@ -17,29 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php;
+package org.sonar.php.checks;
 
 import org.junit.Test;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
-import org.sonar.php.checks.CheckList;
-import org.sonar.plugins.php.api.Php;
+import org.sonar.plugins.php.CheckVerifier;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class DrupalProfileDefinitionTest {
+public class RequireIncludeInstructionsUsageCheckTest {
 
   @Test
-  public void profile_creation() {
-    ValidationMessages validation = ValidationMessages.create();
-
-    DrupalProfileDefinition definition = new DrupalProfileDefinition(new FakeProfileParser());
-    RulesProfile profile = definition.createProfile(validation);
-
-    assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
-    assertThat(profile.getName()).isEqualTo("Drupal");
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(21);
-    assertThat(validation.hasErrors()).isFalse();
+  public void test() throws Exception {
+    CheckVerifier.verify(new RequireIncludeInstructionsUsageCheck(), "RequireIncludeInstructionsUsageCheck.php");
   }
 
 }

@@ -169,5 +169,9 @@
       <repositoryKey>php</repositoryKey>
       <key>S2003</key>  <!-- "require_once" and "include_once" should be used instead of "require" and "include" -->
     </rule>
+    <rule>
+      <repositoryKey>php</repositoryKey>
+      <key>S4833</key>  <!-- "use of namespaces should be preferred to "include" or "require" functions" -->
+    </rule>
   </rules>
 </profile>
