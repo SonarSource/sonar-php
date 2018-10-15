@@ -29,11 +29,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
@@ -71,7 +69,7 @@ class ControlFlowGraphBuilder {
   private final Set<PhpCfgBlock> blocks = new HashSet<>();
   private final PhpCfgEndBlock end = new PhpCfgEndBlock();
 
-  private final ArrayDeque<Breakable> breakables = new ArrayDeque<>();
+  private final LinkedList<Breakable> breakables = new LinkedList<>();
   private final Deque<PhpCfgBlock> throwTargets = new ArrayDeque<>();
   // key is label
   private final Map<String, PhpCfgBlock> labelledBlocks = new HashMap<>();
@@ -170,6 +168,7 @@ class ControlFlowGraphBuilder {
     defaultBlock.setSuccessor(successor);
     PhpCfgBlock nextCase = defaultBlock;
     PhpCfgBlock caseBody = successor;
+    addBreakable(successor, successor);
     for (SwitchCaseClauseTree caseTree : Lists.reverse(tree.cases())) {
       caseBody = buildSubFlow(caseTree.statements(), caseBody);
       if (caseTree.is(Tree.Kind.CASE_CLAUSE)) {
@@ -181,6 +180,7 @@ class ControlFlowGraphBuilder {
         defaultBlock.setSuccessor(caseBody);
       }
     }
+    removeBreakable();
     PhpCfgBlock block = createSimpleBlock(nextCase);
     block.addElement(tree.expression());
     return block;
@@ -267,34 +267,29 @@ class ControlFlowGraphBuilder {
 
   private Breakable getBreakable(@Nullable ExpressionTree argument, StatementTree jumpStmp) {
     try {
-      if (argument != null) {
-        if (!argument.is(Kind.NUMERIC_LITERAL)) {
-          throw exception(jumpStmp);
-        }
-        int breakLevels = getBreakLevels((LiteralTree) argument);
-        Iterator<Breakable> breakableIterator = breakables.iterator();
-        Breakable breakable = breakableIterator.next();
-        while (breakLevels > 1) {
-          breakable = breakableIterator.next();
-          breakLevels--;
-        }
-        return breakable;
-
-      } else {
-        return breakables.element();
-      }
-
-    } catch (NumberFormatException | NoSuchElementException e) {
+      int breakLevels = getBreakLevels(argument);
+      return breakables.get(breakLevels - 1);
+    } catch (IndexOutOfBoundsException e) {
       throw exception(jumpStmp, e);
     }
   }
 
-  private static int getBreakLevels(LiteralTree argument) {
-    int breakLevels = Integer.parseInt(argument.value());
-    if (breakLevels == 0) {
-      breakLevels = 1;
+  private static int getBreakLevels(@Nullable ExpressionTree argument) {
+    if (argument == null) {
+      return 1;
     }
-    return breakLevels;
+    if (!argument.is(Kind.NUMERIC_LITERAL)) {
+      throw exception(argument);
+    }
+    try {
+      int breakLevels = Integer.parseInt(((LiteralTree) argument).value());
+      if (breakLevels == 0) {
+        return 1;
+      }
+      return breakLevels;
+    } catch (NumberFormatException e) {
+      throw exception(argument, e);
+    }
   }
 
   private static RecognitionException exception(Tree tree) {

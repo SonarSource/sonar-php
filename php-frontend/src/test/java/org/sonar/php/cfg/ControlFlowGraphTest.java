@@ -938,6 +938,74 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "stmt();");
   }
 
+  @Test
+  public void switch_with_break() {
+    verifyBlockCfg("" +
+      "before(succ = [case1]);" +
+      "switch ($expr) {" +
+      "    case case1(succ = [case1Body,case2]):" +
+      "        case1Body(succ = [after]);" +
+      "        break;" +
+      "    case case2(succ = [case2Body,default_]):" +
+      "        case2Body(succ = [after]);" +
+      "        break;" +
+      "    default: " +
+      "        default_(succ = [after]);" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+  @Test
+  public void switch_statement_with_default_first_break() {
+    verifyBlockCfg("" +
+      "before(succ = [case1]);" +
+      "switch ($expr) {" +
+      "    default: " +
+      "        default_(succ = [after]);" +
+      "        break;" +
+      "    case case1(succ = [case1Body, case2]):" +
+      "        case1Body(succ = [after]);" +
+      "        break;" +
+      "    case case2(succ = [case2Body,default_]):" +
+      "        case2Body(succ = [after]);" +
+      "        break;" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+
+  @Test
+  public void switch_statement_with_loop_and_continue() {
+    verifyBlockCfg("" +
+      "before(succ = [whileCond]);" +
+      "while (whileCond(succ=[whileBody,after])) {" +
+      "    whileBody(succ=[case1]);" +
+      "    switch ($expr) {" +
+      "        default: " +
+      "            default_(succ = [whileBodyEnd]);" +
+      "            continue;" +
+      "        case case1(succ = [case1Body, case2]):" +
+      "            case1Body(succ = [whileBodyEnd]);" +
+      "            break;" +
+      "        case case2(succ = [case2Body,case3]):" +
+      "            case2Body(succ = [whileBodyEnd]);" +
+      "            break;" +
+      "        case case3(succ = [case3Body,case4]):" +
+      "            case3Body(succ = [whileCond]);" +
+      "            continue 2;" +
+      "        case case4(succ = [case4Body,default_]):" +
+      "            case4Body(succ = [after]);" +
+      "            break 2;" +
+      "    }" +
+      "    whileBodyEnd(succ=[whileCond]);" +
+      "}" +
+      "after(succ = [END]);"
+    );
+  }
+
+
   private void verifyBlockCfg(String functionBody) {
     Validator.assertCfgStructure(cfgForBlock(functionBody));
   }
