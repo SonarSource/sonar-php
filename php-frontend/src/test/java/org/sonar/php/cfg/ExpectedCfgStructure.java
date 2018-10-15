@@ -139,7 +139,7 @@ class ExpectedCfgStructure {
 
         FunctionCallTree blockFunction = getBlockFunctionCall(block.elements().get(0));
         if (blockFunction == null) {
-          throw new UnsupportedOperationException("CFG Block metadata must be the first statement in the block");
+          throw new UnsupportedOperationException("CFG Block metadata must be the first statement in the block.");
         }
 
         String id = getValue(blockFunction.callee());
@@ -203,6 +203,8 @@ class ExpectedCfgStructure {
         for (ArrayPairTree pair : initializer.arrayPairs()) {
           result.add(getValue(pair.value()));
         }
+      } else {
+        throw new UnsupportedOperationException("Expecting array, got '" + tree.toString() + "'");
       }
       return result.toArray(new String[]{});
     }

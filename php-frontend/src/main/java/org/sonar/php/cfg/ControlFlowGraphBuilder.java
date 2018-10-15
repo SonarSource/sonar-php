@@ -47,6 +47,8 @@ import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
+import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
+import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -129,6 +131,12 @@ class ControlFlowGraphBuilder {
       case IF_STATEMENT:
       case ALTERNATIVE_IF_STATEMENT:
         return buildIfStatement((IfStatementTree) tree, currentBlock);
+      case FOR_STATEMENT:
+      case ALTERNATIVE_FOR_STATEMENT:
+        return buildForStatement((ForStatementTree) tree, currentBlock);
+      case FOREACH_STATEMENT:
+      case ALTERNATIVE_FOREACH_STATEMENT:
+        return buildForEachStatement((ForEachStatementTree) tree, currentBlock);
       case BLOCK:
         return buildBlock((BlockTree) tree, currentBlock);
       case EXPRESSION_STATEMENT:
@@ -230,6 +238,42 @@ class ControlFlowGraphBuilder {
     return new RecognitionException(((PHPTree) tree).getLine(), "Failed to build CFG", cause);
   }
 
+  private PhpCfgBlock buildForEachStatement(ForEachStatementTree tree, PhpCfgBlock successor) {
+    ForwardingBlock linkToCondition = createForwardingBlock();
+
+    addBreakable(successor, linkToCondition);
+    PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), linkToCondition);
+    removeBreakable();
+
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
+    conditionBlock.addElement(tree.expression());
+    linkToCondition.setSuccessor(conditionBlock);
+    return createSimpleBlock(conditionBlock);
+  }
+
+  private PhpCfgBlock buildForStatement(ForStatementTree tree, PhpCfgBlock successor) {
+    // we need to reverse the 'update' and 'condition' and 'init' expressions
+    // because they are sequential inside the ForStatementTree
+    // (and not bottom-up like how we build the CFG)
+
+    ForwardingBlock linkToCondition = createForwardingBlock();
+    PhpCfgBlock updateBlock = createSimpleBlock(linkToCondition);
+    Lists.reverse(tree.update()).forEach(updateBlock::addElement);
+
+    addBreakable(successor, updateBlock);
+    PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), updateBlock);
+    removeBreakable();
+
+    PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
+    Lists.reverse(tree.condition()).forEach(conditionBlock::addElement);
+    linkToCondition.setSuccessor(conditionBlock);
+
+    PhpCfgBlock beforeFor = createSimpleBlock(conditionBlock);
+    Lists.reverse(tree.init()).forEach(beforeFor::addElement);
+
+    return beforeFor;
+  }
+
   private PhpCfgBlock buildDoWhileStatement(DoWhileStatementTree tree, PhpCfgBlock successor) {
     ForwardingBlock linkToBody = createForwardingBlock();
     PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, linkToBody, successor);
@@ -245,9 +289,11 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock buildWhileStatement(WhileStatementTree tree, PhpCfgBlock successor) {
     ForwardingBlock linkToCondition = createForwardingBlock();
+
     addBreakable(successor, linkToCondition);
     PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), linkToCondition);
     removeBreakable();
+
     PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
     conditionBlock.addElement(tree.condition().expression());
     linkToCondition.setSuccessor(conditionBlock);
