@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Locale;
 import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
@@ -40,12 +41,19 @@ public class RequireIncludeInstructionsUsageCheck extends PHPVisitorCheck {
     "include_once");
 
   @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    if (!isExcludedFile()) {
+      super.visitCompilationUnit(tree);
+    }
+  }
+
+  @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     super.visitFunctionCall(tree);
 
     String callee = tree.callee().toString();
 
-    if (!this.isExcludedFile() && WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))) {
+    if (WRONG_FUNCTIONS.contains(callee.toLowerCase(Locale.ENGLISH))) {
       String message = String.format(MESSAGE, callee);
       context().newIssue(this, tree.callee(), message);
     }

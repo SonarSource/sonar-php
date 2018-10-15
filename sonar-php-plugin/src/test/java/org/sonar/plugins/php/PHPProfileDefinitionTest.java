@@ -44,7 +44,7 @@ public class PHPProfileDefinitionTest {
     BuiltInQualityProfilesDefinition.BuiltInQualityProfile profile = context.profile("php", "Sonar way");
     assertThat(profile.language()).isEqualTo(Php.KEY);
     assertThat(profile.name()).isEqualTo(PHPProfileDefinition.SONAR_WAY_PROFILE);
-    assertThat(profile.rules().size()).isGreaterThan(51);
+    assertThat(profile.rules().size()).isGreaterThan(50);
     assertThat(profile.rules().size()).isLessThan(CheckList.getAllChecks().size());
     assertThat(profile.rules()).extracting("ruleKey").contains("DuplicatedBlocks");
     assertThat(validation.hasErrors()).isFalse();
