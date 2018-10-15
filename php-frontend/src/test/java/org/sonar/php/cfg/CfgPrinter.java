@@ -71,10 +71,15 @@ class CfgPrinter {
     String stringTree = "<not supported Tree; update CfgPrinter>";
     if (!block.elements().isEmpty()) {
       Tree firstElement = block.elements().get(0);
+      if (firstElement.is(Tree.Kind.LABEL)) {
+        firstElement = block.elements().get(1);
+      }
       if (firstElement.is(Tree.Kind.EXPRESSION_STATEMENT)) {
         stringTree = ((ExpressionStatementTree) firstElement).expression().toString();
       } else if (firstElement.is(Tree.Kind.FUNCTION_CALL)) {
         stringTree = firstElement.toString();
+      } else {
+        System.out.println("Could not print " + firstElement.toString());
       }
     }
 

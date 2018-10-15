@@ -23,6 +23,7 @@ package org.sonar.php.cfg;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,6 +74,15 @@ class PhpCfgBlock implements CfgBlock {
    */
   void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
     this.successor = replacement(successor, replacements);
+  }
+
+  /**
+   * Replace oldSucc with newSucc
+   */
+  void replaceSuccessor(PhpCfgBlock oldSucc, PhpCfgBlock newSucc) {
+    Map<PhpCfgBlock, PhpCfgBlock> map = new HashMap<>();
+    map.put(oldSucc, newSucc);
+    replaceSuccessors(map);
   }
 
   static PhpCfgBlock replacement(PhpCfgBlock successor, Map<PhpCfgBlock, PhpCfgBlock> replacements) {

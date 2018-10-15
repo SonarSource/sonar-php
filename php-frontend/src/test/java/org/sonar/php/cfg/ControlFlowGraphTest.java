@@ -45,6 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * - 'elem' [optional] is the number of expected elements in the block
  *
  * 2. each basic block must contain a function call with this structure as the first statement
+ * - exception: a Label is before the block function call
  *
  * 3. the name of the function is the identifier of the basic block
  *
@@ -848,7 +849,96 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "after(succ = [END]);");
   }
 
-    private void verifyBlockCfg(String functionBody) {
+  @Test
+  public void simple_goto() {
+    verifyBlockCfg("" +
+      "before( succ = [fooBlock], elem = 2 );" +
+      "goto fooLabel;" +
+      "dead ( succ = [fooBlock], elem = 1 );" +
+      "fooLabel:" +
+      "fooBlock( succ = [END], elem = 2);");
+
+    verifyBlockCfg("" +
+      "fooLabel:" +
+      "fooBlock( succ = [fooBlock], elem = 3 );" +
+      "goto fooLabel;" +
+      "dead ( succ = [END], elem = 1  );");
+  }
+
+  @Test
+  public void multiple_gotos_to_same_label() {
+    verifyBlockCfg("" +
+      "before( succ = [fooBlock], elem = 2 );" +
+      "goto fooLabel;" +
+      "deadOne( succ = [END], elem = 2 );" +
+      "return;" +
+      "fooLabel:" +
+      "fooBlock( succ = [fooBlock], elem = 3);" +
+      "goto fooLabel;" +
+      "deadTwo( succ = [END], elem = 1 );");
+  }
+
+  @Test
+  public void goto_nested_one_level() {
+    verifyBlockCfg("" +
+      "while ( cond( succ = [body, afterWhile] )) {" +
+      "  body( succ = [fooBlock] );" +
+      "  goto fooLabel;" +
+      "}" +
+      "afterWhile( succ = [fooBlock] );" +
+      "fooLabel:" +
+      "fooBlock( succ = [END] );");
+
+    verifyBlockCfg("" +
+      "fooLabel:" +
+      "fooBlock( succ = [body] );" +
+      "do {" +
+      "  body( succ = [fooBlock] );" +
+      "  goto fooLabel;" +
+      "} while (cond( succ = [body, END] ));");
+  }
+
+  @Test
+  public void goto_nested_two_levels() {
+    verifyBlockCfg("" +
+      "while (outerCond( succ = [innerCond, fooBlock] )) {" +
+      "  while (innerCond( succ = [bodyInner, ifCond] )) {" +
+      "    bodyInner( succ = [fooBlock] );" +
+      "    goto fooLabel;" +
+      "  }" +
+      "  if (ifCond( succ = [bodyIf, outerCond] )) {" +
+      "    bodyIf( succ = [barBlock] );" +
+      "    goto barLabel;" +
+      "  }" +
+      "}" +
+      "fooLabel:" +
+      "fooBlock( succ = [barBlock] );" +
+      "barLabel:" +
+      "barBlock( succ = [END] );" +
+      "stmt();");
+
+    verifyBlockCfg("" +
+      "fooLabel:" +
+      "fooBlock( succ = [innerCond] );" +
+      "do {" +
+      "  while (innerCond( succ = [bodyInner, ifCond] )) {" +
+      "    bodyInner( succ = [qixBlock] );" +
+      "    goto qixLabel;" +
+      "  }" +
+      "  if (ifCond( succ = [bodyIf, qixBlock] )) {" +
+      "    bodyIf( succ = [barBlock] );" +
+      "    goto barLabel;" +
+      "  }" +
+      "  qixLabel:" +
+      "  qixBlock( succ = [fooBlock]);" +
+      "  goto fooLabel;" +
+      "} while ( outerCond (succ = [innerCond, barBlock])); " +
+      "barLabel:" +
+      "barBlock( succ = [END] );" +
+      "stmt();");
+  }
+
+  private void verifyBlockCfg(String functionBody) {
     Validator.assertCfgStructure(cfgForBlock(functionBody));
   }
 
