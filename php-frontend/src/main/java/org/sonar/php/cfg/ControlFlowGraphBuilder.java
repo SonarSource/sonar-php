@@ -44,6 +44,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
+import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
@@ -52,6 +53,8 @@ import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
+import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
@@ -139,12 +142,35 @@ class ControlFlowGraphBuilder {
         return buildForEachStatement((ForEachStatementTree) tree, currentBlock);
       case BLOCK:
         return buildBlock((BlockTree) tree, currentBlock);
+      case SWITCH_STATEMENT:
+        return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
       case EXPRESSION_STATEMENT:
         currentBlock.addElement(tree);
         return currentBlock;
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
     }
+  }
+
+  private PhpCfgBlock buildSwitchStatement(SwitchStatementTree tree, PhpCfgBlock successor) {
+    ForwardingBlock defaultBlock = createForwardingBlock();
+    defaultBlock.setSuccessor(successor);
+    PhpCfgBlock nextCase = defaultBlock;
+    PhpCfgBlock caseBody = successor;
+    for (SwitchCaseClauseTree caseTree : Lists.reverse(tree.cases())) {
+      caseBody = buildSubFlow(caseTree.statements(), caseBody);
+      if (caseTree.is(Tree.Kind.CASE_CLAUSE)) {
+        PhpCfgBranchingBlock caseBranch = createBranchingBlock(caseTree, caseBody, nextCase);
+        caseBranch.addElement(((CaseClauseTree) caseTree).expression());
+        nextCase = caseBranch;
+      } else {
+        // default case
+        defaultBlock.setSuccessor(caseBody);
+      }
+    }
+    PhpCfgBlock block = createSimpleBlock(nextCase);
+    block.addElement(tree.expression());
+    return block;
   }
 
   private PhpCfgBlock buildTryStatement(TryStatementTree tree, PhpCfgBlock successor) {
