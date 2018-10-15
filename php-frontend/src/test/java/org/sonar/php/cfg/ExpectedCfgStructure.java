@@ -137,7 +137,11 @@ class ExpectedCfgStructure {
           continue;
         }
 
-        FunctionCallTree blockFunction = getBlockFunctionCall(block.elements());
+        FunctionCallTree blockFunction = getBlockFunctionCall(block.elements().get(0));
+        if (blockFunction == null) {
+          throw new UnsupportedOperationException("CFG Block metadata must be the first statement in the block.");
+        }
+
         String id = getValue(blockFunction.callee());
         String[] pred = {};
         String[] succ = {};
@@ -170,28 +174,26 @@ class ExpectedCfgStructure {
       return result;
     }
 
-    private static FunctionCallTree getBlockFunctionCall(List<Tree> elements) {
-      for (Tree element : elements) {
-        ExpressionTree expressionTree;
-        if (element instanceof ExpressionStatementTree) {
-          expressionTree = ((ExpressionStatementTree) element).expression();
-        } else if (element instanceof ExpressionTree) {
-          expressionTree = (ExpressionTree) element;
-        } else {
-          continue;
-        }
-
-        if (!(expressionTree instanceof FunctionCallTree)) {
-          continue;
-        }
-        FunctionCallTree function = (FunctionCallTree) expressionTree;
-        if (function.arguments().isEmpty() ||
-            !(function.callee() instanceof NamespaceNameTree)) {
-          continue;
-        }
-        return function;
+    private static FunctionCallTree getBlockFunctionCall(Tree firstElement) {
+      ExpressionTree expressionTree;
+      if (firstElement instanceof ExpressionStatementTree) {
+        expressionTree = ((ExpressionStatementTree) firstElement).expression();
+      } else if (firstElement instanceof ExpressionTree) {
+        expressionTree = (ExpressionTree) firstElement;
+      } else {
+        return null;
       }
-      throw new UnsupportedOperationException("CFG Block metadata must be in the block elements");
+
+      if (!(expressionTree instanceof FunctionCallTree)) {
+        return null;
+      }
+      FunctionCallTree function = (FunctionCallTree) expressionTree;
+      if (function.arguments().isEmpty() ||
+        !(function.callee() instanceof NamespaceNameTree)) {
+        return null;
+      }
+      return function;
+
     }
 
     private static String[] getStrings(Tree tree) {

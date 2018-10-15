@@ -252,19 +252,26 @@ class ControlFlowGraphBuilder {
   }
 
   private PhpCfgBlock buildForStatement(ForStatementTree tree, PhpCfgBlock successor) {
+    // we need to reverse the 'update' and 'condition' and 'init' expressions
+    // because they are sequential inside the ForStatementTree
+    // (and not bottom-up like how we build the CFG)
+
     ForwardingBlock linkToCondition = createForwardingBlock();
     PhpCfgBlock updateBlock = createSimpleBlock(linkToCondition);
-    tree.update().forEach(updateBlock::addElement);
+    Lists.reverse(tree.update()).forEach(updateBlock::addElement);
 
     addBreakable(successor, updateBlock);
     PhpCfgBlock loopBodyBlock = buildSubFlow(tree.statements(), updateBlock);
     removeBreakable();
 
     PhpCfgBranchingBlock conditionBlock = createBranchingBlock(tree, loopBodyBlock, successor);
-    tree.condition().forEach(conditionBlock::addElement);
-    tree.init().forEach(conditionBlock::addElement);
+    Lists.reverse(tree.condition()).forEach(conditionBlock::addElement);
     linkToCondition.setSuccessor(conditionBlock);
-    return createSimpleBlock(conditionBlock);
+
+    PhpCfgBlock beforeFor = createSimpleBlock(conditionBlock);
+    Lists.reverse(tree.init()).forEach(beforeFor::addElement);
+
+    return beforeFor;
   }
 
   private PhpCfgBlock buildDoWhileStatement(DoWhileStatementTree tree, PhpCfgBlock successor) {

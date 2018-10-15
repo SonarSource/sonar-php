@@ -184,7 +184,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg("" +
       "before(succ = [cond]);" +
-      "for (cond( succ = [body, END]); ; updateBlock(succ=[cond])) {" +
+      "for (; cond( succ = [body, END]) ; updateBlock(succ = [cond])) {" +
       "  body( succ = [END]);" +
       "  break;" +
       "}");
@@ -214,7 +214,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg("" +
       "before(succ = [cond]);" +
-      "for (; cond( succ = [body, END]); update( succ=[cond])) {" +
+      "for (; cond( succ = [body, END]); update( succ = [cond])) {" +
       "  body( succ = [update]);" +
       "  continue;" +
       "  dead( succ = [update]);" +
@@ -256,7 +256,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg("" +
       "startBlock(succ = [outerCond]);" +
-      "for ($i=1 ; outerCond( succ = [forBody, END]); update(succ=[outerCond])) {" +
+      "for ($i=1 ; outerCond( succ = [forBody, END]); update(succ = [outerCond])) {" +
       "  forBody(succ = [doBody]);" +
       "  do {" +
       "    doBody( succ = [END]);" +
@@ -316,7 +316,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg("" +
       "startBlock(succ = [outerCond]);" +
-      "for ($i=1 ; outerCond( succ = [forBody, END]); outerUpdate(succ=[outerCond])) {" +
+      "for ($i=1 ; outerCond( succ = [forBody, END]); outerUpdate(succ = [outerCond])) {" +
       "  forBody(succ = [doBody]);" +
       "  do {" +
       "    doBody( succ = [outerUpdate] );" +
@@ -465,13 +465,13 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   @Test
   public void simple_for() {
     verifyBlockCfg("" +
-      "before(succ = [cond], elem = 1);" +
-      "for ($i=1, $j=1 ; $i < 1, $j < 1, cond(succ=[forBody, END], elem=5); update(succ=[cond], elem=2), $i++) {" +
+      "before(succ = [cond], elem = 3);" +
+      "for ($i=1, $j=1 ; cond(succ = [forBody, END], elem=3), $i < 1, $j < 1; update(succ = [cond], elem=2), $i++) {" +
       "  forBody( succ = [update], elem = 1 );" +
       "}");
     verifyBlockCfg("" +
-      "for ($i=1 ; cond(succ=[forBody, END], elem=2); $i++, $i++, update(succ=[cond], elem=3)) :" +
-      "  forBody(succ=[update], elem=1 );" +
+      "for (before(succ = [cond], elem = 2), $i=1; cond(succ = [forBody, END], elem=2), $i < 10; update(succ = [cond], elem = 2), $i++ ) :" +
+      "  forBody(succ = [update], elem=1 );" +
       "endfor;");
   }
 
