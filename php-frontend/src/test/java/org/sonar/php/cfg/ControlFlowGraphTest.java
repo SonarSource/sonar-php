@@ -852,23 +852,36 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   @Test
   public void simple_goto() {
     verifyBlockCfg("" +
-      "before( succ = [fooBlock] );" +
+      "before( succ = [fooBlock], elem = 2 );" +
       "goto fooLabel;" +
-      "dead ( succ = [fooBlock] );" +
+      "dead ( succ = [fooBlock], elem = 1 );" +
       "fooLabel:" +
-      "fooBlock( succ = [END]);");
+      "fooBlock( succ = [END], elem = 2);");
 
     verifyBlockCfg("" +
       "fooLabel:" +
-      "fooBlock( succ = [fooBlock] );" +
+      "fooBlock( succ = [fooBlock], elem = 3 );" +
       "goto fooLabel;" +
-      "dead ( succ = [END] );");
+      "dead ( succ = [END], elem = 1  );");
+  }
+
+  @Test
+  public void multiple_gotos_to_same_label() {
+    verifyBlockCfg("" +
+      "before( succ = [fooBlock], elem = 2 );" +
+      "goto fooLabel;" +
+      "deadOne( succ = [END], elem = 2 );" +
+      "return;" +
+      "fooLabel:" +
+      "fooBlock( succ = [fooBlock], elem = 3);" +
+      "goto fooLabel;" +
+      "deadTwo( succ = [END], elem = 1 );");
   }
 
   @Test
   public void goto_nested_one_level() {
     verifyBlockCfg("" +
-      "while ( cond( succ=[body, afterWhile] )) {" +
+      "while ( cond( succ = [body, afterWhile] )) {" +
       "  body( succ = [fooBlock] );" +
       "  goto fooLabel;" +
       "}" +

@@ -30,6 +30,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -72,8 +73,10 @@ class ControlFlowGraphBuilder {
 
   private final ArrayDeque<Breakable> breakables = new ArrayDeque<>();
   private final Deque<PhpCfgBlock> throwTargets = new ArrayDeque<>();
+  // key is label
   private final Map<String, PhpCfgBlock> labelledBlocks = new HashMap<>();
-  private final Map<String, PhpCfgBlock> gotosWithoutTarget = new HashMap<>();
+  // key is label, value is a list of blocks that jump to the label
+  private final Map<String, List<PhpCfgBlock>> gotosWithoutTarget = new HashMap<>();
 
   ControlFlowGraph createGraph(BlockTree body) {
     return createGraph(body.statements());
@@ -88,6 +91,7 @@ class ControlFlowGraphBuilder {
     throwTargets.clear();
     throwTargets.push(end);
     labelledBlocks.clear();
+    gotosWithoutTarget.clear();
     PhpCfgBlock start = build(items, createSimpleBlock(end));
     removeEmptyBlocks();
     blocks.add(end);
@@ -225,9 +229,10 @@ class ControlFlowGraphBuilder {
     String label = tree.label().text();
     labelledBlocks.put(label, currentBlock);
     currentBlock.addElement(tree);
-    PhpCfgBlock gotoWithoutTarget = gotosWithoutTarget.get(label);
-    if (gotoWithoutTarget != null) {
-      gotoWithoutTarget.replaceSuccessor(end, currentBlock);
+    List<PhpCfgBlock> gotoBlocks = gotosWithoutTarget.get(label);
+    if (gotoBlocks != null) {
+      gotoBlocks.forEach(gotoBlock -> gotoBlock.replaceSuccessor(end, currentBlock));
+      gotosWithoutTarget.remove(label);
     }
     // create the block for the code above the label
     return createSimpleBlock(currentBlock);
@@ -239,7 +244,8 @@ class ControlFlowGraphBuilder {
     PhpCfgBlock newBlock;
     if (gotoTarget == null) {
       newBlock = createSimpleBlock(end);
-      gotosWithoutTarget.put(label, newBlock);
+      List<PhpCfgBlock> gotosList = gotosWithoutTarget.computeIfAbsent(label, k -> new LinkedList<>());
+      gotosList.add(newBlock);
     } else {
       newBlock = createSimpleBlock(gotoTarget);
     }
