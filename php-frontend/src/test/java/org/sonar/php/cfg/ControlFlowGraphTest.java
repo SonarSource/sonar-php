@@ -54,6 +54,65 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test
+  public void different_statements() {
+    // empty statement
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); ;");
+
+    // yield statement
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); yield 42;");
+
+    // global statement
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); global $x;");
+
+    // static statement
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); static $x;");
+
+    // echo statement
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); echo($x);");
+
+    // echo statement
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); echo($x);");
+
+    // declare statement
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); declare (x);");
+
+    // inline html
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 1 ); ?> <html> <?php");
+
+    // unset statement
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); unset($x);");
+
+    // statement list
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); 1, 2;");
+
+    // function declaration
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); function foo(){}");
+
+    // class declaration
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); class Foo{}");
+
+    // interface declaration
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); interface Foo{}");
+
+    // trait declaration
+    verifyBlockCfg("" +
+      "block( succ = [END], elem = 2 ); trait Foo{}");
+  }
+
+  @Test
   public void try_stmt() {
     verifyBlockCfg("" +
       "try {" +

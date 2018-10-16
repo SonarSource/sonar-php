@@ -156,8 +156,21 @@ class ControlFlowGraphBuilder {
         return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
       case LABEL:
         return createLabelBlock((LabelTree) tree, currentBlock);
+      case EMPTY_STATEMENT:
+      case YIELD_STATEMENT:
+      case GLOBAL_STATEMENT:
+      case STATIC_STATEMENT:
+      case DECLARE_STATEMENT:
+      case UNSET_VARIABLE_STATEMENT:
+      case EXPRESSION_LIST_STATEMENT:
+      case FUNCTION_DECLARATION:
+      case CLASS_DECLARATION:
+      case INTERFACE_DECLARATION:
+      case TRAIT_DECLARATION:
       case EXPRESSION_STATEMENT:
         currentBlock.addElement(tree);
+        return currentBlock;
+      case INLINE_HTML:
         return currentBlock;
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
