@@ -57,7 +57,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   public void different_statements() {
     // empty statement
     verifyBlockCfg("" +
-      "block( succ = [END], elem = 2 ); ;");
+      "block( succ = [END], elem = 1 ); ;");
 
     // yield statement
     verifyBlockCfg("" +
@@ -106,6 +106,22 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     // trait declaration
     verifyBlockCfg("" +
       "block( succ = [END], elem = 2 ); trait Foo{}");
+
+    // namespace
+    verifyScriptTreeCfg("" +
+      "block( succ = [END], elem = 2 ); namespace NS;");
+
+    // use
+    verifyScriptTreeCfg("" +
+      "block( succ = [END], elem = 2 ); use function foo;");
+
+    // group use
+    verifyScriptTreeCfg("" +
+      "block( succ = [END], elem = 2 ); use My\\Project\\{Class1, Class2};");
+
+    // const declaration
+    verifyScriptTreeCfg("" +
+      "block( succ = [END], elem = 2 ); const A = 1;");
   }
 
   @Test
