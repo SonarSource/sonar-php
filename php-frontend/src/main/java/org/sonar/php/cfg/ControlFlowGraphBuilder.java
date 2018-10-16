@@ -41,6 +41,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
@@ -156,8 +157,21 @@ class ControlFlowGraphBuilder {
         return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
       case LABEL:
         return createLabelBlock((LabelTree) tree, currentBlock);
+      case EMPTY_STATEMENT:
+      case YIELD_STATEMENT:
+      case GLOBAL_STATEMENT:
+      case STATIC_STATEMENT:
+      case DECLARE_STATEMENT:
+      case UNSET_VARIABLE_STATEMENT:
+      case EXPRESSION_LIST_STATEMENT:
+      case FUNCTION_DECLARATION:
+      case CLASS_DECLARATION:
+      case INTERFACE_DECLARATION:
+      case TRAIT_DECLARATION:
       case EXPRESSION_STATEMENT:
         currentBlock.addElement(tree);
+        return currentBlock;
+      case INLINE_HTML:
         return currentBlock;
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
@@ -279,11 +293,15 @@ class ControlFlowGraphBuilder {
     if (argument == null) {
       return 1;
     }
-    if (!argument.is(Kind.NUMERIC_LITERAL)) {
+    ExpressionTree levelsExpression = argument;
+    if (levelsExpression.is(Kind.PARENTHESISED_EXPRESSION)) {
+      levelsExpression = ((ParenthesisedExpressionTree) levelsExpression).expression();
+    }
+    if (!levelsExpression.is(Kind.NUMERIC_LITERAL)) {
       throw exception(argument);
     }
     try {
-      int breakLevels = Integer.parseInt(((LiteralTree) argument).value());
+      int breakLevels = Integer.parseInt(((LiteralTree) levelsExpression).value());
       if (breakLevels == 0) {
         return 1;
       }
