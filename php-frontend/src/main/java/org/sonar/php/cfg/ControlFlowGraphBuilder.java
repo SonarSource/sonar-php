@@ -229,15 +229,13 @@ class ControlFlowGraphBuilder {
   private PhpCfgBlock buildThrowStatement(ThrowStatementTree tree, PhpCfgBlock successor) {
     // taking "latest" throw target is an estimation
     // In real a matching `catch` clause should be found (by exception type)
-    PhpCfgBlock simpleBlock = createSimpleBlock(throwTargets.peek());
-    simpleBlock.setSyntacticSuccessor(successor);
+    PhpCfgBlock simpleBlock = createBlockWithSyntacticSuccessor(throwTargets.peek(), successor);
     simpleBlock.addElement(tree);
     return simpleBlock;
   }
 
   private PhpCfgBlock buildReturnStatement(ReturnStatementTree tree, PhpCfgBlock successor) {
-    PhpCfgBlock simpleBlock = createSimpleBlock(end);
-    simpleBlock.setSyntacticSuccessor(successor);
+    PhpCfgBlock simpleBlock = createBlockWithSyntacticSuccessor(end, successor);
     simpleBlock.addElement(tree);
     return simpleBlock;
   }
@@ -260,27 +258,24 @@ class ControlFlowGraphBuilder {
     PhpCfgBlock gotoTarget = labelledBlocks.get(label);
     PhpCfgBlock newBlock;
     if (gotoTarget == null) {
-      newBlock = createSimpleBlock(end);
+      newBlock = createBlockWithSyntacticSuccessor(end, successor);
       List<PhpCfgBlock> gotosList = gotosWithoutTarget.computeIfAbsent(label, k -> new LinkedList<>());
       gotosList.add(newBlock);
     } else {
-      newBlock = createSimpleBlock(gotoTarget);
+      newBlock = createBlockWithSyntacticSuccessor(gotoTarget, successor);
     }
-    newBlock.setSyntacticSuccessor(successor);
     newBlock.addElement(tree);
     return newBlock;
   }
 
   private PhpCfgBlock buildBreakStatement(BreakStatementTree tree, PhpCfgBlock successor) {
-    PhpCfgBlock newBlock = createSimpleBlock(getBreakable(tree.argument(), tree).breakTarget);
-    newBlock.setSyntacticSuccessor(successor);
+    PhpCfgBlock newBlock = createBlockWithSyntacticSuccessor(getBreakable(tree.argument(), tree).breakTarget, successor);
     newBlock.addElement(tree);
     return newBlock;
   }
 
   private PhpCfgBlock buildContinueStatement(ContinueStatementTree tree, PhpCfgBlock successor) {
-    PhpCfgBlock newBlock = createSimpleBlock(getBreakable(tree.argument(), tree).continueTarget);
-    newBlock.setSyntacticSuccessor(successor);
+    PhpCfgBlock newBlock = createBlockWithSyntacticSuccessor(getBreakable(tree.argument(), tree).continueTarget, successor);
     newBlock.addElement(tree);
     return newBlock;
   }
@@ -445,6 +440,12 @@ class ControlFlowGraphBuilder {
 
   private PhpCfgBlock createSimpleBlock(PhpCfgBlock successor) {
     PhpCfgBlock block = new PhpCfgBlock(successor);
+    blocks.add(block);
+    return block;
+  }
+
+  private PhpCfgBlock createBlockWithSyntacticSuccessor(PhpCfgBlock successor, PhpCfgBlock syntacticSuccessor) {
+    PhpCfgBlock block = new PhpCfgBlock(successor, syntacticSuccessor);
     blocks.add(block);
     return block;
   }

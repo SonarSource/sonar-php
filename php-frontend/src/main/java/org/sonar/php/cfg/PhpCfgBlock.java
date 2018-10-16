@@ -45,6 +45,13 @@ class PhpCfgBlock implements CfgBlock {
     this.successor = successor;
   }
 
+  PhpCfgBlock(PhpCfgBlock successor, PhpCfgBlock syntacticSuccessor) {
+    Preconditions.checkArgument(successor != null, "Successor cannot be null");
+    Preconditions.checkArgument(syntacticSuccessor != null, "Syntactic successor cannot be null");
+    this.successor = successor;
+    this.syntacticSuccessor = syntacticSuccessor;
+  }
+
   PhpCfgBlock() {
     // needed by inheriting classes
   }
@@ -118,9 +125,5 @@ class PhpCfgBlock implements CfgBlock {
       }
     }
     return block;
-  }
-
-  public void setSyntacticSuccessor(PhpCfgBlock block) {
-    this.syntacticSuccessor = block;
   }
 }
