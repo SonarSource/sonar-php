@@ -75,25 +75,26 @@ class ControlFlowGraphBuilder {
   private final Map<String, PhpCfgBlock> labelledBlocks = new HashMap<>();
   // key is label, value is a list of blocks that jump to the label
   private final Map<String, List<PhpCfgBlock>> gotosWithoutTarget = new HashMap<>();
+  private final PhpCfgBlock start;
 
-  ControlFlowGraph createGraph(BlockTree body) {
-    return createGraph(body.statements());
-  }
-
-  ControlFlowGraph createGraph(ScriptTree scriptTree) {
-    return createGraph(scriptTree.statements());
-  }
-
-  private ControlFlowGraph createGraph(List<? extends Tree> items) {
-    breakables.clear();
-    throwTargets.clear();
+  ControlFlowGraphBuilder(List<? extends Tree> items) {
     throwTargets.push(end);
-    labelledBlocks.clear();
-    gotosWithoutTarget.clear();
-    PhpCfgBlock start = build(items, createSimpleBlock(end));
+    start = build(items, createSimpleBlock(end));
     removeEmptyBlocks();
     blocks.add(end);
-    return new ControlFlowGraph(blocks, start, end);
+    computePredecessors();
+  }
+
+  ControlFlowGraph getGraph() {
+    return new ControlFlowGraph(ImmutableSet.copyOf(blocks), start, end);
+  }
+
+  private void computePredecessors() {
+    for (PhpCfgBlock block : blocks) {
+      for (CfgBlock successor : block.successors()) {
+        ((PhpCfgBlock) successor).addPredecessor(block);
+      }
+    }
   }
 
   private void removeEmptyBlocks() {
