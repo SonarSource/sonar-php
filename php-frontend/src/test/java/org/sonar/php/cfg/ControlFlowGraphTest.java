@@ -75,10 +75,6 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     verifyBlockCfg("" +
       "block( succ = [END], elem = 2 ); echo($x);");
 
-    // echo statement
-    verifyBlockCfg("" +
-      "block( succ = [END], elem = 2 ); echo($x);");
-
     // declare statement
     verifyBlockCfg("" +
       "block( succ = [END], elem = 2 ); declare (x);");
