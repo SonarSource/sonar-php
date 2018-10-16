@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.tree;
 
 import com.google.common.annotations.Beta;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -114,6 +115,7 @@ public interface Tree {
 
   Kind getKind();
 
+  @Nullable
   Tree getParent();
 
   enum Kind implements GrammarRuleKey {
