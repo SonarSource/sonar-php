@@ -22,6 +22,7 @@ package org.sonar.php.cfg;
 
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**
@@ -35,6 +36,13 @@ public interface CfgBlock {
   Set<CfgBlock> predecessors();
 
   Set<CfgBlock> successors();
+
+  /**
+   * @return block following this one if no jump is applied
+   * Returns {@code null} if this block doesn't end with jump statement (break, continue, return, goto, throw)
+   */
+  @Nullable
+  CfgBlock syntacticSuccessor();
 
   List<Tree> elements();
 

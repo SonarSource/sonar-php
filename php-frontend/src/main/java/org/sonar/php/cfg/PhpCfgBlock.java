@@ -29,12 +29,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBlock implements CfgBlock {
 
   private Set<PhpCfgBlock> predecessors = new HashSet<>();
   private PhpCfgBlock successor;
+  private PhpCfgBlock syntacticSuccessor = null;
 
   private LinkedList<Tree> elements = new LinkedList<>();
 
@@ -57,6 +59,12 @@ class PhpCfgBlock implements CfgBlock {
     return ImmutableSet.of(successor);
   }
 
+  @Nullable
+  @Override
+  public CfgBlock syntacticSuccessor() {
+    return syntacticSuccessor;
+  }
+
   @Override
   public List<Tree> elements() {
     return Collections.unmodifiableList(elements);
@@ -73,7 +81,10 @@ class PhpCfgBlock implements CfgBlock {
    * we have to replace empty successors in the remaining blocks by non-empty successors.
    */
   void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
-    this.successor = replacement(successor, replacements);
+    successor = replacement(successor, replacements);
+    if (syntacticSuccessor != null) {
+      syntacticSuccessor = replacement(syntacticSuccessor, replacements);
+    }
   }
 
   /**
@@ -107,5 +118,9 @@ class PhpCfgBlock implements CfgBlock {
       }
     }
     return block;
+  }
+
+  public void setSyntacticSuccessor(PhpCfgBlock block) {
+    this.syntacticSuccessor = block;
   }
 }

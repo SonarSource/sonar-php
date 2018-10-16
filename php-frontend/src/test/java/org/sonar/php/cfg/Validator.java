@@ -111,6 +111,17 @@ class Validator {
         .withFailMessage(buildDebugMessage("successors", blockTestId, debugDotNotation))
         .containsOnlyElementsOf(expectedSucc);
     }
+
+    String expectedSyntSucc = expectedCfg.expectedSyntSucc(actualBlock);
+
+    if (expectedSyntSucc != null) {
+      assertThat(actualBlock.syntacticSuccessor())
+        .withFailMessage(buildDebugMessage("syntactic successor", blockTestId, debugDotNotation))
+        .isEqualTo(expectedCfg.cfgBlock(expectedSyntSucc));
+
+    } else {
+      assertThat(actualBlock.syntacticSuccessor()).withFailMessage(buildDebugMessage("syntactic successor", blockTestId, debugDotNotation)).isNull();
+    }
   }
 
   private static Set<CfgBlock> getCfgBlocksSet(Collection<String> testIds, ExpectedCfgStructure expectedCfg) {
