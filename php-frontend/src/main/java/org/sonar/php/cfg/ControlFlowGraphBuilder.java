@@ -157,7 +157,6 @@ class ControlFlowGraphBuilder {
         return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
       case LABEL:
         return createLabelBlock((LabelTree) tree, currentBlock);
-      case EMPTY_STATEMENT:
       case YIELD_STATEMENT:
       case GLOBAL_STATEMENT:
       case STATIC_STATEMENT:
@@ -168,10 +167,15 @@ class ControlFlowGraphBuilder {
       case CLASS_DECLARATION:
       case INTERFACE_DECLARATION:
       case TRAIT_DECLARATION:
+      case USE_STATEMENT:
+      case GROUP_USE_STATEMENT:
+      case CONSTANT_DECLARATION:
+      case NAMESPACE_STATEMENT:
       case EXPRESSION_STATEMENT:
         currentBlock.addElement(tree);
         return currentBlock;
       case INLINE_HTML:
+      case EMPTY_STATEMENT:
         return currentBlock;
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
