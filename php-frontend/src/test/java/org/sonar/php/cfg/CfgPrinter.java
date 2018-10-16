@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 class CfgPrinter {
@@ -57,6 +56,9 @@ class CfgPrinter {
           edgeLabel = "[label=" + branchingValue + "]";
         }
         sb.append(id + "->" + graphNodeIds.get(successor) + edgeLabel + ";");
+      }
+      if (block.syntacticSuccessor() != null) {
+        sb.append(id + "->" + graphNodeIds.get(block.syntacticSuccessor()) + "[style=dotted];");
       }
     }
 

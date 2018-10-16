@@ -81,6 +81,11 @@ class ExpectedCfgStructure {
     return getExpectation(block).expectedSuccessorIds;
   }
 
+  @Nullable
+  String expectedSyntSucc(CfgBlock block) {
+    return getExpectation(block).expectedSyntacticSuccessor;
+  }
+
   List<String> expectedPred(CfgBlock block) {
     return getExpectation(block).expectedPredecessorIds;
   }
@@ -102,6 +107,7 @@ class ExpectedCfgStructure {
 
   private class BlockExpectation {
     private final List<String> expectedSuccessorIds = new ArrayList<>();
+    private String expectedSyntacticSuccessor = null;
     private final List<String> expectedPredecessorIds = new ArrayList<>();
     private int expectedNumberOfElements = -1;
 
@@ -120,6 +126,10 @@ class ExpectedCfgStructure {
       return this;
     }
 
+    BlockExpectation withSyntacticSuccessor(@Nullable String syntacticSuccessor) {
+      expectedSyntacticSuccessor = syntacticSuccessor;
+      return this;
+    }
   }
 
   /**
@@ -145,6 +155,7 @@ class ExpectedCfgStructure {
         String id = getValue(blockFunction.callee());
         String[] pred = {};
         String[] succ = {};
+        String syntacticSuccessor = null;
         int elem = -1;
         for (ExpressionTree argument : blockFunction.arguments()) {
           if (!argument.is(Tree.Kind.ASSIGNMENT)) {
@@ -158,12 +169,15 @@ class ExpectedCfgStructure {
             pred = getStrings(assignment.value());
           } else if (isNamespaceTreeWithValue(name, "elem")) {
             elem = Integer.parseInt(getValue(assignment.value()));
+          } else if (isNamespaceTreeWithValue(name, "syntSucc")) {
+            syntacticSuccessor = getValue(assignment.value());
           }
         }
 
         if (id != null) {
           result.createExpectation(block, id)
             .withSuccessorsIds(succ)
+            .withSyntacticSuccessor(syntacticSuccessor)
             .withPredecessorIds(pred)
             .withElementNumber(elem);
         } else {

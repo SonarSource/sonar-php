@@ -29,18 +29,27 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBlock implements CfgBlock {
 
   private Set<PhpCfgBlock> predecessors = new HashSet<>();
   private PhpCfgBlock successor;
+  private PhpCfgBlock syntacticSuccessor = null;
 
   private LinkedList<Tree> elements = new LinkedList<>();
 
   PhpCfgBlock(PhpCfgBlock successor) {
     Preconditions.checkArgument(successor != null, "Successor cannot be null");
     this.successor = successor;
+  }
+
+  PhpCfgBlock(PhpCfgBlock successor, PhpCfgBlock syntacticSuccessor) {
+    Preconditions.checkArgument(successor != null, "Successor cannot be null");
+    Preconditions.checkArgument(syntacticSuccessor != null, "Syntactic successor cannot be null");
+    this.successor = successor;
+    this.syntacticSuccessor = syntacticSuccessor;
   }
 
   PhpCfgBlock() {
@@ -55,6 +64,12 @@ class PhpCfgBlock implements CfgBlock {
   @Override
   public Set<CfgBlock> successors() {
     return ImmutableSet.of(successor);
+  }
+
+  @Nullable
+  @Override
+  public CfgBlock syntacticSuccessor() {
+    return syntacticSuccessor;
   }
 
   @Override
@@ -73,7 +88,10 @@ class PhpCfgBlock implements CfgBlock {
    * we have to replace empty successors in the remaining blocks by non-empty successors.
    */
   void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
-    this.successor = replacement(successor, replacements);
+    successor = replacement(successor, replacements);
+    if (syntacticSuccessor != null) {
+      syntacticSuccessor = replacement(syntacticSuccessor, replacements);
+    }
   }
 
   /**
