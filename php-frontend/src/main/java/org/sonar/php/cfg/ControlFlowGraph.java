@@ -20,7 +20,7 @@
 
 package org.sonar.php.cfg;
 
-import java.util.Collections;
+import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -45,26 +45,20 @@ public class ControlFlowGraph {
 
   private final CfgBlock start;
   private final PhpCfgEndBlock end;
-  private final Set<PhpCfgBlock> blocks;
+  private final Set<CfgBlock> blocks;
 
-  ControlFlowGraph(Set<PhpCfgBlock> blocks, CfgBlock start, PhpCfgEndBlock end) {
+  ControlFlowGraph(ImmutableSet<CfgBlock> blocks, CfgBlock start, PhpCfgEndBlock end) {
     this.start = start;
     this.end = end;
     this.blocks = blocks;
-
-    for (PhpCfgBlock block : blocks) {
-      for (CfgBlock successor : block.successors()) {
-        ((PhpCfgBlock) successor).addPredecessor(block);
-      }
-    }
   }
 
   public static ControlFlowGraph build(BlockTree body) {
-    return new ControlFlowGraphBuilder().createGraph(body);
+    return new ControlFlowGraphBuilder(body.statements()).getGraph();
   }
 
   public static ControlFlowGraph build(ScriptTree scriptTree) {
-    return new ControlFlowGraphBuilder().createGraph(scriptTree);
+    return new ControlFlowGraphBuilder(scriptTree.statements()).getGraph();
   }
 
   public CfgBlock start() {
@@ -79,6 +73,6 @@ public class ControlFlowGraph {
    * Includes start and end blocks
    */
   public Set<CfgBlock> blocks() {
-    return Collections.unmodifiableSet(blocks);
+    return blocks;
   }
 }
