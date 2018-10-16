@@ -188,10 +188,9 @@ public class PHPSensor implements Sensor {
 
     } catch (RecognitionException e) {
       checkInterrupted(e);
-      LOG.error("Unable to parse file: " + inputFile.filename());
+      LOG.error("Unable to parse file [{}] at line {}", inputFile.uri(), e.getLine());
       LOG.error(e.getMessage());
       saveParsingIssue(context, e, inputFile);
-      return;
     } catch (Exception e) {
       checkInterrupted(e);
       throw new AnalysisException("Could not analyse " + inputFile.filename(), e);
