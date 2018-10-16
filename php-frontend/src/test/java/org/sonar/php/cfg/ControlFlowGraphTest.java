@@ -305,6 +305,12 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     verifyBlockCfg(String.format(breakInnerLoop, "1"));
 
     verifyBlockCfg("" +
+      "while (cond( succ = [body, END], elem = 1 )) {" +
+      "  body( succ = [END], elem = 2 );" +
+      "  break (1);" +
+      "}");
+
+    verifyBlockCfg("" +
       "while (outerCond( succ = [innerCond, END] )) {" +
       "  while (innerCond( succ = [ifCond, outerCond] )) {" +
       "    if (ifCond( succ = [body, innerCond] )) {" +
@@ -352,6 +358,12 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     verifyBlockCfg(String.format(continueInnerLoop, "0"));
     verifyBlockCfg(String.format(continueInnerLoop, "1"));
+
+    verifyBlockCfg("" +
+      "do {" +
+      "  body( succ = [cond] );" +
+      "  continue (0);" +
+      "} while (cond( succ = [body, END] ));");
 
     verifyBlockCfg("" +
       "while (outerCond( succ = [innerCond, END] )) {" +

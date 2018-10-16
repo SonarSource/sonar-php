@@ -41,6 +41,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.ParenthesisedExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
@@ -292,11 +293,15 @@ class ControlFlowGraphBuilder {
     if (argument == null) {
       return 1;
     }
-    if (!argument.is(Kind.NUMERIC_LITERAL)) {
+    ExpressionTree levelsExpression = argument;
+    if (levelsExpression.is(Kind.PARENTHESISED_EXPRESSION)) {
+      levelsExpression = ((ParenthesisedExpressionTree) levelsExpression).expression();
+    }
+    if (!levelsExpression.is(Kind.NUMERIC_LITERAL)) {
       throw exception(argument);
     }
     try {
-      int breakLevels = Integer.parseInt(((LiteralTree) argument).value());
+      int breakLevels = Integer.parseInt(((LiteralTree) levelsExpression).value());
       if (breakLevels == 0) {
         return 1;
       }
