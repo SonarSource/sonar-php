@@ -74,6 +74,7 @@ public class CheckList {
       CookieSensitiveDataCheck.class,
       CookiesSecureCheck.class,
       CryptographicKeySizeCheck.class,
+      DeadStoreCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
       DirectlyAccessingSuperGlobalCheck.class,
       DuplicateBranchImplementationCheck.class,
