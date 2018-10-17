@@ -97,7 +97,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     // class declaration
     verifyBlockCfg("" +
-      "block( succ = [END], elem = 2 ); class Foo{}");
+      "block( succ = [END], elem = 1 ); class Foo{}");
 
     // interface declaration
     verifyBlockCfg("" +
@@ -139,6 +139,29 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
         assertThat(cfg.blocks()).contains(cfgBlock.syntacticSuccessor());
       }
     }
+  }
+
+  @Test
+  public void replace_empty_start() {
+    ControlFlowGraph cfg = cfgForBlock("" +
+      "foreach($x as $y) {" +
+      "  return $y;" +
+      "}");
+
+    assertThat(cfg.blocks()).contains(cfg.start());
+    assertThat(cfg.start().elements()).isNotEmpty();
+  }
+
+  @Test
+  public void infinite_for() throws Exception {
+    ControlFlowGraph cfg = cfgForBlock("" +
+      "for(;;) {" +
+      " " +
+      "}");
+
+    assertThat(cfg.blocks()).hasSize(2);
+    assertThat(cfg.start().successors()).containsOnly(cfg.start(), cfg.end());
+    assertThat(cfg.start().elements()).isEmpty();
   }
 
   @Test
