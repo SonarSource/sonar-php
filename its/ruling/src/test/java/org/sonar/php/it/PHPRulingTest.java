@@ -78,10 +78,9 @@ public class PHPRulingTest {
       .setSourceEncoding("UTF-8")
       .setProperty("sonar.import_unknown_files", "true")
       .setProperty("sonar.analysis.mode", "preview")
-      .setProperty("sonar.issuesReport.html.enable", "true")
       .setProperty("dump.old", FileLocation.of("src/test/resources/expected").getFile().getAbsolutePath())
       .setProperty("dump.new", FileLocation.of("target/actual").getFile().getAbsolutePath())
-      .setProperty("sonar.cpd.skip", "true")
+      .setProperty("sonar.cpd.exclusions", "**/*")
       .setProperty("lits.differences", LITS_DIFFERENCES_FILE.getAbsolutePath());
       build.setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1000m");
     ORCHESTRATOR.executeBuild(build);
