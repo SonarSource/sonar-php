@@ -25,7 +25,7 @@ import org.sonar.plugins.php.CheckVerifier;
 public class CodeFollowingJumpStatementCheckTest {
 
   @Test
-  public void defaultValue() throws Exception {
+  public void test() throws Exception {
     CheckVerifier.verify(new CodeFollowingJumpStatementCheck(), "CodeFollowingJumpStatementCheck.php");
   }
 

@@ -1,24 +1,25 @@
 <?php
 
 function f() {
-  return;            // Noncompliant {{Remove the code after this "return".}}
-//^^^^^^
-  $a;
+  echo "hello";
+  return;
+//^^^^^^^>
+  $a;            // Noncompliant {{Remove this unreachable code.}}
+//^^^
 
   if (true) {
-    return;          // Noncompliant
-    $b;
+    return;
+    $b;         // Noncompliant
   } else {
     $c;
   }
 
   while (true) {
-    break;            // Noncompliant {{Remove the code after this "break".}}
-    $d;
+    break;
+    $d;            // Noncompliant
 
-    continue;         // Noncompliant {{Remove the code after this "continue".}}
-//  ^^^^^^^^
-    $e;
+    continue;
+    $e;            // Noncompliant
 
     if (true) {
       break;
@@ -38,8 +39,8 @@ function f() {
 
   switch (a) {
   case 1: {
-    break;            // Noncompliant
-    $e;
+    break;
+    $e;  // Noncompliant
   }
   case 2:
     break;       // OK
@@ -51,8 +52,8 @@ function f() {
 
   try {
     $h;
-    throw ("MyException");          // Noncompliant
-    $i;
+    throw ("MyException");
+    $i;          // Noncompliant
   } catch (Exception $e) {
     $j;
     throw ("MyException");
@@ -67,15 +68,18 @@ function f() {
   }
 
   if (true)
-    return;      // OK
+    return;
+//  ^^^^^^^>
   else
-    return;      // OK
+    return;
+//  ^^^^^^^>
 
-  $n; // TODO: NOK - both if branches returns, so this is also unreachable
+  $n; // Noncompliant
+//^^^
 
-  return;       // OK
+  return;
 
-  function f(){
+  function f(){ // Noncompliant
   }
 
 }
@@ -85,8 +89,8 @@ function f2() {
 }
 
 function f3() {
-  return;;            // Noncompliant
-  $x;
+  return;;
+  $x;            // Noncompliant
 }
 
 function tagAfterReturn() {
@@ -101,8 +105,8 @@ function breakAfterJump() {
       break;
     case 1:
       return "y";
-      break; // Noncompliant
-      foo();
+      break;
+      foo(); // Noncompliant
     default:
       return "z";
       break;
@@ -120,6 +124,60 @@ function labeledStatement() {
     somethingElse();
 }
 
-return;         // Noncompliant
+return;
 
-if (true) {}
+if (true) {}         // Noncompliant
+
+function foreachLoop(){
+    foreach ($loaders as $loader) {
+        return foo($loader);
+    }
+
+    return false;
+}
+
+function classIsNotDead() {
+  return new A();
+
+  class A {}
+}
+
+function functionIsDead() {
+  return 42;
+
+  function foo() {}// Noncompliant
+}
+
+function invalidJump() {
+  continue;
+}
+
+$functionExpression = function() {
+  switch ($x) {
+     case 1:
+       return 1;
+     case 2:
+       return 2;
+     default:
+       return 0;
+  }
+
+  return 42; // Noncompliant
+};
+
+class A {
+  function methodWithoutBody();
+  function method() {
+    return 42;
+    echo 42; // Noncompliant
+  }
+}
+
+function return_in_try() {
+  try {
+    foo();
+    return;
+  } catch (Exp $e) {
+    dosmth();
+  }
+}
