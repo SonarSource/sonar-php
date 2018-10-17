@@ -154,6 +154,7 @@ public class CheckList {
       PhpSapiNameFunctionUsageCheck.class,
       RandomGeneratorCheck.class,
       RedundantFinalCheck.class,
+      RedundantJumpCheck.class,
       RedundantParenthesesCheck.class,
       ReferenceInFunctionCallCheck.class,
       RequireIncludeInstructionsUsageCheck.class,
