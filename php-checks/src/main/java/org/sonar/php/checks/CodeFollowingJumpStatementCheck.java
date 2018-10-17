@@ -19,66 +19,88 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableList;
+import com.sonar.sslr.api.RecognitionException;
 import java.util.List;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.AbstractStatementsCheck;
-import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.php.cfg.CfgBlock;
+import org.sonar.php.cfg.ControlFlowGraph;
+import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 @Rule(key = CodeFollowingJumpStatementCheck.KEY)
-public class CodeFollowingJumpStatementCheck extends AbstractStatementsCheck {
+public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
+
+  private static final Logger LOG = Loggers.get(CodeFollowingJumpStatementCheck.class);
 
   public static final String KEY = "S1763";
-  private static final String MESSAGE = "Remove the code after this \"%s\".";
+  private static final String MESSAGE = "Remove this unreachable code.";
 
-  private static final Kind[] JUMP_KINDS = {
-    Kind.BREAK_STATEMENT,
-    Kind.RETURN_STATEMENT,
-    Kind.CONTINUE_STATEMENT,
-    Kind.THROW_STATEMENT
-  };
-
-  private static final Kind[] NO_ACTION_KINDS = {
-    Kind.EMPTY_STATEMENT,
-    Kind.CLASS_DECLARATION,
-    Kind.FUNCTION_DECLARATION,
-    Kind.INTERFACE_DECLARATION,
-    Kind.TRAIT_DECLARATION,
-    Kind.NAMESPACE_STATEMENT,
-    Kind.USE_STATEMENT,
-    Kind.CONSTANT_DECLARATION,
-    Kind.INLINE_HTML
-  };
+  @Override
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.<Kind>builder()
+      .addAll(CheckUtils.FUNCTION_KINDS)
+      .add(Kind.SCRIPT)
+      .build();
+  }
 
   @Override
   public void visitNode(Tree tree) {
-    List<StatementTree> statements = getStatements(tree);
-
-    for (int i = 0; i < statements.size() - 1; i++) {
-      StatementTree currentStatement = statements.get(i);
-
-      if (currentStatement.is(JUMP_KINDS) && hasActionStatement(statements.subList(i + 1, statements.size()), tree)) {
-        String message = String.format(MESSAGE, ((PHPTree) currentStatement).getFirstToken().text());
-        context().newIssue(this, ((PHPTree) currentStatement).getFirstToken(), message);
+    ControlFlowGraph cfg = null;
+    try {
+      switch (tree.getKind()) {
+        case METHOD_DECLARATION:
+          if (((MethodDeclarationTree) tree).body().is(Kind.BLOCK)) {
+            cfg = ControlFlowGraph.build((BlockTree) ((MethodDeclarationTree) tree).body());
+          }
+          break;
+        case FUNCTION_DECLARATION:
+          cfg = ControlFlowGraph.build(((FunctionDeclarationTree) tree).body());
+          break;
+        case FUNCTION_EXPRESSION:
+          cfg = ControlFlowGraph.build(((FunctionExpressionTree) tree).body());
+          break;
+        case SCRIPT:
+          cfg = ControlFlowGraph.build((ScriptTree) tree);
+          break;
+        default:
+          throw new IllegalStateException("Unexpected tree kind " + tree.getKind());
       }
+    } catch (RecognitionException e) {
+      LOG.warn("[Rule {}] Failed to build control flow graph for file [{}] at line {}",
+        KEY,
+        context().getPhpFile().toString(),
+        e.getLine());
     }
 
+    if (cfg != null) {
+      checkCfg(cfg);
+    }
   }
 
-  private static boolean hasActionStatement(List<StatementTree> statements, Tree parent) {
-    if (parent.is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE) && statements.get(0).is(Kind.BREAK_STATEMENT)) {
-      return false;
-    }
-    for (StatementTree statement : statements) {
-      if (statement.is(Kind.LABEL)) {
-        return false;
-      } else if (!statement.is(NO_ACTION_KINDS)) {
-        return true;
+  private void checkCfg(ControlFlowGraph cfg) {
+    for (CfgBlock cfgBlock : cfg.blocks()) {
+      if (cfgBlock.predecessors().isEmpty() && !cfgBlock.equals(cfg.start()) && !cfgBlock.elements().isEmpty()) {
+        Tree firstElement = cfgBlock.elements().get(0);
+        if (firstElement.is(Kind.BREAK_STATEMENT) && firstElement.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE)) {
+          continue;
+        }
+
+        PreciseIssue issue = context().newIssue(this, firstElement, MESSAGE);
+        cfg.blocks().stream()
+          .filter(block -> cfgBlock.equals(block.syntacticSuccessor()))
+          .forEach(block -> issue.secondary(block.elements().get(block.elements().size() - 1), null));
       }
     }
-    return false;
   }
-
 }
