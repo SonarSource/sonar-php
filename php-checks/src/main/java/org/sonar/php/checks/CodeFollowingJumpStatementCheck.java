@@ -20,69 +20,29 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.RecognitionException;
 import java.util.List;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 import org.sonar.php.cfg.CfgBlock;
 import org.sonar.php.cfg.ControlFlowGraph;
-import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
-import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
-import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
-import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
 @Rule(key = CodeFollowingJumpStatementCheck.KEY)
 public class CodeFollowingJumpStatementCheck extends PHPSubscriptionCheck {
 
-  private static final Logger LOG = Loggers.get(CodeFollowingJumpStatementCheck.class);
-
   public static final String KEY = "S1763";
   private static final String MESSAGE = "Remove this unreachable code.";
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.<Kind>builder()
-      .addAll(CheckUtils.FUNCTION_KINDS)
-      .add(Kind.SCRIPT)
-      .build();
+    return ImmutableList.copyOf(ControlFlowGraph.KINDS_WITH_CONTROL_FLOW);
   }
 
   @Override
   public void visitNode(Tree tree) {
-    ControlFlowGraph cfg = null;
-    try {
-      switch (tree.getKind()) {
-        case METHOD_DECLARATION:
-          if (((MethodDeclarationTree) tree).body().is(Kind.BLOCK)) {
-            cfg = ControlFlowGraph.build((BlockTree) ((MethodDeclarationTree) tree).body());
-          }
-          break;
-        case FUNCTION_DECLARATION:
-          cfg = ControlFlowGraph.build(((FunctionDeclarationTree) tree).body());
-          break;
-        case FUNCTION_EXPRESSION:
-          cfg = ControlFlowGraph.build(((FunctionExpressionTree) tree).body());
-          break;
-        case SCRIPT:
-          cfg = ControlFlowGraph.build((ScriptTree) tree);
-          break;
-        default:
-          throw new IllegalStateException("Unexpected tree kind " + tree.getKind());
-      }
-    } catch (RecognitionException e) {
-      LOG.warn("[Rule {}] Failed to build control flow graph for file [{}] at line {}",
-        KEY,
-        context().getPhpFile().toString(),
-        e.getLine());
-    }
-
+    ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
     if (cfg != null) {
       checkCfg(cfg);
     }
