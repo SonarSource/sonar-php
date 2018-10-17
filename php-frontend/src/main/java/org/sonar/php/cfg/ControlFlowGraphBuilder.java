@@ -76,7 +76,7 @@ class ControlFlowGraphBuilder {
   private final Map<String, PhpCfgBlock> labelledBlocks = new HashMap<>();
   // key is label, value is a list of blocks that jump to the label
   private final Map<String, List<PhpCfgBlock>> gotosWithoutTarget = new HashMap<>();
-  private final PhpCfgBlock start;
+  private PhpCfgBlock start;
 
   ControlFlowGraphBuilder(List<? extends Tree> items) {
     throwTargets.push(end);
@@ -112,6 +112,8 @@ class ControlFlowGraphBuilder {
     for (PhpCfgBlock block : blocks) {
       block.replaceSuccessors(emptyBlockReplacements);
     }
+
+    start = emptyBlockReplacements.getOrDefault(start, start);
   }
 
   private PhpCfgBlock build(List<? extends Tree> trees, PhpCfgBlock successor) {
@@ -164,7 +166,6 @@ class ControlFlowGraphBuilder {
       case UNSET_VARIABLE_STATEMENT:
       case EXPRESSION_LIST_STATEMENT:
       case FUNCTION_DECLARATION:
-      case CLASS_DECLARATION:
       case INTERFACE_DECLARATION:
       case TRAIT_DECLARATION:
       case USE_STATEMENT:
@@ -176,6 +177,7 @@ class ControlFlowGraphBuilder {
         return currentBlock;
       case INLINE_HTML:
       case EMPTY_STATEMENT:
+      case CLASS_DECLARATION:
         return currentBlock;
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
