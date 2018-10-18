@@ -56,8 +56,11 @@ public class ControlFlowGraph {
 
   private static final Logger LOG = Loggers.get(ControlFlowGraph.class);
 
-  public static final Set<Tree.Kind> KINDS_WITH_CONTROL_FLOW = Sets.immutableEnumSet(Tree.Kind.FUNCTION_DECLARATION,
-    Tree.Kind.FUNCTION_EXPRESSION, Tree.Kind.METHOD_DECLARATION, Tree.Kind.SCRIPT);
+  public static final Set<Tree.Kind> KINDS_WITH_CONTROL_FLOW = Sets.immutableEnumSet(
+    Tree.Kind.FUNCTION_DECLARATION,
+    Tree.Kind.FUNCTION_EXPRESSION,
+    Tree.Kind.METHOD_DECLARATION,
+    Tree.Kind.SCRIPT);
 
   private final CfgBlock start;
   private final PhpCfgEndBlock end;

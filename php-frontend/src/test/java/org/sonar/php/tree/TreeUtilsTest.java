@@ -19,6 +19,7 @@
  */
 package org.sonar.php.tree;
 
+import java.util.EnumSet;
 import org.junit.Test;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
@@ -40,6 +41,10 @@ public class TreeUtilsTest {
     StatementTree statementTree = ((CompilationUnitTree) tree).script().statements().get(0);
     assertThat(isDescendant(statementTree, tree)).isTrue();
     assertThat(isDescendant(tree, statementTree)).isFalse();
+
+    assertThat(isDescendant(tree, tree)).isTrue();
+    assertThat(isDescendant(statementTree, statementTree)).isTrue();
+
   }
 
   @Test
@@ -47,7 +52,8 @@ public class TreeUtilsTest {
     Tree tree = PHPParserBuilder.createParser().parse("<?= function foo() {for(;;) {} } ?>");
     FunctionDeclarationTree func = (FunctionDeclarationTree) ((CompilationUnitTreeImpl) tree).script().statements().get(0);
     StatementTree statementTree = func.body().statements().get(0);
-    assertThat(findAncestorWithKind(statementTree, singletonList(Tree.Kind.FUNCTION_DECLARATION))).isEqualTo(func);
+    assertThat(findAncestorWithKind(statementTree, EnumSet.of(Tree.Kind.FUNCTION_DECLARATION))).isEqualTo(func);
+    assertThat(findAncestorWithKind(statementTree, EnumSet.of(Tree.Kind.SCRIPT, Tree.Kind.FUNCTION_DECLARATION))).isEqualTo(func);
     assertThat(findAncestorWithKind(statementTree, singletonList(Tree.Kind.WHILE_STATEMENT))).isNull();
 
     assertThat(findAncestorWithKind(func, singletonList(Tree.Kind.FUNCTION_DECLARATION))).isEqualTo(func);

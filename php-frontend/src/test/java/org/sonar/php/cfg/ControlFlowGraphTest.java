@@ -1160,9 +1160,9 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test
   public void test_buildCFG() {
-    CompilationUnitTree tree = parse("<?php\n" +
-        "function foo() {\n" +
-        "$expr = function() {echo 'Hello';};\n" +
+    CompilationUnitTree tree = parse("<?php " +
+        "function foo() {" +
+        "    $expr = function() {echo 'Hello';};" +
         "}" +
         "echo 'Hello';",
       PHPLexicalGrammar.COMPILATION_UNIT);
@@ -1184,12 +1184,12 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test
   public void test_buildCFG_with_method() {
-    CompilationUnitTree tree = parse("<?php\n" +
-        "class A {\n" +
-        "function foo() {\n" +
-        "echo 'Hello';" +
-        "}" +
-        "abstract function bar();" +
+    CompilationUnitTree tree = parse("<?php " +
+        "class A {" +
+        "    function foo() {" +
+        "        echo 'Hello';" +
+        "    }" +
+        "    abstract function bar();" +
         "}",
       PHPLexicalGrammar.COMPILATION_UNIT);
     ClassDeclarationTree cls = (ClassDeclarationTree) tree.script().statements().get(0);
@@ -1200,11 +1200,28 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     assertThat(cfg.start().elements().get(0)).isEqualTo(echo);
 
     MethodDeclarationTree abstractMethod = (MethodDeclarationTree) cls.members().get(1);
-    cfg = ControlFlowGraph.build(abstractMethod.body(), checkContext);
+    cfg = ControlFlowGraph.build(abstractMethod, checkContext);
+    assertThat(cfg).isNull();
+  }
+
+  @Test
+  public void test_cfg_failure_logs() {
+    CompilationUnitTree tree = parse("<?php\n" +
+        "function foo() {\n" +
+        "     break;\n" +
+        "}\n",
+      PHPLexicalGrammar.COMPILATION_UNIT);
+    FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
+    ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
     assertThat(cfg).isNull();
 
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 4");
-    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Unexpected tree kind TOKEN");
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2");
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build CFG");
+    logTester.clear();
+
+    cfg = ControlFlowGraph.build(func, checkContext);
+    assertThat(cfg).isNull();
+    assertThat(logTester.logs()).isEmpty();
   }
 
   private void verifyBlockCfg(String functionBody) {

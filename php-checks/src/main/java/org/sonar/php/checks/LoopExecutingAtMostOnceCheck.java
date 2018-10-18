@@ -31,11 +31,13 @@ import org.sonar.php.cfg.ControlFlowGraph;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
@@ -53,19 +55,23 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
     Tree.Kind.WHILE_STATEMENT,
     Tree.Kind.DO_WHILE_STATEMENT,
     Tree.Kind.FOR_STATEMENT,
-    Tree.Kind.FOREACH_STATEMENT);
+    Tree.Kind.FOREACH_STATEMENT,
+    Tree.Kind.ALTERNATIVE_WHILE_STATEMENT,
+    Tree.Kind.ALTERNATIVE_FOR_STATEMENT,
+    Tree.Kind.ALTERNATIVE_FOREACH_STATEMENT
+    );
 
-  private ListMultimap<Tree, Tree> reportedLoops = ArrayListMultimap.create();
+  private ListMultimap<Tree, Tree> jumpsByLoop = ArrayListMultimap.create();
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    reportedLoops.clear();
+    jumpsByLoop.clear();
     super.visitCompilationUnit(tree);
     reportIssues();
   }
 
   private void reportIssues() {
-    reportedLoops.asMap().forEach((loop, jumps) -> {
+    jumpsByLoop.asMap().forEach((loop, jumps) -> {
       PreciseIssue preciseIssue = context().newIssue(this, ((PHPTree) loop).getFirstToken(), MESSAGE);
       jumps.forEach(jump -> preciseIssue.secondary(jump, "loop exit"));
     });
@@ -94,23 +100,38 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
   private void checkJump(Tree tree) {
     Tree loop = findAncestorWithKind(tree, LOOPS);
     if (loop != null && !canExecuteMoreThanOnce(loop) && !isForEachReturningFirstElement(loop, tree)) {
-      reportedLoops.put(loop, tree);
+      jumpsByLoop.put(loop, tree);
     }
   }
 
   private static boolean isForEachReturningFirstElement(Tree loop, Tree jump) {
-    if (!loop.is(Tree.Kind.FOREACH_STATEMENT) || !jump.is(Tree.Kind.RETURN_STATEMENT)) {
+    if (!loop.is(Tree.Kind.FOREACH_STATEMENT, Tree.Kind.ALTERNATIVE_FOREACH_STATEMENT) || !jump.is(Tree.Kind.RETURN_STATEMENT)) {
       return false;
     }
     ReturnStatementTree returnTree = (ReturnStatementTree) jump;
     ForEachStatementTree forEachTree = (ForEachStatementTree) loop;
+    if (hasMoreThanOneStatement(forEachTree)) {
+      return false;
+    }
     return areSyntacticallyEquivalent(returnTree.expression(), forEachTree.value())
       || areSyntacticallyEquivalent(returnTree.expression(), forEachTree.key());
+  }
+
+  private static boolean hasMoreThanOneStatement(ForEachStatementTree forEach) {
+    if (forEach.statements().size() > 1) {
+      return true;
+    }
+    StatementTree body = forEach.statements().get(0);
+    if (body.is(Tree.Kind.BLOCK)) {
+      return ((BlockTree) body).statements().size() > 1;
+    }
+    return false;
   }
 
   private boolean canExecuteMoreThanOnce(Tree loop) {
     Tree treeWithFlow = findAncestorWithKind(loop, ControlFlowGraph.KINDS_WITH_CONTROL_FLOW);
     if (treeWithFlow == null) {
+      // should never happen
       return true;
     }
     ControlFlowGraph cfg = ControlFlowGraph.build(treeWithFlow, context());
@@ -134,7 +155,7 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
       }
       Tree lastElement = Iterables.getLast(predecessor.elements());
 
-      if (loop.is(Tree.Kind.FOR_STATEMENT)) {
+      if (loop.is(Tree.Kind.FOR_STATEMENT, Tree.Kind.ALTERNATIVE_FOR_STATEMENT)) {
         ForStatementTree forTree = (ForStatementTree) loop;
         if (!forTree.update().isEmpty()
           && Iterables.getLast(forTree.update()).equals(lastElement)

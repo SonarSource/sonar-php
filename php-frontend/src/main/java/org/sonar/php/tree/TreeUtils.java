@@ -40,13 +40,9 @@ public class TreeUtils {
   @CheckForNull
   public static Tree findAncestorWithKind(Tree tree, Collection<Tree.Kind> kinds) {
     Tree parent = tree;
-
     while (parent != null && !kinds.contains(parent.getKind())) {
       parent = parent.getParent();
     }
-    if (parent != null) {
-      return parent;
-    }
-    return null;
+    return parent;
   }
 }
