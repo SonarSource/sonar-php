@@ -1076,8 +1076,21 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "    default: " +
       "        default_(succ = [after]);" +
       "}" +
-      "after(succ = [END]);"
-    );
+      "after(succ = [END]);");
+
+    verifyBlockCfg("" +
+      "before(succ = [case1]);" +
+      "switch ($expr) :" +
+      "    case case1(succ = [case1Body,case2]):" +
+      "        case1Body(succ = [after], syntSucc = case2Body);" +
+      "        break;" +
+      "    case case2(succ = [case2Body,default_]):" +
+      "        case2Body(succ = [after], syntSucc = default_);" +
+      "        break;" +
+      "    default: " +
+      "        default_(succ = [after]);" +
+      "endswitch;" +
+      "after(succ = [END]);");
   }
 
   @Test

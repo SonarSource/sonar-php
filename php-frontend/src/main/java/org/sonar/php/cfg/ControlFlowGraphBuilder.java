@@ -156,6 +156,7 @@ class ControlFlowGraphBuilder {
       case BLOCK:
         return buildBlock((BlockTree) tree, currentBlock);
       case SWITCH_STATEMENT:
+      case ALTERNATIVE_SWITCH_STATEMENT:
         return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
       case LABEL:
         return createLabelBlock((LabelTree) tree, currentBlock);
