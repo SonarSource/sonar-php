@@ -332,9 +332,6 @@ function anonymous_class() {
 }
 
 function nested_compound_assignment_is_read() {
-  $x1 = 42;
-  foo($x1 += 0);
-
   $x2 = 42; // Noncompliant
   foo($x2 = 0);
 
@@ -347,4 +344,10 @@ function nested_compound_assignment_is_read() {
 
   $x6 = 42; // Noncompliant
   $x6 += 43;
+
+  $x1 = 42;
+  foo($x1 += 0);
+
+  $x7 = 42;
+  return $x7 += 0;
 }

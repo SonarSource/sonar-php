@@ -31,6 +31,7 @@ import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -85,7 +86,7 @@ public class ReadWriteUsages {
 
     @Override
     public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-      if (tree.getParent() instanceof ExpressionTree && !tree.operator().startsWith("=")) {
+      if (!tree.getParent().is(Kind.EXPRESSION_STATEMENT) && !tree.operator().startsWith("=")) {
         // compound assignment used as operand
         visitReadAssignedVariable(tree.variable());
       } else {
