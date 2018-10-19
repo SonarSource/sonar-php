@@ -31,6 +31,7 @@ import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
@@ -47,6 +48,7 @@ public class ReadWriteUsages {
 
   private final SymbolTable symbolTable;
   private final Set<SyntaxToken> writes = new HashSet<>();
+  private final Set<SyntaxToken> readAssignment = new HashSet<>();
   private final Set<SyntaxToken> declarations = new HashSet<>();
   private final ListMultimap<Symbol,Symbol> inheritedVariablesByParent = ArrayListMultimap.create();
   private final Map<Symbol,Symbol> parentSymbolByInheritedReference = new HashMap<>();
@@ -66,7 +68,8 @@ public class ReadWriteUsages {
     List<SyntaxToken> allReferences = new ArrayList<>();
     allReferences.add(symbol.declaration().token());
     allReferences.addAll(symbol.usages());
-    return allReferences.stream().anyMatch(t -> !writes.contains(t) && !declarations.contains(t));
+    return allReferences.stream()
+      .anyMatch(t -> (!writes.contains(t) && !declarations.contains(t)) || readAssignment.contains(t));
   }
 
   private boolean hasParentWhichIsRead(Symbol symbol) {
@@ -83,7 +86,12 @@ public class ReadWriteUsages {
 
     @Override
     public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-      visitAssignedVariable(tree.variable());
+      if (!tree.getParent().is(Kind.EXPRESSION_STATEMENT) && !tree.operator().startsWith("=")) {
+        // compound assignment used as operand
+        visitReadAssignedVariable(tree.variable());
+      } else {
+        visitAssignedVariable(tree.variable());
+      }
       super.visitAssignmentExpression(tree);
     }
 
@@ -108,6 +116,15 @@ public class ReadWriteUsages {
         return;
       }
       writes.add(((VariableIdentifierTree) tree).token());
+    }
+
+    private void visitReadAssignedVariable(Tree tree) {
+      if (!tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+        return;
+      }
+      SyntaxToken token = ((VariableIdentifierTree) tree).token();
+      writes.add(token);
+      readAssignment.add(token);
     }
 
     @Override
