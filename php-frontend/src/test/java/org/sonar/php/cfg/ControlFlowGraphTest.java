@@ -20,38 +20,67 @@
 package org.sonar.php.cfg;
 
 import com.sonar.sslr.api.RecognitionException;
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
+import org.sonar.php.tree.visitors.PHPCheckContext;
+import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.StatementTree;
+import org.sonar.plugins.php.api.visitors.CheckContext;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * This CFG Test uses a meta-language to specify the expected structure of the CFG.
- *
+ * <p>
  * Convention:
- *
+ * <p>
  * 1. the metadata is specified as a function call with the form:
- *
+ * <p>
  * {@code blockId( succ = [1,2], pred = [3], elem = 1 ); }
  * where the argument is a bracketed array with 3 elements:
  * - 'succ' is a bracketed array of expected successor ids. For branching blocks, the true successor must be first.
  * - 'pred' [optional] is a bracketed array of expected predecessor ids
  * - 'elem' [optional] is the number of expected elements in the block
- *
+ * <p>
  * 2. each basic block must contain a function call with this structure as the first statement
  * - exception: a Label is before the block function call
- *
+ * <p>
  * 3. the name of the function is the identifier of the basic block
- *
+ * <p>
  * Also check {@link ExpectedCfgStructure}
  */
 public class ControlFlowGraphTest extends PHPTreeModelTest {
+
+  @org.junit.Rule
+  public LogTester logTester = new LogTester();
+
+  private CheckContext checkContext;
+
+  @Before
+  public void setUp() throws Exception {
+    PhpFile file = mock(PhpFile.class);
+    when(file.toString()).thenReturn("mock.php");
+    checkContext = new PHPCheckContext(file, mock(CompilationUnitTreeImpl.class), mock(SymbolTable.class));
+  }
 
   @Test
   public void different_statements() {
@@ -1142,6 +1171,72 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     );
   }
 
+  @Test
+  public void test_buildCFG() {
+    CompilationUnitTree tree = parse("<?php " +
+        "function foo() {" +
+        "    $expr = function() {echo 'Hello';};" +
+        "}" +
+        "echo 'Hello';",
+      PHPLexicalGrammar.COMPILATION_UNIT);
+    FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
+    ExpressionStatementTree expr = (ExpressionStatementTree) func.body().statements().get(0);
+    ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
+    assertThat(cfg.start().elements().get(0)).isEqualTo(expr);
+
+    FunctionExpressionTree funcExpr = ((FunctionExpressionTree) ((AssignmentExpressionTree) expr.expression()).value());
+    StatementTree echo = funcExpr.body().statements().get(0);
+    cfg = ControlFlowGraph.build(funcExpr, checkContext);
+    assertThat(cfg.start().elements().get(0)).isEqualTo(echo);
+
+    StatementTree scriptEcho = tree.script().statements().get(1);
+    cfg = ControlFlowGraph.build(tree.script(), checkContext);
+    assertThat(cfg.start().elements().get(0)).isEqualTo(func);
+    assertThat(cfg.start().elements().get(1)).isEqualTo(scriptEcho);
+  }
+
+  @Test
+  public void test_buildCFG_with_method() {
+    CompilationUnitTree tree = parse("<?php " +
+        "class A {" +
+        "    function foo() {" +
+        "        echo 'Hello';" +
+        "    }" +
+        "    abstract function bar();" +
+        "}",
+      PHPLexicalGrammar.COMPILATION_UNIT);
+    ClassDeclarationTree cls = (ClassDeclarationTree) tree.script().statements().get(0);
+    MethodDeclarationTree method = (MethodDeclarationTree) cls.members().get(0);
+    StatementTree echo = ((BlockTree) method.body()).statements().get(0);
+
+    ControlFlowGraph cfg = ControlFlowGraph.build(method, checkContext);
+    assertThat(cfg.start().elements().get(0)).isEqualTo(echo);
+
+    MethodDeclarationTree abstractMethod = (MethodDeclarationTree) cls.members().get(1);
+    cfg = ControlFlowGraph.build(abstractMethod, checkContext);
+    assertThat(cfg).isNull();
+  }
+
+  @Test
+  public void test_cfg_failure_logs() {
+    CompilationUnitTree tree = parse("<?php\n" +
+        "function foo() {\n" +
+        "     break;\n" +
+        "}\n",
+      PHPLexicalGrammar.COMPILATION_UNIT);
+    FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
+    ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
+    assertThat(cfg).isNull();
+
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build control flow graph for file [mock.php] at line 2");
+    assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build CFG");
+    logTester.clear();
+
+    // testing mechanism avoiding reporting failure multiple times for the same tree
+    cfg = ControlFlowGraph.build(func, checkContext);
+    assertThat(cfg).isNull();
+    assertThat(logTester.logs()).isEmpty();
+  }
 
   private void verifyBlockCfg(String functionBody) {
     Validator.assertCfgStructure(cfgForBlock(functionBody));

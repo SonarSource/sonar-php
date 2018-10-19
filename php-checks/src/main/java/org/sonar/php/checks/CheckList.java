@@ -128,6 +128,7 @@ public class CheckList {
       LocalVariableAndParameterNameCheck.class,
       LocalVariableShadowsClassFieldCheck.class,
       LogicalWordOperatorUsageCheck.class,
+      LoopExecutingAtMostOnceCheck.class,
       LowerCaseColorCheck.class,
       MethodNameReturningBooleanCheck.class,
       MissingMethodVisibilityCheck.class,

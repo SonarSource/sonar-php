@@ -21,9 +21,21 @@
 package org.sonar.php.cfg;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+import java.util.Collections;
 import java.util.Set;
+import java.util.WeakHashMap;
+import javax.annotation.CheckForNull;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.visitors.CheckContext;
 
 /**
  * The <a href="https://en.wikipedia.org/wiki/Control_flow_graph">Control Flow Graph</a>
@@ -36,16 +48,26 @@ import org.sonar.plugins.php.api.tree.statement.BlockTree;
  * <li>zero or more predecessor blocks.</li>
  * </ul>
  * </p>
- *
+ * <p>
  * A Control Flow Graph has a single start node and a single end node.
  * The end node has no successor and no element.
- *
  */
 public class ControlFlowGraph {
+
+  private static final Logger LOG = Loggers.get(ControlFlowGraph.class);
+
+  public static final Set<Tree.Kind> KINDS_WITH_CONTROL_FLOW = Sets.immutableEnumSet(
+    Tree.Kind.FUNCTION_DECLARATION,
+    Tree.Kind.FUNCTION_EXPRESSION,
+    Tree.Kind.METHOD_DECLARATION,
+    Tree.Kind.SCRIPT);
 
   private final CfgBlock start;
   private final PhpCfgEndBlock end;
   private final Set<CfgBlock> blocks;
+
+  // we use WeakHashMap for implementation to allow the trees to be garbage collected
+  private static Set<Tree> failedTrees = Collections.newSetFromMap(new WeakHashMap<>());
 
   ControlFlowGraph(ImmutableSet<CfgBlock> blocks, CfgBlock start, PhpCfgEndBlock end) {
     this.start = start;
@@ -59,6 +81,38 @@ public class ControlFlowGraph {
 
   public static ControlFlowGraph build(ScriptTree scriptTree) {
     return new ControlFlowGraphBuilder(scriptTree.statements()).getGraph();
+  }
+
+  @CheckForNull
+  public static ControlFlowGraph build(Tree tree, CheckContext context) {
+    if (failedTrees.contains(tree)) {
+      return null;
+    }
+    try {
+      switch (tree.getKind()) {
+        case FUNCTION_DECLARATION:
+          return build(((FunctionDeclarationTree) tree).body());
+        case FUNCTION_EXPRESSION:
+          return build(((FunctionExpressionTree) tree).body());
+        case METHOD_DECLARATION:
+          Tree body = ((MethodDeclarationTree) tree).body();
+          if (body.is(Tree.Kind.BLOCK)) {
+            return build(((BlockTree) body));
+          } else {
+            return null;
+          }
+        case SCRIPT:
+          return build(((ScriptTree) tree));
+        default:
+          throw new IllegalStateException("Unexpected tree kind " + tree.getKind());
+      }
+    } catch (Exception e) {
+      LOG.warn("Failed to build control flow graph for file [{}] at line {}", context.getPhpFile().toString(), ((PHPTree) tree).getLine());
+      LOG.warn(e.getMessage(), e);
+      failedTrees.add(tree);
+    }
+
+    return null;
   }
 
   public CfgBlock start() {
