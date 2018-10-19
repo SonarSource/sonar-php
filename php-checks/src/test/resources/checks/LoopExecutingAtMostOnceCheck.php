@@ -28,6 +28,7 @@ function foo($i)
         throw $error;
     }
 
+    label:
     while ($i < 10) { // Noncompliant
         echo $i;
         $i++;
@@ -122,6 +123,9 @@ function compliant()
 
     foreach ($arr as $item):
         return $item;
+    endforeach;
+
+    foreach ($arr as $item):
     endforeach;
 
     foreach ($arr as $item) return $item;

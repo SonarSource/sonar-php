@@ -121,6 +121,11 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
     if (forEach.statements().size() > 1) {
       return true;
     }
+    if (forEach.statements().isEmpty()) {
+      // just to be sure
+      // will never happen in this rule, because we are hooked on jumps inside loops
+      return false;
+    }
     StatementTree body = forEach.statements().get(0);
     if (body.is(Tree.Kind.BLOCK)) {
       return ((BlockTree) body).statements().size() > 1;

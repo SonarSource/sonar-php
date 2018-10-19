@@ -1219,6 +1219,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     assertThat(logTester.logs(LoggerLevel.WARN)).contains("Failed to build CFG");
     logTester.clear();
 
+    // testing mechanism avoiding reporting failure multiple times for the same tree
     cfg = ControlFlowGraph.build(func, checkContext);
     assertThat(cfg).isNull();
     assertThat(logTester.logs()).isEmpty();
