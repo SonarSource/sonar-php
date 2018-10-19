@@ -330,3 +330,21 @@ function anonymous_class() {
     public function __construct($b) { $this->b = $b; }
   };
 }
+
+function nested_compound_assignment_is_read() {
+  $x1 = 42;
+  foo($x1 += 0);
+
+  $x2 = 42; // Noncompliant
+  foo($x2 = 0);
+
+  $x3 = $x4 = 3; // Noncompliant
+//      ^^^
+  foo($x3);
+
+  $x5 = 42; // Noncompliant
+  $x5 = 43;
+
+  $x6 = 42; // Noncompliant
+  $x6 += 43;
+}
