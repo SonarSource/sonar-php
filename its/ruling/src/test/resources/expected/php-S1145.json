@@ -1,0 +1,17 @@
+{
+'project:Symfony/Bridge/PhpUnit/CoverageListener.php':[
+22,
+],
+'project:Symfony/Bridge/PhpUnit/SymfonyTestsListener.php':[
+22,
+],
+'project:Symfony/Bridge/PhpUnit/TextUI/Command.php':[
+20,
+],
+'project:Symfony/Bridge/PhpUnit/TextUI/TestRunner.php':[
+22,
+],
+'project:Symfony/Component/Routing/Tests/Fixtures/AnnotatedClasses/FooTrait.php':[
+10,
+],
+}

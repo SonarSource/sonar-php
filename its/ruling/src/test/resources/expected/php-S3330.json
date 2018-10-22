@@ -1,4 +1,7 @@
 {
+'project:Symfony/Component/HttpFoundation/Tests/Fixtures/response-functional/cookie_raw_urlencode.php':[
+12,
+],
 'project:php.ini':[
 0,
 ],
