@@ -22,12 +22,15 @@ package org.sonar.php.cfg;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -42,11 +45,13 @@ import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 class ExpectedCfgStructure {
 
+  static final String EMPTY = "_empty";
   // The string value is the CfgBlock test id
   private final BiMap<CfgBlock, String> testIds;
 
   // The key is CfgBlock test id
   private final Map<String, BlockExpectation> expectations;
+  final List<BlockExpectation> emptyBlockExpectations = new ArrayList<>();
 
   private ExpectedCfgStructure() {
     testIds = HashBiMap.create();
@@ -54,11 +59,15 @@ class ExpectedCfgStructure {
   }
 
   static ExpectedCfgStructure parse(Set<CfgBlock> blocks) {
-    return Parser.parse(blocks);
+    return parse(blocks, Function.identity());
+  }
+
+  static ExpectedCfgStructure parse(Set<CfgBlock> blocks, Function<ExpectedCfgStructure, ExpectedCfgStructure> process) {
+    return process.apply(Parser.parse(blocks));
   }
 
   int size() {
-    return expectations.size();
+    return expectations.size() + emptyBlockExpectations.size();
   }
 
   boolean hasNonEmptyPredecessors() {
@@ -72,7 +81,17 @@ class ExpectedCfgStructure {
   }
 
   String testId(CfgBlock block) {
+    if (block instanceof PhpCfgEndBlock) {
+      return "END";
+    }
+    if (block.elements().isEmpty()) {
+      return EMPTY;
+    }
     return testIds.get(block);
+  }
+
+  List<String> blockIds(Collection<CfgBlock> blocks) {
+    return blocks.stream().map(this::testId).collect(Collectors.toList());
   }
 
   CfgBlock cfgBlock(String testId) {
@@ -123,10 +142,16 @@ class ExpectedCfgStructure {
     return expectation;
   }
 
-  private class BlockExpectation {
-    private final List<String> expectedSuccessorIds = new ArrayList<>();
+  BlockExpectation createEmptyBlockExpectation() {
+    BlockExpectation blockExpectation = new BlockExpectation();
+    emptyBlockExpectations.add(blockExpectation);
+    return blockExpectation;
+  }
+
+  class BlockExpectation {
+    final List<String> expectedSuccessorIds = new ArrayList<>();
     private String expectedSyntacticSuccessor = null;
-    private final List<String> expectedPredecessorIds = new ArrayList<>();
+    final List<String> expectedPredecessorIds = new ArrayList<>();
     private int expectedNumberOfElements = -1;
     private final Set<String> expectedLiveInVariables = new HashSet<>();
     private final Set<String> expectedLiveOutVariables = new HashSet<>();
@@ -172,6 +197,15 @@ class ExpectedCfgStructure {
       Collections.addAll(expectedKilledVariables, ids);
       return this;
     }
+
+    boolean matchesBlock(CfgBlock block) {
+      return collectionsEquals(expectedSuccessorIds, blockIds(block.successors()))
+        && collectionsEquals(expectedPredecessorIds, blockIds(block.predecessors()));
+    }
+
+    private boolean collectionsEquals(Collection<?> collection1, Collection<?> collection2) {
+      return collection1.size() == collection2.size() && collection1.containsAll(collection2);
+    }
   }
 
   /**
@@ -186,6 +220,10 @@ class ExpectedCfgStructure {
       for (CfgBlock block : blocks) {
         if (block instanceof PhpCfgEndBlock) {
           result.createExpectation(block, "END");
+          continue;
+        }
+
+        if (block.elements().isEmpty()) {
           continue;
         }
 

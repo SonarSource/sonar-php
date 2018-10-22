@@ -71,7 +71,9 @@ class CfgPrinter {
     }
 
     String stringTree = "<not supported Tree; update CfgPrinter>";
-    if (!block.elements().isEmpty()) {
+    if (block.elements().isEmpty()) {
+      stringTree = "_empty";
+    } else {
       Tree firstElement = block.elements().get(0);
       if (firstElement.is(Tree.Kind.LABEL)) {
         firstElement = block.elements().get(1);
