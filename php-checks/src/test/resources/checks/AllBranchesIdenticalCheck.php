@@ -150,4 +150,10 @@ function switch_statements() {
       doTheThing();
   }
 
+  switch($a) { // Noncompliant
+    case 1:
+      break;
+    default:
+      break;
+  }
 }

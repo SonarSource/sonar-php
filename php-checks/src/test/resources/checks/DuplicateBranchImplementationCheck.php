@@ -2,7 +2,7 @@
 if ($x == 1) {
 //           ^[el=+4;ec=1]>
   doX();
-  doY(); 
+  doY();
 }
 elseif ($x == 2) { doY(); }
 elseif ($x == 3) { // Noncompliant {{This branch's code block is the same as the block for the branch on line 2.}}
@@ -110,7 +110,7 @@ switch($a) {
     break;
   case 3:
     doTheThing();  // no issue
-    break;  
+    break;
 }
 
 switch($a) {
@@ -131,7 +131,7 @@ switch($a) {
     break;
   case 3:
     doTheThing();  // Noncompliant
-    break;  
+    break;
 }
 
 switch($a) {
@@ -140,7 +140,7 @@ switch($a) {
   case 2:
     doTheThing(); // Noncompliant
   case 3:
-    doTheThing();  // Noncompliant  
+    doTheThing();  // Noncompliant
 }
 
 switch($a) {
@@ -148,12 +148,41 @@ switch($a) {
     doTheThing();
     A();
   case 2:
-    doTheThing();
+    doTheThing(); // Noncompliant
     A();
   case 3:
-    doTheThing();
+    doTheThing(); // Noncompliant
     A();
   default:
-    doTheThing();
+    doTheThing(); // Noncompliant
     A();
+}
+
+switch($i) {
+  case 1:
+  case 2:
+}
+
+switch($i) {
+  case 1:
+  case 2: break;
+}
+
+switch($i) {
+  case 1: break;
+  case 2: break;
+}
+
+switch($i) {
+  case 1:
+     foo();
+     bar();
+     break;
+  case 2:
+     baz();
+     break;
+  default:
+     foo(); // Noncompliant
+     bar();
+     break;
 }
