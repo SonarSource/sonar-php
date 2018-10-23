@@ -213,9 +213,10 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   @Test
   public void prefix_postfix_increment_decrement_expressions() {
     verifyLiveVariableAnalysis("" +
-      "condition( succ = [insideIf], liveIn = [a], liveOut = [a], gen = [a], kill = [a]);" +
+      "condition( succ = [insideIf], liveIn = [a, a1, a2], liveOut = [a], gen = [a, a1, a2], kill = [a]);" +
       "--$a;" +
-      "++a;" +
+      "++$a;" +
+      "++$a1[$a2];" +
       "$a++;" +
       "$a--;" +
       "if ($a) {" +

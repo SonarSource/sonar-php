@@ -1,6 +1,7 @@
 {
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Calculation.php':[
 2849,
+3751,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Calculation/DateTime.php':[
 648,
@@ -34,12 +35,17 @@
 90,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/ReferenceHelper.php':[
+389,
 573,
 574,
 575,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Shared/JAMA/Matrix.php':[
 999,
+],
+'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Shared/OLE/PPS/Root.php':[
+130,
+130,
 ],
 'project:PHPExcel_1.7.9_doc/Classes/PHPExcel/Shared/PCLZip/pclzip.lib.php':[
 979,
@@ -64,6 +70,11 @@
 1294,
 1442,
 1825,
+],
+'project:PHPMailer/extras/htmlfilter.php':[
+383,
+392,
+403,
 ],
 'project:PHP_CodeSniffer/CodeSniffer.php':[
 1320,

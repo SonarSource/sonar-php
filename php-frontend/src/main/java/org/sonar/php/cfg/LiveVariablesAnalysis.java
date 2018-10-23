@@ -280,7 +280,7 @@ public class LiveVariablesAnalysis {
     }
 
     private void visitUnaryExpression(UnaryExpressionTree tree) {
-      visitReadVariable(tree.expression());
+      tree.expression().accept(this);
       visitAssignedVariable(tree.expression());
     }
 
