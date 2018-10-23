@@ -354,6 +354,7 @@ function nested_compound_assignment_is_read() {
 
 function simple_for() {
   for ($six = 0, $seven = 42; $six <= 10; $six++) { // Noncompliant
+//               ^^^^^^
     stmt();
   }
 }
