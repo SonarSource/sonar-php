@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.plugins.php.api.symbols.Symbol;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,7 +119,7 @@ class Validator {
       .isEqualTo(expectedSize);
     Set<String> actualVariableNames = actualVariables.stream().map(Symbol::name).collect(Collectors.toSet());
     assertThat(actualVariableNames)
-      .withFailMessage(buildDebugMessage(variableType + " elements differ ", blockTestId, debugDotNotation))
+      .withFailMessage(buildDebugMessage(variableType + " elements differ. Actual: " + StringUtils.join(actualVariableNames, " ; "), blockTestId, debugDotNotation))
       .containsOnlyElementsOf(expectedVariables);
   }
 

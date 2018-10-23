@@ -82,7 +82,7 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
   private void verifyBlock(CfgBlock block, LiveVariables blockLiveVariables, Set<Symbol> readSymbols) {
     Set<Symbol> willBeRead = new HashSet<>(blockLiveVariables.getOut());
     for (Tree element : Lists.reverse(block.elements())) {
-      Map<Symbol, VariableUsage> usagesInElement = blockLiveVariables.getVarUsages(element);
+      Map<Symbol, VariableUsage> usagesInElement = blockLiveVariables.getVariableUsages(element);
       for (Map.Entry<Symbol, VariableUsage> symbolWithUsage : usagesInElement.entrySet()) {
         Symbol symbol = symbolWithUsage.getKey();
         if (!readSymbols.contains(symbol)) {
@@ -90,12 +90,12 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
           continue;
         }
         VariableUsage usage = symbolWithUsage.getValue();
-        if (usage == VariableUsage.WRITE) {
+        if (usage.isWrite() && !usage.isRead()) {
           if (!willBeRead.contains(symbol) && !shouldSkip(element, symbol)) {
             context().newIssue(this, element, String.format(MESSAGE_TEMPLATE, symbol.name()));
           }
           willBeRead.remove(symbol);
-        } else if (usage.isAny(VariableUsage.READ, VariableUsage.READ_WRITE)) {
+        } else if (usage.isRead()) {
           willBeRead.add(symbol);
         }
       }

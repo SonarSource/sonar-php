@@ -44,26 +44,24 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
  */
 public class LiveVariablesAnalysis {
 
-  private final Map<CfgBlock, LiveVariables> liveVariablesPerBlock;
+  private final Map<CfgBlock, LiveVariables> liveVariablesPerBlock = new HashMap<>();
 
   public static LiveVariablesAnalysis analyze(ControlFlowGraph cfg, SymbolTable symbols) {
-    return new LiveVariablesAnalysis(cfg, symbols);
+    LiveVariablesAnalysis instance = new LiveVariablesAnalysis();
+    instance.compute(cfg, symbols);
+    return instance;
   }
 
   public LiveVariables getLiveVariables(CfgBlock block) {
     return liveVariablesPerBlock.get(block);
   }
 
-  private LiveVariablesAnalysis(ControlFlowGraph cfg, SymbolTable symbols) {
-    liveVariablesPerBlock = compute(cfg, symbols);
-  }
-
   public Set<Symbol> getReadSymbols() {
     Set<Symbol> readAtLeastOnce = new HashSet<>();
     for (LiveVariables liveVariables : liveVariablesPerBlock.values()) {
-      for (Map<Symbol, VariableUsage> symbolVariableUsageMap : liveVariables.varUsagesPerElement.values()) {
+      for (Map<Symbol, VariableUsage> symbolVariableUsageMap : liveVariables.variableUsagesPerElement.values()) {
         for (Map.Entry<Symbol, VariableUsage> symbolWithUsage : symbolVariableUsageMap.entrySet()) {
-          if (symbolWithUsage.getValue() == VariableUsage.READ || symbolWithUsage.getValue() == VariableUsage.READ_WRITE) {
+          if (symbolWithUsage.getValue().isRead) {
             readAtLeastOnce.add(symbolWithUsage.getKey());
           }
         }
@@ -76,51 +74,29 @@ public class LiveVariablesAnalysis {
    * See "worklist algorithm" in http://www.cs.cornell.edu/courses/cs4120/2013fa/lectures/lec26-fa13.pdf
    * An alternative terminology for "kill/gen" is "def/use"
    */
-  private static Map<CfgBlock, LiveVariables> compute(ControlFlowGraph cfg, SymbolTable symbols) {
-    Map<CfgBlock, LiveVariables> liveVariablesPerBlock = new HashMap<>();
-    cfg.blocks().forEach(block -> liveVariablesPerBlock.put(block, LiveVariables.init(block, symbols)));
+  private void compute(ControlFlowGraph cfg, SymbolTable symbols) {
+    cfg.blocks().forEach(block -> liveVariablesPerBlock.put(block, LiveVariables.build(block, symbols)));
     Deque<CfgBlock> workList = new ArrayDeque<>(cfg.blocks());
     while (!workList.isEmpty()) {
       CfgBlock currentBlock = workList.pop();
       LiveVariables liveVariables = liveVariablesPerBlock.get(currentBlock);
-      boolean liveInHasChanged = liveVariables.propagateBackwards(liveVariablesPerBlock);
+      boolean liveInHasChanged = liveVariables.propagate(liveVariablesPerBlock);
       if (liveInHasChanged) {
         currentBlock.predecessors().forEach(workList::push);
       }
     }
-
-    return liveVariablesPerBlock;
   }
 
+  public static final class VariableUsage {
+    private boolean isRead = false;
+    private boolean isWrite = false;
 
-  public enum VariableUsage {
-    NONE,
-    WRITE,
-    READ,
-    READ_WRITE;
-
-    public boolean isAny(VariableUsage a, VariableUsage b) {
-      return this == a || this == b;
+    public boolean isWrite() {
+      return isWrite;
     }
 
-    public static VariableUsage addWriteUsage(@Nullable VariableUsage usage) {
-      VariableUsage existingUsage = clean(usage);
-      if (existingUsage.isAny(VariableUsage.READ_WRITE, VariableUsage.READ)) {
-        return VariableUsage.READ_WRITE;
-      }
-      return VariableUsage.WRITE;
-    }
-
-    public static VariableUsage addReadUsage(@Nullable VariableUsage usage) {
-      VariableUsage existingUsage = clean(usage);
-      if (existingUsage.isAny(VariableUsage.READ_WRITE, VariableUsage.WRITE)) {
-        return VariableUsage.READ_WRITE;
-      }
-      return VariableUsage.READ;
-    }
-
-    private static VariableUsage clean(@Nullable VariableUsage usage) {
-      return usage == null ? VariableUsage.NONE : usage;
+    public boolean isRead() {
+      return isRead;
     }
   }
 
@@ -132,7 +108,7 @@ public class LiveVariablesAnalysis {
   public static class LiveVariables {
 
     private final CfgBlock block;
-    private final Map<Tree, Map<Symbol, VariableUsage>> varUsagesPerElement;
+    private final Map<Tree, Map<Symbol, VariableUsage>> variableUsagesPerElement;
 
     /**
      * variables that are being read in the block
@@ -145,7 +121,7 @@ public class LiveVariablesAnalysis {
     private final Set<Symbol> kill = new HashSet<>();
 
     /**
-     * The Live-In variables are variables which
+     * The Live-In variables are variables which has values that:
      * - are needed by this block
      * OR
      * - are needed by a successor block and are not killed in this block.
@@ -159,7 +135,7 @@ public class LiveVariablesAnalysis {
 
     private LiveVariables(CfgBlock block) {
       this.block = block;
-      this.varUsagesPerElement = new HashMap<>();
+      this.variableUsagesPerElement = new HashMap<>();
     }
 
     public Set<Symbol> getIn() {
@@ -170,8 +146,8 @@ public class LiveVariablesAnalysis {
       return ImmutableSet.copyOf(out);
     }
 
-    public Map<Symbol, VariableUsage> getVarUsages(Tree tree) {
-      return ImmutableMap.copyOf(varUsagesPerElement.get(tree));
+    public Map<Symbol, VariableUsage> getVariableUsages(Tree tree) {
+      return ImmutableMap.copyOf(variableUsagesPerElement.get(tree));
     }
 
     Set<Symbol> getGen() {
@@ -185,27 +161,48 @@ public class LiveVariablesAnalysis {
     /**
      * Builds a new LiveVariables instance for the given block and initializes the 'kill' and 'gen' symbol sets.
      */
-    static LiveVariables init(CfgBlock block, SymbolTable symbols) {
-      LiveVariables liveVariables = new LiveVariables(block);
-      // 'kill' has all variables that are written
-      // 'writtenOnly' has variables that are only written (and not read) in a certain block element
-      Set<Symbol> writtenOnly = new HashSet<>();
-      for (Tree tree : block.elements()) {
-        ReadWriteVisitor visitor = new ReadWriteVisitor(symbols);
-        tree.accept(visitor);
-        Map<Symbol, VariableUsage> variableUsages = visitor.getVariableUsages();
-        liveVariables.varUsagesPerElement.put(tree, variableUsages);
-        for (Map.Entry<Symbol, VariableUsage> varUsage : variableUsages.entrySet()) {
-          Symbol var = varUsage.getKey();
-          VariableUsage usage = varUsage.getValue();
-          liveVariables.addToGen(var, usage, writtenOnly);
-          liveVariables.addToKill(var, usage, writtenOnly);
-        }
-      }
-      return liveVariables;
+    static LiveVariables build(CfgBlock block, SymbolTable symbols) {
+      LiveVariables instance = new LiveVariables(block);
+      instance.init(block, symbols);
+      return instance;
     }
 
-    boolean propagateBackwards(Map<CfgBlock, LiveVariables> liveVariablesPerBlock) {
+    private void init(CfgBlock block, SymbolTable symbols) {
+      // 'writtenOnly' has variables that are WRITE-ONLY inside at least one element
+      // (as opposed to 'kill' which can have a variable that inside an element is both READ and WRITTEN)
+      Set<Symbol> writtenOnly = new HashSet<>();
+      for (Tree element : block.elements()) {
+        Map<Symbol, VariableUsage> variableUsages = ReadWriteVisitor.getVariableUsages(element, symbols);
+        variableUsagesPerElement.put(element, variableUsages);
+        computeGenAndKill(writtenOnly, variableUsages);
+      }
+    }
+
+    /**
+     * This has side effects on 'writtenOnly'
+     */
+    private void computeGenAndKill(Set<Symbol> writtenOnly, Map<Symbol, VariableUsage> variableUsages) {
+      for (Map.Entry<Symbol, VariableUsage> variableUsage : variableUsages.entrySet()) {
+        Symbol variable = variableUsage.getKey();
+        VariableUsage usage = variableUsage.getValue();
+        if (usage.isRead && !writtenOnly.contains(variable)) {
+          gen.add(variable);
+        }
+        if (usage.isWrite) {
+          kill.add(variable);
+          // We do not know the order of execution inside a block element (if 'write' is done before 'read'),
+          // so we only add if we know for sure there was only 'write' done for the element
+          if (!usage.isRead) {
+            writtenOnly.add(variable);
+          }
+        }
+      }
+    }
+
+    /**
+     * Propagates backwards: first computes the 'out' set, then the 'in' set.
+     */
+    boolean propagate(Map<CfgBlock, LiveVariables> liveVariablesPerBlock) {
       out.clear();
       block.successors().stream()
         .map(liveVariablesPerBlock::get)
@@ -219,22 +216,6 @@ public class LiveVariablesAnalysis {
       return inHasChanged;
     }
 
-    private void addToGen(Symbol var, VariableUsage usage, Set<Symbol> writtenOnly) {
-      if (usage.isAny(VariableUsage.READ, VariableUsage.READ_WRITE) && !writtenOnly.contains(var)) {
-        gen.add(var);
-      }
-    }
-
-    private void addToKill(Symbol var, VariableUsage usage, Set<Symbol> writtenOnly) {
-      if (usage.isAny(VariableUsage.WRITE, VariableUsage.READ_WRITE)) {
-        kill.add(var);
-        // We do not know the order of execution inside a block element (if 'write' is done before 'read'),
-        // so we only add if we know for sure there was only 'write' done for the element
-        if (usage == VariableUsage.WRITE) {
-          writtenOnly.add(var);
-        }
-      }
-    }
   }
 
   private static class ReadWriteVisitor extends PHPVisitorCheck {
@@ -245,8 +226,10 @@ public class LiveVariablesAnalysis {
       this.symbols = symbols;
     }
 
-    Map<Symbol, VariableUsage> getVariableUsages() {
-      return variables;
+    static Map<Symbol, VariableUsage> getVariableUsages(Tree tree, SymbolTable symbols) {
+      ReadWriteVisitor visitor = new ReadWriteVisitor(symbols);
+      tree.accept(visitor);
+      return visitor.variables;
     }
 
     @Override
@@ -262,8 +245,14 @@ public class LiveVariablesAnalysis {
 
     @Override
     public void visitArrayAssignmentPatternElement(ArrayAssignmentPatternElementTree tree) {
-      visitAssignedVariable(tree.variable());
-      super.visitArrayAssignmentPatternElement(tree);
+      if (visitAssignedVariable(tree.variable())) {
+        Tree key = tree.key();
+        if (key != null) {
+          visitAssignedVariable(key);
+        }
+      } else {
+        super.visitArrayAssignmentPatternElement(tree);
+      }
     }
 
     @Override
@@ -274,14 +263,20 @@ public class LiveVariablesAnalysis {
 
     @Override
     public void visitPrefixExpression(UnaryExpressionTree tree) {
-      visitUnaryExpression(tree);
-      super.visitPrefixExpression(tree);
+      if (tree.is(Tree.Kind.PREFIX_INCREMENT) || tree.is(Tree.Kind.PREFIX_DECREMENT)) {
+        visitUnaryExpression(tree);
+      } else {
+        super.visitPrefixExpression(tree);
+      }
     }
 
     @Override
     public void visitPostfixExpression(UnaryExpressionTree tree) {
-      visitUnaryExpression(tree);
-      super.visitPostfixExpression(tree);
+      if (tree.is(Tree.Kind.POSTFIX_INCREMENT) || tree.is(Tree.Kind.POSTFIX_DECREMENT)) {
+        visitUnaryExpression(tree);
+      } else {
+        super.visitPostfixExpression(tree);
+      }
     }
 
     private void visitUnaryExpression(UnaryExpressionTree tree) {
@@ -295,7 +290,8 @@ public class LiveVariablesAnalysis {
       }
       Symbol varSym = symbols.getSymbol(tree);
       if (isLocalVariable(varSym)) {
-        variables.compute(varSym, (s, existingState) -> VariableUsage.addWriteUsage(existingState));
+        VariableUsage usage = variables.computeIfAbsent(varSym, s -> new VariableUsage());
+        usage.isWrite = true;
         return true;
       }
       return false;
@@ -307,7 +303,8 @@ public class LiveVariablesAnalysis {
       }
       Symbol varSym = symbols.getSymbol(tree);
       if (isLocalVariable(varSym)) {
-        variables.compute(varSym, (s, existingState) -> VariableUsage.addReadUsage(existingState));
+        VariableUsage usage = variables.computeIfAbsent(varSym, s -> new VariableUsage());
+        usage.isRead = true;
       }
     }
 

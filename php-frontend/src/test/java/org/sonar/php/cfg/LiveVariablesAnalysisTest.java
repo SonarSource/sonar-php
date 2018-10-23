@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 1. the metadata is specified as a function call with the form:
  *
  * {@code block1( succ = [block2, END], liveIn = [$x, $y], liveOut = [$y], gen = [$x, $y], kill = [$x] ); }
- * where the argument is a bracketed array with 3 elements:
+ * where the arguments are assignments to:
  * - 'succ' is a bracketed array of expected successor ids. For branching blocks, the true successor must be first.
  * - 'liveIn'  - the live variables that enter the block
  * - 'liveOut' - the live variables that exit the block
@@ -136,7 +136,6 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
 
   @Test
   public void test_write_before_read() {
-
     verifyLiveVariableAnalysis("" +
       "condition( succ = [body, END], liveIn = [], liveOut = [], gen = [], kill = [a]);" +
       "$a = 1;" +
@@ -185,10 +184,12 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   @Test
   public void test_with_ignored_param() {
     verifyLiveVariableAnalysis("$a", "" +
-      "condition( succ = [insideIf], liveIn = [foo, bar, x, y], liveOut = [x], gen = [foo, bar, x, y], kill = [x,y]);" +
+      "condition( succ = [insideIf], liveIn = [foo, bar], liveOut = [x], gen = [foo, bar], kill = [x,y,z,w]);" +
       "$a = 42;" +
       "foo($a);" +
-      "list($x, $y) = array();" +
+      "list(, , $x, $y) = array();" +
+      "list(foo()) = array();" +
+      "list($z => $w ) = array('a' => 32);" +
       "foo($foo, $bar, $x);" +
       "if ($y) {" +
       "  insideIf (succ = [END], liveIn = [x], liveOut = [], gen = [x]);" +
@@ -210,7 +211,7 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void infix_postfix_expressions() {
+  public void prefix_postfix_increment_decrement_expressions() {
     verifyLiveVariableAnalysis("" +
       "condition( succ = [insideIf], liveIn = [a], liveOut = [a], gen = [a], kill = [a]);" +
       "--$a;" +
@@ -224,9 +225,22 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void unary_minus_plus_expression() {
+    verifyLiveVariableAnalysis("" +
+      "condition( succ = [insideIf], liveIn = [a], liveOut = [a], gen = [a], kill = []);" +
+      "foo($a);" +
+      "-$a;" +
+      "+$a;" +
+      "if (cond) {" +
+      "  insideIf (succ = [END], liveIn = [a], liveOut = [], gen = [a]);" +
+      "  foo($a);" +
+      "}");
+  }
+
+  @Test
   public void test_with_array_assignment() {
     verifyLiveVariableAnalysis("" +
-      "condition( succ = [insideIf], liveIn = [x,y], liveOut = [x], gen = [x, y], kill = [x,y]);" +
+      "condition( succ = [insideIf], liveIn = [], liveOut = [x], gen = [], kill = [x,y]);" +
       "list($x, $y) = array();" +
       "if ($y) {" +
       "  insideIf (succ = [END], liveIn = [x], liveOut = [], gen = [x]);" +
@@ -235,9 +249,8 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
   }
 
   @Test
-  public void compute_symbol_usages() {
+  public void read_symbols() {
     String body = "" +
-      "block( succ = [END], liveIn = [], liveOut = [], gen = [], kill = [foo, bar, qix]);" +
       "$foo = 1;" +
       "$bar = bar();" +
       "$bar += bar();" +
@@ -250,7 +263,6 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
     LiveVariablesAnalysis analysis = LiveVariablesAnalysis.analyze(cfg, symbolTable);
     Set<Symbol> readSymbols = analysis.getReadSymbols();
     assertThat(readSymbols).extracting("name").containsExactlyInAnyOrder("$bar", "$qix");
-
   }
 
   private void verifyLiveVariableAnalysis(String body) {

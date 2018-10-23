@@ -59,6 +59,12 @@ function increment() {
   --$w;
 }
 
+function minus() {
+  $x = 42;
+  $y = -$x;
+  return $x;
+}
+
 function assign_in_method_call() {
   $result = 100;
   foo($result = 200);
@@ -87,7 +93,8 @@ function array_assignment(){
   list($c, $d) = foo();
   foo($c);
   foo($d);
-  list($c, $d) = foo(); // FN
+  // Noncompliant@+1
+  list($c, $d) = foo(); // Noncompliant
 }
 
 function assignment_in_lhs() {

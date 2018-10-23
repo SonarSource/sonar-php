@@ -195,14 +195,10 @@ class ExpectedCfgStructure {
         }
 
         String id = getValue(blockFunction.callee());
-        String[] pred = {};
-        String[] succ = {};
-        String syntacticSuccessor = null;
-        int elem = -1;
-        String[] liveIn = {};
-        String[] liveOut = {};
-        String[] gen = {};
-        String[] kill = {};
+        if (id == null) {
+          throw new UnsupportedOperationException("CFG Block metadata is not in expected format");
+        }
+        BlockExpectation expectation = result.createExpectation(block, id);
         for (ExpressionTree argument : blockFunction.arguments()) {
           if (!argument.is(Tree.Kind.ASSIGNMENT)) {
             throw new UnsupportedOperationException("The arguments of block function call must be assignments");
@@ -210,37 +206,22 @@ class ExpectedCfgStructure {
           AssignmentExpressionTree assignment = (AssignmentExpressionTree) argument;
           Tree name = assignment.variable();
           if (isNamespaceTreeWithValue(name, "succ")) {
-            succ = getStrings(assignment.value());
+            expectation.withSuccessorsIds(getStrings(assignment.value()));
           } else if (isNamespaceTreeWithValue(name, "pred")) {
-            pred = getStrings(assignment.value());
+            expectation.withPredecessorIds(getStrings(assignment.value()));
           } else if (isNamespaceTreeWithValue(name, "elem")) {
-            elem = Integer.parseInt(getValue(assignment.value()));
+            expectation.withElementNumber(Integer.parseInt(getValue(assignment.value())));
           } else if (isNamespaceTreeWithValue(name, "syntSucc")) {
-            syntacticSuccessor = getValue(assignment.value());
+            expectation.withSyntacticSuccessor(getValue(assignment.value()));
           } else if (isNamespaceTreeWithValue(name, "gen")) {
-            gen = getVariableStrings(assignment.value());
+            expectation.withGenVariables(getVariableStrings(assignment.value()));
           } else if (isNamespaceTreeWithValue(name, "kill")) {
-            kill = getVariableStrings(assignment.value());
+            expectation.withKilledVariables(getVariableStrings(assignment.value()));
           } else if (isNamespaceTreeWithValue(name, "liveIn")) {
-            liveIn = getVariableStrings(assignment.value());
+            expectation.withLiveInVariables(getVariableStrings(assignment.value()));
           } else if (isNamespaceTreeWithValue(name, "liveOut")) {
-            liveOut = getVariableStrings(assignment.value());
+            expectation.withLiveOutVariables(getVariableStrings(assignment.value()));
           }
-
-        }
-
-        if (id != null) {
-          result.createExpectation(block, id)
-            .withSuccessorsIds(succ)
-            .withSyntacticSuccessor(syntacticSuccessor)
-            .withPredecessorIds(pred)
-            .withElementNumber(elem)
-            .withLiveInVariables(liveIn)
-            .withLiveOutVariables(liveOut)
-            .withGenVariables(gen)
-            .withKilledVariables(kill);
-        } else {
-          throw new UnsupportedOperationException("CFG Block metadata is not in expected format");
         }
       }
 

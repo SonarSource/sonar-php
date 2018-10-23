@@ -56,7 +56,7 @@ import static org.mockito.Mockito.when;
  * 1. the metadata is specified as a function call with the form:
  * <p>
  * {@code block1( succ = [block2, END], pred = [block0], elem = 1 ); }
- * where the argument is a bracketed array with 3 elements:
+ * where the argument are assignments:
  * - 'succ' is a bracketed array of expected successor ids. For branching blocks, the true successor must be first.
  * - 'pred' [optional] is a bracketed array of expected predecessor ids
  * - 'elem' [optional] is the number of expected elements in the block
