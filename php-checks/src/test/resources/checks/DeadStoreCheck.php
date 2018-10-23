@@ -174,7 +174,7 @@ function almost_basic_value() {
 }
 
 function special_zero() {
-  $length = 0x00000;
+  $length = 0x00000; // Noncompliant
   $length = foo();
   return $length;
 }

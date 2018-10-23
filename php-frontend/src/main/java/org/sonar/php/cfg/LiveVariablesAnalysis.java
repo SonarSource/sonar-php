@@ -58,6 +58,20 @@ public class LiveVariablesAnalysis {
     liveVariablesPerBlock = compute(cfg, symbols);
   }
 
+  public Set<Symbol> getReadSymbols() {
+    Set<Symbol> readAtLeastOnce = new HashSet<>();
+    for (LiveVariables liveVariables : liveVariablesPerBlock.values()) {
+      for (Map<Symbol, VariableUsage> symbolVariableUsageMap : liveVariables.varUsagesPerElement.values()) {
+        for (Map.Entry<Symbol, VariableUsage> symbolWithUsage : symbolVariableUsageMap.entrySet()) {
+          if (symbolWithUsage.getValue() == VariableUsage.READ || symbolWithUsage.getValue() == VariableUsage.READ_WRITE) {
+            readAtLeastOnce.add(symbolWithUsage.getKey());
+          }
+        }
+      }
+    }
+    return readAtLeastOnce;
+  }
+
   /**
    * See "worklist algorithm" in http://www.cs.cornell.edu/courses/cs4120/2013fa/lectures/lec26-fa13.pdf
    * An alternative terminology for "kill/gen" is "def/use"
@@ -77,6 +91,7 @@ public class LiveVariablesAnalysis {
 
     return liveVariablesPerBlock;
   }
+
 
   public enum VariableUsage {
     NONE,
@@ -157,17 +172,6 @@ public class LiveVariablesAnalysis {
 
     public Map<Symbol, VariableUsage> getVarUsages(Tree tree) {
       return ImmutableMap.copyOf(varUsagesPerElement.get(tree));
-    }
-
-    public Map<Symbol, Set<VariableUsage>> computeSymbolUsages() {
-      Map<Symbol, Set<VariableUsage>> result = new HashMap<>();
-      for (Map<Symbol, VariableUsage> symbolMaps : varUsagesPerElement.values()) {
-        for (Map.Entry<Symbol, VariableUsage> symUsage : symbolMaps.entrySet()) {
-          Set<VariableUsage> symbolUsages = result.computeIfAbsent(symUsage.getKey(), x -> new HashSet<>());
-          symbolUsages.add(symUsage.getValue());
-        }
-      }
-      return result;
     }
 
     Set<Symbol> getGen() {

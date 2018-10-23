@@ -19,7 +19,6 @@
  */
 package org.sonar.php.cfg;
 
-import java.util.Map;
 import java.util.Set;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
@@ -28,9 +27,6 @@ import org.sonar.php.tree.symbols.SymbolTableImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
-
-import org.sonar.php.cfg.LiveVariablesAnalysis.VariableUsage;
-import org.sonar.php.cfg.LiveVariablesAnalysis.LiveVariables;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -245,38 +241,16 @@ public class LiveVariablesAnalysisTest extends PHPTreeModelTest {
       "$foo = 1;" +
       "$bar = bar();" +
       "$bar += bar();" +
-      "foo($bar);" +
+      "read($bar);" +
       "$qix += 1 + 2;";
     CompilationUnitTree cut = parse("<?php function f() { " + body + " }", PHPLexicalGrammar.COMPILATION_UNIT);
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
     FunctionDeclarationTree functionTree = (FunctionDeclarationTree) cut.script().statements().get(0);
     ControlFlowGraph cfg = ControlFlowGraph.build(functionTree.body());
     LiveVariablesAnalysis analysis = LiveVariablesAnalysis.analyze(cfg, symbolTable);
-    CfgBlock startBlock = cfg.start();
-    LiveVariables startVars = analysis.getLiveVariables(startBlock);
-    Map<Symbol, Set<VariableUsage>> usages = startVars.computeSymbolUsages();
-    assertThat(usages).hasSize(3);
-    int verifiedSymbols = 0;
-    for (Map.Entry<Symbol, Set<VariableUsage>> symbolUsage : usages.entrySet()) {
-      if (symbolUsage.getKey().name().equals("$bar")) {
-        Set<VariableUsage> barUsages = symbolUsage.getValue();
-        assertThat(barUsages).hasSize(3);
-        verifiedSymbols++;
-      }
-      if (symbolUsage.getKey().name().equals("$foo")) {
-        Set<VariableUsage> fooUsages = symbolUsage.getValue();
-        assertThat(fooUsages).hasSize(1);
-        assertThat(fooUsages).containsOnly(VariableUsage.WRITE);
-        verifiedSymbols++;
-      }
-      if (symbolUsage.getKey().name().equals("$qix")) {
-        Set<VariableUsage> quixUsage = symbolUsage.getValue();
-        assertThat(quixUsage).hasSize(1);
-        assertThat(quixUsage).containsOnly(VariableUsage.READ_WRITE);
-        verifiedSymbols++;
-      }
-    }
-    assertThat(verifiedSymbols).isEqualTo(3);
+    Set<Symbol> readSymbols = analysis.getReadSymbols();
+    assertThat(readSymbols).extracting("name").containsExactlyInAnyOrder("$bar", "$qix");
+
   }
 
   private void verifyLiveVariableAnalysis(String body) {
