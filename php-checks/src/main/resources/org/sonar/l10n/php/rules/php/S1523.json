@@ -1,6 +1,6 @@
 {
-  "title": "Code should not be dynamically injected and executed",
-  "type": "VULNERABILITY",
+  "title": "Dynamically executing code is security-sensitive",
+  "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
@@ -8,6 +8,7 @@
   },
   "tags": [
     "cwe",
+    "owasp-a1",
     "owasp-a7"
   ],
   "standards": [
@@ -20,10 +21,12 @@
   "scope": "Main",
   "securityStandards": {
     "CWE": [
-      95
+      95,
+      470
     ],
     "OWASP": [
-      "A7"
+      "A7",
+      "A1"
     ]
   }
 }

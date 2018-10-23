@@ -1,3 +1,11 @@
+<p>Executing code dynamically is security sensitive. It has led in the past to the following vulnerabilities:</p>
+<ul>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-9807">CVE-2017-9807</a> </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-9802">CVE-2017-9802</a> </li>
+</ul>
+<p>Any code which is dynamically evaluated in your process will have the same permissions as the rest of your code. Thus it is very dangerous to do so
+with code coming from an untrusted source. <a href="https://www.owasp.org/index.php/Code_Injection">Injected Code</a> can either run on the server or
+in the client (exemple: XSS attack).</p>
 <p>The <code>eval</code> function is a way to run arbitrary code at run-time. </p>
 <p>According to the PHP documentation</p>
 <blockquote>
@@ -5,14 +13,37 @@
   carefully verified that there is no other option than to use this construct, pay special attention not to pass any user provided data into it
   without properly validating it beforehand.</p>
 </blockquote>
+<p>This rule marks for review each occurence of dynamic code execution.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> the executed code may come from a untrusted source and hasn't been sanitized. </li>
+  <li> the code to run is dynamically chosen via reflection, and an untrusted source can use it to choose which code to run. For example a class could
+  be retrieved by its name and this name comes from a user input. </li>
+</ul>
+<p>You are at risk if you answered yes to any of these questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<p>Regarding the execution of unknown code, the best solution is to not run code provided by an untrusted source. If you really need to do it, run the
+code in a <a href="https://en.wikipedia.org/wiki/Sandbox_(computer_security)">sandboxed</a> environment. Use jails, firewalls and whatever means your
+operating system and programming language provide (example: <a
+href="https://wiki.sei.cmu.edu/confluence/display/java/SEC54-J.+Create+a+secure+sandbox+using+a+security+manager">Security Managers</a> in java, <a
+href="https://www.w3schools.com/tags/att_iframe_sandbox.asp">iframes</a> and <a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin
+policy</a> for javascript in a web browser).</p>
+<p>Do not try to create a blacklist of dangerous code. It is impossible to cover all attacks that way.</p>
+<p>As for the use of reflection, it should be strictly controlled as it can lead to many vulnerabilities. Never let an untrusted source decide what
+code to run. If you have to do it anyway, create a list of allowed code and choose among this list.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
 eval($code_to_be_dynamically_executed)
 </pre>
+<h2>Exceptions</h2>
+<p>Calling reflection methods with a hard-coded type name, method name or field name will not raise an issue.</p>
 <h2>See</h2>
 <ul>
-  <li> <a href="http://cwe.mitre.org/data/definitions/95.html">MITRE CWE-95</a> - CWE-95: Improper Neutralization of Directives in Dynamically
-  Evaluated Code ('Eval Injection') </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/95.html">MITRE CWE-95</a> - Improper Neutralization of Directives in Dynamically Evaluated Code
+  ('Eval Injection') </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/470.html">MITRE CWE-470</a> - Use of Externally-Controlled Input to Select Classes or Code
+  ('Unsafe Reflection') </li>
+  <li> OWASP Top 10 2017 Category A1 - Injection </li>
   <li> OWASP Top 10 2017 Category A7 - Cross-Site Scripting (XSS) </li>
 </ul>
 
