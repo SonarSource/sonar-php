@@ -21,17 +21,18 @@ function globalScope() {
 }
 
 /***************************
- * PARAMETERS, SIMPLE CASE
+ * PARAMETERS
  ***************************/
 
-function param_can_be_written($one, $two, $three) {
-  $one = 42; // is used below
-  foo($one);
-
-  $two = 42; // parameters are ignored
+function param_are_ignored($two, $three) {
+  $two = 42;
   $two = 43;
   foo($two);
 }
+
+/***************************
+ * ASSIGNMENTS
+ ***************************/
 
 function simple() {
   $one = 42; // Noncompliant {{Remove this useless assignment to local variable '$one'.}}
@@ -45,10 +46,6 @@ function simple() {
 
   $three = 42; // this gets reported by S1481 - unused local variable
 }
-
-/***************************
- * ASSIGNMENTS
- ***************************/
 
 function increment() {
   $x = 42;
@@ -68,12 +65,13 @@ function assign_in_method_call() {
 }
 
 function chain_assign() {
-  $realNumber = $imaginary = 0; // OK
-  $realNumber = foo();
-  return array('real' => $realNumber, 'img' => $imaginary); // OK
+  $a = $b = 0; // both are initialized to basic value
+  $a = foo();
+  $b = 42;
+  foo($a, $b);
 }
 
-function multiply_equal() {
+function compound_assignments() {
   $fTerm = 100;
   $fTerm *= foo();
   $fTerm /= foo();
@@ -83,20 +81,18 @@ function multiply_equal() {
   return $fTerm; // OK
 }
 
+function array_assignment(){
+  list($a, $b) = foo();  // reported by S1481 - unused local variable
 
-function list_usage(){
-
-  list($a, $b) = array();  // reported by S1481 - unused local variable
-  list($c, $d) = array();
+  list($c, $d) = foo();
   foo($c);
   foo($d);
-  list($c, $d) = array(); // FN
-  return $c;
+  list($c, $d) = foo(); // FN
 }
 
 function assignment_in_lhs() {
-  $a = 0;
-  $b[$a = foo()] = bar($a);  // OK
+  $a = 43; // FN - we do not consider order inside expressions
+  $b[$a = foo()] = bar($a);
 }
 
 /***************************
@@ -105,17 +101,22 @@ function assignment_in_lhs() {
 
 function basic_values() {
   $first = 0.0;
-  $first = 1.0;
+  $first = 42;
   foo($first);
 
   $one = -1;
   $one = 0;
   $one = 1;
+  $one = 31;
   foo($one);
 
   $two = "";
   $two = "foo";
   foo($two);
+
+  $six = '';
+  $six = bar();
+  foo($six);
 
   $three = false;
   $three = FALSE;
@@ -131,10 +132,6 @@ function basic_values() {
   $five = NULL;
   $five = bar();
   foo($five);
-
-  $six = '';
-  $six = bar();
-  foo($six);
 
   $seven = [];
   $seven = ["one", "two"];
@@ -173,7 +170,7 @@ function almost_basic_value() {
   foo($ten);
 }
 
-function special_zero() {
+function hex_zero() {
   $length = 0x00000; // Noncompliant
   $length = foo();
   return $length;
@@ -182,7 +179,6 @@ function special_zero() {
 class FooBar {
   const CONSTANT = 'constant value';
   function init_with_constant() {
-    // below could be FP, but we do not have the symbol for CONSTANT
     $x = self::CONSTANT; // Noncompliant
     $x = 100;
     foo($x);
@@ -360,16 +356,16 @@ function nested_function_has_different_scope() {
 
 function anonymous_lambda_use($kernel)
 {
-    // false positive because $bundles is considered a different symbol inside the 'use',
+    // false positive because $a is considered a different symbol inside the 'use',
     // even though it's the same symbol
-    $bundles = array("foo" => array(foo())); // Noncompliant
+    $a = 42; // Noncompliant
 
-    $kernel->will($this->returnCallback(function ($bundle) use ($bundles) {
-      return $bundles[$bundle];
-    }));
+    $foo->method(function ($x) use ($a) { // we don't realize $a is the same here
+      return $a[$x];
+    });
 
-    $bundles = array("foo" => array(foo()));
-    $kernel->will($this->returnValue($bundles));
+    $a = 42;
+    $foo->method(bar($a)); // OK
 }
 
 
