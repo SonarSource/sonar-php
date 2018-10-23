@@ -173,10 +173,10 @@ class ControlFlowGraphBuilder {
       case GROUP_USE_STATEMENT:
       case CONSTANT_DECLARATION:
       case NAMESPACE_STATEMENT:
+      case INLINE_HTML:
       case EXPRESSION_STATEMENT:
         currentBlock.addElement(tree);
         return currentBlock;
-      case INLINE_HTML:
       case EMPTY_STATEMENT:
       case CLASS_DECLARATION:
         return currentBlock;

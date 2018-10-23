@@ -110,7 +110,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     // inline html
     verifyBlockCfg("" +
-      "block( succ = [END], elem = 1 ); ?> <html> <?php");
+      "block( succ = [END], elem = 2 ); ?> <html> <?php");
 
     // unset statement
     verifyBlockCfg("" +
