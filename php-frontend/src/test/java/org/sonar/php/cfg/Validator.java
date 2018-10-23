@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang.StringUtils;
+import org.sonar.plugins.php.api.symbols.Symbol;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -85,6 +87,40 @@ class Validator {
           .isEqualTo(expectedCfg.expectedNumberOfElements(actualBlock));
       }
     }
+  }
+
+  static void assertLiveVariables(ControlFlowGraph actualCfg, LiveVariablesAnalysis actualLva) {
+    ExpectedCfgStructure expectedCfg = ExpectedCfgStructure.parse(actualCfg.blocks());
+    String debugDotNotation = CfgPrinter.toDot(actualCfg);
+
+    assertThat(actualCfg.blocks())
+      .withFailMessage(buildDebugMessage("size", "CFG", debugDotNotation))
+      .hasSize(expectedCfg.size());
+
+    for (CfgBlock actualBlock : actualCfg.blocks()) {
+      if (actualBlock.equals(actualCfg.end())) {
+        continue;
+      }
+
+      String blockTestId = expectedCfg.testId(actualBlock);
+      LiveVariablesAnalysis.LiveVariables actualLiveVariables = actualLva.getLiveVariables(actualBlock);
+      assertVariablesAreEqual("Gen Variables", actualLiveVariables.getGen(), expectedCfg.expectedGenVariables(actualBlock), blockTestId, debugDotNotation);
+      assertVariablesAreEqual("Killed Variables", actualLiveVariables.getKill(), expectedCfg.expectedKilledVariables(actualBlock), blockTestId, debugDotNotation);
+      assertVariablesAreEqual("Live In Variables", actualLiveVariables.getIn(), expectedCfg.expectedLiveInVariables(actualBlock), blockTestId, debugDotNotation);
+      assertVariablesAreEqual("Live Out Variables", actualLiveVariables.getOut(), expectedCfg.expectedLiveOutVariables(actualBlock), blockTestId, debugDotNotation);
+    }
+  }
+
+  private static void assertVariablesAreEqual(String variableType, Set<Symbol> actualVariables, Set<String> expectedVariables, String blockTestId, String debugDotNotation) {
+    int actualSize = actualVariables.size();
+    int expectedSize = expectedVariables.size();
+    assertThat(actualSize)
+      .withFailMessage(buildDebugMessage(variableType + " size expected " + expectedSize + " and is " + actualSize, blockTestId, debugDotNotation))
+      .isEqualTo(expectedSize);
+    Set<String> actualVariableNames = actualVariables.stream().map(Symbol::name).collect(Collectors.toSet());
+    assertThat(actualVariableNames)
+      .withFailMessage(buildDebugMessage(variableType + " elements differ. Actual: " + StringUtils.join(actualVariableNames, " ; "), blockTestId, debugDotNotation))
+      .containsOnlyElementsOf(expectedVariables);
   }
 
   private static void assertSuccessors(CfgBlock actualBlock, ExpectedCfgStructure expectedCfg, String debugDotNotation) {

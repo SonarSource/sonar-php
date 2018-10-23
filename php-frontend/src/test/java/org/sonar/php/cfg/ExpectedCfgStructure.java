@@ -24,9 +24,11 @@ import com.google.common.collect.HashBiMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -94,6 +96,22 @@ class ExpectedCfgStructure {
     return getExpectation(block).expectedNumberOfElements;
   }
 
+  Set<String> expectedLiveInVariables(CfgBlock block) {
+    return getExpectation(block).expectedLiveInVariables;
+  }
+
+  Set<String> expectedLiveOutVariables(CfgBlock block) {
+    return getExpectation(block).expectedLiveOutVariables;
+  }
+
+  Set<String> expectedGenVariables(CfgBlock block) {
+    return getExpectation(block).expectedGenVariables;
+  }
+
+  Set<String> expectedKilledVariables(CfgBlock block) {
+    return getExpectation(block).expectedKilledVariables;
+  }
+
   private BlockExpectation getExpectation(CfgBlock block) {
     return expectations.get(testId(block));
   }
@@ -110,6 +128,10 @@ class ExpectedCfgStructure {
     private String expectedSyntacticSuccessor = null;
     private final List<String> expectedPredecessorIds = new ArrayList<>();
     private int expectedNumberOfElements = -1;
+    private final Set<String> expectedLiveInVariables = new HashSet<>();
+    private final Set<String> expectedLiveOutVariables = new HashSet<>();
+    private final Set<String> expectedGenVariables = new HashSet<>();
+    private final Set<String> expectedKilledVariables = new HashSet<>();
 
     BlockExpectation withSuccessorsIds(String... ids) {
       Collections.addAll(expectedSuccessorIds, ids);
@@ -128,6 +150,26 @@ class ExpectedCfgStructure {
 
     BlockExpectation withSyntacticSuccessor(@Nullable String syntacticSuccessor) {
       expectedSyntacticSuccessor = syntacticSuccessor;
+      return this;
+    }
+
+    BlockExpectation withLiveInVariables(String... ids) {
+      Collections.addAll(expectedLiveInVariables, ids);
+      return this;
+    }
+
+    BlockExpectation withLiveOutVariables(String... ids) {
+      Collections.addAll(expectedLiveOutVariables, ids);
+      return this;
+    }
+
+    BlockExpectation withGenVariables(String... ids) {
+      Collections.addAll(expectedGenVariables, ids);
+      return this;
+    }
+
+    BlockExpectation withKilledVariables(String... ids) {
+      Collections.addAll(expectedKilledVariables, ids);
       return this;
     }
   }
@@ -153,35 +195,33 @@ class ExpectedCfgStructure {
         }
 
         String id = getValue(blockFunction.callee());
-        String[] pred = {};
-        String[] succ = {};
-        String syntacticSuccessor = null;
-        int elem = -1;
+        if (id == null) {
+          throw new UnsupportedOperationException("CFG Block metadata is not in expected format");
+        }
+        BlockExpectation expectation = result.createExpectation(block, id);
         for (ExpressionTree argument : blockFunction.arguments()) {
           if (!argument.is(Tree.Kind.ASSIGNMENT)) {
-            throw new UnsupportedOperationException("The arguments of must be assignments");
+            throw new UnsupportedOperationException("The arguments of block function call must be assignments");
           }
           AssignmentExpressionTree assignment = (AssignmentExpressionTree) argument;
           Tree name = assignment.variable();
           if (isNamespaceTreeWithValue(name, "succ")) {
-            succ = getStrings(assignment.value());
+            expectation.withSuccessorsIds(getStrings(assignment.value()));
           } else if (isNamespaceTreeWithValue(name, "pred")) {
-            pred = getStrings(assignment.value());
+            expectation.withPredecessorIds(getStrings(assignment.value()));
           } else if (isNamespaceTreeWithValue(name, "elem")) {
-            elem = Integer.parseInt(getValue(assignment.value()));
+            expectation.withElementNumber(Integer.parseInt(getValue(assignment.value())));
           } else if (isNamespaceTreeWithValue(name, "syntSucc")) {
-            syntacticSuccessor = getValue(assignment.value());
+            expectation.withSyntacticSuccessor(getValue(assignment.value()));
+          } else if (isNamespaceTreeWithValue(name, "gen")) {
+            expectation.withGenVariables(getVariableStrings(assignment.value()));
+          } else if (isNamespaceTreeWithValue(name, "kill")) {
+            expectation.withKilledVariables(getVariableStrings(assignment.value()));
+          } else if (isNamespaceTreeWithValue(name, "liveIn")) {
+            expectation.withLiveInVariables(getVariableStrings(assignment.value()));
+          } else if (isNamespaceTreeWithValue(name, "liveOut")) {
+            expectation.withLiveOutVariables(getVariableStrings(assignment.value()));
           }
-        }
-
-        if (id != null) {
-          result.createExpectation(block, id)
-            .withSuccessorsIds(succ)
-            .withSyntacticSuccessor(syntacticSuccessor)
-            .withPredecessorIds(pred)
-            .withElementNumber(elem);
-        } else {
-          throw new UnsupportedOperationException("CFG Block metadata is not in expected format");
         }
       }
 
@@ -215,7 +255,15 @@ class ExpectedCfgStructure {
 
     }
 
+    private static String[] getVariableStrings(Tree tree) {
+      return getStringList(tree).stream().map(s -> "$" + s).collect(Collectors.toList()).toArray(new String[] {});
+    }
+
     private static String[] getStrings(Tree tree) {
+      return getStringList(tree).toArray(new String[] {});
+    }
+
+    private static List<String> getStringList(Tree tree) {
       List<String> result = new ArrayList<>();
       if (tree instanceof ArrayInitializerBracketTree) {
         ArrayInitializerBracketTree initializer = (ArrayInitializerBracketTree) tree;
@@ -225,7 +273,7 @@ class ExpectedCfgStructure {
       } else {
         throw new UnsupportedOperationException("Expecting array, got '" + tree.toString() + "'");
       }
-      return result.toArray(new String[]{});
+      return result;
     }
 
     private static boolean isNamespaceTreeWithValue(@Nullable Tree tree, String s) {
