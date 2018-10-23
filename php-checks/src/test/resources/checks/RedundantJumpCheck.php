@@ -88,3 +88,13 @@ function go_to() {
 
   goto MyLabel; // OK
 }
+
+function inline_html() {
+  if ($cond) {
+    return; // not redundant, as inline html will be inserted
+  }
+
+  ?>
+  		...
+  <?php
+}

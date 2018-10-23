@@ -94,8 +94,8 @@ function f3() {
 }
 
 function tagAfterReturn() {
-  return; // OK
-  ?><?php
+  return;
+  ?><?php // Noncompliant
 }
 
 function breakAfterJump() {
