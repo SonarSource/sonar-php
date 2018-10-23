@@ -374,6 +374,64 @@ function anonymous_lambda_use($kernel)
 
 
 /***************************
+ * TRY, CATCH, FINALLY
+ ***************************/
+
+function catch_exception() {
+  try {
+    doSomething();
+  } catch (Exception $e) {    // OK, ignore parameter
+    return false;
+  }
+}
+
+function usage_in_catch() {
+  $foo = 42;
+  foo($foo);
+  $foo = 43;
+  try {
+    bar();
+  } catch (Exception $e) {
+    report($foo); // ok
+  }
+}
+
+function no_usage_in_catch() {
+  $foo = 42;
+  foo($foo);
+  $foo = 43; // Noncompliant
+  try {
+    bar();
+  } catch (Exception $e) {
+    report();
+  }
+}
+
+function usage_in_finally() {
+  $foo = 42;
+  foo($foo);
+  $foo = 43;
+  try {
+    bar();
+  } finally {
+    report($foo); // ok
+  }
+}
+
+function usage_in_finally_in_loop() {
+  $foo = 42;
+  foo($foo);
+  $foo = 43;
+  while(cond) {
+    try {
+      throw new Exception();
+    } finally {
+      report($foo); // ok
+    }
+  }
+}
+
+/***************************
  * MISC
  ***************************/
 
@@ -386,3 +444,4 @@ function return_array() {
 function param_by_value(&$cellValue) {
   $cellValue = foo();
 }
+
