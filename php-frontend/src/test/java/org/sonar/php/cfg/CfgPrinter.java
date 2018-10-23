@@ -22,9 +22,6 @@ package org.sonar.php.cfg;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 class CfgPrinter {
 
@@ -42,12 +39,11 @@ class CfgPrinter {
     }
     for (CfgBlock block : cfg.blocks()) {
       int id = graphNodeIds.get(block);
-      sb.append(id + "[label=\"" + blockLabel(cfg, block) + "\"];");
+      sb.append(id + "[label=\"" + blockLabel(block) + "\"];");
     }
     for (CfgBlock block : cfg.blocks()) {
       int id = graphNodeIds.get(block);
-      Set<CfgBlock> successors = block.successors();
-      for (CfgBlock successor : successors) {
+      for (CfgBlock successor : block.successors()) {
         String edgeLabel = "";
         if (block instanceof PhpCfgBranchingBlock) {
           PhpCfgBranchingBlock branching = (PhpCfgBranchingBlock) block;
@@ -65,29 +61,8 @@ class CfgPrinter {
     return sb.toString();
   }
 
-  private static String blockLabel(ControlFlowGraph cfg, CfgBlock block) {
-    if (cfg.end().equals(block)) {
-      return "<END>";
-    }
-
-    String stringTree = "<not supported Tree; update CfgPrinter>";
-    if (block.elements().isEmpty()) {
-      stringTree = "_empty";
-    } else {
-      Tree firstElement = block.elements().get(0);
-      if (firstElement.is(Tree.Kind.LABEL)) {
-        firstElement = block.elements().get(1);
-      }
-      if (firstElement.is(Tree.Kind.EXPRESSION_STATEMENT)) {
-        stringTree = ((ExpressionStatementTree) firstElement).expression().toString();
-      } else if (firstElement.is(Tree.Kind.FUNCTION_CALL)) {
-        stringTree = firstElement.toString();
-      } else {
-        System.out.println("Could not print " + firstElement.toString());
-      }
-    }
-
-    return "Expected: " + stringTree;
+  private static String blockLabel(CfgBlock block) {
+    return "Expected: " + block.toString();
   }
 
 }

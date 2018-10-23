@@ -156,9 +156,6 @@
 'project:symfony/Symfony/Component/HttpFoundation/Request.php':[
 1763,
 ],
-'project:symfony/Symfony/Component/HttpKernel/Fragment/InlineFragmentRenderer.php':[
-83,
-],
 'project:symfony/Symfony/Component/HttpKernel/Tests/DependencyInjection/ContainerAwareHttpKernelTest.php':[
 95,
 ],

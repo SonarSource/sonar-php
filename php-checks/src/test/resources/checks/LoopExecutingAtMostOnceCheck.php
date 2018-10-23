@@ -130,8 +130,7 @@ function compliant()
 
     foreach ($arr as $item) return $item;
 
-    // FP because not handling try-catch with return properly
-    while ($i < 10) { // Noncompliant
+    while ($i < 10) {
         try {
             return foo();
         } catch (Exception $e) {

@@ -203,9 +203,122 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "} catch (Type2 $e) {" +
       "  catchBody2( succ = [finallyBody] );" +
       "} finally {" +
-      "  finallyBody( succ = [END] );" +
-      "}");
+      "  finallyBody( succ = [after,END] );" +
+      "}" +
+      "after(succ = [END]);");
   }
+
+  @Test
+  public void try_finally() {
+    verifyBlockCfg("" +
+      "try {" +
+      "  tryBody( succ = [finallyBody] );" +
+      "} finally {" +
+      "  finallyBody( succ = [after,END] );" +
+      "}" +
+      "after( succ = [END]);");
+  }
+
+  @Test
+  public void try_catch() {
+    ControlFlowGraph actualCfg = cfgForBlock("" +
+      "try {" +
+      "  tryBody( succ = [catchBody, _empty] );" +
+      "} catch(Exception $e) {" +
+      "  catchBody( succ = [_empty] );" +
+      "}" +
+      "after( succ = [END]);");
+    ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
+      expected.createEmptyBlockExpectation()
+        .withPredecessorIds("tryBody", "catchBody")
+        .withSuccessorsIds("after", "END");
+      return expected;
+    });
+    new Validator(expectedCfgStructure).assertCfg(actualCfg);
+  }
+
+  @Test
+  public void try_return_finally() {
+    verifyBlockCfg("" +
+      "try {" +
+      "  tryBody( succ = [finallyBody], syntSucc = finallyBody );" +
+      "  return;" +
+      "} finally {" +
+      "  finallyBody( succ = [after,END] );" +  // note that "after" is in fact not a successor, this is known limitation
+      "}" +
+      "after( succ = [END]);");
+  }
+
+  @Test
+  public void try_return_catch() {
+    ControlFlowGraph actualCfg = cfgForBlock("" +
+      "try {" +
+      "    tryBody(succ = [_empty], pred = [], syntSucc = _empty);" +  // syntSucc should be after, but we are not able to remove _empty block
+      "    return;" +
+      "} catch (Exception $e) {" +
+      "    catchBody(succ=[_empty], pred = [_empty]);" +
+      "}" +
+      "after( succ = [END], pred = [_empty]);");
+    ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
+      expected.createEmptyBlockExpectation()
+        .withPredecessorIds("tryBody")
+        .withSuccessorsIds("catchBody", "_empty");  // _empty is finally block
+      expected.createEmptyBlockExpectation()
+        .withPredecessorIds("catchBody", "_empty")
+        .withSuccessorsIds("after", "END");
+      return expected;
+    });
+    new Validator(expectedCfgStructure).assertCfg(actualCfg);
+  }
+
+  @Test
+  public void try_return_catch_finally() {
+    ControlFlowGraph actualCfg = cfgForBlock("" +
+      "try {" +
+      "    tryBody(succ = [_empty], syntSucc = _empty);" +  // syntSucc should be finallyBody but we are not able to remove _empty
+      "    return;" +
+      "} catch (Exception $e) {" +
+      "    catchBody1(succ=[finallyBody], pred = [_empty]);" +
+      "} catch (Exception $e) {" +
+      "    catchBody2(succ=[finallyBody], pred = [_empty]);" +
+      "} finally {" +
+      "   finallyBody(succ=[after,END], pred = [catchBody1,catchBody2,_empty]);" +
+      "}" +
+      "after(succ = [END], pred = [finallyBody]);");
+    ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
+      expected.createEmptyBlockExpectation()
+        .withPredecessorIds("tryBody")
+        .withSuccessorsIds("catchBody1", "catchBody2", "finallyBody");
+      return expected;
+    });
+    new Validator(expectedCfgStructure).assertCfg(actualCfg);
+  }
+
+  @Test
+  public void nested_try_return_catch_finally() {
+    ControlFlowGraph actualCfg = cfgForBlock("" +
+      "try { " +
+      "    try {" +
+      "        tryBody(succ = [_empty], syntSucc = _empty);" +  // syntSucc should be finallyBody
+      "        return;" +
+      "    } catch (Exception $e) {" +
+      "        catchBody(succ=[finallyBody], pred = [_empty]);" +
+      "    } finally {" +
+      "        finallyBody(succ=[afterInnerTry, outerFinallyBody], pred = [catchBody,_empty]);" +
+      "    }" +
+      "    afterInnerTry(succ = [outerFinallyBody], pred = [finallyBody]);" +
+      "} finally {" +
+      "    outerFinallyBody(succ=[END], pred = [afterInnerTry, finallyBody]);" +
+      "}");
+    ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
+      expected.createEmptyBlockExpectation()
+        .withPredecessorIds("tryBody")
+        .withSuccessorsIds("catchBody", "finallyBody");
+      return expected;
+    });
+    new Validator(expectedCfgStructure).assertCfg(actualCfg);
+  }
+
 
   @Test
   public void throw_outside_try() {
@@ -229,7 +342,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "block0( succ = [finallyBody] );" +
       "try {" +
       "} finally {" +
-      "  finallyBody( succ = [throwBlock] );" +
+      "  finallyBody( succ = [throwBlock, END] );" +
       "}" +
       "throwBlock( succ = [END], syntSucc = dead );" +
       "throw $e;" +
@@ -239,15 +352,15 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "block0( succ = [END], syntSucc = tryBody  );" +
       "throw $e;" +
       "try {" +
-      "  tryBody( succ = [finallyBody]);" +
+      "  tryBody( succ = [finallyBody] );" +
       "} finally {" +
       "  finallyBody( succ = [END] );" +
       "}");
   }
 
   @Test
-  public void throw_inside_try() {
-    verifyBlockCfg("" +
+  public void throw_inside_try_catch_finally() {
+    ControlFlowGraph actualCfg = cfgForBlock("" +
       "try {" +
       "  tryBody( succ = [catchBody1], syntSucc = dead );" +
       "  throw $e;" +
@@ -258,24 +371,45 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "} catch (Type2 $e) {" +
       "  catchBody2( succ = [finallyBody] );" +
       "} finally {" +
-      "  finallyBody( succ = [END], syntSucc = after );" +
+      "  finallyBody( succ = [END], syntSucc = _empty );" +  // syntSucc should be after, but we are not able to remove empty block
       "  throw $e;" +
       "}" +
       "after( succ = [END]);");
+    ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
+      expected.createEmptyBlockExpectation()
+        .withSuccessorsIds("after", "END");  // empty block created for finallyBody which is dead because of throw
+      return expected;
+    });
+    new Validator(expectedCfgStructure).assertCfg(actualCfg);
+  }
 
-    verifyBlockCfg("" +
+  @Test
+  public void throw_inside_nested_try_catch_finally() {
+    ControlFlowGraph actualCfg = cfgForBlock("" +
       "try {" +
       "  try {" +
       "    innerTryBody( succ = [catchBody1], syntSucc = dead );" +
       "    throw $e;" +
-      "    dead( succ = [catchBody1, outerTryBody]);" +
+      "    dead( succ = [catchBody1, _empty]);" +
       "  } catch (Type $e) {" +
-      "    catchBody1( succ = [outerTryBody] );" +
+      "    catchBody1( succ = [_empty] );" +
       "  }" +
-      "  outerTryBody( succ = [catchBody2, END] );" +
+      "  outerTryBody( succ = [catchBody2, _empty] );" +
       "} catch (Type $e) {" +
-      "  catchBody2( succ = [END] );" +
+      "  catchBody2( succ = [_empty] );" +
       "}");
+    ExpectedCfgStructure expectedCfg = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
+      // inner empty finally
+      expected.createEmptyBlockExpectation()
+        .withPredecessorIds("catchBody1", "dead")
+        .withSuccessorsIds("outerTryBody", "_empty");
+      // outer empty finally
+      expected.createEmptyBlockExpectation()
+        .withPredecessorIds("outerTryBody", "catchBody2", "_empty")
+        .withSuccessorsIds("END");
+      return expected;
+    });
+    new Validator(expectedCfg).assertCfg(actualCfg);
   }
 
   @Test
@@ -1236,6 +1370,21 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     cfg = ControlFlowGraph.build(func, checkContext);
     assertThat(cfg).isNull();
     assertThat(logTester.logs()).isEmpty();
+  }
+
+  @Test
+  public void test_block_tostring() {
+    ControlFlowGraph cfg = cfgForBlock("" +
+      "label: " +
+      "    $i++;");
+    assertThat(cfg.start().toString()).isEqualTo("$i++;");
+    assertThat(cfg.end().toString()).isEqualTo("END");
+
+    cfg = cfgForBlock("foo();");
+    assertThat(cfg.start().toString()).isEqualTo("foo();");
+
+    cfg = cfgForBlock("for (;;) {}");
+    assertThat(cfg.start().toString()).isEqualTo("empty");
   }
 
   private void verifyBlockCfg(String functionBody) {
