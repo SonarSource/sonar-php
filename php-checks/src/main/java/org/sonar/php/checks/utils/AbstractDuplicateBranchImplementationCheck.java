@@ -41,9 +41,9 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
   /**
    * "branches" should contain at least one element
    */
-  private void checkBranches(String branchType, List<List<StatementTree>> branches, boolean reportAllEquivalent, SyntaxToken keywordToken) {
+  private void checkBranches(String branchType, List<List<StatementTree>> branches, boolean reportAllDuplicate, SyntaxToken keywordToken) {
     if (areAllEquivalent(branches)) {
-      if (reportAllEquivalent) {
+      if (reportAllDuplicate) {
         reportAllDuplicateBranches(keywordToken);
 
       } else if (!branches.get(0).isEmpty()) {
@@ -53,10 +53,10 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
     } else {
       for (int i = 1; i < branches.size(); i++) {
         for (int j = 0; j < i; j++) {
-          List<StatementTree> duplicatedBranch = branches.get(i);
-          List<StatementTree> duplicateBranch = branches.get(j);
-          if (areSyntacticallyEquivalent(duplicatedBranch, duplicateBranch) && isNontrivial(duplicatedBranch)) {
-            reportTwoDuplicateBranches(branchType, duplicateBranch, duplicatedBranch);
+          List<StatementTree> originalBranch = branches.get(j);
+          List<StatementTree> duplicateBranch = branches.get(i);
+          if (areSyntacticallyEquivalent(duplicateBranch, originalBranch) && isNontrivial(duplicateBranch)) {
+            reportTwoDuplicateBranches(branchType, originalBranch, duplicateBranch);
             break;
           }
         }
@@ -83,16 +83,16 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
         ElseifClauseTree elseifClauseTree = (ElseifClauseTree) clause;
         branches.add(elseifClauseTree.statements());
 
-      } else if (clause.is(Kind.ELSE_CLAUSE)) {
-        ElseClauseTree elseClause = (ElseClauseTree) clause;
-        if (!elseClause.statements().get(0).is(Kind.IF_STATEMENT)) {
-          branches.add(elseClause.statements());
-          hasElse = true;
-        }
+      } else {
+        branches.add(((ElseClauseTree) clause).statements());
+        hasElse = true;
       }
     }
 
-    checkBranches("branch", branches, hasElse, tree.ifToken());
+    // we don't want to report all duplicate branches for "if" without "else"
+    // this means that in some case (implicit "else") nothing will be done
+    boolean reportAllDuplicate = hasElse;
+    checkBranches("branch", branches, reportAllDuplicate, tree.ifToken());
 
     super.visitIfStatement(tree);
   }
@@ -122,7 +122,11 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
     }
 
     if (!normalizedBranches.isEmpty()) {
-      checkBranches("case", normalizedBranches, hasDefault && !hasFallthrough, tree.switchToken());
+      // we don't want to report all duplicate branches for "switch" without "default"
+      // this means that in some case (no 'case' was matched) nothing will be done
+      // same for "switch" with fallthrough, some branches will be fallen through, thus not identical
+      boolean reportAllDuplicate = hasDefault && !hasFallthrough;
+      checkBranches("case", normalizedBranches, reportAllDuplicate, tree.switchToken());
     }
 
     super.visitSwitchStatement(tree);
@@ -136,7 +140,7 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
   }
 
   private static boolean endsWithBreak(List<StatementTree> statements) {
-    return !statements.isEmpty() && statements.get(statements.size() - 1).is(Kind.BREAK_STATEMENT);
+    return statements.get(statements.size() - 1).is(Kind.BREAK_STATEMENT);
   }
 
   private static boolean areAllEquivalent(List<List<StatementTree>> branches) {
@@ -153,6 +157,6 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
 
   protected abstract void reportAllDuplicateBranches(SyntaxToken keyword);
 
-  protected abstract void reportTwoDuplicateBranches(String branchType, List<StatementTree> duplicatedBranchStatements, List<StatementTree> duplicateBranchStatements);
+  protected abstract void reportTwoDuplicateBranches(String branchType, List<StatementTree> originalBranch, List<StatementTree> duplicateBranch);
 
 }

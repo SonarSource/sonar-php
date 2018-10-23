@@ -26,6 +26,13 @@ function if_statements() {
     bar();
   }
 
+  // ok. alternative syntax is ignored
+  if ($a):
+    foo();
+  else:
+    foo();
+  endif;
+
   if ($a) { // Noncompliant
 //^^
     foo();
@@ -125,6 +132,13 @@ function switch_statements() {
     case 1:
       foo();
     default:
+      foo();
+  }
+
+  switch($a) {
+    case 1:
+      foo();
+    case 2:
       foo();
   }
   // SONARPHP-782

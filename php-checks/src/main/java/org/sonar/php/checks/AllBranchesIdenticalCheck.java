@@ -46,8 +46,8 @@ public class AllBranchesIdenticalCheck extends AbstractDuplicateBranchImplementa
   }
 
   @Override
-  protected void reportTwoDuplicateBranches(String branchType, List<StatementTree> duplicatedBranchStatements, List<StatementTree> duplicateBranchStatements) {
-    // do nothing
+  protected void reportTwoDuplicateBranches(String branchType, List<StatementTree> originalBranch, List<StatementTree> duplicateBranch) {
+    // is handled by S1871 (DuplicateBranchImplementationCheck)
   }
 
 

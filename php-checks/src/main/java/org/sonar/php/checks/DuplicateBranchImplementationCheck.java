@@ -34,14 +34,14 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchI
 
   @Override
   protected void reportAllDuplicateBranches(SyntaxToken keyword) {
-    // do nothing
+    // is handled by S3923 (AllBranchesIdenticalCheck)
   }
 
   @Override
-  protected void reportTwoDuplicateBranches(String branchType, List<StatementTree> duplicatedBranchStatements, List<StatementTree> duplicateBranchStatements) {
-    String message = String.format(MESSAGE, branchType, branchType, ((PHPTree) duplicatedBranchStatements.get(0)).getLine());
-    context().newIssue(this, duplicateBranchStatements.get(0), getLast(duplicateBranchStatements), message)
-      .secondary(duplicatedBranchStatements.get(0), getLast(duplicatedBranchStatements), "Original");
+  protected void reportTwoDuplicateBranches(String branchType, List<StatementTree> originalBranch, List<StatementTree> duplicateBranch) {
+    String message = String.format(MESSAGE, branchType, branchType, ((PHPTree) originalBranch.get(0)).getLine());
+    context().newIssue(this, duplicateBranch.get(0), getLast(duplicateBranch), message)
+      .secondary(originalBranch.get(0), getLast(originalBranch), "Original");
   }
 
   private static StatementTree getLast(List<StatementTree> statements) {
