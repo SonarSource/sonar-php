@@ -90,7 +90,7 @@ class ExpectedCfgStructure {
     return testIds.get(block);
   }
 
-  List<String> blockIds(Collection<CfgBlock> blocks) {
+  List<String> blockIds(Collection<? extends CfgBlock> blocks) {
     return blocks.stream().map(this::testId).collect(Collectors.toList());
   }
 

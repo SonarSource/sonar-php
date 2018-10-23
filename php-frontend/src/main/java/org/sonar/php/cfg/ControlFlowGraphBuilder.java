@@ -72,6 +72,9 @@ class ControlFlowGraphBuilder {
 
   private final LinkedList<Breakable> breakables = new LinkedList<>();
   private final Deque<PhpCfgBlock> throwTargets = new ArrayDeque<>();
+
+  private final Deque<TryBodyEnd> exitTargets = new LinkedList<>();
+
   // key is label
   private final Map<String, PhpCfgBlock> labelledBlocks = new HashMap<>();
   // key is label, value is a list of blocks that jump to the label
@@ -80,6 +83,7 @@ class ControlFlowGraphBuilder {
 
   ControlFlowGraphBuilder(List<? extends Tree> items) {
     throwTargets.push(end);
+    exitTargets.push(new TryBodyEnd(end, end));
     start = build(items, createSimpleBlock(end));
     removeEmptyBlocks();
     blocks.add(end);
@@ -209,26 +213,31 @@ class ControlFlowGraphBuilder {
   }
 
   private PhpCfgBlock buildTryStatement(TryStatementTree tree, PhpCfgBlock successor) {
-    PhpCfgBlock finallyOrSuccessor;
+    PhpCfgBlock exitBlock = exitTargets.peek().exitBlock;
+    PhpCfgBlock finallyBlockEnd = createMultiSuccessorBlock(ImmutableSet.of(successor, exitBlock));
+    PhpCfgBlock finallyBlock;
     if (tree.finallyBlock() != null) {
-      finallyOrSuccessor = buildSubFlow(tree.finallyBlock().statements(), successor);
+      finallyBlock = build(tree.finallyBlock().statements(), finallyBlockEnd);
     } else {
-      finallyOrSuccessor = successor;
+      finallyBlock = finallyBlockEnd;
     }
 
     List<PhpCfgBlock> catchBlocks = tree.catchBlocks().stream()
-      .map(catchBlockTree -> buildSubFlow(catchBlockTree.block().statements(), finallyOrSuccessor))
+      .map(catchBlockTree -> buildSubFlow(catchBlockTree.block().statements(), finallyBlock))
       .collect(Collectors.toList());
 
     if (catchBlocks.isEmpty()) {
-      throwTargets.push(finallyOrSuccessor);
+      throwTargets.push(finallyBlock);
     } else {
       throwTargets.push(catchBlocks.get(0));
     }
     Set<PhpCfgBlock> bodySuccessors = new HashSet<>(catchBlocks);
-    bodySuccessors.add(finallyOrSuccessor);
-    PhpCfgBlock tryBodyStartingBlock = build(tree.block().statements(), createMultiSuccessorBlock(bodySuccessors));
+    bodySuccessors.add(finallyBlock);
+    PhpCfgBlock tryBodySuccessors = createMultiSuccessorBlock(bodySuccessors);
+    exitTargets.push(new TryBodyEnd(tryBodySuccessors, finallyBlock));
+    PhpCfgBlock tryBodyStartingBlock = build(tree.block().statements(), tryBodySuccessors);
     throwTargets.pop();
+    exitTargets.pop();
 
     return tryBodyStartingBlock;
   }
@@ -242,7 +251,7 @@ class ControlFlowGraphBuilder {
   }
 
   private PhpCfgBlock buildReturnStatement(ReturnStatementTree tree, PhpCfgBlock successor) {
-    PhpCfgBlock simpleBlock = createBlockWithSyntacticSuccessor(end, successor);
+    PhpCfgBlock simpleBlock = createBlockWithSyntacticSuccessor(exitTargets.peek().catchAndFinally, successor);
     simpleBlock.addElement(tree);
     return simpleBlock;
   }
@@ -439,8 +448,8 @@ class ControlFlowGraphBuilder {
     return block;
   }
 
-  private PhpCfgMultiSuccessorBlock createMultiSuccessorBlock(Set<PhpCfgBlock> successors) {
-    PhpCfgMultiSuccessorBlock block = new PhpCfgMultiSuccessorBlock(successors);
+  private PhpCfgBlock createMultiSuccessorBlock(Set<PhpCfgBlock> successors) {
+    PhpCfgBlock block = new PhpCfgBlock(successors);
     blocks.add(block);
     return block;
   }
@@ -489,6 +498,16 @@ class ControlFlowGraphBuilder {
     Breakable(PhpCfgBlock breakTarget, PhpCfgBlock continueTarget) {
       this.breakTarget = breakTarget;
       this.continueTarget = continueTarget;
+    }
+  }
+
+  static class TryBodyEnd {
+    final PhpCfgBlock catchAndFinally;
+    final PhpCfgBlock exitBlock;
+
+    TryBodyEnd(PhpCfgBlock catchAndFinally, PhpCfgBlock exitBlock) {
+      this.catchAndFinally = catchAndFinally;
+      this.exitBlock = exitBlock;
     }
   }
 }

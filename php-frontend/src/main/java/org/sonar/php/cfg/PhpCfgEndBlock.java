@@ -44,4 +44,9 @@ class PhpCfgEndBlock extends PhpCfgBlock {
   public void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
     throw new UnsupportedOperationException("Cannot replace successors of end block");
   }
+
+  @Override
+  public String toString() {
+    return "END";
+  }
 }

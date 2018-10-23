@@ -91,7 +91,7 @@
     <version.sonar-orchestrator>3.21.0.1721</version.sonar-orchestrator>
     <version.sslr>1.23</version.sslr>
     <version.sslr-squid-bridge>2.7.0.377</version.sslr-squid-bridge>
-    <version.guava>18.0</version.guava>
+    <version.guava>26.0-jre</version.guava>
     <version.sonarlint>3.0.0.1140</version.sonarlint>
     <version.analyzer-commons>1.9.0.327</version.analyzer-commons>
 

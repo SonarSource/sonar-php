@@ -35,21 +35,27 @@ import org.sonar.plugins.php.api.tree.Tree;
 class PhpCfgBlock implements CfgBlock {
 
   private Set<PhpCfgBlock> predecessors = new HashSet<>();
-  private PhpCfgBlock successor;
-  private PhpCfgBlock syntacticSuccessor = null;
+  private Set<PhpCfgBlock> successors;
+  private PhpCfgBlock syntacticSuccessor;
 
   private LinkedList<Tree> elements = new LinkedList<>();
 
-  PhpCfgBlock(PhpCfgBlock successor) {
-    Preconditions.checkArgument(successor != null, "Successor cannot be null");
-    this.successor = successor;
+  private PhpCfgBlock(Set<PhpCfgBlock> successors, @Nullable PhpCfgBlock syntacticSuccessor) {
+    this.successors = ImmutableSet.copyOf(successors);
+    this.syntacticSuccessor = syntacticSuccessor;
   }
 
   PhpCfgBlock(PhpCfgBlock successor, PhpCfgBlock syntacticSuccessor) {
-    Preconditions.checkArgument(successor != null, "Successor cannot be null");
-    Preconditions.checkArgument(syntacticSuccessor != null, "Syntactic successor cannot be null");
-    this.successor = successor;
-    this.syntacticSuccessor = syntacticSuccessor;
+    this(ImmutableSet.of(successor), Preconditions.checkNotNull(syntacticSuccessor,
+      "Syntactic successor cannot be null"));
+  }
+
+  PhpCfgBlock(Set<PhpCfgBlock> successors) {
+    this(successors, null);
+  }
+
+  PhpCfgBlock(PhpCfgBlock successor) {
+    this(ImmutableSet.of(successor));
   }
 
   PhpCfgBlock() {
@@ -62,8 +68,8 @@ class PhpCfgBlock implements CfgBlock {
   }
 
   @Override
-  public Set<CfgBlock> successors() {
-    return ImmutableSet.of(successor);
+  public Set<? extends CfgBlock> successors() {
+    return successors;
   }
 
   @Nullable
@@ -88,7 +94,9 @@ class PhpCfgBlock implements CfgBlock {
    * we have to replace empty successors in the remaining blocks by non-empty successors.
    */
   void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
-    successor = replacement(successor, replacements);
+    successors = successors.stream()
+      .map(successor -> replacement(successor, replacements))
+      .collect(ImmutableSet.toImmutableSet());
     if (syntacticSuccessor != null) {
       syntacticSuccessor = replacement(syntacticSuccessor, replacements);
     }
@@ -125,5 +133,17 @@ class PhpCfgBlock implements CfgBlock {
       }
     }
     return block;
+  }
+
+  @Override
+  public String toString() {
+    if (elements.isEmpty()) {
+      return "empty";
+    }
+    Tree firstElement = elements.get(0);
+    if (firstElement.is(Tree.Kind.LABEL)) {
+      firstElement = elements.get(1);
+    }
+    return firstElement.toString();
   }
 }
