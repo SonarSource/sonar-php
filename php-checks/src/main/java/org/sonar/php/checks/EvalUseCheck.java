@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 public class EvalUseCheck extends FunctionUsageCheck {
 
   public static final String KEY = "S1523";
-  private static final String MESSAGE = "Remove this use of the \"eval\" function.";
+  private static final String MESSAGE = "Make sure that this dynamic injection or execution of code is safe.";
 
   @Override
   protected ImmutableSet<String> functionNames() {

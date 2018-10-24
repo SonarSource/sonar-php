@@ -38,7 +38,7 @@ import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 @Rule(key = "S4507")
 public class CakePhpDebugModeCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Make sure CakePHP's debug mode is not activated on production code.";
+  private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
 
   private static final Set<String> CAKE_DEBUG_FUNCTIONS = ImmutableSet.of("Configure::write", "Configure::config");
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
