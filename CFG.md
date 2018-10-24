@@ -20,7 +20,6 @@ Types of blocks:
 * Branching block
   - has 2 successors - one TRUE successor and one FALSE successor
   - contains the branching tree
-* Multi successor block - multiple successors
 * End block - no successors
 
 ### Statements
