@@ -33,6 +33,7 @@ import org.sonar.php.cfg.ControlFlowGraph;
 import org.sonar.php.cfg.LiveVariablesAnalysis;
 import org.sonar.php.cfg.LiveVariablesAnalysis.LiveVariables;
 import org.sonar.php.cfg.LiveVariablesAnalysis.VariableUsage;
+import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
@@ -70,6 +71,10 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
   public void visitNode(Tree tree) {
     ControlFlowGraph cfg = ControlFlowGraph.build(tree, context());
     if (cfg == null) {
+      return;
+    }
+    Scope scope = context().symbolTable().getScopeFor(tree);
+    if (scope == null || scope.hasUnresolvedCompact()) {
       return;
     }
     LiveVariablesAnalysis lva = LiveVariablesAnalysis.analyze(cfg, context().symbolTable());

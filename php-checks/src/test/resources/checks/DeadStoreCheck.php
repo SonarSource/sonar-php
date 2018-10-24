@@ -448,3 +448,10 @@ function param_by_value(&$cellValue) {
   $cellValue = foo();
 }
 
+function use_of_unresolved_compact() {
+    $groupby = "val";
+    $arr = array('groupby');
+    compact($arr);
+    $groupby = "another";
+    foo($groupby);
+}
