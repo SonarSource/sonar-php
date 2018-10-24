@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -234,7 +235,9 @@ public class LiveVariablesAnalysis {
 
     @Override
     public void visitAssignmentExpression(AssignmentExpressionTree tree) {
-      if (tree.getKind() != Tree.Kind.ASSIGNMENT) {
+      boolean isCompoundAssignment = tree.getKind() != Tree.Kind.ASSIGNMENT;
+      boolean isUsedAsNamedParameterOrReturn = tree.getParent().is(Tree.Kind.FUNCTION_CALL, Tree.Kind.RETURN_STATEMENT);
+      if (isCompoundAssignment || isUsedAsNamedParameterOrReturn) {
         visitReadVariable(tree.variable());
       }
       if (!visitAssignedVariable(tree.variable())) {
@@ -259,6 +262,12 @@ public class LiveVariablesAnalysis {
     public void visitVariableIdentifier(VariableIdentifierTree tree) {
       visitReadVariable(tree);
       super.visitVariableIdentifier(tree);
+    }
+
+    @Override
+    public void visitLiteral(LiteralTree tree) {
+      visitReadVariable(tree);
+      super.visitLiteral(tree);
     }
 
     @Override
@@ -298,10 +307,14 @@ public class LiveVariablesAnalysis {
     }
 
     private void visitReadVariable(Tree tree) {
-      if (!tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+      Symbol varSym;
+      if (tree.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
+        varSym = symbols.getSymbol(tree);
+      } else if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
+        varSym = symbols.getSymbol(((LiteralTree) tree).token());
+      } else {
         return;
       }
-      Symbol varSym = symbols.getSymbol(tree);
       if (isLocalVariable(varSym)) {
         VariableUsage usage = variables.computeIfAbsent(varSym, s -> new VariableUsage());
         usage.isRead = true;
