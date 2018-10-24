@@ -119,7 +119,7 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
   }
 
   private static boolean shouldSkip(Tree element, Symbol symbol) {
-    return symbol.hasModifier("global") || isInitializedToBasicValue(element);
+    return symbol.hasModifier("static") || symbol.hasModifier("global") || isInitializedToBasicValue(element);
   }
 
   private static boolean isInitializedToBasicValue(Tree element) {

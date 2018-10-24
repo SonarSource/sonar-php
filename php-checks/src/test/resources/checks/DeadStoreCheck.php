@@ -4,7 +4,7 @@ function foo($a) {}
 
 
 /***************************
- * GLOBAL SCOPE
+ * GLOBAL SCOPE, STATIC LOCAL
  ***************************/
 
 $a = 1;
@@ -16,8 +16,14 @@ function global_scope_not_local() {
 
 function globalScope() {
   global $a;
-  $a = 2; // compliant, we ignore global scope
-  $a = 3;
+  $a = 21; // compliant, we ignore global scope
+  $a = 31;
+}
+
+function static_local() {
+  static $foo;
+  $foo = 21; // compliant, we ignore static
+  $foo = 31;
 }
 
 /***************************
@@ -100,6 +106,33 @@ function array_assignment(){
 function assignment_in_lhs() {
   $a = 43; // FN - we do not consider order inside expressions
   $b[$a = foo()] = bar($a);
+}
+
+/***************************
+ * COMPACT
+ ***************************/
+
+function usage_via_compact() {
+  $a = "foo";
+  $b = 23;
+  compact('a', 'b');
+  $a = "bar";
+  $b = 123;
+  foo($a, $b);
+}
+
+/***************************
+ * ASSIGNMENT AS PARAMETER OR RETURN PATTERN
+ ***************************/
+
+function assignment_as_return() {
+  $b = 123;
+  foo($b);
+  foo($b = "hello"); // ok
+
+  $a = 23;
+  foo($a);
+  return $a = foo(); // ok
 }
 
 /***************************
@@ -217,6 +250,11 @@ function ifs_noncompliant() {
   $three = 15;
   foo($three);
 
+  $res = 123;
+  foo($res);
+  if ($res = foo()) { // Noncompliant
+    stmt();
+  }
 }
 
 function ifs_compliant() {
@@ -294,6 +332,12 @@ function loops_noncompliant() {
   }
 
   for ($six = 0, $seven = 42; $six <= 10; $six++) { // $seven gets reported by S1481 - unused local variable
+    stmt();
+  }
+
+  $res = 32;
+  foo($res);
+  while ($res = foo()) { // Noncompliant {{Remove this useless assignment to local variable '$res'.}}
     stmt();
   }
 }
@@ -454,4 +498,9 @@ function use_of_unresolved_compact() {
     compact($arr);
     $groupby = "another";
     foo($groupby);
+}
+
+function return_object() {
+  $obj = foo();
+  return $obj->bar();
 }
