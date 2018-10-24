@@ -22,7 +22,6 @@ package org.sonar.php.checks;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.AbstractDuplicateBranchImplementationCheck;
-import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -34,34 +33,18 @@ public class DuplicateBranchImplementationCheck extends AbstractDuplicateBranchI
   private static final String MESSAGE = "This %s's code block is the same as the block for the %s on line %s.";
 
   @Override
-  protected void onAllEquivalentBranches(SyntaxToken keyword, List<List<StatementTree>> branches, boolean hasDefault, boolean hasFallthrough) {
-    if (!hasDefault) {
-      branches.stream().skip(1).forEach(branch -> raiseIssue("branch", branches.get(0), branch));
-    }
-    // otherwise do nothing, case handled by S3923
+  protected void reportAllDuplicateBranches(SyntaxToken keyword) {
+    // is handled by S3923 (AllBranchesIdenticalCheck)
   }
 
   @Override
-  protected void checkForDuplication(String branchType, List<List<StatementTree>> list) {
-    for (int i = 1; i < list.size(); i++) {
-      for (int j = 0; j < i; j++) {
-        if (areSyntacticallyEquivalent(list.get(i), list.get(j))) {
-          raiseIssue(branchType, list.get(j), list.get(i));
-          break;
-        }
-      }
-    }
+  protected void reportTwoDuplicateBranches(String branchType, List<StatementTree> originalBranch, List<StatementTree> duplicateBranch) {
+    String message = String.format(MESSAGE, branchType, branchType, ((PHPTree) originalBranch.get(0)).getLine());
+    context().newIssue(this, duplicateBranch.get(0), getLast(duplicateBranch), message)
+      .secondary(originalBranch.get(0), getLast(originalBranch), "Original");
   }
 
-  private static boolean areSyntacticallyEquivalent(List<StatementTree> list1, List<StatementTree> list2) {
-    boolean bothEmpty = list1.isEmpty() && list2.isEmpty();
-    return !bothEmpty && SyntacticEquivalence.areSyntacticallyEquivalent(list1.iterator(), list2.iterator());
-  }
-
-  private void raiseIssue(String branchType, List<StatementTree> duplicatedTree, List<StatementTree> duplicatingTree) {
-    String message = String.format(MESSAGE, branchType, branchType, ((PHPTree) duplicatedTree.get(0)).getLine());
-    context()
-      .newIssue(this, duplicatingTree.get(0), duplicatingTree.get(duplicatingTree.size() - 1), message)
-      .secondary(duplicatedTree.get(0), duplicatedTree.get(duplicatedTree.size() - 1), null);
+  private static StatementTree getLast(List<StatementTree> statements) {
+    return statements.get(statements.size() - 1);
   }
 }

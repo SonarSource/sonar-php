@@ -21,7 +21,6 @@ package org.sonar.php.checks.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.sonar.php.metrics.LineVisitor;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -35,7 +34,35 @@ import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 
+import static org.sonar.php.checks.utils.SyntacticEquivalence.areSyntacticallyEquivalent;
+
 public abstract class AbstractDuplicateBranchImplementationCheck extends AbstractDuplicateBranchCheck {
+
+  /**
+   * "branches" should contain at least one element
+   */
+  private void checkBranches(String branchType, List<List<StatementTree>> branches, boolean reportAllDuplicate, SyntaxToken keywordToken) {
+    if (areAllEquivalent(branches)) {
+      if (reportAllDuplicate) {
+        reportAllDuplicateBranches(keywordToken);
+
+      } else if (!branches.get(0).isEmpty()) {
+        // do not check size, but need at least one statement in branch to be able to report
+        branches.stream().skip(1).forEach(branch -> reportTwoDuplicateBranches(branchType, branches.get(0), branch));
+      }
+    } else {
+      for (int i = 1; i < branches.size(); i++) {
+        for (int j = 0; j < i; j++) {
+          List<StatementTree> originalBranch = branches.get(j);
+          List<StatementTree> duplicateBranch = branches.get(i);
+          if (areSyntacticallyEquivalent(duplicateBranch, originalBranch) && isNontrivial(duplicateBranch)) {
+            reportTwoDuplicateBranches(branchType, originalBranch, duplicateBranch);
+            break;
+          }
+        }
+      }
+    }
+  }
 
   @Override
   public void visitIfStatement(IfStatementTree tree) {
@@ -56,54 +83,50 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
         ElseifClauseTree elseifClauseTree = (ElseifClauseTree) clause;
         branches.add(elseifClauseTree.statements());
 
-      } else if (clause.is(Kind.ELSE_CLAUSE)) {
-        ElseClauseTree elseClause = (ElseClauseTree) clause;
-        if (!elseClause.statements().get(0).is(Kind.IF_STATEMENT)) {
-          branches.add(elseClause.statements());
-          hasElse = true;
-        }
+      } else {
+        branches.add(((ElseClauseTree) clause).statements());
+        hasElse = true;
       }
     }
 
-    if (areAllEquivalent(branches)) {
-      onAllEquivalentBranches(tree.ifToken(), branches, hasElse, false);
-    } else {
-      checkForDuplication("branch", getNonTrivialBranches(branches, false));
-    }
+    // we don't want to report all duplicate branches for "if" without "else"
+    // this means that in some case (implicit "else") nothing will be done
+    boolean reportAllDuplicate = hasElse;
+    checkBranches("branch", branches, reportAllDuplicate, tree.ifToken());
 
     super.visitIfStatement(tree);
   }
 
   @Override
   public void visitSwitchStatement(SwitchStatementTree tree) {
-    boolean hasFallthrough = false;
-
     List<List<StatementTree>> normalizedBranches = new ArrayList<>();
-    List<List<StatementTree>> caseBranches = new ArrayList<>();
     boolean hasDefault = false;
+    boolean hasFallthrough = false;
     int lastIndex = tree.cases().size() - 1;
 
     for (int i = 0; i < tree.cases().size(); i++) {
       SwitchCaseClauseTree switchCaseClause = tree.cases().get(i);
       List<StatementTree> statements = switchCaseClause.statements();
 
-      if (i != lastIndex && !endsWithBreak(statements)) {
-        hasFallthrough = true;
-      }
-
       if (switchCaseClause.is(Kind.DEFAULT_CLAUSE)) {
         hasDefault = true;
-      } else {
-        caseBranches.add(statements);
       }
 
-      normalizedBranches.add(normalize(statements));
+      if (!statements.isEmpty()) {
+        normalizedBranches.add(normalize(statements));
+
+        if (i != lastIndex && !endsWithBreak(statements)) {
+          hasFallthrough = true;
+        }
+      }
     }
 
-    if (areAllEquivalent(normalizedBranches)) {
-      onAllEquivalentBranches(tree.switchToken(), caseBranches, hasDefault, hasFallthrough);
-    } else {
-      checkForDuplication("case", getNonTrivialBranches(caseBranches, true));
+    if (!normalizedBranches.isEmpty()) {
+      // we don't want to report all duplicate branches for "switch" without "default"
+      // this means that in some case (no 'case' was matched) nothing will be done
+      // same for "switch" with fallthrough, some branches will be fallen through, thus not identical
+      boolean reportAllDuplicate = hasDefault && !hasFallthrough;
+      checkBranches("case", normalizedBranches, reportAllDuplicate, tree.switchToken());
     }
 
     super.visitSwitchStatement(tree);
@@ -117,32 +140,23 @@ public abstract class AbstractDuplicateBranchImplementationCheck extends Abstrac
   }
 
   private static boolean endsWithBreak(List<StatementTree> statements) {
-    return !statements.isEmpty() && statements.get(statements.size() - 1).is(Kind.BREAK_STATEMENT);
+    return statements.get(statements.size() - 1).is(Kind.BREAK_STATEMENT);
   }
 
   private static boolean areAllEquivalent(List<List<StatementTree>> branches) {
-    if (branches.isEmpty()) {
-      return false;
-    }
     List<StatementTree> firstBranch = branches.get(0);
-    return branches.stream().allMatch(branch -> SyntacticEquivalence.areSyntacticallyEquivalent(firstBranch, branch));
+    return branches.stream().allMatch(branch -> areSyntacticallyEquivalent(firstBranch, branch));
   }
 
-  private static List<List<StatementTree>> getNonTrivialBranches(List<List<StatementTree>> branches, boolean isSwitchClause) {
-    return branches.stream()
-      .filter(branch -> isNontrivial(branch, isSwitchClause))
-      .collect(Collectors.toList());
-  }
-
-  private static boolean isNontrivial(List<StatementTree> statements, boolean isSwitchClause) {
-    List<StatementTree> normalizedStatements = isSwitchClause ? normalize(statements) : statements;
-    return normalizedStatements.stream()
+  private static boolean isNontrivial(List<StatementTree> statements) {
+    return statements.stream()
       .flatMap(statement -> statement.is(Kind.BLOCK) ? ((BlockTree) statement).statements().stream() : Stream.of(statement))
       .mapToInt(LineVisitor::linesOfCode)
       .sum() > 1;
   }
 
-  protected abstract void onAllEquivalentBranches(SyntaxToken keyword, List<List<StatementTree>> branchesList, boolean containsDefault, boolean hasFallthrough);
+  protected abstract void reportAllDuplicateBranches(SyntaxToken keyword);
 
-  protected abstract void checkForDuplication(String branchType, List<List<StatementTree>> branchesList);
+  protected abstract void reportTwoDuplicateBranches(String branchType, List<StatementTree> originalBranch, List<StatementTree> duplicateBranch);
+
 }
