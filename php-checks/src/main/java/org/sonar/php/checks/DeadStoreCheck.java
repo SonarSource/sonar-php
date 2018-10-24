@@ -40,7 +40,9 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.TryStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1854")
 public class DeadStoreCheck extends PHPSubscriptionCheck {
@@ -77,8 +79,17 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
     if (scope == null || scope.hasUnresolvedCompact()) {
       return;
     }
+    if (containsTryCatchBlock(tree)) {
+      return;
+    }
     LiveVariablesAnalysis lva = LiveVariablesAnalysis.analyze(cfg, context().symbolTable());
     cfg.blocks().forEach(block -> verifyBlock(block, lva.getLiveVariables(block), lva.getReadSymbols()));
+  }
+
+  private static boolean containsTryCatchBlock(Tree tree) {
+    TryVisitor tryVisitor = new TryVisitor();
+    tree.accept(tryVisitor);
+    return tryVisitor.hasTry;
   }
 
   /**
@@ -134,6 +145,15 @@ public class DeadStoreCheck extends PHPSubscriptionCheck {
       rightValue = rightMostAssignment.value();
     }
     return rightValue;
+  }
+
+  private static class TryVisitor extends PHPVisitorCheck {
+    private boolean hasTry;
+
+    @Override
+    public void visitTryStatement(TryStatementTree tree) {
+      hasTry = true;
+    }
   }
 
 }

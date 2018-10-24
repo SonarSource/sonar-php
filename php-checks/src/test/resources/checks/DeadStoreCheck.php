@@ -402,7 +402,7 @@ function usage_in_catch() {
 function no_usage_in_catch() {
   $foo = 42;
   foo($foo);
-  $foo = 43; // Noncompliant
+  $foo = 43; // Compliant - functions with try-catch are ignored
   try {
     bar();
   } catch (Exception $e) {
