@@ -9,10 +9,15 @@ A CFG is a graph of [basic blocks](https://en.wikipedia.org/wiki/Basic_block) (f
 
 A block has the following attributes:
 
-* successors - blocks that are executed after
-* predecessors - blocks that are executed before
-* syntactic successor - if no jump is applied, the block that immediately follows
-* elements - the AST Trees that are inside the block
+* successors - set of blocks that are executed after
+* predecessors - set of blocks that are executed before
+* syntactic successor
+  - an imaginary successor which exists only for jump blocks (BREAK, CONTINUE, RETURN, GOTO, THROW)
+  - it is the "normal" successor in case the block would not have a jump statement in the end
+  - for non-jump blocks, it is null
+* elements
+  - list of trees (ASTs) inside the block
+  - **Important** : the block does not necessarily end with a terminator
 
 Types of blocks:
 
