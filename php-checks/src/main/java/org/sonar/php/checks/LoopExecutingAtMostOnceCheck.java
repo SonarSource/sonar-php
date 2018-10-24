@@ -63,7 +63,10 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
     Tree.Kind.FOREACH_STATEMENT,
     Tree.Kind.ALTERNATIVE_WHILE_STATEMENT,
     Tree.Kind.ALTERNATIVE_FOR_STATEMENT,
-    Tree.Kind.ALTERNATIVE_FOREACH_STATEMENT
+    Tree.Kind.ALTERNATIVE_FOREACH_STATEMENT,
+    // not loops but can contain break
+    Tree.Kind.SWITCH_STATEMENT,
+    Tree.Kind.ALTERNATIVE_SWITCH_STATEMENT
     );
 
   private ListMultimap<Tree, Tree> jumpsByLoop = ArrayListMultimap.create();
@@ -104,7 +107,10 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
 
   private void checkJump(Tree tree) {
     Tree loop = findAncestorWithKind(tree, LOOPS);
-    if (loop != null && !canExecuteMoreThanOnce(loop) && !isForEachReturningFirstElement(loop, tree)) {
+    if (loop == null || loop.is(Tree.Kind.SWITCH_STATEMENT, Tree.Kind.ALTERNATIVE_SWITCH_STATEMENT)) {
+      return;
+    }
+    if (!canExecuteMoreThanOnce(loop) && !isForEachReturningFirstElement(loop, tree)) {
       jumpsByLoop.put(loop, tree);
     }
   }

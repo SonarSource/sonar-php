@@ -181,3 +181,16 @@ for ($n = 0; $n < $period; ++$n) {
     }
     $cost -= $fNRate;
 }
+
+function dont_check_break_in_switch() {
+    while ($cond) { // Noncompliant
+//  ^^^^^
+        break;
+//      ^^^^^^<
+        switch ($i) {
+            case 1:
+                echo $i;
+                break;  // break is not secondary location bc it's not breaking loop
+        }
+    }
+}
