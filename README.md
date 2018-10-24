@@ -19,6 +19,10 @@ SonarPHP is a [static code analyser](https://en.wikipedia.org/wiki/Static_progra
 * [SonarSource Community Forum](https://community.sonarsource.com/)
 * [Demo project analysis](https://sonarcloud.io/dashboard?id=drupal)
 
+# More documentation
+
+* [Control Flow Graph documentation](CFG.md)
+
 Have question or feedback?
 --------------------------
 
@@ -37,10 +41,6 @@ To submit a contribution, create a pull request for this repository. Please make
 
 ### Custom Rules
 If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you.
-
-### Further documentation
-
-[Control Flow Graph documentation](CFG.md)
 
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.
