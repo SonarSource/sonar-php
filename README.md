@@ -36,7 +36,11 @@ To request a new feature, please create a new thread in [SonarQube Community For
 To submit a contribution, create a pull request for this repository. Please make sure that you follow our [code style](https://github.com/SonarSource/sonar-developer-toolset) and all [tests](#testing) are passing (Travis build is created for each PR).
 
 ### Custom Rules
-If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you. 
+If you have an idea for a rule but you are not sure that everyone needs it you can implement a [custom rule](http://docs.sonarqube.org/display/PLUG/Custom+Rules+for+PHP) available only for you.
+
+### Further documentation
+
+[Control Flow Graph documentation](CFG.md)
 
 # <a name="testing"></a>Testing
 To run tests locally follow these instructions.
