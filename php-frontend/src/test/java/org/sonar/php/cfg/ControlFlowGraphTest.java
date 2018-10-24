@@ -1306,6 +1306,30 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void switch_for_break() {
+    verifyBlockCfg("" +
+      "before(succ = [forCond]);" +
+      "for ($i = 0; forCond(succ = [loop, END]);) {" +
+      "    loop(succ = [c1]);" +
+      "    switch (foo($i)) {" +
+      "        case c1(succ = [case1, c2]):" +
+      "            case1(succ = [afterSwitch], syntSucc = case2);" +
+      "            break;" +
+      "        case c2(succ = [case2, c3]):" +
+      "            case2(succ = [afterSwitch], syntSucc = case3);" +
+      "            break;" +
+      "        case c3(succ = [case3, _default]):" +
+      "            case3(succ = [afterSwitch], syntSucc = _default );" +
+      "            break;" +
+      "        default:" +
+      "            _default(succ = [afterSwitch], syntSucc = afterSwitch);" +
+      "            break;" +
+      "    }" +
+      "    afterSwitch(succ = [forCond]);" +
+      "}");
+  }
+
+  @Test
   public void test_buildCFG() {
     CompilationUnitTree tree = parse("<?php " +
         "function foo() {" +

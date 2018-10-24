@@ -29,6 +29,7 @@ function foo($i)
     }
 
     label:
+    return;
     while ($i < 10) { // Noncompliant
         echo $i;
         $i++;
@@ -36,6 +37,10 @@ function foo($i)
     }
 
     for ($i = 0; $i < 10; $i++) { // Noncompliant
+        break;
+    }
+
+    for ($i = 0; $i < 10;) { // Noncompliant
         break;
     }
 
@@ -145,4 +150,34 @@ function switch_for_coverage($i)
         case 1:
             break;
     }
+}
+
+function for_loop_without_update($end, $cond)
+{
+    for ($i = 0; $i < $end;) {
+       if ($cond)
+           break;
+    }
+}
+
+foreach ($arr as $item) {
+    foreach ($item as $item2) { // Noncompliant
+        break;
+    }
+}
+
+for ($i = 0; $i < 10; $i++) {
+    for ($j = 0; $j < 10; $j++) { // Noncompliant
+        break;
+    }
+}
+
+for ($n = 0; $n < $period; ++$n) {
+
+    switch ($period - $n) {
+        case 1    :
+            return round($cost * 0.5, 0);
+            break;
+    }
+    $cost -= $fNRate;
 }

@@ -23,7 +23,13 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Sets;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import javax.annotation.CheckForNull;
 import org.sonar.check.Rule;
 import org.sonar.php.cfg.CfgBlock;
 import org.sonar.php.cfg.CfgBranchingBlock;
@@ -34,7 +40,6 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
-import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
@@ -134,44 +139,49 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
   }
 
   private boolean canExecuteMoreThanOnce(Tree loop) {
-    Tree treeWithFlow = findAncestorWithKind(loop, ControlFlowGraph.KINDS_WITH_CONTROL_FLOW);
-    if (treeWithFlow == null) {
-      // should never happen
+    CfgBranchingBlock loopBlock = findLoopBlock(loop);
+    if (loopBlock == null) {
       return true;
     }
-    ControlFlowGraph cfg = ControlFlowGraph.build(treeWithFlow, context());
-    if (cfg == null) {
-      return true;
-    }
-    return cfg.blocks().stream()
-      .filter(CfgBranchingBlock.class::isInstance)
-      .filter(b -> ((CfgBranchingBlock) b).branchingTree().equals(loop))
-      .anyMatch(b -> hasPredecessorInsideLoop(b, loop));
-  }
-
-  private static boolean hasPredecessorInsideLoop(CfgBlock block, Tree loop) {
-    for (CfgBlock predecessor : block.predecessors()) {
-      if (predecessor.elements().isEmpty()) {
-        if (hasPredecessorInsideLoop(predecessor, loop)) {
-          return true;
-        } else {
-          continue;
-        }
-      }
-      Tree lastElement = Iterables.getLast(predecessor.elements());
-
-      if (loop.is(Tree.Kind.FOR_STATEMENT, Tree.Kind.ALTERNATIVE_FOR_STATEMENT)) {
-        ForStatementTree forTree = (ForStatementTree) loop;
-        if (!forTree.update().isEmpty()
-          && Iterables.getLast(forTree.update()).equals(lastElement)
-          && !predecessor.predecessors().isEmpty()) {
-          return true;
-        }
-      } else if (isDescendant(lastElement, loop)) {
+    // try to find path in CFG from trueSuccessor of loopBlock to the loopBlock
+    // if such path exists then loop can be executed multiple times
+    Deque<CfgBlock> worklist = new ArrayDeque<>();
+    worklist.add(loopBlock.trueSuccessor());
+    Set<CfgBlock> seen = new HashSet<>();
+    while (!worklist.isEmpty()) {
+      CfgBlock b = worklist.pop();
+      if (b.successors().contains(loopBlock)) {
         return true;
+      }
+      if (seen.add(b)) {
+        b.successors().stream()
+          // consider only paths within the loop body
+          .filter(succ -> blockInsideLoop(succ, loop))
+          .forEach(worklist::push);
       }
     }
     return false;
   }
 
+  private static boolean blockInsideLoop(CfgBlock block, Tree loop) {
+    return block.elements().isEmpty() || isDescendant(block.elements().get(0), loop);
+  }
+
+  @CheckForNull
+  private CfgBranchingBlock findLoopBlock(Tree loop) {
+    Tree treeWithFlow = findAncestorWithKind(loop, ControlFlowGraph.KINDS_WITH_CONTROL_FLOW);
+    if (treeWithFlow == null) {
+      // should never happen
+      return null;
+    }
+    ControlFlowGraph cfg = ControlFlowGraph.build(treeWithFlow, context());
+    if (cfg == null) {
+      return null;
+    }
+    List<CfgBlock> loopBlocks = cfg.blocks().stream()
+      .filter(CfgBranchingBlock.class::isInstance)
+      .filter(b -> ((CfgBranchingBlock) b).branchingTree().equals(loop)).collect(Collectors.toList());
+
+    return  ((CfgBranchingBlock) Iterables.getOnlyElement(loopBlocks));
+  }
 }
