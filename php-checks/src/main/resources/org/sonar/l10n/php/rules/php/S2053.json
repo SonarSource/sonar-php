@@ -1,6 +1,6 @@
 {
   "title": "Hashes should include an unpredictable salt",
-  "type": "SECURITY_HOTSPOT",
+  "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

@@ -5,8 +5,7 @@
 $ctx = stream_context_create([
   'ssl' =&gt; [
     'crypto_method' =&gt;
-      STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT | // Noncompliant
-      STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+      STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT // Noncompliant
   ],
 ]);
 </pre>
@@ -14,7 +13,7 @@ $ctx = stream_context_create([
 <pre>
 $ctx = stream_context_create([
     'ssl' =&gt; [
-        'crypto_method' =&gt; STREAM_CRYPTO_METHOD_SSLv3_CLIENT
+        'crypto_method' =&gt; STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT
     ],
 ]);
 </pre>
