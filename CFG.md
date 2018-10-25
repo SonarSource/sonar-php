@@ -18,13 +18,15 @@ A block has the following attributes:
 * elements
   - list of trees (ASTs) inside the block
   - **Important** : the block does not necessarily end with a terminator
+    - it could have a terminator if it contains a RETURN inside the list of trees
+    - there are no artificial terminators
 
-Types of blocks:
+Types of blocks (different class implementations):
 
 * Simple block - one successor
 * Branching block
   - has 2 successors - one TRUE successor and one FALSE successor
-  - contains the branching tree
+  - contains the branching tree - e.g. IfStatementTree
 * End block - no successors
 
 ### Statements
@@ -51,7 +53,9 @@ The FOR statement creates multiple blocks:
 
 The SWITCH statement is modelled as multiple if-elseif blocks.
 
-The TRY statement is as a multi-successor block - the TRY block has as successors the CATCH and FINALLY blocks.
+The TRY statement is modelled as a block with multiple successors
+- each CATCH block represents a successor
+- the FINALLY block represents a successor
 
 ----
 ## Tests
