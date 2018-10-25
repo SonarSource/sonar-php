@@ -7,7 +7,7 @@ A CFG is a graph of [basic blocks](https://en.wikipedia.org/wiki/Basic_block) (f
 
 ### Blocks
 
-A block has the following attributes:
+#### Block attributes
 
 * successors - set of blocks that are executed after
 * predecessors - set of blocks that are executed before
@@ -21,7 +21,9 @@ A block has the following attributes:
     - it could have a terminator if it contains a RETURN inside the list of trees
     - there are no artificial terminators
 
-Types of blocks (different class implementations):
+#### Block types
+
+Different implementations of blocks:
 
 * Simple block - one successor
 * Branching block
