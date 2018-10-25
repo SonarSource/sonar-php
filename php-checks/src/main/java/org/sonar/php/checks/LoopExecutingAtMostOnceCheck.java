@@ -34,6 +34,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.cfg.CfgBlock;
 import org.sonar.php.cfg.CfgBranchingBlock;
 import org.sonar.php.cfg.ControlFlowGraph;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -41,6 +42,7 @@ import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
+import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
@@ -106,9 +108,14 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
     if (loop == null || loop.is(Tree.Kind.SWITCH_STATEMENT, Tree.Kind.ALTERNATIVE_SWITCH_STATEMENT)) {
       return;
     }
-    if (!canExecuteMoreThanOnce(loop)) {
+    if (!isWhileTrue(loop) && !canExecuteMoreThanOnce(loop)) {
       jumpsByLoop.put(loop, tree);
     }
+  }
+
+  private static boolean isWhileTrue(Tree loop) {
+    return loop.is(Tree.Kind.WHILE_STATEMENT, Tree.Kind.ALTERNATIVE_WHILE_STATEMENT)
+      && CheckUtils.isTrueValue(((WhileStatementTree) loop).condition().expression());
   }
 
   private boolean canExecuteMoreThanOnce(Tree loop) {

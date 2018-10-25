@@ -161,3 +161,10 @@ function dont_check_break_in_switch() {
         }
     }
 }
+
+function while_true() {
+    while (true) {
+        foo();
+        break;
+    }
+}
