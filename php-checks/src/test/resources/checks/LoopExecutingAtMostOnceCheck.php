@@ -168,3 +168,14 @@ function while_true() {
         break;
     }
 }
+
+function while_try()
+{
+    while ($cond) {
+        try {
+            foo();
+            break;
+        } catch (\Exception $e) {
+        }
+    }
+}
