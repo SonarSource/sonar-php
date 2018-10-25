@@ -98,3 +98,19 @@ function inline_html() {
   		...
   <?php
 }
+
+function try_catch() {
+
+  while ($cond) {
+    dosmth();
+    continue; // Noncompliant
+  }
+
+  try {
+    foo();
+    return;
+  } catch (Exc $e) {
+    bar();
+  }
+  after();
+}
