@@ -20,10 +20,12 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.cfg.CfgBlock;
 import org.sonar.php.cfg.ControlFlowGraph;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
@@ -53,10 +55,8 @@ public class RedundantJumpCheck extends PHPSubscriptionCheck {
   private void checkCfg(ControlFlowGraph cfg) {
     for (CfgBlock cfgBlock : cfg.blocks()) {
       if (cfgBlock.successors().size() == 1 && cfgBlock.successors().contains(cfgBlock.syntacticSuccessor())) {
-        Tree lastElement = cfgBlock.elements().get(cfgBlock.elements().size() - 1);
-        if (lastElement.is(Kind.RETURN_STATEMENT) &&
-          (((ReturnStatementTree) lastElement).expression() != null ||
-            lastElement.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE))) {
+        Tree lastElement = Iterables.getLast(cfgBlock.elements());
+        if (isIgnoredReturn(lastElement)) {
           continue;
         }
 
@@ -65,5 +65,20 @@ public class RedundantJumpCheck extends PHPSubscriptionCheck {
         }
       }
     }
+  }
+
+  private static boolean isIgnoredReturn(Tree tree) {
+    if (tree.is(Kind.RETURN_STATEMENT)) {
+      if (((ReturnStatementTree) tree).expression() != null || tree.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE)) {
+        return true;
+      }
+
+      Tree tryAncestor = TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Kind.TRY_STATEMENT));
+      if (tryAncestor != null) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
