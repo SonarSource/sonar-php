@@ -37,17 +37,13 @@ import org.sonar.php.cfg.ControlFlowGraph;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.tree.statement.BreakStatementTree;
-import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.GotoStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
-import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.tree.statement.ThrowStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
 
-import static org.sonar.php.checks.utils.SyntacticEquivalence.areSyntacticallyEquivalent;
 import static org.sonar.php.tree.TreeUtils.findAncestorWithKind;
 import static org.sonar.php.tree.TreeUtils.isDescendant;
 
@@ -56,14 +52,14 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1751";
   private static final String MESSAGE = "Refactor this loop to do more than one iteration.";
+
+  // we don't include foreach loop because it is used to access first element of collection
   private static final Set<Tree.Kind> LOOPS = Sets.immutableEnumSet(
     Tree.Kind.WHILE_STATEMENT,
     Tree.Kind.DO_WHILE_STATEMENT,
     Tree.Kind.FOR_STATEMENT,
-    Tree.Kind.FOREACH_STATEMENT,
     Tree.Kind.ALTERNATIVE_WHILE_STATEMENT,
     Tree.Kind.ALTERNATIVE_FOR_STATEMENT,
-    Tree.Kind.ALTERNATIVE_FOREACH_STATEMENT,
     // not loops but can contain break
     Tree.Kind.SWITCH_STATEMENT,
     Tree.Kind.ALTERNATIVE_SWITCH_STATEMENT
@@ -110,38 +106,9 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
     if (loop == null || loop.is(Tree.Kind.SWITCH_STATEMENT, Tree.Kind.ALTERNATIVE_SWITCH_STATEMENT)) {
       return;
     }
-    if (!canExecuteMoreThanOnce(loop) && !isForEachReturningFirstElement(loop, tree)) {
+    if (!canExecuteMoreThanOnce(loop)) {
       jumpsByLoop.put(loop, tree);
     }
-  }
-
-  private static boolean isForEachReturningFirstElement(Tree loop, Tree jump) {
-    if (!loop.is(Tree.Kind.FOREACH_STATEMENT, Tree.Kind.ALTERNATIVE_FOREACH_STATEMENT) || !jump.is(Tree.Kind.RETURN_STATEMENT)) {
-      return false;
-    }
-    ReturnStatementTree returnTree = (ReturnStatementTree) jump;
-    ForEachStatementTree forEachTree = (ForEachStatementTree) loop;
-    if (hasMoreThanOneStatement(forEachTree)) {
-      return false;
-    }
-    return areSyntacticallyEquivalent(returnTree.expression(), forEachTree.value())
-      || areSyntacticallyEquivalent(returnTree.expression(), forEachTree.key());
-  }
-
-  private static boolean hasMoreThanOneStatement(ForEachStatementTree forEach) {
-    if (forEach.statements().size() > 1) {
-      return true;
-    }
-    if (forEach.statements().isEmpty()) {
-      // just to be sure
-      // will never happen in this rule, because we are hooked on jumps inside loops
-      return false;
-    }
-    StatementTree body = forEach.statements().get(0);
-    if (body.is(Tree.Kind.BLOCK)) {
-      return ((BlockTree) body).statements().size() > 1;
-    }
-    return false;
   }
 
   private boolean canExecuteMoreThanOnce(Tree loop) {

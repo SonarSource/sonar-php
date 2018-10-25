@@ -61,20 +61,6 @@ function foo($i)
         break;
     endfor;
 
-    foreach ($arr as $item) { // Noncompliant
-        break;
-    }
-
-    foreach ($arr as $item) { // Noncompliant
-        foo();
-        return $item;
-    }
-
-    foreach ($arr as $item):  // Noncompliant
-        foo();
-        return $item;
-    endforeach;
-
 }
 
 class A
@@ -118,29 +104,16 @@ function compliant()
         if ($i == 5) break;
     }
 
-    foreach ($arr as $item) {
-        return $item;
-    }
-
-    foreach ($arr as $key => $value) {
-        return $key;
-    }
-
-    foreach ($arr as $item):
-        return $item;
-    endforeach;
-
-    foreach ($arr as $item):
-    endforeach;
-
-    foreach ($arr as $item) return $item;
-
     while ($i < 10) {
         try {
             return foo();
         } catch (Exception $e) {
 
         }
+    }
+
+    foreach ($arr as $item) {
+        return $item;
     }
 }
 
@@ -157,12 +130,6 @@ function for_loop_without_update($end, $cond)
     for ($i = 0; $i < $end;) {
        if ($cond)
            break;
-    }
-}
-
-foreach ($arr as $item) {
-    foreach ($item as $item2) { // Noncompliant
-        break;
     }
 }
 
