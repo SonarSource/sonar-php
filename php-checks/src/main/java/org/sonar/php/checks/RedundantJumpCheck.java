@@ -56,7 +56,7 @@ public class RedundantJumpCheck extends PHPSubscriptionCheck {
     for (CfgBlock cfgBlock : cfg.blocks()) {
       if (cfgBlock.successors().size() == 1 && cfgBlock.successors().contains(cfgBlock.syntacticSuccessor())) {
         Tree lastElement = Iterables.getLast(cfgBlock.elements());
-        if (isIgnoredReturn(lastElement)) {
+        if (isIgnoredJump(lastElement)) {
           continue;
         }
 
@@ -67,18 +67,15 @@ public class RedundantJumpCheck extends PHPSubscriptionCheck {
     }
   }
 
-  private static boolean isIgnoredReturn(Tree tree) {
-    if (tree.is(Kind.RETURN_STATEMENT)) {
-      if (((ReturnStatementTree) tree).expression() != null || tree.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE)) {
-        return true;
-      }
-
-      Tree tryAncestor = TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Kind.TRY_STATEMENT));
-      if (tryAncestor != null) {
-        return true;
-      }
+  private static boolean isIgnoredJump(Tree tree) {
+    if (tree.is(Kind.RETURN_STATEMENT)
+      && (((ReturnStatementTree) tree).expression() != null
+        || tree.getParent().is(Kind.CASE_CLAUSE, Kind.DEFAULT_CLAUSE))) {
+      return true;
     }
 
-    return false;
+    // ignore jumps in try statement because CFG is not precise
+    Tree tryAncestor = TreeUtils.findAncestorWithKind(tree, ImmutableList.of(Kind.TRY_STATEMENT));
+    return tryAncestor != null;
   }
 }

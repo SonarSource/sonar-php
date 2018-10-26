@@ -234,10 +234,12 @@ class ControlFlowGraphBuilder {
     Set<PhpCfgBlock> bodySuccessors = new HashSet<>(catchBlocks);
     bodySuccessors.add(finallyBlock);
     PhpCfgBlock tryBodySuccessors = createMultiSuccessorBlock(bodySuccessors);
+    addBreakable(tryBodySuccessors, tryBodySuccessors);
     exitTargets.push(new TryBodyEnd(tryBodySuccessors, finallyBlock));
     PhpCfgBlock tryBodyStartingBlock = build(tree.block().statements(), tryBodySuccessors);
     throwTargets.pop();
     exitTargets.pop();
+    removeBreakable();
 
     return tryBodyStartingBlock;
   }
