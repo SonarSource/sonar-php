@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -52,7 +53,7 @@ public class PHPIntegrationTest {
       .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
-      .setProjectDir(FileLocation.of("../../sources/src/symfony/Symfony/").getFile())
+      .setProjectDir(FileLocation.of("../../sources/src/Symfony/").getFile())
       .setProfile("it-profile")
       .setProperty("sonar.exclusions", "**/Component/**/*.php");
 
@@ -61,60 +62,68 @@ public class PHPIntegrationTest {
 
   @Test
   public void projectMetric() {
+    SoftAssertions softly = new SoftAssertions();
     // Size
-    assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(23108d);
-    assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(39571d);
-    assertThat(getProjectMeasureAsDouble("files")).isEqualTo(425d);
-    assertThat(getProjectMeasureAsDouble("classes")).isEqualTo(405d);
-    assertThat(getProjectMeasureAsDouble("functions")).isEqualTo(1882d);
+    softly.assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(47540d);
+    softly.assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(72334d);
+    softly.assertThat(getProjectMeasureAsDouble("files")).isEqualTo(784d);
+    softly.assertThat(getProjectMeasureAsDouble("classes")).isEqualTo(645d);
+    softly.assertThat(getProjectMeasureAsDouble("functions")).isEqualTo(3394d);
 
     // Comments
-    assertThat(getProjectMeasureAsDouble("comment_lines_density")).isEqualTo(17.3);
-    assertThat(getProjectMeasureAsDouble("comment_lines")).isEqualTo(4836d);
-    assertThat(getProjectMeasureAsDouble("public_documented_api_density")).isNull();
-    assertThat(getProjectMeasureAsDouble("public_undocumented_api")).isNull();
-    assertThat(getProjectMeasureAsDouble("public_api")).isNull();
+    softly.assertThat(getProjectMeasureAsDouble("comment_lines_density")).isEqualTo(11.6);
+    softly.assertThat(getProjectMeasureAsDouble("comment_lines")).isEqualTo(6232d);
+    softly.assertThat(getProjectMeasureAsDouble("public_documented_api_density")).isNull();
+    softly.assertThat(getProjectMeasureAsDouble("public_undocumented_api")).isNull();
+    softly.assertThat(getProjectMeasureAsDouble("public_api")).isNull();
 
     // Complexity
-    assertThat(getProjectMeasureAsDouble("function_complexity")).isEqualTo(1.9);
-    assertThat(getProjectMeasureAsDouble("class_complexity")).isEqualTo(8.6);
-    assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(8.2);
-    assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(3505.0);
-    assertThat(getProjectMeasureAsDouble("cognitive_complexity")).isEqualTo(2407.0);
-    assertThat(getProjectMeasure("function_complexity_distribution").getValue()).isEqualTo("1=1309;2=370;4=105;6=44;8=15;10=10;12=29");
-    assertThat(getProjectMeasure("file_complexity_distribution").getValue()).isEqualTo("0=212;5=108;10=66;20=18;30=16;60=4;90=1");
-    assertThat(getProjectMeasureAsDouble("class_complexity_distribution")).isNull();
+    softly.assertThat(getProjectMeasureAsDouble("function_complexity")).isEqualTo(2.1);
+    softly.assertThat(getProjectMeasureAsDouble("class_complexity")).isEqualTo(10.2);
+    softly.assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(8.6);
+    softly.assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(6705.0);
+    softly.assertThat(getProjectMeasureAsDouble("cognitive_complexity")).isEqualTo(5083.0);
+    softly.assertThat(getProjectMeasure("function_complexity_distribution").getValue())
+      .isEqualTo("1=2408;2=580;4=203;6=77;8=48;10=14;12=64");
+    softly.assertThat(getProjectMeasure("file_complexity_distribution").getValue())
+      .isEqualTo("0=442;5=164;10=104;20=32;30=28;60=5;90=9");
+    softly.assertThat(getProjectMeasureAsDouble("class_complexity_distribution")).isNull();
+
+    softly.assertAll();
   }
 
   @Test
   public void fileMetrics() {
+    SoftAssertions softly = new SoftAssertions();
     // Size
-    assertThat(getFileMeasureAsDouble("ncloc")).isEqualTo(41d);
-    assertThat(getFileMeasureAsDouble("lines")).isEqualTo(90d);
-    assertThat(getFileMeasureAsDouble("files")).isEqualTo(1d);
-    assertThat(getFileMeasureAsDouble("classes")).isEqualTo(1d);
-    assertThat(getFileMeasureAsDouble("functions")).isEqualTo(3d);
-    assertThat(lineNumbersInDataMeasure(getFileMeasure("ncloc_data").getValue())).isEqualTo(lineNumbersInDataMeasure(
-      "12=1;14=1;21=1;22=1;32=1;33=1;34=1;35=1;37=1;39=1;41=1;42=1;44=1;46=1;47=1;48=1;50=1;52=1;53=1;54=1;56=1;58=1;59=1;60=1;62=1;64=1;66=1;67=1;68=1;70=1;72=1;73=1;75=1;76=1;77=1;78=1;85=1;86=1;87=1;88=1;89=1"));
-    assertThat(lineNumbersInDataMeasure(getFileMeasure("executable_lines_data").getValue())).isEqualTo(lineNumbersInDataMeasure(
-      "34=1;35=1;37=1;39=1;41=1;42=1;44=1;46=1;47=1;50=1;52=1;53=1;56=1;58=1;59=1;62=1;64=1;66=1;67=1;70=1;72=1;77=1;87=1"));
-    assertThat(getFileMeasureAsDouble("lines_to_cover")).isEqualTo(23d);
-    assertThat(getFileMeasureAsDouble("uncovered_lines")).isEqualTo(23d);
+    softly.assertThat(getFileMeasureAsDouble("ncloc")).isEqualTo(48d);
+    softly.assertThat(getFileMeasureAsDouble("lines")).isEqualTo(98d);
+    softly.assertThat(getFileMeasureAsDouble("files")).isEqualTo(1d);
+    softly.assertThat(getFileMeasureAsDouble("classes")).isEqualTo(1d);
+    softly.assertThat(getFileMeasureAsDouble("functions")).isEqualTo(3d);
+    softly.assertThat(lineNumbersInDataMeasure(getFileMeasure("ncloc_data").getValue()))
+      .isEqualTo(lineNumbersInDataMeasure("64=1;66=1;67=1;68=1;70=1;72=1;74=1;75=1;76=1;12=1;78=1;14=1;15=1;80=1;16=1;81=1;17=1;18=1;83=1;19=1;84=1;20=1;85=1;86=1;93=1;29=1;94=1;30=1;95=1;96=1;97=1;38=1;39=1;40=1;41=1;43=1;45=1;47=1;49=1;50=1;52=1;54=1;55=1;56=1;58=1;60=1;61=1;62=1"));
+    softly.assertThat(lineNumbersInDataMeasure(getFileMeasure("executable_lines_data").getValue()))
+      .isEqualTo(lineNumbersInDataMeasure("64=1;66=1;67=1;70=1;72=1;40=1;41=1;74=1;75=1;43=1;45=1;78=1;47=1;80=1;49=1;50=1;52=1;85=1;54=1;55=1;58=1;60=1;61=1;95=1"));
+    softly.assertThat(getFileMeasureAsDouble("lines_to_cover")).isEqualTo(24d);
+    softly.assertThat(getFileMeasureAsDouble("uncovered_lines")).isEqualTo(24d);
 
     // Comments
-    assertThat(getFileMeasureAsDouble("comment_lines_density")).isEqualTo(26.8);
-    assertThat(getFileMeasureAsDouble("comment_lines")).isEqualTo(15d);
-    assertThat(getFileMeasureAsDouble("public_documented_api_density")).isEqualTo(100);
-    assertThat(getFileMeasureAsDouble("public_undocumented_api")).isZero();
+    softly.assertThat(getFileMeasureAsDouble("comment_lines_density")).isEqualTo(23.8);
+    softly.assertThat(getFileMeasureAsDouble("comment_lines")).isEqualTo(15d);
+    softly.assertThat(getFileMeasureAsDouble("public_documented_api_density")).isEqualTo(100);
+    softly.assertThat(getFileMeasureAsDouble("public_undocumented_api")).isZero();
 
-    assertThat(getFileMeasureAsDouble("public_api")).isNull();
+    softly.assertThat(getFileMeasureAsDouble("public_api")).isNull();
 
     // Complexity
-    assertThat(getFileMeasureAsDouble("function_complexity")).isEqualTo(2.7);
-    assertThat(getFileMeasureAsDouble("class_complexity")).isEqualTo(8.0);
-    assertThat(getFileMeasureAsDouble("file_complexity")).isEqualTo(8.0);
-    assertThat(getFileMeasureAsDouble("complexity")).isEqualTo(8.0);
-    assertThat(getFileMeasureAsDouble("cognitive_complexity")).isEqualTo(5.0);
+    softly.assertThat(getFileMeasureAsDouble("function_complexity")).isEqualTo(2.7);
+    softly.assertThat(getFileMeasureAsDouble("class_complexity")).isEqualTo(8.0);
+    softly.assertThat(getFileMeasureAsDouble("file_complexity")).isEqualTo(8.0);
+    softly.assertThat(getFileMeasureAsDouble("complexity")).isEqualTo(8.0);
+    softly.assertThat(getFileMeasureAsDouble("cognitive_complexity")).isEqualTo(5.0);
+
+    softly.assertAll();
   }
 
   private Set<Integer> lineNumbersInDataMeasure(String data) {
@@ -130,10 +139,14 @@ public class PHPIntegrationTest {
    */
   @Test
   public void testDuplicationResults() throws Exception {
-    assertThat(getProjectMeasureAsDouble("duplicated_lines")).isEqualTo(1595d);
-    assertThat(getProjectMeasureAsDouble("duplicated_blocks")).isEqualTo(54d);
-    assertThat(getProjectMeasureAsDouble("duplicated_files")).isEqualTo(32d);
-    assertThat(getProjectMeasureAsDouble("duplicated_lines_density")).isEqualTo(4.0);
+    SoftAssertions softly = new SoftAssertions();
+
+    softly.assertThat(getProjectMeasureAsDouble("duplicated_lines")).isEqualTo(3766d);
+    softly.assertThat(getProjectMeasureAsDouble("duplicated_blocks")).isEqualTo(150d);
+    softly.assertThat(getProjectMeasureAsDouble("duplicated_files")).isEqualTo(55d);
+    softly.assertThat(getProjectMeasureAsDouble("duplicated_lines_density")).isEqualTo(5.2);
+
+    softly.assertAll();
   }
 
   /**
