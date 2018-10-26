@@ -52,7 +52,7 @@ public class PHPIntegrationTest {
       .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
-      .setProjectDir(FileLocation.of("../../sources/src/symfony/Symfony/").getFile())
+      .setProjectDir(FileLocation.of("../../sources/src/Symfony/").getFile())
       .setProfile("it-profile")
       .setProperty("sonar.exclusions", "**/Component/**/*.php");
 
