@@ -47,6 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Suite.SuiteClasses({
   CommonRulesTest.class,
   CustomRulesTest.class,
+  NonPhpProjectTest.class,
   NoSonarTest.class,
   PHPIntegrationTest.class,
   PHPTest.class,
