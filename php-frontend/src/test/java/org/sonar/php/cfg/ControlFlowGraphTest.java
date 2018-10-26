@@ -1383,8 +1383,9 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "      tryBody(succ=[finallyBody], syntSucc=finallyBody);" +
       "      break;" +
       "   } finally {" +
-      "      finallyBody(succ = [END, cond]);" +
+      "      finallyBody(succ = [END, afterTry]);" + // note that afterTry is wrong successor because of break
       "  }" +
+      "  afterTry(succ = [cond]);" +
       "}");
   }
 
@@ -1411,6 +1412,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       "   } catch (Exception $e) {" +
       "      catchBody(succ = [_empty]);" +
       "  }" +
+      "  afterTry(succ = [cond]);" +
       "}" +
       "after(succ=[END]);");
     ExpectedCfgStructure expectedCfgStructure = ExpectedCfgStructure.parse(actualCfg.blocks(), expected -> {
@@ -1419,7 +1421,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
         .withSuccessorsIds("catchBody", "_empty");  // _empty is finally block
       expected.createEmptyBlockExpectation()
         .withPredecessorIds("catchBody", "_empty")
-        .withSuccessorsIds("cond", "END");   // note that path to cond is actually impossible
+        .withSuccessorsIds("afterTry", "END");   // afterTry is executed in case tryBody throws
       return expected;
     });
     new Validator(expectedCfgStructure).assertCfg(actualCfg);
