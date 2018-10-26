@@ -114,3 +114,14 @@ function try_catch() {
   }
   after();
 }
+
+function fp_loop_jump() {
+    while ($cond) {
+        try {
+            bar();
+            continue;
+        } finally {
+            qix();
+        }
+    }
+}
