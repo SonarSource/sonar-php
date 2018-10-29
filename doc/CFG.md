@@ -70,7 +70,7 @@ We made several assumptions to simplify construction of CFG for `try-catch-final
 
 #### Empty blocks
 
-During construction of CFG it might happen that some empty blocks are created (e.g. empty `finally` clause, ...). We have a mechanism to cleanup these empty blocks, however it is limited that it can only remove empty blocks with single predecessor and successor. If empty block has multiple successors (which happens often with `try-catch-finally` statements) it is not removed.
+During the construction of the CFG it might happen that some empty blocks are created (e.g. empty `finally` clause, ...). We have a mechanism to cleanup these empty blocks, however it is limited that it can only remove empty blocks with one predecessor and one successor. If an empty block has multiple successors (which happens often with `try-catch-finally` statements) it is not removed.
 
 #### Impossible paths from `finally`
 
