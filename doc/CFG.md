@@ -79,7 +79,7 @@ Because we are building using bottom-up approach, we will construct the `finally
 1. "exceptional" successor representing the path for the unhandled exception connecting it to the outer `finally` clause or  `END` block.
 2.  "normal" successor to the statement following the `try` statement.
 
-This "normal" successor can be infeasible in case when there is abrupt termination of the control flow like using `return` or `break` in the try body. Consider the following example
+This "normal" successor can be infeasible in case when there is an abrupt termination of the control flow like using `return` or `break` in the try body. Consider the following example
 
 ```php
 while ($cond) {
