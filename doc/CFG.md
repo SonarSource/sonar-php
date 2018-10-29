@@ -101,7 +101,7 @@ Our CFG will look like this
 
 ![](infeasible-finally-path.png)
 
-Notice that red edge is actually impossible, but it will be present in the CFG due to this limitation.
+Notice that the red edge is actually impossible, but it will be present in the CFG due to this limitation.
 
 ## Tests
 
