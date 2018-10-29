@@ -42,7 +42,7 @@ In other words, we do not explore the expressions inside the above statements wh
 
 ## Implementation
 
-The CFG  is built using bottom-up approach. This means that we start with empty END block (bottom), which represents end of the control flow in the current function and we process backwards all the statements in the block recursively. Algorithm is implemented as an AST visitor in [ControlFlowGraphBuilder](php-frontend/src/main/java/org/sonar/php/cfg/ControlFlowGraphBuilder.java)
+The CFG is built bottom-up: we start with empty END block (bottom), which represents end of the control flow in the current function and recursively process the predecessor statements in the block. The algorithm is implemented as an AST visitor in [ControlFlowGraphBuilder](php-frontend/src/main/java/org/sonar/php/cfg/ControlFlowGraphBuilder.java)
 
 CFG is built for following kinds of trees: SCRIPT, FUNCTION_DECLARATION, FUNCTION_EXPRESSION, METHOD_DECLARATION.
 
