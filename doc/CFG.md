@@ -1,6 +1,6 @@
 
 
-# Sonar-PHP Control Flow Graph
+# SonarPHP Control Flow Graph
 
 ## Definition
 
@@ -10,25 +10,19 @@ A CFG is a graph of [basic blocks](https://en.wikipedia.org/wiki/Basic_block) (f
 
 #### Block attributes
 
-* successors - set of blocks that are executed after specific block
-* predecessors - set of blocks that are executed before specific block
-* syntactic successor
+* *successors* - set of blocks that are executed after specific block. Each block has one or more successors. Only exception is special `END` block, representing end of the control flow, which has zero successors.
+* *predecessors* - set of blocks that are executed before specific block
+* *syntactic successor*
   - an imaginary successor which exists only for blocks ending with unconditional jumps (`break`, `continue`, `return`, `goto`, `throw`)
   - it is the "normal" successor in case the jump would be omitted
   - for non-jump blocks, it is `null`
-* elements
+* *elements*
   - list of statements (represented as AST node) inside the block which are executed sequentially
-  - `return` or jump like `break`, `continue` will be the last statement in the elements list
+  - `return` or jump like `break`, `continue` will be the last statement in the elements list  (if such statement is present in the block)
 
-#### Block types
+##### Branching block
 
-Different implementations of blocks:
-
-* Simple block - one or multiple successors
-* Branching block
-  - has 2 successors - one TRUE successor and one FALSE successor
-  - contains the branching tree - e.g. IfStatementTree or loop trees
-* End block - no successors
+`if`, `while`, `for`,  `foreach`  and `do-while` statements generate a special type of the block called Branching Block. It has all the attributes of a normal block, however it has exactly two successors representing *true* and *false* branch of execution and it has additional attribute *branching tree* which contains the statement causing the branching (e.g. AST node of `if` condition).
 
 ### Statements
 
@@ -42,7 +36,7 @@ In other words, we do not explore the expressions inside the above statements wh
 
 ## Implementation
 
-The CFG is built bottom-up: we start with empty END block (bottom), which represents end of the control flow in the current function and recursively process the predecessor statements in the block. The algorithm is implemented as an AST visitor in [ControlFlowGraphBuilder](php-frontend/src/main/java/org/sonar/php/cfg/ControlFlowGraphBuilder.java)
+The CFG is built bottom-up: we start with empty END block (bottom), which represents end of the control flow in the current function and recursively process the predecessor statements in the block. The algorithm is implemented as an AST visitor in [ControlFlowGraphBuilder](../php-frontend/src/main/java/org/sonar/php/cfg/ControlFlowGraphBuilder.java)
 
 A CFG is generated for the following trees: SCRIPT, FUNCTION_DECLARATION, FUNCTION_EXPRESSION, METHOD_DECLARATION.
 
@@ -70,16 +64,16 @@ We made several assumptions to simplify construction of CFG for `try-catch-final
 
 #### Empty blocks
 
-During the construction of the CFG it might happen that some empty blocks are created (e.g. empty `finally` clause, ...). We have a mechanism to cleanup these empty blocks, however it is limited that it can only remove empty blocks with one predecessor and one successor. If an empty block has multiple successors (which happens often with `try-catch-finally` statements) it is not removed.
+During the construction of the CFG it might happen that some empty blocks are created (e.g. empty `finally` clause, ...). We have a mechanism to cleanup these empty blocks, however it is limited that it can only remove empty blocks with one predecessor and one successor. If an empty block has multiple successors (which happens often with `try-catch-finally` statements) it is not removed. Consequently if such empty block has successors which are dead code, they won't be detected, because for the algorithm they appear to be reachable (they have a predecessor).
 
 #### Unfeasible paths from `finally`
 
 Because we are building using bottom-up approach, we will construct the `finally` block before we construct the block for the `try` body. This `finally` block will have two successors:
 
-1. "exceptional" successor representing the path for the unhandled exception connecting it to the outer `finally` clause or  `END` block.
-2.  "normal" successor to the statement following the `try` statement.
+1. "*exceptional*" successor representing the path for the unhandled exception connecting it to the outer `finally` clause or  `END` block.
+2.  "*normal*" successor to the statement following the `try` statement.
 
-This "normal" successor can be infeasible in case when there is an abrupt termination of the control flow like using `return` or `break` in the try body. Consider the following example
+This "*normal*" successor can be unreachable in case when there is an abrupt termination of the control flow like using `return` or `break` in the try body. Consider the following example
 
 ```php
 while ($cond) {
@@ -101,8 +95,8 @@ Our CFG will look like this
 
 ![](infeasible-finally-path.png)
 
-Notice that the red edge is actually impossible, but it will be present in the CFG due to this limitation.
+Notice that the red edge is actually impossible, but it will be present in the CFG due to this limitation. Consequence of this is failure to detect that `afterTry` is dead code.
 
 ## Tests
 
-The best documentation is Test Automation, see [ControlFlowGraphTest](php-frontend/src/test/java/org/sonar/php/cfg/ControlFlowGraphTest.java).
+The best documentation is Test Automation, see [ControlFlowGraphTest](../php-frontend/src/test/java/org/sonar/php/cfg/ControlFlowGraphTest.java).
