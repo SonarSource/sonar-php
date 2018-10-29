@@ -56,7 +56,7 @@ The `for` statement creates multiple blocks:
 
 ### Switch
 
-The SWITCH statement is modelled as multiple `if-elseif-else` blocks. Interesting feature of `switch` statement in PHP is the fact that `continue` inside switch behaves the same as `break` statement ([see manual](http://php.net/manual/en/control-structures.continue.php))
+The SWITCH statement is modelled as multiple `if-elseif-else` blocks. An interesting feature of the `switch` statement in PHP is that a `continue` inside switch behaves as a `break` statement ([see manual](http://php.net/manual/en/control-structures.continue.php))
 
 ### Try Catch Finally
 
