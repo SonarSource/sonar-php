@@ -64,7 +64,7 @@ We made several assumptions to simplify construction of CFG for `try-catch-final
 
 * To limit the number of blocks and edges in the graph, the whole `try` body is treated as single block with `catch` and `finally` treated as successors of this block. Note however that every statement in the body could raise an exception and exit the block. It is up to the analysis using the CFG to take into consideration that the body may not be executed as a whole.
 * If the `finally` clause is missing, we assume that an empty `finally` clause is present to simplify the construction of CFG. 
-* We always assume that it is possible that exception is not being handled by any present `catch` clause, even if there is `catch` clause handling all `Exception` types. In particular this means that there is always path in the CFG representing exception escaping the function scope and reaching `END` block (visiting all enclosed `finally` blocks on the way)
+* We always assume that it is possible that an exception is not handled by any present `catch` clause, even if there is `catch` clause handling all `Exception` types. In particular this means that there is always a path to the `END` block (visiting all enclosed `finally` blocks on the way)
 
 ### Limitations
 
