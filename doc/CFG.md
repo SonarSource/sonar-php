@@ -32,7 +32,7 @@ Different implementations of blocks:
 
 ### Statements
 
-Statements that are considered for building blocks:
+Statements that generate blocks:
 
 * `try`,  `throw`,  `return`, `break`,  `continue`,  `goto`,  `label`, `do-while`, `while`, `for`,  `foreach`, `if`, `switch`
 
