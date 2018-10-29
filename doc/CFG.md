@@ -44,7 +44,7 @@ In other words, we do not explore the expressions inside the above statements wh
 
 The CFG is built bottom-up: we start with empty END block (bottom), which represents end of the control flow in the current function and recursively process the predecessor statements in the block. The algorithm is implemented as an AST visitor in [ControlFlowGraphBuilder](php-frontend/src/main/java/org/sonar/php/cfg/ControlFlowGraphBuilder.java)
 
-CFG is built for following kinds of trees: SCRIPT, FUNCTION_DECLARATION, FUNCTION_EXPRESSION, METHOD_DECLARATION.
+A CFG is generated for the following trees: SCRIPT, FUNCTION_DECLARATION, FUNCTION_EXPRESSION, METHOD_DECLARATION.
 
 ### For Loop
 The `for` statement creates multiple blocks:
