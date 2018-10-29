@@ -50,7 +50,7 @@ A CFG is generated for the following trees: SCRIPT, FUNCTION_DECLARATION, FUNCTI
 The `for` statement creates multiple blocks:
 
 - one for initialization of variables (before body)
-- one for the body of the for
+- one for the body of the `for` statement
 - one for update (following the body)
 - one for the condition
 
