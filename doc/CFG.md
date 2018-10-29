@@ -74,7 +74,7 @@ During the construction of the CFG it might happen that some empty blocks are cr
 
 #### Impossible paths from `finally`
 
-Because we are building using bottom-up approach, we will construct `finally` block before we construct the block for the `try` body. This `finally` block will have two successors:
+Because we are building using bottom-up approach, we will construct the `finally` block before we construct the block for the `try` body. This `finally` block will have two successors:
 
 1. "exceptional" successor representing the path for the unhandled exception connecting it to the outer `finally` clause or  `END` block.
 2.  "normal" successor to the statement following the `try` statement.
