@@ -62,7 +62,7 @@ The SWITCH statement is modelled as multiple `if-elseif-else` blocks. Interestin
 
 We made several assumptions to simplify construction of CFG for `try-catch-finally` construct
 
-* To limit number of blocks and edges in the graph whole `try` body is treated as single block with `catch` and `finally` treated as successors of this block, while in fact every statement in the body could raise the exception and exit the block. It is up to the analysis using the CFG to take into consideration that body may not be executed as a whole.
+* To limit the number of blocks and edges in the graph, the whole `try` body is treated as single block with `catch` and `finally` treated as successors of this block. Note however that every statement in the body could raise an exception and exit the block. It is up to the analysis using the CFG to take into consideration that the body may not be executed as a whole.
 * If the `finally` clause is missing we assume as if empty `finally` clause was present to simplify the construction of CFG. 
 * We always assume that it is possible that exception is not being handled by any present `catch` clause, even if there is `catch` clause handling all `Exception` types. In particular this means that there is always path in the CFG representing exception escaping the function scope and reaching `END` block (visiting all enclosed `finally` blocks on the way)
 
