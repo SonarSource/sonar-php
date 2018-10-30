@@ -22,7 +22,7 @@ A CFG is a graph of [basic blocks](https://en.wikipedia.org/wiki/Basic_block) (f
 
 ##### Branching block
 
-`if`, `while`, `for`,  `foreach`  and `do-while` statements generate a special type of the block called Branching Block. It has all the attributes of a normal block, however it has exactly two successors representing *true* and *false* branch of execution and it has additional attribute *branching tree* which contains the statement causing the branching (e.g. AST node of `if` condition).
+`if`, `while`, `for`,  `foreach`  and `do-while` statements generate a special type of the block called Branching Block. It has all the attributes of a normal block, however it has exactly two successors representing *true* and *false* branch of execution and it has an additional attribute *branching tree* which contains the statement causing the branching (e.g. AST node of `if` condition).
 
 ### Statements
 
