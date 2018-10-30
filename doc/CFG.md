@@ -10,7 +10,7 @@ A CFG is a graph of [basic blocks](https://en.wikipedia.org/wiki/Basic_block) (f
 
 #### Block attributes
 
-* *successors* - set of blocks that are executed after specific block. Each block has one or more successors. Only exception is special `END` block, representing end of the control flow, which has zero successors.
+* *successors* - set of blocks that are executed after specific block. Each block has one or more successors. The only exception is the special `END` block, representing the end of the control flow, which has zero successors.
 * *predecessors* - set of blocks that are executed before specific block
 * *syntactic successor*
   - an imaginary successor which exists only for blocks ending with unconditional jumps (`break`, `continue`, `return`, `goto`, `throw`)
