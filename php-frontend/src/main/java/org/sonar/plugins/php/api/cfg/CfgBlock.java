@@ -18,24 +18,32 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.php.cfg;
+package org.sonar.plugins.php.api.cfg;
 
-
+import java.util.List;
+import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 
 /**
- * A {@link CfgBlock} with 2 successors: represents a block ending
- * with a condition which determines which successor is executed next.
+ * A node of a {@link ControlFlowGraph}.
+ * Successors are the nodes which may be executed after this one.
+ * Predecessors are the nodes which may be executed before this one.
+ * Elements are instances of {@link Tree} which are evaluated one after the other.
  */
-public interface CfgBranchingBlock extends CfgBlock {
+public interface CfgBlock {
 
-  CfgBlock trueSuccessor();
+  Set<? extends CfgBlock> predecessors();
 
-  CfgBlock falseSuccessor();
+  Set<? extends CfgBlock> successors();
 
   /**
-   * Syntax tree causing branching: e.g. loop tree, switch case clause tree, if statement tree, "&&" expression, "||" expression
+   * @return block following this one if no jump is applied
+   * Returns {@code null} if this block doesn't end with jump statement (break, continue, return, goto, throw)
    */
-  Tree branchingTree();
+  @Nullable
+  CfgBlock syntacticSuccessor();
+
+  List<Tree> elements();
 
 }

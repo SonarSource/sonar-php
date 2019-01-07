@@ -18,35 +18,24 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.php.cfg;
+package org.sonar.plugins.php.api.cfg;
 
-import com.google.common.collect.ImmutableSet;
-import java.util.Map;
+
 import org.sonar.plugins.php.api.tree.Tree;
 
-
 /**
- * The end node of a {@link ControlFlowGraph}.
+ * A {@link CfgBlock} with 2 successors: represents a block ending
+ * with a condition which determines which successor is executed next.
  */
-class PhpCfgEndBlock extends PhpCfgBlock {
+public interface CfgBranchingBlock extends CfgBlock {
 
-  @Override
-  public ImmutableSet<CfgBlock> successors() {
-    return ImmutableSet.of();
-  }
+  CfgBlock trueSuccessor();
 
-  @Override
-  public void addElement(Tree element) {
-    throw new UnsupportedOperationException("Cannot add element to end block");
-  }
+  CfgBlock falseSuccessor();
 
-  @Override
-  public void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
-    throw new UnsupportedOperationException("Cannot replace successors of end block");
-  }
+  /**
+   * Syntax tree causing branching: e.g. loop tree, switch case clause tree, if statement tree, "&&" expression, "||" expression
+   */
+  Tree branchingTree();
 
-  @Override
-  public String toString() {
-    return "END";
-  }
 }

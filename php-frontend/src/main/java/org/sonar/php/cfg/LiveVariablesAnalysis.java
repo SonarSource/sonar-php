@@ -29,6 +29,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.cfg.CfgBlock;
+import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -151,11 +153,11 @@ public class LiveVariablesAnalysis {
       return ImmutableMap.copyOf(variableUsagesPerElement.get(tree));
     }
 
-    Set<Symbol> getGen() {
+    public Set<Symbol> getGen() {
       return ImmutableSet.copyOf(gen);
     }
 
-    Set<Symbol> getKill() {
+    public Set<Symbol> getKill() {
       return ImmutableSet.copyOf(kill);
     }
 

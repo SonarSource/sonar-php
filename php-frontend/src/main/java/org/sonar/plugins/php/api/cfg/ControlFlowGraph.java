@@ -18,7 +18,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.php.cfg;
+package org.sonar.plugins.php.api.cfg;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -51,6 +51,8 @@ import org.sonar.plugins.php.api.visitors.CheckContext;
  * <p>
  * A Control Flow Graph has a single start node and a single end node.
  * The end node has no successor and no element.
+ *
+ * <b>WARNING:</b> This is an experimental API, it may change without notice.
  */
 public class ControlFlowGraph {
 
@@ -75,14 +77,23 @@ public class ControlFlowGraph {
     this.blocks = blocks;
   }
 
+  /**
+   * <b>WARNING:</b> This is an experimental API, it may change without notice.
+   */
   public static ControlFlowGraph build(BlockTree body) {
     return new ControlFlowGraphBuilder(body.statements()).getGraph();
   }
 
+  /**
+   * <b>WARNING:</b> This is an experimental API, it may change without notice.
+   */
   public static ControlFlowGraph build(ScriptTree scriptTree) {
     return new ControlFlowGraphBuilder(scriptTree.statements()).getGraph();
   }
 
+  /**
+   * <b>WARNING:</b> This is an experimental API, it may change without notice.
+   */
   @CheckForNull
   public static ControlFlowGraph build(Tree tree, CheckContext context) {
     if (failedTrees.contains(tree)) {

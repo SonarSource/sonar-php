@@ -18,48 +18,35 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.php.cfg;
+package org.sonar.plugins.php.api.cfg;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Map;
 import org.sonar.plugins.php.api.tree.Tree;
 
-class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
 
-  private PhpCfgBlock trueSuccessor;
-  private PhpCfgBlock falseSuccessor;
+/**
+ * The end node of a {@link ControlFlowGraph}.
+ */
+class PhpCfgEndBlock extends PhpCfgBlock {
 
-  private Tree branchingTree;
-
-  public PhpCfgBranchingBlock(Tree branchingTree, PhpCfgBlock trueSuccessor, PhpCfgBlock falseSuccessor) {
-    this.trueSuccessor = trueSuccessor;
-    this.falseSuccessor = falseSuccessor;
-    this.branchingTree = branchingTree;
+  @Override
+  public ImmutableSet<CfgBlock> successors() {
+    return ImmutableSet.of();
   }
 
   @Override
-  public PhpCfgBlock trueSuccessor() {
-    return trueSuccessor;
-  }
-
-  @Override
-  public PhpCfgBlock falseSuccessor() {
-    return falseSuccessor;
-  }
-
-  @Override
-  public Tree branchingTree() {
-    return branchingTree;
-  }
-
-  @Override
-  public ImmutableSet<CfgBlock> successors(){
-    return ImmutableSet.of(trueSuccessor, falseSuccessor);
+  public void addElement(Tree element) {
+    throw new UnsupportedOperationException("Cannot add element to end block");
   }
 
   @Override
   public void replaceSuccessors(Map<PhpCfgBlock, PhpCfgBlock> replacements) {
-    this.trueSuccessor = replacement(this.trueSuccessor, replacements);
-    this.falseSuccessor = replacement(this.falseSuccessor, replacements);
+    throw new UnsupportedOperationException("Cannot replace successors of end block");
+  }
+
+  @Override
+  public String toString() {
+    return "END";
   }
 }
