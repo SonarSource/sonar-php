@@ -32,6 +32,7 @@ import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
+import org.sonar.php.checks.security.SocketUsageCheck;
 
 public class CheckList {
 
@@ -167,6 +168,7 @@ public class CheckList {
       SessionCookiePersistenceCheck.class,
       SilencedErrorsCheck.class,
       SleepFunctionUsageCheck.class,
+      SocketUsageCheck.class,
       SSLCertificatesVerificationDisabledCheck.class,
       StringLiteralDuplicatedCheck.class,
       SwitchCaseTooBigCheck.class,
