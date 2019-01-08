@@ -26,8 +26,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
 
-  private PhpCfgBlock trueSuccessor;
-  private PhpCfgBlock falseSuccessor;
+  private CfgBlock trueSuccessor;
+  private CfgBlock falseSuccessor;
 
   private Tree branchingTree;
 
@@ -38,12 +38,12 @@ class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
   }
 
   @Override
-  public PhpCfgBlock trueSuccessor() {
+  public CfgBlock trueSuccessor() {
     return trueSuccessor;
   }
 
   @Override
-  public PhpCfgBlock falseSuccessor() {
+  public CfgBlock falseSuccessor() {
     return falseSuccessor;
   }
 
