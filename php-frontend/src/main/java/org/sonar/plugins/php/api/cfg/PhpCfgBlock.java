@@ -35,8 +35,8 @@ import org.sonar.plugins.php.api.tree.Tree;
 class PhpCfgBlock implements CfgBlock {
 
   private Set<PhpCfgBlock> predecessors = new HashSet<>();
-  private Set<PhpCfgBlock> successors;
-  private PhpCfgBlock syntacticSuccessor;
+  private Set<CfgBlock> successors;
+  private CfgBlock syntacticSuccessor;
 
   private LinkedList<Tree> elements = new LinkedList<>();
 
@@ -68,7 +68,7 @@ class PhpCfgBlock implements CfgBlock {
   }
 
   @Override
-  public Set<? extends CfgBlock> successors() {
+  public Set<CfgBlock> successors() {
     return successors;
   }
 
@@ -111,7 +111,7 @@ class PhpCfgBlock implements CfgBlock {
     replaceSuccessors(map);
   }
 
-  static PhpCfgBlock replacement(PhpCfgBlock successor, Map<PhpCfgBlock, PhpCfgBlock> replacements) {
+  static CfgBlock replacement(CfgBlock successor, Map<PhpCfgBlock, PhpCfgBlock> replacements) {
     PhpCfgBlock newSuccessor = replacements.get(successor);
     return newSuccessor == null ? successor : newSuccessor;
   }

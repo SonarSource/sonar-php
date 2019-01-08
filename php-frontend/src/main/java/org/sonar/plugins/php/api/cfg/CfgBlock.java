@@ -33,9 +33,9 @@ import org.sonar.plugins.php.api.tree.Tree;
  */
 public interface CfgBlock {
 
-  Set<? extends CfgBlock> predecessors();
+  Set<CfgBlock> predecessors();
 
-  Set<? extends CfgBlock> successors();
+  Set<CfgBlock> successors();
 
   /**
    * @return block following this one if no jump is applied
