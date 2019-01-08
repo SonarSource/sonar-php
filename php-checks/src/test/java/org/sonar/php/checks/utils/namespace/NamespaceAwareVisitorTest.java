@@ -181,6 +181,22 @@ public class NamespaceAwareVisitorTest {
       create("N1", "B"));
   }
 
+  @Test
+  public void consecutive_visits() throws IOException {
+    NamespaceAwareVisitorChecker checker = new NamespaceAwareVisitorChecker();
+    visit("namespace N1 { new B(); use A as B; new B(); }", checker);
+    visit("new B();", checker);
+    visit("namespace N2; new B();", checker);
+    visit("new B();", checker);
+
+    assertThat(checker.fullyQualifiedNames).containsExactly(
+      create("N1", "B"),
+      create("A"),
+      create("B"),
+      create("N2", "B"),
+      create("B"));
+  }
+
   private void visit(String content, NamespaceAwareVisitor visitor) throws IOException {
     String fileContent = "<?php\n" + content;
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(fileContent);

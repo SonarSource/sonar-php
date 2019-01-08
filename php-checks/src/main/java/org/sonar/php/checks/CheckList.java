@@ -34,6 +34,7 @@ import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
+import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 
 public class CheckList {
@@ -154,6 +155,7 @@ public class CheckList {
       OverridingMethodSimplyCallParentCheck.class,
       ParsingErrorCheck.class,
       PerlStyleCommentsUsageCheck.class,
+      PermissionsControlCheck.class,
       PHPDeprecatedFunctionUsageCheck.class,
       PhpSapiNameFunctionUsageCheck.class,
       RandomGeneratorCheck.class,

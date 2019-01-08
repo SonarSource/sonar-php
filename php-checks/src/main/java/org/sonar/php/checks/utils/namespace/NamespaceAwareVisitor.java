@@ -22,6 +22,7 @@ package org.sonar.php.checks.utils.namespace;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
@@ -32,13 +33,13 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class NamespaceAwareVisitor extends PHPVisitorCheck {
 
   private QualifiedName currentNamespace;
-  private Map<String, QualifiedName> aliases;
+  private Map<String, QualifiedName> aliases = new HashMap<>();
 
   @Override
-  public void init() {
-    super.init();
-    currentNamespace = null;
-    aliases = new HashMap<>();
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    resetNamespace();
+    super.visitCompilationUnit(tree);
+    resetNamespace();
   }
 
   @Override
@@ -49,8 +50,7 @@ public class NamespaceAwareVisitor extends PHPVisitorCheck {
 
     boolean isBracketedNamespace = tree.openCurlyBrace() != null;
     if (isBracketedNamespace) {
-      currentNamespace = null;
-      aliases.clear();
+      resetNamespace();
     }
   }
 
@@ -84,6 +84,11 @@ public class NamespaceAwareVisitor extends PHPVisitorCheck {
         return QualifiedName.create(currentNamespace, qualifiedName);
       }
     }
+  }
+
+  private void resetNamespace() {
+    currentNamespace = null;
+    aliases.clear();
   }
 
   private static QualifiedName getOriginalFullyQualifiedName(@Nullable QualifiedName namespacePrefix, UseClauseTree useClauseTree) {
