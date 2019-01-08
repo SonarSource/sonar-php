@@ -17,19 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.cfg;
+package org.sonar.plugins.php.api.cfg;
 
 import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
+import org.sonar.php.cfg.LiveVariablesAnalysis;
 import org.sonar.plugins.php.api.symbols.Symbol;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Validator {
+public class Validator {
 
   private static final String DEBUG_MESSAGE_TEMPLATE;
 
@@ -119,7 +120,7 @@ class Validator {
     expectedCfg.emptyBlockExpectations.removeAll(matchedExpectations);
   }
 
-  static void assertLiveVariables(ControlFlowGraph actualCfg, LiveVariablesAnalysis actualLva) {
+  public static void assertLiveVariables(ControlFlowGraph actualCfg, LiveVariablesAnalysis actualLva) {
     ExpectedCfgStructure expectedCfg = ExpectedCfgStructure.parse(actualCfg.blocks());
     new Validator(expectedCfg).assertLva(actualCfg, actualLva);
   }

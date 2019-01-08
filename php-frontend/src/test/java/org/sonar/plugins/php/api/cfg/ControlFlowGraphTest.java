@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.cfg;
+package org.sonar.plugins.php.api.cfg;
 
 import com.sonar.sslr.api.RecognitionException;
 import org.junit.Before;

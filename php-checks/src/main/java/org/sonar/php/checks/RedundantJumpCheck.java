@@ -23,15 +23,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import org.sonar.check.Rule;
-import org.sonar.php.cfg.CfgBlock;
-import org.sonar.php.cfg.ControlFlowGraph;
+import org.sonar.plugins.php.api.cfg.CfgBlock;
+import org.sonar.plugins.php.api.cfg.ControlFlowGraph;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.ReturnStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPSubscriptionCheck;
 
-import static org.sonar.php.cfg.ControlFlowGraph.KINDS_WITH_CONTROL_FLOW;
+import static org.sonar.plugins.php.api.cfg.ControlFlowGraph.KINDS_WITH_CONTROL_FLOW;
 
 @Rule(key = RedundantJumpCheck.KEY)
 public class RedundantJumpCheck extends PHPSubscriptionCheck {

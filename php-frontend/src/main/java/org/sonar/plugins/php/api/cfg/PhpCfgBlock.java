@@ -18,7 +18,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.php.cfg;
+package org.sonar.plugins.php.api.cfg;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
