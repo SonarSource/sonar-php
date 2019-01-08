@@ -1,0 +1,12 @@
+{
+'project:Symfony/Component/Lock/Tests/Store/BlockingStoreTestTrait.php':[
+63,
+81,
+],
+'project:Symfony/Component/Process/Process.php':[
+1515,
+],
+'project:Symfony/Component/Process/Tests/ProcessTest.php':[
+727,
+],
+}

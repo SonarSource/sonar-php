@@ -33,6 +33,7 @@ import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
+import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 
 public class CheckList {
@@ -168,6 +169,7 @@ public class CheckList {
       SelfAssignmentCheck.class,
       SelfKeywordUsageCheck.class,
       SessionCookiePersistenceCheck.class,
+      SignallingProcessCheck.class,
       SilencedErrorsCheck.class,
       SleepFunctionUsageCheck.class,
       SocketUsageCheck.class,
