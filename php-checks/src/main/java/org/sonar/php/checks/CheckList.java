@@ -32,10 +32,11 @@ import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.FileSystemUsageCheck;
+import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
+import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
-import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
 
 public class CheckList {
@@ -78,6 +79,7 @@ public class CheckList {
       CookieDomainCheck.class,
       CookieSensitiveDataCheck.class,
       CookiesSecureCheck.class,
+      CryptographicHashCheck.class,
       CryptographicKeySizeCheck.class,
       DeadStoreCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
