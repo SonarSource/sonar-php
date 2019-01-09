@@ -41,13 +41,12 @@ function handle_file($filename, $directory, $group, $data, $mode, $flags, $use_i
     fopen($filename, $mode, $use_include_path); // Noncompliant
     readfile($filename, $use_include_path); // Noncompliant
 
-    // No issue is raised if the path does not start with 'file://' but contains '://'
-    // Note: following wrapper are ignored: 'compress.zlib://', 'compress.bzip2://', 'zip://',
-    // 'glob://', 'rar://', 'ogg://'
+    // No issue is raised for network scheme
     file_get_contents("http://example.com", $use_include_path); // Compliant
     file("http://example.com", $flags); // Compliant
-    fopen("http://example.com", $mode, $use_include_path); // Compliant
-    readfile("http://example.com", $use_include_path); // Compliant
+    fopen("ftp://example.com", $mode, $use_include_path); // Compliant
+    fopen("ssh2://example.com", $mode, $use_include_path); // Compliant
+    readfile("https://example.com", $use_include_path); // Compliant
     readfile("file://file1", $use_include_path); // Noncompliant
     readfile("compress.zlib://file1", $use_include_path); // Noncompliant
     readfile("compress.bzip2://file1", $use_include_path); // Noncompliant
@@ -57,6 +56,8 @@ function handle_file($filename, $directory, $group, $data, $mode, $flags, $use_i
     readfile("ogg://file1", $use_include_path); // Noncompliant
     readfile("file1", $use_include_path); // Noncompliant
     readfile("rar://ogg://http://example.com", $use_include_path); // Compliant
+    readfile("rar://unknownhttp://example.com", $use_include_path); // Noncompliant
+    readfile("unknownftp://example.com", $use_include_path); // Noncompliant
 
     // No issue is created if a context is given as there is a high chance that it is not a filesystem access.
     // Note that this will create some false negatives with "zip" contexts.

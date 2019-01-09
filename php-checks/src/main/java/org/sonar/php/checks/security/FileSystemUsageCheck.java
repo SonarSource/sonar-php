@@ -19,11 +19,9 @@
  */
 package org.sonar.php.checks.security;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -77,12 +75,7 @@ public class FileSystemUsageCheck extends PHPVisitorCheck {
 
   private static class FunctionArgsMatcher {
 
-    private static final String FILE_SCHEME = "file";
-
-    private static final String SCHEME_SEPARATOR = "://";
-
-    private static final Set<String> WRAPPER_SCHEMES = new HashSet<>(Arrays.asList(
-      "rar", "zlib", "bzip2", "zip", "compress.zlib", "compress.bzip2", "glob", "ogg"));
+    private static final Pattern NETWORK_SCHEME = Pattern.compile("(^|/)(http|https|ftp|ftps|sftp|ssh|ssh\\d)://");
 
     private final int minCount;
     private final int maxCount;
@@ -111,24 +104,11 @@ public class FileSystemUsageCheck extends PHPVisitorCheck {
             hasPath = true;
           } else if (matchesHardcodedPath) {
             String path = CheckUtils.trimQuotes((LiteralTree) pathExpression);
-            hasPath |= effectiveScheme(path).equals(FILE_SCHEME);
+            hasPath |= !NETWORK_SCHEME.matcher(path).find();
           }
         }
       }
       return hasPath;
     }
-
-    private static String effectiveScheme(String path) {
-      int schemeSep = path.indexOf(SCHEME_SEPARATOR);
-      if (schemeSep != -1) {
-        String scheme = path.substring(0, schemeSep);
-        if (WRAPPER_SCHEMES.contains(scheme)) {
-          return effectiveScheme(path.substring(schemeSep + SCHEME_SEPARATOR.length()));
-        }
-        return scheme;
-      }
-      return FILE_SCHEME;
-    }
   }
-
 }
