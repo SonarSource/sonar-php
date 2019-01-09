@@ -31,6 +31,7 @@ import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
+import org.sonar.php.checks.security.DataEncryptionCheck;
 import org.sonar.php.checks.security.FileSystemUsageCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
@@ -81,6 +82,7 @@ public class CheckList {
       CookiesSecureCheck.class,
       CryptographicHashCheck.class,
       CryptographicKeySizeCheck.class,
+      DataEncryptionCheck.class,
       DeadStoreCheck.class,
       DeprecatedPredefinedVariablesUseCheck.class,
       DirectlyAccessingSuperGlobalCheck.class,
