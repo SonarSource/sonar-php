@@ -31,6 +31,7 @@ import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
+import org.sonar.php.checks.security.FileSystemUsageCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
@@ -99,6 +100,7 @@ public class CheckList {
       FieldNameCheck.class,
       FileHeaderCheck.class,
       FileNameCheck.class,
+      FileSystemUsageCheck.class,
       FileWithSymbolsAndSideEffectsCheck.class,
       FixmeTagPresenceCheck.class,
       ForHidingWhileCheck.class,
