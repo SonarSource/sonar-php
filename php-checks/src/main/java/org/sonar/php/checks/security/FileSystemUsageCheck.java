@@ -75,7 +75,7 @@ public class FileSystemUsageCheck extends PHPVisitorCheck {
 
   private static class FunctionArgsMatcher {
 
-    private static final Pattern NETWORK_SCHEME = Pattern.compile("(^|/)(http|https|ftp|ftps|sftp|ssh|ssh\\d)://");
+    private static final Pattern NETWORK_OR_PHP_SCHEME = Pattern.compile("(^|/)(http|https|ftp|ftps|ssh\\d?(\\.\\w+?)?|php)://");
 
     private final int minCount;
     private final int maxCount;
@@ -104,7 +104,7 @@ public class FileSystemUsageCheck extends PHPVisitorCheck {
             hasPath = true;
           } else if (matchesHardcodedPath) {
             String path = CheckUtils.trimQuotes((LiteralTree) pathExpression);
-            hasPath |= !NETWORK_SCHEME.matcher(path).find();
+            hasPath |= !NETWORK_OR_PHP_SCHEME.matcher(path).find();
           }
         }
       }

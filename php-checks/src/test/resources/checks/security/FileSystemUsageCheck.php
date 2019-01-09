@@ -46,7 +46,9 @@ function handle_file($filename, $directory, $group, $data, $mode, $flags, $use_i
     file("http://example.com", $flags); // Compliant
     fopen("ftp://example.com", $mode, $use_include_path); // Compliant
     fopen("ssh2://example.com", $mode, $use_include_path); // Compliant
+    fopen("ssh2.sftp://example.com", $mode, $use_include_path); // Compliant
     readfile("https://example.com", $use_include_path); // Compliant
+    readfile("php://memory", $use_include_path); // Compliant
     readfile("file://file1", $use_include_path); // Noncompliant
     readfile("compress.zlib://file1", $use_include_path); // Noncompliant
     readfile("compress.bzip2://file1", $use_include_path); // Noncompliant
