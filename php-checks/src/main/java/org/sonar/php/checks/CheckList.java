@@ -39,6 +39,7 @@ import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
+import org.sonar.php.checks.security.XPathUsageCheck;
 
 public class CheckList {
 
@@ -213,8 +214,8 @@ public class CheckList {
       VariableVariablesCheck.class,
       VarKeywordUsageCheck.class,
       WeakSSLProtocolCheck.class,
-      WrongAssignmentOperatorCheck.class
-      );
+      WrongAssignmentOperatorCheck.class,
+      XPathUsageCheck.class);
   }
 
   public static Iterable<Class> getPhpIniChecks() {
