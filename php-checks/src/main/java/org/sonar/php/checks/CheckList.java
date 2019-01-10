@@ -35,6 +35,7 @@ import org.sonar.php.checks.security.DataEncryptionCheck;
 import org.sonar.php.checks.security.FileSystemUsageCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
+import org.sonar.php.checks.security.LoggerConfigurationCheck;
 import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
@@ -139,6 +140,7 @@ public class CheckList {
       LineLengthCheck.class,
       LocalVariableAndParameterNameCheck.class,
       LocalVariableShadowsClassFieldCheck.class,
+      LoggerConfigurationCheck.class,
       LogicalWordOperatorUsageCheck.class,
       LoopExecutingAtMostOnceCheck.class,
       LowerCaseColorCheck.class,
