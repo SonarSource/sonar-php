@@ -25,10 +25,22 @@ original information will be exposed.</p>
 <p><a href="https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet">Sanitize</a> every information read from a cookie before using them.</p>
 <p>Using cookies only for session IDs doesn't make them secure. Follow <a
 href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet#Cookies">OWASP best practices</a> when you configure your cookies.</p>
-<h2>Noncompliant Code Example</h2>
+<h2>Questionable Code Example</h2>
 <pre>
-$value= "1234 1234 1234 1234";
-setcookie("CreditCardNumber", $value, $expire, $path, $domain, true, true); // Noncompliant; this cookie is handling a credit card number, it's a sensitive information
+$value = "1234 1234 1234 1234";
+
+// Review this cookie as it seems to send sensitive information (credit card number).
+setcookie("CreditCardNumber", $value, $expire, $path, $domain, true, true); // Questionable
+setrawcookie("CreditCardNumber", $value, $expire, $path, $domain, true, true); // Questionable
+
+$_COOKIE["name"]; // Questionable
+$HTTP_COOKIE_VARS["name"]; // Questionable
+
+// Unseting and testing existence of a cookie is fine
+unset($_COOKIE["cookie"]); // Compliant
+unset($HTTP_COOKIE_VARS["cookie"]); // Compliant
+isset($_COOKIE["cookie"]); // Compliant
+isset($HTTP_COOKIE_VARS["cookie"]); // Compliant
 </pre>
 <h2>See</h2>
 <ul>
