@@ -189,3 +189,16 @@ new class() extends Not_CI_Controller {
     }
 };
 new class() implements CipherInterface { }; // Noncompliant
+
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support as CryptAlias;
+
+function myLaravelEncrypt($data)
+{
+    Crypt::encryptString($data); // Noncompliant
+    \Illuminate\Support\Facades\Crypt::encrypt($data); // Noncompliant
+    CryptAlias\Facades\Crypt::encryptString($data); // Noncompliant
+    // encrypt using the Laravel "encrypt" helper
+    encrypt($data); // Noncompliant
+    ABC::encryptString($data); // Ok - not from framework
+}
