@@ -42,6 +42,7 @@ import org.sonar.php.checks.security.PermissionsControlCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
+import org.sonar.php.checks.security.StandardInputUsageCheck;
 import org.sonar.php.checks.security.XPathUsageCheck;
 
 public class CheckList {
@@ -189,6 +190,7 @@ public class CheckList {
       SleepFunctionUsageCheck.class,
       SocketUsageCheck.class,
       SSLCertificatesVerificationDisabledCheck.class,
+      StandardInputUsageCheck.class,
       StringLiteralDuplicatedCheck.class,
       SwitchCaseTooBigCheck.class,
       SwitchDefaultPositionCheck.class,
