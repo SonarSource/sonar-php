@@ -20,7 +20,9 @@
 package org.sonar.plugins.php.api.visitors;
 
 import com.google.common.annotations.Beta;
+import java.io.File;
 import java.util.List;
+import javax.annotation.CheckForNull;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -124,4 +126,7 @@ public interface CheckContext {
    * @return the current file
    */
   PhpFile getPhpFile();
+
+  @CheckForNull
+  File getWorkingDirectory();
 }

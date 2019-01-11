@@ -42,4 +42,6 @@ public interface PHPCheck {
   List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree);
 
   List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable);
+
+  List<PhpIssue> analyze(CheckContext context);
 }

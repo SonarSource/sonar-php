@@ -79,7 +79,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   public void setUp() throws Exception {
     PhpFile file = mock(PhpFile.class);
     when(file.toString()).thenReturn("mock.php");
-    checkContext = new PHPCheckContext(file, mock(CompilationUnitTreeImpl.class), mock(SymbolTable.class));
+    checkContext = new PHPCheckContext(file, mock(CompilationUnitTreeImpl.class), null, mock(SymbolTable.class));
   }
 
   @Test

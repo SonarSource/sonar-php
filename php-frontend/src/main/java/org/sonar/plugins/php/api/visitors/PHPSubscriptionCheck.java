@@ -44,17 +44,18 @@ public abstract class PHPSubscriptionCheck extends PHPTreeSubscriber implements 
 
   @Override
   public final List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree) {
-    this.context = new PHPCheckContext(file, tree);
-    scanTree(context.tree());
-
-    return context().getIssues();
+    return analyze(new PHPCheckContext(file, tree, null));
   }
 
   @Override
   public List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
-    this.context = new PHPCheckContext(file, tree, symbolTable);
-    scanTree(context.tree());
+    return analyze(new PHPCheckContext(file, tree, null, symbolTable));
+  }
 
+  @Override
+  public final List<PhpIssue> analyze(CheckContext context) {
+    this.context = context;
+    scanTree(context.tree());
     return context().getIssues();
   }
 }
