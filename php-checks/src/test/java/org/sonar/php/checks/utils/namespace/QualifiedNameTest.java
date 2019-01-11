@@ -32,6 +32,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.sonar.php.checks.utils.namespace.QualifiedName.create;
+import static org.sonar.php.checks.utils.namespace.QualifiedName.qualifiedName;
 
 public class QualifiedNameTest {
 
@@ -73,6 +74,14 @@ public class QualifiedNameTest {
 
     QualifiedName qualifiedName3 = create(qualifiedName1, qualifiedName2);
     assertThat(qualifiedName3).isEqualTo(create("A", "B", "C", "D"));
+  }
+
+  @Test
+  public void qualified_name() {
+    QualifiedName qualifiedName1 = create("A", "B");
+    QualifiedName qualifiedName2 = qualifiedName("A\\B");
+
+    assertThat(qualifiedName1).isEqualTo(qualifiedName2);
   }
 
   @Test

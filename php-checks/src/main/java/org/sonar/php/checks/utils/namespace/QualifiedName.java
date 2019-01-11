@@ -37,6 +37,14 @@ public class QualifiedName {
     this.name = name;
   }
 
+  /**
+   * Utility method to conveniently create QualifiedName objects with PHP namespace notation.
+   * Ex: qualifiedName("Foo\Bar\FooBar")
+   */
+  public static QualifiedName qualifiedName(String qualifiedNameString) {
+    return create(qualifiedNameString.split("\\\\"));
+  }
+
   public static QualifiedName create(String... names) {
     int length = names.length;
     if (length == 0) {
