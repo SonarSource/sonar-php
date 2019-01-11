@@ -32,8 +32,12 @@ stream_set_blocking(STDIN, 0);
 $stat  = fstat(STDIN);
 $isTTY = (posix_isatty(STDIN) === true);
 
+function getStdIn() {
+  return STDIN; // Noncompliant
+}
+
 // coverage
 $unknown(STDIN); // Noncompliant
-if ($a == STDIN) {
+if ($a == STDIN || !STDIN) {
 }
 $a->STDIN();

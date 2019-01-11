@@ -25,9 +25,11 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S4829")
@@ -63,8 +65,8 @@ public class StandardInputUsageCheck extends PHPVisitorCheck {
   }
 
   private void checkUsage(Tree tree) {
-    if (tree.getParent().is(Tree.Kind.FUNCTION_CALL, Tree.Kind.ASSIGNMENT, Tree.Kind.ASSIGNMENT_BY_REFERENCE) &&
-      !isArgumentOfSafeFunctionCall(tree)) {
+    Tree parent = tree.getParent();
+    if (!(parent instanceof BinaryExpressionTree) && !(parent instanceof UnaryExpressionTree) && !isArgumentOfSafeFunctionCall(tree)) {
       context().newIssue(this, tree, MESSAGE);
     }
   }
