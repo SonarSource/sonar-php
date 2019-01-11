@@ -45,7 +45,7 @@ public class PHPAnalyzerTest {
   @Test(expected = RecognitionException.class)
   public void parsing_failure_should_raise_an_exception() throws IOException {
     PHPCheck check = new DummyCheck();
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check));
+    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check), tmpFolder.newFolder());
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php if(condition): ?>");
     analyzer.nextFile(file);
   }
@@ -53,7 +53,7 @@ public class PHPAnalyzerTest {
   @Test
   public void test_analyze() throws Exception {
     PHPCheck check = new DummyCheck();
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check));
+    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(check), tmpFolder.newFolder());
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
     List<PhpIssue> issues = analyzer.analyze();
@@ -68,7 +68,7 @@ public class PHPAnalyzerTest {
 
   @Test
   public void test_cpd() throws Exception {
-    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of());
+    PHPAnalyzer analyzer = new PHPAnalyzer(ImmutableList.of(), tmpFolder.newFolder());
     PhpFile file = FileTestUtils.getFile(tmpFolder.newFile(), "<?php $a = 1;");
     analyzer.nextFile(file);
 
