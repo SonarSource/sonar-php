@@ -60,7 +60,7 @@ public class PHPVisitorCheckTest {
   }
 
   @Test
-  public void should_have_correct_context() throws Exception {
+  public void should_have_correct_context() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
     PhpFile file = FileTestUtils.getFile(new File("src/test/resources/visitors/test.php"));
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(file.contents());
@@ -68,6 +68,11 @@ public class PHPVisitorCheckTest {
     ContextTestVisitor testVisitor = new ContextTestVisitor();
     testVisitor.analyze(file, tree);
     assertThat(testVisitor.context().getPhpFile()).isEqualTo(file);
+    assertThat(testVisitor.context().getWorkingDirectory()).isNull();
+
+    File workingDir = new File("working_dir");
+    testVisitor.analyze(new PHPCheckContext(file, tree, workingDir));
+    assertThat(testVisitor.context().getWorkingDirectory()).isEqualTo(workingDir);
   }
 
 

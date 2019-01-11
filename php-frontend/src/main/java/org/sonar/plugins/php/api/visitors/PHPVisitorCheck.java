@@ -110,7 +110,7 @@ import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 public abstract class PHPVisitorCheck implements VisitorCheck {
 
-  private PHPCheckContext context;
+  private CheckContext context;
 
   @Override
   public void init() {
@@ -558,17 +558,18 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public final List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree) {
-    this.context = new PHPCheckContext(file, tree);
-    visitCompilationUnit(tree);
-
-    return context().getIssues();
+    return analyze(new PHPCheckContext(file, tree, null));
   }
 
   @Override
   public List<PhpIssue> analyze(PhpFile file, CompilationUnitTree tree, SymbolTable symbolTable) {
-    this.context = new PHPCheckContext(file, tree, symbolTable);
-    visitCompilationUnit(tree);
+    return analyze(new PHPCheckContext(file, tree, null, symbolTable));
+  }
 
+  @Override
+  public final List<PhpIssue> analyze(CheckContext context) {
+    this.context = context;
+    visitCompilationUnit(context.tree());
     return context().getIssues();
   }
 }
