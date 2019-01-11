@@ -25,6 +25,7 @@ import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
 import org.sonar.php.checks.utils.namespace.QualifiedName;
+import org.sonar.php.checks.utils.type.StaticFunctionCall;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -41,6 +42,8 @@ import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.namespace.QualifiedName.create;
+import static org.sonar.php.checks.utils.namespace.QualifiedName.qualifiedName;
+import static org.sonar.php.checks.utils.type.StaticFunctionCall.staticFunctionCall;
 
 @Rule(key = "S4787")
 public class DataEncryptionCheck extends NamespaceAwareVisitor {
@@ -227,31 +230,6 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
 
   private static boolean isStaticFunction(MemberAccessTreeImpl memberAccess) {
     return memberAccess.isStatic() && memberAccess.object().is(Tree.Kind.NAMESPACE_NAME) && memberAccess.member().is(Tree.Kind.NAME_IDENTIFIER);
-  }
-
-  private static QualifiedName qualifiedName(String qualifiedNameString) {
-    return create(qualifiedNameString.split("\\\\"));
-  }
-
-  private static StaticFunctionCall staticFunctionCall(String qualifiedFunctionCall) {
-    int i = qualifiedFunctionCall.indexOf("::");
-    QualifiedName qualifiedName = qualifiedName(qualifiedFunctionCall.substring(0, i));
-    return new StaticFunctionCall(qualifiedName, qualifiedFunctionCall.substring(i + 2));
-  }
-
-  private static class StaticFunctionCall {
-    private QualifiedName callee;
-    private String functionName;
-
-    private StaticFunctionCall(QualifiedName callee, String functionName) {
-      this.callee = callee;
-      this.functionName = functionName;
-    }
-
-    private boolean matches(QualifiedName className, String memberName) {
-      return functionName.equals(memberName) && callee.equals(className);
-    }
-
   }
 
   private static class CodeIgniterMethodCallChecker extends PHPVisitorCheck {
