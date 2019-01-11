@@ -29,11 +29,12 @@ import org.sonar.php.checks.phpini.EnableDlCheck;
 import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
+import org.sonar.php.checks.security.ChangingAccessibilityCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
+import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.DataEncryptionCheck;
 import org.sonar.php.checks.security.FileSystemUsageCheck;
-import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.HttpEndpointCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 import org.sonar.php.checks.security.LoggerConfigurationCheck;
@@ -65,6 +66,7 @@ public class CheckList {
       CallParentConstructorCheck.class,
       CallToIniSetCheck.class,
       CatchRethrowingCheck.class,
+      ChangingAccessibilityCheck.class,
       CharacterBeforeOpeningPHPTagCheck.class,
       ClassComplexityCheck.class,
       ClassCouplingCheck.class,
