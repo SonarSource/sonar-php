@@ -30,6 +30,7 @@ import org.sonar.php.checks.phpini.FileUploadsCheck;
 import org.sonar.php.checks.phpini.OpenBasedirCheck;
 import org.sonar.php.checks.phpini.SessionUseTransSidCheck;
 import org.sonar.php.checks.security.ChangingAccessibilityCheck;
+import org.sonar.php.checks.security.CommandLineArgumentCheck;
 import org.sonar.php.checks.security.CookieDomainCheck;
 import org.sonar.php.checks.security.CookieSensitiveDataCheck;
 import org.sonar.php.checks.security.CryptographicHashCheck;
@@ -75,6 +76,7 @@ public class CheckList {
       ClosingTagInFullPHPFileCheck.class,
       CodeFollowingJumpStatementCheck.class,
       CollapsibleIfStatementCheck.class,
+      CommandLineArgumentCheck.class,
       CommentedOutCodeCheck.class,
       ConcatenatedStringLiteralCheck.class,
       ConditionalIndentationCheck.class,
