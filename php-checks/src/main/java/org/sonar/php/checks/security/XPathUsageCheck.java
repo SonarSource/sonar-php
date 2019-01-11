@@ -19,20 +19,14 @@
  */
 package org.sonar.php.checks.security;
 
-import java.util.Objects;
-import java.util.stream.Stream;
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.symbols.Symbol;
+import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
+import org.sonar.php.checks.utils.type.NewObjectCall;
+import org.sonar.php.checks.utils.type.TreeValues;
+import org.sonar.php.checks.utils.type.TypePredicateList;
 import org.sonar.plugins.php.api.tree.Tree;
-import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
-import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
-import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
-import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
-import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S4817")
@@ -40,66 +34,22 @@ public class XPathUsageCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that executing this XPATH expression is safe.";
 
+  private static final Predicate<TreeValues> XPATH_PREDICATES = new TypePredicateList(
+    new ObjectMemberFunctionCall("query", new NewObjectCall("DOMXpath")),
+    new ObjectMemberFunctionCall("evaluate", new NewObjectCall("DOMXpath")),
+    new ObjectMemberFunctionCall("xpath", new NewObjectCall("SimpleXMLElement")));
+
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    ExpressionTree callee = tree.callee();
-    if (callee.is(Tree.Kind.OBJECT_MEMBER_ACCESS) && firstArgIsNotHardcoded(tree)) {
-      MemberAccessTree memberAccess = (MemberAccessTree) callee;
-      if (matchesFunctionCall(memberAccess, "DOMXpath", "query") ||
-        matchesFunctionCall(memberAccess, "DOMXpath", "evaluate") ||
-        matchesFunctionCall(memberAccess, "SimpleXMLElement", "xpath")) {
-        context().newIssue(this, tree, MESSAGE);
-      }
+    TreeValues possibleValues = TreeValues.of(tree, context().symbolTable());
+    if (XPATH_PREDICATES.test(possibleValues) && firstArgIsNotHardcoded(tree)) {
+      context().newIssue(this, tree, MESSAGE);
     }
     super.visitFunctionCall(tree);
   }
 
   private static boolean firstArgIsNotHardcoded(FunctionCallTree tree) {
     return !tree.arguments().isEmpty() && !tree.arguments().get(0).is(Tree.Kind.REGULAR_STRING_LITERAL);
-  }
-
-  private boolean matchesFunctionCall(MemberAccessTree memberAccess, String type, String name) {
-    return isMemberNameMatches(memberAccess, name) && isObjectTypeMatches(memberAccess, type);
-  }
-
-  private static boolean isMemberNameMatches(MemberAccessTree memberAccess, String name) {
-    Tree member = memberAccess.member();
-    return member.is(Tree.Kind.NAME_IDENTIFIER) && ((NameIdentifierTree) member).text().equals(name);
-  }
-
-  private boolean isObjectTypeMatches(MemberAccessTree memberAccess, String type) {
-    Symbol symbol = context().symbolTable().getSymbol(memberAccess.object());
-    if (symbol == null) {
-      return false;
-    }
-    return Stream.concat(Stream.of(symbol.declaration()), symbol.usages().stream().map(SyntaxToken::getParent))
-      .map(XPathUsageCheck::parentAssignment)
-      .filter(Objects::nonNull)
-      .map(AssignmentExpressionTree::value)
-      .map(XPathUsageCheck::extractNewType)
-      .anyMatch(type::equals);
-  }
-
-  @Nullable
-  private static AssignmentExpressionTree parentAssignment(Tree tree) {
-    if (tree.getParent().is(Tree.Kind.ASSIGNMENT)) {
-      return ((AssignmentExpressionTree) tree.getParent());
-    }
-    return null;
-  }
-
-  @Nullable
-  private static String extractNewType(Tree tree) {
-    if (tree.is(Tree.Kind.NEW_EXPRESSION)) {
-      ExpressionTree expression = ((NewExpressionTree) tree).expression();
-      if (expression.is(Tree.Kind.FUNCTION_CALL)) {
-        ExpressionTree callee = ((FunctionCallTree) expression).callee();
-        if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
-          return ((NamespaceNameTree) callee).qualifiedName();
-        }
-      }
-    }
-    return null;
   }
 
 }

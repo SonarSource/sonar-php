@@ -25,8 +25,6 @@ function evaluate_xpath($doc, $xpathstring, $xmlstring)
     $xml->xpath("/users/user[@name='alice']"); // Compliant
 
     // coverage
-    unknown()->query($xpathstring);
-    unknown()->$query($xpathstring);
     $xpath->evaluate();
     $xpath->xpath($xpathstring);
     $xml->query($xpathstring);
@@ -36,13 +34,4 @@ function evaluate_xpath($doc, $xpathstring, $xmlstring)
     $other->query($xpathstring);
     $other->evaluate($xpathstring);
     $other->xpath($xpathstring);
-
-    $emtpy = NULL;
-    $emtpy->query($xpathstring);
-
-    $cls = new class{};
-    $cls->query($xpathstring);
-
-    $dyn = new $name($doc);
-    $dyn->query($xpathstring);
 }
