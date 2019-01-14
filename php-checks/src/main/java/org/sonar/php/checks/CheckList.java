@@ -37,6 +37,7 @@ import org.sonar.php.checks.security.CryptographicHashCheck;
 import org.sonar.php.checks.security.DataEncryptionCheck;
 import org.sonar.php.checks.security.FileSystemUsageCheck;
 import org.sonar.php.checks.security.HttpEndpointCheck;
+import org.sonar.php.checks.security.HttpRequestCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 import org.sonar.php.checks.security.LoggerConfigurationCheck;
 import org.sonar.php.checks.security.PermissionsControlCheck;
@@ -131,6 +132,7 @@ public class CheckList {
       HardCodedIpAddressCheck.class,
       HardCodedUriCheck.class,
       HttpEndpointCheck.class,
+      HttpRequestCheck.class,
       HttpOnlyCheck.class,
       IdenticalOperandsInBinaryExpressionCheck.class,
       IfConditionAlwaysTrueOrFalseCheck.class,
