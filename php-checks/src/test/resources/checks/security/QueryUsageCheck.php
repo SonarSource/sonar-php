@@ -43,6 +43,7 @@ function executeMysqliQuery($statement, $column) {
 function executePDOQuery($dsn, $user, $password, $statement, $type, $obj) {
     $conn = new PDO($dsn, $user, $password);
     $conn->query($statement); // Noncompliant
+    $conn->query('SELECT * from test'); // OK
     $conn->query($statement, PDO::FETCH_COLUMN, 42); // Noncompliant
     $conn->query($statement, PDO::FETCH_CLASS, 'MyClass'); // Noncompliant
     $conn->query($statement, PDO::FETCH_INTO, $obj); // Noncompliant
@@ -61,7 +62,6 @@ function executePostgresQuery($conn, $query, $tableName) {
     pg_query($conn, $query); // Noncompliant
     pg_send_query ($conn, $query); // Noncompliant
 
-
     pg_send_query($conn, 'INSERT INTO test (ID) VALUES (1)'); // OK
     pg_query('INSERT INTO test (ID) VALUES (1)'); // OK
     pg_query($conn, 'INSERT INTO test (ID) VALUES (1)'); // OK
@@ -74,3 +74,12 @@ function executePostgresQuery($conn, $query, $tableName) {
     $data = array('id'=>'2');
     pg_update($conn, $tableName, $data, $cond); // Noncompliant
 }
+
+// coverage
+abc('INSERT INTO test (ID) VALUES ($query)');
+a->abc('INSERT INTO test (ID) VALUES ($query)');
+mysql_query();
+$conn = new PDO($dsn, $user, $password);
+$conn->query();
+$conn->prepare();
+pg_query();

@@ -91,11 +91,11 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private boolean isSuspiciousMemberFunction(FunctionCallTree tree, TreeValues possibleValues) {
+  private static boolean isSuspiciousMemberFunction(FunctionCallTree tree, TreeValues possibleValues) {
     return SUSPICIOUS_QUERY_PREDICATES.test(possibleValues) && !tree.arguments().isEmpty() && !tree.arguments().get(0).is(Tree.Kind.REGULAR_STRING_LITERAL);
   }
 
-  private boolean isSuspiciousPrepareStatement(FunctionCallTree tree, TreeValues possibleValues) {
+  private static boolean isSuspiciousPrepareStatement(FunctionCallTree tree, TreeValues possibleValues) {
     return PDO_PREPARE_PREDICATE.test(possibleValues) && !tree.arguments().isEmpty() && tree.arguments().get(0).is(Tree.Kind.EXPANDABLE_STRING_LITERAL);
   }
 
