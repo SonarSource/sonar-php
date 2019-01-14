@@ -110,7 +110,7 @@ public class PHPSensor implements Sensor {
       fileSystem.predicates().hasType(InputFile.Type.MAIN),
       fileSystem.predicates().hasLanguage(Php.KEY));
 
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()));
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.copyOf(checks.all()), fileSystem.workDir());
 
     List<InputFile> inputFiles = new ArrayList<>();
     fileSystem.inputFiles(mainFilePredicate).forEach(inputFiles::add);

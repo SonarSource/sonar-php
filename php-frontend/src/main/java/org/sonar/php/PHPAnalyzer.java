@@ -21,6 +21,7 @@ package org.sonar.php;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 import org.sonar.api.batch.fs.InputFile;
@@ -37,6 +38,7 @@ import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.metrics.MetricsVisitor;
 import org.sonar.php.parser.PHPParserBuilder;
 import org.sonar.php.tree.symbols.SymbolTableImpl;
+import org.sonar.php.tree.visitors.PHPCheckContext;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -48,12 +50,14 @@ public class PHPAnalyzer {
 
   private final ActionParser<Tree> parser;
   private final ImmutableList<PHPCheck> checks;
+  private final File workingDir;
 
   private CompilationUnitTree currentFileTree;
   private PhpFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
-  public PHPAnalyzer(ImmutableList<PHPCheck> checks) {
+  public PHPAnalyzer(ImmutableList<PHPCheck> checks, File workingDir) {
+    this.workingDir = workingDir;
     this.parser = PHPParserBuilder.createParser();
     this.checks = checks;
 
@@ -71,7 +75,8 @@ public class PHPAnalyzer {
   public List<PhpIssue> analyze() {
     ImmutableList.Builder<PhpIssue> issuesBuilder = ImmutableList.builder();
     for (PHPCheck check : checks) {
-      issuesBuilder.addAll(check.analyze(currentFile, currentFileTree, currentFileSymbolTable));
+      PHPCheckContext context = new PHPCheckContext(currentFile, currentFileTree, workingDir, currentFileSymbolTable);
+      issuesBuilder.addAll(check.analyze(context));
     }
 
     return issuesBuilder.build();

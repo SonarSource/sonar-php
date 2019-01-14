@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.sonar.sslr.api.RecognitionException;
 import java.io.File;
+import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
@@ -33,8 +34,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
@@ -67,8 +70,8 @@ import org.sonar.php.checks.CheckList;
 import org.sonar.php.checks.LeftCurlyBraceEndsLineCheck;
 import org.sonar.plugins.php.api.Php;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
+import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.squidbridge.ProgressReport;
 
@@ -100,6 +103,9 @@ public class PHPSensorTest {
   @org.junit.Rule
   public final ExpectedException thrown = ExpectedException.none();
 
+  @org.junit.Rule
+  public TemporaryFolder tmpFolder = new TemporaryFolder();
+
   private final PHPCustomRuleRepository[] CUSTOM_RULES = {new PHPCustomRuleRepository() {
     @Override
     public String repositoryKey() {
@@ -123,6 +129,11 @@ public class PHPSensorTest {
       description = "Custom parameter",
       defaultValue = "value")
     public String customParam = "value";
+  }
+
+  @Before
+  public void before() throws IOException {
+    context.fileSystem().setWorkDir(tmpFolder.newFolder().toPath());
   }
 
   private PHPSensor createSensor() {
@@ -262,7 +273,7 @@ public class PHPSensorTest {
 
   @Test
   public void progress_report_should_be_stopped() throws Exception {
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.<PHPCheck>of());
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(), null);
     createSensor().analyseFiles(context, phpAnalyzer, Collections.emptyList(), progressReport);
     verify(progressReport).stop();
   }
@@ -488,7 +499,7 @@ public class PHPSensorTest {
   }
 
   private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
-    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check));
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
     thrown.expect(AnalysisException.class);
     thrown.expectMessage(expectedMessageSubstring);
     try {
