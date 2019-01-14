@@ -20,6 +20,7 @@
 package org.sonar.php.checks.security;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 import org.sonar.check.Rule;
@@ -79,7 +80,7 @@ public class QueryUsageCheck extends PHPVisitorCheck {
   private static boolean isSuspiciousGlobalFunction(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
-      String qualifiedNameLowerCase = ((NamespaceNameTree) callee).qualifiedName().toLowerCase();
+      String qualifiedNameLowerCase = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ENGLISH);
       if (SUSPICIOUS_GLOBAL_FUNCTIONS.keySet().contains(qualifiedNameLowerCase)) {
         Integer index = SUSPICIOUS_GLOBAL_FUNCTIONS.get(qualifiedNameLowerCase);
         return index == null || (tree.arguments().size() > index && !tree.arguments().get(index).is(Tree.Kind.REGULAR_STRING_LITERAL));
