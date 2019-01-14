@@ -22,5 +22,5 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0); // Noncompliant
 
 $verify_peer_off = '0';
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); // Noncompliant
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $verify_peer_off); // Noncompliant
+CURL_setopt($curl, CURLOPT_SSL_VERIFYPEER, $verify_peer_off); // Noncompliant
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // Noncompliant

@@ -29,6 +29,7 @@
   $length = strlen($name);
 
   array(1, 2); // Noncompliant
+  ARRAY(1, 2); // Noncompliant
   $arr = array(1, 2);
 
 ?>

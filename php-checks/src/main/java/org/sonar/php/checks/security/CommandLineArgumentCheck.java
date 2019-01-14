@@ -81,7 +81,7 @@ public class CommandLineArgumentCheck extends NamespaceAwareVisitor {
   private boolean isSuspiciousClassInstantiation(ExpressionTree callee) {
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
       QualifiedName className = getFullyQualifiedName((NamespaceNameTree) callee);
-      return SUSPICIOUS_CLASS_INSTANTIATIONS.stream().anyMatch(className::equals);
+      return SUSPICIOUS_CLASS_INSTANTIATIONS.stream().anyMatch(className::equalsIgnoreCase);
     }
     return false;
   }

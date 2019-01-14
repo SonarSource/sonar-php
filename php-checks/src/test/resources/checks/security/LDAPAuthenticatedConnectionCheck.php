@@ -5,7 +5,7 @@ $ldapconn = ldap_connect("foo.com");
 $ldapbind = ldap_bind($ldapconn); // Noncompliant {{Provide username and password to authenticate the connection.}}
 //          ^^^^^^^^^^^^^^^^^^^^
 
-  ldap_bind($ldapconn, "username"); // Noncompliant
+  LDAP_BIND($ldapconn, "username"); // Noncompliant
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   ldap_bind($ldapconn, NULL, NULL); // Noncompliant

@@ -20,6 +20,9 @@
 package org.sonar.php.checks.utils;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -28,7 +31,17 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public abstract class FunctionUsageCheck extends PHPVisitorCheck {
 
+  private Set lowerCaseFunctionNames;
+
   protected abstract ImmutableSet<String> functionNames();
+
+  @Override
+  public void init() {
+    super.init();
+    lowerCaseFunctionNames = functionNames().stream()
+      .map(name -> name.toLowerCase(Locale.ROOT))
+      .collect(Collectors.toSet());
+  }
 
   protected abstract void createIssue(FunctionCallTree tree);
 
@@ -42,7 +55,8 @@ public abstract class FunctionUsageCheck extends PHPVisitorCheck {
   }
 
   private boolean isForbiddenFunction(ExpressionTree callee) {
-    return callee.is(Kind.NAMESPACE_NAME) && functionNames().contains(((NamespaceNameTree) callee).qualifiedName());
+    return callee.is(Kind.NAMESPACE_NAME) &&
+      lowerCaseFunctionNames.contains(((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ROOT));
   }
 
 }

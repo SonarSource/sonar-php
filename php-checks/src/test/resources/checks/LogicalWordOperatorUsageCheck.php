@@ -8,4 +8,5 @@ $a = $b && $c;  // OK
 $a = $b || $c;  // OK
 
 $a = $b or die("error");  // OK
+$a = $b or DIE("error");  // OK
 $a = $b or foo("error");  // Noncompliant

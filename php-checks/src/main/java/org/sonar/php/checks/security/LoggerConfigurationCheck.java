@@ -22,6 +22,7 @@ package org.sonar.php.checks.security;
 import com.google.common.collect.ImmutableSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
@@ -81,13 +82,13 @@ public class LoggerConfigurationCheck extends NamespaceAwareVisitor {
       return;
     }
 
-    String calleeQualifiedName = ((NamespaceNameTree) callee).qualifiedName();
+    String lowerCaseQualifiedName = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ROOT);
     SeparatedList<ExpressionTree> arguments = tree.arguments();
-    if (ERROR_REPORTING.equals(calleeQualifiedName)) {
+    if (ERROR_REPORTING.equals(lowerCaseQualifiedName)) {
       if (arguments.size() == 1 && isSuspiciousDirective(ERROR_REPORTING, arguments.get(0))) {
         context().newIssue(this, tree, MESSAGE);
       }
-    } else if (isSuspiciousGlobalConfiguration(calleeQualifiedName, arguments)) {
+    } else if (isSuspiciousGlobalConfiguration(lowerCaseQualifiedName, arguments)) {
       context().newIssue(this, tree, MESSAGE);
     }
   }
@@ -109,23 +110,23 @@ public class LoggerConfigurationCheck extends NamespaceAwareVisitor {
     super.visitUseTraitDeclaration(tree);
 
     tree.traits().stream()
-      .filter(trait -> PSR_LOG_LOGGER_TRAIT.equals(getFullyQualifiedName(trait)))
+      .filter(trait -> PSR_LOG_LOGGER_TRAIT.equalsIgnoreCase(getFullyQualifiedName(trait)))
       .forEach(trait -> context().newIssue(this, trait, MESSAGE));
   }
 
   private void checkSuspiciousClassDeclaration(ClassTree tree) {
     NamespaceNameTree superClass = tree.superClass();
-    if (superClass != null && getFullyQualifiedName(superClass).equals(PSR_LOG_ABSTRACT_LOGGER_CLASS)) {
+    if (superClass != null && getFullyQualifiedName(superClass).equalsIgnoreCase(PSR_LOG_ABSTRACT_LOGGER_CLASS)) {
       context().newIssue(this, superClass, MESSAGE);
     }
 
     tree.superInterfaces().stream()
-      .filter(superInterface -> PSR_LOG_LOGGER_INTERFACE.equals(getFullyQualifiedName(superInterface)))
+      .filter(superInterface -> PSR_LOG_LOGGER_INTERFACE.equalsIgnoreCase(getFullyQualifiedName(superInterface)))
       .forEach(superInterface -> context().newIssue(this, superInterface, MESSAGE));
   }
 
-  private static boolean isSuspiciousGlobalConfiguration(String calleeQualifiedName, SeparatedList<ExpressionTree> arguments) {
-    return GLOBAL_CONFIGURATION_FUNCTIONS.contains(calleeQualifiedName)
+  private static boolean isSuspiciousGlobalConfiguration(String lowerCaseQualifiedName, SeparatedList<ExpressionTree> arguments) {
+    return GLOBAL_CONFIGURATION_FUNCTIONS.contains(lowerCaseQualifiedName)
       && arguments.size() == 2
       && isSuspiciousDirective(getStringValue(arguments.get(0)), arguments.get(1));
   }

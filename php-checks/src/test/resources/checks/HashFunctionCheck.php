@@ -5,7 +5,7 @@ $password = $_GET['password'];
 
 $hash = hash_pbkdf2('sha256', $password, $email, 100000); // Noncompliant {{Use an unpredictable salt value.}}
 
-$hash = hash_pbkdf2('sha256', $password, $_POST['user'], 100000); // Noncompliant
+$hash = Hash_PBKDF2('sha256', $password, $_POST['user'], 100000); // Noncompliant
 
 $hash = hash_pbkdf2('sha256', $password, '', 100000); // Noncompliant
 

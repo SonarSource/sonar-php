@@ -32,6 +32,7 @@ $myvar = $HTTP_SERVER_VARS[0]; // Noncompliant
 //       ^^^^^^^^^^^^^^^^^
 
 $options = getopt('a:b:'); // Noncompliant
+$options = GetOpt('a:b:'); // Noncompliant
 
 $GLOBALS["argv"]; // Noncompliant
 
@@ -44,8 +45,10 @@ function myglobals() {
 $argv = [1,2,3]; // Noncompliant
 
 new Zend\Console\Getopt(['myopt|m' => 'this is an option']); // Noncompliant
+new zend\console\getopt(['myopt|m' => 'this is an option']); // Noncompliant
 
 new \GetOpt\Option('m', 'myoption', \GetOpt\GetOpt::REQUIRED_ARGUMENT); // Noncompliant
+new \getopt\option('m', 'myoption', \GetOpt\GetOpt::REQUIRED_ARGUMENT); // Noncompliant
 
 // coverage
 getopt["abc"]();

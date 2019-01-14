@@ -2,7 +2,7 @@
   setcookie($name, $value, $expire, $path, $domain, false); // Noncompliant {{Make sure creating this cookie without the "secure" flag is safe here.}}
 //^^^^^^^^^
 
-  setcookie($name, $value, $expire, $path, $domain, false, true); // Noncompliant {{Make sure creating this cookie without the "secure" flag is safe here.}}
+  SetCookie($name, $value, $expire, $path, $domain, false, true); // Noncompliant {{Make sure creating this cookie without the "secure" flag is safe here.}}
 //^^^^^^^^^
 
   setrawcookie($name, $value, $expire, $path, $domain, false); // Noncompliant {{Make sure creating this cookie without the "secure" flag is safe here.}}

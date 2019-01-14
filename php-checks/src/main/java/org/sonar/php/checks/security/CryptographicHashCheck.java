@@ -56,7 +56,7 @@ public class CryptographicHashCheck extends FunctionUsageCheck {
 
   private static boolean isHashInitHMAC(FunctionCallTree tree) {
     String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
-    return qualifiedName.equals("hash_init") &&
+    return qualifiedName.equalsIgnoreCase("hash_init") &&
       tree.arguments().size() >= 2 &&
       isHMAC(tree.arguments().get(1));
   }

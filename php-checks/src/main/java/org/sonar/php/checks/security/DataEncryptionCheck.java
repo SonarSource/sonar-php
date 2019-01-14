@@ -19,10 +19,13 @@
  */
 package org.sonar.php.checks.security;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
 import org.sonar.php.checks.utils.namespace.QualifiedName;
 import org.sonar.php.checks.utils.type.StaticFunctionCall;
@@ -41,7 +44,6 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import static org.sonar.php.checks.utils.namespace.QualifiedName.create;
 import static org.sonar.php.checks.utils.namespace.QualifiedName.qualifiedName;
 import static org.sonar.php.checks.utils.type.StaticFunctionCall.staticFunctionCall;
 
@@ -50,7 +52,7 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
 
   private static final String MESSAGE = "Make sure that encrypting data is safe here.";
 
-  private static final ImmutableSet<String> SUSPICIOUS_GLOBAL_FUNCTIONS = ImmutableSet.of(
+  private static final Set<String> SUSPICIOUS_GLOBAL_FUNCTIONS = CheckUtils.lowerCaseSet(
     // Builtin functions
     "mcrypt_ecb",
     "mcrypt_cfb",
@@ -72,19 +74,19 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
     // Drupal, Laravel or any other extension with an 'encrypt' helper
     "encrypt");
 
-  private static final ImmutableSet<String> ENCRYPTION_MEMBER = ImmutableSet.of("encryption");
+  private static final Set<String> ENCRYPTION_MEMBER = CheckUtils.lowerCaseSet("encryption");
 
-  private static final ImmutableSet<String> SUSPICIOUS_ENCRYPTION_FUNCTIONS = ImmutableSet.of(
+  private static final Set<String> SUSPICIOUS_ENCRYPTION_FUNCTIONS = CheckUtils.lowerCaseSet(
     "create_key",
     "initialize",
     "encrypt");
 
-  private static final ImmutableSet<String> SUSPICIOUS_MEMBER_FUNCTIONS = ImmutableSet.of(
+  private static final Set<String> SUSPICIOUS_MEMBER_FUNCTIONS = CheckUtils.lowerCaseSet(
     // Craft and Yii frameworks
     "encryptByKey",
     "encryptByPassword");
 
-  private static final ImmutableSet<StaticFunctionCall> SUSPICIOUS_STATIC_FUNCTIONS = ImmutableSet.of(
+  private static final List<StaticFunctionCall> SUSPICIOUS_STATIC_FUNCTIONS = Arrays.asList(
     // CakePHP
     staticFunctionCall("Cake\\Utility\\Security::encrypt"),
     staticFunctionCall("Cake\\Utility\\Security::engine"),
@@ -115,7 +117,7 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
     staticFunctionCall("Zend\\Crypt\\PublicKey\\Rsa::factory"),
     staticFunctionCall("Zend\\Crypt\\BlockCipher::factory"));
 
-  private static final ImmutableSet<QualifiedName> SUSPICIOUS_CLASS_INSTANTIATIONS = ImmutableSet.of(
+  private static final List<QualifiedName> SUSPICIOUS_CLASS_INSTANTIATIONS = Arrays.asList(
     // Joomla
     qualifiedName("Joomla\\Crypt\\Cipher_Sodium"),
     qualifiedName("Joomla\\Crypt\\Cipher_Simple"),
@@ -180,13 +182,13 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
       QualifiedName fullyQualifiedSuperclassName = getFullyQualifiedName(superClass);
-      if (fullyQualifiedSuperclassName.equals(CODE_IGNITER_CONTROLLER_CLASS)) {
+      if (fullyQualifiedSuperclassName.equalsIgnoreCase(CODE_IGNITER_CONTROLLER_CLASS)) {
         checkCodeIgniterControllerMethods(tree);
       }
     }
 
     tree.superInterfaces().stream()
-      .filter(superInterface -> JOOMLA_CIPHER_INTERFACE.equals(getFullyQualifiedName(superInterface)))
+      .filter(superInterface -> JOOMLA_CIPHER_INTERFACE.equalsIgnoreCase(getFullyQualifiedName(superInterface)))
       .forEach(superInterface -> context().newIssue(this, superInterface, MESSAGE));
   }
 
@@ -209,7 +211,7 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
         String memberName = ((NameIdentifierTree) memberAccess.member()).text();
         return SUSPICIOUS_STATIC_FUNCTIONS.stream().anyMatch(staticFunctionCall -> staticFunctionCall.matches(className, memberName));
       } else if (memberAccess.member().is(Tree.Kind.NAME_IDENTIFIER)) {
-        return SUSPICIOUS_MEMBER_FUNCTIONS.contains(((NameIdentifierTree) memberAccess.member()).text());
+        return SUSPICIOUS_MEMBER_FUNCTIONS.contains(((NameIdentifierTree) memberAccess.member()).text().toLowerCase(Locale.ROOT));
       }
     }
     return false;
@@ -219,13 +221,14 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
       NamespaceNameTree classNameTree = (NamespaceNameTree) callee;
       QualifiedName className = getFullyQualifiedName(classNameTree);
-      return SUSPICIOUS_CLASS_INSTANTIATIONS.stream().anyMatch(className::equals);
+      return SUSPICIOUS_CLASS_INSTANTIATIONS.stream().anyMatch(className::equalsIgnoreCase);
     }
     return false;
   }
 
   private static boolean isSuspiciousGlobalFunction(ExpressionTree callee) {
-    return callee.is(Tree.Kind.NAMESPACE_NAME) && SUSPICIOUS_GLOBAL_FUNCTIONS.contains(((NamespaceNameTree) callee).qualifiedName());
+    return callee.is(Tree.Kind.NAMESPACE_NAME) &&
+      SUSPICIOUS_GLOBAL_FUNCTIONS.contains(((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ROOT));
   }
 
   private static boolean isStaticFunction(MemberAccessTreeImpl memberAccess) {
@@ -250,11 +253,11 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
       return isMemberAccess(tree, SUSPICIOUS_ENCRYPTION_FUNCTIONS) && isMemberAccess(((MemberAccessTree) tree).object(), ENCRYPTION_MEMBER);
     }
 
-    private static boolean isMemberAccess(Tree tree, ImmutableSet<String> expectedNames) {
+    private static boolean isMemberAccess(Tree tree, Set<String> expectedNames) {
       if (tree.is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
         Tree member = ((MemberAccessTree) tree).member();
         if (member.is(Tree.Kind.NAME_IDENTIFIER)) {
-          return expectedNames.contains(((NameIdentifierTree) member).text());
+          return expectedNames.contains(((NameIdentifierTree) member).text().toLowerCase(Locale.ROOT));
         }
       }
       return false;

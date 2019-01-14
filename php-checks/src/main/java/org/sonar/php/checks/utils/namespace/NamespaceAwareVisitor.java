@@ -20,6 +20,7 @@
 package org.sonar.php.checks.utils.namespace;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -62,7 +63,7 @@ public class NamespaceAwareVisitor extends PHPVisitorCheck {
     tree.clauses().forEach(useClauseTree -> {
       String alias = getAliasName(useClauseTree);
       QualifiedName originalName = getOriginalFullyQualifiedName(namespacePrefix, useClauseTree);
-      aliases.put(alias, originalName);
+      aliases.put(alias.toLowerCase(Locale.ROOT), originalName);
     });
   }
 
@@ -74,7 +75,7 @@ public class NamespaceAwareVisitor extends PHPVisitorCheck {
     if (name.isFullyQualified()) {
       return qualifiedName;
     } else {
-      QualifiedName originalName = aliases.get(qualifiedName.firstPart());
+      QualifiedName originalName = aliases.get(qualifiedName.firstPart().toLowerCase(Locale.ROOT));
       if (originalName != null) {
         return qualifiedName.withOriginalName(originalName);
       } else if (currentNamespace == null) {

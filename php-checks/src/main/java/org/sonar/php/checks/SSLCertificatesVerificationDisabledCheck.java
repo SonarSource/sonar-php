@@ -57,7 +57,7 @@ public class SSLCertificatesVerificationDisabledCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = CheckUtils.getFunctionName(tree);
+    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     List<ExpressionTree> arguments = tree.arguments();
 
     // Detect curl_setopt function usage

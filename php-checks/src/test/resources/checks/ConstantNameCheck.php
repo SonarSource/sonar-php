@@ -10,6 +10,7 @@ const FOO = true;        // OK
 
 define("Foo", false);    // Noncompliant
 //     ^^^^^
+DEFINE("Foo", false);    // Noncompliant
 define("FOO", true);     // OK
 
 class Bar {

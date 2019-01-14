@@ -93,6 +93,24 @@ public class QualifiedName {
     }
   }
 
+  public boolean equalsIgnoreCase(QualifiedName other) {
+    if (this == other) {
+      return true;
+    }
+    if (!this.name.equalsIgnoreCase(other.name)) {
+      return false;
+    }
+    if (this.parentNamespaces.size() != other.parentNamespaces.size()) {
+      return false;
+    }
+    for (int i = 0; i < this.parentNamespaces.size(); i++) {
+      if (!this.parentNamespaces.get(i).equalsIgnoreCase(other.parentNamespaces.get(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {

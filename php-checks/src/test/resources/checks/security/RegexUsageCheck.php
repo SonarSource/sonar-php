@@ -6,6 +6,7 @@ function test($pattern, $inputs) {
     # PCRE functions
     preg_filter($pattern, $replacement, $inputs); // Noncompliant {{Make sure that using a regular expression is safe here.}}
     preg_grep($pattern, $inputs); // Noncompliant
+    PREG_GREP($pattern, $inputs); // Noncompliant
     preg_match_all($pattern, $input); // Noncompliant
     preg_match($pattern, $input); // Noncompliant
     if (version_compare(PHP_VERSION, '7.0', '>=')) {

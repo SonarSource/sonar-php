@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
@@ -44,88 +43,88 @@ public class HardCodedUriCheck extends PHPVisitorCheck {
   private static final String URI_REGEX = SCHEME + "://[^\\$]+";
   private static final Pattern URI_PATTERN = Pattern.compile(URI_REGEX);
   private static final Pattern VARIABLE_NAME_PATTERN = Pattern.compile("filename|path", Pattern.CASE_INSENSITIVE);
-  private static final Set<String> WHITELIST = ImmutableSet.<String>builder()
-    .add("basename")
-    .add("chgrp")
-    .add("chmod")
-    .add("chown")
-    .add("clearstatcache")
-    .add("copy")
-    .add("delete")
-    .add("dirname")
-    .add("disk_​free_​space")
-    .add("disk_​total_​space")
-    .add("diskfreespace")
-    .add("fclose")
-    .add("feof")
-    .add("fflush")
-    .add("fgetc")
-    .add("fgetcsv")
-    .add("fgets")
-    .add("fgetss")
-    .add("file_​exists")
-    .add("file_​get_​contents")
-    .add("file_​put_​contents")
-    .add("file")
-    .add("fileatime")
-    .add("filectime")
-    .add("filegroup")
-    .add("fileinode")
-    .add("filemtime")
-    .add("fileowner")
-    .add("fileperms")
-    .add("filesize")
-    .add("filetype")
-    .add("flock")
-    .add("fnmatch")
-    .add("fopen")
-    .add("fpassthru")
-    .add("fputcsv")
-    .add("fputs")
-    .add("fread")
-    .add("fscanf")
-    .add("fseek")
-    .add("fstat")
-    .add("ftell")
-    .add("ftruncate")
-    .add("fwrite")
-    .add("glob")
-    .add("is_​dir")
-    .add("is_​executable")
-    .add("is_​file")
-    .add("is_​link")
-    .add("is_​readable")
-    .add("is_​uploaded_​file")
-    .add("is_​writable")
-    .add("is_​writeable")
-    .add("lchgrp")
-    .add("lchown")
-    .add("link")
-    .add("linkinfo")
-    .add("lstat")
-    .add("mkdir")
-    .add("move_​uploaded_​file")
-    .add("parse_​ini_​file")
-    .add("parse_​ini_​string")
-    .add("pathinfo")
-    .add("pclose")
-    .add("popen")
-    .add("readfile")
-    .add("readlink")
-    .add("realpath_​cache_​get")
-    .add("realpath_​cache_​size")
-    .add("realpath")
-    .add("rename")
-    .add("rewind")
-    .add("rmdir")
-    .add("set_​file_​buffer")
-    .add("stat")
-    .add("symlink")
-    .add("tempnam")
-    .add("tmpfile")
-    .add("touch")
-    .add("umask")
-    .add("unlink").build();
+  private static final Set<String> WHITELIST = CheckUtils.lowerCaseSet(
+    "basename",
+    "chgrp",
+    "chmod",
+    "chown",
+    "clearstatcache",
+    "copy",
+    "delete",
+    "dirname",
+    "disk_​free_​space",
+    "disk_​total_​space",
+    "diskfreespace",
+    "fclose",
+    "feof",
+    "fflush",
+    "fgetc",
+    "fgetcsv",
+    "fgets",
+    "fgetss",
+    "file_​exists",
+    "file_​get_​contents",
+    "file_​put_​contents",
+    "file",
+    "fileatime",
+    "filectime",
+    "filegroup",
+    "fileinode",
+    "filemtime",
+    "fileowner",
+    "fileperms",
+    "filesize",
+    "filetype",
+    "flock",
+    "fnmatch",
+    "fopen",
+    "fpassthru",
+    "fputcsv",
+    "fputs",
+    "fread",
+    "fscanf",
+    "fseek",
+    "fstat",
+    "ftell",
+    "ftruncate",
+    "fwrite",
+    "glob",
+    "is_​dir",
+    "is_​executable",
+    "is_​file",
+    "is_​link",
+    "is_​readable",
+    "is_​uploaded_​file",
+    "is_​writable",
+    "is_​writeable",
+    "lchgrp",
+    "lchown",
+    "link",
+    "linkinfo",
+    "lstat",
+    "mkdir",
+    "move_​uploaded_​file",
+    "parse_​ini_​file",
+    "parse_​ini_​string",
+    "pathinfo",
+    "pclose",
+    "popen",
+    "readfile",
+    "readlink",
+    "realpath_​cache_​get",
+    "realpath_​cache_​size",
+    "realpath",
+    "rename",
+    "rewind",
+    "rmdir",
+    "set_​file_​buffer",
+    "stat",
+    "symlink",
+    "tempnam",
+    "tmpfile",
+    "touch",
+    "umask",
+    "unlink");
 
   private static boolean isFileNameVariable(IdentifierTree variable) {
     return VARIABLE_NAME_PATTERN.matcher(variable.text()).find();
@@ -133,7 +132,7 @@ public class HardCodedUriCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = CheckUtils.getFunctionName(tree);
+    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     if (functionName != null && (functionName.startsWith("http_") || WHITELIST.contains(functionName))) {
       tree.arguments().forEach(this::checkExpression);
     }

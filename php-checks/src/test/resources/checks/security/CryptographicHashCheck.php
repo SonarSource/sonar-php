@@ -29,4 +29,4 @@ $hash = hash_hmac('ripemd160', 'The quick brown fox jumped over the lazy dog.', 
 // coverage
 $value = 0;
 $ctx = hash_init('sha384', $value); // Noncompliant
-$ctx = hash_init('sha384', CONSTANT_VALUE); // Noncompliant
+$ctx = HASH_INIT('sha384', CONSTANT_VALUE); // Noncompliant

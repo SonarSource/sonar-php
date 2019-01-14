@@ -4,6 +4,7 @@ function handle_file($filename, $directory, $group, $data, $mode, $flags, $use_i
 {
     file_put_contents($filename, $data, $flags); // Noncompliant {{Make sure this file handling is safe here.}}
     copy($filename, $filename); // Noncompliant
+    Copy($filename, $filename); // Noncompliant
     copy("mypath1", "mypath2"); // Noncompliant
     tmpfile(); // Noncompliant
     parse_ini_file($filename); // Noncompliant
@@ -72,4 +73,10 @@ function handle_file($filename, $directory, $group, $data, $mode, $flags, $use_i
     readfile();
     $unknown($filename, $use_include_path, $context);
     unknown($filename, $use_include_path, $context);
+}
+
+namespace N1 {
+    class File {
+    }
+    new File($filename, $flags); // Compliant
 }

@@ -55,7 +55,7 @@ public class CryptographicKeySizeCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree functionCall) {
-    if ("openssl_pkey_new".equals(CheckUtils.getFunctionName(functionCall))) {
+    if ("openssl_pkey_new".equals(CheckUtils.getLowerCaseFunctionName(functionCall))) {
       SeparatedList<ExpressionTree> arguments = functionCall.arguments();
       if (arguments.size() == 1) {
         ExpressionTree configArgument = arguments.get(0);

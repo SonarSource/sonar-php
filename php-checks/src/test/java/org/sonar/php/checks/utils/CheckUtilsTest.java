@@ -79,6 +79,8 @@ public class CheckUtilsTest {
     assertThat(root.is(Tree.Kind.FUNCTION_CALL)).isTrue();
     FunctionCallTree call = (FunctionCallTree) root;
     assertThat(CheckUtils.getFunctionName(call)).isEqualTo("A::run");
+    assertThat(CheckUtils.getLowerCaseFunctionName(call)).isEqualTo("a::run");
+    assertThat(CheckUtils.getLowerCaseFunctionName((FunctionCallTree)expressionFromStatement("$var(2);"))).isNull();
   }
 
   @Test

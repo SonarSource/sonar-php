@@ -3,7 +3,7 @@
 $a = flush(); // Noncompliant {{Remove this use of the output from flush; flush doesn't return anything.}}
 //   ^^^^^
 
-$a = (flush()); // Noncompliant
+$a = (Flush()); // Noncompliant
 
 class A {
   public $field1 = usleep(12); // Noncompliant

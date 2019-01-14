@@ -83,7 +83,7 @@ $ctxConfig = ['ssl' => [
 'crypto_method' => STREAM_CRYPTO_METHOD_ANY_CLIENT // Noncompliant
 ]];
 
-$ctx = stream_context_create($ctxConfig);
+$ctx = Stream_Context_Create($ctxConfig);
 
 $sslConfig = [
 'crypto_method' => STREAM_CRYPTO_METHOD_ANY_CLIENT // Noncompliant

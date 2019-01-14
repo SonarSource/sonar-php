@@ -35,6 +35,7 @@ public class StaticFunctionCallTest {
   @Test
   public void matches() {
     assertThat(staticFunctionCall("A\\B\\C::def").matches(qualifiedName("A\\B\\C"), "def")).isTrue();
+    assertThat(staticFunctionCall("A\\B\\C::def").matches(qualifiedName("a\\b\\c"), "DEF")).isTrue();
     assertThat(staticFunctionCall("A\\B\\C::def").matches(qualifiedName("A\\B\\C"), "ghi")).isFalse();
     assertThat(staticFunctionCall("A\\B\\C::def").matches(qualifiedName("A\\B\\D"), "def")).isFalse();
   }

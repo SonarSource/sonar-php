@@ -1,6 +1,7 @@
 <?php
 
 session_set_cookie_params(3600, "/~path/", ""); // Noncompliant
+Session_Set_Cookie_Params(3600, "/~path/", ""); // Noncompliant
 setcookie("TestCookie", $value, time()+3600, "/~path/", "", 1); // Noncompliant
 
 setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant {{Specify at least a second-level cookie domain.}}

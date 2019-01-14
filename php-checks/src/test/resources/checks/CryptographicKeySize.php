@@ -15,7 +15,7 @@ function nok_var() {
 //                                ^^^^^^^^^^^
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
         );
-    $res = openssl_pkey_new($config);
+    $res = OpenSSL_pkey_new($config);
 }
 
 

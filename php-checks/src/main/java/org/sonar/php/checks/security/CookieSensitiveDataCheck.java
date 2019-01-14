@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
+import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
 
 @Rule(key = "S2255")
 public class CookieSensitiveDataCheck extends PHPVisitorCheck {
@@ -53,7 +53,7 @@ public class CookieSensitiveDataCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = getFunctionName(tree);
+    String functionName = getLowerCaseFunctionName(tree);
     if ("isset".equals(functionName)) {
       nestedIssetStatementCount++;
       super.visitFunctionCall(tree);
