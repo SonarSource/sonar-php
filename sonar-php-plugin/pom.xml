@@ -55,6 +55,10 @@
       <artifactId>sonar-analyzer-commons</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.sonarsource.analyzer-commons</groupId>
+      <artifactId>sonar-xml-parsing</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
     </dependency>
@@ -106,8 +110,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <minsize>2800000</minsize>
-                  <maxsize>3100000</maxsize>
+                  <maxsize>4800000</maxsize>
+                  <minsize>4600000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>

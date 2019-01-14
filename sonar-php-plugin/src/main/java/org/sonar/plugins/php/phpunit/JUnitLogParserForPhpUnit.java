@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
@@ -32,6 +31,7 @@ import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.plugins.php.phpunit.xml.TestCase;
 import org.sonar.plugins.php.phpunit.xml.TestSuite;
 import org.sonar.plugins.php.phpunit.xml.TestSuites;
+import org.sonarsource.analyzer.commons.xml.SafetyFactory;
 
 /**
  * PHPUnit can generate test result logs that comply with JUnit's test results xml format.
@@ -52,15 +52,7 @@ public class JUnitLogParserForPhpUnit {
   }
 
   public static SMInputFactory inputFactory() {
-    XMLInputFactory xmlFactory = XMLInputFactory.newInstance();
-    xmlFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.TRUE);
-    xmlFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
-    xmlFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
-    xmlFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
-    // just so it won't try to load DTD in if there's DOCTYPE
-    xmlFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
-    xmlFactory.setProperty(XMLInputFactory.IS_VALIDATING, Boolean.FALSE);
-    return new SMInputFactory(xmlFactory);
+    return new SMInputFactory(SafetyFactory.createXMLInputFactory());
   }
 
   private static TestSuites processRoot(File file, SMInputFactory inputFactory) throws XMLStreamException {
