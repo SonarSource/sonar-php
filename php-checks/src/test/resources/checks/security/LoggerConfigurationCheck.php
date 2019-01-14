@@ -3,12 +3,12 @@
 function configure_logging() {
   error_reporting(E_RECOVERABLE_ERROR);// Noncompliant {{Make sure that this logger's configuration is safe.}}
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  error_reporting(32);// Noncompliant
+  Error_Reporting(32);// Noncompliant
 
   ini_set('docref_root', '1');// Noncompliant
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^
   ini_set('display_errors', '1');// Noncompliant
-  ini_set('display_startup_errors', '1');// Noncompliant
+  INI_SET('display_startup_errors', '1');// Noncompliant
   ini_set('error_log', "path/to/logfile1");// Noncompliant
   ini_set('error_log', "path/to/logfile2");// Noncompliant
   ini_set('error_reporting', E_PARSE );// Noncompliant
@@ -20,7 +20,7 @@ function configure_logging() {
   ini_set('track_errors', '0');// Noncompliant
 
   ini_alter('docref_root', 'anythingElse');// Noncompliant
-  ini_alter('display_errors', 'anythingElse');// Noncompliant
+  INI_ALTER('display_errors', 'anythingElse');// Noncompliant
   ini_alter('display_startup_errors', 'anythingElse');// Noncompliant
   ini_alter('error_log', "path/to/logfile1");// Noncompliant
   ini_alter('error_log', "path/to/logfile2");// Noncompliant
@@ -73,7 +73,7 @@ abstract class MyLogger3 extends AbstractLogger { // Ok - not resolved to '\Psr\
     // ...
 }
 
-use Psr\Log\AbstractLogger;
+use psr\log\abstractlogger;
 
 abstract class MyLogger4 extends AbstractLogger { // Noncompliant
 //                               ^^^^^^^^^^^^^^
@@ -96,5 +96,5 @@ abstract class MyLogger7 {
 //            ^^^^^^^^^^^^^^^
 }
 
-new class() extends AbstractLogger { }; // Noncompliant
+new class() extends abstractlogger { }; // Noncompliant
 new class() implements Log\LoggerInterface { }; // Noncompliant

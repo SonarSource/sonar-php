@@ -9,6 +9,9 @@ namespace N1;
 //                                      ^^^^^^^^^^^^^^^^^^^^^^^^
     }
 
+    abstract class MyAuthorize1 extends \cake\auth\baseauthorize { // Noncompliant
+    }
+
     abstract class MyAuthorize2 extends BaseAuthorize { // Noncompliant
 //                                      ^^^^^^^^^^^^^
     }
@@ -39,6 +42,11 @@ namespace N1;
 
     new class() extends Controller {
         public function isAuthorized($user) { // Noncompliant
+        }
+    };
+
+    new class() extends Controller {
+        public function isauthorized($user) { // Noncompliant
         }
     };
 

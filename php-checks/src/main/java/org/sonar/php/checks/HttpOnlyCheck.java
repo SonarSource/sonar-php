@@ -33,7 +33,7 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.phpini.PhpIniFiles.checkRequiredBoolean;
-import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
+import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
 
 @Rule(key = "S3330")
 public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
@@ -63,7 +63,7 @@ public class HttpOnlyCheck extends PHPVisitorCheck implements PhpIniCheck {
   }
 
   private static boolean isSetCookie(FunctionCallTree tree) {
-    String functionName = getFunctionName(tree);
+    String functionName = getLowerCaseFunctionName(tree);
     return functionName != null && SET_COOKIE_FUNCTIONS.contains(functionName);
   }
 

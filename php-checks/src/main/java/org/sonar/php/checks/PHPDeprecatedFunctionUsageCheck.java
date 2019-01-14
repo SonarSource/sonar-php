@@ -85,13 +85,13 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   protected void createIssue(FunctionCallTree tree) {
     String functionName = ((NamespaceNameTree) tree.callee()).qualifiedName();
 
-    if (SET_LOCALE_FUNCTION.equals(functionName)) {
+    if (SET_LOCALE_FUNCTION.equalsIgnoreCase(functionName)) {
       checkLocalCategoryArgument(tree.arguments());
 
-    } else if (PARSE_STR_FUNCTION.equals(functionName)) {
+    } else if (PARSE_STR_FUNCTION.equalsIgnoreCase(functionName)) {
       checkParseStrArguments(tree);
 
-    } else if (ASSERT_FUNCTION.equals(functionName)) {
+    } else if (ASSERT_FUNCTION.equalsIgnoreCase(functionName)) {
       checkAssertArguments(tree);
 
     } else {

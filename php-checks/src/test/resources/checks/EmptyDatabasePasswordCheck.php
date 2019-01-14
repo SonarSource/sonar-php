@@ -16,7 +16,7 @@ function mysql() {
     $conn = new mysqli($servername, $username); // OK, defaut value is ini_get("mysqli.default_pw")
     $conn = new mysqli($servername, $username, ''); // Noncompliant
 //                                             ^^
-    $conn = new mysqli($servername, $username, ""); // Noncompliant
+    $conn = new MySQLI($servername, $username, ""); // Noncompliant
     $conn = new mysqli($servername, $username, $secretPassword);
     $conn = new mysqli($servername, $username, $unknown);
     $conn = new mysqli($servername, $username, $secretPassword . 'somethingElse');

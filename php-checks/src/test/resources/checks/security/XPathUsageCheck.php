@@ -12,9 +12,9 @@ function evaluate_xpath($doc, $xpathstring, $xmlstring)
 
     $xpath2 = NULL;
     if ($doc) {
-        $xpath2 = new DOMXpath($doc);
+        $xpath2 = new domxpath($doc);
     }
-    $xpath2->query($xpathstring); // Noncompliant
+    $xpath2->QUERY($xpathstring); // Noncompliant
 
     // An issue will also be created if the SimpleXMLElement is created
     // by simplexml_load_file, simplexml_load_string or simplexml_import_dom

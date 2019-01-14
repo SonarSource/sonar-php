@@ -56,8 +56,8 @@ public class EmptyDatabasePasswordCheck  extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree functionCall) {
-    String functionName = CheckUtils.getFunctionName(functionCall);
-    if ("mysqli".equals(functionName) || "mysqli_connect".equals(functionName) || "PDO".equals(functionName)) {
+    String functionName = CheckUtils.getLowerCaseFunctionName(functionCall);
+    if ("mysqli".equals(functionName) || "mysqli_connect".equals(functionName) || "PDO".equalsIgnoreCase(functionName)) {
       checkPasswordArgument(functionCall, 2);
     } else if ("oci_connect".equals(functionName)) {
       checkPasswordArgument(functionCall, 1);

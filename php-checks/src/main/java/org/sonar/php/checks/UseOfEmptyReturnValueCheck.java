@@ -20,8 +20,6 @@
 package org.sonar.php.checks;
 
 import com.google.common.base.Preconditions;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import org.sonar.check.Rule;
@@ -39,7 +37,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S3699")
 public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
 
-  private static final Set<String> VOID_FUNCTIONS = new HashSet<>(Arrays.asList(
+  private static final Set<String> VOID_FUNCTIONS = CheckUtils.lowerCaseSet(
     // http://php.net/manual/en/function.halt-compiler.php
     "__halt_compiler",
     // http://php.net/manual/en/function.apd-clunk.php
@@ -377,7 +375,7 @@ public class UseOfEmptyReturnValueCheck extends PHPVisitorCheck {
     // http://php.net/manual/en/function.xhprof-sample-enable.php
     "xhprof_sample_enable",
     // http://php.net/manual/en/function.zip-close.php
-    "zip_close"));
+    "zip_close");
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

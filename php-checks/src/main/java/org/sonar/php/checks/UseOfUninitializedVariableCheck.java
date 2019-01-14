@@ -24,12 +24,10 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -109,7 +107,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
     map.put(Kind.ASSIGNMENT, tree -> tree == ((AssignmentExpressionTree) tree.getParent()).value());
     map.put(Kind.FUNCTION_CALL, tree -> {
       FunctionCallTree functionCall = (FunctionCallTree) tree.getParent();
-      return tree == functionCall.callee() || FUNCTION_ALLOWING_ARGUMENT_CHECK.contains(lowerCaseFunctionName(functionCall));
+      return tree == functionCall.callee() || FUNCTION_ALLOWING_ARGUMENT_CHECK.contains(CheckUtils.getLowerCaseFunctionName(functionCall));
     });
     map.put(Kind.FOREACH_STATEMENT, UseOfUninitializedVariableCheck::isInsideForEachExpression);
     map.put(Kind.ALTERNATIVE_FOREACH_STATEMENT, UseOfUninitializedVariableCheck::isInsideForEachExpression);
@@ -186,7 +184,7 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
 
     @Override
     public void visitFunctionCall(FunctionCallTree functionCall) {
-      if (FUNCTION_CHANGING_CURRENT_SCOPE.contains(lowerCaseFunctionName(functionCall))) {
+      if (FUNCTION_CHANGING_CURRENT_SCOPE.contains(CheckUtils.getLowerCaseFunctionName(functionCall))) {
         trustVariables = false;
       }
       super.visitFunctionCall(functionCall);
@@ -246,12 +244,6 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
   private static boolean isReadAccess(Tree tree) {
     Predicate<Tree> predicate = IS_READ_ACCESS_BY_PARENT_KIND.get(tree.getParent().getKind());
     return predicate == null || predicate.test(tree);
-  }
-
-  @Nullable
-  private static String lowerCaseFunctionName(FunctionCallTree functionCall) {
-    String name = CheckUtils.getFunctionName(functionCall);
-    return name != null ? name.toLowerCase(Locale.ROOT) : null;
   }
 
   private static boolean isArrayAssignment(Tree tree) {

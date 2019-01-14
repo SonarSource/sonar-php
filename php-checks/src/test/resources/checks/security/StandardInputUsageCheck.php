@@ -23,6 +23,7 @@ $mystdin = 'php://stdin'; // Noncompliant
 file_get_contents('php://stdin'); // Noncompliant
 readfile("php://stdin"); // Noncompliant
 //       ^^^^^^^^^^^^^
+ReadFile("php://stdin"); // Noncompliant
 
 $input = fopen('php://stdin', 'r'); // Noncompliant
 //             ^^^^^^^^^^^^^

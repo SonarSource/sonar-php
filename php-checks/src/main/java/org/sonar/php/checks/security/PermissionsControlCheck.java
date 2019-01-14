@@ -54,9 +54,9 @@ public class PermissionsControlCheck extends NamespaceAwareVisitor {
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
       QualifiedName fullyQualifiedSuperclassName = getFullyQualifiedName(superClass);
-      if (fullyQualifiedSuperclassName.equals(CAKE_BASE_AUTHORIZE_CLASS)) {
+      if (fullyQualifiedSuperclassName.equalsIgnoreCase(CAKE_BASE_AUTHORIZE_CLASS)) {
         context().newIssue(this, superClass, MESSAGE);
-      } else if (fullyQualifiedSuperclassName.equals(CAKE_CONTROLLER_CLASS)) {
+      } else if (fullyQualifiedSuperclassName.equalsIgnoreCase(CAKE_CONTROLLER_CLASS)) {
         checkCakeControllerMethods(tree);
       }
     }
@@ -66,7 +66,7 @@ public class PermissionsControlCheck extends NamespaceAwareVisitor {
     for (ClassMemberTree member : tree.members()) {
       if (member.is(Tree.Kind.METHOD_DECLARATION)) {
         NameIdentifierTree name = ((MethodDeclarationTree) member).name();
-        if ("isAuthorized".equals(name.text())) {
+        if ("isAuthorized".equalsIgnoreCase(name.text())) {
           context().newIssue(this, name, MESSAGE);
         }
       }

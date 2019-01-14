@@ -40,7 +40,7 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 
-import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
+import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
 
 @Rule(key = "S3331")
 public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck {
@@ -68,7 +68,7 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
 
   @Override
   protected void createIssue(FunctionCallTree tree) {
-    int domainIndex = FUNCTION_AND_PARAM_INDEX.get(getFunctionName(tree));
+    int domainIndex = FUNCTION_AND_PARAM_INDEX.get(getLowerCaseFunctionName(tree));
     List<ExpressionTree> args = tree.arguments();
     if (args.size() <= domainIndex) {
       return;

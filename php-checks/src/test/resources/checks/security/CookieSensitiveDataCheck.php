@@ -9,8 +9,8 @@
 setcookie($name, $value); // Noncompliant {{Make sure that this cookie is used safely.}}
 setrawcookie($name, $value); // Noncompliant {{Make sure that this cookie is used safely.}}
 
-setcookie($name, false); // Noncompliant {{Make sure that this cookie is used safely.}}
-setrawcookie($name, false); // Noncompliant {{Make sure that this cookie is used safely.}}
+SetCookie($name, false); // Noncompliant {{Make sure that this cookie is used safely.}}
+SetRawCookie($name, false); // Noncompliant {{Make sure that this cookie is used safely.}}
 
 setcookie($name, 1); // Noncompliant {{Make sure that this cookie is used safely.}}
 setrawcookie($name, 1); // Noncompliant {{Make sure that this cookie is used safely.}}

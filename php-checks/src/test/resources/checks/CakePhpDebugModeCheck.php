@@ -4,7 +4,7 @@ use Cake\Core\Configure;
 
 Configure::write('debug', 1); // Noncompliant {{Make sure this debug feature is deactivated before delivering the code in production.}}
 
-Configure::write('debug', 2); // Noncompliant
+configure::Write('debug', 2); // Noncompliant
 
 Configure::write('debug', 3); // Noncompliant
 

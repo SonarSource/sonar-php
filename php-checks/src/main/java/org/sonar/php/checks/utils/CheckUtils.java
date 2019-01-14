@@ -24,8 +24,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.commons.lang.StringUtils;
@@ -96,6 +100,19 @@ public final class CheckUtils {
   @Nullable
   public static String getFunctionName(FunctionCallTree functionCall) {
     return nameOf(functionCall.callee());
+  }
+
+  /**
+   * @return Returns function or static method's lower case name, like "f" or "a::f".
+   */
+  @Nullable
+  public static String getLowerCaseFunctionName(FunctionCallTree functionCall) {
+    String name = getFunctionName(functionCall);
+    return name != null ? name.toLowerCase(Locale.ROOT) : null;
+  }
+
+  public static Set<String> lowerCaseSet(String... names) {
+    return Arrays.stream(names).map(name -> name.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
   }
 
   /**

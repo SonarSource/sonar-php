@@ -15,6 +15,7 @@ class MyClass
 }
 
 (new ReflectionClass('MyClass'))->getStaticProperties(); // Noncompliant
+(new reflectionclass('MyClass'))->getstaticproperties(); // Noncompliant
 
 $clazz = new ReflectionClass('MyClass');
 

@@ -8,6 +8,8 @@ use Cake\Routing as CRouting;
     // ...
 });
 
+  router::SCOPE('/', function ($routes) { }); // Noncompliant
+
 Cake\Routing\Router::connect('/', ['controller' => 'MyController', 'action' => 'index']); // Noncompliant
 
   \Cake\Routing\Router::plugin('MyPlugin', function ($routes) { // Noncompliant

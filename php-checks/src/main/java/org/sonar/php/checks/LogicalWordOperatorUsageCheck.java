@@ -61,6 +61,6 @@ public class LogicalWordOperatorUsageCheck extends PHPSubscriptionCheck {
   }
 
   private static boolean isCallToDie(ExpressionTree tree) {
-    return tree.is(Kind.FUNCTION_CALL) && "die".equals(CheckUtils.getFunctionName((FunctionCallTree) tree));
+    return tree.is(Kind.FUNCTION_CALL) && "die".equals(CheckUtils.getLowerCaseFunctionName((FunctionCallTree) tree));
   }
 }

@@ -33,7 +33,7 @@ public class StaticFunctionCall {
   }
 
   public boolean matches(QualifiedName className, String memberName) {
-    return functionName.equals(memberName) && callee.equals(className);
+    return functionName.equalsIgnoreCase(memberName) && callee.equalsIgnoreCase(className);
   }
 
   /**

@@ -43,7 +43,7 @@ public class ConstantNameCheckTest {
     check.format = "^[A-Z][a-z]*$";
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), ImmutableList.<PhpIssue>of(
       new LegacyIssue(check, "Rename this constant \"FOO\" to match the regular expression " + check.format + ".").line(9),
-      new LegacyIssue(check, null).line(13),
-      new LegacyIssue(check, null).line(17)));
+      new LegacyIssue(check, null).line(14),
+      new LegacyIssue(check, null).line(18)));
   }
 }

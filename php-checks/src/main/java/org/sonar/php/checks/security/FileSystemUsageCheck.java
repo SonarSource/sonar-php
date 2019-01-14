@@ -20,6 +20,7 @@
 package org.sonar.php.checks.security;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
@@ -63,9 +64,9 @@ public class FileSystemUsageCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (tree.callee().is(Kind.NAMESPACE_NAME)) {
+    if (tree.callee().is(Kind.NAMESPACE_NAME) && !tree.getParent().is(Kind.NEW_EXPRESSION)) {
       String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
-      FunctionArgsMatcher argsMatcher = FILE_SYSTEM_FUNCTIONS.get(qualifiedName);
+      FunctionArgsMatcher argsMatcher = FILE_SYSTEM_FUNCTIONS.get(qualifiedName.toLowerCase(Locale.ROOT));
       if (argsMatcher != null && argsMatcher.matches(tree)) {
         context().newIssue(this, tree, MESSAGE);
       }

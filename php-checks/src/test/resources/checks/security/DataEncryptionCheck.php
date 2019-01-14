@@ -3,6 +3,7 @@
 function myEncrypt($cipher, $key, $data, $mode, $iv, $options, $padding, $infile, $outfile, $recipcerts, $headers, $nonce, $ad, $pub_key_ids, $env_keys) {
     mcrypt_ecb ($cipher, $key, $data, $mode); // Noncompliant {{Make sure that encrypting data is safe here.}}
 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    MCRYPT_ECB($cipher, $key, $data, $mode); // Noncompliant
     mcrypt_cfb($cipher, $key, $data, $mode, $iv); // Noncompliant
     mcrypt_cbc($cipher, $key, $data, $mode, $iv); // Noncompliant
     mcrypt_encrypt($cipher, $key, $data, $mode); // Noncompliant
@@ -29,6 +30,7 @@ function myCakeEncrypt($key, $data, $engine)
     CakeSecurity::encrypt($data, $key); // Noncompliant
 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     \Cake\Utility\Security::engine($engine); // Noncompliant
+    \cake\utility\security::ENGINE($engine); // Noncompliant
     \Cake\Utility\Security::class; // OK
     \Not\Cake\Utility\Security::encrypt($data, $key); // OK
     \Cake\Utility\Security::encrypt["abc"](); // OK
@@ -44,10 +46,13 @@ abstract class MyCipher1 implements CipherInterface // Noncompliant
 //                                  ^^^^^^^^^^^^^^^
 {}
 
-abstract class MyCipher2 implements NotACipherInterface1 // Ok
+abstract class MyCipher2 implements cipherinterface // Noncompliant
 {}
 
-abstract class MyCipher2 implements NotACipherInterface1, CipherInterface, NotACipherInterface2 // Noncompliant
+abstract class MyCipher3 implements NotACipherInterface1 // Ok
+{}
+
+abstract class MyCipher4 implements NotACipherInterface1, CipherInterface, NotACipherInterface2 // Noncompliant
 {}
 
 function joomlaEncrypt() {
@@ -64,6 +69,7 @@ use Defuse\Crypto\File;
 
 function mypPhpEncryption($data, $key, $password, $inputFilename, $outputFilename, $inputHandle, $outputHandle) {
     Crypto::encrypt($data, $key); // Noncompliant
+    crypto::ENCRYPT($data, $key); // Noncompliant
     Crypto::encryptWithPassword($data, $password); // Noncompliant
     File::encryptFile($inputFilename, $outputFilename, $key); // Noncompliant
     File::encryptFileWithPassword($inputFilename, $outputFilename, $password); // Noncompliant

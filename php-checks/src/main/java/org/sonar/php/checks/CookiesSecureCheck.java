@@ -32,7 +32,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.phpini.PhpIniFiles.checkRequiredBoolean;
-import static org.sonar.php.checks.utils.CheckUtils.getFunctionName;
+import static org.sonar.php.checks.utils.CheckUtils.getLowerCaseFunctionName;
 
 @Rule(key = "S2092")
 public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
@@ -56,7 +56,7 @@ public class CookiesSecureCheck extends PHPVisitorCheck implements PhpIniCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = getFunctionName(tree);
+    String functionName = getLowerCaseFunctionName(tree);
     if ((SET_COOKIE_FUNCTIONS.contains(functionName) && argumentSetToFalse(tree, SET_COOKIE_SECURE_PARAMETER))
       || (SESSION_COOKIE_FUNC.equals(functionName) && argumentSetToFalse(tree, SESSION_COOKIE_SECURE_PARAMETER))) {
       context().newIssue(this, tree.callee(), MESSAGE);

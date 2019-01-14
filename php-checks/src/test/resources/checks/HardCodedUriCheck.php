@@ -29,6 +29,7 @@ preg_match('/^O\:\d+\:/', $process->getOutput());
 $v_path .= '/';
 
 $x = readfile("http://www.mywebsite.com"); // Noncompliant
+$x = ReadFile("http://www.mywebsite.com"); // Noncompliant
 $x = readfile("php://www.mywebsite.com"); // compliant
 $x = readfile("php://www.mywebsite.com"); // compliant
 $x = readfile("php://www.$mywebsite.com"); // compliant

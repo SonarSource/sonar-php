@@ -53,7 +53,7 @@ public class HashFunctionCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = CheckUtils.getFunctionName(tree);
+    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     if ("hash_pbkdf2".equals(functionName) && tree.arguments().size() >= 3) {
       ExpressionTree saltArgument = tree.arguments().get(2);
       if (isPredictable(saltArgument)) {

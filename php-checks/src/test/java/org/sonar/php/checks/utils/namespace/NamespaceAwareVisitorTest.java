@@ -123,6 +123,17 @@ public class NamespaceAwareVisitorTest {
   }
 
   @Test
+  public void use_with_case_insensitive_alias() throws IOException {
+    NamespaceAwareVisitorChecker checker = new NamespaceAwareVisitorChecker();
+    visit("use A\\B as AB; new A(); new ab(); new ab\\C();", checker);
+
+    assertThat(checker.fullyQualifiedNames).containsExactly(
+      create("A"),
+      create("A", "B"),
+      create("A", "B", "C"));
+  }
+
+  @Test
   public void use_with_multi_aliases() throws IOException {
     NamespaceAwareVisitorChecker checker = new NamespaceAwareVisitorChecker();
     visit("use AB as AA, A\\B as AB; new A(); new AA(); new AB();", checker);

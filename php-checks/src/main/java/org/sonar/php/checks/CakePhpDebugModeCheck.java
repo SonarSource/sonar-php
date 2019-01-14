@@ -19,7 +19,6 @@
  */
 package org.sonar.php.checks;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Optional;
 import java.util.Set;
 import org.sonar.check.Rule;
@@ -40,12 +39,12 @@ public class CakePhpDebugModeCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production.";
 
-  private static final Set<String> CAKE_DEBUG_FUNCTIONS = ImmutableSet.of("Configure::write", "Configure::config");
+  private static final Set<String> CAKE_DEBUG_FUNCTIONS = CheckUtils.lowerCaseSet("Configure::write", "Configure::config");
   private AssignmentExpressionVisitor assignmentExpressionVisitor;
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String functionName = CheckUtils.getFunctionName(tree);
+    String functionName = CheckUtils.getLowerCaseFunctionName(tree);
     if (CAKE_DEBUG_FUNCTIONS.contains(functionName) && tree.arguments().size() == 2) {
       ExpressionTree firstArg = tree.arguments().get(0);
       ExpressionTree secondArg = tree.arguments().get(1);
