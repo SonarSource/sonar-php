@@ -79,11 +79,11 @@ public class QueryUsageCheck extends PHPVisitorCheck {
   private static boolean isSuspiciousGlobalFunction(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
-      String qualifiedName = ((NamespaceNameTree) callee).qualifiedName();
-      if (SUSPICIOUS_GLOBAL_FUNCTIONS.keySet().contains(qualifiedName)) {
-        Integer index = SUSPICIOUS_GLOBAL_FUNCTIONS.get(qualifiedName);
+      String qualifiedNameLowerCase = ((NamespaceNameTree) callee).qualifiedName().toLowerCase();
+      if (SUSPICIOUS_GLOBAL_FUNCTIONS.keySet().contains(qualifiedNameLowerCase)) {
+        Integer index = SUSPICIOUS_GLOBAL_FUNCTIONS.get(qualifiedNameLowerCase);
         return index == null || (tree.arguments().size() > index && !tree.arguments().get(index).is(Tree.Kind.REGULAR_STRING_LITERAL));
-      } else if ("pg_query".equals(qualifiedName)) {
+      } else if ("pg_query".equals(qualifiedNameLowerCase)) {
         // First argument of function 'pg_query' is optional
         return !tree.arguments().isEmpty() && !tree.arguments().get(tree.arguments().size() - 1).is(Tree.Kind.REGULAR_STRING_LITERAL);
       }

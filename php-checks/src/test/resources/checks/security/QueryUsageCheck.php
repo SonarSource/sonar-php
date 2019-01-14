@@ -18,7 +18,7 @@ function executeMysqlQuery($query, $database)
 
 function executeQuery($query) {
     mssql_query($query); // Noncompliant
-    mssql_query("SELECT * FROM mytable"); // OK
+    MSSQL_query("SELECT * FROM mytable"); // OK
 }
 
 function executeMysqliQuery($statement, $column) {
@@ -59,7 +59,7 @@ function executePDOQuery($dsn, $user, $password, $statement, $type, $obj) {
 
 function executePostgresQuery($conn, $query, $tableName) {
     pg_query($query); // Noncompliant
-    pg_query($conn, $query); // Noncompliant
+    PG_Query($conn, $query); // Noncompliant
     pg_send_query ($conn, $query); // Noncompliant
 
     pg_send_query($conn, 'INSERT INTO test (ID) VALUES (1)'); // OK
