@@ -153,6 +153,39 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbol.name()).isEqualTo("$a");
   }
 
+  @Test
+  public void built_in_variables() throws Exception {
+    CompilationUnitTree cut = parse("symbols/symbolBuiltins.php");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+
+    assertThat(symbolTable.getSymbols("$myvar")).hasSize(3);
+    assertThat(symbolTable.getSymbols("$GLOBALS")).isEmpty();
+    assertThat(symbolTable.getSymbols("$_SERVER")).isEmpty();
+    assertThat(symbolTable.getSymbols("$_GET")).isEmpty();
+    assertThat(symbolTable.getSymbols("$_POST")).isEmpty();
+    assertThat(symbolTable.getSymbols("$_FILES")).isEmpty();
+    assertThat(symbolTable.getSymbols("$_SESSION")).isEmpty();
+    assertThat(symbolTable.getSymbols("$_ENV")).isEmpty();
+    assertThat(symbolTable.getSymbols("$PHP_ERRORMSG")).isEmpty();
+    assertThat(symbolTable.getSymbols("$HTTP_RAW_POST_DATA")).isEmpty();
+    assertThat(symbolTable.getSymbols("$HTTP_RESPONSE_HEADER")).isEmpty();
+    assertThat(symbolTable.getSymbols("$ARGC")).isEmpty();
+    assertThat(symbolTable.getSymbols("$argc")).hasSize(2);
+    assertThat(symbolTable.getSymbols("$ARGV")).hasSize(1);
+    assertThat(symbolTable.getSymbols("$argv")).hasSize(1);
+    assertThat(symbolTable.getSymbols("$_COOKIE")).isEmpty();
+    assertThat(symbolTable.getSymbols("$_REQUEST")).isEmpty();
+    assertThat(symbolTable.getSymbols("$this")).isEmpty();
+
+    Symbol paramArgvLowerCase = getUniqueSymbol("$argv", symbolTable);
+    Symbol argvUpperCase = getUniqueSymbol("$ARGV", symbolTable);
+
+    assertThat(paramArgvLowerCase).isNotEqualTo(argvUpperCase);
+    assertThat(paramArgvLowerCase.usages()).hasSize(1);
+    assertThat(argvUpperCase.usages()).hasSize(0);
+    assertThat(paramArgvLowerCase.kind()).isEqualTo(Symbol.Kind.PARAMETER);
+  }
+
   private static Symbol getUniqueSymbol(String name, SymbolTableImpl table) {
     List<Symbol> symbols = table.getSymbols(name);
     assertThat(symbols).hasSize(1);

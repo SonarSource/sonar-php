@@ -77,8 +77,6 @@ public class SymbolVisitor extends PHPVisitorCheck {
     "$PHP_ERRORMSG",
     "$HTTP_RAW_POST_DATA",
     "$HTTP_RESPONSE_HEADER",
-    "$ARGC",
-    "$ARGV",
     "$_COOKIE",
     "$_REQUEST"
   );
