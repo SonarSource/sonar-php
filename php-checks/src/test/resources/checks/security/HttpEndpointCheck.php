@@ -3,14 +3,15 @@
 use Cake\Routing\Router;
 use Cake\Routing as CRouting;
 
-Router::scope('/', function ($routes) { // Noncompliant
+  Router::scope('/', function ($routes) { // Noncompliant
+//^^^^^^^^^^^^^
     // ...
 });
 
 Cake\Routing\Router::connect('/', ['controller' => 'MyController', 'action' => 'index']); // Noncompliant
 
-\Cake\Routing\Router::plugin('MyPlugin', function ($routes) { // Noncompliant
-    // ...
+  \Cake\Routing\Router::plugin('MyPlugin', function ($routes) { // Noncompliant
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 });
 
 CRouting\Router::prefix('admin', function ($routes) { // Noncompliant

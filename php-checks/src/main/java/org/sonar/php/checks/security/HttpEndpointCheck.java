@@ -46,7 +46,7 @@ public class HttpEndpointCheck extends NamespaceAwareVisitor {
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     if (isSuspiciousStaticFunction(tree.callee())) {
-      context().newIssue(this, tree, MESSAGE);
+      context().newIssue(this, tree.callee(), MESSAGE);
     }
 
     super.visitFunctionCall(tree);
