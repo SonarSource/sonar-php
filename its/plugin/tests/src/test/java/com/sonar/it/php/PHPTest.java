@@ -64,12 +64,16 @@ public class PHPTest {
       .setProfile("it-profile");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
-    if (!isGreater75()) {
-      // starting 7.6, modules were dropped https://jira.sonarsource.com/browse/MMF-365
-      assertThat(getMeasureAsInt(MULTIMODULE_PROJET_KEY + ":module1", "files")).isEqualTo(4);
-      assertThat(getMeasureAsInt(MULTIMODULE_PROJET_KEY + ":module2", "files")).isEqualTo(2);
+    String componentKey1 = MULTIMODULE_PROJET_KEY + ":module1";
+    String componentKey2 = MULTIMODULE_PROJET_KEY + ":module2";
+    if (isGreater75()) {
+      // starting 7.6, modules were dropped https://jira.sonarsource.com/browse/MMF-365 and are not considered as a component in SQ API
+      componentKey1 += "/src";
+      componentKey2 += "/src";
     }
 
+    assertThat(getMeasureAsInt(componentKey1, "files")).isEqualTo(4);
+    assertThat(getMeasureAsInt(componentKey2, "files")).isEqualTo(2);
     assertThat(getMeasureAsInt(MULTIMODULE_PROJET_KEY, "files")).isEqualTo(4 + 2);
   }
 
