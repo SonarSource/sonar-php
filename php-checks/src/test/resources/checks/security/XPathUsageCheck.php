@@ -24,6 +24,24 @@ function evaluate_xpath($doc, $xpathstring, $xmlstring)
     // There is no risk if the xpath is hardcoded
     $xml->xpath("/users/user[@name='alice']"); // Compliant
 
+    // simplexml_load_file returns a SimpleXMLElement
+    $xml2 = simplexml_load_file('test.xml');
+    $xml2->xpath($xpathstring); // Noncompliant
+    // There is no risk if the xpath is hardcoded
+    $xml2->xpath("/users/user[@name='alice']"); // Compliant
+
+    // simplexml_load_string returns a SimpleXMLElement
+    $xml3 = simplexml_load_string($xmlstring);
+    $xml3->xpath($xpathstring); // Noncompliant
+    // There is no risk if the xpath is hardcoded
+    $xml3->xpath("/users/user[@name='alice']"); // Compliant
+
+    // simplexml_import_dom returns a SimpleXMLElement
+    $xml4 = simplexml_import_dom($xmlstring);
+    $xml4->xpath($xpathstring); // Noncompliant
+    // There is no risk if the xpath is hardcoded
+    $xml4->xpath("/users/user[@name='alice']"); // Compliant
+
     // coverage
     $xpath->evaluate();
     $xpath->xpath($xpathstring);

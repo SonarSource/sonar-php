@@ -21,8 +21,9 @@ package org.sonar.php.checks.security;
 
 import java.util.function.Predicate;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
+import org.sonar.php.checks.utils.type.FunctionCall;
 import org.sonar.php.checks.utils.type.NewObjectCall;
+import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.php.checks.utils.type.TypePredicateList;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -37,7 +38,12 @@ public class XPathUsageCheck extends PHPVisitorCheck {
   private static final Predicate<TreeValues> XPATH_PREDICATES = new TypePredicateList(
     new ObjectMemberFunctionCall("query", new NewObjectCall("DOMXpath")),
     new ObjectMemberFunctionCall("evaluate", new NewObjectCall("DOMXpath")),
-    new ObjectMemberFunctionCall("xpath", new NewObjectCall("SimpleXMLElement")));
+    new ObjectMemberFunctionCall("xpath",
+      new NewObjectCall("SimpleXMLElement"),
+      new FunctionCall("simplexml_load_file"),
+      new FunctionCall("simplexml_load_string"),
+      new FunctionCall("simplexml_import_dom"))
+    );
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
