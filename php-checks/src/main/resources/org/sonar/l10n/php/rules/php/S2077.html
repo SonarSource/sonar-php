@@ -25,10 +25,10 @@ binding mechanisms should be used; they can be relied on to automatically perfor
   <li> <code>PDO::query</code> </li>
   <li> <code>PDO::exec</code> </li>
 </ul>
-<p>In addition the following raise an issue if the provided query is either explicitly concatenated or when it is hard-coded and contains a "$" sign,
-which might indicate a variable.</p>
+<p>In addition, the following function call will also raise an issue if the provided query is a string with one or more interpolated variable
+(containing "$" sign).</p>
 <ul>
-  <li> <code>PDO:prepare</code> </li>
+  <li> <code>PDO::prepare</code> </li>
 </ul>
 <h2>Ask Yourself Whether</h2>
 <ul>

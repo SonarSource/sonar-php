@@ -19,38 +19,84 @@
  */
 package org.sonar.php.checks.security;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
+import org.sonar.php.checks.utils.type.NewObjectCall;
+import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
+import org.sonar.php.checks.utils.type.TreeValues;
+import org.sonar.php.checks.utils.type.TypePredicateList;
+import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S2077")
 public class QueryUsageCheck extends PHPVisitorCheck {
 
-  private static final Set<String> SQL_QUERY_METHODS = new HashSet<>(Arrays.asList(
-    "mysql_query",
-    "mysql_db_query",
-    "mysql_unbuffered_query",
-    "pg_update",
-    "pg_query",
-    "pg_send_query",
-    "mssql_query",
-    "mysqli_query", "mysqli::query",
-    "mysqli_real_query", "mysqli::real_query",
-    "mysqli_multi_query", "mysqli::multi_query",
-    "mysqli_send_query", "mysqli::send_query",
-    "PDO::query",
-    "PDO::exec"));
+  private static final String MESSAGE = "Make sure that executing SQL queries is safe here.";
+  private static final NewObjectCall IS_PDO_OBJECT = new NewObjectCall("PDO");
+  private static final NewObjectCall IS_MYSQLI_OBJECT = new NewObjectCall("mysqli");
+
+  private static final Map<String, Integer> SUSPICIOUS_GLOBAL_FUNCTIONS = buildSuspiciousGlobalFunctions();
+
+  private static Map<String, Integer> buildSuspiciousGlobalFunctions() {
+    Map<String, Integer> map = new HashMap<>();
+    map.put("mssql_query", 0);
+    map.put("mysql_query", 0);
+    map.put("mysql_db_query", 1);
+    map.put("mysql_unbuffered_query", 0);
+    map.put("pg_update", null);
+    map.put("pg_send_query", 1);
+    map.put("mysqli_query", 1);
+    map.put("mysqli_real_query", 1);
+    map.put("mysqli_multi_query", 1);
+    map.put("mysqli_send_query", 1);
+    return map;
+  }
+
+  private static final Predicate<TreeValues> SUSPICIOUS_QUERY_PREDICATES = new TypePredicateList(
+    new ObjectMemberFunctionCall("exec", IS_PDO_OBJECT),
+    new ObjectMemberFunctionCall("query", IS_PDO_OBJECT, IS_MYSQLI_OBJECT),
+    new ObjectMemberFunctionCall("real_query", IS_MYSQLI_OBJECT),
+    new ObjectMemberFunctionCall("multi_query", IS_MYSQLI_OBJECT),
+    new ObjectMemberFunctionCall("send_query", IS_MYSQLI_OBJECT));
+
+  private static final Predicate<TreeValues> PDO_PREPARE_PREDICATE = new ObjectMemberFunctionCall("prepare", new NewObjectCall("PDO"));
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    super.visitFunctionCall(tree);
-    String functionName = CheckUtils.getFunctionName(tree).toLowerCase();
-    if (SQL_QUERY_METHODS.contains(functionName)) {
-      context().newIssue(this, tree, "Make sure that executing SQL queries is safe here.");
+    TreeValues possibleValues = TreeValues.of(tree, context().symbolTable());
+    if (isSuspiciousGlobalFunction(tree) || isSuspiciousMemberFunction(tree, possibleValues) || isSuspiciousPrepareStatement(tree, possibleValues)) {
+      context().newIssue(this, tree.callee(), MESSAGE);
     }
+
+    super.visitFunctionCall(tree);
   }
+
+  private static boolean isSuspiciousGlobalFunction(FunctionCallTree tree) {
+    ExpressionTree callee = tree.callee();
+    if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
+      String qualifiedName = ((NamespaceNameTree) callee).qualifiedName();
+      if (SUSPICIOUS_GLOBAL_FUNCTIONS.keySet().contains(qualifiedName)) {
+        Integer index = SUSPICIOUS_GLOBAL_FUNCTIONS.get(qualifiedName);
+        return index == null || (tree.arguments().size() > index && !tree.arguments().get(index).is(Tree.Kind.REGULAR_STRING_LITERAL));
+      } else if ("pg_query".equals(qualifiedName)) {
+        // First argument of function 'pg_query' is optional
+        return !tree.arguments().isEmpty() && !tree.arguments().get(tree.arguments().size() - 1).is(Tree.Kind.REGULAR_STRING_LITERAL);
+      }
+    }
+    return false;
+  }
+
+  private boolean isSuspiciousMemberFunction(FunctionCallTree tree, TreeValues possibleValues) {
+    return SUSPICIOUS_QUERY_PREDICATES.test(possibleValues) && !tree.arguments().isEmpty() && !tree.arguments().get(0).is(Tree.Kind.REGULAR_STRING_LITERAL);
+  }
+
+  private boolean isSuspiciousPrepareStatement(FunctionCallTree tree, TreeValues possibleValues) {
+    return PDO_PREPARE_PREDICATE.test(possibleValues) && !tree.arguments().isEmpty() && tree.arguments().get(0).is(Tree.Kind.EXPANDABLE_STRING_LITERAL);
+  }
+
 }

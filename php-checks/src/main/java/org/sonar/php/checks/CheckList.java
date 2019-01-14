@@ -40,6 +40,7 @@ import org.sonar.php.checks.security.HttpEndpointCheck;
 import org.sonar.php.checks.security.LDAPAuthenticatedConnectionCheck;
 import org.sonar.php.checks.security.LoggerConfigurationCheck;
 import org.sonar.php.checks.security.PermissionsControlCheck;
+import org.sonar.php.checks.security.QueryUsageCheck;
 import org.sonar.php.checks.security.RegexUsageCheck;
 import org.sonar.php.checks.security.SignallingProcessCheck;
 import org.sonar.php.checks.security.SocketUsageCheck;
@@ -174,6 +175,7 @@ public class CheckList {
       PermissionsControlCheck.class,
       PHPDeprecatedFunctionUsageCheck.class,
       PhpSapiNameFunctionUsageCheck.class,
+      QueryUsageCheck.class,
       RandomGeneratorCheck.class,
       RedundantFinalCheck.class,
       RedundantJumpCheck.class,

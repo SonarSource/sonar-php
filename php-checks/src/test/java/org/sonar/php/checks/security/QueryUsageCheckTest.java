@@ -28,4 +28,5 @@ public class QueryUsageCheckTest {
   public void test() {
     CheckVerifier.verify(new QueryUsageCheck(), "security/QueryUsageCheck.php");
   }
+
 }
