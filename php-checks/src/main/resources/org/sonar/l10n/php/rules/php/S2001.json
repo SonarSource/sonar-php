@@ -1,5 +1,5 @@
 {
-  "title": "Deprecated functions should not be used",
+  "title": "Deprecated features should not be used",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
