@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.symbols;
 
 import com.google.common.annotations.Beta;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,9 +47,14 @@ public class Symbol {
     public String getValue() {
       return value;
     }
+
+    public boolean isQualified() {
+      return this == CLASS;
+    }
   }
 
   private final String name;
+  private QualifiedName qualifiedName;
   private final IdentifierTree declaration;
   private Kind kind;
   private Scope scope;
@@ -56,8 +62,18 @@ public class Symbol {
   private List<SyntaxToken> modifiers = new LinkedList<>();
 
   public Symbol(IdentifierTree declaration, Kind kind, Scope scope) {
+    Preconditions.checkState(!kind.isQualified(), "Declaration of %s should provide qualified name", declaration);
     this.declaration = declaration;
     this.name = declaration.text();
+    this.kind = kind;
+    this.scope = scope;
+  }
+
+  public Symbol(IdentifierTree declaration, Kind kind, Scope scope, QualifiedName qualifiedName) {
+    Preconditions.checkState(kind.isQualified(), "Declaration %s can not have qualified name %s", declaration, qualifiedName);
+    this.declaration = declaration;
+    this.name = declaration.text();
+    this.qualifiedName = qualifiedName;
     this.kind = kind;
     this.scope = scope;
   }
@@ -79,15 +95,15 @@ public class Symbol {
     this.modifiers.addAll(modifiers);
   }
 
-  public void addUsage(SyntaxToken usage){
+  public void addUsage(SyntaxToken usage) {
     usages.add(usage);
   }
 
-  public void addUsage(IdentifierTree usage){
-    usages.add(usage.token());
+  public void addUsage(IdentifierTree usage) {
+    addUsage(usage.token());
   }
 
-  public List<SyntaxToken> usages(){
+  public List<SyntaxToken> usages() {
     return usages;
   }
 
@@ -97,6 +113,10 @@ public class Symbol {
 
   public String name() {
     return name;
+  }
+
+  public QualifiedName qualifiedName() {
+    return qualifiedName;
   }
 
   public IdentifierTree declaration() {

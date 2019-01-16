@@ -20,6 +20,7 @@
 package org.sonar.php.tree.symbols;
 
 import java.util.List;
+import org.assertj.core.api.ListAssert;
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -30,6 +31,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -185,6 +187,68 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(argvUpperCase.usages()).hasSize(0);
     assertThat(paramArgvLowerCase.kind()).isEqualTo(Symbol.Kind.PARAMETER);
   }
+
+  @Test
+  public void qualified_name_for_classes() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php class A  {} namespace N1 { class A {} } ");
+    assertClassSymbols(symbolTable, "\\A", "\\N1\\A");
+
+    symbolTable = symbolTableFor("<?php namespace N1; class A  {} class B {} ");
+    assertClassSymbols(symbolTable, "\\N1\\A", "\\N1\\B");
+
+    symbolTable = symbolTableFor("<?php namespace N1; class A  {} class B {} namespace N2; class C {}");
+    assertClassSymbols(symbolTable, "\\N1\\A", "\\N1\\B", "\\N2\\C");
+  }
+
+  @Test
+  public void qn_class_symbol_usages() throws Exception {
+    CompilationUnitTree cut = parseSource("<?php namespace N1 {\n" +
+      " class A {}\n" +
+      " $a = new A();\n" +
+      "}\n" +
+      "$a = new \\N1\\A();");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    assertClassSymbols(symbolTable, "\\N1\\A");
+    assertSymbolUsages(symbolTable, "\\N1\\A", 3, 5);
+  }
+
+
+  @Test
+  public void use_statements() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
+      "namespace N1 { class A {} }\n" +
+      "use N1\\A as Alias;\n" +
+      "$a = new Alias();");
+    assertSymbolUsages(symbolTable, "\\N1\\A", 4);
+  }
+
+  @Test
+  public void use_statements_group() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php namespace A\\B; class C {} class D {} use A\\B\\{C, D as E};\n" +
+      "new C();\n" +
+      "new D();\n" +
+      "new E();");
+    assertSymbolUsages(symbolTable, "\\A\\B\\C", 2);
+    assertSymbolUsages(symbolTable, "\\A\\B\\D", 3, 4);
+  }
+
+  private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
+    return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
+      .containsExactly(fullyQualifiedNames);
+  }
+
+  private void assertSymbolUsages(SymbolTableImpl symbolTable, String qualifiedName, Integer... lines) {
+    Symbol symbol = symbolTable.getSymbol(qualifiedName);
+    assertThat(symbol.usages()).hasSize(lines.length);
+    assertThat(symbol.usages()).extracting(SyntaxToken::line).containsExactly(lines);
+  }
+
+
+  private SymbolTableImpl symbolTableFor(String source) {
+    CompilationUnitTree cut = parseSource(source);
+    return SymbolTableImpl.create(cut);
+  }
+
 
   private static Symbol getUniqueSymbol(String name, SymbolTableImpl table) {
     List<Symbol> symbols = table.getSymbols(name);

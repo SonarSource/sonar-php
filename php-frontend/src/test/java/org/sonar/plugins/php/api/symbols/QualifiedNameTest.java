@@ -17,28 +17,19 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php;
+package org.sonar.plugins.php.api.symbols;
 
-import com.sonar.sslr.api.typed.ActionParser;
-import java.io.File;
-import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.junit.Test;
 
-public class ParsingTestUtils {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  protected ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
+public class QualifiedNameTest {
 
-  protected CompilationUnitTree parse(String filename) {
-    File file = new File("src/test/resources/", filename);
-
-    ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    return (CompilationUnitTree) parser.parse(file);
+  @Test
+  public void test() {
+    QualifiedName qualifiedName = QualifiedName.create("A", "B", "C");
+    assertThat(qualifiedName.toString()).isEqualTo("\\A\\B\\C");
   }
 
-  protected CompilationUnitTree parseSource(String sourceCode) {
-    ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    return (CompilationUnitTree) parser.parse(sourceCode);
-  }
+
 }
