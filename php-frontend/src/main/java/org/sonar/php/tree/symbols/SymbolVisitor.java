@@ -485,6 +485,10 @@ public class SymbolVisitor extends PHPVisitorCheck {
       if (symbol == null && namespaceName.namespaces().isEmpty()) {
         symbol = currentScope.getSymbol(usageIdentifier.text(), kind);
       }
+      if (symbol == null) {
+        // we do not have the declaration of this symbol, we will create unresolved symbol for it
+        symbol = symbolTable.createUnresolvedSymbol(getFullyQualifiedName(namespaceName), Symbol.Kind.FUNCTION);
+      }
       if (symbol != null) {
         associateSymbol(usageIdentifier, symbol);
       }

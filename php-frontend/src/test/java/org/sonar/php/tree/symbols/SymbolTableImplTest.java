@@ -19,6 +19,7 @@
  */
 package org.sonar.php.tree.symbols;
 
+import com.google.common.collect.Iterables;
 import java.util.List;
 import org.assertj.core.api.ListAssert;
 import org.junit.Test;
@@ -244,6 +245,36 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
     assertClassSymbols(symbolTable, "\\N\\N1\\A");
     assertSymbolUsages(symbolTable, "\\N\\N1\\A", 2);
+  }
+
+  @Test
+  public void undeclared_class_usage() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
+    Symbol symbol = symbolTable.getSymbol("\\PDO");
+    assertThat(symbol).isInstanceOf(UnresolvedSymbol.class);
+    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(usage.line()).isEqualTo(1);
+    assertThat(usage.column()).isEqualTo(17);
+  }
+
+  @Test
+  public void undeclared_class_usage_with_fully_qualified_name() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new \\PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
+    Symbol symbol = symbolTable.getSymbol("\\PDO");
+    assertThat(symbol).isInstanceOf(UnresolvedSymbol.class);
+    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(usage.line()).isEqualTo(1);
+    assertThat(usage.column()).isEqualTo(18);
+  }
+
+  @Test
+  public void undeclared_class_usage_in_namespace() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace A { $a = new A('odbc:sample', 'db2inst1', 'ibmdb2'); }");
+    Symbol symbol = symbolTable.getSymbol("\\A\\A");
+    assertThat(symbol).isInstanceOf(UnresolvedSymbol.class);
+    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(usage.line()).isEqualTo(1);
+    assertThat(usage.column()).isEqualTo(30);
   }
 
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {

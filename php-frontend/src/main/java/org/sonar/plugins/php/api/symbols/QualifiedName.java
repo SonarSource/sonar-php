@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.symbols;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -84,6 +85,10 @@ public class QualifiedName {
 
   public boolean isGlobal() {
     return this == GLOBAL_NAMESPACE;
+  }
+
+  String name() {
+    return Iterables.getLast(nameElements);
   }
 
   public boolean equalsIgnoreCase(QualifiedName other) {

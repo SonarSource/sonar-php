@@ -78,6 +78,13 @@ public class Symbol {
     this.scope = scope;
   }
 
+  protected Symbol(QualifiedName qualifiedName, Kind kind) {
+    this.name = qualifiedName.name();
+    this.qualifiedName = qualifiedName;
+    this.kind = kind;
+    this.declaration = null;
+  }
+
   public ImmutableList<SyntaxToken> modifiers() {
     return ImmutableList.copyOf(modifiers);
   }
