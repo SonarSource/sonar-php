@@ -143,6 +143,7 @@ public class Symbol {
   public String toString() {
     return "Symbol{" +
       "name='" + name + '\'' +
+      ", qualifiedName='" + qualifiedName() + '\'' +
       ", kind=" + kind +
       ", scope=" + scope +
       '}';

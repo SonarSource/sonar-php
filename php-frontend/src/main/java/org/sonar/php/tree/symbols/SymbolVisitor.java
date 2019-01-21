@@ -89,9 +89,9 @@ public class SymbolVisitor extends PHPVisitorCheck {
   private static final ImmutableSet<String> SELF_OBJECTS = ImmutableSet.of("$this", "self", "static");
 
   private QualifiedName currentNamespace = QualifiedName.GLOBAL_NAMESPACE;
+  private Map<String, QualifiedName> aliases = new HashMap<>();
   private Scope classScope = null;
   private Map<Symbol, Scope> scopeBySymbol = new HashMap<>();
-  private Map<String, QualifiedName> aliases = new HashMap<>();
 
   static class ClassMemberUsageState {
     boolean isStatic = false;
@@ -117,8 +117,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {
-    enterScope(tree);
-    globalScope = currentScope;
+    globalScope = symbolTable.addScope(new Scope(tree));
+    currentScope = globalScope;
     super.visitCompilationUnit(tree);
   }
 
@@ -205,14 +205,13 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    Symbol classSymbol = createSymbol(tree.name(), Symbol.Kind.CLASS);
+    Symbol classSymbol = symbolTable.getSymbol(tree.name());
     enterScope(tree);
     classScope = currentScope;
     scan(tree.name());
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
-      scan(superClass.namespaces());
-      Symbol superClassSymbol = resolveSymbol(superClass.name());
+      Symbol superClassSymbol = symbolTable.getSymbol(getFullyQualifiedName(superClass));
       classScope.superClassScope = scopeBySymbol.get(superClassSymbol);
     }
     scopeBySymbol.put(classSymbol, classScope);
@@ -544,8 +543,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   private void enterScope(Tree tree) {
-    currentScope = new Scope(currentScope, tree);
-    symbolTable.addScope(currentScope);
+    currentScope = symbolTable.addScope(new Scope(currentScope, tree));
   }
 
   private Symbol createSymbol(IdentifierTree identifier, Symbol.Kind kind) {
@@ -553,7 +551,6 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
     if (symbol == null) {
       symbol = symbolTable.declareSymbol(identifier, kind, currentScope, currentNamespace);
-      symbolTable.associateSymbol(identifier, symbol);
     } else {
       associateSymbol(identifier, symbol);
     }

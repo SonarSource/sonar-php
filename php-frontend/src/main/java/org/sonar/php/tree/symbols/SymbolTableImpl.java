@@ -21,12 +21,10 @@ package org.sonar.php.tree.symbols;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -39,7 +37,7 @@ import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 public class SymbolTableImpl implements SymbolTable {
 
   private List<Symbol> symbols = new ArrayList<>();
-  private Set<Scope> scopes = Sets.newHashSet();
+  private Map<Tree, Scope> scopes = new HashMap<>();
   private Map<Tree, Symbol> symbolsByTree = new HashMap<>();
   private Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
 
@@ -48,31 +46,27 @@ public class SymbolTableImpl implements SymbolTable {
 
   public static SymbolTableImpl create(CompilationUnitTree compilationUnit) {
     SymbolTableImpl symbolModel = new SymbolTableImpl();
+    new DeclarationVisitor(symbolModel).visitCompilationUnit(compilationUnit);
     new SymbolVisitor(symbolModel).visitCompilationUnit(compilationUnit);
     return symbolModel;
   }
 
-  public void addScope(Scope scope) {
-    scopes.add(scope);
+  public Scope addScope(Scope scope) {
+    return scopes.computeIfAbsent(scope.tree(), t -> scope);
   }
 
   @Override
   public ImmutableSet<Scope> getScopes() {
-    return ImmutableSet.copyOf(scopes);
+    return ImmutableSet.copyOf(scopes.values());
   }
 
   @Nullable
   @Override
   public Scope getScopeFor(Tree tree) {
-    for (Scope scope : scopes) {
-      if (scope.tree().equals(tree)) {
-        return scope;
-      }
-    }
-    return null;
+    return scopes.get(tree);
   }
 
-  public Symbol declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, QualifiedName namespace) {
+  Symbol declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, QualifiedName namespace) {
     Symbol symbol;
     if (kind.isQualified()) {
       QualifiedName qualifiedName = namespace.resolve(name.text());
@@ -83,6 +77,7 @@ public class SymbolTableImpl implements SymbolTable {
     }
     symbols.add(symbol);
     scope.addSymbol(symbol);
+    associateSymbol(name, symbol);
     return symbol;
   }
 

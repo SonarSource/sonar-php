@@ -232,6 +232,20 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertSymbolUsages(symbolTable, "\\A\\B\\D", 3, 4);
   }
 
+  @Test
+  public void usage_before_declaration() throws Exception {
+    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
+      "$a = new N1\\A();\n" +
+      "}\n" +
+      "\n" +
+      "namespace N\\N1 {\n" +
+      "class A {}\n" +
+      "}");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    assertClassSymbols(symbolTable, "\\N\\N1\\A");
+    assertSymbolUsages(symbolTable, "\\N\\N1\\A", 2);
+  }
+
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
