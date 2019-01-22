@@ -491,24 +491,34 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   private QualifiedName getFullyQualifiedName(NamespaceNameTree name) {
-    QualifiedName alias = getAlias(name);
+    QualifiedName alias = resolveAlias(name);
     if (alias != null) {
       return alias;
     }
-    if (name.isFullyQualified() || currentNamespace.isGlobal()) {
+    if (name.isFullyQualified() || currentNamespace.isGlobalNamespace()) {
       return QualifiedName.create(name);
     }
     return currentNamespace.resolve(QualifiedName.create(name));
   }
 
   @CheckForNull
-  private QualifiedName getAlias(NamespaceNameTree namespaceNameTree) {
-    String potentialAlias = namespaceNameTree.namespaces().stream()
-      .findFirst()
-      .map(NameIdentifierTree::text)
-      .orElse(namespaceNameTree.name().text())
-      .toLowerCase(Locale.ROOT);
-    return aliases.get(potentialAlias);
+  private QualifiedName resolveAlias(NamespaceNameTree namespaceNameTree) {
+    if (namespaceNameTree.namespaces().isEmpty()) {
+      return lookupAlias(namespaceNameTree.name());
+    }
+    // first namespace element is potentially an alias
+    NameIdentifierTree potentialAlias = namespaceNameTree.namespaces().iterator().next();
+    QualifiedName aliasedNamespace = lookupAlias(potentialAlias);
+    if (aliasedNamespace != null) {
+      return aliasedNamespace.resolveAliasedName(namespaceNameTree);
+    }
+    return null;
+  }
+
+  @CheckForNull
+  private QualifiedName lookupAlias(IdentifierTree identifierTree) {
+    String alias = identifierTree.text().toLowerCase(Locale.ROOT);
+    return aliases.get(alias);
   }
 
   @Override

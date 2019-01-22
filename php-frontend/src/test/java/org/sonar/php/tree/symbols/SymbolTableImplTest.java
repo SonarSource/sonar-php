@@ -192,13 +192,13 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   @Test
   public void qualified_name_for_classes() throws Exception {
     SymbolTableImpl symbolTable = symbolTableFor("<?php class A  {} namespace N1 { class A {} } ");
-    assertClassSymbols(symbolTable, "\\A", "\\N1\\A");
+    assertClassSymbols(symbolTable, "\\a", "\\n1\\a");
 
     symbolTable = symbolTableFor("<?php namespace N1; class A  {} class B {} ");
-    assertClassSymbols(symbolTable, "\\N1\\A", "\\N1\\B");
+    assertClassSymbols(symbolTable, "\\n1\\a", "\\n1\\b");
 
     symbolTable = symbolTableFor("<?php namespace N1; class A  {} class B {} namespace N2; class C {}");
-    assertClassSymbols(symbolTable, "\\N1\\A", "\\N1\\B", "\\N2\\C");
+    assertClassSymbols(symbolTable, "\\n1\\a", "\\n1\\b", "\\n2\\c");
   }
 
   @Test
@@ -209,8 +209,8 @@ public class SymbolTableImplTest extends ParsingTestUtils {
       "}\n" +
       "$a = new \\N1\\A();");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
-    assertClassSymbols(symbolTable, "\\N1\\A");
-    assertSymbolUsages(symbolTable, "\\N1\\A", 3, 5);
+    assertClassSymbols(symbolTable, "\\n1\\a");
+    assertSymbolUsages(symbolTable, "\\n1\\a", 3, 5);
   }
 
 
@@ -220,7 +220,22 @@ public class SymbolTableImplTest extends ParsingTestUtils {
       "namespace N1 { class A {} }\n" +
       "use N1\\A as Alias;\n" +
       "$a = new Alias();");
-    assertSymbolUsages(symbolTable, "\\N1\\A", 4);
+    assertSymbolUsages(symbolTable, "\\n1\\a", 4);
+
+    symbolTable = symbolTableFor("<?php \n" +
+      "namespace N1 { class A {} }\n" +
+      "use N1\\A;\n" +
+      "$a = new A();");
+    assertSymbolUsages(symbolTable, "\\n1\\a", 4);
+  }
+
+  @Test
+  public void use_statements_aliased_name() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
+      "namespace N1\\N2 { class A {} }\n" +
+      "use N1\\N2;\n" +
+      "$a = new N2\\A();");
+    assertSymbolUsages(symbolTable, "\\N1\\N2\\A", 4);
   }
 
   @Test
@@ -243,14 +258,14 @@ public class SymbolTableImplTest extends ParsingTestUtils {
       "class A {}\n" +
       "}");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
-    assertClassSymbols(symbolTable, "\\N\\N1\\A");
-    assertSymbolUsages(symbolTable, "\\N\\N1\\A", 2);
+    assertClassSymbols(symbolTable, "\\n\\n1\\a");
+    assertSymbolUsages(symbolTable, "\\n\\n1\\a", 2);
   }
 
   @Test
   public void undeclared_class_usage() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
-    Symbol symbol = symbolTable.getSymbol("\\PDO");
+    Symbol symbol = symbolTable.getSymbol("\\pdo");
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
     SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
     assertThat(usage.line()).isEqualTo(1);
@@ -260,7 +275,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   @Test
   public void undeclared_class_usage_with_fully_qualified_name() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new \\PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
-    Symbol symbol = symbolTable.getSymbol("\\PDO");
+    Symbol symbol = symbolTable.getSymbol("\\pdo");
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
     SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
     assertThat(usage.line()).isEqualTo(1);

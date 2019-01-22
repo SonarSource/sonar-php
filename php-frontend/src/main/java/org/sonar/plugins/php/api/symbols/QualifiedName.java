@@ -21,9 +21,8 @@ package org.sonar.plugins.php.api.symbols;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -36,14 +35,16 @@ public class QualifiedName {
   private final ImmutableList<String> nameElements;
 
   private QualifiedName(List<String> parentNamespaces, String name) {
-    this.nameElements = ImmutableList.<String>builder()
+    this(ImmutableList.<String>builder()
       .addAll(parentNamespaces)
       .add(name)
-      .build();
+      .build());
   }
 
   private QualifiedName(List<String> nameElements) {
-    this.nameElements = ImmutableList.copyOf(nameElements);
+    ImmutableList.Builder<String> nameBuilder = ImmutableList.builder();
+    nameElements.forEach(name -> nameBuilder.add(name.toLowerCase(Locale.ROOT)));
+    this.nameElements = nameBuilder.build();
   }
 
   /**
@@ -59,16 +60,16 @@ public class QualifiedName {
     int length = names.length;
     if (length == 0) {
       throw new IllegalStateException("Cannot create an empty qualified name");
-    } else if (length == 1) {
-      return new QualifiedName(Collections.emptyList(), names[0]);
     } else {
-      return new QualifiedName(Arrays.asList(names));
+      return new QualifiedName(ImmutableList.copyOf(names));
     }
   }
 
   public static QualifiedName create(NamespaceNameTree nameTree) {
-    List<String> namespaces = nameTree.namespaces().stream().map(NameIdentifierTree::text).collect(Collectors.toList());
-    return new QualifiedName(namespaces, nameTree.name().text());
+    ImmutableList.Builder<String> newName = ImmutableList.builder();
+    nameTree.namespaces().stream().map(NameIdentifierTree::text).forEach(newName::add);
+    newName.add(nameTree.name().text());
+    return new QualifiedName(newName.build());
   }
 
   public QualifiedName resolve(QualifiedName nameInNamespace) {
@@ -79,31 +80,35 @@ public class QualifiedName {
     return new QualifiedName(newName);
   }
 
+  /**
+   * Used to resolve namespaceNameTree which is using an alias
+   */
+  public QualifiedName resolveAliasedName(NamespaceNameTree namespaceNameTree) {
+    if (namespaceNameTree.namespaces().isEmpty()) {
+      throw new IllegalStateException("Unable to resolve " + namespaceNameTree + " which has only aliased name");
+    }
+    ImmutableList.Builder<String> nameBuilder = ImmutableList.<String>builder()
+      .addAll(nameElements);
+    // skip the first element of the namespace, because it's an alias
+    namespaceNameTree.namespaces()
+      .stream()
+      .skip(1)
+      .map(NameIdentifierTree::text)
+      .forEach(nameBuilder::add);
+    nameBuilder.add(namespaceNameTree.name().text());
+    return new QualifiedName(nameBuilder.build());
+  }
+
   public QualifiedName resolve(String name) {
     return new QualifiedName(nameElements, name);
   }
 
-  public boolean isGlobal() {
+  public boolean isGlobalNamespace() {
     return this == GLOBAL_NAMESPACE;
   }
 
   String name() {
     return Iterables.getLast(nameElements);
-  }
-
-  public boolean equalsIgnoreCase(QualifiedName other) {
-    if (this == other) {
-      return true;
-    }
-    if (this.nameElements.size() != other.nameElements.size()) {
-      return false;
-    }
-    for (int i = 0; i < this.nameElements.size(); i++) {
-      if (!this.nameElements.get(i).equalsIgnoreCase(other.nameElements.get(i))) {
-        return false;
-      }
-    }
-    return true;
   }
 
   @Override

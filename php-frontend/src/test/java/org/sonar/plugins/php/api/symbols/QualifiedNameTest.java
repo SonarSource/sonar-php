@@ -28,7 +28,7 @@ public class QualifiedNameTest {
   @Test
   public void test() {
     QualifiedName qualifiedName = QualifiedName.create("A", "B", "C");
-    assertThat(qualifiedName.toString()).isEqualTo("\\A\\B\\C");
+    assertThat(qualifiedName.toString()).isEqualTo("\\a\\b\\c");
   }
 
 
