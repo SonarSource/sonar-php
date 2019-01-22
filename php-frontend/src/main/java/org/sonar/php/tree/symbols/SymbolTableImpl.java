@@ -81,10 +81,10 @@ public class SymbolTableImpl implements SymbolTable {
     return symbol;
   }
 
-  Symbol createUnresolvedSymbol(QualifiedName fullyQualifiedName, Symbol.Kind kind) {
-    UnresolvedSymbol unresolvedSymbol = new UnresolvedSymbol(fullyQualifiedName, kind);
-    symbolByQualifiedName.put(fullyQualifiedName, unresolvedSymbol);
-    return unresolvedSymbol;
+  Symbol createUndeclaredSymbol(QualifiedName fullyQualifiedName, Symbol.Kind kind) {
+    UndeclaredSymbol undeclaredSymbol = new UndeclaredSymbol(fullyQualifiedName, kind);
+    symbolByQualifiedName.put(fullyQualifiedName, undeclaredSymbol);
+    return undeclaredSymbol;
   }
 
   /**

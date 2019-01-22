@@ -251,7 +251,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   public void undeclared_class_usage() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
     Symbol symbol = symbolTable.getSymbol("\\PDO");
-    assertThat(symbol).isInstanceOf(UnresolvedSymbol.class);
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
     SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
     assertThat(usage.line()).isEqualTo(1);
     assertThat(usage.column()).isEqualTo(17);
@@ -261,7 +261,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   public void undeclared_class_usage_with_fully_qualified_name() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new \\PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
     Symbol symbol = symbolTable.getSymbol("\\PDO");
-    assertThat(symbol).isInstanceOf(UnresolvedSymbol.class);
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
     SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
     assertThat(usage.line()).isEqualTo(1);
     assertThat(usage.column()).isEqualTo(18);
@@ -271,7 +271,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   public void undeclared_class_usage_in_namespace() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace A { $a = new A('odbc:sample', 'db2inst1', 'ibmdb2'); }");
     Symbol symbol = symbolTable.getSymbol("\\A\\A");
-    assertThat(symbol).isInstanceOf(UnresolvedSymbol.class);
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
     SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
     assertThat(usage.line()).isEqualTo(1);
     assertThat(usage.column()).isEqualTo(30);

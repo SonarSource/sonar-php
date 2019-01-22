@@ -149,13 +149,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Nullable
   private static QualifiedName getPrefix(UseStatementTree useStatementTree) {
-    QualifiedName namespacePrefix;
-    if (useStatementTree.prefix() != null) {
-      namespacePrefix = QualifiedName.create(useStatementTree.prefix());
-    } else {
-      namespacePrefix = null;
-    }
-    return namespacePrefix;
+    NamespaceNameTree prefix = useStatementTree.prefix();
+    return prefix == null ? null : QualifiedName.create(prefix);
   }
 
   private static QualifiedName getOriginalFullyQualifiedName(@Nullable QualifiedName namespacePrefix, UseClauseTree useClauseTree) {
@@ -487,7 +482,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       }
       if (symbol == null) {
         // we do not have the declaration of this symbol, we will create unresolved symbol for it
-        symbol = symbolTable.createUnresolvedSymbol(getFullyQualifiedName(namespaceName), Symbol.Kind.FUNCTION);
+        symbol = symbolTable.createUndeclaredSymbol(getFullyQualifiedName(namespaceName), Symbol.Kind.FUNCTION);
       }
       if (symbol != null) {
         associateSymbol(usageIdentifier, symbol);

@@ -23,12 +23,12 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 
 /**
- * Unresolved symbol is used for class symbols which do not have declaration available (built-in classes or classes declared in
+ * {@link UndeclaredSymbol} is used for class symbols which do not have declaration available (built-in classes or classes declared in
  * another compilation unit
  */
-class UnresolvedSymbol extends Symbol {
+class UndeclaredSymbol extends Symbol {
 
-  UnresolvedSymbol(QualifiedName qualifiedName, Kind kind) {
+  UndeclaredSymbol(QualifiedName qualifiedName, Kind kind) {
     super(qualifiedName, kind);
   }
 }
