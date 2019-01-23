@@ -276,6 +276,34 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
+  public void function_usage_before_declaration() throws Exception {
+    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
+      "f();\n" +
+      "function f() {}" +
+      "}");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    assertFunctionSymbols(symbolTable, "\\n\\f");
+    assertSymbolUsages(symbolTable, "\\n\\f", 2);
+  }
+
+  @Test
+  public void nested_function() throws Exception {
+    // Note that actual runtime behavior is that function g doesn't exist until f() is invoked, so this particular example
+    // will actually lead to function not defined error on line 2 at runtime, however this is good enough for purpose of analysis
+    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
+      "g();\n" +
+      "f();\n" +
+      "function f() {" +
+      "  function g() {}" +
+      "}" +
+      "}");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    assertFunctionSymbols(symbolTable, "\\n\\f", "\\n\\g");
+    assertSymbolUsages(symbolTable, "\\n\\f", 3);
+    assertSymbolUsages(symbolTable, "\\n\\g", 2);
+  }
+
+  @Test
   public void undeclared_class_usage() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
     Symbol symbol = symbolTable.getSymbol("\\pdo");
@@ -305,8 +333,22 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(usage.column()).isEqualTo(30);
   }
 
+  @Test
+  public void undeclared_function_usage() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace A { $a = f(); $b = f(); } f();");
+    Symbol symbol = symbolTable.getSymbol("\\f");
+    assertThat(symbol).isNotNull();
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
+    assertSymbolUsages(symbolTable, "\\f", 1, 1, 1);
+  }
+
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
+      .containsExactly(fullyQualifiedNames);
+  }
+
+  private static ListAssert<String> assertFunctionSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
+    return assertThat(symbolTable.getSymbols(Kind.FUNCTION)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
   }
 
