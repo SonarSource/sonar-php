@@ -19,6 +19,7 @@
  */
 package org.sonar.php.tree.symbols;
 
+import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -26,6 +27,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 
 public class Scope {
@@ -37,8 +39,17 @@ public class Scope {
   private boolean unresolvedCompact;
 
   public Scope(Scope outer, Tree tree) {
-    this.outer = outer;
-    this.tree = tree;
+    this.outer = Preconditions.checkNotNull(outer);
+    this.tree = Preconditions.checkNotNull(tree);
+  }
+
+  /**
+   * Used for global scope
+   *
+   */
+  public Scope(CompilationUnitTree compilationUnitTree) {
+    this.outer = null;
+    this.tree = compilationUnitTree;
   }
 
   public Tree tree() {

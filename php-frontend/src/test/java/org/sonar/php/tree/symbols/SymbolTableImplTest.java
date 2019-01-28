@@ -19,7 +19,9 @@
  */
 package org.sonar.php.tree.symbols;
 
+import com.google.common.collect.Iterables;
 import java.util.List;
+import org.assertj.core.api.ListAssert;
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -30,6 +32,7 @@ import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -185,6 +188,140 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(argvUpperCase.usages()).hasSize(0);
     assertThat(paramArgvLowerCase.kind()).isEqualTo(Symbol.Kind.PARAMETER);
   }
+
+  @Test
+  public void qualified_name_for_classes() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php class A  {} namespace N1 { class A {} } ");
+    assertClassSymbols(symbolTable, "\\a", "\\n1\\a");
+
+    symbolTable = symbolTableFor("<?php namespace N1; class A  {} class B {} ");
+    assertClassSymbols(symbolTable, "\\n1\\a", "\\n1\\b");
+
+    symbolTable = symbolTableFor("<?php namespace N1; class A  {} class B {} namespace N2; class C {}");
+    assertClassSymbols(symbolTable, "\\n1\\a", "\\n1\\b", "\\n2\\c");
+  }
+
+  @Test
+  public void qn_class_symbol_usages() throws Exception {
+    CompilationUnitTree cut = parseSource("<?php namespace N1 {\n" +
+      " class A {}\n" +
+      " $a = new A();\n" +
+      "}\n" +
+      "$a = new \\N1\\A();");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    assertClassSymbols(symbolTable, "\\n1\\a");
+    assertSymbolUsages(symbolTable, "\\n1\\a", 3, 5);
+  }
+
+
+  @Test
+  public void use_statements() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
+      "namespace N1 { class A {} }\n" +
+      "use N1\\A as Alias;\n" +
+      "$a = new Alias();");
+    assertSymbolUsages(symbolTable, "\\n1\\a", 4);
+
+    symbolTable = symbolTableFor("<?php \n" +
+      "namespace N1 { class A {} }\n" +
+      "use N1\\A;\n" +
+      "$a = new A();");
+    assertSymbolUsages(symbolTable, "\\n1\\a", 4);
+  }
+
+  @Test
+  public void use_statements_aliased_name() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
+      "namespace N1\\N2 { class A {} }\n" +
+      "use N1\\N2;\n" +
+      "$a = new N2\\A();");
+    assertSymbolUsages(symbolTable, "\\N1\\N2\\A", 4);
+  }
+
+  @Test
+  public void global_and_alias_usage() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
+      "class A {} \n" +
+      "namespace N { class A {} }\n" +
+      "use N\\A;\n" +
+      "$a = new A();\n" +
+      "$a = new \\A();");
+    assertClassSymbols(symbolTable, "\\a", "\\n\\a");
+    assertSymbolUsages(symbolTable, "\\n\\a", 5);
+    assertSymbolUsages(symbolTable, "\\a", 6);
+  }
+
+  @Test
+  public void use_statements_group() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php namespace A\\B; class C {} class D {} use A\\B\\{C, D as E};\n" +
+      "new C();\n" +
+      "new D();\n" +
+      "new E();");
+    assertSymbolUsages(symbolTable, "\\A\\B\\C", 2);
+    assertSymbolUsages(symbolTable, "\\A\\B\\D", 3, 4);
+  }
+
+  @Test
+  public void usage_before_declaration() throws Exception {
+    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
+      "$a = new N1\\A();\n" +
+      "}\n" +
+      "\n" +
+      "namespace N\\N1 {\n" +
+      "class A {}\n" +
+      "}");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    assertClassSymbols(symbolTable, "\\n\\n1\\a");
+    assertSymbolUsages(symbolTable, "\\n\\n1\\a", 2);
+  }
+
+  @Test
+  public void undeclared_class_usage() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
+    Symbol symbol = symbolTable.getSymbol("\\pdo");
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
+    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(usage.line()).isEqualTo(1);
+    assertThat(usage.column()).isEqualTo(17);
+  }
+
+  @Test
+  public void undeclared_class_usage_with_fully_qualified_name() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new \\PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
+    Symbol symbol = symbolTable.getSymbol("\\pdo");
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
+    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(usage.line()).isEqualTo(1);
+    assertThat(usage.column()).isEqualTo(18);
+  }
+
+  @Test
+  public void undeclared_class_usage_in_namespace() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace A { $a = new A('odbc:sample', 'db2inst1', 'ibmdb2'); }");
+    Symbol symbol = symbolTable.getSymbol("\\A\\A");
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
+    SyntaxToken usage = Iterables.getOnlyElement(symbol.usages());
+    assertThat(usage.line()).isEqualTo(1);
+    assertThat(usage.column()).isEqualTo(30);
+  }
+
+  private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
+    return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
+      .containsExactly(fullyQualifiedNames);
+  }
+
+  private void assertSymbolUsages(SymbolTableImpl symbolTable, String qualifiedName, Integer... lines) {
+    Symbol symbol = symbolTable.getSymbol(qualifiedName);
+    assertThat(symbol.usages()).hasSize(lines.length);
+    assertThat(symbol.usages()).extracting(SyntaxToken::line).containsExactly(lines);
+  }
+
+
+  private SymbolTableImpl symbolTableFor(String source) {
+    CompilationUnitTree cut = parseSource(source);
+    return SymbolTableImpl.create(cut);
+  }
+
 
   private static Symbol getUniqueSymbol(String name, SymbolTableImpl table) {
     List<Symbol> symbols = table.getSymbols(name);

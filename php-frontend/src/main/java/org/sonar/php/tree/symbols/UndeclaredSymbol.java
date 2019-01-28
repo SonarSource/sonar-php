@@ -17,28 +17,18 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php;
+package org.sonar.php.tree.symbols;
 
-import com.sonar.sslr.api.typed.ActionParser;
-import java.io.File;
-import org.sonar.php.parser.PHPLexicalGrammar;
-import org.sonar.php.parser.PHPParserBuilder;
-import org.sonar.plugins.php.api.tree.CompilationUnitTree;
-import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 
-public class ParsingTestUtils {
+/**
+ * {@link UndeclaredSymbol} is used for class symbols which do not have declaration available (built-in classes or classes declared in
+ * another compilation unit
+ */
+class UndeclaredSymbol extends Symbol {
 
-  protected ActionParser<Tree> p = PHPParserBuilder.createParser(PHPLexicalGrammar.COMPILATION_UNIT);
-
-  protected CompilationUnitTree parse(String filename) {
-    File file = new File("src/test/resources/", filename);
-
-    ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    return (CompilationUnitTree) parser.parse(file);
-  }
-
-  protected CompilationUnitTree parseSource(String sourceCode) {
-    ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    return (CompilationUnitTree) parser.parse(sourceCode);
+  UndeclaredSymbol(QualifiedName qualifiedName, Kind kind) {
+    super(qualifiedName, kind);
   }
 }

@@ -21,61 +21,70 @@ package org.sonar.php.tree.symbols;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 public class SymbolTableImpl implements SymbolTable {
 
   private List<Symbol> symbols = new ArrayList<>();
-  private Set<Scope> scopes = Sets.newHashSet();
+  private Map<Tree, Scope> scopes = new HashMap<>();
   private Map<Tree, Symbol> symbolsByTree = new HashMap<>();
+  private Map<QualifiedName, Symbol> symbolByQualifiedName = new HashMap<>();
 
-  private SymbolTableImpl(){
+  private SymbolTableImpl() {
   }
 
   public static SymbolTableImpl create(CompilationUnitTree compilationUnit) {
     SymbolTableImpl symbolModel = new SymbolTableImpl();
+    new DeclarationVisitor(symbolModel).visitCompilationUnit(compilationUnit);
     new SymbolVisitor(symbolModel).visitCompilationUnit(compilationUnit);
     return symbolModel;
   }
 
-  public void addScope(Scope scope){
-    scopes.add(scope);
+  public Scope addScope(Scope scope) {
+    return scopes.computeIfAbsent(scope.tree(), t -> scope);
   }
 
   @Override
-  public ImmutableSet<Scope> getScopes(){
-    return ImmutableSet.copyOf(scopes);
+  public ImmutableSet<Scope> getScopes() {
+    return ImmutableSet.copyOf(scopes.values());
   }
 
   @Nullable
   @Override
   public Scope getScopeFor(Tree tree) {
-    for (Scope scope : scopes) {
-      if (scope.tree().equals(tree)) {
-        return scope;
-      }
-    }
-    return null;
+    return scopes.get(tree);
   }
 
-  public Symbol declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope) {
-    Symbol symbol = new Symbol(name, kind, scope);
+  Symbol declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, QualifiedName namespace) {
+    Symbol symbol;
+    if (kind.isQualified()) {
+      QualifiedName qualifiedName = namespace.resolve(name.text());
+      symbol = new Symbol(name, kind, scope, qualifiedName);
+      symbolByQualifiedName.put(qualifiedName, symbol);
+    } else {
+      symbol = new Symbol(name, kind, scope);
+    }
     symbols.add(symbol);
     scope.addSymbol(symbol);
+    associateSymbol(name, symbol);
     return symbol;
+  }
+
+  Symbol createUndeclaredSymbol(QualifiedName fullyQualifiedName, Symbol.Kind kind) {
+    UndeclaredSymbol undeclaredSymbol = new UndeclaredSymbol(fullyQualifiedName, kind);
+    symbolByQualifiedName.put(fullyQualifiedName, undeclaredSymbol);
+    return undeclaredSymbol;
   }
 
   /**
@@ -86,15 +95,14 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   /**
-   *
    * @param kind kind of symbols to look for
    * @return list of symbols with the given kind
    */
   @Override
   public List<Symbol> getSymbols(Symbol.Kind kind) {
     List<Symbol> result = new ArrayList<>();
-    for (Symbol symbol : getSymbols()){
-      if (kind.equals(symbol.kind())){
+    for (Symbol symbol : getSymbols()) {
+      if (kind.equals(symbol.kind())) {
         result.add(symbol);
       }
     }
@@ -102,18 +110,25 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   /**
-   *
    * @param name name of symbols to look for
    * @return list of symbols with the given name
    */
   public List<Symbol> getSymbols(String name) {
     List<Symbol> result = new ArrayList<>();
-    for (Symbol symbol : getSymbols()){
+    for (Symbol symbol : getSymbols()) {
       if (symbol.called(name)) {
         result.add(symbol);
       }
     }
     return result;
+  }
+
+  Symbol getSymbol(QualifiedName qualifiedName) {
+    return symbolByQualifiedName.get(qualifiedName);
+  }
+
+  Symbol getSymbol(String qualifiedName) {
+    return getSymbol(QualifiedName.qualifiedName(qualifiedName));
   }
 
   void associateSymbol(Tree identifier, Symbol symbol) {
