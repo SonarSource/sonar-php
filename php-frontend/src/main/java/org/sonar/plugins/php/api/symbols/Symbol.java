@@ -48,8 +48,8 @@ public class Symbol {
       return value;
     }
 
-    public boolean isQualified() {
-      return this == CLASS;
+    public boolean hasQualifiedName() {
+      return this == CLASS || this == FUNCTION;
     }
   }
 
@@ -62,7 +62,7 @@ public class Symbol {
   private List<SyntaxToken> modifiers = new LinkedList<>();
 
   public Symbol(IdentifierTree declaration, Kind kind, Scope scope) {
-    Preconditions.checkState(!kind.isQualified(), "Declaration of %s should provide qualified name", declaration);
+    Preconditions.checkState(!kind.hasQualifiedName(), "Declaration of %s should provide qualified name", declaration);
     this.declaration = declaration;
     this.name = declaration.text();
     this.kind = kind;
@@ -70,7 +70,7 @@ public class Symbol {
   }
 
   public Symbol(IdentifierTree declaration, Kind kind, Scope scope, QualifiedName qualifiedName) {
-    Preconditions.checkState(kind.isQualified(), "Declaration %s can not have qualified name %s", declaration, qualifiedName);
+    Preconditions.checkState(kind.hasQualifiedName(), "Declaration %s can not have qualified name %s", declaration, qualifiedName);
     this.declaration = declaration;
     this.name = declaration.text();
     this.qualifiedName = qualifiedName;

@@ -51,7 +51,7 @@ public class SymbolTableImpl implements SymbolTable {
     return symbolModel;
   }
 
-  public Scope addScope(Scope scope) {
+  Scope addScope(Scope scope) {
     return scopes.computeIfAbsent(scope.tree(), t -> scope);
   }
 
@@ -68,7 +68,7 @@ public class SymbolTableImpl implements SymbolTable {
 
   Symbol declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, QualifiedName namespace) {
     Symbol symbol;
-    if (kind.isQualified()) {
+    if (kind.hasQualifiedName()) {
       QualifiedName qualifiedName = namespace.resolve(name.text());
       symbol = new Symbol(name, kind, scope, qualifiedName);
       symbolByQualifiedName.put(qualifiedName, symbol);
