@@ -66,10 +66,8 @@ public class QualifiedName {
   }
 
   public static QualifiedName create(NamespaceNameTree nameTree) {
-    ImmutableList.Builder<String> newName = ImmutableList.builder();
-    nameTree.namespaces().stream().map(NameIdentifierTree::text).forEach(newName::add);
-    newName.add(nameTree.name().text());
-    return new QualifiedName(newName.build());
+    List<String> namespaces = nameTree.namespaces().stream().map(NameIdentifierTree::text).collect(Collectors.toList());
+    return new QualifiedName(namespaces, nameTree.name().text());
   }
 
   public QualifiedName resolve(QualifiedName nameInNamespace) {

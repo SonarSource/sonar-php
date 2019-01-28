@@ -239,6 +239,19 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
+  public void global_and_alias_usage() throws Exception {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
+      "class A {} \n" +
+      "namespace N { class A {} }\n" +
+      "use N\\A;\n" +
+      "$a = new A();\n" +
+      "$a = new \\A();");
+    assertClassSymbols(symbolTable, "\\a", "\\n\\a");
+    assertSymbolUsages(symbolTable, "\\n\\a", 5);
+    assertSymbolUsages(symbolTable, "\\a", 6);
+  }
+
+  @Test
   public void use_statements_group() throws Exception {
     SymbolTableImpl symbolTable = symbolTableFor("<?php namespace A\\B; class C {} class D {} use A\\B\\{C, D as E};\n" +
       "new C();\n" +

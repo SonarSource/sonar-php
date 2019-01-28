@@ -503,6 +503,9 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @CheckForNull
   private QualifiedName resolveAlias(NamespaceNameTree namespaceNameTree) {
+    if (namespaceNameTree.isFullyQualified()) {
+      return null;
+    }
     if (namespaceNameTree.namespaces().isEmpty()) {
       return lookupAlias(namespaceNameTree.name());
     }
