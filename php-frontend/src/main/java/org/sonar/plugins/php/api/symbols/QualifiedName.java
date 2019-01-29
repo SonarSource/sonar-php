@@ -128,6 +128,6 @@ public class QualifiedName {
 
   @Override
   public String toString() {
-    return nameElements.stream().collect(Collectors.joining("\\", "\\", ""));
+    return nameElements.stream().collect(Collectors.joining("\\"));
   }
 }
