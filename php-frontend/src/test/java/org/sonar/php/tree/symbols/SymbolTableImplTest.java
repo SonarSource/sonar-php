@@ -43,7 +43,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   private SymbolTableImpl SYMBOL_MODEL = SymbolTableImpl.create(cut);
 
   @Test
-  public void case_sensitivity() throws Exception {
+  public void case_sensitivity() {
     CompilationUnitTree cut = parse("symbols/symbolCase.php");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
 
@@ -88,7 +88,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void test_class_fields() throws Exception {
+  public void test_class_fields() {
     Symbol field = SYMBOL_MODEL.getSymbols("$field1").get(0);
     Symbol constantField = SYMBOL_MODEL.getSymbols("CONSTANT_FIELD").get(0);
 
@@ -100,7 +100,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void test_global_constant() throws Exception {
+  public void test_global_constant() {
     Symbol constant = SYMBOL_MODEL.getSymbols("CONSTANT").get(0);
 
     assertThat(constant.hasModifier("const")).isTrue();
@@ -108,19 +108,19 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void list_variable() throws Exception {
+  public void list_variable() {
     assertThat(SYMBOL_MODEL.getSymbols("$l1")).hasSize(1);
     assertThat(SYMBOL_MODEL.getSymbols("$l2")).hasSize(1);
   }
 
   @Test
-  public void foreach_variable() throws Exception {
+  public void foreach_variable() {
     assertThat(SYMBOL_MODEL.getSymbols("$key")).hasSize(1);
     assertThat(SYMBOL_MODEL.getSymbols("$val")).hasSize(1);
   }
 
   @Test
-  public void static_variable() throws Exception {
+  public void static_variable() {
     List<Symbol> symbols = SYMBOL_MODEL.getSymbols("$static");
     assertThat(symbols).hasSize(1);
     Symbol symbol = symbols.get(0);
@@ -128,7 +128,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void global_variable() throws Exception {
+  public void global_variable() {
     List<Symbol> symbols = SYMBOL_MODEL.getSymbols("$global");
     assertThat(symbols).hasSize(2);
 
@@ -148,7 +148,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void retrieve_symbol_by_tree() throws Exception {
+  public void retrieve_symbol_by_tree() {
     ExpressionTree dollarAUsage = ((AssignmentExpressionTree) ((ExpressionStatementTree)
       ((FunctionDeclarationTree) cut.script().statements().get(5)).body().statements().get(3)).expression()).variable();
     Symbol symbol = SYMBOL_MODEL.getSymbol(dollarAUsage);
@@ -157,7 +157,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void built_in_variables() throws Exception {
+  public void built_in_variables() {
     CompilationUnitTree cut = parse("symbols/symbolBuiltins.php");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
 
@@ -190,7 +190,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void qualified_name_for_classes() throws Exception {
+  public void qualified_name_for_classes() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php class A  {} namespace N1 { class A {} } ");
     assertClassSymbols(symbolTable, "\\a", "\\n1\\a");
 
@@ -202,7 +202,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void qn_class_symbol_usages() throws Exception {
+  public void qn_class_symbol_usages() {
     CompilationUnitTree cut = parseSource("<?php namespace N1 {\n" +
       " class A {}\n" +
       " $a = new A();\n" +
@@ -215,7 +215,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
 
 
   @Test
-  public void use_statements() throws Exception {
+  public void use_statements() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
       "namespace N1 { class A {} }\n" +
       "use N1\\A as Alias;\n" +
@@ -230,7 +230,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void use_statements_aliased_name() throws Exception {
+  public void use_statements_aliased_name() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
       "namespace N1\\N2 { class A {} }\n" +
       "use N1\\N2;\n" +
@@ -239,7 +239,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void global_and_alias_usage() throws Exception {
+  public void global_and_alias_usage() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
       "class A {} \n" +
       "namespace N { class A {} }\n" +
@@ -252,7 +252,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void use_statements_group() throws Exception {
+  public void use_statements_group() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php namespace A\\B; class C {} class D {} use A\\B\\{C, D as E};\n" +
       "new C();\n" +
       "new D();\n" +
@@ -262,7 +262,7 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
-  public void usage_before_declaration() throws Exception {
+  public void usage_before_declaration() {
     CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
       "$a = new N1\\A();\n" +
       "}\n" +
@@ -273,6 +273,34 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
     assertClassSymbols(symbolTable, "\\n\\n1\\a");
     assertSymbolUsages(symbolTable, "\\n\\n1\\a", 2);
+  }
+
+  @Test
+  public void function_usage_before_declaration() {
+    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
+      "f();\n" +
+      "function f() {}" +
+      "}");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    assertFunctionSymbols(symbolTable, "\\n\\f");
+    assertSymbolUsages(symbolTable, "\\n\\f", 2);
+  }
+
+  @Test
+  public void nested_function() {
+    // Note that actual runtime behavior is that function g doesn't exist until f() is invoked, so this particular example
+    // will actually lead to function not defined error on line 2 at runtime, however this is good enough for purpose of analysis
+    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
+      "g();\n" +
+      "f();\n" +
+      "function f() {" +
+      "  function g() {}" +
+      "}" +
+      "}");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    assertFunctionSymbols(symbolTable, "\\n\\f", "\\n\\g");
+    assertSymbolUsages(symbolTable, "\\n\\f", 3);
+    assertSymbolUsages(symbolTable, "\\n\\g", 2);
   }
 
   @Test
@@ -305,8 +333,22 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(usage.column()).isEqualTo(30);
   }
 
+  @Test
+  public void undeclared_function_usage() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace A { $a = f(); $b = f(); } f();");
+    Symbol symbol = symbolTable.getSymbol("\\f");
+    assertThat(symbol).isNotNull();
+    assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
+    assertSymbolUsages(symbolTable, "\\f", 1, 1, 1);
+  }
+
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
+      .containsExactly(fullyQualifiedNames);
+  }
+
+  private static ListAssert<String> assertFunctionSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
+    return assertThat(symbolTable.getSymbols(Kind.FUNCTION)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
   }
 

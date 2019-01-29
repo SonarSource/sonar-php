@@ -28,6 +28,7 @@ import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.plugins.php.api.symbols.Symbol.Kind.CLASS;
+import static org.sonar.plugins.php.api.symbols.Symbol.Kind.FUNCTION;
 
 public class DeclarationVisitor extends PHPVisitorCheck {
 
@@ -65,6 +66,7 @@ public class DeclarationVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    // TODO
+    symbolTable.declareSymbol(tree.name(), FUNCTION, globalScope, currentNamespace);
+    super.visitFunctionDeclaration(tree);
   }
 }

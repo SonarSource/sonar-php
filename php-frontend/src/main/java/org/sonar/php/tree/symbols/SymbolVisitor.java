@@ -173,7 +173,6 @@ public class SymbolVisitor extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    createSymbol(tree.name(), Symbol.Kind.FUNCTION);
     enterScope(tree);
     super.visitFunctionDeclaration(tree);
     leaveScope();
@@ -206,7 +205,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     scan(tree.name());
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
-      Symbol superClassSymbol = symbolTable.getSymbol(getFullyQualifiedName(superClass));
+      Symbol superClassSymbol = symbolTable.getSymbol(getFullyQualifiedName(superClass, Symbol.Kind.CLASS));
       classScope.superClassScope = scopeBySymbol.get(superClassSymbol);
     }
     scopeBySymbol.put(classSymbol, classScope);
@@ -435,7 +434,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
   public void visitFunctionCall(FunctionCallTree tree) {
     if (tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
       NamespaceNameTree namespaceNameCallee = (NamespaceNameTree) tree.callee();
-      usageForNamespaceName(namespaceNameCallee, Symbol.Kind.FUNCTION);
+      Symbol.Kind kind = tree.getParent().is(Kind.NEW_EXPRESSION) ? Symbol.Kind.CLASS : Symbol.Kind.FUNCTION;
+      usageForNamespaceName(namespaceNameCallee, kind);
     } else {
       tree.callee().accept(this);
     }
@@ -475,14 +475,14 @@ public class SymbolVisitor extends PHPVisitorCheck {
   private void usageForNamespaceName(NamespaceNameTree namespaceName, Symbol.Kind kind) {
     if (namespaceName.name().is(Kind.NAME_IDENTIFIER)) {
       NameIdentifierTree usageIdentifier = (NameIdentifierTree) namespaceName.name();
-      QualifiedName qualifiedName = getFullyQualifiedName(namespaceName);
+      QualifiedName qualifiedName = getFullyQualifiedName(namespaceName, kind);
       Symbol symbol = symbolTable.getSymbol(qualifiedName);
       if (symbol == null && namespaceName.namespaces().isEmpty()) {
         symbol = currentScope.getSymbol(usageIdentifier.text(), kind);
       }
       if (symbol == null) {
         // we do not have the declaration of this symbol, we will create unresolved symbol for it
-        symbol = symbolTable.createUndeclaredSymbol(getFullyQualifiedName(namespaceName), Symbol.Kind.FUNCTION);
+        symbol = symbolTable.createUndeclaredSymbol(getFullyQualifiedName(namespaceName, kind), Symbol.Kind.FUNCTION);
       }
       if (symbol != null) {
         associateSymbol(usageIdentifier, symbol);
@@ -490,15 +490,33 @@ public class SymbolVisitor extends PHPVisitorCheck {
     }
   }
 
-  private QualifiedName getFullyQualifiedName(NamespaceNameTree name) {
+  /**
+   * Resolution rules are defined in http://php.net/manual/en/language.namespaces.rules.php
+   * <p>
+   * If unqualified name (see above link for definition) is a class symbol we resolve it in the current namespace. If it's a function we check
+   * if it's declared in current namespace, and if not we resolve as if it was in global namespace. This is imprecise
+   * heuristics, because function could be declared in current namespace, but in another source file, thus we will
+   * incorrectly consider such functions to be in the global namespace
+   */
+  private QualifiedName getFullyQualifiedName(NamespaceNameTree name, Symbol.Kind kind) {
+    if (name.isFullyQualified()) {
+      return QualifiedName.create(name);
+    }
     QualifiedName alias = resolveAlias(name);
     if (alias != null) {
       return alias;
     }
-    if (name.isFullyQualified() || currentNamespace.isGlobalNamespace()) {
-      return QualifiedName.create(name);
+    if (name.hasQualifiers()) {
+      return currentNamespace.resolve(QualifiedName.create(name));
     }
-    return currentNamespace.resolve(QualifiedName.create(name));
+    if (kind == Symbol.Kind.CLASS) {
+      return currentNamespace.resolve(QualifiedName.create(name));
+    }
+    Symbol symbol = symbolTable.getSymbol(currentNamespace.resolve(QualifiedName.create(name)));
+    if (symbol != null) {
+      return symbol.qualifiedName();
+    }
+    return QualifiedName.create(name);
   }
 
   @CheckForNull
