@@ -130,11 +130,11 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
     // interface declaration
     verifyBlockCfg("" +
-      "block( succ = [END], elem = 2 ); interface Foo{}");
+      "block( succ = [END], elem = 1 ); interface Foo{}");
 
     // trait declaration
     verifyBlockCfg("" +
-      "block( succ = [END], elem = 2 ); trait Foo{}");
+      "block( succ = [END], elem = 1 ); trait Foo{}");
 
     // namespace
     verifyScriptTreeCfg("" +
