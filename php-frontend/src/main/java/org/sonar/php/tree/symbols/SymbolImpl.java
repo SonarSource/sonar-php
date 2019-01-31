@@ -40,7 +40,7 @@ public class SymbolImpl implements Symbol {
   private List<SyntaxToken> usages = new LinkedList<>();
   private List<SyntaxToken> modifiers = new LinkedList<>();
 
-  public SymbolImpl(IdentifierTree declaration, Kind kind, Scope scope) {
+  SymbolImpl(IdentifierTree declaration, Kind kind, Scope scope) {
     Preconditions.checkState(!kind.hasQualifiedName(), "Declaration of %s should provide qualified name", declaration);
     this.declaration = declaration;
     this.name = declaration.text();
@@ -48,17 +48,17 @@ public class SymbolImpl implements Symbol {
     this.scope = scope;
   }
 
-  public SymbolImpl(IdentifierTree declaration, Kind kind, Scope scope, QualifiedName qualifiedName) {
+  SymbolImpl(IdentifierTree declaration, Kind kind, Scope scope, QualifiedName qualifiedName) {
     Preconditions.checkState(kind.hasQualifiedName(), "Declaration %s can not have qualified name %s", declaration, qualifiedName);
     this.declaration = declaration;
-    this.name = qualifiedName.name();
+    this.name = qualifiedName.simpleName();
     this.qualifiedName = qualifiedName;
     this.kind = kind;
     this.scope = scope;
   }
 
-  protected SymbolImpl(QualifiedName qualifiedName, Kind kind) {
-    this.name = qualifiedName.name();
+  SymbolImpl(QualifiedName qualifiedName, Kind kind) {
+    this.name = qualifiedName.simpleName();
     this.qualifiedName = qualifiedName;
     this.kind = kind;
     this.declaration = null;
@@ -79,15 +79,15 @@ public class SymbolImpl implements Symbol {
     return false;
   }
 
-  public void addModifiers(List<SyntaxToken> modifiers) {
+  void addModifiers(List<SyntaxToken> modifiers) {
     this.modifiers.addAll(modifiers);
   }
 
-  public void addUsage(SyntaxToken usage) {
+  void addUsage(SyntaxToken usage) {
     usages.add(usage);
   }
 
-  public void addUsage(IdentifierTree usage) {
+  void addUsage(IdentifierTree usage) {
     addUsage(usage.token());
   }
 

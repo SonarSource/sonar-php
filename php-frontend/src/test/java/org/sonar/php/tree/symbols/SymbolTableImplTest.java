@@ -25,8 +25,10 @@ import org.assertj.core.api.ListAssert;
 import org.junit.Test;
 import org.sonar.php.ParsingTestUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.symbols.MemberSymbol;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
+import org.sonar.plugins.php.api.symbols.TypeSymbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -347,6 +349,80 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(symbol).isNotNull();
     assertThat(symbol).isInstanceOf(UndeclaredSymbol.class);
     assertSymbolUsages(symbolTable, "f", 1, 1, 1);
+  }
+
+  @Test
+  public void test_type_symbol() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { class A {} class B extends A {} } ");
+    Symbol classA = symbolTable.getSymbol("n\\a");
+    Symbol classB = symbolTable.getSymbol("n\\b");
+    assertThat(classA.name()).isEqualTo("a");
+    assertThat(classA).isInstanceOf(TypeSymbol.class);
+    assertThat(classB).isInstanceOf(TypeSymbol.class);
+    assertThat(((TypeSymbol) classB).superClass()).isEqualTo(classA);
+    assertThat(((TypeSymbol) classA).superClass()).isNull();
+  }
+
+  @Test
+  public void test_undeclared_superclass() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { class B extends A {} } ");
+    Symbol classA = symbolTable.getSymbol("n\\a");
+    Symbol classB = symbolTable.getSymbol("n\\b");
+    assertThat(classA).isInstanceOf(UndeclaredSymbol.class);
+    assertThat(classB).isInstanceOf(TypeSymbol.class);
+    assertThat(((TypeSymbol) classB).superClass()).isEqualTo(classA);
+  }
+
+  @Test
+  public void test_superclass_with_qualified_name() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { use M; class B extends M\\A implements \\M\\C {} } namespace M { class A {} interface C {} }");
+    TypeSymbol classA = (TypeSymbol) symbolTable.getSymbol("m\\a");
+    TypeSymbol classB = (TypeSymbol) symbolTable.getSymbol("n\\b");
+    assertThat(classB.superClass()).isEqualTo(classA);
+    assertThat(classB.interfaces()).extracting(i -> i.qualifiedName().toString()).containsExactly("m\\c");
+  }
+
+  @Test
+  public void test_class_symbol_with_interfaces() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { class B implements I1, I2 {} interface I1 {} } ");
+    TypeSymbol classB = (TypeSymbol) symbolTable.getSymbol("n\\b");
+    Symbol iface1 = symbolTable.getSymbol("n\\i1");
+    Symbol iface2 = symbolTable.getSymbol("n\\i2");
+    assertThat(classB.interfaces()).containsExactly(iface1, iface2);
+    assertThat(iface1).isInstanceOf(TypeSymbol.class);
+    assertThat(iface2).isInstanceOf(UndeclaredSymbol.class);
+  }
+
+
+  @Test
+  public void test_anonymous_class() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { $x = new class { function foo() {} }; } ");
+    assertThat(symbolTable.getSymbols()).hasSize(2);
+    Symbol fooSymbol = Iterables.getOnlyElement(symbolTable.getSymbols("foo"));
+    // TODO qualified name for methods of anonymous class are wrong, because we don't create correct symbols
+    assertThat(fooSymbol.qualifiedName().toString()).isEqualTo("n\\foo");
+  }
+
+  @Test
+  public void test_class_symbol_members() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { class A { const A; function foo() {} }  } class B { function bar() {} }");
+    TypeSymbol classA = (TypeSymbol) symbolTable.getSymbol("n\\a");
+    assertThat(classA.kind()).isEqualTo(Kind.CLASS);
+    assertThat(classA.members()).extracting(m -> m.qualifiedName().toString())
+      .containsExactly("n\\a::a", "n\\a::foo");
+    assertThat(classA.members()).extracting(MemberSymbol::owner).allMatch(classA::equals);
+
+    TypeSymbol classB = (TypeSymbol) symbolTable.getSymbol("b");
+    assertThat(classB.members()).extracting(m -> m.qualifiedName().toString())
+      .containsExactly("b::bar");
+    assertThat(classB.members()).extracting(MemberSymbol::owner).allMatch(classB::equals);
+  }
+
+  @Test
+  public void test_class_symbol_members_case_insensitive() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php  namespace N { class A { const A; function Foo() {} }  } ");
+    TypeSymbol classA = (TypeSymbol) symbolTable.getSymbol("n\\a");
+    assertThat(classA.members()).extracting(m -> m.qualifiedName().simpleName()).containsExactly("a", "foo");
   }
 
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
