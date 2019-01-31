@@ -170,8 +170,6 @@ class ControlFlowGraphBuilder {
       case UNSET_VARIABLE_STATEMENT:
       case EXPRESSION_LIST_STATEMENT:
       case FUNCTION_DECLARATION:
-      case INTERFACE_DECLARATION:
-      case TRAIT_DECLARATION:
       case USE_STATEMENT:
       case GROUP_USE_STATEMENT:
       case CONSTANT_DECLARATION:
@@ -180,8 +178,10 @@ class ControlFlowGraphBuilder {
       case EXPRESSION_STATEMENT:
         currentBlock.addElement(tree);
         return currentBlock;
-      case EMPTY_STATEMENT:
+      case TRAIT_DECLARATION:
+      case INTERFACE_DECLARATION:
       case CLASS_DECLARATION:
+      case EMPTY_STATEMENT:
         return currentBlock;
       default:
         throw new UnsupportedOperationException("Not supported tree kind " + tree.getKind());
