@@ -20,13 +20,12 @@
 package org.sonar.php.tree.symbols;
 
 import org.sonar.plugins.php.api.symbols.QualifiedName;
-import org.sonar.plugins.php.api.symbols.Symbol;
 
 /**
  * {@link UndeclaredSymbol} is used for class symbols which do not have declaration available (built-in classes or classes declared in
  * another compilation unit
  */
-class UndeclaredSymbol extends Symbol {
+class UndeclaredSymbol extends SymbolImpl {
 
   UndeclaredSymbol(QualifiedName qualifiedName, Kind kind) {
     super(qualifiedName, kind);

@@ -66,14 +66,14 @@ public class SymbolTableImpl implements SymbolTable {
     return scopes.get(tree);
   }
 
-  Symbol declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, QualifiedName namespace) {
-    Symbol symbol;
+  SymbolImpl declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, QualifiedName namespace) {
+    SymbolImpl symbol;
     if (kind.hasQualifiedName()) {
       QualifiedName qualifiedName = namespace.resolve(name.text());
-      symbol = new Symbol(name, kind, scope, qualifiedName);
+      symbol = new SymbolImpl(name, kind, scope, qualifiedName);
       symbolByQualifiedName.put(qualifiedName, symbol);
     } else {
-      symbol = new Symbol(name, kind, scope);
+      symbol = new SymbolImpl(name, kind, scope);
     }
     symbols.add(symbol);
     scope.addSymbol(symbol);

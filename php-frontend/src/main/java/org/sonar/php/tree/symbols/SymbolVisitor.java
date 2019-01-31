@@ -271,14 +271,14 @@ public class SymbolVisitor extends PHPVisitorCheck {
       } else {
 
         if (classMemberUsageState.isSelfMember && classScope != null && classMemberUsageState.isStatic) {
-          Symbol symbol = classScope.getSymbol(tree.text(), Symbol.Kind.FIELD);
+          SymbolImpl symbol = (SymbolImpl) classScope.getSymbol(tree.text(), Symbol.Kind.FIELD);
           if (symbol != null) {
             associateSymbol(tree, symbol);
           }
         }
 
         // see test_property_name_in_variable and case $this->$key ($key stores the name of field)
-        Symbol symbol = currentScope.getSymbol(tree.text(), Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
+        SymbolImpl symbol = (SymbolImpl) currentScope.getSymbol(tree.text(), Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
         if (symbol != null) {
           associateSymbol(tree, symbol);
         }
@@ -289,7 +289,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   private void createOrUseVariableIdentifierSymbol(VariableIdentifierTree identifier) {
-    Symbol symbol = currentScope.getSymbol(identifier.text(), Symbol.Kind.PARAMETER);
+    SymbolImpl symbol = (SymbolImpl) currentScope.getSymbol(identifier.text(), Symbol.Kind.PARAMETER);
     if (symbol == null) {
       createSymbol(identifier, Symbol.Kind.VARIABLE);
       return;
@@ -318,10 +318,10 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   private Symbol resolveSymbol(IdentifierTree tree) {
-    Symbol symbol = null;
+    SymbolImpl symbol = null;
     Scope outer = currentScope;
     while (outer != null) {
-      symbol = outer.getSymbol(tree.text(), Symbol.Kind.CLASS);
+      symbol = (SymbolImpl) outer.getSymbol(tree.text(), Symbol.Kind.CLASS);
       if (symbol != null) {
         associateSymbol(tree, symbol);
         break;
@@ -338,7 +338,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       name = (classMemberUsageState.isConst ? "" : "$") + name;
       kind = Symbol.Kind.FIELD;
     }
-    Symbol symbol = classScope.getSymbol(name, kind);
+    SymbolImpl symbol = (SymbolImpl) classScope.getSymbol(name, kind);
     if (symbol != null) {
       associateSymbol(tree, symbol);
     }
@@ -352,7 +352,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
   public void visitCompoundVariable(CompoundVariableTree tree) {
     SyntaxToken firstExpressionToken = ((PHPTree) tree.variableExpression()).getFirstToken();
     if (firstExpressionToken.text().charAt(0) != '$') {
-      Symbol symbol = currentScope.getSymbol("$" + firstExpressionToken.text());
+      SymbolImpl symbol = (SymbolImpl) currentScope.getSymbol("$" + firstExpressionToken.text());
       if (symbol != null) {
         associateSymbol(firstExpressionToken, symbol);
       }
@@ -377,7 +377,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       // Other cases are not supported
       if (variable.is(Tree.Kind.VARIABLE_IDENTIFIER)) {
         IdentifierTree identifier = (IdentifierTree) variable.variableExpression();
-        Symbol symbol = globalScope.getSymbol(identifier.text(), Symbol.Kind.VARIABLE);
+        SymbolImpl symbol = (SymbolImpl) globalScope.getSymbol(identifier.text(), Symbol.Kind.VARIABLE);
         if (symbol != null) {
           // actually this identifier in global statement is not usage, but we do this for the symbol highlighting
           associateSymbol(identifier, symbol);
@@ -400,7 +400,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
     for (VariableDeclarationTree variable : tree.variables()) {
       // FIXME SONARPHP-741: can generate inconsistencies if the variable has already
       // been declared static in another statement, or if its global
-      Symbol symbol = currentScope.getSymbol(variable.identifier().text(), Symbol.Kind.VARIABLE);
+      SymbolImpl symbol = (SymbolImpl) currentScope.getSymbol(variable.identifier().text(), Symbol.Kind.VARIABLE);
       if (symbol != null) {
         symbol.addModifiers(Collections.singletonList(tree.staticToken()));
       }
@@ -418,7 +418,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       }
 
       if (identifier != null) {
-        Symbol symbol = currentScope.outer().getSymbol(identifier.text());
+        SymbolImpl symbol = (SymbolImpl) currentScope.outer().getSymbol(identifier.text());
         if (symbol != null) {
           associateSymbol(identifier, symbol);
         } else if (variable.is(Kind.REFERENCE_VARIABLE)) {
@@ -460,7 +460,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
         String value = ((LiteralTree) argument).value();
         String variableName = "$" + value.substring(1, value.length() - 1);
 
-        Symbol symbol = currentScope.getSymbol(variableName, Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
+        SymbolImpl symbol = (SymbolImpl) currentScope.getSymbol(variableName, Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
 
         if (symbol != null) {
           associateSymbol(((LiteralTree) argument).token(), symbol);
@@ -476,9 +476,9 @@ public class SymbolVisitor extends PHPVisitorCheck {
     if (namespaceName.name().is(Kind.NAME_IDENTIFIER)) {
       NameIdentifierTree usageIdentifier = (NameIdentifierTree) namespaceName.name();
       QualifiedName qualifiedName = getFullyQualifiedName(namespaceName, kind);
-      Symbol symbol = symbolTable.getSymbol(qualifiedName);
+      SymbolImpl symbol = (SymbolImpl) symbolTable.getSymbol(qualifiedName);
       if (symbol == null && namespaceName.namespaces().isEmpty()) {
-        symbol = currentScope.getSymbol(usageIdentifier.text(), kind);
+        symbol = (SymbolImpl) currentScope.getSymbol(usageIdentifier.text(), kind);
       }
       if (symbol == null) {
         // we do not have the declaration of this symbol, we will create unresolved symbol for it
@@ -576,8 +576,8 @@ public class SymbolVisitor extends PHPVisitorCheck {
     currentScope = symbolTable.addScope(new Scope(currentScope, tree));
   }
 
-  private Symbol createSymbol(IdentifierTree identifier, Symbol.Kind kind) {
-    Symbol symbol = currentScope.getSymbol(identifier.text(), kind);
+  private SymbolImpl createSymbol(IdentifierTree identifier, Symbol.Kind kind) {
+    SymbolImpl symbol = (SymbolImpl) currentScope.getSymbol(identifier.text(), kind);
 
     if (symbol == null) {
       symbol = symbolTable.declareSymbol(identifier, kind, currentScope, currentNamespace);
@@ -587,12 +587,12 @@ public class SymbolVisitor extends PHPVisitorCheck {
     return symbol;
   }
 
-  private void associateSymbol(IdentifierTree tree, Symbol symbol) {
+  private void associateSymbol(IdentifierTree tree, SymbolImpl symbol) {
     symbol.addUsage(tree);
     symbolTable.associateSymbol(tree, symbol);
   }
 
-  private void associateSymbol(SyntaxToken token, Symbol symbol) {
+  private void associateSymbol(SyntaxToken token, SymbolImpl symbol) {
     symbol.addUsage(token);
     symbolTable.associateSymbol(token, symbol);
   }
