@@ -304,6 +304,13 @@ public class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   @Test
+  public void nested_function_inside_method() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php class A { private function nesting() { function nested() {} } }");
+    Symbol symbol = symbolTable.getSymbol("nested");
+    assertThat(symbol).isNotNull();
+  }
+
+  @Test
   public void undeclared_class_usage() {
     SymbolTableImpl symbolTable = symbolTableFor("<?php $dbh = new PDO('odbc:sample', 'db2inst1', 'ibmdb2');");
     Symbol symbol = symbolTable.getSymbol("pdo");

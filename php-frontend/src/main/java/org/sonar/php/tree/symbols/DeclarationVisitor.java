@@ -62,6 +62,7 @@ public class DeclarationVisitor extends PHPVisitorCheck {
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
     symbolTable.declareSymbol(tree.name(), CLASS, globalScope, currentNamespace);
+    super.visitClassDeclaration(tree);
   }
 
   @Override
