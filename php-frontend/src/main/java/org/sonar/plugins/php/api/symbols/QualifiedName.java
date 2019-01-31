@@ -105,7 +105,7 @@ public class QualifiedName {
     return this == GLOBAL_NAMESPACE;
   }
 
-  String name() {
+  public String name() {
     return Iterables.getLast(nameElements);
   }
 

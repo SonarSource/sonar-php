@@ -19,140 +19,41 @@
  */
 package org.sonar.plugins.php.api.symbols;
 
-import com.google.common.annotations.Beta;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import java.util.LinkedList;
 import java.util.List;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-@Beta
-public class Symbol {
+public interface Symbol {
+  List<SyntaxToken> modifiers();
 
-  public enum Kind {
-    VARIABLE("variable"),
-    FUNCTION("function"),
-    PARAMETER("parameter"),
-    CLASS("class"),
-    FIELD("field");
+  boolean hasModifier(String modifier);
 
-    private final String value;
+  List<SyntaxToken> usages();
 
-    Kind(String value) {
-      this.value = value;
-    }
+  Scope scope();
 
-    public String getValue() {
-      return value;
-    }
+  String name();
+
+  QualifiedName qualifiedName();
+
+  IdentifierTree declaration();
+
+  boolean is(Kind kind);
+
+  boolean called(String name);
+
+  Kind kind();
+
+  enum Kind {
+    VARIABLE,
+    FUNCTION,
+    PARAMETER,
+    CLASS,
+    FIELD;
 
     public boolean hasQualifiedName() {
-      return this == CLASS || this == FUNCTION;
+      return this == CLASS || this == FUNCTION || this == FIELD;
     }
-  }
-
-  private final String name;
-  private QualifiedName qualifiedName;
-  private final IdentifierTree declaration;
-  private Kind kind;
-  private Scope scope;
-  private List<SyntaxToken> usages = new LinkedList<>();
-  private List<SyntaxToken> modifiers = new LinkedList<>();
-
-  public Symbol(IdentifierTree declaration, Kind kind, Scope scope) {
-    Preconditions.checkState(!kind.hasQualifiedName(), "Declaration of %s should provide qualified name", declaration);
-    this.declaration = declaration;
-    this.name = declaration.text();
-    this.kind = kind;
-    this.scope = scope;
-  }
-
-  public Symbol(IdentifierTree declaration, Kind kind, Scope scope, QualifiedName qualifiedName) {
-    Preconditions.checkState(kind.hasQualifiedName(), "Declaration %s can not have qualified name %s", declaration, qualifiedName);
-    this.declaration = declaration;
-    this.name = declaration.text();
-    this.qualifiedName = qualifiedName;
-    this.kind = kind;
-    this.scope = scope;
-  }
-
-  protected Symbol(QualifiedName qualifiedName, Kind kind) {
-    this.name = qualifiedName.name();
-    this.qualifiedName = qualifiedName;
-    this.kind = kind;
-    this.declaration = null;
-  }
-
-  public ImmutableList<SyntaxToken> modifiers() {
-    return ImmutableList.copyOf(modifiers);
-  }
-
-  public boolean hasModifier(String modifier) {
-    for (SyntaxToken syntaxToken : modifiers) {
-      if (syntaxToken.text().equalsIgnoreCase(modifier)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public void addModifiers(List<SyntaxToken> modifiers) {
-    this.modifiers.addAll(modifiers);
-  }
-
-  public void addUsage(SyntaxToken usage) {
-    usages.add(usage);
-  }
-
-  public void addUsage(IdentifierTree usage) {
-    addUsage(usage.token());
-  }
-
-  public List<SyntaxToken> usages() {
-    return usages;
-  }
-
-  public Scope scope() {
-    return scope;
-  }
-
-  public String name() {
-    return name;
-  }
-
-  public QualifiedName qualifiedName() {
-    return qualifiedName;
-  }
-
-  public IdentifierTree declaration() {
-    return declaration;
-  }
-
-  public boolean is(Symbol.Kind kind) {
-    return kind.equals(this.kind);
-  }
-
-  public boolean called(String name) {
-    if (kind == Kind.VARIABLE || kind == Kind.PARAMETER) {
-      return name.equals(this.name);
-    } else {
-      return name.equalsIgnoreCase(this.name);
-    }
-  }
-
-  public Kind kind() {
-    return kind;
-  }
-
-  @Override
-  public String toString() {
-    return "Symbol{" +
-      "name='" + name + '\'' +
-      ", qualifiedName='" + qualifiedName() + '\'' +
-      ", kind=" + kind +
-      ", scope=" + scope +
-      '}';
   }
 }
