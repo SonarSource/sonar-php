@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.symbols.TypeSymbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
@@ -66,22 +67,41 @@ public class SymbolTableImpl implements SymbolTable {
     return scopes.get(tree);
   }
 
-  SymbolImpl declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, QualifiedName namespace) {
+  SymbolImpl declareSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, SymbolQualifiedName namespace) {
     SymbolImpl symbol;
     if (kind.hasQualifiedName()) {
-      QualifiedName qualifiedName = namespace.resolve(name.text());
+      SymbolQualifiedName qualifiedName = namespace.resolve(name.text());
       symbol = new SymbolImpl(name, kind, scope, qualifiedName);
       symbolByQualifiedName.put(qualifiedName, symbol);
     } else {
       symbol = new SymbolImpl(name, kind, scope);
     }
-    symbols.add(symbol);
-    scope.addSymbol(symbol);
-    associateSymbol(name, symbol);
+    addSymbol(name, scope, symbol);
     return symbol;
   }
 
-  Symbol createUndeclaredSymbol(QualifiedName fullyQualifiedName, Symbol.Kind kind) {
+  private void addSymbol(IdentifierTree name, Scope scope, Symbol symbol) {
+    symbols.add(symbol);
+    scope.addSymbol(symbol);
+    associateSymbol(name, symbol);
+  }
+
+  TypeSymbolImpl declareTypeSymbol(IdentifierTree name, Scope scope, SymbolQualifiedName namespace) {
+    SymbolQualifiedName qualifiedName = namespace.resolve(name.text());
+    TypeSymbolImpl symbol = new TypeSymbolImpl(name, scope, qualifiedName);
+    symbolByQualifiedName.put(qualifiedName, symbol);
+    addSymbol(name, scope, symbol);
+    return symbol;
+  }
+
+  MemberSymbolImpl declareMemberSymbol(IdentifierTree name, Symbol.Kind kind, Scope scope, TypeSymbol owner) {
+    MemberSymbolImpl memberSymbol = new MemberSymbolImpl(name, kind, scope, owner);
+    symbolByQualifiedName.put(memberSymbol.qualifiedName(), memberSymbol);
+    addSymbol(name, scope, memberSymbol);
+    return memberSymbol;
+  }
+
+  SymbolImpl createUndeclaredSymbol(QualifiedName fullyQualifiedName, Symbol.Kind kind) {
     UndeclaredSymbol undeclaredSymbol = new UndeclaredSymbol(fullyQualifiedName, kind);
     symbolByQualifiedName.put(fullyQualifiedName, undeclaredSymbol);
     return undeclaredSymbol;
@@ -128,7 +148,7 @@ public class SymbolTableImpl implements SymbolTable {
   }
 
   Symbol getSymbol(String qualifiedName) {
-    return getSymbol(QualifiedName.qualifiedName(qualifiedName));
+    return getSymbol(SymbolQualifiedName.qualifiedName(qualifiedName));
   }
 
   void associateSymbol(Tree identifier, Symbol symbol) {

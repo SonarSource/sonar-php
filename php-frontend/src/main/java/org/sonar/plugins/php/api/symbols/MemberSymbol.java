@@ -19,46 +19,11 @@
  */
 package org.sonar.plugins.php.api.symbols;
 
-import java.util.List;
-import javax.annotation.Nullable;
-import org.sonar.php.tree.symbols.Scope;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+/**
+ * Symbol for method, field or constant of {@link TypeSymbol}
+ */
+public interface MemberSymbol extends Symbol {
 
-public interface Symbol {
-  List<SyntaxToken> modifiers();
+  TypeSymbol owner();
 
-  boolean hasModifier(String modifier);
-
-  List<SyntaxToken> usages();
-
-  Scope scope();
-
-  String name();
-
-  /**
-   * @return qualified name for class, function, method or class constant, null otherwise
-   */
-  @Nullable
-  QualifiedName qualifiedName();
-
-  IdentifierTree declaration();
-
-  boolean is(Kind kind);
-
-  boolean called(String name);
-
-  Kind kind();
-
-  enum Kind {
-    VARIABLE,
-    FUNCTION,
-    PARAMETER,
-    CLASS,
-    FIELD;
-
-    public boolean hasQualifiedName() {
-      return this == CLASS || this == FUNCTION || this == FIELD;
-    }
-  }
 }

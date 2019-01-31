@@ -17,18 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.symbols;
+package org.sonar.php.tree.symbols;
 
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class QualifiedNameTest {
+public class SymbolQualifiedNameTest {
 
   @Test
   public void test() {
-    QualifiedName qualifiedName = QualifiedName.create("A", "B", "C");
-    assertThat(qualifiedName.toString()).isEqualTo("a\\b\\c");
+    SymbolQualifiedName qualifiedName1 = SymbolQualifiedName.create("A", "B", "C");
+    SymbolQualifiedName qualifiedName2 = SymbolQualifiedName.create("a", "b", "c");
+    assertThat(qualifiedName1.toString()).isEqualTo("a\\b\\c");
+    assertThat(qualifiedName1).isEqualTo(qualifiedName2);
   }
 
 

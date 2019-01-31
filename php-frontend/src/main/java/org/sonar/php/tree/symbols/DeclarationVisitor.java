@@ -19,7 +19,6 @@
  */
 package org.sonar.php.tree.symbols;
 
-import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -27,14 +26,13 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import static org.sonar.plugins.php.api.symbols.Symbol.Kind.CLASS;
 import static org.sonar.plugins.php.api.symbols.Symbol.Kind.FUNCTION;
 
 public class DeclarationVisitor extends PHPVisitorCheck {
 
   private final SymbolTableImpl symbolTable;
 
-  private QualifiedName currentNamespace = QualifiedName.GLOBAL_NAMESPACE;
+  private SymbolQualifiedName currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
   private Scope globalScope;
 
   DeclarationVisitor(SymbolTableImpl symbolTable) {
@@ -50,18 +48,18 @@ public class DeclarationVisitor extends PHPVisitorCheck {
   @Override
   public void visitNamespaceStatement(NamespaceStatementTree tree) {
     NamespaceNameTree namespaceNameTree = tree.namespaceName();
-    currentNamespace = namespaceNameTree != null ? QualifiedName.create(namespaceNameTree) : QualifiedName.GLOBAL_NAMESPACE;
+    currentNamespace = namespaceNameTree != null ? SymbolQualifiedName.create(namespaceNameTree) : SymbolQualifiedName.GLOBAL_NAMESPACE;
     super.visitNamespaceStatement(tree);
 
     boolean isBracketedNamespace = tree.openCurlyBrace() != null;
     if (isBracketedNamespace) {
-      currentNamespace = QualifiedName.GLOBAL_NAMESPACE;
+      currentNamespace = SymbolQualifiedName.GLOBAL_NAMESPACE;
     }
   }
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
-    symbolTable.declareSymbol(tree.name(), CLASS, globalScope, currentNamespace);
+    symbolTable.declareTypeSymbol(tree.name(), globalScope, currentNamespace);
     super.visitClassDeclaration(tree);
   }
 
