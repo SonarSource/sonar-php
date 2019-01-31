@@ -21,7 +21,9 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
@@ -78,8 +80,7 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
   @Override
   public void visitLiteral(LiteralTree tree) {
     if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      String value = tree.value();
-      stringLiterals.add(value.substring(1, value.length() - 1));
+      stringLiterals.add(CheckUtils.trimQuotes(tree).toLowerCase(Locale.ROOT));
     }
   }
 

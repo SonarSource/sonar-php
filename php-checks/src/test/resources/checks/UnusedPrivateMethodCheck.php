@@ -88,3 +88,14 @@ $x = new class {
   static private function n() {     // Noncompliant
   }
 };
+
+class UsageInStringLiteral {
+    private function Comparator($a, $b) {
+        return $a - $b;
+    }
+
+    function sort($arr) {
+        // function names are case insensitive
+        usort($arr, ['self', 'COMPARATOR']);
+    }
+}
