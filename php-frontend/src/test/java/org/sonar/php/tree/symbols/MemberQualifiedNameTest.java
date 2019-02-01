@@ -19,22 +19,27 @@
  */
 package org.sonar.php.tree.symbols;
 
-import org.sonar.plugins.php.api.symbols.MemberSymbol;
-import org.sonar.plugins.php.api.symbols.TypeSymbol;
-import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.junit.Test;
 
-public class MemberSymbolImpl extends SymbolImpl implements MemberSymbol {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  private final TypeSymbol owner;
+public class MemberQualifiedNameTest {
 
-  MemberSymbolImpl(IdentifierTree declaration, Kind kind, Scope scope, TypeSymbol owner) {
-    super(declaration, kind, scope, new MemberQualifiedName(owner.qualifiedName(), declaration.text()));
-    this.owner = owner;
+  @Test
+  public void test_equal() {
+    SymbolQualifiedName classA = SymbolQualifiedName.create("n", "A");
+    MemberQualifiedName name1 = new MemberQualifiedName(classA, "foo");
+    MemberQualifiedName name2 = new MemberQualifiedName(SymbolQualifiedName.create("n", "a"), "foo");
+    assertThat(name1).isEqualTo(name2);
   }
 
-  @Override
-  public TypeSymbol owner() {
-    return owner;
+  @Test
+  public void test_not_equal() {
+    SymbolQualifiedName classA = SymbolQualifiedName.create("n", "A");
+    MemberQualifiedName name1 = new MemberQualifiedName(classA, "bar");
+    MemberQualifiedName name2 = new MemberQualifiedName(SymbolQualifiedName.create("n", "a"), "foo");
+    assertThat(name1).isNotEqualTo(name2);
+    assertThat(name1).isNotEqualTo(SymbolQualifiedName.create("n", "a", "bar"));
   }
 
 }
