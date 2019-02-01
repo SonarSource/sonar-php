@@ -28,6 +28,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
 import org.sonar.php.checks.utils.namespace.QualifiedName;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -105,7 +106,7 @@ public class CommandLineArgumentCheck extends NamespaceAwareVisitor {
     for (VariableTree variableTree : tree.variables()) {
       Symbol symbol = context().symbolTable().getSymbol(variableTree);
       if (variableTree.is(Tree.Kind.VARIABLE_IDENTIFIER) && symbol != null) {
-        Scope scope = symbol.scope();
+        Scope scope = ((SymbolImpl) symbol).scope();
         String variable = ((VariableIdentifierTree) variableTree).text();
         variableSetAsGlobalInScopes
           .computeIfAbsent(scope, key -> new ArrayList<>())
@@ -126,7 +127,7 @@ public class CommandLineArgumentCheck extends NamespaceAwareVisitor {
   }
 
   private boolean isGlobalVariable(VariableIdentifierTree tree) {
-    Symbol symbol = context().symbolTable().getSymbol(tree);
+    SymbolImpl symbol = (SymbolImpl) context().symbolTable().getSymbol(tree);
     return symbol == null || isGlobalScope(symbol.scope(), tree.text());
   }
 

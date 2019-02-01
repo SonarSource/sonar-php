@@ -134,13 +134,13 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     List<Symbol> symbols = SYMBOL_MODEL.getSymbols("$global");
     assertThat(symbols).hasSize(2);
 
-    Symbol globalGlobal = symbols.get(0);
+    SymbolImpl globalGlobal = (SymbolImpl) symbols.get(0);
     assertThat(globalGlobal.scope().tree().is(Tree.Kind.COMPILATION_UNIT)).isTrue();
     assertThat(((PHPTree) globalGlobal.declaration()).getLine()).isEqualTo(4);
     assertThat(globalGlobal.usages().stream().map(st -> st.line())).containsExactly(15);
     assertThat(globalGlobal.hasModifier("global")).isTrue();
 
-    Symbol localGlobal = symbols.get(1);
+    SymbolImpl localGlobal = (SymbolImpl) symbols.get(1);
     assertThat(localGlobal.scope().tree().is(Tree.Kind.FUNCTION_DECLARATION)).isTrue();
     assertThat(localGlobal.modifiers()).isEmpty();
     assertThat(localGlobal.usages()).isEmpty();
