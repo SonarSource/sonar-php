@@ -25,6 +25,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.SyntacticEquivalence;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -97,6 +98,7 @@ public class UselessIncrementCheck extends PHPVisitorCheck {
     SyntaxToken variableToken = variableIdentifierTree.token();
     Scope currentScope = scopes.peek();
     return currentScope != null && currentScope.getSymbols(Symbol.Kind.VARIABLE).stream()
+      .map(s -> (SymbolImpl) s)
       .filter(symbol -> !(symbol.hasModifier("static") || symbol.hasModifier("global")))
       .filter(symbol -> currentScope.equals(symbol.scope()))
       .flatMap(symbol -> symbol.usages().stream())

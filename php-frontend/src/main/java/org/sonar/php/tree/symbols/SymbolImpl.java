@@ -96,7 +96,6 @@ public class SymbolImpl implements Symbol {
     return usages;
   }
 
-  @Override
   public Scope scope() {
     return scope;
   }

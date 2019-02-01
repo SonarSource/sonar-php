@@ -27,6 +27,7 @@ import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.ReadWriteUsages;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -117,7 +118,7 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
   private void checkScope(Scope scope) {
     for (Symbol symbol : scope.getSymbols(Symbol.Kind.VARIABLE)) {
       // symbol should be declared in this scope
-      if (symbol.scope().equals(scope) && !usages.isRead(symbol) && !exclusions.contains(symbol.declaration())
+      if (((SymbolImpl) symbol).scope().equals(scope) && !usages.isRead(symbol) && !exclusions.contains(symbol.declaration())
         && !raisedIssueLocations.contains(symbol.declaration())) {
 
         context().newIssue(this, symbol.declaration(), String.format(MESSAGE, symbol.name()));
