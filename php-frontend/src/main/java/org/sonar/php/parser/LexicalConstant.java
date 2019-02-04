@@ -103,8 +103,8 @@ public class LexicalConstant {
    * Heredoc / Nowdoc
    */
   public static final String NEW_LINE = "(?:\r\n?+|\n)";
-  public static final String HEREDOC = "(?s)(<<<[ \t\u000B\f]*\"?([^\r\n'\"]++)\"?" + NEW_LINE + ")(?:(.*?)" + NEW_LINE + ")?\\2";
-  public static final String NOWDOC = "(?s)<<<[ \t\u000B\f]*'([^\r\n'\"]++)'" + NEW_LINE + "(?:.*?" + NEW_LINE + ")?\\1";
+  public static final String HEREDOC = "(?s)(<<<[ \t\u000B\f]*\"?([^\r\n'\"]++)\"?" + NEW_LINE + ")(?:(.*?)" + NEW_LINE + ")?[ \t]*+\\2(?!" + IDENTIFIER_PART + ")";
+  public static final String NOWDOC = "(?s)<<<[ \t\u000B\f]*'([^\r\n'\"]++)'" + NEW_LINE + "(?:.*?" + NEW_LINE + ")?[ \t]*+\\1(?!" + IDENTIFIER_PART + ")";
 
   /**
    * String

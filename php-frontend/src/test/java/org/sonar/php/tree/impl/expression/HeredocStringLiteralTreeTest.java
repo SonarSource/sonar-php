@@ -57,6 +57,16 @@ public class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
   }
 
   @Test
+  public void flexible_heredoc_syntax() throws Exception {
+    String code = "<<<\"ABC\"\n  Hello $name!{$foo->bar}!\n  ABC";
+    HeredocStringLiteralTree tree = parseHeredoc(code);
+    assertThat(tree.openingToken().text()).isEqualTo("<<<\"ABC\"\n");
+    assertThat(tree.closingToken().text()).isEqualTo("\n  ABC");
+    assertThat(tree.expressions()).hasSize(2);
+    assertThat(tree.strings()).hasSize(3);
+  }
+
+  @Test
   public void with_double_quotes_inside() throws Exception {
     String code = "<<<ABC\nHello \"John\"!\nABC";
     HeredocStringLiteralTree tree = parseHeredoc(code);
