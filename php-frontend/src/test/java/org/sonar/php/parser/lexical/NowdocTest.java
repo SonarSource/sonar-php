@@ -24,48 +24,39 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class HeredocTest {
+public class NowdocTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.HEREDOC)
-      .matches("<<<EOF\n" +
+    assertThat(PHPLexicalGrammar.NOWDOC)
+      .matches("<<<'EOF'\n" +
         "<html> content </html>\n" +
         "\n" +
         "<p> content </p>\n" +
         "EOF")
-      .matches("<<< \"EOD\"\n"
-        + "  content\n"
+      .matches("<<<'EOD'\n"
         + "EOD")
-      .matches("<<<EOD\n"
-        + "EOD")
-      .matches("<<<EOD\n"
-        + "\n"
-        + "EOD")
-      .matches("<<<EOD\n"
+      .matches("<<<'EOD'\n"
         + "\t EOD")
-      .matches("<<<EOD\n"
+      .matches("<<<'EOD'\n"
         + "     \n"
         + "     EOD")
-      .matches("<<<EOD\n"
+      .matches("<<<'EOD'\n"
         + "     content\n"
         + "     EOD")
-      .matches("<<<EOD\n"
+      .matches("<<<'EOD'\n"
         + "\t\t content\n"
         + "\t\t EOD")
-      .matches("<<<END\n"
+      .matches("<<<'END'\n"
         + "\t\t EN\n"
         + "\t\t ENDING\n"
         + "\t\t END")
-      .notMatches("<<<END\n"
-        + "\t\t ")
-      .notMatches("<<<END\n"
-        + "\t\t ENDING")
-      .notMatches("<<<'EOD'\n"
-        + "content\n"
-        + "EOD")
-      .notMatches("<<<EOD \n"
-        + "\n"
-        + "EOD");
+      .notMatches("<<<\"EOD\"\n"
+        + "\t\t content\n"
+        + "\t\t EOD")
+      .notMatches("<<<EOD\n"
+        + "\t\t content\n"
+        + "\t\t EOD");
   }
+
 }
