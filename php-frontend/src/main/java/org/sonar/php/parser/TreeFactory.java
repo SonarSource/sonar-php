@@ -1572,15 +1572,15 @@ public class TreeFactory {
     return new ReturnTypeClauseTreeImpl(colonToken, typeTree);
   }
 
-  public SeparatedListImpl<ExpressionTree> arguments(Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> arguments) {
-    SeparatedListImpl<ExpressionTree> list;
-    if (arguments.isPresent()) {
-      list = separatedList(arguments.get().first(), arguments.get().second());
-    } else {
-      list = SeparatedListImpl.empty();
-    }
+  public SeparatedListImpl<ExpressionTree> arguments(Optional<SeparatedListImpl<ExpressionTree>> arguments) {
+    return arguments.or(SeparatedListImpl.empty());
+  }
 
-    return list;
+  public SeparatedListImpl<ExpressionTree> argumentsList(
+    ExpressionTree firstArgument,
+    Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> otherArguments,
+    Optional<InternalSyntaxToken> trailingComma) {
+    return separatedList(firstArgument, otherArguments, trailingComma.orNull());
   }
 
   public AnonymousClassTree anonymousClass(

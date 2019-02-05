@@ -1470,8 +1470,11 @@ public class PHPGrammar {
 
   public SeparatedListImpl<ExpressionTree> ARGUMENTS() {
     return b.<SeparatedListImpl<ExpressionTree>>nonterminal().is(
-      f.arguments(b.optional(f.newTuple(
-        FUNCTION_CALL_ARGUMENT(), b.zeroOrMore(f.newTuple(b.token(COMMA), FUNCTION_CALL_ARGUMENT())))))
+      f.arguments(b.optional(f.argumentsList(
+        FUNCTION_CALL_ARGUMENT(),
+        b.zeroOrMore(f.newTuple(b.token(COMMA), FUNCTION_CALL_ARGUMENT())),
+        // PHP 7.3: last argument can be suffixed with an extra comma
+        b.optional(b.token(COMMA)))))
     );
   }
 

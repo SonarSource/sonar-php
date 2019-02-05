@@ -19,10 +19,10 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class FunctionCallParameterListTest {
 
@@ -34,7 +34,11 @@ public class FunctionCallParameterListTest {
       .matches("(& $p)")
       .matches("(...$p)")
       .matches("(yield $a)")
-      .matches("($p1, & $p2, ...$p3, yield $p4)");
+      .matches("($p1, & $p2, ...$p3, yield $p4)")
+      .matches("('title', 'body','comments',)")
+      .notMatches("(,)")
+      .notMatches("('function','bar',,)")
+      .notMatches("(,'function','bar')");
   }
 
 }
