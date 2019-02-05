@@ -1350,6 +1350,7 @@ public class PHPGrammar {
               EXPRESSION(),
               b.token(DOUBLEARROW))),
           b.firstOf(
+            REFERENCE_VARIABLE(),
             MEMBER_EXPRESSION(),
             LIST_EXPRESSION(),
             ARRAY_ASSIGNMENT_PATTERN())));
@@ -1422,6 +1423,7 @@ public class PHPGrammar {
     return b.<AssignmentExpressionTree>nonterminal(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION).is(b.firstOf(
       f.assignmentExpression(MEMBER_EXPRESSION(), ASSIGNMENT_OPERATOR(), CONDITIONAL_EXPR()),
       ASSIGNMENT_BY_REFERENCE(),
+      LIST_EXPRESSION_ASSIGNMENT(),
       ARRAY_DESTRUCTURING_ASSIGNMENT()
     ));
   }
@@ -1652,7 +1654,6 @@ public class PHPGrammar {
           MEMBER_EXPRESSION(),
           NEW_EXPRESSION(),
           EXIT_EXPRESSION(),
-          LIST_EXPRESSION_ASSIGNMENT(),
           INTERNAL_FUNCTION()),
         b.optional(b.firstOf(
           b.token(INC),

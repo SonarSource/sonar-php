@@ -24,48 +24,19 @@ import org.sonar.php.parser.PHPLexicalGrammar;
 
 import static org.sonar.php.utils.Assertions.assertThat;
 
-public class AssignmentExpressionTest {
+public class ArrayDestructuringAssignmentTest {
 
   @Test
   public void test() {
-    assertThat(PHPLexicalGrammar.ASSIGNMENT_EXPRESSION)
-      .matches("$a = $b")
-      .matches("$a **= $b")
-      .matches("$a *= $b")
-      .matches("$a /= $b")
-      .matches("$a %= $b")
-      .matches("$a += $b")
-      .matches("$a -= $b")
-      .matches("$a <<= $b")
-      .matches("$a >>= $b")
-      .matches("$a &= $b")
-      .matches("$a ^= $b")
-      .matches("$a |= $b")
-      .matches("$a -= $b")
-      .matches("$a -= $b")
-
-      .matches("$a =& $b")
-      .matches("$a =& new X")
-      .matches("$a =& myFunction()")
-
-      .matches("$array = [1, 2]")
-      .matches("$array = [1, 2, 3, [3, 4]]")
-      .matches("$a = ['one' => 1, 'two' => 2]")
+    assertThat(PHPLexicalGrammar.ARRAY_DESTRUCTURING_ASSIGNMENT)
       .matches("[$a, $b] = $array")
-      .matches("list($a, $b) = $array")
       .matches("[$a, &$b] = $array")
-      .matches("list($a, &$b) = $array")
-      .matches("$array = [1, 2, 3, [3, 4]]")
-
-      .notMatches("[$a, &&$b] = $array")
-      .notMatches("[$a, &] = $array")
-      .notMatches("[] = $array")
-      .notMatches("list($a, &&$b) = $array")
-      .notMatches("list($a, &) = $array")
-
-      .notMatches("$a =& $b * $c")
-
-      .matches("$var = function () {}")
-      .matches("$a = $b = 1");
+      .matches("[&$a, $b,, [&$c, $d]] = $array")
+      .matches("[&$one, [$two, &$three]] = $a")
+      .matches("['one' => &$one, 'two' => $two] = $a")
+      .notMatches("$array = [1, 2]")
+      .notMatches("list($a, &$b) = $array")
+    ;
   }
+
 }

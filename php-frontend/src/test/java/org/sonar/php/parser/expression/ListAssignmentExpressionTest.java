@@ -29,6 +29,11 @@ public class ListAssignmentExpressionTest {
   @Test
   public void test() {
     assertThat(PHPLexicalGrammar.LIST_EXPRESSION_ASSIGNMENT)
-      .matches("list ($a) = array(1)");
+      .matches("list ($a) = array(1)")
+      .matches("list($a, &$b) = $array")
+      .matches("list(&$a, $b,, list(&$c, $d)) = $array")
+      .matches("list(&$one, list($two, &$three)) = $a")
+      .matches("list(&$one, [$two, &$three]) = $a")
+      .notMatches("$array = [1, 2]");
   }
 }
