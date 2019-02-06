@@ -19,9 +19,11 @@
  */
 package org.sonar.php.tree.impl.expression;
 
+import java.util.Optional;
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,9 +39,13 @@ public class ArrayAssignmentPatternTreeTest extends PHPTreeModelTest {
     assertThat(tree.openBracketToken().text()).isEqualTo("[");
     assertThat(tree.elements()).hasSize(3);
     assertThat(tree.separators()).hasSize(2);
-    assertThat(expressionToString(tree.elements().get(0).get())).isEqualTo("$a");
+    Optional<ArrayAssignmentPatternElementTree> firstElement = tree.elements().get(0);
+    assertThat(firstElement).isPresent();
+    assertThat(expressionToString(firstElement.get())).isEqualTo("$a");
     assertThat(tree.elements().get(1)).isEmpty();
-    assertThat(expressionToString(tree.elements().get(2).get())).isEqualTo("$b");
+    Optional<ArrayAssignmentPatternElementTree> thirdElement = tree.elements().get(2);
+    assertThat(thirdElement).isPresent();
+    assertThat(expressionToString(thirdElement.get())).isEqualTo("$b");
     assertThat(tree.closeBracketToken().text()).isEqualTo("]");
   }
 

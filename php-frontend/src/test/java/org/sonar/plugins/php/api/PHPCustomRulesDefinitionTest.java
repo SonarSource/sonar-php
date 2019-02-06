@@ -44,6 +44,7 @@ public class PHPCustomRulesDefinitionTest {
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository(REPOSITORY_KEY);
 
+    assertThat(repository).isNotNull();
     assertThat(repository.name()).isEqualTo(REPOSITORY_NAME);
     assertThat(repository.language()).isEqualTo(PHPCustomRulesDefinition.LANGUAGE_KEY);
     assertThat(repository.rules()).hasSize(1);
@@ -57,6 +58,7 @@ public class PHPCustomRulesDefinitionTest {
     assertThat(customRule.params()).hasSize(1);
 
     RulesDefinition.Param param = customRule.param("customParam");
+    assertThat(param).isNotNull();
     assertThat(param.key()).isEqualTo("customParam");
     assertThat(param.description()).isEqualTo("Custom parameter");
     assertThat(param.defaultValue()).isEqualTo("value");
@@ -67,7 +69,7 @@ public class PHPCustomRulesDefinitionTest {
     name = RULE_NAME,
     description = "desc",
     tags = {"mybug"})
-  public class MyCustomRule extends PHPVisitorCheck {
+  private static class MyCustomRule extends PHPVisitorCheck {
     @RuleProperty(
       key = "customParam",
       description = "Custom parameter",
@@ -75,7 +77,7 @@ public class PHPCustomRulesDefinitionTest {
     public String customParam = "value";
   }
 
-  public static class MyCustomPhpRulesDefinition extends PHPCustomRulesDefinition {
+  private static class MyCustomPhpRulesDefinition extends PHPCustomRulesDefinition {
 
     @Override
     public String repositoryName() {

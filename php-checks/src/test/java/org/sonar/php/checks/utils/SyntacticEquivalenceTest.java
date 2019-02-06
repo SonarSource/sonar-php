@@ -21,6 +21,8 @@ package org.sonar.php.checks.utils;
 
 import com.sonar.sslr.api.typed.ActionParser;
 import com.sonarsource.checks.coverage.UtilityClass;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.parser.PHPParserBuilder;
@@ -50,11 +52,12 @@ public class SyntacticEquivalenceTest {
     assertThat(areSyntacticallyEquivalent("switch ($a) {case 1: case2:}", "switch ($a) {case 1:}")).isFalse();
   }
 
-  private boolean areSyntacticallyEquivalent(String toParse1, String toParse2) throws Exception {
+  private boolean areSyntacticallyEquivalent(@Nullable String toParse1, @Nullable String toParse2) {
     return SyntacticEquivalence.areSyntacticallyEquivalent(parse(toParse1), parse(toParse2));
   }
 
-  private Tree parse(String toParse) {
+  @CheckForNull
+  private Tree parse(@Nullable String toParse) {
     return toParse == null ? null : parser.parse(toParse);
   }
 

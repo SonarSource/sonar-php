@@ -24,6 +24,7 @@ import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
@@ -50,13 +51,14 @@ public class PHPAnalyzer {
 
   private final ActionParser<Tree> parser;
   private final ImmutableList<PHPCheck> checks;
+  @Nullable
   private final File workingDir;
 
   private CompilationUnitTree currentFileTree;
   private PhpFile currentFile;
   private SymbolTable currentFileSymbolTable;
 
-  public PHPAnalyzer(ImmutableList<PHPCheck> checks, File workingDir) {
+  public PHPAnalyzer(ImmutableList<PHPCheck> checks, @Nullable File workingDir) {
     this.workingDir = workingDir;
     this.parser = PHPParserBuilder.createParser();
     this.checks = checks;

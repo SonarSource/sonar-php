@@ -45,13 +45,13 @@ public class SymbolChecker {
    */
   public void checkSymbolExistence(SensorContextTester context, int line, int column) {
     Collection<TextRange> foundReferences = context.referencesForSymbolAt(componentKey, line, column);
-    String message = "a symbol is expected to exist and have references at line " + line + " and column " + column;
+    String message = String.format("a symbol is expected to exist and have references at line %d and column %d", line, column);
     assertThat(foundReferences).as(message).isNotNull();
   }
 
   public void checkNoSymbolExists(SensorContextTester context, int line, int column) {
     Collection<TextRange> foundReferences = context.referencesForSymbolAt(componentKey, line, column);
-    String message = "no symbol is expected to exist at line " + line + " and column " + column;
+    String message = String.format("no symbol is expected to exist at line %d and column %d", line, column);
     assertThat(foundReferences).as(message).isNull();
   }
 
@@ -63,7 +63,8 @@ public class SymbolChecker {
    */
   public void checkSymbolReferences(SensorContextTester context, int line, int column, List<? extends TextRange> referenceRanges) {
     Collection<TextRange> foundReferences = context.referencesForSymbolAt(componentKey, line, column);
-    String message = "number of found references to the symbol located at line " + line + " and column " + column;
+    assertThat(foundReferences).isNotNull();
+    String message = String.format("number of found references to the symbol located at line %d and column %d", line, column);
     assertThat(foundReferences.size()).as(message).isEqualTo(referenceRanges.size());
     for (TextRange referenceRange : referenceRanges) {
       assertThat(foundReferences).extracting("start", "end").contains(tuple(referenceRange.start(), referenceRange.end()));

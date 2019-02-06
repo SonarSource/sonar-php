@@ -20,6 +20,7 @@
 package org.sonar.php.highlighter;
 
 import java.util.List;
+import javax.annotation.Nullable;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
@@ -55,11 +56,11 @@ public class HighlightChecker {
   /**
    * Checks the highlighting of one column. The first column of a line has index 0.
    */
-  public void check(SensorContextTester context, int line, int column, TypeOfText expectedTypeOfText) {
+  public void check(SensorContextTester context, int line, int column, @Nullable TypeOfText expectedTypeOfText) {
     checkInternal(context, line, column, "", expectedTypeOfText);
   }
 
-  private void checkInternal(SensorContextTester context, int line, int column, String messageComplement, TypeOfText expectedTypeOfText) {
+  private void checkInternal(SensorContextTester context, int line, int column, String messageComplement, @Nullable TypeOfText expectedTypeOfText) {
     List<TypeOfText> foundTypeOfTexts = context.highlightingTypeAt(componentKey, line, column);
 
     int expectedNumberOfTypeOfText = expectedTypeOfText == null ? 0 : 1;

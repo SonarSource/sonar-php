@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 import org.junit.Test;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
@@ -71,7 +72,9 @@ public class PhpIniSensorTest {
     assertThat(issue.ruleKey().rule()).isEqualTo("rule1");
     assertThat(issue.primaryLocation().inputComponent()).isEqualTo(file1);
     assertThat(issue.primaryLocation().message()).isEqualTo("message1");
-    assertThat(issue.primaryLocation().textRange().start().line()).isEqualTo(2);
+    TextRange textRange = issue.primaryLocation().textRange();
+    assertThat(textRange).isNotNull();
+    assertThat(textRange.start().line()).isEqualTo(2);
   }
 
   @Test
@@ -83,16 +86,16 @@ public class PhpIniSensorTest {
     assertThat(logTester.logs()).contains("Unable to parse file: " + file.absolutePath());
   }
 
-  private DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {
+  private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {
     DefaultInputFile file1 = TestInputFileBuilder.create("moduleKey", baseDir, new File(baseDir, "php.ini"))
       .setCharset(StandardCharsets.UTF_8)
-      .initMetadata(Files.toString(new File(baseDir, "php.ini"), StandardCharsets.UTF_8))
+      .initMetadata(Files.asCharSource(new File(baseDir, "php.ini"), StandardCharsets.UTF_8).read())
       .build();
     context.fileSystem().add(file1);
     return file1;
   }
 
-  private Checks<PhpIniCheck> checks() {
+  private static Checks<PhpIniCheck> checks() {
     ActiveRules activeRules = new ActiveRulesBuilder()
       .create(RuleKey.of("repo1", "rule1"))
       .activate()
@@ -101,8 +104,8 @@ public class PhpIniSensorTest {
     return checkFactory.<PhpIniCheck>create("repo1").addAnnotatedChecks(MyCheck.class);
   }
 
-  private PhpIniSensor sensor() {
-    return new PhpIniSensor(null);
+  private static PhpIniSensor sensor() {
+    return new PhpIniSensor(new CheckFactory(new ActiveRulesBuilder().build()));
   }
 
   @Rule(key = "rule1")
