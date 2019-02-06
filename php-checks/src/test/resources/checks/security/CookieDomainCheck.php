@@ -1,11 +1,14 @@
 <?php
 
-session_set_cookie_params(3600, "/~path/", ""); // Noncompliant
-Session_Set_Cookie_Params(3600, "/~path/", ""); // Noncompliant
-setcookie("TestCookie", $value, time()+3600, "/~path/", "", 1); // Noncompliant
+session_set_cookie_params(3600, "/~path/", ".com"); // Noncompliant
+Session_Set_Cookie_Params(3600, "/~path/", ".com"); // Noncompliant
+setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant
 
-setcookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant {{Specify at least a second-level cookie domain.}}
+setCookie("TestCookie", $value, time()+3600, "/~path/", ".com", 1); // Noncompliant {{Specify at least a second-level cookie domain.}}
 //                                                      ^^^^^^
+
+setcookie("unique2u", "SESSION-123456678", null, null, null, null, false); // Compliant - blank value is allowed
+
 session_set_cookie_params(3600, "/~path/", ".com"); // Noncompliant
 
 $domainOne = ".com";  // Noncompliant
@@ -28,9 +31,9 @@ session_set_cookie_params(3600, "/~path/", $domain3);
 
 // special values
 session_set_cookie_params(3600, "/~path/", "................."); // Noncompliant
-session_set_cookie_params(3600, "/~path/", ""); // Noncompliant
+session_set_cookie_params(3600, "/~path/", ""); // Compliant
 session_set_cookie_params(3600, "/~path/", "-1"); // Noncompliant
-session_set_cookie_params(3600, "/~path/", NULL); // Noncompliant
+session_set_cookie_params(3600, "/~path/", NULL); // Compliant
 
 // no domain parameter
 setcookie("TestCookie");
