@@ -29,6 +29,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 
 @Rule(key = PHPDeprecatedFunctionUsageCheck.KEY)
 public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
@@ -72,6 +73,9 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final ImmutableSet<String> LOCALE_CATEGORY_CONSTANTS = ImmutableSet.of(
     "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
 
+  private static final ImmutableSet<String> DEPRECATED_CASE_SENSITIVE_CONSTANTS = ImmutableSet.of(
+    "FILTER_FLAG_SCHEME_REQUIRED", "FILTER_FLAG_HOST_REQUIRED");
+
   @Override
   protected ImmutableSet<String> functionNames() {
     return ImmutableSet.<String>builder()
@@ -81,6 +85,14 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       .add(ASSERT_FUNCTION)
       .add(DEFINE_FUNCTION)
       .build();
+  }
+
+  @Override
+  public void visitNameIdentifier(NameIdentifierTree tree) {
+    if (DEPRECATED_CASE_SENSITIVE_CONSTANTS.contains(tree.text())) {
+      context().newIssue(this, tree, "Do not use this deprecated " + tree.text() + " constant.");
+    }
+    super.visitNameIdentifier(tree);
   }
 
   @Override

@@ -47,3 +47,7 @@ namespace A {
 define('BAR', 21);        // OK
 define('BAR', 21, false); // OK
 define('BAR', 21, null);
+
+$a = FILTER_FLAG_SCHEME_REQUIRED; // Noncompliant {{Do not use this deprecated FILTER_FLAG_SCHEME_REQUIRED constant.}}
+$a = FILTER_FLAG_HOST_REQUIRED; // Noncompliant
+$a = ANY_CONSTANT;
