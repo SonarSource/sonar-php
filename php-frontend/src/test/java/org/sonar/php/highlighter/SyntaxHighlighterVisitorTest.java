@@ -23,6 +23,7 @@ import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import javax.annotation.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -62,7 +63,7 @@ public class SyntaxHighlighterVisitorTest {
   public void empty_input() throws Exception {
     highlight("<?php ");
 
-    assertThat(context.highlightingTypeAt("moduleKey:" + file.getName(), 1, 0)).isEmpty();
+    assertThat(context.highlightingTypeAt(componentKey(), 1, 0)).isEmpty();
   }
 
   @Test
@@ -172,17 +173,19 @@ public class SyntaxHighlighterVisitorTest {
    * Checks the highlighting of a range of columns. The first column of a line has index 0.
    * The range is the columns of the token.
    */
-  private void checkOnRange(int line, int firstColumn, int length, TypeOfText expectedTypeOfText) {
-    String componentKey = "moduleKey:" + file.getName();
-    new HighlightChecker(componentKey).checkOnRange(context, line, firstColumn, length, expectedTypeOfText);
+  private void checkOnRange(int line, int firstColumn, int length, @Nullable TypeOfText expectedTypeOfText) {
+    new HighlightChecker(componentKey()).checkOnRange(context, line, firstColumn, length, expectedTypeOfText);
   }
 
   /**
    * Checks the highlighting of one column. The first column of a line has index 0.
    */
-  private void check(int line, int column, TypeOfText expectedTypeOfText) {
-    String componentKey = "moduleKey:" + file.getName();
-    new HighlightChecker(componentKey).check(context, line, column, expectedTypeOfText);
+  private void check(int line, int column, @Nullable TypeOfText expectedTypeOfText) {
+    new HighlightChecker(componentKey()).check(context, line, column, expectedTypeOfText);
+  }
+
+  private String componentKey() {
+    return "moduleKey:" + file.getName();
   }
 
 }

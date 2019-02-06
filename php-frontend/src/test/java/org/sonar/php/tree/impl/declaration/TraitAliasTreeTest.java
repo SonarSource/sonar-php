@@ -19,13 +19,13 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.statement.TraitAliasTree;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TraitAliasTreeTest extends PHPTreeModelTest {
 
@@ -53,7 +53,7 @@ public class TraitAliasTreeTest extends PHPTreeModelTest {
     assertThat(tree.alias().text()).isEqualTo("method2");
   }
 
-  private TraitAliasTree alias(String toParse) throws Exception {
+  private TraitAliasTree alias(String toParse) {
     TraitAliasTree tree = parse(toParse, PHPLexicalGrammar.TRAIT_ALIAS);
     assertThat(tree.is(Kind.TRAIT_ALIAS)).isTrue();
     assertThat(tree.asToken().text()).isEqualTo("as");

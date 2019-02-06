@@ -20,14 +20,13 @@
 package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.TestUtils;
 import org.sonar.plugins.php.api.tests.PHPCheckTest;
-import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PHPCheck;
-
-import java.util.List;
+import org.sonar.plugins.php.api.visitors.PhpIssue;
 
 public class CommentedOutCodeCheckTest {
 
@@ -44,7 +43,7 @@ public class CommentedOutCodeCheckTest {
     PHPCheckTest.check(CHECK, TestUtils.getCheckFile("CommentedOutCodeCheck.php"), issues);
   }
 
-  private PhpIssue newIssue(int line) {
+  private static PhpIssue newIssue(int line) {
     String message = "Remove this commented out code.";
     return new LegacyIssue(CHECK, message).line(line);
   }

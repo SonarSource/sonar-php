@@ -20,6 +20,7 @@
 package org.sonar.php.checks.utils.namespace;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.php.tree.impl.SeparatedListImpl;
@@ -104,7 +105,7 @@ public class QualifiedNameTest {
   }
 
   private static InternalSyntaxToken token(String text) {
-    return new InternalSyntaxToken(0, 0, text, null, 0, false);
+    return new InternalSyntaxToken(0, 0, text, Collections.emptyList(), 0, false);
   }
 
 }

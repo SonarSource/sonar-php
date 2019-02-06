@@ -38,7 +38,7 @@ public class HighlightChecker {
    * Checks the highlighting of a range of columns. The first column of a line has index 0.
    * The range is the columns of the token.
    */
-  public void checkOnRange(SensorContextTester context, int line, int firstColumn, int length, TypeOfText expectedTypeOfText) {
+  public void checkOnRange(SensorContextTester context, int line, int firstColumn, int length, @Nullable TypeOfText expectedTypeOfText) {
     // check that every column of the token is highlighted (and with the expected type)
     for (int column = firstColumn; column < firstColumn + length; column++) {
       checkInternal(context, line, column, "", expectedTypeOfText);

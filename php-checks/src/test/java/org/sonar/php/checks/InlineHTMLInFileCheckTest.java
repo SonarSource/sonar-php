@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.visitors.FileIssue;
 public class InlineHTMLInFileCheckTest {
 
   private InlineHTMLInFileCheck check = new InlineHTMLInFileCheck();
-  private final String TEST_DIR = "InlineHTMLInFileCheck/";
+  private static final String TEST_DIR = "InlineHTMLInFileCheck/";
 
   @Test
   public void ok() throws Exception {

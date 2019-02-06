@@ -48,7 +48,7 @@ public class TodoTagPresenceCheckTest {
     PHPCheckTest.check(CHECK, file, issues);
   }
 
-  private PhpIssue newIssue(int line) {
+  private static PhpIssue newIssue(int line) {
     String message = "Complete the task associated to this \"TODO\" comment.";
     return new LegacyIssue(CHECK, message).line(line);
   }

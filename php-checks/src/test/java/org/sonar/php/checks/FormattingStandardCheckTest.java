@@ -22,7 +22,7 @@ package org.sonar.php.checks;
 import java.lang.reflect.Field;
 import org.apache.commons.lang.ArrayUtils;
 
-abstract public class FormattingStandardCheckTest {
+public abstract class FormattingStandardCheckTest {
 
   protected FormattingStandardCheck check = new FormattingStandardCheck();
   protected static final String TEST_DIR = "formattingCheck/";

@@ -25,7 +25,7 @@ import org.sonar.plugins.php.CheckVerifier;
 
 public class ControlStructureSpacingTest extends FormattingStandardCheckTest {
 
-  private static String TEST_FILE = TEST_DIR + "ControlStructureSpacingCheck.php";
+  private static final String TEST_FILE = TEST_DIR + "ControlStructureSpacingCheck.php";
 
   @Test
   public void defaultValue() throws IllegalAccessException {

@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TreeValuesTest {
 
-  static ActionParser<Tree> PARSER = PHPParserBuilder.createParser();
+  static final ActionParser<Tree> PARSER = PHPParserBuilder.createParser();
 
   @Test
   public void lookup() {

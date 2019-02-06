@@ -48,7 +48,7 @@ public class FixmeTagPresenceCheckTest {
     PHPCheckTest.check(CHECK, file, issues);
   }
 
-  private PhpIssue newIssue(int line) {
+  private static PhpIssue newIssue(int line) {
     String message = "Take the required action to fix the issue indicated by this \"FIXME\" comment.";
     return new LegacyIssue(CHECK, message).line(line);
   }

@@ -30,6 +30,7 @@ import java.util.List;
 
 public class FileHeaderCheckTest {
 
+  private static final String FILE_2 = "FileHeaderCheck/file2.php";
   private FileHeaderCheck check = new FileHeaderCheck();
 
   @Test
@@ -39,29 +40,29 @@ public class FileHeaderCheckTest {
 
     check.headerFormat = "// copyright 2005";
     PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file1.php"), noIssue);
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_2), issue);
     PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file4.php"), noIssue);
 
     check.headerFormat = "// copyright 20\\d\\d";
     PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file1.php"), issue);
 
     check.headerFormat = "// copyright 2012";
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_2), noIssue);
 
     check.headerFormat = "// copyright 2012\n// foo";
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_2), noIssue);
 
     check.headerFormat = "// copyright 2012\r\n// foo";
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_2), noIssue);
 
     check.headerFormat = "// copyright 2012\r// foo";
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), noIssue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_2), noIssue);
 
     check.headerFormat = "// copyright 2012\r\r// foo";
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_2), issue);
 
     check.headerFormat = "// copyright 2012\n// foo\n\n\n\n\n\n\n\n\n\ngfoo";
-    PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file2.php"), issue);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_2), issue);
 
     check.headerFormat = "/*foo http://www.example.org*/";
     PHPCheckTest.check(check, TestUtils.getCheckFile("FileHeaderCheck/file3.php"), noIssue);

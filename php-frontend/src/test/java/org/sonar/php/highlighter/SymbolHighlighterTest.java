@@ -105,8 +105,10 @@ public class SymbolHighlighterTest {
     // there are 3 symbols: global $b, local $b, $f
     checkSymbolExistence(1, 15); // $f
 
-    checkSymbolReferences(1, 6, ImmutableList.of(textRange(1, 35, 1, 37))); // global $b
-    checkSymbolReferences(1, 35, ImmutableList.of(textRange(1, 46, 1, 48))); // local $b
+    // global $b
+    checkSymbolReferences(1, 6, ImmutableList.of(textRange(1, 35, 1, 37)));
+    // local $b
+    checkSymbolReferences(1, 35, ImmutableList.of(textRange(1, 46, 1, 48)));
   }
 
   private void highlight(String s) {
@@ -125,23 +127,24 @@ public class SymbolHighlighterTest {
     newSymbolTable.save();
   }
 
-  private TextRange textRange(int startLine, int startColumn, int endLine, int endColumn) {
+  private static TextRange textRange(int startLine, int startColumn, int endLine, int endColumn) {
     return new DefaultTextRange(new DefaultTextPointer(startLine, startColumn), new DefaultTextPointer(endLine, endColumn));
   }
 
   private void checkSymbolExistence(int line, int column) {
-    String componentKey = "moduleKey:" + file.getName();
-    new SymbolChecker(componentKey).checkSymbolExistence(context, line, column);
+    new SymbolChecker(componentKey()).checkSymbolExistence(context, line, column);
   }
 
   private void checkNoSymbolExists(int line, int column) {
-    String componentKey = "moduleKey:" + file.getName();
-    new SymbolChecker(componentKey).checkNoSymbolExists(context, line, column);
+    new SymbolChecker(componentKey()).checkNoSymbolExists(context, line, column);
   }
 
   private void checkSymbolReferences(int line, int column, List<? extends TextRange> referenceRanges) {
-    String componentKey = "moduleKey:" + file.getName();
-    new SymbolChecker(componentKey).checkSymbolReferences(context, line, column, referenceRanges);
+    new SymbolChecker(componentKey()).checkSymbolReferences(context, line, column, referenceRanges);
+  }
+
+  private String componentKey() {
+    return "moduleKey:" + file.getName();
   }
 
 }

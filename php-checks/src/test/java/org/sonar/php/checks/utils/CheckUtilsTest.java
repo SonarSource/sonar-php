@@ -263,7 +263,7 @@ public class CheckUtilsTest {
         .allMatch(CheckUtils::isNullOrEmptyString)).isFalse();
   }
 
-  private Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
+  private static Stream<LiteralTree> createLiterals(Tree.Kind kind, String... values) {
     return Arrays.stream(values).map(value -> new LiteralTreeImpl(kind,
       new InternalSyntaxToken(1, 1, value, Collections.emptyList(), 0, false)));
   }

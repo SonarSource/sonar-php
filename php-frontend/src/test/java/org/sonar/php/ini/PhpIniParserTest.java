@@ -172,7 +172,7 @@ public class PhpIniParserTest {
     assertThat(phpIniFile.directivesForName("x")).isEmpty();
   }
 
-  private void checkToken(SyntaxToken token, String text, int startLine, int startColumn, int endLine, int endColumn) {
+  private static void checkToken(SyntaxToken token, String text, int startLine, int startColumn, int endLine, int endColumn) {
     assertThat(token.text()).isEqualTo(text);
     assertThat(token.line()).isEqualTo(startLine);
     assertThat(token.column()).isEqualTo(startColumn);
@@ -180,18 +180,18 @@ public class PhpIniParserTest {
     assertThat(token.endColumn()).isEqualTo(endColumn);
   }
 
-  private void checkSingleDirective(String toParse, String expectedName, String expectedValue) {
+  private static void checkSingleDirective(String toParse, String expectedName, String expectedValue) {
     PhpIniFile file = parse(toParse);
     assertThat(file.directives()).hasSize(1);
     Directive directive = file.directives().get(0);
     checkDirective(directive, expectedName, expectedValue);
   }
 
-  private PhpIniFile parse(String toParse) {
+  private static PhpIniFile parse(String toParse) {
     return new PhpIniParser().parse(toParse);
   }
 
-  private void checkDirective(Directive directive, String expectedName, String expectedValue) {
+  private static void checkDirective(Directive directive, String expectedName, String expectedValue) {
     assertThat(directive.name().text()).isEqualTo(expectedName);
     assertThat(directive.value().text()).isEqualTo(expectedValue);
   }
