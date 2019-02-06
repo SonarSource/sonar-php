@@ -41,3 +41,9 @@ namespace A {
   call_user_method();             /* Noncompliant */ // FIXME (SONARPHP-552) False-Positive
   \call_user_method();            // Noncompliant
 }
+
+  define('BAR', 21, true);  // Noncompliant {{Define this constant as case sensitive.}}
+//^^^^^^^^^^^^^^^^^^^^^^^
+define('BAR', 21);        // OK
+define('BAR', 21, false); // OK
+define('BAR', 21, null);
