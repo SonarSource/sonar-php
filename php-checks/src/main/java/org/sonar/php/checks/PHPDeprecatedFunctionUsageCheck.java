@@ -68,6 +68,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final String SET_LOCALE_FUNCTION = "setlocale";
   private static final String PARSE_STR_FUNCTION = "parse_str";
   private static final String ASSERT_FUNCTION = "assert";
+  private static final String DEFINE_FUNCTION = "define";
   private static final ImmutableSet<String> LOCALE_CATEGORY_CONSTANTS = ImmutableSet.of(
     "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
 
@@ -78,6 +79,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       .add(SET_LOCALE_FUNCTION)
       .add(PARSE_STR_FUNCTION)
       .add(ASSERT_FUNCTION)
+      .add(DEFINE_FUNCTION)
       .build();
   }
 
@@ -93,6 +95,9 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
     } else if (ASSERT_FUNCTION.equalsIgnoreCase(functionName)) {
       checkAssertArguments(tree);
+
+    } else if (DEFINE_FUNCTION.equalsIgnoreCase(functionName)) {
+      checkDefineArguments(tree);
 
     } else {
       context().newIssue(this, tree.callee(), buildMessage(functionName));
@@ -135,6 +140,16 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     SeparatedList<ExpressionTree> arguments = tree.arguments();
     if (!arguments.isEmpty() && arguments.get(0).is(Kind.REGULAR_STRING_LITERAL, Kind.EXPANDABLE_STRING_LITERAL)) {
       context().newIssue(this, tree, "Change this call to \"assert\" to not pass a string argument.");
+    }
+  }
+
+  private void checkDefineArguments(FunctionCallTree tree) {
+    SeparatedList<ExpressionTree> arguments = tree.arguments();
+    if (arguments.size() == 3) {
+      ExpressionTree caseInsensitiveArgument = arguments.get(2);
+      if (caseInsensitiveArgument.is(Kind.BOOLEAN_LITERAL) && "true".equalsIgnoreCase(((LiteralTree) caseInsensitiveArgument).value())) {
+        context().newIssue(this, tree, "Define this constant as case sensitive.");
+      }
     }
   }
 
