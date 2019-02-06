@@ -75,7 +75,7 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
     }
     ExpressionTree argumentVariable = args.get(domainIndex);
     ExpressionTree domainValue = getAssignedValue(argumentVariable);
-    if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL, Tree.Kind.NULL_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
+    if (domainValue.is(Tree.Kind.REGULAR_STRING_LITERAL) && isFirstLevelDomain(((LiteralTree) domainValue).value())) {
       if (argumentVariable == domainValue) {
         context().newIssue(this, domainValue, MESSAGE);
       } else {
@@ -100,7 +100,8 @@ public class CookieDomainCheck extends FunctionUsageCheck implements PhpIniCheck
   }
 
   private static boolean isFirstLevelDomain(String domain) {
-    return Arrays.stream(CheckUtils.trimQuotes(domain).split("\\."))
+    String trimedFromQuotes = CheckUtils.trimQuotes(domain);
+    return !trimedFromQuotes.isEmpty() && Arrays.stream(trimedFromQuotes.split("\\."))
         .map(String::trim)
         .filter(s -> !s.isEmpty())
         .count() < 2;
