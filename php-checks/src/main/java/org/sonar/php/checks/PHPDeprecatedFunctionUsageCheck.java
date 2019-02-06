@@ -64,6 +64,20 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     .put("create_function", "")
     .put("gmp_random", "gmp_random_bits")
     .put("each", "")
+    .put("mbregex_encoding", "mb_regex_encoding")
+    .put("mbereg", "mb_ereg")
+    .put("mberegi", "mb_eregi")
+    .put("mbereg_replace", "mb_ereg_replace")
+    .put("mberegi_replace", "mb_eregi_replace")
+    .put("mbsplit", "mb_split")
+    .put("mbereg_match", "mb_ereg_match")
+    .put("mbereg_search", "mb_ereg_search")
+    .put("mbereg_search_pos", "mb_ereg_search_pos")
+    .put("mbereg_search_regs", "mb_ereg_search_regs")
+    .put("mbereg_search_init", "mb_ereg_search_init")
+    .put("mbereg_search_getregs", "mb_ereg_search_getregs")
+    .put("mbereg_search_getpos", "mb_ereg_search_getpos")
+    .put("mbereg_search_setpos", "mb_ereg_search_setpos")
     .build();
 
   private static final String SET_LOCALE_FUNCTION = "setlocale";
