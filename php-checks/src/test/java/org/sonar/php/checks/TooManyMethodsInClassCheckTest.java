@@ -30,17 +30,17 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 public class TooManyMethodsInClassCheckTest {
 
   private TooManyMethodsInClassCheck check = new TooManyMethodsInClassCheck();
-  private static final String fileName= "TooManyMethodsInClassCheck.php";
+  private static final String FILE_NAME= "TooManyMethodsInClassCheck.php";
 
   @Test
   public void defaultValue() throws Exception  {
-    CheckVerifier.verifyNoIssueIgnoringExpected(check, fileName);
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
   public void custom_maximum_method_threshold() throws Exception {
     check.maximumMethodThreshold = 2;
-    CheckVerifier.verify(check, fileName);
+    CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
@@ -52,7 +52,7 @@ public class TooManyMethodsInClassCheckTest {
       new LegacyIssue(check, "Class \"I\" has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(3),
       new LegacyIssue(check, "This anonymous class has 3 methods, which is greater than 2 authorized. Split it into smaller classes.").line(35)
     );
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }
 
 }

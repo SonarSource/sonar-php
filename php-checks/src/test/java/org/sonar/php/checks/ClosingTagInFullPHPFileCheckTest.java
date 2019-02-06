@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tests.PHPCheckTest;
 public class ClosingTagInFullPHPFileCheckTest {
 
   private ClosingTagInFullPHPFileCheck check = new ClosingTagInFullPHPFileCheck();
-  private final String TEST_DIR = "ClosingTagInFullPHPFileCheck/";
+  private static final String TEST_DIR = "ClosingTagInFullPHPFileCheck/";
 
   @Test
   public void ok() throws Exception {

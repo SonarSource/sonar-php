@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.tests.PHPCheckTest;
 public class CharacterBeforeOpeningPHPTagCheckTest {
 
   private CharacterBeforeOpeningPHPTagCheck check = new CharacterBeforeOpeningPHPTagCheck();
-  private final String TEST_DIR = "CharacterBeforeOpeningPHPTagCheck/";
+  private static final String TEST_DIR = "CharacterBeforeOpeningPHPTagCheck/";
 
   @Test
   public void ok() throws Exception {

@@ -31,17 +31,17 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 public class TooManyFieldsInClassCheckTest {
 
   private TooManyFieldsInClassCheck check = new TooManyFieldsInClassCheck();
-  private static final String fileName = "TooManyFieldsInClassCheck.php";
+  private static final String FILE_NAME = "TooManyFieldsInClassCheck.php";
 
   @Test
   public void test_default() throws Exception {
-    CheckVerifier.verifyNoIssueIgnoringExpected(check, fileName);
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
   public void custom_maximum_field_threshold() throws Exception {
     check.maximumFieldThreshold = 4;
-    CheckVerifier.verify(check, fileName);
+    CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
@@ -53,6 +53,6 @@ public class TooManyFieldsInClassCheckTest {
       new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(3),
       new LegacyIssue(check, "Refactor this class so it has no more than 2 public fields, rather than the 3 it currently has.").line(18)
     );
-    PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), issues);
+    PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), issues);
   }
 }

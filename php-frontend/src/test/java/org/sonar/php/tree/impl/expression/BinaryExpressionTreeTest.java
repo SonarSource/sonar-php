@@ -114,7 +114,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
     testBinary(Kind.INSTANCE_OF, "instanceof", PHPLexicalGrammar.POSTFIX_EXPR);
   }
 
-  private void testBinary(Kind kind, String operator) throws Exception {
+  private void testBinary(Kind kind, String operator) {
     BinaryExpressionTree tree = parse("$a " + operator + " $b", kind);
 
     assertThat(tree.is(kind)).isTrue();
@@ -125,7 +125,7 @@ public class BinaryExpressionTreeTest extends PHPTreeModelTest {
     assertThat(expressionToString(tree.rightOperand())).isEqualTo("$b");
   }
 
-  private void testBinary(Kind kind, String operator, GrammarRuleKey ruleKey) throws Exception {
+  private void testBinary(Kind kind, String operator, GrammarRuleKey ruleKey) {
     BinaryExpressionTree tree = parse("$a " + operator + " $b", ruleKey);
 
     assertThat(tree.is(kind)).isTrue();

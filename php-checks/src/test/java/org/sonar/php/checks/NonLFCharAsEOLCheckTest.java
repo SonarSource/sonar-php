@@ -38,25 +38,25 @@ public class NonLFCharAsEOLCheckTest {
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
   private NonLFCharAsEOLCheck check = new NonLFCharAsEOLCheck();
-  private PhpFile ok_file;
-  private PhpFile ko_file;
+  private PhpFile okFile;
+  private PhpFile koFile;
 
   @Before
   public void setUp() throws Exception {
-    ok_file = TestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \n");
-    ko_file = TestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \r\n");
+    okFile = TestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \n");
+    koFile = TestUtils.getFile(temporaryFolder.newFile(), "<?php $foo = 1; \r\n");
   }
 
   @Test
   public void ok() throws IOException {
-    PHPCheckVerifier.verifyNoIssue(ok_file, check);
+    PHPCheckVerifier.verifyNoIssue(okFile, check);
   }
 
   @Test
   public void ko() throws IOException {
     ImmutableList<PhpIssue> issues = ImmutableList.<PhpIssue>of(
-      new LegacyIssue(check, "Replace all non line feed end of line characters in this file \"" + ko_file.filename() + "\" by LF."));
-    PHPCheckTest.check(check, ko_file, issues);
+      new LegacyIssue(check, "Replace all non line feed end of line characters in this file \"" + koFile.filename() + "\" by LF."));
+    PHPCheckTest.check(check, koFile, issues);
   }
 
 }

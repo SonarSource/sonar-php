@@ -19,13 +19,13 @@
  */
 package org.sonar.php.tree.impl.declaration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ParameterListTree;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParameterListTreeTest extends PHPTreeModelTest {
 
@@ -43,10 +43,10 @@ public class ParameterListTreeTest extends PHPTreeModelTest {
     assertThat(parameterList("($p1, $p2)").parameters()).hasSize(2);
   }
 
-  private ParameterListTree parameterList(String toParse) throws Exception {
+  private ParameterListTree parameterList(String toParse) {
     ParameterListTree tree = parse(toParse, PHPLexicalGrammar.PARAMETER_LIST);
     assertThat(tree.is(Kind.PARAMETER_LIST)).isTrue();
     return tree;
   }
-  
+
 }

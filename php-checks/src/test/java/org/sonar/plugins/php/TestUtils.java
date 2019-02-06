@@ -21,7 +21,6 @@ package org.sonar.plugins.php;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import org.sonar.plugins.php.api.tests.PhpTestFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -33,7 +32,7 @@ public final class TestUtils {
   private TestUtils() {
   }
 
-  public static PhpFile getCheckFile(String filename) throws URISyntaxException {
+  public static PhpFile getCheckFile(String filename) {
     return getFile(new File("src/test/resources/checks/" + filename));
   }
 

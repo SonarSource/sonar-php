@@ -24,17 +24,17 @@ import org.sonar.plugins.php.CheckVerifier;
 
 public class ClassCouplingCheckTest {
 
-  private final String filename = "ClassCouplingCheck.php";
+  private static final String FILE_NAME = "ClassCouplingCheck.php";
   private ClassCouplingCheck check = new ClassCouplingCheck();
 
   @Test
   public void defaultValue() throws Exception {
-    CheckVerifier.verifyNoIssueIgnoringExpected(check, filename);
+    CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
   public void custom() throws Exception {
     check.max = 10;
-    CheckVerifier.verify(check, filename);
+    CheckVerifier.verify(check, FILE_NAME);
   }
 }

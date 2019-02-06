@@ -25,7 +25,7 @@ import org.sonar.plugins.php.CheckVerifier;
 
 public class FunctionSpacingCheckTest extends FormattingStandardCheckTest {
 
-  private static String TEST_FILE = TEST_DIR + "FunctionSpacingCheck.php";
+  private static final String TEST_FILE = TEST_DIR + "FunctionSpacingCheck.php";
 
   @Test
   public void defaultValue() throws Exception {

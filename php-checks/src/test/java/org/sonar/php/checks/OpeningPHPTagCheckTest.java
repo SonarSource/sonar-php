@@ -25,7 +25,7 @@ import org.sonar.plugins.php.CheckVerifier;
 public class OpeningPHPTagCheckTest {
 
   private OpeningPHPTagCheck check = new OpeningPHPTagCheck();
-  private final String TEST_DIR = "OpeningPHPTagCheck/";
+  private static final String TEST_DIR = "OpeningPHPTagCheck/";
 
   @Test
   public void ok_long_tag() throws Exception {

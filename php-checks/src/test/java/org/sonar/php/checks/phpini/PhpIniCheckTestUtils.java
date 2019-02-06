@@ -42,6 +42,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PhpIniCheckTestUtils {
 
+  private PhpIniCheckTestUtils() {
+  }
+
   private static final Pattern LINE_END_COMMENT = Pattern.compile(".*;\\s*Noncompliant(?:\\s*\\{\\{(.*)\\}\\})?.*");
 
   public static void check(PhpIniCheck check, File file) {

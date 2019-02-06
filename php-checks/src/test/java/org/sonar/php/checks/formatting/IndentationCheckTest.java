@@ -25,7 +25,7 @@ import org.sonar.plugins.php.CheckVerifier;
 
 public class IndentationCheckTest extends FormattingStandardCheckTest {
 
-  private static String TEST_FILE = TEST_DIR + "IndentationCheck.php";
+  private static final String TEST_FILE = TEST_DIR + "IndentationCheck.php";
 
   @Test
   public void defaultValue() throws IllegalAccessException {

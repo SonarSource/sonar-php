@@ -35,7 +35,7 @@ public class FileTestUtils {
 
   public static PhpFile getFile(File file, String contents) {
     try {
-      Files.write(file.toPath(), contents.getBytes());
+      Files.write(file.toPath(), contents.getBytes(Charset.defaultCharset()));
     } catch (IOException e) {
       throw new IllegalStateException("Failed to write test file: " + file.getAbsolutePath());
     }

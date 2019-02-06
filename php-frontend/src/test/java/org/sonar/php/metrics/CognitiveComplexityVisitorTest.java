@@ -225,13 +225,13 @@ public class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
     );
   }
 
-  private int complexity(String functionBody) throws Exception {
+  private int complexity(String functionBody) {
     FunctionTree tree = parse("function f() { " + functionBody + " }", PHPLexicalGrammar.FUNCTION_DECLARATION);
     CognitiveComplexity complexity = CognitiveComplexityVisitor.complexity(tree);
     return complexity.getValue();
   }
 
-  private List<TestComplexityComponent> components(String functionBody) throws Exception {
+  private List<TestComplexityComponent> components(String functionBody) {
     FunctionTree tree = parse("function f() { " + functionBody + " }", PHPLexicalGrammar.FUNCTION_DECLARATION);
     CognitiveComplexity complexity = CognitiveComplexityVisitor.complexity(tree);
     return complexity.getComplexityComponents().stream().map(TestComplexityComponent::create).collect(Collectors.toList());

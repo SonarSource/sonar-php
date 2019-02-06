@@ -211,12 +211,12 @@ public class NamespaceAwareVisitorTest {
   private void visit(String content, NamespaceAwareVisitor visitor) throws IOException {
     String fileContent = "<?php\n" + content;
     CompilationUnitTree tree = (CompilationUnitTree) parser.parse(fileContent);
-    PhpFile inputFile = TestUtils.getFile(temporaryFolder.newFile(), fileContent); // "<?php $foo = 1; \n");
+    PhpFile inputFile = TestUtils.getFile(temporaryFolder.newFile(), fileContent);
     visitor.init();
     visitor.analyze(inputFile, tree);
   }
 
-  private class NamespaceAwareVisitorChecker extends NamespaceAwareVisitor {
+  private static class NamespaceAwareVisitorChecker extends NamespaceAwareVisitor {
     private List<QualifiedName> fullyQualifiedNames = new ArrayList<>();
 
     @Override

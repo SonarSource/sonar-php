@@ -27,6 +27,8 @@ import static org.sonar.php.checks.utils.type.StaticFunctionCall.staticFunctionC
 
 public class StaticFunctionCallTest {
 
+  private static final String A_B_C_DEF = "A\\B\\C::def";
+
   @Test(expected = IllegalStateException.class)
   public void illegal_static_function_call() {
     staticFunctionCall("A\\B\\C\\def");
@@ -34,10 +36,10 @@ public class StaticFunctionCallTest {
 
   @Test
   public void matches() {
-    assertThat(staticFunctionCall("A\\B\\C::def").matches(qualifiedName("A\\B\\C"), "def")).isTrue();
-    assertThat(staticFunctionCall("A\\B\\C::def").matches(qualifiedName("a\\b\\c"), "DEF")).isTrue();
-    assertThat(staticFunctionCall("A\\B\\C::def").matches(qualifiedName("A\\B\\C"), "ghi")).isFalse();
-    assertThat(staticFunctionCall("A\\B\\C::def").matches(qualifiedName("A\\B\\D"), "def")).isFalse();
+    assertThat(staticFunctionCall(A_B_C_DEF).matches(qualifiedName("A\\B\\C"), "def")).isTrue();
+    assertThat(staticFunctionCall(A_B_C_DEF).matches(qualifiedName("a\\b\\c"), "DEF")).isTrue();
+    assertThat(staticFunctionCall(A_B_C_DEF).matches(qualifiedName("A\\B\\C"), "ghi")).isFalse();
+    assertThat(staticFunctionCall(A_B_C_DEF).matches(qualifiedName("A\\B\\D"), "def")).isFalse();
   }
 
 }

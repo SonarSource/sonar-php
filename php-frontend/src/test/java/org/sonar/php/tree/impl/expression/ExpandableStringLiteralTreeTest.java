@@ -72,10 +72,11 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
 
   @Test
   public void test_pseudo_comment() throws Exception {
-    parse("\"/**/{$a}\"", Kind.EXPANDABLE_STRING_LITERAL);
+    ExpandableStringLiteralTree tree = parse("\"/**/{$a}\"", Kind.EXPANDABLE_STRING_LITERAL);
+    assertFirstExpression(tree, "{$a}", Kind.COMPUTED_VARIABLE_NAME);
   }
 
-  private void assertExpandableStringLiteral(ExpandableStringLiteralTree tree, int stringsSize, int expressionsSize) {
+  private static void assertExpandableStringLiteral(ExpandableStringLiteralTree tree, int stringsSize, int expressionsSize) {
     assertThat(tree.is(Kind.EXPANDABLE_STRING_LITERAL)).isTrue();
 
     assertThat(tree.openDoubleQuoteToken().text()).isEqualTo("\"");
@@ -84,14 +85,14 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
     assertThat(tree.closeDoubleQuoteToken().text()).isEqualTo("\"");
   }
 
-  private void assertFirstExpression(ExpandableStringLiteralTree tree, String s, Kind kind) {
+  private static void assertFirstExpression(ExpandableStringLiteralTree tree, String s, Kind kind) {
     ExpressionTree expr = tree.expressions().get(0);
 
     assertThat(expr.is(kind)).isTrue();
     assertThat(expressionToString(expr)).isEqualTo(s);
   }
 
-  private void assertFirstString(ExpandableStringLiteralTree tree, String s) {
+  private static void assertFirstString(ExpandableStringLiteralTree tree, String s) {
     ExpandableStringCharactersTree string = tree.strings().get(0);
 
     assertThat(string.is(Kind.EXPANDABLE_STRING_CHARACTERS)).isTrue();
