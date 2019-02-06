@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,7 +78,8 @@ import org.sonar.squidbridge.ProgressReport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.Matchers.any;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -98,6 +100,9 @@ public class PHPSensorTest {
   private static final SonarRuntime NOT_SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION, SonarQubeSide.SERVER);
   private static final SonarRuntime SONARQUBE_6_7 = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER);
 
+  private static final String PARSE_ERROR_FILE = "parseError.php";
+  private static final String ANALYZED_FILE = "PHPSquidSensor.php";
+
   private Set<File> tempReportFiles = new HashSet<>();
 
   @org.junit.Rule
@@ -106,7 +111,7 @@ public class PHPSensorTest {
   @org.junit.Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
 
-  private final PHPCustomRuleRepository[] CUSTOM_RULES = {new PHPCustomRuleRepository() {
+  private static final PHPCustomRuleRepository[] CUSTOM_RULES = {new PHPCustomRuleRepository() {
     @Override
     public String repositoryKey() {
       return "customKey";
@@ -123,7 +128,7 @@ public class PHPSensorTest {
     name = "name",
     description = "desc",
     tags = {"bug"})
-  public class MyCustomRule extends PHPVisitorCheck {
+  public static class MyCustomRule extends PHPVisitorCheck {
     @RuleProperty(
       key = "customParam",
       description = "Custom parameter",
@@ -152,11 +157,10 @@ public class PHPSensorTest {
 
   @Test
   public void analyse() throws NoSuchFieldException, IllegalAccessException {
-    String fileName = "PHPSquidSensor.php";
-    String componentKey = "moduleKey:" + fileName;
+    String componentKey = "moduleKey:" + ANALYZED_FILE;
 
     PHPSensor phpSensor = createSensor();
-    analyseSingleFile(phpSensor, fileName);
+    analyseSingleFile(phpSensor, ANALYZED_FILE);
 
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 6);
@@ -184,8 +188,9 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, fileName);
 
     List<TokensLine> tokensLines = context.cpdTokens(componentKey);
-    assertThat(tokensLines).hasSize(8);
-
+    assertThat(tokensLines)
+      .isNotNull()
+      .hasSize(8);
     assertThat(tokensLines.get(0).getValue()).isEqualTo("require_once$CHARS;");
     assertThat(tokensLines.get(1).getValue()).isEqualTo("classAextendsB");
     assertThat(tokensLines.get(2).getValue()).isEqualTo("{");
@@ -196,7 +201,7 @@ public class PHPSensorTest {
     assertThat(tokensLines.get(7).getValue()).isEqualTo(";");
   }
 
-  private void checkNoSonar(String componentKey, int line, boolean expected, PHPSensor phpSensor) throws NoSuchFieldException, IllegalAccessException {
+  private static void checkNoSonar(String componentKey, int line, boolean expected, PHPSensor phpSensor) throws NoSuchFieldException, IllegalAccessException {
     // retrieve the noSonarFilter, which is private
     Field field = PHPSensor.class.getDeclaredField("noSonarFilter");
     field.setAccessible(true);
@@ -226,7 +231,7 @@ public class PHPSensorTest {
 
   @Test
   public void parsing_error_should_raise_an_issue_if_check_rule_is_activated() throws Exception {
-    analyseSingleFile(createSensorWithParsingErrorCheckActivated(), "parseError.php");
+    analyseSingleFile(createSensorWithParsingErrorCheckActivated(), PARSE_ERROR_FILE);
 
     assertThat(context.allIssues()).as("One issue must be raised").hasSize(1);
 
@@ -234,6 +239,7 @@ public class PHPSensorTest {
     assertThat(issue.ruleKey().rule()).as("A parsing error must be raised").isEqualTo("S2260");
 
     TextRange range = issue.primaryLocation().textRange();
+    assertThat(range).isNotNull();
     assertThat(range.start().line()).isEqualTo(2);
     assertThat(range.start().lineOffset()).isEqualTo(0);
     assertThat(range.end().line()).isEqualTo(2);
@@ -242,13 +248,13 @@ public class PHPSensorTest {
 
   @Test
   public void parsing_error_should_raise_be_reported_in_sensor_context() throws Exception {
-    analyseSingleFile(createSensor(), "parseError.php");
+    analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allAnalysisErrors()).hasSize(1);
   }
 
   @Test
   public void parsing_error_should_raise_no_issue_if_check_rule_is_not_activated() throws Exception {
-    analyseSingleFile(createSensor(), "parseError.php");
+    analyseSingleFile(createSensor(), PARSE_ERROR_FILE);
     assertThat(context.allIssues()).as("One issue must be raised").isEmpty();
   }
 
@@ -257,15 +263,15 @@ public class PHPSensorTest {
     sensor.execute(context);
   }
 
-  private DefaultInputFile inputFile(String fileName) {
+  private static DefaultInputFile inputFile(String fileName) {
     try {
       return TestInputFileBuilder.create("moduleKey", fileName)
         .setModuleBaseDir(PhpTestUtils.getModuleBaseDir().toPath())
         .setType(Type.MAIN)
         .setCharset(Charset.defaultCharset())
         .setLanguage(Php.KEY)
-        .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/"+fileName).toPath()), StandardCharsets.UTF_8)).build();
-    } catch (java.io.IOException e) {
+        .initMetadata(new String(java.nio.file.Files.readAllBytes(new File("src/test/resources/" + fileName).toPath()), StandardCharsets.UTF_8)).build();
+    } catch (IOException e) {
       throw new IllegalStateException("File not found", e);
     }
 
@@ -281,25 +287,25 @@ public class PHPSensorTest {
   @Test
   public void exception_should_report_file_name() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
-    analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "PHPSquidSensor.php");
+    analyseFileWithException(check, inputFile(ANALYZED_FILE), ANALYZED_FILE);
   }
 
   @Test
   public void cancelled_analysis() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException(new InterruptedException()));
-    analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "Analysis cancelled");
+    analyseFileWithException(check, inputFile(ANALYZED_FILE), "Analysis cancelled");
   }
 
   @Test
   public void cancelled_analysis_causing_recognition_exception() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new RecognitionException(42, "message", new InterruptedIOException()));
-    analyseFileWithException(check, inputFile("PHPSquidSensor.php"), "Analysis cancelled");
+    analyseFileWithException(check, inputFile(ANALYZED_FILE), "Analysis cancelled");
   }
 
   /**
    * Same as method <code>createSensor</code>, with one rule activated (the rule for parsing errors).
    */
-  private PHPSensor createSensorWithParsingErrorCheckActivated() {
+  private static PHPSensor createSensorWithParsingErrorCheckActivated() {
     FileLinesContextFactory fileLinesContextFactory = createFileLinesContextFactory();
 
     String parsingErrorCheckKey = "S2260";
@@ -308,12 +314,10 @@ public class PHPSensorTest {
       .setName(parsingErrorCheckKey)
       .activate()
       .build();
-    CheckFactory checkFactory = new CheckFactory(activeRules);
-
-    return new PHPSensor(fileLinesContextFactory, checkFactory, new NoSonarFilter(), CUSTOM_RULES);
+    return new PHPSensor(fileLinesContextFactory, new CheckFactory(activeRules), new NoSonarFilter(), CUSTOM_RULES);
   }
 
-  private FileLinesContextFactory createFileLinesContextFactory() {
+  private static FileLinesContextFactory createFileLinesContextFactory() {
     FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
     FileLinesContext fileLinesContext = mock(FileLinesContext.class);
     when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
@@ -323,7 +327,7 @@ public class PHPSensorTest {
   @Test
   public void test_issues() throws Exception {
     checkFactory = new CheckFactory(getActiveRules());
-    analyseSingleFile(createSensor(), "PHPSquidSensor.php");
+    analyseSingleFile(createSensor(), ANALYZED_FILE);
 
     Collection<Issue> issues = context.allIssues();
 
@@ -339,13 +343,13 @@ public class PHPSensorTest {
     checkFactory = new CheckFactory(getActiveRules());
 
     context.setCancelled(true);
-    analyseSingleFile(createSensor(), "PHPSquidSensor.php");
+    analyseSingleFile(createSensor(), ANALYZED_FILE);
 
     assertThat(context.allIssues()).as("Should have no issue").isEmpty();
     assertThat(context.measures("moduleKey:PHPSquidSensor.php")).isEmpty();
 
     context.setCancelled(false);
-    analyseSingleFile(createSensor(), "PHPSquidSensor.php");
+    analyseSingleFile(createSensor(), ANALYZED_FILE);
 
     assertThat(context.allIssues()).as("Should have no issue").isNotEmpty();
     assertThat(context.measures("moduleKey:PHPSquidSensor.php")).isNotEmpty();
@@ -369,20 +373,19 @@ public class PHPSensorTest {
   }
 
   @Test
-  public void test_file_with_bom() throws Exception {
-    String fileName = "fileWithBom.php";
-
-    PHPSensor phpSensor = createSensor();
-    analyseSingleFile(phpSensor, fileName);
-
-    // should not fail
+  public void test_file_with_bom() {
+    try {
+      analyseSingleFile(createSensor(), "fileWithBom.php");
+    } catch (Exception e) {
+      fail("Should never happen - bom should be handled correctly");
+    }
   }
 
   @Test
   public void should_disable_unnecessary_features_for_sonarlint() throws Exception {
     context.settings().setProperty(PhpPlugin.PHPUNIT_TESTS_REPORT_PATH_KEY, PhpTestUtils.PHPUNIT_REPORT_NAME);
     context.settings().setProperty(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY, PhpTestUtils.PHPUNIT_COVERAGE_REPORT);
-    DefaultInputFile inputFile = inputFile("PHPSquidSensor.php");
+    DefaultInputFile inputFile = inputFile(ANALYZED_FILE);
 
     DefaultInputFile testFile = TestInputFileBuilder.create("moduleKey", "src/AppTest.php")
       .setModuleBaseDir(context.fileSystem().baseDirPath())
@@ -475,7 +478,7 @@ public class PHPSensorTest {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     tempReportFiles.forEach(File::delete);
   }
 
@@ -487,15 +490,18 @@ public class PHPSensorTest {
    * */
   private void createReportWithAbsolutePath(String generatedReportRelativePath, String relativeReportPath, InputFile inputFile) throws Exception {
     File tempReport = new File(context.fileSystem().baseDir(), generatedReportRelativePath);
-    tempReport.createNewFile();
-    File originalReport = new File(context.fileSystem().baseDir(), relativeReportPath);
+    if (tempReport.createNewFile()) {
+      File originalReport = new File(context.fileSystem().baseDir(), relativeReportPath);
 
-    Files.write(
-      Files.toString(originalReport, StandardCharsets.UTF_8)
-        .replace(inputFile.relativePath(), inputFile.absolutePath()),
-      tempReport, StandardCharsets.UTF_8);
+      String content = Files.readLines(originalReport, StandardCharsets.UTF_8)
+        .stream()
+        .collect(Collectors.joining("\n"))
+        .replace(inputFile.relativePath(), inputFile.absolutePath());
 
-    tempReportFiles.add(tempReport);
+      Files.asCharSink(tempReport, StandardCharsets.UTF_8).write(content);
+
+      tempReportFiles.add(tempReport);
+    }
   }
 
   private void analyseFileWithException(PHPCheck check, InputFile inputFile, String expectedMessageSubstring) {
@@ -509,7 +515,7 @@ public class PHPSensorTest {
     }
   }
 
-  private final class ExceptionRaisingCheck extends PHPVisitorCheck {
+  private static final class ExceptionRaisingCheck extends PHPVisitorCheck {
 
     private final RuntimeException exception;
 

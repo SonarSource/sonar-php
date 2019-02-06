@@ -55,7 +55,9 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
     assertListExpression(tree, 2, 4);
     assertThat(tree.toString()).isEqualTo("list (, $a, , ,$b)");
     assertThat(tree.elements().get(0)).isNotPresent();
-    assertThat(expressionToString(Iterables.getLast(tree.elements()).get())).isEqualTo("$b");
+    Optional<ArrayAssignmentPatternElementTree> last = Iterables.getLast(tree.elements());
+    assertThat(last).isPresent();
+    assertThat(expressionToString(last.get())).isEqualTo("$b");
   }
 
   @Test
@@ -66,13 +68,15 @@ public class ListExpressionTreeTest extends PHPTreeModelTest {
     assertFirstElement(tree, Kind.LIST_EXPRESSION, "list ($a)");
   }
 
-  private void assertFirstElement(ListExpressionTree tree, Kind kind, String string) {
-    ArrayAssignmentPatternElementTree element = tree.elements().get(0).get();
+  private static void assertFirstElement(ListExpressionTree tree, Kind kind, String string) {
+    Optional<ArrayAssignmentPatternElementTree> first = tree.elements().get(0);
+    assertThat(first).isPresent();
+    ArrayAssignmentPatternElementTree element = first.get();
     assertThat(element.variable().is(kind)).isTrue();
     assertThat(expressionToString(element)).isEqualTo(string);
   }
 
-  private void assertListExpression(ListExpressionTree tree, int nbElement, int nbSeparators) {
+  private static void assertListExpression(ListExpressionTree tree, int nbElement, int nbSeparators) {
     assertThat(tree.is(Kind.LIST_EXPRESSION)).isTrue();
 
     assertThat(tree.listToken().text()).isEqualTo("list");

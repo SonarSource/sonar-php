@@ -32,15 +32,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LineVisitorTest extends ParsingTestUtils {
 
+  private static final String LOC_FILE = "metrics/lines_of_code.php";
+
   @Test
   public void test_lines_of_code_number() throws Exception {
-    LineVisitor lineVisitor = new LineVisitor(parse("metrics/lines_of_code.php"));
+    LineVisitor lineVisitor = new LineVisitor(parse(LOC_FILE));
     assertThat(lineVisitor.getLinesOfCodeNumber()).isEqualTo(7);
   }
 
   @Test
   public void test_lines_of_code_number_on_tree() throws Exception {
-    CompilationUnitTree cut = parse("metrics/lines_of_code.php");
+    CompilationUnitTree cut = parse(LOC_FILE);
     Optional<ClassDeclarationTree> firstClassTree = cut.script().statements().stream()
       .filter(statement -> statement.is(Tree.Kind.CLASS_DECLARATION))
       .map(ClassDeclarationTree.class::cast)
@@ -51,7 +53,7 @@ public class LineVisitorTest extends ParsingTestUtils {
 
   @Test
   public void test_lines_of_code() throws Exception {
-    LineVisitor lineVisitor = new LineVisitor(parse("metrics/lines_of_code.php"));
+    LineVisitor lineVisitor = new LineVisitor(parse(LOC_FILE));
     Set<Integer> linesOfCode = lineVisitor.getLinesOfCode();
     assertThat(linesOfCode).hasSize(7);
     assertThat(linesOfCode).contains(13, 17, 19, 20, 21, 22, 23);

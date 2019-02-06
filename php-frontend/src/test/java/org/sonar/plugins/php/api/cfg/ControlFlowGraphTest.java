@@ -76,7 +76,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
   private CheckContext checkContext;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     PhpFile file = mock(PhpFile.class);
     when(file.toString()).thenReturn("mock.php");
     checkContext = new PHPCheckContext(file, mock(CompilationUnitTreeImpl.class), null, mock(SymbolTable.class));
@@ -1340,15 +1340,18 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
     ExpressionStatementTree expr = (ExpressionStatementTree) func.body().statements().get(0);
     ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
+    assertThat(cfg).isNotNull();
     assertThat(cfg.start().elements().get(0)).isEqualTo(expr);
 
     FunctionExpressionTree funcExpr = ((FunctionExpressionTree) ((AssignmentExpressionTree) expr.expression()).value());
     StatementTree echo = funcExpr.body().statements().get(0);
     cfg = ControlFlowGraph.build(funcExpr, checkContext);
+    assertThat(cfg).isNotNull();
     assertThat(cfg.start().elements().get(0)).isEqualTo(echo);
 
     StatementTree scriptEcho = tree.script().statements().get(1);
     cfg = ControlFlowGraph.build(tree.script(), checkContext);
+    assertThat(cfg).isNotNull();
     assertThat(cfg.start().elements().get(0)).isEqualTo(func);
     assertThat(cfg.start().elements().get(1)).isEqualTo(scriptEcho);
   }
@@ -1368,6 +1371,7 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
     StatementTree echo = ((BlockTree) method.body()).statements().get(0);
 
     ControlFlowGraph cfg = ControlFlowGraph.build(method, checkContext);
+    assertThat(cfg).isNotNull();
     assertThat(cfg.start().elements().get(0)).isEqualTo(echo);
 
     MethodDeclarationTree abstractMethod = (MethodDeclarationTree) cls.members().get(1);

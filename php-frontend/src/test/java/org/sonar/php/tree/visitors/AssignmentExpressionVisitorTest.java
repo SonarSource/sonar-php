@@ -37,7 +37,7 @@ public class AssignmentExpressionVisitorTest {
 
   @Test
   public void getAssignmentValue() throws Exception {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.Of("$a").from("<?php function foo() { $a = 1; }");
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php function foo() { $a = 1; }");
 
     assertThat(uniqueAssignedValue).isPresent();
     ExpressionTree value = uniqueAssignedValue.get();
@@ -47,7 +47,7 @@ public class AssignmentExpressionVisitorTest {
 
   @Test
   public void getAssignmentValue_global() throws Exception {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.Of("$a").from("<?php $a = 1;");
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;");
 
     assertThat(uniqueAssignedValue).isPresent();
     ExpressionTree value = uniqueAssignedValue.get();
@@ -57,7 +57,7 @@ public class AssignmentExpressionVisitorTest {
 
   @Test
   public void getAssignmentValue_multiple() throws Exception {
-    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.Of("$a").from("<?php $a = 1;\n$a = 2;");
+    Optional<ExpressionTree> uniqueAssignedValue = UniqueAssignedValue.of("$a").from("<?php $a = 1;\n$a = 2;");
 
     assertThat(uniqueAssignedValue).isNotPresent();
   }
@@ -69,11 +69,11 @@ public class AssignmentExpressionVisitorTest {
       this.name = name;
     }
 
-    static UniqueAssignedValue Of(String name) {
+    static UniqueAssignedValue of(String name) {
       return new UniqueAssignedValue(name);
     }
 
-    Optional<ExpressionTree> from(String code) throws Exception {
+    Optional<ExpressionTree> from(String code) {
       CompilationUnitTree tree = parse(code, PHPLexicalGrammar.COMPILATION_UNIT);
       SymbolTable symbolTable = SymbolTableImpl.create(tree);
 
