@@ -688,6 +688,8 @@ public class PHPGrammar {
         b.token(LPARENTHESIS),
         MEMBER_EXPRESSION(),
         b.zeroOrMore(f.newTuple(b.token(COMMA), MEMBER_EXPRESSION())),
+        // PHP 7.3: last argument can be suffixed with an extra comma
+        b.optional(b.token(COMMA)),
         b.token(RPARENTHESIS),
         EOS()));
   }
@@ -1562,7 +1564,14 @@ public class PHPGrammar {
   public FunctionCallTree INTERNAL_FUNCTION() {
     return b.<FunctionCallTree>nonterminal(PHPLexicalGrammar.INTERNAL_FUNCTION).is(
       b.firstOf(
-        f.internalFunction(b.token(PHPLexicalGrammar.ISSET), b.token(LPARENTHESIS), EXPRESSION(), b.zeroOrMore(f.newTuple(b.token(COMMA), EXPRESSION())), b.token(RPARENTHESIS)),
+        f.internalFunction(
+          b.token(PHPLexicalGrammar.ISSET),
+          b.token(LPARENTHESIS),
+          EXPRESSION(),
+          b.zeroOrMore(f.newTuple(b.token(COMMA), EXPRESSION())),
+          // PHP 7.3: last argument can be suffixed with an extra comma
+          b.optional(b.token(COMMA)),
+          b.token(RPARENTHESIS)),
 
         f.internalFunction(
           b.firstOf(

@@ -947,12 +947,11 @@ public class TreeFactory {
   public UnsetVariableStatementTree unsetVariableStatement(
     InternalSyntaxToken unsetToken, InternalSyntaxToken openParenthesisToken,
     ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> list,
-    InternalSyntaxToken closeParenthesisToken, InternalSyntaxToken eosToken
-  ) {
+    Optional<InternalSyntaxToken> trailingComma, InternalSyntaxToken closeParenthesisToken, InternalSyntaxToken eosToken) {
     return new UnsetVariableStatementTreeImpl(
       unsetToken,
       openParenthesisToken,
-      separatedList(expression, list),
+      separatedList(expression, list, trailingComma.orNull()),
       closeParenthesisToken,
       eosToken
     );
@@ -1362,12 +1361,12 @@ public class TreeFactory {
   public FunctionCallTree internalFunction(
     InternalSyntaxToken issetToken, InternalSyntaxToken openParenthesis,
     ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> expressionRest,
-    InternalSyntaxToken closeParenthesis
+    Optional<InternalSyntaxToken> trailingComma, InternalSyntaxToken closeParenthesis
   ) {
     return internalFunction(
       issetToken,
       openParenthesis,
-      separatedList(expression, expressionRest),
+      separatedList(expression, expressionRest, trailingComma.orNull()),
       closeParenthesis);
   }
 

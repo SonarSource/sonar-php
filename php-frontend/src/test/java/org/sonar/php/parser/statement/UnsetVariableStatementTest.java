@@ -30,6 +30,11 @@ public class UnsetVariableStatementTest {
   public void test() {
     assertThat(PHPLexicalGrammar.UNSET_VARIABLE_STATEMENT)
       .matches("unset($a);")
-      .matches("unset($a, $b, $c);");
+      .matches("unset($a, $b,);")
+      .matches("unset($a, $b, $c);")
+      .notMatches("unset(,);")
+      .notMatches("unset($a,,);")
+      .notMatches("unset(,$a);")
+      .notMatches("isset($a);");
   }
 }
