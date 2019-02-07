@@ -31,6 +31,7 @@ import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
 import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -145,6 +146,15 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       }
     }
     super.visitMemberAccess(tree);
+  }
+
+  @Override
+  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+    NameIdentifierTree name = tree.name();
+    if (name.text().equalsIgnoreCase(ASSERT_FUNCTION)) {
+      context().newIssue(this, name, "Use instead the standard \"assert\" function.");
+    }
+    super.visitFunctionDeclaration(tree);
   }
 
   @Override

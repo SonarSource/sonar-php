@@ -38,6 +38,15 @@ namespace A {
   function call_user_method() {
   }
 
+  function assert() { // Noncompliant {{Use instead the standard "assert" function.}}
+  //       ^^^^^^
+  }
+
+  class Foo {
+    function assert() {
+    }
+  }
+
   call_user_method();             /* Noncompliant */ // FIXME (SONARPHP-552) False-Positive
   \call_user_method();            // Noncompliant
 }
