@@ -110,3 +110,28 @@ $char = Normalizer::normalize($char_A_ring, Normalizer::NONE);  // Noncompliant 
 //                                          ^^^^^^^^^^^^^^^^
 $x = Other::Normalizer::NONE;
 $x = Normalizer::$NONE;
+
+$a = stristr($email, 'e');
+$a = stristr($email, 42);  // Noncompliant {{Convert this integer needle into a string.}}
+//                   ^^
+$a = strrchr($PATH, ":");
+$a = strrchr($PATH, -1);  // Noncompliant {{Convert this integer needle into a string.}}
+
+$user = strstr($email, '@', true);
+$user = strstr($email, 0x41, true);  // Noncompliant {{Convert this integer needle into a string.}}
+
+$pos = strripos($haystack, $needle);
+$pos = strripos($haystack, 127);  // Noncompliant {{Convert this integer needle into a string.}}
+
+$pos1 = stripos($mystring1, null);
+$pos1 = stripos($mystring1, 1);  // Noncompliant {{Convert this integer needle into a string.}}
+
+$pos = strrpos($mystring, "b");
+$pos = strrpos($mystring, 49);  // Noncompliant {{Convert this integer needle into a string.}}
+
+$pos = strpos($mystring, f());
+$pos = strpos($mystring, 32);  // Noncompliant {{Convert this integer needle into a string.}}
+
+$result = strchr($stringA); // coverage
+$result = strchr($stringA,$toFind);
+$result = strchr($stringA, 0); // Noncompliant {{Convert this integer needle into a string.}}

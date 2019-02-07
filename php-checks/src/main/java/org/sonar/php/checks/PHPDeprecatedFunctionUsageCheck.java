@@ -21,6 +21,7 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.util.Locale;
 import java.util.function.Predicate;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
@@ -100,12 +101,16 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final ImmutableSet<String> DEPRECATED_CASE_SENSITIVE_CONSTANTS = ImmutableSet.of(
     "FILTER_FLAG_SCHEME_REQUIRED", "FILTER_FLAG_HOST_REQUIRED");
 
+  private static final ImmutableSet<String> SEARCHING_STRING_FUNCTIONS = ImmutableSet.of(
+    "stristr", "strrchr", "strstr", "strripos", "stripos", "strrpos", "strpos", "strchr");
+
   private static final Predicate<TreeValues> SPLFILEOBJECT_FGETSS = new ObjectMemberFunctionCall("fgetss", new NewObjectCall("SplFileObject"));
 
   @Override
   protected ImmutableSet<String> functionNames() {
     return ImmutableSet.<String>builder()
       .addAll(NEW_BY_DEPRECATED_FUNCTIONS.keySet())
+      .addAll(SEARCHING_STRING_FUNCTIONS)
       .add(SET_LOCALE_FUNCTION)
       .add(PARSE_STR_FUNCTION)
       .add(ASSERT_FUNCTION)
@@ -160,6 +165,9 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
     } else if (STREAM_FILTER_APPEND_FUNCTION.equalsIgnoreCase(functionName)) {
       checkStreamFilterAppendArguments(tree);
+
+    } else if (SEARCHING_STRING_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT))) {
+      checkSearchingStringArguments(tree);
 
     } else {
       context().newIssue(this, tree.callee(), buildMessage(functionName));
@@ -225,4 +233,13 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     }
   }
 
+  private void checkSearchingStringArguments(FunctionCallTree tree) {
+    SeparatedList<ExpressionTree> arguments = tree.arguments();
+    if (arguments.size() >= 2) {
+      ExpressionTree needleArgument = arguments.get(1);
+      if (needleArgument.is(Kind.NUMERIC_LITERAL, Kind.UNARY_MINUS)) {
+        context().newIssue(this, needleArgument, "Convert this integer needle into a string.");
+      }
+    }
+  }
 }
