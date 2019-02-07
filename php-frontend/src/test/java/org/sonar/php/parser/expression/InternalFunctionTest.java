@@ -30,6 +30,9 @@ public class InternalFunctionTest {
   public void test() {
     assertThat(PHPLexicalGrammar.INTERNAL_FUNCTION)
       .matches("isset ($a, $b)")
+      .matches("isset ($a, $b,)")
+      .notMatches("unset ($a, $b)")
+      .notMatches("isset (,)")
       .matches("empty ($a)")
       .matches("include $a")
       .matches("include_once $a")
