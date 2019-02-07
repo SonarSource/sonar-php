@@ -19,10 +19,12 @@
  */
 package org.sonar.plugins.php;
 
+import com.sonar.plugins.security.api.PhpRules;
 import org.junit.Test;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.utils.Version;
@@ -50,4 +52,14 @@ public class PHPProfileDefinitionTest {
     assertThat(validation.hasErrors()).isFalse();
   }
 
+  @Test
+  public void should_contains_security_rules_if_present() {
+    // no security rule available
+    PhpRules.getRuleKeys().clear();
+    assertThat(PHPProfileDefinition.getSecurityRuleKeys()).isEmpty();
+
+    // one security rule available
+    PhpRules.getRuleKeys().add("S3649");
+    assertThat(PHPProfileDefinition.getSecurityRuleKeys()).containsOnly(RuleKey.of("phpsecurity", "S3649"));
+  }
 }
