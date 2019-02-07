@@ -34,6 +34,7 @@ import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 
 @Rule(key = PHPDeprecatedFunctionUsageCheck.KEY)
@@ -85,6 +86,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     .put("mbereg_search_setpos", "mb_ereg_search_setpos")
     .put("fgetss", "")
     .put("gzgetss", "")
+    .put("image2wbmp", "imagewbmp")
     .build();
 
   private static final String SET_LOCALE_FUNCTION = "setlocale";
@@ -126,6 +128,18 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       context().newIssue(this, tree, "Do not use this deprecated " + tree.text() + " constant.");
     }
     super.visitNameIdentifier(tree);
+  }
+
+  @Override
+  public void visitMemberAccess(MemberAccessTree tree) {
+    if (tree.isStatic() && tree.object().is(Kind.NAMESPACE_NAME) && tree.member().is(Kind.NAME_IDENTIFIER)) {
+      String constantType = ((NamespaceNameTree) tree.object()).unqualifiedName();
+      String constantName = ((NameIdentifierTree) tree.member()).text();
+      if (constantType.equalsIgnoreCase("Normalizer") && constantName.equals("NONE")) {
+        context().newIssue(this, tree, "Do not use this deprecated \"Normalizer::NONE\" constant.");
+      }
+    }
+    super.visitMemberAccess(tree);
   }
 
   @Override

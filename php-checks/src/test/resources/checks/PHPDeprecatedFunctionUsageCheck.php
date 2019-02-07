@@ -102,3 +102,11 @@ function f() {
     echo $obj->fgetss();
   }
 }
+
+image2wbmp($image);  // Noncompliant {{Replace this "image2wbmp()" call with a call to "imagewbmp".}}
+imagewbmp($image);
+
+$char = Normalizer::normalize($char_A_ring, Normalizer::NONE);  // Noncompliant {{Do not use this deprecated "Normalizer::NONE" constant.}}
+//                                          ^^^^^^^^^^^^^^^^
+$x = Other::Normalizer::NONE;
+$x = Normalizer::$NONE;
