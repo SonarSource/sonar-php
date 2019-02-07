@@ -121,10 +121,40 @@ use of the deprecated features should be added to the code, and all existing use
       <td>Defining case-insensitive constants by calling <code>define()</code> with <code>true</code> as third parameter</td>
       <td><code>define("myconst", $value)</code> or <code>define("myconst", $value, false)</code></td>
     </tr>
+    <tr>
+      <td><code>FILTER_FLAG_SCHEME_REQUIRED</code> and <code>FILTER_FLAG_HOST_REQUIRED</code> flags</td>
+      <td><code>FILTER_VALIDATE_URL</code> flag</td>
+    </tr>
+    <tr>
+      <td><code>fgetss()</code> function, <code>"string.strip_tags"</code> stream filter name, <code>SplFileObject::fgetss()</code> method and
+      <code>gzgetss()</code> function</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>mbregex_encoding()</code>, <code>mbereg()</code>, <code>mberegi()</code>, <code>mbereg_replace()</code>,
+      <code>mberegi_replace()</code>, <code>mbsplit()</code>, <code>mbereg_match()</code>, <code>mbereg_search()</code>,
+      <code>mbereg_search_pos()</code>, <code>mbereg_search_regs()</code>, <code>mbereg_search_init()</code>, <code>mbereg_search_getregs()</code>,
+      <code>mbereg_search_getpos()</code>, <code>mbereg_search_setpos()</code></td>
+      <td>Use the<br> corresponding <code>mb_ereg_*()</code> variants instead</td>
+    </tr>
+    <tr>
+      <td>string search functions with integer needle (<code>stristr</code>, <code>strrchr</code>, <code>strstr</code>, <code>strripos</code>,
+      <code>stripos</code>, <code>strrpos</code>, <code>strpos</code>, <code>strchr</code>) </td>
+      <td>use a string needle instead</td>
+    </tr>
+    <tr>
+      <td><code>image2wbmp()</code></td>
+      <td><code>imagewbmp()</code></td>
+    </tr>
+    <tr>
+      <td><code>Normalizer::NONE</code></td>
+      <td> </td>
+    </tr>
   </tbody>
 </table>
 <h2>See</h2>
 <ul>
+  <li> <a href="https://wiki.php.net/rfc/deprecations_php_7_3">PHP RFC: Deprecations for PHP 7.3</a> </li>
   <li> <a href="https://wiki.php.net/rfc/case_insensitive_constant_deprecation">PHP RFC: Deprecate and Remove Case-Insensitive Constants</a> </li>
 </ul>
 
