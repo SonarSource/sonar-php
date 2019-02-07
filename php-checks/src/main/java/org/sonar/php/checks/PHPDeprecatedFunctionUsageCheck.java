@@ -21,8 +21,13 @@ package org.sonar.php.checks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.util.function.Predicate;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.checks.utils.FunctionUsageCheck;
+import org.sonar.php.checks.utils.type.NewObjectCall;
+import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
+import org.sonar.php.checks.utils.type.TreeValues;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -78,17 +83,22 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     .put("mbereg_search_getregs", "mb_ereg_search_getregs")
     .put("mbereg_search_getpos", "mb_ereg_search_getpos")
     .put("mbereg_search_setpos", "mb_ereg_search_setpos")
+    .put("fgetss", "")
+    .put("gzgetss", "")
     .build();
 
   private static final String SET_LOCALE_FUNCTION = "setlocale";
   private static final String PARSE_STR_FUNCTION = "parse_str";
   private static final String ASSERT_FUNCTION = "assert";
   private static final String DEFINE_FUNCTION = "define";
+  private static final String STREAM_FILTER_APPEND_FUNCTION = "stream_filter_append";
   private static final ImmutableSet<String> LOCALE_CATEGORY_CONSTANTS = ImmutableSet.of(
     "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
 
   private static final ImmutableSet<String> DEPRECATED_CASE_SENSITIVE_CONSTANTS = ImmutableSet.of(
     "FILTER_FLAG_SCHEME_REQUIRED", "FILTER_FLAG_HOST_REQUIRED");
+
+  private static final Predicate<TreeValues> SPLFILEOBJECT_FGETSS = new ObjectMemberFunctionCall("fgetss", new NewObjectCall("SplFileObject"));
 
   @Override
   protected ImmutableSet<String> functionNames() {
@@ -98,7 +108,16 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       .add(PARSE_STR_FUNCTION)
       .add(ASSERT_FUNCTION)
       .add(DEFINE_FUNCTION)
+      .add(STREAM_FILTER_APPEND_FUNCTION)
       .build();
+  }
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    TreeValues possibleValues = TreeValues.of(tree, context().symbolTable());
+    if (SPLFILEOBJECT_FGETSS.test(possibleValues)) {
+      context().newIssue(this, tree,"Remove this \"fgetss()\" call.");
+    }
+    super.visitFunctionCall(tree);
   }
 
   @Override
@@ -124,6 +143,9 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
     } else if (DEFINE_FUNCTION.equalsIgnoreCase(functionName)) {
       checkDefineArguments(tree);
+
+    } else if (STREAM_FILTER_APPEND_FUNCTION.equalsIgnoreCase(functionName)) {
+      checkStreamFilterAppendArguments(tree);
 
     } else {
       context().newIssue(this, tree.callee(), buildMessage(functionName));
@@ -175,6 +197,16 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       ExpressionTree caseInsensitiveArgument = arguments.get(2);
       if (caseInsensitiveArgument.is(Kind.BOOLEAN_LITERAL) && "true".equalsIgnoreCase(((LiteralTree) caseInsensitiveArgument).value())) {
         context().newIssue(this, tree, "Define this constant as case sensitive.");
+      }
+    }
+  }
+
+  private void checkStreamFilterAppendArguments(FunctionCallTree tree) {
+    SeparatedList<ExpressionTree> arguments = tree.arguments();
+    if (arguments.size() >= 2) {
+      ExpressionTree filterNameArgument = arguments.get(1);
+      if (filterNameArgument.is(Kind.REGULAR_STRING_LITERAL) && CheckUtils.trimQuotes((LiteralTree) filterNameArgument).equals("string.strip_tags")) {
+        context().newIssue(this, filterNameArgument, "Remove this highly discouraged 'string.strip_tags' filter usage.");
       }
     }
   }

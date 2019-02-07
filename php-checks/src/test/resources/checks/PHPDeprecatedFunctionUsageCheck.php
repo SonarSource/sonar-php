@@ -83,3 +83,22 @@ $test = mb_ereg_match("a", "some apples");
 $r = mb_ereg_search();
 $r = mb_ereg_search_regs();
 mb_ereg_search_setpos($i);
+
+$buffer = fgetss($handle, 4096);  // Noncompliant {{Remove this "fgetss()" call.}}
+$buffer = gzgetss($handle, 4096); // Noncompliant {{Remove this "gzgetss()" call.}}
+
+stream_filter_append($fp); // coverage
+stream_filter_append($fp, $filterName);
+stream_filter_append($fp, 'string.tolower');
+stream_filter_append($fp, 'string.strip_tags', STREAM_FILTER_WRITE, "<strong><em><span>"); // Noncompliant {{Remove this highly discouraged 'string.strip_tags' filter usage.}}
+//                        ^^^^^^^^^^^^^^^^^^^
+
+function f() {
+  $file = new SplFileObject("sample.php");
+  $obj = new Unknown();
+  while (!$file->eof()) {
+    echo $file->fgetss();  // Noncompliant {{Remove this "fgetss()" call.}}
+//       ^^^^^^^^^^^^^^^
+    echo $obj->fgetss();
+  }
+}
