@@ -197,13 +197,9 @@ public interface Tree {
 
     /**
      * {@link YieldExpressionTree}
+     * @since 3.0 (YieldStatementTree has been replaced by ExpressionStatementTree / YieldExpressionTree)
      */
     YIELD_EXPRESSION(YieldExpressionTree.class),
-
-    /**
-     * {@link YieldExpressionTree}
-     */
-    YIELD_SCALAR(YieldExpressionTree.class),
 
     /**
      * {@link VariableVariableTree}

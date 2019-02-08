@@ -1294,7 +1294,7 @@ public class PHPGrammar {
   }
 
   public YieldExpressionTree YIELD_SCALAR() {
-    return b.<YieldExpressionTree>nonterminal(Kind.YIELD_SCALAR).is(
+    return b.<YieldExpressionTree>nonterminal(PHPLexicalGrammar.YIELD_SCALAR).is(
         f.yieldExpression(b.token(YIELD)));
   }
 
@@ -1302,8 +1302,7 @@ public class PHPGrammar {
     return b.<ParenthesisedExpressionTree>nonterminal(Kind.PARENTHESISED_EXPRESSION).is(
       f.parenthesizedExpression(
         b.token(LPARENTHESIS),
-        b.firstOf(
-          EXPRESSION()),
+        EXPRESSION(),
         b.token(RPARENTHESIS)));
   }
 
