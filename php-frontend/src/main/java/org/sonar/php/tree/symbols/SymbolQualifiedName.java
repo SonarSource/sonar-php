@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 
-class SymbolQualifiedName implements QualifiedName {
+public class SymbolQualifiedName implements QualifiedName {
 
   static final SymbolQualifiedName GLOBAL_NAMESPACE = new SymbolQualifiedName(ImmutableList.of());
 

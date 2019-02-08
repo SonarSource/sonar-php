@@ -19,23 +19,16 @@
  */
 package org.sonar.plugins.php.api.symbols;
 
-import org.sonar.php.tree.symbols.SymbolQualifiedName;
+import org.junit.Test;
 
-/**
- * Represents fully qualified name of the symbol, like {@code namespace\foo\bar }. Use {@link #toString()} to get String representation
- * All qualified names are normalized to lowercase, because PHP is case-insensitive
- */
-public interface QualifiedName {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  /**
-   * @return the last element of qualified name i.e. {@code bar} for {@code namespace\foo\bar} , or {@code method} for {@code namespace\A::method}
-   *
-   */
-  String simpleName();
+public class QualifiedNameTest {
 
-
-  static QualifiedName qualifiedName(String qualifiedNameString) {
-    return SymbolQualifiedName.qualifiedName(qualifiedNameString);
+  @Test
+  public void qualifiedName() {
+    QualifiedName qualifiedName1 = QualifiedName.qualifiedName("A\\B\\C");
+    QualifiedName qualifiedName2 = QualifiedName.qualifiedName("a\\b\\c");
+    assertThat(qualifiedName1).isEqualTo(qualifiedName2);
   }
-
 }
