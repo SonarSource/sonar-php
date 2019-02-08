@@ -81,6 +81,7 @@ import org.sonar.php.tree.impl.expression.NewExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ParenthesizedExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.PostfixExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.PrefixExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.PrefixedCastExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.ReferenceVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.SpreadArgumentTreeImpl;
 import org.sonar.php.tree.impl.expression.VariableVariableTreeImpl;
@@ -1050,6 +1051,10 @@ public class TreeFactory {
 
   public ExpressionTree castExpression(InternalSyntaxToken leftParenthesis, InternalSyntaxToken type, InternalSyntaxToken rightParenthesis, ExpressionTree expression) {
     return new CastExpressionTreeImpl(leftParenthesis, type, rightParenthesis, expression);
+  }
+
+  public ExpressionTree prefixedCastExpression(InternalSyntaxToken prefix, ExpressionTree expression) {
+    return new PrefixedCastExpressionTreeImpl(prefix, expression);
   }
 
   public ExpressionTree prefixExpr(Optional<List<InternalSyntaxToken>> operators, ExpressionTree expression) {

@@ -45,6 +45,7 @@ public class StatementTest {
     .matches("foreach ($array as list(&$a, $b)) { $a = 7; }")
     .matches("global $a;")
     .matches("echo \"Hi\";")
+    .matches("$a = b'hello';")
     .matches("unset($a);")
     .matches("yield yield;")
     .matches("die(yield $foo);")

@@ -24,6 +24,8 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 public enum PHPPunctuator implements GrammarRuleKey {
 
   ANDEQUAL("&="),
+  LOWER_BINARY_CAST_PREFIX("b"),
+  UPPER_BINARY_CAST_PREFIX("B"),
   CONCATEQUAL(".="),
   DIVEQUAL("/="),
   EQU("="),

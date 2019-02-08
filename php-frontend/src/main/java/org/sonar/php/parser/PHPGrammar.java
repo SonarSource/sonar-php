@@ -966,22 +966,36 @@ public class PHPGrammar {
 
   public ExpressionTree CAST_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.CAST_TYPE).is(
-      f.castExpression(
-        b.token(PHPPunctuator.LPARENTHESIS),
+      b.firstOf(
+        f.castExpression(
+          b.token(PHPPunctuator.LPARENTHESIS),
+          b.firstOf(
+            b.token(PHPKeyword.ARRAY),
+            b.token(PHPKeyword.UNSET),
+            b.token(PHPLexicalGrammar.INTEGER),
+            b.token(PHPLexicalGrammar.INT),
+            b.token(PHPLexicalGrammar.DOUBLE),
+            b.token(PHPLexicalGrammar.FLOAT),
+            b.token(PHPLexicalGrammar.STRING),
+            b.token(PHPLexicalGrammar.OBJECT),
+            b.token(PHPLexicalGrammar.BOOLEAN),
+            b.token(PHPLexicalGrammar.BOOL),
+            b.token(PHPLexicalGrammar.BINARY)),
+          b.token(PHPPunctuator.RPARENTHESIS),
+          UNARY_EXPR()),
+        PREFIXED_BINARY_CAST()));
+  }
+
+  public ExpressionTree PREFIXED_BINARY_CAST() {
+    return b.<ExpressionTree>nonterminal(Kind.PREFIXED_CAST_EXPRESSION).is(
+      f.prefixedCastExpression(
         b.firstOf(
-          b.token(PHPKeyword.ARRAY),
-          b.token(PHPKeyword.UNSET),
-          b.token(PHPLexicalGrammar.INTEGER),
-          b.token(PHPLexicalGrammar.INT),
-          b.token(PHPLexicalGrammar.DOUBLE),
-          b.token(PHPLexicalGrammar.FLOAT),
-          b.token(PHPLexicalGrammar.STRING),
-          b.token(PHPLexicalGrammar.OBJECT),
-          b.token(PHPLexicalGrammar.BOOLEAN),
-          b.token(PHPLexicalGrammar.BOOL),
-          b.token(PHPLexicalGrammar.BINARY)),
-        b.token(PHPPunctuator.RPARENTHESIS),
-        UNARY_EXPR()));
+          b.token(PHPPunctuator.LOWER_BINARY_CAST_PREFIX),
+          b.token(PHPPunctuator.UPPER_BINARY_CAST_PREFIX)),
+        b.firstOf(
+          STRING_LITERAL(),
+          NOWDOC_STRING_LITERAL(),
+          HEREDOC_STRING_LITERAL())));
   }
 
   public ExpressionTree UNARY_EXPR() {
@@ -1162,7 +1176,7 @@ public class PHPGrammar {
         NUMERIC_LITERAL(),
         STRING_LITERAL(),
         YIELD_SCALAR(),
-        f.nowdocLiteral(b.token(PHPLexicalGrammar.NOWDOC)),
+        NOWDOC_STRING_LITERAL(),
         HEREDOC_STRING_LITERAL(),
         f.booleanLiteral(b.token(PHPLexicalGrammar.BOOLEAN_LITERAL)),
         f.nullLiteral(b.token(PHPLexicalGrammar.NULL)),
@@ -1209,6 +1223,11 @@ public class PHPGrammar {
   public HeredocStringLiteralTree HEREDOC_STRING_LITERAL() {
     return b.<HeredocStringLiteralTree>nonterminal(Kind.HEREDOC_LITERAL).is(
       f.heredocStringLiteral(b.token(PHPLexicalGrammar.HEREDOC)));
+  }
+
+  public LiteralTree NOWDOC_STRING_LITERAL() {
+    return b.<LiteralTree>nonterminal(Kind.NOWDOC_LITERAL).is(
+      f.nowdocLiteral(b.token(PHPLexicalGrammar.NOWDOC)));
   }
 
   public HeredocStringLiteralTreeImpl.HeredocBody HEREDOC_BODY() {
