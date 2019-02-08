@@ -49,7 +49,6 @@ class ExecutableLineVisitor extends PHPTreeSubscriber {
       Kind.GOTO_STATEMENT,
       Kind.THROW_STATEMENT,
       Kind.EMPTY_STATEMENT,
-      Kind.YIELD_STATEMENT,
       Kind.GLOBAL_STATEMENT,
       Kind.STATIC_STATEMENT,
       Kind.TRY_STATEMENT,

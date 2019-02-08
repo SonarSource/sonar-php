@@ -63,6 +63,7 @@ import org.sonar.plugins.php.api.tree.expression.SpreadArgumentTree;
 import org.sonar.plugins.php.api.tree.expression.UnaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
@@ -99,7 +100,6 @@ import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
-import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
@@ -196,9 +196,14 @@ public interface Tree {
     PARENTHESISED_EXPRESSION(ParenthesisedExpressionTree.class),
 
     /**
-     * {@link ParenthesisedExpressionTree}
+     * {@link YieldExpressionTree}
      */
-    YIELD_EXPRESSION(ParenthesisedExpressionTree.class),
+    YIELD_EXPRESSION(YieldExpressionTree.class),
+
+    /**
+     * {@link YieldExpressionTree}
+     */
+    YIELD_SCALAR(YieldExpressionTree.class),
 
     /**
      * {@link VariableVariableTree}
@@ -879,11 +884,6 @@ public interface Tree {
      * {@link GotoStatementTree}
      */
     GOTO_STATEMENT(GotoStatementTree.class),
-
-    /**
-     * {@link YieldStatementTree}
-     */
-    YIELD_STATEMENT(YieldStatementTree.class),
 
     /**
      * {@link TraitPrecedenceTree}

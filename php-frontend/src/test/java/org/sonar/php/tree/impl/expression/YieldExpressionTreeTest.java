@@ -56,7 +56,7 @@ public class YieldExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
   public void yield_null() throws Exception {
-    YieldExpressionTree tree = parse("yield", Kind.YIELD_EXPRESSION);
+    YieldExpressionTree tree = parse("yield", Kind.YIELD_SCALAR);
 
     assertThat(tree.is(Kind.YIELD_EXPRESSION)).isTrue();
     assertThat(tree.yieldToken().text()).isEqualTo("yield");

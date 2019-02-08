@@ -27,10 +27,10 @@ import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.UnsetVariableStatementTree;
-import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = FileWithSymbolsAndSideEffectsCheck.KEY)
@@ -69,8 +69,8 @@ public class FileWithSymbolsAndSideEffectsCheck extends PHPVisitorCheck {
   }
 
   @Override
-  public void visitYieldStatement(YieldStatementTree tree) {
-    super.visitYieldStatement(tree);
+  public void visitYieldExpression(YieldExpressionTree tree) {
+    super.visitYieldExpression(tree);
     fileHasSideEffect = true;
   }
 

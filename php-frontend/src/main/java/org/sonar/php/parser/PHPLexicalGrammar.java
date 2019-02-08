@@ -152,7 +152,6 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   RETURN_STATEMENT,
   THROW_STATEMENT,
   GOTO_STATEMENT,
-  YIELD_STATEMENT,
 
   TRY_STATEMENT,
   CATCH_BLOCK,

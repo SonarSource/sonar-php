@@ -32,6 +32,7 @@ public class ExitExprTest {
       .matches("exit (0)")
       .matches("die ('Error')")
       .matches("die ()")
+      .matches("die(yield $foo)")
       .matches("die");
   }
 
