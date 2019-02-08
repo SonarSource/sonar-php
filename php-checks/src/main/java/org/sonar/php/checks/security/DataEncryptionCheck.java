@@ -26,10 +26,9 @@ import java.util.Locale;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
-import org.sonar.php.checks.utils.namespace.QualifiedName;
 import org.sonar.php.checks.utils.type.StaticFunctionCall;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -44,11 +43,11 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import static org.sonar.php.checks.utils.namespace.QualifiedName.qualifiedName;
 import static org.sonar.php.checks.utils.type.StaticFunctionCall.staticFunctionCall;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = "S4787")
-public class DataEncryptionCheck extends NamespaceAwareVisitor {
+public class DataEncryptionCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that encrypting data is safe here.";
 
@@ -182,13 +181,13 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
       QualifiedName fullyQualifiedSuperclassName = getFullyQualifiedName(superClass);
-      if (fullyQualifiedSuperclassName.equalsIgnoreCase(CODE_IGNITER_CONTROLLER_CLASS)) {
+      if (fullyQualifiedSuperclassName.equals(CODE_IGNITER_CONTROLLER_CLASS)) {
         checkCodeIgniterControllerMethods(tree);
       }
     }
 
     tree.superInterfaces().stream()
-      .filter(superInterface -> JOOMLA_CIPHER_INTERFACE.equalsIgnoreCase(getFullyQualifiedName(superInterface)))
+      .filter(superInterface -> JOOMLA_CIPHER_INTERFACE.equals(getFullyQualifiedName(superInterface)))
       .forEach(superInterface -> context().newIssue(this, superInterface, MESSAGE));
   }
 
@@ -221,7 +220,7 @@ public class DataEncryptionCheck extends NamespaceAwareVisitor {
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
       NamespaceNameTree classNameTree = (NamespaceNameTree) callee;
       QualifiedName className = getFullyQualifiedName(classNameTree);
-      return SUSPICIOUS_CLASS_INSTANTIATIONS.stream().anyMatch(className::equalsIgnoreCase);
+      return SUSPICIOUS_CLASS_INSTANTIATIONS.stream().anyMatch(className::equals);
     }
     return false;
   }

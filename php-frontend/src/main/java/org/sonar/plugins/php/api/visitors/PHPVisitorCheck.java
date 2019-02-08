@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.visitors.PHPCheckContext;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
@@ -565,5 +567,13 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
     this.context = context;
     visitCompilationUnit(context.tree());
     return context().getIssues();
+  }
+
+  protected final QualifiedName getFullyQualifiedName(NamespaceNameTree namespaceNameTree) {
+    Symbol symbol = context().symbolTable().getSymbol(namespaceNameTree.name());
+    if (symbol == null) {
+      throw new IllegalStateException("Symbol not found for " + namespaceNameTree + " at " + context.getPhpFile() + ":" + ((PHPTree) namespaceNameTree).getFirstToken().line());
+    }
+    return symbol.qualifiedName();
   }
 }
