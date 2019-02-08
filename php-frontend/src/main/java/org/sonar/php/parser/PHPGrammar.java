@@ -1557,7 +1557,7 @@ public class PHPGrammar {
   public ExpressionTree STATIC_SCALAR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.STATIC_SCALAR).is(
       b.firstOf(
-        ARRAY_INITIALIZER(),
+        f.combinedScalarOffset(ARRAY_INITIALIZER(), b.zeroOrMore(DIMENSIONAL_OFFSET())),
         EXPRESSION()));
   }
 

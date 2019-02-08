@@ -56,6 +56,7 @@ public class AssignmentExpressionTest {
       .matches("[$a, &$b] = $array")
       .matches("list($a, &$b) = $array")
       .matches("$array = [1, 2, 3, [3, 4]]")
+      .matches("$bar = [\"bar\" => 3][\"bar\"]")
 
       .notMatches("[$a, &&$b] = $array")
       .notMatches("[$a, &] = $array")
