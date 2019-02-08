@@ -425,6 +425,49 @@ public class SymbolTableImplTest extends ParsingTestUtils {
     assertThat(classA.members()).extracting(m -> m.qualifiedName().simpleName()).containsExactly("a", "foo");
   }
 
+  @Test
+  public void static_invocation() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php use Cake\\Utility\\Security as CakeSecurity; CakeSecurity::encrypt($data, $key); ");
+    Symbol symbol = symbolTable.getSymbol("cake\\utility\\security");
+    assertThat(symbol).isNotNull();
+    assertThat(symbol.kind()).isEqualTo(Kind.CLASS);
+    assertThat(symbol).isExactlyInstanceOf(UndeclaredSymbol.class);
+  }
+
+  @Test
+  public void new_expression_wo_brackets() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php new A; ");
+    Symbol a = symbolTable.getSymbol("a");
+    assertThat(a).isNotNull();
+    assertThat(a.usages()).hasSize(1);
+  }
+
+  @Test
+  public void anonymous_class() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php new class() extends A implements I1, I2 {};");
+    Symbol symbol = symbolTable.getSymbol("a");
+    assertThat(symbol).isNotNull();
+    assertThat(symbol.kind()).isEqualTo(Kind.CLASS);
+    assertThat(symbol).isExactlyInstanceOf(UndeclaredSymbol.class);
+    assertThat(symbolTable.getSymbol("i1")).isNotNull();
+    assertThat(symbolTable.getSymbol("i2")).isNotNull();
+  }
+
+  @Test
+  public void traits() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php namespace N { class A { use trait1, trait2; } }");
+    assertThat(symbolTable.getSymbol("n\\trait1")).isNotNull();
+    assertThat(symbolTable.getSymbol("n\\trait2")).isNotNull();
+  }
+
+  @Test
+  public void use_in_trait() {
+    SymbolTableImpl symbolTable = symbolTableFor("<?php namespace N { trait A { use trait1, trait2; } }");
+    assertThat(symbolTable.getSymbol("n\\a")).isNotNull();
+    assertThat(symbolTable.getSymbol("n\\trait1")).isNotNull();
+    assertThat(symbolTable.getSymbol("n\\trait2")).isNotNull();
+  }
+
   private static ListAssert<String> assertClassSymbols(SymbolTableImpl symbolTable, String... fullyQualifiedNames) {
     return assertThat(symbolTable.getSymbols(Kind.CLASS)).extracting(s -> s.qualifiedName().toString())
       .containsExactly(fullyQualifiedNames);
