@@ -45,8 +45,10 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   public static final String KEY = "S2001";
   private static final String MESSAGE_SET_LOCAL_ARG = "Use the \"%s\" constant instead of a string literal.";
   private static final String MESSAGE_WITH_REPLACEMENT = "Replace this \"%s()\" call with a call to \"%s\".";
-  private static final String MESSAGE_WITHOUT_REPLACEMENT = "Remove this \"%s()\" call.";
+  private static final String MESSAGE_WITHOUT_REPLACEMENT = "Remove this call to deprecated \"%s()\".";
   private static final String SESSION = "$_SESSION";
+  private static final String FGETSS_FUNCTION = "fgetss";
+  private static final String GZGETSS_FUNCTION = "gzgetss";
 
   private static final ImmutableMap<String, String> NEW_BY_DEPRECATED_FUNCTIONS = ImmutableMap.<String, String>builder()
     .put("call_user_method", "call_user_func()")
@@ -62,40 +64,39 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
     .put("session_register", SESSION)
     .put("session_unregister", SESSION)
     .put("session_is_registered", SESSION)
-    .put("set_socket_blocking", "stream_set_blocking")
-    .put("split", "preg_split")
-    .put("spliti", "preg_split")
+    .put("set_socket_blocking", "stream_set_blocking()")
+    .put("split", "preg_split()")
+    .put("spliti", "preg_split()")
     .put("sql_regcase", "")
     .put("mysql_db_query", "mysql_select_db() and mysql_query()")
-    .put("mysql_escape_string", "mysql_real_escape_string")
-    .put("__autoload", "spl_autoload_register")
+    .put("mysql_escape_string", "mysql_real_escape_string()")
+    .put("__autoload", "spl_autoload_register()")
     .put("create_function", "")
-    .put("gmp_random", "gmp_random_bits")
+    .put("gmp_random", "gmp_random_bits()")
     .put("each", "")
-    .put("mbregex_encoding", "mb_regex_encoding")
-    .put("mbereg", "mb_ereg")
-    .put("mberegi", "mb_eregi")
-    .put("mbereg_replace", "mb_ereg_replace")
-    .put("mberegi_replace", "mb_eregi_replace")
-    .put("mbsplit", "mb_split")
-    .put("mbereg_match", "mb_ereg_match")
-    .put("mbereg_search", "mb_ereg_search")
-    .put("mbereg_search_pos", "mb_ereg_search_pos")
-    .put("mbereg_search_regs", "mb_ereg_search_regs")
-    .put("mbereg_search_init", "mb_ereg_search_init")
-    .put("mbereg_search_getregs", "mb_ereg_search_getregs")
-    .put("mbereg_search_getpos", "mb_ereg_search_getpos")
-    .put("mbereg_search_setpos", "mb_ereg_search_setpos")
-    .put("fgetss", "")
-    .put("gzgetss", "")
-    .put("image2wbmp", "imagewbmp")
+    .put("mbregex_encoding", "mb_regex_encoding()")
+    .put("mbereg", "mb_ereg()")
+    .put("mberegi", "mb_eregi()")
+    .put("mbereg_replace", "mb_ereg_replace()")
+    .put("mberegi_replace", "mb_eregi_replace()")
+    .put("mbsplit", "mb_split()")
+    .put("mbereg_match", "mb_ereg_match()")
+    .put("mbereg_search", "mb_ereg_search()")
+    .put("mbereg_search_pos", "mb_ereg_search_pos()")
+    .put("mbereg_search_regs", "mb_ereg_search_regs()")
+    .put("mbereg_search_init", "mb_ereg_search_init()")
+    .put("mbereg_search_getregs", "mb_ereg_search_getregs()")
+    .put("mbereg_search_getpos", "mb_ereg_search_getpos()")
+    .put("mbereg_search_setpos", "mb_ereg_search_setpos()")
+    .put(FGETSS_FUNCTION, "")
+    .put(GZGETSS_FUNCTION, "")
+    .put("image2wbmp", "imagewbmp()")
     .build();
 
   private static final String SET_LOCALE_FUNCTION = "setlocale";
   private static final String PARSE_STR_FUNCTION = "parse_str";
   private static final String ASSERT_FUNCTION = "assert";
   private static final String DEFINE_FUNCTION = "define";
-  private static final String STREAM_FILTER_APPEND_FUNCTION = "stream_filter_append";
   private static final ImmutableSet<String> LOCALE_CATEGORY_CONSTANTS = ImmutableSet.of(
     "LC_ALL", "LC_COLLATE", "LC_CTYPE", "LC_MONETARY", "LC_NUMERIC", "LC_TIME", "LC_MESSAGES");
 
@@ -105,7 +106,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   private static final ImmutableSet<String> SEARCHING_STRING_FUNCTIONS = ImmutableSet.of(
     "stristr", "strrchr", "strstr", "strripos", "stripos", "strrpos", "strpos", "strchr");
 
-  private static final Predicate<TreeValues> SPLFILEOBJECT_FGETSS = new ObjectMemberFunctionCall("fgetss", new NewObjectCall("SplFileObject"));
+  private static final Predicate<TreeValues> SPLFILEOBJECT_FGETSS = new ObjectMemberFunctionCall(FGETSS_FUNCTION, new NewObjectCall("SplFileObject"));
 
   @Override
   protected ImmutableSet<String> functionNames() {
@@ -116,14 +117,13 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       .add(PARSE_STR_FUNCTION)
       .add(ASSERT_FUNCTION)
       .add(DEFINE_FUNCTION)
-      .add(STREAM_FILTER_APPEND_FUNCTION)
       .build();
   }
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
     TreeValues possibleValues = TreeValues.of(tree, context().symbolTable());
     if (SPLFILEOBJECT_FGETSS.test(possibleValues)) {
-      context().newIssue(this, tree,"Remove this \"fgetss()\" call.");
+      context().newIssue(this, tree, String.format(MESSAGE_WITHOUT_REPLACEMENT, FGETSS_FUNCTION));
     }
     super.visitFunctionCall(tree);
   }
@@ -131,9 +131,17 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   @Override
   public void visitNameIdentifier(NameIdentifierTree tree) {
     if (DEPRECATED_CASE_SENSITIVE_CONSTANTS.contains(tree.text())) {
-      context().newIssue(this, tree, "Do not use this deprecated " + tree.text() + " constant.");
+      context().newIssue(this, tree, "Do not use this deprecated \"" + tree.text() + "\" constant.");
     }
     super.visitNameIdentifier(tree);
+  }
+
+  @Override
+  public void visitLiteral(LiteralTree tree) {
+    if (tree.is(Kind.REGULAR_STRING_LITERAL) && CheckUtils.trimQuotes(tree).equals("string.strip_tags")) {
+      context().newIssue(this, tree, "Remove this deprecated \"string.strip_tags\" filter usage.");
+    }
+    super.visitLiteral(tree);
   }
 
   @Override
@@ -152,7 +160,7 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
     NameIdentifierTree name = tree.name();
     if (name.text().equalsIgnoreCase(ASSERT_FUNCTION)) {
-      context().newIssue(this, name, "Use instead the standard \"assert\" function.");
+      context().newIssue(this, name, "Use the standard \"assert\" function instead of declaring a new assert function.");
     }
     super.visitFunctionDeclaration(tree);
   }
@@ -172,9 +180,6 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
 
     } else if (DEFINE_FUNCTION.equalsIgnoreCase(functionName)) {
       checkDefineArguments(tree);
-
-    } else if (STREAM_FILTER_APPEND_FUNCTION.equalsIgnoreCase(functionName)) {
-      checkStreamFilterAppendArguments(tree);
 
     } else if (SEARCHING_STRING_FUNCTIONS.contains(functionName.toLowerCase(Locale.ROOT))) {
       checkSearchingStringArguments(tree);
@@ -229,16 +234,6 @@ public class PHPDeprecatedFunctionUsageCheck extends FunctionUsageCheck {
       ExpressionTree caseInsensitiveArgument = arguments.get(2);
       if (caseInsensitiveArgument.is(Kind.BOOLEAN_LITERAL) && "true".equalsIgnoreCase(((LiteralTree) caseInsensitiveArgument).value())) {
         context().newIssue(this, tree, "Define this constant as case sensitive.");
-      }
-    }
-  }
-
-  private void checkStreamFilterAppendArguments(FunctionCallTree tree) {
-    SeparatedList<ExpressionTree> arguments = tree.arguments();
-    if (arguments.size() >= 2) {
-      ExpressionTree filterNameArgument = arguments.get(1);
-      if (filterNameArgument.is(Kind.REGULAR_STRING_LITERAL) && CheckUtils.trimQuotes((LiteralTree) filterNameArgument).equals("string.strip_tags")) {
-        context().newIssue(this, filterNameArgument, "Remove this highly discouraged 'string.strip_tags' filter usage.");
       }
     }
   }
