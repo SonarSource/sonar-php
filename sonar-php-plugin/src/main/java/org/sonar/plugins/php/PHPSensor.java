@@ -55,10 +55,10 @@ import org.sonar.php.metrics.CpdVisitor.CpdToken;
 import org.sonar.php.metrics.FileMeasures;
 import org.sonar.php.tree.visitors.LegacyIssue;
 import org.sonar.plugins.php.api.Php;
-import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.FileIssue;
 import org.sonar.plugins.php.api.visitors.IssueLocation;
 import org.sonar.plugins.php.api.visitors.LineIssue;
+import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 import org.sonar.plugins.php.api.visitors.PHPCustomRulesDefinition;
 import org.sonar.plugins.php.api.visitors.PhpIssue;
 import org.sonar.plugins.php.api.visitors.PreciseIssue;
@@ -193,7 +193,7 @@ public class PHPSensor implements Sensor {
       saveParsingIssue(context, e, inputFile);
     } catch (Exception e) {
       checkInterrupted(e);
-      throw new AnalysisException("Could not analyse " + inputFile.filename(), e);
+      LOG.error("Could not analyse " + inputFile.filename(), e);
     }
   }
 
