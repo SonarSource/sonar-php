@@ -28,18 +28,12 @@ import org.sonar.plugins.php.api.Php;
 public class PhpPlugin implements Plugin {
 
   public static final String FILE_SUFFIXES_KEY = "sonar.php.file.suffixes";
-  public static final String PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.overallReportPath";
-  public static final String PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.itReportPath";
-  public static final String PHPUNIT_COVERAGE_REPORT_PATH_KEY = "sonar.php.coverage.reportPath";
   public static final String PHPUNIT_COVERAGE_REPORT_PATHS_KEY = "sonar.php.coverage.reportPaths";
   public static final String PHPUNIT_TESTS_REPORT_PATH_KEY = "sonar.php.tests.reportPath";
 
   public static final String PHP_CATEGORY = "PHP";
   public static final String GENERAL_SUBCATEGORY = "General";
   public static final String PHPUNIT_SUBCATEGORY = "PHPUnit";
-
-  private static final String DEPRECATION_MESSAGE = "DEPRECATED: use " + PHPUNIT_COVERAGE_REPORT_PATHS_KEY + ". ";
-  private static final String REPORT_PATH_DESCRIPTION_TEMPLATE = "%sPath to the PHPUnit %s report file. The path may be either absolute or relative to the project base directory.";
 
   @Override
   public void define(Context context) {
@@ -70,34 +64,10 @@ public class PhpPlugin implements Plugin {
         .build());
 
     if (context.getRuntime().getProduct() != SonarProduct.SONARLINT) {
-      context.addExtensions(
+      context.addExtension(
         PropertyDefinition.builder(PHPUNIT_TESTS_REPORT_PATH_KEY)
           .name("Unit Test Report")
-          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, "", "unit test execution"))
-          .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-          .category(PHP_CATEGORY)
-          .subCategory(PHPUNIT_SUBCATEGORY)
-          .build(),
-
-        PropertyDefinition.builder(PHPUNIT_COVERAGE_REPORT_PATH_KEY)
-          .name("Coverage Report")
-          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, DEPRECATION_MESSAGE, "code coverage"))
-          .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-          .category(PHP_CATEGORY)
-          .subCategory(PHPUNIT_SUBCATEGORY)
-          .build(),
-
-        PropertyDefinition.builder(PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY)
-          .name("IT Coverage Report")
-          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, DEPRECATION_MESSAGE, "integration test code coverage"))
-          .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
-          .category(PHP_CATEGORY)
-          .subCategory(PHPUNIT_SUBCATEGORY)
-          .build(),
-
-        PropertyDefinition.builder(PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY)
-          .name("Overall Coverage Report")
-          .description(String.format(REPORT_PATH_DESCRIPTION_TEMPLATE, DEPRECATION_MESSAGE, "overall code coverage"))
+          .description("Path to the PHPUnit unit test execution report file. The path may be either absolute or relative to the project base directory.")
           .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
           .category(PHP_CATEGORY)
           .subCategory(PHPUNIT_SUBCATEGORY)

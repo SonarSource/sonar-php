@@ -33,6 +33,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.php.PhpPlugin;
 import org.sonar.plugins.php.phpunit.xml.CoverageNode;
 import org.sonar.plugins.php.phpunit.xml.FileNode;
 import org.sonar.plugins.php.phpunit.xml.LineNode;
@@ -47,6 +48,15 @@ public class CoverageResultImporter extends SingleFileReportImporter {
 
   CoverageResultImporter(String reportPathKey, String msg) {
     super(reportPathKey, msg);
+  }
+
+  public static ReportImporter multiCoverageImporter() {
+    String msg = "coverage";
+    String propertyKey = PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
+
+    CoverageResultImporter singleReportImporter = new CoverageResultImporter(propertyKey, msg);
+
+    return new MultiPathImporter(singleReportImporter, propertyKey, msg);
   }
 
   @Override

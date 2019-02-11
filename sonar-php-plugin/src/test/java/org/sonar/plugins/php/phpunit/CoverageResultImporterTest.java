@@ -41,6 +41,7 @@ import org.sonar.plugins.php.PhpTestUtils;
 import org.sonar.plugins.php.api.Php;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class CoverageResultImporterTest {
 
@@ -61,56 +62,50 @@ public class CoverageResultImporterTest {
 
   private SensorContextTester context;
 
-  private SensorContext setUpForMockedSensorContext() {
-    return Mockito.mock(SensorContext.class);
-  }
-
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     context = SensorContextTester.create(new File(SRC_TEST_RESOURCES + BASE_DIR).getAbsoluteFile());
     DefaultInputFile monkeyFile = TestInputFileBuilder.create("moduleKey", MONKEY_FILE_NAME)
-        .setType(InputFile.Type.MAIN)
-        .setLanguage(Php.KEY)
-        .setCharset(Charset.defaultCharset())
-        .setLines(50)
-        .build();
+      .setType(InputFile.Type.MAIN)
+      .setLanguage(Php.KEY)
+      .setCharset(Charset.defaultCharset())
+      .setLines(50)
+      .build();
     context.fileSystem().add(monkeyFile);
 
     importer = new CoverageResultImporter(
-      PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
+      PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY,
       "unit test coverage");
   }
 
   @Test
   public void should_throw_an_exception_when_report_not_found() {
-    SensorContext context = setUpForMockedSensorContext();
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Can't read phpUnit report:");
-    importer.importReport(new File("notfound.txt"), context);
+    importer.importReport(new File("notfound.txt"), setUpForMockedSensorContext());
   }
-
 
   @Test
   public void should_parse_even_with_package_node() throws Exception {
-    String componentKey = "moduleKey:" + MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
+    String componentKey = componentKey(MONKEY_FILE_NAME);
 
     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-package.xml"), context);
 
     assertCoverageLineHits(context, componentKey, 34, 1);
   }
 
-   @Test
-   public void should_generate_coverage_measures() throws Exception {
-     String componentKey = "moduleKey:"+ MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
+  @Test
+  public void should_generate_coverage_measures() throws Exception {
+    String componentKey = "moduleKey:" + MONKEY_FILE_NAME;
 
-     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage.xml"), context);
+    importer.importReport(getReportsWithAbsolutePath("phpunit.coverage.xml"), context);
 
-     assertReport(componentKey);
-   }
+    assertReport(componentKey);
+  }
 
   @Test
   public void should_work_with_relative_paths() throws Exception {
-    String componentKey = "moduleKey:" + MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
+    String componentKey = componentKey(MONKEY_FILE_NAME);
 
     String reportName = "phpunit.coverage.xml";
     File reportFile = Paths.get(SRC_TEST_RESOURCES, PhpTestUtils.PHPUNIT_REPORT_DIR, reportName).toFile();
@@ -135,7 +130,7 @@ public class CoverageResultImporterTest {
    */
   @Test
   public void should_not_fail_if_no_statement_count() throws Exception {
-    String componentKey = "moduleKey:" + MONKEY_FILE_NAME; // see call to method getReportsWithAbsolutePath below
+    String componentKey = componentKey(MONKEY_FILE_NAME);
 
     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-no-statements-covered.xml"), context);
 
@@ -147,12 +142,16 @@ public class CoverageResultImporterTest {
    */
   @Test
   public void should_not_fail_if_no_line_for_file_node() throws Exception {
-    importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-filenode-without-line.xml"), context);
+    try {
+      importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-with-filenode-without-line.xml"), context);
+    } catch (Exception e) {
+      fail("Shound never happen");
+    }
   }
 
   @Test
   public void should_not_set_metrics_to_ncloc_for_missing_files_sq_62() throws Exception {
-    String componentKey = "moduleKey:Monkey.php"; // see call to method getReportsWithAbsolutePath below
+    String componentKey = componentKey("Monkey.php");
 
     importer.importReport(getReportsWithAbsolutePath("phpunit.coverage-empty.xml"), context);
 
@@ -179,8 +178,16 @@ public class CoverageResultImporterTest {
     return fileWIthAbsolutePaths;
   }
 
-  private void assertCoverageLineHits(SensorContextTester context, String componentKey, int line, int expectedHits) {
+  private static void assertCoverageLineHits(SensorContextTester context, String componentKey, int line, int expectedHits) {
     assertThat(context.lineHits(componentKey, line)).as("coverage line hits for line: " + line).isEqualTo(expectedHits);
+  }
+
+  private static SensorContext setUpForMockedSensorContext() {
+    return Mockito.mock(SensorContext.class);
+  }
+
+  private static String componentKey(String componentName) {
+    return "moduleKey:" + componentName;
   }
 
 }
