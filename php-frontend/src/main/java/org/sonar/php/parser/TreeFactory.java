@@ -119,7 +119,6 @@ import org.sonar.php.tree.impl.statement.UnsetVariableStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.UseStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.VariableDeclarationTreeImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
-import org.sonar.php.tree.impl.statement.YieldStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -203,7 +202,6 @@ import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
-import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 
 public class TreeFactory {
@@ -940,10 +938,6 @@ public class TreeFactory {
     );
   }
 
-  public YieldStatementTree yieldStatement(YieldExpressionTree yieldExpression, InternalSyntaxToken eosToken) {
-    return new YieldStatementTreeImpl(yieldExpression, eosToken);
-  }
-
   public UnsetVariableStatementTree unsetVariableStatement(
     InternalSyntaxToken unsetToken, InternalSyntaxToken openParenthesisToken,
     ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> list,
@@ -1208,8 +1202,12 @@ public class TreeFactory {
     return new ExpandableStringLiteralTreeImpl(openDoubleQuote, expressions, closeDoubleQuote);
   }
 
-  public YieldExpressionTree yieldExpression(InternalSyntaxToken yieldToken, Optional<ExpressionTree> expr) {
-    return new YieldExpressionTreeImpl(yieldToken, expr.orNull());
+  public YieldExpressionTree yieldExpression(InternalSyntaxToken yieldToken) {
+    return new YieldExpressionTreeImpl(yieldToken, null);
+  }
+
+  public YieldExpressionTree yieldExpression(InternalSyntaxToken yieldToken, ExpressionTree expr) {
+    return new YieldExpressionTreeImpl(yieldToken, expr);
   }
 
   public YieldExpressionTree yieldFromExpression(InternalSyntaxToken yieldToken, InternalSyntaxToken fromToken, ExpressionTree expr) {

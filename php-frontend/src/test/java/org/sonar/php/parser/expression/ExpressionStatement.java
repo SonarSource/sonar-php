@@ -17,23 +17,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.plugins.php.api.tree.statement;
+package org.sonar.php.parser.expression;
 
-import com.google.common.annotations.Beta;
-import org.sonar.plugins.php.api.tree.expression.YieldExpressionTree;
-import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
+import org.junit.Test;
+import org.sonar.php.parser.PHPLexicalGrammar;
 
-/**
- * <a href="http://php.net/manual/ru/language.generators.syntax.php">Yield statement</a>
- * <pre>
- *  {@link #yieldExpression()} ;
- * </pre>
- */
-@Beta
-public interface YieldStatementTree extends StatementTree {
+import static org.sonar.php.utils.Assertions.assertThat;
 
-  YieldExpressionTree yieldExpression();
+public class ExpressionStatement {
 
-  SyntaxToken eosToken();
+  @Test
+  public void test() {
+    assertThat(PHPLexicalGrammar.EXPRESSION_STATEMENT)
+      .matches("1;")
+      .matches("1 + 1;")
+      .matches("yield $a;")
+      .matches("yield +6;")
+      .matches("yield *6;");
+  }
 
 }

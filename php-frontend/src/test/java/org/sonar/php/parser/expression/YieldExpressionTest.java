@@ -20,6 +20,7 @@
 package org.sonar.php.parser.expression;
 
 import org.junit.Test;
+import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 
 import static org.sonar.php.utils.Assertions.assertThat;
@@ -27,13 +28,21 @@ import static org.sonar.php.utils.Assertions.assertThat;
 public class YieldExpressionTest {
 
   @Test
-  public void test() {
-    assertThat(Kind.YIELD_EXPRESSION)
+  public void yield_scalar() {
+    assertThat(PHPLexicalGrammar.YIELD_SCALAR)
       .matches("yield")
+      .notMatches("yield $a");
+  }
+
+  @Test
+  public void yield_expression() {
+    assertThat(Kind.YIELD_EXPRESSION)
+      .notMatches("yield")
       .matches("yield $a")
       .matches("yield $a=>$b")
       .matches("yield from foo()")
-    ;
-
+      .matches("yield yield")
+      .matches("yield from [yield]")
+      .matches("yield \"k\" => \"a\" . \"b\"");
   }
 }

@@ -56,7 +56,6 @@ public class CounterVisitor extends PHPSubscriptionCheck {
     Kind.GOTO_STATEMENT,
     Kind.DECLARE_STATEMENT,
     Kind.STATIC_STATEMENT,
-    Kind.YIELD_STATEMENT,
     Kind.GLOBAL_STATEMENT,
     Kind.CLASS_CONSTANT_PROPERTY_DECLARATION,
     Kind.CLASS_PROPERTY_DECLARATION,

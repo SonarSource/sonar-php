@@ -46,6 +46,14 @@ public class StatementTest {
     .matches("global $a;")
     .matches("echo \"Hi\";")
     .matches("unset($a);")
+    .matches("yield yield;")
+    .matches("die(yield $foo);")
+    .matches("yield from [yield];")
+    .matches("list($value) = yield;")
+    .matches("var_dump(yield * -1);")
+    .matches("var_dump([yield \"k\" => \"a\" . \"b\"]);")
+    .matches("$$varName = yield;")
+    .matches("$gen = yield;")
     .matches("$var = function () {};");
   }
 

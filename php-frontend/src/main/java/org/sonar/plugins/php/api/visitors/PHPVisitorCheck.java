@@ -106,7 +106,6 @@ import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
-import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 public abstract class PHPVisitorCheck implements VisitorCheck {
 
@@ -224,11 +223,6 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitUnsetVariableStatement(UnsetVariableStatementTree tree) {
-    scan(tree);
-  }
-
-  @Override
-  public void visitYieldStatement(YieldStatementTree tree) {
     scan(tree);
   }
 

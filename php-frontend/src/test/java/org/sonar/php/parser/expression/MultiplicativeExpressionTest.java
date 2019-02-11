@@ -19,10 +19,10 @@
  */
 package org.sonar.php.parser.expression;
 
-import static org.sonar.php.utils.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.parser.PHPLexicalGrammar;
+
+import static org.sonar.php.utils.Assertions.assertThat;
 
 public class MultiplicativeExpressionTest {
 
@@ -31,6 +31,7 @@ public class MultiplicativeExpressionTest {
     assertThat(PHPLexicalGrammar.MULTIPLICATIVE_EXPR)
       .matches("$a")
       .matches("$a * $a")
+      .matches("yield * $a")
       .matches("$a / $a")
       .matches("$a % $a");
   }

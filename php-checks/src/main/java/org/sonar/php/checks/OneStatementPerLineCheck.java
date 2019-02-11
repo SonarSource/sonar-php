@@ -79,8 +79,7 @@ public class OneStatementPerLineCheck extends PHPSubscriptionCheck {
         Kind.THROW_STATEMENT,
         Kind.TRY_STATEMENT,
         Kind.UNSET_VARIABLE_STATEMENT,
-        Kind.USE_STATEMENT,
-        Kind.YIELD_STATEMENT
+        Kind.USE_STATEMENT
     );
   }
 

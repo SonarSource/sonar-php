@@ -163,7 +163,6 @@ class ControlFlowGraphBuilder {
         return buildSwitchStatement((SwitchStatementTree) tree, currentBlock);
       case LABEL:
         return createLabelBlock((LabelTree) tree, currentBlock);
-      case YIELD_STATEMENT:
       case GLOBAL_STATEMENT:
       case STATIC_STATEMENT:
       case DECLARE_STATEMENT:

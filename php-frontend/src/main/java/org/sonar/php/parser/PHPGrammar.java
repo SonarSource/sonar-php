@@ -105,7 +105,6 @@ import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.tree.statement.WhileStatementTree;
-import org.sonar.plugins.php.api.tree.statement.YieldStatementTree;
 
 import static org.sonar.php.api.PHPKeyword.ABSTRACT;
 import static org.sonar.php.api.PHPKeyword.ARRAY;
@@ -582,7 +581,6 @@ public class PHPGrammar {
         CONTINUE_STATEMENT(),
         RETURN_STATEMENT(),
         EMPTY_STATEMENT(),
-        YIELD_STATEMENT(),
         GLOBAL_STATEMENT(),
         STATIC_STATEMENT(),
         ECHO_STATEMENT(),
@@ -692,11 +690,6 @@ public class PHPGrammar {
         b.optional(b.token(COMMA)),
         b.token(RPARENTHESIS),
         EOS()));
-  }
-
-  public YieldStatementTree YIELD_STATEMENT() {
-    return b.<YieldStatementTree>nonterminal(PHPLexicalGrammar.YIELD_STATEMENT).is(
-      f.yieldStatement(YIELD_EXPRESSION(), EOS()));
   }
 
   public SwitchStatementTree SWITCH_STATEMENT() {
@@ -993,17 +986,19 @@ public class PHPGrammar {
 
   public ExpressionTree UNARY_EXPR() {
     return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.UNARY_EXPR).is(
+      b.firstOf(
+        YIELD_EXPRESSION(),
         f.prefixExpr(
           b.zeroOrMore(
-          b.firstOf(
-            b.token(PHPPunctuator.INC),
-            b.token(PHPPunctuator.DEC),
-            b.token(PHPPunctuator.PLUS),
-            b.token(PHPPunctuator.MINUS),
-            b.token(PHPPunctuator.TILDA),
-            b.token(PHPPunctuator.BANG),
-            b.token(PHPPunctuator.AT))),
-          POWER_EXPR()));
+            b.firstOf(
+              b.token(PHPPunctuator.INC),
+              b.token(PHPPunctuator.DEC),
+              b.token(PHPPunctuator.PLUS),
+              b.token(PHPPunctuator.MINUS),
+              b.token(PHPPunctuator.TILDA),
+              b.token(PHPPunctuator.BANG),
+              b.token(PHPPunctuator.AT))),
+          POWER_EXPR())));
   }
 
   public ExpressionTree POWER_EXPR() {
@@ -1166,6 +1161,7 @@ public class PHPGrammar {
       b.firstOf(
         NUMERIC_LITERAL(),
         STRING_LITERAL(),
+        YIELD_SCALAR(),
         f.nowdocLiteral(b.token(PHPLexicalGrammar.NOWDOC)),
         HEREDOC_STRING_LITERAL(),
         f.booleanLiteral(b.token(PHPLexicalGrammar.BOOLEAN_LITERAL)),
@@ -1294,16 +1290,19 @@ public class PHPGrammar {
       b.firstOf(
         f.yieldExpressionWithKey(b.token(YIELD), EXPRESSION(), b.token(DOUBLEARROW), EXPRESSION()),
         f.yieldFromExpression(b.token(YIELD), b.token(PHPLexicalGrammar.FROM), EXPRESSION()),
-        f.yieldExpression(b.token(YIELD), b.optional(EXPRESSION()))));
+        f.yieldExpression(b.token(YIELD), EXPRESSION())));
+  }
+
+  public YieldExpressionTree YIELD_SCALAR() {
+    return b.<YieldExpressionTree>nonterminal(PHPLexicalGrammar.YIELD_SCALAR).is(
+        f.yieldExpression(b.token(YIELD)));
   }
 
   public ParenthesisedExpressionTree PARENTHESIZED_EXPRESSION() {
     return b.<ParenthesisedExpressionTree>nonterminal(Kind.PARENTHESISED_EXPRESSION).is(
       f.parenthesizedExpression(
         b.token(LPARENTHESIS),
-        b.firstOf(
-          YIELD_EXPRESSION(),
-          EXPRESSION()),
+        EXPRESSION(),
         b.token(RPARENTHESIS)));
   }
 
@@ -1487,8 +1486,7 @@ public class PHPGrammar {
       b.firstOf(
         REFERENCE_VARIABLE(),
         SPREAD_ARGUMENT(),
-        EXPRESSION(),
-        YIELD_EXPRESSION()));
+        EXPRESSION()));
   }
 
   public ExpressionTree MEMBER_EXPRESSION() {
