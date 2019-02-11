@@ -27,9 +27,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
-import org.sonar.php.checks.utils.namespace.QualifiedName;
 import org.sonar.php.tree.impl.expression.PrefixExpressionTreeImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -40,23 +39,24 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.sonar.php.checks.utils.namespace.QualifiedName.create;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 import static org.sonar.plugins.php.api.tree.Tree.Kind.REGULAR_STRING_LITERAL;
 
 @Rule(key = "S4792")
-public class LoggerConfigurationCheck extends NamespaceAwareVisitor {
+public class LoggerConfigurationCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that this logger's configuration is safe.";
   private static final String ERROR_REPORTING = "error_reporting";
   private static final ImmutableSet<String> GLOBAL_CONFIGURATION_FUNCTIONS = ImmutableSet.of("ini_set", "ini_alter");
   private static final Map<String, List<String>> WHITELISTED_VALUE_BY_DIRECTIVE = buildWhitelistedValues();
-  private static final QualifiedName PSR_LOG_ABSTRACT_LOGGER_CLASS = create("Psr", "Log", "AbstractLogger");
-  private static final QualifiedName PSR_LOG_LOGGER_INTERFACE = create("Psr", "Log", "LoggerInterface");
-  private static final QualifiedName PSR_LOG_LOGGER_TRAIT = create("Psr", "Log", "LoggerTrait");
+  private static final QualifiedName PSR_LOG_ABSTRACT_LOGGER_CLASS = qualifiedName("Psr\\Log\\AbstractLogger");
+  private static final QualifiedName PSR_LOG_LOGGER_INTERFACE = qualifiedName("Psr\\Log\\LoggerInterface");
+  private static final QualifiedName PSR_LOG_LOGGER_TRAIT = qualifiedName("Psr\\Log\\LoggerTrait");
 
   private static Map<String, List<String>> buildWhitelistedValues() {
     Map<String, List<String>> map = new HashMap<>();
@@ -110,18 +110,18 @@ public class LoggerConfigurationCheck extends NamespaceAwareVisitor {
     super.visitUseTraitDeclaration(tree);
 
     tree.traits().stream()
-      .filter(trait -> PSR_LOG_LOGGER_TRAIT.equalsIgnoreCase(getFullyQualifiedName(trait)))
+      .filter(trait -> PSR_LOG_LOGGER_TRAIT.equals(getFullyQualifiedName(trait)))
       .forEach(trait -> context().newIssue(this, trait, MESSAGE));
   }
 
   private void checkSuspiciousClassDeclaration(ClassTree tree) {
     NamespaceNameTree superClass = tree.superClass();
-    if (superClass != null && getFullyQualifiedName(superClass).equalsIgnoreCase(PSR_LOG_ABSTRACT_LOGGER_CLASS)) {
+    if (superClass != null && getFullyQualifiedName(superClass).equals(PSR_LOG_ABSTRACT_LOGGER_CLASS)) {
       context().newIssue(this, superClass, MESSAGE);
     }
 
     tree.superInterfaces().stream()
-      .filter(superInterface -> PSR_LOG_LOGGER_INTERFACE.equalsIgnoreCase(getFullyQualifiedName(superInterface)))
+      .filter(superInterface -> PSR_LOG_LOGGER_INTERFACE.equals(getFullyQualifiedName(superInterface)))
       .forEach(superInterface -> context().newIssue(this, superInterface, MESSAGE));
   }
 

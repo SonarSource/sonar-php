@@ -17,5 +17,18 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-@javax.annotation.ParametersAreNonnullByDefault
-package org.sonar.php.checks.utils.namespace;
+package org.sonar.plugins.php.api.symbols;
+
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class QualifiedNameTest {
+
+  @Test
+  public void qualifiedName() {
+    QualifiedName qualifiedName1 = QualifiedName.qualifiedName("A\\B\\C");
+    QualifiedName qualifiedName2 = QualifiedName.qualifiedName("a\\b\\c");
+    assertThat(qualifiedName1).isEqualTo(qualifiedName2);
+  }
+}

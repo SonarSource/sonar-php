@@ -22,8 +22,8 @@ package org.sonar.php.checks.utils.type;
 import org.junit.Test;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.sonar.php.checks.utils.namespace.QualifiedName.qualifiedName;
 import static org.sonar.php.checks.utils.type.StaticFunctionCall.staticFunctionCall;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class StaticFunctionCallTest {
 

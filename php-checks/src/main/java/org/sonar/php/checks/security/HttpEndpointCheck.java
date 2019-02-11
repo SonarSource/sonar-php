@@ -21,20 +21,20 @@ package org.sonar.php.checks.security;
 
 import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
-import org.sonar.php.checks.utils.namespace.QualifiedName;
 import org.sonar.php.checks.utils.type.StaticFunctionCall;
 import org.sonar.php.tree.impl.expression.MemberAccessTreeImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static org.sonar.php.checks.utils.type.StaticFunctionCall.staticFunctionCall;
 
 @Rule(key = "S4529")
-public class HttpEndpointCheck extends NamespaceAwareVisitor {
+public class HttpEndpointCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that exposing this HTTP endpoint is safe here.";
   private static final ImmutableSet<StaticFunctionCall> SUSPICIOUS_STATIC_FUNCTIONS = ImmutableSet.of(

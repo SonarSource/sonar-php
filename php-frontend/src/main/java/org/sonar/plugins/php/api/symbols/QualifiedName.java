@@ -19,6 +19,8 @@
  */
 package org.sonar.plugins.php.api.symbols;
 
+import org.sonar.php.tree.symbols.SymbolQualifiedName;
+
 /**
  * Represents fully qualified name of the symbol, like {@code namespace\foo\bar }. Use {@link #toString()} to get String representation
  * All qualified names are normalized to lowercase, because PHP is case-insensitive
@@ -30,5 +32,10 @@ public interface QualifiedName {
    *
    */
   String simpleName();
+
+
+  static QualifiedName qualifiedName(String qualifiedNameString) {
+    return SymbolQualifiedName.qualifiedName(qualifiedNameString);
+  }
 
 }

@@ -25,10 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
-import org.sonar.php.checks.utils.namespace.QualifiedName;
 import org.sonar.php.tree.symbols.Scope;
 import org.sonar.php.tree.symbols.SymbolImpl;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -40,18 +39,20 @@ import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.statement.GlobalStatementTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static java.util.Collections.emptyList;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = "S4823")
-public class CommandLineArgumentCheck extends NamespaceAwareVisitor {
+public class CommandLineArgumentCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that command line arguments are used safely here.";
 
   private static final ImmutableSet<QualifiedName> SUSPICIOUS_CLASS_INSTANTIATIONS = ImmutableSet.of(
-    QualifiedName.create("Zend", "Console", "Getopt"),
-    QualifiedName.create("GetOpt", "Option"));
+    qualifiedName("Zend\\Console\\Getopt"),
+    qualifiedName("GetOpt\\Option"));
 
   private static final ImmutableSet<String> SUSPICIOUS_ARRAY_ACCESSES = ImmutableSet.of("$GLOBALS", "$_SERVER");
   private static final ImmutableSet<String> SUSPICIOUS_GLOBAL_IDENTIFIERS = ImmutableSet.of("$argv", "$HTTP_SERVER_VARS");
@@ -82,7 +83,7 @@ public class CommandLineArgumentCheck extends NamespaceAwareVisitor {
   private boolean isSuspiciousClassInstantiation(ExpressionTree callee) {
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
       QualifiedName className = getFullyQualifiedName((NamespaceNameTree) callee);
-      return SUSPICIOUS_CLASS_INSTANTIATIONS.stream().anyMatch(className::equalsIgnoreCase);
+      return SUSPICIOUS_CLASS_INSTANTIATIONS.stream().anyMatch(className::equals);
     }
     return false;
   }

@@ -60,6 +60,7 @@ import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -68,6 +69,7 @@ import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
 import org.sonar.plugins.php.api.tree.statement.StaticStatementTree;
 import org.sonar.plugins.php.api.tree.statement.UseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -224,14 +226,19 @@ public class SymbolVisitor extends PHPVisitorCheck {
     leaveScope();
   }
 
+  @Override
+  public void visitUseTraitDeclaration(UseTraitDeclarationTree tree) {
+    tree.traits().forEach(trait -> usageForNamespaceName(trait, Symbol.Kind.CLASS));
+  }
+
   private Symbol lookupOrCreateUndeclaredSymbol(NamespaceNameTree superClass) {
     QualifiedName qualifiedName = getFullyQualifiedName(superClass, Symbol.Kind.CLASS);
-    Symbol superClassSymbol = symbolTable.getSymbol(qualifiedName);
-    if (superClassSymbol != null) {
-      return superClassSymbol;
-    } else {
-      return symbolTable.createUndeclaredSymbol(qualifiedName, Symbol.Kind.CLASS);
+    SymbolImpl superClassSymbol = (SymbolImpl) symbolTable.getSymbol(qualifiedName);
+    if (superClassSymbol == null) {
+      superClassSymbol = symbolTable.createUndeclaredSymbol(qualifiedName, Symbol.Kind.CLASS);
     }
+    associateSymbol(superClass.name(), superClassSymbol);
+    return superClassSymbol;
   }
 
   @Override
@@ -246,9 +253,11 @@ public class SymbolVisitor extends PHPVisitorCheck {
     // we've already scanned the arguments
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
-      scan(superClass);
+      // because we don't have symbol for anonymous class we will not actually use this symbol
+      lookupOrCreateUndeclaredSymbol(superClass);
     }
-    scan(tree.superInterfaces());
+    // because we don't have symbol for anonymous class we will not actually use these symbols
+    tree.superInterfaces().forEach(this::lookupOrCreateUndeclaredSymbol);
     scan(tree.members());
 
     classScope = null;
@@ -464,15 +473,31 @@ public class SymbolVisitor extends PHPVisitorCheck {
   }
 
   @Override
+  public void visitNewExpression(NewExpressionTree tree) {
+    // syntax without parenthesis new A;
+    if (tree.expression().is(Kind.NAMESPACE_NAME)) {
+      usageForNamespaceName(((NamespaceNameTree) tree.expression()), Symbol.Kind.CLASS);
+      return;
+    }
+    // syntax with parenthesis new A();
+    if (tree.expression().is(Kind.FUNCTION_CALL)) {
+      ExpressionTree callee = ((FunctionCallTree) tree.expression()).callee();
+      if (callee.is(Kind.NAMESPACE_NAME)) {
+        usageForNamespaceName(((NamespaceNameTree) callee), Symbol.Kind.CLASS);
+        scan(((FunctionCallTree) tree.expression()).arguments());
+        return;
+      }
+    }
+    super.visitNewExpression(tree);
+  }
+
+  @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    if (tree.callee().is(Tree.Kind.NAMESPACE_NAME)) {
-      NamespaceNameTree namespaceNameCallee = (NamespaceNameTree) tree.callee();
-      Symbol.Kind kind = tree.getParent().is(Kind.NEW_EXPRESSION) ? Symbol.Kind.CLASS : Symbol.Kind.FUNCTION;
-      usageForNamespaceName(namespaceNameCallee, kind);
+    if (tree.callee().is(Kind.NAMESPACE_NAME)) {
+      usageForNamespaceName((NamespaceNameTree) tree.callee(), Symbol.Kind.FUNCTION);
     } else {
       tree.callee().accept(this);
     }
-
     String callee = SourceBuilder.build(tree.callee()).trim();
     if ("compact".equals(callee) || "\\compact".equals(callee)) {
       visitCompactFunctionCall(tree.arguments());
@@ -515,7 +540,7 @@ public class SymbolVisitor extends PHPVisitorCheck {
       }
       if (symbol == null) {
         // we do not have the declaration of this symbol, we will create unresolved symbol for it
-        symbol = symbolTable.createUndeclaredSymbol(getFullyQualifiedName(namespaceName, kind), Symbol.Kind.FUNCTION);
+        symbol = symbolTable.createUndeclaredSymbol(getFullyQualifiedName(namespaceName, kind), kind);
       }
       if (symbol != null) {
         associateSymbol(usageIdentifier, symbol);
@@ -578,7 +603,11 @@ public class SymbolVisitor extends PHPVisitorCheck {
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
     boolean functionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
-    tree.object().accept(this);
+    if (tree.object().is(Kind.NAMESPACE_NAME)) {
+      usageForNamespaceName(((NamespaceNameTree) tree.object()), Symbol.Kind.CLASS);
+    } else {
+      tree.object().accept(this);
+    }
 
     classMemberUsageState = new ClassMemberUsageState();
     classMemberUsageState.isStatic = tree.isStatic();

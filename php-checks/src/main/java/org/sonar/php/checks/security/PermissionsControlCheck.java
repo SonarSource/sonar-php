@@ -20,8 +20,7 @@
 package org.sonar.php.checks.security;
 
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
-import org.sonar.php.checks.utils.namespace.QualifiedName;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
@@ -30,13 +29,16 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = "S4834")
-public class PermissionsControlCheck extends NamespaceAwareVisitor {
+public class PermissionsControlCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that Permissions are controlled safely here.";
-  private static final QualifiedName CAKE_BASE_AUTHORIZE_CLASS = QualifiedName.create("Cake", "Auth", "BaseAuthorize");
-  private static final QualifiedName CAKE_CONTROLLER_CLASS = QualifiedName.create("Cake", "Controller", "Controller");
+  private static final QualifiedName CAKE_BASE_AUTHORIZE_CLASS = qualifiedName("Cake\\Auth\\BaseAuthorize");
+  private static final QualifiedName CAKE_CONTROLLER_CLASS = qualifiedName("Cake\\Controller\\Controller");
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {
@@ -54,9 +56,9 @@ public class PermissionsControlCheck extends NamespaceAwareVisitor {
     NamespaceNameTree superClass = tree.superClass();
     if (superClass != null) {
       QualifiedName fullyQualifiedSuperclassName = getFullyQualifiedName(superClass);
-      if (fullyQualifiedSuperclassName.equalsIgnoreCase(CAKE_BASE_AUTHORIZE_CLASS)) {
+      if (fullyQualifiedSuperclassName.equals(CAKE_BASE_AUTHORIZE_CLASS)) {
         context().newIssue(this, superClass, MESSAGE);
-      } else if (fullyQualifiedSuperclassName.equalsIgnoreCase(CAKE_CONTROLLER_CLASS)) {
+      } else if (fullyQualifiedSuperclassName.equals(CAKE_CONTROLLER_CLASS)) {
         checkCakeControllerMethods(tree);
       }
     }

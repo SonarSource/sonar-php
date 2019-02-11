@@ -24,8 +24,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
-import org.sonar.php.checks.utils.namespace.NamespaceAwareVisitor;
-import org.sonar.php.checks.utils.namespace.QualifiedName;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
@@ -33,11 +32,12 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-import static org.sonar.php.checks.utils.namespace.QualifiedName.qualifiedName;
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 @Rule(key = "S4825")
-public class HttpRequestCheck extends NamespaceAwareVisitor {
+public class HttpRequestCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Make sure that this http request is sent safely.";
 
@@ -46,14 +46,14 @@ public class HttpRequestCheck extends NamespaceAwareVisitor {
     qualifiedName("GuzzleHttp\\Client"));
 
   private static final List<FunctionMatcher> IO_FUNCTIONS = Arrays.asList(
-    new FunctionMatcher(QualifiedName.create("copy"), 0, 1),
-    new FunctionMatcher(QualifiedName.create("curl_exec")),
-    new FunctionMatcher(QualifiedName.create("file"), 0),
-    new FunctionMatcher(QualifiedName.create("file_get_contents"), 0),
-    new FunctionMatcher(QualifiedName.create("fopen"), 0),
-    new FunctionMatcher(QualifiedName.create("readfile"), 0),
-    new FunctionMatcher(QualifiedName.create("get_headers")),
-    new FunctionMatcher(QualifiedName.create("get_meta_tags"), 0));
+    new FunctionMatcher(qualifiedName("copy"), 0, 1),
+    new FunctionMatcher(qualifiedName("curl_exec")),
+    new FunctionMatcher(qualifiedName("file"), 0),
+    new FunctionMatcher(qualifiedName("file_get_contents"), 0),
+    new FunctionMatcher(qualifiedName("fopen"), 0),
+    new FunctionMatcher(qualifiedName("readfile"), 0),
+    new FunctionMatcher(qualifiedName("get_headers")),
+    new FunctionMatcher(qualifiedName("get_meta_tags"), 0));
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {

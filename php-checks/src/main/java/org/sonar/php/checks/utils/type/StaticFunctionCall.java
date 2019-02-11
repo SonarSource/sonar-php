@@ -19,9 +19,10 @@
  */
 package org.sonar.php.checks.utils.type;
 
-import org.sonar.php.checks.utils.namespace.QualifiedName;
 
-import static org.sonar.php.checks.utils.namespace.QualifiedName.qualifiedName;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
+
+import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class StaticFunctionCall {
   private QualifiedName callee;
@@ -33,7 +34,7 @@ public class StaticFunctionCall {
   }
 
   public boolean matches(QualifiedName className, String memberName) {
-    return functionName.equalsIgnoreCase(memberName) && callee.equalsIgnoreCase(className);
+    return functionName.equalsIgnoreCase(memberName) && callee.equals(className);
   }
 
   /**
