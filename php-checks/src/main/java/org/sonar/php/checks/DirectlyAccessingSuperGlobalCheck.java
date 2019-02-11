@@ -19,8 +19,8 @@
  */
 package org.sonar.php.checks;
 
+import com.google.common.collect.ImmutableSet;
 import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -31,6 +31,9 @@ public class DirectlyAccessingSuperGlobalCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Do not access \"%s\" directly.";
   public static final String KEY = "S2043";
 
+  private static final ImmutableSet<String> SUPER_GLOBAL_REQUIRING_SANITIZATION =  ImmutableSet.of(
+    "$_COOKIE", "$_ENV", "$_FILES", "$_GET", "$_POST", "$_REQUEST", "$_SERVER");
+
   @Override
   public void visitVariableIdentifier(VariableIdentifierTree tree) {
     checkVariable(tree.variableExpression().token());
@@ -39,8 +42,7 @@ public class DirectlyAccessingSuperGlobalCheck extends PHPVisitorCheck {
 
   private void checkVariable(SyntaxToken variable) {
     String name = variable.text();
-
-    if (CheckUtils.SUPERGLOBALS_BY_OLD_NAME.values().contains(name) && !"$_SESSION".equals(name)) {
+    if (SUPER_GLOBAL_REQUIRING_SANITIZATION.contains(name)) {
       context().newIssue(this, variable, String.format(MESSAGE, name));
     }
   }
