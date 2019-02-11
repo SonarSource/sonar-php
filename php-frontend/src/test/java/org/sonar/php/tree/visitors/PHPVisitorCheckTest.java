@@ -24,6 +24,7 @@ import java.io.File;
 import org.junit.Test;
 import org.sonar.php.FileTestUtils;
 import org.sonar.php.parser.PHPParserBuilder;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
@@ -37,6 +38,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class PHPVisitorCheckTest {
 
@@ -73,6 +75,22 @@ public class PHPVisitorCheckTest {
     File workingDir = new File("working_dir");
     testVisitor.analyze(new PHPCheckContext(file, tree, workingDir));
     assertThat(testVisitor.context().getWorkingDirectory()).isEqualTo(workingDir);
+  }
+
+  @Test
+  public void test_getFullyQualifiedName() {
+    ActionParser<Tree> parser = PHPParserBuilder.createParser();
+    CompilationUnitTree tree = (CompilationUnitTree) parser.parse("<?php namespace n { function foo() {}; foo(); }");
+    PHPVisitorCheck visitor = new PHPVisitorCheck() {
+      @Override
+      public void visitFunctionCall(FunctionCallTree tree) {
+        QualifiedName qualifiedName = getFullyQualifiedName(((NamespaceNameTree) tree.callee()));
+        assertThat(qualifiedName.simpleName()).isEqualTo("foo");
+        assertThat(qualifiedName.toString()).isEqualTo("n\\foo");
+      }
+    };
+    PHPCheckContext phpCheckContext = new PHPCheckContext(mock(PhpFile.class), tree, null);
+    visitor.analyze(phpCheckContext);
   }
 
 
