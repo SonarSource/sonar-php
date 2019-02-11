@@ -23,7 +23,6 @@
 package org.sonar.plugins.php;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.Before;
@@ -39,11 +38,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PhpPluginTest {
 
-  private static final String DEPRECATION_NOTICE = "DEPRECATED: use " + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY + ". ";
   private PhpPlugin plugin;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     this.plugin = new PhpPlugin();
   }
 
@@ -52,7 +50,7 @@ public class PhpPluginTest {
     Plugin.Context context = qubeContext(Version.create(6, 7));
     plugin.define(context);
 
-    assertThat(context.getExtensions()).hasSize(13);
+    assertThat(context.getExtensions()).hasSize(10);
   }
 
   @Test
@@ -66,32 +64,11 @@ public class PhpPluginTest {
 
   @Test
   public void should_contain_REPORT_PATHS_from_6_2() throws Exception {
-    Plugin.Context context6_7 = qubeContext(Version.create(6, 7));
-    plugin.define(context6_7);
+    Plugin.Context context67 = qubeContext(Version.create(6, 7));
+    plugin.define(context67);
 
-    assertThat(extensionKeysOf(context6_7)).contains(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY);
-    assertThat(extensionKeysOf(context6_7)).contains(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY);
-  }
-
-  @Test
-  public void should_add_deprecation_warning_to_legacy_coverage_report_path_keys_from_6_2() throws Exception {
-    Plugin.Context context6_7 = qubeContext(Version.create(6, 7));
-    plugin.define(context6_7);
-
-    assertThat(property(context6_7, PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
-    assertThat(property(context6_7, PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
-    assertThat(property(context6_7, PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY).description()).startsWith(DEPRECATION_NOTICE);
-  }
-
-  private PropertyDefinition property(Plugin.Context context, String propertyKey) {
-    final List<Object> extensions = context.getExtensions();
-    final Optional<PropertyDefinition> maybeProperty = extensions.stream().filter(obj -> obj instanceof PropertyDefinition).map(obj -> (PropertyDefinition) obj)
-      .filter(prop -> prop.key().equals(propertyKey)).findFirst();
-    if (maybeProperty.isPresent()) {
-      return maybeProperty.get();
-    } else {
-      throw new IllegalArgumentException(propertyKey + " property not found in " + context);
-    }
+    assertThat(extensionKeysOf(context67)).contains(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY);
+    assertThat(extensionKeysOf(context67)).doesNotContain("sonar.php.coverage.reportPath");
   }
 
   private static Plugin.Context qubeContext(Version version) {

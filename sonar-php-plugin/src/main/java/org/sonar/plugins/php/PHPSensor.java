@@ -136,7 +136,6 @@ public class PHPSensor implements Sensor {
     new TestResultImporter().importReport(context);
 
     final CompatibilityImportersFactory importersFactory = new CompatibilityImportersFactory(context);
-    importersFactory.deprecationWarnings().forEach(LOG::warn);
     importersFactory.createCoverageImporter().importReport(context);
   }
 

@@ -46,7 +46,7 @@ public class ReportWithUnresolvedPathTest {
       .setProjectVersion("1.0")
       .setSourceDirs("src")
       .setTestDirs("tests")
-      .setProperty("sonar.php.coverage.reportPath", "reports/phpunit.coverage.xml");
+      .setProperty("sonar.php.coverage.reportPaths", "reports/phpunit.coverage.xml");
     BuildResult result = orchestrator.executeBuild(build);
     String logs = result.getLogs();
     String expected = "WARN.*Could not resolve 1 file paths in phpunit.coverage.xml, first unresolved path: Math\\.php";

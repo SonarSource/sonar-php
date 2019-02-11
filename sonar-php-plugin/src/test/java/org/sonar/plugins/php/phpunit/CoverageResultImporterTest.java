@@ -77,7 +77,7 @@ public class CoverageResultImporterTest {
     context.fileSystem().add(monkeyFile);
 
     importer = new CoverageResultImporter(
-      PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
+      PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY,
       "unit test coverage");
   }
 

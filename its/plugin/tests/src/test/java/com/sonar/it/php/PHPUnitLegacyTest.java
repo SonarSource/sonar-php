@@ -55,9 +55,6 @@ public class PHPUnitLegacyTest {
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
-      .setProperty("sonar.php.coverage.reportPath", REPORTS_DIR + "/.coverage-with-absolute-path.xml")
-      .setProperty("sonar.php.coverage.itReportPath", REPORTS_DIR + "/.it-coverage-with-absolute-path.xml")
-      .setProperty("sonar.php.coverage.overallReportPath", REPORTS_DIR + "/.overall-coverage-with-absolute-path.xml")
       .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
@@ -69,35 +66,8 @@ public class PHPUnitLegacyTest {
     assertThat(getProjectMeasureAsInt("test_errors")).isEqualTo(0);
   }
 
-  @Test
-  public void coverage() throws Exception {
-    assertThat(getProjectMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getProjectMeasureAsInt("uncovered_conditions")).isNull();
-
-    assertThat(getCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(6);
-    assertThat(getCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(2);
-    assertThat(getCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
-
-    assertThat(getUnCoveredFileMeasureAsInt("conditions_to_cover")).isNull();
-    assertThat(getUnCoveredFileMeasureAsInt("uncovered_conditions")).isNull();
-
-    assertThat(getProjectMeasureAsInt("lines_to_cover")).isEqualTo(9);
-    assertThat(getProjectMeasureAsInt("uncovered_lines")).isEqualTo(5);
-
-    assertThat(getUnCoveredFileMeasureAsInt("lines_to_cover")).isEqualTo(3);
-    assertThat(getUnCoveredFileMeasureAsInt("uncovered_lines")).isEqualTo(3);
-  }
-
   private Integer getProjectMeasureAsInt(String metricKey) {
     return getMeasureAsInt("project", metricKey);
   }
 
-  private Integer getCoveredFileMeasureAsInt(String metricKey) {
-    return getMeasureAsInt("project:src/Math.php", metricKey);
-  }
-
-  private Integer getUnCoveredFileMeasureAsInt(String metricKey) {
-    return getMeasureAsInt("project:src/Math2.php", metricKey);
-  }
 }

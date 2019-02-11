@@ -19,18 +19,12 @@
  */
 package org.sonar.plugins.php.phpunit;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.php.PhpPlugin;
 
 public class CompatibilityImportersFactory {
 
-  public static final String DEPRECATION_WARNING_TEMPLATE = "%s is deprecated as of SonarQube 6.2. Please consider using " + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY;
   public static final String SKIPPED_WARNING_TEMPLATE = "Ignoring %s since you are already using " + PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY + ". Please remove %<s";
-  private static final List<String> LEGACY_PATH_KEYS = Arrays.asList(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY, PhpPlugin.PHPUNIT_IT_COVERAGE_REPORT_PATH_KEY,
-    PhpPlugin.PHPUNIT_OVERALL_COVERAGE_REPORT_PATH_KEY);
   private final SensorContext context;
 
   public CompatibilityImportersFactory(SensorContext context) {
@@ -38,14 +32,7 @@ public class CompatibilityImportersFactory {
   }
 
   public ReportImporter createCoverageImporter() {
-    if (LEGACY_PATH_KEYS.stream().anyMatch(this::isPropertyUsed) && !multiPathCoverageUsed()) {
-      return createLegacyImporters();
-    }
     return createMultiCoverageImporter();
-  }
-
-  private boolean multiPathCoverageUsed() {
-    return context.config().getStringArray(PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATHS_KEY).length > 0;
   }
 
   private static ReportImporter createMultiCoverageImporter() {
@@ -55,27 +42,5 @@ public class CompatibilityImportersFactory {
     CoverageResultImporter singleReportImporter = new CoverageResultImporter(propertyKey, msg);
 
     return new MultiPathImporter(singleReportImporter, propertyKey, msg);
-  }
-
-  private static ReportImporter createLegacyImporters() {
-    return new CoverageResultImporter(
-      PhpPlugin.PHPUNIT_COVERAGE_REPORT_PATH_KEY,
-      "unit test coverage");
-  }
-
-  public List<String> deprecationWarnings() {
-    if (multiPathCoverageUsed()) {
-      return printWarningForUsedLegacyPaths(SKIPPED_WARNING_TEMPLATE);
-    } else {
-      return printWarningForUsedLegacyPaths(DEPRECATION_WARNING_TEMPLATE);
-    }
-  }
-
-  private List<String> printWarningForUsedLegacyPaths(String warningTemplate) {
-    return LEGACY_PATH_KEYS.stream().filter(this::isPropertyUsed).map(pathKey -> String.format(warningTemplate, pathKey)).collect(Collectors.toList());
-  }
-
-  private boolean isPropertyUsed(String legacyPathKey) {
-    return context.config().get(legacyPathKey).isPresent();
   }
 }
