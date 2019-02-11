@@ -19,24 +19,45 @@
  */
 package org.sonar.php.tree.impl.expression;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.PrefixedCastExpressionTree;
+import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CastExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  public void test() throws Exception {
+  public void cast_expression() {
     CastExpressionTree tree = parse("(int)$a", PHPLexicalGrammar.CAST_TYPE);
     assertThat(tree.is(Kind.CAST_EXPRESSION)).isTrue();
     assertThat(tree.openParenthesisToken().text()).isEqualTo("(");
     assertThat(tree.castType().text()).isEqualTo("int");
     assertThat(tree.closeParenthesisToken().text()).isEqualTo(")");
     assertThat(expressionToString(tree.expression())).isEqualTo("$a");
+  }
+
+  @Test
+  public void prefixed_cast_expression() {
+    PrefixedCastExpressionTree tree = parse("b'abc'", PHPLexicalGrammar.CAST_TYPE);
+    assertThat(tree.is(Kind.PREFIXED_CAST_EXPRESSION)).isTrue();
+    assertThat(expressionToString(tree)).isEqualTo("b'abc'");
+    assertThat(tree.prefix().text()).isEqualTo("b");
+    assertThat(expressionToString(tree.expression())).isEqualTo("'abc'");
+
+    StringBuilder visitReport = new StringBuilder();
+    tree.accept(new PHPVisitorCheck() {
+      @Override
+      public void visitPrefixedCastExpression(PrefixedCastExpressionTree tree) {
+        visitReport.append("visitPrefixedCastExpression");
+        super.visitPrefixedCastExpression(tree);
+      }
+    });
+    assertThat(visitReport.toString()).isEqualTo("visitPrefixedCastExpression");
   }
 
 }

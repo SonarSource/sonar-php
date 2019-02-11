@@ -21,6 +21,7 @@ package org.sonar.plugins.php.api.tree;
 
 import com.google.common.annotations.Beta;
 import javax.annotation.Nullable;
+import org.sonar.php.tree.impl.expression.PrefixedCastExpressionTreeImpl;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
@@ -639,6 +640,12 @@ public interface Tree {
      * {@link CastExpressionTree}
      */
     CAST_EXPRESSION(CastExpressionTree.class),
+
+    /**
+     * {@link PrefixedCastExpressionTreeImpl}
+     * @since 3.0
+     */
+    PREFIXED_CAST_EXPRESSION(PrefixedCastExpressionTreeImpl.class),
 
     /**
      * {@link LiteralTree}
