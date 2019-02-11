@@ -63,6 +63,7 @@ import org.sonar.api.scan.issue.filter.FilterableIssue;
 import org.sonar.api.scan.issue.filter.IssueFilterChain;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.duplications.internal.pmd.TokensLine;
@@ -287,7 +288,10 @@ public class PHPSensorTest {
   @Test
   public void exception_should_report_file_name() throws Exception {
     PHPCheck check = new ExceptionRaisingCheck(new IllegalStateException());
-    analyseFileWithException(check, inputFile(ANALYZED_FILE), ANALYZED_FILE);
+    PHPAnalyzer phpAnalyzer = new PHPAnalyzer(ImmutableList.of(check), null);
+    DefaultInputFile defaultInputFile = inputFile(ANALYZED_FILE);
+    createSensor().analyseFiles(context, phpAnalyzer, ImmutableList.of(defaultInputFile), progressReport);
+    assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Could not analyse PHPSquidSensor.php");
   }
 
   @Test
