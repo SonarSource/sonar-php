@@ -87,7 +87,6 @@ public class PHPIntegrationTest {
       .isEqualTo("1=2408;2=580;4=203;6=77;8=48;10=14;12=64");
     softly.assertThat(getProjectMeasure("file_complexity_distribution").getValue())
       .isEqualTo("0=442;5=164;10=104;20=32;30=28;60=5;90=9");
-    softly.assertThat(getProjectMeasureAsDouble("class_complexity_distribution")).isNull();
 
     softly.assertAll();
   }
