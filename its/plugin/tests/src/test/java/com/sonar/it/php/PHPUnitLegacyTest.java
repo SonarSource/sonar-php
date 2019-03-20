@@ -35,6 +35,8 @@ public class PHPUnitLegacyTest {
 
   @ClassRule
   public static Orchestrator orchestrator = ORCHESTRATOR;
+  private static final String PROJECT_KEY = "php-unit-legacy";
+  private static final String PROJECT_NAME = "PHP Unit Legacy";
 
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("phpunit");
 
@@ -44,14 +46,13 @@ public class PHPUnitLegacyTest {
 
   @BeforeClass
   public static void startServer() throws Exception {
-    orchestrator.resetData();
-
     createReportsWithAbsolutePath();
 
+    Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
-      .setProjectKey("project")
-      .setProjectName("project")
+      .setProjectKey(PROJECT_KEY)
+      .setProjectName(PROJECT_NAME)
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
@@ -60,14 +61,14 @@ public class PHPUnitLegacyTest {
   }
 
   @Test
-  public void tests() throws Exception {
+  public void tests() {
     assertThat(getProjectMeasureAsInt("tests")).isEqualTo(3);
     assertThat(getProjectMeasureAsInt("test_failures")).isEqualTo(1);
     assertThat(getProjectMeasureAsInt("test_errors")).isEqualTo(0);
   }
 
   private Integer getProjectMeasureAsInt(String metricKey) {
-    return getMeasureAsInt("project", metricKey);
+    return getMeasureAsInt(PROJECT_KEY, metricKey);
   }
 
 }

@@ -22,8 +22,6 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -37,18 +35,18 @@ public class NoSonarTest {
 
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+  private static final String PROJECT_KEY = "nosonar-project";
+  private static final String PROJECT_NAME = "NOSONAR Project";
 
   private static IssueClient issueClient;
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("nosonar");
 
   @BeforeClass
-  public static void startServer() throws IOException, URISyntaxException, InterruptedException {
-    orchestrator.resetData();
-
-    Tests.provisionProject("nosonar-project", "nosonar-project", "php", "nosonar-profile");
+  public static void startServer() {
+    Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "nosonar-profile");
     SonarScanner build = SonarScanner.create()
-      .setProjectKey("nosonar-project")
-      .setProjectName("nosonar-project")
+      .setProjectKey(PROJECT_KEY)
+      .setProjectName(PROJECT_NAME)
       .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
@@ -69,7 +67,7 @@ public class NoSonarTest {
   }
 
   private static int countIssues(String issueKey) {
-    return issueClient.find(IssueQuery.create().componentRoots("nosonar-project").severities("INFO").rules(issueKey)).list().size();
+    return issueClient.find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules(issueKey)).list().size();
   }
 
 }

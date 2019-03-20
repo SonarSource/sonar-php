@@ -22,8 +22,6 @@ package com.sonar.it.php;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 import org.assertj.core.api.SoftAssertions;
@@ -40,17 +38,17 @@ public class PHPIntegrationTest {
 
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+  private static final String PROJECT_KEY = "php-integration";
+  private static final String PROJECT_NAME = "PHP Integration";
 
-  public final static String FILE_TOKEN_PARSER = "project" + ":Bridge/Twig/TokenParser/TransChoiceTokenParser.php";
+  public final static String FILE_TOKEN_PARSER = PROJECT_KEY + ":Bridge/Twig/TokenParser/TransChoiceTokenParser.php";
 
   @BeforeClass
-  public static void startServer() throws IOException, URISyntaxException, InterruptedException {
-    orchestrator.resetData();
-
-    Tests.provisionProject("project", "project", "php", "it-profile");
+  public static void startServer() {
+    Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
-      .setProjectKey("project")
-      .setProjectName("project")
+      .setProjectKey(PROJECT_KEY)
+      .setProjectName(PROJECT_NAME)
       .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
@@ -137,7 +135,7 @@ public class PHPIntegrationTest {
    * SONAR-3139
    */
   @Test
-  public void testDuplicationResults() throws Exception {
+  public void testDuplicationResults() {
     SoftAssertions softly = new SoftAssertions();
 
     softly.assertThat(getProjectMeasureAsDouble("duplicated_lines")).isEqualTo(3766d);
@@ -157,11 +155,11 @@ public class PHPIntegrationTest {
   }
 
   private Measures.Measure getProjectMeasure(String metricKey) {
-    return getMeasure("project", metricKey.trim());
+    return getMeasure(PROJECT_KEY, metricKey.trim());
   }
 
   private Double getProjectMeasureAsDouble(String metricKey) {
-    return getMeasureAsDouble("project", metricKey.trim());
+    return getMeasureAsDouble(PROJECT_KEY, metricKey.trim());
   }
 
   private Measures.Measure getFileMeasure(String metricKey) {
