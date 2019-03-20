@@ -45,14 +45,14 @@ public class NoSonarTest {
   public static void startServer() throws IOException, URISyntaxException, InterruptedException {
     orchestrator.resetData();
 
+    Tests.provisionProject("nosonar-project", "nosonar-project", "php", "nosonar-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectKey("nosonar-project")
       .setProjectName("nosonar-project")
       .setProjectVersion("1")
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
-      .setProjectDir(PROJECT_DIR)
-      .setProfile("nosonar-profile");
+      .setProjectDir(PROJECT_DIR);
 
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }

@@ -48,6 +48,7 @@ public class CommonRulesTest {
 
     createReportsWithAbsolutePath();
 
+    Tests.provisionProject("project", "project", "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
       .setProjectKey("project")
@@ -56,8 +57,7 @@ public class CommonRulesTest {
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
       .setProperty("sonar.php.coverage.reportPaths", REPORTS_DIR + "/.coverage-with-absolute-path.xml")
-      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml")
-      .setProfile("it-profile");
+      .setProperty("sonar.php.tests.reportPath", REPORTS_DIR + "/.tests-with-absolute-path.xml");
 
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
   }
