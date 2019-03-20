@@ -47,6 +47,7 @@ public class PHPIntegrationTest {
   public static void startServer() throws IOException, URISyntaxException, InterruptedException {
     orchestrator.resetData();
 
+    Tests.provisionProject("project", "project", "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectKey("project")
       .setProjectName("project")
@@ -54,7 +55,6 @@ public class PHPIntegrationTest {
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProjectDir(FileLocation.of("../../sources/src/Symfony/").getFile())
-      .setProfile("it-profile")
       .setProperty("sonar.exclusions", "**/Component/**/*.php");
 
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);

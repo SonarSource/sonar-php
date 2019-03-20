@@ -43,9 +43,9 @@ public class PHPTest {
    */
   @Test
   public void should_import_sources_with_user_defined_file_suffixes() {
+    Tests.provisionProject("project-with-several-extensions", "Project with several extensions", "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("project-with-several-extensions"))
-      .setProfile("it-profile")
       .setProperty("sonar.php.file.suffixes", "php,php3,php4,myphp,html");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
@@ -59,9 +59,9 @@ public class PHPTest {
    */
   @Test
   public void should_support_multimodule_projects() {
+    Tests.provisionProject("multimodule-php", "Multimodule PHP Project", "php", "it-profile");
     SonarScanner build = SonarScanner.create()
-      .setProjectDir(Tests.projectDirectoryFor("multimodule"))
-      .setProfile("it-profile");
+      .setProjectDir(Tests.projectDirectoryFor("multimodule"));
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     String componentKey1 = MULTIMODULE_PROJET_KEY + ":module1";

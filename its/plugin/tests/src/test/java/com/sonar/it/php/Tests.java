@@ -23,6 +23,7 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.container.Server;
 import com.sonar.orchestrator.locator.FileLocation;
 import java.io.File;
 import java.util.Arrays;
@@ -84,6 +85,12 @@ public class Tests {
     ORCHESTRATOR = orchestratorBuilder.build();
   }
 
+  public static void provisionProject(String projectKey, String projectName, String languageKey, String profileName) {
+    Server server = ORCHESTRATOR.getServer();
+    server.provisionProject(projectKey, projectName);
+    server.associateProjectToQualityProfile(projectKey, languageKey, profileName);
+  }
+
   public static final File projectDirectoryFor(String projectDirName) {
     return new File(Tests.PROJECT_ROOT_DIR + projectDirName + "/");
   }
@@ -139,7 +146,6 @@ public class Tests {
 
     List<String> unexpectedLogs = lines.stream()
       .filter(line -> !line.startsWith("INFO: "))
-      .filter(line -> !line.startsWith("WARN: Ability to set quality profile from command line using 'sonar.profile' is deprecated"))
       .filter(line -> !line.startsWith("WARN: sonar.php.coverage.reportPath is deprecated as of SonarQube 6.2"))
       .filter(line -> !line.startsWith("WARN: sonar.php.coverage.itReportPath is deprecated as of SonarQube 6.2"))
       .filter(line -> !line.startsWith("WARN: sonar.php.coverage.overallReportPath is deprecated as of SonarQube 6.2"))
