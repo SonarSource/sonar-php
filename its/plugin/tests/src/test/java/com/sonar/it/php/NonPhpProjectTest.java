@@ -33,6 +33,8 @@ public class NonPhpProjectTest {
 
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+  private static final String PROJECT_KEY = "non-php-project";
+  private static final String PROJECT_NAME = "Non Php Project";
 
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("js-project");
 
@@ -40,12 +42,10 @@ public class NonPhpProjectTest {
 
   @BeforeClass
   public static void startServer() {
-    orchestrator.resetData();
-
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
-      .setProjectKey("project")
-      .setProjectName("project")
+      .setProjectKey(PROJECT_KEY)
+      .setProjectName(PROJECT_NAME)
       .setProjectVersion("1.0")
       .setSourceDirs(".");
 

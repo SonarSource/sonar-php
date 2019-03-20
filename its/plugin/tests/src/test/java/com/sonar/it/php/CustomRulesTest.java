@@ -35,20 +35,20 @@ public class CustomRulesTest {
 
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+  private static final String PROJECT_KEY = "custom-rules";
+  private static final String PROJECT_NAME = "Custom Rules";
 
   private static IssueClient issueClient;
 
   @BeforeClass
-  public static void prepare() throws InterruptedException {
-    orchestrator.resetData();
+  public static void prepare() {
+    Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "php-custom-rules-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(Tests.projectDirectoryFor("custom_rules"))
-      .setProjectKey("custom-rules")
-      .setProjectName("Custom Rules")
+      .setProjectKey(PROJECT_KEY)
+      .setProjectName(PROJECT_NAME)
       .setProjectVersion("1.0")
       .setSourceDirs("src");
-    orchestrator.getServer().provisionProject("custom-rules", "Custom Rules");
-    orchestrator.getServer().associateProjectToQualityProfile("custom-rules", "php", "php-custom-rules-profile");
     Tests.executeBuildWithExpectedWarnings(orchestrator, build);
 
     issueClient = orchestrator.getServer().wsClient().issueClient();

@@ -33,12 +33,14 @@ public class ReportWithUnresolvedPathTest {
 
   @ClassRule
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
+  private static final String PROJECT_KEY = "report-with-unresolved-path";
+  private static final String PROJECT_NAME = "Report With Unresolved Path";
 
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("phpunit");
 
   @Test
   public void should_log_a_warning() throws Exception {
-    orchestrator.resetData();
+    Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
       .setProjectKey("project")

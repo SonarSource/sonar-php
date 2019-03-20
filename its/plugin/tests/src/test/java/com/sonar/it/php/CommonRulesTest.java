@@ -37,6 +37,8 @@ public class CommonRulesTest {
   public static Orchestrator orchestrator = Tests.ORCHESTRATOR;
 
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("common-rules");
+  private static final String PROJECT_KEY = "common-rules";
+  private static final String PROJECT_NAME = "Common Rules";
 
   private static final String SOURCE_DIR = "src";
   private static final String TESTS_DIR = "tests";
@@ -44,15 +46,13 @@ public class CommonRulesTest {
 
   @BeforeClass
   public static void startServer() throws Exception {
-    orchestrator.resetData();
-
     createReportsWithAbsolutePath();
 
-    Tests.provisionProject("project", "project", "php", "it-profile");
+    Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
-      .setProjectKey("project")
-      .setProjectName("project")
+      .setProjectKey(PROJECT_KEY)
+      .setProjectName(PROJECT_NAME)
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
@@ -64,18 +64,18 @@ public class CommonRulesTest {
 
   @Test
   public void tests() throws Exception {
-    assertThat(orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots("project").severities("INFO").rules("common-php:DuplicatedBlocks")).list())
+    assertThat(orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules("common-php:DuplicatedBlocks")).list())
       .hasSize(2);
     assertThat(
-      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots("project").severities("INFO").rules("common-php:InsufficientCommentDensity"))
+      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules("common-php:InsufficientCommentDensity"))
         .list()).hasSize(2);
-    assertThat(orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots("project").severities("INFO").rules("common-php:FailedUnitTests")).list())
+    assertThat(orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules("common-php:FailedUnitTests")).list())
       .hasSize(1);
     assertThat(
-      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots("project").severities("INFO").rules("common-php:InsufficientLineCoverage")).list())
+      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("INFO").rules("common-php:InsufficientLineCoverage")).list())
       .hasSize(1);
     assertThat(
-      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots("project").severities("BLOCKER").rules("php:S3334")).list())
+      orchestrator.getServer().wsClient().issueClient().find(IssueQuery.create().componentRoots(PROJECT_KEY).severities("BLOCKER").rules("php:S3334")).list())
       .hasSize(1);
   }
 

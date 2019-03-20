@@ -36,6 +36,8 @@ public class PHPUnitTest {
 
   @ClassRule
   public static Orchestrator orchestrator = ORCHESTRATOR;
+  private static final String PROJECT_KEY = "php-unit";
+  private static final String PROJECT_NAME = "PHP Unit";
 
   private static final File PROJECT_DIR = Tests.projectDirectoryFor("phpunit");
 
@@ -45,14 +47,13 @@ public class PHPUnitTest {
 
   @BeforeClass
   public static void startServer() throws Exception {
-    orchestrator.resetData();
-
+    Tests.provisionProject(PROJECT_KEY, PROJECT_NAME, "php", "it-profile");
     createReportsWithAbsolutePath();
 
     SonarScanner build = SonarScanner.create()
       .setProjectDir(PROJECT_DIR)
-      .setProjectKey("project")
-      .setProjectName("project")
+      .setProjectKey(PROJECT_KEY)
+      .setProjectName(PROJECT_NAME)
       .setProjectVersion("1.0")
       .setSourceDirs(SOURCE_DIR)
       .setTestDirs(TESTS_DIR)
@@ -92,15 +93,15 @@ public class PHPUnitTest {
   }
 
   private Integer getProjectMeasureAsInt(String metricKey) {
-    return getMeasureAsInt("project", metricKey);
+    return getMeasureAsInt(PROJECT_KEY, metricKey);
   }
 
   private Integer getCoveredFileMeasureAsInt(String metricKey) {
-    return getMeasureAsInt("project:src/Math.php", metricKey);
+    return getMeasureAsInt(PROJECT_KEY + ":src/Math.php", metricKey);
   }
 
   private Integer getUnCoveredFileMeasureAsInt(String metricKey) {
-    return getMeasureAsInt("project:src/Math2.php", metricKey);
+    return getMeasureAsInt(PROJECT_KEY + ":src/Math2.php", metricKey);
   }
 
   /**
