@@ -1,0 +1,18 @@
+{
+  "title": "Dynamically setting session IDs may lead to session fixation",
+  "type": "SECURITY_HOTSPOT",
+  "status": "ready",
+  "tags": [ ],
+  "standards": [
+    "CWE"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-4835",
+  "sqKey": "S4835",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      384
+    ]
+  }
+}
