@@ -1,0 +1,26 @@
+<p>Dynamically setting session IDs with user-supplied data or insecure hashes may lead to session fixation attacks.</p>
+<p>This may allow an attacker to hijack another user's session.</p>
+
+<h2>Recommended Secure Coding Practices</h2>
+<p>Don't manually generate session IDs, and use PHP's native functionality such as <a href="https://www.php.net/session-regenerate-id">session_regenerate_id()</a> instead.</p>
+<p>If however you must generate your own IDs, use a cryptographically secure method, like <code>bin2hex(random_bytes(16))</code></p>
+<h2>Questionable Code Example</h2>
+<pre>
+session_id($_GET['my_id']);
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+session_regenerate_id();
+
+// or
+$sessionId = bin2hex(random_bytes(16));
+session_id($sessionId);
+</pre>
+<h2>See</h2>
+<ul>
+    <li><a href="https://cwe.mitre.org/data/definitions/384.html">MITRE, CWE-384</a> - https://cwe.mitre.org/data/definitions/384.html</li>
+    <li><a href="https://www.owasp.org/index.php/Session_fixation">OWASP, Session fixation</a> - https://www.owasp.org/index.php/Session_fixation</li>
+    <li><a href="https://www.php.net/random-bytes">PHP, random_bytes()</a> - https://www.php.net/random-bytes</li>
+    <li><a href="https://www.php.net/session-regenerate-id">PHP, session_regenerate_id()</a> - https://www.php.net/session-regenerate-id</li>
+</ul>
+
