@@ -6,7 +6,7 @@ TEST:
   - ruling
 
 SQ_VERSION: 
-  - DEV
+  - DOGFOOD
   - LATEST_RELEASE
   - LATEST_RELEASE[6.7]
 
@@ -15,7 +15,7 @@ exclude:
     SQ_VERSION: LATEST_RELEASE
 
   - TEST: ruling
-    SQ_VERSION: DEV
+    SQ_VERSION: DOGFOOD
 
   - TEST: ruling
     SQ_VERSION: LATEST_RELEASE[6.7]
