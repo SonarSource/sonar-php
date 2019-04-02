@@ -67,6 +67,7 @@ import org.sonar.php.tree.impl.expression.CastExpressionTreeImpl;
 import org.sonar.php.tree.impl.expression.CompoundVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ComputedVariableTreeImpl;
 import org.sonar.php.tree.impl.expression.ConditionalExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.ExecutionOperatorTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
@@ -147,6 +148,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -1676,6 +1678,10 @@ public class TreeFactory {
       return new ArrayAssignmentPatternElementTreeImpl(key.get().first(), key.get().second(), variable);
     }
     return new ArrayAssignmentPatternElementTreeImpl(variable);
+  }
+
+  public ExecutionOperatorTree executionOperator(ExpandableStringLiteralTree literal) {
+    return new ExecutionOperatorTreeImpl(literal);
   }
 
   /**

@@ -54,6 +54,7 @@ import org.sonar.plugins.php.api.tree.expression.CastExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ConditionalExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -416,6 +417,11 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitExpandableStringLiteral(ExpandableStringLiteralTree tree) {
+    scan(tree);
+  }
+
+  @Override
+  public void visitExecutionOperator(ExecutionOperatorTree tree) {
     scan(tree);
   }
 

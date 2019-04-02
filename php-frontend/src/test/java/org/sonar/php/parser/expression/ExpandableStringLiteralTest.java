@@ -33,8 +33,20 @@ public class ExpandableStringLiteralTest {
       .matches("\"str $var\"")
       .matches("\"$var $var\"")
       .matches("\"$var str\"")
-      .matches("\"$var str $var\"")
-      .matches("\"$var\"");
+      .matches("\"no escape for `backtick` \"")
+      .matches("\"$var str $var\"");
+  }
+
+  @Test
+  public void executionOperator() {
+    assertThat(Kind.EXECUTION_OPERATOR)
+      .matches("`$var`")
+      .matches("`without expression`")
+      .matches("`str $var`")
+      .matches("`$var $var`")
+      .matches("`$var str`")
+      .matches("`no escape for quotes \" '`")
+      .matches("`$var str $var`");
   }
 
   @Test

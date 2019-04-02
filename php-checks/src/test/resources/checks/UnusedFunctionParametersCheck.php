@@ -89,3 +89,7 @@ class Foo {
     };
  }
 }
+
+function executionOperator($p) {
+  $result = `ls $p`;
+}

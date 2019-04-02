@@ -34,6 +34,9 @@ import java.util.List;
 @Beta
 public interface ExpandableStringLiteralTree extends ExpressionTree {
 
+  /**
+   * @return backtick if this string is an execution operation
+   */
   SyntaxToken openDoubleQuoteToken();
 
   List<ExpandableStringCharactersTree> strings();

@@ -21,7 +21,9 @@ package org.sonar.php.tree.impl.expression;
 
 import org.junit.Test;
 import org.sonar.php.PHPTreeModelTest;
+import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -75,6 +77,28 @@ public class ExpandableStringLiteralTreeTest extends PHPTreeModelTest {
     ExpandableStringLiteralTree tree = parse("\"/**/{$a}\"", Kind.EXPANDABLE_STRING_LITERAL);
     assertFirstExpression(tree, "{$a}", Kind.COMPUTED_VARIABLE_NAME);
   }
+
+  @Test
+  public void executionOperator() throws Exception {
+    ExecutionOperatorTree tree = parse("`ls $a`", PHPLexicalGrammar.EXPRESSION);
+
+    ExpandableStringLiteralTree literal = tree.literal();
+
+    assertThat(literal.openDoubleQuoteToken().text()).isEqualTo("`");
+    assertThat(literal.strings()).hasSize(1);
+    assertThat(literal.expressions()).hasSize(1);
+    assertThat(literal.closeDoubleQuoteToken().text()).isEqualTo("`");
+
+    assertFirstString(literal, "ls ");
+    assertFirstExpression(literal, "$a", Kind.VARIABLE_IDENTIFIER);
+
+    // without embedded expression
+    tree = parse("`ls dir`", PHPLexicalGrammar.EXPRESSION);
+    literal = tree.literal();
+    assertThat(literal.expressions()).isEmpty();
+    assertFirstString(literal, "ls dir");
+  }
+
 
   private static void assertExpandableStringLiteral(ExpandableStringLiteralTree tree, int stringsSize, int expressionsSize) {
     assertThat(tree.is(Kind.EXPANDABLE_STRING_LITERAL)).isTrue();

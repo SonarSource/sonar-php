@@ -17,34 +17,43 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.checks;
+package org.sonar.php.tree.impl.expression;
 
-import com.google.common.collect.ImmutableSet;
-import org.sonar.check.Rule;
-import org.sonar.php.checks.utils.FunctionUsageCheck;
+import com.google.common.collect.Iterators;
+import java.util.Iterator;
+import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
-import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
+import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
-@Rule(key = ExecCallCheck.KEY)
-public class ExecCallCheck extends FunctionUsageCheck {
+public class ExecutionOperatorTreeImpl extends PHPTree implements ExecutionOperatorTree {
 
-  public static final String KEY = "S4721";
-  private static final String MESSAGE = "Make sure that executing this OS command is safe here.";
+  private static final Kind KIND = Kind.EXECUTION_OPERATOR;
 
-  @Override
-  protected ImmutableSet<String> functionNames() {
-    return ImmutableSet.of("exec", "passthru", "proc_open", "popen", "shell_exec", "system", "pcntl_exec");
+  private final ExpandableStringLiteralTree literal;
+
+  public ExecutionOperatorTreeImpl(ExpandableStringLiteralTree literal) {
+    this.literal = literal;
   }
 
   @Override
-  protected void createIssue(FunctionCallTree tree) {
-    context().newIssue(this, tree.callee(), MESSAGE);
+  public Kind getKind() {
+    return KIND;
   }
 
   @Override
-  public void visitExecutionOperator(ExecutionOperatorTree tree) {
-    // http://php.net/manual/en/language.operators.execution.php
-    context().newIssue(this, tree, MESSAGE);
-    super.visitExecutionOperator(tree);
+  public Iterator<Tree> childrenIterator() {
+    return Iterators.singletonIterator(literal);
+  }
+
+  @Override
+  public void accept(VisitorCheck visitor) {
+    visitor.visitExecutionOperator(this);
+  }
+
+  @Override
+  public ExpandableStringLiteralTree literal() {
+    return literal;
   }
 }
