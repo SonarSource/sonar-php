@@ -20,7 +20,6 @@
 package org.sonar.php.checks.security;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -28,36 +27,27 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S4835")
 public class SessionFixationCheck extends PHPVisitorCheck {
 
-    private static final String MESSAGE_HARDCODED_SESSION_ID = "Session IDs must be unique and should not be hardcoded.";
-    private static final String MESSAGE_USER_SUPPLIED_DATA = "Make sure the session ID being set here is cryptographically secure and is not user-supplied.";
+    private static final String MESSAGE_USER_SUPPLIED_SESSION_ID = "Make sure the session ID being set here is cryptographically secure and is not user-supplied.";
 
     @Override
     public void visitFunctionCall(FunctionCallTree tree) {
         if (isSessionIdFunctionWithArguments(tree)) {
-            if (hasHardcodedStringArgument(tree)) {
-                createIssue(tree, MESSAGE_HARDCODED_SESSION_ID);
-            } else {
-                createIssue(tree, MESSAGE_USER_SUPPLIED_DATA);
-            }
+            context().newIssue(this, tree, MESSAGE_USER_SUPPLIED_SESSION_ID);
         }
 
         super.visitFunctionCall(tree);
     }
 
     private boolean isSessionIdFunctionWithArguments(FunctionCallTree tree) {
-        String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
-        return qualifiedName.equalsIgnoreCase("session_id") && hasArguments(tree);
+        return isSessionIdFunction(tree) && hasArguments(tree);
     }
 
-    private boolean hasHardcodedStringArgument(FunctionCallTree tree) {
-        return tree.arguments().get(0).is(Tree.Kind.REGULAR_STRING_LITERAL);
+    private boolean isSessionIdFunction(FunctionCallTree tree) {
+        String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
+        return qualifiedName.equalsIgnoreCase("session_id");
     }
 
     private boolean hasArguments(FunctionCallTree tree) {
-        return tree.arguments().size() >= 1;
-    }
-
-    private void createIssue(FunctionCallTree tree, String message) {
-        context().newIssue(this, tree, message);
+        return !tree.arguments().isEmpty();
     }
 }
