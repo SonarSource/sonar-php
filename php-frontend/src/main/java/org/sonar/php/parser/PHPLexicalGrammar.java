@@ -76,6 +76,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   NUMERIC_LITERAL,
   STRING_LITERAL,
   STRING_WITH_ENCAPS_VAR_CHARACTERS,
+  STRING_CHARACTERS_EXECUTION,
   HEREDOC_STRING_CHARACTERS,
   ENCAPS_VAR_IDENTIFIER,
   REGULAR_VAR_IDENTIFIER,
@@ -215,6 +216,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   TRAIT_CONSTANT,
   NEXT_IS_DOLLAR,
   DOUBLE_QUOTE,
+  BACKTICK,
   REGULAR_STRING_LITERAL,
   VARIABLE_VARIABLE_DOLLAR,
 
@@ -275,8 +277,10 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(REGULAR_STRING_LITERAL).is(SPACING, b.regexp(LexicalConstant.STRING_LITERAL));
 
     b.rule(STRING_WITH_ENCAPS_VAR_CHARACTERS).is(b.regexp(LexicalConstant.STRING_WITH_ENCAPS_VAR_CHARACTERS));
+    b.rule(STRING_CHARACTERS_EXECUTION).is(b.regexp(LexicalConstant.STRING_CHARACTERS_EXECUTION));
     b.rule(HEREDOC_STRING_CHARACTERS).is(b.regexp(LexicalConstant.HEREDOC_STRING_CHARACTERS));
     b.rule(DOUBLE_QUOTE).is("\"");
+    b.rule(BACKTICK).is("`");
     // FIXME: this recovery is introduce in order to parse ${var}, as expression cannot match keywords.
     b.rule(SEMI_COMPLEX_RECOVERY_EXPRESSION).is(b.regexp("[^}]++"));
 

@@ -52,6 +52,7 @@ import org.sonar.plugins.php.api.tree.expression.ArrayInitializerTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayPairTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ComputedVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExecutionOperatorTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringCharactersTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
@@ -1202,6 +1203,7 @@ public class PHPGrammar {
       f.stringLiteral(
         b.firstOf(
           f.regularStringLiteral(b.token(PHPLexicalGrammar.REGULAR_STRING_LITERAL)),
+          EXECUTION_OPERATOR(),
           EXPANDABLE_STRING_LITERAL()),
         b.optional(
           b.firstOf(
@@ -1219,6 +1221,18 @@ public class PHPGrammar {
             EXPANDABLE_STRING_CHARACTERS(),
             ENCAPSULATED_STRING_VARIABLE())),
         b.token(PHPLexicalGrammar.DOUBLE_QUOTE)));
+  }
+
+  public ExecutionOperatorTree EXECUTION_OPERATOR() {
+    return b.<ExecutionOperatorTree>nonterminal(Kind.EXECUTION_OPERATOR).is(
+      f.executionOperator(f.expandableStringLiteral(
+        b.token(PHPLexicalGrammar.SPACING),
+        b.token(PHPLexicalGrammar.BACKTICK),
+        b.oneOrMore(
+          b.firstOf(
+            STRING_CHARACTERS_EXECUTION(),
+            ENCAPSULATED_STRING_VARIABLE())),
+        b.token(PHPLexicalGrammar.BACKTICK))));
   }
 
   public HeredocStringLiteralTree HEREDOC_STRING_LITERAL() {
@@ -1298,6 +1312,11 @@ public class PHPGrammar {
   public ExpressionTree EXPANDABLE_STRING_CHARACTERS() {
     return b.<ExpandableStringCharactersTree>nonterminal(Kind.EXPANDABLE_STRING_CHARACTERS).is(
       f.expandableStringCharacters(b.token(PHPLexicalGrammar.STRING_WITH_ENCAPS_VAR_CHARACTERS)));
+  }
+
+  public ExpressionTree STRING_CHARACTERS_EXECUTION() {
+    return b.<ExpandableStringCharactersTree>nonterminal().is(
+      f.expandableStringCharacters(b.token(PHPLexicalGrammar.STRING_CHARACTERS_EXECUTION)));
   }
 
   public ExpressionTree HEREDOC_STRING_CHARACTERS() {
