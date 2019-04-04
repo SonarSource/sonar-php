@@ -236,6 +236,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
   INT,
   DOUBLE,
   FLOAT,
+  REAL,
   STRING,
   OBJECT,
   BOOLEAN,
@@ -324,6 +325,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(INT).is(word(b, "INT")).skip();
     b.rule(DOUBLE).is(word(b, "DOUBLE")).skip();
     b.rule(FLOAT).is(word(b, "FLOAT")).skip();
+    b.rule(REAL).is(word(b, "REAL")).skip();
     b.rule(STRING).is(word(b, "STRING")).skip();
     b.rule(OBJECT).is(word(b, "OBJECT")).skip();
     b.rule(BOOLEAN).is(word(b, "BOOLEAN")).skip();

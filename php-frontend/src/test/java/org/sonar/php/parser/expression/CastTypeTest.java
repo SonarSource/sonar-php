@@ -39,6 +39,7 @@ public class CastTypeTest {
       .matches("(int)$a")
       .matches("(double)$a")
       .matches("(float)$a")
+      .matches("(real)$a")
       .matches("(string)$a")
       .matches("(object)$a")
       .matches("(boolean)$a")
