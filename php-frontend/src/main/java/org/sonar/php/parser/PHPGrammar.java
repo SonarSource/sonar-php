@@ -976,6 +976,7 @@ public class PHPGrammar {
             b.token(PHPLexicalGrammar.INT),
             b.token(PHPLexicalGrammar.DOUBLE),
             b.token(PHPLexicalGrammar.FLOAT),
+            b.token(PHPLexicalGrammar.REAL),
             b.token(PHPLexicalGrammar.STRING),
             b.token(PHPLexicalGrammar.OBJECT),
             b.token(PHPLexicalGrammar.BOOLEAN),
