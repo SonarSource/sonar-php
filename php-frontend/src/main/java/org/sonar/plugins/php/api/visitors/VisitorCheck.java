@@ -77,6 +77,7 @@ import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
@@ -213,6 +214,8 @@ public interface VisitorCheck extends PHPCheck {
   void visitLabel(LabelTree tree);
 
   void visitNamespaceStatement(NamespaceStatementTree tree);
+
+  void visitEchoTagStatement(EchoTagStatementTree tree);
 
   /**
    * [ END ] Statement

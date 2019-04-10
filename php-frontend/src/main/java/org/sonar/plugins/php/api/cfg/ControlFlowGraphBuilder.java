@@ -175,6 +175,7 @@ class ControlFlowGraphBuilder {
       case NAMESPACE_STATEMENT:
       case INLINE_HTML:
       case EXPRESSION_STATEMENT:
+      case ECHO_TAG_STATEMENT:
         currentBlock.addElement(tree);
         return currentBlock;
       case TRAIT_DECLARATION:

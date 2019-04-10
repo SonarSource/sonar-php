@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.typed.Optional;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +34,7 @@ import javax.annotation.Nullable;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.CompilationUnitTreeImpl;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.php.tree.impl.ScriptTreeImpl;
 import org.sonar.php.tree.impl.SeparatedListImpl;
 import org.sonar.php.tree.impl.VariableIdentifierTreeImpl;
@@ -97,6 +99,7 @@ import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStatementHead;
 import org.sonar.php.tree.impl.statement.DefaultClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.DoWhileStatementTreeImpl;
+import org.sonar.php.tree.impl.statement.EchoTagStatementTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.ElseifClauseTreeImpl;
 import org.sonar.php.tree.impl.statement.EmptyStatementImpl;
@@ -123,6 +126,7 @@ import org.sonar.php.tree.impl.statement.VariableDeclarationTreeImpl;
 import org.sonar.php.tree.impl.statement.WhileStatementTreeImpl;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.ScriptTree;
+import org.sonar.plugins.php.api.tree.SeparatedList;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.BuiltInTypeTree;
@@ -176,6 +180,7 @@ import org.sonar.plugins.php.api.tree.statement.ContinueStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DeclareStatementTree;
 import org.sonar.plugins.php.api.tree.statement.DefaultClauseTree;
 import org.sonar.plugins.php.api.tree.statement.DoWhileStatementTree;
+import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
@@ -295,7 +300,49 @@ public class TreeFactory {
 
 
   public ScriptTree script(InternalSyntaxToken fileOpeningTagToken, Optional<List<StatementTree>> statements) {
-    return new ScriptTreeImpl(fileOpeningTagToken, optionalList(statements));
+    return new ScriptTreeImpl(fileOpeningTagToken, interposeEchoTagStatement(fileOpeningTagToken, optionalList(statements)));
+  }
+
+  private static List<StatementTree> interposeEchoTagStatement(List<StatementTree> statements) {
+    return interposeEchoTagStatement(null, statements);
+  }
+
+  private static List<StatementTree> interposeEchoTagStatement(@Nullable SyntaxToken openingTagToken, List<StatementTree> statements) {
+    boolean previousTokenIsEchoTag = isEchoTag(openingTagToken);
+    List<StatementTree> newStatements = new ArrayList<>();
+    for (StatementTree statement : statements) {
+      newStatements.add(previousTokenIsEchoTag ? interposeEchoTagStatement(statement) : statement);
+      previousTokenIsEchoTag = isEchoTag(statement);
+    }
+    return newStatements;
+  }
+
+  private static StatementTree interposeEchoTagStatement(StatementTree statement) {
+    if (statement.is(Kind.EXPRESSION_STATEMENT)) {
+      ExpressionStatementTree expressionStatement = (ExpressionStatementTree) statement;
+      return newEchoTagStatement(expressionStatement.expression(), (InternalSyntaxToken) expressionStatement.eosToken());
+    } else if (statement.is(Kind.EXPRESSION_LIST_STATEMENT)) {
+      ExpressionListStatementTree list = (ExpressionListStatementTree) statement;
+      return newEchoTagStatement(list.expressions(), (InternalSyntaxToken) list.eosToken());
+    }
+    return statement;
+  }
+
+  private static boolean isEchoTag(StatementTree statement) {
+    return isEchoTag(((PHPTree) statement).getLastToken());
+  }
+
+  private static boolean isEchoTag(@Nullable SyntaxToken token) {
+    return token != null && token.text().endsWith("<?=");
+  }
+
+  public static EchoTagStatementTree newEchoTagStatement(ExpressionTree expression, InternalSyntaxToken eosToken) {
+    SeparatedList<ExpressionTree> expressionList = new SeparatedListImpl(Collections.singletonList(expression), Collections.emptyList());
+    return newEchoTagStatement(expressionList, eosToken);
+  }
+
+  public static EchoTagStatementTree newEchoTagStatement(SeparatedList<ExpressionTree> expressions, InternalSyntaxToken eosToken) {
+    return new EchoTagStatementTreeImpl(expressions, eosToken);
   }
 
   public ScriptTree script(InternalSyntaxToken anythingButOpeningTagToken) {
@@ -610,7 +657,7 @@ public class TreeFactory {
   }
 
   public BlockTree block(InternalSyntaxToken lbrace, Optional<List<StatementTree>> statements, InternalSyntaxToken rbrace) {
-    return new BlockTreeImpl(lbrace, optionalList(statements), rbrace);
+    return new BlockTreeImpl(lbrace, interposeEchoTagStatement(optionalList(statements)), rbrace);
   }
 
   public GotoStatementTree gotoStatement(InternalSyntaxToken gotoToken, InternalSyntaxToken identifier, InternalSyntaxToken eos) {
@@ -742,7 +789,7 @@ public class TreeFactory {
     ForEachStatementHeader header,
     InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken
   ) {
-    return new ForEachStatementTreeImpl(header, colonToken, optionalList(statements), endForEachToken, eosToken);
+    return new ForEachStatementTreeImpl(header, colonToken, interposeEchoTagStatement(optionalList(statements)), endForEachToken, eosToken);
   }
 
   public ForEachStatementHeader forEachStatementHeader(
@@ -800,7 +847,7 @@ public class TreeFactory {
     ForStatementHeader forStatementHeader, InternalSyntaxToken colonToken,
     Optional<List<StatementTree>> statements, InternalSyntaxToken endForToken, InternalSyntaxToken eos
   ) {
-    return new ForStatementTreeImpl(forStatementHeader, colonToken, optionalList(statements), endForToken, eos);
+    return new ForStatementTreeImpl(forStatementHeader, colonToken, interposeEchoTagStatement(optionalList(statements)), endForToken, eos);
   }
 
   public SeparatedListImpl<ExpressionTree> forExpr(ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> listOptional) {
@@ -831,7 +878,7 @@ public class TreeFactory {
       ifToken,
       condition,
       colonToken,
-      optionalList(statements),
+      interposeEchoTagStatement(optionalList(statements)),
       optionalList(elseifClauses),
       elseClause.orNull(),
       endIfToken,
@@ -843,7 +890,7 @@ public class TreeFactory {
     return new ElseClauseTreeImpl(
       elseToken,
       colonToken,
-      optionalList(statements)
+      interposeEchoTagStatement(optionalList(statements))
     );
   }
 
@@ -855,7 +902,7 @@ public class TreeFactory {
       elseifToken,
       condition,
       colonToken,
-      optionalList(statements)
+      interposeEchoTagStatement(optionalList(statements))
     );
   }
 
@@ -885,7 +932,7 @@ public class TreeFactory {
       whileToken,
       condition,
       colonToken,
-      optionalList(statements),
+      interposeEchoTagStatement(optionalList(statements)),
       endwhileToken,
       eosToken
     );
@@ -929,7 +976,7 @@ public class TreeFactory {
       caseToken,
       expression,
       caseSeparatorToken,
-      optionalList(statements)
+      interposeEchoTagStatement(optionalList(statements))
     );
   }
 
@@ -937,7 +984,7 @@ public class TreeFactory {
     return new DefaultClauseTreeImpl(
       defaultToken,
       caseSeparatorToken,
-      optionalList(statements)
+      interposeEchoTagStatement(optionalList(statements))
     );
   }
 
@@ -970,7 +1017,7 @@ public class TreeFactory {
       namespaceToken,
       namespaceName.orNull(),
       openCurlyBrace,
-      optionalList(statements),
+      interposeEchoTagStatement(optionalList(statements)),
       closeCurlyBrace
     );
   }
@@ -1005,7 +1052,7 @@ public class TreeFactory {
     Optional<List<StatementTree>> statements,
     InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken
   ) {
-    return new DeclareStatementTreeImpl(declareStatementHead, colonToken, optionalList(statements), enddeclareToken, eosToken);
+    return new DeclareStatementTreeImpl(declareStatementHead, colonToken, interposeEchoTagStatement(optionalList(statements)), enddeclareToken, eosToken);
   }
 
   public StaticStatementTree staticStatement(
