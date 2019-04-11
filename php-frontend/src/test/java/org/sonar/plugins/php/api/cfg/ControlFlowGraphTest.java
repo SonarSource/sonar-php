@@ -20,6 +20,7 @@
 package org.sonar.plugins.php.api.cfg;
 
 import com.sonar.sslr.api.RecognitionException;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.utils.log.LogTester;
@@ -39,7 +40,9 @@ import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
+import org.sonar.plugins.php.api.tree.statement.EchoTagStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
+import org.sonar.plugins.php.api.tree.statement.InlineHTMLTree;
 import org.sonar.plugins.php.api.tree.statement.StatementTree;
 import org.sonar.plugins.php.api.visitors.CheckContext;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -1476,6 +1479,25 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
       return expected;
     });
     new Validator(expectedCfgStructure).assertCfg(actualCfg);
+  }
+
+  @Test
+  public void echo_tag() {
+    CompilationUnitTree tree = parse("<?php\n" +
+        "function foo() {\n" +
+        "     ?><?= 'Hello' ?><?php\n" +
+        "}\n",
+      PHPLexicalGrammar.COMPILATION_UNIT);
+    FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
+    ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
+    assertThat(cfg).isNotNull();
+    List<Tree> elements = cfg.start().elements();
+    assertThat(elements).hasSize(2);
+    assertThat(elements.get(0).getKind()).isEqualTo(Tree.Kind.INLINE_HTML);
+    assertThat(((InlineHTMLTree)elements.get(0)).inlineHTMLToken().text()).isEqualTo("?><?=");
+    assertThat(elements.get(1).getKind()).isEqualTo(Tree.Kind.ECHO_TAG_STATEMENT);
+    assertThat(((EchoTagStatementTree)elements.get(1)).expressions().get(0).getKind()).isEqualTo(Tree.Kind.REGULAR_STRING_LITERAL);
+    assertThat(((EchoTagStatementTree)elements.get(1)).eosToken().text()).isEqualTo("?><?php");
   }
 
   @Test

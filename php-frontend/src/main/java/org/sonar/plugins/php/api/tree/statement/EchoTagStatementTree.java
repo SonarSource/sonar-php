@@ -17,23 +17,19 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.php.parser.expression;
+package org.sonar.plugins.php.api.tree.statement;
 
-import org.junit.Test;
-import org.sonar.php.parser.PHPLexicalGrammar;
+import org.sonar.plugins.php.api.tree.SeparatedList;
+import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 
-import static org.sonar.php.utils.Assertions.assertThat;
+/**
+ * An EchoTagStatementTree is an AST node that wrap an expression list to represent the php tag: &lt;?= {@link #expressions()} ?&gt;
+ */
+public interface EchoTagStatementTree extends StatementTree {
 
-public class ExpressionStatement {
+  SeparatedList<ExpressionTree> expressions();
 
-  @Test
-  public void test() {
-    assertThat(PHPLexicalGrammar.EXPRESSION_STATEMENT)
-      .matches("1;")
-      .matches("1 + 1;")
-      .matches("yield $a;")
-      .matches("yield +6;")
-      .matches("yield *6;");
-  }
+  SyntaxToken eosToken();
 
 }

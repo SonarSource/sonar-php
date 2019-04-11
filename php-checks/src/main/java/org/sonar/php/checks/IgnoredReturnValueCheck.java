@@ -256,16 +256,16 @@ public class IgnoredReturnValueCheck extends PHPVisitorCheck {
     ExpressionTree expression = CheckUtils.skipParenthesis(expressionTree);
     if (expression.is(Tree.Kind.FUNCTION_CALL)) {
       FunctionCallTree functionCall = (FunctionCallTree) expression;
-      checkName(expressionTree, functionCall.callee(), CheckUtils.getFunctionName(functionCall));
+      checkName(functionCall.callee(), CheckUtils.getFunctionName(functionCall));
     } else if (expression.is(Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
       ArrayInitializerFunctionTree initializer = (ArrayInitializerFunctionTree) expression;
-      checkName(expressionTree, initializer.arrayToken(), "array");
+      checkName(initializer.arrayToken(), "array");
     }
   }
 
-  private void checkName(ExpressionTree expressionTree, Tree issueLocation, @Nullable String name) {
+  private void checkName(Tree issueLocation, @Nullable String name) {
     boolean isPureFunction = name != null && PURE_FUNCTIONS.contains(name.toLowerCase(Locale.ROOT));
-    if (isPureFunction && !CheckUtils.isDisguisedShortEchoStatement(expressionTree.getParent())) {
+    if (isPureFunction) {
       context().newIssue(this, issueLocation, "The return value of \"" + name + "\" must be used.");
     }
   }
