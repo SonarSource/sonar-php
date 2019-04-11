@@ -300,24 +300,24 @@ public class TreeFactory {
 
 
   public ScriptTree script(InternalSyntaxToken fileOpeningTagToken, Optional<List<StatementTree>> statements) {
-    return new ScriptTreeImpl(fileOpeningTagToken, interposeEchoTagStatement(fileOpeningTagToken, optionalList(statements)));
+    return new ScriptTreeImpl(fileOpeningTagToken, interposeEchoTagStatements(fileOpeningTagToken, optionalList(statements)));
   }
 
-  private static List<StatementTree> interposeEchoTagStatement(List<StatementTree> statements) {
-    return interposeEchoTagStatement(null, statements);
+  private static List<StatementTree> interposeEchoTagStatements(List<StatementTree> statements) {
+    return interposeEchoTagStatements(null, statements);
   }
 
-  private static List<StatementTree> interposeEchoTagStatement(@Nullable SyntaxToken openingTagToken, List<StatementTree> statements) {
+  private static List<StatementTree> interposeEchoTagStatements(@Nullable SyntaxToken openingTagToken, List<StatementTree> statements) {
     boolean previousTokenIsEchoTag = isEchoTag(openingTagToken);
     List<StatementTree> newStatements = new ArrayList<>();
     for (StatementTree statement : statements) {
-      newStatements.add(previousTokenIsEchoTag ? interposeEchoTagStatement(statement) : statement);
+      newStatements.add(previousTokenIsEchoTag ? interposeEchoTagStatements(statement) : statement);
       previousTokenIsEchoTag = isEchoTag(statement);
     }
     return newStatements;
   }
 
-  private static StatementTree interposeEchoTagStatement(StatementTree statement) {
+  private static StatementTree interposeEchoTagStatements(StatementTree statement) {
     if (statement.is(Kind.EXPRESSION_STATEMENT)) {
       ExpressionStatementTree expressionStatement = (ExpressionStatementTree) statement;
       return newEchoTagStatement(expressionStatement.expression(), (InternalSyntaxToken) expressionStatement.eosToken());
@@ -336,12 +336,12 @@ public class TreeFactory {
     return token != null && token.text().endsWith("<?=");
   }
 
-  public static EchoTagStatementTree newEchoTagStatement(ExpressionTree expression, InternalSyntaxToken eosToken) {
-    SeparatedList<ExpressionTree> expressionList = new SeparatedListImpl(Collections.singletonList(expression), Collections.emptyList());
+  private static EchoTagStatementTree newEchoTagStatement(ExpressionTree expression, InternalSyntaxToken eosToken) {
+    SeparatedList<ExpressionTree> expressionList = new SeparatedListImpl<>(Collections.singletonList(expression), Collections.emptyList());
     return newEchoTagStatement(expressionList, eosToken);
   }
 
-  public static EchoTagStatementTree newEchoTagStatement(SeparatedList<ExpressionTree> expressions, InternalSyntaxToken eosToken) {
+  private static EchoTagStatementTree newEchoTagStatement(SeparatedList<ExpressionTree> expressions, InternalSyntaxToken eosToken) {
     return new EchoTagStatementTreeImpl(expressions, eosToken);
   }
 
@@ -657,7 +657,7 @@ public class TreeFactory {
   }
 
   public BlockTree block(InternalSyntaxToken lbrace, Optional<List<StatementTree>> statements, InternalSyntaxToken rbrace) {
-    return new BlockTreeImpl(lbrace, interposeEchoTagStatement(optionalList(statements)), rbrace);
+    return new BlockTreeImpl(lbrace, interposeEchoTagStatements(optionalList(statements)), rbrace);
   }
 
   public GotoStatementTree gotoStatement(InternalSyntaxToken gotoToken, InternalSyntaxToken identifier, InternalSyntaxToken eos) {
@@ -789,7 +789,7 @@ public class TreeFactory {
     ForEachStatementHeader header,
     InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements, InternalSyntaxToken endForEachToken, InternalSyntaxToken eosToken
   ) {
-    return new ForEachStatementTreeImpl(header, colonToken, interposeEchoTagStatement(optionalList(statements)), endForEachToken, eosToken);
+    return new ForEachStatementTreeImpl(header, colonToken, interposeEchoTagStatements(optionalList(statements)), endForEachToken, eosToken);
   }
 
   public ForEachStatementHeader forEachStatementHeader(
@@ -847,7 +847,7 @@ public class TreeFactory {
     ForStatementHeader forStatementHeader, InternalSyntaxToken colonToken,
     Optional<List<StatementTree>> statements, InternalSyntaxToken endForToken, InternalSyntaxToken eos
   ) {
-    return new ForStatementTreeImpl(forStatementHeader, colonToken, interposeEchoTagStatement(optionalList(statements)), endForToken, eos);
+    return new ForStatementTreeImpl(forStatementHeader, colonToken, interposeEchoTagStatements(optionalList(statements)), endForToken, eos);
   }
 
   public SeparatedListImpl<ExpressionTree> forExpr(ExpressionTree expression, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> listOptional) {
@@ -878,7 +878,7 @@ public class TreeFactory {
       ifToken,
       condition,
       colonToken,
-      interposeEchoTagStatement(optionalList(statements)),
+      interposeEchoTagStatements(optionalList(statements)),
       optionalList(elseifClauses),
       elseClause.orNull(),
       endIfToken,
@@ -890,7 +890,7 @@ public class TreeFactory {
     return new ElseClauseTreeImpl(
       elseToken,
       colonToken,
-      interposeEchoTagStatement(optionalList(statements))
+      interposeEchoTagStatements(optionalList(statements))
     );
   }
 
@@ -902,7 +902,7 @@ public class TreeFactory {
       elseifToken,
       condition,
       colonToken,
-      interposeEchoTagStatement(optionalList(statements))
+      interposeEchoTagStatements(optionalList(statements))
     );
   }
 
@@ -932,7 +932,7 @@ public class TreeFactory {
       whileToken,
       condition,
       colonToken,
-      interposeEchoTagStatement(optionalList(statements)),
+      interposeEchoTagStatements(optionalList(statements)),
       endwhileToken,
       eosToken
     );
@@ -976,7 +976,7 @@ public class TreeFactory {
       caseToken,
       expression,
       caseSeparatorToken,
-      interposeEchoTagStatement(optionalList(statements))
+      interposeEchoTagStatements(optionalList(statements))
     );
   }
 
@@ -984,7 +984,7 @@ public class TreeFactory {
     return new DefaultClauseTreeImpl(
       defaultToken,
       caseSeparatorToken,
-      interposeEchoTagStatement(optionalList(statements))
+      interposeEchoTagStatements(optionalList(statements))
     );
   }
 
@@ -1017,7 +1017,7 @@ public class TreeFactory {
       namespaceToken,
       namespaceName.orNull(),
       openCurlyBrace,
-      interposeEchoTagStatement(optionalList(statements)),
+      interposeEchoTagStatements(optionalList(statements)),
       closeCurlyBrace
     );
   }
@@ -1052,7 +1052,7 @@ public class TreeFactory {
     Optional<List<StatementTree>> statements,
     InternalSyntaxToken enddeclareToken, InternalSyntaxToken eosToken
   ) {
-    return new DeclareStatementTreeImpl(declareStatementHead, colonToken, interposeEchoTagStatement(optionalList(statements)), enddeclareToken, eosToken);
+    return new DeclareStatementTreeImpl(declareStatementHead, colonToken, interposeEchoTagStatements(optionalList(statements)), enddeclareToken, eosToken);
   }
 
   public StaticStatementTree staticStatement(
