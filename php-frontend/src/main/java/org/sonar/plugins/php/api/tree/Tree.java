@@ -852,7 +852,9 @@ public interface Tree {
 
     /**
      * {@link ExpressionListStatementTree}
+     * @deprecated since 3.1. Use {@link #ECHO_TAG_STATEMENT}
      */
+    @Deprecated
     EXPRESSION_LIST_STATEMENT(ExpressionListStatementTree.class),
 
     /**
