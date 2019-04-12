@@ -297,10 +297,14 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitHeredoc(HeredocStringLiteralTree tree);
 
+  /**
+   * @deprecated since 3.1. Use {@link #visitEchoTagStatement(EchoTagStatementTree)}
+   */
+  @Deprecated
   void visitExpressionListStatement(ExpressionListStatementTree tree);
+
   /**
    * [ END ] Expression
    */
 
 }
-
