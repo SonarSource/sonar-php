@@ -20,34 +20,34 @@
 package org.sonar.php.checks.security;
 
 import org.sonar.check.Rule;
+import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
-@Rule(key = "S4835")
+@Rule(key = "S5328")
 public class SessionFixationCheck extends PHPVisitorCheck {
 
-    private static final String MESSAGE_USER_SUPPLIED_SESSION_ID = "Make sure the session ID being set here is cryptographically secure and is not user-supplied.";
+  private static final String MESSAGE = "Make sure the session ID being set is cryptographically secure and is not user-supplied.";
 
-    @Override
-    public void visitFunctionCall(FunctionCallTree tree) {
-        if (isSessionIdFunctionWithArguments(tree)) {
-            context().newIssue(this, tree, MESSAGE_USER_SUPPLIED_SESSION_ID);
-        }
-
-        super.visitFunctionCall(tree);
+  @Override
+  public void visitFunctionCall(FunctionCallTree tree) {
+    if (isSessionIdFunction(tree) && hasArguments(tree)) {
+      context().newIssue(this, tree, MESSAGE);
     }
 
-    private boolean isSessionIdFunctionWithArguments(FunctionCallTree tree) {
-        return isSessionIdFunction(tree) && hasArguments(tree);
-    }
+    super.visitFunctionCall(tree);
+  }
 
-    private boolean isSessionIdFunction(FunctionCallTree tree) {
-        String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
-        return qualifiedName.equalsIgnoreCase("session_id");
+  private boolean isSessionIdFunction(FunctionCallTree tree) {
+    if (tree.callee().is(Kind.NAMESPACE_NAME)) {
+      String qualifiedName = ((NamespaceNameTree) tree.callee()).qualifiedName();
+      return qualifiedName.equalsIgnoreCase("session_id");
     }
+    return false;
+  }
 
-    private boolean hasArguments(FunctionCallTree tree) {
-        return !tree.arguments().isEmpty();
-    }
+  private boolean hasArguments(FunctionCallTree tree) {
+    return !tree.arguments().isEmpty();
+  }
 }

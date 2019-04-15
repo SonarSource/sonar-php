@@ -1,0 +1,12 @@
+{
+'project:Symfony/Component/HttpFoundation/Session/Storage/Proxy/AbstractProxy.php':[
+94,
+],
+'project:Symfony/Component/HttpFoundation/Tests/Session/Storage/Handler/NullSessionHandlerTest.php':[
+37,
+47,
+],
+'project:Symfony/Component/Security/Csrf/Tests/TokenStorage/NativeSessionTokenStorageTest.php':[
+48,
+],
+}
