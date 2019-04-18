@@ -29,12 +29,12 @@ import org.sonar.plugins.php.api.Php;
 
 public class PhpExclusionsFileFilter implements InputFileFilter {
 
-  private final Configuration configuration;
+  private final String[] excludedPatterns;
 
   private static final Logger LOG = Loggers.get(PhpExclusionsFileFilter.class);
 
   public PhpExclusionsFileFilter(Configuration configuration) {
-    this.configuration = configuration;
+    excludedPatterns = configuration.getStringArray(PhpPlugin.PHP_EXCLUSIONS_KEY);
   }
 
   @Override
@@ -43,11 +43,9 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
       return true;
     }
 
-    String property = PhpPlugin.PHP_EXCLUSIONS_KEY;
-    String[] excludedPatterns = this.configuration.getStringArray(property);
     String relativePath = inputFile.uri().toString();
     if (WildcardPattern.match(WildcardPattern.create(excludedPatterns), relativePath)) {
-      LOG.debug("File [" + inputFile.uri() + "] is excluded by '" + property + "' property and will not be analyzed");
+      LOG.debug("File [" + inputFile.uri() + "] is excluded by '" + PhpPlugin.PHP_EXCLUSIONS_KEY + "' property and will not be analyzed");
       return false;
     }
 
