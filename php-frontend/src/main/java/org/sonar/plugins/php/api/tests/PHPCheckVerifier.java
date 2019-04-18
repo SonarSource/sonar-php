@@ -61,32 +61,6 @@ public class PHPCheckVerifier {
   }
 
   /**
-   * @deprecated since 2.14. Use {@link PHPCheckVerifier#verify(File, PHPCheck)}}
-   */
-  @Deprecated
-  public static void verify(PhpFile sourceFile, PHPCheck check) {
-    new PHPCheckVerifier(true).createVerifier(sourceFile, check).assertOneOrMoreIssues();
-  }
-
-  /**
-   * @deprecated since 2.14. Use {@link PHPCheckVerifier#verifyNoIssue(File, PHPCheck)}}
-   */
-  @Deprecated
-  public static void verifyNoIssue(PhpFile sourceFile, PHPCheck check) {
-    new PHPCheckVerifier(true).createVerifier(sourceFile, check).assertNoIssues();
-  }
-
-  /**
-   * Internal use only. Subject to changes.
-   * @deprecated since 2.14
-   */
-  @Deprecated
-  protected SingleFileVerifier createVerifier(PhpFile file, PHPCheck check) {
-    SingleFileVerifier verifier = SingleFileVerifier.create(file.relativePath(), UTF_8);
-    return getSingleFileVerifier(check, verifier, file);
-  }
-
-  /**
    * Internal use only. Subject to changes.
    */
   protected SingleFileVerifier createVerifier(File file, PHPCheck check) {

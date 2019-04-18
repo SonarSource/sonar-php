@@ -19,7 +19,6 @@
  */
 package org.sonar.php.compat;
 
-import java.nio.file.Paths;
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
@@ -36,14 +35,12 @@ public class PhpFileImplTest {
     when(inputFile.contents()).thenReturn("Input file content");
     when(inputFile.filename()).thenReturn("file.php");
     when(inputFile.toString()).thenReturn("to string");
-    when(inputFile.relativePath()).thenReturn("path/to/file.php");
 
     PhpFile phpFile = new PhpFileImpl(inputFile);
 
     assertThat(phpFile).isExactlyInstanceOf(PhpFileImpl.class);
     assertThat(phpFile.contents()).isEqualTo("Input file content");
     assertThat(phpFile.filename()).isEqualTo("file.php");
-    assertThat(phpFile.relativePath()).isEqualTo(Paths.get("path/to/file.php"));
     assertThat(phpFile.toString()).isEqualTo("to string");
   }
 }

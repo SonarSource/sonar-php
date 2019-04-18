@@ -36,7 +36,6 @@ public class PhpTestFileTest {
   @Test
   public void load_file() throws Exception {
     PhpTestFile file = new PhpTestFile(new File("src/test/resources/tests/testfile.php"));
-    assertThat(file.relativePath().toString().replace('\\', '/')).isEqualTo("src/test/resources/tests/testfile.php");
     assertThat(file.contents()).isEqualTo("<?php echo \"Hello\";\n");
     assertThat(file.filename()).isEqualTo("testfile.php");
     String expectedPath = Paths.get("src", "test", "resources", "tests", "testfile.php").toString();

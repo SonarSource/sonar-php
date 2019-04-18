@@ -20,8 +20,6 @@
 package org.sonar.php.compat;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.php.api.visitors.PhpFile;
 
@@ -31,11 +29,6 @@ public class PhpFileImpl implements PhpFile {
 
   public PhpFileImpl(InputFile wrapped) {
     this.wrapped = wrapped;
-  }
-
-  @Override
-  public Path relativePath() {
-    return Paths.get(wrapped.relativePath());
   }
 
   static class InputFileIOException extends RuntimeException {
