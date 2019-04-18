@@ -1,0 +1,24 @@
+{
+  "title": "Setting session IDs is security-sensitive",
+  "type": "SECURITY_HOTSPOT",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "cwe"
+  ],
+  "standards": [
+    "CWE"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-5328",
+  "sqKey": "S5328",
+  "scope": "All",
+  "securityStandards": {
+    "CWE": [
+      384
+    ]
+  }
+}
