@@ -33,6 +33,7 @@ public class PHPTest {
   private static final String MULTI_MODULE_PROJECT_KEY = "multimodule-php";
   private static final String EMPTY_FILE_PROJECT_KEY = "empty_file_project_key";
   private static final String SEVERAL_EXTENSIONS_PROJECT_KEY = "project-with-several-extensions";
+  private static final String PROJECT_WITH_VENDOR_KEY = "project-with-vendor";
   private static final String SRC_DIR_NAME = "src";
 
   @ClassRule
@@ -52,6 +53,16 @@ public class PHPTest {
     assertThat(getMeasureAsInt(SEVERAL_EXTENSIONS_PROJECT_KEY, "files")).isEqualTo(3);
     assertThat(getMeasureAsInt(getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math2.myphp"), "lines")).isGreaterThan(1);
     assertThat(getComponent(SEVERAL_EXTENSIONS_PROJECT_KEY, getResourceKey(SEVERAL_EXTENSIONS_PROJECT_KEY, "Math3.pgp"))).isNull();
+  }
+
+  @Test
+  public void should_exclude_vendor_dir() {
+    Tests.provisionProject(PROJECT_WITH_VENDOR_KEY, "Project with vendor dir", "php", "it-profile");
+    SonarScanner build = SonarScanner.create()
+      .setProjectDir(Tests.projectDirectoryFor("project-with-vendor"));
+    Tests.executeBuildWithExpectedWarnings(orchestrator, build);
+
+    assertThat(getMeasureAsInt(PROJECT_WITH_VENDOR_KEY, "files")).isEqualTo(1);
   }
 
   /**
