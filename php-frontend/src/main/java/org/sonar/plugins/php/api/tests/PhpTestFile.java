@@ -43,11 +43,6 @@ public class PhpTestFile implements PhpFile {
   }
 
   @Override
-  public Path relativePath() {
-    return relativePath;
-  }
-
-  @Override
   public String contents() {
     return contents;
   }
