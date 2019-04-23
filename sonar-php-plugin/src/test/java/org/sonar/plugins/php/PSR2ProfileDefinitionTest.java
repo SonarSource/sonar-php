@@ -20,9 +20,10 @@
 package org.sonar.plugins.php;
 
 import org.junit.Test;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
-import org.sonar.php.checks.CheckList;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInActiveRule;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
 import org.sonar.plugins.php.api.Php;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,16 +31,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PSR2ProfileDefinitionTest {
 
   @Test
-  public void should_create_sonar_way_profile() {
-    ValidationMessages validation = ValidationMessages.create();
+  public void profile_creation() {
+    PSR2ProfileDefinition definition = new PSR2ProfileDefinition();
+    Context context = new Context();
+    definition.define(context);
+    BuiltInQualityProfile profile = context.profile("php", "PSR-2");
 
-    PSR2ProfileDefinition definition = new PSR2ProfileDefinition(new FakeProfileParser());
-    RulesProfile profile = definition.createProfile(validation);
+    assertThat(profile.language()).isEqualTo(Php.KEY);
+    assertThat(profile.name()).isEqualTo("PSR-2");
+    assertThat(profile.rules()).hasSize(20);
 
-    assertThat(profile.getLanguage()).isEqualTo(Php.KEY);
-    assertThat(profile.getName()).isEqualTo("PSR-2");
-    assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY)).hasSize(20);
-    assertThat(validation.hasErrors()).isFalse();
+    BuiltInActiveRule lineLengthRule = profile.rule(RuleKey.of("php", "S103"));
+    assertThat(lineLengthRule.overriddenParams()).isEmpty();
+    assertThat(lineLengthRule.overriddenSeverity()).isNull();
+
+    BuiltInActiveRule ruleS1788 = profile.rule(RuleKey.of("php", "S1788"));
+    assertThat(ruleS1788.overriddenParams()).isEmpty();
+    assertThat(ruleS1788.overriddenSeverity()).isEqualTo("CRITICAL");
+
+    BuiltInActiveRule ruleS101 = profile.rule(RuleKey.of("php", "S101"));
+    assertThat(ruleS101.overriddenParam("format").overriddenValue()).isEqualTo("^[A-Z][a-zA-Z]*$");
   }
 
 }
