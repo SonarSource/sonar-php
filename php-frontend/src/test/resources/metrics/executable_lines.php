@@ -4,7 +4,6 @@ html is not considered as executable
 
 <?php
 // comment
-
 class A {
 
   public function f() {
@@ -49,7 +48,7 @@ try {                    // +1
   }
 }
 
-declare(ticks=1) { // +1
+declare(ticks=1) {
   foo();           // +1
 }
 
