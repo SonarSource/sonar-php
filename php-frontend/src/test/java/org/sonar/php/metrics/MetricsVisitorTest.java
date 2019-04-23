@@ -43,11 +43,6 @@ public class MetricsVisitorTest extends ParsingTestUtils {
 
     assertThat(fileMeasures.getFileComplexity()).isEqualTo(1);
     assertThat(fileMeasures.getFileCognitiveComplexity()).isEqualTo(0);
-    assertThat(fileMeasures.getClassComplexity()).isEqualTo(1);
-    assertThat(fileMeasures.getFunctionComplexity()).isEqualTo(1);
-
-    assertThat(fileMeasures.getFileComplexityDistribution().build()).isEqualTo("0=1;5=0;10=0;20=0;30=0;60=0;90=0");
-    assertThat(fileMeasures.getFunctionComplexityDistribution().build()).isEqualTo("1=1;2=0;4=0;6=0;8=0;10=0;12=0");
 
     assertThat(fileMeasures.getFunctionNumber()).isEqualTo(1);
     assertThat(fileMeasures.getStatementNumber()).isEqualTo(2);
