@@ -33,9 +33,6 @@ import org.sonar.plugins.php.api.visitors.PhpFile;
 
 public class MetricsVisitor extends PHPSubscriptionCheck {
 
-  private static final Number[] LIMITS_COMPLEXITY_FUNCTIONS = {1, 2, 4, 6, 8, 10, 12};
-  private static final Number[] FILES_DISTRIBUTION_BOTTOM_LIMITS = {0, 5, 10, 20, 30, 60, 90};
-
   private static final Kind[] FUNCTION_NODES = {
     Kind.FUNCTION_DECLARATION,
     Kind.FUNCTION_EXPRESSION,
@@ -73,11 +70,6 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     if (tree.is(Kind.COMPILATION_UNIT)) {
       fileMeasures.setFileComplexity(ComplexityVisitor.complexity(tree));
       fileMeasures.setFileCognitiveComplexity(CognitiveComplexityVisitor.complexity((CompilationUnitTree) tree));
-    } else if (tree.is(CLASS_NODES)) {
-      fileMeasures.addClassComplexity(ComplexityVisitor.complexity(tree));
-
-    } else if (tree.is(FUNCTION_NODES)) {
-      fileMeasures.addFunctionComplexity(ComplexityVisitor.complexity(tree));
     }
   }
 
@@ -87,7 +79,7 @@ public class MetricsVisitor extends PHPSubscriptionCheck {
     FileLinesContext fileLinesContext
   ) {
 
-    this.fileMeasures = new FileMeasures(LIMITS_COMPLEXITY_FUNCTIONS, FILES_DISTRIBUTION_BOTTOM_LIMITS);
+    this.fileMeasures = new FileMeasures();
     this.fileLinesContext = fileLinesContext;
 
     super.analyze(file, tree);

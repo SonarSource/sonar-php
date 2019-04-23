@@ -81,9 +81,9 @@ public class PhpIniSensorTest {
   public void parse_error() throws Exception {
     File baseDir = new File("src/test/resources/phpini-error");
     SensorContextTester context = SensorContextTester.create(baseDir);
-    DefaultInputFile file = setupSingleFile(baseDir, context);
+    setupSingleFile(baseDir, context);
     sensor().execute(context, checks());
-    assertThat(logTester.logs()).contains("Unable to parse file: " + file.absolutePath());
+    assertThat(logTester.logs()).contains("Unable to parse file: php.ini");
   }
 
   private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context) throws IOException {

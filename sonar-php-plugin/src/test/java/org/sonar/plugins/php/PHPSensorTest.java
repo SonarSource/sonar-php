@@ -164,16 +164,12 @@ public class PHPSensorTest {
     analyseSingleFile(phpSensor, ANALYZED_FILE);
 
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.NCLOC, 32);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_CLASSES, 6);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY_IN_FUNCTIONS, 8);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMMENT_LINES, 7);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COGNITIVE_COMPLEXITY, 6);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.COMPLEXITY, 9);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.CLASSES, 1);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.STATEMENTS, 16);
     PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTIONS, 3);
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, "1=0;2=2;4=1;6=0;8=0;10=0;12=0");
-    PhpTestUtils.assertMeasure(context, componentKey, CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, "0=0;5=1;10=0;20=0;30=0;60=0;90=0");
 
     // the .php file contains NOSONAR at line 34
     checkNoSonar(componentKey, 33, true, phpSensor);
