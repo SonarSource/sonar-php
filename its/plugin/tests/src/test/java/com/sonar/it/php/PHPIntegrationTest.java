@@ -62,9 +62,9 @@ public class PHPIntegrationTest {
   public void projectMetric() {
     SoftAssertions softly = new SoftAssertions();
     // Size
-    softly.assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(47540d);
-    softly.assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(72334d);
-    softly.assertThat(getProjectMeasureAsDouble("files")).isEqualTo(784d);
+    softly.assertThat(getProjectMeasureAsDouble("ncloc")).isEqualTo(47539d);
+    softly.assertThat(getProjectMeasureAsDouble("lines")).isEqualTo(72332d);
+    softly.assertThat(getProjectMeasureAsDouble("files")).isEqualTo(783d);
     softly.assertThat(getProjectMeasureAsDouble("classes")).isEqualTo(645d);
     softly.assertThat(getProjectMeasureAsDouble("functions")).isEqualTo(3394d);
 
@@ -77,8 +77,8 @@ public class PHPIntegrationTest {
 
     // Complexity
     softly.assertThat(getProjectMeasureAsDouble("file_complexity")).isEqualTo(8.6);
-    softly.assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(6705.0);
-    softly.assertThat(getProjectMeasureAsDouble("cognitive_complexity")).isEqualTo(5083.0);
+    softly.assertThat(getProjectMeasureAsDouble("complexity")).isEqualTo(6702.0);
+    softly.assertThat(getProjectMeasureAsDouble("cognitive_complexity")).isEqualTo(5080.0);
     softly.assertAll();
   }
 
