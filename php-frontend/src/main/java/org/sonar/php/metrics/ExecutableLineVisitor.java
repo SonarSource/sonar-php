@@ -58,7 +58,6 @@ class ExecutableLineVisitor extends PHPTreeSubscriber {
       Kind.DO_WHILE_STATEMENT,
       Kind.FOREACH_STATEMENT,
       Kind.FOR_STATEMENT,
-      Kind.DECLARE_STATEMENT,
       Kind.EXPRESSION_STATEMENT,
       Kind.UNSET_VARIABLE_STATEMENT
     );
