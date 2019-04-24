@@ -1,6 +1,9 @@
-<?php /**/$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };
-$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };
+
+
+<?php
 // file to exclude
+//
+/**/
 $x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };
 $x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };
 $x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };$x = 1; echo $x; if (false) { echo "hello"; };

@@ -29,6 +29,7 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.internal.MapSettings;
 
+import static org.assertj.core.api.Assertions.fail;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class PhpExclusionsFileFilterTest {
@@ -103,12 +104,33 @@ public class PhpExclusionsFileFilterTest {
     // first line is not a comment nor a single php tag
     testFile = setupSingleFile(baseDir, context, "excluded2.php");
     assertThat(filter.accept(testFile)).isFalse();
+
+    testFile = setupSingleFile(baseDir, context, "excluded3.php");
+    assertThat(filter.accept(testFile)).isFalse();
+
+    //
+
+    testFile = setupSingleFile(baseDir, context, "unknown.php", "");
+    try {
+      filter.accept(testFile);
+      fail("unknown file should have failed");
+    } catch (AnalysisException ae) {
+      assertThat(ae).hasMessage("Unable to read file 'unknown.php'");
+    }
+
+    testFile = setupSingleFile(baseDir, context, "empty.php");
+    assertThat(filter.accept(testFile)).isTrue();
+
   }
 
   private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context, String fileName) throws IOException {
+    return setupSingleFile(baseDir, context, fileName, Files.asCharSource(new File(baseDir, fileName), StandardCharsets.UTF_8).read());
+  }
+
+  private static DefaultInputFile setupSingleFile(File baseDir, SensorContextTester context, String fileName, String content) {
     DefaultInputFile file1 = TestInputFileBuilder.create("moduleKey", baseDir, new File(baseDir, fileName))
       .setCharset(StandardCharsets.UTF_8)
-      .initMetadata(Files.asCharSource(new File(baseDir, fileName), StandardCharsets.UTF_8).read())
+      .initMetadata(content)
       .setLanguage("php")
       .build();
     context.fileSystem().add(file1);
